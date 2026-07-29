@@ -52,7 +52,7 @@ per-segment interpolation already produces the tight look by
 construction).
 """
 
-from config import defaults
+from config import dial
 from core.angles import ring_position_angle
 
 
@@ -84,7 +84,7 @@ def _tight_two_pin_angles(
     the layout for a motto pinned ONLY at its first and last character —
     "a pinned two-word motto" (ANNUIT COEPTIS today). Every letter
     advances from BOTH pins INWARD at the fixed
-    `defaults.RING_MOTTO_LETTER_STEP_DEG` step (the same tight
+    `dial.RING_MOTTO_LETTER_STEP_DEG` step (the same tight
     per-character spacing NOVUS ORDO SECLORUM's own 3-pin segments
     already produce), instead of spreading the whole span evenly across
     every character (the previous round's "too wide" look). Whatever
@@ -98,7 +98,7 @@ def _tight_two_pin_angles(
     (index_a, position_a), (index_b, position_b) = resolved
     angle_a = ring_position_angle(position_a)
     angle_b = ring_position_angle(position_b)
-    step = defaults.RING_MOTTO_LETTER_STEP_DEG
+    step = dial.RING_MOTTO_LETTER_STEP_DEG
     if clockwise:
         while angle_b <= angle_a:
             angle_b += 360.0
@@ -136,7 +136,7 @@ def centered_word_angles(
     SALVATION) ring the dial one word per station seat, drawn by the
     same outside-the-band stamp as the Dollar's Great Seal mottos.
     Letters advance at the mottos' own fixed
-    `defaults.RING_MOTTO_LETTER_STEP_DEG` step and the word's midpoint
+    `dial.RING_MOTTO_LETTER_STEP_DEG` step and the word's midpoint
     lands exactly on the seat angle. `clockwise` picks the reading
     direction exactly as in `motto_glyph_angles` below: True for a
     top-half seat, False for a bottom-half seat — either way the word
@@ -148,7 +148,7 @@ def centered_word_angles(
         raise ValueError(
             f"centered word {text!r} must be one non-empty word"
         )
-    step = defaults.RING_MOTTO_LETTER_STEP_DEG
+    step = dial.RING_MOTTO_LETTER_STEP_DEG
     if not clockwise:
         step = -step
     start = ring_position_angle(position) - step * (len(text) - 1) / 2.0

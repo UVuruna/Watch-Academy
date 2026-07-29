@@ -18,7 +18,7 @@ from time import monotonic
 from PySide6.QtCore import QPointF, Qt
 from PySide6.QtGui import QImage, QPainter, QPixmap
 
-from config import archetypes, constants, defaults, palette, paths, profiling
+from config import archetypes, calendar_mounts, constants, defaults, dial, encyclopedia_ui, glow, palette, pantheon, paths, profiling
 from config.ui_text import ui
 from data.encyclopedia import EncyclopediaRepository
 from data.symbolism import SymbolismRepository
@@ -136,7 +136,7 @@ def _ordinal(n: int) -> str:
 _HEX_NOTE = re.compile(r"\s*\(#[0-9A-Fa-f]{6}\)")
 _TERM_RULES = [
     re.compile(
-        rf"\b(?:{'|'.join(defaults.LEGEND_TERM_PATTERNS[category])})\b",
+        rf"\b(?:{'|'.join(encyclopedia_ui.LEGEND_TERM_PATTERNS[category])})\b",
         re.IGNORECASE,
     )
     for category in ("virtue", "vice", "mood", "weekday")
@@ -178,7 +178,7 @@ def _teaser(text: str) -> str:
     first = text.split("\n\n", 1)[0]
     first = _SUBHEAD.sub("", first).strip()
     sentences = re.split(r"(?<=[.!?])\s+", first)
-    keep = defaults.LEGEND_TEASER_SENTENCES
+    keep = encyclopedia_ui.LEGEND_TEASER_SENTENCES
     if len(sentences) <= keep and first == text.strip():
         return first
     return " ".join(sentences[:keep]).rstrip() + " …"
@@ -220,14 +220,14 @@ def _article_paragraphs(text: str, tr=None) -> str:
             # round two: the gap above must beat the gap below).
             parts.append(
                 "<p align='center' style='"
-                f"margin-top:{defaults.ARTICLE_SUBHEAD_GAP_ABOVE_PX}px;"
-                f"margin-bottom:{defaults.ARTICLE_SUBHEAD_GAP_BELOW_PX}px'>"
+                f"margin-top:{encyclopedia_ui.ARTICLE_SUBHEAD_GAP_ABOVE_PX}px;"
+                f"margin-bottom:{encyclopedia_ui.ARTICLE_SUBHEAD_GAP_BELOW_PX}px'>"
                 f"<b>{html.escape(label)}</b></p>"
             )
             p = p[match.end():]
             body_style = (
                 f" style='margin-top:"
-                f"{defaults.ARTICLE_SUBHEAD_GAP_BELOW_PX}px'"
+                f"{encyclopedia_ui.ARTICLE_SUBHEAD_GAP_BELOW_PX}px'"
             )
         parts.append(
             f"<p align='justify'{body_style}>"
@@ -241,7 +241,7 @@ def _article_body_html(text: str, tr=None) -> str:
     reflow inside the declared table cell (the legend popup measures
     the document and honors this width)."""
     return (
-        f"<table><tr><td width='{defaults.ARTICLE_TEXT_WIDTH_PX}'>"
+        f"<table><tr><td width='{encyclopedia_ui.ARTICLE_TEXT_WIDTH_PX}'>"
         f"{_article_paragraphs(text, tr)}</td></tr></table>"
     )
 
@@ -252,7 +252,7 @@ def _hover_title(text_html: str) -> str:
     and turning-point names all wear it."""
     return (
         f"<div align='center'><span style='font-size:"
-        f"{defaults.ARTICLE_TITLE_PX}px; font-weight:bold'>"
+        f"{encyclopedia_ui.ARTICLE_TITLE_PX}px; font-weight:bold'>"
         f"{text_html}</span></div>"
     )
 
@@ -269,8 +269,8 @@ def _article_html(
     images = image if isinstance(image, tuple) else (image,)
     tags = "".join(
         f"<img src='"
-        f"{scaled_variant_file(img, 2 * defaults.ARTICLE_IMAGE_WIDTH_PX).as_uri()}' "
-        f"width='{defaults.ARTICLE_IMAGE_WIDTH_PX}'/>"
+        f"{scaled_variant_file(img, 2 * encyclopedia_ui.ARTICLE_IMAGE_WIDTH_PX).as_uri()}' "
+        f"width='{encyclopedia_ui.ARTICLE_IMAGE_WIDTH_PX}'/>"
         for img in images
         if img is not None and paths.art_file(img).exists()
     )
@@ -418,7 +418,7 @@ _ENC_ECLIPSE_LUNAR_ORDER = ("Overview", "Total", "Partial", "Penumbral")
 # pair, `app.encyclopedia._topics`'s own append order).
 _ENC_OPHIUCHUS_INDEX = len(_ENC_ZODIAC_ORDER)
 _ENC_CAT_INDEX = len(constants.CHINESE_ANIMALS) + len(constants.CHINESE_ELEMENTS)
-_ENC_SOL_INDEX = len(defaults.SLAVIC_MONTHS) + 1
+_ENC_SOL_INDEX = len(calendar_mounts.SLAVIC_MONTHS) + 1
 _ENC_MODRENIK_INDEX = _ENC_SOL_INDEX + 1
 _ENC_THIRTEENTH_TARGET = {
     "ophiuchus": ("astrology", _ENC_OPHIUCHUS_INDEX),
@@ -538,8 +538,8 @@ class Compositor:
         anywhere on the seat. The toggle semantics are untouched."""
         radius = size / 2
         point = QPointF(x - radius, y - radius)
-        center = dial_point(180.0, radius * defaults.RING_LETTER_RADIUS_FRACTION)
-        hit_radius = radius * defaults.OMEGA_HIT_RADIUS_FRACTION
+        center = dial_point(180.0, radius * dial.RING_LETTER_RADIUS_FRACTION)
+        hit_radius = radius * dial.OMEGA_HIT_RADIUS_FRACTION
         return math.hypot(
             point.x() - center.x(), point.y() - center.y()
         ) <= hit_radius
@@ -872,8 +872,8 @@ class Compositor:
             return 0
         spoken = 0
         radius = size / 2
-        rings = defaults.HOVER_WARM_RADIAL_STEPS
-        angles = defaults.HOVER_WARM_ANGLE_STEPS
+        rings = encyclopedia_ui.HOVER_WARM_RADIAL_STEPS
+        angles = encyclopedia_ui.HOVER_WARM_ANGLE_STEPS
         # Center first (the hexa/trio Sun, center seats), then the rings.
         if self._tooltip_at(radius, radius, size) is not None:
             spoken += 1
@@ -894,7 +894,7 @@ class Compositor:
                     f"hover warmup ring {ring}/{rings} "
                     f"({spoken} articles spoken)"
                 )
-            sleep(defaults.HOVER_WARM_RING_PAUSE_S)
+            sleep(encyclopedia_ui.HOVER_WARM_RING_PAUSE_S)
         return spoken
 
     @paths.in_display
@@ -936,7 +936,7 @@ class Compositor:
         """(theme topic, body page index) for a weekday body dressed in
         `theme` — the classic unit's theme OR a seated slot's own theme.
         None when the theme carries no encyclopedia topic."""
-        if body in _ENC_WEEK_ORDER and theme in defaults.WEEKDAY_THEME_TITLES:
+        if body in _ENC_WEEK_ORDER and theme in pantheon.WEEKDAY_THEME_TITLES:
             return theme, _ENC_WEEK_ORDER.index(body)
         return None
 
@@ -1075,8 +1075,8 @@ class Compositor:
         slika 7 — the hover-card badge), or None for an unknown type;
         `_hover_badge(None)` degrades to empty, so a missing/unknown
         emblem simply shows no image (graceful-absent)."""
-        stem = defaults.ECLIPSE_TYPE_EMBLEM.get((eclipse.kind, eclipse.type))
-        return defaults.ECLIPSE_ART_DIR / f"{stem}.png" if stem else None
+        stem = glow.ECLIPSE_TYPE_EMBLEM.get((eclipse.kind, eclipse.type))
+        return glow.ECLIPSE_ART_DIR / f"{stem}.png" if stem else None
 
     def _arm_angle_at(
         self, point: QPointF, radius: float, rotation: float
@@ -1295,7 +1295,7 @@ class Compositor:
         # hit-test the DRAWN position, whichever radius that is.
         eclipse = self._last_tick.eclipse_event
         moon_orbit = (
-            defaults.GLOW_RING_RADIUS_FRACTION
+            dial.GLOW_RING_RADIUS_FRACTION
             if self._last_tick.moon_event is not None
             or (eclipse is not None and eclipse.kind == "lunar")
             else marker.moon_orbit_fraction
@@ -1309,7 +1309,7 @@ class Compositor:
         ):
             return "moon"
         earth_orbit = (
-            defaults.GLOW_RING_RADIUS_FRACTION
+            dial.GLOW_RING_RADIUS_FRACTION
             if self._last_tick.season_event is not None
             or (eclipse is not None and eclipse.kind == "solar")
             else marker.orbit_fraction
@@ -1463,7 +1463,7 @@ class Compositor:
             metal = self._skin.weekday_set.metal
         elif theme == "planets":
             display_name = defaults.DEFAULT_SKIN.weekday_set.body_names[body]
-            image = defaults.weekday_theme_body_art(
+            image = pantheon.weekday_theme_body_art(
                 "planets", body, on_date=on_date,
             )
             metal = None
@@ -1482,21 +1482,21 @@ class Compositor:
                 else None
             )
             seat = (
-                defaults.pantheon_seat(theme, body)
+                pantheon.pantheon_seat(theme, body)
                 if roster == "pantheon" else None
             )
             if seat is not None:
                 image, display_name, (article_set, article_body) = seat
                 if on_date is not None:
-                    image = defaults.rotating_art_file(image, on_date) or image
+                    image = pantheon.rotating_art_file(image, on_date) or image
             else:
-                display_name = defaults.WEEKDAY_THEME_NAMES[theme][body]
+                display_name = pantheon.WEEKDAY_THEME_NAMES[theme][body]
                 # THE ONE weekday-body resolver (Rule #5 — shared with
                 # `app.controller` and `render.layers._draw_weekday_slot`;
                 # `on_date` wires THE UNIVERSAL ROTATION CONVENTION so
                 # the legend never shows a different day's pick than the
                 # slot it describes).
-                image = defaults.weekday_theme_body_art(
+                image = pantheon.weekday_theme_body_art(
                     theme, body, on_date=on_date,
                     colored=(
                         slot_metal == "colored"
@@ -1507,7 +1507,7 @@ class Compositor:
             # `spec.bodies` is BAKED at settings-apply time (never per
             # day) — re-resolve the live rotation on top of it, exactly
             # like `render.layers.draw_weekday_body`'s own override.
-            image = defaults.rotating_art_file(image, on_date) or image
+            image = pantheon.rotating_art_file(image, on_date) or image
         image = metal_variant_file(image, metal)
         if body == "sun":
             # The dual center's TWO plates in one legend (owner
@@ -1515,17 +1515,17 @@ class Compositor:
             if same_unit:
                 dual_image = self._skin.weekday_set.dual_asset
             else:
-                dual_rel = defaults.WEEKDAY_DUAL_FILES[theme]
-                if roster == "pantheon" and theme in defaults.WEEKDAY_PANTHEON:
+                dual_rel = pantheon.WEEKDAY_DUAL_FILES[theme]
+                if roster == "pantheon" and theme in pantheon.WEEKDAY_PANTHEON:
                     # The pantheon dual wins only when its plate is on
                     # disk — otherwise the WHOLE planetary pair stays
                     # (the classic unit's Sunday law).
-                    candidate = defaults.WEEKDAY_PANTHEON[theme]["dual"][0]
+                    candidate = pantheon.WEEKDAY_PANTHEON[theme]["dual"][0]
                     if paths.art_file(
-                        defaults.weekday_art(f"{candidate}.png")
+                        pantheon.weekday_art(f"{candidate}.png")
                     ).exists():
                         dual_rel = candidate
-                dual_image = defaults.weekday_art(f"{dual_rel}.png")
+                dual_image = pantheon.weekday_art(f"{dual_rel}.png")
             image = (image, metal_variant_file(dual_image, metal))
         node = self._symbolism.article(article_set, article_body)
         text = node["base"]
@@ -1533,7 +1533,7 @@ class Compositor:
         if variant:
             text += "\n\n" + variant
         title = (
-            f"<span style='font-size: {defaults.ARTICLE_TITLE_PX}px'>"
+            f"<span style='font-size: {encyclopedia_ui.ARTICLE_TITLE_PX}px'>"
             f"<b>{html.escape(self._tr(display_name))}</b>"
             f"</span>"
         )
@@ -1608,11 +1608,11 @@ class Compositor:
             image = ""
             if archetype_art_ready(fig["file"]):
                 small = scaled_variant_file(
-                    fig["file"], 2 * defaults.ARTICLE_THREE_IMAGE_PX
+                    fig["file"], 2 * encyclopedia_ui.ARTICLE_THREE_IMAGE_PX
                 )
                 image = (
                     f"<div align='center'><img src='{small.as_uri()}' "
-                    f"width='{defaults.ARTICLE_THREE_IMAGE_PX}'/></div>"
+                    f"width='{encyclopedia_ui.ARTICLE_THREE_IMAGE_PX}'/></div>"
                 )
             return (
                 _hover_title(html.escape(self._tr(caption)))
@@ -1620,7 +1620,7 @@ class Compositor:
                 + _centered_html(f"<b>{html.escape(self._tr(fig['row2']))}</b>")
             )
 
-        width = defaults.ARTICLE_THREE_COLUMN_WIDTH_PX
+        width = encyclopedia_ui.ARTICLE_THREE_COLUMN_WIDTH_PX
         return (
             "<table cellspacing='10'><tr>"
             f"<td width='{width}'>{text_col}</td>"
@@ -1652,11 +1652,11 @@ class Compositor:
         creature_col = _hover_title(html.escape(self._tr(fig["name"])))
         if archetype_art_ready(fig["file"]):
             small = scaled_variant_file(
-                fig["file"], 2 * defaults.ARTICLE_THREE_IMAGE_PX
+                fig["file"], 2 * encyclopedia_ui.ARTICLE_THREE_IMAGE_PX
             )
             creature_col += (
                 f"<div align='center'><img src='{small.as_uri()}' "
-                f"width='{defaults.ARTICLE_THREE_IMAGE_PX}'/></div>"
+                f"width='{encyclopedia_ui.ARTICLE_THREE_IMAGE_PX}'/></div>"
             )
         if rows:
             creature_col += _article_paragraphs(_teaser(rows[0]), tr=self._tr)
@@ -1670,11 +1670,11 @@ class Compositor:
         ev_file = archetypes.tetramorph_evangelist_file(index)
         if archetype_art_ready(ev_file):
             small = scaled_variant_file(
-                ev_file, 2 * defaults.ARTICLE_THREE_IMAGE_PX
+                ev_file, 2 * encyclopedia_ui.ARTICLE_THREE_IMAGE_PX
             )
             evangelist_col += (
                 f"<div align='center'><img src='{small.as_uri()}' "
-                f"width='{defaults.ARTICLE_THREE_IMAGE_PX}'/></div>"
+                f"width='{encyclopedia_ui.ARTICLE_THREE_IMAGE_PX}'/></div>"
             )
         evangelist_col += _centered_html(
             f"<b>{html.escape(self._tr(fig['row2']))}</b>"
@@ -1692,7 +1692,7 @@ class Compositor:
         )
         if len(rows) > 2:
             element_col += _article_paragraphs(_teaser(rows[2]), tr=self._tr)
-        width = defaults.ARTICLE_THREE_COLUMN_WIDTH_PX
+        width = encyclopedia_ui.ARTICLE_THREE_COLUMN_WIDTH_PX
         return (
             "<table cellspacing='10'><tr>"
             f"<td width='{width}'>{creature_col}</td>"
@@ -1759,7 +1759,7 @@ class Compositor:
         ruler = face == "ruler"
         dual_names = (
             self._skin.weekday_set.dual_names
-            or defaults.WEEKDAY_DUAL_NAMES[theme]
+            or pantheon.WEEKDAY_DUAL_NAMES[theme]
         )
         display_name = dual_names[0 if ruler else 1]
         image = metal_variant_file(
@@ -1779,7 +1779,7 @@ class Compositor:
             if variant:
                 text += "\n\n" + variant
         title = (
-            f"<span style='font-size: {defaults.ARTICLE_TITLE_PX}px'>"
+            f"<span style='font-size: {encyclopedia_ui.ARTICLE_TITLE_PX}px'>"
             f"<b>{html.escape(self._tr(display_name))}</b>"
             f"</span>"
         )
@@ -1807,7 +1807,7 @@ class Compositor:
         pair picked from up to three: "ruler" (GOOD), "servant" (EVIL),
         "ninth" (THE UNFOUND)."""
         spec = self._skin.weekday_set
-        dual_names = spec.dual_names or defaults.WEEKDAY_DUAL_NAMES[theme]
+        dual_names = spec.dual_names or pantheon.WEEKDAY_DUAL_NAMES[theme]
         article_set = spec.article_set or constants.WEEKDAY_THEME_ARTICLES[theme]
         columns = []
         sunday = html.escape(self._tr(constants.WEEKDAY_FULL_NAMES["sun"]))
@@ -1824,7 +1824,7 @@ class Compositor:
                 name = dual_names[0 if ruler else 1]
                 raw = spec.bodies.get("sun") if ruler else spec.dual_asset
                 if raw is not None:
-                    raw = defaults.rotating_art_file(raw, self._day.local_date) or raw
+                    raw = pantheon.rotating_art_file(raw, self._day.local_date) or raw
                 asset = metal_variant_file(raw, spec.metal)
                 node = self._symbolism.article(article_set, "sun")
                 text = node.get("faces", {}).get(face) or node["base"]
@@ -1843,8 +1843,8 @@ class Compositor:
             )
         return (
             "<table cellspacing='12'><tr>"
-            f"<td width='{defaults.ARTICLE_COLUMN_WIDTH_PX}'>{columns[0]}</td>"
-            f"<td width='{defaults.ARTICLE_COLUMN_WIDTH_PX}'>{columns[1]}</td>"
+            f"<td width='{encyclopedia_ui.ARTICLE_COLUMN_WIDTH_PX}'>{columns[0]}</td>"
+            f"<td width='{encyclopedia_ui.ARTICLE_COLUMN_WIDTH_PX}'>{columns[1]}</td>"
             "</tr></table>"
         )
 
@@ -1896,7 +1896,7 @@ class Compositor:
         else:
             text = closing
         title = (
-            f"<span style='font-size: {defaults.ARTICLE_TITLE_PX}px'>"
+            f"<span style='font-size: {encyclopedia_ui.ARTICLE_TITLE_PX}px'>"
             f"<b>{html.escape(self._tr(name))}</b></span>"
         )
         return _article_html(asset, title, text, tr=self._tr)
@@ -2032,11 +2032,11 @@ class Compositor:
                 plate = ""
                 if colored is not None and colored.exists():
                     small = scaled_variant_file(
-                        colored, 2 * defaults.ARTICLE_IMAGE_WIDTH_PX
+                        colored, 2 * encyclopedia_ui.ARTICLE_IMAGE_WIDTH_PX
                     )
                     plate = (
                         f"<div align='center'><img src='{small.as_uri()}' "
-                        f"width='{defaults.ARTICLE_IMAGE_WIDTH_PX}'/></div>"
+                        f"width='{encyclopedia_ui.ARTICLE_IMAGE_WIDTH_PX}'/></div>"
                     )
                 article = self._symbolism.zodiac_article(name)
                 text = article["base"]
@@ -2058,9 +2058,9 @@ class Compositor:
             # tables measured wrong — the popup honors these cells).
             return (
                 "<table cellspacing='12'><tr>"
-                f"<td width='{defaults.ARTICLE_COLUMN_WIDTH_PX}'>"
+                f"<td width='{encyclopedia_ui.ARTICLE_COLUMN_WIDTH_PX}'>"
                 f"{columns[0]}</td>"
-                f"<td width='{defaults.ARTICLE_COLUMN_WIDTH_PX}'>"
+                f"<td width='{encyclopedia_ui.ARTICLE_COLUMN_WIDTH_PX}'>"
                 f"{columns[1]}</td>"
                 "</tr></table>"
             )
@@ -2341,7 +2341,7 @@ class Compositor:
             "constellation": ("sign", "logo"),
         }[main_style]
         side_px = round(
-            defaults.ASTRO_MAIN_IMAGE_PX * defaults.ASTRO_SIDE_IMAGE_FRACTION
+            encyclopedia_ui.ASTRO_MAIN_IMAGE_PX * encyclopedia_ui.ASTRO_SIDE_IMAGE_FRACTION
         )
 
         def img(folder: str, px: int) -> str:
@@ -2354,7 +2354,7 @@ class Compositor:
         return (
             "<div align='center'>"
             + img(dirs[sides[0]], side_px)
-            + img(dirs[main_style], defaults.ASTRO_MAIN_IMAGE_PX)
+            + img(dirs[main_style], encyclopedia_ui.ASTRO_MAIN_IMAGE_PX)
             + img(dirs[sides[1]], side_px)
             + "</div>"
         )
@@ -2459,11 +2459,11 @@ class Compositor:
         # their own day/year/moon reading. The 24h (Omega) letter used
         # to share this trigger; it now belongs to the reveal-week
         # double-click instead (see Compositor.hit_omega).
-        half = defaults.GREETINGS_LETTER_HALF_DEG
+        half = encyclopedia_ui.GREETINGS_LETTER_HALF_DEG
         in_letter_band = (
-            radius * defaults.TICK_HOVER_OUTER_FRACTION
+            radius * dial.TICK_HOVER_OUTER_FRACTION
             < distance
-            <= radius * defaults.GREETINGS_LETTER_OUTER_FRACTION
+            <= radius * encyclopedia_ui.GREETINGS_LETTER_OUTER_FRACTION
         )
         if (
             in_letter_band
@@ -2492,9 +2492,9 @@ class Compositor:
         if word_legend is not None:
             return word_legend
         if not (
-            radius * defaults.TICK_HOVER_INNER_FRACTION
+            radius * dial.TICK_HOVER_INNER_FRACTION
             <= distance
-            <= radius * defaults.TICK_HOVER_OUTER_FRACTION
+            <= radius * dial.TICK_HOVER_OUTER_FRACTION
         ):
             return None
         minutes = round((((theta - 180.0) % 360.0) / 15.0) * 60) % (24 * 60)
@@ -2617,8 +2617,8 @@ class Compositor:
         motto = self._skin.ring.motto
         if not motto:
             return None
-        band = defaults.RING_MOTTO_RADIUS_FRACTION
-        half_band = defaults.RING_MOTTO_HOVER_HALF_FRACTION
+        band = dial.RING_MOTTO_RADIUS_FRACTION
+        half_band = dial.RING_MOTTO_HOVER_HALF_FRACTION
         if not (
             radius * (band - half_band)
             <= distance
@@ -2668,7 +2668,7 @@ class Compositor:
         reading and the watchmaker's commentary as a justified column
         — Serbian in every language, on the 12h/24h ring letters."""
         data = _greetings()
-        gap = defaults.GREETINGS_STANZA_GAP_PX
+        gap = encyclopedia_ui.GREETINGS_STANZA_GAP_PX
         # Small margins, not blank lines (owner round two) — Qt
         # collapses the adjacent margins to the larger one.
         stanzas = "".join(
@@ -2824,7 +2824,7 @@ class Compositor:
         )
         if icon is None:
             return ""
-        px = defaults.ECLIPSE_TYPE_ICON_PX
+        px = glow.ECLIPSE_TYPE_ICON_PX
         small = scaled_variant_file(icon, 2 * px)
         return f"<img src='{small.as_uri()}' width='{px}' align='middle'/> "
 
@@ -2927,7 +2927,7 @@ class Compositor:
         # the canonical era badge plus any `_v2`/`alt/` siblings rotate
         # daily by the VIEWED date — the same one the card's own date
         # row reads (deep-travel aware, `real` already un-shifted it).
-        era_art = defaults.rotating_art_file(
+        era_art = pantheon.rotating_art_file(
             defaults.ERA_ART_DIR / era_file, date
         ) or defaults.ERA_ART_DIR / era_file
         era_block = (
@@ -2983,11 +2983,11 @@ class Compositor:
         if path is None:
             return ""
         small = scaled_variant_file(
-            path, 2 * defaults.PERIOD_EARTH_IMAGE_PX
+            path, 2 * encyclopedia_ui.PERIOD_EARTH_IMAGE_PX
         )
         return (
             f"<div align='center'><img src='{small.as_uri()}' "
-            f"width='{defaults.PERIOD_EARTH_IMAGE_PX}'/></div>"
+            f"width='{encyclopedia_ui.PERIOD_EARTH_IMAGE_PX}'/></div>"
         )
 
     def _calendar_tooltip(self, point: QPointF, radius: float) -> str | None:
@@ -3061,7 +3061,7 @@ class Compositor:
         rule every other emblem uses until the prompt sheet lands."""
         month = (index + 5) % 12 + 1
         croatian, gloss, stem, _gregorian = next(
-            entry for entry in defaults.SLAVIC_MONTHS if entry[3] == month
+            entry for entry in calendar_mounts.SLAVIC_MONTHS if entry[3] == month
         )
         art = paths.art_file(defaults.MONTHS_ART_DIR / f"{stem}.png")
         art = art if art.exists() else None
@@ -3124,9 +3124,9 @@ class Compositor:
             dial_point,
         )
 
-        mount_radius = radius * defaults.CALENDAR_MOUNT_RADIUS_FRACTION
+        mount_radius = radius * calendar_mounts.CALENDAR_MOUNT_RADIUS_FRACTION
         hit_radius = calendar_mount_mark_height(mount, radius) / 2.0
-        for index in range(defaults.CALENDAR_MOUNTS[mount].seats):
+        for index in range(calendar_mounts.CALENDAR_MOUNTS[mount].seats):
             center = dial_point(calendar_mount_angle(mount, index), mount_radius)
             dx, dy = point.x() - center.x(), point.y() - center.y()
             if dx * dx + dy * dy <= hit_radius * hit_radius:

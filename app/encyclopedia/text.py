@@ -12,7 +12,7 @@ Layer: app. Documentation: text.md.
 import html as _html
 from pathlib import Path
 
-from config import defaults
+from config import encyclopedia_ui
 from render.compositor import _HEX_NOTE, _SUBHEAD, _highlight_terms
 
 
@@ -36,14 +36,14 @@ def flow_html(text: str, tr=None) -> str:
             # round two — same rule as the hover legends).
             parts.append(
                 "<p align='center' style='"
-                f"margin-top:{defaults.ARTICLE_SUBHEAD_GAP_ABOVE_PX}px;"
-                f"margin-bottom:{defaults.ARTICLE_SUBHEAD_GAP_BELOW_PX}px'>"
+                f"margin-top:{encyclopedia_ui.ARTICLE_SUBHEAD_GAP_ABOVE_PX}px;"
+                f"margin-bottom:{encyclopedia_ui.ARTICLE_SUBHEAD_GAP_BELOW_PX}px'>"
                 f"<b>{_html.escape(label)}</b></p>"
             )
             paragraph = paragraph[match.end():]
             body_style = (
                 f" style='margin-top:"
-                f"{defaults.ARTICLE_SUBHEAD_GAP_BELOW_PX}px'"
+                f"{encyclopedia_ui.ARTICLE_SUBHEAD_GAP_BELOW_PX}px'"
             )
         parts.append(
             f"<p align='justify'{body_style}>"

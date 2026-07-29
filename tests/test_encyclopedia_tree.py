@@ -29,8 +29,8 @@ from PySide6.QtWidgets import QApplication, QScrollArea
 from app.encyclopedia import EncyclopediaDialog, topics as build_topics
 from app.encyclopedia.cards import card_width_for, row_content_width
 from app.encyclopedia.tree import resolve_target, switch_variant, variant_at
-from config import constants, defaults, palette
-from config import encyclopedia_tree as tree
+from config import constants, defaults, encyclopedia_ui, palette, pantheon
+from config import encyclopedia_tree as tree, encyclopedia_ui, pantheon
 from tests.test_theme_completeness import _look_only_themes
 
 
@@ -116,14 +116,14 @@ def test_every_dial_theme_is_reachable_from_home():
 # --- 2/3. THE SCROLL LAWS ---------------------------------------------------
 
 @pytest.mark.parametrize("columns", [
-    defaults.ENCYCLOPEDIA_HOME_COLUMNS,
-    defaults.ENCYCLOPEDIA_GALLERY_MAX_COLUMNS,
+    encyclopedia_ui.ENCYCLOPEDIA_HOME_COLUMNS,
+    encyclopedia_ui.ENCYCLOPEDIA_GALLERY_MAX_COLUMNS,
 ])
 def test_a_full_row_never_exceeds_the_minimum_viewport(columns):
     """The geometry half of the no-X-scroll law: at the narrowest window
     the owner can make, a FULL row of cards still fits — the card-width
     and row-width formulas are exact inverses (Rule #5, one pair)."""
-    width = defaults.ENCYCLOPEDIA_MIN_WIDTH_PX
+    width = encyclopedia_ui.ENCYCLOPEDIA_MIN_WIDTH_PX
     card = card_width_for(width, columns)
     assert row_content_width(card, columns) <= width
 
@@ -149,7 +149,7 @@ def test_growing_the_window_never_raises_its_own_minimum(app):
     # the layout minimum is the thing that actually forbade it.
     assert dialog.home.minimumSizeHint().height() == 0
     floor = dialog.layout().totalMinimumSize()
-    assert floor.height() <= defaults.ENCYCLOPEDIA_MIN_HEIGHT_PX
+    assert floor.height() <= encyclopedia_ui.ENCYCLOPEDIA_MIN_HEIGHT_PX
     assert floor.width() <= dialog.minimumWidth()
     dialog.deleteLater()
 
@@ -187,7 +187,7 @@ def test_zooming_all_the_way_in_still_grows_no_horizontal_bar(app):
     """Zoom scales cards, fonts and images — never the page's width past
     its viewport (owner round R8b item 5a; the regression that started
     this law was exactly "zoom in on a narrow window")."""
-    from config import constants
+    from config import constants, encyclopedia_ui, pantheon
 
     dialog = EncyclopediaDialog()
     dialog.resize(dialog.minimumWidth(), dialog.minimumHeight())
@@ -227,7 +227,7 @@ def test_home_title_and_download_share_one_header_row(app):
     )
     # And the row never widens the window past the owner's 1280.
     assert dialog.layout().minimumSize().width() <= (
-        defaults.ENCYCLOPEDIA_MIN_WIDTH_PX
+        encyclopedia_ui.ENCYCLOPEDIA_MIN_WIDTH_PX
     )
     # Download saves the OPEN page — the galleries have none to save.
     dialog.show_home()
@@ -490,17 +490,17 @@ def test_the_title_plate_resolver_names_one_file_per_block(topics):
     wider, primary / secondary / dark), which is exactly what a
     register is for, so the reserved `Title` stem repeats across
     folders and never inside one."""
-    from config import defaults
+    from config import defaults, encyclopedia_ui, pantheon
 
     seen = {}
     for key in ("greek", "greek_pantheon", "greek_wider",
                 "bible", "bible2", "bible_dark",
                 "religion", "religion_alt"):
-        path = defaults.theme_title_art(key)
+        path = pantheon.theme_title_art(key)
         assert path not in seen, (key, seen.get(path))
         seen[path] = key
     # And the seat is the one the prompt sheets already write against.
-    greek = defaults.theme_title_art("greek")
+    greek = pantheon.theme_title_art("greek")
     assert greek.name == "Title.png"
     assert greek.parent.name == "colored"
     assert greek.parent.parent.name == "primary"
@@ -512,22 +512,22 @@ def test_every_dual_page_shares_the_one_generic_plate(topics):
     and a title plate that draws them again is a repeat. The opposite of
     the TITLE plates above, deliberately: a title names its own theme, a
     duality names the shape all of them share."""
-    from config import defaults
+    from config import defaults, encyclopedia_ui, pantheon
 
     for key in ("greek", "greek_pantheon", "bible", "bible_dark",
                 "wolf", "cosmos", "religion_alt"):
-        assert defaults.theme_title_art(key, duality=True) == (
-            defaults.DUALITY_GENERIC_ART
+        assert pantheon.theme_title_art(key, duality=True) == (
+            pantheon.DUALITY_GENERIC_ART
         ), key
-    assert defaults.DUALITY_GENERIC_ART.parent.name == "instrument"
+    assert pantheon.DUALITY_GENERIC_ART.parent.name == "instrument"
     # The escape hatch exists and is unused — a theme may still claim
     # its own plate when its dual page shows a genuinely new third
     # thing (owner's own carve-out).
-    assert defaults.THEME_OWN_DUALITY_PLATE == {}
-    defaults.THEME_OWN_DUALITY_PLATE["greek"] = True
+    assert pantheon.THEME_OWN_DUALITY_PLATE == {}
+    pantheon.THEME_OWN_DUALITY_PLATE["greek"] = True
     try:
-        claimed = defaults.theme_title_art("greek", duality=True)
+        claimed = pantheon.theme_title_art("greek", duality=True)
     finally:
-        defaults.THEME_OWN_DUALITY_PLATE.clear()
+        pantheon.THEME_OWN_DUALITY_PLATE.clear()
     assert claimed.name == "Duality.png"
     assert claimed.parent.parent.parent.name == "greek"

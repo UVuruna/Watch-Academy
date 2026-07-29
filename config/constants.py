@@ -1,6 +1,6 @@
 """Product-defining invariants. These values NEVER change at runtime
 and are not user-tunable — they define what DOMY Watch is.
-from config import palette
+from config import calendar_mounts, continents, palette, pantheon
 
 Tunables (things a developer might reasonably adjust) live in defaults.py.
 Win32 API literals live in winapi.py.
@@ -379,14 +379,14 @@ CALENDAR_WEDGE_DEG = 360.0 / CALENDAR_WEDGES        # 30° per 2-hour wedge
 # THE CALENDAR MOUNT (owner DESIGN ZODIAC law, R9a round 2026-07-21;
 # GENERALIZED 2026-07-29): the set of figures that rides the Calendar's
 # twelve wedges is no longer a hand-kept quartet. The ONE registry both
-# the picker and the renderer read is `defaults.CALENDAR_MOUNTS` — it
+# the picker and the renderer read is `calendar_mounts.CALENDAR_MOUNTS` — it
 # lives in `defaults` because it is the only module that sees BOTH the
-# canon rosters declared here and `defaults.SLAVIC_MONTHS`; the legal
-# setting values are `defaults.CALENDAR_MOUNT_MODES`, derived from it.
+# canon rosters declared here and `calendar_mounts.SLAVIC_MONTHS`; the legal
+# setting values are `calendar_mounts.CALENDAR_MOUNT_MODES`, derived from it.
 #
 # The Gregorian months, January first — the ONE list every month-keyed
 # mount rotates into Almanac seat order (Rule #19: the June-first order
-# is computed by `defaults.almanac_seat_order`, never written twice).
+# is computed by `calendar_mounts.almanac_seat_order`, never written twice).
 GREGORIAN_MONTH_NAMES = (
     "January", "February", "March", "April", "May", "June",
     "July", "August", "September", "October", "November", "December",
@@ -1089,7 +1089,7 @@ WEEKDAY_THEMES = (
     # (assets/earth/) elevated to a weekday theme (owner exception to the
     # one-image-one-place law, sealed: quality art never shown large
     # elsewhere). Bodies follow the user's earth_style and the live sky's
-    # day/night at render (config.defaults.continents_body_art); the
+    # day/night at render (config.continents.continents_body_art); the
     # Sunday dual is the two poles (Antarctic Ruler / Arctic Servant), the
     # Ninth is Zealandia with the Pangea easter-egg (core.continents).
     "continents",
@@ -1121,7 +1121,7 @@ WEEKDAY_THEMES = (
     # the Encyclopedia. These three are the only casts in the registry
     # whose seats carry a ROSTER: a seat may hold several named
     # factions/figures and rotate through them daily
-    # (`defaults.WEEKDAY_SEAT_ROSTERS`).
+    # (`pantheon.WEEKDAY_SEAT_ROSTERS`).
     "cp_gangs",            # the factions that hold Night City's ground
     "cp_street",           # the people who live on it
     "cp_corpo",            # the powers that move behind both
@@ -1130,7 +1130,7 @@ WEEKDAY_THEMES = (
     # THEMES on the dial, ONE card in the Encyclopedia. With these three
     # the twelve-cast backlog THE THEME COMPLETION LAW was written for is
     # closed. The Dyad cast carries the wave's only rotating seats
-    # (`defaults.WEEKDAY_SEAT_ROSTERS`), including the first PLACE-dual
+    # (`pantheon.WEEKDAY_SEAT_ROSTERS`), including the first PLACE-dual
     # Ninth in the registry.
     "sw_jedi",             # the side that loses and is right
     "sw_sith",             # the side that wins
@@ -1366,7 +1366,7 @@ WEEKDAY_THEME_NINTHS = {
     # chair for; Alt Cunningham has had no body since 2013 and is the
     # demonstration of what the Power cast is actually fighting over.
     # The Alt seat ROTATES with Rache Bartmoss in lockstep with the
-    # Throne and the Mirror (`defaults.WEEKDAY_SEAT_ROSTERS`).
+    # Throne and the Mirror (`pantheon.WEEKDAY_SEAT_ROSTERS`).
     "cp_gangs": ("NetWatch", "cp_gangs/primary/bronze/Netwatch.png"),
     "cp_street": ("V", "cp_street/primary/bronze/V.png"),
     "cp_corpo": (
@@ -1381,7 +1381,7 @@ WEEKDAY_THEME_NINTHS = {
     # whole saga, which the canon expressly permits (a Ninth need not be
     # a person). The Ghosts seat ROTATES with EXEGOL — the registry's
     # first PLACE-vs-PLACE Ninth — through
-    # `defaults.WEEKDAY_SEAT_ROSTERS`.
+    # `pantheon.WEEKDAY_SEAT_ROSTERS`.
     "sw_jedi": ("Yoda", "sw_jedi/primary/bronze/Yoda.png"),
     "sw_sith": ("Darth Plagueis", "sw_sith/primary/bronze/Plagueis.png"),
     "sw_dyad": ("The Ghosts", "sw_dyad/primary/bronze/Ghosts.png"),
@@ -1443,7 +1443,7 @@ WEEKDAY_THEME_NINTH_NIGHT = {
 # single canonical entry in `WEEKDAY_THEME_NINTHS`). `NINTH_MECHANISM_
 # KINDS` is the vocabulary every dispatch above actually implements
 # (`render.layers.ninth_table_for`/`ninth_alt_active`, `render.
-# compositor._center_ninth_alt`, `config.defaults.rotating_art_file`'s
+# compositor._center_ninth_alt`, `config.pantheon.rotating_art_file`'s
 # cadence override) — `tests/test_ninth_mechanisms.py` fails the build
 # if `NINTH_MECHANISMS` ever names anything outside it, or if a double
 # Ninth found in ANY registry above has no entry here at all.
@@ -1487,7 +1487,7 @@ CHINA_UTC_OFFSET_HOURS = 8
 # classical calendar calls that lunar month "the eleventh"
 # (core.blue_moon.chinese_leap_month reads the SAME fact). Each solar
 # term's start nearly always falls in the FIRST week of its Gregorian
-# month, so — exactly like defaults.SLAVIC_MONTHS mounts by Gregorian
+# month, so — exactly like calendar_mounts.SLAVIC_MONTHS mounts by Gregorian
 # month rather than by the true (locally-drifting) bloom date — this
 # table fixes ONE animal per Gregorian month for the static 12-wedge
 # mount; the LIVE lunar month (core.moon.chinese_zodiac) is unaffected.

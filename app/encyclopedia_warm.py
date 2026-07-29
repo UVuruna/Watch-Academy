@@ -12,7 +12,7 @@ See [Encyclopedia Warm](encyclopedia_warm.md).
 
 from time import perf_counter
 
-from config import defaults, paths, profiling
+from config import encyclopedia_ui, paths, profiling
 from render.asset_recolor import ensure_variant, variant_pending
 from render.asset_variants import scaled_variant_file
 
@@ -38,7 +38,7 @@ def _jobs() -> list:
         jobs.append((raw, ceiling))
 
     for topic in topics.values():
-        add(topic["icon"], defaults.ENCYCLOPEDIA_CARD_ICON_DECODE_PX)
+        add(topic["icon"], encyclopedia_ui.ENCYCLOPEDIA_CARD_ICON_DECODE_PX)
     for topic in topics.values():
         for entry in topic["entries"]:
             looks = entry.get("looks") or (
@@ -49,7 +49,7 @@ def _jobs() -> list:
                     for path in row:
                         add(
                             path,
-                            defaults.ENCYCLOPEDIA_READER_DECODE_CEILING_PX,
+                            encyclopedia_ui.ENCYCLOPEDIA_READER_DECODE_CEILING_PX,
                         )
     return jobs
 

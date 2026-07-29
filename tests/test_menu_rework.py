@@ -25,7 +25,7 @@ from app.pointer_theme import PointerThemeDialog
 from app.slot_theme import SlotThemeDialog
 from app.settings_store import Settings
 from app.time_travel import TimeTravelDialog
-from config import defaults
+from config import calendar_mounts, dial, shortcuts
 
 
 @pytest.fixture(scope="module")
@@ -148,7 +148,7 @@ def test_shortcut_table_covers_the_owner_named_candidates():
     test_shortcuts_r5b.py, this one just pins that nothing from the R5
     draft silently vanished. A z-mode shortcut was explicitly considered
     and dropped (Ctrl+Z's pre-existing Undo expectation)."""
-    action_ids = {entry[0] for entry in defaults.SHORTCUTS}
+    action_ids = {entry[0] for entry in shortcuts.SHORTCUTS}
     assert {
         "cycle_ring", "cycle_weekday_theme", "cycle_slots",
         "open_encyclopedia", "open_guide", "open_settings",
@@ -163,16 +163,16 @@ def test_shortcut_table_never_collides_with_the_hidden_mode_secret():
     NO-MODIFIER text (`ClockWidget.keyPressEvent`), so a held-modifier
     combo can never feed it by construction; pinned here as an
     explicit table-shape assertion, not just an inline comment."""
-    for action_id, _key, modifiers, _description in defaults.SHORTCUTS:
+    for action_id, _key, modifiers, _description in shortcuts.SHORTCUTS:
         assert modifiers, f"{action_id} carries no modifier"
 
 
 def test_shortcut_display_renders_ctrl_combo_text():
     """R5b FINAL MAP round: Settings moved off Ctrl+, onto Ctrl+M
     (Rule #6 — the comma binding is gone, not kept alongside)."""
-    assert defaults.shortcut_display("cycle_ring") == "Ctrl+R"
-    assert defaults.shortcut_display("open_settings") == "Ctrl+M"
-    assert defaults.shortcut_display("return_to_now") == "Ctrl+Home"
+    assert shortcuts.shortcut_display("cycle_ring") == "Ctrl+R"
+    assert shortcuts.shortcut_display("open_settings") == "Ctrl+M"
+    assert shortcuts.shortcut_display("return_to_now") == "Ctrl+Home"
 
 
 def _press(widget, key, modifiers=Qt.KeyboardModifier.ControlModifier, text=""):
@@ -199,13 +199,13 @@ def test_widget_emits_shortcut_triggered_for_every_table_entry(app):
     widget = _bare_widget(app)
     seen = []
     widget.shortcut_triggered.connect(seen.append)
-    for action_id, key_name, modifier_names, _description in defaults.SHORTCUTS:
+    for action_id, key_name, modifier_names, _description in shortcuts.SHORTCUTS:
         key = getattr(Qt.Key, key_name)
         modifiers = Qt.KeyboardModifier.NoModifier
         for name in modifier_names:
             modifiers |= getattr(Qt.KeyboardModifier, name)
         _press(widget, key, modifiers)
-    assert seen == [entry[0] for entry in defaults.SHORTCUTS]
+    assert seen == [entry[0] for entry in shortcuts.SHORTCUTS]
 
 
 def test_widget_does_not_feed_the_secret_buffer_on_a_shortcut_combo(app):
@@ -219,7 +219,7 @@ def test_widget_does_not_feed_the_secret_buffer_on_a_shortcut_combo(app):
 
 
 def test_on_shortcut_dispatches_every_action_id(controller, monkeypatch):
-    """Every `defaults.SHORTCUTS` action_id reaches a real handler — R5's
+    """Every `shortcuts.SHORTCUTS` action_id reaches a real handler — R5's
     original ten plus R5b's SLOTS/FAST TRAVEL/LOCATIONS additions."""
     calls = []
     monkeypatch.setattr(controller, "_cycle_ring", lambda: calls.append("cycle_ring"))
@@ -287,9 +287,9 @@ def test_on_shortcut_dispatches_every_action_id(controller, monkeypatch):
             "location_prev_city" if direction < 0 else "location_next_city"
         ),
     )
-    for action_id, *_rest in defaults.SHORTCUTS:
+    for action_id, *_rest in shortcuts.SHORTCUTS:
         controller._on_shortcut(action_id)
-    assert calls == [entry[0] for entry in defaults.SHORTCUTS]
+    assert calls == [entry[0] for entry in shortcuts.SHORTCUTS]
 
 
 def test_cycle_slots_walks_the_legal_chain(controller):
@@ -578,7 +578,7 @@ def test_mount_gallery_offers_every_registered_roster_with_its_seat_count(
     tiles = controller._pointer_theme.findChildren(QToolButton)
     labels = [tile.text() for tile in tiles]
     assert labels[0] == "None"
-    for key, mount in defaults.CALENDAR_MOUNTS.items():
+    for key, mount in calendar_mounts.CALENDAR_MOUNTS.items():
         assert f"{mount.title} ({mount.seats})" in labels, key
     # The rosters with committed art preview it; "None" never does.
     assert any(not tile.icon().isNull() for tile in tiles)
@@ -674,13 +674,13 @@ def test_design_size_slider_applies_only_on_release(controller):
     from PySide6.QtWidgets import QSlider
 
     slider = size_widget.findChild(QSlider)
-    assert slider.minimum() == defaults.SIZE_PRESETS[0]
-    assert slider.maximum() == defaults.SIZE_PRESETS[-1]
+    assert slider.minimum() == dial.SIZE_PRESETS[0]
+    assert slider.maximum() == dial.SIZE_PRESETS[-1]
     before = controller._settings.diameter
-    slider.setValue(before + defaults.MENU_SIZE_SLIDER_STEP)
+    slider.setValue(before + dial.MENU_SIZE_SLIDER_STEP)
     assert controller._settings.diameter == before      # drag alone: no-op
     slider.sliderReleased.emit()
-    assert controller._settings.diameter == before + defaults.MENU_SIZE_SLIDER_STEP
+    assert controller._settings.diameter == before + dial.MENU_SIZE_SLIDER_STEP
 
 
 def test_design_pointer_tab_no_longer_carries_the_calendars_own_rows(controller):

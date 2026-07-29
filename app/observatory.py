@@ -40,7 +40,7 @@ from PySide6.QtWidgets import (
 
 from app.theme import apply_theme, size_to_screen
 from app.ui_style import style_button
-from config import constants, defaults, palette
+from config import constants, defaults, encyclopedia_ui, palette
 from config.ui_text import ui
 from core.deep_time import julian_day_of, real_year
 from core.sun import day_length_curve
@@ -963,7 +963,7 @@ def _build_info_panel(
     panel = QWidget()
     panel.setStyleSheet(
         f"background: {palette.THEME_COLORS['surface_1']};"
-        f"border-radius: {defaults.THEME_RADIUS_CARD_PX}px;"
+        f"border-radius: {encyclopedia_ui.THEME_RADIUS_CARD_PX}px;"
     )
     layout = QVBoxLayout(panel)
     layout.setContentsMargins(12, 12, 12, 12)
@@ -1399,7 +1399,7 @@ class ObservatoryDialog(QDialog):
         label.setWordWrap(True)
         label.setStyleSheet(
             f"color: {palette.OBSERVATORY_MUTED_COLOR};"
-            f"font-size: {defaults.UI_BUTTON_SMALL_FONT_PX}px;"
+            f"font-size: {encyclopedia_ui.UI_BUTTON_SMALL_FONT_PX}px;"
         )
         return label
 

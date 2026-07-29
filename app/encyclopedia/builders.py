@@ -18,7 +18,7 @@ import json
 from datetime import date
 from pathlib import Path
 
-from config import constants, defaults, paths
+from config import constants, continents, defaults, pantheon, paths
 from core import continents
 from data.encyclopedia import EncyclopediaRepository
 from data.moon_phases import MoonPhaseRepository
@@ -60,7 +60,7 @@ def _colored_sibling(path: Path) -> Path:
     register's own `colored/` child — pantheon and primary identically.
     The old two-depth branch (pantheon nested, primary sibling — the
     round R8b item 3 zoo) died with the migration; this is now the
-    path twin of `defaults.colored_variant_rel` for resolved Paths."""
+    path twin of `pantheon.colored_variant_rel` for resolved Paths."""
     return path.parent.parent / "colored" / path.name
 
 
@@ -104,23 +104,23 @@ def _live_ninth_face(
     `is_daylight` is False (`constants.WEEKDAY_THEME_NINTH_NIGHT`);
     "term_weekly" rotates the SAME canonical plate through its OWN seat
     roster by the traveled date's ISO week
-    (`defaults.rotating_art_file`'s cadence override — the identical
+    (`pantheon.rotating_art_file`'s cadence override — the identical
     chokepoint the dial reads, Rule #5); every other mechanism (or none)
     keeps `name`/`plate` untouched, the plain static plate every
     non-double Ninth has always shown here."""
     mechanism = constants.NINTH_MECHANISMS.get(theme)
     if mechanism == "daynight" and not is_daylight:
         alt_name, alt_rel = constants.WEEKDAY_THEME_NINTH_NIGHT[theme]
-        return alt_name, defaults.weekday_art(alt_rel)
+        return alt_name, pantheon.weekday_art(alt_rel)
     if mechanism == "term_weekly":
-        return name, defaults.rotating_art_file(plate, travel_date) or plate
+        return name, pantheon.rotating_art_file(plate, travel_date) or plate
     return name, plate
 
 
 # One theme's plate for one body (bronze / canon file) — the
 # resolution itself lives in config (Rule #5: `app.pointer_theme` and
 # `app.slot_theme` need the SAME preview art for their picker grids).
-_theme_body_art = defaults.weekday_theme_body_art
+_theme_body_art = pantheon.weekday_theme_body_art
 
 
 def _theme_dual_art(
@@ -134,12 +134,12 @@ def _theme_dual_art(
     resolution (`render.layers.WeekdayLayer`) — None (every caller
     before THE WEEKLY MANDATE, owner decree 2026-07-29) keeps the plain
     canonical file."""
-    rel = defaults.WEEKDAY_DUAL_FILES[theme]
+    rel = pantheon.WEEKDAY_DUAL_FILES[theme]
     if colored:
-        rel = defaults.colored_variant_rel(rel)
-    asset = defaults.weekday_art(f"{rel}.png")
+        rel = pantheon.colored_variant_rel(rel)
+    asset = pantheon.weekday_art(f"{rel}.png")
     if on_date is not None:
-        asset = defaults.rotating_art_file(asset, on_date) or asset
+        asset = pantheon.rotating_art_file(asset, on_date) or asset
     return asset
 
 
@@ -175,7 +175,7 @@ def _weekday_topic(theme: str, travel_date: date | None = None):
     if theme == "planets":
         names = defaults.DEFAULT_SKIN.weekday_set.body_names
     else:
-        names = defaults.WEEKDAY_THEME_NAMES[theme]
+        names = pantheon.WEEKDAY_THEME_NAMES[theme]
     metal = theme in constants.METAL_THEMES
     mandate_date = (
         travel_date
@@ -208,8 +208,8 @@ def _weekday_topic(theme: str, travel_date: date | None = None):
         if theme == "planets":
             # Owner defaults 2026-07-13: the photos lead, the sign
             # glyphs and the bronze medallions ride the arrows.
-            sign = defaults.weekday_art(f"planets/primary/sign/{body.capitalize()}.png")
-            art = defaults.weekday_art(f"planets/primary/art/{body.capitalize()}.png")
+            sign = pantheon.weekday_art(f"planets/primary/sign/{body.capitalize()}.png")
+            art = pantheon.weekday_art(f"planets/primary/art/{body.capitalize()}.png")
             return (
                 ("Planets", rows(base, None)),
                 ("Signs", rows(sign, None)),
@@ -233,8 +233,8 @@ def _weekday_topic(theme: str, travel_date: date | None = None):
                 for label, path in _metal_looks(servant, colored)
             )
         if theme == "planets":
-            sign_dual = defaults.weekday_art("planets/primary/sign/Sun_Eclipse.png")
-            art_dual = defaults.weekday_art("planets/primary/art/Sun_Eclipse.png")
+            sign_dual = pantheon.weekday_art("planets/primary/sign/Sun_Eclipse.png")
+            art_dual = pantheon.weekday_art("planets/primary/art/Sun_Eclipse.png")
             return (
                 ("Planets", rows(servant, None)),
                 ("Signs", rows(sign_dual, None)),
@@ -261,7 +261,7 @@ def _weekday_topic(theme: str, travel_date: date | None = None):
         `WEEKDAY_DUAL_NAMES` (the established convention every rostered
         Sunday duality already follows — Session 32's own comment: "its
         rotating partners are named in the two face texts instead")."""
-        ruler_name, _servant_name = defaults.WEEKDAY_DUAL_NAMES[theme]
+        ruler_name, _servant_name = pantheon.WEEKDAY_DUAL_NAMES[theme]
         return {
             "looks": looks_for("sun", on_date=mandate_date),
             "name": ruler_name,
@@ -273,7 +273,7 @@ def _weekday_topic(theme: str, travel_date: date | None = None):
         """The EVIL (Servant) half of Sunday — its OWN page, its OWN
         plate (owner verdict A, round R3b item 1). Same `mandate_date`
         thread as `good_entry`."""
-        _ruler_name, servant_name = defaults.WEEKDAY_DUAL_NAMES[theme]
+        _ruler_name, servant_name = pantheon.WEEKDAY_DUAL_NAMES[theme]
         return {
             "looks": evil_looks_for(on_date=mandate_date),
             "name": servant_name,
@@ -282,12 +282,12 @@ def _weekday_topic(theme: str, travel_date: date | None = None):
         }
 
     title_entry = {
-        "images": (defaults.theme_title_art(theme),),
+        "images": (pantheon.theme_title_art(theme),),
         "name": ("theme_title", theme),
         "article": ("theme_title", theme),
     }
     duality_title_entry = {
-        "images": (defaults.theme_title_art(theme, duality=True),),
+        "images": (pantheon.theme_title_art(theme, duality=True),),
         "name": ("week_duality_title", theme),
         "article": ("week_duality", theme),
     }
@@ -301,7 +301,7 @@ def _weekday_topic(theme: str, travel_date: date | None = None):
 
 # THE PANTHEON/PLANETARY MERGE (Ency INSTRUCTIONS.txt rule 5, round
 # R3b item 2): the four themes with a documented Pantheon roster
-# (`defaults.WEEKDAY_PANTHEON`) become ONE topic each — pages 1-11 the
+# (`pantheon.WEEKDAY_PANTHEON`) become ONE topic each — pages 1-11 the
 # Planetary run `_weekday_topic` already builds (title, Mon..Sat, week-
 # duality title, good, evil, ninth), pages 12-22 the SAME 11-page shape
 # again for the Pantheon roster (`_pantheon_topic` below), reusing the
@@ -318,7 +318,7 @@ _PANTHEON_BLOCK_SIZE = 11
 # The fixed span of BOTH the Planetary and Pantheon blocks together —
 # page 23 (0-indexed 22) is where The Wider Court title opens.
 _WIDER_BLOCK_START = 2 * _PANTHEON_BLOCK_SIZE
-_PANTHEON_MERGED_THEMES = frozenset(defaults.WEEKDAY_PANTHEON)
+_PANTHEON_MERGED_THEMES = frozenset(pantheon.WEEKDAY_PANTHEON)
 
 # THE WIDER COURT'S FIGURES (round R8d, THE WIDER COURT RE-WIRE, owner-
 # approved 2026-07-22 — restores WORKPLAN Session 8's content after
@@ -346,7 +346,7 @@ def _pantheon_topic(theme: str) -> list[dict]:
     good, evil] shape `_weekday_topic` builds (the Ninth is appended
     separately, shared with the Planetary block — see
     `_PANTHEON_MERGED_THEMES` above), sourced from
-    `defaults.WEEKDAY_PANTHEON[theme]` through `defaults.pantheon_seat`
+    `pantheon.WEEKDAY_PANTHEON[theme]` through `pantheon.pantheon_seat`
     — the SAME safety law the live dial's Pantheon roster reads (Rule
     #5, CANON.md "Two Rosters"): a seat whose pantheon plate has not
     landed keeps the WHOLE planetary bundle (file + name + article
@@ -362,18 +362,18 @@ def _pantheon_topic(theme: str) -> list[dict]:
     Colored, since the old code only ever checked the shallow
     `pantheon/colored/` nesting); egypt/slavic stay a single plain
     plate, like their Planetary block."""
-    table = defaults.WEEKDAY_PANTHEON[theme]
+    table = pantheon.WEEKDAY_PANTHEON[theme]
     metal = theme in constants.METAL_THEMES
 
     def seated(body: str) -> tuple[Path, str, str, str]:
         """(plate, name, article_set, article_body) for one body."""
-        found = defaults.pantheon_seat(theme, body)
+        found = pantheon.pantheon_seat(theme, body)
         if found is not None:
             path, name, (article_set, article_body) = found
             return path, name, article_set, article_body
         return (
             _theme_body_art(theme, body),
-            defaults.WEEKDAY_THEME_NAMES[theme][body],
+            pantheon.WEEKDAY_THEME_NAMES[theme][body],
             constants.WEEKDAY_THEME_ARTICLES[theme],
             body,
         )
@@ -396,7 +396,7 @@ def _pantheon_topic(theme: str) -> list[dict]:
         }
 
     sun_path, _sun_name, _sun_set, _sun_body = seated("sun")
-    dual_path = defaults.weekday_art(f"{table['dual'][0]}.png")
+    dual_path = pantheon.weekday_art(f"{table['dual'][0]}.png")
     if paths.art_file(dual_path).exists():
         ruler_name, servant_name = table["dual_names"]
         face_article_set = table["articles"]
@@ -407,17 +407,17 @@ def _pantheon_topic(theme: str) -> list[dict]:
         # planetary Servant, or the reverse.
         sun_path = _theme_body_art(theme, "sun")
         dual_path = _theme_dual_art(theme)
-        ruler_name, servant_name = defaults.WEEKDAY_DUAL_NAMES[theme]
+        ruler_name, servant_name = pantheon.WEEKDAY_DUAL_NAMES[theme]
         face_article_set = constants.WEEKDAY_THEME_ARTICLES[theme]
 
     title_key = f"{theme}_pantheon"
     title_entry = {
-        "images": (defaults.theme_title_art(title_key),),
+        "images": (pantheon.theme_title_art(title_key),),
         "name": ("theme_title", title_key),
         "article": ("theme_title", title_key),
     }
     duality_title_entry = {
-        "images": (defaults.theme_title_art(title_key, duality=True),),
+        "images": (pantheon.theme_title_art(title_key, duality=True),),
         "name": ("week_duality_title", title_key),
         "article": ("week_duality", title_key),
     }
@@ -459,14 +459,14 @@ def _wider_topic(theme: str) -> list[dict]:
     old standalone topics did, until the owner's art lands."""
     title_key = f"{theme}_wider"
     title_entry = {
-        "images": (defaults.theme_title_art(title_key),),
+        "images": (pantheon.theme_title_art(title_key),),
         "name": ("theme_title", title_key),
         "article": ("theme_title", title_key),
     }
     figure_entries = [
         {
             "images": (
-                defaults.weekday_art(f"{theme}/wider/bronze/{figure.lower()}.png"),
+                pantheon.weekday_art(f"{theme}/wider/bronze/{figure.lower()}.png"),
             ),
             "name": figure,
             "article": ("emblem", "wider", figure),
@@ -502,7 +502,7 @@ def _continents_topic(travel_date: date) -> dict:
     does the metal finishes."""
     def region_looks(region: str) -> tuple:
         return tuple(
-            (label, ((defaults.earth_face_art(style, region, phase),),))
+            (label, ((continents.earth_face_art(style, region, phase),),))
             for label, style, phase in (
                 ("Atmosphere", "atmo", "day"),
                 ("Atmosphere · Night", "atmo", "night"),
@@ -513,23 +513,23 @@ def _continents_topic(travel_date: date) -> dict:
 
     def body_entry(body: str) -> dict:
         return {
-            "looks": region_looks(defaults.CONTINENTS_REGIONS[body]),
-            "name": defaults.WEEKDAY_THEME_NAMES["continents"][body],
+            "looks": region_looks(continents.CONTINENTS_REGIONS[body]),
+            "name": pantheon.WEEKDAY_THEME_NAMES["continents"][body],
             "article": ("article", "continents", body),
             "weekday": constants.WEEKDAY_FULL_NAMES[body],
         }
 
-    ruler_name, servant_name = defaults.WEEKDAY_DUAL_NAMES["continents"]
+    ruler_name, servant_name = pantheon.WEEKDAY_DUAL_NAMES["continents"]
     title_entry = {
-        "images": (defaults.CONTINENTS_TITLE_IMAGE,),
+        "images": (continents.CONTINENTS_TITLE_IMAGE,),
         "name": ("theme_title", "continents"),
         "article": ("theme_title", "continents"),
     }
     duality_title_entry = {
         # The two poles in eternal antiphase, side by side.
         "images": (
-            defaults.earth_face_art("atmo", "south_pole", "day"),
-            defaults.earth_face_art("atmo", "north_pole", "day"),
+            continents.earth_face_art("atmo", "south_pole", "day"),
+            continents.earth_face_art("atmo", "north_pole", "day"),
         ),
         "name": ("week_duality_title", "continents"),
         "article": ("week_duality", "continents"),
@@ -555,7 +555,7 @@ def _continents_topic(travel_date: date) -> dict:
         else constants.WEEKDAY_THEME_NINTHS["continents"]
     )
     ninth_entry = {
-        "images": (defaults.weekday_art(ninth_rel),),
+        "images": (pantheon.weekday_art(ninth_rel),),
         "name": ninth_name,
         "article": ("emblem", "ninths", ninth_name),
     }
@@ -565,8 +565,8 @@ def _continents_topic(travel_date: date) -> dict:
         + [duality_title_entry, good_entry, evil_entry, ninth_entry]
     )
     return {
-        "title": defaults.WEEKDAY_THEME_TITLES["continents"],
-        "icon": defaults.CONTINENTS_TITLE_IMAGE,
+        "title": pantheon.WEEKDAY_THEME_TITLES["continents"],
+        "icon": continents.CONTINENTS_TITLE_IMAGE,
         "entries": entries,
     }
 

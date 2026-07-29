@@ -8,7 +8,7 @@ look switcher, and the live-dial body art (earth_style x day/night).
 
 from datetime import date
 
-from config import constants, defaults, paths
+from config import constants, continents, pantheon, paths
 from core import continents
 
 
@@ -18,12 +18,12 @@ def test_continents_registered_everywhere():
     """The theme is a first-class weekday theme: in the dial roster, in a
     menu group, with a title, an article set, blurb, dual and Ninth."""
     assert "continents" in constants.WEEKDAY_THEMES
-    assert defaults.WEEKDAY_THEME_TITLES["continents"] == "Continents"
+    assert pantheon.WEEKDAY_THEME_TITLES["continents"] == "Continents"
     assert constants.WEEKDAY_THEME_ARTICLES["continents"] == "continents"
     assert constants.WEEKDAY_THEME_BLURBS["continents"] == "day"
-    assert defaults.WEEKDAY_DUAL_NAMES["continents"] == ("Antarctica", "Arctic")
+    assert pantheon.WEEKDAY_DUAL_NAMES["continents"] == ("Antarctica", "Arctic")
     # It rides a menu group so the dial can offer it.
-    grouped = {key for _t, keys in defaults.WEEKDAY_MENU_GROUPS for key in keys}
+    grouped = {key for _t, keys in pantheon.WEEKDAY_MENU_GROUPS for key in keys}
     assert "continents" in grouped
 
 
@@ -32,10 +32,10 @@ def test_continents_body_and_dual_plates_exist_on_disk():
     face (the sealed owner exception — the dial's own art reused), and so
     does the Arctic Servant dual (test_every_theme_skeleton's law)."""
     for body in constants.WEEKDAY_BODIES:
-        plate = defaults.weekday_theme_body_art("continents", body)
+        plate = pantheon.weekday_theme_body_art("continents", body)
         assert paths.art_file(plate).exists(), body
-    rel = defaults.WEEKDAY_DUAL_FILES["continents"]
-    dual = defaults.weekday_art(f"{rel}.png")
+    rel = pantheon.WEEKDAY_DUAL_FILES["continents"]
+    dual = pantheon.weekday_art(f"{rel}.png")
     assert paths.art_file(dual).exists()
 
 
@@ -54,12 +54,12 @@ def test_continents_ninth_wired_zealandia_and_pangea():
 
 def test_continent_regions_cover_the_six_columns_and_the_poles():
     """The sealed matrix's continent-to-weekday assignment, pinned."""
-    assert defaults.CONTINENTS_REGIONS == {
+    assert continents.CONTINENTS_REGIONS == {
         "moon": "oceania", "mars": "europe", "mercury": "asia",
         "jupiter": "africa", "venus": "south_america",
         "saturn": "north_america", "sun": "south_pole",
     }
-    assert defaults.CONTINENTS_DUAL_REGION == "north_pole"
+    assert continents.CONTINENTS_DUAL_REGION == "north_pole"
 
 
 # --- 2. THE EASTER-EGG LAW (golden dates against the bundled data) -----------
@@ -188,8 +188,8 @@ def test_topic_title_image_present():
     topic = _topics(date(2026, 7, 7))["continents"]
     assert paths.art_file(topic["icon"]).exists()
     title = topic["entries"][0]
-    assert title["images"] == (defaults.CONTINENTS_TITLE_IMAGE,)
-    assert paths.art_file(defaults.CONTINENTS_TITLE_IMAGE).exists()
+    assert title["images"] == (continents.CONTINENTS_TITLE_IMAGE,)
+    assert paths.art_file(continents.CONTINENTS_TITLE_IMAGE).exists()
 
 
 def test_topic_look_switcher_atmosphere_clean_day_night():
@@ -247,25 +247,25 @@ def test_continents_body_art_follows_style_and_sky():
     setting) and the live sky's day/night — the atmo-day still frame is
     only the baked preview."""
     # Europe (Mars) by day in atmosphere, by night in clean.
-    assert defaults.continents_body_art("mars", "atmo", True).name == (
+    assert continents.continents_body_art("mars", "atmo", True).name == (
         "earth_atmo_europe_day.png"
     )
-    assert defaults.continents_body_art("mars", "clean", False).name == (
+    assert continents.continents_body_art("mars", "clean", False).name == (
         "earth_clean_europe_night.png"
     )
     # The Ruler center (sun -> south_pole) and the Arctic Servant.
-    assert defaults.continents_body_art("sun", "clean", True).name == (
+    assert continents.continents_body_art("sun", "clean", True).name == (
         "earth_clean_south_pole_day.png"
     )
-    assert defaults.continents_dual_art("atmo", False).name == (
+    assert continents.continents_dual_art("atmo", False).name == (
         "earth_atmo_north_pole_night.png"
     )
     # Every live combination resolves to an existing face.
     for body in constants.WEEKDAY_BODIES:
-        for style in defaults.CONTINENTS_PREVIEW_STYLE, "clean":
+        for style in continents.CONTINENTS_PREVIEW_STYLE, "clean":
             for day in (True, False):
                 assert paths.art_file(
-                    defaults.continents_body_art(body, style, day)
+                    continents.continents_body_art(body, style, day)
                 ).exists(), (body, style, day)
 
 

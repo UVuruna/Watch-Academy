@@ -21,8 +21,8 @@ from PySide6.QtGui import QPixmap
 from PySide6.QtWidgets import QSizePolicy, QVBoxLayout, QWidget
 
 from app.encyclopedia.cards import CardGrid, mosaic_pixmap
-from config import defaults, paths
-from config import encyclopedia_tree as tree
+from config import encyclopedia_ui, paths
+from config import encyclopedia_tree as tree, encyclopedia_ui
 
 
 class HomeScreen(QWidget):
@@ -36,7 +36,7 @@ class HomeScreen(QWidget):
         self._encyclopedia = encyclopedia
         self._tr = tr
         self._zoom = 1.0
-        self._grid = CardGrid(defaults.ENCYCLOPEDIA_HOME_COLUMNS)
+        self._grid = CardGrid(encyclopedia_ui.ENCYCLOPEDIA_HOME_COLUMNS)
         self._grid.opened.connect(self.opened)
         # THE GRID NEVER DICTATES A MINIMUM (owner bug 2026-07-29, the
         # one-way resize). `fit()` measures the cards FROM the viewport
@@ -63,7 +63,7 @@ class HomeScreen(QWidget):
         one, otherwise the mosaic computed from the whole's own theme
         plates."""
         drawn = paths.art_file(
-            defaults.ENCYCLOPEDIA_WHOLE_ART_DIR / f"{whole.key}.png"
+            encyclopedia_ui.ENCYCLOPEDIA_WHOLE_ART_DIR / f"{whole.key}.png"
         )
         if drawn.exists():
             return QPixmap(str(drawn))

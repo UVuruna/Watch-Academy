@@ -22,7 +22,7 @@ from PySide6.QtWidgets import QApplication
 
 from app.controller import build_skin
 from app.settings_store import Settings
-from config import constants, defaults, palette
+from config import constants, defaults, palette, pantheon
 from core.clock_state import build_day_context, build_tick_state
 from core.year_wheel import year_marker_angle
 from data.moon_phases import MoonPhaseRepository
@@ -337,10 +337,10 @@ def test_creeds_flip_carries_no_art_or_name_swap(app):
     """The flip moves ARMS, never identities: Christianity stays the
     RULER (its own name, plate and hover text), Satanism stays the
     SERVANT — only which arm each rides changes."""
-    assert defaults.WEEKDAY_DUAL_NAMES["religion"] == (
+    assert pantheon.WEEKDAY_DUAL_NAMES["religion"] == (
         "Christianity", "Satanism",
     )
-    assert defaults.WEEKDAY_THEME_FILES["religion"]["sun"] == "Christianity"
+    assert pantheon.WEEKDAY_THEME_FILES["religion"]["sun"] == "Christianity"
 
 
 # --- The daylight switch ------------------------------------------------------------

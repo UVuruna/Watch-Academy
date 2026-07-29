@@ -27,7 +27,7 @@ from PySide6.QtWidgets import (
     QWidget,
 )
 
-from config import defaults, palette, paths
+from config import calendar_mounts, defaults, palette, pantheon, paths
 
 _MAX_COLUMNS = 4
 
@@ -82,7 +82,7 @@ def _scrollable(content: QWidget) -> QScrollArea:
 
 def build_weekday_theme_grid(current_theme: str, on_pick, tr) -> QScrollArea:
     """A scrollable gallery of every weekday theme, Planets flat first
-    then the kinship groups (`defaults.WEEKDAY_MENU_TOP` /
+    then the kinship groups (`pantheon.WEEKDAY_MENU_TOP` /
     `WEEKDAY_MENU_GROUPS` — the SAME order/grouping the old Weekday
     submenu used). `on_pick(theme_key)` fires on a tile click; the
     CURRENTLY active theme's tile carries an accent border."""
@@ -93,16 +93,16 @@ def build_weekday_theme_grid(current_theme: str, on_pick, tr) -> QScrollArea:
     def add_group(title: str | None, keys: tuple[str, ...]) -> None:
         _add_section(column, tr(title) if title is not None else None, [
             _tile(
-                tr(defaults.WEEKDAY_THEME_TITLES[key]),
-                paths.art_file(defaults.weekday_theme_body_art(key, "sun")),
+                tr(pantheon.WEEKDAY_THEME_TITLES[key]),
+                paths.art_file(pantheon.weekday_theme_body_art(key, "sun")),
                 key == current_theme,
                 lambda k=key: on_pick(k),
             )
             for key in keys
         ])
 
-    add_group(None, defaults.WEEKDAY_MENU_TOP)
-    for group_title, keys in defaults.WEEKDAY_MENU_GROUPS:
+    add_group(None, pantheon.WEEKDAY_MENU_TOP)
+    for group_title, keys in pantheon.WEEKDAY_MENU_GROUPS:
         add_group(group_title, keys)
     column.addStretch(1)
     return _scrollable(content)
@@ -113,7 +113,7 @@ def build_calendar_mount_grid(current_mount: str, on_pick, tr) -> QScrollArea:
     pointer's twelve wedges (owner decree 2026-07-29 — the choice moved
     here from the Design window's Pointer tab).
 
-    The offer is `defaults.CALENDAR_MOUNTS` and nothing else, so
+    The offer is `calendar_mounts.CALENDAR_MOUNTS` and nothing else, so
     registering a roster there puts it on this screen with no edit here
     (Rule #5). Each tile previews the roster with its OWN first member's
     plate — the crown of a System B wheel, the opening sign of a System
@@ -126,7 +126,7 @@ def build_calendar_mount_grid(current_mount: str, on_pick, tr) -> QScrollArea:
     tiles = [_tile(
         tr("None"), None, current_mount == "off", lambda: on_pick("off"),
     )]
-    for key, mount in defaults.CALENDAR_MOUNTS.items():
+    for key, mount in calendar_mounts.CALENDAR_MOUNTS.items():
         preview = paths.art_file(
             defaults.ZODIAC_ART_DIR / mount.art_dir / f"{mount.stems[0]}.png"
         )

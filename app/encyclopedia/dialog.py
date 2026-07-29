@@ -38,8 +38,8 @@ from app.encyclopedia.reader import ReaderScreen
 from app.encyclopedia.themes import ThemeScreen
 from app.theme import apply_theme
 from app.ui_style import style_button
-from config import constants, defaults, palette, paths
-from config import encyclopedia_tree as tree
+from config import constants, defaults, encyclopedia_ui, palette, pantheon, paths
+from config import encyclopedia_tree as tree, encyclopedia_ui, pantheon
 from config.ui_text import ui
 from data.encyclopedia import EncyclopediaRepository
 from data.symbolism import SymbolismRepository
@@ -101,7 +101,7 @@ class EncyclopediaDialog(QDialog):
         self._crumbs = QLabel()
         self._crumbs.setStyleSheet(
             f"color: {palette.THEME_COLORS['text_secondary']};"
-            f"font-size: {defaults.UI_BUTTON_SMALL_FONT_PX}px;"
+            f"font-size: {encyclopedia_ui.UI_BUTTON_SMALL_FONT_PX}px;"
         )
         self._crumbs.setCursor(Qt.CursorShape.PointingHandCursor)
         self._crumbs.mouseReleaseEvent = self._crumb_clicked
@@ -175,14 +175,14 @@ class EncyclopediaDialog(QDialog):
         # too — whichever needs more width wins, so a 4-card row can
         # never spill either.
         min_width = max(
-            defaults.ENCYCLOPEDIA_MIN_WIDTH_PX,
+            encyclopedia_ui.ENCYCLOPEDIA_MIN_WIDTH_PX,
             row_content_width(
-                defaults.ENCYCLOPEDIA_CARD_MIN_WIDTH_PX,
-                defaults.ENCYCLOPEDIA_GALLERY_MAX_COLUMNS,
+                encyclopedia_ui.ENCYCLOPEDIA_CARD_MIN_WIDTH_PX,
+                encyclopedia_ui.ENCYCLOPEDIA_GALLERY_MAX_COLUMNS,
             ),
         )
-        self.setMinimumSize(min_width, defaults.ENCYCLOPEDIA_MIN_HEIGHT_PX)
-        self.resize(min_width, defaults.ENCYCLOPEDIA_MIN_HEIGHT_PX)
+        self.setMinimumSize(min_width, encyclopedia_ui.ENCYCLOPEDIA_MIN_HEIGHT_PX)
+        self.resize(min_width, encyclopedia_ui.ENCYCLOPEDIA_MIN_HEIGHT_PX)
         apply_theme(self)
         self.show_home()
         # The Spacebar jump (owner 2026-07-16): open straight onto the
@@ -220,7 +220,7 @@ class EncyclopediaDialog(QDialog):
         )
         for topic_key, data, plate in (
             ("trinity", verses["trinity"],
-             defaults.SCALE_ART_DIR / "primary" / "colored" / "Union.png"),
+             pantheon.SCALE_ART_DIR / "primary" / "colored" / "Union.png"),
             ("seasons", verses["seasons"],
              defaults.SEASON_ART_DIR / "Poem.png"),
         ):

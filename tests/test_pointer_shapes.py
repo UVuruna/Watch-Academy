@@ -34,8 +34,8 @@ from app.settings_store import (
     SettingsStore,
     replace,
 )
-from config import constants, palette
-from config import defaults
+from config import constants, dial, palette
+from config import defaults, dial
 from core.clock_state import build_day_context, build_tick_state
 from data.moon_phases import MoonPhaseRepository
 from data.seasons import SeasonsRepository
@@ -768,7 +768,7 @@ def test_the_lead_line_constants_are_pointer_neutral():
     """One shared pair for the whole family (Rule #4/#5) — the Rose's
     old private names are GONE (Rule #6, no aliases)."""
     assert palette.ARM_OUTLINE == "#1A1A1A"
-    assert defaults.ARM_OUTLINE_WIDTH == 0.0035
+    assert dial.ARM_OUTLINE_WIDTH == 0.0035
     assert not hasattr(palette, "ROSE_ARM_OUTLINE")
     assert not hasattr(defaults, "ROSE_ARM_OUTLINE_WIDTH")
 
@@ -810,7 +810,7 @@ def test_the_umbra_stands_at_flat_noon_with_the_daylight_switch_off(app):
 
     for pointer in constants.DAYLIGHT_SWITCH_POINTERS:
         skin = _skin(pointer, daylight=False)
-        lightest, _darkest = defaults.UMBRA_CONTRAST_SPANS[skin.umbra_contrast]
+        lightest, _darkest = dial.UMBRA_CONTRAST_SPANS[skin.umbra_contrast]
         flat = tinted_gray(min(255, lightest), skin.ring_tint).name().upper()
         assert shades(pointer, False) == {flat}
         assert len(shades(pointer, True)) > 1

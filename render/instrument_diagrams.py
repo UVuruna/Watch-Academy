@@ -25,7 +25,7 @@ from PySide6.QtGui import (
     QColor, QFont, QFontMetricsF, QPainter, QPen, QPixmap,
 )
 
-from config import constants, defaults, doctrine, palette
+from config import constants, doctrine, encyclopedia_ui, palette
 from core import angles
 
 # The eight figures this module draws, in the order the Instrument topic
@@ -61,7 +61,7 @@ def _canvas(size: int) -> tuple[QPixmap, QPainter]:
 
 def _font(size: int, ratio: float = None, bold: bool = True) -> QFont:
     font = QFont()
-    ratio = defaults.INSTRUMENT_DIAGRAM_LABEL_RATIO if ratio is None else ratio
+    ratio = encyclopedia_ui.INSTRUMENT_DIAGRAM_LABEL_RATIO if ratio is None else ratio
     font.setPixelSize(max(9, round(size * ratio)))
     font.setBold(bold)
     return font
@@ -98,7 +98,7 @@ def _text(painter: QPainter, point: QPointF, text: str, size: int,
     metrics = QFontMetricsF(painter.font())
     half_w = metrics.horizontalAdvance(text) / 2 + size * 0.006
     half_h = metrics.height() / 2
-    margin = defaults.INSTRUMENT_DIAGRAM_MARGIN_PX
+    margin = encyclopedia_ui.INSTRUMENT_DIAGRAM_MARGIN_PX
     x = min(max(point.x(), margin + half_w), size - margin - half_w)
     y = min(max(point.y(), margin + half_h), size - margin - half_h)
     painter.drawText(
@@ -110,13 +110,13 @@ def _text(painter: QPainter, point: QPointF, text: str, size: int,
 
 def _caption(painter: QPainter, size: int, text: str) -> None:
     """The one line under every figure that says what it is measuring."""
-    painter.setFont(_font(size, defaults.INSTRUMENT_DIAGRAM_CAPTION_RATIO, False))
+    painter.setFont(_font(size, encyclopedia_ui.INSTRUMENT_DIAGRAM_CAPTION_RATIO, False))
     painter.setPen(QPen(QColor(_FAINT)))
     painter.drawText(
         QRectF(
-            defaults.INSTRUMENT_DIAGRAM_MARGIN_PX,
-            size * defaults.INSTRUMENT_DIAGRAM_CAPTION_Y,
-            size - 2 * defaults.INSTRUMENT_DIAGRAM_MARGIN_PX,
+            encyclopedia_ui.INSTRUMENT_DIAGRAM_MARGIN_PX,
+            size * encyclopedia_ui.INSTRUMENT_DIAGRAM_CAPTION_Y,
+            size - 2 * encyclopedia_ui.INSTRUMENT_DIAGRAM_MARGIN_PX,
             size * 0.08,
         ),
         Qt.AlignmentFlag.AlignHCenter | Qt.AlignmentFlag.AlignTop,
@@ -157,9 +157,9 @@ def _dial(_key: str, size: int) -> QPixmap:
     hand once round per HOUR, no seconds hand."""
     pixmap, painter = _canvas(size)
     center = QPointF(size / 2, size / 2)
-    radius = size * defaults.INSTRUMENT_DIAGRAM_RING_RATIO
+    radius = size * encyclopedia_ui.INSTRUMENT_DIAGRAM_RING_RATIO
     _dial_face(painter, center, radius, size)
-    hour, minute = defaults.INSTRUMENT_DIAGRAM_SAMPLE_TIME
+    hour, minute = encyclopedia_ui.INSTRUMENT_DIAGRAM_SAMPLE_TIME
     seconds = hour * constants.SECONDS_PER_HOUR + minute * 60
     hour_angle = (
         seconds / constants.SECONDS_PER_DAY * 360.0 + constants.DIAL_OFFSET_DEG
@@ -189,10 +189,10 @@ def _solar_rotation(_key: str, size: int) -> QPixmap:
     decoration."""
     pixmap, painter = _canvas(size)
     center = QPointF(size / 2, size / 2)
-    radius = size * defaults.INSTRUMENT_DIAGRAM_RING_RATIO
+    radius = size * encyclopedia_ui.INSTRUMENT_DIAGRAM_RING_RATIO
     painter.setPen(_pen(_FAINT, size, 0.004))
     painter.drawEllipse(center, radius, radius)
-    tilt = defaults.INSTRUMENT_DIAGRAM_SAMPLE_TILT_DEG
+    tilt = encyclopedia_ui.INSTRUMENT_DIAGRAM_SAMPLE_TILT_DEG
     # Clock noon — where an untipped star would point.
     dashed = _pen(_FAINT, size, 0.004)
     dashed.setStyle(Qt.PenStyle.DashLine)
@@ -228,11 +228,11 @@ def _twilight(_key: str, size: int) -> QPixmap:
     and the one DOMY actually draws."""
     pixmap, painter = _canvas(size)
     center = QPointF(size / 2, size / 2)
-    radius = size * defaults.INSTRUMENT_DIAGRAM_RING_RATIO
+    radius = size * encyclopedia_ui.INSTRUMENT_DIAGRAM_RING_RATIO
     bands = tuple(
         (start, end, f"{name}  {start:.0f}–{end:.0f}°",
          palette.INSTRUMENT_TWILIGHT_COLORS[name])
-        for start, end, name in defaults.INSTRUMENT_TWILIGHT_BANDS
+        for start, end, name in encyclopedia_ui.INSTRUMENT_TWILIGHT_BANDS
     )
     box = QRectF(center.x() - radius, center.y() - radius, radius * 2, radius * 2)
     painter.setPen(Qt.PenStyle.NoPen)
@@ -292,7 +292,7 @@ def _year_wheel(_key: str, size: int) -> QPixmap:
     center = QPointF(size / 2, size / 2)
     # A tighter ring than the other figures: the four anchor names are
     # long, and two of them stand at the widest point of the disc.
-    radius = size * defaults.INSTRUMENT_DIAGRAM_YEAR_RING_RATIO
+    radius = size * encyclopedia_ui.INSTRUMENT_DIAGRAM_YEAR_RING_RATIO
     # Anchor -> the season that BEGINS there and runs clockwise to the
     # next anchor. Summer opens at the top with the June solstice, so
     # the top-right quarter is summer's own, and each quarter wears that
@@ -337,9 +337,9 @@ def _moon_lunations(_key: str, size: int) -> QPixmap:
     the same maths the dial's own moon marker uses."""
     pixmap, painter = _canvas(size)
     center = QPointF(size / 2, size / 2)
-    radius = size * defaults.INSTRUMENT_DIAGRAM_RING_RATIO
-    steps = defaults.INSTRUMENT_DIAGRAM_PHASE_STEPS
-    disc = size * defaults.INSTRUMENT_DIAGRAM_MOON_RATIO
+    radius = size * encyclopedia_ui.INSTRUMENT_DIAGRAM_RING_RATIO
+    steps = encyclopedia_ui.INSTRUMENT_DIAGRAM_PHASE_STEPS
+    disc = size * encyclopedia_ui.INSTRUMENT_DIAGRAM_MOON_RATIO
     painter.setPen(_pen(_FAINT, size, 0.003))
     painter.drawEllipse(center, radius, radius)
     painter.setFont(_font(size))
@@ -436,16 +436,16 @@ def _ring_letters(_key: str, size: int) -> QPixmap:
     table the article quotes."""
     pixmap, painter = _canvas(size)
     center = QPointF(size / 2, size / 2)
-    radius = size * defaults.INSTRUMENT_DIAGRAM_RING_RATIO
+    radius = size * encyclopedia_ui.INSTRUMENT_DIAGRAM_RING_RATIO
     _dial_face(painter, center, radius, size)
-    painter.setFont(_font(size, defaults.INSTRUMENT_DIAGRAM_GLYPH_RATIO))
+    painter.setFont(_font(size, encyclopedia_ui.INSTRUMENT_DIAGRAM_GLYPH_RATIO))
     for glyph, place in doctrine.RING_LETTER_SEATS:
         angle = angles.ring_position_angle(place)
         _text(painter, _on_dial(center, radius * 0.78, angle), glyph, size, color=_ACCENT)
         painter.setFont(_font(size))
         _text(painter, _on_dial(center, radius * 0.55, angle),
               f"{place}th letter · {place:02d}h", size, color=_INK)
-        painter.setFont(_font(size, defaults.INSTRUMENT_DIAGRAM_GLYPH_RATIO))
+        painter.setFont(_font(size, encyclopedia_ui.INSTRUMENT_DIAGRAM_GLYPH_RATIO))
     _caption(painter, size,
              "each letter sits at the hour of its own place in the "
              "Greek alphabet")
@@ -468,9 +468,9 @@ def _oscillations(_key: str, size: int) -> QPixmap:
     years = envelope["years"]
     high = envelope["envelope_days"]
     signed = envelope["signed_days"]
-    inset = size * defaults.INSTRUMENT_DIAGRAM_CHART_INSET
+    inset = size * encyclopedia_ui.INSTRUMENT_DIAGRAM_CHART_INSET
     plot = QRectF(inset, inset, size - 2 * inset,
-                  size * defaults.INSTRUMENT_DIAGRAM_CHART_HEIGHT)
+                  size * encyclopedia_ui.INSTRUMENT_DIAGRAM_CHART_HEIGHT)
     span = max(years) - min(years)
     peak = max(max(high), abs(min(signed)), max(signed)) or 1.0
 

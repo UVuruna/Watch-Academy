@@ -16,7 +16,7 @@ import pytest
 from PySide6.QtCore import QPointF
 from PySide6.QtWidgets import QApplication
 
-from config import constants, defaults, palette
+from config import constants, defaults, dial, encyclopedia_ui, glow, palette, pantheon, shortcuts
 from core.clock_state import build_day_context, build_tick_state
 from data.moon_phases import MoonPhaseRepository
 from data.seasons import SeasonsRepository
@@ -227,12 +227,12 @@ def test_slot_seat_geometry_follows_the_pointer():
         assert slot_seat_scale(skin(pointer=pointer)) == 1.50, pointer
     assert slot_seat_scale(
         skin(pointer="octa", show_pointer=False)
-    ) == defaults.SLOT_SIZE_PINNED == 1.50
+    ) == dial.SLOT_SIZE_PINNED == 1.50
     # (3) The outward shift: angle seats on cross/octa only.
     H3 = constants.AURORA_DUAL_WEEKDAY_ANGLE
     for pointer in ("cross", "octa"):
         assert slot_seat_orbit(skin(pointer=pointer), H3) == \
-            defaults.SLOT_SEAT_OUTWARD[pointer], pointer
+            dial.SLOT_SEAT_OUTWARD[pointer], pointer
         assert slot_seat_orbit(skin(pointer=pointer), "center") == 1.0
         assert slot_seat_orbit(skin(pointer=pointer), "classic") == 1.0
     assert slot_seat_orbit(skin(pointer="hexa"), H3) == 1.0
@@ -317,14 +317,14 @@ def test_subdial_plate_resolves_directly_for_sets_one_through_four(app):
     finishes each — `subdial_plate_file` (reading the active set off
     `config.paths.subdial_set()`, mirroring the art-source switch)
     returns the exact matching file, no recolor, no cache entry."""
-    from config import paths as _paths
+    from config import dial, encyclopedia_ui, glow, pantheon, paths as _paths, shortcuts
     from render.asset_variants import subdial_plate_file
 
     for set_name in ("set1", "set2", "set3", "set4"):
         with _paths.display(_paths.display_context(subdial_set=set_name)):
             for finish in ("gold", "silver", "bronze"):
                 expected = (
-                    defaults.SUBDIAL_ROOT_DIR / set_name / f"{finish}.png"
+                    dial.SUBDIAL_ROOT_DIR / set_name / f"{finish}.png"
                 )
                 assert expected.exists(), (set_name, finish)
                 assert subdial_plate_file(finish) == expected, (
@@ -345,11 +345,11 @@ def test_subdial_plate_solo_set_derives_gold_and_bronze(app):
     are disk-cached live recolors of it, the SAME recipe the retired
     one-master model always used (`render.asset_recolor._recolored_plate`,
     Rule #5 shared with the ring letters)."""
-    from config import paths as _paths
+    from config import dial, encyclopedia_ui, glow, pantheon, paths as _paths, shortcuts
     from render.asset_variants import subdial_plate_file
 
     with _paths.display(_paths.display_context(subdial_set="solo")):
-        master = defaults.SUBDIAL_ROOT_DIR / "solo" / "silver.png"
+        master = dial.SUBDIAL_ROOT_DIR / "solo" / "silver.png"
         assert master.exists()
         assert subdial_plate_file("silver") == master
         version = defaults.SUBDIAL_RECOLOR_VERSION
@@ -387,7 +387,7 @@ def test_subdial_plate_solo_set_derives_gold_and_bronze(app):
 
 
 def test_subdial_set_rejects_unknown_value():
-    from config import paths as _paths
+    from config import dial, encyclopedia_ui, glow, pantheon, paths as _paths, shortcuts
 
     with pytest.raises(ValueError):
         _paths.display_context(subdial_set="bogus")
@@ -452,7 +452,7 @@ def test_dual_sunday_two_faces_on_compass_and_seasons(app, july_wednesday):
 
     # The art table is complete: all twelve themes + colored variants.
     # Canonical paths resolve through the ART SOURCE (owner 2026-07-14).
-    from config import paths as _paths
+    from config import dial, encyclopedia_ui, glow, pantheon, paths as _paths, shortcuts
 
     # A theme whose Mirror plate is pending owner art runs single-faced
     # until it lands; which themes those are is the ART DEBT REGISTRY's
@@ -461,13 +461,13 @@ def test_dual_sunday_two_faces_on_compass_and_seasons(app, july_wednesday):
 
     dual_less = set()
     for theme in constants.WEEKDAY_THEMES:
-        rel = defaults.WEEKDAY_DUAL_FILES[theme]
+        rel = pantheon.WEEKDAY_DUAL_FILES[theme]
         if not _paths.art_file(
-            defaults.weekday_art(f"{rel}.png")
+            pantheon.weekday_art(f"{rel}.png")
         ).exists():
             dual_less.add(theme)
             continue
-        assert theme in defaults.WEEKDAY_DUAL_NAMES
+        assert theme in pantheon.WEEKDAY_DUAL_NAMES
     assert dual_less <= PENDING_DUAL, sorted(dual_less - PENDING_DUAL)
     colored_dual_less = set()
     for theme in constants.METAL_THEMES:
@@ -478,10 +478,10 @@ def test_dual_sunday_two_faces_on_compass_and_seasons(app, july_wednesday):
             continue
         # The colored dual lives in the register's own colored/ look
         # (tree law 2026-07-26) — colored_variant_rel is the ONE swap.
-        rel = defaults.colored_variant_rel(
-            defaults.WEEKDAY_DUAL_FILES[theme]
+        rel = pantheon.colored_variant_rel(
+            pantheon.WEEKDAY_DUAL_FILES[theme]
         )
-        if not _paths.art_file(defaults.weekday_art(f"{rel}.png")).exists():
+        if not _paths.art_file(pantheon.weekday_art(f"{rel}.png")).exists():
             colored_dual_less.add(theme)
     assert colored_dual_less <= PENDING_DUAL, sorted(
         colored_dual_less - PENDING_DUAL
@@ -491,7 +491,7 @@ def test_dual_sunday_two_faces_on_compass_and_seasons(app, july_wednesday):
     # ruler/servant prose.
     import json as _json
 
-    from config import paths
+    from config import dial, encyclopedia_ui, glow, pantheon, paths, shortcuts
     data = _json.loads(
         (paths.database_dir() / "symbolism.json").read_text(encoding="utf-8")
     )
@@ -539,10 +539,10 @@ def test_dual_sunday_two_faces_on_compass_and_seasons(app, july_wednesday):
         from render.asset_variants import scaled_variant_file
 
         eclipse_uri = scaled_variant_file(
-            defaults.weekday_art(
-                f"{defaults.WEEKDAY_DUAL_FILES['planets']}.png"
+            pantheon.weekday_art(
+                f"{pantheon.WEEKDAY_DUAL_FILES['planets']}.png"
             ),
-            2 * defaults.ARTICLE_IMAGE_WIDTH_PX,
+            2 * encyclopedia_ui.ARTICLE_IMAGE_WIDTH_PX,
         ).as_uri()
         assert eclipse_uri in south and eclipse_uri not in north
     # The SERVANT stands as a ghost on ORDINARY days too (a Wednesday):
@@ -707,7 +707,7 @@ def test_theme_ninth_matches_the_encyclopedia_table(app):
     `pantheon` copy that was never drawn (Rule #19 — one figure, one
     plate, read by both rosters). A theme absent from the table
     entirely (no weekday Sunday duality) always answers None."""
-    from config import paths as _paths
+    from config import dial, encyclopedia_ui, glow, pantheon, paths as _paths, shortcuts
     from render.layers import theme_ninth
 
     from tests.art_debt import PENDING_NINTH
@@ -763,14 +763,14 @@ def test_center_dual_hover_pairs_by_solar_window(app):
     outside = comp.tooltip_at(180.0, 180.0, 360.0)
     assert outside is not None
     assert "Alpha" in outside and "Sigma" not in outside
-    assert outside.count(f"<td width='{defaults.ARTICLE_COLUMN_WIDTH_PX}'>") == 0
+    assert outside.count(f"<td width='{encyclopedia_ui.ARTICLE_COLUMN_WIDTH_PX}'>") == 0
 
     day, tick = day_tick_at(12, 44, 28)               # solar noon
     comp.render_offscreen(360.0, 1.0, day, tick)
     at_noon = comp.tooltip_at(180.0, 180.0, 360.0)
     assert at_noon is not None
     assert "Alpha" in at_noon and "Sigma" in at_noon
-    assert at_noon.count(f"<td width='{defaults.ARTICLE_COLUMN_WIDTH_PX}'>") == 2
+    assert at_noon.count(f"<td width='{encyclopedia_ui.ARTICLE_COLUMN_WIDTH_PX}'>") == 2
 
     day, tick = day_tick_at(0, 44, 28)                # solar midnight
     comp.render_offscreen(360.0, 1.0, day, tick)
@@ -778,7 +778,7 @@ def test_center_dual_hover_pairs_by_solar_window(app):
     assert at_midnight is not None
     assert "Omega" in at_midnight and "Sigma" in at_midnight
     assert at_midnight.count(
-        f"<td width='{defaults.ARTICLE_COLUMN_WIDTH_PX}'>"
+        f"<td width='{encyclopedia_ui.ARTICLE_COLUMN_WIDTH_PX}'>"
     ) == 2
 
     # A 2-face theme (no Ninth): ALWAYS both, regardless of the hour.
@@ -795,7 +795,7 @@ def test_center_dual_hover_pairs_by_solar_window(app):
     always_both = planets_comp.tooltip_at(180.0, 180.0, 360.0)
     assert always_both is not None
     assert always_both.count(
-        f"<td width='{defaults.ARTICLE_COLUMN_WIDTH_PX}'>"
+        f"<td width='{encyclopedia_ui.ARTICLE_COLUMN_WIDTH_PX}'>"
     ) == 2
 
 
@@ -958,8 +958,8 @@ def test_ring_tick_hover_reads_all_three_wheels(july_wednesday):
     )
     compositor.render_offscreen(360.0, 1.0, day, tick)
     band = 180.0 * (
-        defaults.TICK_HOVER_INNER_FRACTION
-        + defaults.TICK_HOVER_OUTER_FRACTION
+        dial.TICK_HOVER_INNER_FRACTION
+        + dial.TICK_HOVER_OUTER_FRACTION
     ) / 2
     top = compositor.tooltip_at(180.0, 180.0 - band, 360.0)     # theta 0
     # Formatting round 2026-07-12: bold labels, the exact dial degree
@@ -1192,7 +1192,7 @@ def test_seated_slot_wears_its_own_roster():
     slots share the theme."""
     from app.controller import apply_display_settings
     from app.settings_store import Settings, replace
-    from config import paths as _paths
+    from config import dial, encyclopedia_ui, glow, pantheon, paths as _paths, shortcuts
     from render.layers import slot_view
 
     skin = apply_display_settings(
@@ -1212,7 +1212,7 @@ def test_seated_slot_wears_its_own_roster():
     # The throne the 2nd slot draws on Sunday: Zeus, the pantheon
     # article, an existing plate (fame first — the reused primary
     # serves until the pantheon plate lands).
-    seat = defaults.pantheon_seat("greek", "sun")
+    seat = pantheon.pantheon_seat("greek", "sun")
     assert seat is not None
     assert seat[1].startswith("Zeus")
     assert seat[2] == ("greek_pantheon", "sun")
@@ -1221,7 +1221,7 @@ def test_seated_slot_wears_its_own_roster():
     # rides an existing pantheon plate — no seat may pair the
     # pantheon name with missing art.
     for body in constants.WEEKDAY_BODIES:
-        resolved = defaults.pantheon_seat("greek", body)
+        resolved = pantheon.pantheon_seat("greek", body)
         if resolved is not None:
             assert _paths.art_file(resolved[0]).exists(), body
     # The seated hover speaks the seated figure — same theme on both
@@ -1408,8 +1408,8 @@ def test_greetings_ride_the_top_ring_letter_only_when_unlocked(july_wednesday):
     compositor = Compositor(defaults.DEFAULT_SKIN, AssetCache())
     compositor.render_offscreen(360.0, 1.0, day, tick)
     letters = (
-        defaults.TICK_HOVER_OUTER_FRACTION
-        + defaults.GREETINGS_LETTER_OUTER_FRACTION
+        dial.TICK_HOVER_OUTER_FRACTION
+        + encyclopedia_ui.GREETINGS_LETTER_OUTER_FRACTION
     ) / 2
     top = QPointF(0.0, -180.0 * letters)
     bottom = QPointF(0.0, 180.0 * letters)
@@ -1446,8 +1446,8 @@ def test_mason_ring_letters_answer_their_own_hover_legend(july_wednesday):
     compositor = Compositor(mason_skin, AssetCache())
     compositor.render_offscreen(360.0, 1.0, day, tick)
     letters = (
-        defaults.TICK_HOVER_OUTER_FRACTION
-        + defaults.GREETINGS_LETTER_OUTER_FRACTION
+        dial.TICK_HOVER_OUTER_FRACTION
+        + encyclopedia_ui.GREETINGS_LETTER_OUTER_FRACTION
     ) / 2
     radius = 180.0
 
@@ -1506,7 +1506,7 @@ def test_ring_arc_words_answer_their_seat_legend(july_wednesday):
 
     day, tick = july_wednesday
     radius = 180.0
-    band = defaults.RING_MOTTO_RADIUS_FRACTION
+    band = dial.RING_MOTTO_RADIUS_FRACTION
 
     def point_at(theta_deg: float) -> QPointF:
         theta = math.radians(theta_deg)
@@ -1568,7 +1568,7 @@ def test_mason_motto_arc_paints_outside_the_ring(july_wednesday):
     day, tick = july_wednesday
     dial_diameter = 720
     dial_radius_px = dial_diameter / 2.0
-    motto_radius_px = dial_radius_px * defaults.RING_MOTTO_RADIUS_FRACTION
+    motto_radius_px = dial_radius_px * dial.RING_MOTTO_RADIUS_FRACTION
 
     mason_skin = build_skin(settings_replace(Settings(), ring="Dollar"))
     mason_image, _, mason_margin = _render_window_frame(
@@ -1617,7 +1617,7 @@ def test_omega_double_click_reveals_the_week(july_wednesday):
     # annular wedge MISSED it — it sat just inside the ring band).
     # hit_omega takes WIDGET-LOCAL coordinates (the dial center sits at
     # (radius, radius), same convention as set_hover/tooltip_at).
-    letter = defaults.RING_LETTER_RADIUS_FRACTION
+    letter = dial.RING_LETTER_RADIUS_FRACTION
     x, y = 180.0, 180.0 + 180.0 * letter        # bottom = 24h/Omega center
     assert compositor.hit_omega(x, y, 360.0)
     assert not compositor.hit_omega(180.0, 180.0 - 180.0 * letter, 360.0)  # top: not Omega
@@ -1650,13 +1650,13 @@ def test_omega_hit_is_the_full_letter_circle(july_wednesday):
     comp = Compositor(defaults.DEFAULT_SKIN, AssetCache())
     comp.render_offscreen(360.0, 1.0, day, tick)
     radius = 180.0
-    letter_r = radius * defaults.RING_LETTER_RADIUS_FRACTION
+    letter_r = radius * dial.RING_LETTER_RADIUS_FRACTION
     # The letter centre lands — and it sits BELOW the old annulus's inner
     # bound (the exact spot the owner's screenshot kept missing).
     assert comp.hit_omega(180.0, 180.0 + letter_r, 360.0)
-    assert defaults.RING_LETTER_RADIUS_FRACTION < defaults.TICK_HOVER_OUTER_FRACTION
+    assert dial.RING_LETTER_RADIUS_FRACTION < dial.TICK_HOVER_OUTER_FRACTION
     # A point ABOVE the centre (the gap between the strokes) lands too.
-    inset = radius * defaults.OMEGA_HIT_RADIUS_FRACTION * 0.5
+    inset = radius * dial.OMEGA_HIT_RADIUS_FRACTION * 0.5
     assert comp.hit_omega(180.0, 180.0 + letter_r - inset, 360.0)
     # Well outside the circle — radially and laterally — does not.
     assert not comp.hit_omega(180.0, 180.0 + letter_r + radius * 0.3, 360.0)
@@ -1993,7 +1993,7 @@ def test_twilight_band_format_and_tick_priority(july_wednesday):
             360.0,
         )
 
-    below_band = probe((defaults.TICK_HOVER_INNER_FRACTION - 0.02))
+    below_band = probe((dial.TICK_HOVER_INNER_FRACTION - 0.02))
     assert "Morning Twilight" in below_band
     assert "Dawn:" in below_band and "Sunrise:" in below_band
     span = round((sun.sunrise - sun.dawn).total_seconds() / 60)
@@ -2003,7 +2003,7 @@ def test_twilight_band_format_and_tick_priority(july_wednesday):
     # Same wedge angle, but INSIDE the tick annulus (which overlaps the
     # aura up to 0.90 R): the circle answers, not the wedge.
     aura = compositor._skin.background.aura_radius_fraction
-    in_band = probe((defaults.TICK_HOVER_INNER_FRACTION + aura) / 2)
+    in_band = probe((dial.TICK_HOVER_INNER_FRACTION + aura) / 2)
     assert "Time:" in in_band and "Date:" in in_band
 
 
@@ -2221,7 +2221,7 @@ def test_event_glow_is_visible_even_over_the_yellow_wedge(app):
     # centerline at the dial top (owner rework 2026-07-16). Probe
     # DIAGONALLY below-right of the relocated marker: inside the halo,
     # outside the disc, off the noon hand shafts on the vertical.
-    marker_y = 270 - round(270 * defaults.GLOW_RING_RADIUS_FRACTION)
+    marker_y = 270 - round(270 * dial.GLOW_RING_RADIUS_FRACTION)
     lit = with_glow.pixelColor(289, marker_y + 33)
     plain = without.pixelColor(289, marker_y + 33)
     # The GOLDEN core lifts red and green over the background.
@@ -2250,13 +2250,13 @@ def test_window_margin_is_tight_and_never_clips():
         window_half = 1.0 + 2.0 * margin
         marker = max(skin.year_marker.scale, skin.year_marker.moon_scale)
         glow_reach = (
-            defaults.GLOW_RING_RADIUS_FRACTION
-            + marker * defaults.GLOW_RADIUS_SCALE * skin.hover_enlarge
+            dial.GLOW_RING_RADIUS_FRACTION
+            + marker * glow.GLOW_RADIUS_SCALE * skin.hover_enlarge
         )
         letter_reach = (
-            defaults.RING_LETTER_RADIUS_FRACTION
-            + defaults.RING_LETTER_ART_SCALE * skin.ring_letter_scale
-            * (1.0 + 2.0 * defaults.RING_LETTER_SHADOW_RADIUS)
+            dial.RING_LETTER_RADIUS_FRACTION
+            + dial.RING_LETTER_ART_SCALE * skin.ring_letter_scale
+            * (1.0 + 2.0 * dial.RING_LETTER_SHADOW_RADIUS)
         )
         reach = max(glow_reach, letter_reach)
         # Lower bound — never clips the drawn extent.
@@ -2372,7 +2372,7 @@ def test_moon_event_glow_renders(app):
     # RELOCATES to the ring band centerline (owner rework 2026-07-16);
     # probe 30 px above the relocated marker center, off the disc.
     moon_angle = math.radians(glowing.moon_fraction * 360.0)
-    orbit = 270 * defaults.GLOW_RING_RADIUS_FRACTION
+    orbit = 270 * dial.GLOW_RING_RADIUS_FRACTION
     moon_x = 270 + orbit * math.sin(moon_angle)
     moon_y = 270 - orbit * math.cos(moon_angle)
     lit = with_glow.pixelColor(round(moon_x), round(moon_y) - 30)
@@ -2417,7 +2417,7 @@ def test_moon_marker_hover_outranks_the_ring_tick_during_glow(app):
     moon_angle = math.radians(glowing.moon_fraction * 360.0)
     # The RELOCATED position (ring band centerline) — where the marker
     # is actually DRAWN during the glow window, not its normal orbit.
-    orbit = radius * defaults.GLOW_RING_RADIUS_FRACTION
+    orbit = radius * dial.GLOW_RING_RADIUS_FRACTION
     moon_x = radius + orbit * math.sin(moon_angle)
     moon_y = radius - orbit * math.cos(moon_angle)
     point = QPointF(moon_x - radius, moon_y - radius)
@@ -2465,7 +2465,7 @@ def test_season_glow_relocates_to_ring_band_and_is_golden(app):
     # Summer solstice: year_angle 0 -> the top. Relocated to the ring
     # band centerline; probe 40 px above center (inside the halo, clear
     # of the ~30 px marker disc).
-    band_y = 270 - round(270 * defaults.GLOW_RING_RADIUS_FRACTION)
+    band_y = 270 - round(270 * dial.GLOW_RING_RADIUS_FRACTION)
     lit = with_glow.pixelColor(289, band_y + 33)
     plain = without.pixelColor(289, band_y + 33)
     dr = lit.red() - plain.red()
@@ -2511,7 +2511,7 @@ def test_moon_glow_relocates_to_ring_band_and_is_silver(app):
         540.0, 1.0, day, quiet
     )
     moon_angle = math.radians(glowing.moon_fraction * 360.0)
-    orbit = 270 * defaults.GLOW_RING_RADIUS_FRACTION
+    orbit = 270 * dial.GLOW_RING_RADIUS_FRACTION
     moon_x = 270 + orbit * math.sin(moon_angle)
     moon_y = 270 - orbit * math.cos(moon_angle)
     lit = with_glow.pixelColor(round(moon_x), round(moon_y) - 30)
@@ -2588,7 +2588,7 @@ def test_full_moon_glow_never_clipped_at_window_edge(app):
     assert _max_border_alpha(frame, window) <= 6   # halo faded; nothing clipped
     # ... and the halo really drew at the relocated ring-band bottom.
     radius = 270.0
-    marker_y = radius + radius * defaults.GLOW_RING_RADIUS_FRACTION
+    marker_y = radius + radius * dial.GLOW_RING_RADIUS_FRACTION
     glow_probe_y = marker_y + radius * defaults.DEFAULT_SKIN.year_marker.moon_scale
     lit = frame.pixelColor(
         round(radius + margin + 12), round(glow_probe_y + margin)
@@ -2756,8 +2756,8 @@ def test_calendar_wheel_icon_is_computed_not_shipped(app):
     # the disc (the alternation is real, not a flat fill).
     radius = size / 2.0
     seen = set()
-    for step in range(defaults.CALENDAR_ICON_WEDGE_COUNT * 2):
-        angle = math.radians(step * 360.0 / (defaults.CALENDAR_ICON_WEDGE_COUNT * 2))
+    for step in range(shortcuts.CALENDAR_ICON_WEDGE_COUNT * 2):
+        angle = math.radians(step * 360.0 / (shortcuts.CALENDAR_ICON_WEDGE_COUNT * 2))
         x = round(radius + (radius * 0.6) * math.cos(angle))
         y = round(radius + (radius * 0.6) * math.sin(angle))
         seen.add(image.pixelColor(x, y).name())
@@ -2786,7 +2786,7 @@ def test_calendar_fast_travel_flash_never_falls_back_to_the_emoji(app, monkeypat
 
         def _fast_travel_theme(self):
             return next(
-                t for t in defaults.FAST_TRAVEL_THEMES if t["id"] == "calendar"
+                t for t in shortcuts.FAST_TRAVEL_THEMES if t["id"] == "calendar"
             )
 
         def _fast_travel_option_index(self, theme_id):
@@ -2799,7 +2799,7 @@ def test_calendar_fast_travel_flash_never_falls_back_to_the_emoji(app, monkeypat
 
     WatchController._flash_fast_travel(_Fake())
     assert captured["icon_path"] == calendar_wheel_icon_file(
-        defaults.FAST_TRAVEL_FLASH_ICON_PX
+        shortcuts.FAST_TRAVEL_FLASH_ICON_PX
     )
     assert captured["emoji"] == "📅"
 

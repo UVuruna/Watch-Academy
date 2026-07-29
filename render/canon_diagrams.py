@@ -23,7 +23,7 @@ import math
 from PySide6.QtCore import QPointF, QRectF, Qt
 from PySide6.QtGui import QColor, QFont, QPainter, QPen, QPixmap
 
-from config import archetypes, cube, defaults, doctrine, palette
+from config import archetypes, cube, doctrine, encyclopedia_ui, palette
 from core import angles
 
 _INK = palette.THEME_COLORS["text_primary"]
@@ -65,7 +65,7 @@ def _draw_arms(painter: QPainter, centre: QPointF, radius: float,
     pen = QPen(QColor(_MUTED))
     pen.setWidthF(max(1.0, size * 0.002))
     painter.setPen(pen)
-    painter.setOpacity(defaults.CUBE_DIAGRAM_FRAME_OPACITY)
+    painter.setOpacity(encyclopedia_ui.CUBE_DIAGRAM_FRAME_OPACITY)
     for hour in (12, 16, 20, 24, 4, 8):
         painter.drawLine(centre, _arm_point(centre, radius, hour))
     painter.setOpacity(1.0)
@@ -87,7 +87,7 @@ def _draw_journey(painter: QPainter, centre: QPointF, radius: float,
     painter.setPen(pen)
     for start, end in zip(points, points[1:]):
         painter.drawLine(start, end)
-    painter.setFont(_font(size, defaults.CANON_DIAGRAM_LABEL_RATIO))
+    painter.setFont(_font(size, encyclopedia_ui.CANON_DIAGRAM_LABEL_RATIO))
     metrics = painter.fontMetrics()
     for station, point in zip(stations, points):
         painter.setPen(Qt.PenStyle.NoPen)
@@ -114,7 +114,7 @@ def _draw_journey(painter: QPainter, centre: QPointF, radius: float,
 def _clamped(box: QRectF, size: int) -> QRectF:
     """Keep a label on the plate (the same law the cube diagrams learned
     the hard way — a name pushed off the edge is silently lost)."""
-    margin = defaults.CUBE_DIAGRAM_MARGIN_PX
+    margin = encyclopedia_ui.CUBE_DIAGRAM_MARGIN_PX
     left = min(max(box.left(), margin), size - margin - box.width())
     top = min(max(box.top(), margin), size - margin - box.height())
     return QRectF(left, top, box.width(), box.height())
@@ -132,7 +132,7 @@ def crosses(page: str, size: int) -> QPixmap:
     bright, dark = readings
     pixmap, painter = _canvas(size)
     centre = QPointF(size / 2, size / 2)
-    radius = size * defaults.CANON_DIAGRAM_RING_RATIO
+    radius = size * encyclopedia_ui.CANON_DIAGRAM_RING_RATIO
     _draw_arms(painter, centre, radius, size)
     _draw_journey(painter, centre, radius, size, dark, _DARK_HUE, 0.74)
     _draw_journey(painter, centre, radius, size, bright, _LIGHT_HUE, 1.0)
@@ -150,7 +150,7 @@ def double_trinity(size: int) -> QPixmap:
     never drift apart."""
     pixmap, painter = _canvas(size)
     centre = QPointF(size / 2, size / 2)
-    radius = size * defaults.CANON_DIAGRAM_RING_RATIO
+    radius = size * encyclopedia_ui.CANON_DIAGRAM_RING_RATIO
     for key, hue in (("trinity_primary", _LIGHT_HUE),
                      ("trinity_genesis", _DARK_HUE)):
         wheel = archetypes.ARCHETYPES.get(key) or {}
@@ -175,7 +175,7 @@ def double_trinity(size: int) -> QPixmap:
         painter.setPen(pen)
         for index, point in enumerate(points):
             painter.drawLine(point, points[(index + 1) % len(points)])
-        painter.setFont(_font(size, defaults.CANON_DIAGRAM_LABEL_RATIO))
+        painter.setFont(_font(size, encyclopedia_ui.CANON_DIAGRAM_LABEL_RATIO))
         metrics = painter.fontMetrics()
         for figure, point in zip(figures, points):
             text = f"{figure['name']} · {figure['row2']}"
@@ -205,10 +205,10 @@ def _draw_table(painter: QPainter, size: int, rows, headers) -> None:
     """One table drawer for every table page (Rule #5): a header row,
     then one line per row, columns evenly split, the first column bold."""
     columns = len(headers)
-    margin = size * defaults.CANON_DIAGRAM_TABLE_MARGIN
+    margin = size * encyclopedia_ui.CANON_DIAGRAM_TABLE_MARGIN
     width = (size - 2 * margin) / columns
     height = (size - 2 * margin) / (len(rows) + 1)
-    painter.setFont(_font(size, defaults.CANON_DIAGRAM_TABLE_RATIO))
+    painter.setFont(_font(size, encyclopedia_ui.CANON_DIAGRAM_TABLE_RATIO))
     metrics = painter.fontMetrics()
     for index, header in enumerate(headers):
         painter.setPen(QPen(QColor(palette.THEME_COLORS["accent"])))
@@ -221,7 +221,7 @@ def _draw_table(painter: QPainter, size: int, rows, headers) -> None:
     for row_index, row in enumerate(rows, start=1):
         top = margin + row_index * height
         painter.setPen(pen)
-        painter.setOpacity(defaults.CUBE_DIAGRAM_FRAME_OPACITY)
+        painter.setOpacity(encyclopedia_ui.CUBE_DIAGRAM_FRAME_OPACITY)
         painter.drawLine(
             QPointF(margin, top), QPointF(size - margin, top),
         )

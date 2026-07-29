@@ -8,7 +8,7 @@ table, the article-set names Session 6 fills, and the render
 tunables. Documentation: config/archetypes.md.
 """
 
-from config import cube, palette, paths
+from config import cube, dial, palette, paths
 
 # Canonical (source-less) art root — config.paths.art_file appends the
 # active source SUFFIX (assets/archetypes/<family>/<Figure>_<src>.png) at
@@ -103,7 +103,7 @@ ARCHETYPE_PORTRAIT_STANDARD_ASPECT = 0.5
 # fallback while art is missing/placeholder) shares its fitting and its
 # NAME_LABEL_MAX_PX cap with the weekday body label — one helper,
 # render.layers.draw_name_label (Rule #5); the width fraction lives at
-# defaults.NAME_LABEL_WIDTH_FRACTION, shared by both label paths.
+# dial.NAME_LABEL_WIDTH_FRACTION, shared by both label paths.
 # A file at or under this many pixels per side is a committed 1×1
 # placeholder (the WORKPLAN missing-art rule) — the renderer draws the
 # figure's NAME instead of a stretched pixel.

@@ -19,7 +19,7 @@ whatever art happens to be on disk today."""
 
 from datetime import date
 
-from config import defaults
+from config import pantheon
 
 
 # --- The generic resolver (era, tetramorph, and any future family) --------------
@@ -34,7 +34,7 @@ def test_rotating_art_file_pool_is_base_plus_version_siblings(tmp_path):
     (tmp_path / "Age_of_Light_v2.png").write_bytes(b"")
     (tmp_path / "Age_of_Light_v3.png").write_bytes(b"")
     picks = {
-        defaults.rotating_art_file(canonical, date(2026, 7, 20 + offset))
+        pantheon.rotating_art_file(canonical, date(2026, 7, 20 + offset))
         for offset in range(6)
     }
     assert picks == {
@@ -52,11 +52,11 @@ def test_rotating_art_file_is_deterministic_and_advances(tmp_path):
     (tmp_path / "Judas_v2.png").write_bytes(b"")
     (tmp_path / "Judas_v3.png").write_bytes(b"")
     day = date(2026, 7, 20)
-    assert defaults.rotating_art_file(
+    assert pantheon.rotating_art_file(
         canonical, day
-    ) == defaults.rotating_art_file(canonical, day)
+    ) == pantheon.rotating_art_file(canonical, day)
     picks = {
-        defaults.rotating_art_file(canonical, date(2026, 7, 20 + o)).name
+        pantheon.rotating_art_file(canonical, date(2026, 7, 20 + o)).name
         for o in range(3)
     }
     assert len(picks) == 3
@@ -66,7 +66,7 @@ def test_rotating_art_file_suffixed_source_versions_rotate(tmp_path):
     """The RESTRUCTURE naming: version siblings carry the source suffix
     AFTER the `_vN` (`Lion_v2_gem.png`). A sourceless canonical still
     finds them and rotates between the active-source files."""
-    from config import paths
+    from config import pantheon, paths
 
     (tmp_path / "Lion_gem.png").write_bytes(b"")
     (tmp_path / "Lion_v2_gem.png").write_bytes(b"")
@@ -74,7 +74,7 @@ def test_rotating_art_file_suffixed_source_versions_rotate(tmp_path):
     canonical = tmp_path / "Lion.png"
     with paths.display(paths.display_context(art_source="gemini")):
         picks = {
-            defaults.rotating_art_file(canonical, date(2026, 7, 20 + o))
+            pantheon.rotating_art_file(canonical, date(2026, 7, 20 + o))
             for o in range(4)
         }
     assert picks == {tmp_path / "Lion_gem.png", tmp_path / "Lion_v2_gem.png"}
@@ -86,14 +86,14 @@ def test_rotating_art_file_ignores_unrelated_names(tmp_path):
     canonical = tmp_path / "Eagle.png"
     canonical.write_bytes(b"")
     (tmp_path / "Lion.png").write_bytes(b"")
-    assert defaults.rotating_art_file(canonical, date(2026, 7, 20)) == canonical
+    assert pantheon.rotating_art_file(canonical, date(2026, 7, 20)) == canonical
 
 
 def test_rotating_art_file_single_candidate_never_rotates(tmp_path):
     canonical = tmp_path / "Anno_Lucis.png"
     canonical.write_bytes(b"")
     for offset in range(3):
-        assert defaults.rotating_art_file(
+        assert pantheon.rotating_art_file(
             canonical, date(2026, 7, 20 + offset)
         ) == canonical
 
@@ -101,7 +101,7 @@ def test_rotating_art_file_single_candidate_never_rotates(tmp_path):
 def test_rotating_art_file_missing_canonical_is_none(tmp_path):
     """No master at all -> None (the caller keeps its own fallback) —
     graceful-absent, never a crash."""
-    assert defaults.rotating_art_file(
+    assert pantheon.rotating_art_file(
         tmp_path / "Nothing.png", date(2026, 7, 20)
     ) is None
 
@@ -125,7 +125,7 @@ def test_scale_candidates_figure_first_stem_matching(tmp_path):
         (tmp_path / name).write_bytes(b"")
     found = {
         path.name
-        for path in defaults._rotation_candidates_in(tmp_path, ("Judas",))
+        for path in pantheon._rotation_candidates_in(tmp_path, ("Judas",))
     }
     assert found == {
         "Judas.png", "Judas_v.png", "Judas_v2.png", "Judas_v3.png",
@@ -141,7 +141,7 @@ def test_scale_candidates_search_the_glass_register_too(tmp_path):
     glass.mkdir()
     (glass / "Judas.png").write_bytes(b"")
     (glass / "Judas_v2.png").write_bytes(b"")
-    found = defaults._rotation_candidates((tmp_path, glass), ("Judas",))
+    found = pantheon._rotation_candidates((tmp_path, glass), ("Judas",))
     assert len(found) == 3
     assert {p.parent.name for p in found} == {tmp_path.name, "glass"}
 
@@ -156,8 +156,8 @@ def test_scale_variant_file_is_deterministic(tmp_path, monkeypatch):
     for suffix in ("", "_v1", "_v2"):
         (badge / f"Judas{suffix}.png").write_bytes(b"")
     day = date(2026, 7, 20)
-    first = defaults.scale_variant_file("Judas", day)
-    second = defaults.scale_variant_file("Judas", day)
+    first = pantheon.scale_variant_file("Judas", day)
+    second = pantheon.scale_variant_file("Judas", day)
     assert first is not None
     assert first == second
 
@@ -171,7 +171,7 @@ def test_scale_variant_file_advances_on_consecutive_dates(tmp_path, monkeypatch)
     for suffix in ("", "_v1", "_v2"):
         (badge / f"Judas{suffix}.png").write_bytes(b"")
     picks = {
-        defaults.scale_variant_file("Judas", date(2026, 7, 20 + offset)).name
+        pantheon.scale_variant_file("Judas", date(2026, 7, 20 + offset)).name
         for offset in range(3)
     }
     # Three versions, three consecutive days -> all three get shown
@@ -192,8 +192,8 @@ def test_scale_variant_file_keeps_judas_and_lucifer_in_step(tmp_path, monkeypatc
             (badge / f"{stem}{suffix}.png").write_bytes(b"")
     for offset in range(5):
         day = date(2026, 7, 20 + offset)
-        judas = defaults.scale_variant_file("Judas", day)
-        lucifer = defaults.scale_variant_file("Lucifer", day)
+        judas = pantheon.scale_variant_file("Judas", day)
+        lucifer = pantheon.scale_variant_file("Lucifer", day)
         judas_suffix = judas.stem[len("Judas"):]
         lucifer_suffix = lucifer.stem[len("Lucifer"):]
         assert judas_suffix == lucifer_suffix
@@ -204,13 +204,13 @@ def test_scale_variant_file_graceful_with_one_or_zero_files(tmp_path, monkeypatc
     here); exactly one file on disk means there is nothing to rotate —
     the same file shows every day."""
     monkeypatch.setattr(defaults, "SCALE_ART_DIR", tmp_path)
-    assert defaults.scale_variant_file("Judas", date(2026, 7, 20)) is None
+    assert pantheon.scale_variant_file("Judas", date(2026, 7, 20)) is None
     badge = tmp_path / "primary" / "colored"     # tree law 2026-07-26
     badge.mkdir(parents=True)
     only = badge / "Judas.png"
     only.write_bytes(b"")
-    assert defaults.scale_variant_file("Judas", date(2026, 7, 20)) == only
-    assert defaults.scale_variant_file("Judas", date(2026, 7, 21)) == only
+    assert pantheon.scale_variant_file("Judas", date(2026, 7, 20)) == only
+    assert pantheon.scale_variant_file("Judas", date(2026, 7, 21)) == only
 
 
 def test_scale_variant_file_graceful_when_the_directory_is_missing(tmp_path, monkeypatch):
@@ -218,4 +218,4 @@ def test_scale_variant_file_graceful_when_the_directory_is_missing(tmp_path, mon
     but the resolver must not raise) reads as zero candidates -> None,
     same as an empty existing folder."""
     monkeypatch.setattr(defaults, "SCALE_ART_DIR", tmp_path / "does_not_exist")
-    assert defaults.scale_variant_file("Judas", date(2026, 7, 20)) is None
+    assert pantheon.scale_variant_file("Judas", date(2026, 7, 20)) is None

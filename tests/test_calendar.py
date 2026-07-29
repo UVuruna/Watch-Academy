@@ -19,7 +19,7 @@ import astral
 import pytest
 from PySide6.QtWidgets import QApplication
 
-from config import constants, defaults, palette
+from config import calendar_mounts, constants, defaults, palette
 from core.clock_state import build_day_context, build_tick_state
 from core.year_wheel import almanac_marker_angle, almanac_month_index
 from data.moon_phases import MoonPhaseRepository
@@ -153,7 +153,7 @@ def test_day_arrow_points_outward_at_the_marker_tick():
     angle = almanac_marker_angle(date(2026, 7, 16))
     arrow = calendar_day_arrow(angle, radius)
     tip = arrow[0]
-    expected = dial_point(angle, radius * defaults.CALENDAR_ARROW_TIP_FRACTION)
+    expected = dial_point(angle, radius * calendar_mounts.CALENDAR_ARROW_TIP_FRACTION)
     assert tip.x() == pytest.approx(expected.x())
     assert tip.y() == pytest.approx(expected.y())
     tip_r = math.hypot(tip.x(), tip.y())
@@ -390,8 +390,8 @@ def test_mount_lit_delta_raises_the_current_mark_to_full_opacity():
     """"the mark can inherit that brightness" (owner spec) — the same
     base+delta shape the wedges once used, sized so the current mark
     reaches (but never exceeds) full opacity."""
-    assert 0.0 < defaults.CALENDAR_MOUNT_ALPHA < 1.0
-    assert defaults.CALENDAR_MOUNT_ALPHA + defaults.CALENDAR_MOUNT_LIT_DELTA == (
+    assert 0.0 < calendar_mounts.CALENDAR_MOUNT_ALPHA < 1.0
+    assert calendar_mounts.CALENDAR_MOUNT_ALPHA + calendar_mounts.CALENDAR_MOUNT_LIT_DELTA == (
         pytest.approx(1.0)
     )
 
@@ -407,7 +407,7 @@ def test_calendar_mount_renders_and_a_mark_hover_outranks_the_wedge(app):
     def px(mount: str, index: int) -> tuple[float, float]:
         point = dial_point(
             calendar_mount_angle(mount, index),
-            radius * defaults.CALENDAR_MOUNT_RADIUS_FRACTION,
+            radius * calendar_mounts.CALENDAR_MOUNT_RADIUS_FRACTION,
         )
         return radius + point.x(), radius + point.y()
 
@@ -442,19 +442,19 @@ def test_calendar_mount_off_speaks_no_mark_hover(app):
     comp = Compositor(skin, AssetCache())
     comp.set_day(day)
     comp._last_tick = tick
-    point = dial_point(15.0, 180.0 * defaults.CALENDAR_MOUNT_RADIUS_FRACTION)
+    point = dial_point(15.0, 180.0 * calendar_mounts.CALENDAR_MOUNT_RADIUS_FRACTION)
     assert comp._calendar_mount_tooltip(point, 180.0) is None
 
 
 def test_calendar_mount_modes_are_derived_from_the_registry():
     """THE GENERALIZED OFFER (owner decree 2026-07-29): the legal
     setting values are no longer a hand-kept tuple — they fall out of
-    `defaults.CALENDAR_MOUNTS`, so registering a roster makes it
+    `calendar_mounts.CALENDAR_MOUNTS`, so registering a roster makes it
     settable with no second edit (Rule #5)."""
-    assert defaults.CALENDAR_MOUNT_MODES == ("off",) + tuple(
-        defaults.CALENDAR_MOUNTS
+    assert calendar_mounts.CALENDAR_MOUNT_MODES == ("off",) + tuple(
+        calendar_mounts.CALENDAR_MOUNTS
     )
-    assert defaults.DEFAULT_SKIN.calendar_mount in defaults.CALENDAR_MOUNT_MODES
+    assert defaults.DEFAULT_SKIN.calendar_mount in calendar_mounts.CALENDAR_MOUNT_MODES
     assert not hasattr(constants, "CALENDAR_MOUNT_MODES")   # moved, not copied
 
 
@@ -463,9 +463,9 @@ def test_every_registered_mount_is_canon_shaped():
     Systems), a seat count the seat law knows how to place, members in
     seat order with no blanks, and a centre that is either a real
     `THIRTEENTHS` key or None."""
-    for key, mount in defaults.CALENDAR_MOUNTS.items():
+    for key, mount in calendar_mounts.CALENDAR_MOUNTS.items():
         assert mount.system in ("A", "B"), key
-        assert mount.seats in defaults.CALENDAR_MOUNT_SEATS_PER_WEDGE, key
+        assert mount.seats in calendar_mounts.CALENDAR_MOUNT_SEATS_PER_WEDGE, key
         assert len(mount.members) == len(set(mount.members)) == mount.seats, key
         assert all(mount.members), key
         assert len(mount.stems) == mount.seats, key
@@ -482,12 +482,12 @@ def test_the_new_dozens_are_seated_exactly_where_canon_says():
     16h, Ambition 18h, Pride 20h, Envy 22h, Hatred 24h, Despair 02h,
     Fear 04h, Doubt 06h, Humility 08h, Gratitude 10h") — and because a
     System B wedge is CENTERED on its hour, seat k IS hour 12 + 2k."""
-    almanac = defaults.CALENDAR_MOUNTS["almanac"]
+    almanac = calendar_mounts.CALENDAR_MOUNTS["almanac"]
     assert almanac.system == "B"
     assert almanac.members[0] == "June"                      # the crown
     assert almanac.members[6] == "December"                  # the root
     assert almanac.members[almanac_month_index(1)] == "January"
-    emotions = defaults.CALENDAR_MOUNTS["emotions"]
+    emotions = calendar_mounts.CALENDAR_MOUNTS["emotions"]
     assert emotions.system == "B"
     assert emotions.members[0] == "Love"                     # crown, 12h
     assert emotions.members[6] == "Hatred"                   # root, 24h
@@ -509,26 +509,26 @@ def test_the_four_new_dozens_are_seated_exactly_where_canon_says():
     for BOTH dozen systems — System A's boundary-start wedges
     (Olympians/Apostles, six pairs) and System B's cardinal-centered
     wedges (the Virtue Wheel's two registers, one crown + one root)."""
-    olympians = defaults.CALENDAR_MOUNTS["olympians"]
+    olympians = calendar_mounts.CALENDAR_MOUNTS["olympians"]
     assert olympians.system == "A" and olympians.centre == "hestia"
     assert olympians.members[0] == "Zeus"              # 12-14h, opens the crown
     assert olympians.members[11] == "Hera"             # 10-12h, closes the crown
     assert olympians.members[6] == "Poseidon"          # 00-02h, the root
     assert olympians.members[5] == "Demeter"           # 22-24h, the root's mate
 
-    apostles = defaults.CALENDAR_MOUNTS["apostles"]
+    apostles = calendar_mounts.CALENDAR_MOUNTS["apostles"]
     assert apostles.system == "A" and apostles.centre == "jesus"
     assert apostles.members[0] == "Peter"              # 12-14h, opens the crown
     assert apostles.members[11] == "Andrew"            # 10-12h, closes the crown
     assert apostles.members[5] == "Judas Iscariot"     # 22-24h, the root
     assert apostles.members[6] == "Simon the Zealot"   # 00-02h, the root's mate
 
-    virtues = defaults.CALENDAR_MOUNTS["virtues"]
+    virtues = calendar_mounts.CALENDAR_MOUNTS["virtues"]
     assert virtues.system == "B" and virtues.centre == "prudence"
     assert virtues.members[0] == "Magnanimity"         # 12h, the crown
     assert virtues.members[6] == "Just Indignation"    # 24h, the root
 
-    vices = defaults.CALENDAR_MOUNTS["vices"]
+    vices = calendar_mounts.CALENDAR_MOUNTS["vices"]
     assert vices.system == "B" and vices.centre == "cunning"
     assert vices.members[0] == "Vanity"                # 12h, the crown
     assert vices.members[6] == "Envy"                  # 24h, the root
@@ -554,7 +554,7 @@ def test_the_sins_dozen_is_seated_exactly_where_canon_says():
     the Apostles Dozen), **Lust at 20h** (the red arm's appetite), and
     **Violence at 16h** (the 16h call, delegated and ruled — Cruelty is
     NOT a member). The centre is HARDNESS OF HEART, the anti-Peace."""
-    sins = defaults.CALENDAR_MOUNTS["sins"]
+    sins = calendar_mounts.CALENDAR_MOUNTS["sins"]
     assert sins.system == "B" and sins.centre == "hardness_of_heart"
     assert sins.members == (
         "Pride", "Hypocrisy", "Violence", "Avarice", "Lust", "Envy",
@@ -591,7 +591,7 @@ def test_the_sins_mount_is_settable_and_survives_a_settings_round_trip(tmp_path)
     SETTINGS-MIGRATION LAW, MEMORY "Settings migration on rename")."""
     from app.settings_store import SettingsStore
 
-    assert "sins" in defaults.CALENDAR_MOUNT_MODES
+    assert "sins" in calendar_mounts.CALENDAR_MOUNT_MODES
     path = tmp_path / "settings.json"
     store = SettingsStore(path)
     store.save(dataclasses.replace(store.load(), calendar_mount="sins"))
@@ -636,8 +636,8 @@ def test_seat_law_places_twelve_one_per_wedge_and_twentyfour_two(app):
     24, proving the placement rather than a table."""
     step = constants.CALENDAR_WEDGE_DEG
     # 12 → one per wedge, exactly on the wedge center.
-    for key in defaults.CALENDAR_MOUNTS:
-        mount = defaults.CALENDAR_MOUNTS[key]
+    for key in calendar_mounts.CALENDAR_MOUNTS:
+        mount = calendar_mounts.CALENDAR_MOUNTS[key]
         angles = [calendar_mount_angle(key, i) for i in range(mount.seats)]
         bounds = calendar_wedge_bounds(calendar_mount_wheel(key))
         assert angles == [
@@ -645,12 +645,12 @@ def test_seat_law_places_twelve_one_per_wedge_and_twentyfour_two(app):
         ], key
     # 24 → two per wedge. Registered through the SAME registry so the
     # engine is exercised, not a parallel code path.
-    two_per = defaults.CalendarMount(
+    two_per = calendar_mounts.CalendarMount(
         title="Twenty-four", system="B",
         members=tuple(f"S{i:02d}" for i in range(24)),
         art_dir="emotions/primary/colored",
     )
-    defaults.CALENDAR_MOUNTS["_test24"] = two_per
+    calendar_mounts.CALENDAR_MOUNTS["_test24"] = two_per
     try:
         angles = [calendar_mount_angle("_test24", i) for i in range(24)]
         assert len(angles) == 24
@@ -668,7 +668,7 @@ def test_seat_law_places_twelve_one_per_wedge_and_twentyfour_two(app):
             calendar_mount_mark_height("emotions", 180.0) / 2.0
         )
     finally:
-        del defaults.CALENDAR_MOUNTS["_test24"]
+        del calendar_mounts.CALENDAR_MOUNTS["_test24"]
 
 
 def test_centre_rule_is_per_roster_and_never_unconditional(app):
@@ -696,7 +696,7 @@ def test_centre_rule_is_per_roster_and_never_unconditional(app):
     # A roster canon gives NO thirteenth of its own claims nothing, so
     # resolution falls through to the WHEEL underneath exactly like
     # "off" — the documented law, unchanged by the generalization.
-    defaults.CALENDAR_MOUNTS["_test_no_centre"] = defaults.CALENDAR_MOUNTS[
+    calendar_mounts.CALENDAR_MOUNTS["_test_no_centre"] = calendar_mounts.CALENDAR_MOUNTS[
         "emotions"
     ]._replace(centre=None)
     try:
@@ -706,7 +706,7 @@ def test_centre_rule_is_per_roster_and_never_unconditional(app):
         assert active_thirteenth(no_centre, shows) == "ophiuchus"  # the wheel's
         assert active_thirteenth(no_centre, hides) is None
     finally:
-        del defaults.CALENDAR_MOUNTS["_test_no_centre"]
+        del calendar_mounts.CALENDAR_MOUNTS["_test_no_centre"]
     # ...and the Emotions Dozen itself emphasizes no MARK — there is no
     # "today's emotion" (`follows` is None, untouched by the Axle seal).
     assert calendar_mount_current_index("emotions", shows) is None
@@ -716,7 +716,7 @@ def test_centre_rule_is_per_roster_and_never_unconditional(app):
     # on Dec 5, so the center is empty rather than falling back to
     # Ophiuchus.
     months = _calendar_skin(palette_style="primary", calendar_mount="months")
-    assert defaults.CALENDAR_MOUNTS["months"].centre == "modrenik"
+    assert calendar_mounts.CALENDAR_MOUNTS["months"].centre == "modrenik"
     assert active_thirteenth(months, shows) is None
 
 
@@ -740,7 +740,7 @@ def test_axle_always_centers_are_unconditionally_present(app):
         ("virtues", "prudence"), ("vices", "cunning"),
         ("emotions", "peace"), ("sins", "hardness_of_heart"),
     ):
-        assert defaults.CALENDAR_MOUNTS[mount].centre == centre, mount
+        assert calendar_mounts.CALENDAR_MOUNTS[mount].centre == centre, mount
         skin = _calendar_skin(calendar_mount=mount)
         assert active_thirteenth(skin, ordinary) == centre, mount
     # The existing Ophiuchus golden pair, unaffected by the Axle seal.
@@ -812,7 +812,7 @@ def test_chinese_mount_renders_and_hover_names_the_animal(app):
     )
     chinese.render_offscreen(360.0, 1.0, day, tick)
     point = dial_point(
-        calendar_mount_angle("chinese", 0), radius * defaults.CALENDAR_MOUNT_RADIUS_FRACTION
+        calendar_mount_angle("chinese", 0), radius * calendar_mounts.CALENDAR_MOUNT_RADIUS_FRACTION
     )
     text = chinese.tooltip_at(radius + point.x(), radius + point.y(), 360.0)
     assert text is not None and "Horse" in text and "<img" in text

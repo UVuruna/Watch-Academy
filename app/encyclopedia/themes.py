@@ -19,8 +19,8 @@ from PySide6.QtCore import Qt, Signal
 from PySide6.QtWidgets import QFrame, QScrollArea, QVBoxLayout, QWidget
 
 from app.encyclopedia.cards import CardGrid, card_pixmap
-from config import defaults
-from config import encyclopedia_tree as tree
+from config import encyclopedia_ui
+from config import encyclopedia_tree as tree, encyclopedia_ui
 
 
 class ThemeScreen(QWidget):
@@ -35,7 +35,7 @@ class ThemeScreen(QWidget):
         self._tr = tr
         self._zoom = 1.0
         self._whole: tree.Whole | None = None
-        self._grid = CardGrid(defaults.ENCYCLOPEDIA_GALLERY_MAX_COLUMNS)
+        self._grid = CardGrid(encyclopedia_ui.ENCYCLOPEDIA_GALLERY_MAX_COLUMNS)
         self._grid.opened.connect(self.opened)
         self._scroll = QScrollArea()
         self._scroll.setWidgetResizable(True)

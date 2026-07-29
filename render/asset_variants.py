@@ -24,7 +24,7 @@ from PySide6.QtGui import (
     QColor, QImage, QImageReader, QPainter, QPainterPath, QPen, QPixmap,
 )
 
-from config import defaults, palette, paths, profiling
+from config import defaults, dial, palette, pantheon, paths, profiling, shortcuts
 from config.paths import art_file
 from render.asset_recolor import _recolored_plate, tinted_pixmap
 
@@ -133,7 +133,7 @@ def moon_phase_image(fraction: float, size: int, master: Path | None = None) -> 
     marker = defaults.DEFAULT_SKIN.year_marker
     resolved = art_file(
         master if master is not None
-        else defaults.weekday_art("planets/primary/photo/Moon.png")
+        else pantheon.weekday_art("planets/primary/photo/Moon.png")
     )
     image = QImage(size, size, QImage.Format.Format_ARGB32_Premultiplied)
     image.fill(Qt.GlobalColor.transparent)
@@ -174,7 +174,7 @@ def moon_phase_file(fraction: float, name: str, size: int = 800) -> Path:
     retired; this is the live-render replacement, the cost paid once
     per (phase, size) through the raster cache instead of shipping
     ~7 MB of PNGs)."""
-    master = art_file(defaults.weekday_art("planets/primary/photo/Moon.png"))
+    master = art_file(pantheon.weekday_art("planets/primary/photo/Moon.png"))
     stamp = hashlib.sha1(str(master).encode("utf-8")).hexdigest()[:16]
     mtime = int(master.stat().st_mtime) if master.exists() else 0
     cache = (
@@ -211,7 +211,7 @@ def subdial_plate_file(
     touched this function even before (only the LIVE shadow,
     `render.layers._draw_subdial_shadow`, keyed off the seat's own dial
     position, does). The SOLO set ships one hand-drawn file
-    (`defaults.SUBDIAL_SOLO_FINISH`, silver): silver wins AS DRAWN,
+    (`dial.SUBDIAL_SOLO_FINISH`, silver): silver wins AS DRAWN,
     gold/bronze are disk-cached live recolors of it, exactly like the
     ring letters derive silver/bronze from gold. A TINT (the "theme"
     plate style, owner 2026-07-15 A/B spec) recolors the dark
@@ -222,15 +222,15 @@ def subdial_plate_file(
     active_set = paths.subdial_set()
     if active_set == "solo":
         master = (
-            defaults.SUBDIAL_ROOT_DIR / "solo"
-            / f"{defaults.SUBDIAL_SOLO_FINISH}.png"
+            dial.SUBDIAL_ROOT_DIR / "solo"
+            / f"{dial.SUBDIAL_SOLO_FINISH}.png"
         )
         if not master.exists():
             return None
-        if finish == defaults.SUBDIAL_SOLO_FINISH and tint is None:
+        if finish == dial.SUBDIAL_SOLO_FINISH and tint is None:
             return master
         return _recolored_plate(master, finish, tint)
-    plate = defaults.SUBDIAL_ROOT_DIR / active_set / f"{finish}.png"
+    plate = dial.SUBDIAL_ROOT_DIR / active_set / f"{finish}.png"
     if not plate.exists():
         return None
     if tint is None:
@@ -411,12 +411,12 @@ def calendar_wheel_icon_file(size: int) -> Path:
     image.fill(Qt.GlobalColor.transparent)
     painter = QPainter(image)
     painter.setRenderHint(QPainter.RenderHint.Antialiasing)
-    ring_width = max(1.0, size * defaults.CALENDAR_ICON_RING_WIDTH_FRACTION)
+    ring_width = max(1.0, size * shortcuts.CALENDAR_ICON_RING_WIDTH_FRACTION)
     radius = size / 2.0 - ring_width
     rect = QRectF(
         size / 2.0 - radius, size / 2.0 - radius, 2.0 * radius, 2.0 * radius
     )
-    wedges = defaults.CALENDAR_ICON_WEDGE_COUNT
+    wedges = shortcuts.CALENDAR_ICON_WEDGE_COUNT
     colors = [QColor(c) for c in palette.CALENDAR_ICON_WEDGE_COLORS]
     span_deg = 360.0 / wedges
     painter.setPen(Qt.PenStyle.NoPen)

@@ -25,7 +25,7 @@ from PySide6.QtWidgets import (
 
 from app.theme import apply_theme, size_to_screen
 from app.ui_style import style_button
-from config import constants, defaults, palette, paths
+from config import constants, continents, defaults, dial, palette, paths
 from config.ui_text import ui
 from data.hands import hand_packs
 from data.rings import ring_presets
@@ -245,7 +245,7 @@ class DesignDialog(QDialog):
         for index, name in enumerate(sorted(presets)):
             card = presets[name]
             face = constants.RING_LAYOUTS[card["layout"]]["face"]
-            icon = paths.art_file(defaults.RING_FACE_DIR / face)
+            icon = paths.art_file(dial.RING_FACE_DIR / face)
             row, col = divmod(index, 4)
             grid.addWidget(
                 self._tile(
@@ -364,7 +364,7 @@ class DesignDialog(QDialog):
         style_row = QHBoxLayout()
         for style, title in (("clean", "Clean"), ("atmo", "Atmosphere")):
             icon = paths.art_file(
-                defaults.EARTH_ART_DIR / f"earth_{style}_europe_day.png"
+                continents.EARTH_ART_DIR / f"earth_{style}_europe_day.png"
             )
             style_row.addWidget(self._tile(
                 self._tr(title), icon, settings.earth_style == style,
@@ -372,7 +372,7 @@ class DesignDialog(QDialog):
             ))
         layout.addLayout(style_row)
         label_row = QHBoxLayout()
-        enabled = settings.diameter >= defaults.FULL_TEXT_MIN_DIAMETER
+        enabled = settings.diameter >= dial.FULL_TEXT_MIN_DIAMETER
         for mode, title in (
             ("date", "Date"), ("weekday", "Weekday"),
             ("date_weekday", "Date & Weekday"), ("full", "Full Date"),
@@ -394,16 +394,16 @@ class DesignDialog(QDialog):
         settings = self._settings
         layout = QVBoxLayout()
         preset_row = QHBoxLayout()
-        for preset in defaults.SIZE_PRESETS:
+        for preset in dial.SIZE_PRESETS:
             preset_row.addWidget(self._pill(
                 f"{preset} px", settings.diameter == preset,
                 lambda p=preset: self._setters["diameter"](p),
             ))
         layout.addLayout(preset_row)
         slider = QSlider(Qt.Orientation.Horizontal)
-        slider.setRange(defaults.SIZE_PRESETS[0], defaults.SIZE_PRESETS[-1])
-        slider.setSingleStep(defaults.MENU_SIZE_SLIDER_STEP)
-        slider.setPageStep(defaults.MENU_SIZE_SLIDER_STEP * 5)
+        slider.setRange(dial.SIZE_PRESETS[0], dial.SIZE_PRESETS[-1])
+        slider.setSingleStep(dial.MENU_SIZE_SLIDER_STEP)
+        slider.setPageStep(dial.MENU_SIZE_SLIDER_STEP * 5)
         slider.setValue(settings.diameter)
         value_label = QLabel(f"{settings.diameter} px")
         slider.valueChanged.connect(

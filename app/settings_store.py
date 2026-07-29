@@ -15,7 +15,7 @@ from dataclasses import dataclass, field
 from pathlib import Path
 from zoneinfo import ZoneInfo
 
-from config import constants, defaults
+from config import calendar_mounts, constants, defaults, dial, pantheon
 from data.rings import ring_presets, validate_preset
 
 _HEX_COLOR = re.compile(r"^#[0-9A-Fa-f]{6}$")
@@ -36,7 +36,7 @@ class Settings:
     # None means "never positioned" — first run centers on the primary screen.
     window_x: int | None = None
     window_y: int | None = None
-    diameter: int = defaults.DEFAULT_DIAL_DIAMETER
+    diameter: int = dial.DEFAULT_DIAL_DIAMETER
     click_through: bool = False
     # Visibility Z mode (owner 2026-07-17, ROADMAP 15d): "bottom" — the
     # clock stays below every window except the desktop (the default);
@@ -274,7 +274,7 @@ class SettingsStore:
             raw = json.loads(self._path.read_text(encoding="utf-8-sig"))
             window = raw["window"]
             diameter = int(window["diameter"])
-            if not defaults.MIN_DIAL_DIAMETER <= diameter <= defaults.MAX_DIAL_DIAMETER:
+            if not dial.MIN_DIAL_DIAMETER <= diameter <= dial.MAX_DIAL_DIAMETER:
                 raise ValueError(f"diameter {diameter} outside allowed range")
             # A bad value here would otherwise KeyError deep inside a
             # paint pass, where Qt swallows the exception.
@@ -382,7 +382,7 @@ class SettingsStore:
                  constants.POINTER_SHAPES),
                 ("polygon_edge", constants.POLYGON_EDGE_DEFAULT,
                  constants.POLYGON_EDGE_MODES),
-                ("calendar_mount", "zodiac", defaults.CALENDAR_MOUNT_MODES),
+                ("calendar_mount", "zodiac", calendar_mounts.CALENDAR_MOUNT_MODES),
                 ("octa_slot", "time", constants.OCTA_SLOT_MODES),
                 ("day_slot_style", "sign", constants.SLOT_STYLE_VALUES),
                 ("info_slot_style", "sign", constants.SLOT_STYLE_VALUES),
@@ -750,7 +750,7 @@ def rotation_themes(settings: "Settings") -> tuple[str, ...]:
     group = settings.theme_rotation_group
     if group == "custom":
         return settings.theme_rotation_themes
-    for title, keys in defaults.WEEKDAY_MENU_GROUPS:
+    for title, keys in pantheon.WEEKDAY_MENU_GROUPS:
         if title == group:
             return keys
     return ()
@@ -765,7 +765,7 @@ def _load_rotation_group(raw: dict) -> str:
         return "custom" if raw.get("theme_rotation") is True else "none"
     value = str(value)
     allowed = {"none", "custom"} | {
-        title for title, _ in defaults.WEEKDAY_MENU_GROUPS
+        title for title, _ in pantheon.WEEKDAY_MENU_GROUPS
     }
     if value not in allowed:
         raise ValueError(f"theme_rotation_group {value!r} unknown")

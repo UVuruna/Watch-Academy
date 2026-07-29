@@ -23,7 +23,7 @@ from PySide6.QtCore import QPointF, Qt
 from PySide6.QtGui import QImage, QPainter
 from PySide6.QtWidgets import QApplication
 
-from config import archetypes, constants, defaults
+from config import archetypes, constants, defaults, dial, encyclopedia_ui
 from core.clock_state import build_day_context, build_tick_state
 from data.moon_phases import MoonPhaseRepository
 from data.seasons import SeasonsRepository
@@ -436,14 +436,14 @@ def test_placeholder_falls_back_to_the_name(app, tmp_path):
 
 def test_short_name_is_capped_at_name_label_max_px(app):
     """4b: a SHORT name with ample room must not inflate past
-    `defaults.NAME_LABEL_MAX_PX` — the flat ceiling reasoned from the
+    `dial.NAME_LABEL_MAX_PX` — the flat ceiling reasoned from the
     720-dial short-weekday "TUE" look, shared by the weekday body label
     and the archetype figure label (Rule #5, ONE fitting helper)."""
     import render.layers as layers_mod
 
     assert (
         layers_mod.name_label_px("Ox", target_width=10_000.0)
-        == defaults.NAME_LABEL_MAX_PX
+        == dial.NAME_LABEL_MAX_PX
     )
 
 
@@ -454,7 +454,7 @@ def test_long_name_still_shrinks_to_fit(app):
 
     narrow = layers_mod.name_label_px("The Eye of Providence", target_width=80.0)
     wide = layers_mod.name_label_px("The Eye of Providence", target_width=800.0)
-    assert defaults.BODY_LABEL_MIN_PX <= narrow < wide <= defaults.NAME_LABEL_MAX_PX
+    assert dial.BODY_LABEL_MIN_PX <= narrow < wide <= dial.NAME_LABEL_MAX_PX
 
 
 def test_draw_name_label_draws_exactly_one_line(app, monkeypatch):
@@ -492,13 +492,13 @@ def test_weekday_label_set_uses_the_smallest_fitted_member(app):
     # Every individual body's OWN fit is >= the set answer (the set
     # picks the narrowest-fitting member, never inflates past it).
     slot_size = layers_mod.weekday_body_size(ctx.skin, ctx.radius)
-    target = slot_size * defaults.NAME_LABEL_WIDTH_FRACTION
+    target = slot_size * dial.NAME_LABEL_WIDTH_FRACTION
     own_fits = [
         layers_mod.name_label_px(layers_mod.weekday_label_text(ctx, body), target)
         for body in constants.WEEKDAY_BODIES
     ]
     assert set_px == min(own_fits)
-    assert defaults.BODY_LABEL_MIN_PX <= set_px <= defaults.NAME_LABEL_MAX_PX
+    assert dial.BODY_LABEL_MIN_PX <= set_px <= dial.NAME_LABEL_MAX_PX
 
 
 def test_archetype_label_set_uses_the_smallest_fitted_member(app):
@@ -520,7 +520,7 @@ def test_archetype_label_set_uses_the_smallest_fitted_member(app):
         )
     )
     set_px = layers_mod.archetype_label_set_px(ctx, key, arm_width)
-    target = arm_width * defaults.NAME_LABEL_WIDTH_FRACTION
+    target = arm_width * dial.NAME_LABEL_WIDTH_FRACTION
     fits = [
         layers_mod.name_label_px(fig["name"], target)
         for fig in archetypes.figures(key)
@@ -532,11 +532,11 @@ def test_archetype_label_set_uses_the_smallest_fitted_member(app):
         )
         fits.append(
             layers_mod.name_label_px(
-                center["name"], center_height * defaults.NAME_LABEL_WIDTH_FRACTION,
+                center["name"], center_height * dial.NAME_LABEL_WIDTH_FRACTION,
             )
         )
     assert set_px == min(fits)
-    assert defaults.BODY_LABEL_MIN_PX <= set_px <= defaults.NAME_LABEL_MAX_PX
+    assert dial.BODY_LABEL_MIN_PX <= set_px <= dial.NAME_LABEL_MAX_PX
 
 
 # --- The reveal gesture hides the hands -------------------------------------------
@@ -929,8 +929,8 @@ def test_ages_arm_shows_the_three_side_layout(app):
     assert tip.count("<td") == 3                            # three columns
     # Total width stays within the two-side width (owner).
     assert (
-        3 * defaults.ARTICLE_THREE_COLUMN_WIDTH_PX
-        <= 2 * defaults.ARTICLE_COLUMN_WIDTH_PX + 2
+        3 * encyclopedia_ui.ARTICLE_THREE_COLUMN_WIDTH_PX
+        <= 2 * encyclopedia_ui.ARTICLE_COLUMN_WIDTH_PX + 2
     )
 
 

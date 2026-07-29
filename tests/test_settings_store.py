@@ -4,7 +4,7 @@ tolerance (hand-edited files), diameter validation."""
 import pytest
 
 from app.settings_store import Settings, SettingsCorruptError, SettingsStore, replace
-from config import constants, defaults, paths
+from config import calendar_mounts, constants, paths
 
 
 @pytest.fixture
@@ -440,7 +440,7 @@ def test_subdial_set_round_trip_and_default(store):
     """The SUBDIAL PLATE SET (owner decree 2026-07-21, Rsub round): all
     FIVE sets persist, default to "set1" in older files, and reject an
     unknown value."""
-    from config import constants
+    from config import calendar_mounts, constants
 
     for name in constants.SUBDIAL_SETS:
         store.save(replace(Settings(), subdial_set=name))
@@ -464,7 +464,7 @@ def test_metal_shade_round_trip_and_default(store):
     shade of every metal persists, older files default to
     config.constants.METAL_SHADE_DEFAULT, and an unknown shade name
     raises loudly (Rule #1) rather than silently falling back."""
-    from config import constants
+    from config import calendar_mounts, constants
 
     for metal, names in constants.METAL_SHADE_NAMES.items():
         if metal == "thematic":
@@ -567,9 +567,9 @@ def test_calendar_mount_round_trips_and_defaults_to_zodiac(store):
     home) — a fresh settings file, and every other choice, round-trip
     through save/load."""
     assert Settings().calendar_mount == "zodiac"
-    assert defaults.CALENDAR_MOUNT_MODES[0] == "off"
-    assert set(defaults.CALENDAR_MOUNT_MODES[1:]) == set(defaults.CALENDAR_MOUNTS)
-    for mount in defaults.CALENDAR_MOUNT_MODES:
+    assert calendar_mounts.CALENDAR_MOUNT_MODES[0] == "off"
+    assert set(calendar_mounts.CALENDAR_MOUNT_MODES[1:]) == set(calendar_mounts.CALENDAR_MOUNTS)
+    for mount in calendar_mounts.CALENDAR_MOUNT_MODES:
         saved = replace(Settings(), calendar_mount=mount)
         store.save(saved)
         assert store.load().calendar_mount == mount

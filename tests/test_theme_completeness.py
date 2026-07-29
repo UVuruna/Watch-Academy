@@ -32,7 +32,7 @@ Two guards, symmetric to each other:
 import re
 from pathlib import Path
 
-from config import constants, defaults, paths, taxonomy
+from config import constants, defaults, pantheon, paths, taxonomy
 from data.encyclopedia import EncyclopediaRepository
 from data.symbolism import SymbolismRepository
 
@@ -57,7 +57,7 @@ def _ledger_folders() -> set[str]:
 def _weekday_theme_folders() -> set[str]:
     """Every `assets/weeks/<group>/<folder>` name reachable from a
     registered `constants.WEEKDAY_THEMES` key, read off the already-
-    resolved `defaults.WEEKDAY_THEME_DIRS` (past `THEME_KEY_RENAMES`/
+    resolved `pantheon.WEEKDAY_THEME_DIRS` (past `THEME_KEY_RENAMES`/
     `THEME_FOLDER` — Rule #5, the same chain `defaults.title_plate_art`
     walks, not reimplemented here). "planets" itself carries no themed
     dir of its own (the skin's default unit) but is reached through
@@ -66,7 +66,7 @@ def _weekday_theme_folders() -> set[str]:
     contributes no folder here."""
     folders = set()
     for theme in constants.WEEKDAY_THEMES:
-        rel = defaults.WEEKDAY_THEME_DIRS.get(theme)
+        rel = pantheon.WEEKDAY_THEME_DIRS.get(theme)
         if rel is None:
             continue
         parts = rel.split("/")
@@ -93,7 +93,7 @@ def _emblem_only_folders() -> set[str]:
 def _look_only_themes() -> set[str]:
     """Dial themes with NO topic card of their own — resolved as a LOOK
     of another topic's card instead (`planets_art` rides the Planets
-    card: it is absent from `defaults.WEEKDAY_THEME_TITLES` on purpose,
+    card: it is absent from `pantheon.WEEKDAY_THEME_TITLES` on purpose,
     its own comment reading "rides the Planets encyclopedia topic as a
     look", so `app.encyclopedia.tree._build_topics` never calls
     `_weekday_topic` for it in the first place). Reused by
@@ -101,7 +101,7 @@ def _look_only_themes() -> set[str]:
     source) — a look-only theme has nothing of its own for the Home
     screen to seat, so it is the one documented exception to "every
     registered theme reaches a whole"."""
-    return set(constants.WEEKDAY_THEMES) - set(defaults.WEEKDAY_THEME_TITLES)
+    return set(constants.WEEKDAY_THEMES) - set(pantheon.WEEKDAY_THEME_TITLES)
 
 
 def test_no_registered_theme_is_textless():
@@ -115,7 +115,7 @@ def test_no_registered_theme_is_textless():
     - The Inner Wheel emblem themes (virtues/sins/moods) DO get a
       `_weekday_topic` build, but `app.encyclopedia.tree` immediately
       OVERWRITES it with its own family pages
-      (`defaults.WEEKDAY_THEME_TITLES`'s own comment: "their
+      (`pantheon.WEEKDAY_THEME_TITLES`'s own comment: "their
       ENCYCLOPEDIA topics stay the emblem pages... — the later family
       pass overwrites the weekday topics built from these titles —
       deliberate"), so they never carry a `theme_title` JSON entry by

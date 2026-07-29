@@ -12,7 +12,7 @@ import astral
 import pytest
 from PySide6.QtWidgets import QApplication
 
-from config import defaults, palette
+from config import defaults, dial, palette
 from core.clock_state import build_day_context, build_tick_state
 from data.moon_phases import MoonPhaseRepository
 from data.seasons import SeasonsRepository
@@ -206,7 +206,7 @@ def test_spacebar_moon_marker_opens_the_current_phase(app):
     """The Moon marker opens the Moon topic at the CURRENT phase's page
     (owner 2026-07-16): the phase name indexes constants.MOON_PHASE_NAMES,
     the eight-page order of the topic (queue #8b)."""
-    from config import constants
+    from config import constants, dial
     from core.moon import phase_name
     from render.layers import dial_point
     from core import angles
@@ -235,7 +235,7 @@ def test_spacebar_moon_marker_pins_new_and_full(app):
     no eclipse is in the window (eclipse_event is None)."""
     from types import SimpleNamespace
 
-    from config import constants
+    from config import constants, dial
 
     comp = Compositor(defaults.DEFAULT_SKIN, AssetCache())
     for fraction, page in ((0.0, 0), (0.5, 4)):
@@ -439,8 +439,8 @@ def test_moon_transit_opacity(app):
 
     spec = defaults.DEFAULT_SKIN.year_marker
     assert moon_transit_opacity(spec, 100.0, 250.0) == 1.0        # far apart
-    assert moon_transit_opacity(spec, 100.0, 103.0) == defaults.MOON_TRANSIT_OPACITY
-    assert moon_transit_opacity(spec, 100.0, 460.0 + 3.0) == defaults.MOON_TRANSIT_OPACITY
+    assert moon_transit_opacity(spec, 100.0, 103.0) == dial.MOON_TRANSIT_OPACITY
+    assert moon_transit_opacity(spec, 100.0, 460.0 + 3.0) == dial.MOON_TRANSIT_OPACITY
 
 
 def test_moon_flips_on_southern_hemisphere(app):

@@ -18,7 +18,7 @@ fill's own luminance.
 from PySide6.QtCore import Qt
 from PySide6.QtGui import QColor
 
-from config import defaults, palette
+from config import encyclopedia_ui, palette
 
 
 def _stops(top: str, bottom: str, factor: int = 100) -> str:
@@ -36,18 +36,18 @@ def _stops(top: str, bottom: str, factor: int = 100) -> str:
 def _qss(role: str, small: bool) -> str:
     top, bottom = palette.UI_BUTTON_COLORS[role]
     font = (
-        defaults.UI_BUTTON_SMALL_FONT_PX if small
-        else defaults.UI_BUTTON_FONT_PX
+        encyclopedia_ui.UI_BUTTON_SMALL_FONT_PX if small
+        else encyclopedia_ui.UI_BUTTON_FONT_PX
     )
     pad_v, pad_h = (
-        defaults.UI_BUTTON_SMALL_PADDING_PX if small
-        else defaults.UI_BUTTON_PADDING_PX
+        encyclopedia_ui.UI_BUTTON_SMALL_PADDING_PX if small
+        else encyclopedia_ui.UI_BUTTON_PADDING_PX
     )
     base = (
         "color: white; font-weight: bold;"
         f"font-size: {font}px;"
         f"padding: {pad_v}px {pad_h}px;"
-        f"border-radius: {defaults.UI_BUTTON_RADIUS_PX}px;"
+        f"border-radius: {encyclopedia_ui.UI_BUTTON_RADIUS_PX}px;"
         f"border: 1px solid {palette.UI_BUTTON_EDGE_RGBA};"
     )
     return (
@@ -143,10 +143,10 @@ def style_look_chip(label, look_label: str) -> None:
         text = _readable_text(fill)
     label.setStyleSheet(
         f"color: {text}; font-weight: bold;"
-        f"font-size: {defaults.UI_BUTTON_SMALL_FONT_PX}px;"
-        f"padding: {defaults.UI_BUTTON_SMALL_PADDING_PX[0]}px "
-        f"{defaults.UI_BUTTON_SMALL_PADDING_PX[1]}px;"
-        f"border-radius: {defaults.UI_BUTTON_RADIUS_PX}px;"
+        f"font-size: {encyclopedia_ui.UI_BUTTON_SMALL_FONT_PX}px;"
+        f"padding: {encyclopedia_ui.UI_BUTTON_SMALL_PADDING_PX[0]}px "
+        f"{encyclopedia_ui.UI_BUTTON_SMALL_PADDING_PX[1]}px;"
+        f"border-radius: {encyclopedia_ui.UI_BUTTON_RADIUS_PX}px;"
         f"background: {background};"
         f"border: 1px solid {palette.UI_BUTTON_EDGE_RGBA};"
     )

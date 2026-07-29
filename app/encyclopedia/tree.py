@@ -26,8 +26,8 @@ Layer: app. Documentation: tree.md.
 
 from datetime import date
 
-from config import archetypes, constants, defaults
-from config import encyclopedia_tree as tree
+from config import archetypes, calendar_mounts, constants, defaults, glow, pantheon
+from config import calendar_mounts, encyclopedia_tree as tree, glow, pantheon
 from render.asset_recolor import metal_variant_path
 from render.asset_variants import moon_phase_file
 from render.instrument_diagrams import INSTRUMENT_FIGURES
@@ -76,7 +76,7 @@ def _build_topics(
     if travel_date is None:
         travel_date = date.today()
     topics: dict = {}
-    for theme, title in defaults.WEEKDAY_THEME_TITLES.items():
+    for theme, title in pantheon.WEEKDAY_THEME_TITLES.items():
         icon, entries = _weekday_topic(theme, travel_date)
         topics[theme] = {"title": title, "icon": icon, "entries": entries}
     # THE CONTINENTS overwrite its generic weekday build with the custom
@@ -209,7 +209,7 @@ def _build_topics(
 
     topics["week"] = {
         "title": "The Week",
-        "icon": defaults.weekday_art("planets/primary/photo/Sun.png"),
+        "icon": pantheon.weekday_art("planets/primary/photo/Sun.png"),
         "entries": [
             {
                 "looks": (
@@ -237,7 +237,7 @@ def _build_topics(
         "title": "The Instrument",
         # The owner's gear-tooth section logo (2026-07-13); article
         # images join per key as they land (missing files stay hidden).
-        "icon": defaults.INSTRUMENT_ART_DIR / "logo.png",
+        "icon": pantheon.INSTRUMENT_ART_DIR / "logo.png",
         "entries": [
             {
                 # THE INSTRUMENT DRAWS ITSELF (owner verdict 2026-07-29,
@@ -249,7 +249,7 @@ def _build_topics(
                 **(
                     {"diagram": ("instrument", key)}
                     if key in INSTRUMENT_FIGURES
-                    else {"images": (defaults.INSTRUMENT_ART_DIR / f"{key}.png",)}
+                    else {"images": (pantheon.INSTRUMENT_ART_DIR / f"{key}.png",)}
                 ),
                 "name": ("instrument_title", key),
                 "article": ("instrument", key),
@@ -314,7 +314,7 @@ def _build_topics(
         "title": "The Nine Intelligences",
         "icon": intel / "Existential.png",
         "entries": [{
-            "images": (defaults.theme_title_art("intelligences"),),
+            "images": (pantheon.theme_title_art("intelligences"),),
             "name": "The Nine Intelligences",
             "article": ("emblem", "intelligence", "The Nine Intelligences"),
         }] + [
@@ -340,7 +340,7 @@ def _build_topics(
     # months as a Calendar-pointer 12-set + its own topic — the year's
     # own wheel of labour (etymology, the pan-Slavic siblings, the mark's
     # place on the Calendar pointer wedge). Built from
-    # `defaults.SLAVIC_MONTHS` (Rule #4/#5 — one config table drives the
+    # `calendar_mounts.SLAVIC_MONTHS` (Rule #4/#5 — one config table drives the
     # display name, the article key and the plate stem). Plates are a
     # FUTURE prompt sheet under the canonical sourceless `months/` root
     # (defaults.MONTHS_ART_DIR, graceful-absent). Rides The Celestial
@@ -364,7 +364,7 @@ def _build_topics(
                 "name": f"{croatian} ({gloss})",
                 "article": ("emblem", "months", croatian),
             }
-            for croatian, gloss, stem, _month in defaults.SLAVIC_MONTHS
+            for croatian, gloss, stem, _month in calendar_mounts.SLAVIC_MONTHS
         ] + [
             # THE BLUE MOON LAW's SOL/MODRENIK (owner-sealed 2026-07-22,
             # R12): the year's own THIRTEENTH pair — closes the topic
@@ -379,7 +379,7 @@ def _build_topics(
                 # same thing when a thirteenth arrives — the count does
                 # not close — and it says it once, in the instrument's
                 # own furniture rather than in each set's register.
-                "images": (defaults.THIRTEENTH_GENERIC_ART,),
+                "images": (pantheon.THIRTEENTH_GENERIC_ART,),
                 "name": name,
                 "article": ("emblem", "months", key),
             }
@@ -408,7 +408,7 @@ def _build_topics(
     for topic_key, name, plate in (
         *(
             (theme, *_live_ninth_face(
-                theme, name, defaults.weekday_art(rel), is_daylight, travel_date,
+                theme, name, pantheon.weekday_art(rel), is_daylight, travel_date,
             ))
             for theme, (name, rel) in constants.WEEKDAY_THEME_NINTHS.items()
             # THE CONTINENTS builds its own LIVING Ninth inside
@@ -460,20 +460,20 @@ def _build_topics(
     # two poles rotate — the Union stays fixed.
     topics["duality"] = {
         "title": "The Two Triangles",
-        "icon": defaults.SCALE_ART_DIR / "primary" / "colored" / "Union.png",
+        "icon": pantheon.SCALE_ART_DIR / "primary" / "colored" / "Union.png",
         "entries": [
             {
                 "images": (
-                    defaults.scale_variant_file("Lucifer", travel_date)
-                    or defaults.SCALE_ART_DIR / "primary" / "colored" / "Lucifer.png",
+                    pantheon.scale_variant_file("Lucifer", travel_date)
+                    or pantheon.SCALE_ART_DIR / "primary" / "colored" / "Lucifer.png",
                 ),
                 "name": "Lucifer",
                 "article": ("emblem", "duality", "Lucifer"),
             },
             {
                 "images": (
-                    defaults.scale_variant_file("Judas", travel_date)
-                    or defaults.SCALE_ART_DIR / "primary" / "colored" / "Judas.png",
+                    pantheon.scale_variant_file("Judas", travel_date)
+                    or pantheon.SCALE_ART_DIR / "primary" / "colored" / "Judas.png",
                 ),
                 "name": "Judas",
                 "article": ("emblem", "duality", "Judas"),
@@ -481,7 +481,7 @@ def _build_topics(
             {
                 # The owner's hexagram badge (2026-07-13): the two
                 # triangles interlocked, the white circle at the cross.
-                "images": (defaults.SCALE_ART_DIR / "primary" / "colored" / "Union.png",),
+                "images": (pantheon.SCALE_ART_DIR / "primary" / "colored" / "Union.png",),
                 "name": "The Union",
                 "article": ("emblem", "duality", "The Union"),
             },
@@ -511,7 +511,7 @@ def _build_topics(
     # rendered LIVE (owner decree 2026-07-19: "bolje crtati na licu
     # mesta nego 15MB fajlova") from the full-moon master with the
     # dial's own terminator geometry — moon_phase_file, disk-cached.
-    moon_plate = defaults.weekday_art("planets/primary/photo/Moon.png")
+    moon_plate = pantheon.weekday_art("planets/primary/photo/Moon.png")
     topics["moon"] = {
         "title": "Moon",
         "icon": moon_plate,
@@ -584,7 +584,7 @@ def _build_topics(
         found; fixed the same round, since the convention is
         universal)."""
         canonical = defaults.ERA_ART_DIR / art
-        return defaults.rotating_art_file(canonical, travel_date) or canonical
+        return pantheon.rotating_art_file(canonical, travel_date) or canonical
 
     topics["era"] = {
         "title": "Eras & Ages",
@@ -613,13 +613,13 @@ def _build_topics(
     for topic_key, title, icon_stem, entry_specs in _ECLIPSE_TOPICS:
         topics[topic_key] = {
             "title": title,
-            "icon": defaults.ECLIPSE_ART_DIR / icon_stem,
+            "icon": glow.ECLIPSE_ART_DIR / icon_stem,
             "entries": [
                 {
                     "images": (
-                        tuple(defaults.ECLIPSE_ART_DIR / a for a in art)
+                        tuple(glow.ECLIPSE_ART_DIR / a for a in art)
                         if isinstance(art, tuple)
-                        else (defaults.ECLIPSE_ART_DIR / art,)
+                        else (glow.ECLIPSE_ART_DIR / art,)
                     ),
                     "name": ("eclipse_title", key),
                     "article": ("eclipse", key),

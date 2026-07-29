@@ -39,7 +39,7 @@ from PySide6.QtWidgets import (
 
 from app.theme import apply_theme, size_to_screen
 from app.ui_style import style_button
-from config import constants, defaults, palette
+from config import constants, defaults, palette, shortcuts
 from config.ui_text import ui
 from core.deep_time import (
     astro_from_display,
@@ -184,7 +184,7 @@ class TimeTravelDialog(QDialog):
                 tr(
                     "The dial shows this situation for {n} seconds, "
                     "then returns to the present."
-                ).format(n=defaults.TIME_TRAVEL_DURATION_S)
+                ).format(n=shortcuts.TIME_TRAVEL_DURATION_S)
             )
         )
         # The coverage and PRECISION TIER lines (owner 2026-07-16, the
@@ -310,7 +310,7 @@ class TimeTravelDialog(QDialog):
                     "dates."
                 ).format(span=span)
             else:
-                deep_first, deep_last = defaults.DEEP_TIME_YEAR_RANGE
+                deep_first, deep_last = shortcuts.DEEP_TIME_YEAR_RANGE
                 message = self._tr(
                     "Time Travel covers {span} for now — the Deep Time "
                     "data pack extends it to {deep_first}…{deep_last} "
@@ -333,8 +333,8 @@ class TimeTravelDialog(QDialog):
         an out-of-range year and READ the explanation on OK (owner
         2026-07-16 — a clamped spinbox would silently swallow the
         target instead)."""
-        first, last = self._coverage or defaults.DEEP_TIME_YEAR_RANGE
-        adv_first, adv_last = defaults.DEEP_TIME_YEAR_RANGE
+        first, last = self._coverage or shortcuts.DEEP_TIME_YEAR_RANGE
+        adv_first, adv_last = shortcuts.DEEP_TIME_YEAR_RANGE
         if era_index == 1:                   # BCE/BC: 1 BCE = astro 0
             self._year.setRange(1, max(1 - first, 1 - adv_first))
         else:                                # CE/AD

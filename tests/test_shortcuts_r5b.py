@@ -22,7 +22,7 @@ from PySide6.QtWidgets import QApplication
 from app.controller import WatchController
 from app.fast_travel_flash import FastTravelFlash
 from app.settings_store import Settings, replace
-from config import constants, defaults
+from config import constants, defaults, shortcuts
 from core.deep_time import real_year
 
 
@@ -81,32 +81,32 @@ _OWNER_SEALED_COMBOS = {
 
 
 def test_final_map_contains_every_owner_combo():
-    table = {entry[:3] for entry in defaults.SHORTCUTS}
+    table = {entry[:3] for entry in shortcuts.SHORTCUTS}
     assert _OWNER_SEALED_COMBOS <= table
 
 
 def test_final_map_has_exactly_the_owner_sealed_combos():
-    table = {entry[:3] for entry in defaults.SHORTCUTS}
+    table = {entry[:3] for entry in shortcuts.SHORTCUTS}
     assert table == _OWNER_SEALED_COMBOS
 
 
 def test_ctrl_comma_is_fully_retired():
-    assert not any(entry[1] == "Key_Comma" for entry in defaults.SHORTCUTS)
-    assert "Key_Comma" not in defaults._SHORTCUT_KEY_DISPLAY_OVERRIDES
+    assert not any(entry[1] == "Key_Comma" for entry in shortcuts.SHORTCUTS)
+    assert "Key_Comma" not in shortcuts._SHORTCUT_KEY_DISPLAY_OVERRIDES
 
 
 def test_only_one_ctrl_home_entry_survives_the_full_reset():
-    home_entries = [entry for entry in defaults.SHORTCUTS if entry[1] == "Key_Home"]
+    home_entries = [entry for entry in shortcuts.SHORTCUTS if entry[1] == "Key_Home"]
     assert len(home_entries) == 1
     assert home_entries[0][0] == "return_to_now"
 
 
 def test_settings_shortcut_display_is_ctrl_m():
-    assert defaults.shortcut_display("open_settings") == "Ctrl+M"
+    assert shortcuts.shortcut_display("open_settings") == "Ctrl+M"
 
 
 def test_fast_travel_future_both_bindings_share_one_action_id():
-    matches = [entry for entry in defaults.SHORTCUTS if entry[0] == "fast_travel_future"]
+    matches = [entry for entry in shortcuts.SHORTCUTS if entry[0] == "fast_travel_future"]
     assert {entry[1] for entry in matches} == {"Key_Equal", "Key_Plus"}
 
 
@@ -212,7 +212,7 @@ def test_slot3_theme_cycle_is_noop_without_the_2nd_slot(controller):
 
 
 def test_fast_travel_theme_cycles_in_order_and_wraps(controller):
-    themes = defaults.FAST_TRAVEL_THEMES
+    themes = shortcuts.FAST_TRAVEL_THEMES
     assert controller._fast_travel_theme_index == 0
     for expected in range(1, len(themes) + 1):
         controller._on_shortcut("fast_travel_theme")
@@ -233,7 +233,7 @@ def test_fast_travel_option_cycles_within_theme_and_remembers_per_theme(controll
 
 
 def test_fast_travel_option_wraps_within_its_own_theme(controller):
-    sun_options = defaults.FAST_TRAVEL_THEMES[0]["options"]
+    sun_options = shortcuts.FAST_TRAVEL_THEMES[0]["options"]
     for expected in range(1, len(sun_options) + 1):
         controller._on_shortcut("fast_travel_option")
         assert controller._fast_travel_option_index("sun") == expected % len(sun_options)
@@ -281,12 +281,12 @@ def test_fast_travel_flash_carries_the_active_theme_icon_and_option_text(
 
 def test_fast_travel_past_on_calendar_year_steps_exactly_minus_one_year(controller):
     calendar_index = next(
-        i for i, theme in enumerate(defaults.FAST_TRAVEL_THEMES)
+        i for i, theme in enumerate(shortcuts.FAST_TRAVEL_THEMES)
         if theme["id"] == "calendar"
     )
     year_option_index = next(
         i for i, option in enumerate(
-            defaults.FAST_TRAVEL_THEMES[calendar_index]["options"]
+            shortcuts.FAST_TRAVEL_THEMES[calendar_index]["options"]
         )
         if option["id"] == "year"
     )
@@ -313,12 +313,12 @@ def test_fast_travel_past_on_calendar_year_steps_exactly_minus_one_year(controll
 
 def test_fast_travel_future_on_calendar_year_steps_exactly_plus_one_year(controller):
     calendar_index = next(
-        i for i, theme in enumerate(defaults.FAST_TRAVEL_THEMES)
+        i for i, theme in enumerate(shortcuts.FAST_TRAVEL_THEMES)
         if theme["id"] == "calendar"
     )
     year_option_index = next(
         i for i, option in enumerate(
-            defaults.FAST_TRAVEL_THEMES[calendar_index]["options"]
+            shortcuts.FAST_TRAVEL_THEMES[calendar_index]["options"]
         )
         if option["id"] == "year"
     )
@@ -342,12 +342,12 @@ def test_fast_travel_step_chains_from_the_active_simulation(controller):
     simulation" — a SECOND step continues from the FIRST landing, not
     from real "now" again."""
     calendar_index = next(
-        i for i, theme in enumerate(defaults.FAST_TRAVEL_THEMES)
+        i for i, theme in enumerate(shortcuts.FAST_TRAVEL_THEMES)
         if theme["id"] == "calendar"
     )
     year_option_index = next(
         i for i, option in enumerate(
-            defaults.FAST_TRAVEL_THEMES[calendar_index]["options"]
+            shortcuts.FAST_TRAVEL_THEMES[calendar_index]["options"]
         )
         if option["id"] == "year"
     )
@@ -531,7 +531,7 @@ def test_the_six_direct_shortcut_actions_carry_their_combo_in_the_menu(controlle
         ("open_time_travel", "Ctrl+T"),
         ("toggle_archetype", "Ctrl+A"),
     ):
-        assert defaults.shortcut_display(action_id) == expected_suffix
+        assert shortcuts.shortcut_display(action_id) == expected_suffix
         assert any(t.endswith(f"\t{expected_suffix}") for t in texts), action_id
 
 
@@ -673,10 +673,10 @@ def test_no_two_shortcuts_share_a_chord():
     table is now checked as a whole: one chord, one action (the two
     fast_travel_future rows are the documented exception — Equal and
     numpad Plus are two KEYS for one action, not one key twice)."""
-    from config import defaults
+    from config import defaults, shortcuts
 
     seen = {}
-    for action, key, modifiers, _description in defaults.SHORTCUTS:
+    for action, key, modifiers, _description in shortcuts.SHORTCUTS:
         chord = (key, frozenset(modifiers))
         assert chord not in seen, (
             f"{key} + {sorted(modifiers)} is bound twice: "

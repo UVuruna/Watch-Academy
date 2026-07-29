@@ -15,7 +15,7 @@ contract (see `config/encyclopedia_tree.py`).
 Layer: app. Documentation: pages.md.
 """
 
-from config import archetypes, constants, defaults
+from config import archetypes, constants, pantheon
 
 # The SEASONS topic (owner 2026-07-13; split 2026-07-16, ROADMAP queue
 # #10): the year's quarters, the tropics' halves and the measured twins
@@ -329,7 +329,7 @@ _WEEKDAY_DUAL_PAGE_INDEX = 8
 # Every `_weekday_topic`-built topic — every WEEKDAY_THEME_TITLES key
 # EXCEPT virtues/sins/moods (those get OVERWRITTEN by the emblem-family
 # pass in `_topics()` below and are never weekday-shaped in the end).
-_WEEKDAY_RESTRUCTURED_TOPICS = frozenset(defaults.WEEKDAY_THEME_TITLES) - {
+_WEEKDAY_RESTRUCTURED_TOPICS = frozenset(pantheon.WEEKDAY_THEME_TITLES) - {
     "virtues", "sins", "moods",
 }
 
@@ -366,7 +366,7 @@ NINTH_SEAT_PHILOSOPHICAL_NAME = "The Unfound"
 # cards (`_GALLERY_SUBGROUPS` below, item 5c), the "gods" suffix is
 # redundant on the tile itself. This overrides ONLY the gallery card
 # text and the reader's own top header (`_topic_display_title`) — every
-# OTHER reader of `defaults.WEEKDAY_THEME_TITLES` (the Ancient Gods
+# OTHER reader of `pantheon.WEEKDAY_THEME_TITLES` (the Ancient Gods
 # menu, the Weekday theme picker, Settings) is a DIFFERENT surface the
 # owner never asked to rename, so the shared table itself stays
 # untouched (Rule #5: one shared name would have widened the blast

@@ -28,7 +28,7 @@ from PySide6.QtGui import (
     QRadialGradient,
 )
 
-from config import archetypes, constants, defaults, palette, paths
+from config import archetypes, calendar_mounts, constants, continents, defaults, dial, glow, palette, pantheon, paths
 from core import angles, continents
 from core.clock_state import DayContext, TickState
 from core.deep_time import format_official, real_year
@@ -118,7 +118,7 @@ def draw_outlined_text(
     )
     path = QPainterPath()
     path.addText(baseline, font, text)
-    outline_width = max(1.0, font.pixelSize() * defaults.LABEL_OUTLINE_WIDTH)
+    outline_width = max(1.0, font.pixelSize() * dial.LABEL_OUTLINE_WIDTH)
     painter.setPen(QPen(QColor(*palette.LABEL_OUTLINE_RGBA), outline_width))
     painter.setBrush(QColor(*palette.LABEL_FILL_RGBA))
     painter.drawPath(path)
@@ -134,7 +134,7 @@ def moon_transit_opacity(spec, year_angle: float, moon_angle: float) -> float:
     delta = min(delta, 360.0 - delta)
     # Angular size at which the two discs touch on the shared orbit.
     touch_deg = math.degrees((spec.scale + spec.moon_scale) / spec.orbit_fraction)
-    return 1.0 if delta >= touch_deg else defaults.MOON_TRANSIT_OPACITY
+    return 1.0 if delta >= touch_deg else dial.MOON_TRANSIT_OPACITY
 
 
 def palette_for(skin: SkinDefinition) -> tuple:
@@ -505,9 +505,9 @@ def calendar_day_arrow(angle_deg: float, radius: float) -> QPolygonF:
     """The Almanac Earth day-arrow (owner 2026-07-16): a small triangle
     at `angle_deg`, tip toward the ring ticks, base inward — the ring
     reads today's date to the day. Tunables in defaults."""
-    tip = radius * defaults.CALENDAR_ARROW_TIP_FRACTION
-    base = tip - radius * defaults.CALENDAR_ARROW_LENGTH_FRACTION
-    half = defaults.CALENDAR_ARROW_HALF_DEG
+    tip = radius * calendar_mounts.CALENDAR_ARROW_TIP_FRACTION
+    base = tip - radius * calendar_mounts.CALENDAR_ARROW_LENGTH_FRACTION
+    half = calendar_mounts.CALENDAR_ARROW_HALF_DEG
     return QPolygonF(
         [
             dial_point(angle_deg, tip),
@@ -530,12 +530,12 @@ def calendar_day_arrow(angle_deg: float, radius: float) -> QPolygonF:
 def calendar_mount_wheel(mount: str) -> str:
     """Which `calendar_wedge_bounds` geometry a mount set's marks ride —
     read from the roster's own DOZEN SYSTEM (CANON.md §The Two Dozen
-    Systems, `defaults.CalendarMount.system`): System "A" rides the
+    Systems, `calendar_mounts.CalendarMount.system`): System "A" rides the
     ZODIAC wheel's cardinal-START wedges (boundaries on the cardinals,
     so the twelve fall into six pairs — sign i's wedge IS its own 30-deg
     arc), System "B" the ALMANAC wheel's cardinal-CENTERED wedges (one
     crown at 12h, one root at 24h, six opposition axes)."""
-    return "zodiac" if defaults.CALENDAR_MOUNTS[mount].system == "A" else "almanac"
+    return "zodiac" if calendar_mounts.CALENDAR_MOUNTS[mount].system == "A" else "almanac"
 
 
 def calendar_mount_angle(mount: str, index: int) -> float:
@@ -553,8 +553,8 @@ def calendar_mount_angle(mount: str, index: int) -> float:
     IS the wedge center. A 24-set has two, and they land a quarter wedge
     either side of that center — a 15-deg pitch across the whole dial,
     the same pitch the Rose's three stars already stand on."""
-    per_wedge = defaults.CALENDAR_MOUNT_SEATS_PER_WEDGE[
-        defaults.CALENDAR_MOUNTS[mount].seats
+    per_wedge = calendar_mounts.CALENDAR_MOUNT_SEATS_PER_WEDGE[
+        calendar_mounts.CALENDAR_MOUNTS[mount].seats
     ]
     start, end = calendar_wedge_bounds(calendar_mount_wheel(mount))[
         index // per_wedge
@@ -570,16 +570,16 @@ def calendar_mount_mark_height(mount: str, radius: float) -> float:
     seat pitch, so its marks halve with it (Rule #19: the size follows
     the seat law, it is not a second tunable). Shared by the paint pass
     and the compositor's own hit target (Rule #5)."""
-    per_wedge = defaults.CALENDAR_MOUNT_SEATS_PER_WEDGE[
-        defaults.CALENDAR_MOUNTS[mount].seats
+    per_wedge = calendar_mounts.CALENDAR_MOUNT_SEATS_PER_WEDGE[
+        calendar_mounts.CALENDAR_MOUNTS[mount].seats
     ]
-    return 2 * radius * defaults.CALENDAR_MOUNT_MARK_SCALE / per_wedge
+    return 2 * radius * calendar_mounts.CALENDAR_MOUNT_MARK_SCALE / per_wedge
 
 
 def calendar_mount_entries(mount: str) -> tuple[tuple[str, Path | None], ...]:
     """A mount set's (display_name, art_path_or_None) pairs in SEAT
     ORDER — twelve of them for a Dozen, twenty-four for a 24-set. Every
-    field comes from the roster's own `defaults.CALENDAR_MOUNTS` entry
+    field comes from the roster's own `calendar_mounts.CALENDAR_MOUNTS` entry
     (Rule #5: ONE registry, no per-roster branch survives here).
 
     Art is ALWAYS graceful-absent (the owner's R7b contract, now the
@@ -587,7 +587,7 @@ def calendar_mount_entries(mount: str) -> tuple[tuple[str, Path | None], ...]:
     routes the caller to the name-fallback, never a gap. `art_stems`
     covers the sets whose plates are not named for the member (the
     Slavic months are Croatian proper nouns with ASCII stems)."""
-    entry = defaults.CALENDAR_MOUNTS[mount]
+    entry = calendar_mounts.CALENDAR_MOUNTS[mount]
     return tuple(
         (name, octa_slot_art(entry.art_dir, stem))
         for name, stem in zip(entry.members, entry.stems)
@@ -606,7 +606,7 @@ def calendar_mount_current_index(mount: str, day: DayContext) -> int | None:
     same wedge the Slavic months do). Never hemisphere-mirrored: the
     mark sits on its OWN fixed wedge identity, matching what is drawn
     there, unlike the Earth marker's orbit."""
-    entry = defaults.CALENDAR_MOUNTS[mount]
+    entry = calendar_mounts.CALENDAR_MOUNTS[mount]
     if entry.follows == "sign":
         return entry.members.index(day.zodiac_name)
     if entry.follows == "month":
@@ -631,7 +631,7 @@ def chinese_mount_dimmed_index(day: DayContext) -> int | None:
     # numbering core.blue_moon.chinese_leap_month itself counts in) —
     # then the seat that animal holds on the mount's own wheel.
     animal = constants.CHINESE_ANIMALS[(number + 1) % 12]
-    return defaults.CALENDAR_MOUNTS["chinese"].members.index(animal)
+    return calendar_mounts.CALENDAR_MOUNTS["chinese"].members.index(animal)
 
 
 def _draw_calendar_mount(
@@ -647,17 +647,17 @@ def _draw_calendar_mount(
     checked BEFORE the current-month emphasis, so the two never both
     apply to the one mark. A roster that names no today
     (`CalendarMount.follows` None) simply has no emphasized mark."""
-    mount_radius = ctx.radius * defaults.CALENDAR_MOUNT_RADIUS_FRACTION
+    mount_radius = ctx.radius * calendar_mounts.CALENDAR_MOUNT_RADIUS_FRACTION
     mark_height = calendar_mount_mark_height(mount, ctx.radius)
     current = calendar_mount_current_index(mount, ctx.day)
     dimmed = chinese_mount_dimmed_index(ctx.day) if mount == "chinese" else None
     for index, (name, art) in enumerate(calendar_mount_entries(mount)):
         pos = dial_point(calendar_mount_angle(mount, index), mount_radius)
         if index == dimmed:
-            alpha = defaults.CALENDAR_MOUNT_DIMMED_ALPHA
+            alpha = calendar_mounts.CALENDAR_MOUNT_DIMMED_ALPHA
         else:
-            alpha = defaults.CALENDAR_MOUNT_ALPHA + (
-                defaults.CALENDAR_MOUNT_LIT_DELTA if index == current else 0.0
+            alpha = calendar_mounts.CALENDAR_MOUNT_ALPHA + (
+                calendar_mounts.CALENDAR_MOUNT_LIT_DELTA if index == current else 0.0
             )
         painter.save()
         painter.setOpacity(min(1.0, alpha))
@@ -691,7 +691,7 @@ def umbra_ladder(shades: int, contrast: str) -> tuple[int, ...]:
     endpoint-inclusive over the whole range (16 shades -> 255..0 step
     17); half contrast takes the CENTERS of N equal bins of the middle
     half [64, 192] (16 -> 188..68 step 8, symmetric about 128)."""
-    lightest, darkest = defaults.UMBRA_CONTRAST_SPANS[contrast]
+    lightest, darkest = dial.UMBRA_CONTRAST_SPANS[contrast]
     if contrast == "full":
         return tuple(
             round(lightest - k * (lightest - darkest) / (shades - 1))
@@ -725,23 +725,23 @@ def draw_event_glow(
     mid stop and BEFORE the fully-transparent edge so it reads as a
     separate ring rather than a blend with the bronze core. None for
     every other caller, unchanged."""
-    halo = marker_radius * defaults.GLOW_RADIUS_SCALE
+    halo = marker_radius * glow.GLOW_RADIUS_SCALE
     gradient = QRadialGradient(pos, halo)
     core = QColor(color)
-    core.setAlphaF(defaults.GLOW_CORE_ALPHA * strength)
+    core.setAlphaF(glow.GLOW_CORE_ALPHA * strength)
     mid = QColor(color)
-    mid.setAlphaF(defaults.GLOW_MID_ALPHA * strength)
+    mid.setAlphaF(glow.GLOW_MID_ALPHA * strength)
     edge = QColor(color)
     edge.setAlphaF(0.0)
     gradient.setColorAt(0.0, core)
-    gradient.setColorAt(defaults.GLOW_MID_STOP, mid)
+    gradient.setColorAt(glow.GLOW_MID_STOP, mid)
     if fringe_color is not None:
         fringe_transparent = QColor(fringe_color)
         fringe_transparent.setAlphaF(0.0)
         fringe_peak = QColor(fringe_color)
-        fringe_peak.setAlphaF(defaults.ECLIPSE_LUNAR_FRINGE_ALPHA * strength)
-        stop = defaults.ECLIPSE_LUNAR_FRINGE_STOP
-        half_width = defaults.ECLIPSE_LUNAR_FRINGE_HALF_WIDTH
+        fringe_peak.setAlphaF(glow.ECLIPSE_LUNAR_FRINGE_ALPHA * strength)
+        stop = glow.ECLIPSE_LUNAR_FRINGE_STOP
+        half_width = glow.ECLIPSE_LUNAR_FRINGE_HALF_WIDTH
         gradient.setColorAt(stop - half_width, fringe_transparent)
         gradient.setColorAt(stop, fringe_peak)
         gradient.setColorAt(stop + half_width, fringe_transparent)
@@ -762,35 +762,35 @@ def eclipse_glow_strength(magnitude: float | None) -> float:
     here reads as the strongest glow rather than guessing (Rule #7:
     no defensive branch for a scenario the schema does not produce)."""
     if magnitude is None:
-        return defaults.ECLIPSE_GLOW_STRENGTH_MAX
-    lo, hi = defaults.ECLIPSE_MAGNITUDE_MIN, defaults.ECLIPSE_MAGNITUDE_MAX
+        return glow.ECLIPSE_GLOW_STRENGTH_MAX
+    lo, hi = glow.ECLIPSE_MAGNITUDE_MIN, glow.ECLIPSE_MAGNITUDE_MAX
     fraction = max(0.0, min(1.0, (magnitude - lo) / (hi - lo)))
-    lo_strength = defaults.ECLIPSE_GLOW_STRENGTH_MIN
-    hi_strength = defaults.ECLIPSE_GLOW_STRENGTH_MAX
+    lo_strength = glow.ECLIPSE_GLOW_STRENGTH_MIN
+    hi_strength = glow.ECLIPSE_GLOW_STRENGTH_MAX
     return lo_strength + fraction * (hi_strength - lo_strength)
 
 
 def eclipse_render_state(event) -> str:
     """The catalog (kind, type) -> render STATE lookup (owner decree
-    2026-07-19, fix round C — `defaults.ECLIPSE_TYPE_STATE`). An
+    2026-07-19, fix round C — `glow.ECLIPSE_TYPE_STATE`). An
     unknown/missing type (should not occur — see the config comment)
     documented-falls-back to the kind's PARTIAL state rather than
     raising, since a malformed catalog row must still render something
     plausible (Rule #1: visible degradation, not a crash)."""
-    state = defaults.ECLIPSE_TYPE_STATE.get((event.kind, event.type))
+    state = glow.ECLIPSE_TYPE_STATE.get((event.kind, event.type))
     if state is not None:
         return state
-    return defaults.ECLIPSE_STATE_FALLBACK[event.kind]
+    return glow.ECLIPSE_STATE_FALLBACK[event.kind]
 
 
 def eclipse_state_glow_strength(state: str, magnitude: float | None) -> float:
     """Glow strength for an eclipse render STATE: every state carries a
-    fixed TYPE-driven fraction (`defaults.ECLIPSE_STATE_GLOW_STRENGTH`)
+    fixed TYPE-driven fraction (`glow.ECLIPSE_STATE_GLOW_STRENGTH`)
     EXCEPT "solar_partial", the owner's one named exception, which keeps
     the original magnitude-linear mapping (`eclipse_glow_strength`)."""
     if state == "solar_partial":
         return eclipse_glow_strength(magnitude)
-    return defaults.ECLIPSE_STATE_GLOW_STRENGTH[state]
+    return glow.ECLIPSE_STATE_GLOW_STRENGTH[state]
 
 
 def hover_factor(ctx: "RenderContext", element: str) -> float:
@@ -976,8 +976,8 @@ def draw_archetype_figure(
 
 def name_label_px(name: str, target_width: float) -> int:
     """The measured pixel font size that fits `name` within
-    `target_width`, capped at `defaults.NAME_LABEL_MAX_PX`, floored at
-    `defaults.BODY_LABEL_MIN_PX` — the shared per-name fit (Rule #5):
+    `target_width`, capped at `dial.NAME_LABEL_MAX_PX`, floored at
+    `dial.BODY_LABEL_MIN_PX` — the shared per-name fit (Rule #5):
     a SHORT text no longer inflates past a sane ceiling, a LONG one
     still shrinks to fit (measured, never guessed)."""
     font = QFont()
@@ -987,10 +987,10 @@ def name_label_px(name: str, target_width: float) -> int:
     width = metrics.horizontalAdvance(name)
     fitted = (
         math.floor(100.0 * target_width / width) if width > 0
-        else defaults.NAME_LABEL_MAX_PX
+        else dial.NAME_LABEL_MAX_PX
     )
     return max(
-        defaults.BODY_LABEL_MIN_PX, min(fitted, defaults.NAME_LABEL_MAX_PX)
+        dial.BODY_LABEL_MIN_PX, min(fitted, dial.NAME_LABEL_MAX_PX)
     )
 
 
@@ -1130,8 +1130,8 @@ def slot_seat_scale(skin: SkinDefinition) -> float:
     """The per-pointer slot SIZE factor (owner 2026-07-15): 125% on
     the slim-armed Seasons/Compass, 150% elsewhere."""
     if not skin.show_pointer:
-        return defaults.SLOT_SIZE_PINNED
-    return defaults.SLOT_SIZE_BY_POINTER[skin.pointer]
+        return dial.SLOT_SIZE_PINNED
+    return dial.SLOT_SIZE_BY_POINTER[skin.pointer]
 
 
 def weekday_body_size(skin: SkinDefinition, radius: float) -> float:
@@ -1155,7 +1155,7 @@ def weekday_body_orbit(skin: SkinDefinition) -> float:
     by-colors body rides that radius uniformly (owner 2026-07-15 — this
     one slot always sits at the romb center, whatever the pointer; the
     seated 2nd/3rd slots keep their own arm geometry)."""
-    return skin.star.radius_fraction * defaults.WEEKDAY_ROMB_CENTER_OF_TIP
+    return skin.star.radius_fraction * dial.WEEKDAY_ROMB_CENTER_OF_TIP
 
 
 def slot_seat_orbit(skin: SkinDefinition, seat) -> float:
@@ -1165,9 +1165,9 @@ def slot_seat_orbit(skin: SkinDefinition, seat) -> float:
     if (
         seat not in ("classic", "center")
         and skin.show_pointer
-        and skin.pointer in defaults.SLOT_SEAT_OUTWARD
+        and skin.pointer in dial.SLOT_SEAT_OUTWARD
     ):
-        return defaults.SLOT_SEAT_OUTWARD[skin.pointer]
+        return dial.SLOT_SEAT_OUTWARD[skin.pointer]
     return 1.0
 
 
@@ -1308,7 +1308,7 @@ def thirteenth_plate(key: str) -> tuple[str, Path | None]:
     `art_dir` as their OWN roster's twelve rim members — every prompt
     sheet drops the axle's plate in that one folder beside them, so
     there is no second art-dir table to keep in sync (Rule #19). The ONE
-    registered `defaults.CalendarMount` whose own `centre` names this
+    registered `calendar_mounts.CalendarMount` whose own `centre` names this
     key supplies it; every art_dir may legitimately be missing that one
     extra file (art landed for the twelve rim members well ahead of the
     axle's own plate on every one of the four older Dozens, and the
@@ -1328,7 +1328,7 @@ def thirteenth_plate(key: str) -> tuple[str, Path | None]:
         art = resolved if resolved.exists() else None
     else:
         mount = next(
-            m for m in defaults.CALENDAR_MOUNTS.values() if m.centre == key
+            m for m in calendar_mounts.CALENDAR_MOUNTS.values() if m.centre == key
         )
         art = octa_slot_art(mount.art_dir, name.replace(" ", "_"))
     return name, art
@@ -1351,7 +1351,7 @@ def active_thirteenth(skin: SkinDefinition, day: DayContext) -> str | None:
     notion is retired with the precedence machinery itself):
 
     - A MOUNT that names a thirteenth of its own
-      (`defaults.CalendarMount.centre`) OUTRANKS the wheel whenever both
+      (`calendar_mounts.CalendarMount.centre`) OUTRANKS the wheel whenever both
       are active at once — a mount is a more deliberate SECOND choice
       layered on top of the wheel (owner-documented tiebreak,
       ground-truthed against the settings model: `calendar_mount` is
@@ -1379,7 +1379,7 @@ def active_thirteenth(skin: SkinDefinition, day: DayContext) -> str | None:
     if skin.pointer != "calendar":
         return None
     candidates = day.thirteenth_candidates
-    mount = defaults.CALENDAR_MOUNTS.get(skin.calendar_mount)
+    mount = calendar_mounts.CALENDAR_MOUNTS.get(skin.calendar_mount)
     key = mount.centre if mount is not None and mount.centre else (
         "ophiuchus" if calendar_wheel(skin) == "zodiac" else "sol"
     )
@@ -1446,11 +1446,11 @@ def theme_ninth(
     if entry is None:
         return None
     name, rel = entry
-    asset = defaults.weekday_art(rel)
+    asset = pantheon.weekday_art(rel)
     if not paths.art_file(asset).exists():
         return None
     if on_date is not None:
-        asset = defaults.rotating_art_file(asset, on_date) or asset
+        asset = pantheon.rotating_art_file(asset, on_date) or asset
     return name, asset
 
 
@@ -2111,7 +2111,7 @@ class BackgroundLayer(Layer):
         uses."""
         contrast = ctx.skin.umbra_contrast
         tint = ctx.skin.ring_tint            # the Umbra follows the ring hue
-        lightest, darkest = defaults.UMBRA_CONTRAST_SPANS[contrast]
+        lightest, darkest = dial.UMBRA_CONTRAST_SPANS[contrast]
         lightest = min(255, lightest)            # spans store window BOUNDS
         if not daylight_active(ctx.skin):
             painter.setBrush(tinted_gray(lightest, tint))
@@ -2202,7 +2202,7 @@ class StarLayer(Layer):
         border_width = max(1.0, ctx.radius * spec.border_width_fraction)
         lead = QPen(
             QColor(palette.ARM_OUTLINE),
-            max(1.0, ctx.radius * defaults.ARM_OUTLINE_WIDTH),
+            max(1.0, ctx.radius * dial.ARM_OUTLINE_WIDTH),
         )
         for arms in drawn_arms(ctx.skin, palette_for(ctx.skin)):
             for theta, color in arms:
@@ -2274,27 +2274,27 @@ class RingLayer(Layer):
         # Explicit QPen — copying painter.pen() would inherit the NoPen
         # STYLE set for the donut fill and the ticks would never render.
         painter.setPen(
-            QPen(QColor(spec.text_color), max(1.0, ctx.radius * defaults.RING_TICK_WIDTH))
+            QPen(QColor(spec.text_color), max(1.0, ctx.radius * dial.RING_TICK_WIDTH))
         )
         for hour in range(constants.HOURS_PER_REVOLUTION):
             theta = (hour * 15.0 + constants.DIAL_OFFSET_DEG) % 360.0
             painter.drawLine(
                 dial_point(theta, inner),
-                dial_point(theta, inner * defaults.RING_TICK_REACH),
+                dial_point(theta, inner * dial.RING_TICK_REACH),
             )
 
         numeral_font = QFont()
         numeral_font.setPixelSize(
-            max(defaults.RING_NUMERAL_MIN_PX, round(ctx.radius * defaults.RING_NUMERAL_SIZE))
+            max(dial.RING_NUMERAL_MIN_PX, round(ctx.radius * dial.RING_NUMERAL_SIZE))
         )
         numeral_font.setBold(True)
         letter_font = QFont()
         letter_font.setPixelSize(
-            max(defaults.RING_LETTER_MIN_PX, round(ctx.radius * defaults.RING_LETTER_SIZE))
+            max(dial.RING_LETTER_MIN_PX, round(ctx.radius * dial.RING_LETTER_SIZE))
         )
         letter_font.setBold(True)
         mid = (outer + inner) / 2
-        box = ctx.radius * defaults.RING_TEXT_BOX
+        box = ctx.radius * dial.RING_TEXT_BOX
         for hour in range(constants.HOURS_PER_REVOLUTION):
             theta = (hour * 15.0 + constants.DIAL_OFFSET_DEG) % 360.0
             center = dial_point(theta, mid)
@@ -2311,11 +2311,11 @@ class RingLayer(Layer):
 
         minute_font = QFont()
         minute_font.setPixelSize(
-            max(defaults.RING_MINUTE_MIN_PX, round(ctx.radius * defaults.RING_MINUTE_SIZE))
+            max(dial.RING_MINUTE_MIN_PX, round(ctx.radius * dial.RING_MINUTE_SIZE))
         )
         painter.setFont(minute_font)
         painter.setPen(QColor(spec.text_color))
-        minute_radius = inner * defaults.RING_MINUTE_RADIUS
+        minute_radius = inner * dial.RING_MINUTE_RADIUS
         for minute in range(5, 60, 5):
             center = dial_point(minute * 6.0, minute_radius)
             rect = QRectF(center.x() - box / 2, center.y() - box / 2, box, box)
@@ -2338,8 +2338,8 @@ class RingLayer(Layer):
         it (owner 2026-07-18, Session 21-D: "the ring plate + its
         letters" is one target); the shadow copy skips it — a pure
         black silhouette has no saturation to scale."""
-        shadow_radius = height * defaults.RING_LETTER_SHADOW_RADIUS
-        samples = defaults.RING_LETTER_SHADOW_SAMPLES
+        shadow_radius = height * dial.RING_LETTER_SHADOW_RADIUS
+        samples = dial.RING_LETTER_SHADOW_SAMPLES
         # Silver/bronze are derived from the gold master AT LOAD (owner
         # 2026-07-19), disk-cached like every other derived asset — the
         # shadow silhouette is metal-invariant (same alpha mask on every
@@ -2357,7 +2357,7 @@ class RingLayer(Layer):
         painter.save()
         painter.translate(pos)
         painter.rotate(rotation)
-        painter.setOpacity(defaults.RING_LETTER_SHADOW_ALPHA)
+        painter.setOpacity(dial.RING_LETTER_SHADOW_ALPHA)
         for k in range(samples):
             angle = 2.0 * math.pi * k / samples
             painter.drawPixmap(
@@ -2377,7 +2377,7 @@ class RingLayer(Layer):
         the opposite metal, owner spec). Stamped by `_draw_ring_glyph`
         (Rule #5, shared with the outer motto arc)."""
         height = (
-            2 * ctx.radius * defaults.RING_LETTER_ART_SCALE
+            2 * ctx.radius * dial.RING_LETTER_ART_SCALE
             * ctx.skin.ring_letter_scale
         )
         for hour, gold_asset in self._skin.ring.letter_art.items():
@@ -2389,7 +2389,7 @@ class RingLayer(Layer):
             # only the rays extend beyond it (1.0 for plain letters).
             self._draw_ring_glyph(
                 painter, ctx, gold_asset, metal, theta,
-                defaults.RING_LETTER_RADIUS_FRACTION,
+                dial.RING_LETTER_RADIUS_FRACTION,
                 height * self._skin.ring.letter_zoom.get(hour, 1.0),
             )
 
@@ -2411,21 +2411,21 @@ class RingLayer(Layer):
         if not mottos:
             return
         height = (
-            2 * ctx.radius * defaults.RING_MOTTO_SIZE * ctx.skin.ring_letter_scale
+            2 * ctx.radius * dial.RING_MOTTO_SIZE * ctx.skin.ring_letter_scale
         )
         metal = self._skin.ring.motto_metal
         for motto in mottos:
             for gold_asset, theta in motto["glyphs"]:
                 self._draw_ring_glyph(
                     painter, ctx, gold_asset, metal, theta % 360.0,
-                    defaults.RING_MOTTO_RADIUS_FRACTION, height,
+                    dial.RING_MOTTO_RADIUS_FRACTION, height,
                 )
 
 
 def weekday_label_text(ctx: RenderContext, body: str) -> str:
     """The displayed weekday text for `body`: short until the largest
     preset, full from `WEEKDAY_FULL_NAME_MIN_DIAMETER`."""
-    full_text = 2 * ctx.radius >= defaults.WEEKDAY_FULL_NAME_MIN_DIAMETER
+    full_text = 2 * ctx.radius >= dial.WEEKDAY_FULL_NAME_MIN_DIAMETER
     return (
         constants.WEEKDAY_FULL_NAMES[body] if full_text
         else constants.WEEKDAY_LABELS[body]
@@ -2449,11 +2449,11 @@ def weekday_label_set_px(ctx: RenderContext) -> int:
         text = weekday_label_text(ctx, today)
         width = (
             2 * ctx.radius * spec.center_scale
-            * defaults.NAME_LABEL_WIDTH_FRACTION
+            * dial.NAME_LABEL_WIDTH_FRACTION
         )
         return name_label_px(text, width)
     slot_size = weekday_body_size(ctx.skin, ctx.radius)
-    target_width = slot_size * defaults.NAME_LABEL_WIDTH_FRACTION
+    target_width = slot_size * dial.NAME_LABEL_WIDTH_FRACTION
     servant = servant_holds_the_seat(ctx.skin, today)
     bodies = set()
     for slot_angle, occupants in weekday_slots(ctx.skin):
@@ -2479,7 +2479,7 @@ def draw_body_label(
     label = weekday_label_text(ctx, body)
     px = (
         label_px if label_px is not None
-        else name_label_px(label, size * defaults.NAME_LABEL_WIDTH_FRACTION)
+        else name_label_px(label, size * dial.NAME_LABEL_WIDTH_FRACTION)
     )
     draw_name_label(painter, label, pos, px)
 
@@ -2509,14 +2509,14 @@ def draw_weekday_body(
         and ctx.skin.weekday_theme != "planet_signs"
     )
     asset = spec.bodies.get(body)
-    if ctx.skin.weekday_theme == "continents" and body in defaults.CONTINENTS_REGIONS:
+    if ctx.skin.weekday_theme == "continents" and body in continents.CONTINENTS_REGIONS:
         # THE CONTINENTS live art (owner-sealed matrix 2026-07-21): the
         # baked skin body is only the atmo-day still frame — on the dial
         # the continent follows the user's earth_style (one setting, whole
         # instrument) and the SKY'S OWN day/night (`ctx.tick.is_daylight`,
         # the same sun-elevation law the Earth marker already computes,
         # never recomputed here). Graceful-absent if the face is missing.
-        live = defaults.continents_body_art(
+        live = continents.continents_body_art(
             body, ctx.skin.earth_style, ctx.tick.is_daylight
         )
         if paths.art_file(live).exists():
@@ -2528,7 +2528,7 @@ def draw_weekday_body(
         # rotates daily among its OWN `_v2`/`alt/` siblings if it has
         # any — a no-op for every body that has none (the vast
         # majority today).
-        asset = defaults.rotating_art_file(asset, ctx.day.local_date) or asset
+        asset = pantheon.rotating_art_file(asset, ctx.day.local_date) or asset
     if asset is not None:
         # The theme's metal (owner 2026-07-12): the hue-selective swap
         # turns only the bronze details gold/silver; None = as drawn.
@@ -2646,7 +2646,7 @@ class WeekdayLayer(Layer):
             if ctx.skin.weekday_theme == "continents":
                 # The Arctic Servant follows earth_style + live sky like
                 # the six arms (owner-sealed matrix 2026-07-21).
-                live = defaults.continents_dual_art(
+                live = continents.continents_dual_art(
                     ctx.skin.earth_style, ctx.tick.is_daylight
                 )
                 if paths.art_file(live).exists():
@@ -2655,7 +2655,7 @@ class WeekdayLayer(Layer):
             # round 2026-07-20/21): the dual's own `_v2`/`alt/` siblings
             # (e.g. bible_dark's Judas) rotate daily like the Ruler face.
             servant_asset = (
-                defaults.rotating_art_file(servant_asset, ctx.day.local_date)
+                pantheon.rotating_art_file(servant_asset, ctx.day.local_date)
                 or servant_asset
             )
             if seat_taken == "servant":
@@ -2728,7 +2728,7 @@ class SlotLayer(Layer):
         pos: QPointF, size: float,
     ) -> None:
         mode, style, theme, metal, roster = slot_view(ctx.skin, index)
-        inner = size * defaults.SLOT_ROUNDEL_CONTENT_FRACTION
+        inner = size * dial.SLOT_ROUNDEL_CONTENT_FRACTION
         today = constants.WEEKDAY_BODIES[ctx.day.weekday_index]
         if mode == "seconds":
             # The SMALL-SECONDS complication (owner 2026-07-14).
@@ -2818,7 +2818,7 @@ class SlotLayer(Layer):
             draw_weekday_body(painter, ctx, today, pos, size, 1.0)
             return
         seat = (
-            defaults.pantheon_seat(theme, today)
+            pantheon.pantheon_seat(theme, today)
             if roster == "pantheon" else None
         )
         if seat is not None:
@@ -2833,7 +2833,7 @@ class SlotLayer(Layer):
             # `render.compositor`'s hover legend). colored is the
             # variant SIBLING (owner restructure 2026-07-14:
             # <family>/colored).
-            asset = defaults.weekday_theme_body_art(
+            asset = pantheon.weekday_theme_body_art(
                 theme, today,
                 colored=(metal == "colored" and theme in constants.METAL_THEMES),
             )
@@ -2842,7 +2842,7 @@ class SlotLayer(Layer):
         # every paint already (this slot is never baked at settings
         # time), so the day's own `_v2`/`alt/` pick applies directly —
         # a no-op for every body/seat with no siblings.
-        asset = defaults.rotating_art_file(asset, ctx.day.local_date) or asset
+        asset = pantheon.rotating_art_file(asset, ctx.day.local_date) or asset
         if paths.art_file(asset).exists():
             draw_pixmap_centered(
                 painter, ctx, asset, pos, size,
@@ -2860,7 +2860,7 @@ class SlotLayer(Layer):
         draw_slot_roundel(painter, ctx, pos, size)
         draw_fitted_text(
             painter, ctx, pos,
-            size * defaults.SLOT_ROUNDEL_CONTENT_FRACTION,
+            size * dial.SLOT_ROUNDEL_CONTENT_FRACTION,
             constants.WEEKDAY_LABELS[today],
         )
 
@@ -2952,7 +2952,7 @@ class CenterBodyLayer(Layer):
                     if ctx.skin.weekday_theme == "continents":
                         # The Arctic Servant follows earth_style + live
                         # sky like the Ruler and the six arms.
-                        live = defaults.continents_dual_art(
+                        live = continents.continents_dual_art(
                             ctx.skin.earth_style, ctx.tick.is_daylight
                         )
                         if paths.art_file(live).exists():
@@ -2960,12 +2960,12 @@ class CenterBodyLayer(Layer):
                     # THE UNIVERSAL ROTATION CONVENTION (weekday ALT
                     # ROTATION round 2026-07-20/21).
                     asset = (
-                        defaults.rotating_art_file(asset, ctx.day.local_date)
+                        pantheon.rotating_art_file(asset, ctx.day.local_date)
                         or asset
                     )
                     name = (
                         spec.dual_names
-                        or defaults.WEEKDAY_DUAL_NAMES[ctx.skin.weekday_theme]
+                        or pantheon.WEEKDAY_DUAL_NAMES[ctx.skin.weekday_theme]
                     )[1]
                 else:
                     name, asset = ninth
@@ -2979,7 +2979,7 @@ class CenterBodyLayer(Layer):
                     draw_name_label(
                         painter, name, QPointF(0, 0),
                         name_label_px(
-                            name, center_size * defaults.NAME_LABEL_WIDTH_FRACTION
+                            name, center_size * dial.NAME_LABEL_WIDTH_FRACTION
                         ),
                     )
                 painter.restore()
@@ -3021,7 +3021,7 @@ class CenterBodyLayer(Layer):
             draw_name_label(
                 painter, name, QPointF(0, 0),
                 name_label_px(
-                    name, center_size * defaults.NAME_LABEL_WIDTH_FRACTION
+                    name, center_size * dial.NAME_LABEL_WIDTH_FRACTION
                 ),
             )
         painter.restore()
@@ -3038,14 +3038,14 @@ def archetype_label_set_px(
     function so ArchetypeLayer (DAILY) and ArchetypeCenterLayer
     (MINUTE) — two separate paint passes — agree on one size without
     sharing mutable state."""
-    target = arm_width * defaults.NAME_LABEL_WIDTH_FRACTION
+    target = arm_width * dial.NAME_LABEL_WIDTH_FRACTION
     fits = [name_label_px(fig["name"], target) for fig in archetypes.figures(key)]
     center = archetypes.center(key)
     if center is not None:
         center_height = archetype_figure_size(ctx.skin, ctx.radius, center["file"])
         fits.append(
             name_label_px(
-                center["name"], center_height * defaults.NAME_LABEL_WIDTH_FRACTION,
+                center["name"], center_height * dial.NAME_LABEL_WIDTH_FRACTION,
             )
         )
     return min(fits)
@@ -3102,7 +3102,7 @@ class ArchetypeLayer(Layer):
             # ArchetypeLayer is hover_variable/painted LIVE already, so
             # a day change re-resolves with no extra invalidation.
             if fig.get("rotates"):
-                resolved = defaults.rotating_art_file(
+                resolved = pantheon.rotating_art_file(
                     fig["file"], ctx.day.local_date
                 )
                 if resolved is not None:
@@ -3232,14 +3232,14 @@ def _draw_subdial_shadow(
     center seat (distance 0, no offset at all)."""
     distance = math.hypot(pos.x(), pos.y())
     if distance > 1.0:
-        offset = diameter * defaults.SUBDIAL_SHADOW_OFFSET_FRACTION
+        offset = diameter * dial.SUBDIAL_SHADOW_OFFSET_FRACTION
         shifted = QPointF(
             pos.x() + pos.x() / distance * offset,
             pos.y() + pos.y() / distance * offset,
         )
     else:
         shifted = pos
-    radius = diameter / 2.0 * defaults.SUBDIAL_SHADOW_SPREAD
+    radius = diameter / 2.0 * dial.SUBDIAL_SHADOW_SPREAD
     gradient = QRadialGradient(shifted, radius)
     shade = QColor(*palette.SUBDIAL_SHADOW_RGBA)
     gradient.setColorAt(0.75, shade)
@@ -3284,7 +3284,7 @@ def draw_slot_roundel(
     rim = QColor(
         palette.SLOT_ROUNDEL_BORDER_COLORS[ctx.skin.ring_finish]
     )
-    width = max(1.5, diameter * defaults.SLOT_ROUNDEL_BORDER_FRACTION)
+    width = max(1.5, diameter * dial.SLOT_ROUNDEL_BORDER_FRACTION)
     painter.save()
     painter.setPen(QPen(rim, width))
     painter.setBrush(ring_face_color(paths.art_file(ctx.skin.ring.asset)))
@@ -3318,7 +3318,7 @@ def draw_shadowed_text(
     path.addText(baseline, font, text)
     offset = max(
         1.0,
-        font.pixelSize() * defaults.SUBDIAL_TEXT_SHADOW_OFFSET_FRACTION,
+        font.pixelSize() * dial.SUBDIAL_TEXT_SHADOW_OFFSET_FRACTION,
     )
     painter.save()
     painter.setPen(Qt.PenStyle.NoPen)
@@ -3340,9 +3340,9 @@ def draw_fitted_text(
     font.setBold(True)
     font.setPixelSize(100)
     advance = QFontMetricsF(font).horizontalAdvance(text)
-    target = slot_size * defaults.TIME_TEXT_WIDTH_FRACTION
+    target = slot_size * dial.TIME_TEXT_WIDTH_FRACTION
     font.setPixelSize(
-        max(defaults.BODY_LABEL_MIN_PX, math.floor(100.0 * target / advance))
+        max(dial.BODY_LABEL_MIN_PX, math.floor(100.0 * target / advance))
     )
     draw_shadowed_text(painter, pos, text, font, _finish_color(ctx))
 
@@ -3361,9 +3361,9 @@ def draw_two_lines(
         QFontMetricsF(font).horizontalAdvance(line)
         for line in (top, bottom)
     )
-    target = slot_size * defaults.TIME_TEXT_WIDTH_FRACTION
+    target = slot_size * dial.TIME_TEXT_WIDTH_FRACTION
     font.setPixelSize(
-        max(defaults.BODY_LABEL_MIN_PX, math.floor(100.0 * target / widest))
+        max(dial.BODY_LABEL_MIN_PX, math.floor(100.0 * target / widest))
     )
     offset = font.pixelSize() * 0.62
     color = _finish_color(ctx)
@@ -3387,7 +3387,7 @@ def draw_small_seconds(
     finish-colored on the "theme" style — shadowed either way."""
     spec = ctx.skin.hands.second
     radius = diameter / 2.0
-    outer = radius * defaults.SMALL_SECONDS_TICK_OUTER_FRACTION
+    outer = radius * dial.SMALL_SECONDS_TICK_OUTER_FRACTION
     tick_color = (
         _finish_color(ctx)
         if ctx.skin.subdial_style == "theme"
@@ -3398,9 +3398,9 @@ def draw_small_seconds(
     for step in range(8):
         major = step % 2 == 0
         length = radius * (
-            defaults.SMALL_SECONDS_TICK_MAJOR_FRACTION
+            dial.SMALL_SECONDS_TICK_MAJOR_FRACTION
             if major
-            else defaults.SMALL_SECONDS_TICK_MINOR_FRACTION
+            else dial.SMALL_SECONDS_TICK_MINOR_FRACTION
         )
         width = max(1.0, radius * (0.07 if major else 0.05))
         angle = math.radians(step * 45.0)
@@ -3439,9 +3439,9 @@ def draw_small_seconds(
         pivot_x = logical_w * (
             0.5 if spec.pivot_x_fraction is None else spec.pivot_x_fraction
         )
-        offset = radius * defaults.SMALL_SECONDS_HAND_SHADOW_OFFSET_FRACTION
+        offset = radius * dial.SMALL_SECONDS_HAND_SHADOW_OFFSET_FRACTION
         painter.rotate(ctx.tick.second_angle)
-        painter.setOpacity(defaults.SMALL_SECONDS_HAND_SHADOW_OPACITY)
+        painter.setOpacity(dial.SMALL_SECONDS_HAND_SHADOW_OPACITY)
         painter.drawPixmap(
             QPointF(-pivot_x + offset, -target_tip + offset), silhouette
         )
@@ -3456,9 +3456,9 @@ def earth_region(latitude: float, default: str) -> str:
     POLE (owner 2026-07-15: the Quick Jump flips onto the poles). The
     latitude rides the day context, so a running simulation carries
     its own observer here."""
-    if latitude >= defaults.EARTH_POLE_LATITUDE:
+    if latitude >= continents.EARTH_POLE_LATITUDE:
         return "north_pole"
-    if latitude <= -defaults.EARTH_POLE_LATITUDE:
+    if latitude <= -continents.EARTH_POLE_LATITUDE:
         return "south_pole"
     return default
 
@@ -3505,7 +3505,7 @@ class YearMarkerLayer(Layer):
             )
             glowing = ctx.tick.moon_event is not None or lunar_state is not None
             orbit = (
-                defaults.GLOW_RING_RADIUS_FRACTION
+                dial.GLOW_RING_RADIUS_FRACTION
                 if glowing
                 else spec.moon_orbit_fraction
             )
@@ -3528,7 +3528,7 @@ class YearMarkerLayer(Layer):
                 # desaturated silver at half strength instead.
                 if lunar_state is not None and not lunar_eclipse.visible:
                     color = palette.GLOW_ECLIPSE_INVISIBLE_COLOR
-                    strength *= defaults.ECLIPSE_INVISIBLE_STRENGTH_FACTOR
+                    strength *= glow.ECLIPSE_INVISIBLE_STRENGTH_FACTOR
                 draw_event_glow(
                     painter,
                     pos,
@@ -3538,7 +3538,7 @@ class YearMarkerLayer(Layer):
                     fringe_color=(
                         palette.ECLIPSE_LUNAR_FRINGE_COLOR
                         if lunar_state is not None
-                        and defaults.ECLIPSE_STATE_FRINGE[lunar_state]
+                        and glow.ECLIPSE_STATE_FRINGE[lunar_state]
                         else None
                     ),
                 )
@@ -3578,7 +3578,7 @@ class YearMarkerLayer(Layer):
         )
         glowing = ctx.tick.season_event is not None or solar_eclipse is not None
         orbit = (
-            defaults.GLOW_RING_RADIUS_FRACTION if glowing else spec.orbit_fraction
+            dial.GLOW_RING_RADIUS_FRACTION if glowing else spec.orbit_fraction
         )
         pos = dial_point(year_angle, ctx.radius * orbit)
         size = 2 * ctx.radius * spec.scale * hover_factor(ctx, "earth")
@@ -3604,7 +3604,7 @@ class YearMarkerLayer(Layer):
                 # round E, 2026-07-19) — same rule as the lunar marker.
                 if not solar_eclipse.visible:
                     color = palette.GLOW_ECLIPSE_INVISIBLE_COLOR
-                    strength *= defaults.ECLIPSE_INVISIBLE_STRENGTH_FACTOR
+                    strength *= glow.ECLIPSE_INVISIBLE_STRENGTH_FACTOR
             draw_event_glow(painter, pos, size / 2, color, strength)
         if almanac:
             # The day-ARROW at the marker's exact tick (owner 2026-07-16):
@@ -3635,7 +3635,7 @@ class YearMarkerLayer(Layer):
             draw_pixmap_centered(painter, ctx, asset, pos, size)
             painter.restore()
             if (
-                2 * ctx.radius >= defaults.FULL_TEXT_MIN_DIAMETER
+                2 * ctx.radius >= dial.FULL_TEXT_MIN_DIAMETER
                 and ctx.skin.earth_label != "off"
             ):
                 # The Earth label — FOUR exclusive modes (owner
@@ -3647,7 +3647,7 @@ class YearMarkerLayer(Layer):
             painter.setPen(
                 QPen(
                     QColor(*palette.MARKER_BORDER_RGBA),
-                    max(1.0, size * defaults.MARKER_BORDER_WIDTH),
+                    max(1.0, size * dial.MARKER_BORDER_WIDTH),
                 )
             )
             painter.setBrush(QColor(color))
@@ -3679,8 +3679,8 @@ class YearMarkerLayer(Layer):
             # row, so it gets the full label size).
             bold_font.setPixelSize(
                 max(
-                    defaults.BODY_LABEL_MIN_PX,
-                    round(size * defaults.EARTH_DATE_TEXT_SIZE),
+                    dial.BODY_LABEL_MIN_PX,
+                    round(size * dial.EARTH_DATE_TEXT_SIZE),
                 )
             )
             draw_outlined_text(
@@ -3690,7 +3690,7 @@ class YearMarkerLayer(Layer):
         # "date", "date_weekday" and "full" all lead with the date row.
         text = f"{ctx.day.local_date.day} {ctx.day.local_date:%b}"
         bold_font.setPixelSize(
-            max(defaults.BODY_LABEL_MIN_PX, round(size * defaults.EARTH_DATE_TEXT_SIZE))
+            max(dial.BODY_LABEL_MIN_PX, round(size * dial.EARTH_DATE_TEXT_SIZE))
         )
         if mode == "full":
             second_row = display_year(ctx)
@@ -3711,7 +3711,7 @@ class YearMarkerLayer(Layer):
         row_font = QFont()
         row_font.setPixelSize(
             max(
-                defaults.BODY_LABEL_MIN_PX,
+                dial.BODY_LABEL_MIN_PX,
                 round(size * archetypes.ARCHETYPE_EARTH_DAY_TEXT_SIZE),
             )
         )
@@ -3735,7 +3735,7 @@ class YearMarkerLayer(Layer):
         brightness reduction of the WHOLE disc — lit and unlit halves
         alike, since totality dims the full face — via
         `QPainter.CompositionMode_Multiply` against an OPAQUE gray whose
-        value is `defaults.ECLIPSE_STATE_MOON_BRIGHTNESS[darken_state]`
+        value is `glow.ECLIPSE_STATE_MOON_BRIGHTNESS[darken_state]`
         (0..1 of full value). Multiplying by a NEUTRAL gray scales R/G/B
         equally, i.e. it is exactly "value down" with the hue untouched —
         the owner's fix for the old translucent bronze wash
@@ -3772,7 +3772,7 @@ class YearMarkerLayer(Layer):
         if darken_state is not None:
             disc = QPainterPath()
             disc.addEllipse(QRectF(-radius, -radius, size, size))
-            brightness = defaults.ECLIPSE_STATE_MOON_BRIGHTNESS[darken_state]
+            brightness = glow.ECLIPSE_STATE_MOON_BRIGHTNESS[darken_state]
             value = round(255 * brightness)
             # BLOOD MOON (owner verdict "može", fix round E, 2026-07-19):
             # TOTAL alone wears a deep COPPER tone instead of neutral

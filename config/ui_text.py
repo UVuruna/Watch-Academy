@@ -87,7 +87,7 @@ UI_STRINGS: tuple[str, ...] = (
     "Calendar", "Almanac",
     # The CALENDAR MOUNT gallery (owner decree 2026-07-29) — the two
     # Pointer Theme tabs and every registered roster's own title
-    # (`defaults.CALENDAR_MOUNTS`). "None" is the mount-off tile.
+    # (`calendar_mounts.CALENDAR_MOUNTS`). "None" is the mount-off tile.
     "Weekday bodies", "Calendar mount", "None",
     "Zodiac signs", "Months", "Slavic months", "Chinese zodiac", "Emotions",
     "Gold letters", "Silver letters", "Thematic letters",

@@ -55,7 +55,7 @@ from pathlib import Path
 
 import pytest
 
-from config import constants
+from config import calendar_mounts, constants, continents, pantheon
 
 _ROOT = Path(__file__).resolve().parents[1]
 _PROMPTS_ROOT = _ROOT / "research" / "prompts"
@@ -114,7 +114,7 @@ _DATA_DRIVEN_ROOTS = (
     # Emotions (System B), the Virtue Wheel's two registers (Virtues
     # light + Vices paint, System B), Olympians and Apostles (System A,
     # six pairs each). Every per-figure filename is now enumerated in
-    # `config.defaults.CALENDAR_MOUNTS` (a real Python roster, not a
+    # `config.calendar_mounts.CALENDAR_MOUNTS` (a real Python roster, not a
     # JSON file) — but, exactly like the existing `calendars/zodiac`/
     # `chinese`/`slavic_months` families above, each MEMBER name is a
     # bare string with no "/" (never collected by this lint's namespace
@@ -260,7 +260,7 @@ _WHITELIST: dict[str, str] = {
     # the exception is no longer needed, and keeping it would be stale
     # bookkeeping by this file's own rule.)
     # The Instrument section's own article images
-    # (`app.encyclopedia._topics`: `defaults.INSTRUMENT_ART_DIR /
+    # (`app.encyclopedia._topics`: `pantheon.INSTRUMENT_ART_DIR /
     # f"{key}.png"` for `key in _INSTRUMENT_KEYS`) — same pattern.
     "instrument/paint_light.png": "read via the Instrument topic loop, built at runtime",
     # BADGE SISTEM round one (owner 2026-07-20/21, DESIGN
@@ -301,7 +301,7 @@ _WHITELIST: dict[str, str] = {
     # plate's slot"). No code reads `assets/weeks/societies/wolf/primary/colored/**` yet; wiring
     # `title_entry["images"]` to `(defaults.TITLE_ART_DIR /
     # f"{theme}.png",)`, mirroring the one title plate that already IS
-    # wired (`defaults.CONTINENTS_TITLE_IMAGE`, `assets/earth/world.png`
+    # wired (`continents.CONTINENTS_TITLE_IMAGE`, `assets/earth/world.png`
     # — Continents is deliberately excluded from this family, per the
     # owner's own instruction), is a future app-code round. Full briefs:
     # The theme-title plates need no whitelist entries any more: since

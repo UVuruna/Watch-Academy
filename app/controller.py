@@ -62,7 +62,7 @@ from app.slot_theme import SlotDescriptor, SlotThemeDialog
 from app.time_travel import TimeTravelDialog
 from app.tray import TrayController, logo_icon, window_icon
 from app.widget import ClockWidget
-from config import archetypes, constants, defaults, palette, paths, profiling
+from config import archetypes, constants, defaults, dial, palette, pantheon, paths, profiling, shortcuts
 from config.ui_text import ui
 from core.clock_state import build_day_context, build_tick_state
 from core.deep_time import (
@@ -381,8 +381,8 @@ def _resolve_hands(settings: Settings):
         hour=specs["hours"],
         minute=specs["minutes"],
         second=specs["seconds"],
-        minute_reach_fraction=defaults.HAND_MINUTE_REACH_FRACTION,
-        second_reach_fraction=defaults.HAND_SECOND_REACH_FRACTION,
+        minute_reach_fraction=dial.HAND_MINUTE_REACH_FRACTION,
+        second_reach_fraction=dial.HAND_SECOND_REACH_FRACTION,
         z_order=pack["z_order"],
         desaturate=not bundled,
     )
@@ -446,7 +446,7 @@ def _compose_skin(settings: Settings):
                 else paths.ART_SUFFIX[settings.art_source]
             )
             letter_zoom[hour] = constants.RING_EYE_SHINE_ENLARGE[source]
-        letter_art[hour] = defaults.RING_LETTER_ART_DIR / filename
+        letter_art[hour] = dial.RING_LETTER_ART_DIR / filename
         letter_metal[hour] = _letter_metal(position, metal_layout, settings.ring_finish)
         if position in card["legend"]:
             letter_legend[hour] = card["legend"][position]
@@ -463,7 +463,7 @@ def _compose_skin(settings: Settings):
         {
             "text": entry["text"],
             "glyphs": tuple(
-                (defaults.RING_LETTER_ART_DIR / constants.RING_LETTER_FILES[char], angle)
+                (dial.RING_LETTER_ART_DIR / constants.RING_LETTER_FILES[char], angle)
                 for char, angle in zip(entry["text"], entry["angles"])
                 if char != " "
             ),
@@ -482,7 +482,7 @@ def _compose_skin(settings: Settings):
                     "half": (
                         abs(entry["angles"][word["end"]]
                             - entry["angles"][word["start"]]) / 2.0
-                        + defaults.RING_MOTTO_LETTER_STEP_DEG / 2.0
+                        + dial.RING_MOTTO_LETTER_STEP_DEG / 2.0
                     ),
                 }
                 for word in entry["words"]
@@ -494,7 +494,7 @@ def _compose_skin(settings: Settings):
         defaults.DEFAULT_SKIN,
         ring=dataclasses.replace(
             defaults.DEFAULT_SKIN.ring,
-            asset=defaults.RING_FACE_DIR / layout["face"],
+            asset=dial.RING_FACE_DIR / layout["face"],
             letters=letters,
             letter_art=letter_art,
             letter_metal=letter_metal,
@@ -567,7 +567,7 @@ def _themed_weekday_set(base, theme: str, metal: str | None):
     the sibling variant; owner restructure 2026-07-14)."""
     weekday = base
     if theme != "planets":
-        names = defaults.WEEKDAY_THEME_NAMES[theme]
+        names = pantheon.WEEKDAY_THEME_NAMES[theme]
         weekday = dataclasses.replace(
             weekday,
             # PENDING art (documented): a seat whose plate the owner
@@ -591,7 +591,7 @@ def _themed_weekday_set(base, theme: str, metal: str | None):
                 )
                 for body in names
                 for candidate in (
-                    defaults.weekday_theme_body_art(
+                    pantheon.weekday_theme_body_art(
                         theme, body, colored=(metal == "colored")
                     ),
                 )
@@ -600,10 +600,10 @@ def _themed_weekday_set(base, theme: str, metal: str | None):
         )
     if metal in defaults.METAL_SWAP_TARGETS:
         weekday = dataclasses.replace(weekday, metal=metal)
-    dual_rel = defaults.WEEKDAY_DUAL_FILES[theme]
+    dual_rel = pantheon.WEEKDAY_DUAL_FILES[theme]
     if metal == "colored" and theme in constants.METAL_THEMES:
-        dual_rel = defaults.colored_variant_rel(dual_rel)
-    dual = defaults.weekday_art(f"{dual_rel}.png")
+        dual_rel = pantheon.colored_variant_rel(dual_rel)
+    dual = pantheon.weekday_art(f"{dual_rel}.png")
     if not paths.art_file(dual).exists():
         # PENDING art (documented): a rework can point the dual at a
         # plate the owner has not generated yet (the Creeds' Satanism
@@ -621,13 +621,13 @@ def _pantheon_weekday_set(base, theme: str, metal: str | None):
     article TOGETHER, so a half-generated pantheon never pairs a
     wrong figure with a wrong text. The Sunday dual and its names
     follow the same rule."""
-    table = defaults.WEEKDAY_PANTHEON[theme]
+    table = pantheon.WEEKDAY_PANTHEON[theme]
     planetary = _themed_weekday_set(base, theme, metal)
     bodies: dict = {}
     names: dict = {}
     articles: dict = {}
     for body in constants.WEEKDAY_BODIES:
-        seat = defaults.pantheon_seat(theme, body)
+        seat = pantheon.pantheon_seat(theme, body)
         if seat is not None:
             bodies[body], names[body], articles[body] = seat
         else:
@@ -637,7 +637,7 @@ def _pantheon_weekday_set(base, theme: str, metal: str | None):
                 constants.WEEKDAY_THEME_ARTICLES[theme], body
             )
     dual_rel = table["dual"][0]
-    dual = defaults.weekday_art(f"{dual_rel}.png")
+    dual = pantheon.weekday_art(f"{dual_rel}.png")
     if paths.art_file(dual).exists():
         dual_names = table["dual_names"]
         faces_set = table["articles"]
@@ -646,7 +646,7 @@ def _pantheon_weekday_set(base, theme: str, metal: str | None):
         # pair falls back together (plate, names AND face texts), so
         # the hover never says Hades over a Phaethon plate.
         dual = planetary.dual_asset
-        dual_names = defaults.WEEKDAY_DUAL_NAMES[theme]
+        dual_names = pantheon.WEEKDAY_DUAL_NAMES[theme]
         faces_set = None
     return dataclasses.replace(
         planetary,
@@ -741,7 +741,7 @@ def _overlay_display_settings(skin, settings: Settings, display):
     # only the 2nd is weekday, that slot rides the rotation in ITS
     # OWN theme.
     theme, metal, roster = _classic_slot_theme(settings)
-    if roster == "pantheon" and theme in defaults.WEEKDAY_PANTHEON:
+    if roster == "pantheon" and theme in pantheon.WEEKDAY_PANTHEON:
         weekday = _pantheon_weekday_set(weekday, theme, metal)
     else:
         weekday = _themed_weekday_set(weekday, theme, metal)
@@ -1064,7 +1064,7 @@ class WatchController(QObject):
         # Spacebar over a themed hover target opens the Encyclopedia on
         # that topic's page (owner 2026-07-16, ROADMAP queue #8).
         self._widget.open_encyclopedia.connect(self._open_encyclopedia_at)
-        # KEYBOARD SHORTCUTS (R5 MENU REWORK, `defaults.SHORTCUTS`) —
+        # KEYBOARD SHORTCUTS (R5 MENU REWORK, `shortcuts.SHORTCUTS`) —
         # fired by the focused `ClockWidget.keyPressEvent`; dispatched
         # by action_id in `_on_shortcut`.
         self._widget.shortcut_triggered.connect(self._on_shortcut)
@@ -1462,12 +1462,12 @@ class WatchController(QObject):
             critical=False,
         )
 
-    # --- Keyboard shortcuts (R5 MENU REWORK, `defaults.SHORTCUTS`) -------------
+    # --- Keyboard shortcuts (R5 MENU REWORK, `shortcuts.SHORTCUTS`) -------------
 
     #: Ordered exactly like the Weekday submenu (owner menu rework
     #: 2026-07-13): Planets first and flat, then the kinship groups.
-    _WEEKDAY_THEME_ORDER = defaults.WEEKDAY_MENU_TOP + tuple(
-        key for _title, keys in defaults.WEEKDAY_MENU_GROUPS for key in keys
+    _WEEKDAY_THEME_ORDER = pantheon.WEEKDAY_MENU_TOP + tuple(
+        key for _title, keys in pantheon.WEEKDAY_MENU_GROUPS for key in keys
     )
     #: The 4 Complication modes, in `constants.SLOT_COMPLICATION_TITLES`'s
     #: own dict order (Digital Time -> Date -> Day length -> Seconds) —
@@ -1475,7 +1475,7 @@ class WatchController(QObject):
     _SLOT_COMPLICATION_ORDER = tuple(constants.SLOT_COMPLICATION_TITLES)
 
     def _on_shortcut(self, action_id: str) -> None:
-        """Dispatch one `defaults.SHORTCUTS` entry (owner "OSMISLITI ŠTA
+        """Dispatch one `shortcuts.SHORTCUTS` entry (owner "OSMISLITI ŠTA
         SVE"; R5b FINAL MAP round for the SLOTS/FAST TRAVEL/LOCATIONS
         additions — the full map is designed and pinned by
         `tests/test_shortcuts.py`). Every shortcut needs the dial to
@@ -1636,7 +1636,7 @@ class WatchController(QObject):
     # --- FAST TRAVEL shortcuts (R5b round, owner spec) --------------------------
 
     def _fast_travel_theme(self) -> dict:
-        return defaults.FAST_TRAVEL_THEMES[self._fast_travel_theme_index]
+        return shortcuts.FAST_TRAVEL_THEMES[self._fast_travel_theme_index]
 
     def _fast_travel_option_index(self, theme_id: str) -> int:
         """The REMEMBERED option cursor for `theme_id` (owner spec: each
@@ -1646,12 +1646,12 @@ class WatchController(QObject):
 
     def _cycle_fast_travel_theme(self) -> None:
         """Ctrl+[: the next Fast Travel theme (Sun -> Moon -> Calendar
-        -> Sun, `defaults.FAST_TRAVEL_THEMES`'s own order) — flashes the
+        -> Sun, `shortcuts.FAST_TRAVEL_THEMES`'s own order) — flashes the
         NEW theme's logo (owner spec: every Ctrl+[ / Ctrl+] change
         flashes)."""
         self._fast_travel_theme_index = (
             self._fast_travel_theme_index + 1
-        ) % len(defaults.FAST_TRAVEL_THEMES)
+        ) % len(shortcuts.FAST_TRAVEL_THEMES)
         self._flash_fast_travel()
 
     def _cycle_fast_travel_option(self) -> None:
@@ -1675,7 +1675,7 @@ class WatchController(QObject):
         theme = self._fast_travel_theme()
         option = theme["options"][self._fast_travel_option_index(theme["id"])]
         if theme["id"] == "calendar":
-            icon_path = calendar_wheel_icon_file(defaults.FAST_TRAVEL_FLASH_ICON_PX)
+            icon_path = calendar_wheel_icon_file(shortcuts.FAST_TRAVEL_FLASH_ICON_PX)
         else:
             icon_key = theme["icon_key"]
             icon_path = (
@@ -2293,7 +2293,7 @@ class WatchController(QObject):
         dialog openers + Archetype) use this — the cycling/Fast-Travel/
         Location shortcuts live inside mini windows or have no menu
         surface of their own at all."""
-        return f"{text}\t{defaults.shortcut_display(action_id)}"
+        return f"{text}\t{shortcuts.shortcut_display(action_id)}"
 
     def _build_menu(self) -> QMenu:
         menu = _StayOpenMenu()
@@ -3079,7 +3079,7 @@ class WatchController(QObject):
             return
         self._simulation = (moment, observer)
         self._sim_cycles = cycles
-        self._simulation_ends = monotonic() + defaults.TIME_TRAVEL_DURATION_S
+        self._simulation_ends = monotonic() + shortcuts.TIME_TRAVEL_DURATION_S
         self._day = None                    # rebuild with the simulated situation
         self._on_tick(clock_jumped=False)
 

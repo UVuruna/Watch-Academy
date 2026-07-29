@@ -11,7 +11,7 @@ from PySide6.QtGui import QAction, QPainter
 from PySide6.QtWidgets import QMenu, QWidget
 
 from app import native
-from config import constants, defaults, winapi
+from config import constants, defaults, dial, shortcuts, winapi
 
 # The hover-bypass key, resolved from the config name (Qt enums do
 # not belong in config — Rule: config stays Qt-free).
@@ -20,7 +20,7 @@ _HOVER_BYPASS = getattr(
 )
 
 # The keyboard SHORTCUT map (R5 MENU REWORK; R5b FINAL MAP round),
-# resolved ONCE from `defaults.SHORTCUTS` into real Qt.Key/
+# resolved ONCE from `shortcuts.SHORTCUTS` into real Qt.Key/
 # Qt.KeyboardModifier values — the same config-stays-Qt-free convention
 # `_HOVER_BYPASS` above uses. A modifier tuple ("ControlModifier",) or
 # ("ControlModifier", "AltModifier") combines with bitwise OR.
@@ -33,7 +33,7 @@ def _resolved_modifiers(names: tuple[str, ...]) -> Qt.KeyboardModifier:
 
 _SHORTCUTS = tuple(
     (action_id, getattr(Qt.Key, key_name), _resolved_modifiers(modifier_names))
-    for action_id, key_name, modifier_names, _description in defaults.SHORTCUTS
+    for action_id, key_name, modifier_names, _description in shortcuts.SHORTCUTS
 )
 # A numpad-originated key event (R5b: Ctrl+numpad-plus, the
 # `fast_travel_future` alternate binding) carries Qt's OWN
@@ -347,7 +347,7 @@ class ClockWidget(QWidget):
         ):
             self._trigger_space_jump()
             return
-        # KEYBOARD SHORTCUTS (R5 MENU REWORK, `defaults.SHORTCUTS`) —
+        # KEYBOARD SHORTCUTS (R5 MENU REWORK, `shortcuts.SHORTCUTS`) —
         # checked BEFORE the typed/secret-buffer path (though every
         # entry carries a modifier, so `event.text()` would already be
         # non-printable and fall to `super()` below on its own; this
@@ -502,7 +502,7 @@ class ClockWidget(QWidget):
         # A deliberate z-mode flag swap hides the window mid-transition —
         # the watchdog must not fight it (owner 2026-07-17).
         if event.spontaneous() and not self._closing and not self._z_transition:
-            QTimer.singleShot(defaults.WATCHDOG_RESHOW_MS, self._reshow)
+            QTimer.singleShot(dial.WATCHDOG_RESHOW_MS, self._reshow)
 
     def changeEvent(self, event) -> None:
         if (
@@ -510,7 +510,7 @@ class ClockWidget(QWidget):
             and self.isMinimized()
             and not self._closing
         ):
-            QTimer.singleShot(defaults.WATCHDOG_RESHOW_MS, self.showNormal)
+            QTimer.singleShot(dial.WATCHDOG_RESHOW_MS, self.showNormal)
         super().changeEvent(event)
 
     def _reshow(self) -> None:

@@ -53,7 +53,7 @@ PENDING_BODY_COLORED = frozenset({
     ("sw_dyad", "venus"), ("sw_dyad", "saturn"), ("sw_dyad", "sun"),
 })
 
-# --- The Sunday SERVANT plate (`defaults.WEEKDAY_DUAL_FILES`) ---------------
+# --- The Sunday SERVANT plate (`pantheon.WEEKDAY_DUAL_FILES`) ---------------
 # Themes running dual-less until their Mirror lands. `religion`'s Satanism
 # plate has been pending owner art since 2026-07-15; all three Star Wars
 # Mirrors (Vader, Anakin, Kylo Ren) are wave III's own debt.
@@ -66,7 +66,7 @@ PENDING_DUAL = frozenset({"religion", "sw_jedi", "sw_sith", "sw_dyad"})
 # Plagueis landed with the sheet.
 PENDING_NINTH = frozenset({"continents", "sw_jedi", "sw_dyad"})
 
-# --- SEAT ROSTERS (`defaults.WEEKDAY_SEAT_ROSTERS`) -------------------------
+# --- SEAT ROSTERS (`pantheon.WEEKDAY_SEAT_ROSTERS`) -------------------------
 # Casts whose rotating seats are wired ahead of their plates, so their
 # rotation cannot be exercised yet. `_roster_candidates` already skips a
 # member that is not on disk, so such a seat shows nothing until art

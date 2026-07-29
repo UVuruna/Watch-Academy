@@ -26,7 +26,7 @@ import math
 from PySide6.QtCore import QPointF, QRectF, Qt
 from PySide6.QtGui import QColor, QFont, QPainter, QPen, QPixmap
 
-from config import cube, defaults, palette
+from config import cube, encyclopedia_ui, palette
 
 # THE ISOMETRIC EYE. A cube of 27 cells read on a flat page needs a
 # projection that never lets two different cells land on the same point;
@@ -91,7 +91,7 @@ def _canvas(size: int) -> tuple[QPixmap, QPainter]:
 
 def _label_font(unit: float) -> QFont:
     font = QFont()
-    font.setPixelSize(max(9, round(unit * defaults.CUBE_DIAGRAM_LABEL_RATIO)))
+    font.setPixelSize(max(9, round(unit * encyclopedia_ui.CUBE_DIAGRAM_LABEL_RATIO)))
     font.setBold(True)
     return font
 
@@ -101,7 +101,7 @@ def _draw_frame(painter: QPainter, unit: float) -> None:
     pen = QPen(QColor(palette.THEME_COLORS["text_secondary"]))
     pen.setWidthF(max(1.0, unit * 0.012))
     painter.setPen(pen)
-    painter.setOpacity(defaults.CUBE_DIAGRAM_FRAME_OPACITY)
+    painter.setOpacity(encyclopedia_ui.CUBE_DIAGRAM_FRAME_OPACITY)
     corners = [
         (x, y, z)
         for x in (-1, 1) for y in (-1, 1) for z in (-1, 1)
@@ -126,12 +126,12 @@ def _draw_cells(painter: QPainter, unit: float, lit=()) -> None:
                 coords = (x, y, z)
                 point = _project(coords, unit)
                 radius = unit * (
-                    defaults.CUBE_DIAGRAM_NODE_RATIO * (
+                    encyclopedia_ui.CUBE_DIAGRAM_NODE_RATIO * (
                         1.6 if coords in lit else 1.0
                     )
                 )
                 painter.setOpacity(1.0 if coords in lit else
-                                   defaults.CUBE_DIAGRAM_DIM_OPACITY)
+                                   encyclopedia_ui.CUBE_DIAGRAM_DIM_OPACITY)
                 painter.setPen(Qt.PenStyle.NoPen)
                 painter.setBrush(_hue(coords))
                 painter.drawEllipse(point, radius, radius)
@@ -144,7 +144,7 @@ def _draw_axis_line(painter: QPainter, unit: float, cold, warm,
     pen.setWidthF(max(1.2, unit * (0.030 if strong else 0.014)))
     pen.setCapStyle(Qt.PenCapStyle.RoundCap)
     painter.setPen(pen)
-    painter.setOpacity(1.0 if strong else defaults.CUBE_DIAGRAM_DIM_OPACITY)
+    painter.setOpacity(1.0 if strong else encyclopedia_ui.CUBE_DIAGRAM_DIM_OPACITY)
     painter.drawLine(_project(cold, unit), _project(warm, unit))
     painter.setOpacity(1.0)
 
@@ -155,7 +155,7 @@ def _draw_end_label(painter: QPainter, unit: float, coords, text: str) -> None:
     point = _project(coords, unit)
     outward = QPointF(point)
     length = math.hypot(outward.x(), outward.y()) or 1.0
-    push = unit * defaults.CUBE_DIAGRAM_LABEL_PUSH
+    push = unit * encyclopedia_ui.CUBE_DIAGRAM_LABEL_PUSH
     anchor = QPointF(
         point.x() + outward.x() / length * push,
         point.y() + outward.y() / length * push,
@@ -177,8 +177,8 @@ def _clamped(box: QRectF, painter: QPainter) -> QRectF:
     corner would otherwise be drawn off the edge and silently lost —
     which is exactly what the first render of these diagrams did."""
     device = painter.device()
-    half_w = device.width() / 2 - defaults.CUBE_DIAGRAM_MARGIN_PX
-    half_h = device.height() / 2 - defaults.CUBE_DIAGRAM_MARGIN_PX
+    half_w = device.width() / 2 - encyclopedia_ui.CUBE_DIAGRAM_MARGIN_PX
+    half_h = device.height() / 2 - encyclopedia_ui.CUBE_DIAGRAM_MARGIN_PX
     left = min(max(box.left(), -half_w), half_w - box.width())
     top = min(max(box.top(), -half_h), half_h - box.height())
     return QRectF(left, top, box.width(), box.height())
@@ -195,7 +195,7 @@ def axis(name: str, size: int) -> QPixmap:
     if entry is None:
         return QPixmap()
     pixmap, painter = _canvas(size)
-    unit = size * defaults.CUBE_DIAGRAM_UNIT_RATIO
+    unit = size * encyclopedia_ui.CUBE_DIAGRAM_UNIT_RATIO
     _draw_frame(painter, unit)
     _draw_axis_line(painter, unit, entry.cold.coords, entry.warm.coords)
     _draw_cells(painter, unit, lit=(entry.cold.coords, entry.warm.coords,
@@ -231,7 +231,7 @@ def pole(name: str, size: int) -> QPixmap:
     axis_entry, end = entry
     other = axis_entry.warm if end is axis_entry.cold else axis_entry.cold
     pixmap, painter = _canvas(size)
-    unit = size * defaults.CUBE_DIAGRAM_UNIT_RATIO
+    unit = size * encyclopedia_ui.CUBE_DIAGRAM_UNIT_RATIO
     _draw_frame(painter, unit)
     _draw_axis_line(painter, unit, end.coords, other.coords)
     _draw_cells(painter, unit, lit=(end.coords, (0, 0, 0)))
@@ -245,7 +245,7 @@ def whole_cube(size: int) -> QPixmap:
     """The Cube itself — twenty-seven cells in their own hues, the
     centre lit, no axis singled out."""
     pixmap, painter = _canvas(size)
-    unit = size * defaults.CUBE_DIAGRAM_UNIT_RATIO
+    unit = size * encyclopedia_ui.CUBE_DIAGRAM_UNIT_RATIO
     _draw_frame(painter, unit)
     _draw_cells(painter, unit, lit=[(0, 0, 0)])
     _draw_end_label(painter, unit, (0, 0, 0), cube.THE_ONE.luminous)
@@ -258,7 +258,7 @@ def thirteen_axes(size: int) -> QPixmap:
     doctrine page argues: three through the faces, four through the
     corners, six through the edges."""
     pixmap, painter = _canvas(size)
-    unit = size * defaults.CUBE_DIAGRAM_UNIT_RATIO
+    unit = size * encyclopedia_ui.CUBE_DIAGRAM_UNIT_RATIO
     _draw_frame(painter, unit)
     for entry in cube.AXES:
         _draw_axis_line(
@@ -275,7 +275,7 @@ def hexagram_projection(size: int) -> QPixmap:
     collapse into the centre — the page's whole claim, drawn by looking
     down that axis instead of describing it."""
     pixmap, painter = _canvas(size)
-    unit = size * defaults.CUBE_DIAGRAM_UNIT_RATIO
+    unit = size * encyclopedia_ui.CUBE_DIAGRAM_UNIT_RATIO
     radius = unit * 1.5
     # The six non-sacred corners, in ring order around the diagonal.
     ring = [
@@ -313,7 +313,7 @@ def hexagram_projection(size: int) -> QPixmap:
         )
         metrics = painter.fontMetrics()
         width = metrics.horizontalAdvance(name)
-        push = unit * defaults.CUBE_DIAGRAM_LABEL_PUSH
+        push = unit * encyclopedia_ui.CUBE_DIAGRAM_LABEL_PUSH
         length = math.hypot(point.x(), point.y()) or 1.0
         painter.drawText(
             _clamped(QRectF(
@@ -333,7 +333,7 @@ def banknote_axes(size: int) -> QPixmap:
     read through the Dollar's eye: the vertical Self-Regard, and the two
     that cross it on the pyramid's base."""
     pixmap, painter = _canvas(size)
-    unit = size * defaults.CUBE_DIAGRAM_UNIT_RATIO
+    unit = size * encyclopedia_ui.CUBE_DIAGRAM_UNIT_RATIO
     _draw_frame(painter, unit)
     primary = [a for a in cube.AXES if a.name in (
         "Activation", "Moral Scope", "Self-Regard",

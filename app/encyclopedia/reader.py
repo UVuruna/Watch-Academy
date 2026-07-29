@@ -40,7 +40,7 @@ from PySide6.QtWidgets import (
 from app.encyclopedia import tree as topic_tree
 from app.encyclopedia.text import article_text, entry_name, flow_html, image_tooltip
 from app.ui_style import style_button, style_look_chip
-from config import constants, defaults, paths
+from config import constants, defaults, encyclopedia_ui, paths
 from render.asset_recolor import ensure_variant, variant_pending
 from render import diagrams
 from render.asset_variants import scaled_variant_file
@@ -104,7 +104,7 @@ class ReaderScreen(QWidget):
         self._look_forward.clicked.connect(lambda: self._cycle_look(1))
         self._counter = QLabel()
         self._counter.setStyleSheet(
-            f"font-size: {defaults.UI_BUTTON_FONT_PX}px; font-weight: bold;"
+            f"font-size: {encyclopedia_ui.UI_BUTTON_FONT_PX}px; font-weight: bold;"
         )
         self._previous = QPushButton(self._tr("← Previous"))
         self._previous.clicked.connect(lambda: self.step(-1))
@@ -280,7 +280,7 @@ class ReaderScreen(QWidget):
             # The Four Greetings page: CENTERED italic stanzas with
             # their line breaks kept, the reading justified below.
             data = entry["article"][1]
-            gap = defaults.GREETINGS_STANZA_GAP_PX
+            gap = encyclopedia_ui.GREETINGS_STANZA_GAP_PX
             stanzas = "".join(
                 f"<p align='center' style='margin-top:{gap}px;"
                 f"margin-bottom:{gap}px'><i>"
@@ -333,7 +333,7 @@ class ReaderScreen(QWidget):
         return min(
             viewport,
             round(
-                viewport * defaults.ENCYCLOPEDIA_TEXT_WIDTH_FRACTION
+                viewport * encyclopedia_ui.ENCYCLOPEDIA_TEXT_WIDTH_FRACTION
                 * self._zoom
             ),
         )
@@ -348,13 +348,13 @@ class ReaderScreen(QWidget):
         for block in self._blocks:
             block.setFixedWidth(block_width)
         font_px = min(
-            defaults.ENCYCLOPEDIA_MAX_FONT_PX,
+            encyclopedia_ui.ENCYCLOPEDIA_MAX_FONT_PX,
             max(
-                defaults.ENCYCLOPEDIA_BASE_FONT_PX,
+                encyclopedia_ui.ENCYCLOPEDIA_BASE_FONT_PX,
                 round(
-                    defaults.ENCYCLOPEDIA_BASE_FONT_PX
-                    + (viewport - defaults.ENCYCLOPEDIA_FONT_BASE_WIDTH)
-                    * defaults.ENCYCLOPEDIA_FONT_GROWTH
+                    encyclopedia_ui.ENCYCLOPEDIA_BASE_FONT_PX
+                    + (viewport - encyclopedia_ui.ENCYCLOPEDIA_FONT_BASE_WIDTH)
+                    * encyclopedia_ui.ENCYCLOPEDIA_FONT_GROWTH
                 ),
             ),
         )
@@ -385,11 +385,11 @@ class ReaderScreen(QWidget):
                 block_width,
                 round(
                     self._scroll.viewport().height()
-                    * defaults.READER_IMAGE_MAX_HEIGHT_FRACTION * self._zoom
+                    * encyclopedia_ui.READER_IMAGE_MAX_HEIGHT_FRACTION * self._zoom
                 ),
             ))
             master = diagrams.plate(
-                kind, key, defaults.CUBE_DIAGRAM_SIDE_PX,
+                kind, key, encyclopedia_ui.CUBE_DIAGRAM_SIDE_PX,
             )
             if master.isNull():
                 continue
@@ -418,7 +418,7 @@ class ReaderScreen(QWidget):
         key = str(path)
         pixmap = self._pixmap_cache.get(key)
         if pixmap is None:
-            ceiling = defaults.ENCYCLOPEDIA_READER_DECODE_CEILING_PX
+            ceiling = encyclopedia_ui.ENCYCLOPEDIA_READER_DECODE_CEILING_PX
             source = ensure_variant(path)
             ready = scaled_variant_file(source, ceiling, build=False)
             image = QImage(str(ready))
@@ -484,7 +484,7 @@ class ReaderScreen(QWidget):
         rows = max(1, state.get("rows", 1))
         ceiling = round(
             self._scroll.viewport().height()
-            * defaults.READER_IMAGE_MAX_HEIGHT_FRACTION
+            * encyclopedia_ui.READER_IMAGE_MAX_HEIGHT_FRACTION
             * self._zoom
         )
         max_height = max(

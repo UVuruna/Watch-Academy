@@ -7,7 +7,7 @@
 This module is the LAW's own guard: it collects every double ninth
 this program registers, from EVERY registry shape that can carry one —
 `constants.WEEKDAY_THEME_NINTH_EASTER_EGG`, `constants.
-WEEKDAY_THEME_NINTH_NIGHT`, and `defaults.WEEKDAY_SEAT_ROSTERS[*]
+WEEKDAY_THEME_NINTH_NIGHT`, and `pantheon.WEEKDAY_SEAT_ROSTERS[*]
 ["ninth"]` — and fails the build the moment one is found with no
 `constants.NINTH_MECHANISMS` entry, or an entry naming a mechanism no
 dispatch actually implements. It also pins the three sealed mechanisms
@@ -21,7 +21,7 @@ Layer: tests. See project CLAUDE.md "THE DOUBLE NINTH LAW" and
 
 from datetime import date
 
-from config import constants, defaults
+from config import constants, pantheon
 from render.layers import ninth_table_for
 
 
@@ -35,7 +35,7 @@ def _double_ninth_themes() -> set:
         set(constants.WEEKDAY_THEME_NINTH_EASTER_EGG)
         | set(constants.WEEKDAY_THEME_NINTH_NIGHT)
         | {
-            theme for theme, seats in defaults.WEEKDAY_SEAT_ROSTERS.items()
+            theme for theme, seats in pantheon.WEEKDAY_SEAT_ROSTERS.items()
             if "ninth" in seats
         }
     )
@@ -83,7 +83,7 @@ def test_ninth_table_for_dispatches_by_mechanism():
     asks "which alt table?" — reads EXACTLY the table its own theme's
     mechanism names, and cp_corpo's "term_weekly" deliberately reaches
     NEITHER alt table (its rotation rides `on_date` through the seat
-    roster alone, `config.defaults.rotating_art_file`'s cadence
+    roster alone, `config.pantheon.rotating_art_file`'s cadence
     override — see that function's own docstring)."""
     assert (
         ninth_table_for("continents", active_alt=True)
@@ -202,5 +202,5 @@ def test_cp_gangs_and_cp_street_stay_on_plain_date_rotation():
     parity by accident."""
     assert "cp_gangs" not in constants.NINTH_MECHANISMS
     assert "cp_street" not in constants.NINTH_MECHANISMS
-    assert "ninth" not in defaults.WEEKDAY_SEAT_ROSTERS["cp_gangs"]
-    assert "ninth" not in defaults.WEEKDAY_SEAT_ROSTERS["cp_street"]
+    assert "ninth" not in pantheon.WEEKDAY_SEAT_ROSTERS["cp_gangs"]
+    assert "ninth" not in pantheon.WEEKDAY_SEAT_ROSTERS["cp_street"]

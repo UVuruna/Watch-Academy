@@ -6,7 +6,7 @@ third batch, the tight-letters-plus-one-big-word-gap look)."""
 
 import pytest
 
-from config.defaults import RING_MOTTO_LETTER_STEP_DEG
+from config.dial import RING_MOTTO_LETTER_STEP_DEG
 from core.angles import readable_rotation_deg
 from core.motto import (
     _occurrence_index,

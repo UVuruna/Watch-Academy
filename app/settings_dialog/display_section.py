@@ -17,7 +17,7 @@ from PySide6.QtWidgets import (
     QSpinBox,
 )
 
-from config import constants, defaults
+from config import constants, dial
 
 
 class _DisplaySectionMixin:
@@ -171,7 +171,7 @@ class _DisplaySectionMixin:
         # The custom DIAMETER slider (owner 2026-07-17, ROADMAP 15e): any
         # value between the smallest and largest menu presets applies
         # exactly like a preset pick (the fixed presets stay in the menu).
-        low, high = defaults.SIZE_PRESETS[0], defaults.SIZE_PRESETS[-1]
+        low, high = dial.SIZE_PRESETS[0], dial.SIZE_PRESETS[-1]
         self._diameter_slider = QSlider(Qt.Orientation.Horizontal)
         self._diameter_slider.setRange(low, high)
         self._diameter_slider.setValue(min(max(self._settings.diameter, low), high))
@@ -203,7 +203,7 @@ class _DisplaySectionMixin:
         diameter_reset = QPushButton(tr("Default"))
         diameter_reset.clicked.connect(
             lambda checked: self._diameter_slider.setValue(
-                defaults.DEFAULT_DIAL_DIAMETER
+                dial.DEFAULT_DIAL_DIAMETER
             )
         )
         diameter_row = QHBoxLayout()

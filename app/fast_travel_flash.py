@@ -13,7 +13,7 @@ from PySide6.QtWidgets import (
 )
 
 from app import native
-from config import defaults, palette
+from config import palette, shortcuts
 
 
 class FastTravelFlash(QWidget):
@@ -37,22 +37,22 @@ class FastTravelFlash(QWidget):
         self._text_label = QLabel()
         self._text_label.setStyleSheet(
             f"color: {palette.FAST_TRAVEL_FLASH_TEXT_COLOR};"
-            f"font-weight: 600; font-size: {defaults.FAST_TRAVEL_FLASH_FONT_PX}px;"
+            f"font-weight: 600; font-size: {shortcuts.FAST_TRAVEL_FLASH_FONT_PX}px;"
         )
         layout = QHBoxLayout(self)
-        pad = defaults.FAST_TRAVEL_FLASH_PADDING_PX
+        pad = shortcuts.FAST_TRAVEL_FLASH_PADDING_PX
         layout.setContentsMargins(pad, pad, pad, pad)
         layout.setSpacing(8)
         layout.addWidget(self._icon_label)
         layout.addWidget(self._text_label)
         self.setStyleSheet(
             f"FastTravelFlash {{ background: {palette.FAST_TRAVEL_FLASH_BG}; "
-            f"border-radius: {defaults.FAST_TRAVEL_FLASH_RADIUS_PX}px; }}"
+            f"border-radius: {shortcuts.FAST_TRAVEL_FLASH_RADIUS_PX}px; }}"
         )
         self._opacity = QGraphicsOpacityEffect(self)
         self.setGraphicsEffect(self._opacity)
         self._fade = QPropertyAnimation(self._opacity, b"opacity", self)
-        self._fade.setDuration(defaults.FAST_TRAVEL_FLASH_FADE_MS)
+        self._fade.setDuration(shortcuts.FAST_TRAVEL_FLASH_FADE_MS)
         self._fade.setStartValue(1.0)
         self._fade.setEndValue(0.0)
         self._fade.finished.connect(self.hide)
@@ -69,14 +69,14 @@ class FastTravelFlash(QWidget):
         self._hold_timer.stop()
         self._opacity.setOpacity(1.0)
         if icon_path is not None:
-            size = defaults.FAST_TRAVEL_FLASH_ICON_PX
+            size = shortcuts.FAST_TRAVEL_FLASH_ICON_PX
             self._icon_label.setPixmap(QIcon(str(icon_path)).pixmap(size, size))
             self._icon_label.setText("")
         else:
             self._icon_label.setPixmap(QIcon().pixmap(0, 0))
             self._icon_label.setText(emoji)
             self._icon_label.setStyleSheet(
-                f"font-size: {defaults.FAST_TRAVEL_FLASH_ICON_PX}px;"
+                f"font-size: {shortcuts.FAST_TRAVEL_FLASH_ICON_PX}px;"
             )
         self._text_label.setText(text)
         self.adjustSize()
@@ -86,8 +86,8 @@ class FastTravelFlash(QWidget):
         hold_ms = max(
             0,
             round(
-                defaults.FAST_TRAVEL_FLASH_DURATION_S * 1000
-                - defaults.FAST_TRAVEL_FLASH_FADE_MS
+                shortcuts.FAST_TRAVEL_FLASH_DURATION_S * 1000
+                - shortcuts.FAST_TRAVEL_FLASH_FADE_MS
             ),
         )
         self._hold_timer.start(hold_ms)
@@ -95,7 +95,7 @@ class FastTravelFlash(QWidget):
     def _position_above_or_below(self, dial_widget: QWidget) -> None:
         dial_geo = dial_widget.frameGeometry()
         x = dial_geo.center().x() - self.width() // 2
-        gap = defaults.FAST_TRAVEL_FLASH_GAP_PX
+        gap = shortcuts.FAST_TRAVEL_FLASH_GAP_PX
         above_y = dial_geo.top() - self.height() - gap
         screen = dial_widget.screen() or QGuiApplication.primaryScreen()
         avail = screen.availableGeometry()

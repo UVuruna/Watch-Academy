@@ -20,7 +20,7 @@ import astral
 import pytest
 from PySide6.QtWidgets import QApplication
 
-from config import constants, defaults, palette
+from config import constants, defaults, dial, encyclopedia_ui, glow, palette
 from core.clock_state import (
     EclipseEvent,
     build_day_context,
@@ -294,24 +294,24 @@ def test_controller_absence_expression_yields_empty(tmp_path):
 
 
 def test_eclipse_glow_strength_mapping():
-    assert eclipse_glow_strength(defaults.ECLIPSE_MAGNITUDE_MIN) == pytest.approx(
-        defaults.ECLIPSE_GLOW_STRENGTH_MIN
+    assert eclipse_glow_strength(glow.ECLIPSE_MAGNITUDE_MIN) == pytest.approx(
+        glow.ECLIPSE_GLOW_STRENGTH_MIN
     )
-    assert eclipse_glow_strength(defaults.ECLIPSE_MAGNITUDE_MAX) == pytest.approx(
-        defaults.ECLIPSE_GLOW_STRENGTH_MAX
+    assert eclipse_glow_strength(glow.ECLIPSE_MAGNITUDE_MAX) == pytest.approx(
+        glow.ECLIPSE_GLOW_STRENGTH_MAX
     )
     mid = eclipse_glow_strength(
-        (defaults.ECLIPSE_MAGNITUDE_MIN + defaults.ECLIPSE_MAGNITUDE_MAX) / 2
+        (glow.ECLIPSE_MAGNITUDE_MIN + glow.ECLIPSE_MAGNITUDE_MAX) / 2
     )
-    assert defaults.ECLIPSE_GLOW_STRENGTH_MIN < mid < defaults.ECLIPSE_GLOW_STRENGTH_MAX
+    assert glow.ECLIPSE_GLOW_STRENGTH_MIN < mid < glow.ECLIPSE_GLOW_STRENGTH_MAX
     # Clamped outside the documented range.
     assert eclipse_glow_strength(-5.0) == pytest.approx(
-        defaults.ECLIPSE_GLOW_STRENGTH_MIN
+        glow.ECLIPSE_GLOW_STRENGTH_MIN
     )
     assert eclipse_glow_strength(50.0) == pytest.approx(
-        defaults.ECLIPSE_GLOW_STRENGTH_MAX
+        glow.ECLIPSE_GLOW_STRENGTH_MAX
     )
-    assert eclipse_glow_strength(None) == defaults.ECLIPSE_GLOW_STRENGTH_MAX
+    assert eclipse_glow_strength(None) == glow.ECLIPSE_GLOW_STRENGTH_MAX
 
 
 # --- Render: solar (Earth marker RED glow + art swap) -------------------------
@@ -337,7 +337,7 @@ def test_solar_eclipse_glow_is_red_not_gold(app):
     skin = dataclasses.replace(defaults.DEFAULT_SKIN, solar_rotation=False)
     gold = Compositor(skin, AssetCache()).render_offscreen(540.0, 1.0, day, plain_glow)
     red = Compositor(skin, AssetCache()).render_offscreen(540.0, 1.0, day, eclipsed)
-    marker_y = 270 - round(270 * defaults.GLOW_RING_RADIUS_FRACTION)
+    marker_y = 270 - round(270 * dial.GLOW_RING_RADIUS_FRACTION)
     probe = (289, marker_y + 33)
     gold_px = gold.pixelColor(*probe)
     red_px = red.pixelColor(*probe)
@@ -369,7 +369,7 @@ def test_solar_eclipse_swaps_the_earth_art(app):
     # sample its NEW drawn position (year_angle unchanged, radius swaps).
     year_angle = plain.year_angle
     radius = 270.0
-    orbit = radius * defaults.GLOW_RING_RADIUS_FRACTION
+    orbit = radius * dial.GLOW_RING_RADIUS_FRACTION
     theta = math.radians(year_angle)
     x = round(radius + orbit * math.sin(theta))
     y = round(radius - orbit * math.cos(theta))
@@ -397,7 +397,7 @@ def test_solar_eclipse_hit_test_rides_the_relocated_marker(app):
     comp.render_offscreen(540.0, 1.0, day, eclipsed)
     radius = 270.0
     theta = math.radians(plain.year_angle)
-    orbit = radius * defaults.GLOW_RING_RADIUS_FRACTION
+    orbit = radius * dial.GLOW_RING_RADIUS_FRACTION
     from PySide6.QtCore import QPointF
 
     x = radius + orbit * math.sin(theta)
@@ -432,7 +432,7 @@ def test_lunar_eclipse_glow_is_bronze_and_moon_is_darkened(app):
     after = Compositor(skin, AssetCache()).render_offscreen(540.0, 1.0, day, eclipsed)
     radius = 270.0
     moon_angle = math.radians(quiet.moon_fraction * 360.0)
-    orbit = radius * defaults.GLOW_RING_RADIUS_FRACTION
+    orbit = radius * dial.GLOW_RING_RADIUS_FRACTION
     x = round(radius + orbit * math.sin(moon_angle))
     y = round(radius - orbit * math.cos(moon_angle))
     assert before.pixelColor(x, y) != after.pixelColor(x, y)
@@ -455,7 +455,7 @@ def test_lunar_eclipse_hit_test_rides_the_relocated_marker(app):
     comp.render_offscreen(540.0, 1.0, day, eclipsed)
     radius = 270.0
     moon_angle = math.radians(plain.moon_fraction * 360.0)
-    orbit = radius * defaults.GLOW_RING_RADIUS_FRACTION
+    orbit = radius * dial.GLOW_RING_RADIUS_FRACTION
     from PySide6.QtCore import QPointF
 
     x = radius + orbit * math.sin(moon_angle)
@@ -519,8 +519,8 @@ def test_solar_partial_is_the_one_state_still_magnitude_scaled():
         assert eclipse_state_glow_strength(state, 0.01) == pytest.approx(
             eclipse_state_glow_strength(state, 1.19)
         ), f"{state} must ignore magnitude"
-    lo = eclipse_state_glow_strength("solar_partial", defaults.ECLIPSE_MAGNITUDE_MIN)
-    hi = eclipse_state_glow_strength("solar_partial", defaults.ECLIPSE_MAGNITUDE_MAX)
+    lo = eclipse_state_glow_strength("solar_partial", glow.ECLIPSE_MAGNITUDE_MIN)
+    hi = eclipse_state_glow_strength("solar_partial", glow.ECLIPSE_MAGNITUDE_MAX)
     assert lo < hi        # solar_partial alone still tracks magnitude
 
 
@@ -553,7 +553,7 @@ def _lunar_moon_pixel(app, type_: str, magnitude: float):
     image = Compositor(skin, AssetCache()).render_offscreen(540.0, 1.0, day, eclipsed)
     radius = 270.0
     moon_angle = math.radians(quiet.moon_fraction * 360.0)
-    orbit = radius * defaults.GLOW_RING_RADIUS_FRACTION
+    orbit = radius * dial.GLOW_RING_RADIUS_FRACTION
     x = round(radius + orbit * math.sin(moon_angle))
     y = round(radius - orbit * math.cos(moon_angle))
     return image.pixelColor(x, y)
@@ -601,8 +601,8 @@ def test_lunar_partial_clearly_brighter_than_total(app):
 def test_lunar_disc_brightness_ignores_magnitude(app):
     """The owner's core decree: disc brightness is TYPE-driven only —
     magnitude may vary the GLOW, never the disc's see-through-ness."""
-    low = _lunar_moon_pixel(app, "total", defaults.ECLIPSE_MAGNITUDE_MIN)
-    high = _lunar_moon_pixel(app, "total", defaults.ECLIPSE_MAGNITUDE_MAX)
+    low = _lunar_moon_pixel(app, "total", glow.ECLIPSE_MAGNITUDE_MIN)
+    high = _lunar_moon_pixel(app, "total", glow.ECLIPSE_MAGNITUDE_MAX)
     assert max(low.red(), low.green(), low.blue()) < 55
     assert max(high.red(), high.green(), high.blue()) < 55
 
@@ -625,7 +625,7 @@ def _solar_glow_pixel(app, type_: str, magnitude: float):
     )
     skin = dataclasses.replace(defaults.DEFAULT_SKIN, solar_rotation=False)
     image = Compositor(skin, AssetCache()).render_offscreen(540.0, 1.0, day, eclipsed)
-    marker_y = 270 - round(270 * defaults.GLOW_RING_RADIUS_FRACTION)
+    marker_y = 270 - round(270 * dial.GLOW_RING_RADIUS_FRACTION)
     return image.pixelColor(289, marker_y + 33)
 
 
@@ -720,7 +720,7 @@ def _eclipse_marker_probe(kind, type_, magnitude=1.05):
     comp = Compositor(skin, AssetCache())
     comp.render_offscreen(540.0, 1.0, day, eclipsed)
     radius = 270.0
-    orbit = radius * defaults.GLOW_RING_RADIUS_FRACTION
+    orbit = radius * dial.GLOW_RING_RADIUS_FRACTION
     theta = math.radians(
         plain.year_angle if kind == "solar"
         else plain.moon_fraction * 360.0
@@ -761,7 +761,7 @@ def test_space_jump_falls_back_to_seasons_and_phase_without_eclipse(app):
     comp = Compositor(skin, AssetCache())
     comp.render_offscreen(540.0, 1.0, day, tick)
     radius = 270.0
-    orbit = radius * defaults.GLOW_RING_RADIUS_FRACTION
+    orbit = radius * dial.GLOW_RING_RADIUS_FRACTION
     theta = math.radians(tick.year_angle)
     earth = comp.encyclopedia_target(
         radius + orbit * math.sin(theta), radius - orbit * math.cos(theta), 540.0
@@ -797,12 +797,12 @@ def test_eclipse_emblem_maps_every_category_and_is_graceful(app):
         )
         path = comp._eclipse_emblem(event)
         assert path is not None and path.name == stem
-        assert path.parent == defaults.ECLIPSE_ART_DIR
+        assert path.parent == glow.ECLIPSE_ART_DIR
         # Art-arrival-proof (the subdial lesson, 0.14.367): while the
         # art is absent the badge degrades to EMPTY (graceful), and the
         # moment a source subtree carries the file (the ChatGPT batch,
         # unlocked by registering the "eclipse" root) it must RENDER.
-        from config import paths as _paths
+        from config import dial, encyclopedia_ui, glow, paths as _paths
         if _paths.art_file(path).exists():
             assert _hover_badge(path) != ""
         else:
@@ -997,7 +997,7 @@ _ESCAPED_MARKUP = re.compile(r"&lt;(sup|/sup|b|/b|i|/i)&gt;", re.IGNORECASE)
 def _sweep_tooltip_texts(comp, size=480.0, rings=6, angles=24):
     """Coarse polar sweep over `_tooltip_at` (owner spec — reuse the
     warm-sweep grid): far fewer probes than `warm_hover_articles`'s
-    production pitch (`defaults.HOVER_WARM_RADIAL_STEPS` × `_ANGLE_STEPS`)
+    production pitch (`encyclopedia_ui.HOVER_WARM_RADIAL_STEPS` × `_ANGLE_STEPS`)
     since a regression test only needs to VISIT every hover builder once,
     not warm the asset cache. Returns every non-empty tooltip string."""
     radius = size / 2

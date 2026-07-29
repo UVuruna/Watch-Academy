@@ -18,7 +18,7 @@ from PySide6.QtWidgets import (
     QWidget,
 )
 
-from config import constants, defaults
+from config import constants, pantheon
 
 
 class _ThemesSectionMixin:
@@ -34,7 +34,7 @@ class _ThemesSectionMixin:
         # — None IS off.
         self._rotation_group = QComboBox()
         self._rotation_group.addItem(tr("None"), "none")
-        for title, _ in defaults.WEEKDAY_MENU_GROUPS:
+        for title, _ in pantheon.WEEKDAY_MENU_GROUPS:
             self._rotation_group.addItem(tr(title), title)
         self._rotation_group.addItem(tr("Custom"), "custom")
         index = self._rotation_group.findData(
@@ -49,7 +49,7 @@ class _ThemesSectionMixin:
         grid.setHorizontalSpacing(24)
         self._rotation_checks: dict[str, QCheckBox] = {}
         for index, (key, label) in enumerate(
-            defaults.WEEKDAY_THEME_TITLES.items()
+            pantheon.WEEKDAY_THEME_TITLES.items()
         ):
             box = QCheckBox(tr(label))
             box.setChecked(key in self._settings.theme_rotation_themes)
@@ -86,9 +86,9 @@ class _ThemesSectionMixin:
             # planets_art has no top-level menu title (owner 2026-07-18:
             # it nests as the Planets "Art" look) — it never gets an
             # independent rotation row here.
-            if theme not in defaults.WEEKDAY_THEME_TITLES:
+            if theme not in pantheon.WEEKDAY_THEME_TITLES:
                 continue
-            label = QLabel(tr(defaults.WEEKDAY_THEME_TITLES[theme]))
+            label = QLabel(tr(pantheon.WEEKDAY_THEME_TITLES[theme]))
             self._metal_labels[theme] = label
             metal_row.addWidget(label)
             combo = QComboBox()
@@ -130,7 +130,7 @@ class _ThemesSectionMixin:
                 key for key, box in self._rotation_checks.items()
                 if box.isChecked()
             )
-        for title, keys in defaults.WEEKDAY_MENU_GROUPS:
+        for title, keys in pantheon.WEEKDAY_MENU_GROUPS:
             if title == group_key:
                 return keys
         return ()

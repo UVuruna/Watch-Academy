@@ -28,7 +28,7 @@ from PySide6.QtCore import QRect, QSize, Qt, Signal
 from PySide6.QtGui import QColor, QPainter, QPixmap
 from PySide6.QtWidgets import QFrame, QHBoxLayout, QLabel, QVBoxLayout, QWidget
 
-from config import defaults, palette, paths
+from config import encyclopedia_ui, palette, paths
 from render.asset_variants import scaled_variant_file
 
 
@@ -39,18 +39,18 @@ def row_content_width(card_width: int, columns: int) -> int:
     so the dialog's minimum width and the live per-resize card size can
     never drift apart, which is exactly how the old gallery grew a
     horizontal scrollbar twice."""
-    gap = defaults.ENCYCLOPEDIA_CARD_GAP_PX
-    margins = defaults.ENCYCLOPEDIA_CARD_GAP_PX * 2
+    gap = encyclopedia_ui.ENCYCLOPEDIA_CARD_GAP_PX
+    margins = encyclopedia_ui.ENCYCLOPEDIA_CARD_GAP_PX * 2
     return columns * card_width + (columns - 1) * gap + margins
 
 
 def card_width_for(viewport_width: int, columns: int) -> int:
     """The widest card `columns` of which still fit inside
     `viewport_width` — the exact inverse of `row_content_width`."""
-    gap = defaults.ENCYCLOPEDIA_CARD_GAP_PX
-    margins = defaults.ENCYCLOPEDIA_CARD_GAP_PX * 2
+    gap = encyclopedia_ui.ENCYCLOPEDIA_CARD_GAP_PX
+    margins = encyclopedia_ui.ENCYCLOPEDIA_CARD_GAP_PX * 2
     available = viewport_width - margins - (columns - 1) * gap
-    return max(defaults.ENCYCLOPEDIA_CARD_MIN_WIDTH_PX, available // columns)
+    return max(encyclopedia_ui.ENCYCLOPEDIA_CARD_MIN_WIDTH_PX, available // columns)
 
 
 def card_pixmap(icon: Path | None) -> QPixmap:
@@ -67,7 +67,7 @@ def card_pixmap(icon: Path | None) -> QPixmap:
     if not resolved.exists():
         return QPixmap()
     ready = scaled_variant_file(
-        resolved, defaults.ENCYCLOPEDIA_CARD_ICON_DECODE_PX, build=False,
+        resolved, encyclopedia_ui.ENCYCLOPEDIA_CARD_ICON_DECODE_PX, build=False,
     )
     return QPixmap(str(ready))
 
@@ -86,8 +86,8 @@ def mosaic_pixmap(icons: list[Path]) -> QPixmap:
               if not plate.isNull()]
     if not plates:
         return QPixmap()
-    side = defaults.ENCYCLOPEDIA_MOSAIC_PX
-    gap = defaults.ENCYCLOPEDIA_MOSAIC_GAP_PX
+    side = encyclopedia_ui.ENCYCLOPEDIA_MOSAIC_PX
+    gap = encyclopedia_ui.ENCYCLOPEDIA_MOSAIC_GAP_PX
     canvas = QPixmap(side, side)
     canvas.fill(Qt.GlobalColor.transparent)
     columns = 1 if len(plates) == 1 else 2
@@ -161,10 +161,10 @@ class Card(QFrame):
 
         column = QVBoxLayout(self)
         column.setContentsMargins(
-            defaults.ENCYCLOPEDIA_CARD_PAD_PX, defaults.ENCYCLOPEDIA_CARD_PAD_PX,
-            defaults.ENCYCLOPEDIA_CARD_PAD_PX, defaults.ENCYCLOPEDIA_CARD_PAD_PX,
+            encyclopedia_ui.ENCYCLOPEDIA_CARD_PAD_PX, encyclopedia_ui.ENCYCLOPEDIA_CARD_PAD_PX,
+            encyclopedia_ui.ENCYCLOPEDIA_CARD_PAD_PX, encyclopedia_ui.ENCYCLOPEDIA_CARD_PAD_PX,
         )
-        column.setSpacing(defaults.ENCYCLOPEDIA_CARD_PAD_PX // 2)
+        column.setSpacing(encyclopedia_ui.ENCYCLOPEDIA_CARD_PAD_PX // 2)
         column.addWidget(self._image, stretch=1)
         column.addWidget(self._title)
         column.addWidget(self._about)
@@ -175,20 +175,20 @@ class Card(QFrame):
         tint = QColor(self._accent)
         wash = (
             f"rgba({tint.red()}, {tint.green()}, {tint.blue()}, "
-            f"{defaults.ENCYCLOPEDIA_CARD_HOVER_WASH_ALPHA})"
+            f"{encyclopedia_ui.ENCYCLOPEDIA_CARD_HOVER_WASH_ALPHA})"
             if hover else palette.THEME_COLORS["surface_1"]
         )
         border = (
             self._accent if hover
             else f"rgba({tint.red()}, {tint.green()}, {tint.blue()}, "
-                 f"{defaults.ENCYCLOPEDIA_CARD_EDGE_ALPHA})"
+                 f"{encyclopedia_ui.ENCYCLOPEDIA_CARD_EDGE_ALPHA})"
         )
         self.setStyleSheet(
             "QFrame {"
             f"background: qlineargradient(x1:0, y1:0, x2:0, y2:1,"
             f" stop:0 {wash}, stop:1 {palette.THEME_COLORS['surface_0']});"
-            f"border: {defaults.ENCYCLOPEDIA_CARD_EDGE_PX}px solid {border};"
-            f"border-radius: {defaults.ENCYCLOPEDIA_CARD_RADIUS_PX}px; }}"
+            f"border: {encyclopedia_ui.ENCYCLOPEDIA_CARD_EDGE_PX}px solid {border};"
+            f"border-radius: {encyclopedia_ui.ENCYCLOPEDIA_CARD_RADIUS_PX}px; }}"
         )
 
     def enterEvent(self, event) -> None:      # noqa: N802 — Qt override
@@ -211,16 +211,16 @@ class Card(QFrame):
         card keep its natural height (the theme grid, which scrolls);
         a given height pins it (the home grid, which may not)."""
         title_font = self._title.font()
-        title_font.setPixelSize(font_px + defaults.ENCYCLOPEDIA_CARD_TITLE_BUMP)
+        title_font.setPixelSize(font_px + encyclopedia_ui.ENCYCLOPEDIA_CARD_TITLE_BUMP)
         self._title.setFont(title_font)
         for label in (self._about, self._footer):
             font = label.font()
             font.setPixelSize(max(1, font_px - 1))
             label.setFont(font)
         self.setFixedWidth(width)
-        inner = width - 2 * defaults.ENCYCLOPEDIA_CARD_PAD_PX
+        inner = width - 2 * encyclopedia_ui.ENCYCLOPEDIA_CARD_PAD_PX
         if height is None:
-            image_height = round(inner * defaults.ENCYCLOPEDIA_CARD_IMAGE_RATIO)
+            image_height = round(inner * encyclopedia_ui.ENCYCLOPEDIA_CARD_IMAGE_RATIO)
             self.setMinimumHeight(0)
             self.setMaximumHeight(16777215)
         else:
@@ -230,10 +230,10 @@ class Card(QFrame):
                 + self._about.heightForWidth(inner)
                 + (self._footer.sizeHint().height() if self._footer.isVisible()
                    else 0)
-                + defaults.ENCYCLOPEDIA_CARD_PAD_PX * 3
+                + encyclopedia_ui.ENCYCLOPEDIA_CARD_PAD_PX * 3
             )
             image_height = max(
-                defaults.ENCYCLOPEDIA_CARD_IMAGE_MIN_PX, height - text_height,
+                encyclopedia_ui.ENCYCLOPEDIA_CARD_IMAGE_MIN_PX, height - text_height,
             )
         self._image.setFixedHeight(image_height)
         if self._source.isNull():
@@ -261,10 +261,10 @@ class CardGrid(QWidget):
         self._cards: list[Card] = []
         self._column = QVBoxLayout(self)
         self._column.setContentsMargins(
-            defaults.ENCYCLOPEDIA_CARD_GAP_PX, defaults.ENCYCLOPEDIA_CARD_GAP_PX,
-            defaults.ENCYCLOPEDIA_CARD_GAP_PX, defaults.ENCYCLOPEDIA_CARD_GAP_PX,
+            encyclopedia_ui.ENCYCLOPEDIA_CARD_GAP_PX, encyclopedia_ui.ENCYCLOPEDIA_CARD_GAP_PX,
+            encyclopedia_ui.ENCYCLOPEDIA_CARD_GAP_PX, encyclopedia_ui.ENCYCLOPEDIA_CARD_GAP_PX,
         )
-        self._column.setSpacing(defaults.ENCYCLOPEDIA_CARD_GAP_PX)
+        self._column.setSpacing(encyclopedia_ui.ENCYCLOPEDIA_CARD_GAP_PX)
 
     @property
     def cards(self) -> list[Card]:
@@ -287,7 +287,7 @@ class CardGrid(QWidget):
         self._cards = []
         for start in range(0, len(specs), self._columns):
             row = QHBoxLayout()
-            row.setSpacing(defaults.ENCYCLOPEDIA_CARD_GAP_PX)
+            row.setSpacing(encyclopedia_ui.ENCYCLOPEDIA_CARD_GAP_PX)
             row.addStretch(1)
             for spec in specs[start:start + self._columns]:
                 card = Card(
@@ -308,22 +308,22 @@ class CardGrid(QWidget):
         their natural height and scroll."""
         width = card_width_for(viewport_width, self._columns)
         width = max(
-            defaults.ENCYCLOPEDIA_CARD_MIN_WIDTH_PX,
+            encyclopedia_ui.ENCYCLOPEDIA_CARD_MIN_WIDTH_PX,
             min(round(width * zoom), width),
         )
         font_px = min(
-            defaults.ENCYCLOPEDIA_MAX_FONT_PX,
+            encyclopedia_ui.ENCYCLOPEDIA_MAX_FONT_PX,
             max(
-                defaults.ENCYCLOPEDIA_BASE_FONT_PX,
-                round(width * defaults.ENCYCLOPEDIA_CARD_FONT_RATIO * zoom),
+                encyclopedia_ui.ENCYCLOPEDIA_BASE_FONT_PX,
+                round(width * encyclopedia_ui.ENCYCLOPEDIA_CARD_FONT_RATIO * zoom),
             ),
         )
         height = None
         if viewport_height is not None:
             rows = max(1, (len(self._cards) + self._columns - 1) // self._columns)
-            gaps = defaults.ENCYCLOPEDIA_CARD_GAP_PX * (rows + 1)
+            gaps = encyclopedia_ui.ENCYCLOPEDIA_CARD_GAP_PX * (rows + 1)
             height = max(
-                defaults.ENCYCLOPEDIA_CARD_MIN_HEIGHT_PX,
+                encyclopedia_ui.ENCYCLOPEDIA_CARD_MIN_HEIGHT_PX,
                 (viewport_height - gaps) // rows,
             )
         for card in self._cards:

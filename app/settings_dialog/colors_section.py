@@ -19,7 +19,7 @@ from PySide6.QtWidgets import (
     QVBoxLayout,
 )
 
-from config import constants, defaults, palette
+from config import constants, dial, palette
 
 
 class _ColorsSectionMixin:
@@ -92,7 +92,7 @@ class _ColorsSectionMixin:
         self._chips: list[QPushButton] = []
         for index, hue in enumerate(self._hues):
             chip = QPushButton()
-            self._round_swatch(chip, hue, defaults.PALETTE_SWATCH_PX)
+            self._round_swatch(chip, hue, dial.PALETTE_SWATCH_PX)
             chip.setToolTip(f"{self._tr(self._arm_labels[index])} — {hue}")
             chip.clicked.connect(lambda checked, i=index: self._pick_color(i))
             self._chips.append(chip)
@@ -118,7 +118,7 @@ class _ColorsSectionMixin:
         )
 
     def _paint_chip(self, chip: QPushButton, hue: str, index: int) -> None:
-        self._round_swatch(chip, hue, defaults.PALETTE_SWATCH_PX)
+        self._round_swatch(chip, hue, dial.PALETTE_SWATCH_PX)
         chip.setToolTip(f"{self._tr(self._arm_labels[index])} — {hue}")
 
     def _pick_color(self, index: int) -> None:
@@ -147,7 +147,7 @@ class _ColorsSectionMixin:
         group = QGroupBox(tr("Clock tint — dial, hands and Umbra (letters excluded)"))
         column = QVBoxLayout(group)
         self._tint_swatches: list[tuple[QPushButton, str | None]] = []
-        per_row = defaults.RING_TINT_SWATCHES_PER_ROW
+        per_row = dial.RING_TINT_SWATCHES_PER_ROW
         for title, presets in palette.RING_TINT_GROUPS.items():
             label = QLabel(tr(title))
             label.setStyleSheet("font-weight: bold;")
@@ -218,6 +218,6 @@ class _ColorsSectionMixin:
             self._round_swatch(
                 chip,
                 hue or palette.RING_TINT_NONE_SWATCH,
-                defaults.RING_TINT_SWATCH_PX,
+                dial.RING_TINT_SWATCH_PX,
                 selected=(hue == self._ring_tint),
             )

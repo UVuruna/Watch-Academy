@@ -16,7 +16,7 @@ os.environ.setdefault("QT_QPA_PLATFORM", "offscreen")
 import calendar
 from datetime import date
 
-from config import constants, defaults, paths
+from config import calendar_mounts, constants, defaults, paths
 from data.encyclopedia import EncyclopediaRepository
 
 
@@ -27,7 +27,7 @@ GREGORIAN = {i: calendar.month_name[i] for i in range(1, 13)}
 
 
 def test_slavic_months_table_is_twelve_in_gregorian_order():
-    months = defaults.SLAVIC_MONTHS
+    months = calendar_mounts.SLAVIC_MONTHS
     assert len(months) == 12
     assert [m[3] for m in months] == list(range(1, 13))     # Jan..Dec
     stems = [m[2] for m in months]
@@ -41,7 +41,7 @@ def test_slavic_months_table_is_twelve_in_gregorian_order():
 
 def test_mount_radius_is_in_the_design_law_band():
     """The DESIGN ZODIAC law fixes the marks at 60-70% of the dial radius."""
-    assert 0.60 <= defaults.CALENDAR_MOUNT_RADIUS_FRACTION <= 0.70
+    assert 0.60 <= calendar_mounts.CALENDAR_MOUNT_RADIUS_FRACTION <= 0.70
 
 
 # --- 2. The canonical sourceless root (subdial precedent) -------------------
@@ -63,7 +63,7 @@ def test_month_plates_resolve_by_suffix_or_stay_absent():
     suffix when the art exists (the owner's partial ChatGPT drop), else
     returns the canonical path unchanged so every consumer hides it — the
     wired-ahead graceful-absent contract."""
-    for _cro, _gloss, stem, _m in defaults.SLAVIC_MONTHS:
+    for _cro, _gloss, stem, _m in calendar_mounts.SLAVIC_MONTHS:
         plate = defaults.MONTHS_ART_DIR / f"{stem}.png"
         resolved = paths.art_file(plate)
         if resolved.exists():
@@ -85,7 +85,7 @@ def test_topic_page_order_title_then_twelve():
     assert entries[0]["name"] == "The Slavic Months"
     assert entries[0]["article"] == ("emblem", "months", "The Slavic Months")
     for entry, (cro, gloss, _stem, _m) in zip(
-        entries[1:13], defaults.SLAVIC_MONTHS
+        entries[1:13], calendar_mounts.SLAVIC_MONTHS
     ):
         assert entry["name"] == f"{cro} ({gloss})"
         assert entry["article"] == ("emblem", "months", cro)
@@ -131,7 +131,7 @@ def test_every_month_article_carries_its_web():
     equivalent in prose, and reads non-trivially (Rule #2 — real content,
     not a placeholder)."""
     enc = EncyclopediaRepository()
-    for cro, _gloss, _stem, month in defaults.SLAVIC_MONTHS:
+    for cro, _gloss, _stem, month in calendar_mounts.SLAVIC_MONTHS:
         base = enc.entry("months", cro)["base"]
         assert len(base) > 300, cro
         assert cro in base, cro                          # its own name

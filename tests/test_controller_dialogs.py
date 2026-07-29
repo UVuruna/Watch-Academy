@@ -34,7 +34,7 @@ from app.encyclopedia import EncyclopediaDialog
 from app.observatory import ObservatoryDialog
 from app.settings_dialog.dialog import SettingsDialog
 from app.settings_store import Settings
-from config import defaults
+from config import defaults, encyclopedia_ui
 
 
 @pytest.fixture(scope="module")
@@ -240,8 +240,8 @@ def test_encyclopedia_opens_at_the_owners_own_opening_screen(controller):
     controller._open_encyclopedia_at(None, 0)
     dialog = controller._encyclopedia
 
-    assert dialog.minimumWidth() >= defaults.ENCYCLOPEDIA_MIN_WIDTH_PX
-    assert dialog.minimumHeight() == defaults.ENCYCLOPEDIA_MIN_HEIGHT_PX
+    assert dialog.minimumWidth() >= encyclopedia_ui.ENCYCLOPEDIA_MIN_WIDTH_PX
+    assert dialog.minimumHeight() == encyclopedia_ui.ENCYCLOPEDIA_MIN_HEIGHT_PX
     assert dialog.width() >= dialog.minimumWidth()
     assert dialog.height() >= dialog.minimumHeight()
 
@@ -273,7 +273,7 @@ def test_guide_opens_the_encyclopedia_at_its_card(controller):
     dialog = controller._encyclopedia
 
     assert dialog.topic_key == "guide"
-    assert dialog.height() >= defaults.ENCYCLOPEDIA_MIN_HEIGHT_PX
+    assert dialog.height() >= encyclopedia_ui.ENCYCLOPEDIA_MIN_HEIGHT_PX
 
 
 def test_settings_opens_square_at_50pct_height_or_wider(app):

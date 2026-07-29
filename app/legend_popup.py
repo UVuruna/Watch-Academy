@@ -14,7 +14,7 @@ from PySide6.QtGui import QCursor, QGuiApplication, QTextDocument
 from PySide6.QtWidgets import QFrame, QLabel, QScrollArea, QVBoxLayout, QWidget
 
 from app import native
-from config import defaults, palette
+from config import encyclopedia_ui, palette
 
 
 class LegendPopup(QWidget):
@@ -53,7 +53,7 @@ class LegendPopup(QWidget):
         self._label.setWordWrap(True)
         self._label.setStyleSheet(
             f"color: {palette.LEGEND_TEXT}; "
-            f"padding: {defaults.LEGEND_PADDING_PX}px;"
+            f"padding: {encyclopedia_ui.LEGEND_PADDING_PX}px;"
         )
         self._measure = QTextDocument()
         self._scroll = QScrollArea()
@@ -81,7 +81,7 @@ class LegendPopup(QWidget):
                 QGuiApplication.screenAt(anchor)
                 or QGuiApplication.primaryScreen()
             ).availableGeometry()
-            cap = round(screen.width() * defaults.LEGEND_MAX_WIDTH_FRACTION)
+            cap = round(screen.width() * encyclopedia_ui.LEGEND_MAX_WIDTH_FRACTION)
             # Measure the content laid out at the cap: declared table
             # columns hold their width, nowrap lines keep their natural
             # one — idealWidth is the width the content actually asks
@@ -89,7 +89,7 @@ class LegendPopup(QWidget):
             self._measure.setDefaultFont(self._label.font())
             self._measure.setHtml(content)
             self._measure.setTextWidth(cap)
-            pad = 2 * defaults.LEGEND_PADDING_PX
+            pad = 2 * encyclopedia_ui.LEGEND_PADDING_PX
             wanted = math.ceil(self._measure.idealWidth()) + pad
             self._label.setFixedWidth(max(wanted, 1))
             # Fixed-width table columns do NOT squeeze below their
@@ -107,13 +107,13 @@ class LegendPopup(QWidget):
             width = min(self._label.width() + frame, cap)
             height = min(
                 self._label.height() + 2,
-                round(screen.height() * defaults.LEGEND_MAX_HEIGHT_FRACTION),
+                round(screen.height() * encyclopedia_ui.LEGEND_MAX_HEIGHT_FRACTION),
             )
             self.resize(width, height)
         screen = (
             QGuiApplication.screenAt(anchor) or QGuiApplication.primaryScreen()
         ).availableGeometry()
-        offset = defaults.LEGEND_CURSOR_OFFSET_PX
+        offset = encyclopedia_ui.LEGEND_CURSOR_OFFSET_PX
         x = min(anchor.x() + offset, screen.right() - self.width())
         y = min(anchor.y() + offset, screen.bottom() - self.height())
         self.move(max(screen.left(), x), max(screen.top(), y))

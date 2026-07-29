@@ -12,12 +12,12 @@ per-instance color is touched.
 from PySide6.QtGui import QColor, QGuiApplication
 from PySide6.QtWidgets import QDialogButtonBox, QWidget
 
-from config import defaults, palette
+from config import defaults, encyclopedia_ui, palette
 
 _C = palette.THEME_COLORS
-_RADIUS_CONTROL = defaults.THEME_RADIUS_CONTROL_PX
-_RADIUS_CARD = defaults.THEME_RADIUS_CARD_PX
-_RADIUS_PILL = defaults.THEME_RADIUS_PILL_PX
+_RADIUS_CONTROL = encyclopedia_ui.THEME_RADIUS_CONTROL_PX
+_RADIUS_CARD = encyclopedia_ui.THEME_RADIUS_CARD_PX
+_RADIUS_PILL = encyclopedia_ui.THEME_RADIUS_PILL_PX
 
 
 def _shade(hex_color: str, factor: int) -> str:
