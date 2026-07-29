@@ -799,23 +799,18 @@ scope needs a NEW prompt written. The outstanding work is entirely:
    Wave above).
    Subdial is CLOSED (RULE-19 round, 2026-07-20) — see the
    superseded note above, no more generation needed there.
-1a. **Two wiring rounds** the PROMPT SHEETS round explicitly left for
-   later (out of THIS round's "sheets only, no app code" scope):
-   registering `monsters`/`chinese_myth` in `config/defaults.py`'s
-   weekday-theme tables, and filling every theme's
-   `title_entry["images"]` tuple with its new `assets/weeks/societies/wolf/primary/colored/<key>.png`
-   plate, mirroring `defaults.CONTINENTS_TITLE_IMAGE`.
-1b. **The same two wiring rounds, generalized to the four R10 themes**:
-   registering `wow`/`cyberpunk`/`starwars`/`corporate` in
-   `config/defaults.py`'s weekday-theme tables (same tables as 1a), and
-   filling their own `title_entry["images"]` tuples once their title
-   plates land. PLUS two rotation-specific wiring items unique to this
-   round: calling `rotating_art_file` on the Cyberpunk Gangs/Street
-   rotation seats and the Star Wars Nova Ghosts/Exegol seat (the latter
-   possibly reusing `core.continents`'s own Zealandia/Pangea trigger
-   logic rather than a plain date-rotation — owner call, documented in
-   `starwars_prompts.md`'s own "rotation convention" section, not
-   assumed here).
+1a/1b. **SUPERSEDED by the STAGING LEDGER (Session 30, 2026-07-29).**
+   The two wiring rounds this entry used to describe in prose — for
+   `monsters`/`chinese_myth` and, generalized, for the four R10 themes
+   (`wow`/`cyberpunk`/`starwars`/`corporate`) — were never run; "later"
+   never came, and prose alone could not notice. Project
+   [CLAUDE.md](../../CLAUDE.md) §THE THEME COMPLETION LAW now governs
+   this debt, and [Theme Staging Ledger](../theme_staging.md) is its
+   live, enforced ledger (`tests/test_theme_completeness.py`'s *no art
+   sits unseen* guard reads it directly) — see that file for the
+   current per-cast breakdown (folder, files on disk, prompt sheet,
+   what it still owes, which session owes it) instead of the retired
+   prose below.
 2. **Three wiring decisions**, not art gaps — the row2 rondels
    (Trinity/Family/Walks, 40 files sitting painted and unread), Anno
    Lucis (1 file, once generated, has nowhere to draw yet), and the

@@ -1,0 +1,49 @@
+# Theme Staging Ledger
+
+**Purpose** (Session 30, `WORKPLAN.md` §THE THEME BACKLOG, project
+[CLAUDE.md](../CLAUDE.md) §THE THEME COMPLETION LAW): the honest debt
+list for every ART-ONLY weekday cast — art already generated and sitting
+on disk under `assets/weeks/`, not yet registered in
+`constants.WEEKDAY_THEMES`, so the dial's theme picker cannot show it
+and the Encyclopedia has no page for it. A cast leaves this ledger the
+moment its own wave finishes **every** line of the PER-CAST CHECKLIST
+(`WORKPLAN.md` §THE THEME BACKLOG) — never before, and never partially.
+The law is that a theme ships wired, worded and seated together, or it
+stays listed here as an open, named debt; deferring silently is what the
+law exists to end.
+
+`tests/test_theme_completeness.py`'s *no art sits unseen* guard reads
+this file (folder names in the first column of the table below): every
+theme folder under `assets/weeks/` must be either a registered
+`constants.WEEKDAY_THEMES` key or a row here. Deleting a cast's row
+without also completing its checklist would make the guard fail again —
+the two are locked together on purpose, so a future round cannot
+generate art and quietly abandon it (the exact failure that opened this
+ledger, see CLAUDE.md's law for the twelve-cast/429-file story).
+
+## The Twelve
+
+| Folder | Group | Files on disk | Prompt sheet | Still owes | Owed by |
+|---|---|---|---|---|---|
+| `age_of_heroes` | myth | 38 | [Greek Monsters Prompts](prompts/monsters/greek_monsters_prompts.md) | Full PER-CAST CHECKLIST (all 20 lines) — `WEEKDAY_THEMES` key, blurb/article sets, ninth, `METAL_THEMES`, seat name/dir/file tables, dual, title, menu group, Encyclopedia seat, `symbolism.json` + `encyclopedia.json` texts. Delete `taxonomy.THEME_KEY_RENAMES["monsters"]` in the same commit. | Session 31 |
+| `celestial_court` | myth | 38 | [Chinese Myth Prompts](prompts/chinese/chinese_myth_prompts.md) | Full PER-CAST CHECKLIST (all 20 lines), same shape as above. Delete `taxonomy.THEME_KEY_RENAMES["chinese_myth"]` in the same commit. | Session 31 |
+| `corporate` | crafts | 38 | [Corporate Prompts](prompts/corporate/corporate_prompts.md) | Full PER-CAST CHECKLIST (all 20 lines). Single roster (no pantheon split); no rename entry to delete. | Session 31 |
+| `wow_alliance` | gaming | 38 | [WoW Prompts](prompts/wow/wow_prompts.md) | Full PER-CAST CHECKLIST (all 20 lines). Shares the wave's new `defaults.WEEKDAY_MENU_GROUPS` "Gaming" entry with the other five gaming casts. | Session 32 |
+| `wow_horde` | gaming | 38 | [WoW Prompts](prompts/wow/wow_prompts.md) | Full PER-CAST CHECKLIST (all 20 lines). Same new "Gaming" menu group. | Session 32 |
+| `wow_evil` | gaming | 34 | [WoW Prompts](prompts/wow/wow_prompts.md) | Full PER-CAST CHECKLIST (all 20 lines). Same new "Gaming" menu group. | Session 32 |
+| `cp_gangs` | gaming | 58 | [Cyberpunk Prompts](prompts/cyberpunk/cyberpunk_prompts.md) | Full PER-CAST CHECKLIST (all 20 lines), PLUS wiring its Tuesday 3-way rotation seat (figure-first filenames, a `config.taxonomy` roster — see the sheet's own RESTRUCTURE note). Same new "Gaming" menu group. | Session 32 |
+| `cp_street` | gaming | 54 | [Cyberpunk Prompts](prompts/cyberpunk/cyberpunk_prompts.md) | Full PER-CAST CHECKLIST (all 20 lines), PLUS its own rotation-seat wiring (see `cp_gangs` row). Same new "Gaming" menu group. | Session 32 |
+| `cp_corpo` | gaming | 50 | [Cyberpunk Prompts](prompts/cyberpunk/cyberpunk_prompts.md) | Full PER-CAST CHECKLIST (all 20 lines). Its synchronized pair rotation needs no new code (`_pick_rotation`'s shared modulo already keeps poles in step) — just the roster entries. Same new "Gaming" menu group. | Session 32 |
+| `sw_jedi` | films | 22 | [Star Wars Prompts](prompts/starwars/starwars_prompts.md) | Full PER-CAST CHECKLIST (all 20 lines). Shares the wave's new `defaults.WEEKDAY_MENU_GROUPS` "Films" entry with the other two film casts. | Session 33 |
+| `sw_sith` | films | 18 | [Star Wars Prompts](prompts/starwars/starwars_prompts.md) | Full PER-CAST CHECKLIST (all 20 lines). Same new "Films" menu group. | Session 33 |
+| `sw_dyad` | films | 3 | [Star Wars Prompts](prompts/starwars/starwars_prompts.md) | Full PER-CAST CHECKLIST (all 20 lines), PLUS its place-vs-place Ninth rotation (The Ghosts / Exegol) — either `rotating_art_file` or a reuse of `core.continents`'s Zealandia/Pangea trigger (owner call, documented in the sheet's own "rotation convention" section). Same new "Films" menu group. | Session 33 |
+
+**Total debt:** 429 files across 12 casts, ~200 mandatory texts
+(~145,000 characters of house voice) across three writing waves —
+Session 31 (myth & crafts, 3 casts), Session 32 (gaming, 6 casts),
+Session 33 (films, 3 casts). See `WORKPLAN.md` §THE THEME BACKLOG for
+the full PER-CAST CHECKLIST and the reasoning behind the wave split.
+
+A row is deleted only in the same commit that finishes its cast's
+checklist — see item 20 of the checklist itself: "the cast passes the
+theme-completeness guard (Session 30) with NO exemption left."
