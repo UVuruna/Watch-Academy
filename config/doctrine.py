@@ -132,3 +132,20 @@ UNION_FIELDS = {
 # shares (Rule #5), and a station stands on a ring hour like any other
 # seat. The diagram asks core for the angle; this module only says WHICH
 # hour each station stands on.
+
+
+# --- THE RING LETTERS' OWN REASON ---------------------------------------------
+# D O M Y spells the clock's name on the outer ring, and the O is a
+# Greek Ω — but the real rule is arithmetic: each of the four is a GREEK
+# letter standing at the hour equal to its PLACE in the Greek alphabet
+# (Δ delta 4th at 04h, M mu 12th crowning 12h, Y upsilon 20th at 20h, Ω
+# omega 24th and last at the bottom, 24h). The table lives here because
+# the ring-letters article states it and the computed ring-letter
+# diagram draws it — one source, so the figure can never disagree with
+# the prose it stands beside.
+RING_LETTER_SEATS = (
+    ("Δ", 4),
+    ("M", 12),
+    ("Y", 20),
+    ("Ω", 24),
+)

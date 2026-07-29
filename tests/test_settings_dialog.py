@@ -1392,11 +1392,13 @@ def test_era_terms_topic():
         assert resolved is None or resolved.suffix == ".png"
     # The Great Oscillations was an ESSAY with no emblem of its own (fix
     # round F). The SESSION 27 COVERAGE LAW (owner 2026-07-28, "svaki
-    # clanak mora sliku") supersedes that: an essay still gets a plate
-    # NAME — its topic's own `title` register — so the prompt sheet has
-    # something to address and the page lights up when the art lands.
-    assert len(era[7]["images"]) == 1
-    assert era[7]["images"][0].name == "Great_Oscillations.png"
+    # clanak mora sliku") gave it a plate NAME — and the coverage round
+    # that followed (2026-07-29) retired that name again for the RIGHT
+    # reason: its figure is the La2004 amplitude envelope, the same
+    # series the Observatory plots, so the page names a DRAWER and the
+    # program draws it (root Rule #19). No file, no brief, no gap.
+    assert era[7]["images"] == ()
+    assert era[7]["diagram"] == ("instrument", "oscillations")
 
     # SESSION 27 (owner-sealed 2026-07-28): the old Celestial Engine
     # SPLIT — the watch's own wheels (the week, the instrument, the eras

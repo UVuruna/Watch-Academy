@@ -3298,3 +3298,60 @@ def pole_icon_name(pole: str, on_date: date) -> str:
     `pole_emoji` already uses, so the icon and its documented emoji
     fallback never disagree."""
     return "light" if pole_is_light(pole, on_date) else "dark"
+
+
+# --- THE INSTRUMENT'S OWN DIAGRAMS (Session 27 coverage round, 2026-07-29) ----
+# The seven "how this clock works" pages plus the Great Oscillations are
+# COMPUTED, not painted (root Rule #19 — see render/instrument_diagrams.py).
+# These are that module's only tunables; every astronomical number in the
+# figures comes from `config.constants` or from the bundles themselves.
+INSTRUMENT_DIAGRAM_SIDE_PX = 900        # the drawing's own square, then scaled
+INSTRUMENT_DIAGRAM_MARGIN_PX = 8        # no label is drawn past this edge
+INSTRUMENT_DIAGRAM_RING_RATIO = 0.34    # the dial circle's radius, per side
+INSTRUMENT_DIAGRAM_YEAR_RING_RATIO = 0.27  # ...tighter on the year wheel,
+#                                          whose anchor names are long and
+#                                          two of them stand at the widest
+#                                          point of the disc
+INSTRUMENT_DIAGRAM_LABEL_RATIO = 0.026  # a label's pixel size, per side
+INSTRUMENT_DIAGRAM_CAPTION_RATIO = 0.022
+INSTRUMENT_DIAGRAM_CAPTION_Y = 0.90     # where the one-line caption sits
+INSTRUMENT_DIAGRAM_GLYPH_RATIO = 0.075  # a ring letter, per side
+INSTRUMENT_DIAGRAM_MOON_RATIO = 0.045   # one phase disc's radius, per side
+INSTRUMENT_DIAGRAM_PHASE_STEPS = 8      # phases shown around the lunation
+INSTRUMENT_DIAGRAM_CHART_INSET = 0.10   # the envelope plot's own margin
+INSTRUMENT_DIAGRAM_CHART_HEIGHT = 0.62  # ...and its height, per side
+# The moment drawn on the dial figure — any time whose two hands stand
+# clearly apart reads the lesson (the hour hand is on ITS OWN 24-hour
+# turn, the minute hand on the hour's).
+INSTRUMENT_DIAGRAM_SAMPLE_TIME = (15, 20)
+# The solar tilt drawn on the rotation figure: the project's own golden
+# value (Belgrade under DST, tests/test_dial.py) rather than a made-up
+# angle — the figure is a measurement.
+INSTRUMENT_DIAGRAM_SAMPLE_TILT_DEG = 10.76
+# THE TWILIGHT BANDS: (from, to, name) in degrees of solar depression.
+# Civil comes from `constants.CIVIL_DEPRESSION` — the one the dial
+# actually draws; the other two boundaries are the standard astronomical
+# definitions and live here because nothing else in the program needs
+# them.
+INSTRUMENT_TWILIGHT_BANDS = (
+    (0.0, constants.CIVIL_DEPRESSION, "civil"),
+    (constants.CIVIL_DEPRESSION, 12.0, "nautical"),
+    (12.0, 18.0, "astronomical"),
+)
+INSTRUMENT_TWILIGHT_COLORS = {
+    "day": "#7FA8D9",
+    "civil": "#4A6FA5",
+    "nautical": "#2C4570",
+    "astronomical": "#1A2440",
+    "night": "#0C0F1A",
+    "sun": "#F2C14E",
+}
+INSTRUMENT_MOON_COLORS = {"lit": "#EFEAD8", "dark": "#2A2E38"}
+# The year wheel's quarters read the POINTER palette's own season hues
+# (`("cross", "tertiary")`, summer/autumn/winter/spring clockwise from
+# the top) — one palette, so a re-tuned season colour moves the diagram
+# with the dial.
+INSTRUMENT_SEASON_COLORS = dict(zip(
+    ("summer", "autumn", "winter", "spring"),
+    PALETTE_PRESETS[("cross", "tertiary")],
+))

@@ -1,18 +1,19 @@
 """The ONE door to every computed diagram.
 
-Two modules draw them — [Cube Diagrams](cube_diagrams.md) for the Cube's
-geometry, [Canon Diagrams](canon_diagrams.md) for the journeys and the
-tables — and a page must not have to know which. It declares
-`"diagram": (kind, key)`; this facade finds the drawer.
+Three modules draw them — [Cube Diagrams](cube_diagrams.md) for the
+Cube's geometry, [Canon Diagrams](canon_diagrams.md) for the journeys
+and the tables, [Instrument Diagrams](instrument_diagrams.md) for the
+clock explaining itself — and a page must not have to know which. It
+declares `"diagram": (kind, key)`; this facade finds the drawer.
 
 Layer: render. Documentation: diagrams.md.
 """
 
 from PySide6.QtGui import QPixmap
 
-from render import canon_diagrams, cube_diagrams
+from render import canon_diagrams, cube_diagrams, instrument_diagrams
 
-_MODULES = (cube_diagrams, canon_diagrams)
+_MODULES = (cube_diagrams, canon_diagrams, instrument_diagrams)
 
 
 def plate(kind: str, key: str, size: int) -> QPixmap:

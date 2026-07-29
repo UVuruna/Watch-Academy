@@ -88,9 +88,18 @@ terms, the three figure sets and the twenty-four fields. Every one drawn
 from `config.doctrine` / `config.cube` / `config.archetypes`, never from
 prose. See [Canon Diagrams](canon_diagrams.md).
 
+### `instrument_diagrams.py` — Instrument Diagrams
+The clock explaining itself — the 24-hour face, the star's solar tilt,
+the twilight bands, the year wheel, the lunations, the metals, the ring
+letters, and the La2004 envelope behind the Great Oscillations. Every
+one is drawn from the numbers the dial itself is drawn from, because a
+painted copy would become a lie the moment a constant moved (owner
+verdict 2026-07-29). See [Instrument Diagrams](instrument_diagrams.md).
+
 ### `diagrams.py` — Diagrams
-The ONE door to both diagram modules: a page declares its `(kind, key)`
-and this facade finds the drawer. See [Diagrams](diagrams.md).
+The ONE door to all three diagram modules: a page declares its
+`(kind, key)` and this facade finds the drawer. See
+[Diagrams](diagrams.md).
 
 ## Connections
 

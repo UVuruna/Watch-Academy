@@ -30,6 +30,7 @@ from config import archetypes, constants, defaults
 from config import encyclopedia_tree as tree
 from render.asset_recolor import metal_variant_path
 from render.asset_variants import moon_phase_file
+from render.instrument_diagrams import INSTRUMENT_FIGURES
 
 from app.encyclopedia.builders import (
     _PANTHEON_BLOCK_SIZE,
@@ -233,8 +234,16 @@ def _build_topics(travel_date: date | None = None) -> dict:
         "icon": defaults.INSTRUMENT_ART_DIR / "logo.png",
         "entries": [
             {
-                "images": (
-                    defaults.INSTRUMENT_ART_DIR / f"{key}.png",
+                # THE INSTRUMENT DRAWS ITSELF (owner verdict 2026-07-29,
+                # root Rule #19): every page here whose figure is this
+                # program's own geometry declares a DRAWER, not a file —
+                # move `DIAL_OFFSET_DEG` and a painted dial would become
+                # a lie while this one turns with it. `paint_light` is
+                # the one page holding a real picture, and it keeps it.
+                **(
+                    {"diagram": ("instrument", key)}
+                    if key in INSTRUMENT_FIGURES
+                    else {"images": (defaults.INSTRUMENT_ART_DIR / f"{key}.png",)}
                 ),
                 "name": ("instrument_title", key),
                 "article": ("instrument", key),
@@ -570,14 +579,17 @@ def _build_topics(travel_date: date | None = None) -> dict:
         "entries": [
             {
                 "images": (
-                    tuple(_era_image(a) for a in art)
-                    if isinstance(art, tuple)
-                    else (_era_image(art),) if art else ()
+                    tuple(_era_image(a) for a in row[1])
+                    if isinstance(row[1], tuple)
+                    else (_era_image(row[1]),) if row[1] else ()
                 ),
-                "name": ("era_title", key),
-                "article": ("era", key),
+                # A row is (key, art) or (key, art, diagram) — the same
+                # shape the Cube's own pages use for a COMPUTED figure.
+                **({"diagram": row[2]} if len(row) > 2 else {}),
+                "name": ("era_title", row[0]),
+                "article": ("era", row[0]),
             }
-            for key, art in _ERA_ENTRIES
+            for row in _ERA_ENTRIES
         ],
     }
     # THE ECLIPSES (fix round F, owner order 2026-07-19): two topics —

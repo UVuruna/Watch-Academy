@@ -73,9 +73,13 @@ _ERA_ENTRIES = (
     ("Starry_Winter", "Starry_Winter.png"),
     ("Eras_of_the_World", _ERA_CALENDAR_ART),
     # The Great Oscillations (fix round F, owner "bravo"): the season-
-    # length / Milankovitch essay near the Observatory — an ESSAY, no
-    # plate of its own (like the comparative Eras article), None -> ().
-    ("The_Great_Oscillations", "Great_Oscillations.png"),
+    # length / Milankovitch essay near the Observatory. Its figure is
+    # the La2004 amplitude envelope — the SAME series the Observatory
+    # plots — so the page names a DRAWER, not a plate (owner verdict
+    # 2026-07-29, root Rule #19: a painted chart is a picture of a
+    # number that changes when the bundle changes). A row is
+    # (key, art) or (key, art, diagram).
+    ("The_Great_Oscillations", None, ("instrument", "oscillations")),
 )
 
 # THE ECLIPSES ENCYCLOPEDIA (fix round F, owner order 2026-07-19:

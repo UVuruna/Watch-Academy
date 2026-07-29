@@ -167,6 +167,43 @@ def test_home_title_and_download_share_one_header_row(app):
     dialog.deleteLater()
 
 
+def test_the_instrument_draws_itself(topics, app):
+    """The seven "how this clock works" pages and the Great Oscillations
+    name a DRAWER, not a plate (owner verdict 2026-07-29, root Rule
+    #19): every figure is this program's own geometry, so a painted one
+    would become a lie the moment a constant moved. `paint_light` is the
+    one Instrument page holding a real picture, and it keeps it."""
+    from render import diagrams
+    from render.instrument_diagrams import INSTRUMENT_FIGURES
+
+    drawn = {
+        entry["name"][1]: entry.get("diagram")
+        for entry in topics["instrument"]["entries"]
+    }
+    assert drawn["paint_light"] is None
+    assert drawn["dial"] == ("instrument", "dial")
+    for key, declared in drawn.items():
+        if key == "paint_light":
+            continue
+        assert declared == ("instrument", key), key
+        assert key in INSTRUMENT_FIGURES
+    # The eighth figure rides the Eras topic, not the Instrument's.
+    envelope = [
+        entry for entry in topics["era"]["entries"]
+        if entry["name"][1] == "The_Great_Oscillations"
+    ]
+    assert envelope[0]["diagram"] == ("instrument", "oscillations")
+    assert envelope[0]["images"] == ()
+    # And every one of them really puts ink on the plate.
+    for key in INSTRUMENT_FIGURES:
+        image = diagrams.plate("instrument", key, 300).toImage()
+        assert any(
+            image.pixelColor(x, y).alpha() > 8
+            for y in range(0, image.height(), 3)
+            for x in range(0, image.width(), 3)
+        ), key
+
+
 # --- 4. THE VARIANT LAW -----------------------------------------------------
 
 def test_registers_of_one_subject_became_one_card(topics):

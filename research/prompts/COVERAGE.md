@@ -691,21 +691,54 @@ written — the Egyptian pantheon's dual pair is Ra and Afu-Ra, the
 planetary block's own pair, so its page reads the primary register's
 plate.
 
-### What is still owed a brief
+### What was owed a brief — and how the 43 closed (2026-07-29)
 
-| Family | Files | Where they belong |
+The gap this ledger opened is CLOSED, and closing it corrected the
+ledger itself twice. **The "43" was wrong in two directions**, which is
+recorded here rather than quietly fixed:
+
+**1. Nine already had briefs.** The audit that produced the number
+searched `research/prompts/` alone and missed `research/rose_round/`.
+The eight VERTEX figures have had full briefs in
+[Cube Vertex Arm Plates](../rose_round/vertices_prompts.md) since the
+Rose round, and the Lord's Day centre is written in
+[Council Prompts](archetype/council_prompts.md). Nothing was owed for
+either. **Lesson kept: an audit's search path is part of its claim.**
+
+**2. Eight should never have had briefs at all.** The seven Instrument
+diagrams and the Great Oscillations are figures of the program's OWN
+geometry, and root Rule #19's question kills them as art: *if changing
+a constant would make the painted plate a lie, the plate must not be
+painted.* Move `DIAL_OFFSET_DEG` and a commissioned dial illustration
+is silently wrong. They are COMPUTED now, live, by
+[Instrument Diagrams](../../render/instrument_diagrams.md) — the same
+verdict the Cube's twenty-three compositions took. `paint_light` is the
+counter-example and keeps its picture: it illustrates a doctrine, not a
+geometry.
+
+**One more was a REUSE, not a file.** Triglav's plate has been on disk
+in the Slavic PRIMARY register since his own round; the ninths table
+named a `pantheon` copy nobody ever drew. Both rosters read the one
+plate now (0.14.548) — one figure, one plate.
+
+**Twenty-six briefs were written, and one extra:**
+
+| Family | Files | Sheet |
 |---|---|---|
-| The eight vertex figures | 8 | `archetypes/vertices/primary/colored/` — the Rose's Prophecy wheel cast |
-| The Instrument's own diagrams | 7 | `instrument/*.png` — dial, solar rotation, twilight, year wheel, lunations, metals, ring letters |
-| Wider-court figures | 15 | `weeks/myth/<culture>/wider/bronze/` — Greek 3, Norse 3, Slavic 4, Egypt 5 |
-| The five Chinese elements | 5 | `calendars/zodiac/chinese/elements/colored/` |
-| Slavic pantheon Triglav, the two blue-moon months, Pangea, the Great Oscillations, Composure and Vigor | 8 | their own families' registers |
+| The Wider Court — the gods that keep no hour | 15 | the four myth sheets' own closing sections (Greek 3, Norse 3, Slavic 4, Egypt 5) |
+| The five Chinese elements | 5 | [Chinese Zodiac](zodiac/chinese_zodiac_prompts.md) §The Five Elements |
+| The two thirteenth months — Sol, Modrenik | 2 | [Slavic Months](months/months_prompts.md) |
+| Composure and Vigor — the poles the wheel does not seat | 2 | [Character Prompts](archetype/character_prompts.md) |
+| Pangea **and Zealandia** | 2 | [Continents](weekday/continents_prompts.md), a NEW sheet |
 
-**43 files, no sheet.** They are named in code and therefore
-addressable; none of them is derivable, so each needs a real brief.
-That is the next prompt-writing round — the first time this ledger has
-carried a NON-zero gap since the Zero-Gap Declaration below, and it is
-recorded here rather than discovered later.
+Zealandia was not on the list of 43 — it is the same seat in the same
+family, and splitting it off would have opened a second round for one
+image. **Art: 0/26.** Every sheet verified with PromptPainter's own
+parser (`--dry-run`), 0 problems.
+
+**The gap is back to zero**, and by three different answers rather than
+one: written, computed, or already written somewhere the audit had not
+looked.
 
 ## Zero-Gap Declaration
 

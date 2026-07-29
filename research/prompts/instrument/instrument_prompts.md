@@ -10,6 +10,24 @@ abstractions rather than on-screen geometry. Paste prompts one at a
 time; keep the two Gemini images in one chat session so they read as a
 matched pair.
 
+> **SUPERSEDED FOR SEVEN OF THE EIGHT (owner verdict 2026-07-29, root
+> Rule #19).** `dial`, `solar_rotation`, `twilight`, `year_wheel`,
+> `moon_lunations`, `metals` and `ring_letters` are no longer files at
+> all — the program DRAWS them, live, from the same constants the dial
+> itself is drawn from (see
+> [Instrument Diagrams](../../../render/instrument_diagrams.md)). **Do
+> not capture the five screenshots this sheet plans below, and do not
+> generate anything for `metals` or `ring_letters`.** A stored capture
+> of a live geometry is exactly the asset Rule #19 forbids: it is right
+> only until the geometry moves, and then it is a picture that lies
+> while the article beside it tells the truth. `paint_light` (a
+> doctrine, not a geometry) and the section `logo` are UNCHANGED and
+> still belong to this sheet.
+>
+> The same verdict retired the Great Oscillations plate on the Eras
+> topic — its figure is the La2004 envelope the Observatory already
+> plots.
+
 Suggested drop locations:
 - `assets/instrument/logo.png` — the section logo
 - `assets/instrument/paint_light.png` — the one abstract-concept Gemini image
