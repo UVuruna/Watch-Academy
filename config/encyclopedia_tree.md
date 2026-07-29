@@ -30,7 +30,7 @@ structure tests all read this module.
 
 ```
 Home  ──►  Themes  ──►  Article
-6 cards    5–10 cards    pages + ◀ variant ▶
+6 cards    5–11 cards    pages + ◀ variant ▶
 no scroll  Y scroll      Y scroll
 ```
 
@@ -41,7 +41,7 @@ no scroll  Y scroll      Y scroll
 | The Instrument | yellow, 12h | 5 | 38 + guide |
 | The Celestial Engine | cyan, 03h | 10 | 101 |
 | The Divine | purple, 24h | 7 | 173 |
-| The Human Wheel | red, 18h | 10 | 130 |
+| The Human Wheel | red, 18h | 11 | 163 |
 | The Character Cube | blue, 06h | 7 | 70 |
 | The Living World | green, 09h | 5 | 54 |
 
@@ -81,6 +81,17 @@ carve-out rather than a raised ceiling, pointing at the same arc, which
 dissolves this whole into `inner` and `worlds` and takes both franchise
 cards with it.
 
+**Completion wave III (Session 33, same day)** added the THIRD and last
+franchise card, `starwars`, beside them on the same argument — Jedi,
+Sith and Dyad are one saga read from its two sides and then from the
+generation that inherits both — with its own three-way switcher and
+another 33 pages. The Human Wheel now stands at 11 cards. That does NOT
+open a third carve-out: it widens the existing `human` entry by exactly
+one, with the reason written into the guard's own docstring, because
+WORKPLAN-STRUCTURE.md §THE NINE WHOLES lists "the three FRANCHISE
+cards" together among the members of `worlds` — all three leave this
+whole in the same cut, so one expiring exemption covers them.
+
 ## The variant law
 
 Owner decision, 2026-07-28: **registers of one subject merge into one
@@ -95,15 +106,19 @@ their own cards.**
 | Eclipses | Solar · Lunar |
 | World of Warcraft | Alliance · Horde · Evil |
 | Cyberpunk 2077 | Gangs · Street · Power |
+| Star Wars | Jedi · Sith · Dyad |
 
 Wolf, Bee and Elephant stay three cards (three animals). Virtues, Sins
 and Moods stay three cards (opposites, not dresses). Astrology and the
 Chinese zodiac stay two cards (two systems). A FRANCHISE with several
 casts is the merged case, not the split one: its blocks are one week
-read several times over, so World of Warcraft is one card and Cyberpunk
-2077 is one card — and each of their six casts is still a theme of
-its own on the DIAL, which is what `TOPIC_ALIASES` (derived from this
-table) exists to reconcile.
+read several times over, so World of Warcraft, Cyberpunk 2077 and Star
+Wars are one card each — and every one of their nine casts is still a
+theme of its own on the DIAL, which is what `TOPIC_ALIASES` (derived
+from this table) exists to reconcile. Star Wars is also where the merge
+does the most work for the reader: three of its figures are seated in
+two blocks at different ages, and the switcher is how one walks from
+one age of a person straight to the other.
 
 Pseudocode of the switcher:
 

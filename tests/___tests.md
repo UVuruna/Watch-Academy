@@ -246,6 +246,20 @@ guard blocks the die-visibly SystemExit path. The R5 Quick Jump ROWS
 edit the dialog's own fields without touching a live simulation,
 eclipse-row graying, pole/Greenwich/city rows).
 
+### `art_debt.py`
+Not a test — the ART DEBT REGISTRY, the ONE list of plates a REGISTERED
+theme declares and the owner has not generated yet. Four guards across
+three files (`test_settings_dialog.py`'s bronze skeleton,
+`test_skins.py`'s colored set, `test_pointer.py`'s Sunday Mirror and
+Ninth, `test_weekday_rotation.py`'s seat rosters) each used to carry
+their own hand-written exception; completion wave III (Session 33) would
+have made that four parallel debt lists, so they read this module
+instead (Rule #5). Semantics are SUBSET, never equality: art arriving can
+never turn the suite red, while a gap that is not in the registry — a
+stem typo, a folder rename, a cast wired against art nobody queued —
+fails immediately. Its prose authority is
+[Theme Staging Ledger](../research/theme_staging.md) §Art Owed.
+
 ### `deep_fixture.py` + `test_deep_time.py`
 Session 16: the SMALL fixture pack builder (same schema as the
 generator — never the 92 MB build) and the Deep Time goldens: the

@@ -151,9 +151,29 @@ is the rotation order, which is what keeps the Power cast's
 Throne/Mirror/Ninth triad in lockstep. A roster seat's display name in
 `WEEKDAY_THEME_NAMES` lists every member, so the label can never
 disagree with the plate; Sunday keeps the Ruler · Servant law and names
-its rotating partners in the two face texts. The remaining three casts
-stay listed in
-[Theme Staging Ledger](../research/theme_staging.md). **THE BLUE MOON LAW**
+its rotating partners in the two face texts. **COMPLETION WAVE III**
+(Session 33, same day) closes the backlog: `sw_jedi`, `sw_sith` and
+`sw_dyad` registered across the same tables and `METAL_THEMES`, with
+their own blurb and article sets, their Ninths (Yoda / Darth Plagueis /
+The Ghosts), the NEW "Films" picker group — the second and last group
+the checklist named, matching `taxonomy.WEEK_GROUPS["films"]` on disk —
+and a third merged card, `starwars`, with a Jedi | Sith | Dyad
+switcher. Two things are new here. First, a `WEEKDAY_SEAT_ROSTERS` seat
+that holds PLACES rather than people: the Dyad's Ninth turns between
+The Ghosts and Exegol, which the canon expressly permits (a Ninth need
+not be a person) and which the same table serves with no new mechanism
+— the alternative, reusing `core.continents`'s Zealandia/Pangea
+trigger, is recorded as a PROVISIONAL owner call in the staging ledger
+rather than half-wired beside it. Second, the same PERSON seated in two
+casts at different ages — Anakin in the Sith Mirror and the Jedi
+Mirror, Leia and Han in a cast each of their own — which is why the
+per-cast blurb and article sets are not an over-engineering: a shared
+franchise set would have had to describe one of the two ages wrongly on
+every hover. None of the three needed a `THEME_KEY_RENAMES` deletion.
+The wiring table of the
+[Theme Staging Ledger](../research/theme_staging.md) is now EMPTY; its
+second table records the plates these three casts are still owed.
+**THE BLUE MOON LAW**
 (owner-sealed 2026-07-22, R12; extended by **THE AXLE LAW**, CANON §The
 Axle, owner-sealed 2026-07-29): `THIRTEENTHS` — key → (display name,
 encyclopedia family, encyclopedia entry name), the SAME two-level shape
