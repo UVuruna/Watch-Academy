@@ -41,7 +41,7 @@ no scroll  Y scroll      Y scroll
 | The Instrument | yellow, 12h | 5 | 38 + guide |
 | The Celestial Engine | cyan, 03h | 10 | 101 |
 | The Divine | purple, 24h | 7 | 173 |
-| The Human Wheel | red, 18h | 8 | 64 |
+| The Human Wheel | red, 18h | 9 | 97 |
 | The Character Cube | blue, 06h | 7 | 70 |
 | The Living World | green, 09h | 5 | 54 |
 
@@ -61,6 +61,16 @@ is the one the nine-whole structural arc splits into `sky` and
 `cosmos`, and the guard carries a named, expiring carve-out for it
 rather than a raised ceiling.
 
+**Completion wave II, WoW half (Session 32, 2026-07-29)** added ONE
+card, `wow`, into The Human Wheel beside the Corporation — three casts,
+not three cards. Alliance, Horde and Evil hold the SAME nine seats with
+the same arm bundles and differ only in who sits there, which is the
+variant law's own definition of registers of one subject; the card
+carries a three-way switcher and 33 pages. That takes the whole to 9
+cards, exactly the comfort cap and no carve-out needed. The nine-whole
+structural arc moves this card, the Professions and the Corporation
+together into the new `worlds` whole.
+
 ## The variant law
 
 Owner decision, 2026-07-28: **registers of one subject merge into one
@@ -73,10 +83,15 @@ their own cards.**
 | Bible | Bible · Bible II · Bible Dark |
 | Creeds | Creeds · Ancient religions |
 | Eclipses | Solar · Lunar |
+| World of Warcraft | Alliance · Horde · Evil |
 
 Wolf, Bee and Elephant stay three cards (three animals). Virtues, Sins
 and Moods stay three cards (opposites, not dresses). Astrology and the
-Chinese zodiac stay two cards (two systems).
+Chinese zodiac stay two cards (two systems). A FRANCHISE with several
+casts is the merged case, not the split one: its blocks are one week
+read several times over, so World of Warcraft is one card — and each
+cast is still a theme of its own on the DIAL, which is what
+`TOPIC_ALIASES` (derived from this table) exists to reconcile.
 
 Pseudocode of the switcher:
 

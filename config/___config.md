@@ -120,7 +120,20 @@ card of its own in `encyclopedia_tree`. The same commit DELETED
 `taxonomy.THEME_KEY_RENAMES["monsters"]` and `["chinese_myth"]`: a
 rename table migrates stored user settings, and neither key was ever
 selectable. The law this pays is project [CLAUDE.md](../CLAUDE.md)
-§THE THEME COMPLETION LAW; the remaining nine casts stay listed in
+§THE THEME COMPLETION LAW. **COMPLETION WAVE II, WoW half** (Session
+32, same day): `wow_alliance`, `wow_horde` and `wow_evil` registered
+across the same tables, with `METAL_THEMES` (bronze relief masters with
+`colored/` siblings), their own blurb and article sets, their Ninths
+(Turalyon / Rexxar / Medivh) and the NEW "Gaming" picker group in
+`WEEKDAY_MENU_GROUPS` — matching `taxonomy.WEEK_GROUPS["gaming"]` on
+disk, and shared with the Cyberpunk casts when they land. THREE dial
+themes but ONE Encyclopedia card: a franchise's casts hold the SAME
+nine seats with different people, so `encyclopedia_tree.VARIANT_SOURCES`
+merges them into `wow` with an Alliance | Horde | Evil switcher, and
+`TOPIC_ALIASES` derives each cast's own Spacebar target from that
+merge. None of the three needed a `THEME_KEY_RENAMES` deletion — their
+folder names were always their code keys. The remaining six casts stay
+listed in
 [Theme Staging Ledger](../research/theme_staging.md). **THE BLUE MOON LAW**
 (owner-sealed 2026-07-22, R12): `THIRTEENTHS` — key ("ophiuchus"/
 "sol"/"modrenik"/"chinese") → (display name, encyclopedia family,
