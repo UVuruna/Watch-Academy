@@ -1125,6 +1125,16 @@ WEEKDAY_THEMES = (
     "cp_gangs",            # the factions that hold Night City's ground
     "cp_street",           # the people who live on it
     "cp_corpo",            # the powers that move behind both
+    # COMPLETION WAVE III (Session 33, 2026-07-29): the Star Wars
+    # franchise, the SAME three-casts-one-week shape a third time — three
+    # THEMES on the dial, ONE card in the Encyclopedia. With these three
+    # the twelve-cast backlog THE THEME COMPLETION LAW was written for is
+    # closed. The Dyad cast carries the wave's only rotating seats
+    # (`defaults.WEEKDAY_SEAT_ROSTERS`), including the first PLACE-dual
+    # Ninth in the registry.
+    "sw_jedi",             # the side that loses and is right
+    "sw_sith",             # the side that wins
+    "sw_dyad",             # the generation that inherits the result
 )
 
 # The bronze-plate themes (owner 2026-07-12): their medallions can wear
@@ -1147,6 +1157,14 @@ METAL_THEMES = (
     # colored/ sibling per plate (the sheet's own two-register law), so
     # all four looks apply here too.
     "cp_gangs", "cp_street", "cp_corpo",
+    # Completion wave III (Session 33): aged-bronze carved relief in
+    # primary/bronze with a full-repaint poster colored/ sibling per
+    # plate (the Star Wars sheet's own two-register law), so all four
+    # looks apply here too. Plates the owner has not generated yet are
+    # graceful-absent in every look alike — a metal is a tint of the
+    # bronze master, so a missing master simply shows nothing rather
+    # than showing a wrong figure.
+    "sw_jedi", "sw_sith", "sw_dyad",
 )
 # "colored" (owner 2026-07-12) is the FOURTH look: fresh full-color
 # badges from the theme's colored/ subfolder — separate art, no swap.
@@ -1219,6 +1237,13 @@ WEEKDAY_THEME_BLURBS = {
     "cp_gangs": "cp_gangs",
     "cp_street": "cp_street",
     "cp_corpo": "cp_corpo",
+    # Completion wave III (Session 33): one blurb set per CAST again. Two
+    # figures are seated in TWO of these casts at different ages, so a
+    # shared franchise blurb set would have had to describe one of the
+    # two ages wrongly on every hover.
+    "sw_jedi": "sw_jedi",
+    "sw_sith": "sw_sith",
+    "sw_dyad": "sw_dyad",
 }
 
 # Theme -> symbolism.json article set (the glyph theme shares the
@@ -1266,6 +1291,13 @@ WEEKDAY_THEME_ARTICLES = {
     "cp_gangs": "cp_gangs",
     "cp_street": "cp_street",
     "cp_corpo": "cp_corpo",
+    # Completion wave III (Session 33): own article set per cast, and
+    # here the rule earns its keep twice over — Anakin, Leia and Han each
+    # hold a seat in two of these three casts at different ages, and each
+    # article argues that age's own deed (CUBE.md Charter rule 5).
+    "sw_jedi": "sw_jedi",
+    "sw_sith": "sw_sith",
+    "sw_dyad": "sw_dyad",
 }
 
 # THE NINTH per weekday theme (CANON.md "The Ninth — Outside the
@@ -1340,6 +1372,19 @@ WEEKDAY_THEME_NINTHS = {
     "cp_corpo": (
         "Alt Cunningham", "cp_corpo/primary/bronze/Alt_Cunningham.png",
     ),
+    # COMPLETION WAVE III (Session 33): three Excluded ninths, each
+    # argued in the Star Wars sheet's own terms — Yoda is presumed dead
+    # by every party in the conflict and trains both of the figures who
+    # finish the story from outside every seat; Plagueis exists in the
+    # films only as a story told once, by the man who murdered him, to
+    # the man being recruited; The Ghosts are the accumulated dead of the
+    # whole saga, which the canon expressly permits (a Ninth need not be
+    # a person). The Ghosts seat ROTATES with EXEGOL — the registry's
+    # first PLACE-vs-PLACE Ninth — through
+    # `defaults.WEEKDAY_SEAT_ROSTERS`.
+    "sw_jedi": ("Yoda", "sw_jedi/primary/bronze/Yoda.png"),
+    "sw_sith": ("Darth Plagueis", "sw_sith/primary/bronze/Plagueis.png"),
+    "sw_dyad": ("The Ghosts", "sw_dyad/primary/bronze/Ghosts.png"),
 }
 
 # THE PANGEA EASTER EGG (owner-sealed matrix 2026-07-21): Pangea shows

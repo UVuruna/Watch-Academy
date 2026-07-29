@@ -1291,6 +1291,32 @@ WEEKDAY_SEAT_ROSTERS: dict[str, dict[str, tuple[str, ...]]] = {
         "dual": ("Yorinobu", "Kurt_Hansen"),
         "ninth": ("Alt_Cunningham", "Rache_Bartmoss"),
     },
+    # COMPLETION WAVE III (Session 33, 2026-07-29). The Star Wars Dyad's
+    # three rotating seats. Tuesday and Wednesday are ordinary two-way
+    # pairs of PEOPLE; the Ninth is the registry's first PLACE-vs-PLACE
+    # rotation — The Ghosts (canonical) against Exegol.
+    #
+    # THE NINTH'S MECHANISM IS PROVISIONAL (owner call, recorded in
+    # `research/theme_staging.md`). The sheet leaves the choice open
+    # between (a) this plain date rotation and (b) reusing
+    # `core.continents`'s Zealandia/Pangea TRIGGER — a rarer face that
+    # surfaces only when the sky is doing something. This wave takes (a)
+    # because Rule #5 says one rotation mechanism, not two: the Cyberpunk
+    # half built this table for exactly this shape one commit earlier,
+    # and the sheet's rotation section argues the PAIRING, never the
+    # trigger. Flipping to (b) is a small, fully named change: delete the
+    # "ninth" entry here, add `sw_dyad` to the alt table
+    # `constants.WEEKDAY_THEME_NINTH_EASTER_EGG` (which
+    # `render.layers.theme_ninth` already reads), and widen the three
+    # `weekday_theme == "continents"` gates that compute the flag —
+    # `render.layers` (two call sites), `render.compositor
+    # ._center_pangea` and `app.encyclopedia.builders` — into a
+    # membership test over the two themes.
+    "sw_dyad": {
+        "mars": ("Finn", "Phasma"),
+        "mercury": ("Maz", "DJ"),
+        "ninth": ("Ghosts", "Exegol"),
+    },
 }
 # (theme FOLDER, canonical stem) -> the whole roster (derived; the one
 # lookup `rotating_art_file` performs). Keyed on the folder as well as
@@ -2472,6 +2498,44 @@ WEEKDAY_THEME_NAMES = {
         "venus": "Evelyn Parker",
         "saturn": "Takemura",
     },
+    # COMPLETION WAVE III (Session 33, 2026-07-29). The three Star Wars
+    # casts, rosters owner-sealed 2026-07-22 in
+    # research/prompts/starwars/starwars_prompts.md. The same nine seats
+    # a third time, and the wave where the repeat rule is most visible:
+    # Anakin holds the Sith Mirror and the Jedi Mirror, Leia the Jedi
+    # Tuesday and the Dyad Thursday, Han the Jedi Wednesday and the Dyad
+    # Friday — three people at two ages each, six seats, six independent
+    # arguments (CUBE.md Charter rule 5). The Dyad's Tuesday and
+    # Wednesday follow the ROSTER SEATS' DISPLAY LAW stated above: the
+    # label names every member because the plate turns and the label
+    # does not.
+    "sw_jedi": {
+        "sun": "Young Luke · Vader",
+        "moon": "Obi-Wan Kenobi",
+        "mars": "General Leia Organa",
+        "mercury": "Han Solo",
+        "jupiter": "Qui-Gon Jinn",
+        "venus": "Padmé Amidala",
+        "saturn": "Chewbacca",
+    },
+    "sw_sith": {
+        "sun": "Palpatine · Anakin",
+        "moon": "Grand Moff Tarkin",
+        "mars": "General Grievous",
+        "mercury": "Jabba the Hutt",
+        "jupiter": "Count Dooku",
+        "venus": "Maul",
+        "saturn": "Boba Fett",
+    },
+    "sw_dyad": {
+        "sun": "Rey · Kylo Ren",
+        "moon": "Rose Tico",
+        "mars": "Finn · Phasma",
+        "mercury": "Maz Kanata · DJ",
+        "jupiter": "Old Leia",
+        "venus": "Old Han",
+        "saturn": "General Hux",
+    },
 }
 # THE CONTINENTS (owner-sealed matrix 2026-07-21): the six weekday
 # columns are the six continents; Sunday's body is Antarctica, the
@@ -2563,6 +2627,16 @@ WEEKDAY_THEME_DIRS = {
     "cp_gangs": "cp_gangs/primary/bronze",
     "cp_street": "cp_street/primary/bronze",
     "cp_corpo": "cp_corpo/primary/bronze",
+    # Completion wave III (Session 33): the same shape a fourth time —
+    # one aged-bronze relief master per cast with its full-paint colored/
+    # sibling. The Dyad's roster members live FLAT in the same look dir
+    # beside the canonical plate, the sheet's own figure-first naming
+    # (the sheet's prose still describes the retired `alt/` subfolder;
+    # its DROP PATHS already write Phasma, DJ and Exegol as siblings,
+    # which is the shape wired here).
+    "sw_jedi": "sw_jedi/primary/bronze",
+    "sw_sith": "sw_sith/primary/bronze",
+    "sw_dyad": "sw_dyad/primary/bronze",
     # The emblem families live OUTSIDE assets/weekday/ — the relative
     # step-up reaches assets/emblem/ (owner 2026-07-14).
     "virtues": "../emblem/virtue/primary/colored",
@@ -2705,6 +2779,31 @@ WEEKDAY_THEME_FILES["cp_corpo"] = {
     "mercury": "Dexter", "jupiter": "Solomon", "venus": "Evelyn",
     "saturn": "Takemura",
 }
+# Completion wave III (Session 33): explicit stems for all three Star
+# Wars casts — the display names carry the Sunday dual ("·"), the roster
+# seats' "·" lists, hyphens (Obi-Wan, Qui-Gon), an age qualifier the file
+# drops (Old Leia, Old Han) and the acute of Padmé that the ASCII fold
+# does not know. The stems are the sheet's own drop paths, with ONE
+# correction: the sheet writes `BobaFett.png`, which breaks the tree
+# law's word-separator rule (`tests/test_assets_structure.py`
+# test_figure_stems_separate_their_words) — the lawful stem is
+# `Boba_Fett`, and the sheet has been corrected to match rather than the
+# rule bent to it.
+WEEKDAY_THEME_FILES["sw_jedi"] = {
+    "sun": "Luke", "moon": "Obi_Wan", "mars": "Leia",
+    "mercury": "Han", "jupiter": "Qui_Gon", "venus": "Padme",
+    "saturn": "Chewbacca",
+}
+WEEKDAY_THEME_FILES["sw_sith"] = {
+    "sun": "Palpatine", "moon": "Tarkin", "mars": "Grievous",
+    "mercury": "Jabba", "jupiter": "Dooku", "venus": "Maul",
+    "saturn": "Boba_Fett",
+}
+WEEKDAY_THEME_FILES["sw_dyad"] = {
+    "sun": "Rey", "moon": "Rose", "mars": "Finn",
+    "mercury": "Maz", "jupiter": "Leia", "venus": "Han",
+    "saturn": "Hux",
+}
 # The emblem stems ARE the single names (Capitalized) — only the dual
 # sun display titles need the override.
 WEEKDAY_THEME_FILES["virtues"] = {
@@ -2797,6 +2896,15 @@ WEEKDAY_DUAL_NAMES = {
     "cp_gangs": ("Arasaka", "Militech"),
     "cp_street": ("Johnny Silverhand", "Rogue"),
     "cp_corpo": ("Saburo Arasaka", "Yorinobu"),
+    # COMPLETION WAVE III (Session 33). Three duals of one house rather
+    # than three oppositions, exactly as the sheet argues them: a son and
+    # the father he refused to execute, a master and the apprentice he
+    # assembled from a nine-year-old, and the one pair in the whole
+    # instrument whose SOURCE material calls them a single power in two
+    # bodies.
+    "sw_jedi": ("Young Luke", "Vader, the Father"),
+    "sw_sith": ("Palpatine", "Anakin"),
+    "sw_dyad": ("Rey", "Kylo Ren"),
 }
 # Dual paths live FLAT inside the theme's look dir (owner DUAL
 # FLATTEN 2026-07-19: the dual/ folder carried zero semantic weight at
@@ -2850,6 +2958,13 @@ WEEKDAY_DUAL_FILES = {
     "cp_gangs": "cp_gangs/primary/bronze/Militech",
     "cp_street": "cp_street/primary/bronze/Rogue",
     "cp_corpo": "cp_corpo/primary/bronze/Yorinobu",
+    # Completion wave III (Session 33): the servant plate flat inside the
+    # cast's own look dir, colored twin via colored_variant_rel. None of
+    # the three Mirrors ROTATES — the Dyad's rotating seats are Tuesday,
+    # Wednesday and its Ninth, never its Sunday.
+    "sw_jedi": "sw_jedi/primary/bronze/Vader",
+    "sw_sith": "sw_sith/primary/bronze/Anakin",
+    "sw_dyad": "sw_dyad/primary/bronze/Kylo",
     "virtues": "../emblem/virtue/primary/colored/Humility",
     "sins": "../emblem/sin/primary/colored/Servility",
     "moods": "../emblem/mood/primary/colored/Awe",
@@ -3286,6 +3401,16 @@ WEEKDAY_THEME_TITLES = {
     "cp_gangs": "Cyberpunk Gangs",
     "cp_street": "Cyberpunk Street",
     "cp_corpo": "Cyberpunk Power",
+    # COMPLETION WAVE III (Session 33). Same rule a third time: each cast
+    # is its own dial theme and needs a title that identifies itself in a
+    # FLAT list, so the franchise leads and the block follows. The
+    # Encyclopedia reads "Star Wars" once, with Jedi | Sith | Dyad on the
+    # variant switcher (encyclopedia_tree.VARIANT_SOURCES). The sheet's
+    # own set names — Svetla, Tamna, Nova — stay in the sheet: the
+    # program's language is English (root Rule #17).
+    "sw_jedi": "Star Wars Jedi",
+    "sw_sith": "Star Wars Sith",
+    "sw_dyad": "Star Wars Dyad",
 }
 
 # The Weekday submenu's TOP entries (owner 2026-07-18): rendered FIRST,
@@ -3318,6 +3443,13 @@ WEEKDAY_MENU_GROUPS = (
     # the same order `taxonomy.WEEK_GROUPS["gaming"]` already lists.
     ("Gaming", ("wow_alliance", "wow_horde", "wow_evil",
                 "cp_gangs", "cp_street", "cp_corpo")),
+    # FILMS — opened by completion wave III (Session 33, 2026-07-29),
+    # matching `taxonomy.WEEK_GROUPS["films"]` on disk and closing the
+    # backlog's list of new picker groups (checklist line 12 named
+    # exactly two: Gaming and Films). It stays a group of its own rather
+    # than joining Gaming for the reason the Gaming comment gives — the
+    # kinship is the MEDIUM, and a film is not a game.
+    ("Films", ("sw_jedi", "sw_sith", "sw_dyad")),
     ("Animals", ("wolf", "elephant", "bee")),
     # The emblem families on the dial (owner 2026-07-14).
     ("The Inner Wheel", ("virtues", "sins", "moods")),

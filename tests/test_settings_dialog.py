@@ -488,11 +488,17 @@ def test_dialog_open_close_keeps_the_location(app):
 def test_every_theme_skeleton_is_complete():
     """Every theme folder ships all seven ENTITY-named files
     (placeholders until the owner pastes his vectors over them); the
-    Norse diacritics fold to ASCII on disk (Sól -> Sol.png)."""
+    Norse diacritics fold to ASCII on disk (Sól -> Sol.png). The only
+    permitted gaps are the ones the ART DEBT REGISTRY names
+    (`tests/art_debt.py`, the single list four guards share) — a NEW gap
+    anywhere else (a stem typo, a folder rename, a cast wired against art
+    nobody queued) still fails immediately."""
     from config import constants
 
     from config import paths as _paths
+    from tests.art_debt import PENDING_BODY_BRONZE
 
+    missing = set()
     for theme in constants.WEEKDAY_THEMES:
         if theme == "planets":
             continue
@@ -500,11 +506,10 @@ def test_every_theme_skeleton_is_complete():
         for body in constants.WEEKDAY_BODIES:
             stem = defaults.WEEKDAY_THEME_FILES[theme][body]
             if not _paths.art_file(folder / f"{stem}.png").exists():
-                # ONLY the Ancient set's Eleusis plate is pending
-                # owner art (rework 2026-07-15) — that seat draws the
-                # procedural disc until it lands.
-                assert (theme, body) == ("religion_alt", "jupiter")
-                continue
+                missing.add((theme, body))
+    assert missing <= PENDING_BODY_BRONZE, sorted(
+        missing - PENDING_BODY_BRONZE
+    )
 
 
 def test_encyclopedia_stay_on_top_flag_follows_the_z_mode(app):
@@ -1776,11 +1781,15 @@ def test_every_whole_is_reachable_and_none_is_empty():
       (Session 31, 2026-07-29) and stands at 10 until the nine-whole arc
       splits it into `sky` (sun/moon/seasons/eclipses) and `cosmos` (the
       far sky, where that card's sealed seat actually is).
-    - `human` gained the two FRANCHISE cards in completion wave II
-      (Session 32, same day) — `wow` took it to exactly 9, `cyberpunk`
-      to 10 — and the same arc dissolves it entirely into `inner` (the
-      emblem families) and `worlds` (the professions, the Corporation
-      and all three franchise cards).
+    - `human` gained the FRANCHISE cards in completion waves II and III
+      (Sessions 32 and 33, same day) — `wow` took it to exactly 9,
+      `cyberpunk` to 10, `starwars` to 11 — and the same arc dissolves
+      it entirely into `inner` (the emblem families) and `worlds` (the
+      professions, the Corporation and all three franchise cards). The
+      third card widens this ONE carve-out by exactly one rather than
+      opening a new exemption or loosening the cap, because the
+      destination table names "the three FRANCHISE cards" together: all
+      three leave in the same cut.
 
     Both destinations are named in WORKPLAN-STRUCTURE.md §THE NINE
     WHOLES. The cap stays 9 for every OTHER whole instead of being
@@ -1790,7 +1799,7 @@ def test_every_whole_is_reachable_and_none_is_empty():
     from app.encyclopedia import topics as _topics
     from config.encyclopedia_tree import WHOLES
 
-    pending_split = {"celestial": 10, "human": 10}
+    pending_split = {"celestial": 10, "human": 11}
     topics = _topics()
     for whole in WHOLES:
         assert whole.themes, whole.key

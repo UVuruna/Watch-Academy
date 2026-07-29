@@ -747,6 +747,13 @@ def test_bronze_finish_and_theme_metals():
         _paths.art_file(path).exists()
         for path in colored.bodies.values()
     )
+    # The colored set is complete for every metal-capable theme except
+    # the seats the ART DEBT REGISTRY names (`tests/art_debt.py` — the
+    # ONE list this guard shares with the bronze, dual and Ninth guards,
+    # rather than a fourth private copy of the same debt).
+    from tests.art_debt import PENDING_BODY_COLORED
+
+    missing_colored = set()
     for theme in c.METAL_THEMES:
         if "colored" not in c.theme_metals(theme):
             # planets_art (owner 2026-07-18): bronze medallions with NO
@@ -759,9 +766,11 @@ def test_bronze_finish_and_theme_metals():
         ).parent / "colored"
         for body in c.WEEKDAY_BODIES:
             stem = defaults.WEEKDAY_THEME_FILES[theme][body]
-            assert _paths.art_file(
-                folder / f"{stem}.png"
-            ).exists(), (theme, body)
+            if not _paths.art_file(folder / f"{stem}.png").exists():
+                missing_colored.add((theme, body))
+    assert missing_colored <= PENDING_BODY_COLORED, sorted(
+        missing_colored - PENDING_BODY_COLORED
+    )
     # planets_art itself DOES ship gold/bronze/silver (owner 2026-07-18):
     # the render-chain gate is METAL_THEMES membership + _theme_metal —
     # confirm the tint actually reaches the theme's WeekdaySpec.

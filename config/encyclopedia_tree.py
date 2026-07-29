@@ -78,6 +78,16 @@ class Whole(NamedTuple):
 # into `inner` (the emblem families) and `worlds` (the professions, the
 # Corporation and all three franchise cards), which is exactly where the
 # overflow goes.
+#
+# COMPLETION WAVE III (Session 33, same day) added the THIRD and last
+# such card — `starwars`, the merge declared beside them in
+# VARIANT_SOURCES — and seats it in the same place on the same argument.
+# `human` therefore stands at 11, and the carve-out in
+# `tests/test_settings_dialog.py` is widened by exactly one card WITH
+# its reason named, never quietly: WORKPLAN-STRUCTURE.md §THE NINE
+# WHOLES already lists "the three FRANCHISE cards" among the members of
+# `worlds`, so this whole was always going to hand all three over in the
+# same cut.
 WHOLES = (
     Whole(
         # 12h yellow — the sun at the top of the dial; the instrument's
@@ -107,7 +117,8 @@ WHOLES = (
         # Scale: the human fire, which is what this whole reads.
         "human", "The Human Wheel", palette.ROSE_PALETTE[2],
         ("virtues", "sins", "moods", "intelligences", "profession",
-         "corporate", "wow", "cyberpunk", "trinity", "duality"),
+         "corporate", "wow", "cyberpunk", "starwars", "trinity",
+         "duality"),
     ),
     Whole(
         # 06h blue — sunrise, the spring equinox, Judas's hue: the Cube's
@@ -174,6 +185,19 @@ VARIANT_SOURCES = {
     "cyberpunk": ("Cyberpunk 2077", (("Gangs", "cp_gangs"),
                                      ("Street", "cp_street"),
                                      ("Power", "cp_corpo"))),
+    # COMPLETION WAVE III (Session 33, same day), the third franchise and
+    # the last of the backlog. Jedi, Sith and Dyad are one saga read from
+    # its two sides and then from the generation that inherits both — one
+    # set of nine seats, the same arm bundles, the same Sunday dual and
+    # the same Ninth seat. The merge is what makes the franchise's own
+    # REPEATS legible: Anakin, Leia and Han each hold a seat in two of
+    # the three blocks at different ages, and the switcher is where a
+    # reader walks from one age of a person to the other. The labels are
+    # the sheet's block names in English (its own Svetla | Tamna | Nova
+    # stay in the sheet, root Rule #17).
+    "starwars": ("Star Wars", (("Jedi", "sw_jedi"),
+                               ("Sith", "sw_sith"),
+                               ("Dyad", "sw_dyad"))),
 }
 
 # The four merged god themes already BUILD as three contiguous blocks

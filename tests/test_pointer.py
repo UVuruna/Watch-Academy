@@ -443,7 +443,9 @@ def test_dual_sunday_two_faces_on_compass_and_seasons(app, july_wednesday):
     own name; the north sun speaks the RULER face; on the Seasons the
     Servant shares mercury's 180 seat by the standard priority; the
     Trinity/Prism single image carries BOTH plates in its legend.
-    Every theme's dual art is ON DISK, colored variants too."""
+    Every theme's dual art is ON DISK, colored variants too — except the
+    Mirrors the ART DEBT REGISTRY names (`tests/art_debt.py`), which run
+    single-faced until the owner's plate lands."""
     from app.controller import apply_display_settings
     from app.settings_store import Settings, replace
     from render.layers import servant_holds_the_seat, sunday_dual_face
@@ -452,17 +454,22 @@ def test_dual_sunday_two_faces_on_compass_and_seasons(app, july_wednesday):
     # Canonical paths resolve through the ART SOURCE (owner 2026-07-14).
     from config import paths as _paths
 
+    # A theme whose Mirror plate is pending owner art runs single-faced
+    # until it lands; which themes those are is the ART DEBT REGISTRY's
+    # to say (`tests/art_debt.py`), never this guard's private list.
+    from tests.art_debt import PENDING_DUAL
+
+    dual_less = set()
     for theme in constants.WEEKDAY_THEMES:
         rel = defaults.WEEKDAY_DUAL_FILES[theme]
         if not _paths.art_file(
             defaults.weekday_art(f"{rel}.png")
         ).exists():
-            # ONLY the reworked Creeds may run dual-less: its Satanism
-            # plate is pending owner art (2026-07-15) — the theme runs
-            # single-faced until it lands.
-            assert theme == "religion", theme
+            dual_less.add(theme)
             continue
         assert theme in defaults.WEEKDAY_DUAL_NAMES
+    assert dual_less <= PENDING_DUAL, sorted(dual_less - PENDING_DUAL)
+    colored_dual_less = set()
     for theme in constants.METAL_THEMES:
         if "colored" not in constants.theme_metals(theme):
             # planets_art (owner 2026-07-18): bronze medallions with NO
@@ -474,9 +481,11 @@ def test_dual_sunday_two_faces_on_compass_and_seasons(app, july_wednesday):
         rel = defaults.colored_variant_rel(
             defaults.WEEKDAY_DUAL_FILES[theme]
         )
-        assert _paths.art_file(
-            defaults.weekday_art(f"{rel}.png")
-        ).exists(), theme
+        if not _paths.art_file(defaults.weekday_art(f"{rel}.png")).exists():
+            colored_dual_less.add(theme)
+    assert colored_dual_less <= PENDING_DUAL, sorted(
+        colored_dual_less - PENDING_DUAL
+    )
     # ...and so are the SPLIT FACE TEXTS (owner: no identical text on
     # the two faces) — every article set's sun carries distinct
     # ruler/servant prose.
@@ -687,12 +696,13 @@ def test_theme_ninth_matches_the_encyclopedia_table(app):
     """`render.layers.theme_ninth` (round R3b item 3) reads the SAME
     `constants.WEEKDAY_THEME_NINTHS` table the Encyclopedia's ninths
     pass now builds from (Rule #5) — every listed theme resolves its
-    OWN name and an EXISTING plate, graceful-absent otherwise. ONE
-    documented pending-art exception today: `continents` Zealandia (the
-    owner-sealed Continents theme, R7a 2026-07-21 — its Ninth plate is
-    wired ahead of the owner's art), matching this file's own
-    `test_dual_sunday_two_faces_on_compass_and_seasons` pending-art
-    carve-out. Triglav LEFT that list on 2026-07-29: his art had been
+    OWN name and an EXISTING plate, graceful-absent otherwise. Which
+    Ninths are wired ahead of their art is the ART DEBT REGISTRY's to say
+    (`tests/art_debt.py` — `continents`' Zealandia since R7a 2026-07-21,
+    plus Yoda and The Ghosts from completion wave III); this guard only
+    asserts that nothing OUTSIDE that list has gone missing, and that
+    every plate which does resolve carries its own table name. Triglav
+    LEFT that list on 2026-07-29: his art had been
     on disk in the `primary` register all along while the table named a
     `pantheon` copy that was never drawn (Rule #19 — one figure, one
     plate, read by both rosters). A theme absent from the table
@@ -700,14 +710,17 @@ def test_theme_ninth_matches_the_encyclopedia_table(app):
     from config import paths as _paths
     from render.layers import theme_ninth
 
+    from tests.art_debt import PENDING_NINTH
+
+    absent = set()
     for theme, (name, _rel) in constants.WEEKDAY_THEME_NINTHS.items():
         found = theme_ninth(theme)
-        if theme == "continents":
-            assert found is None, theme       # the Zealandia plate is pending
+        if found is None:
+            absent.add(theme)                 # the plate is pending art
             continue
-        assert found is not None, theme
         assert found[0] == name, theme
         assert _paths.art_file(found[1]).exists(), theme
+    assert absent <= PENDING_NINTH, sorted(absent - PENDING_NINTH)
     for theme in ("planets", "planet_signs", "japan"):
         assert theme_ninth(theme) is None, theme
 

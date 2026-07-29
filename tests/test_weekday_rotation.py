@@ -13,7 +13,7 @@ draw/hover call site now shares (Rule #5 — no more per-call-site
 
 from datetime import date
 
-from config import defaults, paths
+from config import constants, defaults, paths
 from render.layers import theme_ninth
 
 # Two ordinally-consecutive dates, chosen arbitrarily — with exactly two
@@ -108,28 +108,61 @@ def test_theme_ninth_without_alt_is_untouched():
 
 
 def test_seat_roster_shows_every_member_across_its_cycle():
-    """Every stem declared in `defaults.WEEKDAY_SEAT_ROSTERS` must
-    actually appear on the dial within one full turn of its own roster
-    — the whole point of the table."""
-    from config import constants
+    """Every stem declared in `defaults.WEEKDAY_SEAT_ROSTERS` whose plate
+    is on disk must actually appear on the dial within one full turn of
+    its own roster — the whole point of the table. A cast the ART DEBT
+    REGISTRY names (`tests/art_debt.py`) may be wired ahead of its
+    plates: `_roster_candidates` skips a member that is not on disk, so
+    the seat shows nothing until art arrives and there is nothing yet to
+    rotate between. Every OTHER cast must have all of its members."""
+    from tests.art_debt import PENDING_ROSTERS
 
     for theme, seats in defaults.WEEKDAY_SEAT_ROSTERS.items():
         directory = defaults.weekday_art(defaults.WEEKDAY_THEME_DIRS[theme])
         for seat, stems in seats.items():
+            on_disk = [
+                stem for stem in stems
+                if paths.art_file(directory / f"{stem}.png").exists()
+            ]
+            if theme not in PENDING_ROSTERS:
+                assert on_disk == list(stems), (theme, seat)
             canonical = directory / f"{stems[0]}.png"
+            if not paths.art_file(canonical).exists():
+                continue                    # art owed, nothing to rotate
             shown = {
                 defaults.rotating_art_file(canonical, date(2026, 7, 20 + o)).stem
                 for o in range(len(stems))
             }
-            for stem in stems:
+            for stem in on_disk:
                 resolved = paths.art_file(directory / f"{stem}.png")
-                assert resolved.exists(), (theme, seat, stem)
                 assert resolved.stem in shown, (theme, seat, stem)
         # The canonical stem of every BODY seat is the roster's first
         # member, so the two tables can never drift apart.
         for body in constants.WEEKDAY_BODIES:
             if body in seats:
                 assert defaults.WEEKDAY_THEME_FILES[theme][body] == seats[body][0]
+
+
+def test_sw_dyad_ninth_rotates_through_the_seat_roster():
+    """Completion wave III (Session 33): the Dyad's Ninth is a
+    PLACE-vs-PLACE rotation — The Ghosts against Exegol — and the wave
+    resolved it through `WEEKDAY_SEAT_ROSTERS`/`rotating_art_file`, the
+    mechanism the Cyberpunk half had just built, rather than through a
+    second copy of `core.continents`'s Zealandia/Pangea trigger (Rule #5,
+    one rotation mechanism). The choice is PROVISIONAL — the sheet leaves
+    it to the owner and `research/theme_staging.md` records the open
+    call — so this pins WHICH mechanism is wired, which is exactly what a
+    future flip has to change deliberately rather than by accident.
+
+    Art-free on purpose: none of the Dyad's plates exist yet, so the
+    assertion is on the WIRING (the Ninth's own declared plate path
+    resolves to the roster) and not on a rendered file."""
+    name, rel = constants.WEEKDAY_THEME_NINTHS["sw_dyad"]
+    assert name == "The Ghosts"
+    plate = defaults.weekday_art(rel)
+    assert defaults._seat_roster_of(plate) == ("Ghosts", "Exegol")
+    # The alternative mechanism must NOT be half-wired at the same time.
+    assert "sw_dyad" not in constants.WEEKDAY_THEME_NINTH_EASTER_EGG
 
 
 def test_cp_corpo_throne_mirror_and_ninth_turn_in_lockstep():
