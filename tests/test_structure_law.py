@@ -27,10 +27,6 @@ RATCHET: dict[str, tuple[str, str]] = {
         "every pointer's draw code accreted into one file",
         "the render split session proposed in WORKPLAN §Open Owner Decisions",
     ),
-    "config/defaults.py": (
-        "the historical config god-file the law was decreed over",
-        "Session 36 — the config split (WORKPLAN-STRUCTURE.md)",
-    ),
     "app/controller.py": (
         "window shell, menus, tick plumbing and settings glue in one file",
         "an app split round — owed, not yet scheduled",
