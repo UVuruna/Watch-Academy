@@ -308,6 +308,9 @@ Session 36: legend term highlighting, the computed diagrams
 (`CUBE_DIAGRAM_*`/`CANON_DIAGRAM_*`/`INSTRUMENT_DIAGRAM_*`), the
 Encyclopedia's own card/gallery/reader/article sizing, the shared
 `UI_BUTTON_*`/`THEME_RADIUS_*` chrome, the hover warm-sweep tuning.
+Session 28: `CUBE_MODEL_GLASS_OPACITY` — the 3D Cube view's glass shell
+weight, matching the gadget's own demo (`preview3d.cube_model.
+GLASS_OPACITY`) without importing it.
 
 ### `glow.py` — Event Glow and Eclipse Rendering
 **Documentation:** [Glow](glow.md)
@@ -440,7 +443,11 @@ SAME module-global pattern as the art source: ONE global per metal
 because it is a single user preference reached from many render call
 sites (`render.assets.AssetCache._recolored` for badges,
 `render.asset_recolor.letter_metal_file` for ring letters), never threaded as
-a parameter.
+a parameter. **Session 28:** `preview3d_gadget_dir()` — the sibling 3D
+Preview gadget's repo root, a monorepo-relative guess (`Gadgets/3D
+Preview` beside `Gadgets/DOMY Watch`), `None` on a checkout without it
+or a frozen build — [Cube Preview3D Bridge](../render/cube_preview3d.md)
+treats `None` as the documented fallback, never an error.
 
 **THE ROSE — the seventh pointer (owner seal 2026-07-27, [The Cube
 Canon](../CUBE.md) §The Rose).** Its tables live beside every other

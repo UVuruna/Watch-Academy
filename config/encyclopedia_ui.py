@@ -176,6 +176,12 @@ CUBE_DIAGRAM_FRAME_OPACITY = 0.35   # the cube's twelve edges
 CUBE_DIAGRAM_DIM_OPACITY = 0.30     # the cells an axis page does not light
 CUBE_DIAGRAM_SIDE_PX = 900          # the drawing's own square, then scaled
 CUBE_DIAGRAM_MARGIN_PX = 8          # no label is ever drawn past this edge
+# THE 3D MODEL EXPORT (Session 28, `data/cube_model_export.py`): the
+# glass shell's own opacity — matches the gadget's own demo weight
+# (`preview3d.cube_model.GLASS_OPACITY`) so the Cube view reads the same
+# weight as its documentation; the exporter stays gadget-import-free, so
+# the number is transcribed here rather than read from the gadget.
+CUBE_MODEL_GLASS_OPACITY = 0.12
 # The second diagram wave — the journeys and the tables
 # (`render/canon_diagrams.py`).
 CANON_DIAGRAM_RING_RATIO = 0.34     # the arms' own radius, per plate side

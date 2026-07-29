@@ -30,6 +30,21 @@ def database_dir() -> Path:
     return app_root() / "Database"
 
 
+def preview3d_gadget_dir() -> Path | None:
+    """The sibling 3D Preview gadget's repo root (WORKPLAN Session 28) —
+    a monorepo-relative guess (`Gadgets/3D Preview` beside `Gadgets/DOMY
+    Watch`), never an absolute path baked in. `None` when it is not
+    there: a checkout without the gadget, a renamed/moved folder, or a
+    frozen build (the gadget is a dev-time sibling, never bundled data).
+    `render.cube_preview3d` treats `None` as the documented fallback
+    (root Rule #1) — the cube pages simply keep their computed 2D
+    drawer; this function never raises."""
+    if getattr(sys, "frozen", False):
+        return None
+    candidate = Path(__file__).resolve().parents[2] / "3D Preview"
+    return candidate if candidate.is_dir() else None
+
+
 def deep_time_path() -> Path:
     """The OPTIONAL Deep Time pack (Session 16): present → Time Travel
     spans the full pack coverage; absent → the bundled span with the
