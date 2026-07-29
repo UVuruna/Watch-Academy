@@ -2164,6 +2164,41 @@ WEEKDAY_THEME_NAMES = {
         "venus": "Passion",
         "saturn": "Renewal",
     },
+    # COMPLETION WAVE I (Session 31, 2026-07-29). Three casts sealed in
+    # their own prompt sheets long before the wiring: the Olympians'
+    # bestiary seated by the VICE of each arm rather than the virtue
+    # (research/prompts/monsters/), the Chinese court drawn from folk
+    # myth, the Three Kingdoms and Journey to the West
+    # (research/prompts/chinese/), and the executive committee — the one
+    # cast in the book whose members are OFFICES rather than persons
+    # (research/prompts/corporate/).
+    "age_of_heroes": {
+        "sun": "Nemean Lion · Cerberus",
+        "moon": "Medusa",
+        "mars": "Minotaur",
+        "mercury": "Sphinx",
+        "jupiter": "Erymanthian Boar",
+        "venus": "Sirens",
+        "saturn": "Hydra",
+    },
+    "celestial_court": {
+        "sun": "Sun Wukong · Six-Eared Macaque",
+        "moon": "Chang'e",
+        "mars": "Erlang Shen",
+        "mercury": "Guan Yu",
+        "jupiter": "Zhu Bajie",
+        "venus": "Zhinü",
+        "saturn": "Shennong",
+    },
+    "corporate": {
+        "sun": "CEO · Chairman",
+        "moon": "CHRO",
+        "mars": "COO",
+        "mercury": "CFO",
+        "jupiter": "CMO",
+        "venus": "CDO",
+        "saturn": "CTO",
+    },
 }
 # THE CONTINENTS (owner-sealed matrix 2026-07-21): the six weekday
 # columns are the six continents; Sunday's body is Antarctica, the
@@ -2236,6 +2271,11 @@ WEEKDAY_THEME_DIRS = {
     "bible_dark": "bible/dark/colored",
     "cosmos": "cosmos/primary/bronze",
     "planets_art": "planets/primary/art",
+    # Completion wave I (Session 31): bronze primary registers with a
+    # colored/ sibling apiece — the standard cameo-master shape.
+    "age_of_heroes": "age_of_heroes/primary/bronze",
+    "celestial_court": "celestial_court/primary/bronze",
+    "corporate": "corporate/primary/bronze",
     # The emblem families live OUTSIDE assets/weekday/ — the relative
     # step-up reaches assets/emblem/ (owner 2026-07-14).
     "virtues": "../emblem/virtue/primary/colored",
@@ -2264,6 +2304,10 @@ WEEKDAY_THEME_FILES["profession"]["sun"] = "Ruler"
 WEEKDAY_THEME_FILES["wolf"]["sun"] = "Alpha"
 WEEKDAY_THEME_FILES["bee"]["sun"] = "Queen"
 WEEKDAY_THEME_FILES["elephant"]["sun"] = "Matriarch"
+# The Corporation's six weekday stems ARE its display names (the
+# acronyms already carry their own capitals, so the Pascal rule leaves
+# them alone) — only the dual Sunday title needs the single-name file.
+WEEKDAY_THEME_FILES["corporate"]["sun"] = "CEO"
 # The metal reads Quicksilver, the owner's file keeps the element name.
 WEEKDAY_THEME_FILES["alchemy"]["mercury"] = "Mercury"
 # The reworked Creeds and the wolf rank parentheticals keep plain stems.
@@ -2320,6 +2364,19 @@ WEEKDAY_THEME_FILES["planets_art"] = {
     "sun": "Sun", "moon": "Moon", "mars": "Mars",
     "mercury": "Mercury", "jupiter": "Jupiter", "venus": "Venus",
     "saturn": "Saturn",
+}
+# Completion wave I (Session 31): explicit stems — the display names
+# carry duals ("·"), spaces (Erymanthian Boar, Sun Wukong) and a
+# diacritic (Zhinü) that the ASCII fold does not know.
+WEEKDAY_THEME_FILES["age_of_heroes"] = {
+    "sun": "Nemean_Lion", "moon": "Medusa", "mars": "Minotaur",
+    "mercury": "Sphinx", "jupiter": "Erymanthian_Boar", "venus": "Sirens",
+    "saturn": "Hydra",
+}
+WEEKDAY_THEME_FILES["celestial_court"] = {
+    "sun": "Sun_Wukong", "moon": "ChangE", "mars": "Erlang_Shen",
+    "mercury": "Guan_Yu", "jupiter": "Zhu_Bajie", "venus": "Zhinu",
+    "saturn": "Shennong",
 }
 # The emblem stems ARE the single names (Capitalized) — only the dual
 # sun display titles need the override.
@@ -2389,6 +2446,13 @@ WEEKDAY_DUAL_NAMES = {
     # polar night on the other): the Ruler/Servant solar-window law made
     # planetary.
     "continents": ("Antarctica", "Arctic"),
+    # COMPLETION WAVE I (Session 31). Three duals of one house rather
+    # than three oppositions: two literal brothers (both children of
+    # Typhon and Echidna), a Sage and his perfect counterfeit, and the
+    # two offices company law itself recommends be held apart.
+    "age_of_heroes": ("Nemean Lion", "Cerberus"),
+    "celestial_court": ("Sun Wukong", "The Six-Eared Macaque"),
+    "corporate": ("CEO", "Chairman of the Board"),
 }
 # Dual paths live FLAT inside the theme's look dir (owner DUAL
 # FLATTEN 2026-07-19: the dual/ folder carried zero semantic weight at
@@ -2425,6 +2489,11 @@ WEEKDAY_DUAL_FILES = {
     "bible_dark": "bible/dark/colored/Judas",
     "cosmos": "cosmos/primary/bronze/Black_Hole",
     "planets_art": "planets/primary/art/Sun_Eclipse",
+    # Completion wave I (Session 31): the servant plate flat inside the
+    # theme's own look dir, colored twin via colored_variant_rel.
+    "age_of_heroes": "age_of_heroes/primary/bronze/Cerberus",
+    "celestial_court": "celestial_court/primary/bronze/Six_Eared_Macaque",
+    "corporate": "corporate/primary/bronze/Chairman",
     "virtues": "../emblem/virtue/primary/colored/Humility",
     "sins": "../emblem/sin/primary/colored/Servility",
     "moods": "../emblem/mood/primary/colored/Awe",
@@ -2837,6 +2906,12 @@ WEEKDAY_THEME_TITLES = {
     "virtues": "Virtues",
     "sins": "Sins",
     "moods": "Moods",
+    # COMPLETION WAVE I (Session 31). "Chinese Mythology" is NOT the
+    # existing "chinese" topic — that one is the twelve-animal ZODIAC
+    # reading years; this is a seven-figure cast holding a week.
+    "age_of_heroes": "Greek Monsters",
+    "celestial_court": "Chinese Mythology",
+    "corporate": "The Corporation",
 }
 
 # The Weekday submenu's TOP entries (owner 2026-07-18): rendered FIRST,
@@ -2850,8 +2925,15 @@ WEEKDAY_MENU_TOP = ("planets",)
 # submenus below the top entries. The Inner Wheel (Virtues/Sins/Moods)
 # joins once those themes gain their dial texts.
 WEEKDAY_MENU_GROUPS = (
-    ("Ancient Gods", ("egypt", "greek", "norse", "slavic")),
-    ("Society", ("profession", "religion", "religion_alt")),
+    # Completion wave I (Session 31) joins the EXISTING kinship groups
+    # rather than opening new ones: the two myth casts sit with the four
+    # pantheons (`taxonomy.WEEK_GROUPS["myth"]` already holds all six),
+    # and the Corporation sits beside the Professions — the same
+    # `crafts` group on disk, and the same subject: offices people hold.
+    # The new "Gaming" and "Films" groups belong to waves II and III.
+    ("Ancient Gods", ("egypt", "greek", "norse", "slavic",
+                      "age_of_heroes", "celestial_court")),
+    ("Society", ("profession", "corporate", "religion", "religion_alt")),
     # The Scripture family (owner 2026-07-14).
     ("Scripture", ("bible", "bible2", "bible_dark")),
     ("Animals", ("wolf", "elephant", "bee")),

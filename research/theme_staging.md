@@ -21,13 +21,22 @@ the two are locked together on purpose, so a future round cannot
 generate art and quietly abandon it (the exact failure that opened this
 ledger, see CLAUDE.md's law for the twelve-cast/429-file story).
 
-## The Twelve
+## The Nine Still Owed
+
+**Completion wave I landed 2026-07-29 (Session 31):** `age_of_heroes`,
+`celestial_court` and `corporate` left this ledger with all twenty
+checklist lines done — registered in `constants.WEEKDAY_THEMES` and
+`METAL_THEMES`, seven seat names/dirs/stems, dual, ninth, title, picker
+group, an Encyclopedia card of their own, and both stale
+`taxonomy.THEME_KEY_RENAMES` entries deleted. 186 texts in all
+(~83,700 characters): the 51 mandatory ones, the 6 Ruler/Servant face
+texts, 3 card lines for the Encyclopedia's theme screen, and the 126
+per-wheel variant readings the corpus lint requires of every registered
+theme. Their rows are gone from the table below, which is the only way
+a cast may ever leave it.
 
 | Folder | Group | Files on disk | Prompt sheet | Still owes | Owed by |
 |---|---|---|---|---|---|
-| `age_of_heroes` | myth | 38 | [Greek Monsters Prompts](prompts/monsters/greek_monsters_prompts.md) | Full PER-CAST CHECKLIST (all 20 lines) — `WEEKDAY_THEMES` key, blurb/article sets, ninth, `METAL_THEMES`, seat name/dir/file tables, dual, title, menu group, Encyclopedia seat, `symbolism.json` + `encyclopedia.json` texts. Delete `taxonomy.THEME_KEY_RENAMES["monsters"]` in the same commit. | Session 31 |
-| `celestial_court` | myth | 38 | [Chinese Myth Prompts](prompts/chinese/chinese_myth_prompts.md) | Full PER-CAST CHECKLIST (all 20 lines), same shape as above. Delete `taxonomy.THEME_KEY_RENAMES["chinese_myth"]` in the same commit. | Session 31 |
-| `corporate` | crafts | 38 | [Corporate Prompts](prompts/corporate/corporate_prompts.md) | Full PER-CAST CHECKLIST (all 20 lines). Single roster (no pantheon split); no rename entry to delete. | Session 31 |
 | `wow_alliance` | gaming | 38 | [WoW Prompts](prompts/wow/wow_prompts.md) | Full PER-CAST CHECKLIST (all 20 lines). Shares the wave's new `defaults.WEEKDAY_MENU_GROUPS` "Gaming" entry with the other five gaming casts. | Session 32 |
 | `wow_horde` | gaming | 38 | [WoW Prompts](prompts/wow/wow_prompts.md) | Full PER-CAST CHECKLIST (all 20 lines). Same new "Gaming" menu group. | Session 32 |
 | `wow_evil` | gaming | 34 | [WoW Prompts](prompts/wow/wow_prompts.md) | Full PER-CAST CHECKLIST (all 20 lines). Same new "Gaming" menu group. | Session 32 |
@@ -38,11 +47,14 @@ ledger, see CLAUDE.md's law for the twelve-cast/429-file story).
 | `sw_sith` | films | 18 | [Star Wars Prompts](prompts/starwars/starwars_prompts.md) | Full PER-CAST CHECKLIST (all 20 lines). Same new "Films" menu group. | Session 33 |
 | `sw_dyad` | films | 3 | [Star Wars Prompts](prompts/starwars/starwars_prompts.md) | Full PER-CAST CHECKLIST (all 20 lines), PLUS its place-vs-place Ninth rotation (The Ghosts / Exegol) — either `rotating_art_file` or a reuse of `core.continents`'s Zealandia/Pangea trigger (owner call, documented in the sheet's own "rotation convention" section). Same new "Films" menu group. | Session 33 |
 
-**Total debt:** 429 files across 12 casts, ~200 mandatory texts
+**Original debt:** 429 files across 12 casts, ~200 mandatory texts
 (~145,000 characters of house voice) across three writing waves —
 Session 31 (myth & crafts, 3 casts), Session 32 (gaming, 6 casts),
 Session 33 (films, 3 casts). See `WORKPLAN.md` §THE THEME BACKLOG for
 the full PER-CAST CHECKLIST and the reasoning behind the wave split.
+
+**Remaining debt:** 315 files across the 9 casts above — the six gaming
+casts (Session 32) and the three film casts (Session 33).
 
 A row is deleted only in the same commit that finishes its cast's
 checklist — see item 20 of the checklist itself: "the cast passes the

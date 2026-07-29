@@ -48,6 +48,17 @@ class Whole(NamedTuple):
 # Rule #5, one palette): six of the eight, each argued by the hour it
 # stands on. The accent rides the card's edge, the breadcrumb and the
 # article header, so the reader always knows which whole he is inside.
+#
+# COMPLETION WAVE I (Session 31, 2026-07-29) added three cards, each a
+# card of its OWN rather than a switcher member — three DISTINCT
+# subjects, which is what the variant law above turns on: the Greek
+# bestiary beside the Greek gods in `divine`, the Chinese court beside
+# the Chinese zodiac in `celestial`, and the Corporation beside the
+# Professions in `human`. The nine-whole arc reseats all three
+# (`divine` -> `gods`, `celestial` -> `sky` + `cosmos`, and the
+# `profession`/`corporate` pair out of `human` into the new `worlds`);
+# WORKPLAN-STRUCTURE.md §THE NINE WHOLES already names those
+# destinations and states that its table SUPERSEDES the seats here.
 WHOLES = (
     Whole(
         # 12h yellow — the sun at the top of the dial; the instrument's
@@ -64,19 +75,20 @@ WHOLES = (
         # machinery (moon, seasons, eclipses) is read against.
         "celestial", "The Celestial Engine", palette.ROSE_PALETTE[5],
         ("moon", "sun", "seasons", "eclipses", "planets", "cosmos",
-         "continents", "astrology", "chinese"),
+         "continents", "astrology", "chinese", "celestial_court"),
     ),
     Whole(
         # 24h purple — midnight, the winter solstice, the sacred hour.
         "divine", "The Divine", palette.ROSE_PALETTE[4],
-        ("greek", "norse", "egypt", "slavic", "creeds", "bible"),
+        ("greek", "norse", "egypt", "slavic", "age_of_heroes",
+         "creeds", "bible"),
     ),
     Whole(
         # 18h red — sunset, the autumn equinox, Lucifer's own hue on the
         # Scale: the human fire, which is what this whole reads.
         "human", "The Human Wheel", palette.ROSE_PALETTE[2],
         ("virtues", "sins", "moods", "intelligences", "profession",
-         "trinity", "duality"),
+         "corporate", "trinity", "duality"),
     ),
     Whole(
         # 06h blue — sunrise, the spring equinox, Judas's hue: the Cube's

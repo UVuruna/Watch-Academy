@@ -1104,8 +1104,10 @@ def test_octa_variants_wear_the_sealed_walks_and_ages_hues(app):
             seen += 1
     # 163 through Session 6; +7 for the owner-sealed Continents theme
     # (R7a 2026-07-21), whose seven bodies carry the SAME sealed Walks/
-    # Ages octa hues on their own fixed arms.
-    assert seen == 170
+    # Ages octa hues on their own fixed arms; +21 for completion wave I
+    # (Session 31, 2026-07-29) — Greek Monsters, Chinese Mythology and
+    # The Corporation, three more casts riding the same fixed arms.
+    assert seen == 191
 
 
 # --- The Earth day label -----------------------------------------------------------

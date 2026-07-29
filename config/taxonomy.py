@@ -63,9 +63,13 @@ THEME_KEY_RENAMES = {
     "religion": "creeds",
     "religion_alt": "ancient_religions",
     "bible2": "bible_ii",
-    # art-only themes (not yet code-wired) renamed on disk only:
-    "monsters": "age_of_heroes",
-    "chinese_myth": "celestial_court",
+    # The two art-only entries `monsters` -> `age_of_heroes` and
+    # `chinese_myth` -> `celestial_court` were DELETED by completion
+    # wave I (Session 31, 2026-07-29). A rename table migrates STORED
+    # USER SETTINGS, and neither key was ever selectable: both themes
+    # were art-only until that wave registered them under their folder
+    # names, so no settings file can hold the old key (WORKPLAN.md §THE
+    # THEME BACKLOG, structural question 3).
 }
 
 # Code theme KEY -> its on-disk FOLDER name (where key ≠ folder because

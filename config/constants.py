@@ -1098,6 +1098,14 @@ WEEKDAY_THEMES = (
     "virtues",
     "sins",
     "moods",
+    # COMPLETION WAVE I (Session 31, 2026-07-29): three casts whose art
+    # had been generated and correctly placed for a week without ever
+    # being registered here — the failure THE THEME COMPLETION LAW
+    # (project CLAUDE.md) was written for. Each ships wired, worded and
+    # seated in the Encyclopedia in the same round.
+    "age_of_heroes",       # Greek Monsters — the Olympians' bestiary
+    "celestial_court",     # Chinese Mythology — gods, immortals, one rebel
+    "corporate",           # The Corporation — the executive committee
 )
 
 # The bronze-plate themes (owner 2026-07-12): their medallions can wear
@@ -1107,6 +1115,10 @@ METAL_THEMES = (
     "greek", "norse", "profession", "wolf", "bee", "elephant",
     "cosmos",              # bronze star-chart medallions + colored arc
     "planets_art",         # the Planets "Art" look (owner 2026-07-18)
+    # Completion wave I (Session 31): all three casts ship a bronze
+    # primary register with a colored/ sibling, so all four looks are
+    # available — no THEME_METALS_OVERRIDE needed for any of them.
+    "age_of_heroes", "celestial_court", "corporate",
 )
 # "colored" (owner 2026-07-12) is the FOURTH look: fresh full-color
 # badges from the theme's colored/ subfolder — separate art, no swap.
@@ -1159,6 +1171,12 @@ WEEKDAY_THEME_BLURBS = {
     "virtues": "day",
     "sins": "day",
     "moods": "day",
+    # Completion wave I (Session 31): each cast carries its OWN arm
+    # blurb set — a figure cast whose members are not the planets has
+    # nothing to say through the generic day line.
+    "age_of_heroes": "age_of_heroes",
+    "celestial_court": "celestial_court",
+    "corporate": "corporate",
 }
 
 # Theme -> symbolism.json article set (the glyph theme shares the
@@ -1189,6 +1207,10 @@ WEEKDAY_THEME_ARTICLES = {
     "virtues": "virtues",
     "sins": "sins",
     "moods": "moods",
+    # Completion wave I (Session 31): own article set per cast.
+    "age_of_heroes": "age_of_heroes",
+    "celestial_court": "celestial_court",
+    "corporate": "corporate",
 }
 
 # THE NINTH per weekday theme (CANON.md "The Ninth — Outside the
@@ -1232,6 +1254,15 @@ WEEKDAY_THEME_NINTHS = {
     # to WEEKDAY_ART_DIR, reaching the earth family: assets/earth/),
     # graceful-absent until it lands, exactly like Triglav.
     "continents": ("Zealandia", "../earth/zealandia.png"),
+    # COMPLETION WAVE I (Session 31): three Excluded ninths, each argued
+    # in its own sheet — Pegasus is born OF the Monday seat and belongs
+    # to neither the monster line nor the god line; the Buddha is the one
+    # being who could tell the Sunday dual's two faces apart (and the one
+    # who extinguished the Ninth's own sin, WISH); the Founder is the
+    # origin an org chart no longer names.
+    "age_of_heroes": ("Pegasus", "age_of_heroes/primary/bronze/Pegasus.png"),
+    "celestial_court": ("Buddha", "celestial_court/primary/bronze/Buddha.png"),
+    "corporate": ("The Founder", "corporate/primary/bronze/Founder.png"),
 }
 
 # THE PANGEA EASTER EGG (owner-sealed matrix 2026-07-21): Pangea shows
