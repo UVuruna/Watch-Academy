@@ -101,6 +101,14 @@ The ONE door to all three diagram modules: a page declares its
 `(kind, key)` and this facade finds the drawer. See
 [Diagrams](diagrams.md).
 
+### `cube_preview3d.py` — Cube Preview3D Bridge
+The GUARDED bridge to the sibling 3D Preview gadget (WORKPLAN Session
+28): imports it, builds and validates the Character-Cube model
+(`data.cube_model_export`), and hands the reader a ready 3D panel for
+`cube` / `axes` / `axis` / `pole` pages — or `None`, for any reason at
+all, which keeps the page on its computed 2D plate above. See
+[Cube Preview3D Bridge](cube_preview3d.md).
+
 ## Connections
 
 ### Uses
