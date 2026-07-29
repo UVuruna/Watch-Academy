@@ -1,21 +1,25 @@
 """THE SESSION 27 LAWS (owner-sealed 2026-07-28) — pinned.
 
-Four things the rework promised the owner, each of which has to survive
+Five things the rework promised the owner, each of which has to survive
 every future change:
 
-1. **The tree IS the Encyclopedia.** Six wholes, every theme seated in
-   exactly one, and the built table matching the declaration exactly —
-   no orphan card nobody can reach, no declared card that does not
-   exist.
+1. **The tree IS the Encyclopedia.** Nine wholes (Session 35, 2026-07-29
+   — regrouped from the original six), every theme seated in exactly
+   one, and the built table matching the declaration exactly — no
+   orphan card nobody can reach, no declared card that does not exist.
 2. **No horizontal scroll, ever** — at the minimum window size and at
    maximum zoom, on all three levels. This one has regressed twice
    before (rounds R3 and R8b), which is why it is pinned by geometry
    AND by a live dialog.
 3. **The home screen never scrolls** — it owns no scroll area at all,
-   and its 3x2 grid is measured from the viewport.
+   and its 3x3 grid is measured from the viewport.
 4. **The variant switcher keeps the reader's place** — Monday stays
    Monday across a register change, and a shorter register clamps to
    its own last page instead of overrunning.
+5. **THE REACHABILITY LAW (Session 35).** Every dial theme the owner
+   can pick — except the documented look-only ones — resolves, directly
+   or through `TOPIC_ALIASES`, to a topic seated in a whole. No dial
+   theme unreachable from Home ever again.
 """
 
 import pytest
@@ -25,8 +29,9 @@ from PySide6.QtWidgets import QApplication, QScrollArea
 from app.encyclopedia import EncyclopediaDialog, topics as build_topics
 from app.encyclopedia.cards import card_width_for, row_content_width
 from app.encyclopedia.tree import resolve_target, switch_variant, variant_at
-from config import defaults, palette
+from config import constants, defaults, palette
 from config import encyclopedia_tree as tree
+from tests.test_theme_completeness import _look_only_themes
 
 
 @pytest.fixture(scope="module")
@@ -41,11 +46,12 @@ def app():
 
 # --- 1. THE TREE ------------------------------------------------------------
 
-def test_six_wholes_each_carrying_cards():
-    """The owner's home screen is 2x3 — six wholes, none of them empty
+def test_nine_wholes_each_carrying_cards():
+    """The owner's home screen is 3x3 (Session 35, "može i 9 grupacija
+    sa ovim novim velikim sekcijama") — nine wholes, none of them empty
     (the old "The Archetypes" hall stood empty for weeks; a whole with
     no cards is a dead tile on the FIRST screen the reader meets)."""
-    assert len(tree.WHOLES) == 6
+    assert len(tree.WHOLES) == 9
     for whole in tree.WHOLES:
         assert whole.themes, whole.key
 
@@ -62,12 +68,49 @@ def test_the_built_table_matches_the_declared_tree_exactly(topics):
     assert set(topics) == set(tree.all_topics())
 
 
-def test_every_whole_wears_a_rose_hue():
+def test_eight_wholes_wear_a_rose_hue_and_the_ninth_wears_the_moon():
     """The accents are the Rose's own (Rule #5, one palette) — never a
-    hand-picked hex."""
+    hand-picked hex — except the ninth, the Moon's own silver (owner:
+    "boja Silver kao moon"). All nine are distinct."""
+    rose, silver = [], []
     for whole in tree.WHOLES:
-        assert whole.accent in palette.ROSE_PALETTE
-    assert len(set(tree.ROSE_ACCENTS_USED)) == 6      # no hue used twice
+        (silver if whole.accent == palette.MOON_SILVER else rose).append(whole)
+    assert len(rose) == 8
+    assert len(silver) == 1
+    for whole in rose:
+        assert whole.accent in palette.ROSE_PALETTE, whole.key
+    assert silver[0].key == "sky"
+    assert len(set(tree.ROSE_ACCENTS_USED)) == 9      # no hue used twice
+
+
+def test_every_dial_theme_is_reachable_from_home():
+    """THE REACHABILITY LAW (Session 35, owner's exact 2026-07-29
+    complaint — twelve casts were registered on the dial with no seat
+    anywhere in the Encyclopedia). Every key in `constants.WEEKDAY_
+    THEMES` — except the documented LOOK-ONLY keys (Session 30's own
+    exception set, reused verbatim from `tests/test_theme_completeness.
+    py`'s `_look_only_themes`, Rule #5 — `planets_art` is the known
+    member) — resolves, directly or through `tree.TOPIC_ALIASES`, to a
+    topic seated in a whole.
+
+    Boundary with the sibling guards: `test_theme_completeness.py` owns
+    REGISTRATION (art on disk <-> a `WEEKDAY_THEMES` key <-> the staging
+    ledger); this law owns REACHABILITY (a registered key <-> a seat on
+    Home). A theme can pass one and fail the other — this test is what
+    would have caught the twelve-cast failure even if every cast HAD
+    been registered and worded, because none of them had a whole."""
+    look_only = _look_only_themes()
+    unreachable = []
+    for theme in constants.WEEKDAY_THEMES:
+        if theme in look_only:
+            continue
+        if theme in tree.THEME_TO_WHOLE:
+            continue
+        alias = tree.TOPIC_ALIASES.get(theme)
+        if alias is not None and alias[0] in tree.THEME_TO_WHOLE:
+            continue
+        unreachable.append(theme)
+    assert unreachable == []
 
 
 # --- 2/3. THE SCROLL LAWS ---------------------------------------------------
@@ -128,7 +171,7 @@ def test_no_horizontal_bar_on_any_level_at_the_minimum_size(app):
     dialog.show()
     app.processEvents()
     for step in (lambda: None,
-                 lambda: dialog.show_whole("divine"),
+                 lambda: dialog.show_whole("gods"),
                  lambda: dialog.show_topic("greek")):
         step()
         app.processEvents()

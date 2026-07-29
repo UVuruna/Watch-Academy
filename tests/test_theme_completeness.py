@@ -90,18 +90,28 @@ def _emblem_only_folders() -> set[str]:
     return {path.parent.parent.name for path in defaults.EMBLEM_ART_DIRS.values()}
 
 
+def _look_only_themes() -> set[str]:
+    """Dial themes with NO topic card of their own — resolved as a LOOK
+    of another topic's card instead (`planets_art` rides the Planets
+    card: it is absent from `defaults.WEEKDAY_THEME_TITLES` on purpose,
+    its own comment reading "rides the Planets encyclopedia topic as a
+    look", so `app.encyclopedia.tree._build_topics` never calls
+    `_weekday_topic` for it in the first place). Reused by
+    `test_encyclopedia_tree.py`'s REACHABILITY LAW (Rule #5, one
+    source) — a look-only theme has nothing of its own for the Home
+    screen to seat, so it is the one documented exception to "every
+    registered theme reaches a whole"."""
+    return set(constants.WEEKDAY_THEMES) - set(defaults.WEEKDAY_THEME_TITLES)
+
+
 def test_no_registered_theme_is_textless():
     """Every key in `constants.WEEKDAY_THEMES` resolves an article set,
     a blurb set, a title article and (where it has a Ninth) a Ninth
     article. Two DOCUMENTED exceptions to the title-article check, both
     real production behavior rather than omissions:
 
-    - `planets_art` never gets its own Encyclopedia topic at all — it is
-      absent from `defaults.WEEKDAY_THEME_TITLES` on purpose (its own
-      comment: "rides the Planets encyclopedia topic as a look"), so
-      `app.encyclopedia.tree._build_topics` (which iterates
-      `WEEKDAY_THEME_TITLES.items()`) never calls `_weekday_topic` for
-      it in the first place.
+    - `planets_art` never gets its own Encyclopedia topic at all (see
+      `_look_only_themes` above).
     - The Inner Wheel emblem themes (virtues/sins/moods) DO get a
       `_weekday_topic` build, but `app.encyclopedia.tree` immediately
       OVERWRITES it with its own family pages
@@ -114,7 +124,7 @@ def test_no_registered_theme_is_textless():
     symbolism = SymbolismRepository()
     encyclopedia = EncyclopediaRepository()
     emblem_override = set(defaults.EMBLEM_ART_DIRS) & set(constants.WEEKDAY_THEMES)
-    no_own_topic = set(constants.WEEKDAY_THEMES) - set(defaults.WEEKDAY_THEME_TITLES)
+    no_own_topic = _look_only_themes()
     title_exempt = emblem_override | no_own_topic
 
     offenders = []

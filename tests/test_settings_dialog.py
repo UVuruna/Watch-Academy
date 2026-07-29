@@ -1168,11 +1168,11 @@ def test_wider_court_gallery_has_no_extra_tiles():
     for key in ("wider_greek", "wider_norse", "wider_egypt", "wider_slavic"):
         assert key not in topics, key
         assert key not in seated, key
-    # The Divine whole still names exactly the same four culture cards —
-    # no fifth "Wider Court" tile of its own.
-    divine = {whole.key: whole for whole in WHOLES}["divine"].themes
-    assert {"greek", "norse", "egypt", "slavic"} <= set(divine)
-    assert not any(k.startswith("wider") for k in divine)
+    # The Gods whole (Session 35: `divine` -> `gods`) still names exactly
+    # the same four culture cards — no fifth "Wider Court" tile of its own.
+    gods = {whole.key: whole for whole in WHOLES}["gods"].themes
+    assert {"greek", "norse", "egypt", "slavic"} <= set(gods)
+    assert not any(k.startswith("wider") for k in gods)
 
 
 def test_pantheon_pages_offer_colored_like_the_planetary_pages():
@@ -1284,7 +1284,7 @@ def test_the_header_names_the_whole_and_the_register():
     dialog.show()
 
     dialog.show_topic("greek")
-    assert dialog._crumbs.text() == "› The Divine"
+    assert dialog._crumbs.text() == "› The Gods"
     assert dialog._title.text() == "Greek gods — Planetary"
 
     dialog._reader.open_topic("greek", 11)
@@ -1409,12 +1409,17 @@ def test_era_terms_topic():
     # SPLIT — the watch's own wheels (the week, the instrument, the eras
     # and the months) went to THE INSTRUMENT; the sky it computes stayed
     # in the Engine. The eras ride the Instrument with the year wheels.
+    # SESSION 35 (2026-07-29) split the Engine further into the near sky
+    # (`sky`) and the far sky (`cosmos`).
     instrument = {whole.key: whole for whole in WHOLES}["instrument"]
-    engine = {whole.key: whole for whole in WHOLES}["celestial"]
+    sky = {whole.key: whole for whole in WHOLES}["sky"]
+    cosmos_whole = {whole.key: whole for whole in WHOLES}["cosmos"]
     assert instrument.themes == ("week", "instrument", "era", "months", "guide")
-    assert "planet_signs" not in engine.themes
-    for key in ("astrology", "chinese", "planets", "cosmos", "eclipses"):
-        assert key in engine.themes
+    assert "planet_signs" not in sky.themes
+    assert "planet_signs" not in cosmos_whole.themes
+    assert "eclipses" in sky.themes
+    for key in ("astrology", "chinese", "planets", "cosmos", "continents"):
+        assert key in cosmos_whole.themes
 
     # Every article resolves and carries its own MEASURED numbers —
     # never invented, always the sealed anno_lucis.json/ROADMAP figures.
@@ -1514,12 +1519,13 @@ def test_eclipse_topics():
             resolved = _paths.art_file(entry["images"][0])
             assert resolved is None or resolved.suffix == ".png"
 
-    # The merged card rides The Celestial Engine (SESSION 27) — the two
+    # The merged card rides The Sky (SESSION 27; reseated from the old
+    # Celestial Engine into `sky` by SESSION 35, 2026-07-29) — the two
     # source keys are gone from the tree entirely.
-    engine = {whole.key: whole for whole in WHOLES}["celestial"]
-    assert "eclipses" in engine.themes
-    assert "eclipse_solar" not in engine.themes
-    assert "eclipse_lunar" not in engine.themes
+    sky = {whole.key: whole for whole in WHOLES}["sky"]
+    assert "eclipses" in sky.themes
+    assert "eclipse_solar" not in sky.themes
+    assert "eclipse_lunar" not in sky.themes
 
     # Every chapter's article resolves and DESCRIBES its exact dial
     # representation (the sealed state table — the reader's page and the
@@ -1683,20 +1689,23 @@ def test_custom_palette_reaches_the_render():
 # --- ROUND R3: LAYOUT + ARTICLE ORDER + FINISH SWITCHER ------------------------
 
 
-def test_the_home_screen_shows_the_six_wholes():
+def test_the_home_screen_shows_the_nine_wholes():
     """SESSION 27 (owner-sealed 2026-07-28), superseding the five-hall
-    gallery: the home screen carries exactly SIX wholes, each with its
-    own Rose accent, and every theme card is seated in exactly one of
-    them. `planet_signs` is not a card at all — it is one of the
-    Planets card's three LOOKS, and the dial's jump for it resolves
-    through `tree.TOPIC_ALIASES`."""
+    gallery, regrouped from six to NINE wholes by SESSION 35
+    (2026-07-29, "može i 9 grupacija sa ovim novim velikim sekcijama"):
+    the home screen carries exactly nine wholes, each with its own Rose
+    (or, for the ninth, Moon-silver) accent, and every theme card is
+    seated in exactly one of them. `planet_signs` is not a card at all —
+    it is one of the Planets card's three LOOKS, and the dial's jump for
+    it resolves through `tree.TOPIC_ALIASES`."""
     from app.encyclopedia import topics as _topics
     from app.encyclopedia.tree import resolve_target
     from config.encyclopedia_tree import ROSE_ACCENTS_USED, WHOLES
 
     assert [whole.title for whole in WHOLES] == [
-        "The Instrument", "The Celestial Engine", "The Divine",
-        "The Human Wheel", "The Character Cube", "The Living World",
+        "The Instrument", "The Sky", "The Cosmos", "The Gods",
+        "The Faith", "The Character Cube", "The Inner Wheel",
+        "The Living World", "The Worlds",
     ]
     every_card = [theme for whole in WHOLES for theme in whole.themes]
     assert len(every_card) == len(set(every_card)), "no theme in two wholes"
@@ -1769,41 +1778,24 @@ def test_gallery_never_shows_a_horizontal_scrollbar():
 
 def test_every_whole_is_reachable_and_none_is_empty():
     """SESSION 27, replacing the retired `_GALLERY_SUBGROUPS` partition
-    (the old overloaded halls needed sub-headings; six wholes do not):
-    every whole holds at least one card and at most what one screen can
-    carry comfortably, and every card key resolves — a stale name would
-    KeyError the theme screen.
+    (the old overloaded halls needed sub-headings; wholes do not): every
+    whole holds at least one card and at most what one screen can carry
+    comfortably (9 = three full rows), and every card key resolves — a
+    stale name would KeyError the theme screen.
 
-    TWO wholes are over the comfort cap today, each on the record rather
-    than by a raised ceiling:
-
-    - `celestial` gained the Chinese court in completion wave I
-      (Session 31, 2026-07-29) and stands at 10 until the nine-whole arc
-      splits it into `sky` (sun/moon/seasons/eclipses) and `cosmos` (the
-      far sky, where that card's sealed seat actually is).
-    - `human` gained the FRANCHISE cards in completion waves II and III
-      (Sessions 32 and 33, same day) — `wow` took it to exactly 9,
-      `cyberpunk` to 10, `starwars` to 11 — and the same arc dissolves
-      it entirely into `inner` (the emblem families) and `worlds` (the
-      professions, the Corporation and all three franchise cards). The
-      third card widens this ONE carve-out by exactly one rather than
-      opening a new exemption or loosening the cap, because the
-      destination table names "the three FRANCHISE cards" together: all
-      three leave in the same cut.
-
-    Both destinations are named in WORKPLAN-STRUCTURE.md §THE NINE
-    WHOLES. The cap stays 9 for every OTHER whole instead of being
-    loosened globally to hide these two, so each carve-out disappears the
-    moment its split lands and cannot quietly cover a third overloaded
-    whole in the meantime."""
+    SESSION 35 (2026-07-29) dissolved the two carve-outs this test used
+    to carry: `celestial` (10 cards, over cap since completion wave I)
+    split into `sky` and `cosmos`; `human` (11 cards, over cap since
+    completion waves II/III) split into `inner` and `worlds`. Every
+    whole in the nine-whole table fits under the plain cap with no
+    exemption — the carve-outs' designed death."""
     from app.encyclopedia import topics as _topics
     from config.encyclopedia_tree import WHOLES
 
-    pending_split = {"celestial": 10, "human": 11}
     topics = _topics()
     for whole in WHOLES:
         assert whole.themes, whole.key
-        assert len(whole.themes) <= pending_split.get(whole.key, 9), whole.key
+        assert len(whole.themes) <= 9, whole.key
         for theme in whole.themes:
             assert theme in topics, (whole.key, theme)
 

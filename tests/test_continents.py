@@ -228,15 +228,16 @@ def test_topic_ninth_is_living():
     assert pangea["article"] == ("emblem", "ninths", "Pangea")
 
 
-def test_topic_rides_the_celestial_engine():
-    """Gallery placement (owner: The Celestial Engine — the Earth takes
-    its seat among the celestial bodies)."""
+def test_topic_rides_the_cosmos():
+    """Gallery placement (owner: the Earth takes its seat among the far
+    sky's other bodies — reseated from the old Celestial Engine into
+    `cosmos` by Session 35, 2026-07-29)."""
     from config.encyclopedia_tree import WHOLES
 
-    engine = {whole.key: whole for whole in WHOLES}["celestial"]
-    assert "continents" in engine.themes
+    cosmos = {whole.key: whole for whole in WHOLES}["cosmos"]
+    assert "continents" in cosmos.themes
     every = [theme for whole in WHOLES for theme in whole.themes]
-    assert every.count("continents") == 1        # not scattered into two wholes        # not scattered into two halls
+    assert every.count("continents") == 1        # not scattered into two wholes
 
 
 # --- 5. THE LIVE-DIAL BODY ART (earth_style x day/night) ---------------------

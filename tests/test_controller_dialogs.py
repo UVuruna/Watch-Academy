@@ -234,7 +234,7 @@ def test_encyclopedia_opens_at_the_owners_own_opening_screen(controller):
     """SESSION 27 (owner spec 2026-07-28): the Encyclopedia opens — and
     can never be dragged below — the owner's own 1280x720 opening
     screen. The old A4-portrait opening size retired with the two-screen
-    browser: the home screen's 3x2 grid is measured from the viewport,
+    browser: the home screen's 3x3 grid is measured from the viewport,
     so this minimum is what makes "the first screen never scrolls" a
     geometric fact rather than a hope."""
     controller._open_encyclopedia_at(None, 0)
