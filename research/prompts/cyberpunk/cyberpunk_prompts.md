@@ -708,6 +708,36 @@ briefs in this file.
   PRIMARY output generated before this fix (confirmed at least for WoW
   Alliance: Anduin, Khadgar, Muradin) must be REGENERATED from the
   corrected briefs above.
+- **WIRED AND SEATED 2026-07-29 (completion wave II, Session 32).** All
+  three blocks are registered weekday themes — `cp_gangs`,
+  `cp_street`, `cp_corpo` in `constants.WEEKDAY_THEMES` and
+  `METAL_THEMES`, with their seat names, dirs, stems, duals, Ninths
+  (NetWatch / V / Alt Cunningham) and titles in `config/defaults.py`,
+  appended to the "Gaming" picker group the WoW half opened, and ONE
+  Encyclopedia card with a Gangs | Street | Power switcher
+  (`config.encyclopedia_tree.VARIANT_SOURCES`). Every seat, dual, Ninth
+  and title article is written. The sentence below is kept for the
+  record of what this sheet-writing round's scope was; it no longer
+  describes the state of the code.
+- **THE ROTATION SEATS ARE WIRED**, and not the way this sheet
+  guessed. The config ROSTER it anticipated lives in
+  `defaults.WEEKDAY_SEAT_ROSTERS` (`config/defaults.py`, beside the
+  universal rotation convention — NOT in `config/taxonomy.py`, which
+  is the asset-tree hierarchy and knows nothing about seats), and it
+  hooks into `rotating_art_file` itself rather than into any call
+  site: that function is the ONE chokepoint every weekday consumer
+  already goes through, so the dial, the hover legend, the
+  Encyclopedia and the pickers all turn together with no app-code
+  change. Ten seats carry a roster — four in Gangs, three in Street,
+  and Power's synchronized Throne/Mirror/Ninth triad. DECLARED ORDER
+  is the rotation order, which is what actually delivers the
+  "SYNCHRONIZED PAIR ROTATION" above (resolving the pools
+  alphabetically would have paired Saburo with Rache instead of with
+  Alt). A rotating seat's DISPLAY NAME lists every member of its
+  roster and its article argues all of them, so the label can never
+  disagree with the plate; Sunday keeps the Ruler · Servant naming law
+  and names its rotating partners in the two face texts instead.
+  Pinned by four regressions in `tests/test_weekday_rotation.py`.
 - New sheet (R10 GAMING + CORPORATION SHEET WAVE, owner-sealed rosters
   2026-07-22). Theme not yet registered in `config/defaults.py` — that
   wiring, AND the `rotating_art_file` wiring the rotation seats above
@@ -720,9 +750,14 @@ briefs in this file.
   (all 2-way, synchronized as one triad)** — every canonical AND alt/
   alt2 sibling is written out as a full independent brief per the round
   brief's "briefs for ALL" instruction; none are placeholders.
-- **Art: 0/78** — Gangs 14 figures × 2 = 28, Street 13 figures × 2 = 26,
-  Power 12 figures × 2 = 24 (the 3 title plates are tracked separately
-  in [Theme Title Prompts](../titles/theme_title_prompts.md), see
-  above).
+- **Art: 78/78 LANDED** — Gangs 14 figures × 2 = 28, Street 13
+  figures × 2 = 26, Power 12 figures × 2 = 24 — plus all 3 title
+  plates. NOTE for the title-plate root: the three titles did NOT land
+  at the `societies/wolf/` paths written above — that cross-reference
+  predates the title-plate seat law. They sit at
+  `assets/weeks/gaming/cp_<block>/primary/colored/Title.png`, the
+  reserved `Title` stem in each cast's own register, which is what
+  `defaults.theme_title_art` resolves and what the Encyclopedia's
+  opening page reads.
 - Verify with `python main.py "research/prompts/cyberpunk/cyberpunk_prompts.md" --dry-run`
   from `Gadgets/PromptPainter/` before handing the sheet to the owner.
