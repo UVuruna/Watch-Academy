@@ -88,6 +88,32 @@ trace of Session 20's mis-built RING preset reappears (Rule #25 — the
 recurrence pin, since that build came from a canon mis-transcription
 and was deleted whole).
 
+### `test_pointer_shapes.py`
+THE POINTERS REWORK, phase 1 (owner sheet `UV/Pointers.png`, sealed
+2026-07-29) — see
+[The Pointer Shapes](../render/layers.md#the-pointer-shapes). Pins the
+two SHAPES and their geometry, measured on the DRAWN paths rather than
+re-derived from the formulas: one vertex per arm tip; the plain polygon
+really being a square / hexagon / octagon (every sampled point on the
+straight chord, not merely the corners); the CUBE standing in for the
+Trinity's triangle, silhouette-identical to the Cube look's own figure;
+the Calendar's two hexagrams (odd wedges under the even ones) and its
+twelve-point polygon; the Rose's twenty-four rays. The CURVATURE is
+pinned as a law, not as numbers: 0 = the plain polygon, strictly
+monotone inward, 1.0 landing exactly on the star's inner radius, the
+two edge forms agreeing ONLY at 0 — and inert on the Calendar and the
+Rose. The OFFSET WHEELS: the Seasons' boundaries on 12h/3h/6h/9h in
+both shapes, the Prophecy rays on HH:30 while Legacy keeps the hours,
+with a pin that the shift moves no hue off its own ray. The AURA
+alignment (the owner's top-priority fix): golden wedge angles for both
+Rose wheels plus the general law — every ray falls inside the wedge
+drawn in its own hue. Plus the night-border option (clip law, inert
+while daylight is off, and an offscreen pin that it repaints the night
+and not the day) and the settings round-trip of the four new keys
+(defaults for a pre-rework file, `SettingsCorruptError` for a
+hand-edited bad value). `test_the_star_shape_is_untouched_by_the_rework`
+is the regression pin that the default dial did not move.
+
 ### `test_cube_seating.py`
 The Seating geometry goldens (WORKPLAN Session 26, CUBE.md §The
 Seatings). It does NOT merely compare against the sealed constants — it

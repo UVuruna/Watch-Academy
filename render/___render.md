@@ -15,8 +15,10 @@ DAILY layer whose APPEARANCE changes with hover/reveal, so the compositor
 draws it LIVE, never in the cached composite — owner 2026-07-17, ROADMAP
 15f) + `Layer` ABC + the concrete layers
 (closed set): BackgroundLayer (the Umbra brightness wheel + the Aura
-period wedges over the sunlit arc), StarLayer (procedural N-diamond
-star, top tip at solar noon or upright), RingLayer (ring art or the
+period wedges over the sunlit arc, each wedge centred on its own hue's
+RAY GROUP — `aura_wedge_bounds()`), StarLayer (the procedural drawn
+wheel: an N-diamond STAR or the plain POLYGON of the same arms, owner
+sheet 2026-07-29 — top arm at solar noon or upright), RingLayer (ring art or the
 procedural donut with ticks, numerals, per-skin letters), WeekdayLayer
 (hover-variable — themed bodies on the pointer's slots; "ghost" and
 "center_only" modes), CenterBodyLayer and BottomSlotLayer (above the

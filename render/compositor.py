@@ -16,7 +16,7 @@ from functools import lru_cache
 from time import monotonic
 
 from PySide6.QtCore import QPointF, Qt
-from PySide6.QtGui import QImage, QPainter, QPixmap, QPolygonF
+from PySide6.QtGui import QImage, QPainter, QPixmap
 
 from config import archetypes, constants, defaults, paths, profiling
 from config.ui_text import ui
@@ -77,8 +77,8 @@ from render.layers import (
     sunday_dual_face,
     theme_ninth,
     thirteenth_plate,
-    arm_half_deg,
     arm_offset_deg,
+    arm_shape_path,
     weekday_body_orbit,
     weekday_body_size,
     weekday_slots,
@@ -1087,25 +1087,20 @@ class Compositor:
         theta = math.degrees(math.atan2(point.x(), -point.y())) % 360.0
         arms = constants.POINTER_POINTS[self._skin.pointer]
         arm_step = 360.0 / arms
-        # The DRAWN geometry (Rule #5 with StarLayer): the Genesis
-        # offset swings the trio tertiary wheel's arms; the Cube look
-        # widens the family wheels' halves to the full face rhombi.
+        # The DRAWN geometry (Rule #5 with StarLayer): the offset wheels
+        # swing their arms (the Genesis inversion, the Seasons rotation),
+        # the Cube look widens the family wheels' halves to the full face
+        # rhombi — and `arm_shape_path` hands back the very path the
+        # layer paints, so the hover follows the star into the POLYGON
+        # shape instead of hit-testing a diamond that is no longer there.
         offset = arm_offset_deg(self._skin)
         arm_angle = (
             offset
             + round(((theta - rotation - offset) % 360.0) / arm_step)
             * arm_step
         ) % 360.0
-        half = arm_half_deg(self._skin)
-        inner = star_tip / (2.0 * math.cos(math.radians(half)))
-        drawn = arm_angle + rotation
-        diamond = QPolygonF([
-            QPointF(0.0, 0.0),
-            dial_point(drawn - half, inner),
-            dial_point(drawn, star_tip),
-            dial_point(drawn + half, inner),
-        ])
-        if not diamond.containsPoint(point, Qt.FillRule.OddEvenFill):
+        shape = arm_shape_path(self._skin, star_tip, arm_angle + rotation)
+        if not shape.contains(point):
             return None
         return arm_angle
 

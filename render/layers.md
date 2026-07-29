@@ -22,7 +22,11 @@ takes the SKIN now, since the Genesis inversion moves the trio's
 slots), `weekday_slots()` (the ONE reader of
 `POINTER_WEEKDAY_SLOTS`, the Genesis offset applied — Session 20),
 the CUBE-WHEEL trio `arm_offset_deg()` / `cube_look_active()` /
-`arm_half_deg()` (see [The Cube Wheels](#the-cube-wheels)),
+`arm_half_deg()` (see [The Cube Wheels](#the-cube-wheels)), the DRAWN
+WHEEL group `polygon_shape()` / `polygon_faces()` / `drawn_arm_count()`
+/ `drawn_arms()` / `arm_shape_path()` / `wheel_offset_deg()` /
+`aura_wedge_bounds()` / `border_clips()` (see
+[The Pointer Shapes](#the-pointer-shapes)),
 `draw_event_glow()` (the season/moon event halo), the SLOT system:
 `slot_layout()`, `slot_view()`, `weekday_classic_slot()` and the seat
 geometry trio `slot_seat_rotation()` / `slot_seat_scale()` /
@@ -58,8 +62,11 @@ A skin renders with one of SEVEN pointer layouts
 (`SkinDefinition.pointer`, user-overridable): **trio** (Trinity, 3
 hexa-shaped arms), **cross** (Quaternity, 4 × 90°), **hexa** (Prism, 6 ×
 60°), **octa** (Compass, 8 × 45°), **rose** (the Rose — THREE octa
-stars 15° apart, owner 2026-07-27), **aurora** (no arms — day-hue
-wedges only) and **calendar** (no arms — twelve calendar wedges). The arm
+stars 15° apart, owner 2026-07-27), **aurora** (no arms at all — day-hue
+wedges only) and **calendar** (twelve calendar wedges, with two
+hexagrams or a twelve-point star standing on them since the Pointers
+REWORK). Each of them draws in one of two SHAPES — see
+[The Pointer Shapes](#the-pointer-shapes). The arm
 count drives the star geometry, the Aura wedge count and the weekday
 slot layout (`POINTER_WEEKDAY_SLOTS`). Shared slots (cross pairs two
 bodies on three arms) show only the priority winner: the occupant whose
@@ -73,6 +80,99 @@ left) — and the three Cube pointers (trio/hexa/octa) a THIRD, "cube"
 wheel each (owner seal 2026-07-26,
 [The Cube Canon](../CUBE.md)) — see The Cube Wheels below.
 
+<a id="the-pointer-shapes"></a>
+
+## The Pointer Shapes (Pointers REWORK phase 1, owner sheet UV/Pointers.png, sealed 2026-07-29)
+
+Every armed pointer draws in ONE of two shapes, a global choice
+(`Settings.pointer_shape`, `constants.POINTER_SHAPES`):
+
+| Shape | Trinity | Quaternity | Prism | Compass | Calendar | Rose |
+|-------|---------|------------|-------|---------|----------|------|
+| **star** (default) | 3 diamonds | 4 diamonds | hexagram | octagram | TWO hexagrams 30° apart | THREE octagrams 15° apart |
+| **polygon** | the **CUBE** (hexagon of 3 rhombi) | **SQUARE** | **HEXAGON** | **OCTAGON** | one 12-point star | one 24-point star |
+
+Reading the table: the polygon is the star's own arms FATTENED until
+they fill the whole figure — one VERTEX per arm tip, each arm's hue
+filling its kite from the center out to that vertex, boundaries running
+center → edge midpoint. Same palette, same wheel offsets, same rotation
+and day/night law; only the arm's PATH differs. Two exceptions the owner
+named himself: the **Trinity** draws the CUBE instead of a triangle (the
+very hexagon the Cube look already builds — reused, not rebuilt), and
+the **Calendar**'s and the **Rose**'s "polygons" are STARS whose
+adjacent arms merely touch (half-angle `180/N` on 12 and 24 rays), which
+is why no curvature is offered there. Aurora draws no pointer at all and
+ignores the whole setting.
+
+One function per question (Rule #5 — `StarLayer`, the Aura wedges and
+the tests all read these):
+
+- **`polygon_shape(skin)` / `polygon_faces(skin)`** — did the reader ask
+  for a polygon, and is it a TRUE polygon face (trio/cross/hexa/octa)
+  rather than a touching star?
+- **`drawn_arm_count(skin)`** — how many arms really stand on the glass:
+  `POINTER_DIAL_COUNTS` in the polygon shape (24 Rose rays, 12 Calendar
+  rays), one star's arms in the star shape (the Calendar's two hexagrams
+  carry `CALENDAR_STAR_ARMS` = 6 each).
+- **`drawn_arms(skin, colors)`** — the whole wheel as (angle, hue) arms
+  grouped into z-ordered PASSES; the ONE loop that draws every pointer
+  and both shapes.
+- **`arm_shape_path(skin, tip, theta)`** — one arm as a `QPainterPath`:
+  `star_diamond_path` or `polygon_face_path`.
+- **`wheel_rotation(skin, rotation)`** — the solar offset, except on the
+  Calendar, whose figure stands on the wedges it colors and is therefore
+  calendar-FIXED like them.
+
+### The curvature (owner sheet: straight / smooth concave / V-notched)
+
+`polygon_curvature` (0.0–1.0) and `polygon_edge` ("smooth" | "notched")
+touch the FOUR true polygons only. The pull is one law:
+
+```
+FOR EACH outer edge of the figure:
+    mid    = midpoint of the straight edge (its chord)
+    target = tip / (2·cos(the pointer's OWN star half-angle))
+    mid'   = mid pulled along ITS OWN radius from |mid| toward target,
+             by the curvature fraction        # 0 → mid, 1 → target
+    "smooth"  → one quadratic whose CURVE passes through mid'
+                (control = 2·mid' − mid), split at t=0.5 when a face
+                owns only half the edge
+    "notched" → two straight segments meeting at mid' (the V)
+The COLOUR-BOUNDARY edges (centre → boundary corner) never curve.
+```
+
+At 0 both forms draw the plain polygon (vertices on the tip circle,
+edge midpoints on the apothem `tip·cos(180/N)`). At 1 the edge midpoint
+sits exactly where the pointer's own star seats its inner vertex — so a
+V-notched hexagon at full curvature IS the hexagram. On the N-gons the
+boundary corner IS the edge midpoint and travels inward with the pull;
+on the Trinity's cube the boundary corners are hexagon VERTICES at the
+full tip, and the curvature bites the six edges between them.
+
+### Hiding the night borders
+
+`Settings.hide_night_borders` (all pointers): `border_clips(skin, sun)`
+answers `(None,)` — the whole circle, the standing law — unless the
+option is on AND the day/night law is running, in which case the outline
+strokes are clipped to the `lit_regions` arcs alone. The night keeps its
+fills exactly as before and loses the border mesh, which on the Rose
+(24 overlapping rays, each with a lead line) is what the reader saw at
+night instead of the wheel. With the Calendar's/Rose's daylight switch
+OFF everything counts as lit, so the borders return to the full circle.
+
+**Root cause note (Rule #25, 2026-07-29).** The first build of this
+option changed NOTHING on the glass while every helper answered
+correctly. `_draw_arms` clips each arm before stroking its border
+("border as padding"), and it called `painter.setClipPath(shape)` —
+which REPLACES the painter's clip rather than intersecting it, so every
+arm discarded the pass's sunlit-arc clip and stroked the whole circle
+anyway. The fill pass never showed the bug because it sets no clip of
+its own. The call now passes `Qt.ClipOperation.IntersectClip`, and the
+pin is a PIXEL count over the night sector
+(`tests/test_pointer_shapes.py::test_hide_night_borders_leaves_the_
+night_bare`) — asserting `border_clips`' return value alone cannot
+catch it.
+
 <a id="the-cube-wheels"></a>
 
 ## The Cube Wheels (owner seal 2026-07-26, CUBE.md; WORKPLAN Session 20)
@@ -85,26 +185,47 @@ whole geometry (Rule #5 — StarLayer, the Aura wedges, the weekday
 slots, the lit-index math and the compositor's arm hit-test all read
 through them):
 
-- **`arm_offset_deg(skin)`** — THE GENESIS INVERSION (owner: *"trougao
-  ka dole"*): 180° on the trio's tertiary wheel, 0 everywhere else. The
-  trio's arms, Aura hues, weekday slots and hour-spaces all swing onto
-  24h/16h/08h together; `archetype_lit_index` grew a matching
-  `offset` parameter. `weekday_slots(skin)` applies it to
-  `POINTER_WEEKDAY_SLOTS` — pure geometry, each occupant pair stays
-  glued to its arm as it swings (no re-pairing doctrine invented).
+- **`arm_offset_deg(skin)`** — THE OFFSET WHEELS
+  (`constants.WHEEL_ARM_OFFSET_DEG`, one table so a new offset wheel is
+  a line rather than a branch): **180°** on the trio's tertiary wheel —
+  THE GENESIS INVERSION (owner: *"trougao ka dole"*) — and **45°** on
+  the cross's tertiary wheel, THE SEASONS ROTATION (owner 2026-07-29):
+  half a wedge, so the Seasons' colour BOUNDARIES land on 12h/3h/6h/9h
+  and each season begins at its turning point (astronomical), while the
+  cross's Temperaments and Elements wheels stay centred on the cardinals
+  (meteorological). 0 on every other wheel. The wheel's arms, Aura hues,
+  weekday slots and hour-spaces all swing together;
+  `archetype_lit_index` grew a matching `offset` parameter.
+  `weekday_slots(skin)` applies it to `POINTER_WEEKDAY_SLOTS` — pure
+  geometry, each occupant pair stays glued to its arm as it swings (no
+  re-pairing doctrine invented).
+- **`rose_assembly_offset_deg(skin)` / `wheel_offset_deg(skin)`** — the
+  ROSE's own per-wheel shift (owner 2026-07-29): **+7.5°**, half a ray,
+  on PROPHECY, carried by the whole assembly (all three stars, or the
+  24-ray polygon), so every ray CENTRE lands on HH:30 and each hue
+  covers its hours from :00 to :59; LEGACY keeps the full hours. Which
+  hue sits on which ray is untouched — it is a rotation, not a
+  re-anchoring. Unlike the offset wheels this one turns the DRAWN wheel
+  alone (stars + Aura, through `wheel_offset_deg`, which is the sum of
+  the two); the weekday/Ruler/Servant seats and the arm hit-test keep
+  the Rose's eight 45° anchors, and since the shift is smaller than a
+  ray's half-width every seated body still stands inside its own hue
+  group.
 - **`cube_look_active(skin)`** — the Diamond/Cube display toggle
   (`Settings.cube_look`, CUBE.md §Display laws) gates on the
   Double-Trinity FAMILY wheels only: the Court (trio primary), Genesis
   (trio tertiary), the Council (hexa tertiary) — `constants.CUBE_LOOK_WHEELS`.
 - **`arm_half_deg(skin)`** — the DRAWN half-angle: the pointer's slim
-  owner value, EXCEPT under the active Cube look where it widens to
-  the regular `180/N` — and the standing star formula
-  (`inner = tip / 2cos(half)`) then lands the side vertices exactly ON
-  the hexagon rim, so the three (trio) or six (hexa) rhombi tile the
-  hexagon into the corner-view CUBE faces: the Court corner
-  yellow/blue/red, the Genesis corner purple/green/orange, the Council
-  both corners interlocked. Pure angle math — no new geometry code,
-  no art.
+  owner value, EXCEPT wherever the arms fill their whole share of the
+  circle, where it is the regular `180/N` of the DRAWN arm count — the
+  active Cube look, the POLYGON shape, and the Calendar's hexagrams.
+  The standing star formula (`inner = tip / 2cos(half)`) then lands the
+  side vertices exactly ON the hexagon rim, so the three (trio) or six
+  (hexa) rhombi tile the hexagon into the corner-view CUBE faces: the
+  Court corner yellow/blue/red, the Genesis corner purple/green/orange,
+  the Council both corners interlocked. Pure angle math — no new
+  geometry code, no art. (The Trinity's polygon shape resolves to this
+  very same 60°, which is why the two share one construction.)
 
 The cube palettes live in `defaults.PALETTE_PRESETS`: Genesis
 `(#666699, #007E00, #DC9600)` (the Purple-Gray hue law's moon-gray
@@ -117,9 +238,13 @@ Rose POINTER — never a ring, see The Rose below).
 <a id="the-calendar-pointer"></a>
 
 ### The Calendar Pointer (owner 2026-07-16)
-The **Calendar** divides the 24h dial into TWELVE 2-hour wedges and,
-like Aurora, draws NO star arms — the Aura carries the wedge colors
-(`BackgroundLayer`; `StarLayer` skips it). The `palette_style` PICKS
+The **Calendar** divides the 24h dial into TWELVE 2-hour wedges, which
+the Aura carries (`BackgroundLayer`). Since the Pointers REWORK (owner
+sheet 2026-07-29) it also draws a FIGURE over them — two hexagrams in
+the star shape, one twelve-point star in the polygon shape, tips on the
+wedge centres, calendar-FIXED like the wedges themselves; the empty
+calendar of the owner's sheet is the Pointer ELEMENT switched off
+(`show_pointer`), not a third shape. The `palette_style` PICKS
 THE WHEEL (`calendar_wheel()`): **paint = the Zodiac Dozen** (wedge
 boundaries ON the cardinal axes, first hue = the wedge starting at the
 12h line = Cancer, sign boundaries aligned with the year wheel) and
@@ -459,7 +584,31 @@ non-MINUTE layers).
 ### BackgroundLayer (DAILY)
 The UMBRA (gray brightness wheel) rotated with the star, then the AURA
 (transparent hue wedges) at the same rotation, clipped to
-`lit_regions()`: the shared per-regime (start, end, alpha) arcs of the
+`lit_regions()`.
+
+**THE BACKGROUND FOLLOWS THE STAR** (`aura_wedge_bounds()`, the owner's
+top-priority fix 2026-07-29). A hue's wedge is centred on that hue's
+RAY GROUP, never on a bare arm index:
+
+```
+span   = 360 / number of hues
+centre = wheel_offset_deg(skin)        # the wheel's own turn: Genesis,
+                                       # Seasons, the Prophecy half-ray
+       + aura_group_offset_deg(skin)   # the group's MIDDLE ray
+       + hue index * span
+wedge  = centre ± span/2
+```
+
+`aura_group_offset_deg` is the MEAN of the pointer's star offsets: 0 on
+every one-star pointer (the group IS the arm — the standing behaviour),
+−15° on the Rose's Legacy (rays at −30/−15/0) and 0 on its symmetric
+Prophecy. So the Rose's wedge boundaries fall midway between adjacent
+groups — the **HH:30 marks on Legacy, the full hours on Prophecy** —
+instead of cutting a group in half, which is the misalignment the owner
+reported. Golden angles: `tests/test_pointer_shapes.py::
+test_the_aura_wedges_cover_the_rose_ray_groups`.
+
+The wedges are drawn over the shared per-regime (start, end, alpha) arcs of the
 sunlit day (day alpha between sunrise and sunset, twilight alpha over the
 dawn/dusk bands, nothing at night; robust to missing boundaries on
 transitional polar days). With the Colorful element off the same lit
@@ -481,14 +630,23 @@ channel-multiplied by the hue (`tinted_gray`) — the Umbra follows the
 clock body's recolor; the hands do the same through the asset cache.
 
 ### StarLayer (DAILY)
-Procedural N-diamond star (N = pointer arm count; arm half-angles from
-`POINTER_ARM_HALF_ANGLE_DEG`, inner vertices at `tip / (2·cos(half))` —
-tip/√3 for the hexagram; the CROSS borrows the octa arm shape — "octa
-without the diagonals", slim diamonds with gaps — and the TRIO is half
-of hexa, three hexa-shaped arms with gaps): colored BORDERS run
-the full circle so the night diamonds stay recognizable; the FILLS
-(near-full opacity) are clipped to the same `lit_regions()`. The star's
-top tip IS the solar-noon pointer.
+The drawn wheel — a procedural N-diamond STAR or the plain POLYGON of
+the same arms (see [The Pointer Shapes](#the-pointer-shapes)). Star arm
+half-angles come from `POINTER_ARM_HALF_ANGLE_DEG`, inner vertices at
+`tip / (2·cos(half))` — tip/√3 for the hexagram; the CROSS borrows the
+octa arm shape ("octa without the diagonals", slim diamonds with gaps)
+and the TRIO is half of hexa, three hexa-shaped arms with gaps. Colored
+BORDERS run the full circle so the night arms stay recognizable (unless
+`hide_night_borders` clips them to the sunlit arcs); the FILLS
+(near-full opacity) are clipped to the same `lit_regions()`. The
+wheel's top arm IS the solar-noon pointer — except on the Calendar,
+which is calendar-fixed.
+
+The paint is three small methods, so neither the shape nor the day/night
+law knows about the other: `paint` decides WHERE (border clips, then the
+lit regions), `_paint_pass` draws one whole wheel at one alpha inside
+one clip, and `_draw_arms` walks `drawn_arms()`' z-ordered passes,
+asking `arm_shape_path()` for each arm's own geometry.
 
 ### RingLayer (STATIC)
 The full ring image when the skin provides one (numerals and minutes

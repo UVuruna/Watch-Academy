@@ -10,7 +10,7 @@ hold absolute paths; a None asset means "draw procedurally".
 from dataclasses import dataclass, field
 from pathlib import Path
 
-from config import paths
+from config import constants, paths
 
 
 @dataclass(frozen=True)
@@ -244,6 +244,27 @@ class SkinDefinition:
     # Inert on every other pointer, which always runs day/night
     # (render.layers.daylight_active).
     daylight: bool = True
+    # THE POINTER SHAPE (Pointers REWORK phase 1, owner sheet
+    # UV/Pointers.png 2026-07-29): "star" — the diamond stars shipped so
+    # far; "polygon" — the plain polygon of the same arms (square /
+    # hexagon / octagon, the CUBE hexagon on the Trinity), the Calendar's
+    # twelve-point and the Rose's twenty-four-point touching stars.
+    # `config.constants.POINTER_SHAPES`; the armless Aurora ignores it
+    # (render.layers.polygon_shape).
+    pointer_shape: str = constants.POINTER_SHAPE_DEFAULT
+    # THE EDGE PULL of the true polygons (trio/cross/hexa/octa only —
+    # render.layers.polygon_curvature): 0.0 the plain polygon, toward
+    # 1.0 each outer edge's midpoint pulled inward to the star's own
+    # inner radius; `polygon_edge` draws that pull as one concave arc
+    # ("smooth") or as two straight segments meeting in a V ("notched").
+    polygon_curvature: float = constants.POLYGON_CURVATURE_DEFAULT
+    polygon_edge: str = constants.POLYGON_EDGE_DEFAULT
+    # HIDE NIGHT BORDERS (owner option 2026-07-29): with the day/night
+    # law running, the arm/polygon OUTLINE strokes are drawn only over
+    # the sunlit arcs — the night keeps its fills and loses the border
+    # mesh (render.layers.border_clips). False = today's law, borders
+    # around the whole circle.
+    hide_night_borders: bool = False
     # Whether the archetype FIGURES carry their display name (owner
     # 2026-07-18, ROADMAP 15h, Session 21-C) — an INDEPENDENT switch,
     # its own Settings ▸ Display checkbox, no longer sharing

@@ -80,7 +80,18 @@ normalizes it per pointer at render time — on the Calendar
 pointer paint = Zodiac wheel, light = Almanac wheel), `daylight`
 (owner 2026-07-27 — the Calendar's and the Rose's own day/night
 switch; ignored, never rewritten, on the other five pointers, so
-the choice survives a pointer switch), `cube_look`
+the choice survives a pointer switch), the POINTERS REWORK phase-1
+quartet (owner sheet 2026-07-29, additive keys — a file written before
+them simply reads as today's dial): `pointer_shape` ("star" default |
+"polygon", `constants.POINTER_SHAPES` — the drawn wheel is the diamond
+star or the plain polygon of the same arms; inert on the armless
+Aurora), `polygon_curvature` (0.0 default, range
+`constants.POLYGON_CURVATURE_RANGE` — the outer edges' inward pull,
+meaningful on the four TRUE polygons only) with `polygon_edge`
+("smooth" default | "notched", `constants.POLYGON_EDGE_MODES` — the
+concave arc or the V) and `hide_night_borders` (False — the
+arm/polygon outline strokes drawn over the sunlit arcs only, all
+pointers; `render.layers.border_clips`), `cube_look`
 (False — the Diamond/Cube display toggle, CUBE.md §Display laws: the
 Double-Trinity family wheels render as the corner-view cube when on; a
 Settings ▸ Display ▸ Archetype checkbox),

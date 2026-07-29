@@ -36,6 +36,15 @@ the ring preset and the user's display choices onto it at build time.
   `daylight` (owner 2026-07-27, CUBE.md §The Rose — the Calendar and
   the Rose may stand in flat full colour instead of the day/night
   law; inert on the other five, `render.layers.daylight_active`),
+  `pointer_shape` ("star" | "polygon", Pointers REWORK phase 1, owner
+  sheet 2026-07-29 — the drawn wheel is the diamond star or the plain
+  polygon of the same arms; see
+  [The Pointer Shapes](../render/layers.md#the-pointer-shapes)),
+  `polygon_curvature` (0.0–1.0) and `polygon_edge` ("smooth" |
+  "notched") — the outer edges' inward pull and its two forms, read
+  only on the four TRUE polygons (`render.layers.polygon_curvature`),
+  `hide_night_borders` (False — the arm/polygon outline strokes drawn
+  over the sunlit arcs only, `render.layers.border_clips`),
   `calendar_lighting` ("hour" the shichen | "year" the month/sign wedge),
   `archetype_mode` (owner sealed package 2026-07-16 — the active
   (pointer, palette_style) shows ITS archetype: figures in the

@@ -183,14 +183,124 @@ def _saturate_hue(hue: str, factor: float) -> str:
 
 
 def arm_offset_deg(skin: SkinDefinition) -> float:
-    """THE GENESIS INVERSION (owner: "trougao ka dole", CUBE.md): the
-    trio's TERTIARY wheel seats its three arms on the OPPOSITE hours —
-    24h/16h/08h — one 180° offset every arm consumer reads through here
-    (Rule #5): the star diamonds, the Aura wedges, the weekday slots,
-    the lit-index math and the arm hit-test. 0 on every other wheel."""
-    if (skin.pointer, skin.palette_style) == ("trio", "tertiary"):
-        return constants.GENESIS_ARM_OFFSET_DEG
-    return 0.0
+    """THE OFFSET WHEELS (`constants.WHEEL_ARM_OFFSET_DEG`) — the wheels
+    that seat their arms off the pointer's own default angles, read by
+    every arm consumer through this ONE function (Rule #5): the star
+    diamonds and polygon faces, the Aura wedges, the weekday slots, the
+    lit-index math and the arm hit-test.
+
+    - THE GENESIS INVERSION (owner: "trougao ka dole", CUBE.md): the
+      trio's TERTIARY wheel swings 180°, onto 24h/16h/08h.
+    - THE SEASONS ROTATION (owner 2026-07-29): the cross's TERTIARY
+      wheel turns 45°, half a wedge, so its color BOUNDARIES land on
+      12h/3h/6h/9h — the astronomical seasons, each beginning at its
+      turning point. The cross's other two wheels stay centered on the
+      cardinals (meteorological).
+
+    0 on every other wheel."""
+    return constants.WHEEL_ARM_OFFSET_DEG.get(
+        (skin.pointer, skin.palette_style), 0.0
+    )
+
+
+def rose_assembly_offset_deg(skin: SkinDefinition) -> float:
+    """THE PROPHECY SHIFT (owner spec 2026-07-29): +7.5° — half a ray —
+    on the Rose's SECONDARY wheel, carried by the WHOLE assembly (all
+    three stars, or the twenty-four-ray polygon), so every ray CENTER
+    lands on HH:30 and each hue covers its hours from :00 to :59.
+    Legacy keeps the full hours. 0 on every other pointer.
+
+    Unlike `arm_offset_deg` this is a rotation of the DRAWN wheel alone
+    — the stars and the Aura wedges behind them. The weekday seats, the
+    Ruler/Servant seats and the arm hit-test keep the Rose's own eight
+    45° anchors, which is where the seated bodies are drawn and hovered
+    (the shift is smaller than a ray's half-width, so every body still
+    stands inside its own hue group)."""
+    if skin.pointer != "rose":
+        return 0.0
+    return constants.ROSE_WHEEL_ASSEMBLY_OFFSET_DEG[
+        defaults.effective_palette_style(skin.pointer, skin.palette_style)
+    ]
+
+
+def wheel_offset_deg(skin: SkinDefinition) -> float:
+    """The angle the DRAWN wheel — star arms, polygon faces AND the Aura
+    wedges behind them — is turned by: the offset wheels' own rotation
+    plus the Rose's per-wheel assembly shift. ONE reader for both
+    (Rule #5), so a background wedge can never drift off the arms it
+    stands behind."""
+    return arm_offset_deg(skin) + rose_assembly_offset_deg(skin)
+
+
+def aura_group_offset_deg(skin: SkinDefinition) -> float:
+    """Where a hue's Aura WEDGE sits relative to that hue's arm angle:
+    the MEAN of the pointer's star offsets — the CENTER of the hue's ray
+    GROUP (owner's top-priority fix 2026-07-29).
+
+    One star (every pointer but the Rose) means the group is the arm
+    itself and the answer is 0 — the standing behavior. The Rose wears
+    each hue on THREE rays, so the wedge must center on the middle one:
+    −15° on Legacy (rays at −30/−15/0), 0° on Prophecy (−15/0/+15,
+    symmetric). With `wheel_offset_deg` added, Legacy's wedge boundaries
+    land on the HH:30 marks and Prophecy's on the full hours."""
+    offsets = rose_star_offsets(skin)
+    if not offsets:
+        return 0.0
+    return sum(offsets) / len(offsets)
+
+
+def polygon_shape(skin: SkinDefinition) -> bool:
+    """Whether the reader asked for the POLYGON shape on a pointer that
+    HAS one (owner sheet 2026-07-29). Aurora draws no pointer at all, so
+    the setting is inert there — never rewritten, the
+    `effective_palette_style` pattern."""
+    return skin.pointer_shape == "polygon" and skin.pointer != "aurora"
+
+
+def polygon_faces(skin: SkinDefinition) -> bool:
+    """Whether the drawn arm is a POLYGON FACE — the kite filling its
+    share of a plain 3/4/6/8-gon — rather than a star diamond. The
+    Calendar's twelve-point and the Rose's twenty-four-point "polygons"
+    are STARS with touching arms, so they answer False and take the
+    star construction (and, with it, no curvature)."""
+    return polygon_shape(skin) and skin.pointer in constants.POLYGON_POINTERS
+
+
+def drawn_arm_count(skin: SkinDefinition) -> int:
+    """How many arms the drawn wheel really carries — which is NOT
+    always the palette size: the polygon shape counts what the READER
+    counts (`POINTER_DIAL_COUNTS` — the Rose's 24 rays, the Calendar's
+    12), the star shape counts one star's arms (the Rose draws its 8
+    three times; the Calendar's two hexagrams carry 6 each)."""
+    if polygon_shape(skin):
+        return constants.POINTER_DIAL_COUNTS[skin.pointer]
+    if skin.pointer == "calendar":
+        return constants.CALENDAR_STAR_ARMS
+    return constants.POINTER_POINTS[skin.pointer]
+
+
+def arm_half_deg(skin: SkinDefinition) -> float:
+    """The drawn arm half-angle: the pointer's slim-diamond value —
+    EXCEPT wherever the arms fill their whole share of the circle, where
+    the half is the regular `180/N` of the DRAWN arm count:
+
+    - the CUBE look, whose three (trio) or six (hexa) rhombi tile the
+      hexagon exactly — the corner-view cube's visible faces (CUBE.md);
+    - the POLYGON shape, whose faces meet edge to edge (the square's 45°,
+      the hexagon's 30°, the octagon's 22.5°, the cube hexagon's 60°) and
+      whose Calendar/Rose stars have adjacent arms exactly touching
+      (15° on twelve rays, 7.5° on twenty-four);
+    - the CALENDAR's star shape, whose two hexagrams are regular
+      six-point stars (30°).
+
+    The star geometry formula (inner = tip / 2cos(half)) lands the side
+    vertices exactly where each of those figures needs them — the shapes
+    are pure angle math, never new art."""
+    if polygon_shape(skin) or cube_look_active(skin):
+        return 180.0 / drawn_arm_count(skin)
+    if skin.pointer == "calendar":
+        return 180.0 / constants.CALENDAR_STAR_ARMS
+    return constants.POINTER_ARM_HALF_ANGLE_DEG[skin.pointer]
 
 
 def rose_star_offsets(skin: SkinDefinition) -> tuple:
@@ -299,20 +409,6 @@ def cube_look_active(skin: SkinDefinition) -> bool:
         and skin.show_pointer
         and (skin.pointer, skin.palette_style) in constants.CUBE_LOOK_WHEELS
     )
-
-
-def arm_half_deg(skin: SkinDefinition) -> float:
-    """The drawn arm half-angle: the pointer's slim-diamond value —
-    EXCEPT under the CUBE look, where the half widens to the regular
-    180/N so the three (trio) or six (hexa) rhombi tile the hexagon
-    exactly: the corner-view cube's visible faces (CUBE.md — the Court
-    corner yellow/blue/red, the Genesis corner purple/green/orange, the
-    Council both corners interlocked). The star geometry formula
-    (inner = tip / 2cos(half)) already lands the side vertices on the
-    hexagon rim at these values — the look is pure angle math."""
-    if cube_look_active(skin):
-        return 180.0 / constants.POINTER_POINTS[skin.pointer]
-    return constants.POINTER_ARM_HALF_ANGLE_DEG[skin.pointer]
 
 
 def weekday_slots(skin: SkinDefinition) -> tuple:
@@ -1282,6 +1378,269 @@ def pie_path(radius: float, start_deg: float, end_deg: float) -> QPainterPath:
     return path
 
 
+# --- THE DRAWN WHEEL (Pointers REWORK phase 1, owner sheet 2026-07-29) -------
+# One arm is one PATH. Which path — a star diamond or a polygon face —
+# is the only difference between the two shapes; the palette, the wheel
+# offsets, the rotation, the day/night law and the borders are shared
+# code below (Rule #5).
+
+
+def wheel_rotation(skin: SkinDefinition, rotation: float) -> float:
+    """The rotation the drawn wheel rides: the solar offset — except on
+    the CALENDAR, whose figure stands on the wedges it colors and is
+    therefore calendar-FIXED like the wedges themselves (owner spec)."""
+    return 0.0 if skin.pointer == "calendar" else rotation
+
+
+def drawn_arms(
+    skin: SkinDefinition, colors: tuple
+) -> tuple[tuple[tuple[float, str], ...], ...]:
+    """The whole drawn wheel as (angle, hue) arms grouped into PASSES in
+    z-order — the bottom of the stack first, the topmost last. One loop
+    draws every pointer and both shapes (Rule #5):
+
+    ```
+    offset = wheel_offset_deg(skin)              # the wheel's own turn
+    IF pointer is CALENDAR:
+        centres = centre of each of the twelve wedges of the ACTIVE wheel
+        IF shape is polygon → ONE pass: all twelve, hue i on wedge i
+        ELSE                → TWO passes: the ODD wedges' hexagram first,
+                              the EVEN one painted over it
+    ELSE:
+        stars = rose_star_offsets(skin) OR (0,)  # the Rose's three
+        arm k of star s sits at offset + s + k * 360/len(colors)
+        IF shape is polygon on the ROSE → ONE pass of all 24 rays
+                              (they touch instead of overlapping, so
+                              there is no z-stack left to order)
+        ELSE                → one pass per star, in the table's order
+    ```
+    """
+    offset = wheel_offset_deg(skin)
+    if skin.pointer == "calendar":
+        centers = [
+            offset + (start + end) / 2.0
+            for start, end in calendar_wedge_bounds(calendar_wheel(skin))
+        ]
+        if polygon_shape(skin):
+            return (tuple((centers[i], colors[i]) for i in range(len(centers))),)
+        # TWO HEXAGRAMS 30° apart (owner sheet): the star standing on the
+        # EVEN wedge centers is painted last, so it reads over the other.
+        return tuple(
+            tuple(
+                (centers[i], colors[i])
+                for i in range(parity, len(centers), 2)
+            )
+            for parity in (1, 0)
+        )
+    span = 360.0 / len(colors)
+    stars = rose_star_offsets(skin) or (0.0,)
+    arms = tuple(
+        tuple(
+            (offset + star + k * span, color)
+            for k, color in enumerate(colors)
+        )
+        for star in stars
+    )
+    if polygon_shape(skin) and len(stars) > 1:
+        return (tuple(arm for star_arms in arms for arm in star_arms),)
+    return arms
+
+
+def aura_wedge_bounds(
+    skin: SkinDefinition, palette: tuple
+) -> list[tuple[float, float]]:
+    """THE BACKGROUND FOLLOWS THE STAR (owner's top-priority fix
+    2026-07-29) — the (start, end) dial angles of every hue's Aura
+    wedge, hue index 0 first. ONE law: a wedge is centered on its own
+    hue's RAY GROUP, so the wedge behind a group of rays covers exactly
+    those rays and the boundaries fall midway between adjacent groups.
+
+    ```
+    span   = 360 / number of hues
+    centre = wheel_offset_deg(skin)          # the wheel's own turn
+           + aura_group_offset_deg(skin)     # the group's middle ray
+           + hue index * span
+    wedge  = centre ± span/2
+    ```
+
+    On every one-star pointer the group IS the arm and this is the
+    standing behavior. On the ROSE, whose eight hues each wear three
+    rays, the boundaries land on the HH:30 marks (Legacy) and on the
+    full hours (Prophecy) — before this law they cut each group in
+    half, which is the misalignment the owner saw."""
+    span = 360.0 / len(palette)
+    offset = wheel_offset_deg(skin) + aura_group_offset_deg(skin)
+    return [
+        (offset + index * span - span / 2.0, offset + index * span + span / 2.0)
+        for index in range(len(palette))
+    ]
+
+
+def star_inner_radius(skin: SkinDefinition, tip: float) -> float:
+    """Where the pointer's OWN star seats its inner vertices —
+    `tip / (2·cos(half))`, the regular-star value (tip/√3 for the
+    hexagram). It is both the star diamond's own side vertex and the
+    radius a polygon's edge midpoint is pulled to at full curvature, so
+    the two shapes meet there (Rule #5)."""
+    half = constants.POINTER_ARM_HALF_ANGLE_DEG[skin.pointer]
+    return tip / (2.0 * math.cos(math.radians(half)))
+
+
+def polygon_curvature(skin: SkinDefinition) -> float:
+    """The edge pull actually applied: the reader's slider on a TRUE
+    polygon (trio/cross/hexa/octa), 0 everywhere else — the Calendar's
+    and the Rose's polygons are stars, and a star never curves (owner
+    spec). One gate, so the stored value stays untouched on the shapes
+    that ignore it."""
+    return skin.polygon_curvature if polygon_faces(skin) else 0.0
+
+
+def polygon_boundary_radius(skin: SkinDefinition, tip: float) -> float:
+    """The radius of a polygon face's two COLOR-BOUNDARY corners.
+
+    On the plain N-gon that corner IS the outer edge's midpoint, so it
+    sits on the apothem `tip·cos(180/N)` — and travels inward with the
+    curvature exactly as the edge does. The TRINITY's CUBE is the
+    owner's exception: its boundary corners are hexagon VERTICES at the
+    full tip (three rhombi, six vertices), and the curvature bites into
+    the six edges BETWEEN them instead."""
+    if skin.pointer == "trio":
+        return tip
+    apothem = tip * math.cos(math.radians(arm_half_deg(skin)))
+    return apothem + polygon_curvature(skin) * (
+        star_inner_radius(skin, tip) - apothem
+    )
+
+
+def _pulled_midpoint(
+    skin: SkinDefinition, a: QPointF, b: QPointF, tip: float
+) -> QPointF:
+    """One outer edge's midpoint pulled INWARD along its own radius:
+    the chord midpoint at curvature 0 (a straight edge), the star's own
+    inner radius at 1. The angle never moves — only the distance."""
+    mid = QPointF((a.x() + b.x()) / 2.0, (a.y() + b.y()) / 2.0)
+    length = math.hypot(mid.x(), mid.y())
+    target = star_inner_radius(skin, tip)
+    return mid * ((length + polygon_curvature(skin) * (target - length)) / length)
+
+
+def _append_edge(
+    path: QPainterPath, edge_mode: str, a: QPointF, b: QPointF,
+    mid: QPointF, part: str,
+) -> None:
+    """Append the outer edge a→b, bent through its pulled `mid`, to a
+    path already standing at the piece's start point. `part` is "full"
+    (the whole edge), "first" (a→mid) or "second" (mid→b) — a polygon
+    FACE owns half of each of its two edges, the cube's rhombus owns
+    both of its edges whole.
+
+    "notched" draws the two straight segments meeting at `mid`;
+    "smooth" draws the quadratic whose CURVE passes through `mid`
+    (control = 2·mid − chord midpoint), split at t=0.5 by de Casteljau
+    when only half of it is wanted. At curvature 0 `mid` is the chord
+    midpoint itself, the control collapses onto the chord and both
+    modes draw the plain straight edge."""
+    if edge_mode == "notched":
+        if part in ("full", "first"):
+            path.lineTo(mid)
+        if part in ("full", "second"):
+            path.lineTo(b)
+        return
+    chord = QPointF((a.x() + b.x()) / 2.0, (a.y() + b.y()) / 2.0)
+    control = mid * 2.0 - chord
+    if part == "full":
+        path.quadTo(control, b)
+    elif part == "first":
+        path.quadTo((a + control) / 2.0, mid)
+    else:
+        path.quadTo((control + b) / 2.0, b)
+
+
+def star_diamond_path(
+    skin: SkinDefinition, tip: float, theta: float
+) -> QPainterPath:
+    """One star arm: the diamond from the center out to `theta`, its
+    side vertices at `arm_half_deg` either side on the star radius."""
+    half = arm_half_deg(skin)
+    inner = tip / (2.0 * math.cos(math.radians(half)))
+    path = QPainterPath()
+    path.moveTo(0.0, 0.0)
+    path.lineTo(dial_point(theta - half, inner))
+    path.lineTo(dial_point(theta, tip))
+    path.lineTo(dial_point(theta + half, inner))
+    path.closeSubpath()
+    return path
+
+
+def polygon_face_path(
+    skin: SkinDefinition, tip: float, theta: float
+) -> QPainterPath:
+    """One polygon FACE: the kite from the center out to the polygon's
+    vertex at `theta`, widening between the two color boundaries at
+    `theta ± 180/N`. Straight-edged at curvature 0 it is literally the
+    polygon's own slice.
+
+    ```
+    half = 180 / drawn arm count
+    IF pointer is TRINITY (the CUBE):
+        the face is a RHOMBUS of the hexagon — its boundary corners are
+        hexagon VERTICES at the tip radius, and it owns TWO WHOLE
+        hexagon edges (boundary → vertex → boundary)
+    ELSE:
+        the face owns HALF of each of the two polygon edges meeting at
+        its vertex; its boundary corners ARE those edges' midpoints and
+        travel inward with the curvature
+    ```
+    """
+    half = arm_half_deg(skin)
+    # With NO pull the two forms are the same straight edge — drawn as
+    # segments, so the plain polygon really is a polygon of straight
+    # lines rather than a curve that happens to be flat.
+    edge_mode = skin.polygon_edge if polygon_curvature(skin) else "notched"
+    boundary = polygon_boundary_radius(skin, tip)
+    vertex = dial_point(theta, tip)
+    before = dial_point(theta - half, boundary)
+    after = dial_point(theta + half, boundary)
+    path = QPainterPath()
+    path.moveTo(0.0, 0.0)
+    path.lineTo(before)
+    if skin.pointer == "trio":
+        _append_edge(
+            path, edge_mode, before, vertex,
+            _pulled_midpoint(skin, before, vertex, tip), "full",
+        )
+        _append_edge(
+            path, edge_mode, vertex, after,
+            _pulled_midpoint(skin, vertex, after, tip), "full",
+        )
+    else:
+        # The boundary corner IS the pulled midpoint of the edge it
+        # halves — `polygon_boundary_radius` and `_pulled_midpoint`
+        # agree there by construction.
+        _append_edge(
+            path, edge_mode, dial_point(theta - 2.0 * half, tip), vertex,
+            before, "second",
+        )
+        _append_edge(
+            path, edge_mode, vertex, dial_point(theta + 2.0 * half, tip),
+            after, "first",
+        )
+    path.closeSubpath()
+    return path
+
+
+def arm_shape_path(
+    skin: SkinDefinition, tip: float, theta: float
+) -> QPainterPath:
+    """THE ONE arm-geometry entry (Rule #5): the polygon face where the
+    reader asked for a true polygon, the star diamond everywhere else —
+    including the Calendar's and the Rose's polygons, which are stars
+    with touching arms."""
+    if polygon_faces(skin):
+        return polygon_face_path(skin, tip, theta)
+    return star_diamond_path(skin, tip, theta)
+
+
 def lit_regions(sun: SunDay, spec) -> list[tuple[float, float, float]]:
     """(start, end_unwrapped, hue_alpha) arcs of the SUNLIT part of the day
     in wall-clock dial space — full alpha between sunrise and sunset, the
@@ -1323,6 +1682,26 @@ def lit_regions(sun: SunDay, spec) -> list[tuple[float, float, float]]:
     if regime is DaylightRegime.POLAR_DAY:
         return [(0.0, 360.0, spec.day_alpha)]
     return []                                            # POLAR_NIGHT
+
+
+def border_clips(
+    skin: SkinDefinition, sun: SunDay
+) -> tuple[tuple[float, float] | None, ...]:
+    """Where the drawn wheel's OUTLINE strokes are allowed (owner option
+    2026-07-29, `Settings.hide_night_borders`): `(None,)` — the whole
+    circle, no clip — is the standing law, and stays the answer whenever
+    the daylight law itself is off (the Calendar's and the Rose's
+    switch: with the wheel in flat full color EVERYTHING counts as lit).
+    With the option on, the SUNLIT arcs alone: the night keeps its fills
+    exactly as before but loses the border mesh — on the Rose, where 24
+    overlapping rays each carry a lead line, that mesh is what the
+    reader sees at night instead of the wheel. Polar night lights
+    nothing, so nothing is stroked."""
+    if not skin.hide_night_borders or not daylight_active(skin):
+        return (None,)
+    return tuple(
+        (start, end) for start, end, _alpha in lit_regions(sun, skin.star)
+    )
 
 
 def aurora_bands(
@@ -1501,21 +1880,19 @@ class BackgroundLayer(Layer):
             if ctx.skin.colorful
             else (defaults.COLORFUL_OFF_COLOR,)
         )
-        span = 360.0 / len(palette)
-        # The hues center on the DRAWN arms — the Genesis offset swings
-        # the trio tertiary wheel's wedges with its inverted diamonds.
-        offset = arm_offset_deg(ctx.skin)
+        # THE BACKGROUND FOLLOWS THE STAR (`aura_wedge_bounds` — the
+        # owner's top-priority fix 2026-07-29): each hue's wedge covers
+        # its own RAY GROUP, wheel offsets included, so a wedge can
+        # never stand half behind one group and half behind the next.
+        wedges = aura_wedge_bounds(ctx.skin, palette)
         for start, end, alpha in lit_regions(ctx.day.sun, spec):
             painter.save()
             painter.setClipPath(pie_path(aura_radius, start, end))
             painter.setOpacity(alpha)
             painter.rotate(ctx.rotation)
-            for i, color in enumerate(palette):
+            for color, (wedge_start, wedge_end) in zip(palette, wedges):
                 painter.setBrush(QColor(color))
-                center = offset + i * span
-                draw_pie(
-                    painter, aura_radius, center - span / 2, center + span / 2
-                )
+                draw_pie(painter, aura_radius, wedge_start, wedge_end)
             painter.restore()
 
     def _draw_umbra(
@@ -1557,118 +1934,104 @@ class BackgroundLayer(Layer):
 
 
 class StarLayer(Layer):
-    """Procedural N-diamond star whose top vertex points at true solar
-    noon (or straight up with solar rotation off). Colored near-full
-    opacity where the sun is up, borders elsewhere (owner model)."""
+    """The drawn wheel — an N-diamond STAR or the plain POLYGON of the
+    same arms (owner sheet 2026-07-29) — whose top arm points at true
+    solar noon (or straight up with solar rotation off). Colored
+    near-full opacity where the sun is up, borders elsewhere (owner
+    model). The armless Aurora draws nothing here; the Calendar draws
+    its two hexagrams / twelve-point star over its own wedges."""
 
     cadence = Cadence.DAILY
 
     def paint(self, painter: QPainter, ctx: RenderContext) -> None:
         spec = self._skin.star
-        if ctx.skin.pointer in ("aurora", "calendar"):
+        if ctx.skin.pointer == "aurora":
             return          # no geometry at all — the wheel IS the pointer
 
-        # Colored BORDERS run the full circle so the night diamonds stay
-        # recognizable (owner spec)...
-        painter.save()
-        painter.setOpacity(spec.border_alpha)
-        painter.rotate(ctx.rotation)
-        self._draw_diamonds(painter, ctx, fill=False)
-        painter.restore()
+        # Colored BORDERS run the full circle so the night arms stay
+        # recognizable (owner spec) — unless the reader asked for the
+        # night to keep its fills alone (`border_clips`)...
+        for clip in border_clips(ctx.skin, ctx.day.sun):
+            self._paint_pass(painter, ctx, False, spec.border_alpha, clip)
 
         # ...while the FILLS appear only where the sun is up — UNLESS
         # the reader switched the daylight law off (owner 2026-07-27:
         # the Calendar and the Rose carry that switch), in which case
         # the whole wheel stands in flat full color.
         if not daylight_active(ctx.skin):
-            painter.save()
-            painter.setOpacity(spec.day_alpha)
-            painter.rotate(ctx.rotation)
-            self._draw_diamonds(painter, ctx, fill=True)
-            painter.restore()
+            self._paint_pass(painter, ctx, True, spec.day_alpha, None)
             return
         for start, end, alpha in lit_regions(ctx.day.sun, spec):
-            painter.save()
-            painter.setClipPath(pie_path(ctx.radius, start, end))
-            painter.setOpacity(alpha)
-            painter.rotate(ctx.rotation)
-            self._draw_diamonds(painter, ctx, fill=True)
-            painter.restore()
+            self._paint_pass(painter, ctx, True, alpha, (start, end))
 
-    def _draw_diamonds(self, painter: QPainter, ctx: RenderContext, fill: bool) -> None:
-        # THE ROSE (CUBE.md §The Rose): three identical octa stars, 15°
-        # apart, painted bottom-of-the-z-stack first — the same star
-        # drawn three times, never 24 independent arms (Rule #19).
-        for star_offset in rose_star_offsets(ctx.skin) or (0.0,):
-            self._draw_star(painter, ctx, fill, star_offset)
-
-    def _draw_star(
+    def _paint_pass(
         self, painter: QPainter, ctx: RenderContext, fill: bool,
-        star_offset: float,
+        alpha: float, clip: tuple[float, float] | None,
     ) -> None:
+        """One whole-wheel pass at `alpha`, optionally clipped to a dial
+        arc (the lit regions; None = the full circle). The clip is taken
+        in WALL-CLOCK dial space, the wheel drawn inside it in its own
+        rotated frame — the standing order."""
+        painter.save()
+        if clip is not None:
+            painter.setClipPath(pie_path(ctx.radius, *clip))
+        painter.setOpacity(alpha)
+        painter.rotate(wheel_rotation(ctx.skin, ctx.rotation))
+        self._draw_arms(painter, ctx, fill)
+        painter.restore()
+
+    def _draw_arms(
+        self, painter: QPainter, ctx: RenderContext, fill: bool
+    ) -> None:
+        """Every arm of every pass, in z-order (`drawn_arms`) — the
+        Rose's three stars bottom-first, the Calendar's odd hexagram
+        under its even one, one pass everywhere else. The SHAPE is the
+        arm's own path (`arm_shape_path`); nothing else here knows
+        whether a star or a polygon is being drawn."""
         spec = self._skin.star
-        colors = palette_for(ctx.skin)
-        count = len(colors)
-        # The DRAWN half-angle (`arm_half_deg`): the pointer's slim
-        # diamonds — or, under the CUBE look, the regular 180/N halves
-        # whose rhombi tile the hexagon into the corner-view cube faces
-        # (CUBE.md §Display laws). The Genesis offset (`arm_offset_deg`)
-        # swings the trio's tertiary wheel onto 24h/16h/08h.
-        half = arm_half_deg(ctx.skin)
-        offset = arm_offset_deg(ctx.skin) + star_offset
         tip = ctx.radius * spec.radius_fraction
-        # Inner vertices at tip / (2 cos(half)) — the regular-star value
-        # (1/sqrt(3) of the tip for the hexagram); the cross reuses the
-        # octa arm shape, so its arms don't touch (owner spec). Under
-        # the Cube look the same formula lands the side vertices ON the
-        # hexagon rim (trio: tip itself; hexa: tip/√3) — exact tiling.
-        inner = tip / (2.0 * math.cos(math.radians(half)))
         border_width = max(1.0, ctx.radius * spec.border_width_fraction)
-        for k, color in enumerate(colors):
-            theta = offset + k * 360.0 / count
-            diamond = QPolygonF(
-                [
-                    QPointF(0.0, 0.0),
-                    dial_point(theta - half, inner),
-                    dial_point(theta, tip),
-                    dial_point(theta + half, inner),
-                ]
-            )
-            if fill:
-                # THE ROSE'S LEAD (CUBE.md §The Rose — the owner's own
-                # drawing outlines every lancet): three stars share
-                # eight hues, so without a line between them a color
-                # group merges into one mass and the z-order goes
-                # invisible. Each arm is stroked AS IT IS FILLED, in
-                # draw order, so every star reads over the one beneath.
-                if ctx.skin.pointer == "rose":
-                    painter.setPen(
-                        QPen(
-                            QColor(defaults.ROSE_ARM_OUTLINE),
-                            max(
-                                1.0,
-                                ctx.radius * defaults.ROSE_ARM_OUTLINE_WIDTH,
-                            ),
+        for arms in drawn_arms(ctx.skin, palette_for(ctx.skin)):
+            for theta, color in arms:
+                shape = arm_shape_path(ctx.skin, tip, theta)
+                if fill:
+                    # THE ROSE'S LEAD (CUBE.md §The Rose — the owner's
+                    # own drawing outlines every lancet): three stars
+                    # share eight hues, so without a line between them a
+                    # color group merges into one mass and the z-order
+                    # goes invisible. Each arm is stroked AS IT IS
+                    # FILLED, in draw order, so every star reads over the
+                    # one beneath.
+                    if ctx.skin.pointer == "rose":
+                        painter.setPen(
+                            QPen(
+                                QColor(defaults.ROSE_ARM_OUTLINE),
+                                max(
+                                    1.0,
+                                    ctx.radius
+                                    * defaults.ROSE_ARM_OUTLINE_WIDTH,
+                                ),
+                            )
                         )
-                    )
+                    else:
+                        painter.setPen(Qt.PenStyle.NoPen)
+                    painter.setBrush(QColor(color))
+                    painter.drawPath(shape)
                 else:
-                    painter.setPen(Qt.PenStyle.NoPen)
-                painter.setBrush(QColor(color))
-                painter.drawPolygon(diamond)
-            else:
-                # Border as PADDING (owner spec): clip to the diamond and
-                # stroke at double width, so only the inner half shows —
-                # neighboring diamonds' borders sit side by side instead
-                # of overpainting each other along shared edges.
-                clip = QPainterPath()
-                clip.addPolygon(diamond)
-                clip.closeSubpath()
-                painter.save()
-                painter.setClipPath(clip)
-                painter.setPen(QPen(QColor(color), 2.0 * border_width))
-                painter.setBrush(Qt.BrushStyle.NoBrush)
-                painter.drawPolygon(diamond)
-                painter.restore()
+                    # Border as PADDING (owner spec): clip to the arm and
+                    # stroke at double width, so only the inner half
+                    # shows — neighboring arms' borders sit side by side
+                    # instead of overpainting each other along shared
+                    # edges. INTERSECT, never replace: the pass may
+                    # already be clipped to the sunlit arcs
+                    # (`hide_night_borders`), and a plain setClipPath
+                    # would throw that away and stroke the night too.
+                    painter.save()
+                    painter.setClipPath(shape, Qt.ClipOperation.IntersectClip)
+                    painter.setPen(QPen(QColor(color), 2.0 * border_width))
+                    painter.setBrush(Qt.BrushStyle.NoBrush)
+                    painter.drawPath(shape)
+                    painter.restore()
 
 
 class RingLayer(Layer):

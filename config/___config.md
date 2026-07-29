@@ -460,6 +460,32 @@ everywhere else) and the Ruler keeps red at 18h.
 `DAYLIGHT_SWITCH_POINTERS` names the two pointers — Calendar and Rose
 — whose reader may turn the day/night law off.
 
+**THE POINTERS REWORK, phase 1 (owner sheet `UV/Pointers.png`, sealed
+2026-07-29):** `POINTER_SHAPES` ("star" | "polygon", default
+`POINTER_SHAPE_DEFAULT` = "star") — the drawn wheel is the diamond star
+or the plain polygon of the same arms; `POLYGON_POINTERS`
+(trio/cross/hexa/octa) names the four whose polygon really IS a polygon
+and therefore the only ones the curvature touches — the Calendar's
+twelve-point and the Rose's twenty-four-point polygons are stars with
+touching arms. `POLYGON_CURVATURE_RANGE` (0.0–1.0, default
+`POLYGON_CURVATURE_DEFAULT` = 0.0) pulls each outer edge's midpoint
+inward, `POLYGON_EDGE_MODES` ("smooth" the concave arc | "notched" the
+V, default `POLYGON_EDGE_DEFAULT`) says how it is drawn.
+`CALENDAR_STAR_ARMS` = 6 — the Calendar's star shape is TWO hexagrams
+30° apart (the polygon shape is one twelve-point star,
+`POINTER_DIAL_COUNTS`). `WHEEL_ARM_OFFSET_DEG` is now the ONE table of
+wheels that seat their arms off the pointer's defaults —
+`GENESIS_ARM_OFFSET_DEG` 180° on trio tertiary, and the new
+`SEASONS_ARM_OFFSET_DEG` 45° on cross tertiary, which puts the Seasons'
+colour BOUNDARIES on 12h/3h/6h/9h (astronomical seasons; the cross's
+other two wheels stay meteorological). `ROSE_RAY_PITCH_DEG` (15°) and
+`ROSE_WHEEL_ASSEMBLY_OFFSET_DEG` ({Legacy 0°, Prophecy +7.5°}) shift
+the Rose's WHOLE assembly half a ray on Prophecy, so every ray centre
+lands on HH:30 and each hue covers its hours from :00 to :59 — a
+rotation of the drawn wheel and its Aura wedges, never a re-anchoring
+of which hue sits where. Geometry and consumers:
+[The Pointer Shapes](../render/layers.md#the-pointer-shapes).
+
 **THE DUALITY-AXES CONFIG (owner decree 2026-07-28, [The Cube
 Canon](../CUBE.md) §The Thirteen Axes — Display Plans, Session 23):**
 `DUALITY_RULER_ON_COLD_POLE` lists the weekday themes whose Sunday

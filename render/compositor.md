@@ -44,10 +44,14 @@ LIVE (`set_hover()` / `trigger_reveal_week()` no longer drop any cache).
 
 **THE CUBE WHEELS (owner seal 2026-07-26, CUBE.md; WORKPLAN Session
 20):** every arm-geometry consumer here reads the DRAWN geometry
-through `render.layers.arm_offset_deg` / `arm_half_deg` (Rule #5 with
-`StarLayer`): `_arm_angle_at` snaps to the Genesis wheel's inverted
-arms (trio + "cube" → 24h/16h/08h) and widens its hit diamond to the
-Cube-look face rhombi when the toggle dresses a family wheel;
+through `render.layers.arm_offset_deg` / `arm_shape_path` (Rule #5 with
+`StarLayer`): `_arm_angle_at` snaps to the offset wheels' own arms (the
+Genesis inversion trio + tertiary → 24h/16h/08h, the Seasons rotation
+cross + tertiary → the diagonals) and hit-tests THE VERY PATH the layer
+paints — the Cube-look face rhombi when the toggle dresses a family
+wheel, and, since the Pointers REWORK (owner sheet 2026-07-29), the
+POLYGON face when the reader picked that shape, instead of a diamond
+that is no longer drawn;
 `_archetype_lit` feeds the same offset into `archetype_lit_index`, so
 the Genesis hour-spaces count from the Creator's 24h arm. The plain
 (non-archetype) Genesis arm hover speaks its creation office —
@@ -154,8 +158,8 @@ tooltip` — the Rose card carries a computed 24-entry legend, see
   is active; `_element_at` answers `"archetype:center"` over the
   center disc AND `"archetype:<index>"` over each arm DIAMOND (owner
   slika 8, 2026-07-17: the arm figures are hover-enlarge targets
-  through `_arm_angle_at`, the one arm-diamond geometry — checked
-  after the Earth/Moon so the instrument keeps priority); the arm
+  through `_arm_angle_at`, the one arm geometry, star or polygon —
+  checked after the Earth/Moon so the instrument keeps priority); the arm
   figures return the archetype's TWO-ROW article
   (`_archetype_arm_tooltip(index)` → `_archetype_two_rows`: the
   stained glass — real art only — the figure's name, row 1, a rule,
