@@ -24,6 +24,9 @@ one.
 ### Uses
 - [Cube](../config/cube.md) — the thirteen axes, their cells and the
   sealed Rose hue of each face pole
+- [Cube Seating](../core/cube_seating.md) — `cell_color()` (the colour
+  law) and `find_pole()` (the pole lookup `pole()` uses), extracted
+  here so the 3D exporter reads the same two computations (Rule #5)
 - [Config (folder)](../config/___config.md) — the drawing ratios and the
   theme colours
 
@@ -60,7 +63,10 @@ Self-Regard stands vertical exactly as CUBE.md draws it.
 A face pole wears its sealed Rose hue (`cube.ROSE_POLE_HUE`); The One
 wears the dial's accent; **every other cell is the average of the poles
 it stands between** — computed, so a re-tuned palette moves the whole
-cube at once and no hex is ever hand-picked here (Rule #4).
+cube at once and no hex is ever hand-picked here (Rule #4). The
+arithmetic itself lives in `core.cube_seating.cell_color()` (Session
+28): this module wraps it in a `QColor` for the painter, and the 3D
+model exporter reads the exact same hex string.
 
 ## Design Decisions
 

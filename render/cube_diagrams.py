@@ -27,6 +27,7 @@ from PySide6.QtCore import QPointF, QRectF, Qt
 from PySide6.QtGui import QColor, QFont, QPainter, QPen, QPixmap
 
 from config import cube, encyclopedia_ui, palette
+from core import cube_seating
 
 # THE ISOMETRIC EYE. A cube of 27 cells read on a flat page needs a
 # projection that never lets two different cells land on the same point;
@@ -51,32 +52,10 @@ def _project(coords, unit: float) -> QPointF:
 
 
 def _hue(coords) -> QColor:
-    """A cell's own colour. The six face poles wear their sealed Rose
-    hue (`cube.ROSE_POLE_HUE`); the centre wears the dial's accent; every
-    other cell is a blend of the poles it stands between — computed, so
-    a re-tuned palette moves the whole cube at once."""
-    if coords == (0, 0, 0):
-        return QColor(_ONE_HUE)
-    index = cube.ROSE_POLE_HUE.get(coords)
-    if index is not None:
-        return QColor(palette.ROSE_PALETTE[index])
-    reds = greens = blues = count = 0
-    for axis, value in enumerate(coords):
-        if value == 0:
-            continue
-        pole = [0, 0, 0]
-        pole[axis] = value
-        pole_index = cube.ROSE_POLE_HUE.get(tuple(pole))
-        if pole_index is None:
-            continue
-        colour = QColor(palette.ROSE_PALETTE[pole_index])
-        reds += colour.red()
-        greens += colour.green()
-        blues += colour.blue()
-        count += 1
-    if not count:
-        return QColor(_ONE_HUE)
-    return QColor(reds // count, greens // count, blues // count)
+    """A cell's own colour — `core.cube_seating.cell_color()`'s pure hex
+    arithmetic, wrapped in a QColor for the painter (Rule #5: the SAME
+    derivation the 3D exporter reads, one source, two consumers)."""
+    return QColor(cube_seating.cell_color(coords))
 
 
 def _canvas(size: int) -> tuple[QPixmap, QPainter]:
@@ -217,15 +196,7 @@ def pole(name: str, size: int) -> QPixmap:
     rotating 3D previewer (decree 2026-07-29), so until it lands the
     page shows where the seat STANDS — which is the one thing a flat
     figure can honestly say about a 3D position."""
-    entry = next(
-        (
-            (a, end)
-            for a in cube.AXES
-            for end in (a.cold, a.warm)
-            if end.luminous == name
-        ),
-        None,
-    )
+    entry = cube_seating.find_pole(name)
     if entry is None:
         return QPixmap()
     axis_entry, end = entry

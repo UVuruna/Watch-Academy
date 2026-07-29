@@ -7,11 +7,16 @@ wheel changes exactly ONE axis by ONE grade. Everything else — families,
 indices, ray hues, the whole Calendar-12 — is derived from coordinates
 (root Rule 19); only the Rose-24 ring, the survivor of an exhaustive
 search, is recorded in config and re-proved by `solve_rose_seating()`.
+
+`cell_color()` and `find_pole()` (Session 28, the 3D Preview exporter)
+are the SAME derivations `render.cube_diagrams` already drew with —
+extracted here, Qt-free, so the 2D diagrams and the 3D model export
+read one computation instead of two (root Rule #5).
 """
 
 from dataclasses import dataclass
 
-from config import cube
+from config import cube, palette
 
 Coords = tuple[int, int, int]
 
@@ -297,3 +302,53 @@ def calendar_seating(inverted: bool = False) -> tuple[CalendarArm, ...]:
                 axis=axis, inner=inner, outer=outer,
             ))
     return tuple(sorted(arms, key=lambda arm: arm.wedge))
+
+
+# --- colour and pole lookup (shared by the 2D diagrams and the 3D export) -------
+def _hex_to_rgb(value: str) -> tuple[int, int, int]:
+    value = value.lstrip("#")
+    return (int(value[0:2], 16), int(value[2:4], 16), int(value[4:6], 16))
+
+
+def _rgb_to_hex(red: int, green: int, blue: int) -> str:
+    return f"#{red:02X}{green:02X}{blue:02X}"
+
+
+def cell_color(coords: Coords) -> str:
+    """A cell's own hex colour, pure hex arithmetic (Qt-free): the six
+    face poles wear their sealed Rose hue (`cube.ROSE_POLE_HUE`), the
+    centre wears the dial's accent, every other cell is the average of
+    the poles it stands between — computed, so a re-tuned palette moves
+    the whole cube (both its 2D diagrams and its 3D model) at once."""
+    if coords == (0, 0, 0):
+        return palette.THEME_COLORS["accent"]
+    index = cube.ROSE_POLE_HUE.get(coords)
+    if index is not None:
+        return palette.ROSE_PALETTE[index]
+    channels = [0, 0, 0]
+    count = 0
+    for axis, value in enumerate(coords):
+        if value == 0:
+            continue
+        pole = [0, 0, 0]
+        pole[axis] = value
+        pole_index = cube.ROSE_POLE_HUE.get(tuple(pole))
+        if pole_index is None:
+            continue
+        for component, channel in enumerate(_hex_to_rgb(palette.ROSE_PALETTE[pole_index])):
+            channels[component] += channel
+        count += 1
+    if not count:
+        return palette.THEME_COLORS["accent"]
+    return _rgb_to_hex(*(channel // count for channel in channels))
+
+
+def find_pole(name: str) -> tuple[cube.CubeAxis, cube.CubeCell] | None:
+    """The axis and the ONE end whose luminous name is `name` — e.g.
+    `find_pole("Composure")` returns (the Activation axis, its cold
+    end) — or None when no cell carries that name."""
+    return next(
+        ((axis, end) for axis in cube.AXES for end in (axis.cold, axis.warm)
+         if end.luminous == name),
+        None,
+    )

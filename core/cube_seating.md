@@ -22,6 +22,11 @@ a table of words.
   and pins every seat
 - [Research (folder)](../research/___research.md) — the offscreen
   preview generator draws both seatings from here
+- [Cube Diagrams](../render/cube_diagrams.md) — `cell_color()` and
+  `find_pole()`, the 2D drawer's own colour and lookup
+- [Cube Model Export](../data/cube_model_export.md) — the SAME
+  `cell_color()`, plus `family_of`/`SACRED_AXIS` for tier assignment
+  (Session 28's 3D exporter)
 
 ## The laws
 
@@ -100,6 +105,14 @@ FOR each family in primary, secondary, tertiary:
         month := the Almanac wheel's month at that wedge
         outward end := the end whose first non-zero of (x, z, y) is +1
 ```
+
+### `cell_color(coords)` / `find_pole(name)` — shared by 2D and 3D (Session 28)
+Extracted verbatim from `render.cube_diagrams` (Rule #5, one
+computation for two consumers — the 2D drawer and the 3D exporter):
+`cell_color` is pure hex arithmetic (the six sealed Rose hues for the
+poles, the dial's accent for the centre, the average of the poles a
+cell stands between for everything else); `find_pole(name)` is the
+axis+end whose luminous name matches, or `None`.
 
 ## Classes
 
