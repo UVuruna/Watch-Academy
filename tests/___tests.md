@@ -325,6 +325,19 @@ found — PRISM's Council thirty-six lines from its own primary wheel);
 and the table agrees with the pointer roster. `tests/` itself is exempt
 from clause 1 — a probe pixmap's fill is data, not a design decision.
 
+### `test_structure_law.py`
+THE STRUCTURE LAW's guard (root CLAUDE.md, Rule #20 — owner decree
+2026-07-29, supreme): no `.py` file in the project may cross the
+~1,000-line god-file threshold unless it is a named entry in the
+test's RATCHET allowlist, where every entry documents why it is
+tolerated and which session owes the split. The ratchet may only
+SHRINK — a healed or vanished file must leave the list, and adding an
+entry requires the owner's explicit approval in that same session.
+Eleven debtors were named on the law's first day (defaults.py owed to
+Session 36, layers.py/compositor.py to the render split, controller.py
+and observatory.py to an app round, constants.py to a post-36 round,
+five test files to a test hygiene round).
+
 ### `test_ninth_mechanisms.py`
 THE DOUBLE NINTH LAW (owner decree 2026-07-29): every double ninth found
 in ANY registry shape (`WEEKDAY_THEME_NINTH_EASTER_EGG`,
