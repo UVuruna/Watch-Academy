@@ -175,6 +175,43 @@ def test_remove_deletes_the_watch_and_its_settings_file(manager, monkeypatch):
     assert not second_path.exists()
 
 
+def test_remove_closes_the_dial_window_not_only_the_tray_icon(manager, monkeypatch):
+    """REGRESSION (owner bug 2026-07-29): Remove Watch hid the TRAY
+    icon but left the DIAL on screen — a ghost clock with no tray, no
+    scheduler and no owner. `discard()` now closes the window (and the
+    legend popup, and the click-through hover poller) as well."""
+    manager.add_watch(manager._watches[0])
+    second = manager._watches[1]
+    assert second._widget.isVisible()          # it really was on screen
+    _accept_removal(monkeypatch)
+    second._confirm_remove_watch()
+    assert not second._widget.isVisible()
+    assert not second._legend.isVisible()
+    assert not second._hover_poller.isActive()
+
+
+def test_removed_watch_never_resurrects_its_deleted_settings_file(manager, monkeypatch):
+    """REGRESSION (owner bug 2026-07-29, the "only one of two watches
+    actually disappeared after a restart" half): the ghost dial above
+    was still DRAGGABLE, and every move restarted the debounced save —
+    which wrote `settings.<N>.json` straight back after the manager had
+    deleted it, so the removed watch returned on the next launch. A
+    discarded watch must never write its file again, whatever the
+    trigger."""
+    manager.add_watch(manager._watches[0])
+    second = manager._watches[1]
+    second_path = second.settings_path
+    _accept_removal(monkeypatch)
+    second._confirm_remove_watch()
+    assert not second_path.exists()
+    # The exact old resurrection path: a widget move, then the debounced
+    # write it used to schedule (run directly — the test does not wait
+    # out the debounce interval).
+    second._on_widget_moved()
+    second._flush_position()
+    assert not second_path.exists()
+
+
 def test_removed_watch_index_is_never_reused_while_a_higher_one_survives(
     manager, monkeypatch,
 ):

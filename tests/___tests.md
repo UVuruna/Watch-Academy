@@ -276,7 +276,11 @@ own index is never reused while a higher one survives; the menu TITLE
 row (and ONLY the title row — the tray hover stays full always) switches
 short/full as the roster crosses two watches; Exit is wired to the
 manager's `quit_all()` (process-wide) on every watch, Remove Watch stays
-per-watch.
+per-watch. **REGRESSION (owner bug 2026-07-29, Rule #25):** Remove Watch
+closes the DIAL WINDOW (plus legend popup and hover poller), not only the
+tray icon, and a removed watch never resurrects its deleted
+`settings.<N>.json` through a late debounced position save — the two
+halves of the ghost-dial bug, one test each.
 
 ### `test_profiling.py`
 The `@timed` statistics store (owner 2026-07-15): cumulative

@@ -138,12 +138,18 @@ class AppController:
         index guard below is the belt to that suspender against a
         stale double-click race). Tears the watch down WITHOUT saving
         (`discard()`) and deletes its settings file — no further
-        confirmation here, `_confirm_remove_watch` already asked."""
+        confirmation here, `_confirm_remove_watch` already asked.
+
+        `discard()` closes the dial window as well as the tray icon —
+        see its own docstring for the 2026-07-29 ghost-dial bug — and
+        the watch is dropped from `_armed` here so the warm set does
+        not keep a removed watch alive for the rest of the session."""
         if watch.watch_index == 1 or watch not in self._watches:
             return
         watch.discard()
         paths.settings_path(watch.watch_index).unlink(missing_ok=True)
         self._watches.remove(watch)
+        self._armed.discard(watch)
         self._refresh_all_titles()
 
     # --- lifecycle --------------------------------------------------------------

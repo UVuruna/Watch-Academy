@@ -907,6 +907,10 @@ class WatchController(QObject):
         self._store = SettingsStore(settings_path or paths.settings_path(watch_index))
         self._settings = self._load_settings_or_recover()
         self._save_failed = False
+        #: Set by `discard()` (Remove Watch). A discarded watch is DEAD:
+        #: its settings file has just been deleted by the manager, so it
+        #: must never write it again — see `_flush_position`.
+        self._discarded = False
 
         # The cached overlay loads BEFORE the menu builds, so the menu
         # speaks the chosen language from the very first frame (Phase 2);
@@ -1221,7 +1225,13 @@ class WatchController(QObject):
         them explicitly instead of leaving them to the process
         teardown, so their own `finished` handlers (and
         WA_DeleteOnClose) run the ordinary way rather than being cut
-        off mid-flight."""
+        off mid-flight.
+
+        The hover poller and the legend popup are torn down here too
+        (bug 2026-07-29): for Exit the dying process hid them, but a
+        REMOVED watch would otherwise keep polling the global cursor
+        and could leave its tooltip window on screen with no watch
+        behind it."""
         self._widget.mark_closing()
         for dialog in (
             self._encyclopedia, self._observatory,
@@ -1232,6 +1242,8 @@ class WatchController(QObject):
         self._scheduler.stop()
         if self._save_timer.isActive():
             self._save_timer.stop()
+        self._hover_poller.stop()
+        self._legend.dismiss()
         self._tray.hide()
 
     def discard(self) -> None:
@@ -1240,8 +1252,24 @@ class WatchController(QObject):
         scheduler/tray teardown as Exit but deliberately skips the
         save — [the manager](watch_manager.md) deletes this watch's
         settings file right after this call returns, so writing it
-        first would just recreate what is about to be removed."""
+        first would just recreate what is about to be removed.
+
+        THE DIAL ITSELF DIES HERE (owner bug 2026-07-29, root cause).
+        `_teardown_windows()` alone hides the TRAY icon and stops the
+        scheduler but leaves the WINDOW on screen — invisible on Exit,
+        where the process death takes it, but on Remove Watch it left
+        a live ghost dial the user could still see and DRAG. Dragging
+        it fired `moved` → `_on_widget_moved` → the debounced
+        `_flush_position`, which RE-CREATED the settings file the
+        manager had just deleted, so the removed watch came back on the
+        next launch. Closing the window kills both symptoms at the
+        source; `_discarded` is the belt to that suspender (any
+        already-queued save is refused)."""
+        self._discarded = True
         self._teardown_windows()
+        self._widget.close()
+        self._widget.deleteLater()
+        self._legend.deleteLater()
 
     def _prepare_quit(self) -> None:
         """Everything Exit needs from THIS watch except the final
@@ -1753,6 +1781,11 @@ class WatchController(QObject):
         )
 
     def _flush_position(self) -> None:
+        # A REMOVED watch never writes again (owner bug 2026-07-29): the
+        # manager deleted this file the moment `discard()` returned, and
+        # a late save would resurrect the watch on the next launch.
+        if self._discarded:
+            return
         self._capture_position()
         try:
             self._store.save(self._settings)

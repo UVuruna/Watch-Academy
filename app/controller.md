@@ -162,12 +162,28 @@ pattern) rather than guessed:
   [Watch Manager](watch_manager.md)`.quit_all()` can run it for every
   watch before quitting the process exactly once
 - `_teardown_windows()` (ADD WATCH round): closes every open dialog, stops
-  the scheduler and the debounced save timer, hides the tray — the shared
+  the scheduler, the debounced save timer and the click-through hover
+  poller, dismisses the legend popup, hides the tray — the shared
   first half of `_prepare_quit()` (Exit: also saves) and `discard()`
   (Remove Watch: never saves, the file is about to be deleted)
 - `discard()` (ADD WATCH round): Remove Watch's own teardown —
-  `_teardown_windows()` without a save, called by the manager right
-  before it deletes this watch's settings file
+  `_teardown_windows()` without a save, **then closes and deletes the
+  dial window itself** (and the legend popup), called by the manager
+  right before it deletes this watch's settings file.
+
+  > **Root cause fixed 2026-07-29 (owner report, Rule #25).** Remove
+  > Watch used to run `_teardown_windows()` alone, which hides the TRAY
+  > icon but leaves the WINDOW on screen. On Exit that is invisible —
+  > the dying process takes the window with it — but on Remove Watch it
+  > left a live GHOST DIAL: still painted, still draggable, with no tray
+  > and no owner. Worse, dragging the ghost still fired `moved` →
+  > `_on_widget_moved()` → the debounced `_flush_position()`, which
+  > RE-CREATED the `settings.<N>.json` the manager had just deleted, so
+  > the "removed" watch came back on the next launch (the owner had to
+  > restart twice to lose two watches). `discard()` now closes and
+  > deletes the window, and `_discarded` refuses any late write.
+  > Pinned by `test_remove_closes_the_dial_window_not_only_the_tray_icon`
+  > and `test_removed_watch_never_resurrects_its_deleted_settings_file`
 - `refresh_title()` (ADD WATCH round): public hook for the manager —
   re-renders the TITLE row and tray tooltip after the roster changes
   (`watch_count()` just moved for every SURVIVING watch, not only the one
@@ -178,7 +194,10 @@ pattern) rather than guessed:
   never a silent reset (Rule #1)
 - `_on_widget_moved()` / `_flush_position()`: debounced position
   persistence; a mid-run save failure surfaces as a tray error balloon
-  (once per failure streak) instead of dying silently
+  (once per failure streak) instead of dying silently. `_flush_position`
+  refuses to write for a DISCARDED watch (`_discarded`, set by
+  `discard()`) — its settings file has just been deleted and a late
+  save would resurrect it on the next launch
 - `_build_menu()`: the shared tray/right-click menu, every level a
   `_StayOpenMenu` — CHECKABLE picks keep the menu open for several
   settings in one visit; plain actions close as usual (a rebuild while

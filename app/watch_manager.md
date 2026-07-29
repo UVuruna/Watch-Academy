@@ -79,8 +79,11 @@ compacting the roster after every removal.
   only — `WatchController` itself never BUILDS the entry on watch 1; the
   `watch_index == 1` guard here is the belt to that suspender against a
   stale double-click race). `watch.discard()` tears it down WITHOUT
-  saving, then its settings file is deleted and it drops out of the
-  roster — no further confirmation here, `WatchController.
+  saving — dial window included, see [Watch Controller](controller.md)'s
+  `discard()` for the 2026-07-29 ghost-dial bug — then its settings file
+  is deleted and it drops out of the roster AND out of `_armed` (so a
+  removed watch is not kept alive by the warm set for the rest of the
+  session); no further confirmation here, `WatchController.
   _confirm_remove_watch` already asked
 - `run()`: `run()` on every watch in the roster — unchanged per-watch
   behavior, just looped
