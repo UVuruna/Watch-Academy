@@ -846,7 +846,7 @@ has **ONE CROWN** (the top wedge, 12h), **ONE ROOT** (the bottom wedge,
 its exact opposite across the center. System B carries the dozens
 defined by OPPOSITES: an emotion and its cure, a virtue and its failing.
 
-**The four Dozens (owner-approved, Phase 3). EVERY SEAT OF ALL FOUR IS
+**The five Dozens (owner-approved, Phase 3). EVERY SEAT OF ALL FIVE IS
 SEALED (owner 2026-07-29)** — nothing below waits on a wiring round any
 more, and each Dozen now names its CENTER as well as its rim:
 
@@ -856,6 +856,7 @@ more, and each Dozen now names its CENTER as well as its rim:
 | **Virtue Wheel** (Virtues + Vices, two registers of one wheel) | B | crown, root, six axes; paint/light | Magnanimity·Vanity 12h / Just Indignation·Envy 24h | **Prudence** (light) · **Cunning** (paint) | `calendars/virtue_wheel_prompts.md` |
 | **Olympians** | A | six pairs | Zeus+Hera / Demeter+Poseidon | **Hestia** | `calendars/olympians_prompts.md` |
 | **Apostles** | A | six pairs | Peter+Andrew / Judas+Simon | **Jesus** | `calendars/apostles_prompts.md` |
+| **Sins** | B | crown, root, six opposition axes | Pride 12h / Treachery 24h | **Hardness of Heart** | `calendars/sins_prompts.md` |
 
 ### The Axle — the Thirteenth in the Center (owner seal 2026-07-29)
 
@@ -871,7 +872,9 @@ Each roster's own story gives its axle the polarity:**
 - **the THRONE** — the axle is enthroned, and the twelve are gathered
   around it: **Jesus** above the Twelve; **Sol**, the Sun's own month at
   the top of the year; **Prudence**, who steers; **Peace**, the still
-  point every emotion runs toward.
+  point every emotion runs toward; **Hardness of Heart** on the
+  ANTI-throne, Satan fixed in Cocytus' ice while the twelve sins turn
+  around him.
 - **the HIDING PLACE** — the axle is the one left out, displaced or
   hidden: **Ophiuchus**, the sign astronomy knows and astrology omits;
   **The Cat**, cheated out of the race; **Modrenik**, the dark month of
@@ -887,11 +890,14 @@ this is the law:**
   only in a 13-full-moon year (~37% of years) and only inside their own
   short window; The Cat rides the REAL lunisolar leap month. Most years
   they are simply not there.
-- **PERSON-CENTERS stand ALWAYS.** The enthroned never leave, and
-  neither do those who chose the hearth: Jesus, Hestia,
-  Prudence/Cunning and Peace are present every day of every year — no
-  moon count, no window. A wheel with no center does not turn; it only
-  spins.
+- **ALWAYS-CENTERS stand on EVERY date.** The enthroned never leave,
+  and neither do those who chose the hearth: Jesus, Hestia,
+  Prudence/Cunning, Peace and Hardness of Heart are present every day
+  of every year — no moon count, no window. A wheel with no center does
+  not turn; it only spins. (This half was first written "person-
+  centers", and the word no longer holds: Peace and Hardness of Heart
+  are STATES, not persons. The seam was never personhood — it is
+  *not being a leftover month*.)
 
 Hestia is the case that proves the two seams are different: a
 hiding-place STORY, yet permanently present, because she is a person
@@ -900,6 +906,24 @@ while the twelve ride out** (Plato, *Phaedrus* 246e–247a — *"Hestia
 alone abides at home in the house of the gods"*) and the Pythagoreans'
 central fire, the **"hearth of the cosmos"** (Philolaus); **Jesus** —
 *"I am with you always, to the end of the age"* (Matthew 28:20).
+
+**THE CENTER-PAIR LAW (owner seal 2026-07-29).** The axles pair the way
+the wheels do — a center is never sealed alone once its opposite wheel
+exists. Two pairs stand:
+
+- **the two CHARIOTEERS — Prudence · Cunning.** One judgment, one
+  skill, seated at the two centers of ONE wheel's two registers: the
+  charioteer who finds every mean and the dark charioteer who does not
+  miss the road but CHOOSES the cliff (§The Virtue Wheel).
+- **the two STILLNESSES — Peace · Hardness of Heart.** The Emotions
+  Dozen's center and the Sins Dozen's are the same posture read twice:
+  **the heart still because it RESTS** and **the heart still because it
+  FROZE** (§The Sins Dozen). Every other member of both wheels MOVES a
+  person; these two are what is left when nothing moves him.
+
+The law is a reading rule, not a mechanism: a paired axle must be
+argued AGAINST its twin, never in isolation — the twin is half of what
+the seat means.
 
 ### The Emotions Dozen (System B)
 
@@ -1062,77 +1086,92 @@ themselves stay flat color (§The Calendar). Each Dozen wears the
 calendar-mount rondel register (night-window stained glass) with its own
 shared border device — the Wheel of the Heart for Emotions, the Mean's
 balance-beam for the Virtue Wheel, the Greek key for the Olympians, the
-fisherman's Net for the Apostles.
+fisherman's Net for the Apostles, the ring of FROSTWORK for the Sins.
 
 **The axle rides the mount's CENTER seat** — the same seat the calendar
 thirteenths already use (`config/defaults.CALENDAR_MOUNTS` carries a
-`centre` per mount). The four person-centers sealed above are canon as
+`centre` per mount). The six always-centers sealed above are canon as
 of 2026-07-29; registering them, and their art, is a wiring round that
 follows the seal — the seating is the thing that was owed, and it is now
 paid.
 
-### The Sins Dozen — a fifth Dozen, PROPOSED (NOT mounted)
+### The Sins Dozen (System B) — SEALED 2026-07-29
 
-**Status: PROPOSED. Awaiting the owner's per-seat verdict and his pick
-for the center.** Nothing here is sealed, no prompt sheet exists, and
-none is written until the owner rules. The owner approved DRAFTING a
-Sins roster beside the Aristotelian vices, and the two are deliberately
-different traditions: the Virtue Wheel's paint register is Aristotle's
-twelve failings of the MEAN, while this Dozen is the Christian
-tradition's catalogue of SIN — Gregory the Great, Evagrius, Dante.
-System B (crown, root, six axes), as befits a wheel of opposites.
+The fifth Dozen, and the deliberate counterpart of the Virtue Wheel's
+paint register: those twelve are Aristotle's failings of the MEAN, a
+measure missed by too much or too little; these twelve are the
+Christian tradition's catalogue of SIN — Gregory the Great, Evagrius,
+Aquinas, Dante — where the fault is not a measure missed but a bond
+broken. Two traditions on one instrument, never merged. System B
+(crown, root, six opposition axes), as befits a wheel of opposites.
+**Every seat SEALED by the owner 2026-07-29:**
 
-**The center, PROPOSED: PRIDE.** The tradition itself pulled Pride out
-of the wheel: Gregory took it OFF the list of seven and made it the
-ROOT of all of them — *"radix quippe cuncti mali superbia est"*, pride
-is the root of all evil (*Moralia* XXXI), the queen from whom the seven
-proceed. A roster whose own author removed a member and set it over the
-rest is describing an AXLE, not a seat: always present, the sin that
-watches all the others, throne polarity. *"Pride goeth before
-destruction"* (Proverbs 16:18).
-
-**The weighed alternative, for the owner to pick against:
-BLASPHEMY AGAINST THE SPIRIT** — the unforgivable sin, *"hath never
-forgiveness"* (Mark 3:29). It argues the center from the other side:
-not the sin that fathers the rest, but the one that cannot turn back —
-the only still point in a wheel of sins that all still admit repentance.
-Pride is proposed because it is the tradition's own structural choice;
-the Unforgivable is proposed because it is the only sin that literally
-cannot move.
-
-| Hour | Sin | The argument, and its resonance |
+| Hour | Sin | Why this seat |
 |---|---|---|
-| **12h — crown** | **Vainglory** | the rim-face of the axle: exactly the seat Gregory left behind when he lifted Pride out of the seven. The crown of a wheel of sins is the sin that WANTS the crown — and it locks onto the Virtue Wheel's own Vanity at 12h, the same hour, the same hue |
-| 14h | Hypocrisy | the hour of the word about oneself (Truthfulness/Boastfulness on the Virtue Wheel): the settled lie, the *whited sepulchre* (Matthew 23:27) — *hypokrites* is Greek for stage-player, brightest at midday and hollow within |
-| 16h | Violence | Courage's orange arm on two wheels; violence is fortitude's ATTACK-act (the sealed 16↔04 *aggredi*) turned rabid — Dante's seventh circle, violence against neighbour, self and God |
-| 18h | Avarice | the ember hour of Ambition and Right Ambition, the reach for MORE turned into possession without end: *"he that loveth silver shall not be satisfied with silver"* (Ecclesiastes 5:10) |
-| 20h | Lust | the red arm, Pride's own hour and the passion hour of the early night: appetite for the body as pride is appetite for the self (Matthew 5:28) |
-| 22h | Envy | the crimson wound-hour the Emotions Dozen already gives Envy, one step before the root — the bruise on the way to midnight: *"through envy of the devil came death into the world"* (Wisdom 2:24) |
+| **12h — crown** | **Pride** | Gregory's root RETURNS to the rim. He lifted pride off the seven and set it over them — *"radix quippe cuncti mali superbia est"* (*Moralia* XXXI) — and Vainglory existed on his list ONLY as the seat pride had vacated; the owner's seal folds Vainglory back INTO Pride, one seat, the stronger word. *"Pride goeth before destruction"* (Proverbs 16:18) |
+| 14h | **Hypocrisy** | the hour of the word about oneself (Truthfulness/Boastfulness on the Virtue Wheel): the settled lie, the *whited sepulchre* (Matthew 23:27) — *hypokrites* is Greek for stage-player, brightest at midday and hollow within |
+| 16h | **Violence** | fortitude's ATTACK-act (the sealed 16↔04 *aggredi*) turned rabid — Dante's seventh circle, violence against neighbour, self and God, on Courage's own orange arm across two other wheels |
+| 18h | **Avarice** | the ember hour of Ambition and Right Ambition, the reach for MORE turned into possession without end: *"he that loveth silver shall not be satisfied with silver"* (Ecclesiastes 5:10) |
+| 20h | **Lust** | the red arm's appetite in the passion hour of the early night: hunger for the body as pride is hunger for the self — *"whosoever looketh on a woman to lust after her"* (Matthew 5:28) |
+| 22h | **Envy** | the crimson wound-hour the Emotions Dozen already gives Envy, one step before the root — the bruise on the way to midnight: *"through envy of the devil came death into the world"* (Wisdom 2:24) |
 | **24h — root** | **Treachery** | the root law: *the bottom of every wheel is where love breaks* — and treachery is the only sin that REQUIRES love first, a bond made and then broken. Dante's ninth and deepest circle is the traitors' ice, with Judas in Satan's own mouth (*Inferno* XXXIV), and the Apostles Dozen already seats Judas at 22–24h: the man and his sin end at the same midnight. *"He that eateth bread with me hath lifted up his heel against me"* (John 13:18) |
-| 02h | Despair | the indigo hour the Emotions give Despair — and in the tradition despair is a SIN, the sin against Hope (Aquinas, ST II-II q.20), the refusal of a mercy that was offered: Judas's second sin, which the tradition calls worse than his first (Matthew 27:5) |
-| 04h | Wrath | the darkest hour, where the Virtue Wheel already seats Wrath as Patience's failure — endurance snapped: *"let not the sun go down upon your wrath"* (Ephesians 4:26), and at four in the morning the sun has been down all night |
-| 06h | Idolatry | Doubt's teal hour, the divided step: idolatry is the will choosing the wrong god at the fork — *"how long halt ye between two opinions?"* (1 Kings 18:21), Elijah's challenge as the exact image the Emotions' Doubt window already draws (Exodus 20:3–4) |
-| 08h | Gluttony | the green arm of Humility and renunciation, the hour of the DAILY gift (Generosity/Greed): gluttony is renunciation's flat refusal, the daily bread devoured instead of shared — *"whose God is their belly"* (Philippians 3:19) |
-| 10h | Acedia | Gratitude's chartreuse hour, and its exact refusal: Aquinas defines acedia as *tristitia de bono spirituali*, sorrow at one's OWN good (ST II-II q.35). Its most famous name, the *noonday demon* (Psalm 91:6), is the one thing this seating cannot honour — noon is the crown |
+| 02h | **Despair** | the indigo hour the Emotions give Despair — and in the tradition despair is a SIN, the sin against Hope (Aquinas, ST II-II q.20), the refusal of a mercy that was offered: Judas's second sin, which the tradition calls worse than his first (Matthew 27:5) |
+| 04h | **Wrath** | the darkest hour, where the Virtue Wheel already seats Wrath as Patience's failure — endurance snapped: *"let not the sun go down upon your wrath"* (Ephesians 4:26), and at four in the morning the sun has been down all night |
+| 06h | **Idolatry** | Doubt's teal hour, the divided step: idolatry is the will choosing the wrong god at the fork — *"how long halt ye between two opinions?"* (1 Kings 18:21), Elijah's challenge as the exact image the Emotions' Doubt window already draws (Exodus 20:3–4) |
+| 08h | **Gluttony** | the green arm of Humility and renunciation, the hour of the DAILY gift (Generosity/Greed): gluttony is renunciation's flat refusal, the daily bread devoured instead of shared — *"whose God is their belly"* (Philippians 3:19) |
+| 10h | **Acedia** | Gratitude's chartreuse hour, and its exact refusal: Aquinas defines acedia as *tristitia de bono spirituali*, sorrow at one's OWN good (ST II-II q.35). Its most famous name, the *noonday demon* (Psalm 91:6), is the one thing this seating cannot honour — noon is the crown |
 
-**The six axes that fall out (proposed with the seats):** 12↔24
-vainglory's empty crown ↔ the bond destroyed; 14↔02 the lie told to
-others ↔ the lie believed about oneself; 16↔04 fortitude's two acts
-corrupted — the attack turned rabid ↔ the endurance snapped; 18↔06 the
-two false gods, the thing hoarded ↔ the thing worshipped (*"covetousness,
-which is idolatry"*, Colossians 3:5 — Paul names this axis himself);
-20↔08 the two appetites of the flesh; 22↔10 Aquinas' two sorrows —
-sorrow at ANOTHER's good ↔ sorrow at ONE'S OWN.
+**The six axes, each with its meaning:**
 
-**Drafting notes for the verdict.** Gregory's seven already stand
-WITHOUT pride — vainglory, envy, wrath, *tristitia*, avarice, gluttony,
-lust, with pride lifted above them — and Evagrius' acedia makes eight;
-but *tristitia* and acedia are ONE sorrow in the tradition, so they are
-seated once, at 10h, leaving seven. The five that complete the twelve
-come from the broader tradition: hypocrisy, violence, idolatry, despair
-and treachery. **Cruelty was weighed and set aside** — treachery
-contains it and carries the deeper anchor; if the owner wants cruelty as
-its own seat, 16h is where it goes and violence yields.
+| Axis | What it opposes |
+|---|---|
+| 12 ↔ 24 | **Pride ↔ Treachery** — the crown of SELF faces the breaking of FAITH: love of self carried to its end IS betrayal of the other. The wheel's own longest sentence, spoken from the top to the bottom |
+| 14 ↔ 02 | **Hypocrisy ↔ Despair** — the lie told to OTHERS ↔ the lie believed about ONESELF (that no mercy is left) |
+| 16 ↔ 04 | **Violence ↔ Wrath** — fortitude's two acts corrupted: the ATTACK turned rabid ↔ the ENDURANCE snapped (the Virtue Wheel's own *aggredi*/*sustinere* axis, read in sin) |
+| 18 ↔ 06 | **Avarice ↔ Idolatry** — the two false gods: the thing HOARDED ↔ the thing WORSHIPPED. Paul names this axis himself — *"covetousness, which is idolatry"* (Colossians 3:5) |
+| 20 ↔ 08 | **Lust ↔ Gluttony** — the two appetites of the flesh, the body wanted ↔ the bread wanted |
+| 22 ↔ 10 | **Envy ↔ Acedia** — Aquinas' two sorrows: sorrow at ANOTHER's good ↔ sorrow at ONE'S OWN |
+
+**What the seal changed.** Vainglory no longer holds the crown — it is
+GONE as a seat, absorbed into Pride, and the 12h axis now reads across
+three wheels at once: **Magnanimity** (the virtue) — **Vanity** (its
+failing) — **Pride** (the sin): one axis of self-regard, three
+readings, each wheel adding a degree. The canon's own guard applies
+here and must not be blurred: the Emotions Dozen's **PONOS at 20h**
+(warm red) is a POLE, not a vice — *the sin is only the tip past the
+clear heart* — and Pride-the-sin is exactly that tip, a different thing
+from the healthy pole. The two face each other ACROSS the wheels, 12h
+looking down at 20h, which is the point of stacking Dozens at all. At
+16h the ruling is **Violence**; **Cruelty stays weighed and set aside**
+— treachery contains it and carries the deeper anchor. Gregory's seven
+stand without pride (vainglory, envy, wrath, *tristitia*, avarice,
+gluttony, lust) and Evagrius' acedia makes eight; *tristitia* and
+acedia are ONE sorrow in the tradition, so they are seated once, at
+10h. The five that complete the twelve come from the broader tradition:
+pride restored to the rim, hypocrisy, violence, idolatry, despair and
+treachery.
+
+**The center (SEALED 2026-07-29): HARDNESS OF HEART
+(*sklerokardia*), always present — the ANTI-PEACE.** The centers pair
+the way the wheels do (§The Axle, THE CENTER-PAIR LAW): Prudence and
+Cunning are the two CHARIOTEERS, and Peace and Hardness of Heart are
+the two STILLNESSES — **Peace, the heart still because it RESTS;
+Hardness of Heart, the heart still because it FROZE.** Every other sin
+on this wheel MOVES a person; this one is the state in which nothing
+can move him any more. The anchors: **Mark 3:5 → Mark 3:29, the SAME
+scene** — Jesus looks around *"being grieved for the hardness of their
+hearts"*, and to those same hardened hearts He speaks the warning about
+blasphemy against the Spirit, *which "hath never forgiveness"*.
+Hardness is the MECHANISM of the unforgivable: a frozen heart refuses
+the very source of forgiveness, so nothing can reach it — which is why
+the weighed alternative, **Blasphemy against the Spirit, is not
+rejected but ABSORBED** (the sin is named at the center by its cause,
+not by its verdict). Pharaoh's hardened heart runs the same law through
+Exodus. And Dante's bottom of hell is ICE, not fire — **Cocytus**, the
+frozen lake, the anti-peace made geography — and in that ice sit the
+TRAITORS, which puts the Treachery root (24h) directly above the frozen
+center it belongs to. Throne polarity, the anti-throne: Satan fixed in
+the ice at the center while the twelve turn around him.
 
 <a id="the-triads"></a>
 

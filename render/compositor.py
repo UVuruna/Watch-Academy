@@ -1870,9 +1870,9 @@ class Compositor:
 
         THE AXLE LAW (CANON §The Axle) splits the closing line in two:
         a calendar-driven 13th is a blue-moon guest, empty every other
-        day; a PERSON-CENTER (`constants.PERSON_CENTERS`) is the axle
-        the twelve turn on, present on literally every date instead. A
-        person-center whose Encyclopedia article is not written yet
+        day; an ALWAYS-CENTER (`constants.AXLE_ALWAYS_CENTERS`) is the
+        axle the twelve turn on, present on literally every date
+        instead. An always-center whose Encyclopedia article is not written yet
         (`family is None` in `constants.THIRTEENTHS` — the graceful-
         absent contract, same as a missing art plate) skips the
         `entry()` lookup entirely rather than crash on an unwritten
@@ -1882,7 +1882,7 @@ class Compositor:
         bare " …", not this line)."""
         name, asset = thirteenth_plate(key)
         _display, family, article_name = constants.THIRTEENTHS[key]
-        axle = key in constants.PERSON_CENTERS
+        axle = key in constants.AXLE_ALWAYS_CENTERS
         closing = (
             "The one who does not turn with the twelve: always present, "
             "the Calendar pointer's own dial center." if axle else

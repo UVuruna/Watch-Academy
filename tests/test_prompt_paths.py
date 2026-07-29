@@ -129,6 +129,10 @@ _DATA_DRIVEN_ROOTS = (
     "calendars/vices",
     "calendars/olympians",
     "calendars/apostles",
+    # The FIFTH Dozen (owner-sealed 2026-07-29): the Sins, System B —
+    # Pride crowns, Treachery roots, axle Hardness of Heart. Sheet:
+    # `research/prompts/calendars/sins_prompts.md`.
+    "calendars/sins",
     # RESTRUCTURE Phase 3: the ABSTRACT trinity/duality art — the Trio's
     # stacked readings (Time, Callings, Theological, Dialectic) and the
     # two great dualities (Good/Evil, Self/Others), each concept a

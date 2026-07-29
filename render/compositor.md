@@ -309,18 +309,18 @@ tooltip` — the Rose card carries a computed 24-entry legend, see
   naming it "the Calendar pointer's own dial center, empty every other
   day" (the old "theme steps aside" wording is retired — no OTHER
   theme's center face is ever displaced now). THE AXLE LAW (CANON §The
-  Axle, owner-sealed 2026-07-29) gives the five PERSON-CENTERS
-  (`constants.PERSON_CENTERS`) their OWN closing line instead —
+  Axle, owner-sealed 2026-07-29) gives the ALWAYS-CENTERS
+  (`constants.AXLE_ALWAYS_CENTERS`) their OWN closing line instead —
   `[[The Axle]]`, "always present" rather than "empty every other
   day" — and skips the `entry()` call entirely where no article is
-  written yet (`family is None`, currently every person-center but
+  written yet (`family is None`, currently every always-center but
   Hestia, who reuses her existing "wider" article) rather than crash on
   an unwritten family/article pair. The Spacebar jump mirrors the
   calendar-driven four: `_element_encyclopedia_target` maps
   `"thirteenth"` through `_ENC_THIRTEENTH_TARGET` to each member's own
   gallery page (Ophiuchus → "astrology", The Cat → "chinese", Sol/
   Modrenik → "months", each at its topic's own fixed append-order
-  index) — the five PERSON-CENTERS are not in that table yet (no
+  index) — the ALWAYS-CENTERS are not in that table yet (no
   Encyclopedia gallery page of their own), so `.get(key)` gracefully
   returns None for them (no jump, no "Learn more" footer), a future
   wiring round rather than a crash. See

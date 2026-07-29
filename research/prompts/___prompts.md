@@ -187,10 +187,12 @@ addendum mid-round, 2026-07-22)
   `titles/theme_title_prompts.md`
 
 ### `calendars/` (RESTRUCTURE Phase 3, owner-sealed 2026-07-22)
-The four NEW Dozens that ride the Calendar pointer (the two Dozen
+The five NEW Dozens that ride the Calendar pointer (the two Dozen
 systems sealed in [The DOMY Canon](../../CANON.md), §The Two Dozen
 Systems). Round calendar-mount medallions, the same night-window glass
-as `months/`; NOT wired in config yet (content-only). Full ledger:
+as `months/`; all five are now REGISTERED in
+`config.defaults.CALENDAR_MOUNTS` (art still graceful-absent where a
+sheet has not been generated). Full ledger:
 [Prompt Coverage](COVERAGE.md), §The Four Dozens.
 - `emotions_prompts.md` — the Dozen of the Heart (System B): twelve
   emotions on their sealed hours (Love crown, Hatred root), the six
@@ -206,6 +208,10 @@ as `months/`; NOT wired in config yet (content-only). Full ledger:
 - `apostles_prompts.md` — the Twelve Apostles sent two by two (System
   A, Mark 6:7): Peter+Andrew crown, Simon+Judas root (Judas beside
   midnight mirrors Prism Hatred); fisherman's-Net border
+- `sins_prompts.md` — the Sins Dozen, the FIFTH (System B, SEALED
+  2026-07-29): Pride crowns at 12h with Vainglory folded into it,
+  Treachery roots at 24h, Violence holds 16h; PAINT register, the
+  FROST RING border; axle **Hardness of Heart**, the anti-Peace
 
 ### `era/`
 - `era_prompts.md` — the ERA TERMS Encyclopedia set (ROADMAP 15a3):

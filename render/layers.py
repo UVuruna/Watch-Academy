@@ -1303,16 +1303,21 @@ def thirteenth_plate(key: str) -> tuple[str, Path | None]:
     MONTHS_ART_DIR, exactly like the twelve Slavic months (graceful-
     absent until the owner's prompt sheet lands).
 
-    THE AXLE LAW's PERSON-CENTERS (Hestia/Jesus/Prudence/Cunning/Peace,
-    CANON §The Axle) resolve through the SAME `art_dir` as their OWN
-    roster's twelve rim members — every prompt sheet drops the axle's
-    plate in that one folder beside them, so there is no second art-dir
-    table to keep in sync (Rule #19). The ONE registered
-    `defaults.CalendarMount` whose own `centre` names this key supplies
-    it; every art_dir may legitimately be missing that one extra file
-    (art landed for the twelve rim members well ahead of the axle's own
-    plate on every one of the four new Dozens), same graceful-absent
-    contract as everything else here."""
+    THE AXLE LAW's ALWAYS-CENTERS (Hestia/Jesus/Prudence/Cunning/Peace/
+    Hardness of Heart, CANON §The Axle) resolve through the SAME
+    `art_dir` as their OWN roster's twelve rim members — every prompt
+    sheet drops the axle's plate in that one folder beside them, so
+    there is no second art-dir table to keep in sync (Rule #19). The ONE
+    registered `defaults.CalendarMount` whose own `centre` names this
+    key supplies it; every art_dir may legitimately be missing that one
+    extra file (art landed for the twelve rim members well ahead of the
+    axle's own plate on every one of the four older Dozens, and the
+    Sins Dozen has no art at all yet), same graceful-absent contract as
+    everything else here. The axle's STEM follows the one no-space rule
+    `CalendarMount.art_stems` already applies to its rim members
+    (`Just_Indignation`): a filename cannot carry a space, so
+    "Hardness of Heart" drops as `Hardness_of_Heart.png` — one rule, no
+    second table (Rule #19); single-word axles are unaffected."""
     name, _family, _article = constants.THIRTEENTHS[key]
     if key == "ophiuchus":
         art = octa_slot_art("zodiac/astrology/primary/sign", name)
@@ -1325,7 +1330,7 @@ def thirteenth_plate(key: str) -> tuple[str, Path | None]:
         mount = next(
             m for m in defaults.CALENDAR_MOUNTS.values() if m.centre == key
         )
-        art = octa_slot_art(mount.art_dir, name)
+        art = octa_slot_art(mount.art_dir, name.replace(" ", "_"))
     return name, art
 
 
@@ -1358,16 +1363,19 @@ def active_thirteenth(skin: SkinDefinition, day: DayContext) -> str | None:
       registered today names a centre (the Emotions Dozen's is PEACE,
       sealed 2026-07-29 — CANON §The Axle), so this branch currently
       fires only for "off"; it stays live for a future roster that seals
-      no centre (the still-PROPOSED Sins Dozen would, if ever mounted).
+      no centre — the Sins Dozen was the last candidate and it was
+      sealed WITH its axle (Hardness of Heart) on 2026-07-29, so the
+      branch is exercised by a synthetic mount in the tests.
 
     Whether the claimed member actually SHOWS is still its own
     appearance rule's business — `day.thirteenth_candidates` holds the
     calendar-driven members only on their own trigger+window (so on
     almost every day of the year one of THOSE returns None), but holds
-    the five PERSON-CENTERS (`constants.PERSON_CENTERS`) UNCONDITIONALLY
-    (CANON §The Axle: "PERSON-CENTERS stand ALWAYS") — so a mount whose
-    `centre` is a person (Hestia/Jesus/Prudence/Cunning/Peace) shows it
-    on literally every date, never gated by a window at all."""
+    the ALWAYS-CENTERS (`constants.AXLE_ALWAYS_CENTERS`)
+    UNCONDITIONALLY (CANON §The Axle: "ALWAYS-CENTERS stand on EVERY
+    date") — so a mount whose `centre` is an axle (Hestia/Jesus/
+    Prudence/Cunning/Peace/Hardness of Heart) shows it on literally
+    every date, never gated by a window at all."""
     if skin.pointer != "calendar":
         return None
     candidates = day.thirteenth_candidates

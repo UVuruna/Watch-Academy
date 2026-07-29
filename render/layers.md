@@ -430,8 +430,8 @@ IF the pointer is not the Calendar        → nobody (every other
 IF the mounted roster names a thirteenth  → that one, IF today is inside
                                              its own trigger + window
                                              (calendar-driven) OR
-                                             UNCONDITIONALLY (a
-                                             PERSON-CENTER — THE AXLE
+                                             UNCONDITIONALLY (an
+                                             ALWAYS-CENTER — THE AXLE
                                              LAW, below)
 ELSE (mount off, or a roster naming none) → the WHEEL's own: Ophiuchus
                                              on the zodiac wheel, Sol on
@@ -447,15 +447,19 @@ deliberate second choice.
 
 **THE AXLE LAW (CANON §The Axle, owner-sealed 2026-07-29)** splits every
 `centre` into one of two kinds, and the split is MECHANICAL, not a
-per-key `if`: `constants.PERSON_CENTERS` (Hestia/Jesus/Prudence/Cunning/
-Peace) are unioned into `thirteenth_candidates` UNCONDITIONALLY
+per-key `if`: `constants.AXLE_ALWAYS_CENTERS` (Hestia/Jesus/Prudence/
+Cunning/Peace/Hardness of Heart) are unioned into
+`thirteenth_candidates` UNCONDITIONALLY
 (`core.blue_moon.thirteenth_candidates`'s own final line), so a mount
-whose centre is one of them shows it on literally EVERY date — the
-persons who chose the centre never leave, unlike Ophiuchus/Sol/
-Modrenik/The Cat, the months a twelve-month calendar overflows into.
-`thirteenth_plate` resolves a person-centre's art through the SAME
+whose centre is one of them shows it on literally EVERY date — the axle
+its wheel turns on never leaves, unlike Ophiuchus/Sol/Modrenik/The Cat,
+the months a twelve-month calendar overflows into.
+`thirteenth_plate` resolves an always-centre's art through the SAME
 `art_dir` as its own roster's twelve rim members (Rule #19 — no second
-art-dir table); `Compositor._thirteenth_tooltip` skips the Encyclopedia
+art-dir table), under the SAME no-space stem rule `art_stems` applies
+to the rim (a filename cannot carry a space, so `Hardness of Heart`
+resolves to `Hardness_of_Heart.png` — one rule, no per-key table);
+`Compositor._thirteenth_tooltip` skips the Encyclopedia
 lookup for the one whose article is not written yet (`family is None`
 in `constants.THIRTEENTHS` — currently every one but Hestia, who reuses
 her existing "wider" article) rather than crash on an unwritten
@@ -478,7 +482,7 @@ empty-string rule every other emblem uses.
 
 **Registered rosters** (each with its canon source and center rule —
 Center kind: **C** = calendar-driven, windowed almost every day empty;
-**P** = person-center, THE AXLE LAW, always present):
+**A** = always-center, THE AXLE LAW, present on every date):
 
 | Key | Roster | System | Seats | Center |
 |---|---|---|---|---|
@@ -486,16 +490,17 @@ Center kind: **C** = calendar-driven, windowed almost every day empty;
 | `almanac` | the Month Dozen (Gregorian) | B | 12 | Sol (C) |
 | `months` | the Slavic Months | B | 12 | Modrenik (C) |
 | `chinese` | the Chinese month-branch animals | B | 12 | The Cat (C) |
-| `emotions` | the Emotions Dozen | B | 12 | Peace (P) |
-| `olympians` | the Twelve Olympians, six pairs | A | 12 | Hestia (P) |
-| `apostles` | the Twelve Apostles, six pairs | A | 12 | Jesus (P) |
-| `virtues` | the Virtue Wheel, LIGHT register | B | 12 | Prudence (P) |
-| `vices` | the Virtue Wheel, PAINT register | B | 12 | Cunning (P) |
+| `emotions` | the Emotions Dozen | B | 12 | Peace (A) |
+| `olympians` | the Twelve Olympians, six pairs | A | 12 | Hestia (A) |
+| `apostles` | the Twelve Apostles, six pairs | A | 12 | Jesus (A) |
+| `virtues` | the Virtue Wheel, LIGHT register | B | 12 | Prudence (A) |
+| `vices` | the Virtue Wheel, PAINT register | B | 12 | Cunning (A) |
+| `sins` | the Sins Dozen | B | 12 | Hardness of Heart (A) |
 
-All nine entries are CANON.md §The Two Dozen Systems — every seat of
+All ten entries are CANON.md §The Two Dozen Systems — every seat of
 every roster SEALED 2026-07-29 (owner). `olympians`/`apostles`/
-`virtues`/`vices` joined the registry the same round the four
-person-centers did; their twelve RIM members' art landed ahead of this
+`virtues`/`vices` joined the registry the same round the first five
+always-centers did; their twelve RIM members' art landed ahead of that
 wiring round (`assets/calendars/{olympians,apostles,virtues,vices}/`),
 real and committed exactly like `zodiac`/`chinese` — only each roster's
 own AXLE plate is still graceful-absent (`thirteenth_plate` resolves it
@@ -503,6 +508,12 @@ to `None`, the name-only fallback, same contract Sol/Modrenik carried
 before their own art landed). `virtues`/`vices` are TWO ENTRIES of ONE
 wheel (a virtue and its vice share one seat, read light or paint — the
 seat TABLE above is identical between them, only the register differs).
+`sins` (SEALED 2026-07-29, CANON §The Sins Dozen — Pride crowns at 12h
+with Vainglory folded into it, Treachery roots at 24h, Violence holds
+16h) is the FIFTH Dozen and the first roster registered with NO art at
+all yet: all thirteen plates, rim and axle alike, are graceful-absent
+until `research/prompts/calendars/sins_prompts.md` is generated, which
+is exactly what the name fallback exists for.
 
 **"chinese" — the MONTHLY animals (owner R12, Blue Moon round):**
 `constants.CHINESE_MONTH_BRANCH_ANIMALS` fixes one branch animal per
@@ -1067,12 +1078,14 @@ CAN be selected together).
 
 **THE AXLE LAW (CANON §The Axle, owner-sealed 2026-07-29)** means
 `thirteenth_candidates` is no longer empty on an ordinary date: it
-always carries the five PERSON-CENTERS (`constants.PERSON_CENTERS` —
-Hestia, Jesus, Prudence, Cunning, Peace), unioned in unconditionally by
+always carries the ALWAYS-CENTERS (`constants.AXLE_ALWAYS_CENTERS` —
+Hestia, Jesus, Prudence, Cunning, Peace, Hardness of Heart), unioned in
+unconditionally by
 `core.blue_moon.thirteenth_candidates`'s own final line, calendar-driven
 members untouched. A mount whose `centre` is one of them (`emotions` →
 Peace, `olympians` → Hestia, `apostles` → Jesus, `virtues` → Prudence,
-`vices` → Cunning) therefore shows its axle at the dial center on
+`vices` → Cunning, `sins` → Hardness of Heart) therefore shows its axle
+at the dial center on
 LITERALLY EVERY DATE — `CenterBodyLayer` draws it through this exact
 same `_draw_thirteenth` path, no special case.
 

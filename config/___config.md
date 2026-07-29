@@ -158,13 +158,16 @@ stay listed in
 Axle, owner-sealed 2026-07-29): `THIRTEENTHS` — key → (display name,
 encyclopedia family, encyclopedia entry name), the SAME two-level shape
 `WEEKDAY_THEME_NINTHS` uses, read by both the dial
-(`render.layers.thirteenth_plate`) and its hover — now nine keys: the
+(`render.layers.thirteenth_plate`) and its hover — now ten keys: the
 four calendar-driven ("ophiuchus"/"sol"/"modrenik"/"chinese") PLUS the
-five PERSON-CENTERS ("hestia"/"jesus"/"prudence"/"cunning"/"peace",
-`PERSON_CENTERS`, always present per `core.blue_moon.
-thirteenth_candidates`'s own union — no trigger, no window); a
-person-center's family/article are `None` where no Encyclopedia article
-exists yet (Hestia alone reuses her existing "wider" entry) —
+six ALWAYS-CENTERS ("hestia"/"jesus"/"prudence"/"cunning"/"peace"/
+"hardness_of_heart", `AXLE_ALWAYS_CENTERS` — renamed from the
+2026-07-29 `PERSON_CENTERS`, whose word stopped being true once Peace
+and Hardness of Heart, STATES rather than persons, joined it; always
+present per `core.blue_moon.thirteenth_candidates`'s own union — no
+trigger, no window); an always-center's family/article are `None` where
+no Encyclopedia article exists yet (Hestia alone reuses her existing
+"wider" entry) —
 `render.compositor._thirteenth_tooltip` treats `None` as graceful-absent,
 never a crash. `OPHIUCHUS_WINDOW`/`SOL_WINDOW` (year-agnostic (month, day)
 bounds) and `MODRENIK_WINDOW_HALF_DAYS` (14, computed from the REAL
@@ -264,11 +267,15 @@ dimming law, below the resting alpha but never zero) — and above all
 the twelve wedges (`CalendarMount(title, system, members, art_dir,
 centre, art_stems, follows)`, plus `CALENDAR_MOUNT_SEATS_PER_WEDGE` and
 the `almanac_seat_order()` rotation), from which the Settings-validated
-`CALENDAR_MOUNT_MODES` is DERIVED — nine entries as of 2026-07-29:
-`zodiac`/`almanac`/`months`/`chinese`/`emotions` plus the four Dozens
-CANON sealed the same day, `olympians`/`apostles`/`virtues`/`vices`
-(the last two are TWO ENTRIES of Aristotle's one Virtue Wheel, light and
-paint registers of the identical seat table); the render itself
+`CALENDAR_MOUNT_MODES` is DERIVED — ten entries as of 2026-07-29:
+`zodiac`/`almanac`/`months`/`chinese`/`emotions` plus the five Dozens
+CANON sealed the same day, `olympians`/`apostles`/`virtues`/`vices`/
+`sins` (`virtues`/`vices` are TWO ENTRIES of Aristotle's one Virtue
+Wheel, light and paint registers of the identical seat table; `sins` is
+the Christian catalogue of SIN, a different tradition on its own wheel
+— Pride crown, Treachery root, axle Hardness of Heart — and the first
+roster registered with no art on disk at all, every plate
+graceful-absent); the render itself
 (`render.layers._draw_calendar_mount`/`calendar_mount_entries`/
 `calendar_mount_angle`, and the Pointer Theme window's Calendar mount
 tab) is covered

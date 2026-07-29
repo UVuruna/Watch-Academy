@@ -13,14 +13,18 @@ its own trigger and ONLY inside its own short date window; outside
 trigger+window it does not exist anywhere, dial or Encyclopedia.
 
 **THE AXLE LAW (CANON.md §The Axle, owner-sealed 2026-07-29)** adds a
-SECOND kind of thirteenth beside these four: the **PERSON-CENTERS** —
+SECOND kind of thirteenth beside these four: the **ALWAYS-CENTERS** —
 **Hestia** (Olympians), **Jesus** (Apostles), **Prudence** (Virtue
-Wheel, light register), **Cunning** (Virtue Wheel, paint register) and
-**Peace** (Emotions) — `config.constants.PERSON_CENTERS`. They carry NO
-trigger and NO window: unlike the four calendar-driven months/signs
-above, which are exactly what a twelve-month calendar cannot hold, a
-person-center is a figure who CHOSE the centre, and persons do not come
-and go with the moon. `thirteenth_candidates` unions them in
+Wheel, light register), **Cunning** (Virtue Wheel, paint register),
+**Peace** (Emotions) and **Hardness of Heart** (Sins) —
+`config.constants.AXLE_ALWAYS_CENTERS`. They carry NO trigger and NO
+window: unlike the four calendar-driven months/signs above, which are
+exactly what a twelve-month calendar cannot hold, an always-center is
+the axle its wheel turns on, and an axle does not come and go with the
+moon. (The constant was named `PERSON_CENTERS` until 2026-07-29; the
+word stopped being true when Peace and Hardness of Heart — STATES, not
+persons — joined the set, so it now names the LAW instead.)
+`thirteenth_candidates` unions them in
 unconditionally, at the very end, after every calendar-driven fact below
 is computed exactly as it always was — so the fact set is never truly
 empty any more, though the four calendar-driven members remain gated
@@ -47,7 +51,7 @@ Two trigger families for the four CALENDAR-DRIVEN members:
 
 `thirteenth_candidates` names every calendar-driven member (0, 1 or
 occasionally 2) whose OWN trigger+window holds on a given date, PLUS the
-five PERSON-CENTERS unconditionally — an unordered FACT SET, no
+ALWAYS-CENTERS unconditionally — an unordered FACT SET, no
 precedence between members. Ophiuchus's and Modrenik's windows do
 genuinely overlap in the Dec 7-17 band of a blue-moon December, so both
 can be candidates at once — this module no longer picks a winner there.
@@ -58,9 +62,9 @@ on its zodiac/almanac WHEEL (`SkinDefinition.palette_style`), Modrenik/
 The Cat on its "months"/"chinese" MOUNT (`SkinDefinition.calendar_mount`)
 — so resolving a date's candidates to the ONE member a given skin may
 show is [Layers](../render/layers.md)' `active_thirteenth(skin, day)`,
-never a date-only tiebreak here. The five PERSON-CENTERS need no such
+never a date-only tiebreak here. The ALWAYS-CENTERS need no such
 resolution among THEMSELVES — each rides its own roster's dedicated
-mount (`olympians`/`apostles`/`virtues`/`vices`/`emotions`), so at most
+mount (`olympians`/`apostles`/`virtues`/`vices`/`emotions`/`sins`), so at most
 one is ever the ACTIVE skin's own centre at a time; `active_thirteenth`
 reads the mount's `centre` exactly the same way for a person-center as
 for a calendar-driven one, the ONLY difference being that a
@@ -76,7 +80,7 @@ repository or the filesystem, matching `core.continents`/`core.moon`.
 
 ### Uses
 - [Constants (script)](../config/constants.py) — `THIRTEENTHS`,
-  `PERSON_CENTERS`, `OPHIUCHUS_WINDOW`, `SOL_WINDOW`,
+  `AXLE_ALWAYS_CENTERS`, `OPHIUCHUS_WINDOW`, `SOL_WINDOW`,
   `MODRENIK_WINDOW_HALF_DAYS`, `MOON_PHASE_FRACTIONS`.
 - [Deep Time (script)](deep_time.py) — `julian_day`/`delta_t_seconds`,
   the same TT-conversion primitives `core.moon.illumination` uses.
@@ -100,7 +104,8 @@ repository or the filesystem, matching `core.continents`/`core.moon`.
   None). THE AXLE LAW (owner-sealed 2026-07-29) means the "does it
   actually show" test below now has two different answers depending on
   the centre's OWN kind: a calendar-driven centre still needs its
-  trigger+window true today; a PERSON-CENTER (`PERSON_CENTERS`) is
+  trigger+window true today; an ALWAYS-CENTER
+  (`AXLE_ALWAYS_CENTERS`) is
   simply always in the candidate set, so it always shows. `CenterBodyLayer`
   draws it there, gated to `skin.pointer == "calendar"` alone (every
   other pointer's ordinary center laws reign untouched);
@@ -122,18 +127,19 @@ repository or the filesystem, matching `core.continents`/`core.moon`.
 - `thirteenth_candidates(on_date, moon_window, anchors, leap)` — every
   calendar-driven trigger+window active on `on_date` (0, 1 or
   occasionally 2 of them), UNIONED with `config.constants.
-  PERSON_CENTERS` (always present, THE AXLE LAW) — a `frozenset` of
+  AXLE_ALWAYS_CENTERS` (always present, THE AXLE LAW) — a `frozenset` of
   `config.constants.THIRTEENTHS`' keys, never empty any more.
 
 ## Design Decisions
 
-- **THE AXLE LAW's PERSON-CENTERS are a UNION, not a fifth trigger
-  (owner-sealed 2026-07-29).** Hestia/Jesus/Prudence/Cunning/Peace do
-  not fit the "trigger + window" shape at all — they carry neither — so
+- **THE AXLE LAW's ALWAYS-CENTERS are a UNION, not a fifth trigger
+  (owner-sealed 2026-07-29).** Hestia/Jesus/Prudence/Cunning/Peace/
+  Hardness of Heart do not fit the "trigger + window" shape at all —
+  they carry neither — so
   bolting them onto the same machinery as a fifth `if` branch would
   misrepresent them as calendar-driven. Instead `thirteenth_candidates`
   computes the four calendar-driven facts exactly as it always did, then
-  unions in `constants.PERSON_CENTERS` unconditionally as its very last
+  unions in `constants.AXLE_ALWAYS_CENTERS` unconditionally as its very last
   step — one line, no branch, and the four sealed year-rules above stay
   provably untouched by construction (nothing above the union line
   changed).

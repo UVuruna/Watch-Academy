@@ -1002,13 +1002,18 @@ absent. Everything else in the original Session 28 entry stands.
   reading are both DEAD — virtue and vice now share ONE seat. Center:
   **Prudence** (light) · **Cunning** (paint), always present. Full
   table, the six axes and their meanings in CANON §The Virtue Wheel.
-- **The Sins Dozen** — drafted PROPOSED in CANON §The Sins Dozen (a
-  fifth Dozen, System B, twelve seats + center, each seat anchored).
-  Awaits the owner's PER-SEAT verdict and his pick for the center:
-  **Pride** (Gregory's own structure — he took it off the seven and
-  made it their root) vs **Blasphemy against the Spirit** (the
-  unforgivable, Mark 3:29). NOT mounted, no prompt sheet, none written
-  until the owner rules.
+- ~~**The Sins Dozen** seating and center~~ — **SEALED 2026-07-29.**
+  The fifth Dozen, System B: **Pride crowns at 12h** (Gregory's root
+  returns to the rim and Vainglory FOLDS INTO IT — one seat, the
+  stronger word), **Treachery roots at 24h** (Judas in Satan's mouth,
+  the same midnight the Apostles Dozen already gives him), and the 16h
+  call delegated to the orchestrator ruled **Violence** (Dante's
+  seventh circle; Cruelty weighed and set aside). Center:
+  **HARDNESS OF HEART**, always present — the ANTI-PEACE, with
+  Blasphemy against the Spirit ABSORBED rather than rejected (Mark 3:5
+  → 3:29 are one scene). Full table, the six axes and the CENTER-PAIR
+  LAW in CANON §The Sins Dozen and §The Axle; sheet
+  `research/prompts/calendars/sins_prompts.md`; mounted and tested.
 - **A 24-set for the Calendar** — no 24 (+3 center) roster is
   canon-sealed to ride it; the two-per-wedge law is implemented and
   tested, registering one is a single table row once sealed (Rose-24's

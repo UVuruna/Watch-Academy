@@ -545,6 +545,60 @@ def test_the_four_new_dozens_are_seated_exactly_where_canon_says():
     assert hour_of("vices", 6) == pytest.approx(0.0)         # Envy, root (24h≡0h)
 
 
+def test_the_sins_dozen_is_seated_exactly_where_canon_says():
+    """Golden seat pins for the FIFTH Dozen, straight from CANON.md
+    §The Sins Dozen (owner-sealed 2026-07-29). System B, so seat k IS
+    hour 12 + 2k: **Pride crowns at 12h** (Gregory's root returned to
+    the rim, Vainglory FOLDED INTO IT — there is no Vainglory seat),
+    **Treachery roots at 24h** (the root law; Judas' own midnight on
+    the Apostles Dozen), **Lust at 20h** (the red arm's appetite), and
+    **Violence at 16h** (the 16h call, delegated and ruled — Cruelty is
+    NOT a member). The centre is HARDNESS OF HEART, the anti-Peace."""
+    sins = defaults.CALENDAR_MOUNTS["sins"]
+    assert sins.system == "B" and sins.centre == "hardness_of_heart"
+    assert sins.members == (
+        "Pride", "Hypocrisy", "Violence", "Avarice", "Lust", "Envy",
+        "Treachery", "Despair", "Wrath", "Idolatry", "Gluttony", "Acedia",
+    )
+    assert "Vainglory" not in sins.members      # folded into Pride by the seal
+    assert "Cruelty" not in sins.members        # weighed and set aside
+    assert sins.follows is None                 # there is no "today's sin"
+
+    def hour_of(index: int) -> float:
+        return (12.0 + calendar_mount_angle("sins", index) / 15.0) % 24.0
+
+    assert hour_of(0) == pytest.approx(12.0)    # Pride, the crown
+    assert hour_of(6) == pytest.approx(0.0)     # Treachery, the root (24h = 0h)
+    assert hour_of(4) == pytest.approx(20.0)    # Lust
+    assert hour_of(2) == pytest.approx(16.0)    # Violence
+    # Canon's six opposition axes: every seat faces its exact opposite.
+    for k, (near, far) in enumerate(zip(sins.members, sins.members[6:])):
+        assert (near, far) in (
+            ("Pride", "Treachery"), ("Hypocrisy", "Despair"),
+            ("Violence", "Wrath"), ("Avarice", "Idolatry"),
+            ("Lust", "Gluttony"), ("Envy", "Acedia"),
+        ), k
+    # The axle is a real THIRTEENTHS key and an ALWAYS-CENTER — no
+    # trigger, no window (THE AXLE LAW).
+    assert constants.THIRTEENTHS["hardness_of_heart"][0] == "Hardness of Heart"
+    assert "hardness_of_heart" in constants.AXLE_ALWAYS_CENTERS
+
+
+def test_the_sins_mount_is_settable_and_survives_a_settings_round_trip(tmp_path):
+    """Registering the roster makes it a legal `calendar_mount` value
+    with no second edit (THE GENERALIZED OFFER) — and a saved file
+    carrying it loads back unchanged, never read as corrupt (THE
+    SETTINGS-MIGRATION LAW, MEMORY "Settings migration on rename")."""
+    from app.settings_store import SettingsStore
+
+    assert "sins" in defaults.CALENDAR_MOUNT_MODES
+    path = tmp_path / "settings.json"
+    store = SettingsStore(path)
+    store.save(dataclasses.replace(store.load(), calendar_mount="sins"))
+    assert json.loads(path.read_text(encoding="utf-8"))["calendar_mount"] == "sins"
+    assert SettingsStore(path).load().calendar_mount == "sins"
+
+
 def test_new_dozens_rim_members_carry_real_committed_art():
     """The twelve RIM members of all four new Dozens landed real art
     ahead of this wiring round (owner PromptPainter drop under
@@ -557,19 +611,20 @@ def test_new_dozens_rim_members_carry_real_committed_art():
 
 
 def test_new_dozens_axle_plate_is_graceful_absent():
-    """The AXLE's own plate has not landed on disk for any of the five
-    new person-centers — `thirteenth_plate` must resolve `None`, never
+    """The AXLE's own plate has not landed on disk for ANY of the six
+    always-centers — `thirteenth_plate` must resolve `None`, never
     crash, with the name still speaking (the SAME graceful-absent
-    contract Sol/Modrenik carried before their own art landed)."""
+    contract Sol/Modrenik carried before their own art landed). The
+    Sins Dozen's axle also proves the axle STEM rule: a display name
+    with spaces resolves through the underscored filename, the same
+    no-space rule `art_stems` applies to `Just_Indignation`."""
     from render.layers import thirteenth_plate
 
-    for key, name in (
-        ("hestia", "Hestia"), ("jesus", "Jesus"), ("prudence", "Prudence"),
-        ("cunning", "Cunning"), ("peace", "Peace"),
-    ):
+    for key in constants.AXLE_ALWAYS_CENTERS:
         resolved_name, art = thirteenth_plate(key)
-        assert resolved_name == name
-        assert art is None
+        assert resolved_name == constants.THIRTEENTHS[key][0], key
+        assert art is None, key
+    assert thirteenth_plate("hardness_of_heart")[0] == "Hardness of Heart"
 
 
 def test_seat_law_places_twelve_one_per_wedge_and_twentyfour_two(app):
@@ -624,9 +679,9 @@ def test_centre_rule_is_per_roster_and_never_unconditional(app):
     Golden pair for Ophiuchus: Dec 5 2026 is inside a 13-full-moon year
     AND inside its Nov 29 - Dec 17 window, so it shows; Dec 5 2025 is
     not a 13-full-moon year, so the very same wheel, mount and calendar
-    day show NOTHING. (A PERSON-CENTER roster's own centre is EXEMPT
+    day show NOTHING. (An ALWAYS-CENTER roster's own centre is EXEMPT
     from this — THE AXLE LAW, owner-sealed 2026-07-29, tested separately
-    below in `test_person_centers_are_unconditionally_present`; every
+    below in `test_axle_always_centers_are_unconditionally_present`; every
     roster registered today names a real centre, so the "names none"
     branch is exercised here through a SYNTHETIC mount, the same way
     `test_seat_law_places_twelve_one_per_wedge_and_twentyfour_two`
@@ -665,22 +720,25 @@ def test_centre_rule_is_per_roster_and_never_unconditional(app):
     assert active_thirteenth(months, shows) is None
 
 
-def test_person_centers_are_unconditionally_present(app):
+def test_axle_always_centers_are_unconditionally_present(app):
     """THE AXLE LAW's always-present half (CANON §The Axle, owner-sealed
-    2026-07-29): Hestia/Jesus/Prudence/Cunning/Peace carry NO trigger and
-    NO window — unlike Ophiuchus/Sol/Modrenik/The Cat, they show on an
-    ARBITRARY ordinary date, every one of the five at once, while
-    Ophiuchus stays rule-driven on that very same day (the existing
-    golden pair keeps passing: present 2026-12-05, absent 2025-12-05)."""
+    2026-07-29): Hestia/Jesus/Prudence/Cunning/Peace/Hardness of Heart
+    carry NO trigger and NO window — unlike Ophiuchus/Sol/Modrenik/The
+    Cat, they show on an ARBITRARY ordinary date, every one of the six
+    at once, while Ophiuchus stays rule-driven on that very same day
+    (the existing golden pair keeps passing: present 2026-12-05, absent
+    2025-12-05). The constant is named for the LAW, not for personhood
+    (renamed 2026-07-29): Peace and Hardness of Heart are STATES, and
+    the seam THE AXLE LAW actually draws is "not a leftover month"."""
     from render.layers import active_thirteenth
 
     ordinary, _t = _day_tick(app, datetime(2026, 3, 15, 12, 0))
-    assert constants.PERSON_CENTERS <= ordinary.thirteenth_candidates
+    assert constants.AXLE_ALWAYS_CENTERS <= ordinary.thirteenth_candidates
     assert "ophiuchus" not in ordinary.thirteenth_candidates    # still rule-driven
     for mount, centre in (
         ("olympians", "hestia"), ("apostles", "jesus"),
         ("virtues", "prudence"), ("vices", "cunning"),
-        ("emotions", "peace"),
+        ("emotions", "peace"), ("sins", "hardness_of_heart"),
     ):
         assert defaults.CALENDAR_MOUNTS[mount].centre == centre, mount
         skin = _calendar_skin(calendar_mount=mount)

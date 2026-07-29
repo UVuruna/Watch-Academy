@@ -72,9 +72,10 @@ LAW, CANON §The Axle, owner-sealed 2026-07-29):**
 `thirteenth_candidates` is a `frozenset` of `config.constants.
 THIRTEENTHS`' keys — the four calendar-driven ("ophiuchus"/"sol"/
 "modrenik"/"chinese"), every trigger+window active TODAY, a plain fact
-set with NO precedence and NO render-mode read here, PLUS the five
-PERSON-CENTERS ("hestia"/"jesus"/"prudence"/"cunning"/"peace",
-`constants.PERSON_CENTERS`) unioned in unconditionally — no trigger, no
+set with NO precedence and NO render-mode read here, PLUS the
+ALWAYS-CENTERS ("hestia"/"jesus"/"prudence"/"cunning"/"peace"/
+"hardness_of_heart", `constants.AXLE_ALWAYS_CENTERS`) unioned in
+unconditionally — no trigger, no
 window, present every day — computed ONCE via `core.blue_moon.
 thirteenth_candidates` (fed `core.blue_moon.chinese_leap_month
 (year_anchors, moon_window)`, also computed once), never recomputed on

@@ -1429,10 +1429,14 @@ ZODIAC_SPAN_DEG = 30.0
 # it shares the CENTER seat.
 #
 # THE AXLE LAW (CANON.md §The Axle, owner-sealed 2026-07-29) extends this
-# SAME table with the PERSON-CENTERS — Hestia/Jesus/Prudence/Cunning/Peace
-# — the throne/hiding-place axles of the Olympians, Apostles, Virtue Wheel
-# (both registers) and Emotions Dozens. Unlike the four members above,
-# they carry NO year-rule at all: `PERSON_CENTERS` below marks them
+# SAME table with the ALWAYS-CENTERS — Hestia/Jesus/Prudence/Cunning/
+# Peace/Hardness of Heart — the throne/hiding-place axles of the
+# Olympians, Apostles, Virtue Wheel (both registers), Emotions and Sins
+# Dozens. (Named `PERSON_CENTERS` on 2026-07-29 and RENAMED the same
+# day: Peace and Hardness of Heart are STATES, not persons — the seam
+# THE AXLE LAW draws is "not a leftover month", never personhood.)
+# Unlike the four members above,
+# they carry NO year-rule at all: `AXLE_ALWAYS_CENTERS` below marks them
 # unconditionally present (core.blue_moon.thirteenth_candidates unions it
 # in, never gated by a trigger+window). `family`/`article` are `None`
 # where no Encyclopedia article has been written yet (Hestia alone
@@ -1451,13 +1455,16 @@ THIRTEENTHS = {
     "prudence": ("Prudence", None, None),
     "cunning": ("Cunning", None, None),
     "peace": ("Peace", None, None),
+    "hardness_of_heart": ("Hardness of Heart", None, None),
 }
-# THE AXLE LAW's ALWAYS-PRESENT half (CANON §The Axle: "PERSON-CENTERS
-# stand ALWAYS... no moon count, no window") — every key here is
+# THE AXLE LAW's ALWAYS-PRESENT half (CANON §The Axle: "ALWAYS-CENTERS
+# stand on EVERY date... no moon count, no window") — every key here is
 # unconditionally a member of `core.blue_moon.thirteenth_candidates` on
 # every date, regardless of year or window, unlike the four calendar-
 # driven keys above (whose sealed year-rules are untouched by this set).
-PERSON_CENTERS = frozenset({"hestia", "jesus", "prudence", "cunning", "peace"})
+AXLE_ALWAYS_CENTERS = frozenset({
+    "hestia", "jesus", "prudence", "cunning", "peace", "hardness_of_heart",
+})
 # Year-agnostic (month, day) bounds, inclusive both ends — core.blue_moon
 # stamps the trigger year on. Ophiuchus: the astronomical transit (the
 # Sun's real path through the constellation, Nov 29 - Dec 17). Sol:

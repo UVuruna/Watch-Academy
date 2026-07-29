@@ -852,12 +852,14 @@ SLAVIC_MONTHS = (
 # govern whether the seat actually shows (CANON §The Axle, owner-sealed
 # 2026-07-29): a CALENDAR-DRIVEN centre (Ophiuchus/Sol/Modrenik/The Cat)
 # keeps its own appearance rule (`core.blue_moon`), empty on almost every
-# day of the year; a PERSON-CENTRE (`constants.PERSON_CENTERS` — Hestia,
-# Jesus, Prudence, Cunning, Peace) is unconditionally present on EVERY
-# date instead — the axle never leaves. `None` means the canon seals no
-# thirteenth for this set and the center simply stays empty (no roster
-# currently registered below leaves this None; the still-PROPOSED Sins
-# Dozen would, were it ever sealed and mounted).
+# day of the year; an ALWAYS-CENTRE (`constants.AXLE_ALWAYS_CENTERS` —
+# Hestia, Jesus, Prudence, Cunning, Peace, Hardness of Heart) is
+# unconditionally present on EVERY date instead — the axle never leaves.
+# `None` means the canon seals no thirteenth for this set and the center
+# simply stays empty (no roster registered below leaves this None — the
+# Sins Dozen, the last that might have, was sealed WITH its axle on
+# 2026-07-29 — so the branch is exercised by a synthetic mount in
+# `tests/test_calendar.py`).
 CALENDAR_MOUNT_SEATS_PER_WEDGE = {12: 1, 24: 2}
 
 
@@ -967,8 +969,8 @@ CALENDAR_MOUNTS = {
     # The Emotions Dozen (CANON §The Two Dozen Systems, one of the four
     # sealed Dozens) — System B, seated by canon's own hours. Its centre
     # is PEACE, the still point every emotion runs toward (SEALED
-    # 2026-07-29, CANON §The Emotions Dozen) — a PERSON-CENTER, always
-    # present (`constants.PERSON_CENTERS`), unlike the calendar-driven
+    # 2026-07-29, CANON §The Emotions Dozen) — an ALWAYS-CENTER, always
+    # present (`constants.AXLE_ALWAYS_CENTERS`), unlike the calendar-driven
     # thirteenths above.
     "emotions": CalendarMount(
         title="Emotions",
@@ -987,7 +989,7 @@ CALENDAR_MOUNTS = {
     # (seat k spans clock hour 12+2k, matching the existing "zodiac"
     # mount's own Cancer-first convention). Its centre is HESTIA, the
     # hiding-place axle who gave up her seat to Dionysus and kept the
-    # hearth — always present, a PERSON-CENTER.
+    # hearth — always present, an ALWAYS-CENTER.
     "olympians": CalendarMount(
         title="Olympians",
         system="A",
@@ -1005,7 +1007,7 @@ CALENDAR_MOUNTS = {
     # convention as "olympians" above. `art_stems` covers the four
     # members whose plate stem is not their full display name (the
     # sheet's own filenames). Its centre is JESUS, the throne axle —
-    # always present, a PERSON-CENTER.
+    # always present, an ALWAYS-CENTER.
     "apostles": CalendarMount(
         title="Apostles",
         system="A",
@@ -1031,8 +1033,8 @@ CALENDAR_MOUNTS = {
     # seat-order convention `EMOTIONS_DOZEN` already uses (seat k = hour
     # 12+2k). `art_stems` covers the three members whose plate stem
     # differs from the display name (a space or hyphen the filename
-    # cannot carry). Centres are the axle's two faces, both PERSON-
-    # CENTERS, always present: PRUDENCE (light, the charioteer) and
+    # cannot carry). Centres are the axle's two faces, both ALWAYS-
+    # CENTERS, present on every date: PRUDENCE (light, the charioteer) and
     # CUNNING (paint, the dark charioteer) — CANON §The Virtue Wheel.
     "virtues": CalendarMount(
         title="Virtues",
@@ -1065,6 +1067,32 @@ CALENDAR_MOUNTS = {
             "Vulgarity", "Buffoonery", "Envy", "Gluttony", "Wrath",
             "Shamelessness", "Greed", "Flattery",
         ),
+    ),
+    # THE SINS DOZEN (CANON §The Sins Dozen) — the FIFTH Dozen, System
+    # B, SEALED 2026-07-29: the Christian tradition's catalogue of SIN
+    # (Gregory, Evagrius, Aquinas, Dante) beside — never merged with —
+    # the Virtue Wheel's Aristotelian vices. PRIDE crowns at 12h, with
+    # Vainglory FOLDED INTO IT (Gregory's root returns to the rim, one
+    # seat, the stronger word); TREACHERY roots at 24h under the root
+    # law (Judas' own midnight on the Apostles Dozen); VIOLENCE holds
+    # 16h (the delegated call — Cruelty weighed and set aside). Member
+    # order reads CANON's own table top to bottom (12h..10h), the same
+    # System-B seat-order convention `EMOTIONS_DOZEN` uses (seat k =
+    # hour 12 + 2k). Its centre is HARDNESS OF HEART, the ANTI-PEACE —
+    # an ALWAYS-CENTER, present every date. No art has landed for this
+    # roster at all yet (`research/prompts/calendars/sins_prompts.md`
+    # is written but ungenerated), so every plate — the twelve and the
+    # axle alike — takes the graceful-absent NAME fallback, exactly the
+    # contract `art_dir` already documents.
+    "sins": CalendarMount(
+        title="Sins",
+        system="B",
+        members=(
+            "Pride", "Hypocrisy", "Violence", "Avarice", "Lust", "Envy",
+            "Treachery", "Despair", "Wrath", "Idolatry", "Gluttony", "Acedia",
+        ),
+        art_dir="sins/primary/colored",
+        centre="hardness_of_heart",
     ),
 }
 # The legal `Settings.calendar_mount` values — derived, never hand-kept
