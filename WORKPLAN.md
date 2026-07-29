@@ -624,6 +624,300 @@ now table-driven). (5) The three Design-window rows. Tests
   once Session 4 lands. The wiring already degrades gracefully;
   every drop simply lights up.
 
+## THE THEME BACKLOG — twelve casts on disk, nothing wired
+
+**Read this preamble before opening Session 30, 31, 32 or 33.** It
+exists so no agent has to ask what the sessions below are for, and so
+no agent re-opens a question that is already closed.
+
+### What was found (2026-07-29)
+
+Twelve figure casts — six themes' worth — have their art GENERATED and
+sitting in `assets/weeks/`, and the program cannot show a single one of
+them. **429 files, about 215 distinct plates** (each in the two sources,
+`_gem` and `_gpt`):
+
+| Cast (folder) | Files | Group on disk | Its prompt sheet |
+|---|---|---|---|
+| `age_of_heroes` (Greek Monsters) | 38 | `weeks/myth/` | `research/prompts/monsters/greek_monsters_prompts.md` |
+| `celestial_court` (Chinese Mythology) | 38 | `weeks/myth/` | `research/prompts/chinese/chinese_myth_prompts.md` |
+| `corporate` (The Corporation) | 38 | `weeks/crafts/` | `research/prompts/corporate/corporate_prompts.md` |
+| `wow_alliance` / `wow_horde` / `wow_evil` | 38 / 38 / 34 | `weeks/gaming/` | `research/prompts/wow/wow_prompts.md` |
+| `cp_gangs` / `cp_street` / `cp_corpo` | 58 / 54 / 50 | `weeks/gaming/` | `research/prompts/cyberpunk/cyberpunk_prompts.md` |
+| `sw_jedi` / `sw_sith` / `sw_dyad` | 22 / 18 / 3 | `weeks/films/` | `research/prompts/starwars/starwars_prompts.md` |
+
+**Why they are invisible:** none is in `constants.WEEKDAY_THEMES`, so
+the dial's theme picker does not know they exist; and none has an
+Encyclopedia topic. `config.taxonomy` knows their FOLDERS — the tree
+law is satisfied, the art is correctly placed — but the registry does
+not know their KEYS. This was not an accident of one round:
+[Prompt Coverage](research/prompts/COVERAGE.md) items 1a and 1b
+recorded "two wiring rounds left for later" when the sheets shipped.
+Later never came, and nothing in the suite could notice.
+
+**The two costs are not the same size, and that shapes the whole plan:**
+
+- **Wiring** is mechanical: about a dozen config entries per cast, all
+  transcribable from the cast's own sheet and its own folder. Hours.
+- **TEXT is the real bill.** Not one of the twelve has a single written
+  article — not Sun Wukong, not Typhon, not Sylvanas, not Johnny
+  Silverhand. At the MANDATORY minimum a cast needs **17 texts**
+  (7 seat articles + 7 hover blurbs + title + duality + ninth ≈ 12,000
+  characters of house voice); with the optional per-wheel `variants` it
+  is 59. Twelve casts is **~200 mandatory texts, ~145,000 characters**.
+  That is three writing waves, not one session.
+
+### Three structural questions — ALREADY ANSWERED, do not re-open
+
+1. **Three casts of one franchise are three THEMES on the dial, not a
+   third roster value.** `constants.FIGURE_ROSTERS` is a two-value
+   GLOBAL switch (`planetary` / `pantheon`) that every theme obeys at
+   once; a third value would change every other theme's meaning. The
+   disk already settled it — the art shipped as `wow_alliance/`,
+   `wow_horde/`, `wow_evil/`, and `taxonomy.WEEK_GROUPS` lists all six
+   gaming casts as separate theme folders. Three keys, one picker
+   group.
+2. **In the ENCYCLOPEDIA those same three casts are ONE card with a
+   three-way switcher**, not three cards. That is Session 27's own
+   variant law (`config.encyclopedia_tree.VARIANT_SOURCES`, the ◀ ▶
+   beside the title), built for exactly this shape and already carrying
+   the Planetary/Pantheon merges. The dial shows one cast at a time; the
+   reader walks them.
+3. **The code KEY is the FOLDER name** — `age_of_heroes`,
+   `celestial_court` — not the old sheet names (`monsters`,
+   `chinese_myth`). Those two entries in `taxonomy.THEME_KEY_RENAMES`
+   exist only because the folders were renamed while the themes were
+   art-only; a rename table is for MIGRATING stored user settings, and
+   no user has ever had these themes selected. The wave that wires a
+   cast **deletes its rename entry** in the same commit.
+
+### THE PER-CAST CHECKLIST — the one table every wave works from
+
+Every cast needs all of this. A wave is not done until each line is
+true for each of its casts.
+
+| # | Where | What to add |
+|---|---|---|
+| 1 | `constants.WEEKDAY_THEMES` | the key |
+| 2 | `constants.WEEKDAY_THEME_BLURBS` | key → its own blurb-set name |
+| 3 | `constants.WEEKDAY_THEME_ARTICLES` | key → its own article-set name |
+| 4 | `constants.WEEKDAY_THEME_NINTHS` | `(display name, "<theme>/primary/bronze/<Stem>.png")` |
+| 5 | `constants.METAL_THEMES` | the key — every one of these casts is bronze-plate art with a `colored/` sibling |
+| 6 | `defaults.WEEKDAY_THEME_NAMES` | the seven seat DISPLAY names (`sun` … `saturn`) |
+| 7 | `defaults.WEEKDAY_THEME_DIRS` | `"<theme>/primary/bronze"` |
+| 8 | `defaults.WEEKDAY_THEME_FILES` | the seven seat file STEMS |
+| 9 | `defaults.WEEKDAY_DUAL_NAMES` | `(ruler name, servant name)` |
+| 10 | `defaults.WEEKDAY_DUAL_FILES` | the servant plate, sourceless |
+| 11 | `defaults.WEEKDAY_THEME_TITLES` | the human theme title |
+| 12 | `defaults.WEEKDAY_MENU_GROUPS` | the picker group — **new groups "Gaming" and "Films"** for the six gaming and three film casts |
+| 13 | `config.encyclopedia_tree` | a seat in a WHOLE, and `VARIANT_SOURCES` for the three-cast merges |
+| 14 | `taxonomy.THEME_KEY_RENAMES` | DELETE the entry, if this cast has one (see question 3) |
+| 15 | `Database/symbolism.json` → `articles.<set>` | 7 seats, each `{name, base}`; the SUN seat also `{faces: {ruler, servant}}` |
+| 16 | `Database/symbolism.json` → `arms[].blurbs.<set>` + `center.blurbs.<set>` | 7 hover lines, ~100–250 characters each |
+| 17 | `Database/encyclopedia.json` → `theme_title.<key>` | the theme's own title article |
+| 18 | `Database/encyclopedia.json` → `week_duality.<key>` | the dual page's article |
+| 19 | `Database/encyclopedia.json` → `ninths.<Ninth name>` | the ninth's article |
+| 20 | tests | the cast passes the theme-completeness guard (Session 30) with NO exemption left |
+
+**Optional and explicitly NOT required** (graceful by contract, Rule
+#1's documented path): `articles.<set>.<seat>.variants` — the six
+per-pointer-wheel readings. A missing `variants` falls back to `base`.
+Write them only if the wave has room; never at the cost of a `base`.
+
+**English only** (project rule, root Rule #17). The Serbian bundle is
+brought to coverage in Session 15, immediately before the build.
+
+### The order, and why it is this order
+
+```mermaid
+%%{init: {'flowchart': {'subGraphTitleMargin': {'top': 0, 'bottom': 35}}}}%%
+flowchart LR
+    S30[S30 - the LAW<br/>guards + ledger] --> S31[S31 - myth and crafts<br/>3 casts]
+    S30 --> S32[S32 - gaming<br/>6 casts]
+    S30 --> S33[S33 - films<br/>3 casts]
+    S31 --> S34[S34 - queue audit]
+    S32 --> S34
+    S33 --> S34
+    G[(3D Preview gadget<br/>its OWN agent, M2)] --> S28[S28 - 3D integration]
+```
+
+- **The law comes FIRST**, before a single cast is wired. If the waves
+  ran first, the guard would be written to pass whatever the waves
+  happened to do; written first, it is the thing the waves are measured
+  against — and it is what makes this failure impossible to repeat.
+- **Each wave WIRES its own casts.** The owner's rule is that articles,
+  prompts and wiring ship together, so splitting "all the text" from
+  "all the wiring" would violate the very law being written. Every wave
+  therefore ends with its casts VISIBLE — pickable on the dial and
+  readable in the Encyclopedia.
+- **The waves are independent of each other** and may run in any order;
+  they touch disjoint casts and disjoint JSON keys. The only shared
+  files are the config tables, so two waves must not edit the same
+  table at the same moment — run them sequentially unless the owner
+  explicitly asks for parallel agents.
+- **The 3D session stays where it is** (Session 28), blocked on the
+  gadget's own M2. It is the only task here with an EXTERNAL
+  dependency, and by the owner's decree DOMY sessions never implement
+  the gadget.
+
+---
+
+### Session 30 — The Theme Completion Law → **Sonnet**
+
+**Say:** *"Radi Sesiju 30 iz WORKPLAN.md — zakon o kompletnoj temi."*
+
+**Reads:** this preamble; `CLAUDE.md` (project);
+`research/prompts/COVERAGE.md` §1a/1b; `config/___config.md`;
+`tests/test_assets_structure.py` (the guard style to copy).
+
+**Delivers:**
+
+1. **The law is ALREADY WRITTEN** — project [CLAUDE.md](CLAUDE.md)
+   §THE THEME COMPLETION LAW, landed 0.14.552 the day the owner
+   decreed it, so it cannot be lost if this session slips. This
+   session does not rewrite it; it ENFORCES it (items 2 and 3) and
+   links it from `COVERAGE.md`.
+2. **`research/theme_staging.md` — the STAGING LEDGER.** One row per
+   art-only cast: folder, files on disk, its sheet, what it still owes,
+   which session owes it. The twelve casts above are its first rows.
+3. **Two guard tests** in a new `tests/test_theme_completeness.py`:
+   - *no registered theme is textless* — every key in
+     `WEEKDAY_THEMES` resolves an article set, a blurb set, a title
+     article and (where it has a ninth) a ninth article. This one
+     passes today and must never stop passing.
+   - *no art sits unseen* — every theme FOLDER under `assets/weeks/`
+     is either registered in `WEEKDAY_THEMES` **or** listed in the
+     staging ledger with an owed-items line. This one FAILS today with
+     twelve names, and each wave deletes its own rows until it passes
+     empty. **That failure is the deliverable** — it is the sentence
+     the suite could not say before.
+
+**Done when:** the suite is green with the ledger holding exactly the
+twelve casts, the law is in `CLAUDE.md`, and `COVERAGE.md` items 1a/1b
+point at the ledger instead of describing the debt in prose.
+
+---
+
+### Session 31 — Completion wave I: myth & crafts → **Opus** (writers)
+
+**Say:** *"Radi Sesiju 31 iz WORKPLAN.md — talas I, tri postave."*
+
+**Casts:** `age_of_heroes`, `celestial_court`, `corporate`
+(3 × 17 = 51 mandatory texts).
+
+**Reads:** this preamble and the PER-CAST CHECKLIST above;
+[The DOMY Canon](CANON.md) — mandatory for any roster work; each cast's
+own sheet from the table above (the sheets carry the sealed rosters,
+every seat's reasoning and the ninth's argument — that is the writer's
+source material, and it is already written); one existing article set
+as the VOICE reference (`symbolism.json` → `articles.cosmos`, the most
+recent complete set).
+
+**Delivers:** all twenty checklist lines for its three casts, its rows
+deleted from the staging ledger, and a Serbian report naming what each
+cast now shows on the dial.
+
+**Watch for:** the Greek Monsters cast shares its group folder with the
+Greek gods — its articles must not restate the gods' own text, and its
+Encyclopedia seat is a card of its own inside the same whole.
+
+---
+
+### Session 32 — Completion wave II: gaming → **Opus** (writers)
+
+**Say:** *"Radi Sesiju 32 iz WORKPLAN.md — talas II, gaming."*
+
+**Casts:** `wow_alliance`, `wow_horde`, `wow_evil`, `cp_gangs`,
+`cp_street`, `cp_corpo` (6 × 17 = 102 mandatory texts — the biggest
+wave; split into two commits, one per franchise).
+
+**Reads:** as Session 31, plus `research/prompts/wow/wow_prompts.md`
+and `research/prompts/cyberpunk/cyberpunk_prompts.md` in full — the
+Cyberpunk sheet documents ROTATION SEATS (more than one named figure
+sharing a day, resolved through `defaults.rotating_art_file`), a wiring
+shape none of the other casts has.
+
+**Delivers:** the checklist for six casts; **two** Encyclopedia cards
+(one per franchise), each carrying a three-way variant switcher, NOT
+six cards (structural question 2); the two new picker groups.
+
+**Watch for:** the three WoW casts and the three Cyberpunk casts ride
+the SAME nine seats with different figures — an article must argue THAT
+cast's own figure, never the seat in the abstract (Charter rule 5 in
+[The Cube Canon](CUBE.md): three sets on one seat are three different
+people, never one character read three ways).
+
+---
+
+### Session 33 — Completion wave III: films → **Opus** (writers)
+
+**Say:** *"Radi Sesiju 33 iz WORKPLAN.md — talas III, Star Wars."*
+
+**Casts:** `sw_jedi`, `sw_sith`, `sw_dyad` (3 × 17 = 51 texts).
+
+**Reads:** as Session 31, plus
+`research/prompts/starwars/starwars_prompts.md` in full.
+
+**Delivers:** the checklist for three casts; ONE Encyclopedia card with
+a three-way switcher; the "Films" picker group.
+
+**Watch for:** `sw_dyad` has 3 files on disk against the others' 18–22
+— **its art is INCOMPLETE**. The wave writes its texts and wires it
+exactly like the others (every missing plate is graceful-absent by
+contract) and records the shortfall as an "art owed" row in the staging
+ledger; it is not a reason to skip the cast. Anakin/Vader, Leia and Han
+each appear in two casts at different ages — legitimate repeats, and
+each article argues that AGE's own deed.
+
+---
+
+### Session 34 — The generation queue audit → **Haiku**
+
+**Say:** *"Radi Sesiju 34 iz WORKPLAN.md — revizija reda za
+generisanje."*
+
+**Runs:** after 31–33, because wiring twelve casts creates new
+Encyclopedia pages, and a new page can declare a plate nobody has
+drawn.
+
+**Reads:** `research/prompts/COVERAGE.md`;
+`tests/test_encyclopedia_tree.py` (the coverage law's own tests).
+
+**Delivers:** the census re-run — every declared plate resolved through
+`paths.art_file` + `variant_pending`, every absent one cross-checked
+against EVERY sheet under `research/`, **including
+`research/rose_round/`, which one earlier audit did not search and so
+reported nine files as owed when they already had briefs**; a
+PromptPainter `--dry-run` over every touched sheet; the ledger updated
+with the true remaining queue. Mechanical work, no judgment — hence
+Haiku.
+
+---
+
+### Session 28 — the 3D Preview integration (AMENDED 2026-07-29)
+
+The owner's decree of 2026-07-29 fixes WHICH pages become 3D, and the
+answer is the whole Cube family — *"3 Axis main, 4 Axis diagonal
+(temena), 6 Axis diagonal (ivice), CUBE"*. Those are exactly the four
+models already specified as the gadget's v1 deliverable
+(`Gadgets/3D Preview/PLAN.md` §The Four Owner Models), so nothing new
+is being designed here; what this session adds is the PAGE LIST on
+DOMY's side:
+
+| Encyclopedia page | Today | After |
+|---|---|---|
+| The Cube | computed isometric (`cube_diagrams.whole_cube`) | the rotatable Cube model |
+| The Thirteen Axes | computed (`thirteen_axes`) | the three axis models, switched |
+| each of the 13 axis pages | computed (`axis`) | its own axis, lit in 3D |
+| Composure · Vigor | computed (`pole`) — added 0.14.551 | their axis in 3D, the seat lit |
+
+Every one of those pages already declares a DRAWER rather than a file,
+so the swap is a change of drawer, not a change of contract — the
+static figures stay as the fallback for as long as the gadget is
+absent. Everything else in the original Session 28 entry stands.
+
+---
+
 ## Open Owner Decisions (any session may receive the verdict)
 
 - ~~The 27 PROPOSED terms of the 65-grid~~ — **SEALED 2026-07-28 by

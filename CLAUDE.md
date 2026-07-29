@@ -64,6 +64,45 @@ here.
 
 ---
 
+## THE THEME COMPLETION LAW (owner decree 2026-07-29)
+
+**A theme is not finished when its art is generated. It is finished
+when it is SEEN.**
+
+Born from a real, expensive failure: twelve figure casts — Greek
+Monsters, Chinese Mythology, The Corporation, three World of Warcraft
+casts, three Cyberpunk casts, three Star Wars casts — had **429 image
+files generated and correctly placed on disk**, and not one of them
+was visible anywhere in the program. They were never registered in
+`constants.WEEKDAY_THEMES`, so the dial's picker did not know they
+existed, and they had no Encyclopedia topic. The prompt-sheet round
+that produced them wrote "two wiring rounds left for later" into
+[Prompt Coverage](research/prompts/COVERAGE.md) and moved on. Later
+never came, and nothing in the suite could say so.
+
+**Approving a theme commits FOUR deliverables, and they ship
+TOGETHER:**
+
+1. **The prompt sheet** — the art briefs.
+2. **The Encyclopedia articles AND the hover blurbs** — every seat, the
+   dual page, the ninth, the theme title.
+3. **The dial wiring** — every config table (the full list is the
+   PER-CAST CHECKLIST in [Work Plan](WORKPLAN.md) §The Theme Backlog).
+4. **The Encyclopedia seat** — a card in a whole, reachable from Home.
+
+**A round that ships only the sheet MUST, in the same commit, record
+its own debt in the STAGING LEDGER** (`research/theme_staging.md`):
+which cast, what art exists, what it still owes, which session owes
+it. Deferring is allowed; deferring SILENTLY is not.
+
+**Enforced, not merely written** (`tests/test_theme_completeness.py`):
+no registered theme may be textless, and no theme folder under
+`assets/weeks/` may exist without being either registered or listed in
+the staging ledger. A future round that generates art and walks away
+fails the suite in the same session that did it.
+
+---
+
 ## Resource Economy — Stricter Deltas to Root Rule #15
 
 Model economy is now root Rule #15 (inline default, haiku/sonnet/opus
