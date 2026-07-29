@@ -541,71 +541,90 @@ def calendar_day_arrow(angle_deg: float, radius: float) -> QPolygonF:
 
 
 def calendar_mount_wheel(mount: str) -> str:
-    """Which `calendar_wedge_bounds` geometry a mount set's marks ride:
-    zodiac signs own the ZODIAC wheel's cardinal-START wedges (sign i's
-    wedge IS its own 30-deg arc — the honest alignment, no separate
-    month-based approximation needed); Slavic months and the Chinese
-    MONTHLY animals (owner R12) both own the ALMANAC wheel's cardinal-
-    CENTERED wedges (each keyed by a Gregorian month, already indexed
-    by core.year_wheel.almanac_month_index)."""
-    return "zodiac" if mount == "zodiac" else "almanac"
+    """Which `calendar_wedge_bounds` geometry a mount set's marks ride —
+    read from the roster's own DOZEN SYSTEM (CANON.md §The Two Dozen
+    Systems, `defaults.CalendarMount.system`): System "A" rides the
+    ZODIAC wheel's cardinal-START wedges (boundaries on the cardinals,
+    so the twelve fall into six pairs — sign i's wedge IS its own 30-deg
+    arc), System "B" the ALMANAC wheel's cardinal-CENTERED wedges (one
+    crown at 12h, one root at 24h, six opposition axes)."""
+    return "zodiac" if defaults.CALENDAR_MOUNTS[mount].system == "A" else "almanac"
 
 
 def calendar_mount_angle(mount: str, index: int) -> float:
-    """Dial angle (clockwise from top) of mount mark `index` — the
-    CENTER of its own wedge, Calendar-fixed (no rotation, matching the
-    wedges themselves)."""
-    start, end = calendar_wedge_bounds(calendar_mount_wheel(mount))[index]
-    return (start + end) / 2.0
+    """Dial angle (clockwise from top) of mount seat `index`,
+    Calendar-fixed (no rotation, matching the wedges themselves).
+
+    THE SEAT LAW (owner decree 2026-07-29), one formula for both sizes
+    (Rule #19 — no per-seat table exists for either):
+
+        wedge      = index // seats_per_wedge
+        pitch      = CALENDAR_WEDGE_DEG / seats_per_wedge
+        angle      = wedge_center - (wedge_span - pitch) / 2 + slot·pitch
+
+    A 12-set has one seat per wedge, the bracket vanishes and the seat
+    IS the wedge center. A 24-set has two, and they land a quarter wedge
+    either side of that center — a 15-deg pitch across the whole dial,
+    the same pitch the Rose's three stars already stand on."""
+    per_wedge = defaults.CALENDAR_MOUNT_SEATS_PER_WEDGE[
+        defaults.CALENDAR_MOUNTS[mount].seats
+    ]
+    start, end = calendar_wedge_bounds(calendar_mount_wheel(mount))[
+        index // per_wedge
+    ]
+    pitch = constants.CALENDAR_WEDGE_DEG / per_wedge
+    first = (start + end) / 2.0 - (constants.CALENDAR_WEDGE_DEG - pitch) / 2.0
+    return first + (index % per_wedge) * pitch
+
+
+def calendar_mount_mark_height(mount: str, radius: float) -> float:
+    """A mount mark's drawn height. `CALENDAR_MOUNT_MARK_SCALE` is sized
+    so twelve marks never touch at the mount radius; a 24-set halves the
+    seat pitch, so its marks halve with it (Rule #19: the size follows
+    the seat law, it is not a second tunable). Shared by the paint pass
+    and the compositor's own hit target (Rule #5)."""
+    per_wedge = defaults.CALENDAR_MOUNT_SEATS_PER_WEDGE[
+        defaults.CALENDAR_MOUNTS[mount].seats
+    ]
+    return 2 * radius * defaults.CALENDAR_MOUNT_MARK_SCALE / per_wedge
 
 
 def calendar_mount_entries(mount: str) -> tuple[tuple[str, Path | None], ...]:
-    """The twelve (display_name, art_path_or_None) pairs of a mount set,
-    in WEDGE INDEX order (0..11). Zodiac reads the SAME astrology
-    COLORED badges the wedge hover already shows (Rule #5) — real,
-    committed art. Months read the sourceless MONTHS_ART_DIR plates,
-    graceful-absent (owner R7b contract) until the owner's prompt sheet
-    lands — None routes the caller to the name-fallback, never a gap.
-    Chinese (owner R12) mounts the twelve MONTHLY animals
-    (`constants.CHINESE_MONTH_BRANCH_ANIMALS`, NOT the Chinese YEAR
-    zodiac already read elsewhere) — real, committed COLORED badges,
-    the same register the Almanac wedge hover's Chinese branch already
-    shows."""
-    if mount == "zodiac":
-        return tuple(
-            (name, octa_slot_art(constants.ZODIAC_STYLE_ART_DIRS["colored"], name))
-            for name, _symbol in constants.ZODIAC_SIGNS
-        )
-    if mount == "chinese":
-        entries: list[tuple[str, Path | None]] = [("", None)] * 12
-        for gregorian, animal in constants.CHINESE_MONTH_BRANCH_ANIMALS.items():
-            entries[almanac_month_index(gregorian)] = (
-                animal, octa_slot_art("zodiac/chinese/primary/colored", animal),
-            )
-        return tuple(entries)
-    entries: list[tuple[str, Path | None]] = [("", None)] * 12
-    for croatian, _gloss, stem, gregorian in defaults.SLAVIC_MONTHS:
-        index = almanac_month_index(gregorian)
-        resolved = paths.art_file(defaults.MONTHS_ART_DIR / f"{stem}.png")
-        entries[index] = (
-            croatian, resolved if resolved.exists() else None,
-        )
-    return tuple(entries)
+    """A mount set's (display_name, art_path_or_None) pairs in SEAT
+    ORDER — twelve of them for a Dozen, twenty-four for a 24-set. Every
+    field comes from the roster's own `defaults.CALENDAR_MOUNTS` entry
+    (Rule #5: ONE registry, no per-roster branch survives here).
+
+    Art is ALWAYS graceful-absent (the owner's R7b contract, now the
+    universal rule): a plate that is not on disk resolves to None and
+    routes the caller to the name-fallback, never a gap. `art_stems`
+    covers the sets whose plates are not named for the member (the
+    Slavic months are Croatian proper nouns with ASCII stems)."""
+    entry = defaults.CALENDAR_MOUNTS[mount]
+    return tuple(
+        (name, octa_slot_art(entry.art_dir, stem))
+        for name, stem in zip(entry.members, entry.stems)
+    )
 
 
-def calendar_mount_current_index(mount: str, day: DayContext) -> int:
-    """The wedge index (0..11) TODAY'S sign/month owns on the mount's
-    own wheel — the mark that earns the emphasis (owner spec: "the mark
-    can inherit that brightness"). Mirrors calendar_lit_index's own
-    "year" branches (Rule #5), but never hemisphere-mirrored — the mark
-    always sits on its OWN fixed wedge identity, matching what is drawn
-    there (unlike the Earth marker's orbit, which mirrors south). The
-    Chinese mount emphasizes the same Gregorian month's wedge as the
-    Slavic months mount — both are Gregorian-fixed 12-sets."""
-    if mount == "zodiac":
-        names = [name for name, _ in constants.ZODIAC_SIGNS]
-        return names.index(day.zodiac_name)
-    return almanac_month_index(day.local_date.month)
+def calendar_mount_current_index(mount: str, day: DayContext) -> int | None:
+    """The seat index TODAY owns on the mount's own wheel — the mark
+    that earns the emphasis (owner spec: "the mark can inherit that
+    brightness") — or None where the roster names no today, and every
+    mark rests at the same opacity.
+
+    WHAT counts as today is the roster's own `follows` declaration:
+    "sign" reads the running zodiac sign, "month" the running Gregorian
+    month (every month-keyed roster — the Chinese animals emphasize the
+    same wedge the Slavic months do). Never hemisphere-mirrored: the
+    mark sits on its OWN fixed wedge identity, matching what is drawn
+    there, unlike the Earth marker's orbit."""
+    entry = defaults.CALENDAR_MOUNTS[mount]
+    if entry.follows == "sign":
+        return entry.members.index(day.zodiac_name)
+    if entry.follows == "month":
+        return almanac_month_index(day.local_date.month)
+    return None
 
 
 def chinese_mount_dimmed_index(day: DayContext) -> int | None:
@@ -622,29 +641,27 @@ def chinese_mount_dimmed_index(day: DayContext) -> int | None:
     # The doubled LUNAR month's own animal — lunar month N always names
     # CHINESE_ANIMALS[(N + 1) % 12] (month 1 = Tiger, index 2; month 11
     # = Rat, index 0; month 12 = Ox, index 1 — the fixed jianyin
-    # numbering core.blue_moon.chinese_leap_month itself counts in).
+    # numbering core.blue_moon.chinese_leap_month itself counts in) —
+    # then the seat that animal holds on the mount's own wheel.
     animal = constants.CHINESE_ANIMALS[(number + 1) % 12]
-    gregorian = next(
-        month for month, name in constants.CHINESE_MONTH_BRANCH_ANIMALS.items()
-        if name == animal
-    )
-    return almanac_month_index(gregorian)
+    return defaults.CALENDAR_MOUNTS["chinese"].members.index(animal)
 
 
 def _draw_calendar_mount(
     painter: QPainter, ctx: "RenderContext", mount: str
 ) -> None:
-    """The mounted 12-set's marks — one per wedge, DAILY cadence (the
-    current-mark emphasis is a day computation, never per-tick). Missing
-    art (the months set, pre-owner-art) falls back to the entity's NAME,
-    the SAME convention archetype figures/weekday bodies use
-    (`draw_archetype_figure`) — never a blank gap. On the "chinese"
+    """The mounted set's marks — one per SEAT (twelve for a Dozen,
+    twenty-four for a 24-set), DAILY cadence (the current-mark emphasis
+    is a day computation, never per-tick). Missing art falls back to the
+    entity's NAME, the SAME convention archetype figures/weekday bodies
+    use (`draw_archetype_figure`) — never a blank gap. On the "chinese"
     mount, the doubled month's own animal DIMS below its resting alpha
     while The Cat holds the center (`chinese_mount_dimmed_index`) —
     checked BEFORE the current-month emphasis, so the two never both
-    apply to the one mark."""
+    apply to the one mark. A roster that names no today
+    (`CalendarMount.follows` None) simply has no emphasized mark."""
     mount_radius = ctx.radius * defaults.CALENDAR_MOUNT_RADIUS_FRACTION
-    mark_height = 2 * ctx.radius * defaults.CALENDAR_MOUNT_MARK_SCALE
+    mark_height = calendar_mount_mark_height(mount, ctx.radius)
     current = calendar_mount_current_index(mount, ctx.day)
     dimmed = chinese_mount_dimmed_index(ctx.day) if mount == "chinese" else None
     for index, (name, art) in enumerate(calendar_mount_entries(mount)):
@@ -1325,26 +1342,30 @@ def active_thirteenth(skin: SkinDefinition, day: DayContext) -> str | None:
     shape, never a date-only "which is more real" tiebreak (that R12
     notion is retired with the precedence machinery itself):
 
-    - `calendar_mount` "chinese"/"months" OWN a 13th (The Cat/Modrenik)
-      and OUTRANK the wheel whenever both are active at once — a mount
-      is a more deliberate SECOND choice layered on top of the wheel
-      (owner-documented tiebreak, ground-truthed against the settings
-      model: `calendar_mount` is fully independent of `palette_style`,
-      so both CAN be active together, e.g. the zodiac wheel with the
-      chinese mount).
-    - Any other mount ("off", or "zodiac" — which names no 13th of its
-      own, since Ophiuchus already belongs to the WHEEL, not the mount)
-      falls through to the WHEEL (`calendar_wheel`, palette_style-
-      picked): the zodiac wheel claims Ophiuchus, the almanac wheel
-      claims Sol."""
+    - A MOUNT that names a thirteenth of its own
+      (`defaults.CalendarMount.centre`) OUTRANKS the wheel whenever both
+      are active at once — a mount is a more deliberate SECOND choice
+      layered on top of the wheel (owner-documented tiebreak,
+      ground-truthed against the settings model: `calendar_mount` is
+      fully independent of `palette_style`, so both CAN be active
+      together, e.g. the zodiac wheel with the chinese mount).
+    - A mount that names NONE (the Emotions Dozen — canon gives it a
+      crown, a root and six opposition axes, and no thirteenth) and the
+      "off" case both fall through to the WHEEL (`calendar_wheel`,
+      palette_style-picked): the zodiac wheel claims Ophiuchus, the
+      almanac wheel claims Sol.
+
+    Whether the claimed member actually SHOWS is still its own
+    appearance rule's business — `day.thirteenth_candidates` holds only
+    the members whose trigger AND window are true today, so on almost
+    every day of the year this returns None."""
     if skin.pointer != "calendar":
         return None
     candidates = day.thirteenth_candidates
-    if skin.calendar_mount == "chinese":
-        return "chinese" if "chinese" in candidates else None
-    if skin.calendar_mount == "months":
-        return "modrenik" if "modrenik" in candidates else None
-    key = "ophiuchus" if calendar_wheel(skin) == "zodiac" else "sol"
+    mount = defaults.CALENDAR_MOUNTS.get(skin.calendar_mount)
+    key = mount.centre if mount is not None and mount.centre else (
+        "ophiuchus" if calendar_wheel(skin) == "zodiac" else "sol"
+    )
     return key if key in candidates else None
 
 

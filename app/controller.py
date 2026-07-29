@@ -795,7 +795,6 @@ def _overlay_display_settings(skin, settings: Settings, display):
         umbra_form=settings.umbra_form,
         umbra_contrast=settings.umbra_contrast,
         palette_style=palette_style,
-        calendar_lighting=settings.calendar_lighting,
         calendar_mount=settings.calendar_mount,
         # Aurora is ALWAYS solar-rotated (owner spec 2026-07-12): its
         # bands anchor to the real sun events, so the whole wheel keeps
@@ -1830,8 +1829,7 @@ class WatchController(QObject):
         the belt to that suspender for every OTHER path)."""
         if self._design is not None:
             self._design.refresh(self._settings, self._design_setters())
-        if self._pointer_theme is not None:
-            self._pointer_theme.refresh(self._settings.weekday_theme)
+        self._refresh_pointer_theme()
         if self._slot_theme is not None:
             self._slot_theme.refresh(self._slot_descriptors())
 
@@ -2576,12 +2574,6 @@ class WatchController(QObject):
             "palette_style": wrap(
                 lambda v: self._set_display_choice("palette_style", v)
             ),
-            "calendar_lighting": wrap(
-                lambda v: self._set_display_choice("calendar_lighting", v)
-            ),
-            "calendar_mount": wrap(
-                lambda v: self._set_display_choice("calendar_mount", v)
-            ),
             "ring": wrap(self._set_ring),
             "ring_finish": wrap(
                 lambda v: self._set_display_choice("ring_finish", v)
@@ -2616,6 +2608,8 @@ class WatchController(QObject):
             return
         dialog = PointerThemeDialog(
             self._settings.weekday_theme, self._pick_pointer_theme,
+            current_mount=self._live_calendar_mount(),
+            on_pick_mount=self._pick_calendar_mount,
             overlay=self._translation_overlay,
             stay_on_top=self._settings.z_mode == "top",
         )
@@ -2629,8 +2623,34 @@ class WatchController(QObject):
 
     def _pick_pointer_theme(self, theme: str) -> None:
         self._set_weekday_theme(theme)
-        if self._pointer_theme is not None:
-            self._pointer_theme.refresh(theme)
+        self._refresh_pointer_theme()
+
+    def _pick_calendar_mount(self, mount: str) -> None:
+        """THE CALENDAR MOUNT PICK (owner decree 2026-07-29): WHICH
+        roster rides the Calendar's twelve wedges. Applies through the
+        SAME `_set_display_choice` path the Design window used before
+        the control moved here (Rule #5) — only the picker changed, not
+        the setting or the way it is written."""
+        self._set_display_choice("calendar_mount", mount)
+        self._refresh_pointer_theme()
+
+    def _live_calendar_mount(self) -> str | None:
+        """The live mount while the CALENDAR pointer is active, else
+        None — the one signal that gives the Pointer Theme window its
+        mount tab. No other pointer has wedges to mount a roster on."""
+        if self._settings.pointer != "calendar":
+            return None
+        return self._settings.calendar_mount
+
+    def _refresh_pointer_theme(self) -> None:
+        """Re-supply the open Pointer Theme window with the live state
+        so the active tile's border moves without closing it — and so
+        switching to/from the Calendar grows or drops its mount tab."""
+        if self._pointer_theme is None:
+            return
+        self._pointer_theme.refresh(
+            self._settings.weekday_theme, self._live_calendar_mount(),
+        )
 
     @paths.in_display
     def _open_slot_theme(self) -> None:

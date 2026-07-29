@@ -5,8 +5,11 @@
 ## Purpose
 
 The mini WINDOW replacing the old Design submenu's deep chain — Pointer
-(variant + palette style + Calendar lighting + the Calendar's 12-set
-mount), Ring (preset + finish — gold/silver/bronze/THEMATIC, the 4th
+(variant + palette style; SHAPE alone since the Pointers REWORK phase 2,
+owner decree 2026-07-29 — the Calendar's lighting row went with the
+deleted feature and its MOUNT row moved to the
+[Pointer Theme](pointer_theme.md) window, where the other roster
+galleries live), Ring (preset + finish — gold/silver/bronze/THEMATIC, the 4th
 pill coloring the letters in the active preset's own theme color,
 ENLARGE/THEMATIC round 2026-07-27 — + Two metals, now offered for the
 4-letter DOMY/PILOT too, + the Eye's Shine, DOLLAR/EYE round

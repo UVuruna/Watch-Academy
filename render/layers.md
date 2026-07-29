@@ -253,15 +253,21 @@ first hue = the wedge centered on the top = June). `calendar_wedge_bounds()`
 returns the twelve `(start, end)` dial angles; the wedges are
 CALENDAR-FIXED — they never ride the solar rotation.
 
-One wedge LIGHTS by raising its opacity
-(`CALENDAR_WEDGE_ALPHA` + `CALENDAR_WEDGE_LIT_DELTA`);
-`calendar_lit_index()` chooses it from `SkinDefinition.calendar_lighting`:
-**"hour"** — the wedge under the hour hand (the Chinese double-hour /
-shichen: the noon Horse wedge, the midnight Rat…), **"year"** — the
-current month's wedge (Almanac) or the current sign's (Zodiac). The lit
-index rides `RenderContext.calendar_lit` (the compositor computes it
-from the live tick and keys the DAILY composite on it, so the shichen
-relights intraday even though the wedges live below the ring).
+**THE LIT WEDGE IS DELETED** (owner decree 2026-07-29, Pointers REWORK
+phase 2: *"Osvetljavanje part koji prolazi sat ili zemlja iskljuciti —
+obrisati tu funkcionalnost"*). Every wedge paints at the one
+`CALENDAR_WEDGE_ALPHA`; the Calendar now follows the SAME visibility law
+as every other pointer — the day/night law plus its own entry in
+`DAYLIGHT_SWITCH_POINTERS` — and nothing else. Gone with the feature:
+`Settings.calendar_lighting`, `SkinDefinition.calendar_lighting`,
+`constants.CALENDAR_LIGHTING_MODES`, `defaults.CALENDAR_WEDGE_LIT_DELTA`,
+`calendar_lit_index()`, `RenderContext.calendar_lit` and
+`Compositor._calendar_lit`. The lit wedge had been the ONE intraday term
+in the cached-composite key, so the composite is now purely daily. An
+old settings file that still carries the stale `calendar_lighting` key
+loads untouched (the loader reads the keys it knows and ignores extras);
+the whole deletion is pinned by `tests/test_calendar.py`'s
+`test_lit_wedge_*` regressions.
 
 On the Almanac wheel ONLY the Earth marker leaves the shared six-anchor
 season wheel for the Almanac's OWN real-calendar mapping
@@ -274,63 +280,134 @@ to the day. The Moon marker keeps its own lunation orbit. The wedge
 HOVER (`Compositor._calendar_tooltip`) is modest: the month + the
 double-hour's animal (Almanac) or the sign + its dates (Zodiac).
 
-<a id="the-12-set-mount"></a>
+<a id="the-calendar-mount"></a>
 
-#### The 12-SET Mount (DESIGN ZODIAC law, R9a round 2026-07-21)
+#### The Mount (DESIGN ZODIAC law, R9a round 2026-07-21; GENERALIZED 2026-07-29)
 The owner's ZODIAC law (`UV/DESIGN/DESIGN INSTRUCTIONS.txt`): "Zodiac i
 sve što ima 12 TREBA da bude moguće da se AKTIVIRA na CALENDAR POINTER
-(TO MU JE DEFAULT)" — any twelve-fold set may MOUNT twelve small marks
-on the Calendar pointer, one per wedge, at `CALENDAR_MOUNT_RADIUS_FRACTION`
+(TO MU JE DEFAULT)" — any twelve-fold set may MOUNT small marks on the
+Calendar pointer, one per wedge, at `CALENDAR_MOUNT_RADIUS_FRACTION`
 (60-70% of the dial radius — clear of the rim-riding Earth/Moon and the
-Calendar's own pinned South subdial). `SkinDefinition.calendar_mount`
-(`constants.CALENDAR_MOUNT_MODES`, Settings-picked in the Design ▸
-Pointer tab, right beside the lighting row) picks the set: **"off"**
-(nothing extra), **"zodiac"** (the astrology sign register's COLORED
-badges — the SAME art the wedge hover already shows), **"months"**
-(the twelve Slavic months, `defaults.SLAVIC_MONTHS`, graceful-absent
-art) or **"chinese"** (owner R12 — the twelve MONTHLY animals, real
-COLORED badges, see below). Ships **"zodiac"** by default — the owner's
-law names the Calendar pointer as the 12-set's default home, and an
-offscreen render confirmed the badges read cleanly at the mount radius
-without crowding the ring, the hands or the pinned subdial.
+Calendar's own pinned South subdial).
 
-A mount rides its OWN fixed wheel geometry, independent of whichever
-wheel `palette_style` paints as the background wedges
-(`calendar_mount_wheel(mount)`: zodiac → the ZODIAC wheel's cardinal-
-START wedges, since sign *i*'s wedge already IS its own honest 30-deg
-arc; months → the ALMANAC wheel's cardinal-CENTERED wedges, June
-leading). `calendar_mount_angle(mount, index)` is each mark's dial
-angle (its wedge's CENTER, Calendar-fixed — no `ctx.rotation`, exactly
-like the wedges themselves); `calendar_mount_entries(mount)` resolves
-the twelve (name, art-or-None) pairs — zodiac through the existing
-`octa_slot_art(ZODIAC_STYLE_ART_DIRS["colored"], name)`, months through
-the sourceless `MONTHS_ART_DIR` (never a gap: a missing plate resolves
-to `None`, drawn as the entity's NAME through `draw_name_label` — the
-SAME graceful-absent convention `draw_archetype_figure` uses, Rule #5).
-`calendar_mount_current_index(mount, day)` is the emphasis mark —
-mirroring `calendar_lit_index`'s own "year" branches (Rule #5) but
-**never** hemisphere-mirrored: the mark always sits on its own fixed
-wedge identity, matching what is actually drawn there, unlike the Earth
-marker's orbit (which mirrors south). `_draw_calendar_mount` (called
-from `BackgroundLayer.paint`, DAILY cadence, right after the wedge
-loop) draws each mark at `CALENDAR_MOUNT_ALPHA` opacity, raised by
-`CALENDAR_MOUNT_LIT_DELTA` (reaching exactly 1.0) on the current mark —
-"the mark can inherit that brightness" (owner spec), computed, no new
-art.
+**The offer is ONE REGISTRY** — `defaults.CALENDAR_MOUNTS`, a table of
+`CalendarMount(title, system, members, art_dir, centre, art_stems,
+follows)` (owner decree 2026-07-29, replacing a hand-kept quartet of
+`if mount == …` branches). Every function below reads that table and
+nothing else, so registering a roster there puts it on the dial, in the
+picker and in the settings' legal values with no further edit (Rule #5).
+`defaults.CALENDAR_MOUNT_MODES` is derived from it; `Settings.
+calendar_mount` / `SkinDefinition.calendar_mount` still hold the choice
+under their unchanged key, and the PICKER moved to the Pointer Theme
+window's **Calendar mount** tab (the Design ▸ Pointer tab keeps shape
+alone — see [Weekday Theme Grid](../app/weekday_theme_grid.md)).
+Ships **"zodiac"** by default.
+
+**THE TWO DOZEN SYSTEMS** (CANON.md §The Two Dozen Systems and the Four
+Dozens) decide a mount's geometry, and each roster declares its own —
+so `calendar_mount_wheel(mount)` is a lookup, not a special case:
+
+| System | Wedges | Shape | Rides |
+|---|---|---|---|
+| **A** | boundaries ON the cardinals (12h–14h, …) | SIX PAIRS — two flanking the top, two the bottom, two each side | the ZODIAC wheel geometry |
+| **B** | centers ON the cardinals (11h–13h, …) | one CROWN (12h), one ROOT (24h), six OPPOSITION AXES | the ALMANAC wheel geometry |
+
+A mount always rides its OWN geometry, independent of whichever wheel
+`palette_style` paints as the background — the marks never jump when the
+owner switches Zodiac/Almanac colors.
+
+**THE SEAT LAW** (owner decree 2026-07-29) — one formula, no per-seat
+table anywhere (Rule #19):
+
+```
+seats_per_wedge = 1 for a 12-set, 2 for a 24-set
+pitch           = 30° / seats_per_wedge
+angle(index)    = center(wedge index//seats_per_wedge)
+                  − (30° − pitch)/2 + (index mod seats_per_wedge)·pitch
+mark height     = CALENDAR_MOUNT_MARK_SCALE·diameter / seats_per_wedge
+```
+
+A 12-set's bracket vanishes and each member sits ON its wedge center; a
+24-set's two members sit a quarter wedge either side of it — a 15° pitch
+across the whole dial, the same the Rose's three stars stand on — and
+the marks halve so twenty-four never touch. `calendar_mount_angle()`,
+`calendar_mount_mark_height()` (shared by the paint pass and the hover's
+hit disc, Rule #5) and the compositor's own seat loop all read the seat
+count off the registry entry.
+
+`calendar_mount_entries(mount)` resolves the (name, art-or-None) pairs
+from the entry's `members`/`art_dir`/`art_stems` — never a gap: a
+missing plate resolves to `None` and is drawn as the entity's NAME
+through `draw_name_label`, the SAME graceful-absent convention
+`draw_archetype_figure` uses. `calendar_mount_current_index(mount, day)`
+is the emphasis mark, chosen by the roster's own `follows` declaration —
+`"sign"` reads the running zodiac sign, `"month"` the running Gregorian
+month, `None` means the set names no today (the Emotions Dozen: there is
+no "today's emotion", so no mark is emphasized). It is **never**
+hemisphere-mirrored: the mark sits on its own fixed wedge identity,
+matching what is actually drawn there, unlike the Earth marker's orbit.
+`_draw_calendar_mount` (called from `BackgroundLayer.paint`, DAILY
+cadence, right after the wedge loop) draws each mark at
+`CALENDAR_MOUNT_ALPHA`, raised by `CALENDAR_MOUNT_LIT_DELTA` (reaching
+exactly 1.0) on the current mark — "the mark can inherit that
+brightness" (owner spec). This emphasis is the MOUNT's, and it outlived
+the deleted wedge lighting because it marks a roster member, not paint.
+
+**THE CENTER** (`CalendarMount.centre`) names WHICH of
+`constants.THIRTEENTHS` may take the dial center while this roster
+rides — and never unconditionally. `active_thirteenth(skin, day)`
+resolves it:
+
+```
+IF the pointer is not the Calendar        → nobody (every other
+                                             pointer's own center laws
+                                             reign untouched)
+IF the mounted roster names a thirteenth  → that one, IF today is inside
+                                             its own trigger + window
+ELSE (mount off, or a roster naming none) → the WHEEL's own: Ophiuchus
+                                             on the zodiac wheel, Sol on
+                                             the almanac wheel — same
+                                             window test
+```
+
+The window test is `core.blue_moon`'s (`DayContext.thirteenth_candidates`
+holds only the members whose trigger AND window are true today), so on
+almost every day of the year the center is empty. A mount that names one
+OUTRANKS the wheel — a mount is the more deliberate second choice.
 
 The HOVER reuses the existing machinery rather than forking
 (`Compositor._calendar_mount_tooltip`, checked BEFORE the broader
 whole-wedge `_calendar_tooltip` in `_tooltip_at` since a mark is a
 smaller, more specific target sitting inside that same area): a small
-circular hit disc at each mark's drawn position answers with its name —
+circular hit disc at each seat's drawn position answers with its name —
 zodiac through `_zodiac_wedge_html(index)` (factored out of
 `_calendar_tooltip`'s own zodiac branch so the mark speaks the IDENTICAL
 sign+dates+badge text the background wedge hover already does), months
 through `_months_wedge_html(index)` (the Croatian proper noun + its
-English gloss, graceful-absent art via the same `_hover_badge`
-empty-string rule every other emblem uses), chinese through
-`_chinese_mount_wedge_html(index)` (the animal's name over its own
-COLORED badge).
+English gloss), chinese through `_chinese_mount_wedge_html(index)` (the
+animal's name over its own COLORED badge), and every other roster
+through the generic `_mount_seat_html(mount, index)` (the member's name
+over its plate) — all graceful-absent via the same `_hover_badge`
+empty-string rule every other emblem uses.
+
+**Registered rosters** (each with its canon source and center rule):
+
+| Key | Roster | System | Seats | Center |
+|---|---|---|---|---|
+| `zodiac` | the Zodiac Dozen | A | 12 | Ophiuchus |
+| `almanac` | the Month Dozen (Gregorian) | B | 12 | Sol |
+| `months` | the Slavic Months | B | 12 | Modrenik |
+| `chinese` | the Chinese month-branch animals | B | 12 | The Cat |
+| `emotions` | the Emotions Dozen | B | 12 | — none in canon |
+
+**NOT yet mountable** — canon names three more Dozens (§The Two Dozen
+Systems) whose art is already committed but whose PER-WEDGE SEATING it
+deliberately leaves open, and a seat order is not a session's to invent:
+the **Olympians** and the **Apostles** (canon pins only the crown pair,
+the root pair and the Olympians' two flanks — "the exact wedge
+assignment finalized in the wiring round"), and the **Virtue Wheel**
+("The crown/root seating is PROPOSED … and awaits the owner's verdict").
+Each becomes one `CALENDAR_MOUNTS` entry the day its seating is sealed.
 
 **"chinese" — the MONTHLY animals (owner R12, Blue Moon round):**
 `constants.CHINESE_MONTH_BRANCH_ANIMALS` fixes one branch animal per
@@ -371,8 +448,8 @@ ARCHETYPE CLOCK. The machinery:
   whose HOUR-SPACE holds the hour hand: the circle divides by arms
   (trio 3×8h, cross 4×6h, hexa 6×4h, octa 8×3h), every space CENTERED
   on its arm; the spaces ride the DRAWN (solar-rotated) arms. The
-  compositor computes it from the live tick and keys the DAILY
-  composite on it, like the Calendar's shichen wedge.
+  compositor computes it from the live tick; the archetype figures
+  paint LIVE, so it keys no cache.
 - **THE TWO-TYPE LAW** (owner decree 2026-07-18, round two —
   screenshots; height law FIXED round A 2026-07-19 — screenshots showed
   lancets overflowing their diamonds and the Trinity center huge):
@@ -867,14 +944,16 @@ draws a showing 13th there, at the SAME (0, 0) origin every other center
 face uses, sized like `weekday_body_size()`/`center_scale` would size an
 ordinary center face there. Resolution reads `DayContext.
 thirteenth_candidates` (`core.blue_moon.thirteenth_candidates`, an
-unordered per-day FACT set) against the skin's own WHEEL
-(`calendar_wheel`, `palette_style`-picked: zodiac → Ophiuchus, almanac →
-Sol) or MOUNT (`calendar_mount`: "chinese" → The Cat, "months" →
-Modrenik) — a mount that owns a 13th outranks the wheel whenever both
-are active settings at once (ground-truthed against the settings model:
-`calendar_mount` is fully independent of `palette_style`, so both CAN be
-selected together); `calendar_mount == "zodiac"` names no 13th of its
-own and falls through to the wheel, like "off". Graceful-absent like the
+unordered per-day FACT set) against the skin's own MOUNT — the roster's
+`defaults.CalendarMount.centre` since the 2026-07-29 generalization, so
+every roster names its own thirteenth in ONE table instead of an
+`if`-chain here — or, when the mount is "off" or names none (the
+Emotions Dozen), against the WHEEL (`calendar_wheel`,
+`palette_style`-picked: zodiac → Ophiuchus, almanac → Sol). A mount that
+owns a 13th outranks the wheel whenever both are active settings at once
+(ground-truthed against the settings model: `calendar_mount` is fully
+independent of `palette_style`, so both CAN be selected together).
+Graceful-absent like the
 calendar mount's own months (`thirteenth_plate(key)` — a NAME-ONLY
 fallback, never a hidden feature, unlike `theme_ninth` below, whose
 missing plate silently withdraws the Ninth face entirely). Its own hover

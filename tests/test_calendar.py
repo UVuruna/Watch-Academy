@@ -1,13 +1,16 @@
 """The Calendar pointer (owner 2026-07-16, CANON §The Dozen): the two
 wheels' palettes, the Almanac's own real-calendar year mapping (one tick
-≈ one day), the Earth day-arrow, the shichen/year lighting, the pinned
-slot layout, and the no-solar-rotation of the wedges."""
+≈ one day), the Earth day-arrow, the pinned slot layout, and the
+no-solar-rotation of the wedges. The lit-wedge feature it once carried
+is DELETED (owner decree 2026-07-29) — its grave is guarded by the
+`test_lit_wedge_*` regressions below."""
 
 import os
 
 os.environ.setdefault("QT_QPA_PLATFORM", "offscreen")
 
 import dataclasses
+import json
 import math
 from datetime import date, datetime
 from zoneinfo import ZoneInfo
@@ -25,10 +28,10 @@ from render.assets import AssetCache
 from render.compositor import Compositor
 from render.layers import (
     calendar_day_arrow,
-    calendar_lit_index,
     calendar_mount_angle,
     calendar_mount_current_index,
     calendar_mount_entries,
+    calendar_mount_mark_height,
     calendar_mount_wheel,
     calendar_wedge_bounds,
     calendar_wheel,
@@ -158,43 +161,84 @@ def test_day_arrow_points_outward_at_the_marker_tick():
     assert tip_r > base_r                        # tip outward, base inward
 
 
-# --- Lighting --------------------------------------------------------------------
+# --- THE LIT WEDGE IS DELETED (owner decree 2026-07-29) --------------------------
+# "Osvetljavanje part koji prolazi sat ili zemlja iskljuciti — obrisati
+# tu funkcionalnost". These regressions guard the grave: no key, no
+# constant, no render path, no wedge that paints brighter than its
+# siblings — and an old settings file carrying the stale key still loads.
 
 
-def test_shichen_horse_wedge_lights_at_noon(app):
-    """"hour" lighting at 12:15 lights the noon double-hour — on the
-    Almanac that is the Horse wedge (index 0, the top), on the Zodiac the
-    12h-14h wedge the hour hand sits in (index 0)."""
+def test_lit_wedge_feature_names_are_all_gone():
+    """No `calendar_lighting` setting, no `CALENDAR_LIGHTING_MODES`, no
+    `calendar_lit_index`, no `CALENDAR_WEDGE_LIT_DELTA`, no
+    `RenderContext.calendar_lit` — Rule #6, the whole feature deleted
+    rather than wrapped."""
+    import render.layers as layers_module
+    from app.settings_store import Settings
+    from skins.manifest import SkinDefinition
+
+    def field_names(cls) -> set[str]:
+        return {f.name for f in dataclasses.fields(cls)}
+
+    assert "calendar_lighting" not in field_names(Settings)
+    assert "calendar_lighting" not in field_names(SkinDefinition)
+    assert "calendar_lit" not in field_names(layers_module.RenderContext)
+    assert not hasattr(constants, "CALENDAR_LIGHTING_MODES")
+    assert not hasattr(defaults, "CALENDAR_WEDGE_LIT_DELTA")
+    assert not hasattr(layers_module, "calendar_lit_index")
+    assert not hasattr(Compositor, "_calendar_lit")
+
+
+def test_every_calendar_wedge_paints_at_the_same_opacity(app):
+    """The RENDER proof, not just the API proof: at 12:15 — the exact
+    moment the old "hour" mode lit the top wedge and the old "year" mode
+    lit July's — no wedge stands out. Sampling the mount-free mid-radius
+    of all twelve wedges gives twelve equal alphas."""
     day, tick = _day_tick(app, datetime(2026, 7, 16, 12, 15))
-    almanac = _calendar_skin(palette_style="secondary", calendar_lighting="hour")
-    assert calendar_lit_index(almanac, "hour", tick.hour_angle, day) == 0
-    # Index 0 on the Almanac is the Horse (the noon watch).
-    assert constants.CHINESE_ANIMALS[(0 - 6) % 12] == "Horse"
-    zodiac = _calendar_skin(palette_style="primary", calendar_lighting="hour")
-    assert calendar_lit_index(zodiac, "hour", tick.hour_angle, day) == 0
+    comp = Compositor(_calendar_skin(calendar_mount="off"), AssetCache())
+    image = comp.render_offscreen(360.0, 1.0, day, tick)
+    alphas = []
+    for index in range(12):
+        angle = index * constants.CALENDAR_WEDGE_DEG + 15.0
+        point = dial_point(angle, 150.0)
+        alphas.append(
+            image.pixelColor(
+                round(180.0 + point.x()), round(180.0 + point.y())
+            ).alpha()
+        )
+    assert min(alphas) > 0                       # every wedge really painted
+    assert max(alphas) - min(alphas) <= 1        # and none of them lights
 
 
-def test_year_lighting_picks_the_month_and_sign(app):
-    """"year" lighting: the Almanac lights the current MONTH's wedge, the
-    Zodiac the current SIGN's — July 2026 = wedge 1 (July) / Cancer
-    (index 0, sign Cancer runs to ~22 July)."""
-    day, tick = _day_tick(app, datetime(2026, 7, 16, 12, 15))
-    almanac = _calendar_skin(palette_style="secondary", calendar_lighting="year")
-    assert calendar_lit_index(almanac, "year", tick.hour_angle, day) == 1
-    zodiac = _calendar_skin(palette_style="primary", calendar_lighting="year")
-    index = calendar_lit_index(zodiac, "year", tick.hour_angle, day)
-    names = [name for name, _ in constants.ZODIAC_SIGNS]
-    assert names[index] == day.zodiac_name
+def test_composite_key_is_daily_again_without_the_lit_wedge(app):
+    """The lit wedge was the ONE intraday term in the cached-composite
+    key — deleting it makes the key purely (size, day). Two ticks eight
+    hours apart on the same day must NOT invalidate the composite."""
+    day, morning = _day_tick(app, datetime(2026, 7, 16, 8, 15))
+    _, evening = _day_tick(app, datetime(2026, 7, 16, 16, 30))
+    comp = Compositor(_calendar_skin(), AssetCache())
+    comp.render_offscreen(360.0, 1.0, day, morning)
+    first = comp._composite_key
+    comp.render_offscreen(360.0, 1.0, day, evening)
+    assert comp._composite_key == first
 
 
-def test_lighting_mode_switch_changes_the_lit_wedge(app):
-    """The two modes really select different wedges away from noon:
-    mid-afternoon the hour wedge is not the month wedge."""
-    day, tick = _day_tick(app, datetime(2026, 7, 16, 16, 30))
-    skin = _calendar_skin(palette_style="secondary")
-    by_hour = calendar_lit_index(skin, "hour", tick.hour_angle, day)
-    by_year = calendar_lit_index(skin, "year", tick.hour_angle, day)
-    assert by_hour != by_year
+def test_settings_file_with_the_stale_lighting_key_still_loads(tmp_path):
+    """THE SETTINGS-MIGRATION LAW (this project was burned by it before,
+    MEMORY "Settings migration on rename"): every file written before
+    2026-07-29 carries `calendar_lighting`. The loader must IGNORE the
+    stale key — never read the file as corrupt and offer a reset."""
+    from app.settings_store import SettingsStore
+
+    path = tmp_path / "settings.json"
+    store = SettingsStore(path)
+    store.save(dataclasses.replace(store.load(), calendar_mount="chinese"))
+    raw = json.loads(path.read_text(encoding="utf-8"))
+    assert "calendar_lighting" not in raw          # never written again
+    raw["calendar_lighting"] = "year"              # an old file's leftover
+    path.write_text(json.dumps(raw), encoding="utf-8")
+    loaded = SettingsStore(path).load()            # must NOT raise
+    assert loaded.calendar_mount == "chinese"      # and the rest survived
 
 
 # --- Slots & rotation ------------------------------------------------------------
@@ -275,16 +319,6 @@ def test_spacebar_encyclopedia_target_maps_the_hovered_wheel(app):
     assert zodiac.encyclopedia_target(180.0, 180.0, 360.0) is None
 
 
-def test_calendar_lit_index_none_off_the_pointer(app):
-    """The compositor computes no lit wedge for the other pointers (the
-    composite key stays clean)."""
-    day, tick = _day_tick(app, datetime(2026, 7, 16, 12, 15))
-    comp = Compositor(defaults.DEFAULT_SKIN, AssetCache())
-    comp.set_day(day)
-    comp._last_tick = tick
-    assert comp._calendar_lit(tick) is None
-
-
 # --- The 12-SET MOUNT (DESIGN ZODIAC law, R9a round 2026-07-21) ------------------
 # "Zodiac i sve što ima 12 TREBA da bude moguće da se AKTIVIRA na CALENDAR
 # POINTER (TO MU JE DEFAULT)": twelve marks, one per wedge, at 60-70% of
@@ -339,10 +373,11 @@ def test_months_mount_entries_are_graceful_absent_and_wedge_aligned():
 
 
 def test_mount_current_index_matches_todays_sign_and_month_no_hemisphere_flip(app):
-    """The emphasis mark is the SAME lookup calendar_lit_index's "year"
-    branches use (Rule #5) — never hemisphere-mirrored, since the mark
-    sits on its own fixed wedge identity (unlike the Earth marker's
-    orbit)."""
+    """The emphasis mark says "you are here" on the MOUNTED ROSTER — it
+    outlived the deleted wedge lighting (owner 2026-07-29) because it
+    marks a roster member, not dial paint. Never hemisphere-mirrored:
+    the mark sits on its own fixed wedge identity (unlike the Earth
+    marker's orbit)."""
     day, _tick = _day_tick(app, datetime(2026, 7, 16, 12, 15))
     names = [name for name, _symbol in constants.ZODIAC_SIGNS]
     assert calendar_mount_current_index("zodiac", day) == names.index(day.zodiac_name)
@@ -352,9 +387,9 @@ def test_mount_current_index_matches_todays_sign_and_month_no_hemisphere_flip(ap
 
 
 def test_mount_lit_delta_raises_the_current_mark_to_full_opacity():
-    """"the mark can inherit that brightness" (owner spec) — the SAME
-    base+delta shape the wedges use, sized so the current mark reaches
-    (but never exceeds) full opacity."""
+    """"the mark can inherit that brightness" (owner spec) — the same
+    base+delta shape the wedges once used, sized so the current mark
+    reaches (but never exceeds) full opacity."""
     assert 0.0 < defaults.CALENDAR_MOUNT_ALPHA < 1.0
     assert defaults.CALENDAR_MOUNT_ALPHA + defaults.CALENDAR_MOUNT_LIT_DELTA == (
         pytest.approx(1.0)
@@ -411,9 +446,139 @@ def test_calendar_mount_off_speaks_no_mark_hover(app):
     assert comp._calendar_mount_tooltip(point, 180.0) is None
 
 
-def test_calendar_mount_modes_and_default():
-    assert constants.CALENDAR_MOUNT_MODES == ("off", "zodiac", "months", "chinese")
-    assert defaults.DEFAULT_SKIN.calendar_mount in constants.CALENDAR_MOUNT_MODES
+def test_calendar_mount_modes_are_derived_from_the_registry():
+    """THE GENERALIZED OFFER (owner decree 2026-07-29): the legal
+    setting values are no longer a hand-kept tuple — they fall out of
+    `defaults.CALENDAR_MOUNTS`, so registering a roster makes it
+    settable with no second edit (Rule #5)."""
+    assert defaults.CALENDAR_MOUNT_MODES == ("off",) + tuple(
+        defaults.CALENDAR_MOUNTS
+    )
+    assert defaults.DEFAULT_SKIN.calendar_mount in defaults.CALENDAR_MOUNT_MODES
+    assert not hasattr(constants, "CALENDAR_MOUNT_MODES")   # moved, not copied
+
+
+def test_every_registered_mount_is_canon_shaped():
+    """Each entry declares a sealed DOZEN SYSTEM (CANON §The Two Dozen
+    Systems), a seat count the seat law knows how to place, members in
+    seat order with no blanks, and a centre that is either a real
+    `THIRTEENTHS` key or None."""
+    for key, mount in defaults.CALENDAR_MOUNTS.items():
+        assert mount.system in ("A", "B"), key
+        assert mount.seats in defaults.CALENDAR_MOUNT_SEATS_PER_WEDGE, key
+        assert len(mount.members) == len(set(mount.members)) == mount.seats, key
+        assert all(mount.members), key
+        assert len(mount.stems) == mount.seats, key
+        assert mount.centre is None or mount.centre in constants.THIRTEENTHS, key
+        assert mount.follows in (None, "sign", "month"), key
+
+
+def test_the_new_dozens_are_seated_exactly_where_canon_says():
+    """The two rosters this round added, both against CANON's own words.
+
+    The MONTH DOZEN is System B — "June centered on noon" — so June
+    leads and December roots the bottom. The EMOTIONS DOZEN is System B
+    with canon's hour list read verbatim ("Love 12h, Hope 14h, Courage
+    16h, Ambition 18h, Pride 20h, Envy 22h, Hatred 24h, Despair 02h,
+    Fear 04h, Doubt 06h, Humility 08h, Gratitude 10h") — and because a
+    System B wedge is CENTERED on its hour, seat k IS hour 12 + 2k."""
+    almanac = defaults.CALENDAR_MOUNTS["almanac"]
+    assert almanac.system == "B"
+    assert almanac.members[0] == "June"                      # the crown
+    assert almanac.members[6] == "December"                  # the root
+    assert almanac.members[almanac_month_index(1)] == "January"
+    emotions = defaults.CALENDAR_MOUNTS["emotions"]
+    assert emotions.system == "B"
+    assert emotions.members[0] == "Love"                     # crown, 12h
+    assert emotions.members[6] == "Hatred"                   # root, 24h
+    # Canon's six opposition axes: every wedge faces its exact opposite.
+    for k, (near, far) in enumerate(zip(emotions.members, emotions.members[6:])):
+        assert (near, far) in (
+            ("Love", "Hatred"), ("Hope", "Despair"), ("Courage", "Fear"),
+            ("Ambition", "Doubt"), ("Pride", "Humility"), ("Envy", "Gratitude"),
+        ), k
+    # Both wear real committed art — never the name fallback.
+    for key in ("almanac", "emotions"):
+        entries = calendar_mount_entries(key)
+        assert all(art is not None and art.exists() for _n, art in entries), key
+
+
+def test_seat_law_places_twelve_one_per_wedge_and_twentyfour_two(app):
+    """THE SEAT LAW (owner decree 2026-07-29). A 12-set sits one per
+    wedge, ON the wedge center; a 24-set sits TWO per wedge, a quarter
+    wedge either side of it — a 15° pitch across the whole dial. One
+    formula serves both (`calendar_mount_angle`), so this test drives it
+    through a real registry entry for 12 and through a 24-seat entry for
+    24, proving the placement rather than a table."""
+    step = constants.CALENDAR_WEDGE_DEG
+    # 12 → one per wedge, exactly on the wedge center.
+    for key in defaults.CALENDAR_MOUNTS:
+        mount = defaults.CALENDAR_MOUNTS[key]
+        angles = [calendar_mount_angle(key, i) for i in range(mount.seats)]
+        bounds = calendar_wedge_bounds(calendar_mount_wheel(key))
+        assert angles == [
+            pytest.approx((start + end) / 2.0) for start, end in bounds
+        ], key
+    # 24 → two per wedge. Registered through the SAME registry so the
+    # engine is exercised, not a parallel code path.
+    two_per = defaults.CalendarMount(
+        title="Twenty-four", system="B",
+        members=tuple(f"S{i:02d}" for i in range(24)),
+        art_dir="emotions/primary/colored",
+    )
+    defaults.CALENDAR_MOUNTS["_test24"] = two_per
+    try:
+        angles = [calendar_mount_angle("_test24", i) for i in range(24)]
+        assert len(angles) == 24
+        gaps = {round((angles[i + 1] - angles[i]) % 360.0, 6) for i in range(23)}
+        assert gaps == {step / 2.0}                  # a 15-deg ray pitch
+        centers = [
+            (start + end) / 2.0
+            for start, end in calendar_wedge_bounds(calendar_mount_wheel("_test24"))
+        ]
+        for wedge, center in enumerate(centers):
+            assert angles[2 * wedge] == pytest.approx(center - step / 4.0)
+            assert angles[2 * wedge + 1] == pytest.approx(center + step / 4.0)
+        # And the marks SHRINK with the pitch, so twenty-four never touch.
+        assert calendar_mount_mark_height("_test24", 180.0) == pytest.approx(
+            calendar_mount_mark_height("emotions", 180.0) / 2.0
+        )
+    finally:
+        del defaults.CALENDAR_MOUNTS["_test24"]
+
+
+def test_centre_rule_is_per_roster_and_never_unconditional(app):
+    """THE CENTER (owner: "and NOT always"). A roster's `centre` names
+    WHICH thirteenth may take the dial center — the appearance rule
+    itself stays `core.blue_moon`'s, so the seat is empty on almost
+    every day. Golden pair for Ophiuchus: Dec 5 2026 is inside a
+    13-full-moon year AND inside its Nov 29 - Dec 17 window, so it
+    shows; Dec 5 2025 is not a 13-full-moon year, so the very same
+    wheel, mount and calendar day show NOTHING."""
+    from render.layers import active_thirteenth
+
+    shows, _t = _day_tick(app, datetime(2026, 12, 5, 12, 0))
+    hides, _t2 = _day_tick(app, datetime(2025, 12, 5, 12, 0))
+    skin = _calendar_skin(palette_style="primary", calendar_mount="zodiac")
+    assert active_thirteenth(skin, shows) == "ophiuchus"
+    assert active_thirteenth(skin, hides) is None
+    # A roster canon gives NO thirteenth (the Emotions Dozen) claims
+    # nothing of its own, so resolution falls through to the WHEEL
+    # underneath exactly like "off" — the documented law, unchanged by
+    # the generalization.
+    emotions = _calendar_skin(palette_style="primary", calendar_mount="emotions")
+    assert defaults.CALENDAR_MOUNTS["emotions"].centre is None
+    assert active_thirteenth(emotions, shows) == "ophiuchus"   # the wheel's
+    assert active_thirteenth(emotions, hides) is None
+    # ...and it emphasizes no MARK either — there is no "today's emotion".
+    assert calendar_mount_current_index("emotions", shows) is None
+    # A roster that DOES name one outranks the wheel (the owner's
+    # tiebreak): the same zodiac wheel, same day, the Slavic months
+    # mount on top — Modrenik's own window has not opened on Dec 5, so
+    # the center is empty rather than falling back to Ophiuchus.
+    months = _calendar_skin(palette_style="primary", calendar_mount="months")
+    assert defaults.CALENDAR_MOUNTS["months"].centre == "modrenik"
+    assert active_thirteenth(months, shows) is None
 
 
 # --- The Chinese MONTHLY-animal mount (owner R12, Blue Moon round) --------------

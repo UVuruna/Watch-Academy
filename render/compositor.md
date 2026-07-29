@@ -14,15 +14,18 @@ live bodies, ring above them), so the z-order is preserved to the pixel.
 
 ### The rebuild triggers (the COMPLETE list)
 A cached segment is rebuilt ONLY when the composite key changes —
-`(round(size·dpr), day.cache_key, calendar_lit)`:
+`(round(size·dpr), day.cache_key)`:
 
 - **size / DPI change** — `invalidate()` (also flushes the asset cache);
 - **day change** — `set_day()`;
 - **skin / theme install** — the controller builds a FRESH compositor
   (`_install_skin`), so the segments start empty;
-- **settings apply** — same `_install_skin` path;
-- **the Calendar's intraday lit wedge** (`calendar_lit`) — the shichen
-  relights ~12×/day (BackgroundLayer is cached).
+- **settings apply** — same `_install_skin` path.
+
+The key is purely DAILY again since 2026-07-29: the Calendar's lit wedge
+(`calendar_lit`, the shichen that relit ~12×/day) was the ONE intraday
+term in it, and the owner deleted that feature outright — see
+[Layers](layers.md) §The Calendar.
 
 A **hover** enter/leave and an **Omega reveal** toggle rebuild NOTHING —
 the weekday bodies and archetype figures that vary with them are drawn

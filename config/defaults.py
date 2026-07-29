@@ -8,6 +8,7 @@ by app/settings_store.py.
 import re
 from datetime import date
 from pathlib import Path
+from typing import NamedTuple
 
 from config import constants, paths
 from skins.manifest import (
@@ -1062,11 +1063,11 @@ def pointer_arm_labels(pointer: str, palette_style: str) -> tuple:
 COLORFUL_OFF_COLOR = "#FFFFFF"
 
 # --- Calendar pointer (owner 2026-07-16, CANON §The Dozen) ---------------------
-# The twelve wedges paint at a base opacity; the LIT wedge (the shichen
-# under the hour hand, or the current month/sign) raises it by the
-# delta. Calendar-fixed — the wedges never ride the solar rotation.
-CALENDAR_WEDGE_ALPHA = 0.30          # every wedge's resting opacity
-CALENDAR_WEDGE_LIT_DELTA = 0.50      # extra opacity on the lit wedge
+# The twelve wedges ALL paint at this one opacity. Calendar-fixed — the
+# wedges never ride the solar rotation. The old `CALENDAR_WEDGE_LIT_
+# DELTA` (the extra opacity on a "lit" wedge) is DELETED with the
+# lighting feature itself (owner decree 2026-07-29).
+CALENDAR_WEDGE_ALPHA = 0.30          # every wedge's opacity
 CALENDAR_WEDGE_RADIUS_FRACTION = 0.90  # wedge reach, of the dial radius
 # The Earth DAY-ARROW on the Almanac wheel (owner 2026-07-16: "one tick
 # ≈ one day"): a small triangle at the marker's exact tick, pointing
@@ -1112,6 +1113,175 @@ SLAVIC_MONTHS = (
     ("Studeni", "the Cold Month", "Studeni", 11),
     ("Prosinac", "the Month of Shining-Through", "Prosinac", 12),
 )
+
+# --- THE CALENDAR MOUNT REGISTRY (owner decree 2026-07-29) ---------------------
+# "Zodiac i sve što ima 12 TREBA da bude moguće da se AKTIVIRA na
+# CALENDAR POINTER" was implemented in 2026-07-21 as a hand-kept quartet
+# of `if mount == ...` branches. It is now ONE TABLE: every roster whose
+# membership fits the wedges declares itself here, and the renderer and
+# the picker both read this and nothing else (Rule #5, Rule #19 — the
+# geometry is computed from the declaration, never enumerated).
+#
+# THE TWO DOZEN SYSTEMS (CANON.md §The Two Dozen Systems and the Four
+# Dozens, owner seal 2026-07-22) decide a mount's GEOMETRY, and every
+# roster names the one it belongs to:
+#
+#   System "A" — the ZODIAC-aligned wheel: wedge BOUNDARIES sit ON the
+#     cardinals (12h-14h, 14h-16h, ...), so the twelve fall into SIX
+#     PAIRS — two flanking the top, two the bottom, two each side.
+#     Carries the dozens that come IN PAIRS.
+#   System "B" — the MONTH-aligned wheel: the same twelve 2-hour
+#     watches SHIFTED 15° so their CENTERS sit on the cardinals
+#     (11h-13h, ...). One CROWN (12h), one ROOT (24h), six OPPOSITION
+#     AXES. Carries the dozens defined by OPPOSITES.
+#
+# THE SEAT LAW (owner decree 2026-07-29): a 12-set seats ONE member per
+# wedge, at that wedge's own center; a 24-set seats TWO per wedge, at
+# ±a quarter wedge from the center — a 15° pitch, the same the Rose's
+# three stars already stand on. Both fall out of one formula in
+# `render.layers.calendar_mount_angle`; nothing is tabulated per seat.
+#
+# THE CENTER (`centre`) is the `constants.THIRTEENTHS` key whose member
+# may take the dial CENTER while this mount rides — and NEVER
+# unconditionally: each thirteenth keeps its own appearance rule
+# (`core.blue_moon`), so the seat is empty on almost every day of the
+# year. `None` means the canon seals no thirteenth for this set and the
+# center simply stays empty (the Emotions Dozen — canon gives it a
+# crown, a root and six opposition axes, and no thirteenth at all).
+CALENDAR_MOUNT_SEATS_PER_WEDGE = {12: 1, 24: 2}
+
+
+class CalendarMount(NamedTuple):
+    """One roster that may ride the Calendar's twelve wedges.
+
+    `title` is the picker's label. `system` is "A" or "B" above.
+    `members` are the display names in SEAT ORDER (index 0 = this
+    mount's own first seat, counting clockwise from the dial top).
+    `art_dir` is a subdirectory of `assets/calendars/`; `art_stems`
+    names the plate stems only where they differ from the display
+    names (the Slavic months are Croatian proper nouns with ASCII
+    plates), else None — art is always graceful-absent, a missing
+    plate falling back to the member's NAME.
+    """
+
+    title: str
+    system: str
+    members: tuple[str, ...]
+    art_dir: str
+    centre: str | None = None
+    art_stems: tuple[str, ...] | None = None
+    # WHICH member is TODAY'S (the mark that earns the emphasis):
+    # "sign" — the running zodiac sign; "month" — the running Gregorian
+    # month (every month-keyed roster); None — the set names no
+    # today (the Emotions Dozen: there is no "today's emotion", so no
+    # mark is emphasized and all twelve rest at the same opacity).
+    follows: str | None = None
+
+    @property
+    def seats(self) -> int:
+        return len(self.members)
+
+    @property
+    def stems(self) -> tuple[str, ...]:
+        return self.art_stems or self.members
+
+
+def almanac_seat_order(by_month: dict) -> tuple[str, ...]:
+    """A Gregorian-month-keyed table in ALMANAC SEAT ORDER — June first,
+    its wedge centered on the dial's top. The same rotation
+    `core.year_wheel.almanac_month_index` applies, expressed here so
+    `config` needs no `core` import (Rule #19: one rotation rule, two
+    readers, zero written-out orderings)."""
+    return tuple(by_month[(seat + 5) % 12 + 1] for seat in range(12))
+
+
+# THE EMOTIONS DOZEN (CANON.md §The Two Dozen Systems, System B) — the
+# ONE roster canon seats HOUR BY HOUR in its own words: "Love 12h, Hope
+# 14h, Courage 16h, Ambition 18h, Pride 20h, Envy 22h, Hatred 24h,
+# Despair 02h, Fear 04h, Doubt 06h, Humility 08h, Gratitude 10h". On
+# System B geometry the top wedge IS 12h, so the canon hour order IS the
+# seat order, one wedge every two hours clockwise — no mapping needed.
+EMOTIONS_DOZEN = (
+    "Love", "Hope", "Courage", "Ambition", "Pride", "Envy",
+    "Hatred", "Despair", "Fear", "Doubt", "Humility", "Gratitude",
+)
+
+CALENDAR_MOUNTS = {
+    # The Zodiac Dozen — System A (Cancer opens at the summer solstice,
+    # the dial's own top). Its thirteenth is Ophiuchus.
+    "zodiac": CalendarMount(
+        title="Zodiac signs",
+        system="A",
+        members=tuple(name for name, _symbol in constants.ZODIAC_SIGNS),
+        art_dir="zodiac/astrology/primary/colored",
+        centre="ophiuchus",
+        follows="sign",
+    ),
+    # The Month Dozen — System B, the Gregorian months the Almanac wheel
+    # already paints. Its thirteenth is Sol (the Sun's own month).
+    "almanac": CalendarMount(
+        title="Months",
+        system="B",
+        members=almanac_seat_order(
+            dict(enumerate(constants.GREGORIAN_MONTH_NAMES, start=1))
+        ),
+        art_dir="almanac/primary/colored",
+        centre="sol",
+        follows="month",
+    ),
+    # The Slavic Months — System B, the Croatian proper nouns with ASCII
+    # plate stems. Its thirteenth is Modrenik (the Moon's own month).
+    "months": CalendarMount(
+        title="Slavic months",
+        system="B",
+        members=almanac_seat_order(
+            {month: croatian for croatian, _gloss, _stem, month in SLAVIC_MONTHS}
+        ),
+        art_dir="slavic_months/primary/colored",
+        centre="modrenik",
+        follows="month",
+        art_stems=almanac_seat_order(
+            {month: stem for _croatian, _gloss, stem, month in SLAVIC_MONTHS}
+        ),
+    ),
+    # The Chinese MONTH-branch animals (owner R12) — System B, NOT the
+    # Chinese YEAR zodiac read elsewhere. Its thirteenth is The Cat.
+    "chinese": CalendarMount(
+        title="Chinese zodiac",
+        system="B",
+        members=almanac_seat_order(constants.CHINESE_MONTH_BRANCH_ANIMALS),
+        art_dir="zodiac/chinese/primary/colored",
+        centre="chinese",
+        follows="month",
+    ),
+    # The Emotions Dozen (CANON §The Two Dozen Systems, one of the four
+    # sealed Dozens) — System B, seated by canon's own hours. Canon
+    # names NO thirteenth for it, so its center stays empty.
+    "emotions": CalendarMount(
+        title="Emotions",
+        system="B",
+        members=EMOTIONS_DOZEN,
+        art_dir="emotions/primary/colored",
+    ),
+    # NOT YET MOUNTABLE — canon names three more Dozens but leaves each
+    # one's PER-WEDGE SEATING open, and a seat order is not ours to
+    # invent (CANON is the authority, Rule #4/#8):
+    #   - the OLYMPIANS (System A): "the three remaining pairs fill the
+    #     diagonal regions between them (exact wedge assignment
+    #     finalized in the wiring round)" — six of twelve seats open,
+    #     and even the sealed crown pair does not say which flank of
+    #     the top axis is Zeus's and which Hera's.
+    #   - the APOSTLES (System A): "the four middle pairs fill the flank
+    #     and diagonal regions (exact wedges pinned in the wiring
+    #     round)" — eight of twelve seats open.
+    #   - the VIRTUE WHEEL (System B): "The crown/root seating is
+    #     PROPOSED ... and awaits the owner's verdict."
+    # All three already have their art committed under assets/calendars/;
+    # each becomes one entry above the day its seating is sealed.
+}
+# The legal `Settings.calendar_mount` values — derived, never hand-kept
+# (adding a roster above adds its setting value automatically).
+CALENDAR_MOUNT_MODES = ("off",) + tuple(CALENDAR_MOUNTS)
 # The mid-radius the DESIGN ZODIAC law fixes for a mounted 12-set's marks
 # (60-70% of the dial radius) — clear of the rim-riding Earth/Moon and
 # the Calendar's own pinned South subdial (orbit ~0.43R).
@@ -1123,8 +1293,10 @@ CALENDAR_MOUNT_RADIUS_FRACTION = 0.65
 CALENDAR_MOUNT_MARK_SCALE = 0.08
 # The mark's resting opacity and the extra the CURRENT sign/month earns
 # (owner spec: "the mark can inherit that brightness" — the SAME
-# base+delta shape CALENDAR_WEDGE_ALPHA/CALENDAR_WEDGE_LIT_DELTA use for
-# the wedges, sized so the current mark reaches full opacity).
+# base+delta shape the wedges themselves once used, sized so the current
+# mark reaches full opacity). This is the MARK's emphasis, NOT the
+# deleted wedge lighting — it survived the 2026-07-29 deletion because
+# it says "you are here" on the mounted roster, not on the dial paint.
 CALENDAR_MOUNT_ALPHA = 0.65
 CALENDAR_MOUNT_LIT_DELTA = 0.35
 # THE CAT'S DIMMING LAW (owner spec, item 5, R12 — Blue Moon): the

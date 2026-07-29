@@ -214,13 +214,15 @@ class SkinDefinition:
                                        # normalizes it away elsewhere); on the
                                        # Calendar pointer the style PICKS THE
                                        # WHEEL: paint = Zodiac, light = Almanac
-    calendar_lighting: str = "hour"    # "hour" (the shichen under the hand) |
-                                       # "year" (the current month/sign wedge)
-    calendar_mount: str = "zodiac"     # the DESIGN ZODIAC law's 12-SET MOUNT
-                                       # (R9a, config.constants.CALENDAR_MOUNT_
-                                       # MODES): "off" | "zodiac" | "months" —
-                                       # twelve marks at CALENDAR_MOUNT_RADIUS_
-                                       # FRACTION, independent of palette_style
+    calendar_mount: str = "zodiac"     # the DESIGN ZODIAC law's MOUNT (R9a,
+                                       # GENERALIZED 2026-07-29): "off" or any
+                                       # config.constants.CALENDAR_MOUNTS key —
+                                       # twelve wedges of marks at CALENDAR_
+                                       # MOUNT_RADIUS_FRACTION (a 24-set seats
+                                       # TWO per wedge), independent of
+                                       # palette_style. The old `calendar_
+                                       # lighting` sibling is DELETED: the
+                                       # Calendar no longer lights a wedge.
     # THE ARCHETYPE MODE (owner sealed package 2026-07-16): the active
     # (pointer, palette_style) shows ITS archetype — the diamonds carry
     # the stained-glass figures, the hour hand lights the one whose

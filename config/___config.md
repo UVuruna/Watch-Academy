@@ -16,10 +16,11 @@ display names Prism / Quaternity / Compass / Trinity / Rose / Aurora /
 Calendar, each shown with what the READER counts on the glass —
 `POINTER_DIAL_COUNTS`, 3 · 4 · 6 · 7 · 8 · 12 · 24, which is NOT the
 palette size for the Rose, Aurora or the Calendar; the
-Calendar's twelve 2-hour wedges via `CALENDAR_WEDGES`/`CALENDAR_WEDGE_DEG`,
-its `CALENDAR_LIGHTING_MODES` (hour/year, owner 2026-07-16) and its
-`CALENDAR_MOUNT_MODES` (off/zodiac/months/chinese, the DESIGN ZODIAC
-law's 12-set mount, R9a round 2026-07-21, "chinese" added owner R12)
+Calendar's twelve 2-hour wedges via `CALENDAR_WEDGES`/`CALENDAR_WEDGE_DEG`
+(its `CALENDAR_LIGHTING_MODES` were DELETED with the lit-wedge feature
+itself, owner decree 2026-07-29, and its mount registry lives in
+`defaults.CALENDAR_MOUNTS`), and `GREGORIAN_MONTH_NAMES` (January-first,
+the ONE month list every month-keyed mount rotates into seat order)
 with
 their weekday slot layouts (slots rotate
 WITH the star; shared slots resolve by the next-upcoming-day rule
@@ -178,25 +179,30 @@ EXACTLY as the Rose is drawn, one tuple shared with the Rose ring
 preset's rays; `effective_palette_style`/`pointer_arm_labels` are the
 per-pointer style normalizer and the arm-label picker, and
 `ROSE_RAY_HALF_DEG`/`ROSE_RAY_BORDER` the Rose ray geometry), the Calendar wedge
-opacity + lit delta and the Almanac day-arrow geometry
-(`CALENDAR_WEDGE_ALPHA`, `CALENDAR_WEDGE_LIT_DELTA`, `CALENDAR_ARROW_*`),
-the Calendar-pointer 12-SET MOUNT (owner-sealed R7b 2026-07-21
-registration, R9a 2026-07-21 render + picker):
+opacity and the Almanac day-arrow geometry (`CALENDAR_WEDGE_ALPHA` —
+every wedge, since the lit wedge was deleted 2026-07-29 —
+`CALENDAR_ARROW_*`),
+the CALENDAR MOUNT (owner-sealed R7b 2026-07-21 registration, R9a
+2026-07-21 render + picker, GENERALIZED 2026-07-29):
 `SLAVIC_MONTHS` (the twelve Croatian months as (croatian, gloss, ascii
-stem, gregorian-month) rows — the first mount-set beyond the zodiac
-signs / Chinese animals the pointer already reads), `MONTHS_ART_DIR`
+stem, gregorian-month) rows), `EMOTIONS_DOZEN` (CANON's own hour-seated
+Dozen), `MONTHS_ART_DIR`
 (the canonical **sourceless** `assets/months/` root, OUTSIDE
 `ART_SOURCED_ROOTS` — the subdial precedent; graceful-absent, a future
 prompt sheet), `CALENDAR_MOUNT_RADIUS_FRACTION` (0.65, the DESIGN
 ZODIAC law's 60-70% mount radius), `CALENDAR_MOUNT_MARK_SCALE` (the
-mark's own drawn height), `CALENDAR_MOUNT_ALPHA`/
+mark's own drawn height, halved per extra seat per wedge), `CALENDAR_MOUNT_ALPHA`/
 `CALENDAR_MOUNT_LIT_DELTA` (the current-mark emphasis, reaching exactly
 1.0) and `CALENDAR_MOUNT_DIMMED_ALPHA` (0.20, owner R12 — The Cat's
-dimming law, below the resting alpha but never zero) —
-`constants.CALENDAR_MOUNT_MODES` ("off"/"zodiac"/"months"/"chinese",
-Settings-validated) is the mode enum; the render itself
+dimming law, below the resting alpha but never zero) — and above all
+**`CALENDAR_MOUNTS`**, the ONE registry of every roster that may ride
+the twelve wedges (`CalendarMount(title, system, members, art_dir,
+centre, art_stems, follows)`, plus `CALENDAR_MOUNT_SEATS_PER_WEDGE` and
+the `almanac_seat_order()` rotation), from which the Settings-validated
+`CALENDAR_MOUNT_MODES` is DERIVED; the render itself
 (`render.layers._draw_calendar_mount`/`calendar_mount_entries`/
-`calendar_mount_angle`, the Design ▸ Pointer tab's mount row) is covered
+`calendar_mount_angle`, and the Pointer Theme window's Calendar mount
+tab) is covered
 in [Layers](../render/layers.md)'s own Calendar Pointer section (see
 [Encyclopedia (subfolder)](../app/encyclopedia/___encyclopedia.md) for the Slavic Months topic),
 the Umbra contrast spans, the octa slot text width fraction, the event glow

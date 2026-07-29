@@ -390,8 +390,11 @@ pattern) rather than guessed:
   [Design Window](design_window.md)'s Pointer tab, which reads this
   SAME raw-English table directly, translated at build time; `watch_
   title` reads it too, UNTRANSLATED — Rule #5, one source) and the
-  pair is never grayed; the Calendar lighting row is visible only on
-  the Calendar pointer. **THE CUBE THIRD WHEELS (owner seal
+  pair is never grayed. The Design ▸ Pointer tab carries NOTHING
+  Calendar-specific any more (owner decree 2026-07-29): the lighting
+  row died with the feature and `_pick_calendar_mount` now serves the
+  [Pointer Theme](pointer_theme.md) window's mount tab instead.
+  **THE CUBE THIRD WHEELS (owner seal
   2026-07-26, CUBE.md; WORKPLAN Session 20):** the three Cube pointers
   carry a THIRD label — Court/Family/**Genesis**,
   **Persons**/One Soul/**Council**, Walks/Ages/**Character** — and the Design

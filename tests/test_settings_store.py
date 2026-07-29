@@ -4,7 +4,7 @@ tolerance (hand-edited files), diameter validation."""
 import pytest
 
 from app.settings_store import Settings, SettingsCorruptError, SettingsStore, replace
-from config import constants, paths
+from config import constants, defaults, paths
 
 
 @pytest.fixture
@@ -567,8 +567,9 @@ def test_calendar_mount_round_trips_and_defaults_to_zodiac(store):
     home) — a fresh settings file, and every other choice, round-trip
     through save/load."""
     assert Settings().calendar_mount == "zodiac"
-    assert constants.CALENDAR_MOUNT_MODES == ("off", "zodiac", "months", "chinese")
-    for mount in constants.CALENDAR_MOUNT_MODES:
+    assert defaults.CALENDAR_MOUNT_MODES[0] == "off"
+    assert set(defaults.CALENDAR_MOUNT_MODES[1:]) == set(defaults.CALENDAR_MOUNTS)
+    for mount in defaults.CALENDAR_MOUNT_MODES:
         saved = replace(Settings(), calendar_mount=mount)
         store.save(saved)
         assert store.load().calendar_mount == mount

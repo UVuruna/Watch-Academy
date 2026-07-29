@@ -157,34 +157,13 @@ class DesignDialog(QDialog):
                 lambda s=style: self._setters["palette_style"](s),
             ))
         layout.addLayout(style_row)
-        if settings.pointer == "calendar":
-            lighting_row = QHBoxLayout()
-            for mode, title in (
-                ("hour", "Light the hour (shichen)"),
-                ("year", "Light the month/sign"),
-            ):
-                lighting_row.addWidget(self._pill(
-                    self._tr(title), settings.calendar_lighting == mode,
-                    lambda m=mode: self._setters["calendar_lighting"](m),
-                ))
-            layout.addLayout(lighting_row)
-            # THE 12-SET MOUNT (DESIGN ZODIAC law, R9a round): twelve
-            # marks at CALENDAR_MOUNT_RADIUS_FRACTION — the Calendar
-            # pointer's OWN options row, right beside its lighting mode
-            # (owner spec: "put it where the Calendar pointer's own
-            # options already live").
-            mount_row = QHBoxLayout()
-            for mode, title in (
-                ("off", "No 12-set mount"),
-                ("zodiac", "Mount zodiac signs"),
-                ("months", "Mount Slavic months"),
-                ("chinese", "Mount Chinese zodiac"),
-            ):
-                mount_row.addWidget(self._pill(
-                    self._tr(title), settings.calendar_mount == mode,
-                    lambda m=mode: self._setters["calendar_mount"](m),
-                ))
-            layout.addLayout(mount_row)
+        # THE CALENDAR'S OWN OPTIONS LEFT THIS TAB (owner decree
+        # 2026-07-29, Pointers REWORK phase 2). The lit wedge is DELETED
+        # outright (the Calendar now follows the same visibility law as
+        # every other pointer), and the MOUNT — WHICH roster rides the
+        # twelve wedges — moved to the Pointer Theme window, beside the
+        # weekday-body gallery, because a mount is CONTENT (a roster
+        # choice with art, needing a gallery) and this tab is SHAPE.
         widget = QWidget()
         widget.setLayout(layout)
         return widget

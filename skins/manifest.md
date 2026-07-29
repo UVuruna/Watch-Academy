@@ -45,7 +45,10 @@ the ring preset and the user's display choices onto it at build time.
   only on the four TRUE polygons (`render.layers.polygon_curvature`),
   `hide_night_borders` (False — the arm/polygon outline strokes drawn
   over the sunlit arcs only, `render.layers.border_clips`),
-  `calendar_lighting` ("hour" the shichen | "year" the month/sign wedge),
+  `calendar_mount` ("off" or any `defaults.CALENDAR_MOUNTS` key — WHICH
+  roster rides the Calendar's twelve wedges; its `calendar_lighting`
+  sibling was DELETED with the lit-wedge feature, owner decree
+  2026-07-29),
   `archetype_mode` (owner sealed package 2026-07-16 — the active
   (pointer, palette_style) shows ITS archetype: figures in the
   diamonds, the hour hand lighting the current hour-space, the weekday

@@ -127,18 +127,27 @@ ROUND stained-glass rondel, night-window register, photorealistic render, isolat
 
 ## Reuse notes — NO new art for these
 
+> **STALE-MECHANIC CORRECTION (owner decree 2026-07-29).** The WEDGE
+> LIGHTING both bullets below describe — the wedge under the hour hand
+> (shichen) and the wedge under today's sign/month — is DELETED. The
+> Calendar lights no wedge; all twelve paint at one opacity and the
+> pointer follows the same visibility law as every other. The ART
+> conclusion of both bullets is untouched (still: generate nothing);
+> only the sentences explaining WHEN a plate is shown are obsolete.
+> The current reader is [Layers](../../../render/layers.md) §The
+> Calendar Pointer.
+
 - **The Zodiac wheel (left) articles** reuse the EXISTING zodiac art
   — the astrology sign / logo / constellation / colored plates
   already on disk (`assets/calendars/` zodiac trees; see
-  [Astrology Prompts](../zodiac/astrology_prompts.md)). The Zodiac
-  Dozen lights the CURRENT sign's wedge; the article shows the
-  existing Astrology plate. Generate nothing.
-- **The double-hours lighting (shichen)** reuses the EXISTING
+  [Astrology Prompts](../zodiac/astrology_prompts.md)). The article
+  shows the existing Astrology plate. Generate nothing.
+- **The Chinese double-hour (shichen) articles** reuse the EXISTING
   Chinese animal medallions (colored / gold / silver / bronze, all
   twelve already on disk; see
-  [Chinese Zodiac Prompts](../zodiac/chinese_zodiac_prompts.md)).
-  When the hand enters a double-hour its wedge lights and the animal
-  speaks the article from its existing medallion. Generate nothing.
+  [Chinese Zodiac Prompts](../zodiac/chinese_zodiac_prompts.md)) —
+  the animal speaks its article from its existing medallion.
+  Generate nothing.
 
 ---
 
@@ -149,6 +158,6 @@ ROUND stained-glass rondel, night-window register, photorealistic render, isolat
   twelve Almanac month medallions above.
 - Month hues locked to CANON §The Month Dozen (pure primaries
   allowed on this wheel): January `#8000FF` … December `#FF00FF`.
-- Reuse doctrine: Zodiac articles use existing astrology art; shichen
-  lighting uses existing Chinese animal medallions — zero new art
-  for either wheel beyond the twelve month medallions.
+- Reuse doctrine: Zodiac articles use existing astrology art; the
+  shichen articles use existing Chinese animal medallions — zero new
+  art for either wheel beyond the twelve month medallions.

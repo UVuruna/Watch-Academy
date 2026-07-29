@@ -530,7 +530,7 @@ def test_pointer_theme_window_live_grays_while_already_open(controller):
     controller._open_pointer_theme()
     dialog = controller._pointer_theme
     controller._set_display_choice("show_pointer", False)
-    assert not dialog._grid.isEnabled()
+    assert not dialog._body.isEnabled()
     assert not dialog._gate_label.isHidden()
 
 
@@ -539,6 +539,64 @@ def test_pick_pointer_theme_applies_and_refreshes(controller):
     controller._pick_pointer_theme("greek")
     assert controller._settings.weekday_theme == "greek"
     assert controller._settings.weekday_slot == "weekday"
+
+
+# --- The CALENDAR MOUNT moved into this window (owner decree 2026-07-29) ---------
+
+
+def test_mount_tab_appears_only_on_the_calendar_pointer(controller):
+    """The mount is CONTENT, so it lives with the other roster
+    galleries — and only the Calendar has wedges to mount a roster on.
+    Every other pointer keeps the single weekday gallery it always
+    had."""
+    from PySide6.QtWidgets import QTabWidget
+
+    controller._set_display_choice("pointer", "hexa")
+    controller._open_pointer_theme()
+    assert controller._pointer_theme.findChild(QTabWidget) is None
+    # Switching to the Calendar with the window OPEN grows the tab live.
+    controller._set_display_choice("pointer", "calendar")
+    tabs = controller._pointer_theme.findChild(QTabWidget)
+    assert tabs is not None
+    titles = [tabs.tabText(i) for i in range(tabs.count())]
+    assert titles == ["Weekday bodies", "Calendar mount"]
+    # ...and switching away drops it again.
+    controller._set_display_choice("pointer", "hexa")
+    assert controller._pointer_theme.findChild(QTabWidget) is None
+
+
+def test_mount_gallery_offers_every_registered_roster_with_its_seat_count(
+    controller,
+):
+    """The offer is the REGISTRY and nothing else (Rule #5) — "None"
+    leads, then one tile per roster labeled with how many seats it
+    fills, so the reader can tell a Dozen from a 24-set at a glance."""
+    from PySide6.QtWidgets import QToolButton
+
+    controller._set_display_choice("pointer", "calendar")
+    controller._open_pointer_theme()
+    tiles = controller._pointer_theme.findChildren(QToolButton)
+    labels = [tile.text() for tile in tiles]
+    assert labels[0] == "None"
+    for key, mount in defaults.CALENDAR_MOUNTS.items():
+        assert f"{mount.title} ({mount.seats})" in labels, key
+    # The rosters with committed art preview it; "None" never does.
+    assert any(not tile.icon().isNull() for tile in tiles)
+
+
+def test_mount_pick_persists_under_the_unchanged_settings_key(controller):
+    """The stored key stays `calendar_mount` — the control moved, the
+    setting did not (renaming a stored key without a migration makes
+    the whole file read as corrupt; this project has been burned by
+    that before)."""
+    controller._set_display_choice("pointer", "calendar")
+    controller._open_pointer_theme()
+    assert controller._settings.calendar_mount == "zodiac"    # shipped default
+    controller._pick_calendar_mount("emotions")
+    assert controller._settings.calendar_mount == "emotions"
+    assert controller._skin.calendar_mount == "emotions"      # reached the dial
+    controller._pick_calendar_mount("off")
+    assert controller._settings.calendar_mount == "off"
 
 
 # --- Slot Theme window (item 3C) --------------------------------------------------
@@ -625,46 +683,24 @@ def test_design_size_slider_applies_only_on_release(controller):
     assert controller._settings.diameter == before + defaults.MENU_SIZE_SLIDER_STEP
 
 
-def test_design_pointer_tab_shows_calendar_lighting_only_on_calendar(controller):
-    controller._set_display_choice("pointer", "calendar")
-    controller._open_design()
-    from PySide6.QtWidgets import QPushButton
-
-    tab = controller._design._pointer_tab()
-    labels = [b.text() for b in tab.findChildren(QPushButton)]
-    assert any("shichen" in l for l in labels)
-    controller._set_display_choice("pointer", "hexa")
-    tab = controller._design._pointer_tab()
-    labels = [b.text() for b in tab.findChildren(QPushButton)]
-    assert not any("shichen" in l for l in labels)
-
-
-def test_design_pointer_tab_shows_the_mount_row_only_on_calendar(controller):
-    """The 12-SET MOUNT picker (DESIGN ZODIAC law, R9a round): lives
-    beside calendar_lighting, the Calendar pointer's own options row —
-    off any other pointer it is simply absent, like the lighting row."""
+def test_design_pointer_tab_no_longer_carries_the_calendars_own_rows(controller):
+    """POINTERS REWORK phase 2 (owner decree 2026-07-29): the Design ▸
+    Pointer tab is SHAPE only. The lit-wedge row is deleted with the
+    feature; the MOUNT row moved to the Pointer Theme window (content
+    belongs with the other roster galleries) — so the Calendar's tab now
+    looks exactly like every other pointer's."""
     from PySide6.QtWidgets import QPushButton
 
     controller._set_display_choice("pointer", "calendar")
     controller._open_design()
     tab = controller._design._pointer_tab()
     labels = [b.text() for b in tab.findChildren(QPushButton)]
-    assert any("Mount zodiac signs" in l for l in labels)
-    assert any("Mount Slavic months" in l for l in labels)
-    controller._set_display_choice("pointer", "hexa")
-    tab = controller._design._pointer_tab()
-    labels = [b.text() for b in tab.findChildren(QPushButton)]
-    assert not any("Mount zodiac signs" in l for l in labels)
-
-
-def test_design_mount_pick_applies_and_refreshes_the_open_window(controller):
-    controller._set_display_choice("pointer", "calendar")
-    controller._open_design()
-    assert controller._settings.calendar_mount == "zodiac"     # shipped default
-    controller._design_setters()["calendar_mount"]("months")
-    assert controller._settings.calendar_mount == "months"
-    controller._design_setters()["calendar_mount"]("off")
-    assert controller._settings.calendar_mount == "off"
+    assert not any("shichen" in label for label in labels)
+    assert not any("Mount" in label for label in labels)
+    # And the setters map lost both keys with them (Rule #6, no wrappers).
+    setters = controller._design_setters()
+    assert "calendar_lighting" not in setters
+    assert "calendar_mount" not in setters
 
 
 def test_design_ring_pick_applies_and_refreshes_the_open_window(controller):

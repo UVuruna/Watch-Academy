@@ -327,10 +327,12 @@ screens —
   **THE POINTER MOUNT** (R9a round, 2026-07-21): the DESIGN ZODIAC
   law's twelve marks now DRAW on the Calendar pointer at
   `defaults.CALENDAR_MOUNT_RADIUS_FRACTION` (60-70% radius), with a
-  Settings picker for WHICH 12-set mounts (off / zodiac signs / this
-  months set / the Chinese monthly animals, `SkinDefinition.
-  calendar_mount`, the Design ▸ Pointer tab) — see
-  [Layers](../render/layers.md)'s own "The 12-SET Mount"
+  picker for WHICH roster mounts (`SkinDefinition.calendar_mount`,
+  every key of `defaults.CALENDAR_MOUNTS` — this months set among them
+  — in the [Pointer Theme](pointer_theme.md) window's Calendar mount
+  tab since the 2026-07-29 generalization moved it off the Design ▸
+  Pointer tab) — see
+  [Layers](../render/layers.md)'s own "The Mount"
   section; pinned by `tests/test_calendar.py`.
   **THE THIRTEENTH PAIR (owner-sealed 2026-07-22, R12 Blue Moon Law):**
   the topic closes with two MORE entries appended after the twelve —

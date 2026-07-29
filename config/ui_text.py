@@ -71,9 +71,14 @@ UI_STRINGS: tuple[str, ...] = (
     # Prism's first wheel is the PERSONS (CANON.md), never a generic label.
     "Persons",
     # The Calendar pointer (owner 2026-07-16): the wheel pair riding
-    # the two slots, and its two lighting modes.
+    # the two slots. Its two LIGHTING labels died with the feature
+    # (owner decree 2026-07-29) — the Calendar lights no wedge.
     "Calendar", "Almanac",
-    "Light the hour (shichen)", "Light the month/sign",
+    # The CALENDAR MOUNT gallery (owner decree 2026-07-29) — the two
+    # Pointer Theme tabs and every registered roster's own title
+    # (`defaults.CALENDAR_MOUNTS`). "None" is the mount-off tile.
+    "Weekday bodies", "Calendar mount", "None",
+    "Zodiac signs", "Months", "Slavic months", "Chinese zodiac", "Emotions",
     "Gold letters", "Silver letters", "Thematic letters",
     "Clean", "Atmosphere", "Date", "Names",
     "The day name written on the weekday bodies.",

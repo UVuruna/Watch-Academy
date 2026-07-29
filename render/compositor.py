@@ -3056,19 +3056,41 @@ class Compositor:
             )
         return _hover_badge(art) + _centered_html(*lines)
 
+    def _mount_seat_html(self, mount: str, index: int) -> str:
+        """The generic mounted-seat hover: the member's name over its own
+        plate, graceful-absent through the SAME `_hover_badge`
+        empty-string rule every other emblem uses. Serves every roster
+        that has nothing richer to say than its name (the Emotions
+        Dozen, the Month Dozen) — the three sets that DO (a sign's dates,
+        a month's gloss, an animal's month) keep their own writers
+        above."""
+        from render.layers import calendar_mount_entries
+
+        name, art = calendar_mount_entries(mount)[index]
+        return _hover_badge(art) + _centered_html(
+            f"<b>{html.escape(self._tr(name))}</b>"
+        )
+
     def _calendar_mount_tooltip(self, point: QPointF, radius: float) -> str | None:
-        """The mounted 12-set mark under the cursor (DESIGN ZODIAC law,
-        R9a round) — a small circular target at CALENDAR_MOUNT_RADIUS_
-        FRACTION, outranking the broader whole-wedge hover beneath it
-        (checked first in `_tooltip_at`). Off while no set is mounted."""
+        """The mounted set's seat under the cursor (DESIGN ZODIAC law,
+        R9a round; GENERALIZED 2026-07-29) — a small circular target at
+        CALENDAR_MOUNT_RADIUS_FRACTION, outranking the broader
+        whole-wedge hover beneath it (checked first in `_tooltip_at`).
+        Off while no set is mounted. The seat COUNT comes from the
+        roster's own registry entry, so a 24-set is hit-tested on all
+        twenty-four of its seats without a second loop."""
         mount = self._skin.calendar_mount
         if mount == "off":
             return None
-        from render.layers import calendar_mount_angle, dial_point
+        from render.layers import (
+            calendar_mount_angle,
+            calendar_mount_mark_height,
+            dial_point,
+        )
 
         mount_radius = radius * defaults.CALENDAR_MOUNT_RADIUS_FRACTION
-        hit_radius = radius * defaults.CALENDAR_MOUNT_MARK_SCALE
-        for index in range(12):
+        hit_radius = calendar_mount_mark_height(mount, radius) / 2.0
+        for index in range(defaults.CALENDAR_MOUNTS[mount].seats):
             center = dial_point(calendar_mount_angle(mount, index), mount_radius)
             dx, dy = point.x() - center.x(), point.y() - center.y()
             if dx * dx + dy * dy <= hit_radius * hit_radius:
@@ -3076,7 +3098,9 @@ class Compositor:
                     return self._zodiac_wedge_html(index)
                 if mount == "chinese":
                     return self._chinese_mount_wedge_html(index)
-                return self._months_wedge_html(index)
+                if mount == "months":
+                    return self._months_wedge_html(index)
+                return self._mount_seat_html(mount, index)
         return None
 
     def _period_tooltip(self, point: QPointF, radius: float) -> str | None:

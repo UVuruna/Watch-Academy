@@ -70,7 +70,13 @@ repository or the filesystem, matching `core.continents`/`core.moon`.
 - [Layers (folder)](../render/___render.md) — `active_thirteenth(skin,
   day)` resolves `DayContext.thirteenth_candidates` against the skin's
   own pointer/wheel/mount to the ONE member (if any) the Calendar
-  pointer's dial center may show — `CenterBodyLayer` draws it there,
+  pointer's dial center may show. Since the mount generalization (owner
+  decree 2026-07-29) the mount side of that resolution is a TABLE
+  lookup, not an `if`-chain: each roster in `defaults.CALENDAR_MOUNTS`
+  declares its own `centre` (a key of `THIRTEENTHS`, or None where canon
+  seals no thirteenth — the Emotions Dozen). The trigger + window test
+  below is unchanged and still decides whether the claimed member
+  actually shows. `CenterBodyLayer` draws it there,
   gated to `skin.pointer == "calendar"` alone (every other pointer's
   ordinary center laws reign untouched); `_draw_calendar_mount`'s
   "chinese" mount dims the doubled month's own animal from

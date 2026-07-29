@@ -72,12 +72,13 @@ class Settings:
     umbra_contrast: str = "dark"
     palette_style: str = "primary"       # on Calendar: paint = Zodiac wheel,
                                         # light = Almanac wheel
-    calendar_lighting: str = "hour"     # Calendar lit wedge: "hour" (the
-                                        # shichen) | "year" (month/sign)
-    calendar_mount: str = "zodiac"      # the 12-SET MOUNT (R9a, DESIGN
-                                        # ZODIAC law): "off" | "zodiac" |
-                                        # "months" (Slavic months, graceful-
-                                        # absent art)
+    # The Calendar MOUNT (R9a, DESIGN ZODIAC law; GENERALIZED 2026-07-29):
+    # WHICH roster rides the twelve wedges — "off" or any key of
+    # `constants.CALENDAR_MOUNTS`. A file written before the
+    # generalization keeps its value untouched; a file written before
+    # the LIT-WEDGE DELETION (same day) still carries a stale
+    # `calendar_lighting` key, which the loader simply ignores.
+    calendar_mount: str = "zodiac"
     # THE ARCHETYPE MODE (owner sealed package 2026-07-16): the
     # diamonds carry the archetype figures and the weekday model and
     # all three slots switch OFF — at the RENDER level only, so the
@@ -381,9 +382,7 @@ class SettingsStore:
                  constants.POINTER_SHAPES),
                 ("polygon_edge", constants.POLYGON_EDGE_DEFAULT,
                  constants.POLYGON_EDGE_MODES),
-                ("calendar_lighting", "hour",
-                 constants.CALENDAR_LIGHTING_MODES),
-                ("calendar_mount", "zodiac", constants.CALENDAR_MOUNT_MODES),
+                ("calendar_mount", "zodiac", defaults.CALENDAR_MOUNT_MODES),
                 ("octa_slot", "time", constants.OCTA_SLOT_MODES),
                 ("day_slot_style", "sign", constants.SLOT_STYLE_VALUES),
                 ("info_slot_style", "sign", constants.SLOT_STYLE_VALUES),
@@ -579,7 +578,6 @@ class SettingsStore:
             "umbra_form": settings.umbra_form,
             "umbra_contrast": settings.umbra_contrast,
             "palette_style": settings.palette_style,
-            "calendar_lighting": settings.calendar_lighting,
             "calendar_mount": settings.calendar_mount,
             "archetype_mode": settings.archetype_mode,
             "archetype_names": settings.archetype_names,

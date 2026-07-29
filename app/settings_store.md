@@ -95,7 +95,12 @@ pointers; `render.layers.border_clips`), `cube_look`
 (False — the Diamond/Cube display toggle, CUBE.md §Display laws: the
 Double-Trinity family wheels render as the corner-view cube when on; a
 Settings ▸ Display ▸ Archetype checkbox),
-`calendar_lighting` ("hour" | "year", owner 2026-07-16),
+`calendar_mount` ("zodiac" — WHICH roster rides the Calendar's twelve
+wedges, any `defaults.CALENDAR_MOUNT_MODES` value; picked in the
+Pointer Theme window's Calendar mount tab since 2026-07-29, when its
+`calendar_lighting` sibling was DELETED outright with the lit-wedge
+feature — an older file still carrying that key loads untouched, since
+the loader reads the keys it knows and ignores extras),
 `archetype_mode` (False — THE ARCHETYPE MODE, owner sealed package
 2026-07-16: the diamonds carry the active wheel's archetype figures
 and the weekday model and all three slots switch OFF at the render

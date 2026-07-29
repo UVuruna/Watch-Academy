@@ -377,14 +377,19 @@ CALENDAR_WEDGE_DEG = 360.0 / CALENDAR_WEDGES        # 30° per 2-hour wedge
 #
 # THE CALENDAR MOUNT (owner DESIGN ZODIAC law, R9a round 2026-07-21;
 # GENERALIZED 2026-07-29): the set of figures that rides the Calendar's
-# twelve wedges. The offer is no longer a hand-kept quartet — every
-# roster whose membership is 12/13 (one per wedge) or 24/27 (two per
-# wedge) may mount, and `CALENDAR_MOUNTS` below is the ONE registry
-# both the picker and the renderer read (Rule #5). ONE mount at a time,
-# independent of `palette_style` — a mount rides its OWN fixed wheel
-# geometry regardless of which wheel paints the background wedges
-# (render.layers.calendar_mount_wheel).
-CALENDAR_MOUNT_MODES = ("off", "zodiac", "months", "chinese")
+# twelve wedges is no longer a hand-kept quartet. The ONE registry both
+# the picker and the renderer read is `defaults.CALENDAR_MOUNTS` — it
+# lives in `defaults` because it is the only module that sees BOTH the
+# canon rosters declared here and `defaults.SLAVIC_MONTHS`; the legal
+# setting values are `defaults.CALENDAR_MOUNT_MODES`, derived from it.
+#
+# The Gregorian months, January first — the ONE list every month-keyed
+# mount rotates into Almanac seat order (Rule #19: the June-first order
+# is computed by `defaults.almanac_seat_order`, never written twice).
+GREGORIAN_MONTH_NAMES = (
+    "January", "February", "March", "April", "May", "June",
+    "July", "August", "September", "October", "November", "December",
+)
 
 # Display names chosen by the owner (FINAL.txt #8): the internal keys
 # stay hexa/cross/octa/trio (settings and code stability); the menu and
