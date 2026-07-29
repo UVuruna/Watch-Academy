@@ -182,3 +182,19 @@ Run started:  2026-07-27 16:48:58  (0/12 pending)
 Images: 0
 Run finished: 2026-07-27 16:48:58  (all pending items done)
 
+====================================================================
+Calendar Art Prompts (Gemini) — the Almanac's Twelve Month Medallions  [ChatGPT]
+Run started:  2026-07-29 17:49:12  (0/12 pending)
+--------------------------------------------------------------------
+--------------------------------------------------------------------
+Images: 0
+Run finished: 2026-07-29 17:49:12  (all pending items done)
+
+====================================================================
+Calendar Art Prompts (Gemini) — the Almanac's Twelve Month Medallions  [ChatGPT]
+Run started:  2026-07-29 19:29:43  (0/12 pending)
+--------------------------------------------------------------------
+--------------------------------------------------------------------
+Images: 0
+Run finished: 2026-07-29 19:29:43  (all pending items done)
+

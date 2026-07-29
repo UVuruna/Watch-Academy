@@ -67,3 +67,22 @@ Run started:  2026-07-27 15:19:51  (0/12 pending)
 Images: 0
 Run finished: 2026-07-27 15:19:51  (all pending items done)
 
+====================================================================
+Slavic Months Prompts (Gemini) — the Wheel of Labour  [Gemini]
+Run started:  2026-07-29 17:52:46  (2/14 pending)
+--------------------------------------------------------------------
+2026-07-29 17:53:09  assets/calendars/slavic_months/primary/colored/Sol.png gen    6.0s  ours   13.6s   1024x1024 -> 882x881    945 KB  [REMOVE BG: done, CROP: done]
+2026-07-29 17:53:21  assets/calendars/slavic_months/primary/colored/Modrenik.png gen    6.6s  ours    2.1s   1024x1024 -> 952x968    744 KB  [REMOVE BG: done, CROP: done]
+--------------------------------------------------------------------
+Images: 2  |  average generation (AI): 6s/image  |  average our time (save+bgfix+pause): 8s/image
+Total AI + our time: 28s  (wall clock: 35s)
+Run finished: 2026-07-29 17:53:21  (all pending items done)
+
+====================================================================
+Slavic Months Prompts (Gemini) — the Wheel of Labour  [Gemini]
+Run started:  2026-07-29 19:27:51  (0/14 pending)
+--------------------------------------------------------------------
+--------------------------------------------------------------------
+Images: 0
+Run finished: 2026-07-29 19:27:51  (all pending items done)
+

@@ -111,3 +111,19 @@ Images: 39  |  average generation (AI): 33s/image  |  average our time (save+bgf
 Total AI + our time: 32m 19s  (wall clock: 37m 28s)
 Run finished: 2026-07-27 15:57:19  (quota / rate limit — stopped)
 
+====================================================================
+Zodiac Signs — Sign / Logo / Constellation Plates (ChatGPT)  [Gemini]
+Run started:  2026-07-29 18:39:58  (0/52 pending)
+--------------------------------------------------------------------
+--------------------------------------------------------------------
+Images: 0
+Run finished: 2026-07-29 18:39:58  (all pending items done)
+
+====================================================================
+Zodiac Signs — Sign / Logo / Constellation Plates (ChatGPT)  [Gemini]
+Run started:  2026-07-29 19:35:05  (0/52 pending)
+--------------------------------------------------------------------
+--------------------------------------------------------------------
+Images: 0
+Run finished: 2026-07-29 19:35:05  (all pending items done)
+

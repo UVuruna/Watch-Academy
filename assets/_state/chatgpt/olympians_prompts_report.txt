@@ -91,3 +91,21 @@ Run started:  2026-07-25 15:49:09  (0/12 pending)
 Images: 0
 Run finished: 2026-07-25 15:49:09  (all pending items done)
 
+====================================================================
+Olympians Prompts — the Twelve, in Six Pairs (System A)  [ChatGPT]
+Run started:  2026-07-29 18:29:37  (1/13 pending)
+--------------------------------------------------------------------
+2026-07-29 18:30:38  assets/calendars/olympians/primary/colored/Hestia.png gen   56.3s  ours    0.5s   1024x1024 -> 968x955    1.8 MB  [REMOVE BG: nothing, CROP: done]
+--------------------------------------------------------------------
+Images: 1  |  average generation (AI): 56s/image  |  average our time (save+bgfix+pause): 0s/image
+Total AI + our time: 57s  (wall clock: 1m 00s)
+Run finished: 2026-07-29 18:30:38  (all pending items done)
+
+====================================================================
+Olympians Prompts — the Twelve, in Six Pairs (System A)  [ChatGPT]
+Run started:  2026-07-29 19:36:21  (0/13 pending)
+--------------------------------------------------------------------
+--------------------------------------------------------------------
+Images: 0
+Run finished: 2026-07-29 19:36:21  (all pending items done)
+

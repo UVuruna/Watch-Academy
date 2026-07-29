@@ -199,3 +199,19 @@ Images: 30  |  average generation (AI): 32s/image  |  average our time (save+bgf
 Total AI + our time: 22m 51s  (wall clock: 25m 18s)
 Run finished: 2026-07-27 15:19:49  (all pending items done)
 
+====================================================================
+Badge 1:1 Prompts (Gemini) — round-one circular companions for the lancet vitraži  [Gemini]
+Run started:  2026-07-29 17:46:29  (0/38 pending)
+--------------------------------------------------------------------
+--------------------------------------------------------------------
+Images: 0
+Run finished: 2026-07-29 17:46:29  (all pending items done)
+
+====================================================================
+Badge 1:1 Prompts (Gemini) — round-one circular companions for the lancet vitraži  [Gemini]
+Run started:  2026-07-29 19:27:51  (0/38 pending)
+--------------------------------------------------------------------
+--------------------------------------------------------------------
+Images: 0
+Run finished: 2026-07-29 19:27:51  (all pending items done)
+

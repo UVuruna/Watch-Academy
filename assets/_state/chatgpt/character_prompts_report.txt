@@ -58,3 +58,22 @@ Run started:  2026-07-27 16:48:58  (0/16 pending)
 Images: 0
 Run finished: 2026-07-27 16:48:58  (all pending items done)
 
+====================================================================
+Character Archetype Prompts — the Compass of Character, Eight Directions  [ChatGPT]
+Run started:  2026-07-29 17:49:12  (2/18 pending)
+--------------------------------------------------------------------
+2026-07-29 17:50:26  assets/archetypes/character/primary/colored/Composure.png gen   62.7s  ours    9.0s  1024x1536 -> 458x1335    1.2 MB  [REMOVE BG: nothing, CROP: done]
+2026-07-29 17:53:12  assets/archetypes/character/primary/colored/Vigor.png gen  159.6s  ours    0.4s  1024x1536 -> 470x1435    1.5 MB  [REMOVE BG: nothing, CROP: done]
+--------------------------------------------------------------------
+Images: 2  |  average generation (AI): 1m 51s/image  |  average our time (save+bgfix+pause): 5s/image
+Total AI + our time: 3m 52s  (wall clock: 4m 00s)
+Run finished: 2026-07-29 17:53:12  (all pending items done)
+
+====================================================================
+Character Archetype Prompts — the Compass of Character, Eight Directions  [ChatGPT]
+Run started:  2026-07-29 19:29:43  (0/18 pending)
+--------------------------------------------------------------------
+--------------------------------------------------------------------
+Images: 0
+Run finished: 2026-07-29 19:29:43  (all pending items done)
+

@@ -91,3 +91,21 @@ Run started:  2026-07-25 15:49:09  (0/12 pending)
 Images: 0
 Run finished: 2026-07-25 15:49:09  (all pending items done)
 
+====================================================================
+Apostles Prompts — the Twelve, Sent Two by Two (System A)  [ChatGPT]
+Run started:  2026-07-29 18:27:13  (1/13 pending)
+--------------------------------------------------------------------
+2026-07-29 18:28:30  assets/calendars/apostles/primary/colored/Jesus.png gen   72.5s  ours    0.6s   1024x1024 -> 962x941    1.7 MB  [REMOVE BG: nothing, CROP: done]
+--------------------------------------------------------------------
+Images: 1  |  average generation (AI): 1m 12s/image  |  average our time (save+bgfix+pause): 1s/image
+Total AI + our time: 1m 13s  (wall clock: 1m 16s)
+Run finished: 2026-07-29 18:28:30  (all pending items done)
+
+====================================================================
+Apostles Prompts — the Twelve, Sent Two by Two (System A)  [ChatGPT]
+Run started:  2026-07-29 19:36:21  (0/13 pending)
+--------------------------------------------------------------------
+--------------------------------------------------------------------
+Images: 0
+Run finished: 2026-07-29 19:36:21  (all pending items done)
+

@@ -1,0 +1,26 @@
+====================================================================
+The Thirteen Axes — the Sacred Plates  [Gemini]
+Run started:  2026-07-29 17:36:44  (9/9 pending)
+--------------------------------------------------------------------
+2026-07-29 17:37:01  assets/archetypes/sacred/primary/colored/The_One.png gen    5.7s  ours    8.5s   1024x1024 -> 887x888    875 KB  [REMOVE BG: done, CROP: done]
+2026-07-29 17:37:32  assets/archetypes/sacred/primary/colored/Sacred_Axis.png gen   11.7s  ours   14.2s    506x1024 -> 412x946    459 KB  [REMOVE BG: done, CROP: done]
+2026-07-29 17:37:58  assets/archetypes/sacred/circle/colored/Sacred_Axis.png gen    9.8s  ours   13.5s   1024x1024 -> 822x821    584 KB  [REMOVE BG: done, CROP: done]
+2026-07-29 17:38:14  assets/archetypes/sacred/archetypal/colored/Jesus_Christ.png gen    7.2s  ours    5.2s   1024x1024 -> 868x865    1.2 MB  [REMOVE BG: done, CROP: done]
+2026-07-29 17:38:40  assets/archetypes/sacred/historical/colored/Maximilian_Kolbe.png gen   13.1s  ours    9.0s   1024x1024 -> 828x826    926 KB  [REMOVE BG: done, CROP: done]
+2026-07-29 17:39:06  assets/archetypes/sacred/modern/colored/Aslan.png gen    8.3s  ours   14.3s   1024x1024 -> 890x891    1.1 MB  [REMOVE BG: done, CROP: done]
+2026-07-29 17:39:25  assets/archetypes/sacred/archetypal/colored/The_Devil.png gen    7.2s  ours    9.5s   1024x1024 -> 792x808    935 KB  [REMOVE BG: done, CROP: done]
+2026-07-29 17:39:47  assets/archetypes/sacred/historical/colored/Nero.png gen    8.4s  ours   10.1s   1024x1024 -> 872x875    1.0 MB  [REMOVE BG: done, CROP: done]
+2026-07-29 17:40:04  assets/archetypes/sacred/modern/colored/Sauron.png gen   13.2s  ours    1.6s   1024x1024 -> 866x874    1.1 MB  [REMOVE BG: done, CROP: done]
+--------------------------------------------------------------------
+Images: 9  |  average generation (AI): 9s/image  |  average our time (save+bgfix+pause): 10s/image
+Total AI + our time: 2m 50s  (wall clock: 3m 20s)
+Run finished: 2026-07-29 17:40:04  (all pending items done)
+
+====================================================================
+The Thirteen Axes — the Sacred Plates  [Gemini]
+Run started:  2026-07-29 19:27:51  (0/9 pending)
+--------------------------------------------------------------------
+--------------------------------------------------------------------
+Images: 0
+Run finished: 2026-07-29 19:27:51  (all pending items done)
+

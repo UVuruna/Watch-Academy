@@ -91,3 +91,21 @@ Run started:  2026-07-27 15:19:51  (0/12 pending)
 Images: 0
 Run finished: 2026-07-27 15:19:51  (all pending items done)
 
+====================================================================
+Emotions Prompts — the Dozen of the Heart (System B)  [Gemini]
+Run started:  2026-07-29 17:46:41  (1/13 pending)
+--------------------------------------------------------------------
+2026-07-29 17:46:50  assets/calendars/emotions/primary/colored/Peace.png gen    5.0s  ours    1.5s   1024x1024 -> 891x890    678 KB  [REMOVE BG: done, CROP: done]
+--------------------------------------------------------------------
+Images: 1  |  average generation (AI): 5s/image  |  average our time (save+bgfix+pause): 2s/image
+Total AI + our time: 7s  (wall clock: 9s)
+Run finished: 2026-07-29 17:46:50  (all pending items done)
+
+====================================================================
+Emotions Prompts — the Dozen of the Heart (System B)  [Gemini]
+Run started:  2026-07-29 19:27:51  (0/13 pending)
+--------------------------------------------------------------------
+--------------------------------------------------------------------
+Images: 0
+Run finished: 2026-07-29 19:27:51  (all pending items done)
+

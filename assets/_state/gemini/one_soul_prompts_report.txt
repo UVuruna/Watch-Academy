@@ -118,3 +118,19 @@ Run started:  2026-07-27 14:54:30  (0/8 pending)
 Images: 0
 Run finished: 2026-07-27 14:54:30  (all pending items done)
 
+====================================================================
+Prism Archetype Prompts (Gemini) — One Soul, the Bond, the six pillars of a home  [Gemini]
+Run started:  2026-07-29 17:46:29  (0/8 pending)
+--------------------------------------------------------------------
+--------------------------------------------------------------------
+Images: 0
+Run finished: 2026-07-29 17:46:29  (all pending items done)
+
+====================================================================
+Prism Archetype Prompts (Gemini) — One Soul, the Bond, the six pillars of a home  [Gemini]
+Run started:  2026-07-29 19:27:51  (0/8 pending)
+--------------------------------------------------------------------
+--------------------------------------------------------------------
+Images: 0
+Run finished: 2026-07-29 19:27:51  (all pending items done)
+

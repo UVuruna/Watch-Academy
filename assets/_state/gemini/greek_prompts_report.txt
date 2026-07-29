@@ -30,3 +30,23 @@ Run started:  2026-07-27 15:19:51  (0/32 pending)
 Images: 0
 Run finished: 2026-07-27 15:19:51  (all pending items done)
 
+====================================================================
+Greek Gods — the Complete Prompt Sheet (bronze + colored, Planetary + Pantheon)  [Gemini]
+Run started:  2026-07-29 18:36:38  (3/35 pending)
+--------------------------------------------------------------------
+2026-07-29 18:37:01  assets/weeks/myth/greek/wider/bronze/dionysus.png gen    6.5s  ours   12.9s   1024x1024 -> 916x915    1.2 MB  [REMOVE BG: done, CROP: done]
+2026-07-29 18:37:25  assets/weeks/myth/greek/wider/bronze/hephaestus.png gen    9.7s  ours   11.4s   1024x1024 -> 988x984    1.5 MB  [REMOVE BG: done, CROP: done]
+2026-07-29 18:37:39  assets/weeks/myth/greek/wider/bronze/hestia.png gen    8.7s  ours    1.1s   1024x1024 -> 845x845    1.0 MB  [REMOVE BG: done, CROP: done]
+--------------------------------------------------------------------
+Images: 3  |  average generation (AI): 8s/image  |  average our time (save+bgfix+pause): 8s/image
+Total AI + our time: 50s  (wall clock: 1m 01s)
+Run finished: 2026-07-29 18:37:39  (all pending items done)
+
+====================================================================
+Greek Gods — the Complete Prompt Sheet (bronze + colored, Planetary + Pantheon)  [Gemini]
+Run started:  2026-07-29 19:35:05  (0/35 pending)
+--------------------------------------------------------------------
+--------------------------------------------------------------------
+Images: 0
+Run finished: 2026-07-29 19:35:05  (all pending items done)
+

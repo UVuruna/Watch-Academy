@@ -80,3 +80,22 @@ SKIPPED by the sheet (L564): `chinese_myth` — Chinese Mythology — already sa
 Images: 0
 Run finished: 2026-07-25 14:27:09  (all pending items done)
 
+====================================================================
+Theme Title Plates — the Encyclopedia's Own Cover Pages (Gemini/ChatGPT)  [ChatGPT]
+Run started:  2026-07-29 19:41:20  (32/65 pending)
+--------------------------------------------------------------------
+2026-07-29 19:42:19  assets/weeks/films/sw_jedi/primary/colored/Title.png gen   50.1s  ours    6.4s   1024x1024 -> 941x906    1.5 MB  [REMOVE BG: nothing, CROP: done]
+2026-07-29 19:42:28  assets/weeks/films/sw_sith/primary/colored/Title.png REFUSED — no image — ChatGPT: the response answered with TEXT but no image, and the text matches no known marker — loud skip, neve
+2026-07-29 19:42:52  assets/weeks/films/sw_dyad/primary/colored/Title.png REFUSED — no image — ChatGPT: the response answered with TEXT but no image, and the text matches no known marker — loud skip, neve
+2026-07-29 19:44:53  assets/weeks/celestial_bodies/planets/primary/photo/Duality.png gen   97.8s  ours    4.8s   1024x1024 -> 855x813    1.2 MB  [REMOVE BG: nothing, CROP: done]
+2026-07-29 19:46:46  assets/weeks/celestial_bodies/cosmos/primary/colored/Duality.png gen   79.3s  ours    9.6s   1024x1024 -> 928x912    1.5 MB  [REMOVE BG: nothing, CROP: done]
+2026-07-29 19:47:01  assets/weeks/myth/greek/primary/colored/Duality.png REFUSED — no image — ChatGPT: the response answered with TEXT but no image, and the text matches no known marker — loud skip, neve
+2026-07-29 19:48:23  assets/weeks/myth/norse/primary/colored/Duality.png gen   54.4s  ours   10.7s   1024x1024 -> 944x931    2.0 MB  [REMOVE BG: nothing, CROP: done]
+2026-07-29 19:48:30  assets/weeks/myth/egypt/primary/colored/Duality.png REFUSED — no image — ChatGPT: the response answered with TEXT but no image, and the text matches no known marker — loud skip, neve
+2026-07-29 19:50:03  assets/weeks/myth/slavic/primary/colored/Duality.png gen   58.9s  ours   12.8s   1024x1024 -> 951x947    1.9 MB  [REMOVE BG: nothing, CROP: done]
+--------------------------------------------------------------------
+Refused: 4 image(s) — rework those prompts in the sheet (or intervene manually) and rerun
+Images: 5  |  average generation (AI): 1m 08s/image  |  average our time (save+bgfix+pause): 9s/image
+Total AI + our time: 6m 25s  (wall clock: 9m 12s)
+Run finished: 2026-07-29 19:50:32  (quota / rate limit — stopped)
+

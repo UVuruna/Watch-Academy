@@ -1,0 +1,30 @@
+====================================================================
+Sins Prompts — the Twelve Sins and the Frozen Heart (System B)  [Gemini]
+Run started:  2026-07-29 17:47:06  (13/13 pending)
+--------------------------------------------------------------------
+2026-07-29 17:47:23  assets/calendars/sins/primary/colored/Pride.png gen    6.6s  ours    7.4s   1024x1024 -> 929x930    1.2 MB  [REMOVE BG: done, CROP: done]
+2026-07-29 17:47:51  assets/calendars/sins/primary/colored/Treachery.png gen   14.4s  ours   11.0s   1024x1024 -> 882x882   1006 KB  [REMOVE BG: done, CROP: done]
+2026-07-29 17:48:15  assets/calendars/sins/primary/colored/Hypocrisy.png gen    9.6s  ours   12.2s   1024x1024 -> 925x922    1.0 MB  [REMOVE BG: done, CROP: done]
+2026-07-29 17:48:38  assets/calendars/sins/primary/colored/Violence.png gen    8.1s  ours   11.9s   1024x1024 -> 890x891    1.2 MB  [REMOVE BG: done, CROP: done]
+2026-07-29 17:48:59  assets/calendars/sins/primary/colored/Avarice.png gen    7.7s  ours   10.8s   1024x1024 -> 856x855    1.1 MB  [REMOVE BG: done, CROP: done]
+2026-07-29 17:49:15  assets/calendars/sins/primary/colored/Lust.png gen    7.2s  ours    6.6s   1024x1024 -> 862x864    1.1 MB  [REMOVE BG: done, CROP: done]
+2026-07-29 17:49:39  assets/calendars/sins/primary/colored/Envy.png gen    7.1s  ours   14.0s   1024x1024 -> 820x821    964 KB  [REMOVE BG: done, CROP: done]
+2026-07-29 17:49:56  assets/calendars/sins/primary/colored/Despair.png gen    7.6s  ours    7.5s   1024x1024 -> 924x925    1.1 MB  [REMOVE BG: done, CROP: done]
+2026-07-29 17:50:18  assets/calendars/sins/primary/colored/Wrath.png gen    9.7s  ours    9.5s   1024x1024 -> 890x890    926 KB  [REMOVE BG: done, CROP: done]
+2026-07-29 17:50:45  assets/calendars/sins/primary/colored/Idolatry.png gen   10.8s  ours   14.4s   1024x1024 -> 945x943    1.3 MB  [REMOVE BG: done, CROP: done]
+2026-07-29 17:51:05  assets/calendars/sins/primary/colored/Gluttony.png gen    7.6s  ours    9.8s   1024x1024 -> 912x910    1.0 MB  [REMOVE BG: done, CROP: done]
+2026-07-29 17:51:20  assets/calendars/sins/primary/colored/Acedia.png gen    8.6s  ours    5.0s   1024x1024 -> 924x923    1.2 MB  [REMOVE BG: done, CROP: done]
+2026-07-29 17:51:34  assets/calendars/sins/primary/colored/Hardness_of_Heart.png gen    9.8s  ours    1.5s   1024x1024 -> 928x925    1.2 MB  [REMOVE BG: done, CROP: done]
+--------------------------------------------------------------------
+Images: 13  |  average generation (AI): 9s/image  |  average our time (save+bgfix+pause): 9s/image
+Total AI + our time: 3m 56s  (wall clock: 4m 29s)
+Run finished: 2026-07-29 17:51:34  (all pending items done)
+
+====================================================================
+Sins Prompts — the Twelve Sins and the Frozen Heart (System B)  [Gemini]
+Run started:  2026-07-29 19:27:51  (0/13 pending)
+--------------------------------------------------------------------
+--------------------------------------------------------------------
+Images: 0
+Run finished: 2026-07-29 19:27:51  (all pending items done)
+

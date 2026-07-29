@@ -14,3 +14,19 @@ Images: 7  |  average generation (AI): 28s/image  |  average our time (save+bgfi
 Total AI + our time: 5m 15s  (wall clock: 5m 46s)
 Run finished: 2026-07-27 14:54:28  (all pending items done)
 
+====================================================================
+Genesis Archetype Prompts — the Creation Trio, the Triangle Turned Down  [Gemini]
+Run started:  2026-07-29 17:46:29  (0/7 pending)
+--------------------------------------------------------------------
+--------------------------------------------------------------------
+Images: 0
+Run finished: 2026-07-29 17:46:29  (all pending items done)
+
+====================================================================
+Genesis Archetype Prompts — the Creation Trio, the Triangle Turned Down  [Gemini]
+Run started:  2026-07-29 19:27:51  (0/7 pending)
+--------------------------------------------------------------------
+--------------------------------------------------------------------
+Images: 0
+Run finished: 2026-07-29 19:27:51  (all pending items done)
+

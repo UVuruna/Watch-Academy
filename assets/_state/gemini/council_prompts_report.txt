@@ -20,3 +20,21 @@ Images: 13  |  average generation (AI): 27s/image  |  average our time (save+bgf
 Total AI + our time: 8m 09s  (wall clock: 9m 11s)
 Run finished: 2026-07-27 14:26:30  (all pending items done)
 
+====================================================================
+Council Archetype Prompts — the Six Offices in Session  [Gemini]
+Run started:  2026-07-29 17:40:42  (1/13 pending)
+--------------------------------------------------------------------
+2026-07-29 17:40:52  assets/archetypes/council/primary/colored/Lords_Day.png gen    4.9s  ours    1.8s   1024x1024 -> 918x920    986 KB  [REMOVE BG: done, CROP: done]
+--------------------------------------------------------------------
+Images: 1  |  average generation (AI): 5s/image  |  average our time (save+bgfix+pause): 2s/image
+Total AI + our time: 7s  (wall clock: 10s)
+Run finished: 2026-07-29 17:40:52  (all pending items done)
+
+====================================================================
+Council Archetype Prompts — the Six Offices in Session  [Gemini]
+Run started:  2026-07-29 19:27:51  (0/13 pending)
+--------------------------------------------------------------------
+--------------------------------------------------------------------
+Images: 0
+Run finished: 2026-07-29 19:27:51  (all pending items done)
+

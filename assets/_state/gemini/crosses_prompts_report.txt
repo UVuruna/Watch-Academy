@@ -27,3 +27,19 @@ Images: 20  |  average generation (AI): 26s/image  |  average our time (save+bgf
 Total AI + our time: 14m 09s  (wall clock: 15m 40s)
 Run finished: 2026-07-27 14:48:39  (all pending items done)
 
+====================================================================
+Two Crosses Prompts — the Path of Light and the Path of Darkness  [Gemini]
+Run started:  2026-07-29 17:40:54  (0/20 pending)
+--------------------------------------------------------------------
+--------------------------------------------------------------------
+Images: 0
+Run finished: 2026-07-29 17:40:54  (all pending items done)
+
+====================================================================
+Two Crosses Prompts — the Path of Light and the Path of Darkness  [Gemini]
+Run started:  2026-07-29 19:27:51  (0/20 pending)
+--------------------------------------------------------------------
+--------------------------------------------------------------------
+Images: 0
+Run finished: 2026-07-29 19:27:51  (all pending items done)
+

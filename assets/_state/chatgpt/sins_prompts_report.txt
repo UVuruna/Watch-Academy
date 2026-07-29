@@ -1,0 +1,38 @@
+====================================================================
+Sins Prompts — the Twelve Sins and the Frozen Heart (System B)  [ChatGPT]
+Run started:  2026-07-29 18:30:40  (13/13 pending)
+--------------------------------------------------------------------
+2026-07-29 18:31:47  assets/calendars/sins/primary/colored/Pride.png gen   57.5s  ours    7.6s   1024x1024 -> 955x945    1.8 MB  [REMOVE BG: nothing, CROP: done]
+2026-07-29 18:33:40  assets/calendars/sins/primary/colored/Treachery.png gen  104.3s  ours    5.4s   1024x1024 -> 941x921    1.9 MB  [REMOVE BG: nothing, CROP: done]
+2026-07-29 18:33:54  assets/calendars/sins/primary/colored/Hypocrisy.png REFUSED — no image — ChatGPT: the response answered with TEXT but no image, and the text matches no known marker — loud skip, neve
+2026-07-29 18:34:14  assets/calendars/sins/primary/colored/Violence.png REFUSED — no image — ChatGPT: the response answered with TEXT but no image, and the text matches no known marker — loud skip, neve
+2026-07-29 18:34:33  assets/calendars/sins/primary/colored/Avarice.png REFUSED — no image — ChatGPT: the response answered with TEXT but no image, and the text matches no known marker — loud skip, neve
+2026-07-29 18:36:03  assets/calendars/sins/primary/colored/Lust.png gen   50.7s  ours    4.8s   1024x1024 -> 964x947    1.6 MB  [REMOVE BG: nothing, CROP: done]
+2026-07-29 18:37:23  assets/calendars/sins/primary/colored/Envy.png gen   57.5s  ours   11.1s   1024x1024 -> 974x956    1.8 MB  [REMOVE BG: nothing, CROP: done]
+2026-07-29 18:37:29  assets/calendars/sins/primary/colored/Despair.png REFUSED — no image — ChatGPT: the response answered with TEXT but no image, and the text matches no known marker — loud skip, neve
+2026-07-29 18:37:47  assets/calendars/sins/primary/colored/Wrath.png REFUSED — no image — ChatGPT: the response answered with TEXT but no image, and the text matches no known marker — loud skip, neve
+2026-07-29 18:40:17  assets/calendars/sins/primary/colored/Idolatry.png gen   64.6s  ours    9.0s   1024x1024 -> 956x934    1.9 MB  [REMOVE BG: nothing, CROP: done]
+2026-07-29 18:41:29  assets/calendars/sins/primary/colored/Gluttony.png gen   48.7s  ours   13.0s   1024x1024 -> 966x954    1.8 MB  [REMOVE BG: nothing, CROP: done]
+2026-07-29 18:43:10  assets/calendars/sins/primary/colored/Acedia.png gen   92.5s  ours    6.9s   1024x1024 -> 966x954    2.0 MB  [REMOVE BG: nothing, CROP: done]
+2026-07-29 18:44:36  assets/calendars/sins/primary/colored/Hardness_of_Heart.png gen   81.0s  ours    0.4s   1024x1024 -> 966x954    2.1 MB  [REMOVE BG: nothing, CROP: done]
+--------------------------------------------------------------------
+Refused: 5 image(s) — rework those prompts in the sheet (or intervene manually) and rerun
+Images: 8  |  average generation (AI): 1m 10s/image  |  average our time (save+bgfix+pause): 7s/image
+Total AI + our time: 10m 15s  (wall clock: 13m 57s)
+Run finished: 2026-07-29 18:44:36  (all pending items done)
+
+====================================================================
+Sins Prompts — the Twelve Sins and the Frozen Heart (System B)  [ChatGPT]
+Run started:  2026-07-29 19:36:21  (5/13 pending)
+--------------------------------------------------------------------
+2026-07-29 19:36:27  assets/calendars/sins/primary/colored/Hypocrisy.png REFUSED — no image — ChatGPT: the response answered with TEXT but no image, and the text matches no known marker — loud skip, neve
+2026-07-29 19:37:46  assets/calendars/sins/primary/colored/Violence.png gen   59.4s  ours    5.2s   1024x1024 -> 943x924    1.7 MB  [REMOVE BG: nothing, CROP: done]
+2026-07-29 19:38:56  assets/calendars/sins/primary/colored/Avarice.png gen   55.5s  ours    9.9s   1024x1024 -> 994x985    2.0 MB  [REMOVE BG: nothing, CROP: done]
+2026-07-29 19:40:11  assets/calendars/sins/primary/colored/Despair.png gen   61.6s  ours    9.7s   1024x1024 -> 966x955    1.6 MB  [REMOVE BG: nothing, CROP: done]
+2026-07-29 19:41:18  assets/calendars/sins/primary/colored/Wrath.png gen   63.2s  ours    0.6s   1024x1024 -> 955x933    1.7 MB  [REMOVE BG: nothing, CROP: done]
+--------------------------------------------------------------------
+Refused: 1 image(s) — rework those prompts in the sheet (or intervene manually) and rerun
+Images: 4  |  average generation (AI): 1m 00s/image  |  average our time (save+bgfix+pause): 6s/image
+Total AI + our time: 4m 25s  (wall clock: 4m 57s)
+Run finished: 2026-07-29 19:41:18  (all pending items done)
+

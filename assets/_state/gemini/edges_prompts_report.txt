@@ -1,0 +1,33 @@
+====================================================================
+Edge Cell Plates — the Eight New Edge Seats of the Cube  [Gemini]
+Run started:  2026-07-29 17:40:54  (16/16 pending)
+--------------------------------------------------------------------
+2026-07-29 17:41:14  assets/archetypes/edges/primary/colored/Prudence.png gen    6.4s  ours   10.5s    506x1024 -> 375x949    460 KB  [REMOVE BG: done, CROP: done]
+2026-07-29 17:41:30  assets/archetypes/edges/circle/colored/Prudence.png gen    7.1s  ours    5.8s   1024x1024 -> 859x859    896 KB  [REMOVE BG: done, CROP: done]
+2026-07-29 17:41:53  assets/archetypes/edges/primary/colored/Ardor.png gen   11.2s  ours    9.1s    506x1024 -> 356x961    443 KB  [REMOVE BG: done, CROP: done]
+2026-07-29 17:42:15  assets/archetypes/edges/circle/colored/Ardor.png gen    8.6s  ours   11.1s   1024x1024 -> 830x833    984 KB  [REMOVE BG: done, CROP: done]
+2026-07-29 17:42:34  assets/archetypes/edges/primary/colored/Steadfastness.png gen    7.6s  ours    8.4s    506x1024 -> 305x952    351 KB  [REMOVE BG: done, CROP: done]
+2026-07-29 17:42:58  assets/archetypes/edges/circle/colored/Steadfastness.png gen    7.0s  ours   14.8s   1024x1024 -> 869x877    898 KB  [REMOVE BG: done, CROP: done]
+2026-07-29 17:43:17  assets/archetypes/edges/primary/colored/Reform.png gen    7.1s  ours    9.0s    506x1024 -> 370x914    633 KB  [REMOVE BG: done, CROP: done]
+2026-07-29 17:43:41  assets/archetypes/edges/circle/colored/Reform.png gen    9.3s  ours   10.6s   1024x1024 -> 860x861    1.1 MB  [REMOVE BG: done, CROP: done]
+2026-07-29 17:44:00  assets/archetypes/edges/primary/colored/Meekness.png gen    8.6s  ours    7.5s    506x1024 -> 444x954    490 KB  [REMOVE BG: done, CROP: done]
+2026-07-29 17:44:17  assets/archetypes/edges/circle/colored/Meekness.png gen    8.8s  ours    4.8s   1024x1024 -> 799x794    916 KB  [REMOVE BG: done, CROP: done]
+2026-07-29 17:44:36  assets/archetypes/edges/primary/colored/Aspiration.png gen    7.6s  ours    9.1s    506x1024 -> 337x967    441 KB  [REMOVE BG: done, CROP: done]
+2026-07-29 17:44:59  assets/archetypes/edges/circle/colored/Aspiration.png gen    8.7s  ours    9.9s   1024x1024 -> 927x927    1.1 MB  [REMOVE BG: done, CROP: done]
+2026-07-29 17:45:24  assets/archetypes/edges/primary/colored/Self_Mastery.png gen    8.1s  ours   13.9s    506x1024 -> 402x957    661 KB  [REMOVE BG: done, CROP: done]
+2026-07-29 17:45:48  assets/archetypes/edges/circle/colored/Self_Mastery.png gen    9.3s  ours   13.0s   1024x1024 -> 856x862    1.1 MB  [REMOVE BG: done, CROP: done]
+2026-07-29 17:46:06  assets/archetypes/edges/primary/colored/Diligence.png gen    8.1s  ours    7.2s    506x1024 -> 454x966    559 KB  [REMOVE BG: done, CROP: done]
+2026-07-29 17:46:28  assets/archetypes/edges/circle/colored/Diligence.png gen   17.7s  ours    1.2s   1024x1024 -> 759x771    885 KB  [REMOVE BG: done, CROP: done]
+--------------------------------------------------------------------
+Images: 16  |  average generation (AI): 9s/image  |  average our time (save+bgfix+pause): 9s/image
+Total AI + our time: 4m 47s  (wall clock: 5m 34s)
+Run finished: 2026-07-29 17:46:28  (all pending items done)
+
+====================================================================
+Edge Cell Plates — the Eight New Edge Seats of the Cube  [Gemini]
+Run started:  2026-07-29 19:27:51  (0/16 pending)
+--------------------------------------------------------------------
+--------------------------------------------------------------------
+Images: 0
+Run finished: 2026-07-29 19:27:51  (all pending items done)
+

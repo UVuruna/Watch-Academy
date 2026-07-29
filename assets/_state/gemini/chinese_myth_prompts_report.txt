@@ -131,3 +131,19 @@ Run started:  2026-07-27 15:19:51  (0/18 pending)
 Images: 0
 Run finished: 2026-07-27 15:19:51  (all pending items done)
 
+====================================================================
+Chinese Mythology — the Immortals Weekday Theme (Gemini/ChatGPT)  [Gemini]
+Run started:  2026-07-29 17:52:14  (0/18 pending)
+--------------------------------------------------------------------
+--------------------------------------------------------------------
+Images: 0
+Run finished: 2026-07-29 17:52:14  (all pending items done)
+
+====================================================================
+Chinese Mythology — the Immortals Weekday Theme (Gemini/ChatGPT)  [Gemini]
+Run started:  2026-07-29 19:27:51  (0/18 pending)
+--------------------------------------------------------------------
+--------------------------------------------------------------------
+Images: 0
+Run finished: 2026-07-29 19:27:51  (all pending items done)
+

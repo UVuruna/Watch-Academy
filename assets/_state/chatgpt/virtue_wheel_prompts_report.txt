@@ -104,3 +104,22 @@ Run started:  2026-07-25 15:49:09  (0/24 pending)
 Images: 0
 Run finished: 2026-07-25 15:49:09  (all pending items done)
 
+====================================================================
+Virtue Wheel Prompts — Aristotle's Twelve, in Two Registers (System B)  [ChatGPT]
+Run started:  2026-07-29 18:44:39  (2/26 pending)
+--------------------------------------------------------------------
+2026-07-29 18:45:41  assets/calendars/virtues/primary/colored/Prudence.png gen   54.2s  ours    4.9s   1024x1024 -> 931x905    1.7 MB  [REMOVE BG: nothing, CROP: done]
+2026-07-29 18:47:20  assets/calendars/vices/primary/colored/Cunning.png gen   92.1s  ours    0.4s   1024x1024 -> 955x936    2.0 MB  [REMOVE BG: nothing, CROP: done]
+--------------------------------------------------------------------
+Images: 2  |  average generation (AI): 1m 13s/image  |  average our time (save+bgfix+pause): 3s/image
+Total AI + our time: 2m 31s  (wall clock: 2m 41s)
+Run finished: 2026-07-29 18:47:20  (all pending items done)
+
+====================================================================
+Virtue Wheel Prompts — Aristotle's Twelve, in Two Registers (System B)  [ChatGPT]
+Run started:  2026-07-29 19:41:20  (0/26 pending)
+--------------------------------------------------------------------
+--------------------------------------------------------------------
+Images: 0
+Run finished: 2026-07-29 19:41:20  (all pending items done)
+

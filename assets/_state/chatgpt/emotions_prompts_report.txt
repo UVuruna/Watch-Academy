@@ -91,3 +91,21 @@ Run started:  2026-07-25 15:49:09  (0/12 pending)
 Images: 0
 Run finished: 2026-07-25 15:49:09  (all pending items done)
 
+====================================================================
+Emotions Prompts — the Dozen of the Heart (System B)  [ChatGPT]
+Run started:  2026-07-29 18:28:31  (1/13 pending)
+--------------------------------------------------------------------
+2026-07-29 18:29:36  assets/calendars/emotions/primary/colored/Peace.png gen   62.2s  ours    0.6s   1024x1024 -> 927x898    1.4 MB  [REMOVE BG: nothing, CROP: done]
+--------------------------------------------------------------------
+Images: 1  |  average generation (AI): 1m 02s/image  |  average our time (save+bgfix+pause): 1s/image
+Total AI + our time: 1m 03s  (wall clock: 1m 06s)
+Run finished: 2026-07-29 18:29:36  (all pending items done)
+
+====================================================================
+Emotions Prompts — the Dozen of the Heart (System B)  [ChatGPT]
+Run started:  2026-07-29 19:36:21  (0/13 pending)
+--------------------------------------------------------------------
+--------------------------------------------------------------------
+Images: 0
+Run finished: 2026-07-29 19:36:21  (all pending items done)
+

@@ -1,0 +1,32 @@
+====================================================================
+The Thirteen Axes — the Sacred Plates  [ChatGPT]
+Run started:  2026-07-29 17:36:41  (9/9 pending)
+--------------------------------------------------------------------
+2026-07-29 17:36:50  assets/archetypes/sacred/primary/colored/The_One.png REFUSED — no image — ChatGPT: the response answered with TEXT but no image, and the text matches no known marker — loud skip, neve
+2026-07-29 17:37:24  assets/archetypes/sacred/primary/colored/Sacred_Axis.png REFUSED — no image — ChatGPT: the response answered with TEXT but no image, and the text matches no known marker — loud skip, neve
+2026-07-29 17:38:00  assets/archetypes/sacred/circle/colored/Sacred_Axis.png REFUSED — no image — ChatGPT: the response answered with TEXT but no image, and the text matches no known marker — loud skip, neve
+2026-07-29 17:39:46  assets/archetypes/sacred/archetypal/colored/Jesus_Christ.png gen   56.5s  ours   13.4s   1024x1024 -> 970x958    1.9 MB  [REMOVE BG: nothing, CROP: done]
+2026-07-29 17:41:40  assets/archetypes/sacred/historical/colored/Maximilian_Kolbe.png gen   94.6s  ours    7.9s   1024x1024 -> 958x933    1.9 MB  [REMOVE BG: nothing, CROP: done]
+2026-07-29 17:43:37  assets/archetypes/sacred/modern/colored/Aslan.png gen   98.2s  ours   12.8s   1024x1024 -> 944x926    2.0 MB  [REMOVE BG: nothing, CROP: done]
+2026-07-29 17:45:28  assets/archetypes/sacred/archetypal/colored/The_Devil.png gen  101.8s  ours    6.8s   1024x1024 -> 950x933    1.9 MB  [REMOVE BG: nothing, CROP: done]
+2026-07-29 17:47:29  assets/archetypes/sacred/historical/colored/Nero.png gen  104.0s  ours   12.3s   1024x1024 -> 948x931    1.9 MB  [REMOVE BG: nothing, CROP: done]
+2026-07-29 17:49:10  assets/archetypes/sacred/modern/colored/Sauron.png gen   96.9s  ours    0.3s   1024x1024 -> 979x942    1.9 MB  [REMOVE BG: nothing, CROP: done]
+--------------------------------------------------------------------
+Refused: 3 image(s) — rework those prompts in the sheet (or intervene manually) and rerun
+Images: 6  |  average generation (AI): 1m 32s/image  |  average our time (save+bgfix+pause): 9s/image
+Total AI + our time: 10m 06s  (wall clock: 12m 29s)
+Run finished: 2026-07-29 17:49:10  (all pending items done)
+
+====================================================================
+The Thirteen Axes — the Sacred Plates  [ChatGPT]
+Run started:  2026-07-29 19:27:51  (3/9 pending)
+--------------------------------------------------------------------
+2026-07-29 19:28:52  assets/archetypes/sacred/primary/colored/The_One.png gen   49.0s  ours    8.4s   1024x1024 -> 848x832    1.5 MB  [REMOVE BG: nothing, CROP: done]
+2026-07-29 19:29:06  assets/archetypes/sacred/primary/colored/Sacred_Axis.png REFUSED — no image — ChatGPT: the response answered with TEXT but no image, and the text matches no known marker — loud skip, neve
+2026-07-29 19:29:41  assets/archetypes/sacred/circle/colored/Sacred_Axis.png REFUSED — no image — ChatGPT: the response answered with TEXT but no image, and the text matches no known marker — loud skip, neve
+--------------------------------------------------------------------
+Refused: 2 image(s) — rework those prompts in the sheet (or intervene manually) and rerun
+Images: 1  |  average generation (AI): 49s/image  |  average our time (save+bgfix+pause): 8s/image
+Total AI + our time: 57s  (wall clock: 1m 50s)
+Run finished: 2026-07-29 19:29:41  (all pending items done)
+

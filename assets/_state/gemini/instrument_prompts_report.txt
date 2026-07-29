@@ -72,3 +72,22 @@ Run started:  2026-07-27 15:19:51  (0/2 pending)
 Images: 0
 Run finished: 2026-07-27 15:19:51  (all pending items done)
 
+====================================================================
+The Instrument — Prompt & Shot Sheet (Gemini + Screenshots)  [Gemini]
+Run started:  2026-07-29 17:52:14  (2/4 pending)
+--------------------------------------------------------------------
+2026-07-29 17:52:34  assets/instrument/duality.png                gen    6.0s  ours   12.3s   1024x1024 -> 830x833    718 KB  [REMOVE BG: done, CROP: done]
+2026-07-29 17:52:44  assets/instrument/thirteenth.png             gen    6.5s  ours    1.1s   1024x1024 -> 759x792    625 KB  [REMOVE BG: done, CROP: done]
+--------------------------------------------------------------------
+Images: 2  |  average generation (AI): 6s/image  |  average our time (save+bgfix+pause): 7s/image
+Total AI + our time: 26s  (wall clock: 30s)
+Run finished: 2026-07-29 17:52:44  (all pending items done)
+
+====================================================================
+The Instrument — Prompt & Shot Sheet (Gemini + Screenshots)  [Gemini]
+Run started:  2026-07-29 19:27:51  (0/4 pending)
+--------------------------------------------------------------------
+--------------------------------------------------------------------
+Images: 0
+Run finished: 2026-07-29 19:27:51  (all pending items done)
+

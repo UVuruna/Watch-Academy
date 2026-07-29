@@ -1,0 +1,42 @@
+====================================================================
+Edge Cell Plates — the Eight New Edge Seats of the Cube  [ChatGPT]
+Run started:  2026-07-29 17:54:34  (16/16 pending)
+--------------------------------------------------------------------
+2026-07-29 17:55:43  assets/archetypes/edges/primary/colored/Prudence.png gen   61.1s  ours    4.7s  1024x1536 -> 529x1500    1.6 MB  [REMOVE BG: nothing, CROP: done]
+2026-07-29 17:57:33  assets/archetypes/edges/circle/colored/Prudence.png gen   93.9s  ours    8.9s   1024x1024 -> 894x905    1.6 MB  [REMOVE BG: nothing, CROP: done]
+2026-07-29 17:57:42  assets/archetypes/edges/primary/colored/Ardor.png REFUSED — no image — ChatGPT: the response answered with TEXT but no image, and the text matches no known marker — loud skip, neve
+2026-07-29 17:58:19  assets/archetypes/edges/circle/colored/Ardor.png REFUSED — no image — ChatGPT: the response answered with TEXT but no image, and the text matches no known marker — loud skip, neve
+2026-07-29 17:58:54  assets/archetypes/edges/primary/colored/Steadfastness.png REFUSED — no image — ChatGPT: the response answered with TEXT but no image, and the text matches no known marker — loud skip, neve
+2026-07-29 18:07:11  assets/archetypes/edges/circle/colored/Steadfastness.png gen  128.5s  ours    9.9s   1024x1536 -> 869x867    1.5 MB  [REMOVE BG: nothing, CROP: done]
+2026-07-29 18:09:35  assets/archetypes/edges/primary/colored/Reform.png gen  125.6s  ours    7.9s  1024x1536 -> 527x1275    1.6 MB  [REMOVE BG: nothing, CROP: done]
+2026-07-29 18:13:45  assets/archetypes/edges/circle/colored/Reform.png gen  111.8s  ours    5.9s   1024x1536 -> 889x898    1.8 MB  [REMOVE BG: nothing, CROP: done]
+2026-07-29 18:15:48  assets/archetypes/edges/primary/colored/Meekness.png gen  111.2s  ours    5.8s  1024x1536 -> 591x1211    1.8 MB  [REMOVE BG: nothing, CROP: done]
+2026-07-29 18:16:01  assets/archetypes/edges/circle/colored/Meekness.png REFUSED — no image — ChatGPT: the response answered with TEXT but no image, and the text matches no known marker — loud skip, neve
+2026-07-29 18:16:41  assets/archetypes/edges/primary/colored/Aspiration.png REFUSED — no image — ChatGPT: the response answered with TEXT but no image, and the text matches no known marker — loud skip, neve
+2026-07-29 18:17:15  assets/archetypes/edges/circle/colored/Aspiration.png REFUSED — no image — ChatGPT: the response answered with TEXT but no image, and the text matches no known marker — loud skip, neve
+2026-07-29 18:20:03  assets/archetypes/edges/primary/colored/Self_Mastery.png gen  127.7s  ours    7.4s  1024x1536 -> 525x1242    1.4 MB  [REMOVE BG: nothing, CROP: done]
+2026-07-29 18:22:24  assets/archetypes/edges/circle/colored/Self_Mastery.png gen  118.7s  ours   10.5s   1024x1536 -> 888x898    1.7 MB  [REMOVE BG: nothing, CROP: done]
+2026-07-29 18:24:45  assets/archetypes/edges/primary/colored/Diligence.png gen  131.1s  ours    4.4s  1024x1536 -> 524x1242    1.4 MB  [REMOVE BG: nothing, CROP: done]
+2026-07-29 18:27:11  assets/archetypes/edges/circle/colored/Diligence.png gen  121.6s  ours    0.4s   1024x1536 -> 853x846    1.4 MB  [REMOVE BG: nothing, CROP: done]
+--------------------------------------------------------------------
+Refused: 6 image(s) — rework those prompts in the sheet (or intervene manually) and rerun
+Images: 10  |  average generation (AI): 1m 53s/image  |  average our time (save+bgfix+pause): 7s/image
+Total AI + our time: 19m 57s  (wall clock: 32m 37s)
+Run finished: 2026-07-29 18:27:11  (all pending items done)
+
+====================================================================
+Edge Cell Plates — the Eight New Edge Seats of the Cube  [ChatGPT]
+Run started:  2026-07-29 19:29:43  (6/16 pending)
+--------------------------------------------------------------------
+2026-07-29 19:31:15  assets/archetypes/edges/primary/colored/Ardor.png gen   79.1s  ours    9.8s  1024x1536 -> 482x1502    1.3 MB  [REMOVE BG: nothing, CROP: done]
+2026-07-29 19:33:24  assets/archetypes/edges/circle/colored/Ardor.png gen  114.1s  ours   12.3s   1024x1536 -> 925x939    1.4 MB  [REMOVE BG: nothing, CROP: done]
+2026-07-29 19:33:49  assets/archetypes/edges/primary/colored/Steadfastness.png REFUSED — no image — ChatGPT: the response answered with TEXT but no image, and the text matches no known marker — loud skip, neve
+2026-07-29 19:35:28  assets/archetypes/edges/circle/colored/Meekness.png gen   51.3s  ours    9.0s   1024x1024 -> 916x904    1.6 MB  [REMOVE BG: nothing, CROP: done]
+2026-07-29 19:35:41  assets/archetypes/edges/primary/colored/Aspiration.png REFUSED — no image — ChatGPT: the response answered with TEXT but no image, and the text matches no known marker — loud skip, neve
+2026-07-29 19:36:19  assets/archetypes/edges/circle/colored/Aspiration.png REFUSED — no image — ChatGPT: the response answered with TEXT but no image, and the text matches no known marker — loud skip, neve
+--------------------------------------------------------------------
+Refused: 3 image(s) — rework those prompts in the sheet (or intervene manually) and rerun
+Images: 3  |  average generation (AI): 1m 22s/image  |  average our time (save+bgfix+pause): 10s/image
+Total AI + our time: 4m 36s  (wall clock: 6m 36s)
+Run finished: 2026-07-29 19:36:19  (all pending items done)
+

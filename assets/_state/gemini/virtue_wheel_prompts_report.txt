@@ -103,3 +103,22 @@ Run started:  2026-07-27 15:19:51  (0/24 pending)
 Images: 0
 Run finished: 2026-07-27 15:19:51  (all pending items done)
 
+====================================================================
+Virtue Wheel Prompts — Aristotle's Twelve, in Two Registers (System B)  [Gemini]
+Run started:  2026-07-29 17:51:36  (2/26 pending)
+--------------------------------------------------------------------
+2026-07-29 17:51:58  assets/calendars/virtues/primary/colored/Prudence.png gen    7.0s  ours   11.0s   1024x1024 -> 886x883    1.2 MB  [REMOVE BG: done, CROP: done]
+2026-07-29 17:52:12  assets/calendars/vices/primary/colored/Cunning.png gen    8.5s  ours    1.5s   1024x1024 -> 886x883    1.1 MB  [REMOVE BG: done, CROP: done]
+--------------------------------------------------------------------
+Images: 2  |  average generation (AI): 8s/image  |  average our time (save+bgfix+pause): 6s/image
+Total AI + our time: 28s  (wall clock: 36s)
+Run finished: 2026-07-29 17:52:12  (all pending items done)
+
+====================================================================
+Virtue Wheel Prompts — Aristotle's Twelve, in Two Registers (System B)  [Gemini]
+Run started:  2026-07-29 19:27:51  (0/26 pending)
+--------------------------------------------------------------------
+--------------------------------------------------------------------
+Images: 0
+Run finished: 2026-07-29 19:27:51  (all pending items done)
+
