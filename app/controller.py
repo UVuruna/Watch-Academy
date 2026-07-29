@@ -2574,6 +2574,22 @@ class WatchController(QObject):
             "palette_style": wrap(
                 lambda v: self._set_display_choice("palette_style", v)
             ),
+            # THE POINTER SHAPE + ITS POLYGON OPTIONS (Pointers REWORK
+            # phase 3, owner sheet UV/Pointers.png, 2026-07-29) — plain
+            # display choices, the SAME generic setter as every other
+            # scalar Design pick above (Rule #5, no new mechanism).
+            "pointer_shape": wrap(
+                lambda v: self._set_display_choice("pointer_shape", v)
+            ),
+            "polygon_curvature": wrap(
+                lambda v: self._set_display_choice("polygon_curvature", v)
+            ),
+            "polygon_edge": wrap(
+                lambda v: self._set_display_choice("polygon_edge", v)
+            ),
+            "hide_night_borders": wrap(
+                lambda v: self._set_display_choice("hide_night_borders", v)
+            ),
             "ring": wrap(self._set_ring),
             "ring_finish": wrap(
                 lambda v: self._set_display_choice("ring_finish", v)

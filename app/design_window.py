@@ -157,6 +157,66 @@ class DesignDialog(QDialog):
                 lambda s=style: self._setters["palette_style"](s),
             ))
         layout.addLayout(style_row)
+        # THE POINTER SHAPE + ITS POLYGON OPTIONS (Pointers REWORK phase
+        # 3, owner sheet UV/Pointers.png, 2026-07-29) — every pointer
+        # EXCEPT the armless Aurora, which draws no pointer at all and
+        # ignores the choice outright (`constants.POINTER_SHAPES`).
+        if settings.pointer != "aurora":
+            shape_row = QHBoxLayout()
+            for shape in constants.POINTER_SHAPES:
+                shape_row.addWidget(self._pill(
+                    self._tr(shape.capitalize()),
+                    settings.pointer_shape == shape,
+                    lambda s=shape: self._setters["pointer_shape"](s),
+                ))
+            layout.addLayout(shape_row)
+            # CURVATURE + EDGE (owner sheet): only the four TRUE
+            # polygons (`constants.POLYGON_POINTERS`) take them, and
+            # only once "Polygon" is the active shape — the Calendar's
+            # and the Rose's own "polygon" reading are touching-arm
+            # STARS that never curve (owner spec), and the star shape
+            # has no edge to pull in the first place.
+            if (
+                settings.pointer in constants.POLYGON_POINTERS
+                and settings.pointer_shape == "polygon"
+            ):
+                low, high = constants.POLYGON_CURVATURE_RANGE
+                slider = QSlider(Qt.Orientation.Horizontal)
+                slider.setRange(int(low * 100), int(high * 100))
+                slider.setValue(int(round(settings.polygon_curvature * 100)))
+                percent_label = QLabel(f"{slider.value()}%")
+                slider.valueChanged.connect(
+                    lambda value, label=percent_label:
+                    label.setText(f"{value}%")
+                )
+                slider.sliderReleased.connect(
+                    lambda: self._setters["polygon_curvature"](
+                        slider.value() / 100.0
+                    )
+                )
+                curvature_row = QHBoxLayout()
+                curvature_row.addWidget(QLabel(self._tr("Curvature")))
+                curvature_row.addWidget(slider)
+                curvature_row.addWidget(percent_label)
+                layout.addLayout(curvature_row)
+                edge_row = QHBoxLayout()
+                for edge, title in (
+                    ("smooth", "Smooth concave"), ("notched", "V-notched"),
+                ):
+                    edge_row.addWidget(self._pill(
+                        self._tr(title), settings.polygon_edge == edge,
+                        lambda e=edge: self._setters["polygon_edge"](e),
+                    ))
+                layout.addLayout(edge_row)
+            # HIDE NIGHT BORDERS (owner option 2026-07-29): the arm's
+            # outline stroke runs only over the sunlit arcs, so the
+            # night keeps its fills without the overlapping-border mesh.
+            night_borders = QCheckBox(self._tr("Hide night borders"))
+            night_borders.setChecked(settings.hide_night_borders)
+            night_borders.toggled.connect(
+                self._setters["hide_night_borders"]
+            )
+            layout.addWidget(night_borders)
         # THE CALENDAR'S OWN OPTIONS LEFT THIS TAB (owner decree
         # 2026-07-29, Pointers REWORK phase 2). The lit wedge is DELETED
         # outright (the Calendar now follows the same visibility law as

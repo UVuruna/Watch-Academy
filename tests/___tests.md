@@ -112,7 +112,24 @@ while daylight is off, and an offscreen pin that it repaints the night
 and not the day) and the settings round-trip of the four new keys
 (defaults for a pre-rework file, `SettingsCorruptError` for a
 hand-edited bad value). `test_the_star_shape_is_untouched_by_the_rework`
-is the regression pin that the default dial did not move.
+is the regression pin that the default dial did not move. Phase 3
+(the Design window's own rows, `test_design_window.py` below) closes
+the loop here too: `test_the_four_design_rows_persist_and_reach_the_
+live_skin` drives a REAL `WatchController`'s `_design_setters()` and
+checks both `Settings` and the installed skin move.
+
+### `test_design_window.py`
+The `DesignDialog` regressions — THE TAB BOUNCE fix (owner fix
+2026-07-26: a live-apply rebuild now keeps whichever tab was open) and,
+since Pointers REWORK phase 3 (owner sheet `UV/Pointers.png`,
+2026-07-29), the Pointer tab's three new rows: the full pointer×shape
+gating matrix for Shape / Curvature+Edge / Hide-night-borders (a
+polygon pointer in "Polygon" shape shows all three; Aurora shows none;
+the Calendar and the Rose never show Curvature+Edge even in "Polygon"
+shape, since their own "polygon" is a touching-arm star that never
+curves), and which widget calls which `_setters[...]` key with which
+value (a `_RecordingSetters` stub — the real wiring, persistence and
+the live skin, is `test_pointer_shapes.py`'s own controller test above).
 
 ### `test_cube_seating.py`
 The Seating geometry goldens (WORKPLAN Session 26, CUBE.md §The

@@ -340,6 +340,14 @@ pattern) rather than guessed:
   each window's picks call THROUGH (Rule #5 — the SAME `_set_*`
   methods the old menu chains used), each wrapped so a pick both
   applies and re-supplies the open window with fresh state.
+  `_design_setters()`'s four Pointers REWORK phase 3 keys
+  (`pointer_shape`/`polygon_curvature`/`polygon_edge`/
+  `hide_night_borders`, owner sheet `UV/Pointers.png`, 2026-07-29) have
+  no old-menu equivalent — they are new plain wraps of the SAME generic
+  `_set_display_choice(key, value)` every scalar Design pick already
+  uses, added because their rows are new, not because the mechanism is
+  (see [Design Window](design_window.md)'s own "THE POINTER SHAPE
+  ROWS" for the gating matrix).
   `_refresh_pointer_theme_gate()`/`_refresh_slot_theme_gate()` (called
   from `_refresh_menu_gating`) gray the top-level entry AND push a
   live gate into an already-open window: Pointer Theme grays on

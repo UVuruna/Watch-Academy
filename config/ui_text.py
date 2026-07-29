@@ -47,6 +47,12 @@ UI_STRINGS: tuple[str, ...] = (
     # "Shine" (DOLLAR/EYE round, owner decree 2026-07-27): the Eye of
     # Providence's per-preset rays toggle on the Design ▸ Ring tab.
     "Two metals", "Shine",
+    # THE POINTERS REWORK phase 3 (owner sheet UV/Pointers.png,
+    # 2026-07-29): the Design ▸ Pointer tab's new SHAPE/CURVATURE/EDGE/
+    # NIGHT BORDERS rows. "Star" already ships above (the opacity
+    # slider label) and is reused verbatim for the shape pill.
+    "Polygon", "Curvature", "Smooth concave", "V-notched",
+    "Hide night borders",
     "Encyclopedia", "Astrology", "Chinese zodiac", "← Back",
     "Gods", "Zodiac", "Themes", "Creeds & Mysteries",
     "Fine (16 shades)", "Coarse (13 shades)", "Gradient",

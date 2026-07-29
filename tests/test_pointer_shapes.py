@@ -26,7 +26,7 @@ import pytest
 from PySide6.QtGui import QImage, QPainter
 from PySide6.QtWidgets import QApplication
 
-from app.controller import build_skin
+from app.controller import WatchController, build_skin
 from app.settings_store import (
     Settings,
     SettingsCorruptError,
@@ -752,3 +752,47 @@ def test_the_settings_reach_the_skin(app):
     assert skin.hide_night_borders is True
     assert polygon_faces(skin) is True
     assert polygon_curvature(skin) == pytest.approx(0.4)
+
+
+# --- The Design window's wiring reaches the live controller (phase 3) ---------------
+
+
+@pytest.fixture
+def controller(app, tmp_path, monkeypatch):
+    """A REAL WatchController — the exact object whose `_design_setters()`
+    the Design window's Pointer tab calls through, so this is the
+    faithful proof that a row's pick both PERSISTS to `Settings` and
+    reaches the INSTALLED skin, not a re-test of `build_skin` alone
+    (already golden-tested above)."""
+    monkeypatch.setenv("APPDATA", str(tmp_path))
+    made = WatchController(app)
+    yield made
+    made._teardown_windows()
+    made._profiling_timer.stop()
+
+
+def test_the_four_design_rows_persist_and_reach_the_live_skin(controller):
+    """Rule #25 pin: every new Design ▸ Pointer row writes through the
+    SAME `_set_display_choice` mechanism the neighboring rows use
+    (Rule #5, no new mechanism) — `_design_setters()` is the exact dict
+    `_open_design()` hands the window, so calling through it here is
+    the real wiring, not a stand-in."""
+    setters = controller._design_setters()
+    setters["pointer"]("octa")
+    setters["pointer_shape"]("polygon")
+    assert controller._settings.pointer_shape == "polygon"
+    assert controller._skin.pointer_shape == "polygon"
+    assert polygon_faces(controller._skin) is True
+
+    setters["polygon_curvature"](0.5)
+    assert controller._settings.polygon_curvature == pytest.approx(0.5)
+    assert controller._skin.polygon_curvature == pytest.approx(0.5)
+    assert polygon_curvature(controller._skin) == pytest.approx(0.5)
+
+    setters["polygon_edge"]("notched")
+    assert controller._settings.polygon_edge == "notched"
+    assert controller._skin.polygon_edge == "notched"
+
+    setters["hide_night_borders"](True)
+    assert controller._settings.hide_night_borders is True
+    assert controller._skin.hide_night_borders is True
