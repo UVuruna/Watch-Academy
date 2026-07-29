@@ -1250,6 +1250,23 @@ def _pick_rotation(candidates: list[Path], on_date: date) -> Path | None:
     return candidates[index]
 
 
+def _pick_weekly_mandate(candidates: list[Path], on_date: date) -> Path | None:
+    """cp_corpo's WEEKLY MANDATE (owner decree 2026-07-29,
+    `constants.NINTH_MECHANISMS["cp_corpo"] == "term_weekly"`): the
+    RULING triple flips at the ISO calendar week BOUNDARY, not daily —
+    even week rules the canonical (Arasaka) half, odd week the
+    alternate (NUSA) half, same graceful degrade as `_pick_rotation`
+    (zero -> None, one -> that one every week). A 53-week ISO year
+    hands the odd side one extra week — the owner knows and accepts
+    it."""
+    if not candidates:
+        return None
+    if len(candidates) == 1:
+        return candidates[0]
+    index = on_date.isocalendar()[1] % len(candidates)
+    return candidates[index]
+
+
 # THE SEAT ROSTER (Cyberpunk casts, sheet-sealed 2026-07-22; wired by
 # completion wave II's second half, Session 32, 2026-07-29). The
 # universal rotation above pools ONE figure's own `_v2` versions — a
@@ -1292,30 +1309,25 @@ WEEKDAY_SEAT_ROSTERS: dict[str, dict[str, tuple[str, ...]]] = {
         "ninth": ("Alt_Cunningham", "Rache_Bartmoss"),
     },
     # COMPLETION WAVE III (Session 33, 2026-07-29). The Star Wars Dyad's
-    # three rotating seats. Tuesday and Wednesday are ordinary two-way
-    # pairs of PEOPLE; the Ninth is the registry's first PLACE-vs-PLACE
-    # rotation — The Ghosts (canonical) against Exegol.
+    # rotating PEOPLE seats — Tuesday and Wednesday, ordinary two-way
+    # pairs.
     #
-    # THE NINTH'S MECHANISM IS PROVISIONAL (owner call, recorded in
-    # `research/theme_staging.md`). The sheet leaves the choice open
-    # between (a) this plain date rotation and (b) reusing
-    # `core.continents`'s Zealandia/Pangea TRIGGER — a rarer face that
-    # surfaces only when the sky is doing something. This wave takes (a)
-    # because Rule #5 says one rotation mechanism, not two: the Cyberpunk
-    # half built this table for exactly this shape one commit earlier,
-    # and the sheet's rotation section argues the PAIRING, never the
-    # trigger. Flipping to (b) is a small, fully named change: delete the
-    # "ninth" entry here, add `sw_dyad` to the alt table
-    # `constants.WEEKDAY_THEME_NINTH_EASTER_EGG` (which
-    # `render.layers.theme_ninth` already reads), and widen the three
-    # `weekday_theme == "continents"` gates that compute the flag —
-    # `render.layers` (two call sites), `render.compositor
-    # ._center_pangea` and `app.encyclopedia.builders` — into a
-    # membership test over the two themes.
+    # THE NINTH'S MECHANISM IS RESOLVED (owner verdict 2026-07-29,
+    # SEALED, superseding Session 33's PROVISIONAL date rotation): the
+    # Ninth is a DAYLIGHT/NIGHT switch, not a seat roster — "the duality
+    # of that theme pulling the actors to one of two sides." Day shows
+    # The Ghosts (`constants.WEEKDAY_THEME_NINTHS["sw_dyad"]`, the
+    # canonical/good face), night shows Exegol
+    # (`constants.WEEKDAY_THEME_NINTH_NIGHT`) — dispatched through
+    # `constants.NINTH_MECHANISMS["sw_dyad"] == "daynight"` by
+    # `render.layers.theme_ninth`/`ninth_alt_active` and `render.
+    # compositor._center_ninth_alt`, reading the SAME `TickState.
+    # is_daylight` `center_face` already reads. The "ninth" entry that
+    # used to live here is GONE — see `research/theme_staging.md` for
+    # the closed provisional note.
     "sw_dyad": {
         "mars": ("Finn", "Phasma"),
         "mercury": ("Maz", "DJ"),
-        "ninth": ("Ghosts", "Exegol"),
     },
 }
 # (theme FOLDER, canonical stem) -> the whole roster (derived; the one
@@ -1364,8 +1376,13 @@ def rotating_art_file(canonical_path: Path, on_date: date) -> Path | None:
     retired the `alt/` subfolder — versions are `_v2`-style siblings in
     the SAME source-free folder now) — or, when the plate is the
     canonical member of a SEAT ROSTER above, that roster's own figures in
-    declared order. Opt-in per consumer (scale duality, era emblems,
-    tetramorph figures, every weekday body) — never on the hot
+    declared order — normally by `_pick_rotation`'s daily modulo, except
+    cp_corpo's own roster, which reads the ISO week's parity instead
+    (`_pick_weekly_mandate`, `constants.NINTH_MECHANISMS["cp_corpo"] ==
+    "term_weekly"` — THE WEEKLY MANDATE, owner decree 2026-07-29): ONE
+    rotation chokepoint, a per-theme CADENCE rather than a second
+    mechanism (Rule #5). Opt-in per consumer (scale duality, era
+    emblems, tetramorph figures, every weekday body) — never on the hot
     `art_file` path. This is the ONE chokepoint every weekday consumer
     already calls, which is why the roster hooks in here rather than at
     four call sites. None when the canonical path resolves to nothing on
@@ -1375,9 +1392,13 @@ def rotating_art_file(canonical_path: Path, on_date: date) -> Path | None:
         return None
     stems = _seat_roster_of(canonical_path)
     if stems is not None:
-        return _pick_rotation(
-            _roster_candidates(canonical_path.parent, stems), on_date
+        theme = canonical_path.parts[-4]
+        picker = (
+            _pick_weekly_mandate
+            if constants.NINTH_MECHANISMS.get(theme) == "term_weekly"
+            else _pick_rotation
         )
+        return picker(_roster_candidates(canonical_path.parent, stems), on_date)
     candidates = _rotation_candidates(
         (canonical_path.parent,), (canonical_path.stem,)
     )

@@ -1387,17 +1387,72 @@ WEEKDAY_THEME_NINTHS = {
     "sw_dyad": ("The Ghosts", "sw_dyad/primary/bronze/Ghosts.png"),
 }
 
-# THE PANGEA EASTER EGG (owner-sealed matrix 2026-07-21): Pangea shows
-# INSTEAD of Zealandia on the Ninth seat ONLY when the sky is doing
-# something on the traveled day — an eclipse, a season turning point, or
-# a full/new moon day (~1/11 of the year). Same story, deeper time: was
-# once ALL, split, and by the supercontinent cycle will return. The LAW
-# lives in core.continents; render.layers.theme_ninth reads this alt
-# table when the law fires. Plate wired ahead of the owner's art
-# (graceful-absent), same earth-family home as Zealandia.
+# THE PANGEA EASTER EGG (owner-sealed matrix 2026-07-21; trigger WIDENED
+# to every principal moon phase 2026-07-29): Pangea shows INSTEAD of
+# Zealandia on the Ninth seat ONLY when the sky is doing something on
+# the traveled day — an eclipse, a season turning point, or a principal
+# moon-phase day (full, new, or either quarter — core.continents'
+# `pangea_over_zealandia`). Same story, deeper time: was once ALL,
+# split, and by the supercontinent cycle will return. The LAW lives in
+# core.continents; render.layers.theme_ninth reads this alt table when
+# the law fires (mechanism "easter_egg" below). Plate wired ahead of the
+# owner's art (graceful-absent), same earth-family home as Zealandia.
 WEEKDAY_THEME_NINTH_EASTER_EGG = {
     "continents": ("Pangea", "../earth/pangea.png"),
 }
+
+# THE DYAD'S NIGHT FACE (owner Double-Ninth verdict, 2026-07-29):
+# sw_dyad's Ninth is a DAYLIGHT/NIGHT switch, not a date rotation — day
+# shows the canonical `WEEKDAY_THEME_NINTHS["sw_dyad"]` entry (The
+# Ghosts, the good side), night shows Exegol from this table (the
+# owner's words: "the duality of that theme pulling the actors to one
+# of two sides"). Mirrors `WEEKDAY_THEME_NINTH_EASTER_EGG`'s shape —
+# theme -> (display name, plate) — read by `render.layers.theme_ninth`
+# when the mechanism dispatch (`NINTH_MECHANISMS` below) resolves to
+# "daynight". Plate wired ahead of the owner's art (graceful-absent);
+# neither Ghosts nor Exegol has landed yet.
+WEEKDAY_THEME_NINTH_NIGHT = {
+    "sw_dyad": ("Exegol", "sw_dyad/primary/bronze/Exegol.png"),
+}
+
+# THE DOUBLE NINTH LAW (standing law, owner decree 2026-07-29): a theme
+# may mount a DOUBLE NINTH — two faces contending for the ONE seat —
+# only with a DEFINED alternation mechanism, and every reader (the dial,
+# its hover, the Encyclopedia) shows ONLY the currently active face,
+# never both at once. `NINTH_MECHANISMS` names, per theme, WHICH
+# mechanism governs its double Ninth (and, for "term_weekly", its whole
+# synchronized Throne/Mirror/Ninth triple — the name stays "NINTH_" for
+# historical continuity with the seat it was coined for):
+#
+# - "easter_egg"  — a SKY trigger (`core.continents.pangea_over_
+#   zealandia`): the alt face surfaces only when an eclipse, a turning
+#   point or a principal moon phase lands on the traveled day.
+# - "daynight"    — the SAME daylight state `render.layers.center_face`
+#   reads (`TickState.is_daylight`): day the canonical face, night the
+#   alt (`WEEKDAY_THEME_NINTH_NIGHT`).
+# - "term_weekly" — cp_corpo's WEEKLY MANDATE: the traveled date's ISO
+#   calendar week PARITY decides which half of the seat roster rules —
+#   even week the canonical (Arasaka) triple, odd week the alternate
+#   (NUSA) triple — for its Throne, Mirror AND Ninth together (the
+#   existing `WEEKDAY_SEAT_ROSTERS`/`rotating_art_file` chokepoint,
+#   cadence swapped from daily to weekly; `config.defaults.
+#   _pick_weekly_mandate`). No separate alt TABLE — the roster already
+#   names both halves, only the picker's cadence changes.
+#
+# A theme absent from this table has no double Ninth at all (the plain
+# single canonical entry in `WEEKDAY_THEME_NINTHS`). `NINTH_MECHANISM_
+# KINDS` is the vocabulary every dispatch above actually implements
+# (`render.layers.ninth_table_for`/`ninth_alt_active`, `render.
+# compositor._center_ninth_alt`, `config.defaults.rotating_art_file`'s
+# cadence override) — `tests/test_ninth_mechanisms.py` fails the build
+# if `NINTH_MECHANISMS` ever names anything outside it, or if a double
+# Ninth found in ANY registry above has no entry here at all.
+NINTH_MECHANISMS: dict[str, str] = {
+    "continents": "easter_egg",
+    "sw_dyad": "daynight",
+    "cp_corpo": "term_weekly",
+}
+NINTH_MECHANISM_KINDS = frozenset({"easter_egg", "daynight", "term_weekly"})
 
 # THE DUAL/NINTH TIME WINDOW (owner seal 2026-07-29, superseding
 # INSTRUCTION #5's hour widths): half an hour either side of the day's
