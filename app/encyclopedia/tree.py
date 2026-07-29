@@ -614,13 +614,20 @@ def _build_topics(travel_date: date | None = None) -> dict:
         topics[topic_key] = {
             "title": title,
             "icon": icon,
+            # A row is (name, art) or (name, art, diagram): the COMPUTED
+            # pages (owner verdict 2026-07-29) name a drawer instead of
+            # a file — the axes, the Cube's own figures and the two
+            # projections are compositions the canon exempted from
+            # generation, and the program draws them from
+            # `config.cube`'s coordinates (root Rule #19).
             "entries": [
                 {
-                    "images": () if art is None else (art,),
-                    "name": name,
-                    "article": ("emblem", family, name),
+                    "images": () if row[1] is None else (row[1],),
+                    "name": row[0],
+                    "article": ("emblem", family, row[0]),
+                    **({"diagram": row[2]} if len(row) > 2 else {}),
                 }
-                for name, art in entry_specs
+                for row in entry_specs
             ],
         }
         if tile is not None:

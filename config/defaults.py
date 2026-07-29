@@ -1456,6 +1456,21 @@ ENCYCLOPEDIA_READER_DECODE_CEILING_PX = 1600   # ~viewport height × max zoom
 ENCYCLOPEDIA_GALLERY_MAX_COLUMNS = 4
 ENCYCLOPEDIA_GALLERY_CARD_PADDING_PX = 40   # matches _rescale_topics' + 40/+44
 
+# --- THE COMPUTED DIAGRAMS (owner verdict 2026-07-29) -----------------------
+# Twenty-three Encyclopedia pages are COMPOSITIONS the canon exempted
+# from generation (CUBE.md, Session 25, root Rule #19). They are drawn
+# live from `config.cube`'s own coordinates instead — see
+# `render/cube_diagrams.py`. Every number here is a RATIO of the plate's
+# own side, so one drawing serves every zoom level and every window.
+CUBE_DIAGRAM_UNIT_RATIO = 0.185     # one cube step, as a share of the side
+CUBE_DIAGRAM_NODE_RATIO = 0.055     # a cell's dot radius, per unit
+CUBE_DIAGRAM_LABEL_RATIO = 0.30     # a label's pixel size, per unit
+CUBE_DIAGRAM_LABEL_PUSH = 0.55      # how far outward a pole's name sits
+CUBE_DIAGRAM_FRAME_OPACITY = 0.35   # the cube's twelve edges
+CUBE_DIAGRAM_DIM_OPACITY = 0.30     # the cells an axis page does not light
+CUBE_DIAGRAM_SIDE_PX = 900          # the drawing's own square, then scaled
+CUBE_DIAGRAM_MARGIN_PX = 8          # no label is ever drawn past this edge
+
 # --- THE SESSION 27 REWORK (owner-sealed 2026-07-28) -------------------------
 # Three levels — six WHOLES, their THEME cards, then the article slider.
 #

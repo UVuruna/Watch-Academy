@@ -1390,9 +1390,13 @@ def test_era_terms_topic():
     for image in era[6]["images"]:
         resolved = _paths.art_file(image)
         assert resolved is None or resolved.suffix == ".png"
-    # The Great Oscillations is an ESSAY — no emblem of its own (like the
-    # Eras essay's own text), so its image tuple is empty (fix round F).
-    assert era[7]["images"] == ()
+    # The Great Oscillations was an ESSAY with no emblem of its own (fix
+    # round F). The SESSION 27 COVERAGE LAW (owner 2026-07-28, "svaki
+    # clanak mora sliku") supersedes that: an essay still gets a plate
+    # NAME — its topic's own `title` register — so the prompt sheet has
+    # something to address and the page lights up when the art lands.
+    assert len(era[7]["images"]) == 1
+    assert era[7]["images"][0].parent.parent.name == "title"
 
     # SESSION 27 (owner-sealed 2026-07-28): the old Celestial Engine
     # SPLIT — the watch's own wheels (the week, the instrument, the eras

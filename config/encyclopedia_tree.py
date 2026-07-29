@@ -186,20 +186,13 @@ TOPIC_ALIASES["planet_signs"] = ("planets", 0)
 # are listed here, and the coverage test reads this list as the
 # documented gap rather than a silent hole.
 PLATELESS_PAGES = {
-    "cube_doctrine": (
-        "The Cube", "The Thirteen Axes", "The Sixty-Five Terms",
-        "The Three Sets",
-    ),
-    "cube_axes": (
-        "The Activation Axis", "The Moral Scope Axis",
-        "The Self-Regard Axis", "Reason ↔ Emotion",
-        "Pragmatism ↔ Idealism", "Person ↔ Cause", "Hearth ↔ Desert",
-        "Lion ↔ Lamb", "Servant ↔ Sovereign",
-    ),
-    "cube_figures": (
-        "Vow ↔ Vision", "Preservation ↔ Revolution", "Crown ↔ Shield",
-    ),
-    "cube_projections": ("The Hexagram Projection", "The Banknote Axes"),
+    # What the FIRST diagram wave (0.14.540) has not drawn yet: the
+    # tables and the word-figures. `render/cube_diagrams.py` answers
+    # every cube-geometry page already; these seven wait for their own
+    # drawers (the term grid, the three sets, the two triangles, the
+    # union table, the chiasm and the two ciphers) — data-driven
+    # figures, so none of them is a prompt either.
+    "cube_doctrine": ("The Sixty-Five Terms", "The Three Sets"),
     "double_trinity": ("The Double Trinity", "The Twenty-Four Fields"),
     "crosses": ("The Two Crosses", "FALL and STAR", "DOMY and SAFE"),
 }

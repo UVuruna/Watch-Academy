@@ -72,6 +72,13 @@ color sample, the moon-phase live render, the subdial plate resolver,
 the working-set downscale family, and the two computed icons (calendar
 wheel, solar eclipse type). See [Asset Variants](asset_variants.md).
 
+### `cube_diagrams.py` — Cube Diagrams
+The Character Cube's Encyclopedia pages that are COMPOSITIONS rather than
+scenes — one axis lit inside its cube, the whole cube, all thirteen
+lines, the hexagram projection, the banknote axes — drawn live from
+`config.cube`'s own coordinates (owner verdict 2026-07-29: computed, not
+generated, and never blank). See [Cube Diagrams](cube_diagrams.md).
+
 ## Connections
 
 ### Uses

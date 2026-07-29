@@ -42,6 +42,7 @@ from app.encyclopedia.text import article_text, entry_name, flow_html, image_too
 from app.ui_style import style_button, style_look_chip
 from config import constants, defaults, paths
 from render.asset_recolor import ensure_variant, variant_pending
+from render import cube_diagrams
 from render.asset_variants import scaled_variant_file
 from render.compositor import _HEX_NOTE, _SUBHEAD
 
@@ -65,6 +66,11 @@ class ReaderScreen(QWidget):
         self._blocks: list[QWidget] = []
         self._text_labels: list[QLabel] = []
         self._name_labels: list[QLabel] = []
+        # THE COMPUTED PAGES (owner verdict 2026-07-29): a page may name
+        # a DRAWER instead of a file — (label, (kind, key)) pairs, re-fit
+        # on every resize from one cached master (Rule #19: one master,
+        # transformed, never a plate per size).
+        self._diagram_labels: list = []
         self._pixmap_cache: dict[str, QPixmap] = {}
         # FINISH PERSISTENCE (owner INSTRUCTION #3): once picked, a
         # look/finish (e.g. Bronze) rides EVERY following entry that
@@ -201,6 +207,7 @@ class ReaderScreen(QWidget):
         self._blocks = []
         self._text_labels = []
         self._name_labels = []
+        self._diagram_labels = []
         content = QWidget()
         column = QVBoxLayout(content)
         column.setSpacing(defaults.GUIDE_SPACING_PX * 3)
@@ -260,6 +267,12 @@ class ReaderScreen(QWidget):
         self._look_forward.setVisible(multi_look)
         if multi_look:
             self._update_look_caption()
+        diagram = entry.get("diagram")
+        if diagram:
+            plate = QLabel()
+            plate.setAlignment(Qt.AlignmentFlag.AlignCenter)
+            self._diagram_labels.append((plate, diagram))
+            cell.addWidget(plate, alignment=Qt.AlignmentFlag.AlignHCenter)
         name = QLabel(f"<b>{self._entry_name(entry)}</b>")
         name.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self._name_labels.append(name)
@@ -365,6 +378,28 @@ class ReaderScreen(QWidget):
             font = label.font()
             font.setPixelSize(font_px + 3)
             label.setFont(font)
+        for label, (kind, key) in self._diagram_labels:
+            # ONE master per figure, scaled to the page — the same
+            # ceiling the art images obey, so a diagram can never push
+            # the article off screen.
+            side = max(120, min(
+                block_width,
+                round(
+                    self._scroll.viewport().height()
+                    * defaults.READER_IMAGE_MAX_HEIGHT_FRACTION * self._zoom
+                ),
+            ))
+            master = cube_diagrams.plate(
+                kind, key, defaults.CUBE_DIAGRAM_SIDE_PX,
+            )
+            if master.isNull():
+                continue
+            label.setPixmap(master.scaled(
+                side, side,
+                Qt.AspectRatioMode.KeepAspectRatio,
+                Qt.TransformationMode.SmoothTransformation,
+            ))
+            label.setFixedSize(side, side)
         for state in self._cells:
             # First pass builds the grid; resizes only re-fit pixmaps.
             if "cells" in state:

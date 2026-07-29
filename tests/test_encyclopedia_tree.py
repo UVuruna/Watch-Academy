@@ -288,7 +288,7 @@ def test_every_article_names_the_plate_it_wants(topics):
     for key, topic in topics.items():
         exempt = set(tree.PLATELESS_PAGES.get(key, ()))
         for entry in topic["entries"]:
-            if _declared_slots(entry):
+            if _declared_slots(entry) or entry.get("diagram"):
                 continue
             if _page_name(entry) in exempt:
                 continue
@@ -309,7 +309,7 @@ def test_the_exception_list_has_no_stale_entries(topics):
         assert key in topics, key
         plated = {
             _page_name(entry) for entry in topics[key]["entries"]
-            if _declared_slots(entry)
+            if _declared_slots(entry) or entry.get("diagram")
         }
         present = {_page_name(entry) for entry in topics[key]["entries"]}
         for name in names:
@@ -335,3 +335,33 @@ def test_the_title_plate_resolver_names_one_file_per_block(topics):
             assert path not in seen, (key, duality, seen.get(path))
             seen[path] = (key, duality)
     assert "title" in str(defaults.theme_title_art("greek"))
+
+
+def test_every_declared_diagram_has_a_drawer(topics):
+    """A page may name a DRAWER instead of a file (owner verdict
+    2026-07-29). Nothing may name one that does not exist — that would
+    be a blank page pretending to be a computed one."""
+    from render import cube_diagrams
+
+    known = set(cube_diagrams.kinds())
+    for key, topic in topics.items():
+        for entry in topic["entries"]:
+            spec = entry.get("diagram")
+            if spec is None:
+                continue
+            kind, _key = spec
+            assert kind in known, f"{key}: {entry['name']} -> {kind}"
+
+
+def test_the_axis_pages_draw_the_axis_they_argue(topics):
+    """Every axis page's diagram names the CANON axis of the same name —
+    the drawing is the canon table, not a decoration beside it."""
+    from config import cube
+
+    canon = {axis.name for axis in cube.AXES}
+    for key in ("cube_axes", "cube_figures"):
+        for entry in topics[key]["entries"]:
+            spec = entry.get("diagram")
+            if spec is None or spec[0] != "axis":
+                continue
+            assert spec[1] in canon, (key, entry["name"], spec)
