@@ -1106,6 +1106,15 @@ WEEKDAY_THEMES = (
     "age_of_heroes",       # Greek Monsters — the Olympians' bestiary
     "celestial_court",     # Chinese Mythology — gods, immortals, one rebel
     "corporate",           # The Corporation — the executive committee
+    # COMPLETION WAVE II (Session 32, 2026-07-29): the World of Warcraft
+    # franchise. THREE casts riding the SAME nine seats with different
+    # figures — three THEMES on the dial (backlog structural answer 1:
+    # FIGURE_ROSTERS is a two-value GLOBAL switch, so a franchise's
+    # blocks can only be themes), ONE card in the Encyclopedia with a
+    # three-way switcher (answer 2).
+    "wow_alliance",        # the Grand Alliance's own command
+    "wow_horde",           # the new Horde's leadership
+    "wow_evil",            # the enemies both were made against
 )
 
 # The bronze-plate themes (owner 2026-07-12): their medallions can wear
@@ -1119,6 +1128,10 @@ METAL_THEMES = (
     # primary register with a colored/ sibling, so all four looks are
     # available — no THEME_METALS_OVERRIDE needed for any of them.
     "age_of_heroes", "celestial_court", "corporate",
+    # Completion wave II (Session 32): the three WoW casts are bronze
+    # carved relief in primary/bronze with a full-paint colored/ sibling
+    # per plate — the same cameo-master shape, so all four looks apply.
+    "wow_alliance", "wow_horde", "wow_evil",
 )
 # "colored" (owner 2026-07-12) is the FOURTH look: fresh full-color
 # badges from the theme's colored/ subfolder — separate art, no swap.
@@ -1177,6 +1190,13 @@ WEEKDAY_THEME_BLURBS = {
     "age_of_heroes": "age_of_heroes",
     "celestial_court": "celestial_court",
     "corporate": "corporate",
+    # Completion wave II (Session 32): one blurb set per CAST, never one
+    # per franchise — the three ride the same seats with different
+    # people, and the hover line names the person (CUBE.md Charter
+    # rule 5).
+    "wow_alliance": "wow_alliance",
+    "wow_horde": "wow_horde",
+    "wow_evil": "wow_evil",
 }
 
 # Theme -> symbolism.json article set (the glyph theme shares the
@@ -1211,6 +1231,12 @@ WEEKDAY_THEME_ARTICLES = {
     "age_of_heroes": "age_of_heroes",
     "celestial_court": "celestial_court",
     "corporate": "corporate",
+    # Completion wave II (Session 32): own article set per cast, for the
+    # same reason — three sets on one seat are three different people,
+    # and each article argues THAT person's own deed.
+    "wow_alliance": "wow_alliance",
+    "wow_horde": "wow_horde",
+    "wow_evil": "wow_evil",
 }
 
 # THE NINTH per weekday theme (CANON.md "The Ninth — Outside the
@@ -1263,6 +1289,15 @@ WEEKDAY_THEME_NINTHS = {
     "age_of_heroes": ("Pegasus", "age_of_heroes/primary/bronze/Pegasus.png"),
     "celestial_court": ("Buddha", "celestial_court/primary/bronze/Buddha.png"),
     "corporate": ("The Founder", "corporate/primary/bronze/Founder.png"),
+    # COMPLETION WAVE II (Session 32): three Excluded ninths, each argued
+    # in the franchise's own sheet — Turalyon kept the same oath for a
+    # thousand years with no Alliance in reach to keep it for; Rexxar
+    # belongs to no people at all and came anyway; Medivh is the one
+    # figure of the Evil cast who never chose what he became and is
+    # nevertheless responsible for most of it.
+    "wow_alliance": ("Turalyon", "wow_alliance/primary/bronze/Turalyon.png"),
+    "wow_horde": ("Rexxar", "wow_horde/primary/bronze/Rexxar.png"),
+    "wow_evil": ("Medivh", "wow_evil/primary/bronze/Medivh.png"),
 }
 
 # THE PANGEA EASTER EGG (owner-sealed matrix 2026-07-21): Pangea shows

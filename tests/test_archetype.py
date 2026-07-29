@@ -1106,8 +1106,11 @@ def test_octa_variants_wear_the_sealed_walks_and_ages_hues(app):
     # (R7a 2026-07-21), whose seven bodies carry the SAME sealed Walks/
     # Ages octa hues on their own fixed arms; +21 for completion wave I
     # (Session 31, 2026-07-29) — Greek Monsters, Chinese Mythology and
-    # The Corporation, three more casts riding the same fixed arms.
-    assert seen == 191
+    # The Corporation, three more casts riding the same fixed arms; +21
+    # for completion wave II's World of Warcraft half (Session 32, same
+    # day) — Alliance, Horde and Evil, which ride those fixed arms three
+    # times over with three different casts.
+    assert seen == 212
 
 
 # --- The Earth day label -----------------------------------------------------------

@@ -59,6 +59,15 @@ class Whole(NamedTuple):
 # `profession`/`corporate` pair out of `human` into the new `worlds`);
 # WORKPLAN-STRUCTURE.md §THE NINE WHOLES already names those
 # destinations and states that its table SUPERSEDES the seats here.
+#
+# COMPLETION WAVE II (Session 32, 2026-07-29) added ONE card for three
+# casts — `wow`, the merge declared in VARIANT_SOURCES below. It is the
+# variant law's own shape rather than an exception to it: Alliance,
+# Horde and Evil are three registers of ONE subject, the same nine seats
+# read three times over. It seats in `human` beside the Professions and
+# the Corporation until the nine-whole arc moves the whole group into
+# `worlds` (WORKPLAN-STRUCTURE.md §THE NINE WHOLES names the franchise
+# cards there explicitly, and that table supersedes this seat).
 WHOLES = (
     Whole(
         # 12h yellow — the sun at the top of the dial; the instrument's
@@ -88,7 +97,7 @@ WHOLES = (
         # Scale: the human fire, which is what this whole reads.
         "human", "The Human Wheel", palette.ROSE_PALETTE[2],
         ("virtues", "sins", "moods", "intelligences", "profession",
-         "corporate", "trinity", "duality"),
+         "corporate", "wow", "trinity", "duality"),
     ),
     Whole(
         # 06h blue — sunrise, the spring equinox, Judas's hue: the Cube's
@@ -132,6 +141,19 @@ VARIANT_SOURCES = {
                           ("Ancient religions", "religion_alt"))),
     "bible": ("Bible", (("Bible", "bible"), ("Bible II", "bible2"),
                         ("Bible Dark", "bible_dark"))),
+    # COMPLETION WAVE II (Session 32, 2026-07-29). The World of Warcraft
+    # franchise is ONE card with a three-way switcher, never three cards
+    # (WORKPLAN.md §THE THEME BACKLOG, structural answer 2): its three
+    # casts hold the SAME nine seats — the same arm colours, the same
+    # virtue/vice bundles, the same Sunday dual and the same Ninth
+    # seat — and differ only in who is sitting there, which is precisely
+    # what "registers of one subject" means. The dial shows one cast at
+    # a time; the reader walks all three. TOPIC_ALIASES derives from
+    # this, so each cast's own Spacebar jump still lands on its own
+    # pages.
+    "wow": ("World of Warcraft", (("Alliance", "wow_alliance"),
+                                  ("Horde", "wow_horde"),
+                                  ("Evil", "wow_evil"))),
 }
 
 # The four merged god themes already BUILD as three contiguous blocks

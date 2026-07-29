@@ -2199,6 +2199,41 @@ WEEKDAY_THEME_NAMES = {
         "venus": "CDO",
         "saturn": "CTO",
     },
+    # COMPLETION WAVE II (Session 32, 2026-07-29). The three World of
+    # Warcraft casts, rosters owner-sealed 2026-07-22 in
+    # research/prompts/wow/wow_prompts.md: the SAME nine seats held three
+    # times over, with the arm bundle fixed and only the person changing
+    # (CUBE.md Charter rule 5 — three different people holding one
+    # office, never one character read three ways). The Alliance and the
+    # Horde are seated by the arm's VIRTUE, the Evil cast by the VICE
+    # that virtue is named against.
+    "wow_alliance": {
+        "sun": "Varian Wrynn · Genn Greymane",
+        "moon": "Anduin",
+        "mars": "Muradin Bronzebeard",
+        "mercury": "Khadgar",
+        "jupiter": "Uther the Lightbringer",
+        "venus": "Jaina",
+        "saturn": "Malfurion",
+    },
+    "wow_horde": {
+        "sun": "Thrall · Garrosh",
+        "moon": "Baine",
+        "mars": "Grommash Hellscream",
+        "mercury": "Gallywix",
+        "jupiter": "Vol'jin",
+        "venus": "Draka",
+        "saturn": "Cairne",
+    },
+    "wow_evil": {
+        "sun": "Arthas · Illidan",
+        "moon": "Kel'Thuzad",
+        "mars": "Mannoroth",
+        "mercury": "Gul'dan",
+        "jupiter": "Kil'jaeden the Deceiver",
+        "venus": "Sylvanas",
+        "saturn": "Deathwing",
+    },
 }
 # THE CONTINENTS (owner-sealed matrix 2026-07-21): the six weekday
 # columns are the six continents; Sunday's body is Antarctica, the
@@ -2276,6 +2311,11 @@ WEEKDAY_THEME_DIRS = {
     "age_of_heroes": "age_of_heroes/primary/bronze",
     "celestial_court": "celestial_court/primary/bronze",
     "corporate": "corporate/primary/bronze",
+    # Completion wave II (Session 32): the same shape again — a carved
+    # bronze relief master per cast with its full-paint colored/ sibling.
+    "wow_alliance": "wow_alliance/primary/bronze",
+    "wow_horde": "wow_horde/primary/bronze",
+    "wow_evil": "wow_evil/primary/bronze",
     # The emblem families live OUTSIDE assets/weekday/ — the relative
     # step-up reaches assets/emblem/ (owner 2026-07-14).
     "virtues": "../emblem/virtue/primary/colored",
@@ -2378,6 +2418,26 @@ WEEKDAY_THEME_FILES["celestial_court"] = {
     "mercury": "Guan_Yu", "jupiter": "Zhu_Bajie", "venus": "Zhinu",
     "saturn": "Shennong",
 }
+# Completion wave II (Session 32): explicit stems for all three WoW
+# casts — the display names carry the Sunday dual ("·"), epithets
+# (the Lightbringer, the Deceiver), surnames the file drops, and the
+# apostrophes of Vol'jin, Kel'Thuzad, Gul'dan and Kil'jaeden that the
+# ASCII fold does not know. The stems are the sheet's own drop paths.
+WEEKDAY_THEME_FILES["wow_alliance"] = {
+    "sun": "Varian", "moon": "Anduin", "mars": "Muradin",
+    "mercury": "Khadgar", "jupiter": "Uther", "venus": "Jaina",
+    "saturn": "Malfurion",
+}
+WEEKDAY_THEME_FILES["wow_horde"] = {
+    "sun": "Thrall", "moon": "Baine", "mars": "Grommash",
+    "mercury": "Gallywix", "jupiter": "Voljin", "venus": "Draka",
+    "saturn": "Cairne",
+}
+WEEKDAY_THEME_FILES["wow_evil"] = {
+    "sun": "Arthas", "moon": "Kel_Thuzad", "mars": "Mannoroth",
+    "mercury": "Guldan", "jupiter": "Kiljaeden", "venus": "Sylvanas",
+    "saturn": "Deathwing",
+}
 # The emblem stems ARE the single names (Capitalized) — only the dual
 # sun display titles need the override.
 WEEKDAY_THEME_FILES["virtues"] = {
@@ -2453,6 +2513,14 @@ WEEKDAY_DUAL_NAMES = {
     "age_of_heroes": ("Nemean Lion", "Cerberus"),
     "celestial_court": ("Sun Wukong", "The Six-Eared Macaque"),
     "corporate": ("CEO", "Chairman of the Board"),
+    # COMPLETION WAVE II (Session 32). Three duals of one house rather
+    # than three oppositions, exactly as the sheet argues them: two
+    # kings of the same alliance, a Warchief and the successor he
+    # appointed himself, and two men who made the identical bargain and
+    # were answered differently for it.
+    "wow_alliance": ("Varian Wrynn", "Genn Greymane"),
+    "wow_horde": ("Thrall", "Garrosh Hellscream"),
+    "wow_evil": ("Arthas, the Lich King", "Illidan Stormrage"),
 }
 # Dual paths live FLAT inside the theme's look dir (owner DUAL
 # FLATTEN 2026-07-19: the dual/ folder carried zero semantic weight at
@@ -2494,6 +2562,11 @@ WEEKDAY_DUAL_FILES = {
     "age_of_heroes": "age_of_heroes/primary/bronze/Cerberus",
     "celestial_court": "celestial_court/primary/bronze/Six_Eared_Macaque",
     "corporate": "corporate/primary/bronze/Chairman",
+    # Completion wave II (Session 32): the servant plate flat inside the
+    # cast's own look dir, colored twin via colored_variant_rel.
+    "wow_alliance": "wow_alliance/primary/bronze/Genn",
+    "wow_horde": "wow_horde/primary/bronze/Garrosh",
+    "wow_evil": "wow_evil/primary/bronze/Illidan",
     "virtues": "../emblem/virtue/primary/colored/Humility",
     "sins": "../emblem/sin/primary/colored/Servility",
     "moods": "../emblem/mood/primary/colored/Awe",
@@ -2912,6 +2985,15 @@ WEEKDAY_THEME_TITLES = {
     "age_of_heroes": "Greek Monsters",
     "celestial_court": "Chinese Mythology",
     "corporate": "The Corporation",
+    # COMPLETION WAVE II (Session 32). Each cast is its OWN dial theme
+    # and needs a title that identifies itself in a FLAT list (the
+    # Settings rotation grid has no group headings), so the franchise
+    # leads and the faction follows. The Encyclopedia is the opposite
+    # case and reads "World of Warcraft" once, with Alliance | Horde |
+    # Evil on the variant switcher (encyclopedia_tree.VARIANT_SOURCES).
+    "wow_alliance": "Warcraft Alliance",
+    "wow_horde": "Warcraft Horde",
+    "wow_evil": "Warcraft Evil",
 }
 
 # The Weekday submenu's TOP entries (owner 2026-07-18): rendered FIRST,
@@ -2930,12 +3012,18 @@ WEEKDAY_MENU_GROUPS = (
     # pantheons (`taxonomy.WEEK_GROUPS["myth"]` already holds all six),
     # and the Corporation sits beside the Professions — the same
     # `crafts` group on disk, and the same subject: offices people hold.
-    # The new "Gaming" and "Films" groups belong to waves II and III.
+    # The "Films" group belongs to wave III.
     ("Ancient Gods", ("egypt", "greek", "norse", "slavic",
                       "age_of_heroes", "celestial_court")),
     ("Society", ("profession", "corporate", "religion", "religion_alt")),
     # The Scripture family (owner 2026-07-14).
     ("Scripture", ("bible", "bible2", "bible_dark")),
+    # GAMING — opened by completion wave II (Session 32), matching
+    # `taxonomy.WEEK_GROUPS["gaming"]` on disk. The three WoW casts are
+    # its first members; the Cyberpunk casts join it in the same wave's
+    # second half, and the group stays ONE picker submenu for both
+    # franchises (the kinship is the medium, not the setting).
+    ("Gaming", ("wow_alliance", "wow_horde", "wow_evil")),
     ("Animals", ("wolf", "elephant", "bee")),
     # The emblem families on the dial (owner 2026-07-14).
     ("The Inner Wheel", ("virtues", "sins", "moods")),
