@@ -4,7 +4,7 @@
 The rework replaced the old two-screen browser (one gallery of 39 tiles
 in five halls -> article slider) with three levels:
 
-1. **Home** — SIX wholes, 2x3, no scroll ever (the window's own minimum
+1. **Home** — NINE wholes, 3x3, no scroll ever (the window's own minimum
    is the 1280x720 the owner specified, so the grid fits by geometry,
    not by luck).
 2. **Themes** — the chosen whole's own theme cards, vertical scroll only.
@@ -38,99 +38,93 @@ class Whole(NamedTuple):
     themes: tuple[str, ...]
 
 
-# THE SIX WHOLES (owner-sealed 2026-07-28, "Instrument izdvojen"): the
-# old five halls with The Celestial Engine split into the INSTRUMENT
-# (the watch and its own wheels) and the ENGINE (the sky it computes),
-# and the Cube canon promoted out of the old "The Archetypes" hall into
-# a whole of its own — it now carries 7 of the 35 theme cards.
+# THE NINE WHOLES (owner-sealed 2026-07-29, Session 35 — "može i 9
+# grupacija sa ovim novim velikim sekcijama"; the exact table is
+# WORKPLAN-STRUCTURE.md §THE NINE WHOLES). The Session 27 six split
+# further: `celestial` divides into the near sky (`sky` — sun, moon,
+# seasons, eclipses) and the far sky (`cosmos` — planets, the cosmos
+# theme, continents, astrology, the Chinese court); `divine` sheds its
+# two WRITTEN faiths (Bible, Creeds) into the new `faith`, which also
+# takes Trinity and Duality off `human`; `human` itself splits into
+# `inner` (the four emblem families alone) and `worlds` (the trades, the
+# Corporation and the three FRANCHISE cards the Theme Backlog arc
+# registered — WoW, Cyberpunk, Star Wars, Sessions 31-33). `instrument`,
+# `cube` and `living` are untouched, seat and membership both. No card
+# lost an article, a variant or its dial wiring in the move — only its
+# SEAT on Home changed (RESEAT, never re-wire).
 #
 # THE ACCENTS are the Rose's own hues (`palette.ROSE_PALETTE`, sealed —
-# Rule #5, one palette): six of the eight, each argued by the hour it
-# stands on. The accent rides the card's edge, the breadcrumb and the
-# article header, so the reader always knows which whole he is inside.
-#
-# COMPLETION WAVE I (Session 31, 2026-07-29) added three cards, each a
-# card of its OWN rather than a switcher member — three DISTINCT
-# subjects, which is what the variant law above turns on: the Greek
-# bestiary beside the Greek gods in `divine`, the Chinese court beside
-# the Chinese zodiac in `celestial`, and the Corporation beside the
-# Professions in `human`. The nine-whole arc reseats all three
-# (`divine` -> `gods`, `celestial` -> `sky` + `cosmos`, and the
-# `profession`/`corporate` pair out of `human` into the new `worlds`);
-# WORKPLAN-STRUCTURE.md §THE NINE WHOLES already names those
-# destinations and states that its table SUPERSEDES the seats here.
-#
-# COMPLETION WAVE II (Session 32, 2026-07-29) added ONE card for three
-# casts — `wow`, the merge declared in VARIANT_SOURCES below. It is the
-# variant law's own shape rather than an exception to it: Alliance,
-# Horde and Evil are three registers of ONE subject, the same nine seats
-# read three times over. It seats in `human` beside the Professions and
-# the Corporation until the nine-whole arc moves the whole group into
-# `worlds` (WORKPLAN-STRUCTURE.md §THE NINE WHOLES names the franchise
-# cards there explicitly, and that table supersedes this seat).
-#
-# The same wave's CYBERPUNK half added a second such card — `cyberpunk`,
-# the merge declared beside `wow` in VARIANT_SOURCES — and seats it in
-# the same place for the same reason. That takes `human` to 10, one past
-# the comfort cap, and the carve-out is NAMED in
-# `tests/test_settings_dialog.py` rather than the cap being loosened:
-# WORKPLAN-STRUCTURE.md §THE NINE WHOLES already dissolves this whole
-# into `inner` (the emblem families) and `worlds` (the professions, the
-# Corporation and all three franchise cards), which is exactly where the
-# overflow goes.
-#
-# COMPLETION WAVE III (Session 33, same day) added the THIRD and last
-# such card — `starwars`, the merge declared beside them in
-# VARIANT_SOURCES — and seats it in the same place on the same argument.
-# `human` therefore stands at 11, and the carve-out in
-# `tests/test_settings_dialog.py` is widened by exactly one card WITH
-# its reason named, never quietly: WORKPLAN-STRUCTURE.md §THE NINE
-# WHOLES already lists "the three FRANCHISE cards" among the members of
-# `worlds`, so this whole was always going to hand all three over in the
-# same cut.
+# Rule #5, one palette) plus the Moon's own face (`palette.MOON_SILVER`
+# — owner: "koristi ROSE paletu + neka boja Silver kao moon"): all eight
+# Rose hues are now spent, and the ninth accent is the silver the Moon's
+# own dial body wears. The accent rides the card's edge, the breadcrumb
+# and the article header, so the reader always knows which whole he is
+# inside.
 WHOLES = (
     Whole(
-        # 12h yellow — the sun at the top of the dial; the instrument's
-        # own noon, the moment the whole watch is built around.
-        # The Guide (owner 2026-07-28: "jedno mesto za čitanje svega")
-        # is the fifth card — the paged help book folded in from its own
-        # retired window, built from the SAME `assets/.../guide/*.json`
-        # it always used (Rule #5, no content copied).
+        # 12h yellow — noon, the hour the whole watch is built around
+        # (unchanged since Session 27). The Guide (owner 2026-07-28:
+        # "jedno mesto za čitanje svega") is the fifth card — the paged
+        # help book folded in from its own retired window, built from
+        # the SAME `assets/.../guide/*.json` it always used (Rule #5,
+        # no content copied).
         "instrument", "The Instrument", palette.ROSE_PALETTE[0],
         ("week", "instrument", "era", "months", "guide"),
     ),
     Whole(
-        # 03h cyan — the deep-night sky, the hours the Engine's own
-        # machinery (moon, seasons, eclipses) is read against.
-        "celestial", "The Celestial Engine", palette.ROSE_PALETTE[5],
-        ("moon", "sun", "seasons", "eclipses", "planets", "cosmos",
-         "continents", "astrology", "chinese", "celestial_court"),
+        # The Moon's own silver — the near sky's face; eclipses ARE
+        # sun-moon crossings, so they seat here rather than in the far
+        # sky (owner: "Silver kao moon").
+        "sky", "The Sky", palette.MOON_SILVER,
+        ("sun", "moon", "seasons", "eclipses"),
     ),
     Whole(
-        # 24h purple — midnight, the winter solstice, the sacred hour.
-        "divine", "The Divine", palette.ROSE_PALETTE[4],
-        ("greek", "norse", "egypt", "slavic", "age_of_heroes",
-         "creeds", "bible"),
+        # 03h cyan — deep night, the hours the far sky is read against
+        # (inherited from the old `celestial`).
+        "cosmos", "The Cosmos", palette.ROSE_PALETTE[5],
+        ("planets", "cosmos", "continents", "astrology", "chinese",
+         "celestial_court"),
     ),
     Whole(
-        # 18h red — sunset, the autumn equinox, Lucifer's own hue on the
-        # Scale: the human fire, which is what this whole reads.
-        "human", "The Human Wheel", palette.ROSE_PALETTE[2],
-        ("virtues", "sins", "moods", "intelligences", "profession",
-         "corporate", "wow", "cyberpunk", "starwars", "trinity",
-         "duality"),
+        # 24h moon-violet — midnight, the sacred hour (inherited from
+        # `divine`).
+        "gods", "The Gods", palette.ROSE_PALETTE[4],
+        ("greek", "norse", "egypt", "slavic", "age_of_heroes"),
     ),
     Whole(
-        # 06h blue — sunrise, the spring equinox, Judas's hue: the Cube's
-        # own axis blue (CUBE.md, the color law).
+        # 21h rose — the vesper hour: Love's red thinned by moonlight
+        # (the Rose canon's own reading), the one hue the six-whole
+        # table left unspent until now.
+        "faith", "The Faith", palette.ROSE_PALETTE[3],
+        ("bible", "creeds", "trinity", "duality"),
+    ),
+    Whole(
+        # 06h blue — the Cube's own axis blue (CUBE.md, the colour law;
+        # unchanged since Session 27).
         "cube", "The Character Cube", palette.ROSE_PALETTE[6],
         ("cube_doctrine", "cube_axes", "cube_figures", "cube_projections",
          "double_trinity", "crosses", "one_soul"),
     ),
     Whole(
-        # 09h green — spring's own centre, blue and yellow blended: life.
+        # 18h red — sunset, the human fire, Lucifer's own hue on the
+        # Scale (inherited from `human`).
+        "inner", "The Inner Wheel", palette.ROSE_PALETTE[2],
+        ("virtues", "sins", "moods", "intelligences"),
+    ),
+    Whole(
+        # 09h green — spring's own centre, blue and yellow blended: life
+        # (unchanged since Session 27).
         "living", "The Living World", palette.ROSE_PALETTE[7],
         ("wolf", "bee", "elephant", "alchemy", "japan"),
+    ),
+    Whole(
+        # 15h orange — the working afternoon, the Merchant's copper: the
+        # other hue the six-whole table left unspent. Worlds PEOPLE
+        # build — trades and their offices, and the invented worlds of
+        # games and film (the three franchise cards, moved here whole —
+        # never renamed, never split).
+        "worlds", "The Worlds", palette.ROSE_PALETTE[1],
+        ("profession", "corporate", "wow", "cyberpunk", "starwars"),
     ),
 )
 
@@ -144,9 +138,10 @@ THEME_TO_WHOLE = {
 
 WHOLE_BY_KEY = {whole.key: whole for whole in WHOLES}
 
-# The six hues actually spent, in whole order — the Rose keeps eight;
-# orange (15h) and rose (21h) stay unspent on purpose: they are the two
-# SEASON-CENTRE blends, and a whole is not a season.
+# All nine hues spent, in whole order — the eight `ROSE_PALETTE` hues
+# and the Moon's own `MOON_SILVER`, each used exactly once (Session 35
+# — the six-whole table's two unspent hues, orange 15h and rose 21h,
+# are now `worlds` and `faith`).
 ROSE_ACCENTS_USED = tuple(whole.accent for whole in WHOLES)
 
 # --- The variant law ---------------------------------------------------------

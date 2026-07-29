@@ -42,7 +42,7 @@ Nine sections, fixed. A new colour joins the section it belongs to;
 
 | § | Section | Holds |
 |---|---------|-------|
-| 1 | THE NAMED HUES | hues the canon names (`MOON_GRAY_VIOLET`), referenced by the rest |
+| 1 | THE NAMED HUES | hues the canon names (`MOON_GRAY_VIOLET`, `MOON_SILVER`), referenced by the rest |
 | 2 | THE POINTER WHEELS | one block per pointer — ALL its wheels together |
 | 3 | THE RING | `RING_TINT_GROUPS` |
 | 4 | THE DIAL | labels, markers, calendar pointer, glows, eclipses, instrument bands |
@@ -112,8 +112,8 @@ allowed anywhere.
   asset variant that paints
 - [App (folder)](../app/___app.md) — theme, tray, legend, report,
   observatory, encyclopedia, settings dialog
-- [Encyclopedia Tree](encyclopedia_tree.md) — the six wholes' accents
-  are `ROSE_PALETTE` hues
+- [Encyclopedia Tree](encyclopedia_tree.md) — the nine wholes' accents:
+  eight `ROSE_PALETTE` hues plus the ninth, `MOON_SILVER`
 
 ## Functions
 

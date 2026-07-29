@@ -48,6 +48,14 @@ from config import constants
 # midnight, the Winter Solstice; NEVER royal purple).
 MOON_GRAY_VIOLET = "#666699"
 
+# THE MOON'S OWN FACE (Session 35, owner: "boja Silver kao moon" — the
+# nine-whole Encyclopedia's ninth accent wears the Moon's own hue, not a
+# hand-picked silver). Promoted from the dial's Moon body
+# (`SKIN_PLANET_BODY_COLORS["moon"]`, §6, which now references it) so a
+# retune of the Moon's own colour moves both readers together (Rule #5,
+# one value).
+MOON_SILVER = "#C9CDD4"
+
 
 # ════════════════════════════════════════════════════════════════════
 # 2. THE POINTER WHEELS
@@ -520,7 +528,7 @@ SKIN_PLANET_BODY_COLORS = {
     "mars": "#C96A3D",
     "venus": "#E1934B",
     "mercury": "#9B8F86",
-    "moon": "#C9CDD4",
+    "moon": MOON_SILVER,
     "saturn": "#D4B27A",
 }
 # The Continents face: the lit hemisphere and the night one.
