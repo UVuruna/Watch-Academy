@@ -599,6 +599,54 @@ teaser law, click through the Spacebar-jump contract; tests on the
 exporter's schema and the embed's open path. Runs only after the
 gadget's M2 (the four models + Switcher) exists.
 
+**Verification note (2026-07-29, this session's M2 audit — STILL
+BLOCKED, gadget repo untouched per owner decree "DOMY sessions never
+implement it").** Checked the gadget's own code against PLAN.md's M2
+bullet ("secondary/tertiary at true angles, computed colors, the
+glass cube, register/reading switcher, snap views, the orientation-
+snap table feature") at gadget commit `a47d655` (0.0.022):
+
+- **Delivered:** the `cube` primitive (glass faces, per-face colour/
+  opacity — 0.0.001/0.0.010), view presets (0.0.008), the demo
+  control panel (0.0.012), a second QPainter renderer in parity with
+  the web core (0.0.018–0.0.021). This is solid **M1**, not M2.
+- **NOT delivered:** `AXIS_DIRECTIONS` is a hardcoded 6-entry table
+  (`+x/-x/+y/-y/+z/-z` only) in BOTH renderers
+  (`src/primitives.js:9-13`, `preview3d/light/primitives.py:20-23`),
+  each throwing on any other key, and no primitive spec field carries
+  an arbitrary rotation/direction — so the `axes` builder structurally
+  cannot express the 6 secondary (edge-midpoint) or 4 tertiary
+  (vertex-diagonal) directions PLAN.md's M2 calls for. No
+  register/reading Switcher exists anywhere in the code (grepped
+  `switcher|register|reading|luminous|fallen` across `.py`/`.js` —
+  zero hits outside this PLAN.md). No orientation-snap quaternion
+  table exists. PLAN.md's own speculative "Data Model" (axes/cells/
+  views JSON with per-cell luminous/fallen names) was never built
+  either — the shipped system has exactly two primitive types (`axes`,
+  `cube`), and `shared/spec.json` (which this WORKPLAN entry and
+  PLAN.md's integration contract call "the model schema") is actually
+  just shared CONSTANTS (palette, view presets, camera/animation
+  defaults) — there is no per-content schema to export into beyond the
+  primitive-spec tree in MODELS.md.
+- **A relevant correction already on record in the gadget's own
+  CLAUDE.md (owner, 2026-07-28, §Consumers):** the hover-card/click-
+  to-navigate contract this entry describes is RETRACTED — "the
+  previewer is a container dropped in where the topic's image used to
+  sit, and nothing more... do not build raycast picking for it." Any
+  future session should read that section before wiring hover/click.
+- **Consequence:** deliverables 3–6 of the Session 28 brief (exporter,
+  embed, tests, docs) stay undelivered this round — building an
+  exporter against a schema that does not exist, or an embed for axes
+  the renderer cannot orient, would be exactly the "fragile hack" root
+  CLAUDE.md tells a session to stop and report instead of inventing.
+  **What would unblock it:** a real gadget-side M2 session that (a)
+  lets an `axes` arm take an arbitrary unit-vector direction (not just
+  the 6 face tokens) so the 6 secondary + 4 tertiary axes can be built
+  at their true cube angles, and (b) ships an actual register/reading
+  Switcher. `config/cube.py`'s `AXES` tuple (13 `CubeAxis`, each with
+  ternary `coords` + `luminous`/`fallen` names) is already the exact
+  DOMY-side data source the exporter would read once that lands.
+
 ### Session 29 — the Pointers rework → **Fable** (orchestrator) — DONE (2026-07-29, 0.14.545 / 0.14.555 / 0.14.556)
 
 Owner sheet `UV/Pointers.png`, run as three sequential agents (opus,
