@@ -41,6 +41,9 @@ header row; `download_entry()` — the deed — stayed). Everything that
 SIZES an article moved here verbatim — the block-width formula, the
 em-like font growth, the image-height ceiling, the lazy decode cache and
 THE INVISIBLE CLIPPER fix all carry ground-truthed owner bug fixes.
+Session 28 adds the 3D SWAP: a diagram page tries
+[Cube Preview3D Bridge](../../render/cube_preview3d.md) first, lazily,
+and keeps its computed 2D plate whenever that bridge answers `None`.
 
 ### `cards.py` — The Card
 One card component and one grid for both gallery levels (Rule #5), plus

@@ -21,6 +21,11 @@ not be re-derived.
 - [Text Resolution](text.md) — prose, names, HTML, tooltips
 - [Topic Tree](tree.md) — `switch_variant`, the pure offset law
 - [Asset Recolor](../../render/asset_recolor.md) / [Asset Variants](../../render/asset_variants.md) — pending metal variants and decode-ceiling downscales
+- [Diagrams](../../render/diagrams.md) — the computed 2D plate every
+  diagram page falls back to
+- [Cube Preview3D Bridge](../../render/cube_preview3d.md) — a diagram
+  page tries this FIRST (Session 28); `None` keeps the 2D plate above
+  exactly as before this session
 
 ### Used by
 - [Encyclopedia Dialog](dialog.md)
@@ -45,3 +50,10 @@ shorter.
 - **`_rescale()` runs BEFORE `setWidget`** — the fix for the invisible
   clipper: a fresh widget handed to a QScrollArea is sized on a first
   pass and only corrected on a second, which page turns never reach.
+- **THE 3D SWAP is lazy and additive** (Session 28, the Encyclopedia
+  never-block law): `cube_preview3d.build_widget()` is called only
+  inside `_show_entry()` — never at dialog construction — and only for
+  the page actually being shown; its `None` path is byte-identical to
+  what this screen did before the gadget existed. `_diagram_side()`
+  factors the one sizing formula both the 2D plate and the 3D panel
+  obey, so neither can ever push the article off screen.

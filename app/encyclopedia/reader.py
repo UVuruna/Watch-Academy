@@ -42,7 +42,7 @@ from app.encyclopedia.text import article_text, entry_name, flow_html, image_too
 from app.ui_style import style_button, style_look_chip
 from config import constants, defaults, encyclopedia_ui, paths
 from render.asset_recolor import ensure_variant, variant_pending
-from render import diagrams
+from render import cube_preview3d, diagrams
 from render.asset_variants import scaled_variant_file
 from render.compositor import _HEX_NOTE, _SUBHEAD
 
@@ -71,6 +71,13 @@ class ReaderScreen(QWidget):
         # on every resize from one cached master (Rule #19: one master,
         # transformed, never a plate per size).
         self._diagram_labels: list = []
+        # THE 3D SWAP (Session 28): the Cube family's eligible kinds get a
+        # live `render.cube_preview3d` panel instead, built ONCE per
+        # `_show_entry()` (never per resize) and only ever resized here —
+        # `_preview3d_widgets` stays empty whenever the gadget is absent,
+        # so this is a pure addition, never a replacement of the fallback
+        # path above.
+        self._preview3d_widgets: list = []
         self._pixmap_cache: dict[str, QPixmap] = {}
         # FINISH PERSISTENCE (owner INSTRUCTION #3): once picked, a
         # look/finish (e.g. Bronze) rides EVERY following entry that
@@ -207,6 +214,7 @@ class ReaderScreen(QWidget):
         self._text_labels = []
         self._name_labels = []
         self._diagram_labels = []
+        self._preview3d_widgets = []
         content = QWidget()
         column = QVBoxLayout(content)
         column.setSpacing(defaults.GUIDE_SPACING_PX * 3)
@@ -268,10 +276,21 @@ class ReaderScreen(QWidget):
             self._update_look_caption()
         diagram = entry.get("diagram")
         if diagram:
-            plate = QLabel()
-            plate.setAlignment(Qt.AlignmentFlag.AlignCenter)
-            self._diagram_labels.append((plate, diagram))
-            cell.addWidget(plate, alignment=Qt.AlignmentFlag.AlignHCenter)
+            kind, key = diagram
+            # THE FALLBACK LAW: `build_widget` answers None for every
+            # reason the gadget might be unusable, and that is exactly
+            # when this page keeps its computed 2D plate below — the
+            # widget is built lazily, HERE, only because this entry is
+            # actually being shown (never at dialog-open).
+            panel = cube_preview3d.build_widget(kind, key)
+            if panel is not None:
+                self._preview3d_widgets.append(panel)
+                cell.addWidget(panel, alignment=Qt.AlignmentFlag.AlignHCenter)
+            else:
+                plate = QLabel()
+                plate.setAlignment(Qt.AlignmentFlag.AlignCenter)
+                self._diagram_labels.append((plate, diagram))
+                cell.addWidget(plate, alignment=Qt.AlignmentFlag.AlignHCenter)
         name = QLabel(f"<b>{self._entry_name(entry)}</b>")
         name.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self._name_labels.append(name)
@@ -377,34 +396,44 @@ class ReaderScreen(QWidget):
             font = label.font()
             font.setPixelSize(font_px + 3)
             label.setFont(font)
+        diagram_side = self._diagram_side(block_width)
         for label, (kind, key) in self._diagram_labels:
             # ONE master per figure, scaled to the page — the same
             # ceiling the art images obey, so a diagram can never push
             # the article off screen.
-            side = max(120, min(
-                block_width,
-                round(
-                    self._scroll.viewport().height()
-                    * encyclopedia_ui.READER_IMAGE_MAX_HEIGHT_FRACTION * self._zoom
-                ),
-            ))
             master = diagrams.plate(
                 kind, key, encyclopedia_ui.CUBE_DIAGRAM_SIDE_PX,
             )
             if master.isNull():
                 continue
             label.setPixmap(master.scaled(
-                side, side,
+                diagram_side, diagram_side,
                 Qt.AspectRatioMode.KeepAspectRatio,
                 Qt.TransformationMode.SmoothTransformation,
             ))
-            label.setFixedSize(side, side)
+            label.setFixedSize(diagram_side, diagram_side)
+        for panel in self._preview3d_widgets:
+            # Re-fit on every resize, same ceiling as the 2D plates
+            # above — the SAME square a page would show either way.
+            panel.set_square_size(diagram_side)
         for state in self._cells:
             # First pass builds the grid; resizes only re-fit pixmaps.
             if "cells" in state:
                 self._resize_cell(state, block_width)
             else:
                 self._render_cell(state, block_width)
+
+    def _diagram_side(self, block_width: int) -> int:
+        """The square a computed diagram (2D plate or 3D panel alike)
+        fits inside — the same height ceiling the art images obey, so
+        neither can ever push the article off screen."""
+        return max(120, min(
+            block_width,
+            round(
+                self._scroll.viewport().height()
+                * encyclopedia_ui.READER_IMAGE_MAX_HEIGHT_FRACTION * self._zoom
+            ),
+        ))
 
     def _pixmap(self, path) -> QPixmap:
         """The decoded-image cache behind the lazy looks (owner
