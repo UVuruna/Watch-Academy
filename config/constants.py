@@ -1192,7 +1192,13 @@ WEEKDAY_THEME_NINTHS = {
     "greek": ("Gaia", "greek/pantheon/bronze/Gaia.png"),
     "norse": ("Yggdrasil", "norse/pantheon/bronze/Yggdrasil.png"),
     "egypt": ("The Pharaoh", "egypt/pantheon/bronze/Pharaoh.png"),
-    "slavic": ("Triglav", "slavic/pantheon/bronze/Triglav.png"),
+    # TRIGLAV IS ONE PLATE, NOT TWO (Rule #19, fixed 2026-07-29): the
+    # Round Four adjudication locks him as the ninth in BOTH roster
+    # modes, and his sheet drops the art in the PRIMARY register — the
+    # pantheon copy would be the same image under a second name. The
+    # table pointed at that never-drawn copy while `Triglav_gem.png`
+    # sat on disk in `primary/`, so the seat read as pending art.
+    "slavic": ("Triglav", "slavic/primary/bronze/Triglav.png"),
     "alchemy": ("The Philosopher's Stone", "alchemy/primary/colored/Stone.png"),
     "profession": ("The Polymath", "profession/primary/bronze/Polymath.png"),
     "religion": ("Freemasonry", "creeds/primary/colored/Freemasonry.png"),
