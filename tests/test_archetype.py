@@ -1109,8 +1109,10 @@ def test_octa_variants_wear_the_sealed_walks_and_ages_hues(app):
     # The Corporation, three more casts riding the same fixed arms; +21
     # for completion wave II's World of Warcraft half (Session 32, same
     # day) — Alliance, Horde and Evil, which ride those fixed arms three
-    # times over with three different casts.
-    assert seen == 212
+    # times over with three different casts; +21 again for the same
+    # wave's CYBERPUNK half — Gangs, Street and Power, a second
+    # franchise triplet on the identical nine seats.
+    assert seen == 233
 
 
 # --- The Earth day label -----------------------------------------------------------
