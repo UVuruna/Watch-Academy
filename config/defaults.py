@@ -2752,6 +2752,16 @@ def theme_title_art(key: str, duality: bool = False) -> "Path":
     seat_register, look = TITLE_PLATE_SEATS.get(base, ("primary", "colored"))
     register = register or seat_register
     stem = DUALITY_PLATE_STEM if duality else TITLE_PLATE_STEM
+    if duality and register == "pantheon":
+        # A pantheon block whose dual pair is the SAME pair as the
+        # planetary block's would need an identical plate — Egypt's Ra
+        # and Afu-Ra sit at the centre of both rosters. Rule #19: the
+        # second plate is not a variant to draw, it is the first plate,
+        # so the page reads the primary register's own file. Derived,
+        # never enumerated: the comparison is the canon's two tables.
+        pantheon = WEEKDAY_PANTHEON.get(base, {})
+        if pantheon.get("dual_names") == WEEKDAY_DUAL_NAMES.get(base):
+            register = seat_register
     # The live CODE keys are still the pre-rename ones (`bible2`,
     # `religion_alt`) — the rename table takes them to the taxonomy's own
     # key, and THEME_FOLDER from there to the folder that holds them.

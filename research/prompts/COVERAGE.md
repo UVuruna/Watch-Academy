@@ -653,6 +653,60 @@ Unchanged, re-confirmed 2026-07-19:
 
 <a id="zero-gap"></a>
 
+## The Session 27 Wave — the coverage law and what it exposed (2026-07-28/29)
+
+The Encyclopedia rework turned the owner's law *"svaki članak mora
+sliku"* into something enforceable: a page must NAME what it wants —
+either a plate a sheet can address, or a DRAWER the program runs.
+`tests/test_encyclopedia_tree.py` now fails the suite if any article
+names neither, and `config.encyclopedia_tree.PLATELESS_PAGES` is `{}`.
+
+Three things came out of it, in this order.
+
+**1. Ninety-two articles named NOTHING.** Not a missing file — a
+missing name, so no sheet could even say what to draw. Sixty of them
+were given a name from something that already existed: the reserved
+`Title` stem in the theme's own register (the seat this very sheet
+family has been writing against since R8c), the Cube's six face poles
+reading the Character wheel's plates, its eight vertices reading the
+Rose's Prophecy wheel, the five Chinese elements taking their own
+`elements` register, and four overviews taking their families' own
+conventions.
+
+**2. Twenty-three were COMPOSITIONS, and are now COMPUTED.** The
+thirteen axis pages, the Cube's own diagrams, the two ciphers and the
+union table are drawn live by `render/cube_diagrams.py` and
+`render/canon_diagrams.py` from `config.cube` / `config.doctrine` /
+`config.archetypes`. **No prompt is owed for any of them** — that is
+root Rule #19 applied exactly where CUBE.md (Session 25) already said
+an axis "IS its two ends through the centre — a composition, never a
+new scene".
+
+**3. Thirty-three plates were genuinely new, and are written.** See
+[Theme Title Plates](titles/theme_title_prompts.md) §THE SESSION 27
+WAVE: 17 theme Duality plates, 3 Pantheon Duality plates, 4 Pantheon
+titles, 4 Wider Court titles, the One Soul title and the Bible/Creeds
+register duals. **Art: 0/33.** One more was DERIVED rather than
+written — the Egyptian pantheon's dual pair is Ra and Afu-Ra, the
+planetary block's own pair, so its page reads the primary register's
+plate.
+
+### What is still owed a brief
+
+| Family | Files | Where they belong |
+|---|---|---|
+| The eight vertex figures | 8 | `archetypes/vertices/primary/colored/` — the Rose's Prophecy wheel cast |
+| The Instrument's own diagrams | 7 | `instrument/*.png` — dial, solar rotation, twilight, year wheel, lunations, metals, ring letters |
+| Wider-court figures | 15 | `weeks/myth/<culture>/wider/bronze/` — Greek 3, Norse 3, Slavic 4, Egypt 5 |
+| The five Chinese elements | 5 | `calendars/zodiac/chinese/elements/colored/` |
+| Slavic pantheon Triglav, the two blue-moon months, Pangea, the Great Oscillations, Composure and Vigor | 8 | their own families' registers |
+
+**43 files, no sheet.** They are named in code and therefore
+addressable; none of them is derivable, so each needs a real brief.
+That is the next prompt-writing round — the first time this ledger has
+carried a NON-zero gap since the Zero-Gap Declaration below, and it is
+recorded here rather than discovered later.
+
 ## Zero-Gap Declaration
 
 After this round: **every image the app can reference is either (a)

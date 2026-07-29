@@ -611,3 +611,400 @@ ROUND rose-window stained-glass medallion, night-window register, photorealistic
   instruction.
 - Verify with `python main.py "research/prompts/titles/theme_title_prompts.md" --dry-run`
   from `Gadgets/PromptPainter/` before handing the sheet to the owner.
+
+---
+
+# THE SESSION 27 WAVE — the DUALITY plates and the BLOCK titles
+
+**Owner Session 27, 2026-07-28/29.** The Encyclopedia rework made two
+things visible that the sheet above never covered.
+
+**1. Every weekday theme has a SECOND title page.** The R3 article
+restructure gave each theme a `week_duality` page — the one that
+introduces Sunday as the theme's dual centre, standing between Saturday
+and the Ruler/Servant pair. It carried no plate name at all until the
+Session 27 coverage law (owner: *"svaki clanak mora sliku"*), and it now
+names the reserved stem **`Duality.png`** in the SAME seat as its
+theme's own `Title.png`.
+
+**2. A merged theme's blocks each need their own title.** The variant
+law folded Planetary / Pantheon / Wider Court into one card whose
+switcher walks the three registers — and the second and third blocks
+open on their own title pages, which the sheet above never wrote,
+because those blocks used to be separate topics. They take the reserved
+`Title` stem in their OWN register: `<theme>/pantheon/colored/Title.png`
+and `<theme>/wider/colored/Title.png`.
+
+Every drop path below is what `config.defaults.theme_title_art`
+resolves — the resolver and this sheet are ONE pair, and
+`tests/test_encyclopedia_tree.py` pins that no two blocks fight over a
+single filename.
+
+## Derivation check (Rule #19)
+
+**A Duality plate is NOT derivable from its theme's Title plate.** The
+Title shows the theme WHOLE (every seat at once); the Duality shows ONE
+pair in opposition — two faces of a single body, meeting. Neither is a
+crop, a tint or a transform of the other; no formula turns a wreath of
+seven emblems into Helios facing Phaethon. The eight block titles are
+likewise different scenes with different casts (the Pantheon's own
+hierarchy, the Wider Court's seatless A-listers), never recolors of the
+Planetary plate.
+
+What IS derived and therefore absent here: the metal finishes (the
+recolor pipeline builds Gold and Silver from the drawn master) and every
+mixed reading of a pair — computed, never drawn.
+
+## House rules
+
+The rules of the sheet above hold unchanged: photorealistic (or the
+theme's own sculptural register) render, isolated background, and the
+circular-medallion vs rectangular-plate shape inherited from that
+theme's OWN cast art. The lettering exception applies: a Duality plate
+carries ONE wordmark — the pair's two names separated by a centred dot,
+in the same script that theme's Title plate uses.
+
+**The composition law for every Duality plate:** the two faces meet at
+the plate's vertical axis, Ruler on the LEFT, Servant on the RIGHT — the
+same order the reader meets on the dual page itself, so the plate
+teaches the page's own layout before a word is read.
+
+## The Duality plates
+
+## `planets` — Sun · Eclipsed Sun (`assets/weeks/celestial_bodies/planets/primary/photo/Duality.png`)
+
+*The one body the whole week turns on, in its two states — the same
+star, lit and covered.*
+
+```
+Squared observatory print, photographic plate style, photorealistic render, perfectly centered, isolated on white background. Left half: the Sun in full white-gold corona, granulation visible across the disc. Right half: the same disc in total eclipse, the black lunar shadow seated exactly on it, the corona flaring around the rim. The two halves meet at a hairline vertical seam down the exact centre, no frame between them. Along the base, a printed observatory caption reads "SUN · ECLIPSED SUN" in plate-lettering capitals — the ONE piece of text anywhere in the image. Palette: white-gold plasma, deep umbral black, cold plate-grey.
+```
+
+---
+
+## `cosmos` — Sun · Black Hole (`assets/weeks/celestial_bodies/cosmos/primary/colored/Duality.png`)
+
+*The deep-sky reading of the same seat: the star that gives light and the
+object that keeps it.*
+
+```
+Ornate circular medallion, deep-space photographic render, photorealistic, perfectly centered, isolated on white background. Left half: a star in full emission, light streaming outward. Right half: a black hole's accretion disc bending that same light around a pitch-black event horizon. The streams from the left half curve into the right half's disc, so the two halves read as one continuous flow of light given and light taken. Along the base, "SUN · BLACK HOLE" in clean astronomical sans capitals — the ONE piece of text anywhere in the image. Palette: emission white-gold, accretion orange, absolute black.
+```
+
+---
+
+## `greek` — Helios · Phaethon (`assets/weeks/myth/greek/primary/colored/Duality.png`)
+
+*The father who drives the chariot and the son who could not — the week's
+dual centre in the culture's own bronze.*
+
+```
+Ornate circular medallion, aged bronze relief, photorealistic render, perfectly centered, isolated on white background. Left: Helios in profile at the reins of the sun-chariot, the horses steady, the rays behind his head cast as a clean radiate crown. Right: Phaethon in profile falling from the same chariot, the reins loose, the horses scattering, his rays broken and trailing. The two profiles face each other across the medallion's vertical axis, the chariot's yoke crossing between them. Along the base, a carved stone plinth reads "HELIOS · PHAETHON" in Attic lapidary capitals — the ONE piece of text anywhere in the image. Border: the family's own Greek key band. Palette: aged bronze, fire-gold, scorched umber.
+```
+
+---
+
+## `norse` — Sól · Skoll (`assets/weeks/myth/norse/primary/colored/Duality.png`)
+
+*The sun and the wolf that runs behind her — the chase that ends the
+world, held in one disc.*
+
+```
+Ornate circular medallion, aged bronze relief, photorealistic render, perfectly centered, isolated on white background. Left: Sol in profile driving her chariot, a small clean sun-disc raised behind her. Right: Skoll the wolf mid-stride, jaws open toward that disc, mist trailing from his flanks. The two halves meet at the vertical axis where the wolf's breath crosses the chariot's wheel. Along the base, a carved wooden plinth reads "SOL · SKOLL" in Younger Futhark runic capitals cut deep into weathered wood — the ONE piece of text anywhere in the image. Border: continuous interlace knotwork. Palette: aged bronze, frost-grey, cold northern blue.
+```
+
+---
+
+## `egypt` — Ra · Afu-Ra (`assets/weeks/myth/egypt/primary/colored/Duality.png`)
+
+*The day barge and the night barge: the same god, above the horizon and
+under it.*
+
+```
+Ornate circular medallion, carved limestone relief with gilt inlay, photorealistic render, perfectly centered, isolated on white background. Left: Ra falcon-headed in the solar barge, the sun-disc bright above him, the water beneath cut in clean horizontal registers. Right: Afu-Ra ram-headed in the night barge, the disc dark and enclosed, the water beneath cut in the same registers reversed. The two barges meet prow to prow at the vertical axis. Along the base, a sunk-relief cartouche reads "RA · AFU-RA" in Egyptian monumental capitals — the ONE piece of text anywhere in the image. Border: a lotus-and-papyrus band. Palette: limestone cream, gilt gold, night lapis.
+```
+
+---
+
+## `slavic` — Young Dažbog · Old Dažbog (`assets/weeks/myth/slavic/primary/colored/Duality.png`)
+
+*One god at both ends of his own day — the morning face and the evening
+face, the year's own reading of a life.*
+
+```
+Ornate circular medallion, carved wood with bronze inlay, photorealistic render, perfectly centered, isolated on white background. Left: Dazbog young, beardless, rising, a small sun-wheel held at his shoulder. Right: the same face aged, bearded, descending, the same wheel lowered to his hip and worn thin. The two profiles face each other across the vertical axis and the sun-wheel's spokes continue unbroken between them — one wheel shared by both. Along the base, a carved plank reads "MLADI DAZBOG · STARI DAZBOG" in Glagolitic-derived folk capitals — the ONE piece of text anywhere in the image. Border: a woven folk-braid band. Palette: honey wood, bronze, harvest amber.
+```
+
+---
+
+## `religion` — Christianity · Satanism (`assets/weeks/faith/creeds/primary/colored/Duality.png`)
+
+*The creed at the centre of the week and its inversion — the same symbol,
+one way up and the other.*
+
+```
+Round stained-glass rose window, photorealistic render of leaded glass, perfectly centered, isolated on white background. Left half: a cross upright in warm gold and white glass, light passing through it. Right half: the same cross inverted in cold violet and black glass, the light behind it dimmed. One continuous lead came runs down the vertical axis where the halves meet. Along the base, a glass banner reads "CHRISTIANITY · SATANISM" in Gothic blackletter capitals fired into the glass — the ONE piece of text anywhere in the image. Palette: gold and white glass against violet and black, cool grey lead.
+```
+
+---
+
+## `religion_alt` — Mithraism · Corax (`assets/weeks/faith/creeds/secondary/colored/Duality.png`)
+
+*The mystery's highest grade and its lowest — the initiate's whole ladder
+compressed into a pair.*
+
+```
+Round stained-glass rose window, photorealistic render of leaded glass, perfectly centered, isolated on white background. Left half: the Mithraic bull-slaying scene in warm ochre and red glass, the torch raised. Right half: the raven of the Corax grade alone on a bare perch in cold blue and grey glass, the torch lowered. One lead came runs down the vertical axis. Along the base, a glass banner reads "MITHRAISM · CORAX" in Roman square capitals fired into the glass — the ONE piece of text anywhere in the image. Palette: ochre and blood-red against cold blue, cool grey lead.
+```
+
+---
+
+## `bible` — Ancient of Days · Son (`assets/weeks/faith/bible/primary/colored/Duality.png`)
+
+*The two faces Scripture gives the same throne — the eternal and the
+incarnate.*
+
+```
+Ornate circular medallion, illuminated-manuscript gold leaf on vellum, photorealistic render, perfectly centered, isolated on white background. Left: the Ancient of Days enthroned in profile, white-haired, the throne wheels burning beneath him. Right: the Son in profile, young, standing rather than enthroned, hands open. The two figures face each other across the vertical axis and one continuous band of gold leaf passes behind both heads as a single shared halo. Along the base, a vellum scroll reads "ANCIENT OF DAYS · SON" in Carolingian minuscule capitals — the ONE piece of text anywhere in the image. Border: an acanthus vine in gold leaf. Palette: vellum cream, burnished gold, imperial red.
+```
+
+---
+
+## `bible2` — Abraham · Isaac (`assets/weeks/faith/bible/secondary/colored/Duality.png`)
+
+*The father with the knife and the son on the wood — the covenant's own
+dual centre.*
+
+```
+Ornate circular medallion, illuminated-manuscript gold leaf on vellum, photorealistic render, perfectly centered, isolated on white background. Left: Abraham in profile, the knife lowered, his gaze upward. Right: Isaac in profile, bound on the wood, calm. Between them at the vertical axis stands the ram caught in the thicket, drawn small, so the plate's centre is the substitution itself. Along the base, a vellum scroll reads "ABRAHAM · ISAAC" in Carolingian minuscule capitals — the ONE piece of text anywhere in the image. Border: an acanthus vine in gold leaf. Palette: vellum cream, burnished gold, thicket green.
+```
+
+---
+
+## `bible_dark` — Lucifer · Judas (`assets/weeks/faith/bible/dark/colored/Duality.png`)
+
+*The two falls the dark reading sets against each other — the one who
+would not serve and the one who would not stay.*
+
+```
+Ornate circular medallion, illuminated-manuscript gold leaf on darkened vellum, photorealistic render, perfectly centered, isolated on white background. Left: Lucifer in profile falling upward out of frame, wings still bright at the roots and burnt at the tips. Right: Judas in profile falling downward, the purse open and the coins already leaving his hand. The two falls cross at the vertical axis, one rising out and one going down, so the plate reads as a single X of descent. Along the base, a scorched vellum scroll reads "LUCIFER · JUDAS" in Carolingian minuscule capitals — the ONE piece of text anywhere in the image. Palette: darkened vellum, tarnished gold, midnight blue and ember red.
+```
+
+---
+
+## `profession` — Ruler · Servant (`assets/weeks/crafts/profession/primary/colored/Duality.png`)
+
+*Every trade's own Sunday: the one who commands the work and the one who
+does it.*
+
+```
+Ornate circular medallion, aged bronze relief, photorealistic render, perfectly centered, isolated on white background. Left: a ruler in profile, crowned, one hand open in command, the tools of the week's trades arranged behind him as a fan. Right: a servant in profile, uncrowned, both hands on those same tools, working them. The two profiles face each other across the vertical axis and the fan of tools is ONE fan, shared, passing behind both. Along the base, a bronze plaque reads "RULER · SERVANT" in industrial gothic capitals — the ONE piece of text anywhere in the image. Palette: aged bronze, iron grey, workshop amber.
+```
+
+---
+
+## `wolf` — Alpha · Omega (`assets/weeks/societies/wolf/primary/colored/Duality.png`)
+
+*The pack's two ends — the one who leads the hunt and the one who eats
+last.*
+
+```
+Ornate circular medallion, aged bronze relief, photorealistic render, perfectly centered, isolated on white background. Left: the alpha wolf in profile, head high, shoulders forward. Right: the omega wolf in profile, head low, body turned aside in submission. The two face each other across the vertical axis; the same pack trail runs beneath both, unbroken. Along the base, a bronze plaque reads "ALPHA · OMEGA" in clean naturalist capitals — the ONE piece of text anywhere in the image. Border: a pine-and-track band. Palette: aged bronze, winter grey, forest green.
+```
+
+---
+
+## `bee` — Queen · Cleaner (`assets/weeks/societies/bee/primary/colored/Duality.png`)
+
+*The hive's two ends — the one every cell is built for and the one who
+keeps the cells fit to use.*
+
+```
+Ornate circular medallion, aged bronze relief, photorealistic render, perfectly centered, isolated on white background. Left: the queen bee in profile at the centre of a brood comb, her attendants implied by the comb's own geometry rather than drawn. Right: a cleaner bee in profile at the mouth of an emptied cell, carrying debris out of it. The two halves meet at the vertical axis, where one continuous run of hexagonal comb passes behind both. Along the base, a bronze plaque reads "QUEEN · CLEANER" in clean naturalist capitals — the ONE piece of text anywhere in the image. Palette: aged bronze, honey amber, wax cream.
+```
+
+---
+
+## `elephant` — Matriarch · Memory (`assets/weeks/societies/elephant/primary/colored/Duality.png`)
+
+*The herd's living head and the herd's long past — the one who decides
+and the one who remembers.*
+
+```
+Ornate circular medallion, aged bronze relief, photorealistic render, perfectly centered, isolated on white background. Left: the matriarch in profile, tusks forward, leading. Right: the same silhouette rendered as bone — a weathered elephant skull in profile at a dry riverbed, facing back the way the herd came. The two halves meet at the vertical axis, where one continuous trail of footprints passes from the living head into the bone. Along the base, a bronze plaque reads "MATRIARCH · MEMORY" in clean naturalist capitals — the ONE piece of text anywhere in the image. Palette: aged bronze, savanna dust, dry-bone white.
+```
+
+---
+
+## `alchemy` — Gold · Raw Ore (`assets/weeks/crafts/alchemy/primary/colored/Duality.png`)
+
+*The art's end and its beginning — the same substance before and after
+the work.*
+
+```
+Ornate circular medallion, aged bronze relief with polished inlay, photorealistic render, perfectly centered, isolated on white background. Left: a finished gold ingot, mirror-polished, its surface reflecting the medallion's own border back at the viewer. Right: raw ore, unrefined rock with gold seams still locked inside it. The two halves meet at the vertical axis, where a single crucible sits half in each. Along the base, an engraved brass strip reads "GOLD · RAW ORE" in alchemical roman capitals — the ONE piece of text anywhere in the image. Border: the seven planetary metal glyphs. Palette: aged bronze, refined gold, grey ore-rock.
+```
+
+---
+
+## `japan` — Amaterasu · Ama-no-Iwato (`assets/weeks/crafts/japan/primary/colored/Duality.png`)
+
+*The sun goddess and the cave she hid in — light present and light
+withdrawn, on one disc.*
+
+```
+Ornate circular medallion, lacquer and gold maki-e on a dark ground, photorealistic render, perfectly centered, isolated on white background. Left: Amaterasu emerging, the mirror held before her, light spilling out in fine gold lines. Right: the mouth of the rock cave sealed by its boulder, those same gold lines stopping dead at its edge. The two halves meet at the vertical axis, where the boulder's rim and the first ray touch. Along the base, a lacquer panel reads "AMATERASU · AMA-NO-IWATO" in brush-drawn capitals — the ONE piece of text anywhere in the image. Border: a stylised cloud band. Palette: black lacquer, gold maki-e, vermillion.
+```
+
+---
+
+## The four PANTHEON block titles
+
+*The second block of each merged culture opens on its own title page: the
+culture's OWN hierarchy roster, not the planetary seven. Each plate
+gathers that block's cast the way the Planetary title gathers its own —
+same medallion, same border, same script, different cast.*
+
+## `greek_pantheon` — Greek Pantheon (`assets/weeks/myth/greek/pantheon/colored/Title.png`)
+
+```
+Ornate circular medallion, aged bronze relief, photorealistic render, perfectly centered, isolated on white background. Center: the twelve-throne hall of Olympus seen from the floor, six thrones carved in relief along each side wall receding to a bright doorway, each throne bearing a small emblem of its occupant rather than a figure — trident, owl, lyre, peacock, sheaf, hunting bow. Along the base, a carved stone plinth reads "GREEK PANTHEON" in Attic lapidary capitals — the ONE piece of text anywhere in the image. Border: the family's own Greek key band. Palette: aged bronze, laurel-gold, marble white.
+```
+
+---
+
+## `norse_pantheon` — Norse Pantheon (`assets/weeks/myth/norse/pantheon/colored/Title.png`)
+
+```
+Ornate circular medallion, aged bronze relief, photorealistic render, perfectly centered, isolated on white background. Center: the hall of Gladsheim seen from its doorway, high seats carved in relief along both walls, each bearing its occupant's own emblem rather than a figure — spear, hammer, ship, apple, bow, sword. Ravens sit on the roof-beam above. Along the base, a carved wooden plinth reads "NORSE PANTHEON" in Younger Futhark runic capitals — the ONE piece of text anywhere in the image. Border: continuous interlace knotwork. Palette: aged bronze, frost-grey, cold northern blue.
+```
+
+---
+
+## `egypt_pantheon` — Egyptian Pantheon (`assets/weeks/myth/egypt/pantheon/colored/Title.png`)
+
+```
+Ornate circular medallion, carved limestone relief with gilt inlay, photorealistic render, perfectly centered, isolated on white background. Center: the hall of the Ennead, nine empty thrones in sunk relief arranged in two registers, each throne carrying its occupant's own emblem rather than a figure — ankh, was-sceptre, feather, scales, sistrum. Along the base, a sunk-relief cartouche reads "EGYPTIAN PANTHEON" in Egyptian monumental capitals — the ONE piece of text anywhere in the image. Border: a lotus-and-papyrus band. Palette: limestone cream, gilt gold, deep lapis.
+```
+
+---
+
+## `slavic_pantheon` — Slavic Pantheon (`assets/weeks/myth/slavic/pantheon/colored/Title.png`)
+
+```
+Ornate circular medallion, carved wood with bronze inlay, photorealistic render, perfectly centered, isolated on white background. Center: a hilltop grove of carved wooden idol-posts standing in a ring, each post bearing its god's own mark rather than a face — thunder-axe, serpent coil, sun-wheel, sheaf, spindle. A fire burns low at the ring's centre. Along the base, a carved plank reads "SLAVIC PANTHEON" in Glagolitic-derived folk capitals — the ONE piece of text anywhere in the image. Border: a woven folk-braid band. Palette: honey wood, bronze, ember red.
+```
+
+---
+
+## The four WIDER COURT block titles
+
+*The third block is the culture's seatless A-listers — the great names
+the week has no room for. Each plate says exactly that: a full court with
+the seven weekday seats visibly taken, and the rest standing.*
+
+## `greek_wider` — The Wider Court (`assets/weeks/myth/greek/wider/colored/Title.png`)
+
+```
+Ornate circular medallion, aged bronze relief, photorealistic render, perfectly centered, isolated on white background. Center: a wide temple forecourt in relief — seven marble seats along the back wall, every one occupied by a draped figure carved in shallow relief, and in the foreground a standing crowd of further figures with no seat to take, carved in deeper relief so they read as nearer and unseated. Along the base, a carved stone plinth reads "THE WIDER COURT" in Attic lapidary capitals — the ONE piece of text anywhere in the image. Border: the family's own Greek key band. Palette: aged bronze, laurel-gold, marble white.
+```
+
+---
+
+## `norse_wider` — The Wider Court (`assets/weeks/myth/norse/wider/colored/Title.png`)
+
+```
+Ornate circular medallion, aged bronze relief, photorealistic render, perfectly centered, isolated on white background. Center: a longhouse interior in relief — seven high seats along the back wall, all taken, and a standing press of further figures filling the floor before them with nowhere to sit, carved in deeper relief. Smoke from the central hearth crosses the whole scene. Along the base, a carved wooden plinth reads "THE WIDER COURT" in Younger Futhark runic capitals — the ONE piece of text anywhere in the image. Border: continuous interlace knotwork. Palette: aged bronze, frost-grey, hearth amber.
+```
+
+---
+
+## `egypt_wider` — The Wider Court (`assets/weeks/myth/egypt/wider/colored/Title.png`)
+
+```
+Ornate circular medallion, carved limestone relief with gilt inlay, photorealistic render, perfectly centered, isolated on white background. Center: a hypostyle hall in sunk relief — seven thrones between the columns, every one occupied, and a procession of further figures walking the aisle past them in a register of their own, unseated. Along the base, a sunk-relief cartouche reads "THE WIDER COURT" in Egyptian monumental capitals — the ONE piece of text anywhere in the image. Border: a lotus-and-papyrus band. Palette: limestone cream, gilt gold, deep lapis.
+```
+
+---
+
+## `slavic_wider` — The Wider Court (`assets/weeks/myth/slavic/wider/colored/Title.png`)
+
+```
+Ornate circular medallion, carved wood with bronze inlay, photorealistic render, perfectly centered, isolated on white background. Center: a village gathering-ground in relief — seven carved idol-posts standing in their ring, all seven marked and claimed, and beyond the ring a looser scatter of unmarked posts still raw from the axe. Along the base, a carved plank reads "THE WIDER COURT" in Glagolitic-derived folk capitals — the ONE piece of text anywhere in the image. Border: a woven folk-braid band. Palette: honey wood, bronze, harvest amber.
+```
+
+---
+
+## The PANTHEON duality plates
+
+*Each merged culture's second block has its own dual centre, and it is a
+different pair from the planetary block's — Zeus against Hades where the
+first block set Helios against Phaethon.*
+
+**Egypt is the one exception, and it is derived rather than drawn:** the
+Ennead's dual pair IS Ra and Afu-Ra, the same pair the planetary block
+already carries, so `theme_title_art` sends the Egyptian pantheon's dual
+page to the PRIMARY register's own plate. Rule #19 — the second plate
+would not be a variant, it would be the first plate.
+
+## `greek_pantheon` — Zeus · Hades (`assets/weeks/myth/greek/pantheon/colored/Duality.png`)
+
+*The brothers who divided the world between them: the sky's throne and
+the one under it.*
+
+```
+Ornate circular medallion, aged bronze relief, photorealistic render, perfectly centered, isolated on white background. Left: Zeus enthroned in profile, thunderbolt at rest across his knee, an eagle on the throne's arm, open sky behind him. Right: Hades enthroned in profile in the same posture and the same throne, the bident across his knee, Cerberus at his feet, closed rock behind him. The two thrones meet back to back at the vertical axis and share one continuous carved base, so the plate reads as one seat split in two. Along the base, a carved stone plinth reads "ZEUS · HADES" in Attic lapidary capitals — the ONE piece of text anywhere in the image. Border: the family's own Greek key band. Palette: aged bronze, sky-gold, chthonic slate.
+```
+
+---
+
+## `norse_pantheon` — Odin · The Wanderer (`assets/weeks/myth/norse/pantheon/colored/Duality.png`)
+
+*The All-Father on his high seat and the same god on the road in a
+traveller's hat — the throne and the walk, one figure.*
+
+```
+Ornate circular medallion, aged bronze relief, photorealistic render, perfectly centered, isolated on white background. Left: Odin on the high seat Hlidskjalf in profile, spear upright, both ravens on the seat-back, the hall's beams above him. Right: the same face under a wide traveller's hat in profile, spear used as a walking staff, one raven gone from his shoulder, open road and weather behind him. The two halves meet at the vertical axis where the spear-shaft continues unbroken from throne to road. Along the base, a carved wooden plinth reads "ODIN · THE WANDERER" in Younger Futhark runic capitals — the ONE piece of text anywhere in the image. Border: continuous interlace knotwork. Palette: aged bronze, hall amber, road grey.
+```
+
+---
+
+## `slavic_pantheon` — Perun · Veles (`assets/weeks/myth/slavic/pantheon/colored/Duality.png`)
+
+*The oldest quarrel the Slavs told: the thunder in the oak's crown and
+the serpent at its roots.*
+
+```
+Ornate circular medallion, carved wood with bronze inlay, photorealistic render, perfectly centered, isolated on white background. Left: Perun in profile high in the crown of a great oak, axe raised, storm-light behind him. Right: Veles in profile coiled among the same oak's roots below the waterline, horned, cattle-marks worked into the wood around him. The two halves meet at the vertical axis, where the oak's trunk runs from root to crown as one unbroken carving. Along the base, a carved plank reads "PERUN · VELES" in Glagolitic-derived folk capitals — the ONE piece of text anywhere in the image. Border: a woven folk-braid band. Palette: honey wood, bronze, storm grey and root black.
+```
+
+---
+
+## `one_soul` — One Soul (`assets/archetypes/one_soul/primary/colored/Title.png`)
+
+*The theme titled in full is a triple — One Soul, The Vow, The Bond — and
+the plate carries all three the way the reader meets them: one thing
+named three times.*
+
+```
+Ornate circular medallion, warm gold and rose enamel on bronze, photorealistic render, perfectly centered, isolated on white background. Center: two hands clasped wrist to wrist, seen from the side so neither hand is dominant, and around them a single unbroken cord looped three times — the three loops of equal size, one continuous cord. Nothing else occupies the field. Along the base, an enamelled plaque reads "ONE SOUL · THE VOW · THE BOND" in Roman inscriptional capitals — the ONE piece of text anywhere in the image. Border: a plain bronze fillet, no ornament. Palette: warm gold, rose enamel, deep bronze.
+```
+
+---
+
+## Status — the Session 27 wave
+
+- **33 new briefs** (17 theme Duality plates, 3 Pantheon Duality plates,
+  4 Pantheon titles, 4 Wider Court titles, the One Soul title and the
+  Bible/Creeds register duals), written 2026-07-29. **Art: 0/33.**
+- **The Egyptian pantheon dual is DERIVED, not drawn:** its pair is Ra
+  and Afu-Ra, the planetary block's own pair, so the page reads the
+  primary register's plate (Rule #19 — the second plate would not be a
+  variant, it would be the first plate).
+- Every drop path here is what `config.defaults.theme_title_art`
+  resolves — the resolver and this sheet are ONE pair, pinned by
+  `tests/test_encyclopedia_tree.py`.
+- **Absent by construction, not by oversight:** `continents` (its dual
+  title already carries the two poles' own earth faces) and the emblem
+  families virtues / sins / moods (flat emblem topics — they have no
+  week-duality page at all).
