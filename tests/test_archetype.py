@@ -29,18 +29,16 @@ from data.moon_phases import MoonPhaseRepository
 from data.seasons import SeasonsRepository
 from render.assets import AssetCache
 from render.compositor import Compositor
-from render.layers import (
-    archetype_active,
+from render.archetype_geometry import (
     archetype_art_ready,
     archetype_center_lit,
     archetype_lit_index,
-    dial_point,
     draw_archetype_figure,
-    enabled_slots,
-    slot_layout,
-    weekday_classic_slot,
-    RenderContext,
 )
+from render.context import RenderContext
+from render.painting import dial_point
+from render.skin_geometry import archetype_active
+from render.slot_layout import enabled_slots, slot_layout, weekday_classic_slot
 
 
 @pytest.fixture(scope="module")
@@ -439,10 +437,10 @@ def test_short_name_is_capped_at_name_label_max_px(app):
     `dial.NAME_LABEL_MAX_PX` — the flat ceiling reasoned from the
     720-dial short-weekday "TUE" look, shared by the weekday body label
     and the archetype figure label (Rule #5, ONE fitting helper)."""
-    import render.layers as layers_mod
+    from render.painting import name_label_px
 
     assert (
-        layers_mod.name_label_px("Ox", target_width=10_000.0)
+        name_label_px("Ox", target_width=10_000.0)
         == dial.NAME_LABEL_MAX_PX
     )
 
@@ -450,10 +448,10 @@ def test_short_name_is_capped_at_name_label_max_px(app):
 def test_long_name_still_shrinks_to_fit(app):
     """4b: the cap is a ceiling, not a floor — a LONG name in a narrow
     space still measures DOWN to fit, and grows again with more room."""
-    import render.layers as layers_mod
+    from render.painting import name_label_px
 
-    narrow = layers_mod.name_label_px("The Eye of Providence", target_width=80.0)
-    wide = layers_mod.name_label_px("The Eye of Providence", target_width=800.0)
+    narrow = name_label_px("The Eye of Providence", target_width=80.0)
+    wide = name_label_px("The Eye of Providence", target_width=800.0)
     assert dial.BODY_LABEL_MIN_PX <= narrow < wide <= dial.NAME_LABEL_MAX_PX
 
 
@@ -461,17 +459,17 @@ def test_draw_name_label_draws_exactly_one_line(app, monkeypatch):
     """Owner verdict 2026-07-18: the two-line wrap is GONE — every name,
     long or short, draws as exactly ONE outlined line at the given
     pixel size (no more measuring/splitting inside the draw call)."""
-    import render.layers as layers_mod
+    import render.painting as painting_mod
 
     calls = []
     monkeypatch.setattr(
-        layers_mod, "draw_outlined_text",
+        painting_mod, "draw_outlined_text",
         lambda painter, pos, text, font:
             calls.append((text, pos.y(), font.pixelSize())),
     )
     image = QImage(200, 200, QImage.Format.Format_ARGB32_Premultiplied)
     painter = QPainter(image)
-    layers_mod.draw_name_label(painter, "Compass Walks", QPointF(0, 0), 42.0)
+    painting_mod.draw_name_label(painter, "Compass Walks", QPointF(0, 0), 42.0)
     painter.end()
     assert calls == [("Compass Walks", 0.0, 42)]
 
@@ -480,7 +478,9 @@ def test_weekday_label_set_uses_the_smallest_fitted_member(app):
     """21-C owner verdict: ALL names of one weekday ring wear the size
     of the SMALLEST fitted member — a set containing one long name
     drags every member down to its size, the cap/floor still hold."""
-    import render.layers as layers_mod
+    from render.painting import name_label_px
+    from render.slot_layout import weekday_body_size
+    from render.weekday_body import weekday_label_set_px, weekday_label_text
 
     skin = _archetype_skin("hexa", show_weekday_names=True)
     day, tick = _dt(datetime(2026, 7, 16, 12, 0))
@@ -488,13 +488,13 @@ def test_weekday_label_set_uses_the_smallest_fitted_member(app):
         skin=dataclasses.replace(skin, archetype_mode=False),
         day=day, tick=tick, radius=200.0, cache=AssetCache(), dpr=1.0,
     )
-    set_px = layers_mod.weekday_label_set_px(ctx)
+    set_px = weekday_label_set_px(ctx)
     # Every individual body's OWN fit is >= the set answer (the set
     # picks the narrowest-fitting member, never inflates past it).
-    slot_size = layers_mod.weekday_body_size(ctx.skin, ctx.radius)
+    slot_size = weekday_body_size(ctx.skin, ctx.radius)
     target = slot_size * dial.NAME_LABEL_WIDTH_FRACTION
     own_fits = [
-        layers_mod.name_label_px(layers_mod.weekday_label_text(ctx, body), target)
+        name_label_px(weekday_label_text(ctx, body), target)
         for body in constants.WEEKDAY_BODIES
     ]
     assert set_px == min(own_fits)
@@ -505,33 +505,35 @@ def test_archetype_label_set_uses_the_smallest_fitted_member(app):
     """21-C owner verdict: the archetype figures AND the center share
     ONE set — a long figure/center name drags every label in the
     layout down to its own smaller fitted size."""
-    import render.layers as layers_mod
+    from render.archetype_geometry import archetype_figure_size, archetype_label_set_px
+    from render.painting import name_label_px
+    from render.skin_geometry import archetype_key
 
     skin = _archetype_skin("trio")
     ctx = RenderContext(
         skin=skin, day=SimpleNamespace(), tick=None,
         radius=200.0, cache=AssetCache(), dpr=1.0,
     )
-    key = layers_mod.archetype_key(skin)
+    key = archetype_key(skin)
     arm_width = (
         ctx.radius * skin.star.radius_fraction
         * math.tan(
             math.radians(constants.POINTER_ARM_HALF_ANGLE_DEG[skin.pointer])
         )
     )
-    set_px = layers_mod.archetype_label_set_px(ctx, key, arm_width)
+    set_px = archetype_label_set_px(ctx, key, arm_width)
     target = arm_width * dial.NAME_LABEL_WIDTH_FRACTION
     fits = [
-        layers_mod.name_label_px(fig["name"], target)
+        name_label_px(fig["name"], target)
         for fig in archetypes.figures(key)
     ]
     center = archetypes.center(key)
     if center is not None:
-        center_height = layers_mod.archetype_figure_size(
+        center_height = archetype_figure_size(
             skin, ctx.radius, center["file"]
         )
         fits.append(
-            layers_mod.name_label_px(
+            name_label_px(
                 center["name"], center_height * dial.NAME_LABEL_WIDTH_FRACTION,
             )
         )
@@ -549,7 +551,7 @@ def test_reveal_hides_the_hands(app, monkeypatch):
     pixel probe band broke the day the owner's real center glass landed
     over it, 2026-07-18): normal frame paints hands, reveal frame paints
     none, toggle-off paints them again."""
-    from render.layers import HandLayer
+    from render.layers.hand import HandLayer
 
     day, tick = _dt(datetime(2026, 7, 16, 12, 0))
     skin = _archetype_skin("trio", show_weekday_names=False)
@@ -664,9 +666,8 @@ def test_archetype_figure_size_circle_and_portrait_types(app, tmp_path):
     placeholder) wears `weekday_body_size` — IDENTICAL to the weekday
     bodies; PORTRAIT art (the tall lancets) wears the STANDARD-aspect
     inscribed height, `archetype_portrait_height`."""
-    from render.layers import (
-        archetype_figure_size, archetype_portrait_height, weekday_body_size,
-    )
+    from render.archetype_geometry import archetype_figure_size, archetype_portrait_height
+    from render.slot_layout import weekday_body_size
 
     skin = _archetype_skin("trio")
     radius = 180.0
@@ -700,9 +701,8 @@ def test_archetype_figure_size_boundary_is_the_threshold(tmp_path):
     `ARCHETYPE_PORTRAIT_ASPECT_MAX` (fix round A 2026-07-19: 0.70, not
     the old 0.85): aspect AT the threshold reads CIRCLE (>=), just
     below it reads PORTRAIT."""
-    from render.layers import (
-        archetype_figure_size, archetype_portrait_height, weekday_body_size,
-    )
+    from render.archetype_geometry import archetype_figure_size, archetype_portrait_height
+    from render.slot_layout import weekday_body_size
 
     skin = _archetype_skin("trio")
     radius = 180.0
@@ -730,7 +730,8 @@ def test_archetype_figure_size_providence_eye_aspect_classifies_circle(tmp_path)
     classified as PORTRAIT under the old 0.85 threshold and drew at the
     tall lancet height (the "Trinity ogroman centar" bug). At 0.70 it
     classifies CIRCLE and wears the slot size."""
-    from render.layers import archetype_figure_size, weekday_body_size
+    from render.archetype_geometry import archetype_figure_size
+    from render.slot_layout import weekday_body_size
 
     skin = _archetype_skin("trio")
     radius = 180.0
@@ -750,8 +751,9 @@ def test_archetype_center_follows_its_own_art_type(app, monkeypatch, tmp_path):
     two): a circle center wears the slot size, a portrait center the
     lancet fraction, whichever art the archetype's center dict names."""
     import config.archetypes as archetypes_mod
-    import render.layers as layers_mod
-    from render.layers import ArchetypeCenterLayer, weekday_body_size
+    import render.layers.archetype as archetype_layer_mod
+    from render.layers.archetype import ArchetypeCenterLayer
+    from render.slot_layout import weekday_body_size
 
     skin = _archetype_skin("trio")
     radius = 180.0
@@ -763,12 +765,12 @@ def test_archetype_center_follows_its_own_art_type(app, monkeypatch, tmp_path):
         )
         captured = []
         monkeypatch.setattr(
-            layers_mod, "draw_pixmap_centered",
+            archetype_layer_mod, "draw_pixmap_centered",
             lambda painter, ctx, asset, pos, height, *a, **kw:
                 captured.append(height),
         )
         monkeypatch.setattr(
-            layers_mod, "draw_name_label",
+            archetype_layer_mod, "draw_name_label",
             lambda painter, name, pos, target_width:
                 captured.append(target_width),
         )
@@ -793,7 +795,7 @@ def test_archetype_center_follows_its_own_art_type(app, monkeypatch, tmp_path):
     tip = radius * skin.star.radius_fraction
     half = constants.POINTER_ARM_HALF_ANGLE_DEG["trio"]
     tan_half = math.tan(math.radians(half))
-    from render.layers import archetype_portrait_height
+    from render.archetype_geometry import archetype_portrait_height
     assert rendered_height(portrait_center) == pytest.approx(
         archetype_portrait_height(tip, tan_half)
     )
@@ -807,7 +809,8 @@ def test_archetype_center_size_is_reveal_invariant(app):
     so the 2026-07-18 center WINDOW also reads full in the non-reveal case —
     isolating the size comparison from the window's own opacity term (pinned
     separately by test_archetype_center_window_render)."""
-    from render.layers import ArchetypeCenterLayer, RenderContext
+    from render.context import RenderContext
+    from render.layers.archetype import ArchetypeCenterLayer
 
     skin = _archetype_skin("trio")
     layer = ArchetypeCenterLayer(skin)
@@ -855,7 +858,7 @@ def test_archetype_center_window_render(app):
     """Owner seal 2026-07-18: the center draws differently in vs out of
     the noon/midnight window on the same skin/day, and the reveal
     gesture forces it full even OUT of the window."""
-    from render.layers import ArchetypeCenterLayer
+    from render.layers.archetype import ArchetypeCenterLayer
 
     city = defaults.DEFAULT_CITY
     tz = ZoneInfo(city["timezone"])
@@ -898,7 +901,7 @@ def test_archetype_arm_is_a_hover_target(app):
     """Owner slika 8: an archetype arm is a hover-enlarge target
     ("archetype:<index>") through the arm-diamond geometry — set_hover
     locks on and the enlarged figure redraws above (the HoverLift twin)."""
-    from render.layers import archetype_lit_index
+    from render.archetype_geometry import archetype_lit_index
 
     day, tick = _dt(datetime(2026, 7, 16, 14, 30))
     skin = _archetype_skin("octa", hover_enlarge=1.8)   # solar rotation off
@@ -1287,15 +1290,21 @@ def test_archetype_names_gates_the_render(app, monkeypatch):
     `show_weekday_names` — for the figures' names: with real art, the
     LIT figure's name draws when `archetype_names` is on and is
     SKIPPED when off, regardless of the weekday bodies' own switch."""
-    import render.layers as layers_mod
+    # The split moved these three out of one module: `draw_archetype_figure`
+    # reads them as globals of `render.archetype_geometry`, the centre
+    # figure as globals of `render.layers.archetype` — patch BOTH so the
+    # gate is exercised exactly as it was when all of it lived in one file.
+    import render.archetype_geometry as archetype_geom_mod
+    import render.layers.archetype as archetype_layer_mod
 
-    monkeypatch.setattr(layers_mod, "archetype_art_ready", lambda path: True)
-    monkeypatch.setattr(layers_mod, "draw_pixmap_centered", lambda *a, **kw: None)
     calls = []
-    monkeypatch.setattr(
-        layers_mod, "draw_name_label",
-        lambda painter, name, pos, label_px: calls.append(name),
-    )
+    for mod in (archetype_geom_mod, archetype_layer_mod):
+        monkeypatch.setattr(mod, "archetype_art_ready", lambda path: True)
+        monkeypatch.setattr(mod, "draw_pixmap_centered", lambda *a, **kw: None)
+        monkeypatch.setattr(
+            mod, "draw_name_label",
+            lambda painter, name, pos, label_px: calls.append(name),
+        )
     day, tick = _dt(datetime(2026, 7, 16, 12, 0))
 
     def render(archetype_names):

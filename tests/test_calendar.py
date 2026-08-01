@@ -26,7 +26,7 @@ from data.moon_phases import MoonPhaseRepository
 from data.seasons import SeasonsRepository
 from render.assets import AssetCache
 from render.compositor import Compositor
-from render.layers import (
+from render.calendar_mount import (
     calendar_day_arrow,
     calendar_mount_angle,
     calendar_mount_current_index,
@@ -36,11 +36,9 @@ from render.layers import (
     calendar_wedge_bounds,
     calendar_wheel,
     chinese_mount_dimmed_index,
-    dial_point,
-    slot_layout,
-    slot_seat_rotation,
-    weekday_classic_slot,
 )
+from render.painting import dial_point
+from render.slot_layout import slot_layout, slot_seat_rotation, weekday_classic_slot
 
 
 @pytest.fixture(scope="module")
@@ -173,7 +171,8 @@ def test_lit_wedge_feature_names_are_all_gone():
     `calendar_lit_index`, no `CALENDAR_WEDGE_LIT_DELTA`, no
     `RenderContext.calendar_lit` — Rule #6, the whole feature deleted
     rather than wrapped."""
-    import render.layers as layers_module
+    import render.calendar_mount as calendar_mount_module
+    from render.context import RenderContext as RenderContextClass
     from app.settings_store import Settings
     from skins.manifest import SkinDefinition
 
@@ -182,10 +181,10 @@ def test_lit_wedge_feature_names_are_all_gone():
 
     assert "calendar_lighting" not in field_names(Settings)
     assert "calendar_lighting" not in field_names(SkinDefinition)
-    assert "calendar_lit" not in field_names(layers_module.RenderContext)
+    assert "calendar_lit" not in field_names(RenderContextClass)
     assert not hasattr(constants, "CALENDAR_LIGHTING_MODES")
     assert not hasattr(defaults, "CALENDAR_WEDGE_LIT_DELTA")
-    assert not hasattr(layers_module, "calendar_lit_index")
+    assert not hasattr(calendar_mount_module, "calendar_lit_index")
     assert not hasattr(Compositor, "_calendar_lit")
 
 
@@ -617,7 +616,7 @@ def test_new_dozens_axle_plates_resolve_real_art():
     Dozen's axle also proves the axle STEM rule: a display name with
     spaces resolves through the underscored filename, the same
     no-space rule `art_stems` applies to `Just_Indignation`."""
-    from render.layers import thirteenth_plate
+    from render.ninths import thirteenth_plate
 
     for key in constants.AXLE_ALWAYS_CENTERS:
         resolved_name, art = thirteenth_plate(key)
@@ -685,7 +684,7 @@ def test_centre_rule_is_per_roster_and_never_unconditional(app):
     branch is exercised here through a SYNTHETIC mount, the same way
     `test_seat_law_places_twelve_one_per_wedge_and_twentyfour_two`
     exercises its own synthetic 24-seat entry.)"""
-    from render.layers import active_thirteenth
+    from render.ninths import active_thirteenth
 
     shows, _t = _day_tick(app, datetime(2026, 12, 5, 12, 0))
     hides, _t2 = _day_tick(app, datetime(2025, 12, 5, 12, 0))
@@ -729,7 +728,7 @@ def test_axle_always_centers_are_unconditionally_present(app):
     2025-12-05). The constant is named for the LAW, not for personhood
     (renamed 2026-07-29): Peace and Hardness of Heart are STATES, and
     the seam THE AXLE LAW actually draws is "not a leftover month"."""
-    from render.layers import active_thirteenth
+    from render.ninths import active_thirteenth
 
     ordinary, _t = _day_tick(app, datetime(2026, 3, 15, 12, 0))
     assert constants.AXLE_ALWAYS_CENTERS <= ordinary.thirteenth_candidates

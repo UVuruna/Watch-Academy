@@ -79,7 +79,7 @@ def ring_face_color(path: Path | None) -> QColor:
 # fix 2026-07-19, live-render round): the lit region is the half-disc
 # on the lit side combined (gibbous) or reduced (crescent) with the
 # terminator half-ellipse (semi-axis a = R*|cos(2*pi*f)|). ONE shared
-# function — `render.layers.YearMarkerLayer._draw_moon` (the dial) and
+# function — `render.layers.year_marker.YearMarkerLayer._draw_moon` (the dial) and
 # `moon_phase_image` below (the Encyclopedia's live-rendered Moon
 # pages) both call it, so the two never drift apart.
 MOON_TERMINATOR_EPSILON = 1e-6   # of the radius — the exact-quarter guard
@@ -203,13 +203,13 @@ def subdial_plate_file(
     Settings and lives as a `config.paths` module global
     (`paths.subdial_set()`, mirroring the art-source switch exactly) —
     it is NOT threaded as a parameter here since this is its only
-    reader, keeping `render.layers.draw_slot_roundel`'s existing call
+    reader, keeping `render.subdial.draw_slot_roundel`'s existing call
     untouched.
 
     Sets 1-4 are three hand-drawn finishes each: the matching file
     returns AS DRAWN, no recolor, no cache — the seat dimension never
     touched this function even before (only the LIVE shadow,
-    `render.layers._draw_subdial_shadow`, keyed off the seat's own dial
+    `render.subdial._draw_subdial_shadow`, keyed off the seat's own dial
     position, does). The SOLO set ships one hand-drawn file
     (`dial.SUBDIAL_SOLO_FINISH`, silver): silver wins AS DRAWN,
     gold/bronze are disk-cached live recolors of it, exactly like the

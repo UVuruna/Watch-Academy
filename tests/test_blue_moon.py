@@ -4,7 +4,7 @@ full-moon counts, each 13th's own window (boundary days both sides), The
 Cat's REAL lunisolar leap month against two independently verified
 years, the DayContext wiring (a plain fact set, no precedence), the
 graceful-absent contract for Sol/Modrenik, and — the owner's correction —
-`render.layers.active_thirteenth`'s FOUR INDEPENDENT MODE gate: a 13th
+`render.ninths.active_thirteenth`'s FOUR INDEPENDENT MODE gate: a 13th
 shows ONLY on the Calendar pointer, in the ONE mode that owns it, NEVER
 on any other pointer. Purity (no Qt, no wall clock) is covered
 generically by tests/test_purity.py's core/*.py glob — not re-pinned
@@ -40,7 +40,8 @@ from data.moon_phases import MoonPhaseRepository
 from data.seasons import SeasonsRepository
 from render.assets import AssetCache
 from render.compositor import Compositor
-from render.layers import active_thirteenth, center_seat_body_key, thirteenth_plate
+from render.ninths import active_thirteenth, thirteenth_plate
+from render.slot_layout import center_seat_body_key
 
 
 @pytest.fixture(scope="module")
@@ -201,7 +202,7 @@ def test_ophiuchus_and_modrenik_windows_can_both_be_true_facts():
     `thirteen_moon_year` and share the Dec 7-17 band of a blue-moon
     December. UNLIKE R12, core.blue_moon picks no winner here — both are
     reported as true FACTS; resolving to ONE mode-owned member is
-    render.layers.active_thirteenth's job, from the ACTIVE skin, never a
+    render.ninths.active_thirteenth's job, from the ACTIVE skin, never a
     date-only tiebreak (see test_mount_outranks_the_wheel_when_both_claim
     below)."""
     mr, sr = MoonPhaseRepository(), SeasonsRepository()

@@ -85,7 +85,8 @@ def _dt(app, when):
 def _seat_px(skin, radius, seat_angle):
     """The widget pixel at a seated slot's centre — mirrors the
     compositor's `_element_at` seat geometry."""
-    from render.layers import dial_point, slot_seat_orbit, slot_seat_rotation
+    from render.painting import dial_point
+    from render.slot_layout import slot_seat_orbit, slot_seat_rotation
 
     orbit = skin.weekday_set.orbit_fraction * slot_seat_orbit(skin, seat_angle)
     pos = dial_point(seat_angle + slot_seat_rotation(skin, 0.0), radius * orbit)
@@ -95,7 +96,7 @@ def _seat_px(skin, radius, seat_angle):
 def _arm_px(radius, dial_angle, star_fraction):
     """A widget pixel well inside the star arm pointing at `dial_angle`
     (solar rotation off, so the drawn angle is the dial angle)."""
-    from render.layers import dial_point
+    from render.painting import dial_point
 
     pos = dial_point(dial_angle, radius * star_fraction * 0.82)
     return radius + pos.x(), radius + pos.y()
@@ -133,7 +134,7 @@ def test_spacebar_seated_slots_resolve_per_slot_theme(app):
         weekday_theme="greek", weekday_slot="weekday",
         show_octa_slot=True, octa_slot="weekday", info_slot_theme="egypt",
     )
-    from render.layers import slot_layout
+    from render.slot_layout import slot_layout
 
     layout = slot_layout(skin)               # {1: 240°, 2: 120°}
     assert set(layout.values()) == {240.0, 120.0}
@@ -208,7 +209,7 @@ def test_spacebar_moon_marker_opens_the_current_phase(app):
     the eight-page order of the topic (queue #8b)."""
     from config import constants
     from core.moon import phase_name
-    from render.layers import dial_point
+    from render.painting import dial_point
     from core import angles
 
     day, tick = _dt(app, datetime(2026, 7, 16, 12, 0))
@@ -301,7 +302,9 @@ def test_composite_segments_split_around_the_live_bodies(app):
     the weekday_set BELOW the ring, so pulling it out leaves the base
     (background, star) below the bodies and the ring above them — the
     weekday/archetype layers paint LIVE between the two blits."""
-    from render.layers import ArchetypeLayer, RingLayer, WeekdayLayer
+    from render.layers.archetype import ArchetypeLayer
+    from render.layers.ring import RingLayer
+    from render.layers.weekday import WeekdayLayer
 
     day, tick = _dt(app, datetime(2026, 7, 16, 14, 30))
     comp = Compositor(defaults.DEFAULT_SKIN, AssetCache())
@@ -363,7 +366,7 @@ def test_lit_regions_never_crash_across_polar_year(app):
     from datetime import date, timedelta
 
     from core.sun import compute_sun_day
-    from render.layers import lit_regions
+    from render.daylight import lit_regions
 
     spec = defaults.DEFAULT_SKIN.background
     cities = [
@@ -399,7 +402,8 @@ def test_moon_terminator_quarters(app):
     from PySide6.QtCore import QPointF, Qt
     from PySide6.QtGui import QImage, QPainter
 
-    from render.layers import RenderContext, YearMarkerLayer
+    from render.context import RenderContext
+    from render.layers.year_marker import YearMarkerLayer
 
     skin = _procedural_moon_skin()
     layer = YearMarkerLayer(skin)
@@ -435,7 +439,7 @@ def test_moon_transit_opacity(app):
     """The smaller Moon transits OVER the Earth at reduced opacity when
     they meet on the shared rim; apart it is fully opaque. (With the
     Earth element switched off the layer skips the transit entirely.)"""
-    from render.layers import moon_transit_opacity
+    from render.daylight import moon_transit_opacity
 
     spec = defaults.DEFAULT_SKIN.year_marker
     assert moon_transit_opacity(spec, 100.0, 250.0) == 1.0        # far apart
@@ -451,7 +455,8 @@ def test_moon_flips_on_southern_hemisphere(app):
     from PySide6.QtCore import QPointF, Qt
     from PySide6.QtGui import QImage, QPainter
 
-    from render.layers import RenderContext, YearMarkerLayer
+    from render.context import RenderContext
+    from render.layers.year_marker import YearMarkerLayer
 
     skin = _procedural_moon_skin()
     layer = YearMarkerLayer(skin)
@@ -521,16 +526,16 @@ def test_aura_saturation_grays_only_the_aura_hues_not_the_star(app):
     """The Aura Saturation slider (owner fix round E, 2026-07-19, slika
     2 — RE-SCOPED and RELABELED from "Pointer": storage key stays
     `pointer_saturation`, but it now scales ONLY the Aura wedges behind/
-    around the diamonds, `render.layers.aura_palette_for` — 0.0 grays
+    around the diamonds, `render.skin_geometry.aura_palette_for` — 0.0 grays
     every hue to its own brightness (HSV saturation zeroed, value/hue
-    untouched). `render.layers.palette_for` — what `StarLayer` reads for
+    untouched). `render.skin_geometry.palette_for` — what `StarLayer` reads for
     the diamonds themselves — stays perfectly RAW regardless of the
     slider; the ring/letters (a separate art path) are untouched too."""
     import dataclasses
 
     from PySide6.QtGui import QColor
 
-    from render.layers import aura_palette_for, palette_for
+    from render.skin_geometry import aura_palette_for, palette_for
 
     full = dataclasses.replace(defaults.DEFAULT_SKIN, pointer_saturation=1.0)
     gray = dataclasses.replace(defaults.DEFAULT_SKIN, pointer_saturation=0.0)

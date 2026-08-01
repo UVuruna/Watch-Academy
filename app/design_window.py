@@ -29,7 +29,7 @@ from config import constants, continents, defaults, dial, palette, paths
 from config.ui_text import ui
 from data.hands import hand_packs
 from data.rings import ring_presets
-from render.layers import daylight_active
+from render.skin_geometry import daylight_active
 
 
 def _clear(layout) -> None:

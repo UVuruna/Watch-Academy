@@ -13,7 +13,7 @@ solves every character's dial angle: pinned characters land exactly on
 their seat, and the run of characters between two consecutive pins is
 spaced EVENLY across the angular gap between them (owner spec: "even
 letter spacing between the pinned letters"). Pure math — no Qt, no
-wall clock (core purity, tests/test_purity.py); render.layers.RingLayer
+wall clock (core purity, tests/test_purity.py); render.layers.ring.RingLayer
 draws the result, data.rings.validate_preset calls this at LOAD time so
 a broken pin config (a typo'd occurrence, an out-of-order pin) fails
 loudly there, never mid-paint.
@@ -189,7 +189,7 @@ def motto_glyph_angles(
     sweeps counterclockwise under the bottom (NOVUS ORDO SECLORUM's own
     arc, 4h -> 20h through the bottom/24h). Both directions read
     left-to-right to a VIEWER (never mirrored) even though the angle
-    moves opposite ways, because dial-x (`render.layers.dial_point`'s
+    moves opposite ways, because dial-x (`render.painting.dial_point`'s
     `distance * sin(theta)`) is monotonic in OPPOSITE senses across the
     two halves of the circle: increasing theta moves screen-x
     left-to-right over the top but right-to-left under the bottom, so

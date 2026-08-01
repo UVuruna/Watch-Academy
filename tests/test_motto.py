@@ -138,7 +138,7 @@ def test_novus_ordo_seclorum_pinned_letters_land_on_their_seats():
 
 def test_bottom_arc_glyph_orientation_points_top_toward_center():
     """MOTO-FIX round: `readable_rotation_deg` (shared by every ring
-    glyph, `render.layers._draw_ring_glyph`) needs no new flag for the
+    glyph, `render.layers.ring._draw_ring_glyph`) needs no new flag for the
     bottom arc's own "tops inward" convention — it already derives this
     from the angle alone, unchanged by this round. At the bottom dead
     center (180 deg, ORDO's own O pin) the rotation is 0: with no

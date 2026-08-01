@@ -113,7 +113,7 @@ class DayContext:
     # mode read here (computed ONCE via core.blue_moon.
     # thirteenth_candidates, never on the MINUTE-cadence paint pass);
     # resolving it to the ONE member a given skin's pointer/wheel/mount
-    # may show is render.layers.active_thirteenth's job.
+    # may show is render.ninths.active_thirteenth's job.
     # `chinese_leap_month_number` is the doubled lunar month (1-12) ONLY
     # while today falls inside that leap window ("chinese" in
     # `thirteenth_candidates`, None otherwise) — the Chinese-mount's own

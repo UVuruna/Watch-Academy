@@ -7,7 +7,7 @@ assets (not a synthetic tmp tree — `test_scale_rotation.py` already
 pins the generic `rotating_art_file` mechanism in isolation; this file
 is the WIRING test: does the weekday resolution chokepoint actually
 call it) against `config.pantheon.weekday_theme_body_art` and
-`render.layers.theme_ninth`, the two functions every weekday-body-art
+`render.ninths.theme_ninth`, the two functions every weekday-body-art
 draw/hover call site now shares (Rule #5 — no more per-call-site
 `theme_dir / f"{...}.png"` duplicates). Also pins THE WEEKLY MANDATE
 (owner decree 2026-07-29): cp_corpo's own seat rosters (sun/dual/ninth)
@@ -19,7 +19,7 @@ member is reachable."""
 from datetime import date, timedelta
 
 from config import constants, pantheon, paths
-from render.layers import ninth_table_for, theme_ninth
+from render.ninths import ninth_table_for, theme_ninth
 
 # Two ordinally-consecutive dates, chosen arbitrarily — with exactly two
 # candidates (canonical + one alt/ sibling) any consecutive pair must

@@ -30,10 +30,10 @@ class _ColorsSectionMixin:
         unchanged — RE-SCOPED and RELABELED fix round E, 2026-07-19,
         slika 2: the label reads "Aura" now, and the slider scales only
         the colored period wedges behind/around the diamonds via
-        `render.layers.aura_palette_for` — the star diamonds themselves
-        no longer move with it, `render.layers.palette_for` stays raw).
+        `render.skin_geometry.aura_palette_for` — the star diamonds themselves
+        no longer move with it, `render.skin_geometry.palette_for` stays raw).
         RING (`ring_saturation`) scales the ring band art's (plate +
-        letter overlay) saturation at `render.layers.RingLayer`, after
+        letter overlay) saturation at `render.layers.ring.RingLayer`, after
         the ring_tint recolor. Both 0-100%, default 100% (unchanged);
         "Default" resets each to 100."""
         tr = self._tr

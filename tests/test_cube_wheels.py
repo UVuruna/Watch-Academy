@@ -30,11 +30,11 @@ from data.rings import ring_presets
 from data.seasons import SeasonsRepository
 from render.assets import AssetCache
 from render.compositor import Compositor
-from render.layers import (
+from render.archetype_geometry import archetype_lit_index
+from render.skin_geometry import (
+    archetype_key,
     arm_half_deg,
     arm_offset_deg,
-    archetype_key,
-    archetype_lit_index,
     cube_look_active,
     palette_for,
     today_slot_theta,
@@ -266,7 +266,7 @@ def test_genesis_arm_hover_speaks_the_office(app):
     day, tick = _dt(datetime(2026, 7, 16, 14, 30))
     comp = Compositor(_skin("trio"), AssetCache())
     comp.render_offscreen(360.0, 1.0, day, tick)
-    from render.layers import dial_point
+    from render.painting import dial_point
 
     pos = dial_point(180.0, 180.0 * 0.86 * 0.82)     # the 24h arm
     tooltip = comp.tooltip_at(180.0 + pos.x(), 180.0 + pos.y(), 360.0)

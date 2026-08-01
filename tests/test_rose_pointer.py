@@ -30,19 +30,18 @@ from data.rings import ring_presets
 from data.seasons import SeasonsRepository
 from render.assets import AssetCache
 from render.compositor import Compositor
-from render.layers import (
+from render.painting import dial_point
+from render.skin_geometry import (
     arm_half_deg,
     daylight_active,
-    dial_point,
     palette_for,
     rose_star_offsets,
     rose_star_set,
     ruler_seat_angle,
     servant_seat_angle,
-    sunday_dual_face,
-    weekday_body_orbit,
     weekday_slots,
 )
+from render.slot_layout import sunday_dual_face, weekday_body_orbit
 
 
 @pytest.fixture(scope="module")

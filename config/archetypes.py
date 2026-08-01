@@ -80,7 +80,7 @@ ARCHETYPE_LIFE_REGISTERS = ("tree", "animals")
 #   - PORTRAIT type (aspect < the threshold — the tall lancet vitraž
 #     windows: persons, temperaments) wears the INSCRIBED height for
 #     the STANDARD aspect (`ARCHETYPE_PORTRAIT_STANDARD_ASPECT`), via
-#     `render.layers.archetype_portrait_height()` — UNIFORM for every
+#     `render.archetype_geometry.archetype_portrait_height()` — UNIFORM for every
 #     portrait in the set regardless of its OWN art's aspect.
 # Missing/placeholder art (the name-fallback path) reads CIRCLE-sized —
 # there is no art to classify.
@@ -102,7 +102,7 @@ ARCHETYPE_PORTRAIT_STANDARD_ASPECT = 0.5
 # The figure NAME label (the lit figure with Names on, and the
 # fallback while art is missing/placeholder) shares its fitting and its
 # NAME_LABEL_MAX_PX cap with the weekday body label — one helper,
-# render.layers.draw_name_label (Rule #5); the width fraction lives at
+# render.painting.draw_name_label (Rule #5); the width fraction lives at
 # dial.NAME_LABEL_WIDTH_FRACTION, shared by both label paths.
 # A file at or under this many pixels per side is a committed 1×1
 # placeholder (the WORKPLAN missing-art rule) — the renderer draws the
@@ -437,7 +437,7 @@ ARCHETYPES = {
     # at 16h. THE MANY-NAMES DOCTRINE: this wheel says God where the
     # Court says The One — the names are layered, never reconciled.
     # Figure order = drawn-arm order under the 180° Genesis offset
-    # (render.layers.arm_offset_deg), so the tuple index stays the
+    # (render.skin_geometry.arm_offset_deg), so the tuple index stays the
     # hour-space index exactly like every other wheel.
     "trinity_genesis": {
         "articles": "archetype_trinity_genesis",

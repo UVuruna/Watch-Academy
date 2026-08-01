@@ -56,7 +56,7 @@ def readable_rotation_deg(theta: float) -> float:
     travel around the circle (owner spec): tangential, but the LOWER
     half (90-270 deg) flips 180 deg so text never reads upside down —
     Omega stands upright at the bottom. Shared by the ring's own letters
-    and the outer motto arc (`render.layers.RingLayer`, Rule #5)."""
+    and the outer motto arc (`render.layers.ring.RingLayer`, Rule #5)."""
     if 90.0 < theta < 270.0:
         return theta - 180.0
     return theta if theta <= 90.0 else theta - 360.0

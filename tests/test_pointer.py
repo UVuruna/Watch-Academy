@@ -22,19 +22,17 @@ from data.moon_phases import MoonPhaseRepository
 from data.seasons import SeasonsRepository
 from render.assets import AssetCache
 from render.compositor import Compositor, _build_layers
-from render.layers import (
-    HandLayer,
-    SlotLayer,
-    dial_point,
-    palette_for,
+from render.daylight import umbra_ladder
+from render.layers.hand import HandLayer
+from render.layers.slot import SlotLayer
+from render.painting import dial_point
+from render.skin_geometry import palette_for, today_slot_theta, visible_occupant
+from render.slot_layout import (
     slot_layout,
     slot_seat_orbit,
     slot_seat_rotation,
     slot_seat_scale,
-    today_slot_theta,
     weekday_body_orbit,
-    umbra_ladder,
-    visible_occupant,
     weekday_classic_slot,
 )
 
@@ -402,7 +400,7 @@ def test_subdial_shadow_direction_follows_the_seat():
     were waste."""
     from PySide6.QtCore import Qt
     from PySide6.QtGui import QImage, QPainter
-    from render.layers import _draw_subdial_shadow
+    from render.subdial import _draw_subdial_shadow
 
     def alpha_at(pos, probe, diameter=80.0):
         image = QImage(240, 240, QImage.Format.Format_ARGB32_Premultiplied)
@@ -448,7 +446,7 @@ def test_dual_sunday_two_faces_on_compass_and_seasons(app, july_wednesday):
     single-faced until the owner's plate lands."""
     from app.controller import apply_display_settings
     from app.settings_store import Settings, replace
-    from render.layers import servant_holds_the_seat, sunday_dual_face
+    from render.slot_layout import servant_holds_the_seat, sunday_dual_face
 
     # The art table is complete: all twelve themes + colored variants.
     # Canonical paths resolve through the ART SOURCE (owner 2026-07-14).
@@ -592,7 +590,7 @@ def test_center_dual_face_is_the_complement_of_sunday_dual_face(app):
     EXACTLY one of the two laws, never both, never neither."""
     from app.controller import apply_display_settings
     from app.settings_store import Settings, replace
-    from render.layers import center_dual_face, sunday_dual_face
+    from render.slot_layout import center_dual_face, sunday_dual_face
 
     for pointer in ("hexa", "trio", "octa", "cross"):
         skin = apply_display_settings(
@@ -625,7 +623,7 @@ def test_center_face_solar_windows_golden(app):
     (11:30-12:30 and 23:30-00:30 solar). A theme with only two faces
     ignores the windows entirely. Ticks are BUILT per moment (never
     hour-angle-patched), because the law reads `tick.is_daylight`."""
-    from render import layers as render_layers
+    from render import ninths as render_ninths
 
     city = defaults.DEFAULT_CITY
     tz = ZoneInfo(city["timezone"])
@@ -659,7 +657,7 @@ def test_center_face_solar_windows_golden(app):
         (21, 30, 0): "servant",    # after sunset (20:14) — night
     }
     for (hh, mm, ss), expected in golden_with_ninth.items():
-        assert render_layers.center_face(day, at(hh, mm, ss), True) == (
+        assert render_ninths.center_face(day, at(hh, mm, ss), True) == (
             expected
         ), (hh, mm, ss)
 
@@ -670,7 +668,7 @@ def test_center_face_solar_windows_golden(app):
         (10, 0, 0): "ruler",       # day
     }
     for (hh, mm, ss), expected in golden_no_ninth.items():
-        assert render_layers.center_face(day, at(hh, mm, ss), False) == (
+        assert render_ninths.center_face(day, at(hh, mm, ss), False) == (
             expected
         ), (hh, mm, ss)
 
@@ -687,13 +685,13 @@ def test_center_face_solar_windows_golden(app):
         (18, 0, 0): None,
     }
     for (hh, mm, ss), expected in golden_seats.items():
-        assert render_layers.dual_seat_ninth(day, at(hh, mm, ss)) == (
+        assert render_ninths.dual_seat_ninth(day, at(hh, mm, ss)) == (
             expected
         ), (hh, mm, ss)
 
 
 def test_theme_ninth_matches_the_encyclopedia_table(app):
-    """`render.layers.theme_ninth` (round R3b item 3) reads the SAME
+    """`render.ninths.theme_ninth` (round R3b item 3) reads the SAME
     `constants.WEEKDAY_THEME_NINTHS` table the Encyclopedia's ninths
     pass now builds from (Rule #5) — every listed theme resolves its
     OWN name and an EXISTING plate, graceful-absent otherwise. Which
@@ -708,7 +706,7 @@ def test_theme_ninth_matches_the_encyclopedia_table(app):
     plate, read by both rosters). A theme absent from the table
     entirely (no weekday Sunday duality) always answers None."""
     from config import paths as _paths
-    from render.layers import theme_ninth
+    from render.ninths import theme_ninth
 
     from tests.art_debt import PENDING_NINTH
 
@@ -1014,7 +1012,8 @@ def test_aurora_bands_spread_the_day_hues_evenly():
     from core import angles
     from data.moon_phases import MoonPhaseRepository
     from data.seasons import SeasonsRepository
-    from render.layers import aurora_bands, today_slot_theta
+    from render.daylight import aurora_bands
+    from render.skin_geometry import today_slot_theta
 
     wheel_hues = palette.PALETTE_PRESETS[("aurora", "primary")]
     tz = ZoneInfo(defaults.DEFAULT_CITY["timezone"])
@@ -1193,7 +1192,7 @@ def test_seated_slot_wears_its_own_roster():
     from app.controller import apply_display_settings
     from app.settings_store import Settings, replace
     from config import paths as _paths
-    from render.layers import slot_view
+    from render.slot_layout import slot_view
 
     skin = apply_display_settings(
         defaults.DEFAULT_SKIN,
@@ -1255,7 +1254,7 @@ def test_pointer_variants_render(july_wednesday, pointer):
 def test_trio_centers_the_sun_and_pairs_the_week():
     """Owner-approved trio pairing: Faith 12h = Jupiter+Saturn, Love 20h
     = Venus+Mars, Hope 4h = Moon+Mercury; Sunday's Sun in the center."""
-    from render.layers import today_slot_theta
+    from render.skin_geometry import today_slot_theta
 
     trio_skin = dataclasses.replace(defaults.DEFAULT_SKIN, pointer="trio")
     assert today_slot_theta(trio_skin, "sun") is None
@@ -1676,7 +1675,9 @@ def test_reveal_week_raises_ghost_opacity_and_lifts_the_center_body(
 
     from PySide6.QtGui import QImage, QPainter
 
-    from render.layers import CenterBodyLayer, RenderContext, WeekdayLayer
+    from render.context import RenderContext
+    from render.layers.center_body import CenterBodyLayer
+    from render.layers.weekday import WeekdayLayer
 
     day, tick = blue_moon_free_wednesday
     skin = dc.replace(defaults.DEFAULT_SKIN, pointer="trio")
@@ -2897,17 +2898,25 @@ def test_weekday_center_body_matches_the_diamond_bodies(
     dropped the seat factor and SHRANK (~114 px). One formula now:
     `weekday_body_size`, shared by the slots, the ghost center and the
     above-the-hands center pass."""
-    import render.layers as layers
-    from render.layers import CenterBodyLayer, RenderContext, WeekdayLayer
+    # `draw_weekday_body` now lives in `render.weekday_body`; the three
+    # layers that draw bodies each hold their own bound name, so the patch
+    # goes on each of them (one module before the split).
+    import render.layers.center_body as center_body_mod
+    import render.layers.slot as slot_mod
+    import render.layers.weekday as weekday_mod
+    from render.context import RenderContext
+    from render.layers.center_body import CenterBodyLayer
+    from render.layers.weekday import WeekdayLayer
 
     day, tick = blue_moon_free_wednesday
     calls = []
-    monkeypatch.setattr(
-        layers, "draw_weekday_body",
-        lambda painter, ctx, body, pos, size, opacity, label_px=None: calls.append(
-            ((pos.x(), pos.y()), size)
-        ),
-    )
+    for mod in (weekday_mod, center_body_mod, slot_mod):
+        monkeypatch.setattr(
+            mod, "draw_weekday_body",
+            lambda painter, ctx, body, pos, size, opacity, label_px=None: calls.append(
+                ((pos.x(), pos.y()), size)
+            ),
+        )
     for pointer in ("hexa", "trio"):
         skin = dataclasses.replace(defaults.DEFAULT_SKIN, pointer=pointer)
         for reveal in (False, True):

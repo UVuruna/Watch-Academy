@@ -227,7 +227,7 @@ class SkinDefinition:
     # (pointer, palette_style) shows ITS archetype — the diamonds carry
     # the stained-glass figures, the hour hand lights the one whose
     # hour-space it is in, and the weekday model and ALL THREE SLOTS
-    # switch OFF at the render level (render.layers.enabled_slots) —
+    # switch OFF at the render level (render.slot_layout.enabled_slots) —
     # the user's slot settings stay untouched, so toggling back
     # restores everything. Aurora/Calendar have no archetype: the mode
     # is inert there.
@@ -237,14 +237,14 @@ class SkinDefinition:
     # cube), Council (hexa tertiary) — render as the corner-view CUBE when
     # True: the arm diamonds widen to the regular 180/N halves and tile
     # the hexagon into the visible cube faces
-    # (render.layers.cube_look_active / arm_half_deg). False = Diamond,
+    # (render.skin_geometry.cube_look_active / arm_half_deg). False = Diamond,
     # the slim-arm medallion form. Inert on every other wheel.
     cube_look: bool = False
     # THE DAYLIGHT SWITCH (owner 2026-07-27): the Calendar and the Rose
     # let the reader turn the day/night law off and stand in flat full
     # color — their wheels are read as a wheel first and a clock second.
     # Inert on every other pointer, which always runs day/night
-    # (render.layers.daylight_active).
+    # (render.skin_geometry.daylight_active).
     daylight: bool = True
     # THE POINTER SHAPE (Pointers REWORK phase 1, owner sheet
     # UV/Pointers.png 2026-07-29): "star" — the diamond stars shipped so
@@ -252,10 +252,10 @@ class SkinDefinition:
     # hexagon / octagon, the CUBE hexagon on the Trinity), the Calendar's
     # twelve-point and the Rose's twenty-four-point touching stars.
     # `config.constants.POINTER_SHAPES`; the armless Aurora ignores it
-    # (render.layers.polygon_shape).
+    # (render.skin_geometry.polygon_shape).
     pointer_shape: str = constants.POINTER_SHAPE_DEFAULT
     # THE EDGE PULL of the true polygons (trio/cross/hexa/octa only —
-    # render.layers.polygon_curvature): 0.0 the plain polygon, toward
+    # render.shapes.polygon_curvature): 0.0 the plain polygon, toward
     # 1.0 each outer edge's midpoint pulled inward to the star's own
     # inner radius; `polygon_edge` draws that pull as one concave arc
     # ("smooth") or as two straight segments meeting in a V ("notched").
@@ -264,7 +264,7 @@ class SkinDefinition:
     # HIDE NIGHT BORDERS (owner option 2026-07-29): with the day/night
     # law running, the arm/polygon OUTLINE strokes are drawn only over
     # the sunlit arcs — the night keeps its fills and loses the border
-    # mesh (render.layers.border_clips). False = today's law, borders
+    # mesh (render.daylight.border_clips). False = today's law, borders
     # around the whole circle.
     hide_night_borders: bool = False
     # Whether the archetype FIGURES carry their display name (owner
@@ -359,13 +359,13 @@ class SkinDefinition:
     # user-visible spelling — migrating it buys nothing) but RE-SCOPED
     # and RELABELED "Aura" (owner fix round E, 2026-07-19, slika 2): it
     # scales ONLY the Aura wedges' HSV saturation, via
-    # `render.layers.aura_palette_for` — the star diamonds
-    # (`render.layers.palette_for`, now RAW) no longer move with it.
+    # `render.skin_geometry.aura_palette_for` — the star diamonds
+    # (`render.skin_geometry.palette_for`, now RAW) no longer move with it.
     # 1.0 unchanged, 0.0 grays every Aura hue to its own brightness.
     pointer_saturation: float = 1.0
     # RING (new, Session 21-D): scales the RING BAND art's (the ring
     # plate + its letter/numeral overlay) HSV saturation in
-    # `render.layers.RingLayer`, applied AFTER the ring_tint recolor —
+    # `render.layers.ring.RingLayer`, applied AFTER the ring_tint recolor —
     # 1.0 unchanged, 0.0 grays it to its own brightness. The Umbra and
     # hands do not read this (see layers.md's RingLayer note).
     ring_saturation: float = 1.0

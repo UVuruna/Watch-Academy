@@ -370,7 +370,7 @@ CALENDAR_WEDGE_DEG = 360.0 / CALENDAR_WEDGES        # 30° per 2-hour wedge
 # under the hour hand or under today's month/sign; it follows the SAME
 # visibility law as every other pointer (the day/night law plus its own
 # DAYLIGHT_SWITCH_POINTERS entry). `CALENDAR_LIGHTING_MODES`,
-# `Settings.calendar_lighting`, `render.layers.calendar_lit_index` and
+# `Settings.calendar_lighting`, `render.calendar_mount.calendar_lit_index` and
 # `defaults.CALENDAR_WEDGE_LIT_DELTA` died with it — an old settings
 # file that still carries the stale `calendar_lighting` key simply
 # loads without it (the loader reads keys it knows, never rejects
@@ -575,7 +575,7 @@ POLYGON_EDGE_DEFAULT = "smooth"
 # pattern); "polygon" draws ONE twelve-point star (POINTER_DIAL_COUNTS)
 # whose adjacent arms touch, one hue per 2h wedge, tips on the wedge
 # centers. Both ride the active wheel's own wedge geometry
-# (`render.layers.calendar_wedge_bounds`) and, like the wedges
+# (`render.calendar_mount.calendar_wedge_bounds`) and, like the wedges
 # themselves, are calendar-FIXED — they never take the solar rotation.
 CALENDAR_STAR_ARMS = 6
 
@@ -611,7 +611,7 @@ ROSE_STAR_OFFSETS = {
 #           past and future symmetric. Owner's numbers: tips 11h/12h/13h,
 #           background 10:30 -> 13:30.
 #
-# `render.layers.aura_wedge_anchor` is the ONE reader (Rule #5).
+# `render.skin_geometry.aura_wedge_anchor` is the ONE reader (Rule #5).
 AURA_WEDGE_ANCHOR_DEFAULT = (-0.5, 0.5)
 ROSE_AURA_WEDGE_ANCHOR = {
     "primary": (-1.0, 0.0),
@@ -641,7 +641,7 @@ ROSE_ARM_SYSTEMS = {"primary": "character_2d", "secondary": "vertices_3d"}
 # reader turn the day/night law OFF and stand in flat full color — the
 # Calendar's twelve wedges and the Rose's three stars are read as a
 # WHEEL first and a clock second. Every other pointer always runs
-# day/night (`render.layers.lit_regions`); `Settings.daylight` is
+# day/night (`render.daylight.lit_regions`); `Settings.daylight` is
 # ignored on them so the stored choice survives a pointer switch.
 DAYLIGHT_SWITCH_POINTERS = ("calendar", "rose")
 
@@ -715,7 +715,7 @@ def palette_styles_for(pointer: str) -> tuple[str, ...]:
 # THE GENESIS INVERSION (owner: "trougao ka dole", CUBE.md §Double
 # Trinity): the trio's TERTIARY wheel draws its three arms on the OPPOSITE
 # seats — 24h/16h/08h instead of 12h/20h/04h — one arm-angle offset fed
-# through render.layers.arm_offset_deg into the star diamonds, the Aura
+# through render.skin_geometry.arm_offset_deg into the star diamonds, the Aura
 # wedges, the weekday slots, the lit-index math and the arm hit-test.
 GENESIS_ARM_OFFSET_DEG = 180.0
 
@@ -743,7 +743,7 @@ WHEEL_ARM_OFFSET_DEG = {
 # corner-view: the arm diamonds widen to 180/N half-angles, so the
 # three/six rhombi tile the hexagon exactly — three visible cube faces
 # on the trio wheels, the two interlocked corners on the Council).
-# `Settings.cube_look` toggles it; render.layers.cube_look_active gates.
+# `Settings.cube_look` toggles it; render.skin_geometry.cube_look_active gates.
 CUBE_LOOK_WHEELS = (
     ("trio", "primary"), ("trio", "tertiary"), ("hexa", "tertiary"),
 )
@@ -1394,7 +1394,7 @@ WEEKDAY_THEME_NINTHS = {
 # moon-phase day (full, new, or either quarter — core.continents'
 # `pangea_over_zealandia`). Same story, deeper time: was once ALL,
 # split, and by the supercontinent cycle will return. The LAW lives in
-# core.continents; render.layers.theme_ninth reads this alt table when
+# core.continents; render.ninths.theme_ninth reads this alt table when
 # the law fires (mechanism "easter_egg" below). Plate wired ahead of the
 # owner's art (graceful-absent), same earth-family home as Zealandia.
 WEEKDAY_THEME_NINTH_EASTER_EGG = {
@@ -1407,7 +1407,7 @@ WEEKDAY_THEME_NINTH_EASTER_EGG = {
 # Ghosts, the good side), night shows Exegol from this table (the
 # owner's words: "the duality of that theme pulling the actors to one
 # of two sides"). Mirrors `WEEKDAY_THEME_NINTH_EASTER_EGG`'s shape —
-# theme -> (display name, plate) — read by `render.layers.theme_ninth`
+# theme -> (display name, plate) — read by `render.ninths.theme_ninth`
 # when the mechanism dispatch (`NINTH_MECHANISMS` below) resolves to
 # "daynight". Plate wired ahead of the owner's art (graceful-absent);
 # neither Ghosts nor Exegol has landed yet.
@@ -1427,7 +1427,7 @@ WEEKDAY_THEME_NINTH_NIGHT = {
 # - "easter_egg"  — a SKY trigger (`core.continents.pangea_over_
 #   zealandia`): the alt face surfaces only when an eclipse, a turning
 #   point or a principal moon phase lands on the traveled day.
-# - "daynight"    — the SAME daylight state `render.layers.center_face`
+# - "daynight"    — the SAME daylight state `render.ninths.center_face`
 #   reads (`TickState.is_daylight`): day the canonical face, night the
 #   alt (`WEEKDAY_THEME_NINTH_NIGHT`).
 # - "term_weekly" — cp_corpo's WEEKLY MANDATE: the traveled date's ISO
@@ -1442,7 +1442,7 @@ WEEKDAY_THEME_NINTH_NIGHT = {
 # A theme absent from this table has no double Ninth at all (the plain
 # single canonical entry in `WEEKDAY_THEME_NINTHS`). `NINTH_MECHANISM_
 # KINDS` is the vocabulary every dispatch above actually implements
-# (`render.layers.ninth_table_for`/`ninth_alt_active`, `render.
+# (`render.ninths.ninth_table_for`/`ninth_alt_active`, `render.
 # compositor._center_ninth_alt`, `config.pantheon.rotating_art_file`'s
 # cadence override) — `tests/test_ninth_mechanisms.py` fails the build
 # if `NINTH_MECHANISMS` ever names anything outside it, or if a double
@@ -1460,8 +1460,8 @@ NINTH_MECHANISM_KINDS = frozenset({"easter_egg", "daynight", "term_weekly"})
 # the actual `DayContext.sun.noon`), i.e. solar 11:30-12:30 and
 # 23:30-00:30. In BOTH windows the NINTH shows; outside them the
 # CENTER seat follows the sky itself — DAYLIGHT the Ruler, NIGHT the
-# Servant (`render.layers.center_face`) — and a two-badge Sunday swaps
-# ONE seat per window (`render.layers.dual_seat_ninth`: near noon the
+# Servant (`render.ninths.center_face`) — and a two-badge Sunday swaps
+# ONE seat per window (`render.ninths.dual_seat_ninth`: near noon the
 # Ninth replaces the SERVANT beside the Ruler, near midnight the RULER
 # beside the Servant). Themes with no Ninth ignore the windows.
 CENTER_WINDOW_HOURS = 0.5
@@ -1523,7 +1523,7 @@ ZODIAC_SPAN_DEG = 30.0
 # Moons, ~37% of years) AND inside its own short date window. `key` ->
 # (display name, encyclopedia family, encyclopedia entry name) — the
 # SAME two-level lookup WEEKDAY_THEME_NINTHS uses for its (name, path),
-# read by both the dial (render.layers.thirteenth_plate) and its hover
+# read by both the dial (render.ninths.thirteenth_plate) and its hover
 # (render.compositor). "chinese" (The Cat) is NOT solar-triggered — see
 # core.blue_moon.chinese_leap_month — it shares this table only because
 # it shares the CENTER seat.
@@ -1681,11 +1681,11 @@ HOVER_ENLARGE_RANGE = (1.0, 2.0)
 # 0-100; the stored setting is the 0.0-1.0 factor.
 # POINTER (formerly "palette_saturation" — renamed for clarity now that
 # a second, independent RING slider exists): the Star+Aura palette's
-# HSV saturation (`render.layers.palette_for`).
+# HSV saturation (`render.skin_geometry.palette_for`).
 POINTER_SATURATION_RANGE = (0.0, 1.0)
 POINTER_SATURATION_SLIDER_STEP = 1
 # RING (new, Session 21-D): the ring band art's HSV saturation — the
-# ring plate AND its letter/numeral overlay (`render.layers.RingLayer`,
+# ring plate AND its letter/numeral overlay (`render.layers.ring.RingLayer`,
 # after the ring_tint recolor). The Umbra and hands do not read this —
 # see layers.md's RingLayer note for the ground-truthed scope.
 RING_SATURATION_RANGE = (0.0, 1.0)
@@ -1777,7 +1777,7 @@ POINTER_WEEKDAY_SLOTS = {
     # their canonical color seats. The 06h SERVANT seat is absent from
     # this table on purpose — exactly as 24h is absent from the octa's:
     # the seat is the Servant face's alone and
-    # `render.layers.servant_holds_the_seat` hands it to him.
+    # `render.slot_layout.servant_holds_the_seat` hands it to him.
     "rose": (
         (0.0, ("jupiter",)),        # 12h yellow — Thursday
         (45.0, ("mars",)),          # 15h orange — Tuesday
@@ -1798,7 +1798,7 @@ POINTER_WEEKDAY_SLOTS = {
 # claim "the Compass reserves this bottom arm for it". It has not been
 # true since the dual-Sunday round — the Compass shows all EIGHT arms,
 # and its 24h seat belongs to the SERVANT face of Sunday
-# (`render.layers.servant_holds_the_seat`), which is exactly why
+# (`render.slot_layout.servant_holds_the_seat`), which is exactly why
 # `POINTER_WEEKDAY_SLOTS["octa"]` has no 180° entry. A later change
 # moved the truth and left the old sentence standing, and a session
 # read it and believed it. When behavior moves, the sentence that
@@ -1808,7 +1808,7 @@ SOUTH_SLOT_ANGLE = 180.0
 # everywhere the dual Sunday has always sat, but the ROSE seats him on
 # the BLUE arm at 06h — blue is Judas's hue and the servant's, red is
 # Lucifer's and the master's, and 6 + 6 + 6 lands the pair on 06h and
-# 18h (CUBE.md §The Rose). `render.layers.servant_seat_angle` is the
+# 18h (CUBE.md §The Rose). `render.skin_geometry.servant_seat_angle` is the
 # ONE reader (Rule #5); absent = SOUTH_SLOT_ANGLE.
 SERVANT_SEAT_ANGLE = {"rose": 270.0}
 AURORA_DUAL_WEEKDAY_ANGLE = 225.0    # 3h — bottom left
@@ -1829,7 +1829,7 @@ AURORA_DUAL_SLOT_ANGLE = 135.0       # 21h — bottom right
 # FALLEN WARM one (red) — the reverse of the blind default, which
 # today seats Satanism blue and Christianity red. Listed themes pull
 # their RULER to the cold pole instead; absent = the default carries
-# over unchanged. `render.layers.ruler_seat_angle`/`servant_seat_angle`
+# over unchanged. `render.skin_geometry.ruler_seat_angle`/`servant_seat_angle`
 # are the two readers (Rule #5) — they swap which of the Ruler's/
 # Servant's figures rides which arm, never their names or articles.
 DUALITY_RULER_ON_COLD_POLE = frozenset({"religion"})

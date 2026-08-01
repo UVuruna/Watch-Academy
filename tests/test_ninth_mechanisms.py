@@ -22,7 +22,7 @@ Layer: tests. See project CLAUDE.md "THE DOUBLE NINTH LAW" and
 from datetime import date
 
 from config import constants, pantheon
-from render.layers import ninth_table_for
+from render.ninths import ninth_table_for
 
 
 def _double_ninth_themes() -> set:
@@ -79,7 +79,7 @@ def test_the_three_sealed_mechanisms():
 
 
 def test_ninth_table_for_dispatches_by_mechanism():
-    """`render.layers.ninth_table_for` — the ONE place `theme_ninth`
+    """`render.ninths.ninth_table_for` — the ONE place `theme_ninth`
     asks "which alt table?" — reads EXACTLY the table its own theme's
     mechanism names, and cp_corpo's "term_weekly" deliberately reaches
     NEITHER alt table (its rotation rides `on_date` through the seat

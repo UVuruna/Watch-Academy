@@ -32,7 +32,7 @@ from data.moon_phases import MoonPhaseRepository
 from data.seasons import SeasonsRepository
 from render.assets import AssetCache
 from render.compositor import Compositor
-from render.layers import (
+from render.eclipse_glow import (
     eclipse_glow_strength,
     eclipse_render_state,
     eclipse_state_glow_strength,

@@ -23,10 +23,12 @@ EXCLUDED_DIR_NAMES = {".venv", "venv", "node_modules", "__pycache__", ".git"}
 # entry requires the owner's explicit approval in that same session.
 # Entry: posix-relative path -> (why it is tolerated, who owes the split).
 RATCHET: dict[str, tuple[str, str]] = {
-    "render/layers.py": (
-        "every pointer's draw code accreted into one file",
-        "the render split session proposed in WORKPLAN §Open Owner Decisions",
-    ),
+    # `render/layers.py` (3,881 lines) LEFT this list on 2026-08-01: split
+    # into `render/layers/` (one module per layer) plus twelve
+    # responsibility modules beside it (context, painting, subdial,
+    # skin_geometry, calendar_mount, shapes, daylight, eclipse_glow,
+    # slot_layout, archetype_geometry, ninths, weekday_body). The ratchet
+    # shrinks; it never grows back.
     "app/controller.py": (
         "window shell, menus, tick plumbing and settings glue in one file",
         "an app split round — owed, not yet scheduled",

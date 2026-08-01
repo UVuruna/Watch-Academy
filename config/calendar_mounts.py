@@ -44,10 +44,10 @@ CALENDAR_ARROW_HALF_DEG = 2.4        # half-width of the base, in dial degrees
 # month->wedge via core.year_wheel.almanac_month_index). `stem` is the
 # ASCII plate stem under MONTHS_ART_DIR (assets/months/<stem>.png,
 # graceful-absent — the mount draws the Croatian name instead until the
-# owner's prompt sheet lands, `render.layers.calendar_mount_entries`).
+# owner's prompt sheet lands, `render.calendar_mount.calendar_mount_entries`).
 # The MOUNT ITSELF (R9a round, 2026-07-21): drawing the twelve marks at
 # CALENDAR_MOUNT_RADIUS_FRACTION and the Settings picker for WHICH
-# 12-set mounts are both live now (render.layers.BackgroundLayer,
+# 12-set mounts are both live now (render.layers.background.BackgroundLayer,
 # app.design_window's Pointer tab) — see config/___config.md and
 # app/encyclopedia.md for the Encyclopedia side.
 SLAVIC_MONTHS = (
@@ -91,7 +91,7 @@ SLAVIC_MONTHS = (
 # wedge, at that wedge's own center; a 24-set seats TWO per wedge, at
 # ±a quarter wedge from the center — a 15° pitch, the same the Rose's
 # three stars already stand on. Both fall out of one formula in
-# `render.layers.calendar_mount_angle`; nothing is tabulated per seat.
+# `render.calendar_mount.calendar_mount_angle`; nothing is tabulated per seat.
 #
 # THE CENTER (`centre`) is the `constants.THIRTEENTHS` key whose member
 # may take the dial CENTER while this mount rides. Two different LAWS

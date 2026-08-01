@@ -298,7 +298,7 @@ WEEKDAY_SEAT_ROSTERS: dict[str, dict[str, tuple[str, ...]]] = {
     # canonical/good face), night shows Exegol
     # (`constants.WEEKDAY_THEME_NINTH_NIGHT`) — dispatched through
     # `constants.NINTH_MECHANISMS["sw_dyad"] == "daynight"` by
-    # `render.layers.theme_ninth`/`ninth_alt_active` and `render.
+    # `render.ninths.theme_ninth`/`ninth_alt_active` and `render.
     # compositor._center_ninth_alt`, reading the SAME `TickState.
     # is_daylight` `center_face` already reads. The "ninth" entry that
     # used to live here is GONE — see `research/theme_staging.md` for
@@ -1405,7 +1405,7 @@ def weekday_theme_body_art(
     picker windows both need a representative preview per theme, so the
     resolution lives ONCE in config and both readers import it. THE
     SAME expression used to be re-typed at every render call site
-    (`render.layers._draw_weekday_slot`, `render.compositor`'s hover
+    (`render.weekday_body._draw_weekday_slot`, `render.compositor`'s hover
     legend, `app.controller._themed_weekday_set`'s baked bodies dict) —
     consolidated here (weekday ALT ROTATION round, owner 2026-07-20/21)
     so the universal rotation convention has exactly ONE weekday-body

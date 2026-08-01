@@ -579,7 +579,7 @@ def _themed_weekday_set(base, theme: str, metal: str | None):
             # to re-type the theme_dir/colored-folder expression);
             # no `on_date` here — this dict is BAKED once at settings-
             # apply time, so a daily rotation pick would go stale
-            # across a multi-day run. `render.layers.draw_weekday_body`
+            # across a multi-day run. `render.weekday_body.draw_weekday_body`
             # re-resolves the LIVE rotation on top of whichever
             # canonical file lands here (same law as its own CONTINENTS
             # live override, right below it).
@@ -711,7 +711,7 @@ def apply_display_settings(skin, settings: Settings):
 def _overlay_display_settings(skin, settings: Settings, display):
     # THE ARCHETYPE MODE (owner sealed package 2026-07-16): active
     # while the drawn pointer carries an archetype. The overriding
-    # itself happens at the RENDER level (render.layers.enabled_slots
+    # itself happens at the RENDER level (render.slot_layout.enabled_slots
     # answers empty), so every slot/weekday setting below stays the
     # user's own — toggling the mode back restores everything.
     archetype_on = (

@@ -244,7 +244,7 @@ class Settings:
     pointer_saturation: float = 1.0
     # RING (new, Session 21-D): scales the ring band art's (the ring
     # plate + its letter overlay) HSV saturation, applied AFTER the
-    # ring_tint recolor (`render.layers.RingLayer`) — 1.0 unchanged,
+    # ring_tint recolor (`render.layers.ring.RingLayer`) — 1.0 unchanged,
     # 0.0 grayed. The Umbra and hands do not read this.
     ring_saturation: float = 1.0
     # Display overrides (None = the skin's own value). The Aura's

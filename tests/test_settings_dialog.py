@@ -12,7 +12,7 @@ from app.controller import apply_display_settings
 from app.settings_dialog.dialog import SettingsDialog
 from app.settings_store import Settings, replace
 from config import defaults, dial, encyclopedia_ui, palette, pantheon
-from render.layers import palette_for
+from render.skin_geometry import palette_for
 
 BELGRADE_PATH = ("Europe", "Southern Europe", "Serbia", "Grad Beograd", "Belgrade")
 

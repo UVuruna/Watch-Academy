@@ -41,26 +41,26 @@ from data.moon_phases import MoonPhaseRepository
 from data.seasons import SeasonsRepository
 from render.assets import AssetCache
 from render.compositor import Compositor
-from render.layers import (
-    BackgroundLayer,
-    RenderContext,
-    StarLayer,
-    arm_half_deg,
-    arm_offset_deg,
+from render.context import RenderContext
+from render.daylight import border_clips, lit_regions
+from render.layers.background import BackgroundLayer
+from render.layers.star import StarLayer
+from render.painting import dial_point, tinted_gray
+from render.shapes import (
     arm_shape_path,
-    aura_wedge_anchor,
     aura_wedge_bounds,
-    border_clips,
-    dial_point,
-    drawn_arm_count,
     drawn_arms,
-    lit_regions,
-    palette_for,
     polygon_boundary_radius,
     polygon_curvature,
-    polygon_faces,
     star_inner_radius,
-    tinted_gray,
+)
+from render.skin_geometry import (
+    arm_half_deg,
+    arm_offset_deg,
+    aura_wedge_anchor,
+    drawn_arm_count,
+    palette_for,
+    polygon_faces,
     wheel_rotation,
 )
 
@@ -366,11 +366,11 @@ def test_both_rose_wheels_keep_every_ray_on_a_full_hour(app):
     back, the dead mechanism is being rebuilt."""
     assert not hasattr(constants, "ROSE_WHEEL_ASSEMBLY_OFFSET_DEG")
     assert not hasattr(constants, "ROSE_RAY_PITCH_DEG")
-    import render.layers as layers
+    import render.skin_geometry as skin_geometry
 
-    assert not hasattr(layers, "rose_assembly_offset_deg")
-    assert not hasattr(layers, "wheel_offset_deg")
-    assert not hasattr(layers, "aura_group_offset_deg")
+    assert not hasattr(skin_geometry, "rose_assembly_offset_deg")
+    assert not hasattr(skin_geometry, "wheel_offset_deg")
+    assert not hasattr(skin_geometry, "aura_group_offset_deg")
     assert constants.ROSE_STAR_OFFSETS["primary"] == (-30.0, -15.0, 0.0)
     assert constants.ROSE_STAR_OFFSETS["secondary"] == (-15.0, 15.0, 0.0)
 

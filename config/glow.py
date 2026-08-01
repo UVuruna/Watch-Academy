@@ -60,7 +60,7 @@ ECLIPSE_GLOW_STRENGTH_MAX = 1.0
 # sets the disc BRIGHTNESS (never translucency, never magnitude); it
 # also sets the glow STRENGTH for every state except "solar_partial",
 # which keeps the original magnitude-linear mapping
-# (`render.layers.eclipse_glow_strength`) — the owner's one named
+# (`render.eclipse_glow.eclipse_glow_strength`) — the owner's one named
 # exception ("SOLAR partial: art + glow scaled by magnitude").
 #
 # `hybrid` (annular-total transitional, ~3.2k of ~70k solar rows) has no

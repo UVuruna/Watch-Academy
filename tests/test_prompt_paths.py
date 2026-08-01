@@ -67,7 +67,11 @@ _PROMPTS_ROOT = _ROOT / "research" / "prompts"
 _SCAN_PY_FILES = tuple(sorted((_ROOT / "config").glob("*.py"))) + (
     *sorted((_ROOT / "app" / "encyclopedia").glob("*.py")),
     _ROOT / "render" / "compositor.py",
-    _ROOT / "render" / "layers.py",
+    *sorted((_ROOT / "render" / "layers").glob("*.py")),
+    _ROOT / "render" / "archetype_geometry.py",
+    _ROOT / "render" / "calendar_mount.py",
+    _ROOT / "render" / "ninths.py",
+    _ROOT / "render" / "subdial.py",
     _ROOT / "render" / "assets.py",
     _ROOT / "render" / "asset_recolor.py",
     _ROOT / "render" / "asset_variants.py",
@@ -81,7 +85,14 @@ _SCAN_MODULES = (
         # the dialog and the topic table).
         "app.encyclopedia.pages", "app.encyclopedia.builders",
         "app.encyclopedia.tree",
-        "render.compositor", "render.layers",
+        "render.compositor",
+        # SESSION 37: `render.layers` is a PACKAGE — the art tables that
+        # used to sit in the one god-file now live in these modules.
+        "render.layers.background", "render.layers.center_body",
+        "render.layers.ring", "render.layers.slot",
+        "render.layers.weekday", "render.layers.year_marker",
+        "render.archetype_geometry", "render.calendar_mount",
+        "render.ninths", "render.subdial",
         "render.assets", "render.asset_recolor", "render.asset_variants",
     )
 )

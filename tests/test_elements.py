@@ -20,14 +20,12 @@ from data.moon_phases import MoonPhaseRepository
 from data.seasons import SeasonsRepository
 from render.assets import AssetCache
 from render.compositor import Compositor, _build_layers
-from render.layers import (
-    CenterBodyLayer,
-    HandLayer,
-    SlotLayer,
-    StarLayer,
-    WeekdayLayer,
-    YearMarkerLayer,
-)
+from render.layers.center_body import CenterBodyLayer
+from render.layers.hand import HandLayer
+from render.layers.slot import SlotLayer
+from render.layers.star import StarLayer
+from render.layers.weekday import WeekdayLayer
+from render.layers.year_marker import YearMarkerLayer
 
 
 @pytest.fixture(scope="module")

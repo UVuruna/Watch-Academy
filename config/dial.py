@@ -69,7 +69,7 @@ BODY_LABEL_MIN_PX = 6
 # 2026-07-18 was REVOKED the same day (Session 21-C, his slika: a huge
 # "Youth" beside a tiny "Childhood" reads ugly) — replaced by the
 # SET-UNIFORM law: every name sharing a ring wears the size of the
-# SMALLEST fitted member (`render.layers.weekday_label_set_px` /
+# SMALLEST fitted member (`render.weekday_body.weekday_label_set_px` /
 # `archetype_label_set_px`), so no per-line offset constant is needed.
 NAME_LABEL_MAX_PX = 40
 NAME_LABEL_WIDTH_FRACTION = 0.92     # of the available width (arm/body)
@@ -123,7 +123,7 @@ RING_LETTER_SHADOW_SAMPLES = 8       # offsets around the circle
 # 2026-07-19, the dollar's Great Seal reference image): curved text
 # OUTSIDE the ring band, reusing the SAME letter-art library/finish/
 # shadow stamp as the ring's own six letters
-# (`render.layers.RingLayer._draw_ring_glyph`), just smaller and
+# (`render.layers.ring.RingLayer._draw_ring_glyph`), just smaller and
 # further out — decorative inscription, not the primary Dollar seats.
 # ONE SHARED RADIUS (MOTO-FIX round): the first round's design had both
 # mottos' pinned letters land on the SAME angle (O at noon, S at 16h),
@@ -213,7 +213,7 @@ OMEGA_HIT_RADIUS_FRACTION = RING_LETTER_ART_SCALE * 1.5
 # (`Settings.subdial_set`); the letter FINISH (ring_finish, tray Design
 # menu) still decides which color draws within it. The SEAT never
 # touches the file at all, only the LIVE shadow
-# (`render.layers._draw_subdial_shadow`) — unchanged since Rule #19's
+# (`render.subdial._draw_subdial_shadow`) — unchanged since Rule #19's
 # first enforcement.
 SUBDIAL_ROOT_DIR = paths.assets_dir() / "instrument" / "subdial"
 SUBDIAL_SOLO_FINISH = "silver"      # the solo set's one hand-drawn file

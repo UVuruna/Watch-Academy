@@ -44,7 +44,7 @@ def test_continents_ninth_wired_zealandia_and_pangea():
     face; BOTH plates LANDED 2026-07-29 (the owner's generation batch,
     renamed to the earth family's suffixless law) — `theme_ninth` now
     resolves both faces, and this pin keeps them resolvable forever."""
-    from render.layers import theme_ninth
+    from render.ninths import theme_ninth
 
     assert constants.WEEKDAY_THEME_NINTHS["continents"][0] == "Zealandia"
     assert constants.WEEKDAY_THEME_NINTH_EASTER_EGG["continents"][0] == "Pangea"

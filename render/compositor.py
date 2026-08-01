@@ -40,51 +40,53 @@ from core.year_wheel import (
 from render.assets import AssetCache
 from render.asset_recolor import metal_variant_file
 from render.asset_variants import eclipse_solar_type_icon, scaled_variant_file
-from render.layers import (
-    ArchetypeCenterLayer,
-    ArchetypeLayer,
-    BackgroundLayer,
-    Cadence,
-    CenterBodyLayer,
-    HandLayer,
-    Layer,
-    RenderContext,
-    RingLayer,
-    SlotLayer,
-    StarLayer,
-    WeekdayLayer,
-    YearMarkerLayer,
-    HoverLiftLayer,
-    archetype_active,
+from render.archetype_geometry import (
     archetype_art_ready,
     archetype_figure_size,
-    archetype_key,
     archetype_lit_index,
+)
+from render.calendar_mount import chinese_mount_dimmed_index
+from render.context import Cadence, Layer, RenderContext
+from render.layers.archetype import ArchetypeCenterLayer, ArchetypeLayer
+from render.layers.background import BackgroundLayer
+from render.layers.center_body import CenterBodyLayer
+from render.layers.hand import HandLayer
+from render.layers.hover_lift import HoverLiftLayer
+from render.layers.ring import RingLayer
+from render.layers.slot import SlotLayer
+from render.layers.star import StarLayer
+from render.layers.weekday import WeekdayLayer
+from render.layers.year_marker import YearMarkerLayer, earth_region
+from render.ninths import (
     active_thirteenth,
-    center_dual_face,
     center_face,
-    chinese_mount_dimmed_index,
-    dial_point,
     dual_seat_ninth,
-    earth_region,
     ninth_window_anchor,
+    theme_ninth,
+    thirteenth_plate,
+)
+from render.painting import dial_point
+from render.shapes import arm_shape_path
+from render.skin_geometry import (
+    archetype_active,
+    archetype_key,
+    arm_offset_deg,
     palette_for,
-    servant_holds_the_seat,
     servant_seat_angle,
+    visible_occupant,
+    weekday_slots,
+)
+from render.slot_layout import (
+    center_dual_face,
+    servant_holds_the_seat,
     slot_layout,
     slot_seat_orbit,
     slot_seat_rotation,
     slot_seat_scale,
     slot_view,
     sunday_dual_face,
-    theme_ninth,
-    thirteenth_plate,
-    arm_offset_deg,
-    arm_shape_path,
     weekday_body_orbit,
     weekday_body_size,
-    weekday_slots,
-    visible_occupant,
     weekday_classic_slot,
 )
 from skins.manifest import SkinDefinition
@@ -1183,7 +1185,7 @@ class Compositor:
         (owner 2026-07-16, the Spacebar jump) — Almanac wedges open the
         Chinese animal, Zodiac wedges the sign. Mirrors the
         _calendar_tooltip angle math."""
-        from render.layers import calendar_wheel
+        from render.calendar_mount import calendar_wheel
 
         distance = math.hypot(point.x(), point.y())
         outer = radius * self._skin.background.aura_radius_fraction
@@ -1217,7 +1219,7 @@ class Compositor:
         # THE BLUE MOON LAW (owner overrule, CORRECTED 2026-07-2X): the
         # Calendar pointer's own dial center — otherwise EMPTY, since
         # its slot layout is always "pinned" (never "classic"/"center",
-        # see render.layers.slot_layout) — is its OWN hit target,
+        # see render.slot_layout.slot_layout) — is its OWN hit target,
         # checked first; a showing 13th's hit disc mirrors the DRAWN
         # size exactly (`CenterBodyLayer._draw_thirteenth`).
         thirteenth = active_thirteenth(self._skin, self._day)
@@ -1492,7 +1494,7 @@ class Compositor:
             else:
                 display_name = pantheon.WEEKDAY_THEME_NAMES[theme][body]
                 # THE ONE weekday-body resolver (Rule #5 — shared with
-                # `app.controller` and `render.layers._draw_weekday_slot`;
+                # `app.controller` and `render.weekday_body._draw_weekday_slot`;
                 # `on_date` wires THE UNIVERSAL ROTATION CONVENTION so
                 # the legend never shows a different day's pick than the
                 # slot it describes).
@@ -1506,7 +1508,7 @@ class Compositor:
         if same_unit and image is not None and on_date is not None:
             # `spec.bodies` is BAKED at settings-apply time (never per
             # day) — re-resolve the live rotation on top of it, exactly
-            # like `render.layers.draw_weekday_body`'s own override.
+            # like `render.weekday_body.draw_weekday_body`'s own override.
             image = pantheon.rotating_art_file(image, on_date) or image
         image = metal_variant_file(image, metal)
         if body == "sun":
@@ -1851,7 +1853,7 @@ class Compositor:
     def _active_thirteenth(self) -> str | None:
         """THE BLUE MOON LAW's resolved 13th for today+mode (owner
         overrule, CORRECTED 2026-07-2X) — calls the SAME pure resolver
-        the paint pass calls (`render.layers.active_thirteenth`, fed
+        the paint pass calls (`render.ninths.active_thirteenth`, fed
         the pre-computed `DayContext.thirteenth_candidates` fact set);
         None before the first day build (mirrors `_center_ninth_alt`'s own
         graceful guard)."""
@@ -2003,7 +2005,7 @@ class Compositor:
             # stand LEFT/RIGHT as two columns — each with its bold
             # title (name + dates, NO glyph), its COLORED logo, then
             # ITS article (base + the active palette's paragraph).
-            from render.layers import octa_slot_art
+            from render.subdial import octa_slot_art
 
             style = self._skin.palette_style
             columns = []
@@ -2286,7 +2288,7 @@ class Compositor:
         in the ACTIVE style's look (owner bug 2026-07-13: the legend
         always showed the bronze plate): colored takes its own art,
         gold/silver ride the selective swap."""
-        from render.layers import octa_slot_art
+        from render.subdial import octa_slot_art
 
         day = self._day
         element, animal = day.chinese_name.split()
@@ -2330,7 +2332,7 @@ class Compositor:
         ACTIVE style's art LARGE in the middle — filling the image
         band — and the two remaining styles small at its sides (text
         mode leads with the colored logo)."""
-        from render.layers import octa_slot_art
+        from render.subdial import octa_slot_art
 
         dirs = constants.ZODIAC_STYLE_ART_DIRS
         main_style = style if style in dirs else "colored"
@@ -2999,7 +3001,8 @@ class Compositor:
         year-wheel cusps), above the sign's COLORED LOGO art — never a
         unicode glyph standing in for the art (owner 2026-07-16, ROADMAP
         queue #7)."""
-        from render.layers import calendar_wheel, octa_slot_art
+        from render.calendar_mount import calendar_wheel
+        from render.subdial import octa_slot_art
 
         distance = math.hypot(point.x(), point.y())
         outer = radius * self._skin.background.aura_radius_fraction
@@ -3037,7 +3040,7 @@ class Compositor:
         zodiac mark hover (`_calendar_mount_tooltip`, drawn on this exact
         wedge, never hemisphere-mirrored) speaks the identical text the
         background wedge hover already does."""
-        from render.layers import octa_slot_art
+        from render.subdial import octa_slot_art
 
         day = self._day
         name, symbol = constants.ZODIAC_SIGNS[index]
@@ -3077,7 +3080,7 @@ class Compositor:
         Chinese slot hover already reads. While this exact wedge is the
         one lending its month to The Cat (`chinese_mount_dimmed_index`),
         a short note says so."""
-        from render.layers import octa_slot_art
+        from render.subdial import octa_slot_art
 
         gregorian = (index + 5) % 12 + 1
         animal = constants.CHINESE_MONTH_BRANCH_ANIMALS[gregorian]
@@ -3100,7 +3103,7 @@ class Compositor:
         Dozen, the Month Dozen) — the three sets that DO (a sign's dates,
         a month's gloss, an animal's month) keep their own writers
         above."""
-        from render.layers import calendar_mount_entries
+        from render.calendar_mount import calendar_mount_entries
 
         name, art = calendar_mount_entries(mount)[index]
         return _hover_badge(art) + _centered_html(
@@ -3118,11 +3121,8 @@ class Compositor:
         mount = self._skin.calendar_mount
         if mount == "off":
             return None
-        from render.layers import (
-            calendar_mount_angle,
-            calendar_mount_mark_height,
-            dial_point,
-        )
+        from render.calendar_mount import calendar_mount_angle, calendar_mount_mark_height
+        from render.painting import dial_point
 
         mount_radius = radius * calendar_mounts.CALENDAR_MOUNT_RADIUS_FRACTION
         hit_radius = calendar_mount_mark_height(mount, radius) / 2.0

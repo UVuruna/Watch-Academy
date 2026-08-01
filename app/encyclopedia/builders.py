@@ -131,7 +131,7 @@ def _theme_dual_art(
     `colored_variant_rel` is the ONE swap implementation). `on_date`
     opts into THE UNIVERSAL ROTATION CONVENTION (`defaults.
     rotating_art_file`), exactly like the live dial's OWN Servant
-    resolution (`render.layers.WeekdayLayer`) — None (every caller
+    resolution (`render.layers.weekday.WeekdayLayer`) — None (every caller
     before THE WEEKLY MANDATE, owner decree 2026-07-29) keeps the plain
     canonical file."""
     rel = pantheon.WEEKDAY_DUAL_FILES[theme]

@@ -1242,7 +1242,7 @@ def test_earth_pole_regions_full_res_and_latitude_override():
     continent. Every earth face is his full-resolution original."""
     from PySide6.QtGui import QImageReader
 
-    from render.layers import earth_region
+    from render.layers.year_marker import earth_region
 
     # The full 32-variant table exists at full resolution.
     for style in ("clean", "atmo"):
@@ -1508,7 +1508,7 @@ def test_ring_tint_is_a_tritone_map():
     from PySide6.QtWidgets import QApplication
 
     from render.assets import AssetCache
-    from render.layers import tinted_gray
+    from render.painting import tinted_gray
 
     QApplication.instance() or QApplication([])
     source = QPixmap(3, 1)

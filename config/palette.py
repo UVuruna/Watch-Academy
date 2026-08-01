@@ -446,7 +446,7 @@ ECLIPSE_LUNAR_FRINGE_COLOR = "#40E0D0"
 
 # BLOOD MOON DISC (owner verdict "može", fix round E, 2026-07-19): the
 # TOTAL state's multiply-darken uses this deep copper-red instead of
-# neutral gray — `render.layers.tinted_gray`'s black->tint->white
+# neutral gray — `render.painting.tinted_gray`'s black->tint->white
 # tritone at `ECLIPSE_STATE_MOON_BRIGHTNESS["lunar_total"]` (~7%) reads
 # dark AND visibly red, the real "blood moon" look; partial/penumbral
 # keep the plain neutral gray (only totality dims the WHOLE face enough

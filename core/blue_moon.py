@@ -41,7 +41,7 @@ Ophiuchus's and Modrenik's windows genuinely overlap in the Dec 7-17 band
 of a blue-moon December — because a "collision" only exists once a
 RENDER MODE tries to show two members at once, which the mode gate
 itself makes impossible. Resolving a date's candidates to the ONE member
-a given skin may show is `render.layers.active_thirteenth`'s job, read
+a given skin may show is `render.ninths.active_thirteenth`'s job, read
 from the skin's own pointer/wheel/mount, never astronomical "realness".
 
 Pure module (no Qt, no wall clock) — purity-gated by tests/test_purity;

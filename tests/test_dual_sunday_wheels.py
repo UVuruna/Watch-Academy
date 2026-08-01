@@ -13,16 +13,14 @@ import pytest
 from PySide6.QtWidgets import QApplication
 
 from config import constants, defaults
-from render.layers import (
-    center_dual_face,
+from render.skin_geometry import (
     center_duality,
-    center_seat_body_key,
     horizontal_duality,
     ruler_seat_angle,
     servant_seat_angle,
-    sunday_dual_face,
     weekday_slots,
 )
+from render.slot_layout import center_dual_face, center_seat_body_key, sunday_dual_face
 
 
 @pytest.fixture(scope="module")
