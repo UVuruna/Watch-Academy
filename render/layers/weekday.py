@@ -12,6 +12,7 @@ from render.skin_geometry import center_duality, hover_factor, servant_seat_angl
 from render.slot_layout import servant_holds_the_seat, weekday_body_orbit, weekday_body_size, weekday_classic_slot
 from render.weekday_body import draw_weekday_body, weekday_label_set_px
 
+
 class WeekdayLayer(Layer):
     """Weekday bodies on the pointer's arm slots (rotating WITH the star,
     owner decision), BELOW the hands. The hexa and trio pointers keep

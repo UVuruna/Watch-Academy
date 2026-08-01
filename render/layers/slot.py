@@ -14,6 +14,7 @@ from render.subdial import display_year, draw_fitted_text, draw_slot_roundel, dr
 from render.weekday_body import draw_body_label, draw_weekday_body
 from skins.manifest import SkinDefinition
 
+
 class SlotLayer(Layer):
     """Every SEATED slot (owner matrix 2026-07-14): the 1st/2nd/3rd
     contents at their matrix positions — angles ride the star's

@@ -15,6 +15,7 @@ from PySide6.QtGui import QColor, QFont, QFontMetricsF, QPainter, QPainterPath, 
 from config import dial, palette
 from render.context import RenderContext
 
+
                                      # the figure whose HOUR-SPACE holds the
                                      # hour hand draws FULL, the rest ghost —
                                      # computed from the live tick like the

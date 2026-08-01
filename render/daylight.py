@@ -102,6 +102,8 @@ def border_clips(
     nothing, so nothing is stroked."""
     if not skin.hide_night_borders or not daylight_active(skin):
         return (None,)
+
+
     return tuple(
         (start, end) for start, end, _alpha in lit_regions(sun, skin.star)
     )

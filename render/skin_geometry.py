@@ -12,6 +12,7 @@ from config import archetypes, constants, palette
 from render.context import RenderContext
 from skins.manifest import SkinDefinition
 
+
 def palette_for(skin: SkinDefinition) -> tuple:
     """The active Star+Aura BASE palette — ONE source for both the star
     diamonds and the background wedges (owner spec): the user's custom

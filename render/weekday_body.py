@@ -15,6 +15,7 @@ from render.painting import draw_name_label, draw_pixmap_centered, name_label_px
 from render.skin_geometry import center_duality, servant_seat_angle, visible_occupant, weekday_slots
 from render.slot_layout import servant_holds_the_seat, weekday_body_size
 
+
 def weekday_label_text(ctx: RenderContext, body: str) -> str:
     """The displayed weekday text for `body`: short until the largest
     preset, full from `WEEKDAY_FULL_NAME_MIN_DIAMETER`."""

@@ -12,6 +12,7 @@ from render.painting import dial_point, draw_name_label, draw_pixmap_centered
 from render.skin_geometry import archetype_key, arm_half_deg, hover_factor
 from render.slot_layout import weekday_body_orbit
 
+
 class ArchetypeLayer(Layer):
     """THE ARCHETYPE MODE's arm figures (owner sealed package
     2026-07-16): each diamond carries its archetype's stained glass,

@@ -10,6 +10,7 @@ from config import constants, dial, pantheon, paths
 from render.skin_geometry import archetype_active, center_duality, servant_seat_angle, visible_occupant, weekday_slots
 from skins.manifest import SkinDefinition
 
+
 def enabled_slots(skin: SkinDefinition) -> tuple[tuple[int, str], ...]:
     """The ENABLED slots in order — (index, mode) pairs. They enable
     STRICTLY 1 → 2 → 3 (owner 2026-07-14: "ne može da uključi samo

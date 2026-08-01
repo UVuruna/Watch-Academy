@@ -99,6 +99,8 @@ class BackgroundLayer(Layer):
             aura_palette_for(ctx.skin)
             if ctx.skin.colorful
             else (palette.COLORFUL_OFF_COLOR,)
+
+
         )
         # THE BACKGROUND FOLLOWS THE STAR (`aura_wedge_bounds` — the
         # owner's fix 2026-07-29): each hue's wedge is anchored on its

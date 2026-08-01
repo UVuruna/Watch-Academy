@@ -10,6 +10,7 @@ from render.painting import pie_path
 from render.shapes import arm_shape_path, drawn_arms
 from render.skin_geometry import daylight_active, palette_for, wheel_rotation
 
+
 class StarLayer(Layer):
     """The drawn wheel — an N-diamond STAR or the plain POLYGON of the
     same arms (owner sheet 2026-07-29) — whose top arm points at true

@@ -67,6 +67,8 @@ def drawn_arms(
     )
     if polygon_shape(skin) and len(stars) > 1:
         return (tuple(arm for star_arms in arms for arm in star_arms),)
+
+
     return arms
 
 

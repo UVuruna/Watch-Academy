@@ -16,6 +16,7 @@ from render.context import RenderContext
 from render.subdial import octa_slot_art
 from skins.manifest import SkinDefinition
 
+
 def thirteenth_plate(key: str) -> tuple[str, Path | None]:
     """(display name, resolved asset path or None) of the Blue Moon
     Law's 13th `key` (one of `constants.THIRTEENTHS`) — mirrors

@@ -10,6 +10,7 @@ from PySide6.QtGui import QBrush, QColor, QPainter, QRadialGradient
 
 from config import glow
 
+
 def draw_event_glow(
     painter: QPainter, pos: QPointF, marker_radius: float, color: str,
     strength: float = 1.0, fringe_color: str | None = None,

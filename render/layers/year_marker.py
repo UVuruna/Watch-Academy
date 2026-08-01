@@ -15,6 +15,7 @@ from render.painting import dial_point, draw_outlined_text, draw_pixmap_centered
 from render.skin_geometry import hover_factor
 from render.subdial import display_year
 
+
 def earth_region(latitude: float, default: str) -> str:
     """The Earth marker's ART REGION: the active location's continent
     — except at extreme latitudes, where the planet honestly shows its

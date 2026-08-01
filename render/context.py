@@ -19,6 +19,7 @@ from core.clock_state import DayContext, TickState
 from render.assets import AssetCache
 from skins.manifest import SkinDefinition
 
+
 class Cadence(Enum):
     STATIC = "static"    # rebuild on skin/size/DPI change
     DAILY = "daily"      # rebuild on DayContext change

@@ -18,6 +18,7 @@ from render.asset_variants import ring_face_color, subdial_plate_file
 from render.context import RenderContext
 from render.painting import draw_pixmap_centered, draw_shadowed_text
 
+
 def octa_slot_art(folder: str, name: str) -> Path | None:
     """The PNG for an image slot style — `folder` is a subdirectory of
     assets/calendars/ (the RESTRUCTURE 2026-07-22 home; the old

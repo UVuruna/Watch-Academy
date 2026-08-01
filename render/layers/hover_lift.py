@@ -9,6 +9,7 @@ from render.layers.weekday import WeekdayLayer
 from render.layers.year_marker import YearMarkerLayer
 from skins.manifest import SkinDefinition
 
+
 class HoverLiftLayer(Layer):
     """The hover Z-LIFT (owner 2026-07-13: "kad radim hover hoću da u
     trenutku enlarge bude iznad kazaljki"): stacked LAST, it repaints

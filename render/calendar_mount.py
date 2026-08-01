@@ -18,6 +18,7 @@ from render.painting import dial_point, draw_name_label, draw_pixmap_centered, n
 from render.subdial import octa_slot_art
 from skins.manifest import SkinDefinition
 
+
 def calendar_wheel(skin: SkinDefinition) -> str:
     """Which of the Calendar's two wheels is active (owner 2026-07-16):
     the palette_style CARRIES the wheel — paint = the Zodiac Dozen,

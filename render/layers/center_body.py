@@ -12,6 +12,7 @@ from render.skin_geometry import center_duality, hover_factor
 from render.slot_layout import center_dual_face, weekday_body_size, weekday_classic_slot
 from render.weekday_body import draw_weekday_body, weekday_label_set_px
 
+
 class CenterBodyLayer(Layer):
     """The current day's CENTER image drawn ABOVE the hands — the opaque
     Sun on Sundays in ghost mode (hexa and trio pointers; cross/octa

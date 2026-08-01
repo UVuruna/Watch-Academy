@@ -19,6 +19,7 @@ from render.skin_geometry import arm_half_deg
 from render.slot_layout import weekday_body_size
 from skins.manifest import SkinDefinition
 
+
 def archetype_lit_index(
     pointer: str, hour_angle: float, rotation: float = 0.0,
     offset: float = 0.0,

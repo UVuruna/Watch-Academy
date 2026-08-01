@@ -6,6 +6,7 @@ from PySide6.QtGui import QPainter
 from render.context import Cadence, Layer, RenderContext
 from skins.manifest import HandSpec, SkinDefinition
 
+
 class HandLayer(Layer):
     """One class, three instances — rotates a hand image about its
     pack-defined PIVOT (owner spec 2026-07-12). Sizing uses

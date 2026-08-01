@@ -12,6 +12,7 @@ from render.asset_recolor import letter_metal_file
 from render.context import Cadence, Layer, RenderContext
 from render.painting import dial_point, draw_pixmap_centered
 
+
 class RingLayer(Layer):
     """Outer ring: donut, hour ticks, 24h numerals with per-skin letters,
     minute numbers along the inner edge."""
