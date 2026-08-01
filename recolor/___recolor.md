@@ -63,53 +63,22 @@ low-contrast source from being stretched into a poster.
 
 ## Files
 
-### `recipe.py` — The Tunables
-Dataclasses for the whole algorithm plus the per-metal entries, loaded
-from `presets/metals.json`. NOTHING in this package hardcodes a number
-(Rule #4); the JSON is the single source of truth and is data, not code,
-so new metals need no new lines. Exercised beyond metals since the
-ENLARGE/THEMATIC round (owner 2026-07-27): the ring's THEMATIC finish
-colors — `cross_red`, `cross_blue`, `dollar_green`, `moon_indigo`,
-`templar_black` — are ordinary colored ramps in the same file, one
-entry each, zero code (see [Config (folder)](../config/___config.md),
-`RING_THEMATIC_SHADES`).
+| File | Tier | One line |
+|------|------|----------|
+| `transform.py` | Algorithmic | the orchestrator — `recolor()`, the one public entry — [about](__about/transform.md) · [flow](__flow/transform.md) |
+| `mask.py` | Algorithmic | step 1 — which pixels are metal (Oklab hue window + chroma ramp, or alpha) — [about](__about/mask.md) · [flow](__flow/mask.md) |
+| `tone.py` | Algorithmic | steps 2–7 — de-tint, split, anchor, curve — [about](__about/tone.md) · [flow](__flow/tone.md) |
+| `ramp.py` | Algorithmic | steps 8–9 — gradient map and specular — [about](__about/ramp.md) · [flow](__flow/ramp.md) |
+| `space.py` | Algorithmic | sRGB/linear/Oklab color math — [about](__about/space.md) · [flow](__flow/space.md) |
+| `filters.py` | Algorithmic | the guided-filter form/detail split primitive — [about](__about/filters.md) · [flow](__flow/filters.md) |
+| `recipe.py` | Algorithmic | the tunables — dataclasses loaded from `presets/metals.json` — [about](__about/recipe.md) · [flow](__flow/recipe.md) |
+| `preview.py` | Standard | verification harness — contact sheet + metrics table — [about](__about/preview.md) |
+| `__main__.py` | Standard | CLI — `python -m recolor` — [about](__about/__main__.md) |
+| `__init__.py` | Trivial | re-exports `Metal`, `Recipe`, `Specular`, `Tuning`, `load`, `recolor` |
 
-### `space.py` — Color Space Math
-sRGB <-> linear light, linear RGB <-> Oklab, hex parsing. Pure numpy,
-vectorized, no per-pixel Python.
-
-### `filters.py` — Edge-Preserving Split Primitive
-O(1)-per-pixel box filter (cumulative sums) and the guided filter built
-on it. This is what separates form from detail without the halos a plain
-Gaussian would leave along every engraving line. No scipy, no OpenCV —
-numpy only, so the package ports cleanly.
-
-### `mask.py` — Which Pixels Are Metal
-The Oklab hue window + chroma ramp that tells bronze relief from gray
-stone, and the whole-glyph alpha mode for ring letters. One function,
-two modes — the two old kernels differed ONLY here (Rule #5).
-
-### `tone.py` — De-tint, Split, Anchor, Curve
-Steps 2–7: the neutral relief map and everything that shapes it before
-a color is ever chosen.
-
-### `ramp.py` — Gradient Map And Specular
-Steps 8–9: sampling a metal's ramp at a lightness, in Oklab so the
-interpolation never shifts hue or muddies the midtones.
-
-### `transform.py` — The Orchestrator
-`recolor(rgba, source, target, recipe)` — the one public entry that runs
-the pipeline end to end. numpy in, numpy out; no Qt, no file I/O.
-
-### `preview.py` — The Verification Harness
-Builds the contact sheet AND the metrics table (clipping %, per-channel
-means, masked-region detail range) for a set of source images. Every
-change to this package is judged on numbers, never on vibes.
-
-### `__main__.py` — CLI
-`python -m recolor IN.png --source bronze --target gold --out OUT.png`
-and `python -m recolor --preview` for the owner's test plates. PIL lives
-here and in `preview.py` only — the algorithm core stays numpy-only.
+`presets/metals.json` is the data file `recipe.py` loads — not a Python
+module, so it carries no tier of its own; its schema is the
+[Recipe flow diagram](__flow/recipe.md)'s visual tree.
 
 ## Connections
 
@@ -117,7 +86,7 @@ here and in `preview.py` only — the algorithm core stays numpy-only.
 - nothing in this project — the package is deliberately standalone
 
 ### Used by
-- [Assets](../render/assets.md) — the badge/letter metal swap adapts
+- [Assets](../render/__about/assets.md) — the badge/letter metal swap adapts
   QImage to numpy and calls `transform.recolor`
 
 ## Design Decisions
@@ -133,3 +102,9 @@ here and in `preview.py` only — the algorithm core stays numpy-only.
 - **All metals, not three.** Adding copper, brass, rose gold, steel,
   gunmetal, platinum, pewter or iron costs one JSON entry and zero code,
   so they are all present from day one.
+- **`recipe.py`'s data model reused beyond metals.** Since the
+  ENLARGE/THEMATIC round (owner 2026-07-27) the ring's THEMATIC finish
+  colors — `cross_red`, `cross_blue`, `dollar_green`, `moon_indigo`,
+  `templar_black` — are ordinary colored ramps in `presets/metals.json`,
+  one entry each, zero code (see
+  [Config (folder)](../config/___config.md)'s `RING_THEMATIC_SHADES`).

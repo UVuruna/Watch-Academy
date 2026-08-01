@@ -1,4 +1,4 @@
-# DOMY Watch
+# Watch Academy
 
 Watch Academy is a transparent 24-hour analog clock widget for the Windows desktop, built around a single dial named DOMY. Only the dial is visible on screen — no frame, no taskbar entry — like a phone home-screen widget.
 
@@ -44,7 +44,7 @@ Canon](CUBE.md#the-name).
 ## Structure
 
 ```
-📁 DOMY Watch/
+📁 DOMY Watch/            ← folder name kept; the app is Watch Academy
   🐍 main.py            ← entry point
   📁 config/            ← all constants and tunables
   📁 core/              ← pure astronomy/angle computation
@@ -62,6 +62,15 @@ Canon](CUBE.md#the-name).
 
 ## Documentation
 
+Every `.md` in this project is reachable from here by following links —
+enforced by `tests/test_doc_links.py`. Each code folder carries a
+`___folder.md` entry point, an `__about/` folder (what each file does) and,
+where a file holds a real algorithm, a `__flow/` folder (its logic drawn as a
+diagram plus language-neutral pseudocode).
+
+- [Agent Guidance](CLAUDE.md) — how Claude Code works in this project;
+  inherits the monorepo constitution
+- [Main (Entry Point)](__about/main.md) — what `main.py` does at startup
 - [Work Plan](WORKPLAN.md) — the ORDER of the closing sessions:
   what to tell each fresh agent, what it reads, what it delivers,
   and which model tier the job deserves
@@ -85,12 +94,23 @@ Canon](CUBE.md#the-name).
 - [Tests (folder)](tests/___tests.md)
 - [Setup (folder)](setup/___setup.md)
 - [Design (folder)](design/___design.md)
+- [Illustrator (folder)](illustrator/___illustrator.md) — vector sources
+  (gitignored on disk; the folder doc travels with the repo)
 - [Research (folder)](research/___research.md) — image-generation
   prompt sheets live here; see [How to Write a Prompt
   Sheet](../PromptPainter/instructions.md) before authoring a new one
 - [Roster — the Master Systematics](ROSTER.md) — every theme, every
   figure, its seat, per-source art coverage (generated:
   `python research/build_roster.py`)
+
+### Structural plans (history, still referenced)
+
+- [The One-Hierarchy Refactor](RESTRUCTURE.md) — the owner-approved
+   plan (sealed 2026-07-22) behind today's `assets/` and Encyclopedia shape
+- [The Structural Arc](WORKPLAN-STRUCTURE.md) — the plan for the
+  config-split sessions
+- [Refactor God-Files](REFACTOR-GODFILES.md) — a local copy of the
+  monorepo task brief (the canonical one now lives at the repo root)
 
 ## Running from source
 

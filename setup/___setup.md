@@ -1,94 +1,60 @@
 # setup/
 
-Build tooling and one-time asset generators (the full M7 pipeline —
-build.py, installer.nsi, svg_to_ico.py, certificates — lands here).
+Build tooling and one-time asset generators. Today it holds the two
+data-pack generators that build bundled `Database/*.json`/`*.sqlite`
+content from the research extraction; the full M7 build pipeline
+(`build.py`, `installer.nsi`, `svg_to_ico.py`, certificates — see the
+monorepo root [CLAUDE.md](../../../CLAUDE.md) Build & Release System)
+has not landed here yet.
 
 ## Files
 
-### `app_info.json` — Installer Metadata Seed
-Seeded ahead of the M7 build pipeline (Session 22, the Renaming,
-2026-07-27) so the naming decision does not have to be re-derived when
-`build.py` lands: `name`/`description` carry **Watch Academy** — the
-sealed application name (CUBE.md §The Name) — while `exe_name`/
-`installer_name` stay DOMY-based (`DOMYWatch.exe`/`DOMYWatch_Setup.exe`),
-matching the folder/mutex/AppUserModelID identity that never changed.
-`version` is a static seed (not wired to any runtime code yet — this
-project has no single version source per Rule #23); whoever writes
-`build.py` bumps it to the real release version before packaging.
-Pinned by `tests/test_app_info.py`.
-
-**LIVE-RENDER CLEANUP (owner decree 2026-07-19: "bolje crtati na licu
-mesta nego 15MB fajlova")** — three one-time generators are RETIRED
-whole (Rule #6, no leftovers), their output now computed at load/on
-demand instead of shipped as pre-rendered files:
-- `make_silver_letters.py` / `make_bronze_letters.py` (ring letters):
-  the ~15 MB of `<Stem>_silver.png`/`<Stem>_bronze.png` in
-  `assets/ring/letters/` are deleted; `render.asset_recolor.letter_metal_file`
-  derives both from the gold master at load (silver = grayscale
-  desaturation, bronze = a straight multiply with `BRONZE_LETTER_TINT`
-  off the silver result), disk-cached like every other derived asset.
-- `make_moon_phases.py` (Encyclopedia Moon pages): the ~7 MB of
-  `assets/moon/<source>/<phase>.png` plates are deleted;
-  `render.asset_variants.moon_phase_image` (the shared terminator geometry
-  extracted out of `render.layers._draw_moon` as `moon_lit_region`,
-  fixing an exact-quarter degeneracy the plates shipped with) plus
-  `moon_phase_file` (disk-cached path wrapper) render each phase live.
-
-### `make_deep_time.py` — Deep Time Pack Generator
-One-time (rerunnable) generator (Session 16, owner 2026-07-17):
-builds the compact app-side `Database/deep_time.sqlite` from the
-research extraction `research/ephemeris/events.sqlite` (gitignored,
-~92 MB — rerun the research pipeline first if absent):
-
-    python setup/make_deep_time.py
-
-Copies all sun events, moon phases and both eclipse catalogs over the
-full usable span, storing ASTRONOMICAL calendar fields per instant
-(ISO strings cannot carry negative years) plus `jd_ut` on the eclipse
-tables as the ordering key; writes the pack coverage into `meta` from
-the actual event content — a year Y needs the December solstice of
-Y−1, the March equinox of Y+1 AND the January–February moon events of
-its neighbors (the Chinese New Year cusp; verified trap 2026-07-17:
-the scan starts mid-year, so the naive extents-trimmed-by-one bound
-let the edge year crash the day build). Progress every 100k rows
-(Rule #10). Current build: coverage −12997…+16993, ~1.75M rows,
-**56.6 MB**. The pack is GITIGNORED (the entry names this
-script as the way back) and ships only with the M7 FULL installation —
-the app detects it at startup and runs happily without it.
-
-### `make_observatory.py` — Observatory Series Generator
-One-time (rerunnable) generator (Session 17, owner 2026-07-16; extended
-Fix round D, Task 4, 2026-07-19) builds the compact, COMMITTED chart
-bundles the [Observatory](../app/observatory.md) reads —
-`Database/observatory_seasons.json` (the four northern season
-durations, bin-mean decimated from `events.sqlite` sun_events, plus an
-`eras` block from `anno_lucis.json`), `Database/observatory_eclipses.json`
-(solar/lunar counts per bucket + the per-type summary), and
-`Database/observatory_envelope.json` (the La2004 Laskar amplitude
-envelope, sliced from `research/ephemeris/long_envelope.json` to the
-owner's ±200,000-year chart window — already 1-kyr step, so the slice
-alone is ~401 rows, no further decimation needed):
-
-    python setup/make_observatory.py
-
-Unlike the multi-megabyte sqlite packs these bundles are small
-(~55 KB + ~2 KB + ~9 KB) and committed — the Observatory never requires
-deep_time.sqlite. Validates the derived light/dark halves against
-`season_halves.json` (Rule #1). Rerun the research pipeline first if
-`events.sqlite` is absent (gitignored, ~92 MB); the envelope slice needs
-`research/ephemeris/long_envelope.json` (committed — regenerate via the
-research venv's `long_envelope.py` per
-[Research Ephemeris (subfolder)](../research/ephemeris/___ephemeris.md)
-only if it is ever missing).
+| File | Tier | One line |
+|------|------|----------|
+| `make_deep_time.py` | Algorithmic | builds the gitignored full-span `Database/deep_time.sqlite` from the research events database — [about](__about/make_deep_time.md) · [flow](__flow/make_deep_time.md) |
+| `make_observatory.py` | Algorithmic | builds the three committed, decimated Observatory chart bundles — [about](__about/make_observatory.md) · [flow](__flow/make_observatory.md) |
+| `app_info.json` | — | installer metadata seed (name/description/version/exe names) — plain config, not a code file |
 
 ## Connections
 
 ### Uses
-- [Config (folder)](../config/___config.md) — letter file table and art dir
 - [Research Ephemeris (subfolder)](../research/ephemeris/___ephemeris.md)
-  — the events database `make_deep_time.py` / `make_observatory.py` read
+  — the events database and companion JSON files both generators read
 
 ### Used by
-- Nobody at runtime — the app loads the generated PNGs like any asset;
-  the Deep Time pack is read by the
-  [Deep Time Repository](../data/deep_time.md).
+- Nobody at runtime — both scripts are one-time (rerunnable) tools the
+  owner runs manually from the command line. Their outputs are read by
+  [Deep Time Repository](../data/__about/deep_time.md) and
+  [Observatory Data](../data/__about/observatory.md); see
+  [Database (folder)](../Database/___database.md) for what each
+  generated file contains
+
+## Design Decisions
+
+- **`app_info.json` seeds the M7 naming decision ahead of `build.py`.**
+  Session 22 (the Renaming, 2026-07-27) set `name`/`description` to
+  **Watch Academy** — the sealed application name (CUBE.md §The Name)
+  — while `exe_name`/`installer_name` stay DOMY-based
+  (`DOMYWatch.exe`/`DOMYWatch_Setup.exe`), matching the folder/mutex/
+  AppUserModelID identity that never changed. `version` is a static
+  seed (no single version source wired to runtime code yet — Rule
+  #23 does not yet apply here); whoever writes `build.py` bumps it to
+  the real release version before packaging. Pinned by
+  `tests/test_app_info.py`.
+- **Both generators are rerunnable, not append-only.** Each recreates
+  its output from scratch on every run (`make_deep_time.py` drops and
+  rebuilds the sqlite file; `make_observatory.py` overwrites its three
+  JSON files) — safe to rerun after the research extraction changes,
+  never accumulates stale rows.
+- **The LIVE-RENDER CLEANUP retired three former generators whole**
+  (owner decree 2026-07-19, "bolje crtati na licu mesta nego 15MB
+  fajlova" — better to draw on the spot than 15MB of files): the ring
+  letter metal generators (`make_silver_letters.py` /
+  `make_bronze_letters.py`) and the moon phase plate generator
+  (`make_moon_phases.py`) are DELETED (Rule #6, no leftovers) — their
+  ~22 MB combined output is now computed live and disk-cached
+  (`render.asset_recolor.letter_metal_file`,
+  `render.asset_variants.moon_phase_file`) instead of shipped as
+  pre-rendered files. This is Rule #19 (Compute, Don't Generate)
+  applied retroactively: a recolor/geometry formula replaced a file
+  tree.

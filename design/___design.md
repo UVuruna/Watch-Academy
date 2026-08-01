@@ -1,8 +1,11 @@
 # design/
 
 The owner's master art — NOT bundled with the app (working copies are
-downscaled into `assets/skins/domy/` and must be refreshed whenever a
-master changes).
+downscaled into the matching category root under
+[Assets (folder)](../assets/___assets.md) — `instrument/` for the
+ring/hands, `weeks/celestial_bodies/planets/` for the weekday bodies,
+`celestial/earth/` for the Earth markers — and must be refreshed
+whenever a master changes).
 
 ## Folders
 
@@ -14,8 +17,10 @@ master changes).
   cross/hexa/octa pointer look references (drawn procedurally in-app)
 - `weekday/planets/` — the seven weekday bodies
 - `date/earth/{atmosphere|clean}/{day|night}/` — Earth per continent
-- legacy loose files: `hours.png`, `minutes.png`, `seconds.png`,
-  `hexaLight.png` (superseded by the folders above)
+- `example/` — reference screenshots and a rendered `Clock.png` mockup
+  (owner reference material, not consumed by the app); also holds
+  `hexaLight.png`, an older pointer-look reference superseded by
+  `background/hexa_light.png` / `hexa_paint.png`
 
 ## Connections
 

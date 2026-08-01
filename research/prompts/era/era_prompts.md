@@ -268,7 +268,7 @@ ROUND rose-window stained-glass medallion, night-window register, photorealistic
 **Future use (owner note, not yet wired further than the essay art):**
 these ten calendar emblems' art already backs the "Eras of the World"
 article's image strip (`app/encyclopedia.py` `_ERA_CALENDAR_ART`,
-graceful-absent — see [Encyclopedia](../../../app/encyclopedia.md));
+graceful-absent — see [Encyclopedia](../../../app/encyclopedia/___encyclopedia.md));
 the owner's next planned use is the Settings/era-picker combo
 (`app/settings_dialog.py` Third calendar dropdown, currently text-only)
 wearing the matching emblem beside each option.
@@ -307,7 +307,7 @@ wearing the matching emblem beside each option.
   Maya glyphs), joins the six above — 14 images total. The `third_era`
   setting itself also grew a Maya option this round
   (`core/deep_time.py` `maya_long_count`, TRUE Long Count arithmetic,
-  not an offset — see [Deep Time](../../../core/deep_time.md)); this
+  not an offset — see [Deep Time](../../../core/__about/deep_time.md)); this
   sheet only covers the ARTWORK.
 - **Extended again (ERA-TRIO round, owner 2026-07-20 — "može sve 3"):**
   three more calendar-system emblems join the seven above — `KaliYuga.png`
@@ -321,7 +321,7 @@ wearing the matching emblem beside each option.
   Chinese (`core/deep_time.py` `third_era_year`, `constants.
   THIRD_ERA_OFFSETS["kali"] = 3101`); Olympiad and Unix are FORMATTERS
   like Maya, not offsets (`olympiad_year`, `unix_epoch_seconds` — see
-  [Deep Time](../../../core/deep_time.md)). Also ground-truthed and
+  [Deep Time](../../../core/__about/deep_time.md)). Also ground-truthed and
   fixed this round: the calendar strip's consumer
   (`app/encyclopedia.py` `_era_image`) used to bypass
   `rotating_art_file` entirely for the whole strip — now every

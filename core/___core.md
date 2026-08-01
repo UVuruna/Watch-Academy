@@ -1,122 +1,60 @@
 # core/
 
-Pure computation: zero Qt, zero file I/O, zero `datetime.now()` in library
-code — callers inject "now" and pre-extracted data, so every function is
-deterministic, pytest-testable headless, and reusable for a future mobile
-version. A purity test enforces the no-Qt rule.
+Pure computation: zero Qt, zero file I/O, zero `datetime.now()` in
+library code (the one documented exception is `__main__.py`'s `--at`
+default) — callers inject "now" and pre-extracted data, so every
+function is deterministic, pytest-testable headless, and reusable
+outside the desktop widget. `tests/test_purity.py` enforces the no-Qt
+and no-wall-clock rules by AST inspection. Dial convention: degrees
+CLOCKWISE from the TOP (12:00 noon top, 00:00 midnight bottom,
+`DIAL_OFFSET_DEG = 180`).
 
 ## Files
 
-### `angles.py` — Time → Dial Angle
-The one shared time→angle mapping (noon at top, clockwise: 12:00→0°,
-18:00→90°, 00:00→180°, 06:00→270°) used by the hour hand, the sun-event
-arc boundaries and the solar-noon marker; the minute-hand angle; the
-star rotation from the solar-noon offset (+15°/hour late, computed
-from integer seconds to avoid timedelta sign bugs).
-See [Angles](angles.md).
-
-### `sun.py` — Sun Events & Daylight Regimes
-The five sun events (dawn/sunrise/noon/sunset/dusk) computed INDIVIDUALLY
-via astral — `astral.sun.sun()` is all-or-nothing and its polar-day and
-polar-night error messages are identical. `noon()` never raises, so the
-star rotation is always computable. `DaylightRegime` classification: NORMAL,
-WHITE_NIGHTS, TWILIGHT_ONLY, POLAR_DAY, POLAR_NIGHT (elevation checks
-against −0.833°/−6°). See [Sun](sun.md).
-
-### `year_wheel.py` — Year Marker
-Piecewise-linear interpolation between the six season anchors of a
-calendar year: summer solstice exactly at the top, winter at the bottom,
-equinoxes exactly at 90°/270° (naive linear-over-year is ~2.3° wrong at
-the equinoxes and is rejected by the golden tests).
-See [Year Wheel](year_wheel.md).
-
-### `moon.py` — Moon Phase
-Cycle-fraction interpolation between principal-phase instants (exact
-at the anchors, ~0.0001 cycle accurate in between; astral.moon is
-day-granular and not used) + the TRUE analytic illumination since
-Session 16 (Meeus 48.4 elongation series, ΔT-aware, golden-tested
-against the DE441 events database). See [Moon](moon.md).
-
-### `deep_time.py` — Deep Time Calendar Mathematics
-Session 16 (owner 2026-07-17): the year-line formatters (the official
-year with Anno Lucis always beside it — owner amendment), the
-astronomical-year convention (1 BCE = year 0), the exact 400-year
-Gregorian PROXY mapping that lets datetime carry −13000…+17000
-moments, the proleptic Julian Day, ΔT (Espenak–Meeus) and the
-quick-jump calendar arithmetic. See [Deep Time](deep_time.md).
-
-### `clock_state.py` — Two-Tier State
-`DayContext` (frozen per-day bundle; cache key `(local_date, utcoffset)`
-catches DST — the star legitimately jumps 15° at transitions) and
-`TickState` (per-minute hand angles + smooth year angle + the rising
-sign). See [Clock State](clock_state.md).
-
-### `motto.py` — Outer Motto Arc Angle Math
-TASK 1 (owner "može radi" 2026-07-19): given a motto string and its
-pinned letter→ring-position constraints, solves every character's dial
-angle — pinned letters land exactly on their ring seat, unpinned
-letters between two pins are spaced EVENLY. See [Motto](motto.md).
-
-### `ascendant.py` — Rising Sign
-The natal ascendant ("podznak", owner request 2026-07-12): Julian date
-→ sidereal time → the ascendant ecliptic longitude; validated against
-the owner's own birth chart (Belgrade 20.6.1990 12:15 → Virgo).
-See [Ascendant](ascendant.md).
-
-### `continents.py` — the Continents Ninth Easter-Egg Law
-Owner-sealed matrix 2026-07-21 (round R7a): decides Zealandia (default)
-vs Pangea (when the sky is doing something — an eclipse, a season
-turning point, or a full/new moon day) for the Continents theme's Ninth
-seat. One boolean over three triggers, fed by two thin wrappers (the
-dial's pre-built event lists, the Encyclopedia's date + repositories) so
-astronomy is never recomputed. See [Continents](continents.md).
-
-### `blue_moon.py` — the Thirteenth Member
-Owner-sealed 2026-07-22, CORRECTED 2026-07-2X: the Blue Moon Law —
-Ophiuchus/Sol/Modrenik gated by `thirteen_moon_year` (13 Full Moons in
-the calendar year, ~37%), The Cat gated by the REAL lunisolar leap-month
-mechanic (`chinese_leap_month`, a Meeus solar-longitude zhongqi search,
-golden-tested against the 2023 leap 2nd and 2025 leap 6th months).
-`thirteenth_candidates` names every member active on a date as a plain
-fact set, no precedence — the four members live in four INDEPENDENT
-RENDER MODES on the Calendar pointer alone (never any other pointer) and
-never compete for the same seat; `render.layers.active_thirteenth`
-resolves a date's candidates against the skin's own wheel/mount. See
-[Blue Moon](blue_moon.md).
-
-### `cube_seating.py` — the Character Cube's geometry
-Session 26, CUBE.md §The Seatings. THE SYMMETRY LAW leads (owner
-2026-07-28, *"primarna je simetrija, sekundarna je simbolika"*): the 3
-face axes take one equilateral triangle of arms, the 3 human vertex axes
-the opposite triangle, the 6 edge axes the hexagon between — the
-hexagram. Under it, the one-grade kinship law, the antipodal law and the
-parity theorem (the human circle can only close once the two Sacred
-vertices leave it) solve both display plans — **Calendar-12** (one axis
-per month, with an inverted second version) and **Rose-24** (one seat per
-ray, the single survivor of the search). Also answers the rotation↔hour
-question in the negative: no rotation has order 24, and the dial's
-half-turn is the inversion, not a turn. See
-[Cube Seating](cube_seating.md).
-
-### `__main__.py` — CLI Selftest
-`python -m core --city NAME [--at ISO]` (or `--lat --lng --tz`) prints
-the full computed state — the time-travel flag for eyeballing DST, polar
-and solstice days. Verified against the design mockup for 20.6.2025:
-sunrise 04:52, sunset 20:27, solar noon 12:39, Friday→Venus, Earth at
-the top.
+| File | Tier | One line |
+|------|------|----------|
+| `angles.py` | Algorithmic | the one shared time -> dial-angle mapping — [about](__about/angles.md) · [flow](__flow/angles.md) |
+| `ascendant.py` | Algorithmic | sidereal-time rising-sign math — [about](__about/ascendant.md) · [flow](__flow/ascendant.md) |
+| `blue_moon.py` | Algorithmic | the Blue Moon Law — the hidden 13th member of every 12-set — [about](__about/blue_moon.md) · [flow](__flow/blue_moon.md) |
+| `clock_state.py` | Algorithmic | the two-tier render state, `DayContext` + `TickState` — [about](__about/clock_state.md) · [flow](__flow/clock_state.md) |
+| `continents.py` | Algorithmic | the Continents theme's Zealandia/Pangea Ninth-seat law — [about](__about/continents.md) · [flow](__flow/continents.md) |
+| `cube_seating.py` | Algorithmic | the Character Cube's geometry — Calendar-12 and Rose-24 — [about](__about/cube_seating.md) · [flow](__flow/cube_seating.md) |
+| `deep_time.py` | Algorithmic | Deep Time calendar mathematics — eras, the 400-year proxy, Julian Day, ΔT — [about](__about/deep_time.md) · [flow](__flow/deep_time.md) |
+| `motto.py` | Algorithmic | outer Great Seal / station-word ring-arc glyph angles — [about](__about/motto.md) · [flow](__flow/motto.md) |
+| `moon.py` | Algorithmic | moon phase fraction and analytic illumination — [about](__about/moon.md) · [flow](__flow/moon.md) |
+| `sun.py` | Algorithmic | sun events and daylight-regime classification — [about](__about/sun.md) · [flow](__flow/sun.md) |
+| `year_wheel.py` | Algorithmic | year-marker angle, piecewise-linear between season anchors — [about](__about/year_wheel.md) · [flow](__flow/year_wheel.md) |
+| `__main__.py` | Standard | `python -m core` CLI selftest — prints the full computed state — [about](__about/__main__.md) |
+| `__init__.py` | Trivial | module docstring only, no code |
 
 ## Connections
 
 ### Uses
-- [Config (folder)](../config/___config.md) — dial/sun/moon invariants
+- [Config (folder)](../config/___config.md) — every dial/sun/moon/cube
+  invariant and threshold this layer reads
 
 ### Used by
 - [Data (folder)](../data/___data.md) — constructs `YearAnchors`/`MoonWindow`
-- [App (folder)](../app/___app.md) and [Render (folder)](../render/___render.md) — consume `DayContext`/`TickState` (M3)
-- [Tests (folder)](../tests/___tests.md) — golden-value suite
+  from bundled ephemeris data, then hands them into `core`
+- [App (folder)](../app/___app.md) — the controller drives the
+  rebuild/tick flow (`build_day_context`/`build_tick_state`)
+- [Render (folder)](../render/___render.md) — consumes `DayContext`/
+  `TickState` every paint; `cube_diagrams`/`cube_model_export` reuse
+  `cube_seating`'s `cell_color`/`find_pole`
+- [Tests (folder)](../tests/___tests.md) — the golden-value suite pins
+  every formula in this folder
 
 ## Design Decisions
-- Events may be `None` (documented polar behavior) — the regime enum, not
-  exception text, tells the renderer which sectors exist.
+- Events may be `None` (documented polar/edge behavior) — enums like
+  `DaylightRegime`, not exception text, tell the renderer which sectors
+  exist.
 - All angles are degrees clockwise from the dial top, directly usable by
   `QPainter.rotate()` in y-down screen coordinates.
+- **Nothing derivable is stored** (root Rule #19 — compute, don't
+  generate): `cube_seating`'s families, indices and ray hues, the
+  Calendar-12's twelve arms, and every angle in this folder are computed
+  from a handful of rules, never enumerated as data.
+- **Purity is the contract, not a convention** — `tests/test_purity.py`
+  fails the build on any `PySide6` import or wall-clock call anywhere in
+  `core/`, `data/`, or `recolor/`, with `core/__main__.py`'s `--at`
+  default as the one documented, tested exception.

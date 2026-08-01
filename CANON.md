@@ -1489,8 +1489,8 @@ iznutra na 12"), completing the reading this section already named. The
 first round's "MASON reads twice" design (both mottos' own O and own S
 sharing the identical seat, drawn at two concentric radii) is retired.
 Implementation and the full per-letter angle table:
-[Ring Presets](data/rings.md), [Layers](render/layers.md),
-[Motto](core/motto.md).
+[Ring Presets](data/__about/rings.md), [Layers](render/layers/___layers.md),
+[Motto](core/__about/motto.md).
 
 **THE THREE OPPOSITIONS (MOTO round, owner "može" 2026-07-19, sealed
 verbatim):** the six letters also read as THREE AXES across the

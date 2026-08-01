@@ -34,7 +34,7 @@ isolated background (no transparency-checkerboard artifact — a clean
 isolated field, not a partial cutout), the circular window shape IS the
 frame, NO lettering anywhere in any image. Every emblem stays true to
 the dial's own sealed state table (see
-[Layers](../../../render/layers.md) §THE STATE TABLE): the copper blood
+[Layers](../../../render/layers/___layers.md) §THE STATE TABLE): the copper blood
 moon for lunar total, the ring of fire for annular, the pearl corona
 for solar total, the honest faint veil for penumbral.
 

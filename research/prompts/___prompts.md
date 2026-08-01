@@ -1,16 +1,14 @@
 # prompts/
 
-The image-generation prompt sheets — the owner generates art from
-these, one theme at a time, top to bottom. Since the roster doctrine
-closed (2026-07-15), **each weekday theme owns ONE complete file**:
-every plate the theme needs across BOTH rosters (Planetary +
-Pantheon), in every register the theme ships (bronze + colored),
-including the Sunday dual and the Ninth — with **REUSE** notes where
-an existing plate serves a new seat (nothing to generate) and
-**SUPERSEDED / DO NOT GENERATE** notes for everything the doctrine
-retired (the old Hades/Baldur/Set/Crnobog/Jester/Legion ninths).
-Check the root [Roster](../../ROSTER.md) for what is already on disk
-per source.
+The image-generation prompt sheets — the owner generates art from these,
+one theme at a time, top to bottom. Since the roster doctrine closed
+(2026-07-15), **each weekday theme owns ONE complete file**: every plate
+the theme needs across BOTH rosters (Planetary + Pantheon), in every
+register the theme ships (bronze + colored), including the Sunday dual and
+the Ninth — with **REUSE** notes where an existing plate serves a new seat
+(nothing to generate) and **SUPERSEDED / DO NOT GENERATE** notes for
+everything the doctrine retired. Check the root
+[Roster](../../ROSTER.md) for what is already on disk per source.
 
 ## Before writing a NEW sheet
 
@@ -18,340 +16,74 @@ Read [How to Write a Prompt Sheet](../../../PromptPainter/instructions.md)
 first — PromptPainter's own sheet contract, owned and enforced by its
 parser (`painter/sheet_parser.py`), also behind the GUI's own
 **Instructions** button. Every image needs a
-`**Title** → \`path.png\`` line right in its own entry; skip it and
-the tool silently drops that image with ZERO warning — no error, no
-log, nothing (`intelligences_prompts.md` shipped with only 1 of 11
-entries loading until caught 2026-07-17). Verify any sheet before
+`**Title** → \`path.png\`` line right in its own entry; skip it and the
+tool silently drops that image with ZERO warning. Verify any sheet before
 handing it to the owner:
 
 ```bash
 python main.py "path/to/your_sheet.md" --dry-run
 ```
 
-run from `Gadgets/PromptPainter/` — zero problems and the expected
-item count means the sheet is safe to queue.
+run from `Gadgets/PromptPainter/` — zero problems and the expected item
+count means the sheet is safe to queue.
 
-## Files
+## Folders
 
-### `weekday/` — one complete sheet per theme
-- `greek_prompts.md` — Planetary + Pantheon (Zeus/Hades dual, Gaia
-  ninth), bronze + colored
-- `norse_prompts.md` — Planetary + Pantheon (the Wanderer dual,
-  Yggdrasil ninth), bronze + colored
-- `egypt_prompts.md` — Planetary + Pantheon (Isis, Horus, Anubis,
-  Bastet, the Pharaoh ninth), bronze + tomb-fresco colored
-- `slavic_prompts.md` — Planetary + Pantheon (Perun/Veles dual,
-  Svarog, Lada, Triglav ninth), bronze + folk-icon colored
-- `religion_prompts.md` — the reworked CREEDS (Christianity
-  enthroned, the Satanism dual, the Freemasonry ninth)
-- `religion_alt_prompts.md` — ANCIENT RELIGIONS (Eleusis seated, the
-  Unknown God ninth)
-- `profession_prompts.md` — bronze + colored + the Polymath ninth
-- `bible_theme_prompts.md` — Bible (the Holy Trinity ninth)
-- `bible2_prompts.md` — Bible II (the Isaac dual, the Melchizedek
-  ninth)
-- `bible_dark_prompts.md` — the dark set (the Lucifer/Judas dual, the
-  Ninth Circle ninth)
-- `wolf_pack_prompts.md`, `bee_hive_prompts.md`,
-  `elephant_herd_prompts.md` — the animal societies (complete:
-  bronze + colored + their Union ninths; wolves need NO new art —
-  the ranks land as display names)
-- `cosmos_prompts.md` — Cosmos (bronze + colored + the Big Bang
-  ninth)
-- `planet_art_prompts.md` — the Planets ART medallion look (bronze
-  only, the seven bodies + the Sun-eclipse dual)
-- `alchemy_metal_prompts.md` (the raw-ore dual, the Philosopher's
-  Stone ninth), `japan_prompts.md` (the Ama-no-Iwato dual),
-  `planet_signs_prompts.md` (its Eclipsed Sun dual) — the closed
-  sets, each complete in its own file
-- `planets_prompts.md` — the real-photo Planets theme (owner's own
-  photographs, no prompts needed) + its Eclipsed Sun dual; pointers to
-  its ART-medallion sibling, `planet_art_prompts.md`, and to
-  `planet_signs_prompts.md`
-- `continents_prompts.md` — the Continents theme's TWO NINTHS only
-  (Zealandia and the deep-time Pangea): photoreal globes joining the
-  owner's own Earth family, no medallion and no border. The six seated
-  continents and the title plate need no prompts — his photography
-  already fills them
-- The four myth sheets (`greek` / `norse` / `slavic` / `egypt`) each
-  close with a **WIDER COURT** section: the seatless gods the
-  Encyclopedia keeps, bronze only, their border roundels carved BLANK
-  because the figure holds no hour
+| Folder | One line |
+|--------|----------|
+| [Weekday (subfolder)](weekday/___weekday.md) | One complete sheet per weekday theme — the doctrine's main body |
+| [Archetype (subfolder)](archetype/___archetype.md) | One sheet per pointer archetype (Trinity/Prism/Compass/Calendar) plus the CUBE WAVE's third wheels and the Thirteen-Axes edge/sacred plates |
+| [Calendars (subfolder)](calendars/___calendars.md) | The five new Dozens riding the Calendar pointer (RESTRUCTURE Phase 3) |
+| [Emblem (subfolder)](emblem/___emblem.md) | The Inner Wheel emblem themes — Virtue, Sin, Mood, Intelligences |
+| [Zodiac (subfolder)](zodiac/___zodiac.md) | Astrology (12 signs + Ophiuchus) and the Chinese 12-animal cycle |
+| [Badge (subfolder)](badge/___badge.md) | The Judas–Lucifer Scale, the Trinity/Seasons/Turning-Point badges, the BADGE SISTEM 1:1 circles |
+| [Instrument (subfolder)](instrument/___instrument.md) | "The Instrument" Encyclopedia chapter art and the subdial plates |
+| [Months (subfolder)](months/___months.md) | The Slavic Months Calendar-pointer 12-set |
+| [Era (subfolder)](era/___era.md) | The Age of Light / Age of Darkness ERA TERMS set |
+| [Eclipse (subfolder)](eclipse/___eclipse.md) | The seven eclipse-category Encyclopedia emblems |
+| [Titles (subfolder)](titles/___titles.md) | Every weekday theme's title-page plate, the one sheet that intentionally carries lettering |
+| [Monsters (subfolder)](monsters/___monsters.md) | The Greek Monsters weekday theme |
+| [Chinese (subfolder)](chinese/___chinese.md) | The Chinese Mythology weekday theme |
+| [WoW (subfolder)](wow/___wow.md) | The World of Warcraft weekday theme — three parallel casts |
+| [Cyberpunk (subfolder)](cyberpunk/___cyberpunk.md) | The Cyberpunk 2077 weekday theme — three parallel casts, the first rotation seats |
+| [Star Wars (subfolder)](starwars/___starwars.md) | The Star Wars weekday theme — three casts, plus two copyright-workaround variant sheets |
+| [Corporate (subfolder)](corporate/___corporate.md) | THE CORPORATION weekday theme |
+| [Guide (subfolder)](guide/___guide.md) | The Guide dialog's owner-facing screenshot checklist (Serbian) |
+| [Icons (subfolder)](icons/___icons.md) | The small SVG icon request list (Serbian) |
 
-### `zodiac/`
-- `chinese_zodiac_prompts.md` — bronze + colored (12 animals), the
-  excluded Cat thirteenth (Encyclopedia-only, no dial seat)
-- `astrology_prompts.md` — sign + logo + constellation + colored (12
-  signs), the excluded Ophiuchus thirteenth (Encyclopedia-only, no
-  dial seat)
+Every sheet not covered by the folders above (the legacy regeneration
+sheets and closed sets folded straight into the Weekday folder) is listed
+in [Weekday (subfolder)](weekday/___weekday.md).
 
-### `badge/`
-- `scale_badge_prompts.md` — the Judas–Lucifer Scale, BOTH
-  registers: metal cameo triptych + the stained-glass windows
-  (owner masters 2026-07-15) with the rose-window UNION
-- `season_trinity_prompts.md` — Trinity, Seasons, Turning Points,
-  Meteorological twins
-- `badge_1to1_prompts.md` — BADGE SISTEM round one (ART-INFRA round,
-  owner 2026-07-20/21): 38 round 1:1 circular companions for every
-  2:1 archetype lancet across all seven families, feeding a FUTURE
-  hover-card left-column layout (wiring undecided, owner call)
+## `COVERAGE.md`
 
-### `months/`
-- `months_prompts.md` — the Slavic Months Calendar-pointer 12-set
-  (R7b, owner-sealed 2026-07-21): twelve round rose-window medallions,
-  one per Croatian month, sharing a "Wheel of Labour" spoked
-  cart-wheel border; the render of the mounted marks is a separate
-  future round
-
-### `monsters/` (PROMPT SHEETS round, owner-approved 2026-07-21 night)
-- `greek_monsters_prompts.md` — the Greek Monsters weekday theme (a
-  NEW theme, single roster): six bestiary seats, the Nemean Lion /
-  Cerberus dual (literal brothers, children of Typhon and Echidna),
-  the Excluded Ninth Pegasus. Night-window register wearing the
-  Olympian family's own Greek-key border in a darker bestiary cut; its
-  title plate (Typhon & Echidna) is cross-referenced into
-  `titles/theme_title_prompts.md`, not written twice
-
-### `chinese/` (PROMPT SHEETS round, owner-approved 2026-07-21 night;
-SEALED v2 roster, owner 2026-07-21, "Bravo, sve mi se sviđa")
-- `chinese_myth_prompts.md` — the Chinese Mythology weekday theme (a
-  NEW theme, single roster; NOT the `chinese` zodiac-animal theme under
-  `zodiac/`): six immortal seats (Guan Yu on Wednesday as the
-  merchant's own patron, Caishen guesting in his scene; Erlang Shen on
-  Tuesday), the Sun Wukong / Six-Eared Macaque dual (the Monkey King
-  crowned against his own perfect false double), the Excluded Ninth
-  Buddha (master of the dual's own tell, and of the Ninth seat's sin,
-  Wish). Night-window register wearing its own cloud-scroll (xiangyun)
-  border, jade-and-lacquer palette; its title plate (The Peach Banquet)
-  is cross-referenced into `titles/theme_title_prompts.md`, not written
-  twice
-
-### `titles/` (PROMPT SHEETS round, owner item 7, 2026-07-21; +10 more
-in the GAMING + CORPORATION SHEET WAVE, R10, 2026-07-22)
-- `theme_title_prompts.md` — fills every weekday theme's (plus
-  Intelligences' and Slavic Months') documented graceful-absent
-  title-page plate slot, 34 briefs (24 original + 10 from R10) + 2
-  cross-referenced (Greek Monsters, Chinese Mythology — WoW/Cyberpunk/
-  Star Wars/Corporate's own 10 are written in FULL here instead, not
-  cross-referenced). NEW sourceless root, `assets/weeks/societies/wolf/primary/colored/<key>.png`,
-  the same precedent `months/` and `subdial/` already set. The ONE
-  sheet in the whole project that intentionally carries lettering —
-  each plate's own wordmark, in a script matching that theme's culture
-  (owner item 7). Continents is excluded — it already has a real,
-  wired title image (`assets/celestial/earth/world.png`)
-
-### `wow/` (GAMING + CORPORATION SHEET WAVE, owner-sealed rosters
-2026-07-22)
-- `wow_prompts.md` — the World of Warcraft weekday theme (a NEW theme,
-  THREE parallel casts — Alliance, Horde, Evil — riding the same nine
-  seats, generalizing the Planetary/Pantheon "Two Rosters" doctrine
-  from two to three). Carved runestone/faction-crest register, a
-  distinct border family per block; its three title plates are
-  cross-referenced into `titles/theme_title_prompts.md`, not written
-  twice
-
-### `cyberpunk/` (GAMING + CORPORATION SHEET WAVE, owner-sealed rosters
-2026-07-22)
-- `cyberpunk_prompts.md` — the Cyberpunk 2077 weekday theme (THREE
-  casts — Gangs, Street, Power). Introduces the sheet family's first
-  ROTATION SEATS (more than one named figure/faction sharing a day),
-  via a documented `alt/`/`_v*`-stem convention built directly on
-  `config.defaults.rotating_art_file`'s existing search; Power's trio
-  carries a SYNCHRONIZED PAIR ROTATION (every pole holding exactly 2
-  candidates, same mechanism that already keeps the Scale badges'
-  Judas/Lucifer in step). Neon-chrome holo-medallion register; its
-  three title plates are cross-referenced into
-  `titles/theme_title_prompts.md`
-
-### `starwars/` (GAMING + CORPORATION SHEET WAVE, owner-sealed
-addendum mid-round, 2026-07-22)
-- `starwars_prompts.md` — the Star Wars weekday theme (THREE casts —
-  Svetla/light, Tamna/dark, Nova/the dyad). Nova's own Unfound seat is
-  a PLACE-vs-PLACE dual rotation (The Ghosts / Exegol), modeled on
-  `core/continents.md`'s own Zealandia/Pangea precedent rather than a
-  plain person-vs-person swap. Anakin/Vader, Leia and Han each appear
-  in two sets at different ages/roles — legitimate repeats, not
-  duplicates. Aurebesh-flavored holo-crest register (letterform-flavor
-  only, never a genuine alphabet); its three title plates are
-  cross-referenced into `titles/theme_title_prompts.md`
-
-### `corporate/` (GAMING + CORPORATION SHEET WAVE, owner-sealed roster
-2026-07-22)
-- `corporate_prompts.md` — THE CORPORATION weekday theme (a NEW theme,
-  single roster, same closed-set shape as Greek Monsters/Chinese
-  Mythology): six executive seats, the CEO/Chairman of the Board dual,
-  the Founder ninth ("the ghost seat every company has"). Every figure
-  is an explicit ARCHETYPE — "no likeness of any real person" written
-  into all 18 prompts. Brushed-steel-and-glass corporate seal register;
-  its one title plate is cross-referenced into
-  `titles/theme_title_prompts.md`
-
-### `calendars/` (RESTRUCTURE Phase 3, owner-sealed 2026-07-22)
-The five NEW Dozens that ride the Calendar pointer (the two Dozen
-systems sealed in [The DOMY Canon](../../CANON.md), §The Two Dozen
-Systems). Round calendar-mount medallions, the same night-window glass
-as `months/`; all five are now REGISTERED in
-`config.defaults.CALENDAR_MOUNTS` (art still graceful-absent where a
-sheet has not been generated). Full ledger:
-[Prompt Coverage](COVERAGE.md), §The Four Dozens.
-- `emotions_prompts.md` — the Dozen of the Heart (System B): twelve
-  emotions on their sealed hours (Love crown, Hatred root), the six
-  prism-seat emotions keeping their prism hues, six opposition-axis
-  cures; shared Wheel-of-the-Heart border
-- `virtue_wheel_prompts.md` — Aristotle's twelve in TWO registers of
-  one wheel (System B, paint/light): 12 virtues (light) + 12 vices
-  (paint); the Mean balance-beam border; crown/root layout PENDING
-  owner approval (Courage crown / Cowardice root proposed)
-- `olympians_prompts.md` — the Twelve Olympians in six pairs (System
-  A): Zeus+Hera crown, Poseidon+Demeter root, Apollo/Artemis flanks;
-  Greek-key border
-- `apostles_prompts.md` — the Twelve Apostles sent two by two (System
-  A, Mark 6:7): Peter+Andrew crown, Simon+Judas root (Judas beside
-  midnight mirrors Prism Hatred); fisherman's-Net border
-- `sins_prompts.md` — the Sins Dozen, the FIFTH (System B, SEALED
-  2026-07-29): Pride crowns at 12h with Vainglory folded into it,
-  Treachery roots at 24h, Violence holds 16h; PAINT register, the
-  FROST RING border; axle **Hardness of Heart**, the anti-Peace
-
-### `era/`
-- `era_prompts.md` — the ERA TERMS Encyclopedia set (ROADMAP 15a3):
-  the Age of Light and Age of Darkness, plus the four Starry Seasons
-  inside them (spring/summer of the light era, autumn/winter of the
-  dark era) — one rose-window emblem each, night-window register; the
-  comparative "Eras of the World" article carries no emblem
-
-### `eclipse/`
-- `eclipse_prompts.md` — the ECLIPSES Encyclopedia set (fix round F,
-  owner order 2026-07-19): one night-window rose-window emblem per
-  category the dial distinguishes — SOLAR total/annular/partial/hybrid
-  and LUNAR total/partial/penumbral (7 images, `assets/celestial/eclipse/<Name>.png`),
-  each doctrine-true to the sealed state table (pearl corona, ring of
-  fire, copper blood moon, turquoise fringe, penumbral veil). Backs both
-  the Encyclopedia chapters and the on-dial eclipse hover badge
-
-### `emblem/` — one file per wheel theme
-- `virtue_prompts.md` — the eight Virtues (Humility dual)
-- `sin_prompts.md` — the eight Sins (Servility dual)
-- `mood_prompts.md` — the eight Moods (Awe dual, the Ninth Mood /
-  Eclipse ninth)
-- `intelligences_prompts.md` — the nine intelligences (Encyclopedia
-  set, not a weekday theme)
-
-### `instrument/`
-- `instrument_prompts.md` — the Instrument reader art
-- `subdial_circle_prompts.md` — the subdial plates (the silver
-  master ships; gold/bronze recolor at runtime)
-
-### `archetype/` — one file per pointer archetype (all seven + the Calendar, complete 2026-07-16)
-- `trinity_prompts.md` — the courtroom trio (Jesus the Advocate /
-  the Devil the Prosecutor / The One the Judge) + the all-seeing
-  Eye rosette as the union of the three at the center
-- `family_prompts.md` — Trinity secondary: the Father/Shield, the
-  Mother/Heart, the Child/Dawn + the Hearth rosette + role rondels
-- `persons_prompts.md` — Prism primary: One/Love, Michael/Courage,
-  Devil/Hatred, Jesus/Humility (Lucifer and Judas REUSE the Scale
-  glass windows)
-- `one_soul_prompts.md` — Prism secondary: the six pillar windows each
-  carrying its shadow, the Union rosette, the Child rondel
-- `temperaments_prompts.md` — Seasons: the four temperaments on the
-  season colors + the UNAPPROVED optional tetramorph section
-- `walks_prompts.md` — Compass primary: the eight estates in their
-  material hues + the eight object rondels (Crown … Bell)
-- `life_prompts.md` — Compass secondary: BOTH image registers — the
-  Tree (one oak, eight states) and the Menagerie (eight creatures)
-- `calendar_prompts.md` — the Calendar pointer: twelve month
-  medallions (wedges stay flat color; zodiac art and the Chinese
-  animal medallions REUSE)
-- `triads_prompts.md` — the abstract trios (RESTRUCTURE Phase 3): Time,
-  Callings, Theological, Dialectic — each concept a lancet + a 1:1
-  circle companion, on the Trinity arm geometry (concepts, not the
-  seated persons)
-- `dualities_prompts.md` — the two great dualities (RESTRUCTURE Phase
-  3): Good/Evil and Self/Others (the two halves of One_Love's
-  clear-heart summit), each pole a lancet + a 1:1 circle companion
-- `genesis_prompts.md` — the CUBE WAVE's Trinity third wheel (Session
-  19, [The Cube Canon](../../CUBE.md) §The Double Trinity): the creation
-  trio drawn INVERTED — God the Creator (moon-gray purple 24h), Jesus the
-  Preserver (green 08h), the Devil the Destroyer (orange 16h), each a
-  lancet + a 1:1 circle, plus the centre rosette **The Beginning**
-  (name SEALED 2026-07-26)
-- `council_prompts.md` — the CUBE WAVE's Prism third wheel: the UNION,
-  all six Double-Trinity offices on the six arms at once, with the
-  Lord's Day centre. The wave's one REUSE question is SEALED (owner
-  2026-07-26, "može novo"): Route A — six NEW "in session" tellings,
-  all entries load ticked; Route B kept in the sheet as the road not
-  taken
-- `character_prompts.md` — the CUBE WAVE's Compass third wheel: the Cube
-  with the depth axis at zero — eight directions (4 poles + 4 blends),
-  each ONE window carrying its virtue above and its fall below, plus its
-  circle; the Rose's own palette law is stated here, and the three-set
-  figure roster is tabled with CUBE.md's six OPEN slots left OPEN
-- `crosses_prompts.md` — the CUBE WAVE's Two Crosses (Encyclopedia/legend
-  plates, no wheel slot): the upward Path of Light and downward Path of
-  Darkness emblems, the TRUST / DISTRUST centres and the eight stations
-  (Hope·Faith·Love·Salvation, Fear·Anger·Hate·Suffering). Letterless by
-  house rule — FALL/STAR/DOMY/SAFE and the Latin/Greek rows stay in the
-  articles
-- `cross_words_prompts.md` — the CROSS-WORDS round (owner UV inbox
-  2026-07-27): the eight classical WORDS the DOMY/PILOT ring letters
-  borrow for their stations (Ysteria·Orge·Detestatio·Miseria,
-  Tharsos·Latria·Pothos·Opheleia) as 1:1 medallions in the crosses
-  family's `secondary` register — words, not stations; no file shared
-  with `crosses_prompts.md`
-- `banknote_offices_prompts.md` — the same round's Dollar legend: the
-  five Double-Trinity OFFICES (Malignant Accuser, Anointed Aegis,
-  Satanic Scourge, Omnific Originator, Nazarene Advocate) as engraved
-  intaglio BANKNOTE plates, a new `archetypes/banknote` family in the
-  note's own craft; the Eye of Providence seat reuses the ring letter
-  library's own masters and gets no entry
-
-- `edges_prompts.md` — the THIRTEEN-AXES wave's eight NEW edge seats
-  (WORKPLAN Session 25, [The Cube Canon](../../CUBE.md) §The 65 Terms):
-  Prudence, Ardor, Steadfastness, Reform, Meekness, Aspiration,
-  Self-Mastery and Diligence, each ONE lancet carrying its virtue above
-  and its fall below plus a circle companion, in the Rose's own ray hue.
-  The family's own device is the CLEAR THIRD PANE — an edge commits two
-  axes and holds the third at measure — and the fall is one committed
-  colour swallowing the other, chosen from the seat's written article
-- `axes_prompts.md` — the same wave's SACRED plates: The One as a
-  rosette of six equal petals around a still white point and NO figure
-  (the centre takes no exemplar, by doctrine), the Sacred Axis as five
-  unequal bands with the luminous stations nearer the centre than the
-  fallen ones, its circle, and the six people of the two sacred seats.
-  Its derivation check is the wave's own verdict that **the twelve human
-  axis pages take no plate at all** — an axis IS its two ends through
-  the centre, which the Rose already draws — with a standalone
-  axis-emblem round left PENDING OWNER
-- The wave's 48 FIGURE badges (8 seats × 3 registers × 2 polarities)
-  live beside the other two Rose figure sheets, in
-  `research/rose_round/edge_figures_prompts.md`
+[Prompt Coverage](COVERAGE.md) is the AGENT-FACING gap ledger — read it
+before writing a sheet, not after. It covers everything
+[Roster](../../ROSTER.md) does NOT walk: the archetype tree, era, eclipse,
+the subdial masters, the Calendar-pointer 12-set, the BADGE SISTEM 1:1
+circles, and the owner's own hand-built collections.
 
 **The Rose of the Twenty-Four's GEOMETRY has no sheet** (CUBE.md §The
-Rose): three identical octa stars offset 15°, 24 rays in 8 palette
-colours — computed, drawn, never painted. Every sheet of the Cube wave
-repeats this in its own Rule #19 derivation check so no future round
-opens a queue for it. **CORRECTION OF RECORD (2026-07-28):** this
-paragraph used to call the Rose "a RING PRESET, the Mason ring's
-sibling", which the owner's own spec had already overruled — the Rose is
-the seventh POINTER, and its ring preset was deleted whole in 0.14.482.
-The GEOMETRY is still computed; the FIGURES that ride it are art, and
-their round is open (`research/rose_round/`).
+Rose): three identical octa stars offset 15°, 24 rays in 8 palette colours
+— computed, drawn, never painted. The FIGURES that ride it are art, and
+their round is open — [Rose Round (subfolder)](../rose_round/___rose_round.md).
 
 ## Connections
 
 ### Uses
-- [The Pantheon Catalog](../pantheon_catalog.md) — the locked rosters
-  and doctrine every sheet implements
+- [The Pantheon Catalog](../pantheon_catalog.md) — the locked rosters and
+  doctrine every sheet implements
 - [Roster](../../ROSTER.md) — per-source coverage (what exists)
 
 ### Used by
+- [Research (folder)](../___research.md) — this folder's own entry point
 - The owner's generation sessions (Gemini / ChatGPT)
 
 ## Design Decisions
 One theme = one file, because the owner generates in order and hunted
 across files before (the colored Skoll case). Prompts are copied
-byte-identical when they move; border identities are per-theme
-constants (meander / knotwork / cartouche / kolovrat…) so a series
-stays recognizable; images never carry lettering — the ONE documented
-exception in the whole project is `titles/theme_title_prompts.md`,
+byte-identical when they move; border identities are per-theme constants
+(meander / knotwork / cartouche / kolovrat…) so a series stays
+recognizable; images never carry lettering — the ONE documented exception
+in the whole project is [Theme Title Prompts](titles/theme_title_prompts.md),
 where the wordmark IS the point of the plate (owner item 7).

@@ -15,7 +15,7 @@ matched pair.
 > `moon_lunations`, `metals` and `ring_letters` are no longer files at
 > all — the program DRAWS them, live, from the same constants the dial
 > itself is drawn from (see
-> [Instrument Diagrams](../../../render/instrument_diagrams.md)). **Do
+> [Instrument Diagrams](../../../render/__about/instrument_diagrams.md)). **Do
 > not capture the five screenshots this sheet plans below, and do not
 > generate anything for `metals` or `ring_letters`.** A stored capture
 > of a live geometry is exactly the asset Rule #19 forbids: it is right

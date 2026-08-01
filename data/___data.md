@@ -1,106 +1,68 @@
 # data/
 
-Repositories over `Database/*` — the only code that knows the file
-schemas. Loud failures with the supported range in the message
-(Rule #1); plain dataclasses out; no Qt (enforced by the purity test).
+Repositories over `Database/*` — the only code that knows the bundled
+JSON/SQLite file schemas. Loud failures with the supported range named
+in the message (Rule #1); plain dataclasses out; no Qt (enforced by the
+purity test).
 
 ## Files
 
-### `locations.py` — Location Repository
-LAZY over the 4 MB `world_locations.json` (45,650 cities; loaded on
-demand, released when the picker closes). Handles the MIXED depth — 127
-of 241 countries mix direct-city leaves with admin sub-dicts — by
-classifying every child by shape (`"latitude" in value`), never by depth.
-Yields `CityRecord`, the only thing persisted after selection.
-See [Locations](locations.md).
-
-### `seasons.py` — Seasons Repository
-Extract-and-discard over `seasons_utc.json` (1560–2640): parses once per
-year, keeps a tiny `YearAnchors`, drops the dict. Handles the verified
-field trap: a year's `winter.start` is the December solstice OF that year
-(ending the entry), while `winter.duration` describes the winter that
-BEGAN it — the two are never paired. `coverage()` returns the (first,
-last) years straight from the data. Years the bundled JSON does not hold
-CHAIN to the injected Deep Time pack (Session 16); bundled years stay
-bundled, bit-identical. See [Seasons](seasons.md).
-
-### `moon_phases.py` — Moon Phases Repository
-Windowed extraction over `moonPhases_utc.json` (1551–2649): the target
-year plus both neighbors, month keys filtered with `isdigit()` (year
-entries mix month dicts with aggregate count keys), "Last Quarter"
-normalized to "Third Quarter". `coverage()` returns the (first, last)
-years straight from the data. Missing years chain to the Deep Time pack
-like the seasons (whole windows from one source, never mixed).
-See [Moon Phases](moon_phases.md).
-
-### `deep_time.py` — Deep Time Repository
-Session 16 (owner 2026-07-17): read-only over the OPTIONAL full-span
-pack `Database/deep_time.sqlite` (−12997…+16993; gitignored, FULL
-installation only). `detect()` is the ONE resolution point; the
-controller injects the instance into the two repositories above.
-Serves proxy-shifted `YearAnchors`/`MoonWindow` for any pack year and
-the eclipse catalog (next/prev by Julian Day) behind the Quick Jump
-eclipse navigation. See [Deep Time Repository](deep_time.md).
-
-### `observatory.py` — Observatory Data
-Session 17 (owner 2026-07-16): read-only over the committed chart
-bundles `observatory_seasons.json` / `observatory_eclipses.json`
-(setup/make_observatory.py) — the four bin-mean season durations plus
-the two derived half-years, the era markers, and the eclipse density +
-per-type summary. Always present (unlike deep_time.sqlite), so the
-[Observatory](../app/observatory.md) never requires the Deep Time pack.
-See [Observatory Data](observatory.md).
-
-### `symbolism.py` — Symbolism Repository
-Per-body blurbs and the full ARTICLE corpus from `symbolism.json` (the
-machine-readable companion of [DOMY Symbolism](../SYMBOLISM.md)) — the
-hover articles per theme, sign, animal, element and Trinity virtue.
-See [Symbolism Repository](symbolism.md).
-
-### `encyclopedia.py` — Encyclopedia Repository
-The Encyclopedia's own content from `Database/encyclopedia.json`
-(instrument articles, week day pages, virtue/sin/mood entries),
-overlay-localized. See [Encyclopedia Repository](encyclopedia.md).
-
-### `cube_model_export.py` — Cube Model Export
-Builds the Character-Cube MODEL (axes, seats, views) the sibling 3D
-Preview gadget's widget shows, from `config.cube`'s own canon — one
-source of truth (root Rule #19), no gadget import, no Qt. See
-[Cube Model Export](cube_model_export.md).
-
-### `translations.py` — Translations
-Translate-once-then-cache (owner spec: we ship only English): corpus
-collection, the keyless gtx client, the hash-tracked per-language
-cache and the Serbian Cyrillic→Latin transliteration.
-See [Translations](translations.md).
-
-### `rings.py` — Ring Presets
-The ring preset cards (bundled `ring_presets.json` + the user's custom
-cards from settings): `{name, positions, letters}`, layouts resolved by
-the positions signature, loud validation. See [Ring Presets](rings.md).
-
-### `hands.py` — Hand Packs
-The hand packs (owner spec 2026-07-12): a folder of hours/minutes/
-seconds images pointing UP plus `hands.json` (name, per-hand pivot,
-bottom-up z-order); bundled `assets/hands/<pack>/` + the user's own
-packs beside the settings file. See [Hand Packs](hands.md).
-
-### `_io.py` — Shared Loader
-`load_json_checked()` — a plain function, not a base class (a few small
-repositories do not justify a hierarchy). `year_bounds(data)` reads the
-(first, last) integer year keys of a bundled database, so coverage is
-never hardcoded (Rule #4) — a Deep Time pack widens the file alone.
+| File | Tier | One line |
+|------|------|----------|
+| `locations.py` | Algorithmic | lazy world-locations tree, shape-classified by depth — [about](__about/locations.md) · [flow](__flow/locations.md) |
+| `seasons.py` | Standard | year → `YearAnchors`, extract-and-discard over `seasons_utc.json` — [about](__about/seasons.md) |
+| `moon_phases.py` | Standard | year → `MoonWindow`, windowed over `moonPhases_utc.json` — [about](__about/moon_phases.md) |
+| `deep_time.py` | Algorithmic | optional full-span SQLite pack, proxy-shifted years + eclipse catalog — [about](__about/deep_time.md) · [flow](__flow/deep_time.md) |
+| `observatory.py` | Algorithmic | Observatory chart bundles + extrema detection — [about](__about/observatory.md) · [flow](__flow/observatory.md) |
+| `symbolism.py` | Algorithmic | per-body blurbs + article corpus, `$ref` reseat resolution — [about](__about/symbolism.md) · [flow](__flow/symbolism.md) |
+| `encyclopedia.py` | Standard | the Encyclopedia's own sections, overlay-localized — [about](__about/encyclopedia.md) |
+| `cube_model_export.py` | Algorithmic | Character Cube canon exported as a 3D Preview MODEL — [about](__about/cube_model_export.md) · [flow](__flow/cube_model_export.md) |
+| `translations.py` | Algorithmic | corpus collection, gtx client, hash-tracked cache, sr transliteration — [about](__about/translations.md) · [flow](__flow/translations.md) |
+| `rings.py` | Algorithmic | ring preset cards, layout resolution, motto angle solving — [about](__about/rings.md) · [flow](__flow/rings.md) |
+| `hands.py` | Standard | hand pack loading + validation — [about](__about/hands.md) |
+| `_io.py` | Trivial | `load_json_checked()` / `year_bounds()` — the shared JSON loader every repository above calls |
+| `__init__.py` | Trivial | docstring only, no code |
 
 ## Connections
 
 ### Uses
 - [Config (folder)](../config/___config.md) — paths and coverage ranges
-- [Core (folder)](../core/___core.md) — `YearAnchors`, `MoonWindow`
-- [Database (folder)](../Database/___database.md) — the JSON files
+- [Core (folder)](../core/___core.md) — `YearAnchors`, `MoonWindow`,
+  `EclipseEvent`, `cube_seating`, `deep_time`, `motto`
+- [Database (folder)](../Database/___database.md) — the JSON/SQLite
+  files
+- [Config Cube](../config/__about/cube.md) — the Character Cube canon
+  (`cube_model_export.py` only)
 
 ### Used by
-- [App (folder)](../app/___app.md) — controller (M3), location picker (M6)
+- [App (folder)](../app/___app.md) — controller, settings dialog,
+  encyclopedia browser
+- [Render (folder)](../render/___render.md) — compositor,
+  cube_preview3d bridge, instrument diagrams
 - [Core (folder)](../core/___core.md) CLI selftest
-- [Tests (folder)](../tests/___tests.md) — run against the LIVE files
-- [Cube Preview3D Bridge](../render/cube_preview3d.md) — the guarded
-  gadget bridge validates and mounts `cube_model_export.build_model()`
+- [Tests (folder)](../tests/___tests.md) — run against the LIVE bundled
+  files
+
+## Design Decisions
+
+- **`_io.py` stays a plain function module, not a base class** — a
+  handful of small repositories does not justify a hierarchy (Rule #5
+  is about not duplicating logic, not about forcing OOP where a
+  function suffices).
+- **Bundled-first chaining:** `SeasonsRepository` and
+  `MoonPhaseRepository` each accept an optional `deep=` repository,
+  injected once at startup by the controller when
+  `DeepTimeRepository.detect()` finds the optional SQLite pack.
+  Bundled years NEVER fall through to the pack — the minute-exact tier
+  stays bit-identical whether or not the pack is installed; only a
+  year the bundle has no entry for chains to it, and the WHOLE window
+  then comes from the pack alone, never mixed with the bundle.
+- **`coverage()` is read from the data on every repository that has
+  one** (`seasons`, `moon_phases`, `deep_time`) — never hardcoded
+  (Rule #4), so a future Deep Time pack simply widens its own file and
+  every consumer follows without a code change.
+- **`cube_model_export.py` lives in `data/` despite not reading
+  `Database/*`** — it belongs here by RESPONSIBILITY (a read-only
+  export over canon data, the same shape as every other repository in
+  this folder), not by import source; it reads `config.cube` /
+  `core.cube_seating` instead of a JSON file.

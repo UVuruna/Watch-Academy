@@ -320,7 +320,7 @@ dial's own Earth marker rather than generating a second set. On the dial
 the body follows the user's `earth_style` and the live sky's day/night
 (`config.defaults.continents_body_art`); the atmo-day face is only the
 baked still frame the Encyclopedia gallery previews with. See
-[Continents (script)](../core/continents.md) for the Ninth easter-egg
+[Continents (script)](../core/__about/continents.md) for the Ninth easter-egg
 law and [Encyclopedia (subfolder)](../app/encyclopedia/___encyclopedia.md) for the topic.
 
 ## Connections
@@ -328,4 +328,4 @@ law and [Encyclopedia (subfolder)](../app/encyclopedia/___encyclopedia.md) for t
 ### Used by
 - [Config (folder)](../config/___config.md) — DEFAULT_SKIN + RING_PRESETS paths
 - [Render (folder)](../render/___render.md) — asset cache
-- [Watch Controller](../app/controller.md) — weekday theme + zodiac art paths
+- [Watch Controller](../app/__about/controller.md) — weekday theme + zodiac art paths

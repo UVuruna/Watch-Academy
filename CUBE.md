@@ -897,9 +897,9 @@ the rule stays **OPEN**, now with its impossible half removed.
 
 ### Where it lives
 
-The words are [Character Cube](config/cube.md) (the 65 terms as data);
+The words are [Character Cube](config/__about/cube.md) (the 65 terms as data);
 the geometry, both seatings and the search are
-[Cube Seating](core/cube_seating.md); the goldens are
+[Cube Seating](core/__about/cube_seating.md); the goldens are
 `tests/test_cube_seating.py`; and `research/seating_preview.py` draws
 both wheels to `research/seating/*.png` for the eye. No pointer is wired
 to either seating yet — that is the queue's later round.

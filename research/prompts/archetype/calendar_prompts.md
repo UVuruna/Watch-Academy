@@ -134,7 +134,7 @@ ROUND stained-glass rondel, night-window register, photorealistic render, isolat
 > pointer follows the same visibility law as every other. The ART
 > conclusion of both bullets is untouched (still: generate nothing);
 > only the sentences explaining WHEN a plate is shown are obsolete.
-> The current reader is [Layers](../../../render/layers.md) §The
+> The current reader is [Layers](../../../render/layers/___layers.md) §The
 > Calendar Pointer.
 
 - **The Zodiac wheel (left) articles** reuse the EXISTING zodiac art

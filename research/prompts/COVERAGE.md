@@ -715,7 +715,7 @@ geometry, and root Rule #19's question kills them as art: *if changing
 a constant would make the painted plate a lie, the plate must not be
 painted.* Move `DIAL_OFFSET_DEG` and a commissioned dial illustration
 is silently wrong. They are COMPUTED now, live, by
-[Instrument Diagrams](../../render/instrument_diagrams.md) — the same
+[Instrument Diagrams](../../render/__about/instrument_diagrams.md) — the same
 verdict the Cube's twenty-three compositions took. `paint_light` is the
 counter-example and keeps its picture: it illustrates a doctrine, not a
 geometry.

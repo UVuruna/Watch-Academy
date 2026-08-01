@@ -178,7 +178,7 @@ installer artifact).
 **Say:** "Radi Sesiju 11 iz WORKPLAN.md — Calendar pointer."
 **Reads:** CANON.md §The Dozen (BOTH variants, the palettes, the
 owner's verdicts on the open points); `Dozen.png` (root);
-`render/layers.md`, `skins/manifest.md`, `config/___config.md`
+`render/layers.md`, `skins/__about/manifest.md`, `config/___config.md`
 (palette system).
 **Delivers:** the twelve-wedge pointer with its two variants —
 Zodiac Dozen (sign boundaries on the axes, 15°-shifted wheel,
@@ -1131,7 +1131,7 @@ absent. Everything else in the original Session 28 entry stands.
   (`constants.NINTH_MECHANISMS["sw_dyad"] == "daynight"`,
   `constants.WEEKDAY_THEME_NINTH_NIGHT`); `WEEKDAY_SEAT_ROSTERS
   ["sw_dyad"]["ninth"]` is deleted. Part of THE DOUBLE NINTH LAW, see
-  [Config (folder)](../config/___config.md) and
+  [Config (folder)](config/___config.md) and
   `tests/test_ninth_mechanisms.py`.
 - ~~**cp_corpo's Throne/Mirror/Ninth mechanism**~~ — **RESOLVED
   2026-07-29: THE WEEKLY MANDATE.** The ISO calendar week's PARITY,

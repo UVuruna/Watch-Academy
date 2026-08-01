@@ -1,465 +1,204 @@
 # tests/
 
-Headless pytest suite; run with `python -m pytest tests` from the project
-root (the root `conftest.py` puts the packages on `sys.path`). Core, data
-and settings tests need no QApplication; the render tests create one on
-the `offscreen` Qt platform.
+Headless pytest suite for an astronomical instrument — most of these tests
+are GOLDEN-VALUE pins against real astronomy (equinox angles, DST hexagram
+tilt, moon illumination, sunrise/sunset), not behavior checks against
+invented numbers. Run with `python -m pytest tests` from the project root
+(the root `conftest.py` puts the packages on `sys.path`). Core, data and
+settings tests need no `QApplication`; render/GUI tests create one on the
+`offscreen` Qt platform. A handful of tests RE-RUN an exhaustive search or
+walk the real bundled `assets/`/`Database/` trees rather than compare
+against a frozen constant, so a golden can never silently drift out of sync
+with the argument that produced it.
+
+Per [DOCS.md](../../../rules/DOCS.md) tier rules, `tests/` is a doc tier of
+its own — this file is the ONLY doc in the folder; no `__about/`, no
+`__flow/`, no per-test `.md`.
 
 ## Files
 
-### `test_angles.py`
-Dial-angle quadrants (12:00→0°, 18:00→90°, 00:00→180°, 06:00→270°),
-minute hand, hexagram sign convention (±15°/hour).
+| File | What it pins |
+|------|---------------|
+| `test_angles.py` | Dial-angle quadrants (12:00→0°, 18:00→90°, 00:00→180°, 06:00→270°), minute hand, hexagram sign convention (±15°/hour). |
+| `test_app_info.py` | Pre-M7 `setup/app_info.json` seed: product markets as **Watch Academy**, exe/installer stay DOMY-named. |
+| `test_archetype.py` | THE ARCHETYPE MODE goldens: seven-archetype grid/figure/center tables, render-level override, hour-space lighting per pointer, Omega reveal, R5-shrunk menu gating. |
+| `test_article_charter.py` | Article Charter rule 4 (no scene description): the exact deleted staging phrases stay dead; standing corpus lint bans depiction verbs while allowing legitimate "stands"/"standing" doctrine. |
+| `test_assets_structure.py` | The `assets/` TAXONOMY MIRROR law: fixed top-level roots, no source-named/`alt/` folders survive, `weeks/<group>/<theme>` matches `WEEK_GROUPS`, every figure image sits at the one legal tree path. |
+| `test_blue_moon.py` | 13th-member-of-the-year law: `thirteen_moon_year` against published full-moon counts, each 13th's window, the Cat's lunisolar leap month, the graceful-absent contract, the Calendar-only four-mode gate. |
+| `test_calendar.py` | Calendar pointer: two wheels' palettes, Almanac real-calendar year mapping, Earth day-arrow, pinned slot layout, no-solar-rotation of wedges, deleted lit-wedge regression guards. |
+| `test_clock_state.py` | Composition through the real repositories for Belgrade 2026-07-07 12:00 CEST: DST-aware cache key, weekday→Mars, hexagram tilt, hands, `is_daylight`, year angle. |
+| `test_config_cohesion.py` | GUARD — see below. |
+| `test_config_sections.py` | GUARD — see below. |
+| `test_continents.py` | Continents theme: six-continent + polar-dual + Zealandia/Pangea-Ninth registration, Ninth easter-egg golden dates, Encyclopedia topic, live day/night body art. |
+| `test_controller_dialogs.py` | Encyclopedia/Guide/Observatory open non-modal, a second open RAISES the live instance instead of stacking, a themed SPACE jump navigates it, `quit()` closes every open dialog, per-dialog opening sizes. |
+| `test_cube_encyclopedia.py` | Cube ENCYCLOPEDIA wave: three new families complete and Charter-obedient, the 24-field union table, Two Crosses, each wheel figure's `enc` index, sealed theme name, Charter-rework regression pin. |
+| `test_cube_preview3d.py` | 3D Preview integration: the model exporter validates against the sibling gadget's schema, `build_widget()` returns `None` for out-of-scope kinds and whenever the gadget is unreachable, the four page families mount a live panel when it IS present (skips, not fails, if the sibling folder is absent). |
+| `test_cube_roster.py` | The ROSTERS: every engine-spoken name stands in `CUBE.md`, sealed 108 seats + 48 new edge seats, each seat's three sets are three different people, centre is always `None`, unknown cell/seat/register raises. |
+| `test_cube_seating.py` | Seating geometry: RE-RUNS the exhaustive search (65-term table, the 3+6+3 family counts, the symmetry law, the parity theorem, the 1056→1 funnel, the pole-hue ceiling) rather than comparing frozen constants. |
+| `test_cube_wheels.py` | Cube wheels engine: third-wheel "cube" slot, sealed cube palettes, the Genesis inversion end to end, Council/Character figure tables, Diamond/Cube toggle, settings round-trip, the Rose ring preset. |
+| `test_deep_time.py` | (uses the `deep_fixture.py` helper below) Year-line formatters, 1 BCE = year 0, the 400-year proxy frame, proleptic Julian Day, ΔT sanity, quick-jump arithmetic, eclipse next/prev with catalog-edge clamp. |
+| `test_design_window.py` | `DesignDialog`: the tab-bounce fix, the Pointer tab's Shape/Curvature+Edge/Hide-night-borders gating matrix per pointer×shape, night-borders row greys out when there is no night. |
+| `test_doc_links.py` | GUARD — see below. |
+| `test_docs_coverage.py` | GUARD — see below. |
+| `test_dual_sunday_wheels.py` | THE DUAL SUNDAY WHEEL MAP: duality is a property of the wheel (center on hexa/trio/Seasons, vertical on Quaternity/Compass, horizontal on Rose/Character), plus the two sealed per-theme flips. |
+| `test_eclipse.py` | Eclipse display: bounded (non-scanning) data lookup, the ±3h core window, red-solar/bronze-lunar render, the absence rule — no Deep Time pack means no eclipse ever renders. |
+| `test_elements.py` | The Elements switches: pointer/weekday/marker/seconds toggles drop exactly their own layers, Colorful-off Aura pixel probe, switched-off elements answer no hovers. |
+| `test_encyclopedia_loading.py` | THE LAZY LOADING LAW: naming a metal variant stays pure, pixels build only in `ensure_variant` (on display or in the background warm) — the fix for a main-thread minutes-long block on every art rename. |
+| `test_encyclopedia_tree.py` | THE ENCYCLOPEDIA TREE: nine wholes seat every theme, the REACHABILITY LAW (every dial theme resolves to a seated topic bar documented look-only exceptions), no-horizontal-scroll, home 3×3 grid, variant-switcher offset, coverage law. |
+| `test_intelligences.py` | Nine Intelligences rewrite: topic page order, the sealed day→intelligence mapping, the Sun's three faces, each article's virtue/vice/mood/weekday/profession web matches `symbolism.json`. |
+| `test_menu_rework.py` | R5 MENU REWORK: `watch_title` short/full forms, the live title row + tray tooltip, the `SHORTCUTS` table and full dispatch, Elements→Visible rename, Time Travel Quick Jump rows, the three R5 mini windows. |
+| `test_months.py` | THE SLAVIC MONTHS: twelve-month Gregorian-order registration, the sourceless `months/` root, the DESIGN ZODIAC mount radius, the Encyclopedia article web (etymology, Gregorian equivalent, pan-Slavic siblings). |
+| `test_moon.py` | Fraction 0.74 on 2026-07-07, anchor-instant exactness, May 2026's 5 events, "Last Quarter" normalization, the TRUE analytic illumination goldens across every 2026 principal instant, the owner cross-check, the proxy-frame un-shift, the research-db sweep (skips cleanly when absent). |
+| `test_ninth_mechanisms.py` | THE DOUBLE NINTH LAW: every registry-shape ninth maps to a `NINTH_MECHANISMS` entry a real dispatch implements, no orphan entries, the three sealed mechanisms by name, live active-only Encyclopedia behavior for the two live-state mechanisms. |
+| `test_observatory.py` | The Observatory: committed series-bundle integrity, season/day-length math goldens, an offscreen render smoke test per chart. |
+| `test_one_soul_theme.py` | ONE SOUL theme: the family complete in wheel arm order, every page obeying the Article Charter, the doctrine content itself, the triple-name display proved on a live offscreen dialog, the Spacebar contract, no duplicated hover row. |
+| `test_palette_law.py` | GUARD — see below. |
+| `test_pointer.py` | Pointer variants (hexa/cross/octa): slot layouts, shared-slot priority, palette presets, the octa bottom slot, the Umbra, the solar-rotation toggle. *(In the structure-law ratchet — owed a test-hygiene split.)* |
+| `test_pointer_shapes.py` | THE POINTERS REWORK: the two shapes' geometry measured on drawn paths, the curvature law, the offset wheels staying on full hours, the owner's own AURA alignment numbers, the lead-line color, the daylight switch reaching the background, settings round-trip. |
+| `test_profiling.py` | The `@timed` statistics store: cumulative aggregates with session-only recents, atomic persistence and reset, the Report's readable-unit formatting. |
+| `test_prompt_paths.py` | THE SHEET-PATH LINT: every prompt sheet's declared `assets/...` drop path resolves to something a config table or consuming module actually references — catches sheet/code path drift before art is generated. |
+| `test_purity.py` | GUARD — see below. |
+| `test_recolor.py` | The metal transformer: golden pins plus one regression per named failure of the kernel it replaced, run against a SYNTHESIZED test plate (never the owner's gitignored `UV/` art). |
+| `test_render.py` | Offscreen compositor smoke tests: frame size, transparent corners, opaque ring, painted center, yellowish noon sector in July daylight. |
+| `test_repositories.py` | Against the LIVE `Database/` files: continent/country/city counts, an audited admin-nested sample, macro-region curation, Belgrade lookup, loud unknown-path/out-of-coverage errors, `coverage()` reading matching its own error text. |
+| `test_rose_pointer.py` | THE ROSE pointer: three-star geometry and z-order on both wheels, the one shared `ROSE_PALETTE`, the weekday COLOR LAW with its dual Sunday, the DAYLIGHT switch's exact scope, the deleted-RING-preset recurrence pin. |
+| `test_scale_rotation.py` | THE UNIVERSAL ROTATION CONVENTION: base file + `_vN` siblings + `alt/` pool merge into one daily rotation, the generic resolver and the Scale-specific wrapper, driven against synthetic tmp trees only. |
+| `test_settings_dialog.py` | M6 settings window: location-picker cascade over the real database, opacity overrides, the palette editor. *(In the structure-law ratchet — owed a test-hygiene split.)* |
+| `test_settings_store.py` | Round-trip, atomic-write cleanup, BOM tolerance, corruption/quarantine-to-`.bak`, Session 16 keys; ADD WATCH per-watch `settings.<N>.json` naming and `discover_watch_indices()`'s startup scan. |
+| `test_shortcuts_r5b.py` | R5b FINAL MAP: the sealed shortcut table, the SLOTS/FAST TRAVEL/LOCATIONS families, the Fast Travel flash overlay, two real `ClockWidget.keyPressEvent` fixes (bare-Space-only, KeypadModifier masking). |
+| `test_skins.py` | Ring presets and the built render config: the DOMY/PILOT/third bundled card goldens (layout, letters), `missing_assets` validation. *(In the structure-law ratchet — owed a test-hygiene split.)* |
+| `test_startup_warm.py` | THE SLOW START fix (14.78s→1.46s for three watches): first paint runs NO metal recolor, the background drain builds it, the warm pass runs ONCE per process, legend-off skips the hover sweep entirely. |
+| `test_structure_law.py` | GUARD — see below. |
+| `test_sun.py` | Golden sun values: Belgrade DST hexagram jump −4.17°→+10.76°, the four Tromsø daylight regimes, Longyearbyen polar-night solar noon, Santiago de Compostela/Kamchatka angles, the mockup day 20.6.2025. |
+| `test_system_trio.py` | The native SPACE-without-focus keyboard hook's install/uninstall bookkeeping and callback contract, stale-hover clearing off themed elements, the permanent crash-log file and a synthetic unhandled exception. |
+| `test_theme_completeness.py` | GUARD — see below. |
+| `test_time_travel.py` | The BCE-capable moment editor: 4500 BCE with pack coverage, refusal messages naming the right tier, the dual-calendar header, proleptic Feb-29 clamping, the guard against a die-visibly `SystemExit`. |
+| `test_translations.py` | Translate-once-then-cache: corpus collection covers every article family, the hash-tracked cache only re-translates changed text, Serbian transliteration, the repository overlay — all offline. |
+| `test_tray.py` | Per-watch tray icon rule: watch 1 the gold master, watch 2 the rose-gold master, watch 3+ tinted along the calendar-month color wheel starting purple, wrapping forever; every `logo_icon()` call returns non-null. |
+| `test_watch_manager.py` | ADD WATCH: `AppController` builds/rediscovers watches across a restart, `add_watch()` seeds from the current watch, `remove_watch()` guards the anchor and tears down the dial window (not just the tray icon) plus its settings file. |
+| `test_weekday_rotation.py` | The rotation convention reaching the weekday tree: real bundled `alt/` assets wired through `weekday_theme_body_art`/`theme_ninth`, THE WEEKLY MANDATE — cp_corpo's rosters turn by ISO-week parity, not daily ordinal. |
+| `test_widget.py` | The clock window's z-order modes: the three-way `z_mode` swap and TRUE always-on-top re-assertion after Qt's native window recreation (the Win32 call is stubbed and counted). |
+| `test_year_wheel.py` | Cardinal points EXACTLY at 0/90/180/270 (rejects naive linear-over-year), monotonicity, loud out-of-span failure, mockup-day Earth within 2° of the top, the `winter.start` field trap. |
 
-### `test_sun.py`
-Golden sun values: Belgrade DST hexagram jump −4.17°→+10.76° across
-2026-03-28/29; the four Tromsø daylight regimes; Longyearbyen polar
-night with solar noon still computable (11:55, rotation −1.2°); Santiago
-de Compostela +39.8° summer / +23.0° winter; Kamchatka +22.6°; the
-mockup day 20.6.2025 (sunrise 04:52, sunset 20:27).
+## Guard tests — monorepo law enforcement
 
-### `test_year_wheel.py`
-Cardinal points EXACTLY at 0/90/180/270 (rejects naive linear-over-year,
-which lands the autumn equinox at ~92.3°); monotonicity; loud
-out-of-span failure; mockup-day Earth within 2° of the top; the
-`winter.start` field trap (previous vs this December solstice).
+Nine tests enforce the monorepo constitution's laws rather than astronomy.
+FOUR of them are the standard guard set every project in the monorepo
+carries ([Code Rules](../../../rules/CODE.md) -> Enforcement) — marked
+**[standard]** below; the rest are this project's own. All four standard
+guards run from [Guard Runner (script)](run_guards.py), which the Claude
+Code hooks in `.claude/settings.json` fire after every edit (`--fast`:
+structure + config sections) and again when a session tries to stop (all
+four). It exits **2**, which is what makes a hook BLOCKING.
 
-### `test_moon.py`
-Fraction 0.74 on 2026-07-07; exactness at anchor instants; May 2026 has
-5 events (two full moons); "Last Quarter" normalization; the nominal
-cosine curve — and the TRUE analytic illumination goldens (Session 16):
-~0/50/100/50 at every 2026 bundled principal instant (±0.6 p.p.), the
-owner's cross-check (2026-07-17 10:11 → 11.5 ± 0.5%), the deep
-proxy-frame un-shift, and the research-database sweep across the whole
-span (skips cleanly when the gitignored research db is absent).
+- **`test_structure_law.py`** **[standard]** — THE STRUCTURE LAW's
+  god-file ratchet. Fails the build on any `.py` file over ~1,000 lines
+  that is not a named `RATCHET` entry; a second test fails if a healed or
+  deleted file is still listed. Current ratchet: `app/controller.py`,
+  `render/compositor.py`, `config/constants.py`, `config/pantheon.py`
+  (owner-approved), `app/observatory.py`, plus five test files
+  (`test_pointer.py`, `test_settings_dialog.py`, `test_skins.py`,
+  `test_archetype.py`, `test_eclipse.py`) owed to a future test-hygiene
+  round. `render/layers.py` LEFT the list on 2026-08-01 when it was split
+  into `render/layers/` plus twelve responsibility modules — the ratchet
+  only ever shrinks.
+- **`test_config_sections.py`** **[standard]** — THE CONFIG SECTION LAW.
+  For every `config/*.py`: no module-level patching of a table defined
+  earlier in the same file (`TABLE[...] = ...`, `TABLE.update(...)`), no
+  duplicate dict keys, and no top-level definition above the file's first
+  section banner. It carries its own shrink-only `PATCHING_RATCHET`, today
+  holding exactly one entry (`config/pantheon.py`) with the reason and the
+  round that owes the fix.
+- **`test_docs_coverage.py`** **[standard]** — THE DOCS LAW, coverage half.
+  Every source file has exactly the docs its TIER requires — Trivial: none
+  at all, Standard: `__about/{name}.md`, Algorithmic: `__about/` **and**
+  `__flow/`. The tier assignment lives in the test itself as two
+  frozensets, so changing a file's tier is a deliberate edit. It also
+  refuses the two shapes MD-First 2.0 replaced: beside-script docs and
+  orphan docs whose script is gone.
+- **`test_doc_links.py`** **[standard]** — THE DOCS LAW, navigation half.
+  No broken relative link in any project `.md`, and every project `.md`
+  reachable from [Watch Academy (README)](../README.md) by following
+  links.
+- **`test_config_cohesion.py`** — the config split's own guard: every
+  `config/*.py` file must be at/under the god-file threshold except the two
+  entries already tracked in `test_structure_law.py`'s ratchet
+  (`constants.py`, `pantheon.py`, not duplicated here); and no name that
+  moved out of `config/defaults.py` into the six new modules (`dial`,
+  `shortcuts`, `pantheon`, `calendar_mounts`, `encyclopedia_ui`, `glow`,
+  `continents`) may still resolve as `defaults.<name>` (Rule #6, no
+  re-export shims).
+- **`test_purity.py`** — `core/`, `data/` and `recolor/` must import no
+  PySide6 and must read no wall clock (`datetime.now`/`.today`,
+  `time.time`); `core/__main__.py` is exempt from the wall-clock check
+  only, as documented CLI glue.
+- **`test_theme_completeness.py`** — THE THEME COMPLETION LAW: a registered
+  theme (every `constants.WEEKDAY_THEMES` key) must resolve its article
+  set, blurb set, title article and (if it has one) Ninth article, with two
+  named exceptions; and every `assets/weeks/` theme folder must be either a
+  registered key or an open row in the STAGING LEDGER
+  (`research/theme_staging.md`) — the guard that would have caught the
+  twelve-cast/429-file failure the law is named for.
+- **`test_palette_law.py`** — THE COLOUR LAW: no hex or CSS `rgba(...)`
+  literal anywhere outside `config/palette.py` (`tests/` itself is exempt —
+  a probe fixture's fill is data, not a design decision); `PALETTE_PRESETS`
+  values are bare names, never inlined hues; every pointer's palette
+  entries form ONE contiguous run in the table; the table's pointer/style
+  pairs agree with `constants.palette_styles_for`.
+- **`test_app_info.py`** — the pre-M7 `setup/app_info.json` seed: `name`/
+  `description` market the app as **Watch Academy** while `exe_name`/
+  `installer_name` stay DOMY-based (`DOMYWatch.exe` /
+  `DOMYWatch_Setup.exe`), since DOMY remains the dial's own on-disk/binary
+  identity.
 
-### `test_clock_state.py`
-Composition through the real repositories for Belgrade 2026-07-07 12:00
-CEST: cache key with DST offset (including the spring-forward day, where
-the key must carry the offset of NOW, not midnight), weekday→Mars,
-hexagram tilt range, hands at the top, `is_daylight`, year angle ~16 days
-past the solstice.
+## Helper modules (not tests)
 
-### `test_elements.py`
-The Elements switches (FINAL.txt #5): pointer off drops the star AND
-the octa info slot, weekday off drops the bodies and the center, both
-markers off drop the year-marker layer, seconds off drops the third
-hand; Colorful off paints the Aura white (pixel saturation probe);
-switched-off elements answer no hovers.
+- **`art_debt.py`** — the ART DEBT REGISTRY: the one list of plates a
+  REGISTERED theme has declared but the owner has not generated yet.
+  `test_settings_dialog.py`, `test_skins.py`, `test_pointer.py` and
+  `test_weekday_rotation.py` each read this ONE module instead of carrying
+  their own hand-written exception list (Rule #5). Semantics are SUBSET,
+  never equality — art arriving can never turn the suite red, but an
+  ungueued gap fails immediately.
+- **`deep_fixture.py`** — builds the SMALL Deep Time fixture pack (same
+  schema as the real generator, never the 92 MB build) that
+  `test_deep_time.py`'s goldens run against.
 
-### `test_render.py`
-Offscreen compositor smoke tests (`QT_QPA_PLATFORM=offscreen`): frame
-size, transparent corners, opaque ring, painted center, yellowish noon
-sector in July daylight.
+## How to run
 
-### `test_archetype.py`
-THE ARCHETYPE MODE goldens (owner sealed package 2026-07-16): the
-seven-archetype grid and figure/center tables, the render-level
-override (slots/weekday off without mutating settings; the big
-seconds hand returns), the hour-space lighting boundaries per pointer
-(trio/cross/hexa/octa, solar rotation riding the drawn arms), the
-1×1-placeholder fallback to the figure's name, the repurposed Omega
-reveal hiding the hands, the graceful two-row article path and the
-pending line, the Walks→Professions encyclopedia mapping, the Earth
-day-label option, and the menu gating (full controller against a TEMP
-settings home) — R5 MENU REWORK shrank the gating test to the
-Archetype toggle + the Pointer Theme/Slot Theme entries (the Design/
-slot-submenu-specific tests moved to `test_menu_rework.py`, which now
-owns the whole R5 round; several tests tied to the retired Quick
-Jump/Design/Slot submenus and the Elements→Visible rename were
-removed here as their subject moved).
+```bash
+python -m pytest tests
+```
 
-### `test_rose_pointer.py`
-THE ROSE — the seventh pointer (owner seal 2026-07-27, [The Cube
-Canon](../CUBE.md) §The Rose). Pins the three-star geometry and its
-z-order on both wheels (`ROSE_STAR_OFFSETS` in DRAW order; the 0° star
-topmost on BOTH, so the dominant arm always points at true 12h;
-Prophecy rides the FUTURE star in the middle z-layer), the one
-`ROSE_PALETTE` shared by both wheels and the Character wheel, the
-weekday COLOR LAW with its dual Sunday (Ruler red 18h, Servant blue
-06h, Thursday and Wednesday keeping their canonical seats) and the
-DAYLIGHT switch (only the Calendar and the Rose honor it; the stored
-setting survives a pointer switch on the other five). Two of its pins
-are guards rather than goldens: the four cardinal hues are checked
-against `core.year_wheel`'s OWN computed turning-point angles — proof
-the palette and the year agree — and
-`test_the_rose_ring_preset_is_gone_for_good` fails the moment any
-trace of Session 20's mis-built RING preset reappears (Rule #25 — the
-recurrence pin, since that build came from a canon mis-transcription
-and was deleted whole).
+Honest warning: the full suite is SLOW — over ~15 minutes on the owner's
+machine (dozens of offscreen Qt widgets, the exhaustive Cube-seating
+search, the live `Database/` walk, the prompt-sheet corpus scan). Run a
+single file or test while iterating:
 
-### `test_pointer_shapes.py`
-THE POINTERS REWORK, phase 1 (owner sheet `UV/Pointers.png`, sealed
-2026-07-29) — see
-[The Pointer Shapes](../render/layers.md#the-pointer-shapes). Pins the
-two SHAPES and their geometry, measured on the DRAWN paths rather than
-re-derived from the formulas: one vertex per arm tip; the plain polygon
-really being a square / hexagon / octagon (every sampled point on the
-straight chord, not merely the corners); the CUBE standing in for the
-Trinity's triangle, silhouette-identical to the Cube look's own figure;
-the Calendar's two hexagrams (odd wedges under the even ones) and its
-twelve-point polygon; the Rose's twenty-four rays. The CURVATURE is
-pinned as a law, not as numbers: 0 = the plain polygon, strictly
-monotone inward, 1.0 landing exactly on the star's inner radius, the
-two edge forms agreeing ONLY at 0 — and inert on the Calendar and the
-Rose. The OFFSET WHEELS: the Seasons' boundaries on 12h/3h/6h/9h in
-both shapes — and, after the owner's CORRECTION round (2026-07-29),
-`test_both_rose_wheels_keep_every_ray_on_a_full_hour`, which pins the
-revoked Prophecy +7.5° shift DEAD (the deleted names must stay absent)
-while both wheels keep all twenty-four rays on full hours, plus a pin
-that no hue left its own ray. The AURA alignment: the owner's own
-golden numbers verbatim (`test_the_rose_wedges_stand_on_the_owners_own_
-hours` — Legacy tips 10h/11h/12h with the wedge 9h → 12h, Prophecy
-tips 11h/12h/13h with 10:30 → 13:30) plus the general law — every ray
-falls inside the wedge drawn in its own hue. The LEAD LINE: every
-pointer × both shapes really strokes `palette.ARM_OUTLINE` on the glass
-(an offscreen colour count, anti-aliasing off), Aurora paints nothing
-at all, and the old Rose-private constant names are gone. The DAYLIGHT
-SWITCH reaching the BACKGROUND: the Umbra flattening to one shade and
-the Aura flooding the night, both measured on rendered pixels. Plus the
-night-border option (clip law, inert while daylight is off, and an
-offscreen pin that it repaints the night and not the day) and the
-settings round-trip of the four new keys
-(defaults for a pre-rework file, `SettingsCorruptError` for a
-hand-edited bad value). `test_the_star_shape_is_untouched_by_the_rework`
-is the regression pin that the default dial did not move. Phase 3
-(the Design window's own rows, `test_design_window.py` below) closes
-the loop here too: `test_the_four_design_rows_persist_and_reach_the_
-live_skin` drives a REAL `WatchController`'s `_design_setters()` and
-checks both `Settings` and the installed skin move.
-
-### `test_design_window.py`
-The `DesignDialog` regressions — THE TAB BOUNCE fix (owner fix
-2026-07-26: a live-apply rebuild now keeps whichever tab was open) and,
-since Pointers REWORK phase 3 (owner sheet `UV/Pointers.png`,
-2026-07-29), the Pointer tab's three new rows: the full pointer×shape
-gating matrix for Shape / Curvature+Edge / Hide-night-borders (a
-polygon pointer in "Polygon" shape shows all three; Aurora shows none;
-the Calendar and the Rose never show Curvature+Edge even in "Polygon"
-shape, since their own "polygon" is a touching-arm star that never
-curves), and which widget calls which `_setters[...]` key with which
-value (a `_RecordingSetters` stub — the real wiring, persistence and
-the live skin, is `test_pointer_shapes.py`'s own controller test above).
-The owner's correction round adds
-`test_night_borders_greys_out_when_there_is_no_night`: the row is
-present in every state, and DISABLED exactly when the Calendar or the
-Rose has its daylight switch off (no night, so nothing to hide).
-
-### `test_cube_seating.py`
-The Seating geometry goldens (WORKPLAN Session 26, CUBE.md §The
-Seatings). It does NOT merely compare against the sealed constants — it
-RE-RUNS the exhaustive search, law by law, so the Rose-24 ring can never
-drift away from the argument that produced it. Pinned: the 65-term table;
-the 3 + 6 + 3 family counts that make the symmetry law possible at all;
-THE SYMMETRY LAW itself (the owner's own hexagram pairs 12h-24h, 4h-16h,
-20h-8h, and what it costs — 48 of the 1056 rings obey it); the parity
-theorem (14 vs 12 over all 26 cells, 12 vs 12 once the Sacred pair
-leaves); the funnel 1056 → 48 → 8 → 4 → 2 → 1; the proven 4-of-6 ceiling
-on pole hues and the mirrored Activation pencil; the hue-pencil
-structure; the Calendar's three families at exactly 120°/120°/60° plus
-the inverted version; the radial law; and the two negative results on
-rotation↔hour (no element of order 24; the half-turn is the inversion).
-
-### `test_cube_roster.py`
-The ROSTERS (WORKPLAN Session 24, CUBE.md §The Rosters) — who holds each
-of the twenty-six human cells in each of the three figure sets, and who
-echoes the two sacred corners. The pins run canon → engine: every name
-the engine speaks must stand in `CUBE.md` (a typo or a quiet swap fails
-at once), the sealed 108 seats are spot-pinned unchanged and the 48 new
-edge seats are pinned whole. Structural pins: each seat's three sets are
-three DIFFERENT people (Charter rule 5); a figure repeats ONLY between a
-vertex and its own flat shadow — proved from the coordinates, not from a
-hand-written list of exceptions; the 52 people this round added are each
-new and each seated once; the centre answers `None` in every register (by
-doctrine); an unknown cell, seat or register RAISES; both Rose wheels
-resolve their 48 seat-readings through the one table; each Cube wheel arm
-seats the cell its own two names claim; and the star map, the roster and
-the disk registers now speak ONE vocabulary.
-
-### `test_cube_wheels.py`
-The Cube wheels engine goldens (WORKPLAN Session 20; owner seal
-2026-07-26, CUBE.md): the third-wheel slot (the "cube" style exists
-only on trio/hexa/octa; sealed menu labels; `effective_palette_style`
-normalization at `apply_display_settings` and in the watch title), the
-sealed cube palettes (Genesis' moon-gray inverted trio, the Council's
-re-dressed hexa wheel, Character = `ROSE_PALETTE` exactly as the Rose
-is drawn), the Genesis inversion end to end (offset only on trio·cube;
-figures/lit-index/weekday-slots on the 24h/16h/08h arms; the arm
-hover speaking its creation office with the pending line and a silent
-Spacebar jump), the Council/Character figure tables, the Diamond/Cube
-display toggle (family gating; 180/N face-rhombus halves), the
-settings round-trip, and the Rose ring preset (the computed card,
-the procedural skin, an offscreen render carrying all eight ray hues,
-and the per-ray hover legend).
-
-### `test_cube_encyclopedia.py`
-The Cube ENCYCLOPEDIA wave (WORKPLAN Session 21, 2026-07-27): the
-three new `encyclopedia.json` families are complete (20 + 5 + 14
-pages) and every one of them obeys the Article Charter's four
-movements in order; the 24-field union table names all twelve
-office/process pairs; the Two Crosses carry the Latin and Greek rows,
-the chiasm, TRUST/DISTRUST and both ciphers; the Archetypes hall's
-three topics resolve and every Cube wheel figure's `enc` index lands
-on the page it argues (the Spacebar contract); the three wheels'
-article sets speak their own prose instead of the pending line; the
-six combo figures the owner delegated to this session are written;
-the sealed prism-light theme name (all three kept, "One Soul" alone
-where one name must stand, and the hexa PRIMARY slot renamed to
-**Persons** on 2026-07-27); and a REGRESSION PIN on the Charter
-rework — the exact scene-describing phrases that were removed can
-never come back.
-
-### `test_one_soul_theme.py`
-The ONE SOUL theme (owner verdict 2026-07-27): the `one_soul`
-encyclopedia family is complete and in the wheel's own arm order
-(title page, six pillars 12h→08h, the Union, the Child) with every
-page obeying the Article Charter; the pages carry the DOCTRINE a
-hover cannot — the conjugation law, all six cross-cures of the three
-axes of love, the union's kept/felt faces, the family triangle and
-its hearth roles; every pillar names its own shadow; the TRIPLE NAME
-is what the reader actually sees (topic title + title page) while the
-gallery card carries the single name, proved on a live offscreen
-dialog that opens on the theme and pages through all nine entries;
-the Spacebar contract for all six arms AND the centre; and a Rule #5
-pin that no dial hover row is duplicated into a page.
-`test_archetype.py` carries the same jump proved through the real
-hover geometry.
-
-### `test_encyclopedia_tree.py`
-THE SESSION 27/35 LAWS, pinned: the tree IS the Encyclopedia — NINE
-wholes (Session 35, 2026-07-29, regrouped from six — "može i 9
-grupacija sa ovim novim velikim sekcijama"), every theme seated in
-exactly one, the built table matching the declaration exactly; eight
-accents drawn from `palette.ROSE_PALETTE` and the ninth `palette.
-MOON_SILVER`, all nine distinct; THE REACHABILITY LAW — every dial
-theme (except the documented look-only keys, reused from `test_theme_
-completeness.py`'s own exception set, Rule #5) resolves through
-`THEME_TO_WHOLE` or `TOPIC_ALIASES` to a seated topic, the guard born
-from the owner's exact complaint that twelve fully-registered casts had
-no seat anywhere in the Encyclopedia; the no-horizontal-scroll law at
-minimum size and max zoom on all three levels; the home screen owns no
-scroll area at all, its 3x3 grid measured from the viewport and never
-raising its own minimum on regrow; the variant switcher's offset law
-(Monday stays Monday, a shorter register clamps); the Cube's four-card
-partition of the 42-page run; the coverage law (every article names a
-plate or a drawer, `PLATELESS_PAGES` stays empty and stale-free).
-
-### `test_theme_completeness.py`
-THE THEME COMPLETION LAW (project `CLAUDE.md`, owner decree
-2026-07-29), enforced: `test_no_registered_theme_is_textless` — every
-`constants.WEEKDAY_THEMES` key resolves its article set, blurb set,
-title article and (where it has one) Ninth article, with the two
-documented exceptions (`planets_art`'s look-only status, the emblem
-family's title-page overwrite) both explained and pinned;
-`test_no_art_sits_unseen` — every `assets/weeks/` theme folder is
-either a registered key or an open row in the STAGING LEDGER
-(`research/theme_staging.md`), the guard that would have caught the
-twelve-cast/429-file failure the law itself is named for. `_look_only_
-themes()` — the dial themes with no topic card of their own
-(`planets_art`) — is the ONE source `test_encyclopedia_tree.py`'s
-REACHABILITY LAW reuses (Rule #5).
-
-### `test_repositories.py`
-Against the LIVE Database files: 5 continents, 241 countries, 121
-mixed-depth, 45,649 cities (post-curation shape); the audited
-admin-nested sample (Serbia→Banat→Ada); the macro-region curation;
-Belgrade lookup; loud unknown-path and out-of-coverage errors; and
-`coverage()` reading (1560–2640 / 1551–2649) straight from the data,
-with the error message matching what coverage reports.
-
-### `test_time_travel.py`
-The BCE-capable moment editor (Session 16, owner slika 13): 4500 BCE
-accepted with the pack coverage (era combo + spin → astro −4499, proxy
-2301/cycles 17), the refusal messages (pack absent names the pack;
-beyond the pack names the Laskar tier), the live precision-tier and
-coverage lines, the dual-calendar header (Anno Lucis always paired;
-third calendar joins), era labels per notation, proleptic Feb-29
-clamping (year 0 IS leap), the inclusive bounds — and the proof the
-guard blocks the die-visibly SystemExit path. The R5 Quick Jump ROWS
-(item 3A) goldens live in `test_menu_rework.py` instead (arrow clicks
-edit the dialog's own fields without touching a live simulation,
-eclipse-row graying, pole/Greenwich/city rows).
-
-### `art_debt.py`
-Not a test — the ART DEBT REGISTRY, the ONE list of plates a REGISTERED
-theme declares and the owner has not generated yet. Four guards across
-three files (`test_settings_dialog.py`'s bronze skeleton,
-`test_skins.py`'s colored set, `test_pointer.py`'s Sunday Mirror and
-Ninth, `test_weekday_rotation.py`'s seat rosters) each used to carry
-their own hand-written exception; completion wave III (Session 33) would
-have made that four parallel debt lists, so they read this module
-instead (Rule #5). Semantics are SUBSET, never equality: art arriving can
-never turn the suite red, while a gap that is not in the registry — a
-stem typo, a folder rename, a cast wired against art nobody queued —
-fails immediately. Its prose authority is
-[Theme Staging Ledger](../research/theme_staging.md) §Art Owed.
-
-### `deep_fixture.py` + `test_deep_time.py`
-Session 16: the SMALL fixture pack builder (same schema as the
-generator — never the 92 MB build) and the Deep Time goldens: the
-year-line formatters (owner amendment 2026-07-17), 1 BCE = year 0
-round-trips, third-era years, the 400-year proxy frame (canonical
-window, leap/weekday preservation), proleptic Julian Day (modern
-goldens + a real-pack sweep that skips when the pack is absent), ΔT
-sanity against measured Swiss Ephemeris values, quick-jump calendar
-arithmetic (leap clamps, era edges), pack detection present/absent,
-proxy-shifted anchors/windows, loud missing-year errors, repository
-chaining (bundled years stay bit-identical), and eclipse next/prev
-with the catalog-edge clamp.
-
-### `test_settings_store.py`
-Round-trip, atomic-write cleanup, BOM tolerance, corruption and
-diameter-range errors, quarantine-to-.bak; the Session 16 keys
-(era_notation/show_era_suffix/third_era/jump_cities) round-trip and
-validate loudly. ADD WATCH round (owner INSTRUCTION.txt item 2, sealed
-2026-07-21): `config.paths.settings_path(watch_index)`'s naming scheme
-(`settings.json` for watch 1, `settings.<N>.json` for 2+, sharing one
-user dir), independent round-trips per watch file, and
-`discover_watch_indices()`'s startup scan (finds every numbered file,
-ignores a quarantined `.bak`/an in-flight `.tmp`, `[1]` on an empty dir).
-
-### `test_tray.py`
-ADD WATCH round (owner INSTRUCTION.txt item 2B): the per-watch tray
-icon rule — watch 1 the gold master untouched, watch 2 the pre-existing
-rose-gold master (not a recolor), watch 3+ tinted along the CALENDAR
-MONTH color wheel starting PURPLE `#8000FF` (R:G:B 1:0:2, the owner's
-own worked example) then BLUE `#0000FF` (R:G:B 0:0:1) and onward,
-wrapping forever past December; every `logo_icon(watch_index)` call
-returns a non-null `QIcon`.
-
-### `test_watch_manager.py`
-ADD WATCH round: `app.watch_manager.AppController` builds one anchor
-watch (index 1) at startup and rediscovers every watch on disk across a
-restart; `add_watch()` seeds a new watch's settings from the CURRENT
-watch (position cleared so it re-centers instead of overlapping);
-`remove_watch()` refuses the anchor, confirms via a Yes/No box before
-tearing a watch down, and deletes its settings file — a removed watch's
-own index is never reused while a higher one survives; the menu TITLE
-row (and ONLY the title row — the tray hover stays full always) switches
-short/full as the roster crosses two watches; Exit is wired to the
-manager's `quit_all()` (process-wide) on every watch, Remove Watch stays
-per-watch. **REGRESSION (owner bug 2026-07-29, Rule #25):** Remove Watch
-closes the DIAL WINDOW (plus legend popup and hover poller), not only the
-tray icon, and a removed watch never resurrects its deleted
-`settings.<N>.json` through a late debounced position save — the two
-halves of the ghost-dial bug, one test each.
-
-### `test_profiling.py`
-The `@timed` statistics store (owner 2026-07-15): cumulative
-aggregates with session-only recents, atomic persistence and reset;
-the Report's readable-unit formatting (ns whole, µs/ms at two
-decimals, s at three).
-
-### `test_palette_law.py`
-THE COLOUR LAW (owner verdict 2026-07-29), pinned in four clauses: no
-colour literal anywhere outside [Palette](../config/palette.md);
-`PALETTE_PRESETS` names its wheels and spells no hue out; every
-pointer's entries form ONE contiguous run (the exact defect the owner
-found — PRISM's Council thirty-six lines from its own primary wheel);
-and the table agrees with the pointer roster. `tests/` itself is exempt
-from clause 1 — a probe pixmap's fill is data, not a design decision.
-
-### `test_structure_law.py`
-THE STRUCTURE LAW's guard (root CLAUDE.md, Rule #20 — owner decree
-2026-07-29, supreme): no `.py` file in the project may cross the
-~1,000-line god-file threshold unless it is a named entry in the
-test's RATCHET allowlist, where every entry documents why it is
-tolerated and which session owes the split. The ratchet may only
-SHRINK — a healed or vanished file must leave the list, and adding an
-entry requires the owner's explicit approval in that same session.
-Eleven debtors were named on the law's first day (defaults.py owed to
-Session 36, layers.py/compositor.py to the render split, controller.py
-and observatory.py to an app round, constants.py to a post-36 round,
-five test files to a test hygiene round). Session 36 healed and
-deleted the defaults.py entry the same commit it split the file; it
-could NOT do the same for the new `config/pantheon.py` (the weekday
-theme registry, provably over the threshold at its floor — see
-`config/pantheon.md`), which stays unratcheted and failing on purpose,
-an owner decision this session did not have the authority to make for
-itself.
-
-### `test_config_cohesion.py`
-THE CONFIG SPLIT's own guard (Session 36, WORKPLAN-STRUCTURE.md):
-every `config/*.py` file is at or under the god-file threshold except
-the two ALREADY-ratchet-tracked exceptions (`constants.py`, untouched
-by the split; `pantheon.py`, the split's one open item — both named in
-`test_structure_law.py`'s own ratchet, never duplicated here); and no
-name that moved out of `config/defaults.py` into one of the six new
-modules (or `continents.py`, the pantheon deterministic fallback)
-remains reachable as `defaults.<name>` — Rule #6, no re-export shims.
-
-### `test_ninth_mechanisms.py`
-THE DOUBLE NINTH LAW (owner decree 2026-07-29): every double ninth found
-in ANY registry shape (`WEEKDAY_THEME_NINTH_EASTER_EGG`,
-`WEEKDAY_THEME_NINTH_NIGHT`, `WEEKDAY_SEAT_ROSTERS[*]["ninth"]`) has a
-`NINTH_MECHANISMS` entry naming a mechanism a real dispatch implements,
-and no orphan entry names a theme with no double ninth at all; pins the
-three sealed mechanisms by name (continents "easter_egg", sw_dyad
-"daynight", cp_corpo "term_weekly"); proves `render.layers.
-ninth_table_for` dispatches by mechanism (and that "term_weekly"
-deliberately reaches no alt table); and proves the Encyclopedia's
-active-only law on live offscreen `topics()` calls for both live-state
-mechanisms — sw_dyad's day/night Ghosts/Exegol switch and cp_corpo's
-ISO-week-parity WEEKLY MANDATE (Throne/Mirror/Ninth flipping together,
-names staying static while the plates turn) — reached through the
-merged `starwars`/`cyberpunk` variant cards.
-
-### `test_purity.py`
-Asserts nothing under `core/` or `data/` mentions PySide6 — and that
-library code reads no wall clock (`datetime.now`/`.today`/`time.time`;
-`core/__main__.py` is exempt as CLI glue).
-
-### `test_controller_dialogs.py`
-R4 owner instruction batch 2026-07-20, ITEM 1/3: Encyclopedia/Guide/
-Observatory open NON-MODAL (`.show()`, `isModal()` False) and stay that
-way while the dial keeps processing events; a second open request
-RAISES the live instance (identity-checked) instead of stacking a
-duplicate; a themed second SPACE jump NAVIGATES the live Encyclopedia
-window (`navigate_to`); closing a dialog clears the controller's own
-reference; `quit()` closes every still-open one — widened this round
-to the three R5 mini windows too (Design/Pointer Theme/Slot Theme).
-Opening sizes: A4 portrait at 80% screen height (Encyclopedia
-respecting its own gallery min-width law, Observatory), square at 50%
-(Guide, Settings respecting its own content-width floor) — built
-against a REAL `WatchController` (standalone construction, unchanged
-by the ADD WATCH round's `app.watch_manager.AppController`), minus the
-single-instance mutex and `run()`'s tray/scheduler/background-thread
-side effects.
-
-### `test_menu_rework.py`
-R5 MENU REWORK round (owner spec 2026-07-20,
-`UV/DESIGN/RIGHT CLICK MENU.txt` + `UV/INSTRUCTION.txt` item 2A):
-`watch_title` both forms (short = location, full = the owner's own
-"Belgrade-Gold DOMY-Family Trinity" worked example, untranslated by
-signature); the TITLE row heading the menu + the tray tooltip staying
-live through `_install_skin` without a rebuild; the keyboard
-`SHORTCUTS` table (the ten owner-named action ids, every entry
-carrying a modifier so it can never feed the hidden-mode secret
-buffer, `shortcut_display`'s "Ctrl+R" rendering), a bare
-`ClockWidget.keyPressEvent` → `shortcut_triggered` mapping for every
-table entry (isolated from a real controller so it cannot open a
-blocking modal), `WatchController._on_shortcut`'s full dispatch table,
-`_cycle_ring`/`_cycle_slots`'s legal-state walks; the Elements→Visible
-rename (menu text, no stale `_element_*` identifiers); the Time
-Travel window's own Quick Jump rows (item 3A — arrow clicks edit the
-dialog's own fields without touching the live simulation, an edge
-clamp is a no-op, eclipse rows gray without the Deep Time pack, pole/
-Greenwich/city rows); and the three mini windows (Pointer Theme, Slot
-Theme, Design, item 3B/3C/3D) — non-modal + raises-on-second-open,
-their own gating (Archetype-on, Pointer hidden, no Slot visible), live
-regray while already open, and picks applying through the SAME
-`_set_*` methods the old menu chains used.
-
-### `test_app_info.py`
-WORKPLAN Session 22 (the Renaming, 2026-07-27): pins the pre-M7
-`setup/app_info.json` seed — `name`/`description` say **Watch Academy**
-(the sealed application name, CUBE.md §The Name) while `exe_name`/
-`installer_name` stay DOMY-based, since DOMY remains the dial's own
-name and the on-disk/binary identity.
+```bash
+python -m pytest tests/test_moon.py
+python -m pytest tests/test_moon.py::test_fraction_matches_the_owner_cross_check
+```
 
 ## Connections
 
+- [Watch Academy (README)](../README.md) — project entry point; this
+  suite is the project's verification layer.
+
 ### Uses
-- [Core (folder)](../core/___core.md), [Data (folder)](../data/___data.md),
-  [App (folder)](../app/___app.md) (settings store),
-  [Database (folder)](../Database/___database.md)
+- [Config (folder)](../config/___config.md) — the tables and thresholds
+  every golden and every guard test reads against (palette, constants,
+  pantheon, defaults).
+- [Core (folder)](../core/___core.md) — the pure astronomy/geometry engine
+  the golden-value tests pin directly.
+- [Data (folder)](../data/___data.md) — the repositories (seasons, moon
+  phases, Database cities, Deep Time, encyclopedia, symbolism) tests read
+  through, some against the real bundled files.
+- [Render (folder)](../render/___render.md) — the compositor and layers
+  the offscreen render/smoke tests exercise.
+- [App (folder)](../app/___app.md) — the controller, dialogs, settings
+  store and watch manager the GUI-level tests drive headlessly.
+- [Skins (folder)](../skins/___skins.md) — the ring-preset/skin system
+  `test_skins.py` validates.
+- [Recolor (folder)](../recolor/___recolor.md) — the metal-transform
+  kernel `test_recolor.py` pins and `test_purity.py` keeps Qt-free.
