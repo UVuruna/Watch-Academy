@@ -49,9 +49,6 @@ Layer: config — pure, no Qt, no wall clock.
 - [Palette](palette.md) — `ROSE_PALETTE`, the sealed eight hues eight
   of the nine accents draw from (Rule #5, one palette); the ninth is
   `MOON_SILVER`, the Moon's own dial hue
-- [Defaults](defaults.md) — imported alongside `palette` (unused
-  directly by this module today, kept for the pair's historical import
-  shape)
 
 ### Used by
 - [App (folder)](../../app/___app.md) — the Encyclopedia package

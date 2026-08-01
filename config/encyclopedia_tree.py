@@ -26,7 +26,7 @@ config/encyclopedia_tree.md.
 
 from typing import NamedTuple
 
-from config import defaults, palette
+from config import palette
 
 
 # ═══════════════════════════ THE NINE WHOLES ═══════════════════════════
