@@ -13,6 +13,7 @@ live here with them.
 import ctypes
 from ctypes import wintypes
 
+# ═══════════════════════════ WIN32 CONSTANTS ═══════════════════════════
 # SetWindowLongPtrW index
 GWL_EXSTYLE = -20
 

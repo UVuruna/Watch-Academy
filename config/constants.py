@@ -6,6 +6,7 @@ Tunables (things a developer might reasonably adjust) live in defaults.py.
 Win32 API literals live in winapi.py.
 """
 
+# ═══════════════════════════ APP IDENTITY ═══════════════════════════
 APP_NAME = "DOMY Watch"
 ORGANIZATION = "UVuruna"
 SINGLE_INSTANCE_MUTEX = "DOMYWatch.SingleInstance"
@@ -110,6 +111,7 @@ MOON_CYCLE_QUARTER = 0.25           # fraction between consecutive principal pha
 # from its meta table, never hardcoded.
 DEEP_TIME_DB_FILENAME = "deep_time.sqlite"
 
+# ═══════════════════════════ ERA NOTATION & THIRD CALENDARS ═══════════════════════════
 # Era notation (Settings, owner amendment 2026-07-17): governs ONLY the
 # OFFICIAL year form's labels — "bce_ce" (default) or "bc_ad". Positive
 # years render BARE ("2026", as the world writes it) unless the user
@@ -292,6 +294,7 @@ CITY_NAME_TRANSLITERATIONS = {
     "ð": "d",
 }
 
+# ═══════════════════════════ WEEKDAY BODIES ═══════════════════════════
 # Weekday index (datetime.weekday(): Monday=0) -> celestial body.
 # Sunday's body (Sun) sits in the dial center on the hexa pointer; the
 # other bodies occupy the star's arm slots.
@@ -326,6 +329,7 @@ WEEKDAY_FULL_NAMES = {
     "sun": "Sunday",
 }
 
+# ═══════════════════════════ POINTER ARM & WEDGE COUNTS ═══════════════════════════
 # Pointer variants: how many arms the star has — and with how many hues
 # the day's periods are measured (owner spec: trio 3x120, cross 4x90,
 # hexa 6x60, octa 8x45).
@@ -392,6 +396,7 @@ GREGORIAN_MONTH_NAMES = (
     "July", "August", "September", "October", "November", "December",
 )
 
+# ═══════════════════════════ POINTER DISPLAY NAMES ═══════════════════════════
 # Display names chosen by the owner (FINAL.txt #8): the internal keys
 # stay hexa/cross/octa/trio (settings and code stability); the menu and
 # the docs speak these.
@@ -411,6 +416,7 @@ POINTER_DISPLAY_NAMES = {
     "rose": "Rose",         # three octa stars, 15° apart (CUBE.md)
 }
 
+# ═══════════════════════════ WHEEL LABELS ═══════════════════════════
 # The wheel LABELS per pointer (owner 2026-07-17, ROADMAP 11; naming
 # refinements 2026-07-17/19; the CUBE third wheels sealed 2026-07-26,
 # CUBE.md §Double Trinity/§Character Wheel) — RAW English, the ONE table
@@ -473,6 +479,7 @@ POINTER_PALETTE_LABELS = {
     "default": ("Primary palette", "Secondary palette", "Tertiary palette"),
 }
 
+# ═══════════════════════════ ARM LABELS ═══════════════════════════
 # What each palette circle COLORS (owner spec 2026-07-11: hovering a
 # palette swatch in Settings names its arm position). Order matches
 # PALETTE_PRESETS — clockwise from the top arm; the Compass speaks in
@@ -514,6 +521,7 @@ POINTER_ARM_LABELS = {
     "calendar": tuple(f"Wedge {index + 1}" for index in range(12)),
 }
 
+# ═══════════════════════════ ARM HALF-ANGLES ═══════════════════════════
 # Star arm (diamond) half-angles. Hexa/octa are the regular N-star
 # values (180/N, adjacent arms touch at the inner vertices); the CROSS
 # uses the OCTA arm shape — "octa without the 4 diagonal arms" (owner
@@ -530,6 +538,7 @@ POINTER_ARM_HALF_ANGLE_DEG = {
     "rose": 22.5,
 }
 
+# ═══════════════════════════ POINTER SHAPE & POLYGON EDGES ═══════════════════════════
 # THE POINTER SHAPE (Pointers REWORK phase 1, owner sheet
 # UV/Pointers.png, 2026-07-29) — ONE global choice for the drawn wheel:
 #   "star"    — the standing diamond stars (the shape shipped so far).
@@ -569,6 +578,7 @@ POLYGON_CURVATURE_DEFAULT = 0.0
 POLYGON_EDGE_MODES = ("smooth", "notched")
 POLYGON_EDGE_DEFAULT = "smooth"
 
+# ═══════════════════════════ CALENDAR & ROSE STAR GEOMETRY ═══════════════════════════
 # THE CALENDAR'S TWO SHAPES (owner sheet 2026-07-29): "star" draws TWO
 # HEXAGRAMS 30° apart — six of the twelve wedge hues on each, the one
 # standing on the EVEN wedge centers painted on top (the Rose's z-stack
@@ -618,6 +628,7 @@ ROSE_AURA_WEDGE_ANCHOR = {
     "secondary": (-0.5, 0.5),
 }
 
+# ═══════════════════════════ ROSE FIGURE SETS & DAYLIGHT SWITCH ═══════════════════════════
 # Which figure SET each Rose star carries, keyed by its offset (CUBE.md
 # §The Rose — the two wheels share both anchors and move only the myth):
 # Modern rides the true hours, Historical one ray back, the Myth set on
@@ -645,6 +656,7 @@ ROSE_ARM_SYSTEMS = {"primary": "character_2d", "secondary": "vertices_3d"}
 # ignored on them so the stored choice survives a pointer switch.
 DAYLIGHT_SWITCH_POINTERS = ("calendar", "rose")
 
+# ═══════════════════════════ TRIO & GENESIS ARM THEMES ═══════════════════════════
 # The trio's theological themes per arm angle (SYMBOLISM.md trio canon:
 # Faith vertical toward God, Hope on the dawn side, Love with Venus).
 # Like every pointer, the arm tip is the CENTER of its hue (owner
@@ -663,6 +675,7 @@ GENESIS_ARM_OFFICES = {
     60.0: ("the Devil", "Destroyer"),
 }
 
+# ═══════════════════════════ THE UMBRA WHEEL ═══════════════════════════
 # The UMBRA (gray brightness wheel) ships in three user-selectable
 # forms (owner spec). Sectioned forms follow one structure: the LIGHTEST
 # and DARKEST sections are single, CENTERED on the star's top tip (true
@@ -681,6 +694,7 @@ UMBRA_SECTION_COUNTS = {"fine": 30, "coarse": 24}
 # bright half (128-255), "dark" the dark half (0-127).
 UMBRA_CONTRAST_VARIANTS = ("full", "half", "light", "dark")
 
+# ═══════════════════════════ WHEEL SLOTS ═══════════════════════════
 # The WHEEL SLOTS a pointer's palette row can hold. The keys are
 # POSITIONAL and carry NO meaning of their own (owner decree
 # 2026-07-28, closing the "paint"/"light" era: those two words named a
@@ -712,6 +726,7 @@ def palette_styles_for(pointer: str) -> tuple[str, ...]:
     return PALETTE_STYLES[:2]
 
 
+# ═══════════════════════════ WHEEL ARM OFFSETS ═══════════════════════════
 # THE GENESIS INVERSION (owner: "trougao ka dole", CUBE.md §Double
 # Trinity): the trio's TERTIARY wheel draws its three arms on the OPPOSITE
 # seats — 24h/16h/08h instead of 12h/20h/04h — one arm-angle offset fed
@@ -736,6 +751,7 @@ WHEEL_ARM_OFFSET_DEG = {
     ("cross", "tertiary"): SEASONS_ARM_OFFSET_DEG,
 }
 
+# ═══════════════════════════ THE CUBE LOOK ═══════════════════════════
 # THE CUBE LOOK (owner seal 2026-07-26, CUBE.md §Display laws): the
 # Double-Trinity FAMILY wheels — the Court (trio primary), Genesis (trio
 # tertiary) and the Council (hexa tertiary) — render in TWO looks: "Diamond"
@@ -748,6 +764,7 @@ CUBE_LOOK_WHEELS = (
     ("trio", "primary"), ("trio", "tertiary"), ("hexa", "tertiary"),
 )
 
+# ═══════════════════════════ SOUTH SLOT & COMPLICATIONS ═══════════════════════════
 # The SOUTH SLOT (menu name; the internal octa_* keys stay for settings
 # and code stability, like the pointer keys): user-selected info near
 # the dial bottom. On the Compass it IS the reserved bottom arm; the
@@ -826,10 +843,12 @@ CHINESE_STYLE_ART_DIRS = {
     "bronze": "zodiac/chinese/primary/bronze",
 }
 
+# ═══════════════════════════ EARTH MARKER STYLE ═══════════════════════════
 # Earth marker style: the owner ships every continent in a clean and an
 # atmosphere version.
 EARTH_STYLES = ("clean", "atmo")
 
+# ═══════════════════════════ RING FINISHES & METAL SHADES ═══════════════════════════
 # Ring letters and layouts (owner spec 2026-07-10, data-driven): ring
 # presets live in Database/ring_presets.json (+ the user's custom ones
 # in settings) as {name, positions, letters}; the POSITIONS signature
@@ -920,6 +939,7 @@ METAL_SHADE_TITLES = {
     "steel": "Steel", "pewter": "Pewter", "iron": "Iron",
 }
 
+# ═══════════════════════════ SUBDIAL PLATES ═══════════════════════════
 # The subdial PLATE styles (owner 2026-07-15, his A/B spec): "theme" —
 # the tapisserie field wears the clock tint (the AP design in the
 # theme color) and the tick circle joins the finish metal; "black" —
@@ -941,12 +961,14 @@ SUBDIAL_SET_TITLES = {
     "set1": "1", "set2": "2", "set3": "3", "set4": "4", "solo": "Solo",
 }
 
+# ═══════════════════════════ FIGURE ROSTERS ═══════════════════════════
 # The two figure ROSTERS (owner doctrine 2026-07-15): "planetary" —
 # the day-ruler counterparts (the shipped canon); "pantheon" — the
 # culture's own hierarchy seated on our archetypes. Themes without a
 # pantheon table fall back to planetary (documented).
 FIGURE_ROSTERS = ("planetary", "pantheon")
 
+# ═══════════════════════════ RING LAYOUTS & LETTERS ═══════════════════════════
 RING_LAYOUTS = {
     # Owner naming (2026-07-10): the up-triangle is the masculine
     # Flame, the down-triangle the feminine Chalice, and their union —
@@ -1056,6 +1078,7 @@ RING_LETTER_FILES = {
     "👁 Gemini ☀": "Eye_shine_gem.png",
 }
 
+# ═══════════════════════════ WEEKDAY THEMES ═══════════════════════════
 # Weekday body themes (SYMBOLISM.md canon): "planets" uses the skin's
 # own weekday unit; the others swap in the owner's themed art from
 # assets/skins/domy/weekday/<theme>/ with the canon display names.
@@ -1137,6 +1160,7 @@ WEEKDAY_THEMES = (
     "sw_dyad",             # the generation that inherits the result
 )
 
+# ═══════════════════════════ THEME METAL LOOKS ═══════════════════════════
 # The bronze-plate themes (owner 2026-07-12): their medallions can wear
 # a METAL — bronze is the art as drawn, gold and silver are runtime
 # tritone tints. All other themes are full-color and never tint.
@@ -1186,6 +1210,7 @@ def theme_metals(theme: str) -> tuple[str, ...]:
     overrides it (documented exceptions only, see THEME_METALS_OVERRIDE)."""
     return THEME_METALS_OVERRIDE.get(theme, THEME_METALS)
 
+# ═══════════════════════════ THEME BLURBS & ARTICLES ═══════════════════════════
 # Theme -> symbolism.json blurb key (the encyclopedic text under the
 # hexa diamond hover follows the active theme).
 WEEKDAY_THEME_BLURBS = {
@@ -1300,6 +1325,7 @@ WEEKDAY_THEME_ARTICLES = {
     "sw_dyad": "sw_dyad",
 }
 
+# ═══════════════════════════ THE NINTH TABLES ═══════════════════════════
 # THE NINTH per weekday theme (CANON.md "The Ninth — Outside the
 # Circle"; owner 8+1 doctrine 2026-07-14): (display name, plate path
 # RELATIVE to WEEKDAY_ART_DIR). Themes absent from this table (planets,
@@ -1415,6 +1441,7 @@ WEEKDAY_THEME_NINTH_NIGHT = {
     "sw_dyad": ("Exegol", "sw_dyad/primary/bronze/Exegol.png"),
 }
 
+# ═══════════════════════════ NINTH MECHANISMS ═══════════════════════════
 # THE DOUBLE NINTH LAW (standing law, owner decree 2026-07-29): a theme
 # may mount a DOUBLE NINTH — two faces contending for the ONE seat —
 # only with a DEFINED alternation mechanism, and every reader (the dial,
@@ -1454,6 +1481,7 @@ NINTH_MECHANISMS: dict[str, str] = {
 }
 NINTH_MECHANISM_KINDS = frozenset({"easter_egg", "daynight", "term_weekly"})
 
+# ═══════════════════════════ DUAL/NINTH TIME WINDOW ═══════════════════════════
 # THE DUAL/NINTH TIME WINDOW (owner seal 2026-07-29, superseding
 # INSTRUCTION #5's hour widths): half an hour either side of the day's
 # SOLAR anchors (never wall-clock — `core.angles.hours_between` reads
@@ -1466,6 +1494,7 @@ NINTH_MECHANISM_KINDS = frozenset({"easter_egg", "daynight", "term_weekly"})
 # beside the Servant). Themes with no Ninth ignore the windows.
 CENTER_WINDOW_HOURS = 0.5
 
+# ═══════════════════════════ ZODIAC & CHINESE CALENDAR ═══════════════════════════
 # Chinese zodiac (sexagenary cycle): the animal repeats every 12 years,
 # the element every 10 (two years per element). Year N maps via
 # (N - 4) % 12 and ((N - 4) % 10) // 2 — 2026 = Fire Horse. The Chinese
@@ -1578,6 +1607,7 @@ SOL_WINDOW = ((6, 18), (7, 15))
 # bottom" — honest across years, unlike a fixed MM-DD pair).
 MODRENIK_WINDOW_HALF_DAYS = 14
 
+# ═══════════════════════════ GLOW WINDOWS & ECLIPSE VISIBILITY ═══════════════════════════
 # Season/moon event glow windows (owner spec): the Earth marker glows
 # ±12 h around the four season instants, the Moon marker ±6 h around the
 # four principal phase instants. The phase NAME window stays ±12 h
@@ -1598,6 +1628,7 @@ ECLIPSE_GLOW_WINDOW_H = 3.0
 ECLIPSE_SOLAR_VISIBILITY_KM = 3500.0
 EARTH_RADIUS_KM = 6371.0            # mean radius — the great-circle distance basis
 
+# ═══════════════════════════ SEASON EVENT NAMES ═══════════════════════════
 # Year-wheel anchor angle (mod 360) -> season event name, PER CLIMATE
 # ZONE (owner decision 2026-07-10): the southern hemisphere flips the
 # seasonal names (their Summer Solstice is the December one) and the
@@ -1626,6 +1657,7 @@ ZONE_SEASON_EVENT_NAMES = {
     },
 }
 
+# ═══════════════════════════ TRANSLATION LANGUAGES ═══════════════════════════
 # Languages offered in Settings (owner: "all the provider offers") —
 # the Google-translate codes the gtx endpoint accepts, code -> English
 # display name. ORIGINALS (owner decision 2026-07-11) ship hand-written
@@ -1657,6 +1689,7 @@ TRANSLATION_LANGUAGES = {
     "uz": "Uzbek", "vi": "Vietnamese", "cy": "Welsh",
 }
 
+# ═══════════════════════════ UI SCALE & SATURATION RANGES ═══════════════════════════
 # The Encyclopedia's Ctrl+MouseWheel ZOOM (owner round R8b item 5b:
 # "uvodimo novu funkcionalnost CTRL + MOUSHE WHEEL... za smanjenje
 # svega ili povecanje" — one factor scaling fonts, images and gallery
@@ -1691,6 +1724,7 @@ POINTER_SATURATION_SLIDER_STEP = 1
 RING_SATURATION_RANGE = (0.0, 1.0)
 RING_SATURATION_SLIDER_STEP = 1
 
+# ═══════════════════════════ TROPICS ═══════════════════════════
 # The tropics span the Tropic of Cancer to the Tropic of Capricorn;
 # their year splits into WET and DRY halves bounded by the equinoxes
 # (owner decision) — the wet half centers on the hemisphere's high sun.
@@ -1699,6 +1733,7 @@ TROPIC_LATITUDE_DEG = 23.44
 # falls just before the bundled anchor span (day-count display accuracy).
 TROPICAL_YEAR_DAYS = 365.2422
 
+# ═══════════════════════════ WEEKDAY INDEX ═══════════════════════════
 # Body -> Sunday-first weekday index (the owner's numbering used by the
 # shared-slot priority rule: the occupant whose day comes NEXT wins).
 SUNDAY_FIRST_INDEX = {
@@ -1711,6 +1746,7 @@ SUNDAY_FIRST_INDEX = {
     "saturn": 6,
 }
 
+# ═══════════════════════════ WEEKDAY SLOTS PER POINTER ═══════════════════════════
 # Weekday slots per pointer: (dial degrees from the pointer's TOP vertex,
 # occupant bodies). Slots rotate WITH the star (owner decision). Owner's
 # layouts: hexa = one body per arm, Sun in the center; cross = pairs on
@@ -1789,6 +1825,7 @@ POINTER_WEEKDAY_SLOTS = {
     ),
 }
 
+# ═══════════════════════════ DUALITY SEATING ═══════════════════════════
 # The SOUTH SLOT home angle and the Aurora DUAL layout (owner spec
 # 2026-07-12): with BOTH the weekday body and the slot on, they flank
 # the bottom ±45° — the weekday at 3h on the left, the slot at 21h on

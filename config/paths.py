@@ -19,6 +19,7 @@ from typing import Mapping
 from config import constants
 
 
+# ═══════════════════════════ PATH ROOTS & BUNDLED RESOURCES ═══════════════════════════
 def app_root() -> Path:
     """Root folder holding bundled resources (Database/, assets/)."""
     if getattr(sys, "frozen", False):
@@ -218,6 +219,7 @@ def metal_shade(metal: str) -> str:
     return current_display().shade(metal)
 
 
+# ═══════════════════════════ ART FILE RESOLUTION ═══════════════════════════
 # The terminal filename suffix per art source (RESTRUCTURE Naming
 # Convention, 2026-07-22): the Gemini/ChatGPT split moved OFF the folder
 # tree and ONTO the filename — `<Figure>[_vN]_<src>.png`, source last.

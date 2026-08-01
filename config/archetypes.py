@@ -10,6 +10,7 @@ tunables. Documentation: config/archetypes.md.
 
 from config import cube, dial, palette, paths
 
+# ═══════════════════════════ ARCHETYPE ART ROOT ═══════════════════════════
 # Canonical (source-less) art root — config.paths.art_file appends the
 # active source SUFFIX (assets/archetypes/<family>/<Figure>_<src>.png) at
 # every disk boundary (RESTRUCTURE 2026-07-22).
@@ -19,6 +20,7 @@ ARCHETYPE_ART_DIR = paths.assets_dir() / "archetypes"
 # the Scale badge alone, in four rotating versions; the prism seats get
 # their own lancets.)
 
+# ═══════════════════════════ THE ARCHETYPE GRID ═══════════════════════════
 # The grid (CANON, owner 2026-07-16): the FIRST wheel carries the
 # WORLD's order, the SECOND the HOME's. Aurora and the Calendar have NO
 # archetype at all, and a seat absent from this table is not a bug —
@@ -56,6 +58,7 @@ ARCHETYPE_GRID = {
     ("rose", "secondary"): "rose_vertices",
 }
 
+# ═══════════════════════════ LIFE REGISTER SELECTION ═══════════════════════════
 # The Eight Ages ship TWO image registers (owner "oba", CANON §Compass
 # light): Register I the Tree (one oak, eight states — the ★-marked
 # default) and Register II the Menagerie (eight creatures). This picks
@@ -135,6 +138,7 @@ ARCHETYPE_PENDING_LINE = (
 )
 
 
+# ═══════════════════════════ FIGURE ROW HELPER ═══════════════════════════
 def _fig(angle, file, name, row2, entity, enc=None, rotates=False, cell=None):
     """One figure row: unrotated arm angle (dial degrees from the
     top), canonical art path, the TWO-ROW names (row 1 the figure,
@@ -154,6 +158,7 @@ def _fig(angle, file, name, row2, entity, enc=None, rotates=False, cell=None):
     }
 
 
+# ═══════════════════════════ PER-FAMILY ART DIRECTORIES ═══════════════════════════
 # Tree law 2026-07-26: every family's lancet art lives at its
 # primary register's colored look (`<family>/primary/colored/`);
 # the 1:1 circle badges live BESIDE it at `<family>/circle/colored/`
@@ -204,6 +209,7 @@ SACRED_ART_DIR = ARCHETYPE_ART_DIR / "sacred" / "primary" / "colored"
 # registers and the Rose's three stars all read that one declaration.
 CROSSES_ART_DIR = ARCHETYPE_ART_DIR / "crosses" / "primary" / "colored"
 
+# ═══════════════════════════ THE EIGHT AGES ═══════════════════════════
 # The Eight Ages, shared by both registers: (angle, age name, row-2
 # being per register, entity, file stem) — ordered by arm position so
 # the tuple index IS the hour-space index (0 = the top arm).
@@ -235,6 +241,7 @@ def _life_figures(register: str) -> tuple:
     )
 
 
+# ═══════════════════════════ THE ARCHETYPES TABLE ═══════════════════════════
 # Per archetype: the article SET (Session 6 writes {"rows": [...]}
 # nodes into Database/symbolism.json → articles.<set>, entity keys
 # below + "center"), the ordered FIGURES (index = hour-space index)
@@ -574,6 +581,7 @@ ARCHETYPES = {
 }
 
 
+# ═══════════════════════════ TETRAMORPH SIDE DATA ═══════════════════════════
 # The four elements the TETRAMORPH creatures ride (owner 2026-07-17,
 # CANON §Seasons secondary). Index = the arm/hour-space index, in the SAME
 # order as the quaternity_secondary figures and the _CROSS_ELEMENTS hues: fire
@@ -609,6 +617,7 @@ def tetramorph_evangelist_file(index: int):
     return TETRAMORPH_EVANGELIST_FILES[index]
 
 
+# ═══════════════════════════ PUBLIC ACCESSORS ═══════════════════════════
 def grid_key(pointer: str, palette_style: str) -> str | None:
     """The archetype of one (pointer, wheel) grid seat — None on the
     archetype-less instruments (Aurora, Calendar)."""

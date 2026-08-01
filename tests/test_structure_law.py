@@ -30,12 +30,30 @@ RATCHET: dict[str, tuple[str, str]] = {
     # slot_layout, archetype_geometry, ninths, weekday_body). The ratchet
     # shrinks; it never grows back.
     "app/controller.py": (
-        "window shell, menus, tick plumbing and settings glue in one file",
-        "an app split round — owed, not yet scheduled",
+        "3,449 lines: ~780 of module-level skin building (build_skin, "
+        "apply_display_settings, display_for, watch_title and their "
+        "helpers) plus a 2,577-line WatchController carrying the window/"
+        "tray/menu shell, dialog opening, shortcuts, time travel and tick "
+        "plumbing. The 2026-08-01 split session mapped it but did NOT cut "
+        "it: the free functions lift out cleanly into app/skin_builder.py, "
+        "but the controller itself needs responsibility MIXINS or "
+        "collaborator objects, and every step costs an 18-minute suite run",
+        "a dedicated app-controller split session — start with "
+        "app/skin_builder.py (self-contained, 15 test files import those "
+        "four names directly), then the class",
     ),
     "render/compositor.py": (
-        "scene assembly, hover and tooltip logic in one file",
-        "the render split session, together with layers.py",
+        "3,311 lines carrying THREE responsibilities: layer stacking with "
+        "cadence-driven caching (~450 lines), hit-testing (_element_at, "
+        "_weekday_body_at, _arm_angle_at, set_hover, encyclopedia_target "
+        "and its targeters), and a ~2,000-line bank of tooltip/article "
+        "HTML builders. The 2026-08-01 session split render/layers.py and "
+        "mapped this one, but the tooltip bank is METHODS reading self._"
+        "skin/_day/_tick and the repositories — extracting it means a "
+        "collaborator object, not a file move",
+        "a dedicated compositor split session — lift the free HTML "
+        "helpers to render/article_html.py first, then the tooltip bank "
+        "into a TooltipComposer, then hit-testing",
     ),
     "config/constants.py": (
         "the second config god-file; Session 36's map covers defaults.py only",

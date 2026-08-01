@@ -11,6 +11,7 @@ from dataclasses import dataclass
 from config import palette
 
 
+# ═══════════════════════════ CUBE CELL & AXIS TYPES ═══════════════════════════
 @dataclass(frozen=True)
 class CubeCell:
     """One cell of the 27: where it stands, and the two names the radial
@@ -33,6 +34,7 @@ class CubeAxis:
     warm: CubeCell
 
 
+# ═══════════════════════════ THE THIRTEEN AXES ═══════════════════════════
 THE_ONE = CubeCell((0, 0, 0), "The One")
 
 # The thirteen. The Sacred Axis leads: it is the only one whose two ends
@@ -108,6 +110,7 @@ AXES: tuple[CubeAxis, ...] = (
     ),
 )
 
+# ═══════════════════════════ THE SACRED TRIO ═══════════════════════════
 # The sacred trio, in the order the Sacred Axis reads them (CUBE.md
 # §The Sacred Axis): the LUMINOUS cold corner, the centre, the FALLEN
 # warm corner. The Rose seats all three at the axle — the Being view
@@ -271,6 +274,7 @@ ROSTER: dict[tuple[int, int, int], dict[str, tuple[str, str]]] = {
     },
 }
 
+# ═══════════════════════════ THE SACRED FIGURES ═══════════════════════════
 # THE TWO SACRED CORNERS (CUBE.md §The Rosters): the mythic principals
 # are the persons themselves — the other two registers carry ECHOES,
 # never rivals. The CENTRE is deliberately absent: The One contains all
@@ -306,6 +310,7 @@ def sacred_figure(seat: str, register: str) -> str | None:
         return None
     return SACRED_FIGURES[seat][register]
 
+# ═══════════════════════════ ROSE SEATING ═══════════════════════════
 # THE SIX POLES' SEALED ROSE HUES (CUBE.md §The Sunday axis, the
 # "Consequence for the Cube" table) as indices into
 # `palette.ROSE_PALETTE` — yellow 0, orange 1, red 2, rose 3, purple 4,
@@ -362,6 +367,7 @@ ROSE_24_SEATING: tuple[tuple[int, int, int], ...] = (
     (0, 1, -1),      # ray 23  11h  yellow  edge    Devotion / Martyrdom
 )
 
+# ═══════════════════════════ CALENDAR-12 SEATING ═══════════════════════════
 # THE CALENDAR-12 LAWS (Session 26, re-solved under the symmetry law).
 # The Almanac wheel's twelve wedges (June centred on the top, wedge w at
 # hour 12 + 2w) carry the three families in the same hexagram figure:

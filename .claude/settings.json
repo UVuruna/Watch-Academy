@@ -1,0 +1,63 @@
+{
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          { "type": "command", "command": "python tests/run_guards.py --fast" }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          { "type": "command", "command": "python tests/run_guards.py" }
+        ]
+      }
+    ]
+  },
+  "permissions": {
+    "allow": [
+      "Bash(xargs -I {} find {} -type d)",
+      "Skill(deep-research)",
+      "Skill(deep-research:*)",
+      "Workflow(deep-research)",
+      "WebSearch",
+      "WebFetch(domain:daysoftheweek.org)",
+      "WebFetch(domain:sonsofvikings.com)",
+      "WebFetch(domain:en.wikipedia.org)",
+      "WebFetch(domain:www.ancient-origins.net)",
+      "WebFetch(domain:www.historyskills.com)",
+      "WebFetch(domain:mythnerd.com)",
+      "WebFetch(domain:historycooperative.org)",
+      "WebFetch(domain:www.thecollector.com)",
+      "WebFetch(domain:worldhistoryedu.com)",
+      "WebFetch(domain:pantheon.org)",
+      "WebFetch(domain:www.universetoday.com)",
+      "WebFetch(domain:www.oldgreekgods.com)",
+      "WebFetch(domain:empiresofold.com)",
+      "WebFetch(domain:www.culturefrontier.com)",
+      "WebFetch(domain:greekreporter.com)",
+      "Bash(powershell -Command \"Get-Date\")",
+      "Bash(curl -s \"https://daysoftheweek.org/origins/\")",
+      "Bash(cd /tmp && echo \"Starting verification of Hecate claim\")",
+      "Read(//u/tmp/**)",
+      "Bash(cd /tmp && grep -i \"svarog\\\\|dazhbog\" bxhgcou61.txt | head -30)",
+      "WebFetch(domain:www.theoi.com)",
+      "WebFetch(domain:www.worldhistory.org)",
+      "Bash(powershell -Command \"Write-Host 'Starting claim verification for Uranus'\")",
+      "Bash(python -c \"import json; data = json.load\\(open\\('Database/symbolism.json'\\)\\); print\\(json.dumps\\(data.get\\('articles', {}\\).get\\('greek', {}\\), indent=2\\)\\)\")",
+      "Bash(powershell -Command ' *)",
+      "Bash(curl -s \"https://en.wikipedia.org/wiki/Uranus\")",
+      "PowerShell($path = \"u:\\\\Coding\\\\UVuruna \\(git\\)\\\\Gadgets\\\\DOMY Watch\\\\Database\\\\symbolism.json\"; $content = Get-Content -Path $path -Encoding utf8 | ConvertFrom-Json; $content.articles.greek | Get-Member -MemberType NoteProperty | Select-Object -ExpandProperty Name)",
+      "PowerShell($path = \"u:\\\\Coding\\\\UVuruna \\(git\\)\\\\Gadgets\\\\DOMY Watch\\\\Database\\\\encyclopedia.json\"; $content = Get-Content -Path $path -Encoding utf8 | ConvertFrom-Json; $content.ninths | Get-Member -MemberType NoteProperty | Select-Object -ExpandProperty Name)",
+      "Bash(curl -s \"https://pantheon.org/miscellaneous/origin_names_celestial_bodies.php\")",
+      "Bash(git log *)",
+      "Bash(python -m pytest tests -q)",
+      "Bash(python -c ' *)",
+      "Bash(grep -nE \"^\\\\*\\\\*.*→ \\\\`assets\" research/prompts/starwars/starwars_prompts.md)",
+      "Bash(sed 's/```//')",
+      "Bash(cd \"/u/Coding/UVuruna/Gadgets/DOMY Watch\" && head -42 research/prompts/starwars/starwars_descriptive_prompts.md && echo \"===SAMPLE ENTRY===\" && sed -n '/^### Monday/,/^### Tuesday/p' research/prompts/starwars/starwars_descriptive_prompts.md | head -22)"
+    ]
+  }
+}

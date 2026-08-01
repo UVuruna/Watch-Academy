@@ -10,6 +10,7 @@ Layer: config — pure, no Qt, no wall clock.
 from config import constants, paths
 
 
+# ═══════════════════════════ ARTICLE HOVER SIZING ═══════════════════════════
 # Article hovers (owner spec, FINAL.txt hover rework + EXTRAS): the
 # entity's art rides on top of its article, larger and clearer than on
 # the dial; the prose wraps at a fixed width so QToolTip stays a column.
@@ -121,6 +122,7 @@ LEGEND_PADDING_PX = 8
 # footer; the full article lives in the Encyclopedia.
 LEGEND_TEASER_SENTENCES = 2
 
+# ═══════════════════════════ ENCYCLOPEDIA GALLERY & READER SIZING ═══════════════════════════
 # The Encyclopedia article view (owner UX rounds 2026-07-12/13): the
 # text BLOCK hugs the LEFT edge and spans this fraction of the window
 # width — the prose reflows to fill it (no fixed wrap); the font grows
@@ -206,6 +208,8 @@ ENCYCLOPEDIA_MIN_HEIGHT_PX = 720
 # 1280x720 minimum: 3 rows x ENCYCLOPEDIA_CARD_MIN_HEIGHT_PX (150) + 4 x
 # ENCYCLOPEDIA_CARD_GAP_PX (20) gaps = 530px, well under the 720 floor.
 ENCYCLOPEDIA_HOME_COLUMNS = 3
+
+# ═══════════════════════════ ENCYCLOPEDIA THEME CARDS ═══════════════════════════
 # The card itself. The edge is the whole's own Rose accent — a hairline
 # at rest (EDGE_ALPHA), lit on hover, with a tinted wash behind it.
 ENCYCLOPEDIA_CARD_GAP_PX = 20
@@ -228,6 +232,7 @@ ENCYCLOPEDIA_CARD_TITLE_BUMP = 3       # the title sits this much above the body
 ENCYCLOPEDIA_WHOLE_ART_DIR = paths.assets_dir() / "instrument" / "wholes"
 ENCYCLOPEDIA_MOSAIC_PX = 512           # the composed tile's own side
 ENCYCLOPEDIA_MOSAIC_GAP_PX = 6
+# ═══════════════════════════ UI BUTTONS & RADII ═══════════════════════════
 # Modern reader buttons (owner 2026-07-14: "veći, upečatljiviji,
 # življih boja — ne kao app iz 1990-e"): vivid gradient pills shared by
 # the Encyclopedia and the Guide. Each role owns a (top, bottom)
@@ -240,6 +245,7 @@ UI_BUTTON_SMALL_PADDING_PX = (5, 12)
 THEME_RADIUS_CONTROL_PX = 8      # buttons, inputs, combos
 THEME_RADIUS_CARD_PX = 14        # group-box cards
 THEME_RADIUS_PILL_PX = 999       # nav selection pill, checkbox indicator
+# ═══════════════════════════ READER IMAGE CEILING & HIDDEN GREETINGS ═══════════════════════════
 # Reader image ceiling (owner imperative 2026-07-14): no article or
 # Guide image may eat the page — anything taller than this fraction of
 # the viewport height scales down to it, leaving room for the text.

@@ -29,6 +29,7 @@ from typing import NamedTuple
 from config import defaults, palette
 
 
+# ═══════════════════════════ THE NINE WHOLES ═══════════════════════════
 class Whole(NamedTuple):
     """One top-level card on the Home screen."""
 
@@ -219,15 +220,21 @@ CUBE_TOPICS = (
 # name still lands on its own pages: `bible_dark` opens the Bible card
 # on its third variant, not a ghost topic. Identity entries are included
 # on purpose — the resolver has ONE path, never a special case.
-TOPIC_ALIASES = {
-    source: (topic, index)
-    for topic, (_title, variants) in VARIANT_SOURCES.items()
-    for index, (_label, source) in enumerate(variants)
-}
 # The Planets/Signs/Art LOOK switcher is one theme wearing three art
 # registers (RESTRUCTURE §Themes vs looks) — the dial's `planet_signs`
-# slot still has to resolve a page, and it is the Planets card's own.
-TOPIC_ALIASES["planet_signs"] = ("planets", 0)
+# slot still has to resolve a page, and it is the Planets card's own. It
+# has no variant row of its own, so it joins the derived rows here rather
+# than patching the table after the fact (THE CONFIG SECTION LAW).
+_LOOK_SWITCHER_ALIASES = {"planet_signs": ("planets", 0)}
+
+TOPIC_ALIASES = {
+    **{
+        source: (topic, index)
+        for topic, (_title, variants) in VARIANT_SOURCES.items()
+        for index, (_label, source) in enumerate(variants)
+    },
+    **_LOOK_SWITCHER_ALIASES,
+}
 
 
 # --- The coverage law --------------------------------------------------------
@@ -247,6 +254,7 @@ TOPIC_ALIASES["planet_signs"] = ("planets", 0)
 PLATELESS_PAGES: dict = {}
 
 
+# ═══════════════════════════ ACCESSOR FUNCTIONS ═══════════════════════════
 def cube_target(flat_index: int) -> tuple[str, int]:
     """(topic key, local page index) for a Spacebar jump that names the
     OLD flat cube index. `config/archetypes.py` aims the Cube wheels'

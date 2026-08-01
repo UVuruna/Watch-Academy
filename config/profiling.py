@@ -18,6 +18,7 @@ from contextlib import contextmanager
 
 from config import paths
 
+# ═══════════════════════════ PROFILING STORE STATE & I/O ═══════════════════════════
 RECENT_KEEP = 120                    # session-only sparkline window
 
 _lock = threading.Lock()
@@ -57,6 +58,7 @@ def _ensure_loaded() -> None:
         }
 
 
+# ═══════════════════════════ RECORDING ═══════════════════════════
 def _record(name: str, elapsed_ns: int) -> None:
     global _dirty
     with _lock:
@@ -105,6 +107,7 @@ def measure(name: str):
         _record(name, time.perf_counter_ns() - start)
 
 
+# ═══════════════════════════ SNAPSHOT & MAINTENANCE ═══════════════════════════
 def snapshot() -> dict[str, dict]:
     """A display copy: aggregates + the session's recent durations."""
     with _lock:

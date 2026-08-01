@@ -19,6 +19,7 @@ config/doctrine.md.
 from typing import NamedTuple
 
 
+# ═══════════════════════════ JOURNEY STATION TYPE ═══════════════════════════
 class Station(NamedTuple):
     """One stop on a four-station journey: the arm it stands on, the
     station's own name, and the letter the cipher takes from it."""
@@ -28,6 +29,7 @@ class Station(NamedTuple):
     letter: str
 
 
+# ═══════════════════════════ THE TWO CROSSES ═══════════════════════════
 # THE TWO CROSSES (CUBE.md §The Path of Light / §The Path of Darkness).
 # A seat is what an arm IS; a STATION is where a traveller stands at that
 # hour of the journey — which is why both crosses can walk the same six
@@ -48,6 +50,7 @@ PATH_OF_DARKNESS = (
     Station(12, "Suffering", "S"),
 )
 
+# ═══════════════════════════ FALL AND STAR MNEMONICS ═══════════════════════════
 # THE ENGLISH MNEMONICS (encyclopedia, "FALL and STAR"). The words are
 # the journeys' own verbs and destinations — FALL is the descent's
 # motion, STAR the ascent's aim. The substitutions are canon: Loathing
@@ -67,6 +70,7 @@ STAR = (
     Station(24, "Redemption", "R"),
 )
 
+# ═══════════════════════════ DOMY AND SAFE CIPHERS & PAGE REGISTRY ═══════════════════════════
 # THE ASSEMBLED CIPHERS (encyclopedia, "DOMY and SAFE"). Built by
 # ASSEMBLY rather than walking order, exactly as MASON is assembled from
 # the letters ringing the Banknote's hexagram: the application's own name
@@ -93,6 +97,7 @@ CROSS_PAGES = {
 }
 
 
+# ═══════════════════════════ FIELD TYPE & THE TWENTY-FOUR FIELDS ═══════════════════════════
 class Field(NamedTuple):
     """One of the twenty-four: an office (what the person DOES) and the
     process it works on the object (what HAPPENS to it)."""

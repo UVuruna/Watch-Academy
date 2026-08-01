@@ -11,6 +11,7 @@ from pathlib import Path
 from config import paths
 
 
+# ═══════════════════════════ CONTINENT REGIONS & POLE THRESHOLD ═══════════════════════════
 _CONTINENTS = (
     "europe", "north_america", "south_america", "africa", "asia",
     "oceania",
@@ -24,6 +25,7 @@ _CONTINENTS = (
 # polar settlements honestly see the pole.
 EARTH_POLE_LATITUDE = 75.0
 
+# ═══════════════════════════ THE CONTINENTS WEEKDAY THEME ═══════════════════════════
 # THE CONTINENTS weekday theme (owner-sealed matrix 2026-07-21). The six
 # weekday bodies ride the six continents — the dial's OWN Earth-marker
 # faces are the theme's bodies (owner exception to the one-image-one-
@@ -55,6 +57,7 @@ CONTINENTS_PREVIEW_STYLE = "atmo"
 CONTINENTS_TITLE_IMAGE = EARTH_ART_DIR / "world.png"
 
 
+# ═══════════════════════════ ART RESOLUTION FUNCTIONS ═══════════════════════════
 def earth_face_art(style: str, region: str, phase: str = "day") -> Path:
     """One Earth-marker face on disk — the SAME `{style}_{region}_
     {phase}` naming the YearMarkerSpec variants use (Rule #5), reused as

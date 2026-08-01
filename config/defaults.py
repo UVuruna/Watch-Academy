@@ -49,6 +49,7 @@ from skins.manifest import (
     YearMarkerSpec,
 )
 
+# ═══════════════════════════ COORDINATOR VALUES ═══════════════════════════
 # ECLIPSE_SOLAR_ART lives here, not in glow.py: its value is
 # `pantheon.weekday_art(...)`, and a new module may never import
 # another new module (the fixed DAG) -- this is the one place
@@ -186,6 +187,7 @@ ECLIPSE_SOLAR_TYPE_ICON_SOURCE = {
 
                                      # bigger than the tint swatches)
 
+# ═══════════════════════════ SETTINGS NAV & WORKING SET CEILINGS ═══════════════════════════
 # The Settings dialog's NAVIGATION COLUMN (owner ROADMAP 15h item 1,
 # 2026-07-18): a left list of section TITLES, each opening its panel on
 # the right — replacing the old one-long-scroll layout.
@@ -207,6 +209,7 @@ WORKING_SET_CEILINGS = {
     "celestial/seasons": 1200,
 }
 
+# ═══════════════════════════ TIME TRAVEL & REVEAL TIMING ═══════════════════════════
 REVEAL_WEEK_DURATION_S = 60.0
 
 # Time Travel QUICK JUMPS (owner 2026-07-14): one-click presets under
@@ -228,6 +231,7 @@ TIME_TRAVEL_ROW_ICON_PX = 26
 TIME_TRAVEL_ARROW_BUTTON_PX = 34
 
 
+# ═══════════════════════════ SUBDIAL SOLO RECOLOR ═══════════════════════════
 # Recoloring the SOLO set's silver master to the other two letter
 # finishes (owner 2026-07-15 recipe, still live for the solo set after
 # the Rsub round, 2026-07-21 — sets 1-4 are hand-drawn per finish and
@@ -248,6 +252,7 @@ SUBDIAL_RECOLOR_VERSION = 3      # cache tag — bump on recolor math changes
 # field brightens by this gain before the tint lands (texture intact).
 SUBDIAL_RECOLOR_FIELD_GAIN = 1.9
 
+# ═══════════════════════════ THE REPORT WINDOW ═══════════════════════════
 # The hidden REPORT window (owner 2026-07-15): function efficiency
 # statistics — table + two QPainter charts in one quiet gold hue
 # (single-series marks; identity lives in the row labels, exact
@@ -567,6 +572,7 @@ MONTHS_ART_DIR = (
 HOVER_BADGE_WIDTH_PX = 128
 
 
+# ═══════════════════════════ METAL SHADE RAMPS ═══════════════════════════
 # THE METAL SHADES (rewritten 2026-07-27, owner verdict "prihvaceno" on
 # the new transformer): the numeric recolor recipe is GONE from this file
 # — every shade is now a named RAMP in `recolor/presets/metals.json`, and

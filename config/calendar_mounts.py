@@ -341,6 +341,8 @@ CALENDAR_MOUNTS = {
         centre="hardness_of_heart",
     ),
 }
+
+# ═══════════════════════════ MOUNT RENDER TUNABLES ═══════════════════════════
 # The legal `Settings.calendar_mount` values — derived, never hand-kept
 # (adding a roster above adds its setting value automatically).
 CALENDAR_MOUNT_MODES = ("off",) + tuple(CALENDAR_MOUNTS)

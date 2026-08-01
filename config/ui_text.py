@@ -11,12 +11,14 @@ sentences.
 """
 
 
+# ═══════════════════════════ TRANSLATION LOOKUP ═══════════════════════════
 def ui(overlay: dict, text: str) -> str:
     """The active language's form of a catalog string ({}-placeholders
     intact — the caller formats); English is the fallback source."""
     return overlay.get(f"ui/{text}", text)
 
 
+# ═══════════════════════════ THE UI STRING CATALOG ═══════════════════════════
 UI_STRINGS: tuple[str, ...] = (
     # --- Menu -----------------------------------------------------------------
     "Design", "Hands",
