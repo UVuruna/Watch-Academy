@@ -16,6 +16,7 @@ flowchart TB
 Two thin wrappers feed the same law from different data shapes:
 
 ```mermaid
+%%{init: {'flowchart': {'subGraphTitleMargin': {'top': 0, 'bottom': 35}}}}%%
 flowchart LR
     subgraph DIAL["Dial form"]
         A1[DayContext.season_events] --> A3[date_has_turning_point]
