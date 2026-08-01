@@ -1,9 +1,13 @@
 import matplotlib.pyplot as plt
 import numpy as np
 import json
+from pathlib import Path
 from matplotlib.ticker import MaxNLocator
 
-large = 'Database/seasons_large.json'
+# Same-directory reference, matching the sibling research scripts'
+# Path(__file__)-based resolution (e.g. seating_preview.py's OUT_DIR) —
+# never a raw literal relative to the current working directory.
+large = Path(__file__).resolve().parent / 'seasons_large.json'
 LARGE: dict
 with open(large, 'r') as file:
     LARGE = json.load(file)

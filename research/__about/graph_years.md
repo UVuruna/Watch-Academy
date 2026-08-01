@@ -24,19 +24,26 @@ uncommented at the bottom of the file.
 ## Connections
 
 ### Uses
-- Intends to read `research/seasons_large.json` (the extended season
-  dataset also described in [Research (folder)](../___research.md)) — see
-  the bug note below
+- Reads `research/seasons_large.json` (the extended season dataset also
+  described in [Research (folder)](../___research.md)), resolved via
+  `Path(__file__).resolve().parent` — same-directory, frozen-CWD-safe,
+  matching the sibling research scripts' `Path(__file__)`-based path
+  resolution (e.g. `seating_preview.py`'s `OUT_DIR`)
 - `matplotlib`, `numpy`
 
 ### Used by
 - Nobody; ad hoc, run manually for a quick chart
 
-## Known issue (flagged, not fixed)
+## Fixed issue (2026-08-01)
 
-Line 6 opens `'Database/seasons_large.json'`, but no such file exists —
-`Database/` never held it. The actual data lives at
-`research/seasons_large.json` (confirmed on disk, ~11 MB). Running the
-script from the project root today raises `FileNotFoundError` before any
-plotting happens. Likely a stale path left over from before the file moved
-into `research/`; not fixed here per this migration's docs-only scope.
+Line 6 used to open the raw literal `'Database/seasons_large.json'`, which
+never existed — `Database/` never held this file; only
+`research/seasons_large.json` does (~11 MB). Running the script from the
+project root raised `FileNotFoundError` before any plotting happened —
+a stale path left over from before the file moved into `research/`.
+Fixed by resolving the path relative to the script's own location instead
+of the working directory. Verified: `MPLBACKEND=Agg python
+research/graph_years.py` now runs to completion (loads the JSON, builds
+both graphs, reaches `plt.show()`) with exit code 0 — `Agg` only avoids
+blocking on the interactive window for this headless verification, the
+script itself is unchanged in that regard.
