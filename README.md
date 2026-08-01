@@ -105,6 +105,9 @@ diagram plus language-neutral pseudocode).
 
 ### Structural plans (history, still referenced)
 
+- [The Theme Registry](THEME-REGISTRY.md) — **OPEN discussion brief**
+  (owner decree 2026-08-01): one registry of all themes grouped by kind,
+  per-member contract; resolves the `pantheon.py` patching ratchet
 - [The One-Hierarchy Refactor](RESTRUCTURE.md) — the owner-approved
   plan (sealed 2026-07-22) behind today's `assets/` and Encyclopedia shape
 - [The Structural Arc](WORKPLAN-STRUCTURE.md) — the plan for the
