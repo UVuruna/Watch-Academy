@@ -16,6 +16,7 @@ comment for why.
 
 import hashlib
 import math
+import os
 import sys
 from pathlib import Path
 
@@ -267,38 +268,113 @@ def working_ceiling(path: Path | None) -> int | None:
     return None
 
 
+def build_scaled_copy(source: str, cache: str, width: int) -> None:
+    """Decode `source`, smooth-downscale to `width` px, atomic-save to
+    `cache` — the ONE working-copy build, shared by the inline
+    cache-miss path (`scaled_variant_file`) and the warmup's subprocess
+    pool (Rule #5). Plain-string arguments and no config reads on
+    purpose: a spawned child calls this with everything it needs in
+    hand. Raises `OSError` on an unreadable source or a failed write —
+    each caller keeps its own documented fallback."""
+    scaled = QImage(source).scaledToWidth(
+        width, Qt.TransformationMode.SmoothTransformation
+    )
+    if scaled.isNull():
+        raise OSError(f"cannot decode image source: {source}")
+    raster_store.atomic_save(scaled, Path(cache))
+
+
 @profiling.timed("Working set warmup")
-def warm_working_set(progress=None) -> int:
+def warm_working_set(progress=None, should_stop=None) -> int:
     """Generate the DOWNSCALED working copies of every oversized dial
     asset (owner 2026-07-15: the originals ship full-res, the
-    installation builds the working set). Runs on a background thread
-    at startup — QImage-based, disk-cached like every derived file, a
-    no-op once warm. Returns how many copies were (re)built."""
+    installation builds the working set). A no-op once warm; returns
+    how many copies were (re)built.
+
+    Cold builds run in a small SUBPROCESS pool (0.14.706, the owner's
+    "75 sekundi mrtav sat"): PySide's QImage decode/smooth-scale/encode
+    of a multi-MB source holds the GIL for SECONDS per call, so on the
+    warm THREAD every such call froze the GUI thread with it — the
+    window unmovable, the right-click menu dead, exactly as long as the
+    cold items took. Child processes have their own GIL; the warm
+    thread only waits on futures (which releases the GIL) and prints
+    progress. If the pool cannot start or dies (a frozen build without
+    multiprocessing support, an exhausted machine), the build falls
+    back to the old in-thread loop — slower and GUI-hostile, but warm
+    (Rule #1: degraded and visible, never absent)."""
+    from concurrent.futures import as_completed, ProcessPoolExecutor
     from time import perf_counter
 
     start = perf_counter()
-    built = 0
     todo: list[tuple[Path, int]] = []
     for subtree, ceiling in defaults.WORKING_SET_CEILINGS.items():
         for source in sorted((paths.assets_dir() / subtree).rglob("*.png")):
             size = QImageReader(str(source)).size()
             if size.isValid() and size.width() > ceiling:
                 todo.append((source, ceiling))
-    for index, (source, ceiling) in enumerate(todo):
-        fresh = not _scaled_cache_path(source, ceiling).exists()
-        scaled_variant_file(source, ceiling)
-        if fresh:
-            built += 1
-        if progress is not None and (index + 1) % 10 == 0:
+    cold = [
+        (source, _scaled_cache_path(source, ceiling), ceiling)
+        for source, ceiling in todo
+        if not _scaled_cache_path(source, ceiling).exists()
+    ]
+
+    def report(done: int) -> None:
+        if progress is not None and done % 10 == 0:
             elapsed = perf_counter() - start
             progress(
-                f"[{elapsed:.1f}s] working set {index + 1}/{len(todo)} "
-                f"({(index + 1) / len(todo) * 100:.0f}%)"
+                f"[{elapsed:.1f}s] working set {done}/{len(cold)} "
+                f"({done / len(cold) * 100:.0f}%)"
             )
+
+    built = 0
+    if cold:
+        try:
+            workers = max(1, min(defaults.WORKING_SET_WORKERS, os.cpu_count() or 1))
+            with ProcessPoolExecutor(max_workers=workers) as pool:
+                futures = [
+                    pool.submit(build_scaled_copy, str(source), str(cache), width)
+                    for source, cache, width in cold
+                ]
+                for future in as_completed(futures):
+                    if should_stop is not None and should_stop():
+                        for pending in futures:
+                            pending.cancel()
+                        break
+                    try:
+                        future.result()
+                        built += 1
+                    except OSError as error:
+                        # One bad source is one missing working copy —
+                        # the dial reads the original (slower, correct).
+                        print(
+                            f"working set build failed: {error}",
+                            file=sys.stderr,
+                        )
+                    report(built)
+        except Exception as error:
+            print(
+                f"working set pool unavailable ({error}); "
+                "building in-thread",
+                file=sys.stderr,
+            )
+            for source, cache, width in cold:
+                if should_stop is not None and should_stop():
+                    break
+                if cache.exists():
+                    continue
+                try:
+                    build_scaled_copy(str(source), str(cache), width)
+                    built += 1
+                except OSError as inner:
+                    print(
+                        f"working set build failed: {inner}",
+                        file=sys.stderr,
+                    )
+                report(built)
     if progress is not None and todo:
         progress(
             f"[{perf_counter() - start:.1f}s] working set complete — "
-            f"{len(todo)} oversized sources"
+            f"{len(todo)} oversized sources, {built} built cold"
         )
     return built
 
@@ -330,11 +406,8 @@ def scaled_variant_file(
     if not cache.exists():
         # QImage, not QPixmap — the working-set warmup calls this off
         # the GUI thread (QPixmap is main-thread-only).
-        scaled = QImage(str(path)).scaledToWidth(
-            width, Qt.TransformationMode.SmoothTransformation
-        )
         try:
-            raster_store.atomic_save(scaled, cache)
+            build_scaled_copy(str(path), str(cache), width)
         except OSError as error:
             print(
                 f"scaled variant cache write failed: {error}",

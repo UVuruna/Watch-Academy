@@ -210,6 +210,42 @@ def test_a_finish_switch_after_the_warm_drains_again(app, cold_cache):
         asset_recolor.set_art_stale_notifier(None)
 
 
+def test_warm_working_set_builds_cold_copies_in_children(tmp_path, monkeypatch):
+    """THE 75-SECOND DEAD WINDOW (owner log 2026-07-31): a cold working
+    set decoded/scaled/encoded multi-MB PNGs on the warm THREAD, and
+    each of those Qt calls held the GIL for seconds — the GUI thread
+    could not run a single event handler, so the dial was unmovable and
+    the right-click menu dead for the whole cold stretch. The law: cold
+    working-set builds happen in CHILD PROCESSES (their own GIL); the
+    warm thread only waits and reports."""
+    from PySide6.QtGui import QColor, QImage
+
+    from config import defaults
+    from render import asset_variants
+
+    tree = tmp_path / "assets" / "weeks"
+    tree.mkdir(parents=True)
+    source = QImage(900, 600, QImage.Format.Format_ARGB32)
+    source.fill(QColor("#8B6914"))
+    assert source.save(str(tree / "big.png"))
+
+    monkeypatch.setattr(paths, "assets_dir", lambda: tmp_path / "assets")
+    monkeypatch.setattr(
+        paths, "settings_path", lambda index=1: tmp_path / "settings.json"
+    )
+    monkeypatch.setattr(defaults, "WORKING_SET_CEILINGS", {"weeks": 400})
+
+    built = asset_variants.warm_working_set()
+
+    assert built == 1
+    cache = asset_variants._scaled_cache_path(tree / "big.png", 400)
+    assert cache.exists(), "the cold copy never landed"
+    copy = QImage(str(cache))
+    assert copy.width() == 400, "the working copy must be scaled to the ceiling"
+    # A second pass is a no-op — the scan itself is the verification.
+    assert asset_variants.warm_working_set() == 0
+
+
 def test_legend_off_skips_the_hover_sweep_entirely(app, monkeypatch):
     """The owner's three watches all run with the legend OFF, and his
     2026-07-28 log shows each of them walking the full 40x180 grid to

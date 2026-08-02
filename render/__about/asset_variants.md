@@ -11,7 +11,11 @@ Split Phase 2).
 
 **The working set** (owner 2026-07-15): `working_ceiling(path)` names
 each assets subtree's largest possible on-dial size; `warm_working_set`
-pre-builds the downscaled copies on a background thread at startup;
+pre-builds the downscaled copies at startup — COLD builds run in a
+small SUBPROCESS pool (0.14.706; a multi-MB QImage decode/scale/encode
+holds the GIL for seconds, and on a mere thread that froze the GUI for
+the owner's measured 75 s — child processes have their own GIL), with a
+documented in-thread fallback when the pool cannot start;
 `scaled_variant_file` is the disk-cached downscale
 [Assets](assets.md)`.AssetCache.pixmap_by_height` routes any request
 through whenever it fits under the ceiling — the SAME function the
@@ -70,9 +74,12 @@ circle).
   QImage render, and the disk-cached path wrapper.
 - `subdial_plate_file(finish, tint=None)`: the active subdial set's
   plate, resolved/recolored/tinted as needed.
-- `working_ceiling(path)` / `warm_working_set(progress=None)` /
-  `scaled_variant_file(path, width, build=True)`: the working-set
-  family.
+- `working_ceiling(path)` / `warm_working_set(progress=None,
+  should_stop=None)` / `scaled_variant_file(path, width, build=True)` /
+  `build_scaled_copy(source, cache, width)`: the working-set family —
+  `build_scaled_copy` is the ONE build (plain-string args, no config
+  reads) shared by the inline miss path and the warmup's subprocess
+  workers.
 - `eclipse_solar_type_icon(type_)`: the small per-type solar eclipse
   icon (annular gets a live tritone tint).
 - `calendar_wheel_icon_file(size)`: a COMPUTED 12-wedge wheel glyph, no

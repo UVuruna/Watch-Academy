@@ -217,6 +217,14 @@ WORKING_SET_CEILINGS = {
 # with the GUI thread. The effective count is min(cap, cpu_count).
 ART_DRAIN_WORKERS = 4
 
+# The working-set builder's SUBPROCESS pool size (0.14.706): PySide's
+# QImage decode/smooth-scale/encode of a multi-MB source holds the GIL
+# for SECONDS per call, so on a mere thread the GUI goes unclickable
+# exactly as long — the owner's "75 sekundi mrtav sat". Child processes
+# have their own GIL; two of them keep the cold build fast without
+# starving the machine the dial is animating on.
+WORKING_SET_WORKERS = 2
+
 # ═══════════════════════════ TIME TRAVEL & REVEAL TIMING ═══════════════════════════
 REVEAL_WEEK_DURATION_S = 60.0
 

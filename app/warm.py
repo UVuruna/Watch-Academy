@@ -50,7 +50,7 @@ def run_warm(
     )
     if should_stop is not None and should_stop():
         return
-    warm_working_set(progress=progress)
+    warm_working_set(progress=progress, should_stop=should_stop)
     if should_stop is not None and should_stop():
         return
     warm_encyclopedia(progress=progress, should_stop=should_stop)
