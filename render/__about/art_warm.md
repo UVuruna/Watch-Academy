@@ -37,9 +37,13 @@ restart (owner bug 2026-08-02).
 
 ## Functions
 - `warm_pending_art(progress=None, on_ready=None, should_stop=None)`:
-  builds every recorded-but-missing derived image, newest recipes last;
-  returns how many were built. `on_ready` fires after EACH build (not
-  once at the end) so the dial upgrades finish by finish.
+  builds every recorded-but-missing derived image on a small thread
+  pool (`defaults.ART_DRAIN_WORKERS`, 0.14.704 — numpy's C loops
+  release the GIL, so the recolors genuinely overlap; `ensure_variant`'s
+  per-path locks and its QImage-only rule make worker threads legal);
+  returns how many were built. `on_ready` fires after EACH completed
+  build (from the completion loop, never a worker) so the dial upgrades
+  finish by finish.
 
 ## Design Decisions
 - **Repeat until the ledger stops growing, never a single pass.** The

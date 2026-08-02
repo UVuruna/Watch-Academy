@@ -209,6 +209,14 @@ WORKING_SET_CEILINGS = {
     "celestial/seasons": 1200,
 }
 
+# ═══════════════════════════ BACKGROUND WARM ═══════════════════════════
+# The art-ledger drain's thread pool CAP (0.14.704, the slow-render
+# session): numpy releases the GIL inside its C loops, so N letter
+# recolors genuinely overlap; capped low because each worker holds a
+# full-plate float pipeline in memory and the drain shares the machine
+# with the GUI thread. The effective count is min(cap, cpu_count).
+ART_DRAIN_WORKERS = 4
+
 # ═══════════════════════════ TIME TRAVEL & REVEAL TIMING ═══════════════════════════
 REVEAL_WEEK_DURATION_S = 60.0
 

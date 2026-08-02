@@ -147,6 +147,26 @@ def test_the_warm_starts_once_and_only_after_every_dial_painted(monkeypatch):
     assert started[0] == [one, two, three]
 
 
+def test_the_drain_builds_a_whole_batch_and_leaves_nothing(app, cold_cache):
+    """The pooled drain (0.14.704) keeps the serial contract: every
+    recorded recipe built exactly once, the ledger left empty, one
+    on_ready per landed finish."""
+    letters_dir = paths.assets_dir() / "instrument" / "ring" / "letters"
+    letters = [letters_dir / name for name in ("A.png", "B.png", "C.png", "D.png")]
+    for letter in letters:
+        assert letter.exists()
+        asset_recolor.letter_metal_file(letter, "silver")
+
+    landed = []
+    built = warm_pending_art(on_ready=lambda: landed.append(True))
+
+    assert built == len(letters)
+    assert len(landed) == len(letters)
+    assert pending_art() == []
+    for letter in letters:
+        assert asset_recolor.letter_metal_path(letter, "silver").exists()
+
+
 def test_a_finish_switch_after_the_warm_drains_again(app, cold_cache):
     """THE 2026-08-02 BUG: the startup warm was the ONLY drain of the
     art ledger, so a finish/shade/theme switch AFTER it finished

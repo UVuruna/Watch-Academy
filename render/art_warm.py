@@ -26,23 +26,31 @@ startup-only drain left switched dials gold until restart).
 See [Art Warm](art_warm.md).
 """
 
+import os
+from concurrent.futures import ThreadPoolExecutor, as_completed
 from time import perf_counter
 
-from config import profiling
+from config import defaults, profiling
 from render.asset_recolor import ensure_variant, pending_art
 
 
 @profiling.timed("Dial art warmup")
 def warm_pending_art(progress=None, on_ready=None, should_stop=None) -> int:
-    """Build every recorded-but-missing derived image, newest recipes
-    last. Returns how many were built.
+    """Build every recorded-but-missing derived image. Returns how many
+    were built.
 
-    `on_ready` fires after EACH build (not once at the end) so the dial
-    upgrades letter by letter instead of staying gold until the whole
-    batch finishes — the owner sees the metal arrive while the rest is
-    still working. It is called from THIS thread; the controller's slot
-    is connected across threads by Qt, so the repaint itself happens on
-    the GUI thread.
+    The batch runs on a SMALL THREAD POOL (0.14.704 — the owner's "10
+    slova 10 sekundi je nedopustivo"): the pixel work is numpy, whose C
+    loops release the GIL, so `defaults.ART_DRAIN_WORKERS` recolors
+    genuinely overlap; `ensure_variant`'s per-path locks already make
+    two threads meeting on the SAME file build it once, and it never
+    touches QPixmap (the R1b law), so worker threads are legal.
+
+    `on_ready` fires after EACH completed build (not once at the end) so
+    the dial upgrades letter by letter instead of staying gold until the
+    whole batch finishes. It is called from THIS thread — the completion
+    loop, never a worker — and the controller's slot is connected across
+    threads by Qt, so the repaint itself happens on the GUI thread.
 
     Repeats until the ledger stops growing: the GUI thread records new
     recipes while this runs (a paint that reaches art the previous pass
@@ -51,29 +59,42 @@ def warm_pending_art(progress=None, on_ready=None, should_stop=None) -> int:
     returns the source file when a cache write fails (a full disk, a
     locked file), which leaves the job "pending" forever; without the
     attempted set that would be an endless loop instead of a dial that
-    simply keeps its master art (Rule #1: degraded, visible, not hung)."""
+    simply keeps its master art (Rule #1: degraded, visible, not hung).
+    A `should_stop` request makes the not-yet-started jobs no-ops; the
+    handful already in flight finish their file and stop."""
     start = perf_counter()
     built = 0
     attempted: set[str] = set()
+
+    def build(path):
+        if should_stop is not None and should_stop():
+            return False
+        ensure_variant(path)
+        return True
+
     while True:
         jobs = [path for path in pending_art() if str(path) not in attempted]
         if not jobs:
             break
-        for index, path in enumerate(jobs):
-            if should_stop is not None and should_stop():
-                return built
-            attempted.add(str(path))
-            ensure_variant(path)
-            built += 1
-            if on_ready is not None:
-                on_ready()
-            if progress is not None and (index + 1) % 5 == 0:
-                elapsed = perf_counter() - start
-                rate = (index + 1) / elapsed if elapsed > 0 else 0.0
-                progress(
-                    f"[{elapsed:.1f}s] dial art {index + 1}/{len(jobs)} "
-                    f"({(index + 1) / len(jobs) * 100:.0f}%) | {rate:.1f}/sec"
-                )
+        if should_stop is not None and should_stop():
+            return built
+        attempted.update(str(path) for path in jobs)
+        workers = max(1, min(defaults.ART_DRAIN_WORKERS, os.cpu_count() or 1))
+        with ThreadPoolExecutor(max_workers=workers) as pool:
+            futures = [pool.submit(build, path) for path in jobs]
+            for index, future in enumerate(as_completed(futures)):
+                if not future.result():
+                    continue
+                built += 1
+                if on_ready is not None:
+                    on_ready()
+                if progress is not None and (index + 1) % 5 == 0:
+                    elapsed = perf_counter() - start
+                    rate = (index + 1) / elapsed if elapsed > 0 else 0.0
+                    progress(
+                        f"[{elapsed:.1f}s] dial art {index + 1}/{len(jobs)} "
+                        f"({(index + 1) / len(jobs) * 100:.0f}%) | {rate:.1f}/sec"
+                    )
     if progress is not None and built:
         progress(
             f"[{perf_counter() - start:.1f}s] dial art complete — "
