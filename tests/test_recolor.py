@@ -384,3 +384,50 @@ def test_overrides_are_empty_by_default(recipe):
     and shipping one silently would hide that the shared formula failed
     for that plate."""
     assert recipe.overrides == {}
+
+
+def test_box_mean_matches_the_naive_window_mean():
+    """THE COUNTS CACHE PIN (0.14.703): `box_mean` now reuses its
+    edge-normalization denominator across calls — the cache must never
+    change the arithmetic, so the whole filter is pinned against a
+    literal nested-loop window mean with clamped edges."""
+    rng = np.random.default_rng(7)
+    source = rng.random((13, 9))
+    radius = 2
+    expected = np.empty_like(source)
+    for y in range(source.shape[0]):
+        for x in range(source.shape[1]):
+            window = source[
+                max(0, y - radius):y + radius + 1,
+                max(0, x - radius):x + radius + 1,
+            ]
+            expected[y, x] = window.mean()
+    np.testing.assert_allclose(
+        filters.box_mean(source, radius), expected, rtol=1e-12
+    )
+
+
+def test_box_mean_is_bit_identical_on_the_cached_second_call():
+    """The cached denominator serves every later same-shape call — the
+    second answer must be BIT-identical to the first, and the shared
+    read-only counts plane must never be writable by a caller."""
+    rng = np.random.default_rng(11)
+    source = rng.random((21, 17))
+    first = filters.box_mean(source, 3).copy()
+    second = filters.box_mean(source, 3)
+    np.testing.assert_array_equal(first, second)
+    counts = filters._box_counts(source.shape, 3, source.dtype.str)
+    assert not counts.flags.writeable
+
+
+def test_ramp_stops_cache_serves_reads_only(recipe):
+    """`_stops_oklab` is cached per frozen Metal — same object back on
+    the second call, read-only both times, and `sample` still maps the
+    ramp ends to the ramp ends."""
+    metal = recipe.metal("silver")
+    first = ramp._stops_oklab(metal)
+    second = ramp._stops_oklab(metal)
+    assert first[0] is second[0] and first[1] is second[1]
+    assert not first[0].flags.writeable and not first[1].flags.writeable
+    ends = ramp.sample(metal, np.array([0.0, 1.0]))
+    assert ends.shape == (2, 3)

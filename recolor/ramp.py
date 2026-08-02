@@ -14,6 +14,8 @@ midtones never go muddy (linear RGB's failure) and the hue never drifts
 (sRGB's failure).
 """
 
+from functools import lru_cache
+
 import numpy as np
 
 from recolor import space
@@ -23,12 +25,21 @@ from recolor.recipe import Metal, Specular
 _WHITE = np.ones(3)
 
 
+@lru_cache(maxsize=64)
 def _stops_oklab(metal: Metal) -> tuple[np.ndarray, np.ndarray]:
-    """A metal's stop positions and their Oklab colors, position-sorted."""
+    """A metal's stop positions and their Oklab colors, position-sorted.
+    Cached per `Metal` (frozen, hashable): the same handful of ramps is
+    re-sampled on every recolor call, and the hex→linear→Oklab hop for
+    five stops is pure recomputation. Returned read-only — `sample`
+    only reads them."""
     positions = np.array([position for position, _ in metal.stops])
     colors = np.array([space.hex_to_linear(color) for _, color in metal.stops])
     order = np.argsort(positions)
-    return positions[order], space.linear_to_oklab(colors[order])
+    sorted_positions = positions[order]
+    lab_stops = space.linear_to_oklab(colors[order])
+    sorted_positions.setflags(write=False)
+    lab_stops.setflags(write=False)
+    return sorted_positions, lab_stops
 
 
 def body_color(metal: Metal, position: float) -> np.ndarray:
