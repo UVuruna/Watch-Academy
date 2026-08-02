@@ -60,7 +60,15 @@ def _load_gadget():
         return None
     gadget_path = str(gadget_dir)
     if gadget_path not in sys.path:
-        sys.path.insert(0, gadget_path)
+        # APPEND, never insert(0) (0.14.711): the gadget root carries
+        # its own `main.py` and `tests/`, and at the FRONT of sys.path
+        # they shadowed this project's same-named modules for the rest
+        # of the process — `import main` after any Cube 3D page load
+        # resolved to the GADGET's main (caught by the crash-log test).
+        # The bridge only needs `preview3d`, a name this project does
+        # not carry, and the package imports nothing but stdlib +
+        # PySide6 (verified by AST walk) — so LAST in line is enough.
+        sys.path.append(gadget_path)
     try:
         import preview3d
     except Exception:
