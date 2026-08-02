@@ -24,6 +24,10 @@ original/master path rather than crashing (Rule #1).
 - [Assets](assets.md) — `AssetCache._recolored`, `AssetCache._tinted`
   (the recolor doors this module wraps in a disk-cached, path-in/
   path-out interface)
+- [Raster Store](raster_store.md) — `ensure_variant` and
+  `_recolored_plate` write atomically (owner crash 2026-07-31: the GUI
+  thread's unlocked `exists()` check raced a direct `QImage.save` and
+  painted a truncated PNG)
 - [Config (folder)](../../config/___config.md) — `paths` (`art_file`,
   `metal_shade`, `settings_path`), `defaults`, `profiling`
 

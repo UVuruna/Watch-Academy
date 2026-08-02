@@ -40,6 +40,8 @@ and the measured autopsy of the retired kernel it replaced.
 - PySide6 QtGui/QtSvg
 - [Recolor (folder)](../../recolor/___recolor.md) — the metal
   transformer `_recolored` adapts to QImage
+- [Raster Store](raster_store.md) — the SVG master's disk write is
+  atomic (a half-written cache PNG must never be visible)
 
 ### Used by
 - [Layers (subfolder)](../layers/___layers.md) — hands, hexagram,

@@ -39,6 +39,7 @@ from config import defaults, paths
 from config.paths import art_file
 from recolor import recolor
 from recolor.recipe import load as recolor_recipe
+from render import raster_store
 
 
 class AssetCache:
@@ -349,8 +350,7 @@ class AssetCache:
             renderer.render(painter, QRectF(0, 0, width, target))
             painter.end()
             try:
-                disk.parent.mkdir(parents=True, exist_ok=True)
-                image.save(str(disk))
+                raster_store.atomic_save(image, disk)
             except OSError as error:     # a cold cache is only slower,
                 print(                   # never wrong — but say so
                     f"raster cache write failed: {disk}: {error}",

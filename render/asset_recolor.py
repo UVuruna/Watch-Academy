@@ -19,6 +19,7 @@ from PySide6.QtGui import QColor, QImage, QPixmap
 
 from config import defaults, palette, paths, profiling
 from config.paths import art_file
+from render import raster_store
 from render.assets import AssetCache
 
 
@@ -179,8 +180,7 @@ def _recolored_plate(
         QImage.Format.Format_RGBA8888,
     ).copy()
     try:
-        cache.parent.mkdir(parents=True, exist_ok=True)
-        out.save(str(cache))
+        raster_store.atomic_save(out, cache)
     except OSError as error:
         # A cold cache is only slower, never wrong — but say so.
         print(f"subdial recolor cache write failed: {error}", file=sys.stderr)
@@ -303,9 +303,10 @@ def ensure_variant(path: Path | None) -> Path | None:
             QImage(str(source)), metal, source_metal, mask_mode, shade,
         )
         try:
-            path.parent.mkdir(parents=True, exist_ok=True)
-            if not swapped.save(str(path)):
-                raise OSError(f"QImage.save returned False for {path}")
+            # Atomic (owner crash 2026-07-31): the GUI thread checks
+            # exists() with no lock, so the file must never be visible
+            # half-written.
+            raster_store.atomic_save(swapped, path)
         except OSError as error:
             print(f"metal variant cache write failed: {error}", file=sys.stderr)
             return source

@@ -26,6 +26,7 @@ from PySide6.QtGui import (
 
 from config import defaults, dial, palette, pantheon, paths, profiling, shortcuts
 from config.paths import art_file
+from render import raster_store
 from render.asset_recolor import _recolored_plate, tinted_pixmap
 
 
@@ -184,9 +185,7 @@ def moon_phase_file(fraction: float, name: str, size: int = 800) -> Path:
     if not cache.exists():
         image = moon_phase_image(fraction, size, master)
         try:
-            cache.parent.mkdir(parents=True, exist_ok=True)
-            if not image.save(str(cache)):
-                raise OSError(f"QImage.save returned False for {cache}")
+            raster_store.atomic_save(image, cache)
         except OSError as error:
             # A cold cache is only slower, never wrong — but say so.
             print(f"moon phase cache write failed: {error}", file=sys.stderr)
@@ -335,8 +334,7 @@ def scaled_variant_file(
             width, Qt.TransformationMode.SmoothTransformation
         )
         try:
-            cache.parent.mkdir(parents=True, exist_ok=True)
-            scaled.save(str(cache))
+            raster_store.atomic_save(scaled, cache)
         except OSError as error:
             print(
                 f"scaled variant cache write failed: {error}",
@@ -376,9 +374,7 @@ def eclipse_solar_type_icon(type_: str) -> Path | None:
             pixmap, palette.GLOW_ECLIPSE_SOLAR_ANNULAR_COLOR
         )
         try:
-            cache.parent.mkdir(parents=True, exist_ok=True)
-            if not tinted.save(str(cache)):
-                raise OSError(f"QPixmap.save returned False for {cache}")
+            raster_store.atomic_save(tinted, cache)
         except OSError as error:
             # A cold cache is only slower, never wrong — but say so.
             print(
@@ -431,9 +427,7 @@ def calendar_wheel_icon_file(size: int) -> Path:
     painter.drawEllipse(rect)
     painter.end()
     try:
-        cache.parent.mkdir(parents=True, exist_ok=True)
-        if not image.save(str(cache)):
-            raise OSError(f"QImage.save returned False for {cache}")
+        raster_store.atomic_save(image, cache)
     except OSError as error:
         print(f"calendar wheel icon cache write failed: {error}", file=sys.stderr)
         raise

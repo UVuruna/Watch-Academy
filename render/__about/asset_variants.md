@@ -46,6 +46,9 @@ circle).
 - [Assets](assets.md) — the reverse `pixmap_by_height` edge
 - [Asset Recolor](asset_recolor.md) — `_recolored_plate`
   (`subdial_plate_file`), `tinted_pixmap` (`eclipse_solar_type_icon`)
+- [Raster Store](raster_store.md) — every disk write is atomic
+  (owner crash 2026-07-31: a half-written cache PNG must never be
+  visible to a reader)
 - [Config (folder)](../../config/___config.md) — `paths`, `defaults`,
   `profiling`
 
