@@ -1368,8 +1368,9 @@ def test_show_action_visible_only_in_normal_z_mode(app, tmp_path, monkeypatch):
 
     c = WatchController(app)
     try:
-        # TITLE, separator, Add Watch (watch 1: no Remove entry), separator, Show
-        assert c._menu.actions()[4] is c._show_action
+        # TITLE, warm-status row (0.14.710), separator, Add Watch
+        # (watch 1: no Remove entry), separator, Show
+        assert c._menu.actions()[5] is c._show_action
         assert c._settings.z_mode == "bottom"           # default
         assert not c._show_action.isVisible()
         c._settings = dataclasses.replace(c._settings, z_mode="normal")

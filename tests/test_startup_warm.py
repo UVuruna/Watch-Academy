@@ -247,7 +247,14 @@ def test_art_ready_bursts_collapse_into_one_repaint(app):
 
     for _ in range(17):                    # a whole drain burst
         controller.apply_pending_art()
-    QTest.qWait(defaults.ART_REPAINT_DEBOUNCE_MS * 3)
+    # Deadline, not a fixed window: a loaded machine may delay the
+    # timer past any fixed wait and turn the pin into a flake.
+    deadline = 5000
+    waited = 0
+    while FakeCompositor.refreshes == 0 and waited < deadline:
+        QTest.qWait(50)
+        waited += 50
+    QTest.qWait(defaults.ART_REPAINT_DEBOUNCE_MS * 2)   # grace: a 2nd fire?
 
     assert FakeCompositor.refreshes == 1, "a burst must repaint ONCE"
     assert FakeWidget.updates == 1
