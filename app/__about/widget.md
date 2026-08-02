@@ -56,7 +56,12 @@ default, `WA_TranslucentBackground`, `WA_ShowWithoutActivating`).
   halos and the event glow); `margin_fraction` is supplied live by the
   controller on every skin install
 - `paintEvent()`: delegates to `compositor.paint(painter, size, dpr, tick)`;
-  emits `first_painted` after the FIRST successful paint
+  emits `first_painted` after the FIRST successful paint. The painter is
+  ended on EVERY exit path (owner crash log 2026-07-31: one escaped
+  render `ValueError` left the QPainter active and killed every later
+  frame) — a failing frame prints its traceback to stderr, stays
+  partially drawn, and the next tick paints again
+  (`tests/test_paint_safety.py`)
 - `mouseDoubleClickEvent()`: a double-click on the Omega (24h) hit area
   toggles the reveal-week window (hides the hands + reveals ghosts/full
   archetype figures for `REVEAL_WEEK_DURATION_S`, or ends it early)

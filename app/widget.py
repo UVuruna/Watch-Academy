@@ -6,6 +6,8 @@ Painting is delegated to the render compositor; the widget itself knows
 nothing about the dial.
 """
 
+import traceback
+
 from PySide6.QtCore import QEvent, Qt, QTimer, Signal
 from PySide6.QtGui import QAction, QPainter
 from PySide6.QtWidgets import QMenu, QWidget
@@ -275,20 +277,33 @@ class ClockWidget(QWidget):
             # tick before show(), so this only covers stray early paints.
             return
         painter = QPainter(self)
-        painter.translate(self._margin_px, self._margin_px)
-        self._renderer.paint(
-            painter,
-            float(self._dial_diameter),
-            self.devicePixelRatioF(),
-            self._tick,
-        )
-        if not self._has_painted:
+        painted = False
+        try:
+            painter.translate(self._margin_px, self._margin_px)
+            self._renderer.paint(
+                painter,
+                float(self._dial_diameter),
+                self.devicePixelRatioF(),
+                self._tick,
+            )
+            painted = True
+        except Exception:
+            # A paint must NEVER leave the QPainter session open (owner
+            # crash log 2026-07-31: one escaped ValueError cascaded into
+            # QBackingStore::endPaint errors on every later frame and a
+            # permanently dead window). This is the GUI top-level
+            # boundary the No-Error-Masking rule allows: the traceback
+            # stays fully visible on stderr, the frame stays partially
+            # drawn, and the next tick paints again.
+            traceback.print_exc()
+        finally:
+            painter.end()
+        if painted and not self._has_painted:
             # The dial is ON SCREEN. Only now may background work start
             # (owner 2026-07-28) — and only now does the art ledger know
             # which derived files this dial actually wants, because the
             # paint above is what records them.
             self._has_painted = True
-            painter.end()
             self.first_painted.emit()
 
     # --- Input ----------------------------------------------------------------
