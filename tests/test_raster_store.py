@@ -15,7 +15,9 @@ import os
 import pytest
 from PySide6.QtGui import QColor, QImage
 
-from render.raster_store import atomic_save, fingerprint, source_prefix
+from render.raster_store import (
+    atomic_save, collect_garbage, fingerprint, source_prefix,
+)
 
 
 def _image() -> QImage:
@@ -100,3 +102,37 @@ def test_source_prefix_is_stamp_underscore_fingerprint(tmp_path):
     assert len(stamp) == 16 and int(stamp, 16) >= 0
     assert len(digest) == 12 and int(digest, 16) >= 0
     assert source_prefix(tmp_path / "missing.png").endswith("_0")
+
+
+def test_collect_garbage_sweeps_orphans_and_keeps_the_living(tmp_path):
+    """THE 10 GB BACKLOG (measured 2026-08-02: 10,039 files, nothing
+    ever deleted a stale entry). The sweep's law: a stamped name no
+    current source claims dies — mtime-era names included — and every
+    `.part` corpse dies; the living entry and the stampless computed
+    icons stay."""
+    cache = tmp_path / "raster_cache"
+    cache.mkdir()
+    source = tmp_path / "assets" / "letter.png"
+    source.parent.mkdir(parents=True)
+    source.write_bytes(b"golden-letter" * 50)
+    prefix = source_prefix(source)
+    stamp = prefix.split("_")[0]
+
+    living = cache / f"{prefix}_letter_gold_classic_v6.png"
+    living.write_bytes(b"keep")
+    icon = cache / "calendar_wheel_icon_64.png"
+    icon.write_bytes(b"keep")
+    mtime_era = cache / f"{'a' * 16}_1785493132_letter_thematic_cross_red_v6.png"
+    mtime_era.write_bytes(b"corpse-corpse")
+    old_content = cache / f"{stamp}_deadbeef0123_w800_face.png"
+    old_content.write_bytes(b"corpse")
+    partial = cache / f"{prefix}_x.png.part"
+    partial.write_bytes(b"interrupted")
+
+    removed, freed = collect_garbage(cache, {prefix})
+
+    assert living.exists() and icon.exists()
+    assert not mtime_era.exists() and not old_content.exists()
+    assert not partial.exists()
+    assert removed == 3
+    assert freed == len(b"corpse-corpse") + len(b"corpse") + len(b"interrupted")

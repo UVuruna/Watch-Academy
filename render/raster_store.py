@@ -108,3 +108,54 @@ def source_prefix(path: Path) -> str:
     if not path.exists():
         return f"{stamp}_0"
     return f"{stamp}_{fingerprint(path)}"
+
+
+def collect_garbage(
+    cache_dir: Path, valid_prefixes: set[str], progress=None
+) -> tuple[int, int]:
+    """Sweep `cache_dir`: delete every stamped cache PNG whose leading
+    `stamp_fingerprint` pair is not in `valid_prefixes`, plus every
+    leftover `.part` (an interrupted atomic write). Returns
+    `(files_removed, bytes_freed)`.
+
+    Measured need (2026-08-02): 10,039 files / 10.0 GB, most of them
+    corpses under retired mtime-keyed names — nothing ever deleted a
+    stale entry before this. Names whose first field is NOT a 16-hex
+    stamp (the computed calendar-wheel icons) are KEPT — they carry no
+    source to validate against. A file that refuses deletion (open in
+    a viewer, antivirus lock) is skipped, never fatal: a missed corpse
+    costs disk, a crashed sweep costs trust."""
+    removed = 0
+    freed = 0
+    if not cache_dir.exists():
+        return removed, freed
+    for entry in cache_dir.iterdir():
+        if not entry.is_file():
+            continue
+        name = entry.name
+        if name.endswith(".part"):
+            stale = True
+        elif name.endswith(".png"):
+            fields = name.split("_")
+            if len(fields) < 3:
+                continue
+            stamp = fields[0]
+            if len(stamp) != 16 or any(
+                c not in "0123456789abcdef" for c in stamp
+            ):
+                continue                 # a computed icon — no source
+            stale = f"{stamp}_{fields[1]}" not in valid_prefixes
+        else:
+            continue
+        if not stale:
+            continue
+        try:
+            size = entry.stat().st_size
+            entry.unlink()
+        except OSError:
+            continue
+        removed += 1
+        freed += size
+        if progress is not None and removed % 1000 == 0:
+            progress(f"cache gc {removed} swept | {freed / 2**20:.0f} MB")
+    return removed, freed
