@@ -1056,6 +1056,12 @@ class WatchController(QObject):
         self._profiling_timer.timeout.connect(profiling.flush)
         self._profiling_timer.start()
         self._widget.moved.connect(self._on_widget_moved)
+        # The art-ready DEBOUNCE (0.14.707): the pooled drain lands
+        # finishes in bursts — one quiet window, one composite rebuild.
+        self._art_repaint_timer = QTimer(self)
+        self._art_repaint_timer.setSingleShot(True)
+        self._art_repaint_timer.setInterval(defaults.ART_REPAINT_DEBOUNCE_MS)
+        self._art_repaint_timer.timeout.connect(self._apply_art_now)
         self.art_ready.connect(self.apply_pending_art)
         # The hidden-mode code listener (owner 2026-07-14): printable
         # keys typed on the focused dial roll through a buffer.
@@ -1181,12 +1187,26 @@ class WatchController(QObject):
         return self._widget.first_painted
 
     def apply_pending_art(self) -> None:
-        """A background recolor finished: drop the composited pixmaps and
-        repaint, so a letter standing in as its GOLD MASTER is replaced
-        by its real metal (owner decree 2026-07-28: "Kad završi prikaže").
-        Runs on the GUI thread — the warm thread reaches it through a
-        queued Qt connection, never by touching a QPixmap itself."""
-        self._compositor.invalidate()
+        """A background recolor finished: schedule the repaint that
+        replaces a GOLD-MASTER stand-in with its real metal (owner
+        decree 2026-07-28: "Kad završi prikaže"). Runs on the GUI
+        thread — the warm thread reaches it through a queued Qt
+        connection, never by touching a QPixmap itself.
+
+        DEBOUNCED, not immediate (0.14.707): the pooled drain lands a
+        burst of finishes back to back, and a full composite rebuild
+        per landed file (62 ms each, up to 17 per burst) repainted
+        nothing the trailing rebuild would not show anyway. The restart
+        pattern is `_save_timer`'s — the LAST arrival wins the one
+        rebuild; arrivals slower than the window still repaint one by
+        one."""
+        self._art_repaint_timer.start()
+
+    def _apply_art_now(self) -> None:
+        """The debounce window closed: rebuild the composites (assets
+        stay — the landed finish resolves under a NEW cache key, so
+        nothing rasterized needs re-decoding) and repaint."""
+        self._compositor.refresh_composites()
         self._widget.update()
 
     def hover_sweep(self):

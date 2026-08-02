@@ -210,6 +210,65 @@ def test_a_finish_switch_after_the_warm_drains_again(app, cold_cache):
         asset_recolor.set_art_stale_notifier(None)
 
 
+def test_art_ready_bursts_collapse_into_one_repaint(app):
+    """0.14.707: the pooled drain lands finishes in bursts, and a full
+    composite rebuild per landed file repainted nothing the trailing
+    rebuild would not show. One quiet window after the LAST arrival =
+    exactly one refresh + one update — and never a whole-cache flush."""
+    from PySide6.QtCore import QTimer
+    from PySide6.QtTest import QTest
+
+    from app.controller import WatchController
+    from config import defaults
+
+    class FakeCompositor:
+        refreshes = 0
+        flushes = 0
+
+        def refresh_composites(self):
+            FakeCompositor.refreshes += 1
+
+        def invalidate(self):
+            FakeCompositor.flushes += 1
+
+    class FakeWidget:
+        updates = 0
+
+        def update(self):
+            FakeWidget.updates += 1
+
+    controller = WatchController.__new__(WatchController)
+    controller._compositor = FakeCompositor()
+    controller._widget = FakeWidget()
+    controller._art_repaint_timer = QTimer()
+    controller._art_repaint_timer.setSingleShot(True)
+    controller._art_repaint_timer.setInterval(defaults.ART_REPAINT_DEBOUNCE_MS)
+    controller._art_repaint_timer.timeout.connect(controller._apply_art_now)
+
+    for _ in range(17):                    # a whole drain burst
+        controller.apply_pending_art()
+    QTest.qWait(defaults.ART_REPAINT_DEBOUNCE_MS * 3)
+
+    assert FakeCompositor.refreshes == 1, "a burst must repaint ONCE"
+    assert FakeWidget.updates == 1
+    assert FakeCompositor.flushes == 0, "an art repaint must not flush assets"
+
+
+def test_art_repaint_keeps_the_rasterized_assets(app, cold_cache):
+    """`refresh_composites` drops the composite groups alone — the
+    decoded/rasterized assets survive, because a landed finish resolves
+    under a NEW cache key and nothing else changed."""
+    compositor, day, tick = _dial(build_skin(Settings()))
+    compositor.render_offscreen(360.0, 1.0, day, tick)
+    held = len(compositor._cache._pixmaps)
+    assert held > 0, "the paint decoded nothing — the pin lost its subject"
+
+    compositor.refresh_composites()
+
+    assert len(compositor._cache._pixmaps) == held
+    assert compositor._composites == [None] * len(compositor._cached_groups)
+
+
 def test_warm_working_set_builds_cold_copies_in_children(tmp_path, monkeypatch):
     """THE 75-SECOND DEAD WINDOW (owner log 2026-07-31): a cold working
     set decoded/scaled/encoded multi-MB PNGs on the warm THREAD, and

@@ -608,11 +608,21 @@ class Compositor:
 
     def set_day(self, day: DayContext) -> None:
         self._day = day
+        self.refresh_composites()
+
+    def refresh_composites(self) -> None:
+        """Drop the cached composite groups ALONE — the rasterized
+        assets stay. The art-ready repaint path (0.14.707): a
+        background-built finish changes WHICH file the ring resolves,
+        so the composites must rebuild, but flushing the whole
+        `AssetCache` for one landed letter re-decoded every subdial,
+        body and plate — measured as a 62 ms full rebuild per letter,
+        17 times per drain burst."""
         self._composites = [None] * len(self._cached_groups)
 
     def invalidate(self) -> None:
         """Size/DPI/screen change: drop the composites and rasterized assets."""
-        self._composites = [None] * len(self._cached_groups)
+        self.refresh_composites()
         self._cache.flush()
 
     def _rotation(self) -> float:

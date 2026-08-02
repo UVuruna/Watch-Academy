@@ -225,6 +225,14 @@ ART_DRAIN_WORKERS = 4
 # starving the machine the dial is animating on.
 WORKING_SET_WORKERS = 2
 
+# The art-ready repaint DEBOUNCE (0.14.707): the pooled drain lands
+# finishes in tight bursts, and repainting per landed file meant up to
+# 17 composite rebuilds where the trailing one already showed
+# everything. One quiet window after the last arrival = one rebuild;
+# arrivals spaced wider than the window still repaint one by one, so
+# the dial keeps visibly dressing itself on a slow drain.
+ART_REPAINT_DEBOUNCE_MS = 120
+
 # ═══════════════════════════ TIME TRAVEL & REVEAL TIMING ═══════════════════════════
 REVEAL_WEEK_DURATION_S = 60.0
 

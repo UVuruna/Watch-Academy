@@ -30,7 +30,12 @@ file is now scoped precisely: lift the free HTML helpers to
 
 1. **Layer stacking + cached compositing** (`__init__`, `_plan_steps`,
    `paint`, `_render_group`, `render_offscreen`, `set_day`,
-   `invalidate`, `_rotation`) — roughly the first 700 lines.
+   `refresh_composites`, `invalidate`, `_rotation`) — roughly the first
+   700 lines. `refresh_composites` (0.14.707) drops the composite
+   groups ALONE — the art-ready repaint path, where the rasterized
+   assets survive because a landed finish resolves under a new cache
+   key; `invalidate` (size/DPI/screen change) additionally flushes the
+   whole `AssetCache`.
 2. **Hit-testing** (`_element_at`, `set_hover`, `hit_omega`,
    `_weekday_body_at`, `_arm_angle_at`, `encyclopedia_target` and its
    `_*_encyclopedia_target` family) — the geometry that answers "what
