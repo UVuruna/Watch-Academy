@@ -71,6 +71,11 @@ class AppController:
         self._art_lock = threading.Lock()
         self._art_thread: threading.Thread | None = None
         self._art_rerun = False
+        #: The live warm/drain progress line every watch's menu shows
+        #: while background work runs (0.14.710); None = idle, row
+        #: hidden. Written by the warm/drain threads, read on the GUI
+        #: thread at menu-open — a single str reference, no lock needed.
+        self._warm_status: str | None = None
         asset_recolor.set_art_stale_notifier(self.kick_art_warm)
         self._watches: list[WatchController] = []
         for index in paths.discover_watch_indices():
@@ -99,6 +104,9 @@ class AppController:
         # `self._on_add_watch` fresh on every click, never a snapshot
         # taken at connect time (see WatchController._build_menu).
         watch._on_add_watch = lambda: self.add_watch(watch)
+        # The menu's warm-status row reads the manager's live progress
+        # line the same deferred way (0.14.710).
+        watch._warm_status_provider = lambda: self._warm_status
         return watch
 
     def _next_index(self) -> int:
@@ -218,12 +226,21 @@ class AppController:
             for watch in watches:
                 watch.art_ready.emit()
 
-        run_warm(
-            hover_sweeps=[watch.hover_sweep() for watch in watches],
-            progress=print,
-            on_art_ready=art_ready,
-            should_stop=lambda: self._quitting,
-        )
+        try:
+            run_warm(
+                hover_sweeps=[watch.hover_sweep() for watch in watches],
+                progress=self._report_progress,
+                on_art_ready=art_ready,
+                should_stop=lambda: self._quitting,
+            )
+        finally:
+            self._warm_status = None
+
+    def _report_progress(self, line: str) -> None:
+        """Every warm/drain progress line goes two places: the console
+        (the owner's startup log) and the menus' warm-status row."""
+        self._warm_status = line
+        print(line)
 
     # --- the on-demand art drain ---------------------------------------------
 
@@ -259,16 +276,22 @@ class AppController:
         """The kicked drain's body: `warm_pending_art` until the ledger
         is stable, then once more per rerun flag — a kick that arrived
         mid-drain is honored, never lost."""
-        while True:
-            warm_pending_art(
-                progress=print,
-                on_ready=self._emit_art_ready,
-                should_stop=lambda: self._quitting,
-            )
-            with self._art_lock:
-                if not self._art_rerun:
-                    return
-                self._art_rerun = False
+        try:
+            # Small batches finish before their first progress line
+            # would print — the row still names the work (0.14.710).
+            self._warm_status = "building switched art…"
+            while True:
+                warm_pending_art(
+                    progress=self._report_progress,
+                    on_ready=self._emit_art_ready,
+                    should_stop=lambda: self._quitting,
+                )
+                with self._art_lock:
+                    if not self._art_rerun:
+                        return
+                    self._art_rerun = False
+        finally:
+            self._warm_status = None
 
     def _emit_art_ready(self) -> None:
         """A recolor landed: every live watch repaints (the art is

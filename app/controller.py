@@ -950,6 +950,10 @@ class WatchController(QObject):
         self._fast_travel_theme_index = 0
         self._fast_travel_option_indices: dict[str, int] = {}
         self._jump_city_index = 0
+        # The warm-status provider (0.14.710) — wired by the manager
+        # AFTER construction, exactly like `_on_add_watch`; a watch
+        # built stand-alone (tests) simply never shows the row.
+        self._warm_status_provider = None
         self._menu = self._build_menu()
         self._legend = LegendPopup()
         self._fast_travel_flash = FastTravelFlash()
@@ -1208,6 +1212,17 @@ class WatchController(QObject):
         nothing rasterized needs re-decoding) and repaint."""
         self._compositor.refresh_composites()
         self._widget.update()
+
+    def _refresh_warm_status_row(self) -> None:
+        """The menu is opening: show the manager's live warm/drain
+        status line, or hide the row when the process is idle
+        (0.14.710 — the menu tells the user WHAT is loading instead of
+        the dial silently standing in gold)."""
+        provider = self._warm_status_provider
+        status = provider() if provider is not None else None
+        self._warm_status_action.setVisible(status is not None)
+        if status is not None:
+            self._warm_status_label.setText(status)
 
     def hover_sweep(self):
         """This watch's hover warm as a callable, for the shared warm
@@ -2342,6 +2357,25 @@ class WatchController(QObject):
         title_action.setDefaultWidget(title_label)
         menu.addAction(title_action)
         self._title_label = title_label
+        # WARM STATUS ROW (0.14.710; owner: "može da da INFO LOADING dok
+        # učitava a NIKAKO LAG STUCK SCREEN"): while any background phase
+        # is still working — the startup warm or an on-demand art drain —
+        # the menu names it, refreshed on every open; hidden when idle.
+        # A QWidgetAction-hosted QLabel like the title above (a disabled
+        # QAction still hover-highlights on some platforms).
+        status_label = QLabel()
+        status_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        status_label.setStyleSheet(
+            "font-size: 11px; padding: 2px 12px 6px 12px;"
+            f"color: {palette.THEME_COLORS['text_secondary']};"
+        )
+        status_action = QWidgetAction(menu)
+        status_action.setDefaultWidget(status_label)
+        status_action.setVisible(False)
+        menu.addAction(status_action)
+        self._warm_status_label = status_label
+        self._warm_status_action = status_action
+        menu.aboutToShow.connect(self._refresh_warm_status_row)
         menu.addSeparator()
         # ADD WATCH (owner INSTRUCTION.txt item 2, sealed 2026-07-21):
         # "na vrhu... ispod TITLE info" — directly below the title row,

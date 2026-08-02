@@ -254,6 +254,33 @@ def test_art_ready_bursts_collapse_into_one_repaint(app):
     assert FakeCompositor.flushes == 0, "an art repaint must not flush assets"
 
 
+def test_the_menu_status_row_mirrors_the_manager(app):
+    """0.14.710 (owner: "INFO LOADING ... NIKAKO LAG STUCK SCREEN"): the
+    context menu's status row shows the manager's live warm/drain line
+    while background work runs, and hides the moment it is idle."""
+    from PySide6.QtGui import QAction
+    from PySide6.QtWidgets import QLabel
+
+    from app.controller import WatchController
+
+    controller = WatchController.__new__(WatchController)
+    controller._warm_status_label = QLabel()
+    controller._warm_status_action = QAction("status")
+    controller._warm_status_provider = None
+    controller._refresh_warm_status_row()
+    assert not controller._warm_status_action.isVisible()
+
+    status = {"line": "[2.1s] working set 40/908 (4%)"}
+    controller._warm_status_provider = lambda: status["line"]
+    controller._refresh_warm_status_row()
+    assert controller._warm_status_action.isVisible()
+    assert controller._warm_status_label.text() == status["line"]
+
+    status["line"] = None
+    controller._refresh_warm_status_row()
+    assert not controller._warm_status_action.isVisible()
+
+
 def test_art_repaint_keeps_the_rasterized_assets(app, cold_cache):
     """`refresh_composites` drops the composite groups alone — the
     decoded/rasterized assets survive, because a landed finish resolves

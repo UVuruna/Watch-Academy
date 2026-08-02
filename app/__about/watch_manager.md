@@ -77,6 +77,10 @@ later in the session.
   repaints per built finish. Stands down until the startup warm has
   started — that first drain belongs to `run_warm`, after the first
   frames
+- `_report_progress(line)` / `_warm_status`: every warm/drain progress
+  line goes to the console AND to the live `_warm_status` string each
+  watch's menu status row reads at menu-open (0.14.710, the owner's
+  "INFO LOADING" ask); None = idle, row hidden
 - `quit_all()`: the Exit action on ANY watch closes the WHOLE process —
   every watch's own `_prepare_quit()` runs before the one shared
   `app.quit()`
