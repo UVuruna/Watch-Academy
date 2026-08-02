@@ -9,7 +9,6 @@ gradient-map tint. See [Asset Recolor](asset_recolor.md) for the full
 recipe.
 """
 
-import hashlib
 import sys
 import threading
 from pathlib import Path
@@ -40,16 +39,17 @@ def letter_metal_path(path: Path, metal: str) -> Path:
     The source metal is GOLD here (the master these are drawn on)
     against the badges' bronze; the transform is source-agnostic and is
     simply told which. The active SHADE comes from the watch's display
-    context (`config.paths.metal_shade`). Cache key: the master's mtime,
-    the metal, the shade and `defaults.METAL_SWAP_VERSION`."""
+    context (`config.paths.metal_shade`). Cache key: the master's
+    CONTENT fingerprint (`raster_store.source_prefix`, 0.14.708 — a git
+    checkout no longer orphans the cache), the metal, the shade and
+    `defaults.METAL_SWAP_VERSION`."""
     path = art_file(path)
     if path is None or not path.exists():
         return path
     shade = paths.metal_shade(metal)
-    stamp = hashlib.sha1(str(path).encode("utf-8")).hexdigest()[:16]
     cache = (
         paths.settings_path().parent / "raster_cache"
-        / f"{stamp}_{int(path.stat().st_mtime)}_letter_{metal}_{shade}"
+        / f"{raster_store.source_prefix(path)}_letter_{metal}_{shade}"
         f"_v{defaults.METAL_SWAP_VERSION}.png"
     )
     _PENDING_VARIANTS.setdefault(
@@ -114,11 +114,10 @@ def _recolored_plate(
     interior (the tapisserie field) is colorized the same way to the
     clock tint (the "theme" plate style); without one the field stays
     as drawn."""
-    stamp = hashlib.sha1(str(master).encode("utf-8")).hexdigest()[:16]
     tint_tag = f"_{tint.lstrip('#').lower()}" if tint else ""
     cache = (
         paths.settings_path().parent / "raster_cache"
-        / f"{stamp}_{int(master.stat().st_mtime)}"
+        / f"{raster_store.source_prefix(master)}"
         f"_subdial{defaults.SUBDIAL_RECOLOR_VERSION}"
         f"_{finish}{tint_tag}.png"
     )
@@ -258,7 +257,8 @@ def metal_variant_path(path: Path, metal: str | None) -> Path:
     """WHERE `path`'s hue-selective metal swap lives on disk — a pure
     path computation, NO pixel work (the Encyclopedia resolves hundreds
     of these while building its topic table; generation is deferred to
-    `ensure_variant`). Cache key: the file's mtime, the active SHADE and
+    `ensure_variant`). Cache key: the file's CONTENT fingerprint
+    (`raster_store.source_prefix`, 0.14.708), the active SHADE and
     `defaults.METAL_SWAP_VERSION` (R8a redo, 2026-07-21 night). None or
     a non-swap metal returns the original path; a source missing from
     disk returns the CANONICAL path unchanged (graceful-absent — the
@@ -271,10 +271,9 @@ def metal_variant_path(path: Path, metal: str | None) -> Path:
     if not path.exists():
         return path
     shade = paths.metal_shade(metal)
-    stamp = hashlib.sha1(str(path).encode("utf-8")).hexdigest()[:16]
     cache = (
         paths.settings_path().parent / "raster_cache"
-        / f"{stamp}_{int(path.stat().st_mtime)}_{metal}_{shade}"
+        / f"{raster_store.source_prefix(path)}_{metal}_{shade}"
         f"_v{defaults.METAL_SWAP_VERSION}.png"
     )
     _PENDING_VARIANTS.setdefault(

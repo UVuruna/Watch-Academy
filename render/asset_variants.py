@@ -14,7 +14,6 @@ modules' top-level imports never form a cycle; see that method's own
 comment for why.
 """
 
-import hashlib
 import math
 import os
 import sys
@@ -177,11 +176,9 @@ def moon_phase_file(fraction: float, name: str, size: int = 800) -> Path:
     per (phase, size) through the raster cache instead of shipping
     ~7 MB of PNGs)."""
     master = art_file(pantheon.weekday_art("planets/primary/photo/Moon.png"))
-    stamp = hashlib.sha1(str(master).encode("utf-8")).hexdigest()[:16]
-    mtime = int(master.stat().st_mtime) if master.exists() else 0
     cache = (
         paths.settings_path().parent / "raster_cache"
-        / f"{stamp}_{mtime}_moon_{name}_{size}.png"
+        / f"{raster_store.source_prefix(master)}_moon_{name}_{size}.png"
     )
     if not cache.exists():
         image = moon_phase_image(fraction, size, master)
@@ -242,10 +239,9 @@ def _scaled_cache_path(path: Path, width: int) -> Path:
     """Where `path`'s downscaled-to-`width` copy lives. The source
     STEM rides the name — hover tests and humans can read which face
     a derived file came from."""
-    stamp = hashlib.sha1(str(path).encode("utf-8")).hexdigest()[:16]
     return (
         paths.settings_path().parent / "raster_cache"
-        / f"{stamp}_{int(path.stat().st_mtime)}_w{width}_{path.stem}.png"
+        / f"{raster_store.source_prefix(path)}_w{width}_{path.stem}.png"
     )
 
 
@@ -434,10 +430,9 @@ def eclipse_solar_type_icon(type_: str) -> Path | None:
         return None
     if type_ != "annular":
         return source
-    stamp = hashlib.sha1(str(source).encode("utf-8")).hexdigest()[:16]
     cache = (
         paths.settings_path().parent / "raster_cache"
-        / f"{stamp}_{int(source.stat().st_mtime)}_eclipse_annular_tint.png"
+        / f"{raster_store.source_prefix(source)}_eclipse_annular_tint.png"
     )
     if not cache.exists():
         pixmap = QPixmap(str(source))

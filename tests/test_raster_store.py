@@ -10,10 +10,12 @@ file on disk is either COMPLETE or ABSENT — the encoder writes a
 `.part` sibling and `os.replace` publishes it in one atomic step.
 """
 
+import os
+
 import pytest
 from PySide6.QtGui import QColor, QImage
 
-from render.raster_store import atomic_save
+from render.raster_store import atomic_save, fingerprint, source_prefix
 
 
 def _image() -> QImage:
@@ -67,3 +69,34 @@ def test_a_failed_encode_leaves_nothing_and_raises(tmp_path):
 
     assert not target.exists()
     assert list(tmp_path.rglob("*.part")) == [], "partial file must be removed"
+
+
+def test_fingerprint_survives_a_git_touch(tmp_path):
+    """THE COLD-START CAUSE (0.14.708): cache names carried the source
+    mtime, and a git checkout rewrites mtimes without changing a pixel
+    — one checkout orphaned the whole multi-GB cache. The law: same
+    bytes, same fingerprint, whatever the timestamps say; changed
+    bytes, new fingerprint."""
+    source = tmp_path / "letter.png"
+    source.write_bytes(b"\x89PNG-golden-letter-bytes" * 100)
+    original = fingerprint(source)
+
+    stat = source.stat()
+    os.utime(source, (stat.st_atime + 3600, stat.st_mtime + 3600))
+    assert fingerprint(source) == original, "a touch must not orphan the cache"
+
+    source.write_bytes(b"\x89PNG-changed-letter-bytes" * 100)
+    assert fingerprint(source) != original, "an edit MUST orphan the cache"
+
+
+def test_source_prefix_is_stamp_underscore_fingerprint(tmp_path):
+    """The one naming function every cache-path builder and the GC
+    share: 16-hex path stamp, underscore, 12-hex content fingerprint —
+    and the documented graceful-absent `_0` for a missing source."""
+    source = tmp_path / "plate.png"
+    source.write_bytes(b"subdial-master")
+    prefix = source_prefix(source)
+    stamp, digest = prefix.split("_")
+    assert len(stamp) == 16 and int(stamp, 16) >= 0
+    assert len(digest) == 12 and int(digest, 16) >= 0
+    assert source_prefix(tmp_path / "missing.png").endswith("_0")

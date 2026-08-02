@@ -25,7 +25,6 @@ files (that module in turn imports `asset_recolor.py`, which imports
 top-level imports never form a cycle; see that method's own comment.
 """
 
-import hashlib
 import math
 import sys
 from pathlib import Path
@@ -332,10 +331,9 @@ class AssetCache:
         cached = cls._svg_masters.get(key)
         if cached is not None and cached[1] >= max(px_height, cls.MASTER_MIN_PX):
             return cached[0]
-        stamp = hashlib.sha1(key.encode("utf-8")).hexdigest()[:16]
         disk = (
             paths.settings_path().parent / "raster_cache"
-            / f"{stamp}_{int(path.stat().st_mtime)}_{target}.png"
+            / f"{raster_store.source_prefix(path)}_{target}.png"
         )
         image = QImage(str(disk)) if disk.exists() else QImage()
         if image.isNull():

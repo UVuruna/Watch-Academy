@@ -4,14 +4,23 @@
 
 ## Purpose
 The disk raster cache's own module — the one place that knows HOW a
-derived image lands on disk safely. Born from the owner's 2026-07-31
-crash log: the background art warm wrote a letter recolor **directly to
-its final cache path** with `QImage.save`, the GUI thread's
-`letter_metal_file` saw the path exist mid-write, and `paintEvent`
-loaded a truncated PNG — `ValueError` inside the paint, an unterminated
-`QPainter`, and a permanently broken window. A cache file must either
-be COMPLETE on disk or NOT THERE; nothing in between may ever be
-visible to a reader.
+derived image lands on disk safely and WHAT its name is keyed by.
+
+Born from the owner's 2026-07-31 crash log: the background art warm
+wrote a letter recolor **directly to its final cache path** with
+`QImage.save`, the GUI thread's `letter_metal_file` saw the path exist
+mid-write, and `paintEvent` loaded a truncated PNG — `ValueError`
+inside the paint, an unterminated `QPainter`, and a permanently broken
+window. A cache file must either be COMPLETE on disk or NOT THERE;
+nothing in between may ever be visible to a reader.
+
+The second law (0.14.708): cache names follow the source's **CONTENT**,
+not its mtime. Every git operation rewrites mtimes without changing a
+pixel, so the old mtime-keyed names orphaned the entire multi-GB cache
+on every checkout — the next launch re-paid every recolor and downscale
+cold (the owner's 75-second start traces straight back to this).
+`source_prefix` is the ONE naming function every cache-path builder
+shares, so the naming and the garbage collector can never drift apart.
 
 ## Connections
 
@@ -34,6 +43,14 @@ visible to a reader.
   atomically. Raises `OSError` when the encode or the rename fails
   (after removing the partial file) — callers keep their existing
   "cold cache is only slower, never wrong" fallbacks.
+- `fingerprint(path)`: a 12-hex content key — sha1 over (size, first
+  64 KiB, last 4 KiB), memoized by (size, mtime_ns) so the steady state
+  costs one `stat`. Documented limit: a same-size edit leaving both
+  sampled windows byte-identical keeps the old name — no compressed
+  raster format produced by an editor does that in practice.
+- `source_prefix(path)`: the leading `<16-hex path stamp>_<12-hex
+  fingerprint>` pair every cache name derived from `path` starts with;
+  a missing source yields the graceful-absent `_0`.
 
 ## Design Decisions
 - **`os.replace`, not `Path.rename`** — on Windows, `rename` onto an
