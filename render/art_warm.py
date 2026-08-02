@@ -14,9 +14,14 @@ background thread and calls back so the dial repaints in its real metal.
 
 This is the FIRST warm phase — the pixels the user is actually looking at
 come before the working-set downscales, the Encyclopedia inventory and
-the hover sweep (`app.warm.run_warm` owns that order). It also runs ONCE
-PER PROCESS, not once per watch: every watch shares one raster cache, so
-N watches asking for the same file is one job, not N.
+the hover sweep (`app.warm.run_warm` owns that order). It runs once per
+PROCESS at startup, never once per watch (every watch shares one raster
+cache, so N watches asking for the same file is one job, not N) — and
+again ON DEMAND whenever a later paint observes a missing finish: a
+finish/shade/theme switch records fresh recipes, `letter_metal_file`
+rings `asset_recolor`'s stale notifier, and `app.watch_manager.
+AppController.kick_art_warm` drains them (owner bug 2026-08-02 — the
+startup-only drain left switched dials gold until restart).
 
 See [Art Warm](art_warm.md).
 """

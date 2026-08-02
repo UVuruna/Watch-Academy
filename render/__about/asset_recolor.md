@@ -28,6 +28,12 @@ original/master path rather than crashing (Rule #1).
   `_recolored_plate` write atomically (owner crash 2026-07-31: the GUI
   thread's unlocked `exists()` check raced a direct `QImage.save` and
   painted a truncated PNG)
+- the STALE NOTIFIER (`set_art_stale_notifier`) — `letter_metal_file`
+  rings it on every observed miss, so a finish/shade/theme switch after
+  the startup warm still gets its recipes built ([Watch
+  Manager](../../app/__about/watch_manager.md)'s `kick_art_warm`; owner
+  bug 2026-08-02: the startup-only drain left switched dials gold until
+  restart)
 - [Config (folder)](../../config/___config.md) — `paths` (`art_file`,
   `metal_shade`, `settings_path`), `defaults`, `profiling`
 

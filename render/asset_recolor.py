@@ -75,6 +75,13 @@ def letter_metal_file(path: Path, metal: str) -> Path:
     drawn in, so a not-yet-recolored dial is a GOLD dial, never a blank
     one (Rule #1 — a documented, visible fallback, not a silent one).
 
+    A MISS also rings the stale notifier (owner bug 2026-08-02: the
+    startup drain was the ONLY drain, so a finish/theme switch after it
+    finished recorded recipes nobody ever built — the dial stayed gold
+    until the next process restart). The paint that observes the miss
+    is exactly the moment the recipe is known, so the notifier fires
+    here, at the source of truth, not from any settings handler.
+
     `render.art_warm.warm_pending_art` drains the ledger on the
     background thread and the controller repaints; a caller that needs
     the real pixels NOW (an export) uses `ensure_variant` on
@@ -82,6 +89,8 @@ def letter_metal_file(path: Path, metal: str) -> Path:
     derived = letter_metal_path(path, metal)
     if derived is None or derived.exists():
         return derived
+    if _ART_STALE_NOTIFIER is not None:
+        _ART_STALE_NOTIFIER()
     return _PENDING_VARIANTS[str(derived)][0]
 
 
@@ -215,6 +224,26 @@ def _recolored_plate(
 _PENDING_VARIANTS: dict[str, tuple[Path, str, str, str, str]] = {}
 _VARIANT_LOCKS: dict[str, threading.Lock] = {}
 _VARIANT_LOCKS_GUARD = threading.Lock()
+
+# THE STALE NOTIFIER (owner bug 2026-08-02: "kada promjenim sa npr
+# DOLLAR NA DOMY thematic bude zlatni i ne uradi RECOLOR dok ne ugasim
+# i upalim APP"): the startup warm was the only drain of this ledger,
+# so recipes recorded AFTER it finished — every finish/shade/theme
+# switch — sat unbuilt forever. `letter_metal_file` calls this the
+# moment a paint observes a missing finish; `app.watch_manager`
+# installs its `kick_art_warm` here, which starts (or re-runs) a
+# background drain. Must stay cheap and thread-agnostic: it is called
+# on the GUI thread inside a paint.
+_ART_STALE_NOTIFIER = None
+
+
+def set_art_stale_notifier(notifier) -> None:
+    """Install the callable rung when a paint observes a MISSING derived
+    finish (None uninstalls — tests). One process, one notifier: the
+    process-wide `app.watch_manager.AppController` owns the one drain
+    thread, mirroring `shared_cache()`'s one-per-process shape."""
+    global _ART_STALE_NOTIFIER
+    _ART_STALE_NOTIFIER = notifier
 
 
 def _variant_lock(key: str) -> threading.Lock:

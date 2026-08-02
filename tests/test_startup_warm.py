@@ -22,6 +22,7 @@ The four laws pinned here, one test each:
 """
 
 import os
+import threading
 from datetime import datetime
 from zoneinfo import ZoneInfo
 
@@ -144,6 +145,49 @@ def test_the_warm_starts_once_and_only_after_every_dial_painted(monkeypatch):
     manager._warm_thread.join(timeout=5)
     assert len(started) == 1, "the warm ran once per watch instead of once"
     assert started[0] == [one, two, three]
+
+
+def test_a_finish_switch_after_the_warm_drains_again(app, cold_cache):
+    """THE 2026-08-02 BUG: the startup warm was the ONLY drain of the
+    art ledger, so a finish/shade/theme switch AFTER it finished
+    recorded recipes nobody ever built — the dial stayed gold until the
+    process restarted. The law: a paint that observes a missing finish
+    rings `asset_recolor`'s stale notifier, and the manager's
+    `kick_art_warm` drains the ledger without any restart."""
+    from app.watch_manager import AppController
+    from config.paths import art_file
+
+    manager = AppController.__new__(AppController)
+    manager._quitting = False
+    startup = threading.Thread(target=lambda: None)  # the one startup
+    startup.start()                                  # warm: came, went
+    startup.join()
+    manager._warm_thread = startup
+    manager._art_lock = threading.Lock()
+    manager._art_thread = None
+    manager._art_rerun = False
+    manager._watches = []
+    asset_recolor.set_art_stale_notifier(manager.kick_art_warm)
+    try:
+        letter = paths.assets_dir() / "instrument" / "ring" / "letters" / "A.png"
+        assert letter.exists(), "the test master must exist"
+
+        # The paint under the NEW finish: records the recipe, observes
+        # the miss, stands the gold master in — and rings the notifier.
+        stand_in = asset_recolor.letter_metal_file(letter, "silver")
+        assert stand_in == art_file(letter), "the miss must stand the master in"
+
+        assert manager._art_thread is not None, (
+            "the miss never kicked a drain — the 2026-08-02 bug is back"
+        )
+        manager._art_thread.join(timeout=120)
+        assert not manager._art_thread.is_alive(), "the drain hung"
+        assert pending_art() == [], "the kicked drain left work behind"
+        derived = asset_recolor.letter_metal_path(letter, "silver")
+        assert derived.exists(), "the switched finish was never built"
+        assert asset_recolor.letter_metal_file(letter, "silver") == derived
+    finally:
+        asset_recolor.set_art_stale_notifier(None)
 
 
 def test_legend_off_skips_the_hover_sweep_entirely(app, monkeypatch):

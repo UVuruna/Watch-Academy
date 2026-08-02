@@ -47,6 +47,8 @@ from app.controller import WatchController
 from app.settings_store import SettingsStore
 from app.warm import run_warm
 from config import paths
+from render import asset_recolor
+from render.art_warm import warm_pending_art
 
 
 class AppController:
@@ -64,6 +66,12 @@ class AppController:
         #: The watches the NEXT warm pass covers — the startup roster, or
         #: the single watch a mid-session ADD WATCH just created.
         self._armed: set = set()
+        # The on-demand art drain (owner bug 2026-08-02): one thread,
+        # re-armed by a rerun flag instead of ever running two at once.
+        self._art_lock = threading.Lock()
+        self._art_thread: threading.Thread | None = None
+        self._art_rerun = False
+        asset_recolor.set_art_stale_notifier(self.kick_art_warm)
         self._watches: list[WatchController] = []
         for index in paths.discover_watch_indices():
             self._watches.append(self._build_watch(index))
@@ -216,6 +224,58 @@ class AppController:
             on_art_ready=art_ready,
             should_stop=lambda: self._quitting,
         )
+
+    # --- the on-demand art drain ---------------------------------------------
+
+    def kick_art_warm(self) -> None:
+        """Drain freshly-recorded derived-art recipes on a background
+        thread — installed as `render.asset_recolor`'s stale notifier,
+        rung the moment a paint observes a MISSING finish (owner bug
+        2026-08-02: after the one startup warm finished, a finish/shade/
+        theme switch recorded recipes nobody ever built — the dial
+        stayed gold until the next process restart).
+
+        Cheap and thread-agnostic on purpose (it runs inside a paint):
+        one lock, one flag, at most ONE drain thread alive — a kick
+        during a running drain sets the rerun flag and the drain loops
+        once more instead of a second thread starting. Before the
+        startup warm has been armed and started, the kick stands down:
+        that first drain belongs to `run_warm`, AFTER every dial's
+        first frame (owner 2026-07-28 — nothing competes with the
+        first paint)."""
+        if self._quitting or self._warm_thread is None:
+            return
+        with self._art_lock:
+            if self._art_thread is not None and self._art_thread.is_alive():
+                self._art_rerun = True
+                return
+            self._art_rerun = False
+            self._art_thread = threading.Thread(
+                target=self._drain_art, daemon=True, name="DOMY art drain",
+            )
+            self._art_thread.start()
+
+    def _drain_art(self) -> None:
+        """The kicked drain's body: `warm_pending_art` until the ledger
+        is stable, then once more per rerun flag — a kick that arrived
+        mid-drain is honored, never lost."""
+        while True:
+            warm_pending_art(
+                progress=print,
+                on_ready=self._emit_art_ready,
+                should_stop=lambda: self._quitting,
+            )
+            with self._art_lock:
+                if not self._art_rerun:
+                    return
+                self._art_rerun = False
+
+    def _emit_art_ready(self) -> None:
+        """A recolor landed: every live watch repaints (the art is
+        shared, so any dial may be the one standing in with a master).
+        Qt queues the cross-thread signal onto each GUI thread."""
+        for watch in list(self._watches):
+            watch.art_ready.emit()
 
     def quit_all(self) -> None:
         """The Exit menu action on ANY watch closes the WHOLE process

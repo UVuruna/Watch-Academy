@@ -67,6 +67,16 @@ later in the session.
   background warm thread (see [Warm](warm.md)) — called for the startup
   roster and again, for a single watch only, after a mid-session
   `add_watch`
+- `kick_art_warm()` / `_drain_art()` / `_emit_art_ready()`: the ON-DEMAND
+  art drain (owner bug 2026-08-02 — a finish/shade/theme switch after
+  the startup warm finished recorded recipes nobody ever built, and the
+  dial stayed gold until restart). Installed as [Asset
+  Recolor](../../render/__about/asset_recolor.md)'s stale notifier: a
+  paint that observes a missing finish rings it, one lock + one rerun
+  flag keep at most ONE drain thread alive, and every live watch
+  repaints per built finish. Stands down until the startup warm has
+  started — that first drain belongs to `run_warm`, after the first
+  frames
 - `quit_all()`: the Exit action on ANY watch closes the WHOLE process —
   every watch's own `_prepare_quit()` runs before the one shared
   `app.quit()`
