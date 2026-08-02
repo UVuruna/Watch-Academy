@@ -21,8 +21,9 @@ import numpy as np
 from recolor import space
 from recolor.recipe import Metal, Specular
 
-# The specular target — linear white.
-_WHITE = np.ones(3)
+# The specular target — linear white (float32, like every constant in
+# `space` — one float64 operand would upcast the whole blend back).
+_WHITE = np.ones(3, dtype=np.float32)
 
 
 @lru_cache(maxsize=64)
@@ -62,6 +63,9 @@ def sample(metal: Metal, lightness: np.ndarray) -> np.ndarray:
         ],
         axis=-1,
     )
+    # np.interp always answers in float64 — fold back to the caller's
+    # own precision so the float32 pipeline stays float32 downstream.
+    lab = lab.astype(lightness.dtype, copy=False)
     return np.clip(space.oklab_to_linear(lab), 0.0, None)
 
 

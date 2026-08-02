@@ -41,6 +41,11 @@ def recolor(
     target_metal = recipe.metal(target)
     tuning = recipe.tuning
 
+    # FLOAT32 pipeline (0.14.705): the filter passes are bandwidth-bound
+    # and every color matrix in `space` is float32 — one entry cast keeps
+    # the whole image in single precision end to end. Verified against
+    # the float64 pipeline: max |delta| far under half an 8-bit quantum.
+    rgba = np.asarray(rgba, dtype=np.float32)
     linear = space.srgb_to_linear(rgba[..., :3])
     alpha = rgba[..., 3]
 

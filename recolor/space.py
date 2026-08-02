@@ -23,29 +23,38 @@ _SRGB_ALPHA = 0.055
 _SRGB_GAMMA = 2.4
 
 # Rec.709 / sRGB linear luminance weights.
-LUMA_WEIGHTS = np.array([0.2126, 0.7152, 0.0722])
+#
+# FLOAT32 CONSTANTS (0.14.705): the pipeline runs in float32 — the
+# filter passes are memory-bandwidth-bound, so halving the traffic is a
+# measured win — and numpy's promotion rules mean ONE float64 constant
+# in a matmul silently upcasts the whole downstream image back to
+# float64, so the matrices must carry the dtype themselves. float32's
+# 24-bit mantissa is ~7 decimal digits against an 8-bit output
+# quantum of 1/255 — verified: max |delta| vs the float64 pipeline is
+# far below half a quantum on real letter art.
+LUMA_WEIGHTS = np.array([0.2126, 0.7152, 0.0722], dtype=np.float32)
 
 # Oklab forward: linear sRGB -> LMS, then cube root, then LMS' -> Lab.
 _LMS_FROM_RGB = np.array([
     [0.4122214708, 0.5363325363, 0.0514459929],
     [0.2119034982, 0.6806995451, 0.1073969566],
     [0.0883024619, 0.2817188376, 0.6299787005],
-])
+], dtype=np.float32)
 _LAB_FROM_LMS = np.array([
     [0.2104542553, 0.7936177850, -0.0040720468],
     [1.9779984951, -2.4285922050, 0.4505937099],
     [0.0259040371, 0.7827717662, -0.8086757660],
-])
+], dtype=np.float32)
 _LMS_FROM_LAB = np.array([
     [1.0, 0.3963377774, 0.2158037573],
     [1.0, -0.1055613458, -0.0638541728],
     [1.0, -0.0894841775, -1.2914855480],
-])
+], dtype=np.float32)
 _RGB_FROM_LMS = np.array([
     [4.0767416621, -3.3077115913, 0.2309699292],
     [-1.2684380046, 2.6097574011, -0.3413193965],
     [-0.0041960863, -0.7034186147, 1.7076147010],
-])
+], dtype=np.float32)
 
 
 def srgb_to_linear(srgb: np.ndarray) -> np.ndarray:

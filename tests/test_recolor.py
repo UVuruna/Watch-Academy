@@ -343,10 +343,14 @@ def test_the_stone_field_is_left_as_drawn(plate, recipe):
 
 
 def test_alpha_is_carried_through_untouched(plate, recipe):
+    """No ARITHMETIC may touch the alpha channel. Since the float32
+    pipeline (0.14.705) the output is single precision, so "untouched"
+    means bit-exactly the float32 CAST of the input — any blend or
+    scale would break that equality."""
     faded = plate.copy()
     faded[..., 3] = np.linspace(0.0, 1.0, SIZE)[None, :]
     out = recolor(faded, "bronze", "silver", recipe)
-    assert np.array_equal(out[..., 3], faded[..., 3])
+    assert np.array_equal(out[..., 3], faded[..., 3].astype(np.float32))
 
 
 def test_every_metal_can_be_both_source_and_target(plate, recipe):
