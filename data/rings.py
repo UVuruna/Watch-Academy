@@ -1,23 +1,23 @@
 """Ring preset cards — bundled JSON plus the user's custom rings.
 
-One card = one dial styling (owner spec): {name, positions, letters}.
-The positions signature resolves the LAYOUT (config RING_LAYOUTS) —
-the ring face with matching gaps and the metal rules. Validation is
-loud (Rule #1): a broken card must name itself, never render blank.
+One card = one dial styling: the COMPOSITIONAL model (owner decree
+2026-08-05) — an OUTER band (config.constants.RING_OUTERS) whose empty
+hour fields carry the preset's own LETTERS, an INNER band (the user's
+own changeable pick, config.constants.RING_INNERS) and an optional
+CROWN TEXT (motto) arc. `{name, outer, letters}` is the whole card;
+`outer` resolves the empty positions directly (no signature guessing).
+Validation is loud (Rule #1): a broken card must name itself, never
+render blank.
 """
 
 from config import constants, paths
 from core.motto import (
     _occurrence_index,
     centered_word_angles,
+    free_arc_angles,
     motto_glyph_angles,
 )
 from data._io import load_json_checked
-
-_SIGNATURES = {
-    frozenset(layout["positions"]): name
-    for name, layout in constants.RING_LAYOUTS.items()
-}
 
 
 def _validate_motto(name: str, raw: list, positions: tuple) -> tuple:
@@ -85,6 +85,29 @@ def _validate_motto(name: str, raw: list, positions: tuple) -> tuple:
                 f"{sorted(unknown)}"
             )
         clockwise = bool(motto_entry.get("clockwise", True))
+        # THE CROWN TEXT form (custom rings, owner decree 2026-08-05):
+        # `{"text", "orientation"}` — free-form, user-typed text arcing
+        # from the top or from the bottom, NOT pinned to any ring seat.
+        # Mutually exclusive with `center`/`pins` (the bundled presets'
+        # own Great Seal / cross-word forms).
+        orientation = motto_entry.get("orientation")
+        if orientation is not None:
+            if motto_entry.get("pins") or motto_entry.get("center") is not None:
+                raise ValueError(
+                    f"ring preset {name!r}: motto {text!r} cannot carry "
+                    f"`orientation` together with `center`/`pins`"
+                )
+            try:
+                angles = free_arc_angles(text, str(orientation))
+            except ValueError as error:
+                raise ValueError(
+                    f"ring preset {name!r}: motto {text!r}: {error}"
+                ) from error
+            resolved.append({
+                "text": text, "angles": angles,
+                "words": _words(text, (), None),
+            })
+            continue
         # The CROSS-WORDS form (owner UV inbox 2026-07-27): a single
         # station word CENTERED on one of the preset's own seats —
         # `{"text", "center", "clockwise"}`, the DOMY/PILOT cross
@@ -139,32 +162,43 @@ def _validate_motto(name: str, raw: list, positions: tuple) -> tuple:
 
 
 def validate_preset(entry: dict) -> dict:
-    """One card checked: known positions signature, library letters,
-    matching counts. Returns {name, positions, letters, layout, triangle,
-    legend, motto}. `triangle` (ROADMAP 15b) is an optional 3-position
-    override of the SEAL layout's own metal triangle (which is empty —
-    one finish on all six, the plain seal reading) so a 6-letter preset
-    can split into two 3-letter metal groups instead (the Dollar
-    banknote's Trinity/Union read, CANON.md §The Banknote). `legend` is an optional
-    hour(position) -> {name, reading} map — the per-letter HOVER LEGEND
-    text, quoted verbatim from CANON. `motto` (TASK 1) is an optional
-    list of Great Seal motto strings + their pinned letter→position
-    constraints — see `_validate_motto`."""
+    """One card checked: known outer, library letters, matching counts.
+    Returns {name, outer, positions, letters, triangle, legend, motto,
+    thematic}. `outer` (owner decree 2026-08-05, the compositional ring
+    model) resolves the empty hour fields directly from
+    `constants.RING_OUTERS` — no more guessing a "layout" from a
+    positions signature. The FIVE bundled presets are each LOCKED to
+    exactly one outer (`constants.RING_OUTER_LOCK`); any other name
+    (every custom ring) may pick any outer freely. `triangle` (ROADMAP
+    15b) is an optional 3-position override of the `"hexa"` outer's own
+    metal triangle (which is empty — one finish on all six, the plain
+    Union reading) so a 6-letter preset can split into two 3-letter
+    metal groups instead (the Dollar banknote's Trinity/Union read,
+    CANON.md §The Banknote). `legend` is an optional hour(position) ->
+    {name, reading} map — the per-letter HOVER LEGEND text, quoted
+    verbatim from CANON. `motto` (TASK 1, widened 2026-08-05 with the
+    free-form CROWN TEXT) is an optional list of motto/crown-text
+    entries — see `_validate_motto`."""
     name = str(entry.get("name", "")).strip()
     if not name:
         raise ValueError(f"ring preset without a name: {entry!r}")
-    positions = tuple(int(p) for p in entry.get("positions", ()))
-    layout = _SIGNATURES.get(frozenset(positions))
-    if layout is None:
+    outer = str(entry.get("outer", ""))
+    if outer not in constants.RING_OUTERS:
         raise ValueError(
-            f"ring preset {name!r}: positions {positions} match no layout "
-            f"(known: {[l['positions'] for l in constants.RING_LAYOUTS.values()]})"
+            f"ring preset {name!r}: unknown outer {outer!r} "
+            f"(known: {sorted(constants.RING_OUTERS)})"
         )
+    locked = constants.RING_OUTER_LOCK.get(name)
+    if locked is not None and outer != locked:
+        raise ValueError(
+            f"ring preset {name!r} is locked to outer {locked!r}, got {outer!r}"
+        )
+    positions = constants.RING_OUTERS[outer]["positions"]
     letters = tuple(str(letter) for letter in entry.get("letters", ()))
     if len(letters) != len(positions):
         raise ValueError(
             f"ring preset {name!r}: {len(letters)} letters for "
-            f"{len(positions)} positions"
+            f"{len(positions)} positions (outer {outer!r})"
         )
     unknown = [l for l in letters if l not in constants.RING_LETTER_FILES]
     if unknown:
@@ -181,10 +215,10 @@ def validate_preset(entry: dict) -> dict:
     triangle_raw = entry.get("triangle")
     triangle = None
     if triangle_raw is not None:
-        if layout != "seal":
+        if outer != "hexa":
             raise ValueError(
                 f"ring preset {name!r}: a triangle override only applies "
-                f"to the seal layout (this preset resolved to {layout!r})"
+                f"to the 'hexa' outer (this preset's outer is {outer!r})"
             )
         triangle = tuple(int(p) for p in triangle_raw)
         if len(triangle) != 3 or not set(triangle).issubset(positions):
@@ -230,7 +264,7 @@ def validate_preset(entry: dict) -> dict:
         "name": name,
         "positions": positions,
         "letters": letters,
-        "layout": layout,
+        "outer": outer,
         "triangle": triangle,
         "legend": legend,
         "motto": motto,

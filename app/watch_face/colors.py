@@ -16,13 +16,12 @@ Outer/Inner ring-tint split and R-24's Crown Text color/size ARE built
 this round —
 
   * R-21's Outer/Inner ring-tint split: the owner's split ring art
-    (`assets/instrument/ring/outter/`+`inner/`, untracked) IS the new
-    ART this needed — `render.layers.ring.RingLayer._draw_split_plate`
-    composes both bands, each with its OWN tint
+    (`assets/instrument/ring/outter/`+`inner/`) became THE
+    COMPOSITIONAL RING MODEL (owner decree 2026-08-05) —
+    `render.layers.ring.RingLayer._draw_bands` composes both bands
+    UNCONDITIONALLY now, each with its OWN tint
     (`ring_tint`/`ring_tint_inner`). The "Inner (Minute track)" row
-    below greys out with a tooltip when the split art is absent from
-    disk (`setters["ring_has_split_art"]`) — graceful truth, not a
-    dead control.
+    below is always live — no more disk-presence gate.
   * R-24's Crown Text color: the outer arc IS the Great Seal motto
     inscription (`RingSpec.motto`) — it always had a seat, just no
     control. `motto_tint` (this section) and `motto_scale`/`motto_alpha`
@@ -109,13 +108,11 @@ def _tint_group(
 def _ring_tint_group(settings, setters, tr) -> QGroupBox:
     """R-21 item 1: the Clock/ring tint picker, MOVED here (renamed
     "Ring tint" in THIS window — the stored key is untouched; the
-    retired Settings dialog copy was deleted outright by Phase 6). Now
-    also carries R-21's OUTER/INNER split (owner correction 2026-08-05):
-    an "Inner (Minute track)" tint picker for `ring_tint_inner`, nested
-    below the outer/whole-band picker (which stays the "Ring tint"
-    label — its own semantics never changed). Greyed out with a
-    tooltip when the owner's split art (`ring_has_split_art`) is not on
-    disk — the picker would repaint nothing today."""
+    retired Settings dialog copy was deleted outright by Phase 6).
+    THE COMPOSITIONAL RING MODEL (owner decree 2026-08-05) made the
+    outer/inner split the ONLY ring render path, so the "Inner (Minute
+    track)" tint picker for `ring_tint_inner` is always live now — no
+    more disk-presence gate."""
     group = _tint_group(
         tr, "Ring tint", settings.ring_tint, setters["ring_tint"],
         "Gray (default)", "Pick the ring tint",
@@ -125,15 +122,6 @@ def _ring_tint_group(settings, setters, tr) -> QGroupBox:
         setters["ring_tint_inner"], "Follow outer (default)",
         "Pick the inner (minute track) tint",
     )
-    has_split_art = setters["ring_has_split_art"]()
-    if not has_split_art:
-        inner.setEnabled(False)
-        inner.setToolTip(
-            tr(
-                "The split ring art (outer/inner) is not installed yet — "
-                "the ring still draws as one band."
-            )
-        )
     group.layout().addWidget(inner)
     return group
 

@@ -1,12 +1,19 @@
-"""The RING layer — the dial face, its letters and word legend."""
+"""The RING layer — THE COMPOSITIONAL RING MODEL (owner decree
+2026-08-05): a ring is ALWAYS the composition of an outer band, an
+inner band, the preset's own letters and an optional crown-text motto
+arc. No monolithic single-plate ring face and no procedural fallback
+exist any more — every skin's `RingSpec` carries a real
+`outer_asset`/`inner_asset` pair (`config.defaults`, `app.controller.
+_compose_skin`), so this layer composes unconditionally.
+"""
 
 import math
 from pathlib import Path
 
-from PySide6.QtCore import QPointF, QRectF, Qt
-from PySide6.QtGui import QColor, QFont, QPainter, QPainterPath, QPen
+from PySide6.QtCore import QPointF
+from PySide6.QtGui import QPainter
 
-from config import constants, dial, palette
+from config import dial, palette
 from core import angles
 from render.asset_recolor import letter_metal_file
 from render.context import Cadence, Layer, RenderContext
@@ -14,127 +21,37 @@ from render.painting import dial_point, draw_pixmap_centered
 
 
 class RingLayer(Layer):
-    """Outer ring: donut, hour ticks, 24h numerals with per-skin letters,
-    minute numbers along the inner edge."""
+    """The composed ring: outer band, inner band, the preset's own
+    letters (with per-hour metal finish) and the optional crown-text
+    motto arc."""
 
     cadence = Cadence.STATIC
 
     def paint(self, painter: QPainter, ctx: RenderContext) -> None:
+        self._draw_bands(painter, ctx)
+        self._draw_letter_art(painter, ctx)
+        self._draw_motto(painter, ctx)
+
+    def _draw_bands(self, painter: QPainter, ctx: RenderContext) -> None:
+        """The outer + inner band composition — inner drawn FIRST so the
+        outer band's own edge sits on top. `ring_tint_inner` None
+        follows `ring_tint`, the SAME "follow-unless-overridden" shape
+        `hands_tint` uses — the outer band's tint semantics are the
+        product's own long-standing ones (RING SATURATION, owner
+        2026-07-18, Session 21-D, scales the plate's saturation AFTER
+        the tint recolor — both plates are grayscale-mastered)."""
         spec = self._skin.ring
-        if (
-            spec.use_split_art
-            and dial.RING_OUTER_ASSET.exists()
-            and dial.RING_INNER_ASSET.exists()
-        ):
-            # THE OUTER/INNER SPLIT (R-21, owner correction 2026-08-05):
-            # the owner's new split art replaces the single baked plate
-            # with two independently-tinted bands — see
-            # `_draw_split_plate` and `config.dial`'s own section note.
-            # Gated on the PRESET'S OWN opt-in (`RingSpec.use_split_art`)
-            # as well as the files' presence — the art landing on disk
-            # must never by itself repaint an existing preset (owner:
-            # "he will spec the mapping later").
-            self._draw_split_plate(painter, ctx)
-            self._draw_letter_art(painter, ctx)
-            self._draw_motto(painter, ctx)
-            return
-        if spec.asset is not None:
-            # The ring art carries numerals and minutes; the ring tint
-            # multiplies the art. The LETTERS are the owner's separate
-            # gold/silver art, overlaid by calculation so the tint never
-            # touches them (1x1 placeholders until his files land). The
-            # RING SATURATION slider (owner 2026-07-18, Session 21-D)
-            # scales the plate's saturation AFTER the tint recolor — the
-            # plate is grayscale-mastered, so saturating the pre-tint
-            # source would be a no-op; the tinted OUTPUT is what actually
-            # carries hue.
-            draw_pixmap_centered(
-                painter, ctx, spec.asset, QPointF(0, 0), 2 * ctx.radius,
-                tint=ctx.skin.ring_tint, saturation=ctx.skin.ring_saturation,
-            )
-            self._draw_letter_art(painter, ctx)
-            self._draw_motto(painter, ctx)
-            return
-        outer, inner = ctx.radius, ctx.radius * (1.0 - spec.width_fraction)
-
-        ring = QPainterPath()
-        # (procedural fallback ring below — no tint, no letter art)
-        ring.addEllipse(QRectF(-outer, -outer, 2 * outer, 2 * outer))
-        ring.addEllipse(QRectF(-inner, -inner, 2 * inner, 2 * inner))
-        painter.setPen(Qt.PenStyle.NoPen)
-        painter.fillPath(ring, QColor(spec.fill))
-
-        # Explicit QPen — copying painter.pen() would inherit the NoPen
-        # STYLE set for the donut fill and the ticks would never render.
-        painter.setPen(
-            QPen(QColor(spec.text_color), max(1.0, ctx.radius * dial.RING_TICK_WIDTH))
-        )
-        for hour in range(constants.HOURS_PER_REVOLUTION):
-            theta = (hour * 15.0 + constants.DIAL_OFFSET_DEG) % 360.0
-            painter.drawLine(
-                dial_point(theta, inner),
-                dial_point(theta, inner * dial.RING_TICK_REACH),
-            )
-
-        numeral_font = QFont()
-        numeral_font.setPixelSize(
-            max(dial.RING_NUMERAL_MIN_PX, round(ctx.radius * dial.RING_NUMERAL_SIZE))
-        )
-        numeral_font.setBold(True)
-        letter_font = QFont()
-        letter_font.setPixelSize(
-            max(dial.RING_LETTER_MIN_PX, round(ctx.radius * dial.RING_LETTER_SIZE))
-        )
-        letter_font.setBold(True)
-        mid = (outer + inner) / 2
-        box = ctx.radius * dial.RING_TEXT_BOX
-        for hour in range(constants.HOURS_PER_REVOLUTION):
-            theta = (hour * 15.0 + constants.DIAL_OFFSET_DEG) % 360.0
-            center = dial_point(theta, mid)
-            rect = QRectF(center.x() - box / 2, center.y() - box / 2, box, box)
-            letter = spec.letters.get(hour)
-            if letter is not None:
-                painter.setFont(letter_font)
-                painter.setPen(QColor(spec.letter_color))
-                painter.drawText(rect, Qt.AlignmentFlag.AlignCenter, letter)
-            else:
-                painter.setFont(numeral_font)
-                painter.setPen(QColor(spec.text_color))
-                painter.drawText(rect, Qt.AlignmentFlag.AlignCenter, str(hour))
-
-        minute_font = QFont()
-        minute_font.setPixelSize(
-            max(dial.RING_MINUTE_MIN_PX, round(ctx.radius * dial.RING_MINUTE_SIZE))
-        )
-        painter.setFont(minute_font)
-        painter.setPen(QColor(spec.text_color))
-        minute_radius = inner * dial.RING_MINUTE_RADIUS
-        for minute in range(5, 60, 5):
-            center = dial_point(minute * 6.0, minute_radius)
-            rect = QRectF(center.x() - box / 2, center.y() - box / 2, box, box)
-            painter.drawText(rect, Qt.AlignmentFlag.AlignCenter, str(minute))
-
-    def _draw_split_plate(self, painter: QPainter, ctx: RenderContext) -> None:
-        """R-21: the two independently-tinted bands
-        (`dial.RING_OUTER_ASSET`/`RING_INNER_ASSET`, graceful absence
-        gated by `paint()`) — inner drawn FIRST so the outer band's own
-        edge sits on top, exactly matching the single-plate look the two
-        together reconstruct (session's side-by-side render check).
-        `ring_tint_inner` None follows `ring_tint`, the SAME
-        "follow-unless-overridden" shape `hands_tint` already uses —
-        the outer band's tint semantics are UNCHANGED (still
-        `ring_tint`, no migration)."""
         inner_tint = (
             ctx.skin.ring_tint_inner
             if ctx.skin.ring_tint_inner is not None
             else ctx.skin.ring_tint
         )
         draw_pixmap_centered(
-            painter, ctx, dial.RING_INNER_ASSET, QPointF(0, 0), 2 * ctx.radius,
+            painter, ctx, spec.inner_asset, QPointF(0, 0), 2 * ctx.radius,
             tint=inner_tint, saturation=ctx.skin.ring_saturation,
         )
         draw_pixmap_centered(
-            painter, ctx, dial.RING_OUTER_ASSET, QPointF(0, 0), 2 * ctx.radius,
+            painter, ctx, spec.outer_asset, QPointF(0, 0), 2 * ctx.radius,
             tint=ctx.skin.ring_tint, saturation=ctx.skin.ring_saturation,
         )
 

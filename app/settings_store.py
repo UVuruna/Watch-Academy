@@ -15,8 +15,9 @@ from dataclasses import dataclass, field
 from pathlib import Path
 from zoneinfo import ZoneInfo
 
+from app.settings_ring import fold_ring_name, load_named_dict, normalized_ring_card
 from config import calendar_mounts, constants, defaults, dial, pantheon
-from data.rings import ring_presets, validate_preset
+from data.rings import ring_presets
 
 _HEX_COLOR = re.compile(r"^#[0-9A-Fa-f]{6}$")
 
@@ -71,6 +72,15 @@ class Settings:
     # `constants.RING_EYE_SHINE_DEFAULT`
     # (`app.controller._ring_eye_shine` resolves both).
     ring_eye_shine: dict = field(default_factory=dict)
+    # COMPOSITIONAL RING MODEL (owner decree 2026-08-05): the active
+    # preset's inner-band pick, keyed by preset name like
+    # `ring_two_metals` (`app.controller._resolve_ring_inner`). Crown
+    # text for CUSTOM rings: free-typed inscription + orientation
+    # ("top"/"bottom"), keyed by ring name — bundled presets' motto
+    # text lives in Database/ring_presets.json instead.
+    ring_inner: dict = field(default_factory=dict)
+    custom_ring_crown_text: dict = field(default_factory=dict)
+    custom_ring_crown_orientation: dict = field(default_factory=dict)
     # Install defaults per the owner's 2026-07-12 list: hexa primary,
     # gradient-dark Umbra, atmosphere Earth, STEEL hands, 720 dial.
     pointer: str = "hexa"
@@ -339,7 +349,7 @@ class SettingsStore:
             # against bundled + custom together; the name matches case-
             # insensitively (older files stored "domy").
             custom_rings = tuple(
-                _normalized_ring_card(entry)
+                normalized_ring_card(entry)
                 for entry in raw.get("custom_rings", ())
             )
             jump_cities = tuple(
@@ -350,7 +360,7 @@ class SettingsStore:
                 name.lower(): name for name in ring_presets(custom_rings)
             }
             ring_value = str(raw.get("ring", "DOMY"))
-            ring = _fold_ring_name(ring_value, by_fold)
+            ring = fold_ring_name(ring_value, by_fold)
             if ring is None:
                 raise ValueError(f"ring {ring_value!r} unknown")
             # THE METAL-SPLIT OPTION (TASK 3): per-preset dict, same
@@ -359,22 +369,20 @@ class SettingsStore:
             # (a stale bundled rename, a deleted custom ring) is simply
             # dropped rather than corrupting the whole file over one
             # stale entry.
-            ring_two_metals = {}
-            for raw_name, value in dict(raw.get("ring_two_metals", {})).items():
-                if not isinstance(value, bool):
-                    continue
-                resolved = _fold_ring_name(str(raw_name), by_fold)
-                if resolved is not None:
-                    ring_two_metals[resolved] = value
-            # THE EYE'S SHINE (DOLLAR/EYE round): same per-preset dict,
-            # same lenient policy as `ring_two_metals` just above.
-            ring_eye_shine = {}
-            for raw_name, value in dict(raw.get("ring_eye_shine", {})).items():
-                if not isinstance(value, bool):
-                    continue
-                resolved = _fold_ring_name(str(raw_name), by_fold)
-                if resolved is not None:
-                    ring_eye_shine[resolved] = value
+            is_bool = lambda v: isinstance(v, bool)
+            ring_two_metals = load_named_dict(raw, "ring_two_metals", by_fold, is_bool)
+            ring_eye_shine = load_named_dict(raw, "ring_eye_shine", by_fold, is_bool)
+            ring_inner = load_named_dict(
+                raw, "ring_inner", by_fold, constants.RING_INNERS.__contains__
+            )
+            custom_ring_crown_text = load_named_dict(
+                raw, "custom_ring_crown_text", by_fold,
+                lambda v: isinstance(v, str) and bool(v),
+            )
+            custom_ring_crown_orientation = load_named_dict(
+                raw, "custom_ring_crown_orientation", by_fold,
+                ("top", "bottom").__contains__,
+            )
             # One-time migration (2026-07-12): the South slot became a
             # MODE + per-family STYLE pair — the six old combined
             # values map onto it (external user data, not an API shim).
@@ -569,6 +577,9 @@ class SettingsStore:
                 custom_rings=custom_rings,
                 ring_two_metals=ring_two_metals,
                 ring_eye_shine=ring_eye_shine,
+                ring_inner=ring_inner,
+                custom_ring_crown_text=custom_ring_crown_text,
+                custom_ring_crown_orientation=custom_ring_crown_orientation,
                 jump_cities=jump_cities,
                 ring_tint=ring_tint,
                 earth_scale=_load_scale(raw, "earth_scale", *constants.ELEMENT_SCALE_RANGE, 1.0),
@@ -646,6 +657,11 @@ class SettingsStore:
             "custom_rings": [dict(card) for card in settings.custom_rings],
             "ring_two_metals": dict(settings.ring_two_metals),
             "ring_eye_shine": dict(settings.ring_eye_shine),
+            "ring_inner": dict(settings.ring_inner),
+            "custom_ring_crown_text": dict(settings.custom_ring_crown_text),
+            "custom_ring_crown_orientation": dict(
+                settings.custom_ring_crown_orientation
+            ),
             "pointer": settings.pointer,
             "umbra_form": settings.umbra_form,
             "umbra_contrast": settings.umbra_contrast,
@@ -751,55 +767,6 @@ class SettingsStore:
         backup = self._path.with_suffix(".json.bak")
         os.replace(self._path, backup)
         return backup
-
-
-# RING PRESET RENAMES (TASK 2, MASON/ICONS round, owner verdicts
-# 2026-07-19, third batch; DOLLAR/EYE round, owner decree 2026-07-27):
-# a stored settings file's OLD bundled preset name migrates onto its
-# new one (external user data, not an API shim, Rule #6) — a bare
-# case-insensitive fold alone cannot bridge these (unlike "MORPH" ->
-# "Morph", a pure case change the existing fold already handles for
-# free). The first-generation names chain straight to the CURRENT
-# ones: "MASON G" -> "Mason" -> "Dollar", "NUMBERS" -> "Omega" ->
-# "The One".
-_LEGACY_RING_NAMES = {
-    "mason g": "Dollar",
-    "mason": "Dollar",
-    "numbers": "The One",
-    "omega": "The One",
-    # CROSS-WORDS round (owner UV inbox + PILOT pick 2026-07-27): the
-    # chalice card "MORPH"/"Morph" becomes "PILOT" (Π-I-L-Ω-Θ — the
-    # guide who carries the traveler home).
-    "morph": "PILOT",
-}
-
-
-def _fold_ring_name(raw_name: str, by_fold: dict) -> str | None:
-    """One stored ring name resolved to its CURRENT bundled/custom name
-    — the TASK 2 rename migration first, then the existing case-
-    insensitive fold (older files stored "domy") — or None when it
-    names nothing loaded (a stale bundled rename, or a custom ring the
-    user later deleted). Shared by the top-level `ring` field (which
-    must raise on a miss) and `ring_two_metals`'s dict keys (which
-    silently drop a miss, `theme_metals`'s own lenient policy)."""
-    renamed = _LEGACY_RING_NAMES.get(raw_name.lower(), raw_name)
-    return by_fold.get(renamed.lower())
-
-
-def _normalized_ring_card(entry: dict) -> dict:
-    """One custom ring card, validated by the shared card validator and
-    stored in its JSON-serializable shape. The optional `thematic`
-    color pick (ENLARGE/THEMATIC round, owner 2026-07-27) rides along
-    only when set — older cards stay byte-identical."""
-    card = validate_preset(entry)
-    normalized = {
-        "name": card["name"],
-        "positions": list(card["positions"]),
-        "letters": list(card["letters"]),
-    }
-    if card["thematic"] is not None:
-        normalized["thematic"] = card["thematic"]
-    return normalized
 
 
 def _normalized_jump_city(entry: dict) -> dict:

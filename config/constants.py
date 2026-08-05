@@ -1042,30 +1042,88 @@ SUBDIAL_SET_TITLES = {
 # pantheon table fall back to planetary (documented).
 FIGURE_ROSTERS = ("planetary", "pantheon")
 
-# ═══════════════════════════ RING LAYOUTS & LETTERS ═══════════════════════════
-RING_LAYOUTS = {
-    # Owner naming (2026-07-10): the up-triangle is the masculine
-    # Flame, the down-triangle the feminine Chalice, and their union —
-    # the hexagram — the Seal.
-    "flame": {
+# ═══════════════════════════ RING OUTERS, INNERS & LETTERS ═══════════════════════════
+# THE COMPOSITIONAL RING MODEL (owner decree 2026-08-05, coordinator's
+# pixel analysis on the actual PNGs): a ring is ALWAYS the composition
+# of an OUTER band (`assets/instrument/ring/outter/`, carries the empty
+# hour fields the letters stand in) + an INNER band
+# (`assets/instrument/ring/inner/`, the minute track) + the preset's
+# own letters in the outer's empty fields + an optional CROWN TEXT
+# (motto) arc. The old monolithic single-plate faces (`domy.png`,
+# `morph.png`, `hexagram.png`) are DEAD — deleted from disk the same
+# session this table replaced `RING_LAYOUTS`. `positions` is the empty
+# hour fields, MEASURED off the art (owner naming keeps the pre-
+# existing "24" convention for the bottom/midnight seat rather than
+# "0" — `core.angles.ring_position_angle` treats them identically).
+# `triangle` is the DEFAULT 3-of-N metal-split subset for outers that
+# have one built in (bot_cross/top_cross, today's DOMY/PILOT look);
+# empty for every other outer — a preset may still override it via its
+# own `triangle` card field, but ONLY when its outer is `"hexa"`
+# (`data.rings.validate_preset`).
+RING_OUTERS = {
+    "bot_cross": {
+        "file": "bot_cross.png",
         "positions": (12, 20, 24, 4),
-        "face": "domy.png",
-        "triangle": (12, 20, 4),     # points UP
+        "triangle": (12, 20, 4),     # points UP (the Flame, DOMY's own)
         "theme": "Masculine",
     },
-    "chalice": {
+    "top_cross": {
+        "file": "top_cross.png",
         "positions": (12, 16, 24, 8),
-        "face": "morph.png",
-        "triangle": (8, 16, 24),     # points DOWN
+        "triangle": (8, 16, 24),     # points DOWN (the Chalice, PILOT's own)
         "theme": "Feminine",
     },
-    "seal": {
+    "hexa": {
+        "file": "hexa.png",
         "positions": (12, 16, 20, 24, 4, 8),
-        "face": "hexagram.png",
         "triangle": (),              # the Seal wears ONE metal on all six
         "theme": "Union",
     },
+    "cross": {
+        "file": "cross.png",
+        "positions": (12, 18, 24, 6),
+        "triangle": (),
+        "theme": "Cross",
+    },
+    "full": {
+        "file": "full.png",
+        "positions": (24,),
+        "triangle": (),
+        "theme": "Full",
+    },
+    "octa": {
+        "file": "octa.png",
+        "positions": (12, 15, 18, 21, 24, 3, 6, 9),
+        "triangle": (),
+        "theme": "Octa",
+    },
 }
+# THE FIVE PRESETS' LOCKED OUTER (owner decree 2026-08-05): each
+# bundled preset is locked to exactly one outer — the preset's INNER
+# stays user-changeable (`RING_INNER_PRESET_DEFAULT` below is only the
+# starting default). `data.rings.validate_preset` enforces this lock
+# for every bundled card.
+RING_OUTER_LOCK = {
+    "DOMY": "bot_cross", "PILOT": "top_cross", "Dollar": "hexa",
+    "Templar": "cross", "The One": "full",
+}
+# THE EIGHT INNER VARIANTS (owner's measured art,
+# `assets/instrument/ring/inner/*.png`): "seconds*" carry the minute
+# numbers (today's look), "simple*" ticks only; the _cross/_octa/_point
+# suffix is an arrow-marker overlay at those positions. Legal on EVERY
+# outer (custom rings) — the compositional model has no illegal pair.
+RING_INNERS = (
+    "seconds", "seconds_cross", "seconds_octa", "simple",
+    "simple_cross", "simple_octa", "simple_point", "simple_seconds",
+)
+# The coordinator's recommended per-preset default inner (owner may
+# re-verdict later — implemented as defaults, user-changeable in
+# Settings ▸ Ring like `RING_TWO_METALS_DEFAULT`/`RING_EYE_SHINE_DEFAULT`).
+RING_INNER_PRESET_DEFAULT = {
+    "DOMY": "seconds", "PILOT": "seconds_cross", "Dollar": "simple",
+    "Templar": "simple_cross", "The One": "simple_point",
+}
+RING_INNER_DEFAULT = "simple"       # every custom ring's own fallback
 # THE METAL-SPLIT OPTION (TASK 3, MASON/ICONS round, owner verdicts
 # 2026-07-19, third batch): for every seal preset that carries its own
 # `triangle` override (Mason/Omega/Templar today — `data.rings.
@@ -1114,11 +1172,14 @@ RING_EYE_SHINE_ENLARGE = {"gem": 1.67, "gpt": 2.11}
 # render.asset_recolor.letter_metal_file — no more pre-rendered files). The
 # library is GROUPED (owner spec 2026-07-11):
 # the builder shows Latin / Greek / Numbers / Symbols sections. Numbers
-# exist ONLY for the six ring positions they belong to (owner decision:
-# a number makes no sense away from its own hour) — 24h wears Ω in the
-# NUMBERS bundled preset.
+# exist ONLY for the ring positions they belong to (owner decision: a
+# number makes no sense away from its own hour) — every empty field
+# across every RING_OUTERS outer EXCEPT 24, which always wears Ω (the
+# NUMBERS bundled preset's own reading, kept for every other outer).
 _LATIN_LETTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-_RING_NUMBERS = ("4", "8", "12", "16", "20")
+_RING_NUMBERS = (
+    "3", "4", "6", "8", "9", "12", "15", "16", "18", "20", "21",
+)
 RING_LETTER_GROUPS = {
     "Latin": tuple(_LATIN_LETTERS),
     "Greek": ("Ω", "Π", "Φ", "Ψ", "Σ", "Θ"),

@@ -155,6 +155,34 @@ def centered_word_angles(
     return tuple(start + step * k for k in range(len(text)))
 
 
+def free_arc_angles(text: str, orientation: str) -> tuple[float, ...]:
+    """One dial angle per CHARACTER of an arbitrary CROWN TEXT (custom
+    rings, owner decree 2026-08-05: "displayed arcing from 12 upward
+    (top) or from the bottom") — spaces included (a space still
+    consumes one evenly-spaced slot, exactly like `motto_glyph_angles`;
+    the caller skips drawing them). Unlike `centered_word_angles` this
+    is not tied to any ring seat or letter position — it is simply
+    centered on the dial's own top (`orientation="top"`) or bottom
+    (`orientation="bottom"`) anchor, at the mottos' own fixed
+    `dial.RING_MOTTO_LETTER_STEP_DEG` step. "top" reads clockwise
+    (left-to-right over the top, like ANNUIT COEPTIS); "bottom" reads
+    counter-clockwise (left-to-right under the bottom, like NOVUS ORDO
+    SECLORUM) — the same direction flip `motto_glyph_angles` documents
+    and for the same reason (dial-x is monotonic in opposite senses
+    across the two halves)."""
+    if not text:
+        raise ValueError("crown text must not be empty")
+    if orientation not in ("top", "bottom"):
+        raise ValueError(f"crown orientation {orientation!r} must be top/bottom")
+    anchor = 12 if orientation == "top" else 24
+    clockwise = orientation == "top"
+    step = dial.RING_MOTTO_LETTER_STEP_DEG
+    if not clockwise:
+        step = -step
+    start = ring_position_angle(anchor) - step * (len(text) - 1) / 2.0
+    return tuple(start + step * k for k in range(len(text)))
+
+
 def motto_glyph_angles(
     text: str,
     pins: tuple[tuple[str, int, int], ...],

@@ -26,23 +26,25 @@ from config import constants, defaults
 
 class _CustomArtSectionMixin:
     def _build_custom_ring_group(self) -> QGroupBox:
-        """The ring card builder: pick a layout (Flame / Chalice /
-        Seal), a library letter per position and a unique name — the
-        new card joins Theme ▸ Ring with the gold/silver metal rules."""
+        """THE COMPOSITIONAL RING MODEL (owner decree 2026-08-05): the
+        ring card builder picks an OUTER (`constants.RING_OUTERS` — any
+        outer is legal for a custom ring, not just the five presets'
+        locked ones), a library letter per empty field and a unique
+        name — the new card joins Theme ▸ Ring with the gold/silver
+        metal rules. The INNER band and any CROWN TEXT are Settings-
+        level choices, changeable afterward in the Watch Face Ring
+        section (`app.watch_face.ring`), not part of this builder."""
         tr = self._tr
         self._custom_rings = list(self._settings.custom_rings)
         group = QGroupBox(tr("Custom ring"))
         column = QVBoxLayout(group)
         top = QHBoxLayout()
         self._ring_layout_combo = QComboBox()
-        layout_labels = {
-            "flame": "Flame — Masculine ({n} letters)",
-            "chalice": "Chalice — Feminine ({n} letters)",
-            "seal": "Seal — Union ({n} letters)",
-        }
-        for key, layout in constants.RING_LAYOUTS.items():
+        for key, outer in constants.RING_OUTERS.items():
             self._ring_layout_combo.addItem(
-                tr(layout_labels[key]).format(n=len(layout["positions"])),
+                tr("{theme} ({n} letters)").format(
+                    theme=outer["theme"], n=len(outer["positions"])
+                ),
                 key,
             )
         self._ring_layout_combo.currentIndexChanged.connect(
@@ -94,7 +96,7 @@ class _CustomArtSectionMixin:
                         inner.widget().deleteLater()
         self._ring_slot_combos = {}
         layout_key = self._ring_layout_combo.currentData()
-        for position in constants.RING_LAYOUTS[layout_key]["positions"]:
+        for position in constants.RING_OUTERS[layout_key]["positions"]:
             cell = QVBoxLayout()
             cell.addWidget(QLabel(f"{position}h"))
             combo = self._letter_combo(position)
@@ -130,7 +132,7 @@ class _CustomArtSectionMixin:
         layout_key = self._ring_layout_combo.currentData()
         entry = {
             "name": self._ring_name_edit.text().strip(),
-            "positions": list(constants.RING_LAYOUTS[layout_key]["positions"]),
+            "outer": layout_key,
             "letters": [
                 combo.currentText()
                 for combo in self._ring_slot_combos.values()
@@ -147,7 +149,7 @@ class _CustomArtSectionMixin:
             return
         stored = {
             "name": card["name"],
-            "positions": list(card["positions"]),
+            "outer": card["outer"],
             "letters": list(card["letters"]),
         }
         if card["thematic"] is not None:

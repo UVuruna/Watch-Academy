@@ -719,14 +719,13 @@ DEFAULT_SKIN = SkinDefinition(
         radius_fraction=0.86,           # star tips touch the ring's inner edge too
     ),
     ring=RingSpec(
-        # A face placeholder only — the controller's build_skin ALWAYS
-        # overlays the chosen ring preset card (face + letters + letter
-        # art) from Database/ring_presets.json at build time.
-        asset=dial.RING_FACE_DIR / "domy.png",
-        fill=palette.SKIN_RING_FILL,
-        text_color=palette.SKIN_RING_TEXT,
-        letter_color=palette.SKIN_RING_LETTER,
-        width_fraction=0.16,
+        # A composition placeholder only — the controller's build_skin
+        # ALWAYS overlays the chosen ring preset card (outer + inner +
+        # letters + crown text) from Database/ring_presets.json at
+        # build time (the COMPOSITIONAL RING MODEL, owner decree
+        # 2026-08-05).
+        outer_asset=dial.RING_OUTER_ART_DIR / "bot_cross.png",
+        inner_asset=dial.RING_INNER_ART_DIR / "seconds.png",
         letters={12: "M", 20: "Y", 0: "Ω", 4: "D"},
     ),
     weekday_set=WeekdaySpec(

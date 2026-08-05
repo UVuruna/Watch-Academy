@@ -73,6 +73,7 @@ from core.deep_time import (
     real_year,
     shift_calendar,
 )
+from core.motto import free_arc_angles
 from core.moon import chinese_name_of_year
 from data.deep_time import DeepTimeRepository
 from data.hands import HAND_NAMES, hand_packs
@@ -87,23 +88,23 @@ from render.compositor import Compositor
 from skins.manifest import HandSpec, HandsSpec, missing_assets
 
 
-def _letter_metal(position: int, layout: dict, finish: str) -> str:
+def _letter_metal(position: int, outer_metal: dict, finish: str) -> str:
     """The owner's metal rules (extended with bronze 2026-07-12):
-    4-letter layouts — the trio of one metal forms the layout's
+    4-position outers — the trio of one metal forms the outer's own
     TRIANGLE and the remaining letter wears the ACCENT metal (gold ->
     3 gold + 1 silver; silver -> 3 silver + 1 gold; bronze -> 3 bronze
-    + 1 silver); the SEAL wears the ONE finish metal on all six —
-    UNLESS the ring preset overrides the triangle (ROADMAP 15b, Mason:
+    + 1 silver); "hexa" wears the ONE finish metal on all six — UNLESS
+    the ring preset overrides the triangle (ROADMAP 15b, Dollar:
     CANON.md §The Banknote reads the hexagram as TWO triangles, the
-    Trinity 12/20/4 and the Union 16/24/8 — `build_skin` passes the
+    Trinity 12/20/4 and the Union 16/24/8 — `_compose_skin` passes the
     preset's own `triangle` here when it carries one AND the owner's
     per-preset "Two metals" toggle is on (TASK 3, MASON/ICONS round,
     `_ring_two_metals`), so the Trinity vertices wear the finish metal
-    and the Union vertices the accent, the same rule as the 4-letter
-    layouts applied to a 3+3 split; DOMY/PILOT's own triangle-less seal
-    presets, and any eligible preset with the toggle off, keep the plain
-    one-metal reading)."""
-    if not layout["triangle"] or position in layout["triangle"]:
+    and the Union vertices the accent, the same rule as the 4-position
+    outers applied to a 3+3 split; DOMY/PILOT's own bot_cross/top_cross
+    triangle, and any eligible preset with the toggle off, keep the
+    plain one-metal reading)."""
+    if not outer_metal["triangle"] or position in outer_metal["triangle"]:
         return finish
     return "gold" if finish == "silver" else "silver"
 
@@ -113,21 +114,24 @@ def _ring_two_metals(settings: Settings, card: dict) -> bool:
     groups or wears one finish on all of them (TASK 3, MASON/ICONS
     round; WIDENED in the ENLARGE/THEMATIC round, owner 2026-07-27:
     "hoću da Two Metals opcija bude i za DOMY tj PILOT"). Eligible now:
-    every preset with its OWN `triangle` override (Dollar/The One/
-    Templar) AND every preset whose LAYOUT carries a triangle (the
-    4-letter flame/chalice — DOMY, PILOT, custom 4-letter rings), whose
-    3+1 split used to be unconditional. Only a triangle-less seal
-    custom card stays ineligible (always False — nothing to split).
-    The user's stored per-preset choice (`Settings.ring_two_metals`)
-    wins; absent, the owner's documented per-preset default
-    (`constants.RING_TWO_METALS_DEFAULT` — Dollar True), else the
-    layout's own nature: flame/chalice default ON (today's look), seal
-    default OFF."""
-    layout = constants.RING_LAYOUTS[card["layout"]]
-    if card["triangle"] is None and not layout["triangle"]:
+    every preset with its OWN `triangle` override (Dollar today, the
+    only preset on the "hexa" outer) AND every preset whose OUTER
+    carries a triangle by default (bot_cross/top_cross — DOMY, PILOT,
+    custom rings on either outer), whose 3+1 split used to be
+    unconditional. Every other outer (cross/full/octa, and a
+    triangle-less hexa custom card) stays ineligible (always False —
+    nothing to split; this is also why Templar/The One lost the toggle
+    when they moved off "hexa" onto cross/full, owner decree
+    2026-08-05). The user's stored per-preset choice
+    (`Settings.ring_two_metals`) wins; absent, the owner's documented
+    per-preset default (`constants.RING_TWO_METALS_DEFAULT` — Dollar
+    True), else the outer's own nature: bot_cross/top_cross default ON
+    (today's look), hexa default OFF."""
+    outer = constants.RING_OUTERS[card["outer"]]
+    if card["triangle"] is None and not outer["triangle"]:
         return False
     default = constants.RING_TWO_METALS_DEFAULT.get(
-        card["name"], bool(layout["triangle"])
+        card["name"], bool(outer["triangle"])
     )
     return settings.ring_two_metals.get(card["name"], default)
 
@@ -402,17 +406,33 @@ def build_skin(settings: Settings):
         return _compose_skin(settings)
 
 
+def _resolve_ring_inner(settings: Settings, card: dict) -> Path:
+    """The preset's ACTIVE inner band (owner decree 2026-08-05: the
+    inner is user-changeable independent of the outer's lock). The
+    user's stored per-preset choice (`Settings.ring_inner`) wins;
+    absent, the bundled presets' own coordinator-recommended default
+    (`constants.RING_INNER_PRESET_DEFAULT`), else the custom-ring
+    fallback (`constants.RING_INNER_DEFAULT`)."""
+    default = constants.RING_INNER_PRESET_DEFAULT.get(
+        card["name"], constants.RING_INNER_DEFAULT
+    )
+    inner = settings.ring_inner.get(card["name"], default)
+    if inner not in constants.RING_INNERS:
+        inner = default
+    return dial.RING_INNER_ART_DIR / f"{inner}.png"
+
+
 def _compose_skin(settings: Settings):
     card = ring_presets(settings.custom_rings)[settings.ring]
-    layout = constants.RING_LAYOUTS[card["layout"]]
-    # A preset may override the seal layout's own (empty) triangle —
-    # ROADMAP 15b, Mason's Trinity/Union metal split — but only when the
-    # owner's per-preset "Two metals" toggle is actually on (TASK 3,
-    # MASON/ICONS round) — see `_letter_metal`'s and `_ring_two_metals`'s
-    # docstrings.
+    outer = constants.RING_OUTERS[card["outer"]]
+    # A preset may override the "hexa" outer's own (empty) triangle —
+    # ROADMAP 15b, Dollar's Trinity/Union metal split — but only when
+    # the owner's per-preset "Two metals" toggle is actually on
+    # (TASK 3, MASON/ICONS round) — see `_letter_metal`'s and
+    # `_ring_two_metals`'s docstrings.
     two_metals = _ring_two_metals(settings, card)
     metal_layout = {
-        "triangle": (card["triangle"] or layout["triangle"]) if two_metals else ()
+        "triangle": (card["triangle"] or outer["triangle"]) if two_metals else ()
     }
     # The Eye's SHINE (DOLLAR/EYE round, owner decree 2026-07-27): the
     # adaptive eye glyph swaps its whole stem for the glory-of-rays
@@ -458,6 +478,34 @@ def _compose_skin(settings: Settings):
     # ONE finish the whole inscription wears (the same settings.
     # ring_finish the Trinity-triangle letters use — the motto is read
     # as one continuous inscription, not a seat-by-seat split).
+    motto_entries = list(card["motto"])
+    # CROWN TEXT for CUSTOM rings (owner decree 2026-08-05): the
+    # bundled presets keep their existing motto text (above); a custom
+    # ring's own free-typed inscription is a SETTINGS-level choice
+    # (`Settings.custom_ring_crown_text`/`custom_ring_crown_orientation`,
+    # like `ring_inner`), resolved here rather than baked into the
+    # card at creation time — the user can retype it any time. Unknown
+    # characters (outside the letter library) silently drop the crown
+    # text for this build rather than crashing the running app on a
+    # keystroke; a KNOWN GAP — see the session's OPEN QUESTIONS for the
+    # honest alternative (a visible validation message).
+    if settings.ring not in constants.RING_OUTER_LOCK:
+        crown_text = settings.custom_ring_crown_text.get(settings.ring, "")
+        if crown_text and not any(
+            char != " " and char not in constants.RING_LETTER_FILES
+            for char in crown_text
+        ):
+            orientation = settings.custom_ring_crown_orientation.get(
+                settings.ring, "top"
+            )
+            angles = free_arc_angles(crown_text, orientation)
+            motto_entries.append({
+                "text": crown_text, "angles": angles,
+                "words": ({
+                    "text": crown_text, "start": 0,
+                    "end": len(crown_text) - 1, "seat": None,
+                },),
+            })
     motto = tuple(
         {
             "text": entry["text"],
@@ -487,13 +535,14 @@ def _compose_skin(settings: Settings):
                 for word in entry["words"]
             ),
         }
-        for entry in card["motto"]
+        for entry in motto_entries
     )
     skin = dataclasses.replace(
         defaults.DEFAULT_SKIN,
         ring=dataclasses.replace(
             defaults.DEFAULT_SKIN.ring,
-            asset=dial.RING_FACE_DIR / layout["face"],
+            outer_asset=dial.RING_OUTER_ART_DIR / outer["file"],
+            inner_asset=_resolve_ring_inner(settings, card),
             letters=letters,
             letter_art=letter_art,
             letter_metal=letter_metal,
@@ -2059,6 +2108,44 @@ class WatchController(QObject):
         self._install_skin(build_skin(self._settings))
         self._flush_position()
 
+    def _set_ring_inner(self, inner: str) -> None:
+        """THE COMPOSITIONAL RING MODEL (owner decree 2026-08-05): the
+        active preset's own inner-band choice, stored keyed by preset
+        name (`Settings.ring_inner`, exactly like `ring_two_metals`
+        above) — the outer stays locked (bundled) or fixed at creation
+        (custom), only the inner is ever swapped in place."""
+        inner_choices = dict(self._settings.ring_inner)
+        inner_choices[self._settings.ring] = inner
+        self._settings = replace(self._settings, ring_inner=inner_choices)
+        self._install_skin(build_skin(self._settings))
+        self._flush_position()
+
+    def _set_custom_ring_crown_text(self, text: str) -> None:
+        """CROWN TEXT (owner decree 2026-08-05): a custom ring's own
+        free-typed crown inscription, stored keyed by ring name
+        (`Settings.custom_ring_crown_text`) — empty clears it (no
+        motto drawn)."""
+        texts = dict(self._settings.custom_ring_crown_text)
+        if text:
+            texts[self._settings.ring] = text
+        else:
+            texts.pop(self._settings.ring, None)
+        self._settings = replace(self._settings, custom_ring_crown_text=texts)
+        self._install_skin(build_skin(self._settings))
+        self._flush_position()
+
+    def _set_custom_ring_crown_orientation(self, orientation: str) -> None:
+        """CROWN TEXT orientation (owner decree 2026-08-05): "top"
+        (arcing from 12 upward) or "bottom", stored keyed by ring name
+        (`Settings.custom_ring_crown_orientation`)."""
+        orientations = dict(self._settings.custom_ring_crown_orientation)
+        orientations[self._settings.ring] = orientation
+        self._settings = replace(
+            self._settings, custom_ring_crown_orientation=orientations
+        )
+        self._install_skin(build_skin(self._settings))
+        self._flush_position()
+
     def _set_hands(self, hands: str) -> None:
         if hands == self._settings.hands:
             return
@@ -2749,6 +2836,11 @@ class WatchController(QObject):
             ),
             "ring_two_metals": wrap(self._set_ring_two_metals),
             "ring_eye_shine": wrap(self._set_ring_eye_shine),
+            "ring_inner": wrap(self._set_ring_inner),
+            "custom_ring_crown_text": wrap(self._set_custom_ring_crown_text),
+            "custom_ring_crown_orientation": wrap(
+                self._set_custom_ring_crown_orientation
+            ),
             "open_custom_ring": self._open_custom_ring_editor,
             # THE CALENDAR MOUNT (owner decree 2026-07-29): WHICH roster
             # rides the Calendar's twelve wedges — ported here from the
@@ -2908,18 +3000,6 @@ class WatchController(QObject):
             # Opacity/Size/Colors each grey their Crown Text row when
             # this reads False (graceful truth, not a dead control).
             "ring_has_motto": lambda: bool(self._skin.ring.motto),
-            # Same shape: whether the ACTIVE ring preset actually
-            # composes the split outer/inner plates right now — BOTH
-            # the preset's own opt-in (`RingSpec.use_split_art`, False
-            # for every preset that ships today) AND the owner's art
-            # files on disk must hold, matching
-            # `render.layers.ring.RingLayer.paint`'s own gate exactly;
-            # Colors greys the "Inner (Minute track)" row otherwise.
-            "ring_has_split_art": lambda: (
-                self._skin.ring.use_split_art
-                and dial.RING_OUTER_ASSET.exists()
-                and dial.RING_INNER_ASSET.exists()
-            ),
         }
 
     def _opacity_skin_defaults(self) -> dict:

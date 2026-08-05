@@ -88,10 +88,11 @@ AURA_OFF_FOLLOW_VALUE = 224
 
 
 # --- Ring faces -------------------------------------------------------------------
-# Ring PRESETS are data now (Database/ring_presets.json + the user's
-# custom cards in settings, loaded by data/rings.py — owner spec): a
-# card is {name, positions, letters}; its positions signature picks the
-# LAYOUT (constants.RING_LAYOUTS) whose FACE file lives here.
+# Ring PRESETS are data (Database/ring_presets.json + the user's custom
+# cards in settings, loaded by data/rings.py — THE COMPOSITIONAL RING
+# MODEL, owner decree 2026-08-05): a card is {name, outer, letters};
+# `outer` names a `constants.RING_OUTERS` entry directly, whose file
+# lives under `RING_OUTER_ART_DIR` below.
 RING_FACE_DIR = paths.assets_dir() / "instrument" / "ring"
 
 RING_TINT_SWATCH_PX = 22             # diameter of one tint circle
@@ -166,34 +167,18 @@ RING_MOTTO_RADIUS_FRACTION = 1.13    # BOTH arcs (MOTO-FIX round) — clears
 # Seal's own gap over the eye.
 RING_MOTTO_LETTER_STEP_DEG = 60.0 / 9
 
-# --- Ring OUTER/INNER split art (R-21, owner correction 2026-08-05) ----------------
-# The owner's new split ring art (`assets/instrument/ring/outter/`,
-# `assets/instrument/ring/inner/`) replaces the single baked `domy.png`
-# band with TWO plates — the outer hour-tick band and the inner
-# minute-track band — each recolorable with its OWN tint
-# (`RingLayer._draw_split_plate`, `SkinDefinition.ring_tint_inner`).
-# UNTRACKED owner art (this repo's CLAUDE.md): both directories may be
-# absent on disk — `RingLayer.paint` checks `.exists()` on both files
-# and falls back to the single `spec.asset` plate exactly as before
-# when either is missing (graceful absence, proven by
-# `tests/test_ring_split.py`). The art's mere presence on disk is NOT a
-# verdict, either: `RingLayer.paint` also requires the active preset's
-# own `RingSpec.use_split_art` opt-in (False for every preset shipped
-# today) — the owner reviews each preset's split look before it goes
-# live, one at a time.
-#
-# THE VARIANT SEAM (owner: a picker is explicitly OUT of scope for this
-# round — he will spec hexa/octa/cross/top_cross/bot_cross for the
-# outer band and cross/octa/point/seconds(_cross/_octa) for the inner
-# band later): these two constants name the ONE pair this round ships
-# — "full" outer + "simple" inner, verified the closest visual match to
-# today's single-plate look (side-by-side render, session notes) — a
-# future variant picker replaces these two constants with a lookup
-# keyed by the user's pick; nothing else in the render path changes.
+# --- Ring OUTER/INNER composition (owner decree 2026-08-05) -----------------------
+# THE COMPOSITIONAL RING MODEL: a ring is ALWAYS the composition of an
+# OUTER band (`RING_OUTER_ART_DIR`, `constants.RING_OUTERS[name]["file"]`
+# — the hour-tick band with the preset's own empty letter fields) + an
+# INNER band (`RING_INNER_ART_DIR`, `constants.RING_INNERS` — the
+# minute-track band, independently tintable via `ring_tint_inner`) +
+# the letters + an optional crown-text motto arc. There is no single
+# monolithic plate and no procedural fallback any more — the old
+# `domy.png`/`morph.png`/`hexagram.png` faces are DELETED;
+# `render.layers.ring.RingLayer.paint` always composes both bands.
 RING_OUTER_ART_DIR = paths.assets_dir() / "instrument" / "ring" / "outter"
 RING_INNER_ART_DIR = paths.assets_dir() / "instrument" / "ring" / "inner"
-RING_OUTER_ASSET = RING_OUTER_ART_DIR / "full.png"
-RING_INNER_ASSET = RING_INNER_ART_DIR / "simple.png"
 
 # --- Hand sizing (owner spec 2026-07-12) -------------------------------------------
 # Sizing uses TIP-TO-PIVOT lengths only: the seconds tip reaches the

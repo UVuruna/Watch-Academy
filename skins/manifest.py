@@ -48,11 +48,15 @@ class StarSpec:
 
 @dataclass(frozen=True)
 class RingSpec:
-    asset: Path | None                 # full dial-ring image; None -> procedural
-    fill: str
-    text_color: str
-    letter_color: str
-    width_fraction: float              # ring thickness as fraction of the dial radius
+    """THE COMPOSITIONAL RING MODEL (owner decree 2026-08-05): a ring is
+    ALWAYS the composition of an OUTER band + an INNER band + the
+    letters in the outer's own empty fields + an optional crown-text
+    motto arc — there is no more single monolithic plate and no
+    procedural fallback; `render.layers.ring.RingLayer.paint` composes
+    `outer_asset` then `inner_asset` unconditionally."""
+
+    outer_asset: Path                  # the outer band plate (empty letter fields)
+    inner_asset: Path                  # the inner minute-track band
     letters: dict[int, str] = field(default_factory=dict)  # hour -> letter replacing the numeral
     # The owner's GOLD letter art: hour -> the master file, ALWAYS gold
     # (built by the controller's build_skin). The ring tint never
@@ -104,17 +108,6 @@ class RingSpec:
     # build_skin. Unlike `letter_metal` this is NOT per-hour: the motto
     # is read as ONE continuous inscription, not a seat-by-seat split.
     motto_metal: str = "gold"
-    # THE OUTER/INNER SPLIT OPT-IN (R-21, owner correction 2026-08-05):
-    # False (default, every preset that exists today) draws the single
-    # baked `asset` plate exactly as before, even when the owner's split
-    # art (`dial.RING_OUTER_ASSET`/`RING_INNER_ASSET`) happens to be on
-    # disk — the art landing is not itself a verdict on which presets
-    # should SHOW it (owner: "he will spec the mapping later"). Only a
-    # preset that flips this to True AND finds both files on disk
-    # (`render.layers.ring.RingLayer.paint`) composes the split bands;
-    # either condition failing falls back to the single plate — never a
-    # crash, never a silent visual change for existing presets.
-    use_split_art: bool = False
 
 
 @dataclass(frozen=True)
@@ -459,7 +452,8 @@ def missing_assets(skin: SkinDefinition) -> list[Path]:
     silently broken dial)."""
     referenced = [
         skin.background.base_asset,
-        skin.ring.asset,
+        skin.ring.outer_asset,
+        skin.ring.inner_asset,
         skin.year_marker.moon_asset,
         skin.hands.hour.asset,
         skin.hands.minute.asset,

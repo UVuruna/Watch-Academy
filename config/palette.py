@@ -520,11 +520,6 @@ SUBDIAL_RECOLOR_COLORS = {
 # is and reads its colours from here, so the ring's slate and the seven
 # planet bodies are tunable in the one place colours live.
 
-# The procedural ring face (a placeholder only — `build_skin` always
-# overlays the chosen ring preset card from Database/ring_presets.json).
-SKIN_RING_FILL = "#4A4E57"
-SKIN_RING_TEXT = "#F0F0F0"
-SKIN_RING_LETTER = "#E8B84B"
 # The seven weekday planet bodies, each a photographic body's own cast.
 SKIN_PLANET_BODY_COLORS = {
     "sun": "#FFC838",

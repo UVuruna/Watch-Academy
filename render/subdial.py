@@ -122,7 +122,7 @@ def draw_slot_roundel(
     width = max(1.5, diameter * dial.SLOT_ROUNDEL_BORDER_FRACTION)
     painter.save()
     painter.setPen(QPen(rim, width))
-    painter.setBrush(ring_face_color(paths.art_file(ctx.skin.ring.asset)))
+    painter.setBrush(ring_face_color(paths.art_file(ctx.skin.ring.outer_asset)))
     inner = (diameter - width) / 2.0
     painter.drawEllipse(pos, inner, inner)
     painter.restore()
