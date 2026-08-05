@@ -9,15 +9,29 @@ contract in one entry, and every table a consumer reads is COMPUTED
 from it in ONE assignment — so THE CONFIG SECTION LAW's ban on
 post-definition patching holds by construction rather than by care.
 
-The kinds (owner-sealed):
+The kinds (owner-sealed), and where each one's data lives:
 
-  * **week — 6+3** ([week/](week/__init__.py)): six weekdays, then Sunday's
-    three — Ruler, Servant, Ninth.
-  * **dozen — 12+1**: twelve wedges and an axle. Still declared in
-    `config.calendar_mounts`; it already is one table and breaks no
-    law, so it moves here when its own round comes.
-  * **cube — 24+3** and **wheel — N+centre**: `config.cube` and
-    `config.archetypes`, same reasoning.
+  * **week — 6+3** ([week.py](week.py)): six weekdays, then Sunday's
+    three — Ruler, Servant, Ninth. Declared HERE, because it was the
+    scattered one: ~20 tables in six modules, with ~30 patches applied
+    after their own definition.
+  * **dozen — 12+1**: `config.calendar_mounts.CALENDAR_MOUNTS` — twelve
+    wedges and an axle, already ONE table in one section.
+  * **cube — 24+3**: `config.cube` — and its seating is COMPUTED
+    (`core.cube_seating`), re-derived by the suite rather than stored.
+  * **wheel — N+centre**: `config.archetypes.ARCHETYPES`.
+  * **pointers**: [pointers.py](pointers.py) — not a kind but the
+    matrix that says which kinds each pointer may carry, per shape.
+
+THE OTHER THREE ARE NOT MOVED, DELIBERATELY (owner ruling 2026-08-05,
+the same ruling that put the week registry back into one file). Each is
+already a single declarative table in its own section, breaking no law
+and patched nowhere; moving them would buy a tidier import and cost the
+thing this project actually pays for — a reader finding the mounts
+where the mounts have always been. What the registry owes them is a
+NAMED VIEW, so a caller can ask "every kind, every member" without
+knowing which module holds which: `KINDS`, `members_of` and
+`kind_of` below.
 
 Layer: config — pure. The `week` package imports nothing but the
 sentinel, which is what lets
@@ -214,3 +228,82 @@ def __getattr__(name: str):
     if name in _LAZY:
         return _CACHE.setdefault(name, _LAZY[name]())
     raise AttributeError(f"module {__name__!r} has no attribute {name!r}")
+
+
+# ═══════════════════════════ EVERY KIND, ONE VIEW ═══════════════════════════
+# The four kinds and their members, without a caller needing to know
+# which module declares which. A VIEW, never a copy: each function reads
+# the owning table live, so the registry can never disagree with the
+# thing it describes.
+from config.registry.pointers import CUBE, DOZEN, KINDS, WEEK as _WEEK_KIND, WHEEL  # noqa: E402
+
+
+def themes_of(kind: str) -> tuple[str, ...]:
+    """Every theme key of one kind, in its own registration order."""
+    if kind == _WEEK_KIND:
+        return THEMES
+    if kind == DOZEN:
+        from config import calendar_mounts
+
+        return tuple(calendar_mounts.CALENDAR_MOUNTS)
+    if kind == WHEEL:
+        from config import archetypes
+
+        return tuple(archetypes.ARCHETYPES)
+    if kind == CUBE:
+        return ("cube",)          # ONE theme, seated two ways
+    return ()
+
+
+def kinds_of(theme: str) -> tuple[str, ...]:
+    """EVERY kind that claims this key — plural on purpose.
+
+    A theme key is scoped to its KIND, not to the program: `virtues`
+    and `sins` are each BOTH a week theme (the Inner Wheel's emblem
+    families — the days ARE their virtues, their sins) and a Dozen (the
+    Virtue Wheel's twelve Aristotelian seats, the Sins Dozen's twelve
+    from Gregory and Dante). Different rosters with different members
+    that happen to share a word; renaming either would cost a settings
+    migration to buy nothing — so the collision is NAMED here instead
+    of hidden. A caller that holds a bare key and needs certainty must
+    say which kind it means."""
+    return tuple(kind for kind in KINDS if theme in themes_of(kind))
+
+
+def kind_of(theme: str) -> str | None:
+    """The FIRST kind claiming this key, or None. Ambiguous by nature
+    where a key is shared — see `kinds_of`, which is the honest answer;
+    this one is the convenience for the (many) keys that are unique."""
+    kinds = kinds_of(theme)
+    return kinds[0] if kinds else None
+
+
+def members_of(theme: str) -> tuple[str, ...]:
+    """The display names a theme seats, in seat order — the one call a
+    reader makes when it does not care which kind it is holding."""
+    kind = kind_of(theme)
+    if kind == _WEEK_KIND:
+        entry = WEEK[theme]
+        seats = [seat["name"] for seat in entry["seats"].values()]
+        seats.append(entry["sunday"]["name"])
+        if "ninth" in entry:
+            seats.append(entry["ninth"]["name"])
+        return tuple(name for name in seats if name)
+    if kind == DOZEN:
+        from config import calendar_mounts
+
+        return tuple(calendar_mounts.CALENDAR_MOUNTS[theme].members)
+    if kind == WHEEL:
+        from config import archetypes
+
+        return tuple(
+            figure.get("name", "")
+            for figure in archetypes.ARCHETYPES[theme].get("figures", ())
+        )
+    if kind == CUBE:
+        from config import cube
+
+        return tuple(
+            cube.roster(cell, "archetypal")[0] for cell in cube.ROSE_24_SEATING
+        )
+    return ()

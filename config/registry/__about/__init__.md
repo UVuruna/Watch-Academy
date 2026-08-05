@@ -23,6 +23,25 @@ Layer: config — pure.
   the Continents' COMPUTED stems; imported inside the function so the
   registry stays importable from anywhere in `config`.
 
+## Every kind, one view
+
+`themes_of(kind)`, `kinds_of(theme)`, `kind_of(theme)` and
+`members_of(theme)` answer for all four kinds without a caller knowing
+which module declares which. They are VIEWS, never copies — each reads
+the owning table live, so the registry cannot disagree with the thing
+it describes. The dozen, the cube and the wheels keep their data where
+it has always been (owner ruling 2026-08-05): each is already a single
+declarative table in its own section, and moving it would cost a reader
+more than it buys.
+
+**A key is scoped to its KIND, not to the program.** `virtues` and
+`sins` are each both a week theme (the Inner Wheel's emblem families)
+and a Dozen (the Virtue Wheel, the Sins Dozen) — different rosters that
+share a word. `kinds_of` is the honest answer; `kind_of` is the
+convenience for the many keys that are unique, and
+`tests/test_registry.py` fails if a THIRD collision ever appears
+unnamed.
+
 ## Notes
 
 The two ALT Ninth tables (`NINTH_EASTER_EGG`, `NINTH_NIGHT`) are ONE

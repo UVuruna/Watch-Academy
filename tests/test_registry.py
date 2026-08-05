@@ -103,3 +103,73 @@ def test_a_rotating_seat_leads_with_its_own_stem():
         sunday = entry["sunday"]
         if "rotates" in sunday:
             assert sunday["rotates"][0] == sunday["stem"]
+
+
+def test_every_kind_answers_through_one_view():
+    """THE FOUR KINDS, one call each. The dozen, the cube and the wheels
+    keep their data where it has always been (owner ruling 2026-08-05 —
+    each is already one declarative table in its own section, and moving
+    it would cost a reader more than it buys); what the registry owes
+    them is a NAMED VIEW, so a caller can ask without knowing which
+    module holds which."""
+    from config import archetypes, calendar_mounts
+
+    assert registry.themes_of(registry.KINDS[0]) == constants.WEEKDAY_THEMES
+    assert registry.themes_of("dozen") == tuple(calendar_mounts.CALENDAR_MOUNTS)
+    assert registry.themes_of("wheel") == tuple(archetypes.ARCHETYPES)
+    assert registry.themes_of("cube") == ("cube",)
+    assert registry.themes_of("nonesuch") == ()
+
+
+# A theme key is scoped to its KIND, not to the program. TWO collisions
+# today, named rather than hidden — both between the Inner Wheel (the
+# days ARE their virtues / their sins, seven weekday seats) and a Dozen
+# (the Virtue Wheel's twelve Aristotelian seats, the Sins Dozen's twelve
+# from Gregory and Dante). Different rosters, different members, one
+# shared word; renaming either would cost a settings migration to buy
+# nothing.
+KNOWN_SHARED_KEYS = {
+    "virtues": ("week", "dozen"),
+    "sins": ("week", "dozen"),
+}
+
+
+def test_the_only_shared_key_is_the_one_we_have_named():
+    """A NEW collision means two rosters silently answering to one name
+    — the reverse lookup would then hand a caller the wrong roster."""
+    shared = {
+        theme: registry.kinds_of(theme)
+        for kind in registry.KINDS
+        for theme in registry.themes_of(kind)
+        if len(registry.kinds_of(theme)) > 1
+    }
+    assert shared == KNOWN_SHARED_KEYS
+
+
+def test_the_reverse_lookup_places_every_other_theme_in_one_kind():
+    seen: dict[str, str] = {}
+    for kind in registry.KINDS:
+        for theme in registry.themes_of(kind):
+            if theme in KNOWN_SHARED_KEYS:
+                continue
+            assert theme not in seen, f"{theme} claimed by {seen[theme]} and {kind}"
+            seen[theme] = kind
+    assert registry.kind_of("greek") == "week"
+    assert registry.kind_of("zodiac") == "dozen"
+    assert registry.kind_of("prism_council") == "wheel"
+    assert registry.kind_of("nonesuch") is None
+
+
+def test_members_of_reads_the_owning_table_live():
+    """A VIEW, never a copy — so the registry cannot disagree with the
+    thing it describes."""
+    from config import calendar_mounts
+
+    assert registry.members_of("emotions") == (
+        calendar_mounts.CALENDAR_MOUNTS["emotions"].members
+    )
+    norse = registry.members_of("norse")
+    assert norse[0] == "Máni"            # Monday leads; the six weekdays first
+    assert norse[-2] == "Sól"            # then Sunday's label
+    assert norse[-1] == "Yggdrasil"      # then the Ninth
+    assert len(registry.members_of("cube")) == 24
