@@ -4,9 +4,12 @@
 
 ## Purpose
 
-`_CustomArtSectionMixin` — the **Custom art** nav section: the Custom ring
-and Custom hands builders. Plain-Python mixin (no base class); composed onto
-[Settings Dialog](dialog.md)'s `QDialog` shell.
+`_CustomArtSectionMixin` — the Custom ring and Custom hands builders.
+Plain-Python mixin (no base class); composed onto [Settings Dialog]
+(dialog.md)'s `QDialog` shell. Since Phase 6 FINAL cleanup this is no longer
+a visible sidebar row — it is reached only through the dialog's hidden
+`initial_section="Custom art"` construction mode (dialog.md's Design
+Decisions), opened by the Watch Face Ring section's "Custom ring…" button.
 
 - **Custom ring** — the ring card builder: a layout (Flame / Chalice /
   Seal), a library letter per position and a unique name; the per-position
@@ -19,13 +22,14 @@ and Custom hands builders. Plain-Python mixin (no base class); composed onto
   Thematic ring finish — ANY transformer ramp, the five theme colors and
   every metal — stored on the card as the optional `thematic` field; "Auto"
   leaves it absent (moon indigo fallback). Add validates the card
-  (`data.rings.validate_preset`) and OK persists it (it appears under Theme
-  ▸ Ring).
+  (`data.rings.validate_preset`) and OK persists it (it appears in the Watch
+  Face window's Ring gallery).
 - **Custom hands** (owner spec 2026-07-12) — the hand-pack builder: three
   PNGs pointing UP, a pivot per hand (x from the left, 'center' by default;
   y in pixels from the bottom), a bottom-up z-order and a unique name. Add
   writes the pack folder immediately (files, not settings, via
-  `data.hands.user_hands_dir`) — it appears under Design ▸ Hands.
+  `data.hands.user_hands_dir`) — it appears in the Watch Face window's Hands
+  gallery.
 
 ## Connections
 

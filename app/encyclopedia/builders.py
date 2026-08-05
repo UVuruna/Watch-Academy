@@ -118,8 +118,8 @@ def _live_ninth_face(
 
 
 # One theme's plate for one body (bronze / canon file) — the
-# resolution itself lives in config (Rule #5: `app.pointer_theme` and
-# `app.slot_theme` need the SAME preview art for their picker grids).
+# resolution itself lives in config (Rule #5: `app.weekday_theme_grid`'s
+# galleries, read by the Watch Face window, need the SAME preview art).
 _theme_body_art = pantheon.weekday_theme_body_art
 
 

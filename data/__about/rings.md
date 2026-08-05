@@ -42,8 +42,8 @@ mismatch or a duplicate name raises naming the offending card.
   the active preset
 - [Settings Store](../../app/__about/settings_store.md) — imports
   `ring_presets` and `validate_preset` to check a stored custom card
-- [Design Window](../../app/__about/design_window.md) — lists loaded preset
-  names
+- [Watch Face — Ring section](../../app/watch_face/__about/ring.md) — lists
+  loaded preset names
 - [Custom Art Section](../../app/settings_dialog/__about/custom_art_section.md)
   — `validate_preset` checks the custom-ring builder's input
 

@@ -6,12 +6,12 @@ import os
 os.environ.setdefault("QT_QPA_PLATFORM", "offscreen")
 
 import pytest
-from PySide6.QtWidgets import QApplication, QGroupBox
+from PySide6.QtWidgets import QApplication
 
 from app.controller import apply_display_settings
 from app.settings_dialog.dialog import SettingsDialog
 from app.settings_store import Settings, replace
-from config import defaults, dial, encyclopedia_ui, palette, pantheon
+from config import defaults, encyclopedia_ui, palette, pantheon
 from render.skin_geometry import palette_for
 
 BELGRADE_PATH = ("Europe", "Southern Europe", "Serbia", "Grad Beograd", "Belgrade")
@@ -138,139 +138,95 @@ def test_dialog_z_mode_round_trips(app):
     dialog.done(0)
 
 
-def test_dialog_diameter_slider(app):
-    """The custom diameter slider (owner 2026-07-17, ROADMAP 15e): its
-    range spans the smallest to the largest menu preset, it restores the
-    stored diameter, and result_settings applies any value like a preset
-    pick."""
+def test_dialog_diameter_passes_through_unchanged(app):
+    """Phase 6 FINAL cleanup: the diameter slider moved to the Watch
+    Face Size section (LIVE-APPLY, see tests/test_watch_face.py) — this
+    dialog no longer edits it at all, so `result_settings()` must return
+    it UNCHANGED rather than reset it to any widget default."""
     from app.settings_store import replace
 
     dialog = SettingsDialog(replace(Settings(), diameter=540), defaults.DEFAULT_SKIN)
-    assert dialog._diameter_slider.minimum() == dial.SIZE_PRESETS[0]
-    assert dialog._diameter_slider.maximum() == dial.SIZE_PRESETS[-1]
-    assert dialog._diameter_slider.value() == 540
-    dialog._diameter_slider.setValue(933)          # an arbitrary in-range value
-    assert dialog.result_settings().diameter == 933
+    assert dialog.result_settings().diameter == 540
+    assert not hasattr(dialog, "_diameter_slider")
+    assert not hasattr(dialog, "_diameter_spin")
     dialog.done(0)
 
 
-def test_dialog_diameter_spinbox_syncs_both_ways(app):
-    """The exact numeric input (owner ROADMAP 15h item 12b): same range
-    as the slider, restores the stored diameter, and either widget moving
-    drags the other along — applied together on OK."""
+# --- The navigation rework (owner ROADMAP 15h item 1; narrowed Phase 6) -----------
+
+
+def test_dialog_subdial_set_and_metal_shades_no_longer_live_here(app):
+    """Phase 6 FINAL cleanup: the SUBDIAL PLATE SET picker (owner decree
+    2026-07-21, Rsub round) and the METAL SHADES combos (R8a round) moved
+    to the Watch Face window (LIVE-APPLY — see
+    tests/test_watch_face_themes.py and tests/test_watch_face_colors.py)
+    — `result_settings()` passes both through unchanged."""
     from app.settings_store import replace
-
-    dialog = SettingsDialog(replace(Settings(), diameter=540), defaults.DEFAULT_SKIN)
-    assert dialog._diameter_spin.minimum() == dial.SIZE_PRESETS[0]
-    assert dialog._diameter_spin.maximum() == dial.SIZE_PRESETS[-1]
-    assert dialog._diameter_spin.value() == 540
-    dialog._diameter_spin.setValue(801)
-    assert dialog._diameter_slider.value() == 801
-    assert dialog.result_settings().diameter == 801
-    dialog._diameter_slider.setValue(650)
-    assert dialog._diameter_spin.value() == 650
-    assert dialog.result_settings().diameter == 650
-    dialog.done(0)
-
-
-# --- The navigation rework (owner ROADMAP 15h item 1) -----------------------------
-
-
-def test_dialog_subdial_set_combo_round_trips(app):
-    """The SUBDIAL PLATE SET picker (owner decree 2026-07-21, Rsub
-    round) sits beside Artwork in Themes: five entries labeled
-    1/2/3/4/Solo, restores the stored value, and result_settings()
-    returns the pick."""
-    from app.settings_store import replace
-    from config import constants
-
-    dialog = SettingsDialog(replace(Settings(), subdial_set="set3"), defaults.DEFAULT_SKIN)
-    assert dialog._subdial_set_combo.currentData() == "set3"
-    values = [
-        dialog._subdial_set_combo.itemData(i)
-        for i in range(dialog._subdial_set_combo.count())
-    ]
-    assert values == list(constants.SUBDIAL_SETS)
-    labels = [
-        dialog._subdial_set_combo.itemText(i)
-        for i in range(dialog._subdial_set_combo.count())
-    ]
-    assert labels == ["1", "2", "3", "4", "Solo"]
-    assert dialog.result_settings().subdial_set == "set3"
-    index = dialog._subdial_set_combo.findData("solo")
-    dialog._subdial_set_combo.setCurrentIndex(index)
-    assert dialog.result_settings().subdial_set == "solo"
-    dialog.done(0)
-
-
-def test_dialog_metal_shade_combos_round_trip(app):
-    """THE METAL SHADES picker (R8a round, owner spec 2026-07-21 night)
-    sits beside Subdial plate in Themes: one combo per metal, each
-    listing exactly that metal's shades in
-    config.constants.METAL_SHADE_NAMES order, restores the stored
-    picks, and result_settings() returns all three."""
-    from app.settings_store import replace
-    from config import constants
 
     dialog = SettingsDialog(
         replace(
-            Settings(), metal_shade_gold="amber",
+            Settings(), subdial_set="set3", metal_shade_gold="amber",
             metal_shade_bronze="light_bronze", metal_shade_silver="platinum",
         ),
         defaults.DEFAULT_SKIN,
     )
-    combos = dialog._metal_shade_combos
-    assert set(combos) == {"gold", "bronze", "silver"}
-    for metal, names in constants.METAL_SHADE_NAMES.items():
-        if metal == "thematic":
-            # The THEMATIC pseudo-metal (ENLARGE/THEMATIC round, owner
-            # 2026-07-27) has NO picker — its shade follows the active
-            # ring preset (`constants.RING_THEMATIC_SHADES`).
-            continue
-        values = [
-            combos[metal].itemData(i) for i in range(combos[metal].count())
-        ]
-        assert values == list(names), metal
-    assert combos["gold"].currentData() == "amber"
-    assert combos["bronze"].currentData() == "light_bronze"
-    assert combos["silver"].currentData() == "platinum"
     result = dialog.result_settings()
+    assert result.subdial_set == "set3"
     assert result.metal_shade_gold == "amber"
     assert result.metal_shade_bronze == "light_bronze"
     assert result.metal_shade_silver == "platinum"
-    index = combos["gold"].findData("champagne")
-    combos["gold"].setCurrentIndex(index)
-    assert dialog.result_settings().metal_shade_gold == "champagne"
+    assert not hasattr(dialog, "_subdial_set_combo")
+    assert not hasattr(dialog, "_metal_shade_combos")
     dialog.done(0)
 
 
-def test_dialog_navigation_lists_every_section(app):
-    """The left column becomes a NAVIGATION of section titles (owner
-    2026-07-18) instead of one long scroll — every existing group still
-    exists, just filed under one of the sections, and clicking a title
-    switches the visible panel."""
+def test_dialog_navigation_lists_the_three_remaining_sections(app):
+    """Phase 6 FINAL cleanup narrowed the left column to THREE sections
+    — Display/Colors/Themes moved out wholesale into the Watch Face
+    window (LIVE-APPLY)."""
     dialog = SettingsDialog(Settings(), defaults.DEFAULT_SKIN)
     assert dialog._nav_list.count() == dialog._stack.count()
-    assert dialog._nav_list.count() >= 7          # every group still fits somewhere
-    # Every nav title carries the right-arrow marker.
     titles = [dialog._nav_list.item(i).text() for i in range(dialog._nav_list.count())]
+    assert [t.split()[0] for t in titles] == ["Location", "Language", "System"]
+    # Every nav title carries the right-arrow marker.
     assert all(title.rstrip().endswith("▸") for title in titles)
-    # Every widget from the old single-scroll layout is still reachable —
-    # spot-check one control from several different groups/sections.
+    # Every widget the three remaining sections still own is reachable —
+    # Custom art builds NEITHER here (see the hidden-mode test below).
     assert dialog._search is not None                 # Location
-    assert dialog._star_slider is not None             # Opacity (Display)
-    assert dialog._diameter_slider is not None         # Sizes (Display)
-    assert dialog._chips                                # Palette (Colors)
-    assert dialog._tint_swatches                        # Ring tint (Colors)
-    assert dialog._ring_layout_combo is not None         # Custom ring
-    assert dialog._hand_name_edit is not None            # Custom hands
-    assert dialog._rotation_group is not None             # Theme rotation (Themes)
-    assert dialog._art_source_combo is not None            # Artwork (Themes)
-    assert dialog._subdial_set_combo is not None            # Subdial plate (Themes)
-    assert dialog._metal_shade_combos                        # Metal shades (Themes)
     assert dialog._language_combo is not None               # Language
     assert dialog._era_combo is not None                     # Calendar eras (Language)
     assert dialog._autostart_check is not None                # System
+    assert not hasattr(dialog, "_ring_layout_combo")   # Custom ring: hidden mode only
+    assert not hasattr(dialog, "_hand_name_edit")      # Custom hands: hidden mode only
+    dialog.done(0)
+
+
+def test_custom_art_hidden_mode_builds_no_sidebar(app):
+    """R-02/R-13: `initial_section="Custom art"` skips the nav column
+    entirely and shows just the Custom ring/hands groups — the ONLY way
+    this page is reached since Phase 6 FINAL cleanup (the Watch Face
+    Ring section's "Custom ring…" button)."""
+    dialog = SettingsDialog(
+        Settings(), defaults.DEFAULT_SKIN, initial_section="Custom art",
+    )
+    assert dialog._nav_list is None
+    assert dialog._stack is None
+    assert dialog._ring_layout_combo is not None
+    assert dialog._hand_name_edit is not None
+    dialog.done(0)
+
+
+def test_custom_art_hidden_mode_result_settings_touches_only_custom_rings(app):
+    from app.settings_store import replace
+
+    settings = replace(Settings(), diameter=777, language="sr")
+    dialog = SettingsDialog(
+        settings, defaults.DEFAULT_SKIN, initial_section="Custom art",
+    )
+    result = dialog.result_settings()
+    assert result.diameter == 777          # untouched
+    assert result.language == "sr"         # untouched
+    assert result.custom_rings == tuple(settings.custom_rings)
     dialog.done(0)
 
 
@@ -346,79 +302,32 @@ def test_dialog_navigation_switches_the_visible_panel(app):
     dialog.done(0)
 
 
-def test_dialog_colors_section_shares_palette_and_ring_tint(app):
-    """Owner's own example (ROADMAP 15h item 1): the Pointer palette and
-    the Clock/ring tint are both COLOR — one shared 'Colors' title."""
-    dialog = SettingsDialog(Settings(), defaults.DEFAULT_SKIN)
-    colors_row = next(
-        i for i in range(dialog._nav_list.count())
-        if dialog._nav_list.item(i).text().startswith("Colors")
+def test_dialog_passes_through_saturation_opacity_and_palette_unchanged(app):
+    """Phase 6 FINAL cleanup: Colors (Palette, Ring tint, Saturation) and
+    Display's Opacity group were DELETED from this dialog outright — all
+    now LIVE-APPLY in the Watch Face window (see
+    tests/test_watch_face_colors.py, tests/test_watch_face.py's Opacity
+    coverage). `result_settings()` must pass every one of those fields
+    through UNCHANGED rather than resetting it to a widget default that
+    no longer exists."""
+    from app.settings_store import replace
+
+    settings = replace(
+        Settings(),
+        pointer_saturation=0.4, ring_saturation=0.7,
+        star_alpha=0.4, aura_twilight_alpha=0.7,
+        palettes={"hexa_primary": ("#123456",) * 6},
     )
-    page = dialog._stack.widget(colors_row).widget()
-    group_titles = [
-        child.title() for child in page.findChildren(QGroupBox)
-    ]
-    assert any("Palette" in title for title in group_titles)
-    assert any("tint" in title for title in group_titles)
-    dialog.done(0)
-
-
-def test_dialog_saturation_group_lives_in_colors_with_two_sliders(app):
-    """Owner verdict (Session 21-D): Saturation does NOT belong in
-    Element sizes — it moves into Colors (beside Palette + Ring tint)
-    as its OWN group with two INDEPENDENT sliders, Pointer and Ring."""
-    dialog = SettingsDialog(Settings(), defaults.DEFAULT_SKIN)
-    colors_row = next(
-        i for i in range(dialog._nav_list.count())
-        if dialog._nav_list.item(i).text().startswith("Colors")
-    )
-    page = dialog._stack.widget(colors_row).widget()
-    group_titles = [child.title() for child in page.findChildren(QGroupBox)]
-    assert any("Saturation" in title for title in group_titles)
-    # The old "Element sizes" panel (Display) no longer hosts it.
-    display_row = next(
-        i for i in range(dialog._nav_list.count())
-        if dialog._nav_list.item(i).text().startswith("Display")
-    )
-    display_page = dialog._stack.widget(display_row).widget()
-    display_titles = [
-        child.title() for child in display_page.findChildren(QGroupBox)
-    ]
-    assert not any("Saturation" in title for title in display_titles)
-    dialog.done(0)
-
-
-def test_dialog_saturation_sliders_round_trip_independently(app):
-    dialog = SettingsDialog(Settings(), defaults.DEFAULT_SKIN)
-    dialog._pointer_saturation_slider.setValue(40)
-    dialog._ring_saturation_slider.setValue(70)
+    dialog = SettingsDialog(settings, defaults.DEFAULT_SKIN)
     result = dialog.result_settings()
     assert result.pointer_saturation == pytest.approx(0.4)
     assert result.ring_saturation == pytest.approx(0.7)
-    dialog.done(0)
-
-
-def test_dialog_sliders_set_independent_overrides(app):
-    """Owner spec: the Aura's sunlight and twilight opacities move
-    independently — touching one leaves the other on the skin value."""
-    dialog = SettingsDialog(Settings(), defaults.DEFAULT_SKIN)
-    dialog._star_slider.setValue(40)
-    dialog._aura_twilight_slider.setValue(70)
-    result = dialog.result_settings()
-    assert result.star_alpha == pytest.approx(0.40)
-    assert result.aura_day_alpha is None
-    assert result.aura_twilight_alpha == pytest.approx(0.70)
-    dialog.done(0)
-
-
-def test_dialog_palette_edit_and_reset(app):
-    dialog = SettingsDialog(Settings(), defaults.DEFAULT_SKIN)
-    dialog._hues[0] = "#123456"
-    edited = dialog.result_settings()
-    assert edited.palettes["hexa_primary"][0] == "#123456"
-    dialog._reset_palette()
-    clean = dialog.result_settings()
-    assert "hexa_primary" not in clean.palettes   # back to the owner preset
+    assert result.star_alpha == pytest.approx(0.4)
+    assert result.aura_twilight_alpha == pytest.approx(0.7)
+    assert result.palettes == settings.palettes
+    assert not hasattr(dialog, "_pointer_saturation_slider")
+    assert not hasattr(dialog, "_star_slider")
+    assert not hasattr(dialog, "_hues")
     dialog.done(0)
 
 

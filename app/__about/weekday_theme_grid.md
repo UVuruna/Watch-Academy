@@ -6,9 +6,9 @@
 Reusable, scrollable image+name galleries. Two live here — the weekday
 BODY themes and the Calendar MOUNT — built from the same three
 primitives (`_tile`, `_add_section`, `_scrollable`) so they look and
-behave identically (Rule #5), shared by [Pointer Theme](pointer_theme.md)
-and [Slot Theme](slot_theme.md) instead of each holding its own copy of
-a gallery layout.
+behave identically (Rule #5). Originally shared by the now-DELETED
+Pointer Theme and Slot Theme windows (Phase 6 FINAL cleanup); the sole
+caller today is the Watch Face window's Themes & Slots section.
 
 ## Connections
 
@@ -18,10 +18,12 @@ a gallery layout.
   `calendar_mounts.CALENDAR_MOUNTS`
 
 ### Used by
-- [Pointer Theme](pointer_theme.md) — the picker for the 1st Slot's own
-  weekday-body layer, and (Calendar pointer only) the mount gallery
-- [Slot Theme](slot_theme.md) — the Weekday tab of whichever slot is
-  being edited
+- [Watch Face — Content Tree](../watch_face/__about/theme_tree.md) —
+  `build_weekday_group_grid`/`build_weekday_theme_tiles` (Level 2/3 of
+  the breadcrumb-navigated weekday-body picker)
+- [Watch Face — Themes & Slots](../watch_face/__about/themes.md) —
+  `build_calendar_mount_grid`, shown only while the Calendar pointer is
+  active
 
 ## Functions
 

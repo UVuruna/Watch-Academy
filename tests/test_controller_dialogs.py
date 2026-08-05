@@ -50,10 +50,7 @@ def controller(app):
     # test fails partway through — a stray offscreen QDialog left alive
     # cannot leak onto anyone's real screen, but closing it deterministically
     # keeps one test's window from bleeding into the next test's assertions.
-    for dialog in (
-        made._encyclopedia, made._observatory,
-        made._design, made._pointer_theme, made._slot_theme,
-    ):
+    for dialog in (made._encyclopedia, made._observatory, made._watch_face):
         if dialog is not None:
             dialog.close()
 
@@ -197,13 +194,12 @@ def test_closing_the_guide_clears_the_controller_reference(controller):
 def test_quit_closes_every_open_non_modal_dialog(controller, monkeypatch):
     """`quit()` itself is not exercised end to end here (it saves
     settings and calls app.quit()) — only the ITEM-1-specific piece
-    (now widened to R5's three mini windows too): every live non-modal
-    dialog is closed before teardown."""
+    (widened to the Watch Face window too, the sole survivor of R5's
+    three mini windows after Phase 6 FINAL cleanup): every live
+    non-modal dialog is closed before teardown."""
     controller._open_encyclopedia_at(None, 0)
     controller._open_observatory()
-    controller._open_design()
-    controller._open_pointer_theme()
-    controller._open_slot_theme()
+    controller._open_watch_face()
 
     # Stub out everything quit() does beyond the dialog-closing loop —
     # this test's only concern is ITEM 1's addition.
@@ -223,9 +219,7 @@ def test_quit_closes_every_open_non_modal_dialog(controller, monkeypatch):
 
     assert controller._encyclopedia is None
     assert controller._observatory is None
-    assert controller._design is None
-    assert controller._pointer_theme is None
-    assert controller._slot_theme is None
+    assert controller._watch_face is None
 
 
 # --- opening sizes (DESIGN #1) ---------------------------------------------------

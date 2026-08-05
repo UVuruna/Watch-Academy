@@ -1,10 +1,15 @@
 """R5 MENU REWORK round goldens (owner spec, `UV/DESIGN/RIGHT CLICK
 MENU.txt` + `UV/INSTRUCTION.txt` item 2A): the watch TITLE (short in
 the menu, full on the tray tooltip), the keyboard SHORTCUT map (no
-collision with the hidden-mode secret buffer), the Elements -> Visible
-rename, and the four mini windows (Time Travel's own Quick Jump rows,
-Pointer Theme, Slot Theme, Design) that replaced the deep submenu
-chains `UV/DESIGN/Meni One over Another.png` complained about.
+collision with the hidden-mode secret buffer), and the Elements ->
+Visible rename. The four mini windows this round originally replaced
+the deep submenu chains with (Time Travel's own Quick Jump rows,
+Pointer Theme, Slot Theme, Design) have themselves been superseded:
+Time Travel's Quick Jump rows are still covered below; Pointer
+Theme/Slot Theme/Design were DELETED by Phase 6 FINAL cleanup — their
+own coverage lives in `tests/test_watch_face_pointer.py` and
+`tests/test_watch_face_themes.py` now (the Watch Face window that
+replaced them).
 """
 
 import dataclasses
@@ -20,12 +25,9 @@ from PySide6.QtGui import QKeyEvent
 from PySide6.QtWidgets import QApplication
 
 from app.controller import WatchController, watch_title
-from app.design_window import DesignDialog
-from app.pointer_theme import PointerThemeDialog
-from app.slot_theme import SlotThemeDialog
 from app.settings_store import Settings
 from app.time_travel import TimeTravelDialog
-from config import calendar_mounts, dial, shortcuts
+from config import dial, shortcuts
 
 
 @pytest.fixture(scope="module")
@@ -38,10 +40,7 @@ def controller(app, tmp_path, monkeypatch):
     monkeypatch.setenv("APPDATA", str(tmp_path))
     made = WatchController(app)
     yield made
-    for dialog in (
-        made._encyclopedia, made._observatory,
-        made._design, made._pointer_theme, made._slot_theme,
-    ):
+    for dialog in (made._encyclopedia, made._observatory, made._watch_face):
         if dialog is not None:
             dialog.close()
     made._profiling_timer.stop()
@@ -555,223 +554,57 @@ def test_pole_and_greenwich_and_city_rows_exist(controller, monkeypatch):
     assert "South Pole" in dialog._south_pole_button.text()
 
 
-# --- Pointer Theme window (item 3B) -----------------------------------------------
+
+# --- The Names submenu (R-09/R-26, Phase 6 FINAL cleanup) ---------------------
 
 
-def test_pointer_theme_opens_non_modal_and_raises_on_second_open(controller):
-    controller._open_pointer_theme()
-    first = controller._pointer_theme
-    assert isinstance(first, PointerThemeDialog)
-    assert first.isVisible()
-    assert not first.isModal()
-    calls = []
-    monkeypatch_raise = first.raise_
-    first.raise_ = lambda: calls.append("raise")
-    controller._open_pointer_theme()
-    assert calls == ["raise"]
-    assert controller._pointer_theme is first
-    first.raise_ = monkeypatch_raise
+def test_menu_carries_a_names_submenu_beside_visible(controller):
+    """The weekday-body day name and the archetype figures' names are
+    unified into one submenu beside Visible in the right-click menu —
+    the SAME stored keys every other reader (render layers, Watch Face)
+    already uses."""
+    texts = [a.text() for a in controller._menu.actions()]
+    assert any("Names" in t for t in texts)
 
 
-def test_pointer_theme_entry_grays_when_pointer_hidden(controller):
-    controller._set_display_choice("show_pointer", False)
-    assert not controller._pointer_theme_action.isEnabled()
-    assert controller._pointer_theme_action.toolTip()
+def test_names_toggles_write_the_expected_settings_keys(controller):
+    names_menu = next(
+        action.menu() for action in controller._menu.actions()
+        if action.menu() is not None and "Names" in action.text()
+    )
+    labels = {a.text(): a for a in names_menu.actions()}
+    weekday_names = next(a for t, a in labels.items() if "Weekday names" in t)
+    archetype_names = next(a for t, a in labels.items() if "Archetype names" in t)
+    weekday_names.trigger()
+    assert controller._settings.show_weekday_names is not Settings().show_weekday_names
+    archetype_names.trigger()
+    assert controller._settings.archetype_names is not Settings().archetype_names
 
 
-def test_pointer_theme_entry_grays_when_first_slot_off(controller):
-    controller._set_display_choice("show_weekday", False)
-    assert not controller._pointer_theme_action.isEnabled()
+# --- The Calendar mount (owner decree 2026-07-29; ported into the Watch Face
+# window's Themes & Slots section by Phase 6 FINAL cleanup) -------------------
 
 
-def test_pointer_theme_entry_grays_when_archetype_on(controller):
-    controller._set_display_choice("pointer", "trio")
-    controller._set_display_choice("archetype_mode", True)
-    assert not controller._pointer_theme_action.isEnabled()
-
-
-def test_pointer_theme_window_live_grays_while_already_open(controller):
-    controller._open_pointer_theme()
-    dialog = controller._pointer_theme
-    controller._set_display_choice("show_pointer", False)
-    assert not dialog._body.isEnabled()
-    assert not dialog._gate_label.isHidden()
-
-
-def test_pick_pointer_theme_applies_and_refreshes(controller):
-    controller._open_pointer_theme()
-    controller._pick_pointer_theme("greek")
-    assert controller._settings.weekday_theme == "greek"
-    assert controller._settings.weekday_slot == "weekday"
-
-
-# --- The CALENDAR MOUNT moved into this window (owner decree 2026-07-29) ---------
-
-
-def test_mount_tab_appears_only_on_the_calendar_pointer(controller):
-    """The mount is CONTENT, so it lives with the other roster
-    galleries — and only the Calendar has wedges to mount a roster on.
-    Every other pointer keeps the single weekday gallery it always
-    had."""
-    from PySide6.QtWidgets import QTabWidget
-
-    controller._set_display_choice("pointer", "hexa")
-    controller._open_pointer_theme()
-    assert controller._pointer_theme.findChild(QTabWidget) is None
-    # Switching to the Calendar with the window OPEN grows the tab live.
-    controller._set_display_choice("pointer", "calendar")
-    tabs = controller._pointer_theme.findChild(QTabWidget)
-    assert tabs is not None
-    titles = [tabs.tabText(i) for i in range(tabs.count())]
-    assert titles == ["Weekday bodies", "Calendar mount"]
-    # ...and switching away drops it again.
-    controller._set_display_choice("pointer", "hexa")
-    assert controller._pointer_theme.findChild(QTabWidget) is None
-
-
-def test_mount_gallery_offers_every_registered_roster_with_its_seat_count(
+def test_calendar_mount_setter_applies_through_the_same_display_choice_path(
     controller,
 ):
-    """The offer is the REGISTRY and nothing else (Rule #5) — "None"
-    leads, then one tile per roster labeled with how many seats it
-    fills, so the reader can tell a Dozen from a 24-set at a glance."""
-    from PySide6.QtWidgets import QToolButton
-
+    """The stored key stays `calendar_mount` — the picker moved (twice
+    now: Pointer Theme -> Watch Face), the setting did not."""
     controller._set_display_choice("pointer", "calendar")
-    controller._open_pointer_theme()
-    tiles = controller._pointer_theme.findChildren(QToolButton)
-    labels = [tile.text() for tile in tiles]
-    assert labels[0] == "None"
-    for key, mount in calendar_mounts.CALENDAR_MOUNTS.items():
-        assert f"{mount.title} ({mount.seats})" in labels, key
-    # The rosters with committed art preview it; "None" never does.
-    assert any(not tile.icon().isNull() for tile in tiles)
-
-
-def test_mount_pick_persists_under_the_unchanged_settings_key(controller):
-    """The stored key stays `calendar_mount` — the control moved, the
-    setting did not (renaming a stored key without a migration makes
-    the whole file read as corrupt; this project has been burned by
-    that before)."""
-    controller._set_display_choice("pointer", "calendar")
-    controller._open_pointer_theme()
     assert controller._settings.calendar_mount == "zodiac"    # shipped default
-    controller._pick_calendar_mount("emotions")
+    setters = controller._watch_face_setters()
+    setters["calendar_mount"]("emotions")
     assert controller._settings.calendar_mount == "emotions"
     assert controller._skin.calendar_mount == "emotions"      # reached the dial
-    controller._pick_calendar_mount("off")
-    assert controller._settings.calendar_mount == "off"
 
 
-# --- Slot Theme window (item 3C) --------------------------------------------------
-
-
-def test_slot_theme_opens_non_modal_and_raises_on_second_open(controller):
-    controller._open_slot_theme()
-    first = controller._slot_theme
-    assert isinstance(first, SlotThemeDialog)
-    assert first.isVisible()
-    assert not first.isModal()
-    calls = []
-    original = first.raise_
-    first.raise_ = lambda: calls.append("raise")
-    controller._open_slot_theme()
-    assert calls == ["raise"]
-    first.raise_ = original
-
-
-def test_slot_theme_entry_grays_when_no_slot_visible(controller):
-    controller._set_display_choice("show_weekday", False)
-    assert not controller._slot_theme_action.isEnabled()
-
-
-def test_slot_theme_second_medal_disabled_until_enabled(controller):
-    dialog = SlotThemeDialog(controller._slot_descriptors())
-    second = dialog._icon_row.itemAt(1).widget()
-    assert not second.isEnabled()          # 2nd Slot off by default
-    controller._cycle_slots()              # 1 -> 2 slots on
-    dialog.refresh(controller._slot_descriptors())
-    second = dialog._icon_row.itemAt(1).widget()
-    assert second.isEnabled()
-    dialog.close()
+# --- Slot descriptors (item 3C's data, read by the Watch Face window now) ----
 
 
 def test_slot_descriptor_weekday_pick_applies_through_south_slot(controller):
     controller._cycle_slots()   # enable the 2nd slot
-    controller._open_slot_theme()
-    second = controller._slot_theme._descriptor(2)
+    descriptors = controller._slot_descriptors()
+    second = next(d for d in descriptors if d.index == 2)
     second.set_weekday("norse")
     assert controller._settings.info_slot_theme == "norse"
     assert controller._settings.octa_slot == "weekday"
-
-
-# --- Design window (item 3D) -------------------------------------------------------
-
-
-def test_design_opens_non_modal_and_raises_on_second_open(controller):
-    controller._open_design()
-    first = controller._design
-    assert isinstance(first, DesignDialog)
-    assert first.isVisible()
-    assert not first.isModal()
-    calls = []
-    original = first.raise_
-    first.raise_ = lambda: calls.append("raise")
-    controller._open_design()
-    assert calls == ["raise"]
-    first.raise_ = original
-
-
-def test_design_ring_and_hands_tiles_carry_real_preview_art(controller):
-    controller._open_design()
-    ring_widget = controller._design._ring_tab()
-    from PySide6.QtWidgets import QToolButton
-
-    tiles = ring_widget.findChildren(QToolButton)
-    assert tiles
-    assert any(not tile.icon().isNull() for tile in tiles)
-
-
-def test_design_size_slider_applies_only_on_release(controller):
-    controller._open_design()
-    size_widget = controller._design._size_tab()
-    from PySide6.QtWidgets import QSlider
-
-    slider = size_widget.findChild(QSlider)
-    assert slider.minimum() == dial.SIZE_PRESETS[0]
-    assert slider.maximum() == dial.SIZE_PRESETS[-1]
-    before = controller._settings.diameter
-    slider.setValue(before + dial.MENU_SIZE_SLIDER_STEP)
-    assert controller._settings.diameter == before      # drag alone: no-op
-    slider.sliderReleased.emit()
-    assert controller._settings.diameter == before + dial.MENU_SIZE_SLIDER_STEP
-
-
-def test_design_pointer_tab_no_longer_carries_the_calendars_own_rows(controller):
-    """POINTERS REWORK phase 2 (owner decree 2026-07-29): the Design ▸
-    Pointer tab is SHAPE only. The lit-wedge row is deleted with the
-    feature; the MOUNT row moved to the Pointer Theme window (content
-    belongs with the other roster galleries) — so the Calendar's tab now
-    looks exactly like every other pointer's."""
-    from PySide6.QtWidgets import QPushButton
-
-    controller._set_display_choice("pointer", "calendar")
-    controller._open_design()
-    tab = controller._design._pointer_tab()
-    labels = [b.text() for b in tab.findChildren(QPushButton)]
-    assert not any("shichen" in label for label in labels)
-    assert not any("Mount" in label for label in labels)
-    # And the setters map lost both keys with them (Rule #6, no wrappers).
-    setters = controller._design_setters()
-    assert "calendar_lighting" not in setters
-    assert "calendar_mount" not in setters
-
-
-def test_design_ring_pick_applies_and_refreshes_the_open_window(controller):
-    from data.rings import ring_presets
-
-    controller._open_design()
-    names = sorted(ring_presets(controller._settings.custom_rings))
-    other = next(n for n in names if n != controller._settings.ring)
-    controller._design_setters()["ring"](other)
-    assert controller._settings.ring == other

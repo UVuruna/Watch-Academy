@@ -42,13 +42,11 @@ from PySide6.QtWidgets import (
 )
 
 from app import native
-from app.design_window import DesignDialog
 from app.watch_face.window import WatchFaceDialog
 from app.encyclopedia import EncyclopediaDialog
 from app.fast_travel_flash import FastTravelFlash
 from app.observatory import ObservatoryDialog
 from app.legend_popup import LegendPopup
-from app.pointer_theme import PointerThemeDialog
 from app.report import ReportDialog
 from app.shortcuts_window import ShortcutsDialog
 from app.scheduler import MinuteScheduler
@@ -61,7 +59,7 @@ from app.settings_store import (
     rotation_themes,
     slot_layout_target,
 )
-from app.slot_theme import SlotDescriptor, SlotThemeDialog
+from app.slot_descriptor import SlotDescriptor
 from app.time_travel import TimeTravelDialog
 from app.tray import TrayController, logo_icon, window_icon
 from app.widget import ClockWidget
@@ -970,18 +968,12 @@ class WatchController(QObject):
         # `self._simulation`. No simulation can be running yet at
         # startup, but the attribute must EXIST for that check.
         self._simulation: tuple[datetime, astral.Observer] | None = None
-        # THE THREE MINI WINDOWS (R5 MENU REWORK item 3) also live
-        # BEFORE the menu build now: `_refresh_menu_gating` (called at
-        # the end of `_build_menu`) pushes a live gate into whichever
-        # of these is currently open, so the attribute must EXIST
-        # (None — nothing can be open yet at startup).
-        self._design: DesignDialog | None = None
-        self._pointer_theme: PointerThemeDialog | None = None
-        self._slot_theme: SlotThemeDialog | None = None
-        # THE WATCH FACE WINDOW (Phase ①+②, R-01) — the SAME one-live-
-        # instance lifecycle as the trio above; it exists ALONGSIDE them
-        # this phase (Design/Pointer Theme/Slot Theme are untouched until
-        # a later phase retires them).
+        # THE WATCH FACE WINDOW (Phase ①+②, R-01; the sole survivor after
+        # Phase 6 FINAL cleanup retired Design/Pointer Theme/Slot Theme)
+        # also lives BEFORE the menu build: `_refresh_menu_gating` (called
+        # at the end of `_build_menu`) pushes a live gate into it if open,
+        # so the attribute must EXIST (None — nothing can be open yet at
+        # startup).
         self._watch_face: WatchFaceDialog | None = None
         # FAST TRAVEL / LOCATIONS shortcut state (R5b round, owner spec,
         # sealed 2026-07-21) — SESSION-only, like the hidden-mode unlock:
@@ -1138,12 +1130,11 @@ class WatchController(QObject):
         # by a stray close).
         self._encyclopedia: EncyclopediaDialog | None = None
         self._observatory: ObservatoryDialog | None = None
-        # THE THREE MINI WINDOWS (R5 MENU REWORK item 3) — the SAME
-        # non-modal, one-live-instance lifecycle as the trio above, see
-        # design_window.md/pointer_theme.md/slot_theme.md for why they
-        # are LIVE-APPLY rather than transactional — are initialized
+        # THE WATCH FACE WINDOW — the SAME non-modal, one-live-instance
+        # lifecycle as the pair above (see watch_face/window.md for why
+        # it is LIVE-APPLY rather than transactional) — is initialized
         # EARLIER, before the first `_build_menu()` call (its gating
-        # pass reads them).
+        # pass reads it).
 
         # In click-through mode the window receives no mouse input, so the
         # hover tooltips are driven by polling the global cursor instead.
@@ -1314,8 +1305,7 @@ class WatchController(QObject):
         behind it."""
         self._widget.mark_closing()
         for dialog in (
-            self._encyclopedia, self._observatory,
-            self._design, self._pointer_theme, self._slot_theme,
+            self._encyclopedia, self._observatory, self._watch_face,
         ):
             if dialog is not None:
                 dialog.close()
@@ -1632,8 +1622,7 @@ class WatchController(QObject):
         spec) unless `_weekday_theme_on_diamonds()` — cycling a theme
         nobody can see would be a silent, invisible state change.
         `_set_weekday_theme` runs `_install_skin`, which refreshes the
-        Pointer Theme / Slot Theme windows in place when either happens
-        to be open."""
+        Watch Face window in place when it happens to be open."""
         if not self._weekday_theme_on_diamonds():
             return
         order = self._WEEKDAY_THEME_ORDER
@@ -1656,7 +1645,7 @@ class WatchController(QObject):
 
     def _slot_mode_state(self, index: int) -> tuple[str, Callable[[str], None]]:
         """(current mode, setter) for Slot `index`'s own MODE field —
-        the SAME setters `_slot_descriptors()` wires the Slot Theme
+        the SAME setters `_slot_descriptors()` wires the Watch Face
         window's own mode picker through (Rule #5)."""
         settings = self._settings
         if index == 1:
@@ -1671,7 +1660,7 @@ class WatchController(QObject):
         """(current weekday theme, setter) for Slot `index` — the setter
         ALSO switches that slot's mode to "weekday" as a side effect
         (the SAME `_set_weekday_theme`/`_set_south_slot`/
-        `_set_third_slot` behavior the Slot Theme window's own theme
+        `_set_third_slot` behavior the Watch Face window's own theme
         picker already relies on), so cycling the theme via the
         keyboard is also how you switch a slot INTO weekday-display
         mode with one repeated press."""
@@ -1990,19 +1979,13 @@ class WatchController(QObject):
         )
 
     def _refresh_open_mini_windows(self) -> None:
-        """Keep any OPEN Design/Pointer Theme/Slot Theme window in step
-        with the live settings — called from `_install_skin` (the SAME
-        choke point `_refresh_watch_title` uses) so a change made
-        through ANY path (a keyboard shortcut, Settings, a pick inside
-        a DIFFERENT one of the three windows) never leaves an already-
-        open window showing a stale pick. Each window's own `refresh()`
-        already runs after a pick made THROUGH it (Rule #5 — this is
-        the belt to that suspender for every OTHER path)."""
-        if self._design is not None:
-            self._design.refresh(self._settings, self._design_setters())
-        self._refresh_pointer_theme()
-        if self._slot_theme is not None:
-            self._slot_theme.refresh(self._slot_descriptors())
+        """Keep an OPEN Watch Face window in step with the live settings
+        — called from `_install_skin` (the SAME choke point
+        `_refresh_watch_title` uses) so a change made through ANY path
+        (a keyboard shortcut, Settings) never leaves an already-open
+        window showing a stale pick. The window's own `refresh()` already
+        runs after a pick made THROUGH it (Rule #5 — this is the belt to
+        that suspender for every OTHER path)."""
         if self._watch_face is not None:
             self._watch_face.refresh(self._settings, self._watch_face_setters())
 
@@ -2280,16 +2263,13 @@ class WatchController(QObject):
     def _refresh_menu_gating(self) -> None:
         """Recompute every gated FLAT menu entry from the CURRENT
         settings without rebuilding (the stay-open menu keeps its
-        window; only the gray states move). R5 MENU REWORK shrank this
-        considerably: everything that used to gate a WIDGET INSIDE the
-        old Design/Slot submenu chains (the palette-style label swap,
-        the Calendar-lighting visibility, the Two-metals toggle, the
-        1 → 2 → 3 slot-enable chain, the Seasons three-slot lock) now
-        lives INSIDE the three mini windows themselves, recomputed
-        fresh on every `_build()`/`refresh()` call there instead of
-        gated in place here — what remains gated at the FLAT top level
-        is the Show/Archetype/Solar-rotation toggles, the big seconds
-        hand, and the three window-opening entries' own availability."""
+        window; only the gray states move). Phase 6 FINAL cleanup
+        retired the Design/Pointer Theme/Slot Theme windows and their
+        own per-entry gates — the Watch Face window recomputes its own
+        content live on every `refresh()` instead of being gated here.
+        What remains gated at the FLAT top level is the
+        Show/Archetype/Solar-rotation toggles and the big seconds
+        hand."""
         settings = self._settings
         # SHOW (owner 2026-07-18): meaningless outside "normal" z-mode —
         # HIDDEN there, not grayed.
@@ -2312,62 +2292,6 @@ class WatchController(QObject):
         self._solar_rotation_action.setEnabled(
             settings.pointer != "aurora"
         )
-        self._refresh_pointer_theme_gate()
-        self._refresh_slot_theme_gate()
-
-    def _refresh_pointer_theme_gate(self) -> None:
-        """The Pointer Theme entry/window's own availability (item 3B,
-        agent interpretation — see pointer_theme.md): grayed while
-        Archetype mode overrides the diamonds, while the Pointer
-        element itself is hidden in Visible, or while the 1st Slot
-        (the layer this window themes) is off."""
-        settings = self._settings
-        archetype_on = (
-            settings.show_pointer
-            and archetypes.has_archetype(settings.pointer)
-            and settings.archetype_mode
-        )
-        if archetype_on:
-            reason = self._ui(
-                "The Archetype mode is on — the diamonds carry its own figures."
-            )
-        elif not settings.show_pointer:
-            reason = self._ui("The Pointer is hidden in Visible.")
-        elif not settings.show_weekday:
-            reason = self._ui("The 1st Slot is off — nothing wears this theme.")
-        else:
-            reason = ""
-        available = not reason
-        self._pointer_theme_action.setEnabled(available)
-        self._pointer_theme_action.setToolTip(reason)
-        if self._pointer_theme is not None:
-            self._pointer_theme.set_gate(available, reason)
-
-    def _refresh_slot_theme_gate(self) -> None:
-        """The Slot Theme entry/window's own availability (item 3C,
-        owner spec: "moze da bude GRAY ako nisu vidljivi slotovi") —
-        grayed when NO slot is visible at all (the 1 → 2 → 3 chain
-        means the 1st is the bootstrap: `Ctrl+N`, `_cycle_slots`, turns
-        it back on) or while Archetype mode overrides every slot."""
-        settings = self._settings
-        archetype_on = (
-            settings.show_pointer
-            and archetypes.has_archetype(settings.pointer)
-            and settings.archetype_mode
-        )
-        if archetype_on:
-            reason = self._ui(
-                "The Archetype mode is on — the diamonds carry its own figures."
-            )
-        elif not settings.show_weekday:
-            reason = self._ui("No Slot is visible.")
-        else:
-            reason = ""
-        available = not reason
-        self._slot_theme_action.setEnabled(available)
-        self._slot_theme_action.setToolTip(reason)
-        if self._slot_theme is not None:
-            self._slot_theme.set_gate(available, reason)
 
     def _add_choice_group(
         self, menu: QMenu, submenu: QMenu, options, current, setter, disabled=()
@@ -2528,29 +2452,10 @@ class WatchController(QObject):
         # DESIGN / POINTER THEME / SLOT THEME (R5 MENU REWORK item 3,
         # owner spec — the exact "4-5 branching levels stack one over
         # another in a screen corner" complaint that opened this round,
-        # `UV/DESIGN/Meni One over Another.png`): each ONE flat entry
-        # now opens its own mini WINDOW (`app.design_window`,
-        # `app.pointer_theme`, `app.slot_theme`) instead of the deep
-        # nested chains this used to be (Rule #6 — no both-paths; the
-        # windows are LIVE-APPLY, exactly like the chains they replace,
-        # see each module's own docstring for the modal-vs-non-modal
-        # justification). Gating lives in `_refresh_menu_gating` /
-        # `_refresh_pointer_theme_gate` / `_refresh_slot_theme_gate`.
-        design_action = QAction(f"🎨 {tr('Design…')}", menu)
-        design_action.triggered.connect(self._open_design)
-        menu.addAction(design_action)
-        self._pointer_theme_action = QAction(
-            f"✨ {tr('Pointer Theme…')}", menu
-        )
-        self._pointer_theme_action.triggered.connect(self._open_pointer_theme)
-        menu.addAction(self._pointer_theme_action)
-        self._slot_theme_action = QAction(f"🥇 {tr('Slot Theme…')}", menu)
-        self._slot_theme_action.triggered.connect(self._open_slot_theme)
-        menu.addAction(self._slot_theme_action)
-        # THE WATCH FACE WINDOW (Phase ①+②, R-01): the new consolidated
-        # picker sits ALONGSIDE the three above this phase — none of
-        # them retire until a later phase finishes the remaining
-        # sections and moves every gallery here.
+        # `UV/DESIGN/Meni One over Another.png`): ONE flat entry opens
+        # the consolidated WATCH FACE window (Phase 6 FINAL cleanup
+        # retired the Design/Pointer Theme/Slot Theme mini windows this
+        # phase originally sat alongside — see `watch_face/window.md`).
         watch_face_action = QAction(
             self._labeled(f"🕹️ {tr('Watch Face…')}", "open_watch_face"), menu
         )
@@ -2610,6 +2515,29 @@ class WatchController(QObject):
             lambda checked=False: self._toggle_all_visible()
         )
         self._refresh_visible_check()
+        # NAMES (R-09/R-26, Phase 6 FINAL cleanup): the two independent
+        # name/title toggles unified beside Visible — the weekday-body
+        # day name (owner spec: previously buried, unreachable from any
+        # menu) and the archetype figures' names (moved off the Settings
+        # dialog's retired Display ▸ Archetype group, same stored key,
+        # `archetype_names`). Both write the SAME `Settings` fields every
+        # other reader (`render.layers`, the Watch Face window) already
+        # uses — no new setting invented.
+        names_menu = self._submenu(menu, f"🔤 {tr('Names')}")
+        self._add_toggle(
+            names_menu, tr("Weekday names"), settings.show_weekday_names,
+            lambda checked: self._set_display_choice(
+                "show_weekday_names", checked
+            ),
+            tr("The day name written on the weekday bodies."),
+        )
+        self._add_toggle(
+            names_menu, tr("Archetype names"), settings.archetype_names,
+            lambda checked: self._set_display_choice(
+                "archetype_names", checked
+            ),
+            tr("The archetype figures' names."),
+        )
         menu.addSeparator()
         self._add_toggle(
             menu, f"📜 {tr('Legend')}", settings.legend,
@@ -2751,93 +2679,14 @@ class WatchController(QObject):
         kept alongside)."""
         self._open_encyclopedia_at("guide", 0)
 
-    # --- The three mini windows (R5 MENU REWORK item 3) -------------------------
-
-    @paths.in_display
-    def _open_design(self) -> None:
-        """Open (or raise) the [Design Window](design_window.md) —
-        NON-MODAL, LIVE-APPLY (see its own docstring): a second open
-        request raises the ONE live instance."""
-        if self._design is not None:
-            self._design.raise_()
-            self._design.activateWindow()
-            return
-        dialog = DesignDialog(
-            self._settings, self._design_setters(),
-            overlay=self._translation_overlay,
-            stay_on_top=self._settings.z_mode == "top",
-        )
-        dialog.finished.connect(self._on_design_closed)
-        self._design = dialog
-        dialog.show()
-
-    def _on_design_closed(self, _result: int = 0) -> None:
-        self._design = None
-
-    def _design_setters(self) -> dict:
-        """One setter per Design tab, each wrapped so a pick BOTH
-        applies (through the SAME `_set_*` methods the old menu chain
-        used, Rule #5) AND refreshes the open window with the new
-        live state — the window itself is stateless between picks."""
-        def wrap(setter):
-            def wrapped(*args, **kwargs):
-                setter(*args, **kwargs)
-                if self._design is not None:
-                    self._design.refresh(self._settings, self._design_setters())
-            return wrapped
-
-        return {
-            "pointer": wrap(lambda v: self._set_display_choice("pointer", v)),
-            "palette_style": wrap(
-                lambda v: self._set_display_choice("palette_style", v)
-            ),
-            # THE POINTER SHAPE + ITS POLYGON OPTIONS (Pointers REWORK
-            # phase 3, owner sheet UV/Pointers.png, 2026-07-29) — plain
-            # display choices, the SAME generic setter as every other
-            # scalar Design pick above (Rule #5, no new mechanism).
-            "pointer_shape": wrap(
-                lambda v: self._set_display_choice("pointer_shape", v)
-            ),
-            "polygon_curvature": wrap(
-                lambda v: self._set_display_choice("polygon_curvature", v)
-            ),
-            "polygon_edge": wrap(
-                lambda v: self._set_display_choice("polygon_edge", v)
-            ),
-            "hide_night_borders": wrap(
-                lambda v: self._set_display_choice("hide_night_borders", v)
-            ),
-            "ring": wrap(self._set_ring),
-            "ring_finish": wrap(
-                lambda v: self._set_display_choice("ring_finish", v)
-            ),
-            "ring_two_metals": wrap(self._set_ring_two_metals),
-            "ring_eye_shine": wrap(self._set_ring_eye_shine),
-            "umbra_form": wrap(
-                lambda v: self._set_display_choice("umbra_form", v)
-            ),
-            "umbra_contrast": wrap(
-                lambda v: self._set_display_choice("umbra_contrast", v)
-            ),
-            "subdial_style": wrap(
-                lambda v: self._set_display_choice("subdial_style", v)
-            ),
-            "hands": wrap(self._set_hands),
-            "earth_style": wrap(
-                lambda v: self._set_display_choice("earth_style", v)
-            ),
-            "earth_label": wrap(self._set_earth_label),
-            "diameter": wrap(self._set_diameter),
-        }
-
-    # --- The Watch Face window (Phase ①+②, R-01) ---------------------------
+    # --- The Watch Face window (Phase ①+②, R-01; sole survivor after ------
+    # Phase 6 FINAL cleanup retired Design/Pointer Theme/Slot Theme) -------
 
     @paths.in_display
     def _open_watch_face(self) -> None:
         """Open (or raise) the [Watch Face Window](../watch_face/__about/window.md)
         — NON-MODAL, LIVE-APPLY: a second open request raises the ONE
-        live instance. Exists alongside Design/Pointer Theme/Slot Theme
-        this phase (a later phase retires them)."""
+        live instance."""
         if self._watch_face is not None:
             self._watch_face.raise_()
             self._watch_face.activateWindow()
@@ -2855,10 +2704,10 @@ class WatchController(QObject):
         self._watch_face = None
 
     def _watch_face_setters(self) -> dict:
-        """One setter per Watch Face section, wrapped exactly like
-        `_design_setters()` (Rule #5: the SAME `_set_*` controller
-        methods, so a pick applies through the one code path every
-        window shares) plus the two additions this phase's sections need:
+        """One setter per Watch Face section, wrapped so a pick both
+        applies through the SAME `_set_*` controller methods every
+        caller shares (Rule #5) and refreshes the open window live,
+        plus the two additions this phase's sections need:
         `daylight` (R-05, moved here from the Settings dialog's Archetype
         group — same key) and the per-element scale keys (R- Size
         section — the Settings dialog only ever applied these on OK; here
@@ -2897,6 +2746,13 @@ class WatchController(QObject):
             "ring_two_metals": wrap(self._set_ring_two_metals),
             "ring_eye_shine": wrap(self._set_ring_eye_shine),
             "open_custom_ring": self._open_custom_ring_editor,
+            # THE CALENDAR MOUNT (owner decree 2026-07-29): WHICH roster
+            # rides the Calendar's twelve wedges — ported here from the
+            # retired Pointer Theme window (Phase 6 FINAL cleanup); the
+            # SAME `_set_display_choice` path, same stored key.
+            "calendar_mount": wrap(
+                lambda v: self._set_display_choice("calendar_mount", v)
+            ),
             "umbra_form": wrap(
                 lambda v: self._set_display_choice("umbra_form", v)
             ),
@@ -2928,9 +2784,9 @@ class WatchController(QObject):
             "slot_layout": wrap(self._set_slot_layout),
             # A data PROVIDER, not a scalar setter (Rule #5): the
             # Themes & Slots section reuses the EXACT `SlotDescriptor`
-            # triple the (retired-later) Slot Theme window builds —
-            # `_slot_descriptors()`'s own `wrap()` already refreshes
-            # this window (see above), so no second wrapping here.
+            # triple `_slot_descriptors()` builds — its own `wrap()`
+            # already refreshes this window (see above), so no second
+            # wrapping here.
             "slot_descriptors": self._slot_descriptors,
             "theme_rotation_minutes": wrap(
                 lambda v: self._set_display_choice("theme_rotation_minutes", v)
@@ -2939,6 +2795,23 @@ class WatchController(QObject):
                 lambda v: self._set_display_choice(
                     "theme_metal_follow_ring", v
                 )
+            ),
+            # Phase 6 FINAL cleanup: the rotation GROUP picker + the
+            # per-theme metal combos, ported from the retired Settings
+            # dialog Themes section (same stored keys — only the
+            # picker's home and its live-vs-on-OK timing changed).
+            "theme_rotation_group": wrap(
+                lambda v: self._set_display_choice("theme_rotation_group", v)
+            ),
+            "theme_rotation_themes": wrap(
+                lambda v: self._set_display_choice("theme_rotation_themes", v)
+            ),
+            "theme_metal": wrap(self._set_theme_metal),
+            "art_source": wrap(
+                lambda v: self._set_display_choice("art_source", v)
+            ),
+            "subdial_set": wrap(
+                lambda v: self._set_display_choice("subdial_set", v)
             ),
             # --- Colors (Phase 4, R-21..R-25) --------------------------
             "pointer_saturation": wrap(
@@ -3025,6 +2898,19 @@ class WatchController(QObject):
             "ghost_alpha": skin.weekday_set.ghost_opacity,
         }
 
+    def _set_theme_metal(self, theme: str, metal: str) -> None:
+        """Phase 6 FINAL cleanup: one theme's own metal pick inside the
+        Theme rotation group's per-theme combos — the SAME `theme_
+        metals` dict `SettingsDialog.result_settings()` used to write
+        on OK, applied live instead."""
+        metals = dict(self._settings.theme_metals)
+        if metals.get(theme) == metal:
+            return
+        metals[theme] = metal
+        self._settings = replace(self._settings, theme_metals=metals)
+        self._install_skin(build_skin(self._settings))
+        self._flush_position()
+
     def _set_watch_face_palette(self, pointer: str, style: str, hues: tuple) -> None:
         """R-21 item 2 — the Watch Face Palette chips' LIVE-APPLY twin of
         `SettingsDialog.result_settings`'s palette-on-OK commit: the SAME
@@ -3063,102 +2949,20 @@ class WatchController(QObject):
             return
         self._apply_settings_dialog_result(dialog)
 
-    @paths.in_display
-    def _open_pointer_theme(self) -> None:
-        """Open (or raise) the [Pointer Theme](pointer_theme.md) window
-        — NON-MODAL, LIVE-APPLY: a second open request raises the ONE
-        live instance."""
-        if self._pointer_theme is not None:
-            self._pointer_theme.raise_()
-            self._pointer_theme.activateWindow()
-            return
-        dialog = PointerThemeDialog(
-            self._settings.weekday_theme, self._pick_pointer_theme,
-            current_mount=self._live_calendar_mount(),
-            on_pick_mount=self._pick_calendar_mount,
-            overlay=self._translation_overlay,
-            stay_on_top=self._settings.z_mode == "top",
-        )
-        dialog.finished.connect(self._on_pointer_theme_closed)
-        self._pointer_theme = dialog
-        self._refresh_pointer_theme_gate()
-        dialog.show()
-
-    def _on_pointer_theme_closed(self, _result: int = 0) -> None:
-        self._pointer_theme = None
-
-    def _pick_pointer_theme(self, theme: str) -> None:
-        self._set_weekday_theme(theme)
-        self._refresh_pointer_theme()
-
-    def _pick_calendar_mount(self, mount: str) -> None:
-        """THE CALENDAR MOUNT PICK (owner decree 2026-07-29): WHICH
-        roster rides the Calendar's twelve wedges. Applies through the
-        SAME `_set_display_choice` path the Design window used before
-        the control moved here (Rule #5) — only the picker changed, not
-        the setting or the way it is written."""
-        self._set_display_choice("calendar_mount", mount)
-        self._refresh_pointer_theme()
-
-    def _live_calendar_mount(self) -> str | None:
-        """The live mount while the CALENDAR pointer is active, else
-        None — the one signal that gives the Pointer Theme window its
-        mount tab. No other pointer has wedges to mount a roster on."""
-        if self._settings.pointer != "calendar":
-            return None
-        return self._settings.calendar_mount
-
-    def _refresh_pointer_theme(self) -> None:
-        """Re-supply the open Pointer Theme window with the live state
-        so the active tile's border moves without closing it — and so
-        switching to/from the Calendar grows or drops its mount tab."""
-        if self._pointer_theme is None:
-            return
-        self._pointer_theme.refresh(
-            self._settings.weekday_theme, self._live_calendar_mount(),
-        )
-
-    @paths.in_display
-    def _open_slot_theme(self) -> None:
-        """Open (or raise) the [Slot Theme](slot_theme.md) window —
-        NON-MODAL, LIVE-APPLY: a second open request raises the ONE
-        live instance."""
-        if self._slot_theme is not None:
-            self._slot_theme.raise_()
-            self._slot_theme.activateWindow()
-            return
-        dialog = SlotThemeDialog(
-            self._slot_descriptors(),
-            overlay=self._translation_overlay,
-            stay_on_top=self._settings.z_mode == "top",
-        )
-        dialog.finished.connect(self._on_slot_theme_closed)
-        self._slot_theme = dialog
-        self._refresh_slot_theme_gate()
-        dialog.show()
-
-    def _on_slot_theme_closed(self, _result: int = 0) -> None:
-        self._slot_theme = None
-
     def _slot_descriptors(self) -> tuple:
         """One `SlotDescriptor` per slot, built fresh from the LIVE
         settings — each carries its OWN setter, wrapped so a pick
         BOTH applies (through the SAME `_set_weekday_theme`/
         `_set_south_slot`/`_set_third_slot`/`_set_display_choice`
         methods the old menu chain used, Rule #5) AND re-supplies the
-        window with a fresh triple."""
+        Watch Face window with a fresh triple (R-18, Watch Face
+        Phase ③: the content tree is the sole reader since Phase 6
+        FINAL cleanup retired the Slot Theme window)."""
         settings = self._settings
 
         def wrap(setter):
             def wrapped(*args, **kwargs):
                 setter(*args, **kwargs)
-                if self._slot_theme is not None:
-                    self._slot_theme.refresh(self._slot_descriptors())
-                # R-18 (Watch Face Phase ③): the SAME descriptors now
-                # feed the Themes & Slots content tree, so a pick made
-                # THERE must refresh both live windows — one wrap, two
-                # readers (Rule #5), instead of a second copy of this
-                # closure inside `_watch_face_setters()`.
                 if self._watch_face is not None:
                     self._watch_face.refresh(
                         self._settings, self._watch_face_setters()

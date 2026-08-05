@@ -22,11 +22,10 @@ every top-level dialog in `app/` calls.
 
 ### Used by
 Every dialog in `app/` — [Settings Dialog](../settings_dialog/__about/dialog.md),
-[Time Travel](time_travel.md), [Report](report.md), [Design
-Window](design_window.md), [Pointer Theme](pointer_theme.md), [Slot
-Theme](slot_theme.md), [Encyclopedia Dialog](../encyclopedia/__about/dialog.md),
-[Observatory](observatory.md) — for `apply_theme`; the four A4/square
-callers additionally use `size_to_screen`
+[Time Travel](time_travel.md), [Report](report.md), [Watch Face]
+(../watch_face/___watch_face.md), [Encyclopedia Dialog]
+(../encyclopedia/__about/dialog.md), [Observatory](observatory.md) — for
+`apply_theme`; the four A4/square callers additionally use `size_to_screen`
 
 ## Functions
 

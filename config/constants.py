@@ -420,8 +420,9 @@ POINTER_DISPLAY_NAMES = {
 # The wheel LABELS per pointer (owner 2026-07-17, ROADMAP 11; naming
 # refinements 2026-07-17/19; the CUBE third wheels sealed 2026-07-26,
 # CUBE.md §Double Trinity/§Character Wheel) — RAW English, the ONE table
-# both the Design window's palette-style row (`app.design_window`,
-# `tr()`-wrapped at build time) and the watch TITLE row
+# both the Watch Face Pointer section's palette-style row
+# (`app.watch_face.pointer`, `tr()`-wrapped at build time) and the watch
+# TITLE row
 # (`app.controller.watch_title`, untranslated — a name, not chrome)
 # read (Rule #5: one source, two readers). Index 0 = "primary", index 1
 # = "secondary", index 2 (where present) = "tertiary" — the slot keys

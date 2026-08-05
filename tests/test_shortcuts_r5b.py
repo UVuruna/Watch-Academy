@@ -36,10 +36,7 @@ def controller(app, tmp_path, monkeypatch):
     monkeypatch.setenv("APPDATA", str(tmp_path))
     made = WatchController(app)
     yield made
-    for dialog in (
-        made._encyclopedia, made._observatory,
-        made._design, made._pointer_theme, made._slot_theme,
-    ):
+    for dialog in (made._encyclopedia, made._observatory, made._watch_face):
         if dialog is not None:
             dialog.close()
     made._fast_travel_flash.close()

@@ -12,7 +12,7 @@ import pytest
 from PySide6.QtWidgets import QApplication, QListWidget, QToolButton
 
 from app.settings_store import Settings
-from app.slot_theme import SlotDescriptor
+from app.slot_descriptor import SlotDescriptor
 from app.watch_face.window import WatchFaceDialog, _SECTIONS
 from config import constants, shortcuts
 from data.hands import hand_packs

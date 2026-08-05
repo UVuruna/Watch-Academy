@@ -16,10 +16,8 @@ their outputs through the render compositor.
 | `widget.py` | Algorithmic | the frameless, transparent dial window — [about](__about/widget.md) · [flow](__flow/widget.md) |
 | `settings_store.py` | Algorithmic | the `Settings` data table + its atomic JSON store — [about](__about/settings_store.md) · [flow](__flow/settings_store.md) |
 | `time_travel.py` | Algorithmic | the scenario-tester dialog + its Quick Jump rows — [about](__about/time_travel.md) · [flow](__flow/time_travel.md) |
-| `design_window.py` | Algorithmic | the tabbed Pointer/Ring/Umbra/Complications/Hands/Earth/Size window — [about](__about/design_window.md) · [flow](__flow/design_window.md) |
-| `pointer_theme.py` | Algorithmic | the 1st Slot weekday-body (+ Calendar mount) picker window — [about](__about/pointer_theme.md) · [flow](__flow/pointer_theme.md) |
-| `slot_theme.py` | Algorithmic | the three-medal per-slot picker window — [about](__about/slot_theme.md) · [flow](__flow/slot_theme.md) |
-| `weekday_theme_grid.py` | Algorithmic | the shared image+name gallery builders both mini windows use — [about](__about/weekday_theme_grid.md) · [flow](__flow/weekday_theme_grid.md) |
+| `slot_descriptor.py` | Standard | the shared `SlotDescriptor` dataclass the controller builds and the Watch Face window reads — [about](__about/slot_descriptor.md) |
+| `weekday_theme_grid.py` | Algorithmic | the shared image+name gallery builders (the weekday-body gallery, the Calendar mount gallery) the Watch Face window uses — [about](__about/weekday_theme_grid.md) · [flow](__flow/weekday_theme_grid.md) |
 | `legend_popup.py` | Algorithmic | the scrollable hover window replacing QToolTip — [about](__about/legend_popup.md) · [flow](__flow/legend_popup.md) |
 | `fast_travel_flash.py` | Algorithmic | the transient icon+text toast for Ctrl+[ / Ctrl+] — [about](__about/fast_travel_flash.md) · [flow](__flow/fast_travel_flash.md) |
 | `report.py` | Algorithmic | the hidden efficiency report — table + bar chart + sparkline — [about](__about/report.md) · [flow](__flow/report.md) |

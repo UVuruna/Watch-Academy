@@ -1,15 +1,19 @@
 """Reusable image+name pickers — R5 MENU REWORK (owner spec: "u lepsem
-vecem meniju sa slikama i tekstom"), shared by the Pointer Theme and
-Slot Theme windows (Rule #5) instead of each holding its own copy of a
-gallery layout.
+vecem meniju sa slikama i tekstom"), shared by the Watch Face window's
+Themes & Slots section (`app.watch_face.theme_tree`/`themes`) instead of
+holding its own copy of a gallery layout. Originally shared by the
+now-DELETED Pointer Theme and Slot Theme windows (Phase 6 FINAL
+cleanup retired them); the galleries themselves outlived those windows
+unchanged (Rule #5, one gallery, whichever caller needs it).
 
 Two galleries live here, both built from the SAME tile/section
 primitives: the weekday BODY themes (kinship-grouped) and — since the
 Pointers REWORK phase 2, owner decree 2026-07-29 — the CALENDAR MOUNT,
 the roster that rides the Calendar pointer's twelve wedges. The mount
-moved here out of the Design window's Pointer tab because it is a
-CONTENT choice (a roster, with art, needing a gallery), and content is
-picked in these windows; the Design tab keeps shape alone.
+originally moved here out of the Design window's Pointer tab because it
+is a CONTENT choice (a roster, with art, needing a gallery); it now
+surfaces in the Watch Face Themes & Slots section, shown only while the
+Calendar pointer is active (`app.watch_face.themes._calendar_mount_group`).
 """
 
 from pathlib import Path

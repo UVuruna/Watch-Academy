@@ -46,10 +46,10 @@ CALENDAR_ARROW_HALF_DEG = 2.4        # half-width of the base, in dial degrees
 # graceful-absent — the mount draws the Croatian name instead until the
 # owner's prompt sheet lands, `render.calendar_mount.calendar_mount_entries`).
 # The MOUNT ITSELF (R9a round, 2026-07-21): drawing the twelve marks at
-# CALENDAR_MOUNT_RADIUS_FRACTION and the Settings picker for WHICH
-# 12-set mounts are both live now (render.layers.background.BackgroundLayer,
-# app.design_window's Pointer tab) — see config/___config.md and
-# app/encyclopedia.md for the Encyclopedia side.
+# CALENDAR_MOUNT_RADIUS_FRACTION and the picker for WHICH 12-set mounts
+# are both live now (render.layers.background.BackgroundLayer,
+# app.watch_face.themes's Calendar mount group) — see config/___config.md
+# and app/encyclopedia.md for the Encyclopedia side.
 SLAVIC_MONTHS = (
     # (croatian proper noun, english gloss, ascii stem, gregorian month)
     ("Siječanj", "the Month of Felling", "Sijecanj", 1),
