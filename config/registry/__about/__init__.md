@@ -4,7 +4,7 @@
 
 ## Purpose
 
-Turns [the week registry](week.md) into the tables every consumer
+Turns [the week registry](../week/__about/__init__.md) into the tables every consumer
 already reads — ONE assignment per table, no patching afterwards. This
 is where the ~30 post-definition assignments THE CONFIG SECTION LAW
 forbids went to die: each is now a field of its theme's entry.
@@ -38,7 +38,7 @@ migration finishes.
 ## Connections
 
 ### Uses
-- [Week Registry](week.md)
+- [Week Registry](../week/__about/__init__.md)
 - `config.continents` — lazily, for the COMPUTED stems
 
 ### Used by

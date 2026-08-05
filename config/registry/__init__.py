@@ -11,7 +11,7 @@ post-definition patching holds by construction rather than by care.
 
 The kinds (owner-sealed):
 
-  * **week — 6+3** ([week.py](week.py)): six weekdays, then Sunday's
+  * **week — 6+3** ([week/](week/__init__.py)): six weekdays, then Sunday's
     three — Ruler, Servant, Ninth.
   * **dozen — 12+1**: twelve wedges and an axle. Still declared in
     `config.calendar_mounts`; it already is one table and breaks no
@@ -19,12 +19,13 @@ The kinds (owner-sealed):
   * **cube — 24+3** and **wheel — N+centre**: `config.cube` and
     `config.archetypes`, same reasoning.
 
-Layer: config — pure. `week` imports nothing at all, which is what lets
+Layer: config — pure. The `week` package imports nothing but the
+sentinel, which is what lets
 `constants` and `pantheon` both derive from it without a cycle.
-Documentation: [registry](registry.md).
 """
 
-from config.registry.week import COMPUTED, MENU, MENU_TOP, WEEK
+from config.registry.sentinel import COMPUTED
+from config.registry.week import MENU, MENU_TOP, WEEK
 
 BODIES = ("sun", "moon", "mars", "mercury", "jupiter", "venus", "saturn")
 # seat key -> the planetary body that is the seat's second name.
