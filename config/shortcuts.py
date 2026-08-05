@@ -68,6 +68,13 @@ SHORTCUTS = (
     ("open_guide", "Key_G", ("ControlModifier",), "Open the Guide"),
     ("open_settings", "Key_M", ("ControlModifier",), "Open Settings"),
     (
+        # WATCH FACE round (Phase ①+②, R-01): F="Face" — Ctrl+W was the
+        # owner's first-named candidate but is already
+        # `cycle_weekday_theme`'s (this table is checked for the
+        # collision, never assumed free).
+        "open_watch_face", "Key_F", ("ControlModifier",), "Open Watch Face",
+    ),
+    (
         "open_observatory", "Key_O", ("ControlModifier",),
         "Open the Observatory",
     ),

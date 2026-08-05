@@ -57,6 +57,11 @@ _OWNER_SEALED_COMBOS = {
     ("open_encyclopedia", "Key_E", ("ControlModifier",)),
     ("open_guide", "Key_G", ("ControlModifier",)),
     ("open_settings", "Key_M", ("ControlModifier",)),
+    # WATCH FACE round (Phase ①+②, R-01) — added AFTER the R5b FINAL MAP
+    # was sealed; test_final_map_has_exactly_the_owner_sealed_combos below
+    # is updated in the same commit that added it (Ctrl+W was already
+    # cycle_weekday_theme's, so F="Face" is the free mnemonic).
+    ("open_watch_face", "Key_F", ("ControlModifier",)),
     ("open_observatory", "Key_O", ("ControlModifier",)),
     ("open_time_travel", "Key_T", ("ControlModifier",)),
     ("return_to_now", "Key_Home", ("ControlModifier",)),

@@ -43,6 +43,7 @@ from PySide6.QtWidgets import (
 
 from app import native
 from app.design_window import DesignDialog
+from app.watch_face.window import WatchFaceDialog
 from app.encyclopedia import EncyclopediaDialog
 from app.fast_travel_flash import FastTravelFlash
 from app.observatory import ObservatoryDialog
@@ -943,6 +944,11 @@ class WatchController(QObject):
         self._design: DesignDialog | None = None
         self._pointer_theme: PointerThemeDialog | None = None
         self._slot_theme: SlotThemeDialog | None = None
+        # THE WATCH FACE WINDOW (Phase ①+②, R-01) — the SAME one-live-
+        # instance lifecycle as the trio above; it exists ALONGSIDE them
+        # this phase (Design/Pointer Theme/Slot Theme are untouched until
+        # a later phase retires them).
+        self._watch_face: WatchFaceDialog | None = None
         # FAST TRAVEL / LOCATIONS shortcut state (R5b round, owner spec,
         # sealed 2026-07-21) — SESSION-only, like the hidden-mode unlock:
         # the theme/option cursors and the custom-city cursor start fresh
@@ -1523,6 +1529,7 @@ class WatchController(QObject):
             "open_encyclopedia": lambda: self._open_encyclopedia_at(None, 0),
             "open_guide": self._open_guide,
             "open_settings": self._open_settings,
+            "open_watch_face": self._open_watch_face,
             "open_observatory": self._open_observatory,
             "open_time_travel": self._open_time_travel,
             "return_to_now": self._end_simulation,
@@ -1900,6 +1907,8 @@ class WatchController(QObject):
         self._refresh_pointer_theme()
         if self._slot_theme is not None:
             self._slot_theme.refresh(self._slot_descriptors())
+        if self._watch_face is not None:
+            self._watch_face.refresh(self._settings, self._watch_face_setters())
 
     def _install_skin(self, skin) -> None:
         """Swap the rendered skin: fresh compositor, current day kept."""
@@ -2437,6 +2446,15 @@ class WatchController(QObject):
         self._slot_theme_action = QAction(f"🥇 {tr('Slot Theme…')}", menu)
         self._slot_theme_action.triggered.connect(self._open_slot_theme)
         menu.addAction(self._slot_theme_action)
+        # THE WATCH FACE WINDOW (Phase ①+②, R-01): the new consolidated
+        # picker sits ALONGSIDE the three above this phase — none of
+        # them retire until a later phase finishes the remaining
+        # sections and moves every gallery here.
+        watch_face_action = QAction(
+            self._labeled(f"🕹️ {tr('Watch Face…')}", "open_watch_face"), menu
+        )
+        watch_face_action.triggered.connect(self._open_watch_face)
+        menu.addAction(watch_face_action)
         # Visible (owner spec; renamed from Elements, R5 MENU REWORK
         # item E — Rule #6, every reference below renamed with it):
         # plain on/off switches — the slots enable INSIDE their own
@@ -2700,6 +2718,119 @@ class WatchController(QObject):
             "diameter": wrap(self._set_diameter),
         }
 
+    # --- The Watch Face window (Phase ①+②, R-01) ---------------------------
+
+    @paths.in_display
+    def _open_watch_face(self) -> None:
+        """Open (or raise) the [Watch Face Window](../watch_face/__about/window.md)
+        — NON-MODAL, LIVE-APPLY: a second open request raises the ONE
+        live instance. Exists alongside Design/Pointer Theme/Slot Theme
+        this phase (a later phase retires them)."""
+        if self._watch_face is not None:
+            self._watch_face.raise_()
+            self._watch_face.activateWindow()
+            return
+        dialog = WatchFaceDialog(
+            self._settings, self._watch_face_setters(),
+            overlay=self._translation_overlay,
+            stay_on_top=self._settings.z_mode == "top",
+        )
+        dialog.finished.connect(self._on_watch_face_closed)
+        self._watch_face = dialog
+        dialog.show()
+
+    def _on_watch_face_closed(self, _result: int = 0) -> None:
+        self._watch_face = None
+
+    def _watch_face_setters(self) -> dict:
+        """One setter per Watch Face section, wrapped exactly like
+        `_design_setters()` (Rule #5: the SAME `_set_*` controller
+        methods, so a pick applies through the one code path every
+        window shares) plus the two additions this phase's sections need:
+        `daylight` (R-05, moved here from the Settings dialog's Archetype
+        group — same key) and the per-element scale keys (R- Size
+        section — the Settings dialog only ever applied these on OK; here
+        they are LIVE, like every other Watch Face pick)."""
+        def wrap(setter):
+            def wrapped(*args, **kwargs):
+                setter(*args, **kwargs)
+                if self._watch_face is not None:
+                    self._watch_face.refresh(
+                        self._settings, self._watch_face_setters()
+                    )
+            return wrapped
+
+        return {
+            "pointer": wrap(lambda v: self._set_display_choice("pointer", v)),
+            "palette_style": wrap(
+                lambda v: self._set_display_choice("palette_style", v)
+            ),
+            "pointer_shape": wrap(
+                lambda v: self._set_display_choice("pointer_shape", v)
+            ),
+            "polygon_curvature": wrap(
+                lambda v: self._set_display_choice("polygon_curvature", v)
+            ),
+            "polygon_edge": wrap(
+                lambda v: self._set_display_choice("polygon_edge", v)
+            ),
+            "hide_night_borders": wrap(
+                lambda v: self._set_display_choice("hide_night_borders", v)
+            ),
+            "daylight": wrap(lambda v: self._set_display_choice("daylight", v)),
+            "ring": wrap(self._set_ring),
+            "ring_finish": wrap(
+                lambda v: self._set_display_choice("ring_finish", v)
+            ),
+            "ring_two_metals": wrap(self._set_ring_two_metals),
+            "ring_eye_shine": wrap(self._set_ring_eye_shine),
+            "open_custom_ring": self._open_custom_ring_editor,
+            "umbra_form": wrap(
+                lambda v: self._set_display_choice("umbra_form", v)
+            ),
+            "umbra_contrast": wrap(
+                lambda v: self._set_display_choice("umbra_contrast", v)
+            ),
+            "hands": wrap(self._set_hands),
+            "earth_style": wrap(
+                lambda v: self._set_display_choice("earth_style", v)
+            ),
+            "earth_label": wrap(self._set_earth_label),
+            "diameter": wrap(self._set_diameter),
+            "earth_scale": wrap(
+                lambda v: self._set_display_choice("earth_scale", v)
+            ),
+            "moon_scale": wrap(
+                lambda v: self._set_display_choice("moon_scale", v)
+            ),
+            "slot_scale": wrap(
+                lambda v: self._set_display_choice("slot_scale", v)
+            ),
+            "ring_letter_scale": wrap(
+                lambda v: self._set_display_choice("ring_letter_scale", v)
+            ),
+            "hover_enlarge": wrap(
+                lambda v: self._set_display_choice("hover_enlarge", v)
+            ),
+        }
+
+    def _open_custom_ring_editor(self) -> None:
+        """R-13: the Watch Face Ring section's "Custom ring…" button —
+        the custom-ring flow itself lives only inside
+        `SettingsDialog` (a mixin, not a standalone dialog), so this
+        opens THAT dialog navigated straight to its Custom art section
+        rather than duplicating its inline widgets. Modal (`exec()`),
+        the SAME transactional lifecycle `_open_settings` always used —
+        stacking a modal dialog on top of the non-modal Watch Face
+        window is ordinary Qt behavior."""
+        dialog = SettingsDialog(
+            self._settings, self._skin, self._translation_overlay,
+            initial_section="Custom art",
+        )
+        if dialog.exec() != SettingsDialog.DialogCode.Accepted:
+            return
+        self._apply_settings_dialog_result(dialog)
+
     @paths.in_display
     def _open_pointer_theme(self) -> None:
         """Open (or raise) the [Pointer Theme](pointer_theme.md) window
@@ -2954,6 +3085,14 @@ class WatchController(QObject):
         )
         if dialog.exec() != SettingsDialog.DialogCode.Accepted:
             return
+        self._apply_settings_dialog_result(dialog)
+
+    def _apply_settings_dialog_result(self, dialog: SettingsDialog) -> None:
+        """Everything an ACCEPTED `SettingsDialog` triggers — shared by
+        `_open_settings` and the Watch Face Ring section's "Custom
+        ring…" button (`_open_custom_ring_editor`, R-13), which opens
+        the SAME dialog navigated to a different section (Rule #5: one
+        apply path, however the dialog was reached)."""
         new_settings = dialog.result_settings()
         location_changed = (
             new_settings.latitude,

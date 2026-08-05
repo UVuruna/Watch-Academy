@@ -241,6 +241,10 @@ def test_on_shortcut_dispatches_every_action_id(controller, monkeypatch):
         controller, "_open_settings", lambda: calls.append("open_settings")
     )
     monkeypatch.setattr(
+        controller, "_open_watch_face",
+        lambda: calls.append("open_watch_face"),
+    )
+    monkeypatch.setattr(
         controller, "_open_observatory",
         lambda: calls.append("open_observatory"),
     )
