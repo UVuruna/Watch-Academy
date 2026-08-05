@@ -58,8 +58,18 @@ class SettingsDialog(
     _ThemesSectionMixin,
     _LanguageSystemSectionMixin,
 ):
+    # THE SEVEN NAV SECTIONS' plain-English keys, in the same order the
+    # `sections` list below builds them — used by `initial_section`
+    # ONLY (untranslated, so a caller can jump to a section regardless
+    # of the active language; the sidebar itself still shows `tr(title)`).
+    _SECTION_KEYS = (
+        "Location", "Display", "Colors", "Custom art", "Themes",
+        "Language", "System",
+    )
+
     def __init__(self, settings: Settings, skin,
-                 overlay: dict | None = None, parent=None):
+                 overlay: dict | None = None, parent=None,
+                 initial_section: str | None = None):
         super().__init__(parent)
         self._overlay = overlay or {}
         self.setWindowTitle(
@@ -153,6 +163,14 @@ class SettingsDialog(
             self._stack.addWidget(panel_scroll)
         self._nav_list.currentRowChanged.connect(self._stack.setCurrentIndex)
         self._nav_list.setCurrentRow(0)
+        # WATCH FACE round (R-13): a caller may open straight onto a
+        # section — the Watch Face window's Ring page's "Custom ring…"
+        # button, so it never needs to duplicate the Custom art group's
+        # inline widgets (`app.watch_face.ring.md`'s Design Decisions).
+        if initial_section in self._SECTION_KEYS:
+            self._nav_list.setCurrentRow(
+                self._SECTION_KEYS.index(initial_section)
+            )
 
         layout = QVBoxLayout(self)
         body = QHBoxLayout()

@@ -42,11 +42,15 @@ defines none of the group builders.
 
 ### SettingsDialog(QDialog, _LocationSectionMixin, _DisplaySectionMixin, _ColorsSectionMixin, _CustomArtSectionMixin, _ThemesSectionMixin, _LanguageSystemSectionMixin)
 
-- `__init__(settings, skin, overlay=None, parent=None)`: builds the seven
-  sections (see the [folder doc](../___settings_dialog.md)'s layout table)
-  prefilled from the current settings (combos restored from the stored city
-  path), wires `self._nav_list`/`self._stack` and sizes the dialog from the
-  widest/tallest panel's inner content
+- `__init__(settings, skin, overlay=None, parent=None, initial_section=None)`:
+  builds the seven sections (see the [folder doc](../___settings_dialog.md)'s
+  layout table) prefilled from the current settings (combos restored from the
+  stored city path), wires `self._nav_list`/`self._stack` and sizes the dialog
+  from the widest/tallest panel's inner content. `initial_section` (WATCH FACE
+  round, R-13) selects one of `_SECTION_KEYS` (the SAME seven, untranslated —
+  works regardless of the active language) at open time instead of the
+  default first row — used by `app.watch_face.ring`'s "Custom ring…" button
+  to land straight on "Custom art" without duplicating its inline widgets.
 - `_tr(text) -> str`: the active language's form of a chrome string (Phase 2)
   — inherited by every mixin, none of which re-declare it
 - `done(result)`: releases the location tree before closing (the
