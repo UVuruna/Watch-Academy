@@ -8,6 +8,8 @@ table, the article-set names Session 6 fills, and the render
 tunables. Documentation: config/archetypes.md.
 """
 
+from pathlib import Path
+
 from config import cube, dial, palette, paths
 
 # ═══════════════════════════ ARCHETYPE ART ROOT ═══════════════════════════
@@ -67,41 +69,31 @@ ARCHETYPE_LIFE_REGISTER = "tree"
 ARCHETYPE_LIFE_REGISTERS = ("tree", "animals")
 
 # --- Render tunables -----------------------------------------------------------
-# THE TWO-TYPE LAW (owner decree 2026-07-18, round two — screenshots):
-# the archetype art divides into TWO TYPES by its OWN aspect ratio
-# (width/height), classified once by `render.layers.archetype_figure_
-# size()` — no per-art clamp, no set-minimum (the 15g clamp era is
-# over: `archetype_set_height`, `archetype_figure_height` and
-# `archetype_fit_height` are deleted):
-#   - CIRCLE type (aspect >= ARCHETYPE_PORTRAIT_ASPECT_MAX — rondels,
-#     medallions, the square Scale glass, and WIDE art like Saturn's
-#     rings) wears the SLOT size, `weekday_body_size()` — IDENTICAL to
-#     the weekday bodies. Wide art stays height-based on purpose (owner:
-#     "planeta istih dimenzija kao ostale, prstenovi vire" — the ball
-#     matches every other circle, the rings overflow the frame — no
-#     clamp, deliberately).
-#   - PORTRAIT type (aspect < the threshold — the tall lancet vitraž
-#     windows: persons, temperaments) wears the INSCRIBED height for
-#     the STANDARD aspect (`ARCHETYPE_PORTRAIT_STANDARD_ASPECT`), via
-#     `render.archetype_geometry.archetype_portrait_height()` — UNIFORM for every
-#     portrait in the set regardless of its OWN art's aspect.
-# Missing/placeholder art (the name-fallback path) reads CIRCLE-sized —
-# there is no art to classify.
-# FIX ROUND A (owner verdict 2026-07-19, screenshots — lancets
-# overflowing their diamonds, the Trinity center huge): 0.85 let the
-# ChatGPT-set Providence_Eye center (measured aspect 0.842, a rondel)
-# wrongly classify as PORTRAIT and draw at the tall lancet height.
-# 0.70 sits cleanly between the measured lancet cluster (0.37-0.58,
-# median ~0.50) and the rondel/center cluster (0.99-1.03), with
-# Providence_Eye's 0.842 now safely CIRCLE-side.
-ARCHETYPE_PORTRAIT_ASPECT_MAX = 0.70
-# The STANDARD portrait aspect (owner reforcing ALL lancet art to this
-# exact ratio) — portrait height is the height that INSCRIBES a
-# rectangle of THIS aspect (not the art's own) into the arm diamond, so
-# every portrait is uniform and a 1:2 lancet fits its diamond EXACTLY.
-# Art wider than 1:2 may slightly overflow sideways until the owner
-# reforces it to the standard — transitional, documented, not clamped.
-ARCHETYPE_PORTRAIT_STANDARD_ASPECT = 0.5
+# THE DIAL LAW (owner decree 2026-08-04, REPLACING the two-type law of
+# 2026-07-18): a seat on the dial holds ONLY a round — or square —
+# plate at 1:1, and it wears the SLOT size, `weekday_body_size()`,
+# identical to the weekday bodies. There is no second type to classify:
+# `dial_plate()` resolves every figure to its family's `circle`
+# register, so what reaches the dial is round by construction.
+#
+# WHAT DIED WITH IT, and why the deletion matters more than the rule:
+# the old law sorted art into CIRCLE and PORTRAIT and gave the portrait
+# type — "the tall lancet vitraz windows: persons, temperaments" — its
+# own inscribed height ON THE DIAL, with a 1:2 standard aspect beneath
+# it. The owner had asked repeatedly for round plates only; every
+# session read that written law instead and obeyed it, which is why the
+# instruction kept failing. A rule cannot win against a law in the
+# code, so the law is gone rather than argued with:
+# `ARCHETYPE_PORTRAIT_ASPECT_MAX`, `ARCHETYPE_PORTRAIT_STANDARD_ASPECT`
+# and `render.archetype_geometry.archetype_portrait_height` are
+# deleted, and `tests/test_dial_plates.py` MEASURES the actual PNG a
+# dial seat resolves — anything off 1:1 fails the build.
+#
+# The lancets are not surplus: their place is the hover's left column,
+# at full height, with the paragraph rondels beside them. Wide art like
+# Saturn's rings stays height-based on purpose (owner: "planeta istih
+# dimenzija kao ostale, prstenovi vire") and is the one documented
+# exception the measuring guard exempts by name.
 # The figure NAME label (the lit figure with Names on, and the
 # fallback while art is missing/placeholder) shares its fitting and its
 # NAME_LABEL_MAX_PX cap with the weekday body label — one helper,
@@ -628,6 +620,32 @@ def has_archetype(pointer: str) -> bool:
     """Whether ANY wheel of this pointer carries an archetype — the
     menu gates the Archetype toggle on it."""
     return any(seat_pointer == pointer for seat_pointer, _ in ARCHETYPE_GRID)
+
+
+def dial_plate(art_file):
+    """THE DIAL LAW (owner decree 2026-08-04): a seat on the dial may
+    hold ONLY a round — or square — plate at 1:1. Never a lancet, never
+    anything stretched.
+
+    `art_file` is a figure's own art path, `<family>/<register>/<look>/
+    <Stem>.png` (the tall stained-glass LANCET, whose place is the
+    hover's left column). The dial's plate is the SAME figure in the
+    family's `circle` register: the register segment swaps, the look and
+    the stem do not. COMPUTED, never tabulated (Rule #19) — a second
+    table of round plates would be the first table with one folder
+    renamed.
+
+    A family whose circle art has not landed (`vertices`, `tetramorph`
+    today) resolves to a path that does not exist, and the renderer's
+    standing graceful-absent law draws the figure's NAME instead. That
+    is the honest outcome the owner asked for: no lancet on the dial,
+    not even as a stopgap.
+    """
+    parts = list(Path(art_file).parts)
+    if len(parts) < 3:
+        return art_file
+    parts[-3] = "circle"
+    return Path(*parts)
 
 
 def figures(key: str) -> tuple:

@@ -1292,7 +1292,7 @@ class Compositor:
             center = archetypes.center(key)
             if center is not None and hit(
                 QPointF(0.0, 0.0),
-                archetype_figure_size(self._skin, radius, center["file"]) / 2.0,
+                archetype_figure_size(self._skin, radius) / 2.0,
             ):
                 return "archetype:center"
         marker = self._skin.year_marker

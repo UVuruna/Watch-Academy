@@ -7,7 +7,6 @@ plus its name on the dial. The skin QUERIES (`archetype_key`,
 [Skin Geometry](__about/skin_geometry.md).
 """
 
-import math
 
 from PySide6.QtCore import QPointF
 from PySide6.QtGui import QImageReader, QPainter
@@ -15,7 +14,6 @@ from PySide6.QtGui import QImageReader, QPainter
 from config import archetypes, constants, dial, paths
 from render.context import RenderContext
 from render.painting import draw_name_label, draw_pixmap_centered, name_label_px
-from render.skin_geometry import arm_half_deg
 from render.slot_layout import weekday_body_size
 from skins.manifest import SkinDefinition
 
@@ -80,58 +78,29 @@ def archetype_art_ready(path) -> bool:
     return archetype_art_size(path) is not None
 
 
-def archetype_portrait_height(tip: float, tan_half: float) -> float:
-    """The PORTRAIT figure height that exactly INSCRIBES the STANDARD
-    aspect (`archetypes.ARCHETYPE_PORTRAIT_STANDARD_ASPECT`, 1:2) into
-    its arm's diamond — the old `archetype_fit_height` formula (15g
-    clamp era), reintroduced here for ONE purpose only: sizing the
-    UNIFORM portrait at the standard aspect, never per-art (owner
-    two-type law round two, 2026-07-18, fix round A 2026-07-19). The
-    diamond is a rhombus centered at the romb center with along-arm
-    half-diagonal tip/2 and perpendicular half-diagonal tip*tan(half)/2;
-    a centered inscribed rectangle of half a×b fits iff a/p + b/q <= 1,
-    so a figure of aspect `a` scaled to height h (width = a*h) fits up
-    to h = tip*tan(half)/(a + tan(half)) — evaluated at the STANDARD
-    aspect so a 1:2 lancet inscribes its diamond EXACTLY; art wider than
-    1:2 may still overflow sideways until the owner reforces it to the
-    standard (transitional, documented, not clamped)."""
-    return tip * tan_half / (
-        archetypes.ARCHETYPE_PORTRAIT_STANDARD_ASPECT + tan_half
-    )
-
-
 def archetype_figure_size(
-    skin: SkinDefinition, radius: float, art_file,
+    skin: SkinDefinition, radius: float, art_file=None,
 ) -> float:
-    """THE ONE sizing entry for every archetype figure — arms AND center
-    (owner two-type law, 2026-07-18 round two; height law fixed round A
-    2026-07-19): the art divides into TWO TYPES by its OWN aspect ratio
-    (width/height), classified once — no per-art clamp, no set-minimum.
+    """THE ONE sizing entry for every archetype figure — arms AND
+    center. THE DIAL LAW (owner decree 2026-08-04): a dial seat holds
+    only a round or square plate at 1:1, so every figure wears the SLOT
+    size, `weekday_body_size()`, identical to the weekday bodies. There
+    is nothing to classify.
 
-    - CIRCLE type (aspect >= `ARCHETYPE_PORTRAIT_ASPECT_MAX` — rondels,
-      medallions, the square Scale glass, and WIDE art like Saturn's
-      rings) wears the SLOT size, `weekday_body_size()` — IDENTICAL to
-      the weekday bodies; wide art stays height-based ON PURPOSE (owner:
-      "planeta istih dimenzija kao ostale, prstenovi vire" — the ball
-      matches every other circle, the rings overflow the frame,
-      deliberately — no clamp).
-    - PORTRAIT type (aspect < the threshold — the tall lancet vitraž
-      windows: persons, temperaments) wears `archetype_portrait_height()`
-      — the height inscribing the STANDARD aspect (not the art's own)
-      into the diamond, UNIFORM for every portrait in the set.
+    THE TWO-TYPE LAW IS GONE (same decree). It sorted art by aspect and
+    gave the tall lancet vitraz windows their own inscribed height ON
+    THE DIAL — the written law that overrode the owner's repeated
+    instruction, session after session, because a rule cannot win
+    against a law in the code. The lancets now live in the hover's left
+    column, and `config.archetypes.dial_plate` resolves every seat to
+    its family's `circle` register, so what arrives here is round by
+    construction. `art_file` is kept in the signature for its callers
+    and no longer read.
 
-    Missing/placeholder art (the name-fallback path) reads CIRCLE-sized
-    — there is no art to classify."""
-    size = archetype_art_size(art_file)
-    if size is None or (
-        size.width() / size.height() >= archetypes.ARCHETYPE_PORTRAIT_ASPECT_MAX
-    ):
-        return weekday_body_size(skin, radius)
-    tip = radius * skin.star.radius_fraction
-    # The DRAWN half-angle (the Cube look widens the family wheels'
-    # arms to full rhombi — a lancet inscribes the fatter face).
-    tan_half = math.tan(math.radians(arm_half_deg(skin)))
-    return archetype_portrait_height(tip, tan_half)
+    Wide art like Saturn's rings stays height-based on purpose (owner:
+    "planeta istih dimenzija kao ostale, prstenovi vire") — the ball
+    matches every other circle and the rings overflow the frame."""
+    return weekday_body_size(skin, radius)
 
 
 def draw_archetype_figure(
@@ -172,7 +141,7 @@ def archetype_label_set_px(
     fits = [name_label_px(fig["name"], target) for fig in archetypes.figures(key)]
     center = archetypes.center(key)
     if center is not None:
-        center_height = archetype_figure_size(ctx.skin, ctx.radius, center["file"])
+        center_height = archetype_figure_size(ctx.skin, ctx.radius)
         fits.append(
             name_label_px(
                 center["name"], center_height * dial.NAME_LABEL_WIDTH_FRACTION,

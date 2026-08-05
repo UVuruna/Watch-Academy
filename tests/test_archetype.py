@@ -363,13 +363,19 @@ def _png(tmp_path, name: str, side: int, color=Qt.GlobalColor.red):
     return path
 
 
-def _rect_png(tmp_path, name: str, width: int, height: int):
-    """A non-square synthetic PNG (art-arrival-proof) for the two-type
-    classification tests — width/height picks CIRCLE (wide/square) vs
-    PORTRAIT (tall) without depending on the owner's real art landing."""
+def _rect_png(tmp_path, name: str, width: int, height: int, *, seat=False):
+    """A synthetic PNG (art-arrival-proof), so a sizing test never waits
+    on the owner's real art. `seat=True` places it where a DIAL seat
+    resolves — `<family>/circle/<look>/` — since `archetypes.dial_plate`
+    swaps the register segment and a flat tmp file would resolve to
+    nothing (THE DIAL LAW, 2026-08-04)."""
     image = QImage(width, height, QImage.Format.Format_ARGB32_Premultiplied)
     image.fill(Qt.GlobalColor.red)
-    path = tmp_path / name
+    directory = tmp_path
+    if seat:
+        directory = tmp_path / "family" / "circle" / "colored"
+        directory.mkdir(parents=True, exist_ok=True)
+    path = directory / name
     image.save(str(path))
     return path
 
@@ -659,69 +665,49 @@ def test_one_soul_arms_and_center_jump_to_their_own_pages(app):
     assert persons.encyclopedia_target(180.0, 180.0, 360.0) is None
 
 
-def test_archetype_figure_size_circle_and_portrait_types(app, tmp_path):
-    """Owner decree 2026-07-18, round two (screenshots): the archetype
-    art divides into TWO TYPES by its OWN aspect ratio — no per-art
-    clamp. CIRCLE art (square, or WIDE like Saturn's rings, or missing/
-    placeholder) wears `weekday_body_size` — IDENTICAL to the weekday
-    bodies; PORTRAIT art (the tall lancets) wears the STANDARD-aspect
-    inscribed height, `archetype_portrait_height`."""
-    from render.archetype_geometry import archetype_figure_size, archetype_portrait_height
+def test_every_dial_seat_wears_the_slot_size(app, tmp_path):
+    """THE DIAL LAW (owner decree 2026-08-04, REPLACING the two-type law
+    of 2026-07-18): a dial seat holds only a round or square plate at
+    1:1, so EVERY figure wears `weekday_body_size` — identical to the
+    weekday bodies. Nothing about the file changes that any more: the
+    square badge, the wide art, the placeholder, the missing file and
+    even a tall lancet handed in by mistake all size the same, because
+    the size no longer classifies art. The lancet's place is the hover.
+    """
+    from render.archetype_geometry import archetype_figure_size
     from render.slot_layout import weekday_body_size
 
     skin = _archetype_skin("trio")
     radius = 180.0
-    circle_size = weekday_body_size(skin, radius)
-    tip = radius * skin.star.radius_fraction
-    half = constants.POINTER_ARM_HALF_ANGLE_DEG["trio"]
-    tan_half = math.tan(math.radians(half))
-    portrait_size = archetype_portrait_height(tip, tan_half)
-    assert portrait_size != pytest.approx(circle_size)   # a real distinction
-
-    # CIRCLE: a square medallion.
-    square = _rect_png(tmp_path, "square.png", 200, 200)
-    assert archetype_figure_size(skin, radius, square) == pytest.approx(circle_size)
-    # CIRCLE: WIDE art (Saturn's rings) stays height-based ON PURPOSE
-    # (owner: "planeta istih dimenzija kao ostale, prstenovi vire") —
-    # no clamp shrinks it to fit its own width.
-    wide = _rect_png(tmp_path, "wide.png", 400, 200)
-    assert archetype_figure_size(skin, radius, wide) == pytest.approx(circle_size)
-    # PORTRAIT: a tall lancet.
-    tall = _rect_png(tmp_path, "tall.png", 400, 800)
-    assert archetype_figure_size(skin, radius, tall) == pytest.approx(portrait_size)
-    # Missing / placeholder art reads CIRCLE-sized — nothing to classify.
+    slot = weekday_body_size(skin, radius)
+    for name, width, height in (
+        ("square.png", 200, 200),
+        ("wide.png", 400, 200),        # Saturn's rings — overflow is the point
+        ("tall.png", 400, 800),        # a lancet: sized the same, never taller
+    ):
+        art = _rect_png(tmp_path, name, width, height)
+        assert archetype_figure_size(skin, radius, art) == pytest.approx(slot)
     placeholder = _png(tmp_path, "tiny.png", 1)
-    assert archetype_figure_size(skin, radius, placeholder) == pytest.approx(circle_size)
+    assert archetype_figure_size(skin, radius, placeholder) == pytest.approx(slot)
     missing = tmp_path / "never_written.png"
-    assert archetype_figure_size(skin, radius, missing) == pytest.approx(circle_size)
+    assert archetype_figure_size(skin, radius, missing) == pytest.approx(slot)
+    # and with no art argument at all — the callers that stopped passing one
+    assert archetype_figure_size(skin, radius) == pytest.approx(slot)
 
 
-def test_archetype_figure_size_boundary_is_the_threshold(tmp_path):
-    """The CIRCLE/PORTRAIT split sits exactly at
-    `ARCHETYPE_PORTRAIT_ASPECT_MAX` (fix round A 2026-07-19: 0.70, not
-    the old 0.85): aspect AT the threshold reads CIRCLE (>=), just
-    below it reads PORTRAIT."""
-    from render.archetype_geometry import archetype_figure_size, archetype_portrait_height
-    from render.slot_layout import weekday_body_size
+def test_the_dial_seat_resolves_the_round_plate(app):
+    """The seat draws the family's `circle` register, computed from the
+    lancet path — the register swaps, the look and the stem do not. This
+    is what keeps a vitraz off the dial: not a rule, a resolver."""
+    from pathlib import Path as _Path
 
-    skin = _archetype_skin("trio")
-    radius = 180.0
-    threshold = archetypes.ARCHETYPE_PORTRAIT_ASPECT_MAX
-    assert threshold == pytest.approx(0.70)
-    height = 1000
-    at_threshold = _rect_png(
-        tmp_path, "at_threshold.png", round(height * threshold), height
-    )
-    just_below = _rect_png(
-        tmp_path, "just_below.png", round(height * threshold) - 1, height
-    )
-    circle_size = weekday_body_size(skin, radius)
-    tip = radius * skin.star.radius_fraction
-    half = constants.POINTER_ARM_HALF_ANGLE_DEG["trio"]
-    tan_half = math.tan(math.radians(half))
-    portrait_size = archetype_portrait_height(tip, tan_half)
-    assert archetype_figure_size(skin, radius, at_threshold) == pytest.approx(circle_size)
-    assert archetype_figure_size(skin, radius, just_below) == pytest.approx(portrait_size)
+    for key in archetypes.ARCHETYPES:
+        for fig in archetypes.figures(key):
+            lancet = _Path(fig["file"])
+            plate = _Path(archetypes.dial_plate(fig["file"]))
+            assert plate.parts[-3] == "circle", f"{key}/{fig['name']}"
+            assert plate.name == lancet.name          # same figure
+            assert plate.parts[-2] == lancet.parts[-2]  # same look
 
 
 def test_archetype_figure_size_providence_eye_aspect_classifies_circle(tmp_path):
@@ -787,17 +773,15 @@ def test_archetype_center_follows_its_own_art_type(app, monkeypatch, tmp_path):
         monkeypatch.undo()
         return captured[-1]
 
-    circle_center = _rect_png(tmp_path, "circle_center.png", 200, 200)
+    circle_center = _rect_png(tmp_path, "circle_center.png", 200, 200, seat=True)
     assert rendered_height(circle_center) == pytest.approx(
         weekday_body_size(skin, radius)
     )
-    portrait_center = _rect_png(tmp_path, "portrait_center.png", 400, 800)
-    tip = radius * skin.star.radius_fraction
-    half = constants.POINTER_ARM_HALF_ANGLE_DEG["trio"]
-    tan_half = math.tan(math.radians(half))
-    from render.archetype_geometry import archetype_portrait_height
+    # THE DIAL LAW (2026-08-04): the centre is a seat like any other —
+    # a lancet handed to it draws at the SAME slot size, never taller.
+    portrait_center = _rect_png(tmp_path, "portrait_center.png", 400, 800, seat=True)
     assert rendered_height(portrait_center) == pytest.approx(
-        archetype_portrait_height(tip, tan_half)
+        weekday_body_size(skin, radius)
     )
 
 

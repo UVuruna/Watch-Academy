@@ -69,11 +69,14 @@ class ArchetypeLayer(Layer):
                 )
                 if resolved is not None:
                     fig = {**fig, "file": resolved}
-            # THE TWO-TYPE LAW (owner decree 2026-07-18, round two): each
-            # figure's OWN art aspect decides CIRCLE (the slot size) vs
-            # PORTRAIT (the per-pointer lancet fraction) — classified
-            # per figure, not once for the whole layout.
-            height = archetype_figure_size(ctx.skin, ctx.radius, fig["file"])
+            # THE DIAL LAW (owner decree 2026-08-04): the seat draws
+            # the figure's ROUND plate — its family's `circle` register
+            # — at the slot size, never the tall lancet, whose place is
+            # the hover. A family whose circle art has not landed falls
+            # back to the figure's NAME, which is the honest outcome:
+            # no lancet on the dial, not even as a stopgap.
+            fig = {**fig, "file": archetypes.dial_plate(fig["file"])}
+            height = archetype_figure_size(ctx.skin, ctx.radius)
             draw_archetype_figure(
                 painter, ctx, fig,
                 dial_point(fig["angle"] + ctx.rotation, orbit),
@@ -106,14 +109,14 @@ class ArchetypeCenterLayer(Layer):
         center = archetypes.center(key)
         if center is None or not self._gate(ctx, "archetype:center"):
             return
-        # THE TWO-TYPE LAW (owner decree 2026-07-18, round two): the
-        # center follows its OWN art's type — `archetype_figure_size`
-        # classifies it exactly like an arm figure (circle = the slot
-        # size, portrait = the lancet fraction) — no longer the weekday
-        # Sun's center_scale, and the reveal window can no longer resize
-        # it (the helper has no reveal term).
+        # THE DIAL LAW (owner decree 2026-08-04): the centre is a seat
+        # like any other — its ROUND plate at the slot size. The centre
+        # figures were already rose windows and rondels, which is why
+        # this seat never looked wrong; it now takes the same path as
+        # the arms rather than relying on that.
+        center = {**center, "file": archetypes.dial_plate(center["file"])}
         height = (
-            archetype_figure_size(ctx.skin, ctx.radius, center["file"])
+            archetype_figure_size(ctx.skin, ctx.radius)
             * hover_factor(ctx, "archetype:center")
         )
         # THE WINDOW (owner seal 2026-07-18): full at solar noon/midnight
