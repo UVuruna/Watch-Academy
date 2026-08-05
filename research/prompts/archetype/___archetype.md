@@ -26,6 +26,7 @@ WAVE's three third wheels and the Thirteen-Axes wave's edge/sacred plates.
 | [Banknote Offices Prompts](banknote_offices_prompts.md) | The five Double-Trinity OFFICES as engraved intaglio banknote plates |
 | [Edges Prompts](edges_prompts.md) | THIRTEEN-AXES wave: eight new edge seats (Prudence, Ardor, Steadfastness, Reform, Meekness, Aspiration, Self-Mastery, Diligence), each a lancet + circle |
 | [Axes Prompts](axes_prompts.md) | THIRTEEN-AXES wave: the SACRED plates (The One's six-petal rosette, the Sacred Axis, its circle, the six people of the two sacred seats) |
+| [Rondel Prompts](rondel_prompts.md) | THE HOVER LAW (2026-08-04): one round plate per hover PARAGRAPH — the 46 still-missing rondels across nine families, with the reuse rules that keep the count at 46 |
 
 **The Rose of the Twenty-Four's GEOMETRY has no sheet** (three identical
 octa stars offset 15°, 24 rays in 8 palette colours — computed, drawn, never
