@@ -70,6 +70,7 @@ its own — this file is the ONLY doc in the folder; no `__about/`, no
 | `test_startup_warm.py` | THE SLOW START fix (14.78s→1.46s for three watches): first paint runs NO metal recolor, the background drain builds it, the warm pass runs ONCE per process, legend-off skips the hover sweep entirely. |
 | `test_art_reachability.py` | GUARD — see below. |
 | `test_figure_plates.py` | GUARD — see below. |
+| `test_pointer_registry.py` | THE PERMISSION MATRIX: the registry names every pointer that exists, its seat count matches what the dial draws, the Calendar refuses the week in both shapes, the dozen belongs to the Calendar alone, the SHAPE dimension bites on the Rose, the cube rides Rose+Calendar only, Aurora carries nothing circular, every WHEEL claim has a real archetype grid entry, and an unknown pointer answers empty. |
 | `test_structure_law.py` | GUARD — see below. |
 | `test_sun.py` | Golden sun values: Belgrade DST hexagram jump −4.17°→+10.76°, the four Tromsø daylight regimes, Longyearbyen polar-night solar noon, Santiago de Compostela/Kamchatka angles, the mockup day 20.6.2025. |
 | `test_system_trio.py` | The native SPACE-without-focus keyboard hook's install/uninstall bookkeeping and callback contract, stale-hover clearing off themed elements, the permanent crash-log file and a synthetic unhandled exception. |

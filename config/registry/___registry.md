@@ -21,6 +21,7 @@ Layer: config — pure. `week.py` imports NOTHING, which is what lets
 |------|------|----------|
 | `__init__.py` | Algorithmic | the derivation layer — every legacy table computed from `WEEK` in one assignment apiece — [about](__about/__init__.md) · [flow](__flow/__init__.md) |
 | `sentinel.py` | Standard | `COMPUTED` — the one value the registry refuses to freeze — [about](__about/sentinel.md) |
+| `pointers.py` | Algorithmic | THE POINTER REGISTRY — the permission matrix: what each pointer may carry, per shape — [about](__about/pointers.md) |
 | `week.py` | Algorithmic | THE WEEK REGISTRY, the 6+3 kind: all 35 theme entries, whole — [about](__about/week.md) · [flow](__flow/week.md) |
 
 ## Connections
