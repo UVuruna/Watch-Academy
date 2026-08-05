@@ -56,6 +56,17 @@ archetype_figure_size()`:
 Missing/placeholder art reads CIRCLE-sized (there is no art to
 classify).
 
+## The three plates of a figure (owner decree 2026-08-04)
+
+`figure_plates(figure, paragraphs)` returns the whole contract:
+`dial` (the family's `circle` register — THE DIAL LAW, 1:1 only),
+`hover` (the figure's own lancet, the hover card's left column at full
+height) and `paragraphs` (one rondel per `rows[i]` beyond the first,
+its stem built from the paragraph's subject). Two reuses are documented
+rather than duplicated: paragraph one reuses the dial plate, and the
+Tetramorph's paragraph two reuses its evangelist rondel.
+`tests/test_figure_plates.py` counts what is still owed.
+
 ## Connections
 
 ### Uses

@@ -8,6 +8,7 @@ table, the article-set names Session 6 fills, and the render
 tunables. Documentation: config/archetypes.md.
 """
 
+import re
 from pathlib import Path
 
 from config import cube, dial, palette, paths
@@ -646,6 +647,78 @@ def dial_plate(art_file):
         return art_file
     parts[-3] = "circle"
     return Path(*parts)
+
+
+# ═══════════════════════════ THE THREE PLATES ═══════════════════════════
+# THE HOVER LAW (owner decree 2026-08-04). One figure is drawn three
+# times and each drawing has exactly ONE place:
+#
+#   dial       the round 1:1 plate in the seat's diamond (THE DIAL LAW)
+#   hover      the tall stained-glass LANCET, the hover card's left
+#              column at its full height
+#   paragraph  a small round rondel above each paragraph in the hover's
+#              right column — one per `rows[i]` of the figure's article,
+#              which is why a figure carries one, two or three and never
+#              four (THE ARTICLE-DEPTH LAW's three shortcuts)
+#
+# All three are COMPUTED from the figure's own art path (Rule #19). The
+# point of naming them is that an EMPTY slot becomes a named debt the
+# guard can count, instead of an absence nobody can see:
+# `tests/test_figure_plates.py` reports exactly which figure owes which
+# plate, and `research/prompts/archetype/rondel_prompts.md` briefs the
+# 46 rondels the hover will ask for.
+RONDEL_PREFIX = "Rondel_"
+
+
+def hover_plate(art_file):
+    """The lancet — the figure's own art, unchanged. Named so a caller
+    says which of the three it means rather than passing `file` around
+    and hoping."""
+    return Path(art_file)
+
+
+def paragraph_plate(art_file, row2: str, index: int = 2):
+    """(see `figure_plates`) — with ONE documented reuse: the
+    Tetramorph's second paragraph IS its evangelist, and those four
+    rondels are already drawn and wired (`_EVANGELIST_DIR`), so the slot
+    points at them rather than asking for the same image a second time
+    under a second name (Rule #19).
+    """
+    if index == 2 and Path(art_file).parts[-4] == "tetramorph":
+        return _EVANGELIST_DIR / f"{row2}.png"
+    return _paragraph_rondel(art_file, row2, index)
+
+
+def _paragraph_rondel(art_file, row2: str, index: int = 2):
+    """The ordinary case: a rondel beside its own lancet.
+
+    The rondel for one paragraph of a figure's article: the family's
+    own register, the stem built from the paragraph's SUBJECT (`row2` —
+    the calling, object, quality or shadow the second row names). A
+    figure with three paragraphs suffixes the third, matching the drop
+    paths its prompt sheet already writes."""
+    stem = RONDEL_PREFIX + re.sub(
+        r"[^A-Za-z0-9]+", "_", row2.replace("The ", "")
+    ).strip("_")
+    if index > 2:
+        stem = f"{stem}_{index}"
+    return Path(art_file).parent / f"{stem}.png"
+
+
+def figure_plates(figure: dict, paragraphs: int = 2) -> dict:
+    """The three named slots of one figure — the whole contract in one
+    place. `paragraphs` is the figure's own `rows` count; paragraph ONE
+    reuses the dial plate (row one IS the figure, and it already has a
+    round plate), so only rows two and up ask for a rondel."""
+    art = figure["file"]
+    return {
+        "dial": dial_plate(art),
+        "hover": hover_plate(art),
+        "paragraphs": tuple(
+            paragraph_plate(art, figure["row2"], index)
+            for index in range(2, max(paragraphs, 1) + 1)
+        ),
+    }
 
 
 def figures(key: str) -> tuple:

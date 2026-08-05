@@ -69,6 +69,7 @@ its own — this file is the ONLY doc in the folder; no `__about/`, no
 | `test_skins.py` | Ring presets and the built render config: the DOMY/PILOT/third bundled card goldens (layout, letters), `missing_assets` validation. *(In the structure-law ratchet — owed a test-hygiene split.)* |
 | `test_startup_warm.py` | THE SLOW START fix (14.78s→1.46s for three watches): first paint runs NO metal recolor, the background drain builds it, the warm pass runs ONCE per process, legend-off skips the hover sweep entirely. |
 | `test_art_reachability.py` | GUARD — see below. |
+| `test_figure_plates.py` | GUARD — see below. |
 | `test_structure_law.py` | GUARD — see below. |
 | `test_sun.py` | Golden sun values: Belgrade DST hexagram jump −4.17°→+10.76°, the four Tromsø daylight regimes, Longyearbyen polar-night solar noon, Santiago de Compostela/Kamchatka angles, the mockup day 20.6.2025. |
 | `test_system_trio.py` | The native SPACE-without-focus keyboard hook's install/uninstall bookkeeping and callback contract, stale-hover clearing off themed elements, the permanent crash-log file and a synthetic unhandled exception. |
@@ -133,6 +134,15 @@ four). It exits **2**, which is what makes a hook BLOCKING.
   PySide6 and must read no wall clock (`datetime.now`/`.today`,
   `time.time`); `core/__main__.py` is exempt from the wall-clock check
   only, as documented CLI glue.
+- **`test_figure_plates.py`** — THE HOVER LAW's ledger: one figure is drawn
+  three times (the dial's round 1:1 plate, the hover's lancet, one rondel per
+  paragraph beyond the first) and `config.archetypes.figure_plates` names all
+  three, so an empty slot is a countable debt rather than an invisible
+  absence. Two documented reuses keep the count honest — paragraph one IS the
+  figure and reuses its dial plate, and the Tetramorph's paragraph two IS its
+  evangelist rondel, already drawn. `RONDEL_DEBT` must equal what is actually
+  missing on disk: a round that generates a set and forgets to shrink the
+  table fails here.
 - **`test_art_reachability.py`** — NO ART SITS UNSEEN, widened to the WHOLE
   `assets/` tree (owner ruling 2026-08-05, after an audit found ~280
   archetype plates nothing could draw). Every directory holding a `.png` is
