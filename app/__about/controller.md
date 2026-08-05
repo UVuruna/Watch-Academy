@@ -35,14 +35,14 @@ for the procedure):
    `_prepare_quit()`, `quit()`, `_position_widget()`, the debounced-save
    pair (`_on_widget_moved`/`_flush_position`), `refresh_title()`.
 3. **Dialog opening/lifecycle** — the non-modal one-live-instance dance
-   for Design/Pointer Theme/Slot Theme/Watch Face/Encyclopedia/
-   Observatory/Guide, plus the modal Settings/Time Travel/Report/
-   Shortcuts openers (`_open_design`, `_open_pointer_theme`,
-   `_open_slot_theme`, `_open_watch_face`, `_open_encyclopedia_at`,
-   `_open_observatory`, `_open_guide`, `_open_settings`, `_open_report`,
-   `_open_shortcuts` — R-37) and their
-   `_design_setters`/`_watch_face_setters`/`_slot_descriptors` callable
-   bundles. `_apply_settings_dialog_result` is the ONE apply path an
+   for Watch Face/Encyclopedia/Observatory/Guide (Phase 6 FINAL cleanup
+   retired the separate Design/Pointer Theme/Slot Theme mini windows —
+   the Watch Face window is their sole survivor), plus the modal
+   Settings/Time Travel/Report/Shortcuts openers (`_open_watch_face`,
+   `_open_encyclopedia_at`, `_open_observatory`, `_open_guide`,
+   `_open_settings`, `_open_report`, `_open_shortcuts` — R-37) and their
+   `_watch_face_setters`/`_slot_descriptors` callable bundles.
+   `_apply_settings_dialog_result` is the ONE apply path an
    accepted `SettingsDialog` takes, however it was reached — the plain
    menu opener (`_open_settings`) and the Watch Face Ring section's
    "Custom ring…" button (`_open_custom_ring_editor`, R-13, which opens
@@ -75,13 +75,12 @@ for the procedure):
 - [Native](native.md) — `PowerEventFilter`, click-through, single-instance
 - [Legend Popup](legend_popup.md), [Fast Travel Flash](fast_travel_flash.md) —
   one instance each, owned here
-- [Design Window](design_window.md), [Pointer Theme](pointer_theme.md),
-  [Slot Theme](slot_theme.md), [Time Travel](time_travel.md), [Report](report.md),
+- [Time Travel](time_travel.md), [Report](report.md),
   [Observatory](observatory.md) — opens/owns the one live instance of each
 - [Watch Face (subfolder)](../watch_face/___watch_face.md) —
-  `WatchFaceDialog`, opened/owned the SAME way (Phase ①+② of the Watch
-  Face & Settings UI rework; exists alongside the three above until a
-  later phase retires them)
+  `WatchFaceDialog`, opened/owned the SAME way (the owner-approved Watch
+  Face & Settings UI rework — Phase 6 FINAL cleanup deleted the
+  Design/Pointer Theme/Slot Theme windows this window replaces)
 - [Settings Dialog (subfolder)](../settings_dialog/___settings_dialog.md),
   [Encyclopedia (subfolder)](../encyclopedia/___encyclopedia.md) — opens
   them; applies their results
@@ -129,11 +128,13 @@ still constructs and behaves as before that round.
   astronomical data dies VISIBLY (a dialog, then exit) — never a
   silently wrong dial
 - `_build_menu()`: the shared tray/right-click `_StayOpenMenu` — TITLE
-  row, Add/Remove Watch, Show (tray-only), Design…/Pointer Theme…/Slot
-  Theme…/Watch Face… (the R5 mini windows, plus Phase ①+②'s new
-  consolidated one), Visible dropdown, Legend/Solar
-  rotation/Archetype/Click-through toggles, Settings…/Encyclopedia…/
-  Observatory…/Guide…/Time Travel…, the hidden Report, Exit
+  row, Add/Remove Watch, Show (tray-only), Watch Face… (the ONE flat
+  entry that replaced the R5 Design…/Pointer Theme…/Slot Theme… mini
+  windows, Phase 6 FINAL cleanup), Visible dropdown, Names dropdown
+  (R-09/R-26 — weekday names + archetype names, unified beside
+  Visible), Legend/Solar rotation/Archetype/Click-through toggles,
+  Settings…/Encyclopedia…/Observatory…/Guide…/Time Travel…, the hidden
+  Report, Exit
 - `_compute_jump(base_moment, base_observer, base_cycles, kind, city)`:
   the pure jump arithmetic (places, turning points, calendar unit
   jumps, the optional phase filter) shared by every travel entry point;

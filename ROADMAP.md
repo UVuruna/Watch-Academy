@@ -17,6 +17,31 @@ lives in [The DOMY Canon](CANON.md).
 
 ## Where We Stand
 
+- **THE WATCH FACE & SETTINGS UI REWORK — Phase 6 FINAL cleanup landed
+  (2026-08):** the six-phase rework closes. `app.watch_face.WatchFaceDialog`
+  (eight sections: Pointer, Ring, Hands, Umbra & Aura, Size, Themes &
+  Slots, Colors, Opacity) is now the ONE place all visual/live-apply
+  customization lives; the Design/Pointer Theme/Slot Theme mini windows
+  and the Settings dialog's own Display/Colors/Themes sections are
+  DELETED (R-03), no shims. `SettingsDialog` is reduced to Location/
+  Language/System (R-02) — Custom art stays reachable only as a
+  sidebar-hidden page the Watch Face Ring section's "Custom ring…"
+  button opens (`initial_section="Custom art"`), the transactional
+  OK/Cancel path unchanged for the three real sections. A right-click
+  **Names** submenu (R-09/R-26) unifies the weekday-body day name and
+  the archetype figures' names beside Visible, writing the same
+  `show_weekday_names`/`archetype_names` keys the old buried/Settings-
+  only toggles wrote. Label sweep (R-11/R-19/R-27): "Ring letters" reads
+  "Indices" and "Slot" reads "Complications" everywhere a user sees
+  them; no stored setting key was renamed. **Recorded debts the rework
+  does NOT close:** the ring's outer/inner tint split needs new art
+  before it can be a real control (R-21); no "Crown Text" render
+  element exists to attach a Colors/Opacity control to (Phase ④
+  verified this — the brief describes something the dial never grew);
+  a per-pointer default theme table is pending the Theme Dictionary
+  registry; the dozen/cube slot-content kinds have no render path yet
+  (Themes & Slots' content tree explains this in place rather than
+  offering a picker that draws nothing).
 - **THE ENCYCLOPEDIA REWORK (WORKPLAN Session 27, owner-sealed
   2026-07-28/29) — DONE:** the browser reads on THREE levels now — six
   WHOLES on a home screen that never scrolls (The Instrument · The
