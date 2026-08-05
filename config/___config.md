@@ -29,6 +29,7 @@ here; nothing here imports from them.
 | `glow.py` | Algorithmic | event glow windows and the whole eclipse type→render-state machine — [about](__about/glow.md) · [flow](__flow/glow.md) |
 | `palette.py` | Algorithmic | THE COLOUR LAW — every colour in the program, nine fixed sections, nothing else — [about](__about/palette.md) · [flow](__flow/palette.md) |
 | `pantheon.py` | Algorithmic | the weekday theme registry and THE UNIVERSAL ROTATION CONVENTION engine — [about](__about/pantheon.md) · [flow](__flow/pantheon.md) |
+| `registry/` | (package) | THE REGISTRY — one dictionary of all themes, grouped by KIND; every legacy table derived from it in one assignment — [folder](registry/___registry.md) |
 | `paths.py` | Algorithmic | frozen-safe path resolution, the art-source suffix resolver, the per-watch thread-local Display Context — [about](__about/paths.md) · [flow](__flow/paths.md) |
 | `profiling.py` | Algorithmic | `@timed`/`measure()` execution-time statistics behind the hidden Report — [about](__about/profiling.md) · [flow](__flow/profiling.md) |
 | `shortcuts.py` | Algorithmic | the keyboard shortcut table and Fast Travel's theme/option jumps — [about](__about/shortcuts.md) · [flow](__flow/shortcuts.md) |
