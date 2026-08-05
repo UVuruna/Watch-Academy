@@ -48,7 +48,10 @@ for the procedure):
    the same dialog navigated to its Custom art section) both call it.
 4. **Keyboard shortcuts** — `_on_shortcut` and its ~20 per-family
    handlers (ring/weekday cycling, slot cycling, Fast Travel stepping,
-   Location jumps, the hidden-mode secret buffer).
+   Location jumps, the hidden-mode secret buffer). `_cycle_slots`
+   (Ctrl+N) now shares its flag arithmetic with `_apply_slot_layout`/
+   `_set_slot_layout`, which the Watch Face Themes & Slots section's
+   FACE LAYOUT row picks directly instead of stepping (Phase ③, R-17).
 5. **Time travel and simulation** — `_compute_jump` (the pure jump
    arithmetic), `_apply_jump`/`_dialog_jump`/`_start_simulation`/
    `_end_simulation`/`_active_simulation_or_now`, the coverage guards

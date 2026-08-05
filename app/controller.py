@@ -58,6 +58,7 @@ from app.settings_store import (
     SettingsStore,
     replace,
     rotation_themes,
+    slot_layout_target,
 )
 from app.slot_theme import SlotDescriptor, SlotThemeDialog
 from app.time_travel import TimeTravelDialog
@@ -1773,19 +1774,16 @@ class WatchController(QObject):
     def _cycle_slots(self) -> None:
         """Ctrl+N: the number of visible Slots, 0 → 1 → 2 → 3 → 0 (the
         SAME 1 → 2 → 3 chain the menu's own ordinals enforce — cycling
-        can only ever pass through legal states). `_install_skin`
-        refreshes the Slot Theme window in place when it happens to be
-        open."""
-        settings = self._settings
-        count = (
-            int(settings.show_weekday)
-            + int(settings.show_weekday and settings.show_octa_slot)
-            + int(
-                settings.show_weekday and settings.show_octa_slot
-                and settings.show_third_slot
-            )
-        )
-        target = (count + 1) % 4
+        can only ever pass through legal states)."""
+        target = (slot_layout_target(self._settings) + 1) % 4
+        self._apply_slot_layout(target)
+
+    def _apply_slot_layout(self, target: int) -> None:
+        """The shared body behind `_cycle_slots` (Ctrl+N steps it) and
+        `_set_slot_layout` (the Watch Face FACE LAYOUT row picks it
+        directly) — ONE place computing the flag triple for a legal
+        0-3 target (Rule #5). `_install_skin` refreshes the Slot Theme
+        window in place when it happens to be open."""
         self._settings = replace(
             self._settings,
             show_weekday=target >= 1,
@@ -1795,6 +1793,14 @@ class WatchController(QObject):
         self._install_skin(build_skin(self._settings))
         self._refresh_menu_gating()
         self._flush_position()
+
+    def _set_slot_layout(self, target: int) -> None:
+        """R-17: the Watch Face FACE LAYOUT row's direct pick — the
+        SAME legal 0-3 states `_cycle_slots` steps through, applied at
+        once instead of incrementally."""
+        if target == slot_layout_target(self._settings):
+            return
+        self._apply_slot_layout(target)
 
     def _toggle_archetype_shortcut(self) -> None:
         """Ctrl+A: the SAME toggle as the menu's own Archetype entry — a
@@ -2812,6 +2818,22 @@ class WatchController(QObject):
             "hover_enlarge": wrap(
                 lambda v: self._set_display_choice("hover_enlarge", v)
             ),
+            # --- Themes & Slots (Phase ③, R-17/R-18/R-19/R-20) -----------
+            "slot_layout": wrap(self._set_slot_layout),
+            # A data PROVIDER, not a scalar setter (Rule #5): the
+            # Themes & Slots section reuses the EXACT `SlotDescriptor`
+            # triple the (retired-later) Slot Theme window builds —
+            # `_slot_descriptors()`'s own `wrap()` already refreshes
+            # this window (see above), so no second wrapping here.
+            "slot_descriptors": self._slot_descriptors,
+            "theme_rotation_minutes": wrap(
+                lambda v: self._set_display_choice("theme_rotation_minutes", v)
+            ),
+            "theme_metal_follow_ring": wrap(
+                lambda v: self._set_display_choice(
+                    "theme_metal_follow_ring", v
+                )
+            ),
         }
 
     def _open_custom_ring_editor(self) -> None:
@@ -2922,6 +2944,15 @@ class WatchController(QObject):
                 setter(*args, **kwargs)
                 if self._slot_theme is not None:
                     self._slot_theme.refresh(self._slot_descriptors())
+                # R-18 (Watch Face Phase ③): the SAME descriptors now
+                # feed the Themes & Slots content tree, so a pick made
+                # THERE must refresh both live windows — one wrap, two
+                # readers (Rule #5), instead of a second copy of this
+                # closure inside `_watch_face_setters()`.
+                if self._watch_face is not None:
+                    self._watch_face.refresh(
+                        self._settings, self._watch_face_setters()
+                    )
             return wrapped
 
         return (
