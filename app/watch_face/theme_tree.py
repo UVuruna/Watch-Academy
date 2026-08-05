@@ -17,16 +17,23 @@ from app.weekday_theme_grid import (
     weekday_group_titles,
 )
 from config import constants
+from config.registry import pointers
 
 _ZODIAC_STYLES = constants.ZODIAC_SLOT_STYLES + ("text",)
 _CHINESE_STYLES = constants.CHINESE_SLOT_STYLES + ("text",)
 
-#: The pointer's default weekday theme — uniform (the app's own
-#: bootstrap default, `Settings.weekday_theme`'s `"planets"`). No
-#: per-pointer default table exists yet — recorded as debt in the
-#: Phase ③ session report; this constant is the ONE place a future
-#: per-pointer table would replace.
-DEFAULT_WEEKDAY_THEME = "planets"
+#: The pointer's default weekday theme, asked of THE POINTER REGISTRY
+#: (`config.registry.pointers.default_theme`) rather than assumed.
+#:
+#: It answers None where the pointer cannot carry a week theme at all —
+#: the Calendar (twelve wedges against nine members) and Aurora (no
+#: circular theme at all) — so the picker no longer stars an option
+#: that pointer can never show. Where the week IS carried the answer is
+#: the app's own bootstrap default: no pointer has ever asked for a
+#: different one, and inventing per-pointer favourites is a product
+#: decision nobody has made.
+def default_weekday_theme(pointer: str, shape: str = pointers.STAR):
+    return pointers.default_theme(pointer, pointers.WEEK, shape)
 
 #: Level-1 kind keys, in menu order, and the human title each shows.
 _KIND_TITLES = (
@@ -114,7 +121,7 @@ def _populate(root, active, full_face, pointer, pointer_shape, tr, rebuild) -> N
         root.addLayout(tabs_row)
     active_kind = _nav.kind if _nav.kind in dict(available) else available[0][0]
     if active_kind == "weekday":
-        root.addWidget(_weekday_branch(active, tr, rebuild))
+        root.addWidget(_weekday_branch(active, pointer, pointer_shape, tr, rebuild))
     elif active_kind == "complications":
         root.addWidget(_complications_branch(active, tr))
     else:
@@ -144,7 +151,7 @@ def _select_kind(key: str, rebuild) -> None:
     rebuild()
 
 
-def _weekday_branch(active, tr, rebuild) -> QWidget:
+def _weekday_branch(active, pointer, pointer_shape, tr, rebuild) -> QWidget:
     layout = QVBoxLayout()
     if _nav.weekday_group is None:
         layout.addWidget(build_weekday_group_grid(
@@ -158,7 +165,8 @@ def _weekday_branch(active, tr, rebuild) -> QWidget:
         crumb.addStretch(1)
         layout.addLayout(crumb)
         layout.addWidget(build_weekday_theme_tiles(
-            _nav.weekday_group, active.theme_value, DEFAULT_WEEKDAY_THEME,
+            _nav.weekday_group, active.theme_value,
+            default_weekday_theme(pointer, pointer_shape),
             lambda theme: active.set_weekday(theme), tr,
         ))
     widget = QWidget()

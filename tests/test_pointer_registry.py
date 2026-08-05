@@ -82,3 +82,26 @@ def test_an_unknown_pointer_answers_empty_rather_than_raising():
     picker — the graceful-absent law, applied to permissions."""
     assert pointers.carries("nonesuch") == ()
     assert not pointers.may_carry("nonesuch", pointers.WEEK)
+
+
+def test_a_pointer_that_cannot_carry_the_week_has_no_default_theme():
+    """The None is the point (owner debt, closed 2026-08-05). The Watch
+    Face picker used to star the app's global default on EVERY pointer,
+    including the two that can never show a week theme — telling the
+    reader something untrue. A pointer with no permission has no
+    default."""
+    assert pointers.default_theme("hexa") == pointers.BOOTSTRAP_WEEK_THEME
+    assert pointers.default_theme("rose") == pointers.BOOTSTRAP_WEEK_THEME
+    assert pointers.default_theme("rose", shape=pointers.POLYGON) is None
+    assert pointers.default_theme("calendar") is None
+    assert pointers.default_theme("aurora") is None
+    assert pointers.default_theme("nonesuch") is None
+
+
+def test_the_bootstrap_default_is_a_real_week_theme():
+    """It is the app's own `Settings.weekday_theme` default, not a
+    per-pointer favourite — nobody has made that product decision, and
+    the registry does not invent one."""
+    from config import constants
+
+    assert pointers.BOOTSTRAP_WEEK_THEME in constants.WEEKDAY_THEMES

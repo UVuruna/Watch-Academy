@@ -95,6 +95,30 @@ POINTERS = {
 }
 
 
+# The app's own bootstrap default weekday theme (`Settings.weekday_theme`).
+# It is a PROGRAM default, not a pointer's preference: no pointer has
+# ever asked for a different one, and inventing per-pointer favourites
+# is a product decision nobody has made. What the matrix CAN say
+# truthfully is where the default does not apply at all — see
+# `default_theme`.
+BOOTSTRAP_WEEK_THEME = "planets"
+
+
+def default_theme(pointer: str, kind: str = WEEK, shape: str = STAR):
+    """The theme a picker should mark as this pointer's default for
+    `kind`, or None when the pointer cannot carry that kind at all.
+
+    The None is the point. Before the matrix existed, the Watch Face
+    picker marked the global default everywhere — including on pointers
+    that can never show a week theme, which told the reader something
+    untrue. A pointer with no permission has no default, and saying so
+    is more useful than a star on an impossible option.
+    """
+    if not may_carry(pointer, kind, shape):
+        return None
+    return BOOTSTRAP_WEEK_THEME if kind == WEEK else None
+
+
 def carries(pointer: str, shape: str = STAR) -> tuple[str, ...]:
     """The kinds `pointer` may show in `shape` — () when it shows none.
     An unknown pointer answers () rather than raising: a settings file

@@ -23,6 +23,18 @@ entries; Astrology/Ascendant/Chinese zodiac's Level 2 is their style
 pills (`constants.ZODIAC_SLOT_STYLES`/`CHINESE_SLOT_STYLES`) — all
 three ported verbatim from `app.slot_theme.SlotThemeDialog._style_tab`.
 
+## The starred default (debt closed 2026-08-05)
+
+`default_weekday_theme(pointer, shape)` asks THE POINTER REGISTRY
+(`config.registry.pointers.default_theme`) instead of assuming. It
+answers **None** where the pointer cannot carry a week theme at all —
+the Calendar (twelve wedges against nine members) and Aurora (no
+circular theme at all) — so the picker no longer stars an option that
+pointer can never show. Where the week IS carried, the answer is the
+app's own bootstrap default: no pointer has asked for a different one,
+and inventing per-pointer favourites is a product decision nobody has
+made.
+
 ## Connections
 
 ### Uses
