@@ -7,12 +7,15 @@ dialog's own visual groups) into a single left-sidebar + right-page shell
 (the same list+stack shape [Settings Dialog](../settings_dialog/___settings_dialog.md)
 already uses) with EIGHT sections.
 
-**THIS PHASE builds the frame plus five real sections** (Pointer, Ring,
-Hands, Umbra & Aura, Size) and the thumbnail service. Themes & Slots /
-Colors / Opacity are placeholder pages ("Arrives in a later phase") so
-the sidebar already shows the window's final shape — later phases fill
-them in and, in Phase 6, retire the old Design/Pointer Theme/Slot Theme
-windows and the Settings dialog's Display/Colors groups they absorb.
+**Phase ①+② built the frame plus five real sections** (Pointer, Ring,
+Hands, Umbra & Aura, Size) and the thumbnail service. **Phase ③ (R-17/
+R-18/R-19/R-20) adds the sixth: Themes & Slots** — the FACE LAYOUT row,
+the SLOT PICKER, the breadcrumb content tree, the subdial plate pills
+and the theme rotation controls. Colors / Opacity remain placeholder
+pages ("Arrives in a later phase") so the sidebar already shows the
+window's final shape — a later phase fills them in and, in Phase 6,
+retires the old Design/Pointer Theme/Slot Theme windows and the
+Settings dialog's Display/Colors groups they absorb.
 **The old windows are UNTOUCHED this phase** — they keep working exactly
 as before, side by side with this new one, until Phase 6 removes them.
 
@@ -29,6 +32,8 @@ as before, side by side with this new one, until Phase 6 removes them.
 | `hands.py` | Algorithmic | R-14: hand-pack gallery, large hour-hand tiles — [about](__about/hands.md) · [flow](__flow/hands.md) |
 | `umbra_aura.py` | Algorithmic | umbra form + contrast pills — [about](__about/umbra_aura.md) · [flow](__flow/umbra_aura.md) |
 | `size.py` | Algorithmic | diameter + every element scale slider — [about](__about/size.md) · [flow](__flow/size.md) |
+| `themes.py` | Algorithmic | R-17/R-19/R-20: FACE LAYOUT row, SLOT PICKER, subdial plate + rotation — [about](__about/themes.md) · [flow](__flow/themes.md) |
+| `theme_tree.py` | Algorithmic | R-17/R-18: the breadcrumb content decision tree — [about](__about/theme_tree.md) · [flow](__flow/theme_tree.md) |
 
 ## Layout — the sidebar
 
@@ -57,6 +62,9 @@ the same way).
 - [Settings Dialog](../settings_dialog/___settings_dialog.md) — `ring.py`'s
   "Custom ring…" button opens it, navigated to the Custom art section
   (`dialog.SettingsDialog(..., initial_section="Custom art")`)
+- [Slot Theme](../__about/slot_theme.md) — `SlotDescriptor` (`themes.py`/
+  `theme_tree.py` read the SAME descriptor triple the Slot Theme window
+  builds, never a second copy, Rule #5)
 
 ### Used by
 - [Watch Controller](../__about/controller.md) — `_open_watch_face`

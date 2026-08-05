@@ -1,12 +1,13 @@
-"""The Watch Face window (R-01, see window.md) — Phase ①+② of the
-owner-approved Watch Face & Settings UI rework: a left `QListWidget`
-sidebar beside a right `QStackedWidget` page per section (the same
-list+stack shape `app.settings_dialog.dialog.SettingsDialog` already
-uses), replacing — over several phases — Design/Pointer Theme/Slot
-Theme and the Settings dialog's own Display/Colors groups. THIS PHASE
-wires five real sections; Themes & Slots/Colors/Opacity are placeholder
-pages ("Arrives in a later phase") so the sidebar already shows the
-window's final shape. The OLD windows are untouched this phase.
+"""The Watch Face window (R-01, see window.md) — the owner-approved
+Watch Face & Settings UI rework: a left `QListWidget` sidebar beside a
+right `QStackedWidget` page per section (the same list+stack shape
+`app.settings_dialog.dialog.SettingsDialog` already uses), replacing —
+over several phases — Design/Pointer Theme/Slot Theme and the Settings
+dialog's own Display/Colors groups. Phase ①+② wired five sections;
+Phase ③ (see themes.md) replaces the Themes & Slots placeholder with
+the real section. Colors/Opacity remain placeholder pages ("Arrives in
+a later phase") so the sidebar already shows the window's final shape.
+The OLD windows are untouched this phase.
 """
 
 from PySide6.QtCore import Qt
@@ -16,7 +17,7 @@ from PySide6.QtWidgets import (
 )
 
 from app.theme import apply_theme, size_to_screen
-from app.watch_face import hands, pointer, ring, size, umbra_aura
+from app.watch_face import hands, pointer, ring, size, themes, umbra_aura
 from config import constants, defaults
 from config.ui_text import ui
 
@@ -29,7 +30,7 @@ _SECTIONS = (
     ("Hands", hands.build),
     ("Umbra & Aura", umbra_aura.build),
     ("Opacity", None),
-    ("Themes & Slots", None),
+    ("Themes & Slots", themes.build),
     ("Colors", None),
     ("Size", size.build),
 )
