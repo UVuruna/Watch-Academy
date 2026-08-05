@@ -51,6 +51,18 @@ Clock (ring) tint groups. Plain-Python mixin (no base class); composed onto
 Palette (`_paint_chip`) and Clock tint (`_show_ring_tint`) — one painting
 routine, two galleries, Rule #5.
 
+**Watch Face Phase 4 refactor:** `_round_swatch`, the Clock tint grids
+and its label/selection repaint now DELEGATE to
+[Tint Picker](../../watch_face/__about/tint_picker.md)
+(`round_swatch`/`build_preset_grids`/`build_custom_row`/
+`tint_label_text`/`repaint_selection`) — extracted so the live-apply
+Watch Face Colors section draws the SAME picker instead of a second
+copy. This mixin's own OK/Cancel state (`self._ring_tint`,
+`self._tint_swatches`, `self._ring_tint_label`) is unchanged; only the
+drawing/repaint code moved. `_pick_ring_tint` is gone — `_set_ring_tint`
+itself is now passed straight to `tint_picker.build_custom_row` as the
+`on_pick` callback (the dialog no longer opens `QColorDialog` inline).
+
 ## Connections
 
 ### Uses
@@ -58,7 +70,9 @@ routine, two galleries, Rule #5.
   `POINTER_ARM_LABELS`/`POINTER_SATURATION_RANGE`/`POINTER_SATURATION_SLIDER_STEP`/
   `RING_SATURATION_RANGE`/`RING_SATURATION_SLIDER_STEP`, `palette.pointer_arm_labels`/
   `RING_TINT_GROUPS`/`RING_TINT_PICKER_SEED`/`RING_TINT_NONE_SWATCH`,
-  `dial.PALETTE_SWATCH_PX`/`RING_TINT_SWATCHES_PER_ROW`/`RING_TINT_SWATCH_PX`
+  `dial.PALETTE_SWATCH_PX`
+- [Tint Picker](../../watch_face/__about/tint_picker.md) — the Clock tint
+  group's grids/custom row/label/repaint
 - `self._palette_style` — read here, but normalized in [Settings Dialog]
   (dialog.md)'s `__init__` via `palette.effective_palette_style`, not by
   this mixin
@@ -82,6 +96,7 @@ routine, two galleries, Rule #5.
 - `_pick_color(index)`: opens `QColorDialog` for one palette arm
 - `_reset_palette()`: restores the preset's hues
 - `_build_ring_tint_group() -> QGroupBox`: the Clock tint grids + picker
+  (delegates to `tint_picker.build_preset_grids`/`build_custom_row`)
 - `_set_ring_tint(hue)`: applies a picked/preset tint
-- `_pick_ring_tint()`: opens `QColorDialog` for a custom tint
-- `_show_ring_tint()`: repaints the tint label + every swatch's selection ring
+- `_show_ring_tint()`: repaints the tint label + every swatch's selection
+  ring (delegates to `tint_picker.tint_label_text`/`repaint_selection`)

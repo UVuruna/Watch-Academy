@@ -4,10 +4,11 @@ right `QStackedWidget` page per section (the same list+stack shape
 `app.settings_dialog.dialog.SettingsDialog` already uses), replacing —
 over several phases — Design/Pointer Theme/Slot Theme and the Settings
 dialog's own Display/Colors groups. Phase ①+② wired five sections;
-Phase ③ (see themes.md) replaces the Themes & Slots placeholder with
-the real section. Colors/Opacity remain placeholder pages ("Arrives in
-a later phase") so the sidebar already shows the window's final shape.
-The OLD windows are untouched this phase.
+Phase ③ (see themes.md) replaced the Themes & Slots placeholder with
+the real section; Phase ④ (see colors.md/opacity.md) replaces the last
+two placeholders — every section is now real, and the sidebar has
+carried its final shape since Phase ①. The OLD windows/dialog groups
+are untouched until Phase 6 retires them.
 """
 
 from PySide6.QtCore import Qt
@@ -17,7 +18,7 @@ from PySide6.QtWidgets import (
 )
 
 from app.theme import apply_theme, size_to_screen
-from app.watch_face import hands, pointer, ring, size, themes, umbra_aura
+from app.watch_face import colors, hands, opacity, pointer, ring, size, themes, umbra_aura
 from config import constants, defaults
 from config.ui_text import ui
 
@@ -29,9 +30,9 @@ _SECTIONS = (
     ("Ring", ring.build),
     ("Hands", hands.build),
     ("Umbra & Aura", umbra_aura.build),
-    ("Opacity", None),
+    ("Opacity", opacity.build),
     ("Themes & Slots", themes.build),
-    ("Colors", None),
+    ("Colors", colors.build),
     ("Size", size.build),
 )
 

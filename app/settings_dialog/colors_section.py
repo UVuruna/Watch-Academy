@@ -10,7 +10,6 @@ from PySide6.QtGui import QColor
 from PySide6.QtWidgets import (
     QColorDialog,
     QFormLayout,
-    QGridLayout,
     QGroupBox,
     QHBoxLayout,
     QLabel,
@@ -19,6 +18,7 @@ from PySide6.QtWidgets import (
     QVBoxLayout,
 )
 
+from app.watch_face import tint_picker
 from config import constants, dial, palette
 
 
@@ -108,14 +108,11 @@ class _ColorsSectionMixin:
     def _round_swatch(
         chip: QPushButton, hue: str, size: int, selected: bool = False
     ) -> None:
-        """Paint-style color circle (owner spec): a plain filled round
-        button; the selected ring-tint swatch wears a white ring."""
-        border = "2px solid #FFFFFF" if selected else "1px solid #666"
-        chip.setFixedSize(size, size)
-        chip.setStyleSheet(
-            f"background-color: {hue}; border: {border};"
-            f"border-radius: {size // 2}px;"
-        )
+        """Delegates to the shared builder (Watch Face Phase 4, Rule
+        #5) — `app.watch_face.tint_picker.round_swatch`, extracted from
+        here so the live-apply Watch Face Colors section draws the
+        SAME swatch."""
+        tint_picker.round_swatch(chip, hue, size, selected)
 
     def _paint_chip(self, chip: QPushButton, hue: str, index: int) -> None:
         self._round_swatch(chip, hue, dial.PALETTE_SWATCH_PX)
@@ -146,34 +143,19 @@ class _ColorsSectionMixin:
         tr = self._tr
         group = QGroupBox(tr("Clock tint — dial, hands and Umbra (letters excluded)"))
         column = QVBoxLayout(group)
-        self._tint_swatches: list[tuple[QPushButton, str | None]] = []
-        per_row = dial.RING_TINT_SWATCHES_PER_ROW
-        for title, presets in palette.RING_TINT_GROUPS.items():
-            label = QLabel(tr(title))
-            label.setStyleSheet("font-weight: bold;")
-            column.addWidget(label)
-            grid = QGridLayout()
-            grid.setHorizontalSpacing(4)
-            grid.setVerticalSpacing(4)
-            for index, (name, hue) in enumerate(presets.items()):
-                chip = QPushButton()
-                chip.setToolTip(
-                    f"{tr(name)} — {hue}"
-                    if hue
-                    else f"{tr(name)} — {tr('the untouched art')}"
-                )
-                chip.clicked.connect(
-                    lambda checked, chosen=hue: self._set_ring_tint(chosen)
-                )
-                self._tint_swatches.append((chip, hue))
-                grid.addWidget(chip, index // per_row, index % per_row)
-            grid.setColumnStretch(per_row, 1)
-            column.addLayout(grid)
-        row = QHBoxLayout()
-        custom = QPushButton(tr("Custom…"))
-        custom.clicked.connect(self._pick_ring_tint)
-        row.addWidget(custom)
-        row.addStretch(1)
+        # Delegates to the shared builder (Watch Face Phase 4, Rule #5):
+        # `app.watch_face.tint_picker.build_preset_grids`, extracted
+        # from here so the live-apply Watch Face Colors section's Ring
+        # tint group draws the SAME grids.
+        grids, self._tint_swatches = tint_picker.build_preset_grids(
+            tr, palette.RING_TINT_GROUPS, self._ring_tint,
+            self._set_ring_tint, palette.RING_TINT_NONE_SWATCH,
+        )
+        column.addLayout(grids)
+        row = tint_picker.build_custom_row(
+            tr, self._ring_tint, palette.RING_TINT_PICKER_SEED,
+            self._set_ring_tint, "Pick the ring tint",
+        )
         self._ring_tint_label = QLabel()
         row.addWidget(self._ring_tint_label)
         column.addLayout(row)
@@ -184,40 +166,16 @@ class _ColorsSectionMixin:
         self._ring_tint = hue
         self._show_ring_tint()
 
-    def _pick_ring_tint(self) -> None:
-        chosen = QColorDialog.getColor(
-            QColor(self._ring_tint or palette.RING_TINT_PICKER_SEED), self,
-            "Pick the ring tint",
-        )
-        if not chosen.isValid():
-            return
-        self._set_ring_tint(chosen.name().upper())
-
     def _show_ring_tint(self) -> None:
-        # The label speaks like the hover (owner 2026-07-15): the
-        # preset's NAME beside the hex; a custom hue shows bare hex.
-        name = next(
-            (
-                preset_name
-                for presets in palette.RING_TINT_GROUPS.values()
-                for preset_name, hue in presets.items()
-                if hue == self._ring_tint and hue is not None
-            ),
-            None,
-        )
-        if self._ring_tint is None:
-            text = self._tr("Gray (default)")
-        elif name is not None:
-            text = f"{self._tr(name)} — {self._ring_tint}"
-        else:
-            text = self._ring_tint
-        self._ring_tint_label.setText(text)
-        # Repaint every swatch — the one matching the active tint is
-        # ringed white ("Gray"/None shows as the bare art gray).
-        for chip, hue in self._tint_swatches:
-            self._round_swatch(
-                chip,
-                hue or palette.RING_TINT_NONE_SWATCH,
-                dial.RING_TINT_SWATCH_PX,
-                selected=(hue == self._ring_tint),
+        # Delegates to the shared builders (Watch Face Phase 4, Rule
+        # #5) — the label reads like the hover (owner 2026-07-15): the
+        # preset's NAME beside the hex, "Gray (default)" for None.
+        self._ring_tint_label.setText(
+            tint_picker.tint_label_text(
+                self._tr, self._ring_tint, palette.RING_TINT_GROUPS,
+                "Gray (default)",
             )
+        )
+        tint_picker.repaint_selection(
+            self._tint_swatches, self._ring_tint, palette.RING_TINT_NONE_SWATCH,
+        )

@@ -9,13 +9,13 @@ already uses) with EIGHT sections.
 
 **Phase ①+② built the frame plus five real sections** (Pointer, Ring,
 Hands, Umbra & Aura, Size) and the thumbnail service. **Phase ③ (R-17/
-R-18/R-19/R-20) adds the sixth: Themes & Slots** — the FACE LAYOUT row,
+R-18/R-19/R-20) added the sixth: Themes & Slots** — the FACE LAYOUT row,
 the SLOT PICKER, the breadcrumb content tree, the subdial plate pills
-and the theme rotation controls. Colors / Opacity remain placeholder
-pages ("Arrives in a later phase") so the sidebar already shows the
-window's final shape — a later phase fills them in and, in Phase 6,
-retires the old Design/Pointer Theme/Slot Theme windows and the
-Settings dialog's Display/Colors groups they absorb.
+and the theme rotation controls. **Phase ④ (R-15/R-21..R-25/R-35/R-36)
+replaces the last two placeholders: Colors and Opacity** — every
+section now has a real builder; Phase 6 retires the old Design/Pointer
+Theme/Slot Theme windows and the Settings dialog's Display/Colors
+groups they absorb.
 **The old windows are UNTOUCHED this phase** — they keep working exactly
 as before, side by side with this new one, until Phase 6 removes them.
 
@@ -34,6 +34,9 @@ as before, side by side with this new one, until Phase 6 removes them.
 | `size.py` | Algorithmic | diameter + every element scale slider — [about](__about/size.md) · [flow](__flow/size.md) |
 | `themes.py` | Algorithmic | R-17/R-19/R-20: FACE LAYOUT row, SLOT PICKER, subdial plate + rotation — [about](__about/themes.md) · [flow](__flow/themes.md) |
 | `theme_tree.py` | Algorithmic | R-17/R-18: the breadcrumb content decision tree — [about](__about/theme_tree.md) · [flow](__flow/theme_tree.md) |
+| `tint_picker.py` | Standard | shared round-swatch/preset-grid/custom-row builders every color control reuses — [about](__about/tint_picker.md) |
+| `colors.py` | Standard | R-21..R-25: Ring tint, Palette, Umbra/Aura/Hands/Indices color, Metal shades, Saturation — [about](__about/colors.md) |
+| `opacity.py` | Standard | R-15/R-35/R-36 + the moved rows: Clock body + Bodies-on-the-ring opacity sliders — [about](__about/opacity.md) |
 
 ## Layout — the sidebar
 
