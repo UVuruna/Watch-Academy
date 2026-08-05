@@ -33,16 +33,20 @@ UI_STRINGS: tuple[str, ...] = (
     # the watch-roster entries at the top of the menu.
     "Add Watch", "Remove this Watch",
     "Remove this watch? Its settings file will be deleted.",
-    # R5 MENU REWORK (owner spec): the three mini windows replacing the
-    # deep Design/Slot/Weekday submenu chains, and the shared "Slot"
-    # picker labels.
-    "Design…", "Pointer Theme", "Pointer Theme…", "Slot Theme",
-    "Slot Theme…", "1st Slot", "2nd Slot", "3rd Slot",
-    "The Archetype mode is on — the diamonds carry its own figures.",
-    "The Pointer is hidden in Visible.",
-    "The 1st Slot is off — nothing wears this theme.",
-    "No Slot is visible.",
+    # R5 MENU REWORK (owner spec): the shared "Slot" picker labels — the
+    # three mini windows that used to carry them (Design…, Pointer
+    # Theme…, Slot Theme…) were DELETED by Phase 6 FINAL cleanup, along
+    # with their own now-dead gate-reason strings; the medal titles and
+    # the "off" note below survive in the Watch Face window's Themes &
+    # Slots section (Rule #5, same strings, one reader now instead of two).
+    "1st Slot", "2nd Slot", "3rd Slot",
     "This Slot is off — Ctrl+N cycles the visible Slots.",
+    # THE NAMES SUBMENU (R-09/R-26, Phase 6 FINAL cleanup): unifies the
+    # weekday-body day name and the archetype figures' names beside
+    # Visible in the right-click menu.
+    "Weekday names", "Archetype names",
+    "The day name written on the weekday bodies.",
+    "The archetype figures' names.",
     # "Two metals" (TASK 3, MASON/ICONS round) never joined the corpus
     # when the menu toggle was added — closed here alongside the Design
     # window's own copy of it (R5 MENU REWORK, Rule #5, one table).
@@ -154,7 +158,12 @@ UI_STRINGS: tuple[str, ...] = (
     "City", "Latitude", "Longitude", "Timezone",
     "not found", "{n} found",
     "Star", "Aura — sunlight", "Aura — twilight", "Skin default", "Default",
-    "Ring letters", "Hover enlarge",
+    # "Ring letters" (R-11/R-19/R-27 label sweep, Phase 6 FINAL cleanup):
+    # renamed to "Indices" everywhere it labels the hour-marker glyphs
+    # (the Watch Face Size section's scale slider; the Colors section's
+    # free-tint row) — one catalog entry, same stored keys
+    # (`ring_letter_scale`/`letter_tint`).
+    "Indices", "Hover enlarge",
     "Reset to preset", "Custom…", "Gray (default)", "the untouched art",
     "Unique name", "Add ring", "{n} custom ring(s) saved",
     # The custom card's Thematic color pick (ENLARGE/THEMATIC round,
@@ -213,6 +222,10 @@ UI_STRINGS: tuple[str, ...] = (
     "Home", "Download",
     # The art-source pick (owner 2026-07-14: Gemini vs ChatGPT).
     "Artwork",
+    # Phase 6 FINAL cleanup: the SUBDIAL PLATE SET group title, distinct
+    # from the pre-existing "Subdial plate" (theme/black background)
+    # group now sharing the Watch Face Themes & Slots page with it.
+    "Subdial plate set",
     # The hidden-mode unlock balloon (owner 2026-07-14).
     "Hidden mode unlocked",
     "The Four Greetings await in the Encyclopedia — Trinity and Seasons.",
@@ -287,12 +300,14 @@ UI_STRINGS: tuple[str, ...] = (
     "Top functions by total time",
     "No measurements yet — use the clock a little.",
     "Select a row to watch its recent durations.",
-    # The unified SLOT size slider and the rotation-group dropdown
-    # (owner 2026-07-14).
-    "Slot", "None", "Custom",
-    # The 1st/2nd/3rd Slot system (owner 2026-07-14): superscript
-    # labels, the Complications dropdown and the per-slot Enable.
-    "1ˢᵗ Slot", "2ⁿᵈ Slot", "3ʳᵈ Slot",
+    # The rotation-group dropdown (owner 2026-07-14). "Slot" bare and
+    # the superscript "1ˢᵗ/2ⁿᵈ/3ʳᵈ Slot" trio were orphaned when Phase 6
+    # FINAL cleanup retired the Design/Slot Theme windows that used to
+    # read them — the surviving "1st Slot"/"2nd Slot"/"3rd Slot" labels
+    # (R-11/R-19/R-27 label sweep) are entered near "Weekday" above.
+    "None", "Custom",
+    # The 1st/2nd/3rd Slot system (owner 2026-07-14): the Complications
+    # dropdown and the per-slot Enable.
     "Complications", "Digital Time", "Enable",
     "The slots enable in order — 1st, then 2nd, then 3rd.",
     # The complication PLATE styles (owner A/B spec 2026-07-15).
