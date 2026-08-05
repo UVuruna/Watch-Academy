@@ -10,7 +10,7 @@ hold absolute paths; a None asset means "draw procedurally".
 from dataclasses import dataclass, field
 from pathlib import Path
 
-from config import constants, palette, paths
+from config import constants, dial, palette, paths
 
 
 @dataclass(frozen=True)
@@ -157,6 +157,12 @@ class YearMarkerSpec:
     moon_hidden_alpha: float = 0.5     # marker opacity while the moon is
                                        # BELOW the horizon (owner spec
                                        # 2026-07-12; Settings slider)
+    # THE MOON TRANSIT OPACITY (Watch Face Phase 4, R-35): the rim-
+    # transit dimming `render.daylight.moon_transit_opacity` applies
+    # while the Moon marker meets the Earth marker — was a bare
+    # `dial.MOON_TRANSIT_OPACITY` constant, now a per-skin field an
+    # override can replace (`settings.moon_transit_alpha`).
+    transit_alpha: float = dial.MOON_TRANSIT_OPACITY
 
 
 @dataclass(frozen=True)
@@ -369,6 +375,33 @@ class SkinDefinition:
     # 1.0 unchanged, 0.0 grays it to its own brightness. The Umbra and
     # hands do not read this (see layers.md's RingLayer note).
     ring_saturation: float = 1.0
+    # THE UMBRA COLORING MENU (Watch Face Phase 4, R-22, see
+    # `render.layers.background.BackgroundLayer._draw_umbra`): "follow"
+    # (default) reads `ring_tint` like every release before this one;
+    # "custom" reads `umbra_tint` instead. `umbra_saturation` scales the
+    # active tint's HSV saturation before the tritone map runs.
+    umbra_tint_mode: str = "follow"
+    umbra_tint: str | None = None
+    umbra_saturation: float = 1.0
+    # THE UMBRA OPACITY (Watch Face Phase 4, R-15, owner-requested): a
+    # plain layer-alpha multiplier at composite time — 1.0 unchanged.
+    umbra_alpha: float = 1.0
+    # THE AURA COLORLESS COLORING (Watch Face Phase 4, R-23): read only
+    # while `colorful` is off (`BackgroundLayer.paint`'s existing
+    # colorless branch) — "follow"/"white"/"black"/"custom".
+    aura_off_tint_mode: str = "white"
+    aura_off_tint: str | None = None
+    # THE HANDS FREE COLOR + SATURATION (Watch Face Phase 4, R-24/R-25):
+    # None follows `ring_tint` like every hand always has; a hex
+    # overrides it independently. Saturation scales the hand pack's own
+    # HSV, the same parameter the ring plate already uses.
+    hands_tint: str | None = None
+    hands_saturation: float = 1.0
+    # THE INDICES FREE COLOR (Watch Face Phase 4, R-24): an EXTRA tint
+    # layered over the ring letters' metal finish in
+    # `render.layers.ring.RingLayer._draw_ring_glyph` — None (default)
+    # leaves the metal finish untouched, exactly as today.
+    letter_tint: str | None = None
     # THE DISPLAY CONTEXT (owner bug 2026-07-28, multi-watch colour
     # leak): this watch's OWN art source, subdial plate set and metal
     # shades — see `config.paths.DisplayContext`. It rides the SKIN

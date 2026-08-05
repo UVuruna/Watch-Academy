@@ -80,6 +80,12 @@ MARKER_BORDER_WIDTH = 0.05           # fraction of the marker size
 # on the shared rim — like an eclipse (owner decision; both stay visible).
 MOON_TRANSIT_OPACITY = 0.5
 
+# THE AURA COLORLESS MENU's "follow" option (Watch Face Phase 4, R-23):
+# the brightness fed to `render.painting.tinted_gray` so "follow ring"
+# reads as the tint's OWN near-white end rather than the tint itself —
+# high enough that every preset still reads recognizably pale.
+AURA_OFF_FOLLOW_VALUE = 224
+
 
 # --- Ring faces -------------------------------------------------------------------
 # Ring PRESETS are data now (Database/ring_presets.json + the user's

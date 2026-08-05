@@ -121,8 +121,13 @@ class RingLayer(Layer):
         # shadow silhouette is metal-invariant (same alpha mask on every
         # finish), so it always reads the gold file directly.
         asset = letter_metal_file(gold_asset, metal)
+        # THE INDICES FREE COLOR (Watch Face Phase 4, R-24): an EXTRA
+        # tint layered OVER the metal finish already resolved above
+        # (None, the default, leaves it untouched — today's behavior on
+        # every release before this one).
         pixmap = ctx.cache.pixmap_by_height(
-            asset, height, ctx.dpr, saturation=ctx.skin.ring_saturation
+            asset, height, ctx.dpr, saturation=ctx.skin.ring_saturation,
+            tint=ctx.skin.letter_tint,
         )
         shadow = ctx.cache.pixmap_by_height(
             gold_asset, height, ctx.dpr, tint=palette.SHADOW_STAMP_TINT

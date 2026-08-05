@@ -24,7 +24,10 @@ def moon_transit_opacity(spec, year_angle: float, moon_angle: float) -> float:
     delta = min(delta, 360.0 - delta)
     # Angular size at which the two discs touch on the shared orbit.
     touch_deg = math.degrees((spec.scale + spec.moon_scale) / spec.orbit_fraction)
-    return 1.0 if delta >= touch_deg else dial.MOON_TRANSIT_OPACITY
+    # `spec.transit_alpha` (Watch Face Phase 4, R-35): defaults to the
+    # same `dial.MOON_TRANSIT_OPACITY` this always read; a settings
+    # override replaces it in `apply_display_settings`.
+    return 1.0 if delta >= touch_deg else spec.transit_alpha
 
 
 def umbra_ladder(shades: int, contrast: str) -> tuple[int, ...]:

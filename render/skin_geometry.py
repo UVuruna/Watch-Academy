@@ -40,10 +40,10 @@ def aura_palette_for(skin: SkinDefinition) -> tuple:
     hues = palette_for(skin)
     if skin.pointer_saturation == 1.0:
         return hues
-    return tuple(_saturate_hue(hue, skin.pointer_saturation) for hue in hues)
+    return tuple(saturate_hue(hue, skin.pointer_saturation) for hue in hues)
 
 
-def _saturate_hue(hue: str, factor: float) -> str:
+def saturate_hue(hue: str, factor: float) -> str:
     """Scale one `#RRGGBB` hue's HSV saturation by `factor` (0.0..1.0,
     clamped) — value and hue untouched, so 0.0 grays the color to its
     OWN brightness rather than to a flat white/black."""

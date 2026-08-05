@@ -252,6 +252,40 @@ class Settings:
     star_alpha: float | None = None
     aura_day_alpha: float | None = None
     aura_twilight_alpha: float | None = None
+    # THE UMBRA OPACITY (Watch Face Phase 4, R-15, owner-requested): a
+    # plain layer-level alpha at composite time
+    # (`render.layers.background.BackgroundLayer._draw_umbra`) — 1.0
+    # unchanged (fully opaque, today's behavior).
+    umbra_alpha: float = 1.0
+    # THE MOON TRANSIT OPACITY (Watch Face Phase 4, R-35 — "Moon — hover
+    # over Earth" reads as the Moon marker's rim-transit dimming when it
+    # meets the Earth marker, `render.daylight.moon_transit_opacity`;
+    # there is no mouse-hover state here, only this transit). None = the
+    # skin's own `dial.MOON_TRANSIT_OPACITY`.
+    moon_transit_alpha: float | None = None
+    # THE GHOST OPACITY (Watch Face Phase 4, R-36 — "Inactive icons":
+    # the non-active weekday bodies' `WeekdaySpec.ghost_opacity`). None =
+    # the active theme's own value (themes differ today).
+    ghost_alpha: float | None = None
+    # THE UMBRA TINT (Watch Face Phase 4, R-22): "follow" (default)
+    # reads `ring_tint`, unchanged from today; "custom" reads `umbra_tint`
+    # instead — both through the same `render.painting.tinted_gray`.
+    umbra_tint_mode: str = "follow"
+    umbra_tint: str | None = None       # #RRGGBB, used only in "custom" mode
+    umbra_saturation: float = 1.0       # HSV scale of the active tint (0..1)
+    # THE AURA COLORLESS COLORING (Watch Face Phase 4, R-23): active
+    # only while `colorful` is off. "follow" tritones `ring_tint` toward
+    # white; "white"/"black" are flat; "custom" reads `aura_off_tint`.
+    aura_off_tint_mode: str = "white"
+    aura_off_tint: str | None = None    # #RRGGBB, used only in "custom" mode
+    # THE HANDS FREE COLOR (Watch Face Phase 4, R-24): None follows
+    # `ring_tint` like every hand today; a hex overrides it independently.
+    hands_tint: str | None = None
+    hands_saturation: float = 1.0       # the hand pack's own HSV scale (0..1)
+    # THE INDICES FREE COLOR (Watch Face Phase 4, R-24): an EXTRA tint
+    # layered over the ring letters' metal finish (None = metal only,
+    # today's behavior) — `render.layers.ring.RingLayer._draw_ring_glyph`.
+    letter_tint: str | None = None
     # Custom palettes keyed "pointer_style" -> tuple of #RRGGBB hues.
     palettes: dict = field(default_factory=dict)
 
@@ -409,6 +443,8 @@ class SettingsStore:
                 ("era_notation", "bce_ce", constants.ERA_NOTATIONS),
                 ("third_era", "none", constants.THIRD_ERAS),
                 ("z_mode", "bottom", constants.Z_MODES),
+                ("umbra_tint_mode", "follow", constants.UMBRA_TINT_MODES),
+                ("aura_off_tint_mode", "white", constants.AURA_OFF_TINT_MODES),
             ):
                 value = str(raw.get(key, default))
                 if value not in allowed:
@@ -552,6 +588,19 @@ class SettingsStore:
                 star_alpha=_load_alpha(raw, "star_alpha"),
                 aura_day_alpha=_load_alpha(raw, "aura_day_alpha"),
                 aura_twilight_alpha=_load_alpha(raw, "aura_twilight_alpha"),
+                umbra_alpha=_load_scale(raw, "umbra_alpha", 0.0, 1.0, 1.0),
+                moon_transit_alpha=_load_alpha(raw, "moon_transit_alpha"),
+                ghost_alpha=_load_alpha(raw, "ghost_alpha"),
+                umbra_tint=_load_hex(raw, "umbra_tint"),
+                umbra_saturation=_load_scale(
+                    raw, "umbra_saturation", *constants.UMBRA_SATURATION_RANGE, 1.0
+                ),
+                aura_off_tint=_load_hex(raw, "aura_off_tint"),
+                hands_tint=_load_hex(raw, "hands_tint"),
+                hands_saturation=_load_scale(
+                    raw, "hands_saturation", *constants.HANDS_SATURATION_RANGE, 1.0
+                ),
+                letter_tint=_load_hex(raw, "letter_tint"),
                 palettes=_load_palettes(raw.get("palettes", {})),
                 **choices,
             )
@@ -649,6 +698,17 @@ class SettingsStore:
             "star_alpha": settings.star_alpha,
             "aura_day_alpha": settings.aura_day_alpha,
             "aura_twilight_alpha": settings.aura_twilight_alpha,
+            "umbra_alpha": settings.umbra_alpha,
+            "moon_transit_alpha": settings.moon_transit_alpha,
+            "ghost_alpha": settings.ghost_alpha,
+            "umbra_tint_mode": settings.umbra_tint_mode,
+            "umbra_tint": settings.umbra_tint,
+            "umbra_saturation": settings.umbra_saturation,
+            "aura_off_tint_mode": settings.aura_off_tint_mode,
+            "aura_off_tint": settings.aura_off_tint,
+            "hands_tint": settings.hands_tint,
+            "hands_saturation": settings.hands_saturation,
+            "letter_tint": settings.letter_tint,
             "palettes": {
                 key: list(palette) for key, palette in settings.palettes.items()
             },
@@ -845,6 +905,19 @@ def _load_alpha(raw: dict, key: str) -> float | None:
     value = float(value)
     if not 0.0 <= value <= 1.0:
         raise ValueError(f"{key} {value} outside 0..1")
+    return value
+
+
+def _load_hex(raw: dict, key: str) -> str | None:
+    """A `#RRGGBB` override or None — the SAME validation `ring_tint`
+    has always run inline (Watch Face Phase 4: shared here so the four
+    new tint overrides do not each repeat it, Rule #5)."""
+    value = raw.get(key)
+    if value is None:
+        return None
+    value = str(value).upper()
+    if not _HEX_COLOR.match(value):
+        raise ValueError(f"{key} {value!r} not #RRGGBB")
     return value
 
 

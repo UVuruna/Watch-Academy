@@ -747,6 +747,20 @@ UMBRA_SECTION_COUNTS = {"fine": 30, "coarse": 24}
 # bright half (128-255), "dark" the dark half (0-127).
 UMBRA_CONTRAST_VARIANTS = ("full", "half", "light", "dark")
 
+# THE UMBRA COLORING MENU (Watch Face Phase 4, R-22): "follow" reads
+# `ring_tint` — today's behavior, unchanged — "custom" reads its own
+# `umbra_tint` hue instead, through the SAME tritone recolor
+# (`render.painting.tinted_gray`).
+UMBRA_TINT_MODES = ("follow", "custom")
+
+# THE AURA COLORLESS MENU (Watch Face Phase 4, R-23): active only while
+# the "Colorful" Visible switch is off (`not settings.colorful`) — the
+# Aura's day/twilight wedges then wear ONE of these instead of
+# `palette.COLORFUL_OFF_COLOR`'s hardcoded white: "follow" tritones the
+# ring tint toward white (`tinted_gray`'s own white end), "white"/"black"
+# are flat, "custom" reads `aura_off_tint`.
+AURA_OFF_TINT_MODES = ("follow", "white", "black", "custom")
+
 # ═══════════════════════════ WHEEL SLOTS ═══════════════════════════
 # The WHEEL SLOTS a pointer's palette row can hold. The keys are
 # POSITIONAL and carry NO meaning of their own (owner decree
@@ -1776,6 +1790,21 @@ POINTER_SATURATION_SLIDER_STEP = 1
 # see layers.md's RingLayer note for the ground-truthed scope.
 RING_SATURATION_RANGE = (0.0, 1.0)
 RING_SATURATION_SLIDER_STEP = 1
+# HANDS (Watch Face Phase 4, R-25): the hand pack's own HSV saturation,
+# independent of the ring's — `render.layers.hand.HandLayer` reads it
+# alongside its existing `desaturate`/`tint` pipeline (the SAME
+# `AssetCache.pixmap_by_height` saturation parameter the ring already
+# uses, a bounded reuse — no new recolor math).
+HANDS_SATURATION_RANGE = (0.0, 1.0)
+HANDS_SATURATION_SLIDER_STEP = 1
+# UMBRA (Watch Face Phase 4, R-25): scales the Umbra TINT's own HSV
+# saturation before the black->tint->white tritone map runs
+# (`render.skin_geometry.saturate_hue`, reused from the Aura's — Rule
+# #5) — 0.0 grays the active tint to a plain neutral, 1.0 unchanged.
+# A no-op while the Umbra follows Gray (tint is None): there is no hue
+# to desaturate.
+UMBRA_SATURATION_RANGE = (0.0, 1.0)
+UMBRA_SATURATION_SLIDER_STEP = 1
 
 # ═══════════════════════════ TROPICS ═══════════════════════════
 # The tropics span the Tropic of Cancer to the Tropic of Capricorn;

@@ -52,10 +52,22 @@ class HandLayer(Layer):
         height = spec.natural_height * (target_tip / tip_units)
         # The hands follow the clock tint (owner spec: one hue recolors
         # the whole body); colored USER art is desaturated first so the
-        # tint has gray to work on.
+        # tint has gray to work on. THE HANDS FREE COLOR (Watch Face
+        # Phase 4, R-24): `hands_tint` overrides the ring hue
+        # independently when set — None (default) follows `ring_tint`
+        # exactly like every release before this one. `hands_saturation`
+        # (R-25) scales the FINAL pixmap the same way the ring's own
+        # saturation slider already does (`AssetCache.pixmap_by_height`'s
+        # existing `saturation` parameter — no new recolor math).
+        tint = (
+            ctx.skin.hands_tint
+            if ctx.skin.hands_tint is not None
+            else ctx.skin.ring_tint
+        )
         pixmap = ctx.cache.pixmap_by_height(
-            spec.asset, height, ctx.dpr, tint=ctx.skin.ring_tint,
+            spec.asset, height, ctx.dpr, tint=tint,
             desaturate=self._skin.hands.desaturate,
+            saturation=ctx.skin.hands_saturation,
         )
         logical_w = pixmap.width() / ctx.dpr
         pivot_x = logical_w * (

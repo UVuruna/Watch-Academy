@@ -302,6 +302,10 @@ def pointer_arm_labels(pointer: str, palette_style: str) -> tuple:
 # twilight arcs are still indicated, but as plain white transparency
 # instead of the pointer-palette hues.
 COLORFUL_OFF_COLOR = "#FFFFFF"
+# THE AURA COLORLESS MENU's "Black" option (Watch Face Phase 4, R-23) —
+# the flat twin of COLORFUL_OFF_COLOR above, for the reader who wants
+# the colorless wedges dark instead of light.
+AURA_OFF_BLACK = "#000000"
 
 
 # ==================================================================

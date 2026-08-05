@@ -9,7 +9,7 @@ from render.context import Cadence, Layer, RenderContext
 from render.daylight import aurora_bands, lit_regions, umbra_ladder
 from render.painting import draw_pie, draw_pixmap_centered, pie_path, tinted_gray
 from render.shapes import aura_wedge_bounds
-from render.skin_geometry import aura_palette_for, daylight_active
+from render.skin_geometry import aura_palette_for, daylight_active, saturate_hue
 
 class BackgroundLayer(Layer):
     """The UMBRA (gray brightness wheel) and the AURA (transparent hue
@@ -47,6 +47,11 @@ class BackgroundLayer(Layer):
         # independently of the Aura.
         painter.save()
         painter.rotate(ctx.rotation)
+        # THE UMBRA OPACITY (Watch Face Phase 4, R-15, owner-requested):
+        # a plain layer-alpha multiplier over the whole Umbra paint —
+        # 1.0 is a no-op, the default and every release before this one.
+        if ctx.skin.umbra_alpha != 1.0:
+            painter.setOpacity(ctx.skin.umbra_alpha)
         if spec.base_asset is not None:
             draw_pixmap_centered(
                 painter, ctx, spec.base_asset, QPointF(0, 0), 2 * umbra_radius
@@ -93,14 +98,13 @@ class BackgroundLayer(Layer):
             return
 
         # Colorful off (Elements switch): the day/twilight arcs are still
-        # indicated, but in plain white — a one-entry palette draws a
-        # single full wedge under the same clip and alphas.
+        # indicated, but as ONE flat hue — a one-entry palette draws a
+        # single full wedge under the same clip and alphas. THE AURA
+        # COLORLESS MENU (Watch Face Phase 4, R-23) picks WHICH flat hue.
         aura_hues = (
             aura_palette_for(ctx.skin)
             if ctx.skin.colorful
-            else (palette.COLORFUL_OFF_COLOR,)
-
-
+            else (self._aura_off_color(ctx),)
         )
         # THE BACKGROUND FOLLOWS THE STAR (`aura_wedge_bounds` — the
         # owner's fix 2026-07-29): each hue's wedge is anchored on its
@@ -110,6 +114,22 @@ class BackgroundLayer(Layer):
             painter, ctx, aura_radius, aura_hues,
             aura_wedge_bounds(ctx.skin, aura_hues), ctx.rotation,
         )
+
+    def _aura_off_color(self, ctx: RenderContext) -> str:
+        """THE AURA COLORLESS MENU (Watch Face Phase 4, R-23): the ONE
+        flat hue the day/twilight wedges wear while `colorful` is off.
+        "follow" tritones the ring tint toward white — `tinted_gray`'s
+        own white end, reused (Rule #5) rather than inventing a second
+        blend; "white"/"black" are the flat classics; "custom" reads
+        the user's own hex."""
+        mode = ctx.skin.aura_off_tint_mode
+        if mode == "custom" and ctx.skin.aura_off_tint is not None:
+            return ctx.skin.aura_off_tint
+        if mode == "black":
+            return palette.AURA_OFF_BLACK
+        if mode == "follow" and ctx.skin.ring_tint is not None:
+            return tinted_gray(dial.AURA_OFF_FOLLOW_VALUE, ctx.skin.ring_tint).name()
+        return palette.COLORFUL_OFF_COLOR
 
     def _paint_aura(
         self, painter: QPainter, ctx: RenderContext, radius: float,
@@ -163,7 +183,18 @@ class BackgroundLayer(Layer):
         span's LIGHTEST shade, through the same tint map every form
         uses."""
         contrast = ctx.skin.umbra_contrast
-        tint = ctx.skin.ring_tint            # the Umbra follows the ring hue
+        # THE UMBRA COLORING MENU (Watch Face Phase 4, R-22): "follow"
+        # (default, unchanged) reads the ring hue; "custom" reads its
+        # own `umbra_tint` instead. `umbra_saturation` (R-25) scales
+        # whichever tint is active BEFORE the tritone map runs — a
+        # no-op while the tint is None (nothing to desaturate).
+        tint = (
+            ctx.skin.umbra_tint
+            if ctx.skin.umbra_tint_mode == "custom"
+            else ctx.skin.ring_tint
+        )
+        if tint is not None and ctx.skin.umbra_saturation != 1.0:
+            tint = saturate_hue(tint, ctx.skin.umbra_saturation)
         lightest, darkest = dial.UMBRA_CONTRAST_SPANS[contrast]
         lightest = min(255, lightest)            # spans store window BOUNDS
         if not daylight_active(ctx.skin):
