@@ -93,7 +93,12 @@ skin folders: DOMY and MORPH are ring preset names, nothing more).
   🖼️ logo.svg              ← project logo (M7; also copied to monorepo logos/)
   🖼️ logo.svg              ← the owner's GOLD watch — tray icon now, EXE/installer art in M7
   🖼️ logo-setup.svg        ← the rose-gold variant (NSIS wizard art)
-  📁 ring/                 ← dial ring faces: domy.png, morph.png (+ future rings)
+  📁 ring/                 ← THE COMPOSITIONAL RING MODEL (owner decree 2026-08-05):
+                             outter/ (outer bands) + inner/ (minute-track bands) +
+                             letters/ compose every ring — no monolithic plates any more
+    📁 outter/             ← bot_cross/top_cross/hexa/cross/full/octa.png
+    📁 inner/              ← seconds/seconds_cross/seconds_octa/simple/
+                             simple_cross/simple_octa/simple_point/simple_seconds.png
     📁 letters/            ← the owner's GOLD letter library ONLY (owner decree
                              2026-07-19, "bolje crtati na licu mesta nego 15MB
                              fajlova": the pre-rendered <Stem>_silver.png/
