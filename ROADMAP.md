@@ -55,7 +55,23 @@ lives in [The DOMY Canon](CANON.md).
   is still pending the Theme Dictionary registry; the dozen/cube
   slot-content kinds still have no render path (Themes & Slots' content
   tree explains this in place rather than offering a picker that draws
-  nothing) — those two debts stand.
+  nothing) — those two debts stand. **RING VERDICTS round (owner
+  correction 2026-08-05, same day):** "The One" moved off its locked
+  "full" outer onto "octa" — Ω alone at the midnight seat, the other
+  seven empty fields wearing their own NUMBER glyphs; "full" is now
+  preset-free (custom rings only). Every preset's inner default was
+  re-verdicted (DOMY/PILOT/Dollar → "seconds", Templar →
+  "seconds_cross", The One → "simple_octa",
+  `constants.RING_INNER_PRESET_DEFAULT`). The custom crown-text field
+  now carries a whitelist `QValidator` (`constants.
+  RING_CROWN_TEXT_CHARSET`, derived from `RING_LETTER_FILES`) so an
+  unsupported keystroke is rejected outright, replacing the old
+  silent-drop-at-build behaviour. A new LOCATION crown option
+  (`Settings.ring_crown_location`, per ring, presets and custom alike)
+  replaces the crown text with the active location's own "CITY,
+  COUNTRY", following every location change through the SAME
+  `_location_flash_text` formatter R-30's flash uses
+  (`WatchController._active_location_display`).
 - **THE ENCYCLOPEDIA REWORK (WORKPLAN Session 27, owner-sealed
   2026-07-28/29) — DONE:** the browser reads on THREE levels now — six
   WHOLES on a home screen that never scrolls (The Instrument · The

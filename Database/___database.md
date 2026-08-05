@@ -114,7 +114,13 @@ loaded by [Ring Presets](../data/__about/rings.md) together with the user's
 custom cards. The Dollar's apex seats the Eye of Providence (adaptive
 glyph, art source + Shine toggle) and its legend reads each letter as
 office + Cube term; DOMY and PILOT carry the Two Crosses' station
-words and legends (CANON.md §The Banknote).
+words and legends (CANON.md §The Banknote). RING VERDICTS round (owner
+correction 2026-08-05): The One moved off its locked "full" outer onto
+"octa" — Ω alone at the midnight seat, the other seven empty fields
+wearing their own NUMBER glyphs (3/6/9/12/15/18/21); "full" is now
+preset-free (custom rings only). Every preset's own inner-band DEFAULT
+(user-changeable) was re-verdicted in the same round
+(`config.constants.RING_INNER_PRESET_DEFAULT`).
 
 ### `translations/`
 BUNDLED ORIGINAL translations (owner decision 2026-07-11): English is

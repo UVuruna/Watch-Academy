@@ -10,7 +10,15 @@ lock), the finish pills, the Two-metals/Shine checkboxes (unchanged),
 an INNER gallery (eight tiles — user-changeable independent of the
 locked outer) and a Crown Text group (read-only preset text, or a
 custom ring's own typed text + top/bottom orientation) — plus R-13's
-"Custom ring…" button.
+"Custom ring…" button. RING VERDICTS round (owner correction
+2026-08-05) added two things to the Crown Text group: the typed
+field's `QLineEdit` now carries a WHITELIST `QValidator`
+(`_crown_text_validator`, built straight off
+`constants.RING_CROWN_TEXT_CHARSET`) so an unsupported character can
+never be typed at all — a tooltip states exactly what is allowed — and
+every ring (preset or custom) gained a "Location" checkbox that
+replaces the crown text with the active location's own "CITY, COUNTRY"
+(`setters["ring_crown_location"]`).
 
 ## Connections
 
@@ -21,12 +29,20 @@ custom ring's own typed text + top/bottom orientation) — plus R-13's
 - [Config (folder)](../../../config/___config.md) — `RING_OUTERS`,
   `RING_OUTER_LOCK`, `RING_INNERS`, `RING_INNER_PRESET_DEFAULT`,
   `RING_INNER_DEFAULT`, `RING_FINISHES`, `RING_EYE_GLYPH`,
-  `RING_TWO_METALS_DEFAULT`, `RING_EYE_SHINE_DEFAULT`
+  `RING_TWO_METALS_DEFAULT`, `RING_EYE_SHINE_DEFAULT`,
+  `RING_CROWN_TEXT_CHARSET`
 
 ### Used by
 - `app.watch_face.window` — registered as the Ring section's builder
 
 ## Design Decisions
+- **Whitelist, not a hand list:** the validator's character class is
+  built from `constants.RING_CROWN_TEXT_CHARSET` (every SINGLE-
+  character key of `RING_LETTER_FILES` — the multi-character symbol
+  keys are the custom-builder's own letter picks, never typed running
+  text — plus the space), the exact same set
+  `app.controller._location_crown_text` filters the Location crown
+  through. One source, never two lists drifting apart (Rule #5).
 - **R-13 honesty note:** `app/settings_dialog/custom_art_section.py`'s
   custom-ring flow is a plain-Python mixin baked directly onto
   `SettingsDialog` — there is no standalone custom-ring editor `QDialog`

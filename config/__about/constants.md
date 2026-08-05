@@ -65,13 +65,19 @@ data has exactly one home.
 - **Subdial** — `SUBDIAL_STYLES`, `SUBDIAL_SETS`/`_DEFAULT`/`_TITLES`.
 - **Figure rosters** — `FIGURE_ROSTERS` (`planetary`/`pantheon`).
 - **Ring outers, inners and letters** (THE COMPOSITIONAL RING MODEL,
-  owner decree 2026-08-05) — `RING_OUTERS` (bot_cross/top_cross/hexa/
-  cross/full/octa), `RING_OUTER_LOCK` (the five presets' locked outer),
-  `RING_INNERS`/`RING_INNER_PRESET_DEFAULT`/`_DEFAULT`,
+  owner decree 2026-08-05; RING VERDICTS correction, same day) —
+  `RING_OUTERS` (bot_cross/top_cross/hexa/cross/full/octa),
+  `RING_OUTER_LOCK` (the five presets' locked outer — "The One" moved
+  onto "octa"; "full" is now preset-free, custom rings only),
+  `RING_INNERS`/`RING_INNER_PRESET_DEFAULT` (DOMY/PILOT/Dollar all
+  "seconds", Templar "seconds_cross", The One "simple_octa")/`_DEFAULT`,
   `RING_TWO_METALS_DEFAULT`, THE EYE AT THE APEX (`RING_EYE_GLYPH`/
   `_SHINE_FILE`/`_SHINE_DEFAULT`/`_SHINE_ENLARGE`), `RING_LETTER_
   GROUPS`/`_FILES` (the full Latin/Greek/Numbers/Symbols letter
-  library).
+  library), `RING_CROWN_TEXT_CHARSET` (the crown-text whitelist —
+  every single-character `RING_LETTER_FILES` key plus the space,
+  derived, never hand-written; shared by the custom crown-text field's
+  `QValidator` and the Location crown's own text filter).
 - **Weekday themes — the master list** — `WEEKDAY_THEMES` (every
   registered dial theme key, ~38 entries), `METAL_THEMES`, `THEME_
   METALS`, `THEME_METALS_OVERRIDE`/`theme_metals()`, `WEEKDAY_THEME_

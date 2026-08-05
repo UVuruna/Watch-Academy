@@ -145,13 +145,17 @@ still constructs and behaves as before that round.
 
 ## Module-level functions (skin-building responsibility)
 
-### `build_skin(settings) -> SkinDefinition`
+### `build_skin(settings, location_display="") -> SkinDefinition`
 The ONE render config: `DEFAULT_SKIN` with the chosen ring preset card,
 the chosen finish's letter art, the chosen hand pack and the user's
 display choices overlaid — built inside this watch's own display
 context (`paths.display(display_for(settings))`, owner bug fix
 2026-07-28: building watch 2's skin must never see watch 1's art
-source/subdial set).
+source/subdial set). `location_display` (RING VERDICTS round, owner
+decree 2026-08-05) is the active location's own "CITY, COUNTRY" text —
+`WatchController` passes its live `_active_location_display`; every
+other caller (tests, a direct build) leaves it "" and the Location
+crown option simply draws nothing extra for that build.
 
 ### `display_for(settings) -> paths.DisplayContext`
 The per-watch art-source/subdial-set/metal-shade triple, read once and
@@ -197,11 +201,30 @@ always passes `True`; the menu TITLE row passes `watch_count() >= 2`.
 ### Small pure helpers
 `_letter_metal`, `_ring_two_metals`, `_ring_eye_shine`, `_theme_metal`,
 `_location_flash_text` (R-30, the flash's own "CITY, COUNTRY" formatter),
-`_resolve_hands`, `_next_rotation_theme`,
+`_location_crown_text` (RING VERDICTS round, owner decree 2026-08-05 —
+uppercases and filters `_location_flash_text`'s own output down to
+`constants.RING_CROWN_TEXT_CHARSET`, the exact set the motto renderer
+can draw), `_resolve_hands`, `_next_rotation_theme`,
 `_filtered_sun_anchors`, `_filtered_moon_events`, `_slot_seconds`,
 `_effective_weekday_slot`, `_classic_slot_theme`, `_themed_weekday_set`,
 `_pantheon_weekday_set` — each a small, independently testable piece of
 the skin-building responsibility.
+
+**THE LOCATION CROWN (RING VERDICTS round, owner decree 2026-08-05):**
+a per-ring toggle (`Settings.ring_crown_location`, keyed by ring name
+like `ring_two_metals`) that REPLACES whatever crown text the active
+ring carries — a bundled preset's own motto or a custom ring's typed
+text — with the active location's "CITY, COUNTRY", available for
+presets and custom rings alike (`_compose_skin`). `WatchController`
+keeps a live `_active_location_display` string in lockstep with
+`_active_location_name` (R-31) at every one of its update points
+(`__init__`, `_flash_location`, `_end_simulation`) — `_flash_location`
+(R-30's own flash/tray-title path, every location change funnels
+through it: Settings dialog preset pick, Quick Jump, Time Travel,
+Greenwich, the poles) ALSO recomposes the skin there, so the crown
+follows a location change the same tick the flash/tray title do,
+never lagging a tick behind. `_set_ring_crown_location` is the ONE
+setter the Watch Face Ring section's "Location" checkbox calls.
 
 ## Classes (menu plumbing)
 
