@@ -501,6 +501,119 @@ def _build_topics(
             for virtue in ("Faith", "Hope", "Love")
         ],
     }
+    # THE TRIADS (wired 2026-08-05 — the round that closed the staging
+    # ledger's §Art Outside The Weeks debt for this family). The four
+    # trios stack the Trinity arms (CANON.md §The Triads; art doctrine
+    # §The abstract triads & dualities art doctrine): every concept
+    # page shows its lancet beside its 1:1 circle companion, in arm
+    # order 12h · 20h · 04h within each trio. The theological trio
+    # re-reads the trio arm articles (Rule #5 — the same three texts
+    # the Trinity card above and the dial hover already read) under
+    # its own lancets, which is exactly the seat the ledger owed.
+    triads_root = archetypes.TRIADS_ART_DIR
+    topics["triads"] = {
+        "title": "The Triads",
+        "icon": triads_root / "time" / "circle" / "colored" / "Present.png",
+        "entries": [
+            {
+                # The coverage law wants a slot on every page — the
+                # title strings the four trios' CROWN rondels (their
+                # 12h concepts), the "four trios, one geometry" claim
+                # as a strip.
+                "images": (
+                    triads_root / "time" / "circle" / "colored"
+                    / "Present.png",
+                    triads_root / "callings" / "circle" / "colored"
+                    / "Judge.png",
+                    triads_root / "theological" / "circle" / "colored"
+                    / "Faith.png",
+                    triads_root / "dialectic" / "circle" / "colored"
+                    / "Synthesis.png",
+                ),
+                "name": "The Triads",
+                "article": ("emblem", "triads", "The Triads"),
+            },
+        ] + [
+            {
+                "images": (
+                    triads_root / group / "primary" / "colored"
+                    / f"{stem}.png",
+                    triads_root / group / "circle" / "colored"
+                    / f"{stem}.png",
+                ),
+                "name": name,
+                "article": article,
+            }
+            for group, stem, name, article in (
+                ("time", "Present", "The Present",
+                 ("emblem", "triads", "The Present")),
+                ("time", "Future", "The Future",
+                 ("emblem", "triads", "The Future")),
+                ("time", "Past", "The Past",
+                 ("emblem", "triads", "The Past")),
+                ("callings", "Judge", "The Judge",
+                 ("emblem", "triads", "The Judge")),
+                ("callings", "Prosecutor", "The Prosecutor",
+                 ("emblem", "triads", "The Prosecutor")),
+                ("callings", "Advocate", "The Advocate",
+                 ("emblem", "triads", "The Advocate")),
+                ("theological", "Faith", "Faith", ("trio", "Faith")),
+                ("theological", "Love", "Love", ("trio", "Love")),
+                ("theological", "Hope", "Hope", ("trio", "Hope")),
+                ("dialectic", "Synthesis", "Synthesis",
+                 ("emblem", "triads", "Synthesis")),
+                ("dialectic", "Antithesis", "Antithesis",
+                 ("emblem", "triads", "Antithesis")),
+                ("dialectic", "Thesis", "Thesis",
+                 ("emblem", "triads", "Thesis")),
+            )
+        ],
+    }
+    # THE DUALITIES (same wiring round). The two BASE oppositions under
+    # every wheel — a pair page carries both poles, each pole its
+    # lancet and its 1:1 companion; the ARCH person-pairs (Lucifer
+    # against Judas above all) keep their own pages on the Two
+    # Triangles card, and the title page argues the distinction.
+    dualities_root = archetypes.DUALITIES_ART_DIR
+    topics["dualities"] = {
+        "title": "The Dualities",
+        "icon": dualities_root / "good_evil" / "circle" / "colored"
+        / "Good.png",
+        "entries": [
+            {
+                # The coverage law again: the title strings the four
+                # POLE rondels — two pairs, four directions, the edge
+                # between them being the card's whole argument.
+                "images": (
+                    dualities_root / "good_evil" / "circle" / "colored"
+                    / "Good.png",
+                    dualities_root / "good_evil" / "circle" / "colored"
+                    / "Evil.png",
+                    dualities_root / "self_others" / "circle" / "colored"
+                    / "Self.png",
+                    dualities_root / "self_others" / "circle" / "colored"
+                    / "Others.png",
+                ),
+                "name": "The Dualities",
+                "article": ("emblem", "dualities", "The Dualities"),
+            },
+        ] + [
+            {
+                "images": tuple(
+                    dualities_root / pair / register / "colored"
+                    / f"{stem}.png"
+                    for stem in poles
+                    for register in ("primary", "circle")
+                ),
+                "name": name,
+                "article": ("emblem", "dualities", name),
+            }
+            for pair, poles, name in (
+                ("good_evil", ("Good", "Evil"), "Good and Evil"),
+                ("self_others", ("Self", "Others"), "Self and Others"),
+            )
+        ],
+    }
     # THE MOON (owner 2026-07-16, ROADMAP queue #8b): EIGHT phase pages —
     # the four principal phases and the four between them — in cycle
     # order, each a house-voice article carrying the phase's geometry,

@@ -45,7 +45,9 @@ needs a special case (Rule #7).
   table — every weekday theme, Astrology, Chinese zodiac, The Week, The
   Instrument, Virtues/Sins/Moods, The Nine Intelligences, The Slavic
   Months, the shared Ninths loop, the Pantheon/Wider-Court blocks, The
-  Two Triangles, Trinity, Moon, Seasons, Sun, Eras, both Eclipse
+  Two Triangles, Trinity, The Triads and The Dualities (the 2026-08-05
+  wiring round — the four trios' and two base pairs' lancet + 1:1
+  pages), Moon, Seasons, Sun, Eras, both Eclipse
   families and the Archetypes hall (Cube/Double Trinity/Crosses/One Soul)
 - `topics(travel_date=None, overlay=None, is_daylight=True) -> dict`:
   the public entry point — `_build_topics` plus the Guide topic, then the

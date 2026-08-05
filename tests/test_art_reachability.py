@@ -81,6 +81,17 @@ RESOLVED_ELSEWHERE: dict[str, str] = {
     "archetypes/life/circle/colored":
         "THE DIAL LAW's plate for the Eight Ages (whose figures live in "
         "registers, not in the ARCHETYPES figure table)",
+    # The 2026-08-05 wiring round: the Triads and Dualities cards of the
+    # Faith whole build every concept page's lancet + 1:1 companion from
+    # `archetypes.TRIADS_ART_DIR` / `DUALITIES_ART_DIR` per trio/pair.
+    "archetypes/triads/{trio}/primary/colored":
+        "app.encyclopedia.tree — the Triads card's concept lancets",
+    "archetypes/triads/{trio}/circle/colored":
+        "app.encyclopedia.tree — the same pages' 1:1 circle companions",
+    "archetypes/dualities/{pair}/primary/colored":
+        "app.encyclopedia.tree — the Dualities card's pole lancets",
+    "archetypes/dualities/{pair}/circle/colored":
+        "app.encyclopedia.tree — the same pages' 1:1 circle companions",
 }
 
 _PLACEHOLDER = re.compile(r"\{[a-z_]+\}")

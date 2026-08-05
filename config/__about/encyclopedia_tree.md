@@ -72,7 +72,7 @@ no scroll  Y scroll      Y scroll
 | The Sky | Moon's silver | 4 | 27 |
 | The Cosmos | cyan, 03h | 6 | 74 |
 | The Gods | moon-violet, 24h | 5 | 118 |
-| The Faith | rose, 21h | 4 | 61 |
+| The Faith | rose, 21h | 6 | 77 |
 | The Character Cube | blue, 06h | 7 | 70 |
 | The Inner Wheel | red, 18h | 4 | 36 |
 | The Living World | green, 09h | 5 | 54 |

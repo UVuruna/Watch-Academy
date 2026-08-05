@@ -194,22 +194,17 @@ without wiring it fails the guard again, which is the point.
 | Folder | Plates | Ruled | Owes |
 |--------|--------|-------|------|
 | `archetypes/banknote/primary/colored` | 15 | WIRE as the Banknote article's own illustrations — the page draws vectors today (`render/cube_diagrams.py:banknote_axes`) and the plates fill its figure slots | the wiring round |
-| `archetypes/triads/callings/primary/colored` | 6 | ENCYCLOPEDIA-ONLY set, `mount: none` — the Trinity's three wheels are sealed (Court, Family, Genesis), so a triad has nowhere to sit without unseating one | a seat in a whole + its text |
-| `archetypes/triads/callings/circle/colored` | 6 | same set, its 1:1 plates | with the above |
-| `archetypes/triads/dialectic/primary/colored` | 6 | ENCYCLOPEDIA-ONLY set | a seat in a whole + its text |
-| `archetypes/triads/dialectic/circle/colored` | 6 | same set, its 1:1 plates | with the above |
-| `archetypes/triads/theological/primary/colored` | 6 | ENCYCLOPEDIA-ONLY set | a seat in a whole + its text |
-| `archetypes/triads/theological/circle/colored` | 6 | same set, its 1:1 plates | with the above |
-| `archetypes/triads/time/primary/colored` | 6 | ENCYCLOPEDIA-ONLY set | a seat in a whole + its text |
-| `archetypes/triads/time/circle/colored` | 6 | same set, its 1:1 plates | with the above |
-| `archetypes/dualities/good_evil/primary/colored` | 4 | ENCYCLOPEDIA-ONLY — a two-armed pointer does not exist and will not | a seat in a whole + its text |
-| `archetypes/dualities/good_evil/circle/colored` | 4 | same set, its 1:1 plates | with the above |
-| `archetypes/dualities/self_others/primary/colored` | 4 | ENCYCLOPEDIA-ONLY | a seat in a whole + its text |
-| `archetypes/dualities/self_others/circle/colored` | 4 | same set, its 1:1 plates | with the above |
 
-**79 plates in 13 folders**, every one of them named. Their prompt
-sheets are already written —
+**The triads and dualities rows left this table 2026-08-05** — the
+wiring round the owner ordered that day seated both families in the
+Encyclopedia's Faith whole (the `triads` card beside Trinity, the
+`dualities` card beside the Two Triangles; `app/encyclopedia/tree.py`,
+texts in `encyclopedia.json` families `triads`/`dualities`, the
+theological trio re-reading the trio arm articles per Rule #5). Their
+twelve folders are now declared in `tests/test_art_reachability.py`
+`RESOLVED_ELSEWHERE`, which is the wired state the table's own rule
+demands. What remains owed here is the single banknote row above.
+Prompt sheets, for the record —
 [Triads Prompts](prompts/archetype/triads_prompts.md),
 [Dualities Prompts](prompts/archetype/dualities_prompts.md),
-[Banknote Offices Prompts](prompts/archetype/banknote_offices_prompts.md)
-— so what they owe is code and text, never generation.
+[Banknote Offices Prompts](prompts/archetype/banknote_offices_prompts.md).

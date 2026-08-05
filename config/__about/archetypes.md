@@ -81,6 +81,10 @@ Tetramorph's paragraph two reuses its evangelist rondel.
   two-row articles, the encyclopedia targets
 - [Watch Controller](../../app/__about/controller.md) — the menu toggle gating
   (`has_archetype`)
+- [Encyclopedia Tree](../../app/encyclopedia/__about/tree.md) — the public art
+  roots (`CROSSES_ART_DIR`, the Cube families, and since 2026-08-05
+  `TRIADS_ART_DIR`/`DUALITIES_ART_DIR` — the Triads and Dualities
+  cards' lancet + 1:1 pages)
 
 ## Functions
 

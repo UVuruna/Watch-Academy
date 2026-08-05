@@ -201,6 +201,17 @@ SACRED_ART_DIR = ARCHETYPE_ART_DIR / "sacred" / "primary" / "colored"
 # at `config.cube.FIGURE_SETS` (Session 24) — the roster, the disk
 # registers and the Rose's three stars all read that one declaration.
 CROSSES_ART_DIR = ARCHETYPE_ART_DIR / "crosses" / "primary" / "colored"
+# THE ABSTRACT TRIADS AND DUALITIES (wired 2026-08-05, closing the
+# staging ledger's §Art Outside The Weeks debt; art doctrine CANON.md
+# §The abstract triads & dualities art doctrine). Neither is a wheel:
+# the four trios are the Trinity arms' stacked readings and the two
+# pairs the base oppositions — Encyclopedia subjects only (`mount:
+# none`; a two-armed pointer does not exist). These are the FAMILY
+# roots; the Encyclopedia's Triads and Dualities topics build
+# `<set>/{primary,circle}/colored/<Stem>.png` under them for every
+# concept page's lancet and its 1:1 circle companion.
+TRIADS_ART_DIR = ARCHETYPE_ART_DIR / "triads"
+DUALITIES_ART_DIR = ARCHETYPE_ART_DIR / "dualities"
 
 # ═══════════════════════════ THE EIGHT AGES ═══════════════════════════
 # The Eight Ages, shared by both registers: (angle, age name, row-2

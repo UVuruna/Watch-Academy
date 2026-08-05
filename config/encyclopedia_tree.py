@@ -97,7 +97,11 @@ WHOLES = (
         # (the Rose canon's own reading), the one hue the six-whole
         # table left unspent until now.
         "faith", "The Faith", palette.ROSE_PALETTE[3],
-        ("bible", "creeds", "trinity", "duality"),
+        # `triads` seats beside the trinity whose arms it stacks, and
+        # `dualities` beside the Judas–Lucifer scale whose base
+        # oppositions it names (the 2026-08-05 wiring round, closing
+        # the staging ledger's triads/dualities debt).
+        ("bible", "creeds", "trinity", "triads", "duality", "dualities"),
     ),
     Whole(
         # 06h blue — the Cube's own axis blue (CUBE.md, the colour law;

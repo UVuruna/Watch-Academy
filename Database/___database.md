@@ -101,7 +101,13 @@ the Court, Genesis, the Council and the 24-field union table) and
 the FALL/STAR and DOMY/SAFE ciphers). Every one of those 39 pages is
 written to the Article Charter's four movements —
 `[[Thesis]]`/`[[Argument]]`/`[[Correspondences]]`/`[[Quote]]` — pinned
-by `tests/test_cube_encyclopedia.py`. Read by the
+by `tests/test_cube_encyclopedia.py`. **The `triads` and `dualities`
+families (the 2026-08-05 wiring round)** carry the Faith whole's two
+newest cards in the same four movements: `triads` (10 — the title and
+the time/callings/dialectic trios; the theological trio re-reads
+`symbolism.json`'s trio arm articles per Rule #5) and `dualities` (3 —
+the title with the arch/base distinction, Good and Evil, Self and
+Others). Read by the
 [Encyclopedia Repository](../data/__about/encyclopedia.md); translated through
 `encyclopedia/<section>/<key>/...` overlay keys.
 
@@ -114,7 +120,11 @@ loaded by [Ring Presets](../data/__about/rings.md) together with the user's
 custom cards. The Dollar's apex seats the Eye of Providence (adaptive
 glyph, art source + Shine toggle) and its legend reads each letter as
 office + Cube term; DOMY and PILOT carry the Two Crosses' station
-words and legends (CANON.md §The Banknote). RING VERDICTS round (owner
+words and legends (CANON.md §The Banknote). Since the 2026-08-05
+decree ALL five bundled cards carry a per-letter hover legend: The
+One reads its eight stations as the hours themselves (CANON.md §THE
+HOUR RING) and Templar's four identical ✠ carry four DIFFERENT
+watches (§THE TEMPLAR RING). RING VERDICTS round (owner
 correction 2026-08-05): The One moved off its locked "full" outer onto
 "octa" — Ω alone at the midnight seat, the other seven empty fields
 wearing their own NUMBER glyphs (3/6/9/12/15/18/21); "full" is now

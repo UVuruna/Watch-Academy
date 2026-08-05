@@ -122,9 +122,11 @@ class EncyclopediaRepository:
         eight vertices, the coordinate doctrine and the Banknote-axes
         seal; the Court/Genesis/Council triangles and the 24-field union
         table; the two four-station paths with the chiasm, TRUST/DISTRUST
-        and the FALL/STAR and DOMY/SAFE ciphers), name the entry
+        and the FALL/STAR and DOMY/SAFE ciphers) | "triads" / "dualities"
+        (the 2026-08-05 wiring round — the Trinity arms' four stacked
+        trios and the two base oppositions), name the entry
         ("Justice", "Lucifer", "Hestia", "Lipanj", "The Cube",
-        "Suffering")."""
+        "Suffering", "The Present", "Good and Evil")."""
         return self._localized(
             f"encyclopedia/{family}/{name}", self._load()[family][name]
         )

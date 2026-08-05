@@ -45,7 +45,7 @@ Serbian and any machine-translated language apply automatically.
   weekday theme's own opening page / its week-duality title page.
 - `entry(family, name)`: `{base}` of one emblem-family article —
   `family` is any of virtues/sins/moods/duality/ninths/intelligence/
-  wider/months/cube/double_trinity/crosses/one_soul.
+  wider/months/cube/double_trinity/crosses/one_soul/triads/dualities.
 - `_section(section, key)` (private): the shared localized lookup
   every public method above delegates to — `{title, base}` of
   `data[section][key]`, overlaid.
