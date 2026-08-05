@@ -2,22 +2,24 @@
 
 **About:** [description](../__about/rings.md)
 
-## Algorithm — `validate_preset()`: card to resolved layout
+## Algorithm — `validate_preset()`: card to resolved outer (THE COMPOSITIONAL RING MODEL, owner decree 2026-08-05)
 
 ```mermaid
 flowchart TB
     A[entry dict] --> B{name present?}
     B -- no --> X1[raise]
-    B -- yes --> C[positions = tuple of ints]
-    C --> D{frozenset positions matches a RING_LAYOUTS signature?}
-    D -- no --> X2[raise: no matching layout]
-    D -- yes --> E{len letters == len positions?}
+    B -- yes --> C{outer is a known RING_OUTERS key?}
+    C -- no --> X2[raise: unknown outer]
+    C -- yes --> C2{name locked to a different outer in RING_OUTER_LOCK?}
+    C2 -- yes --> X2b[raise: preset is locked]
+    C2 -- no --> D[positions = RING_OUTERS.outer.positions]
+    D --> E{len letters == len positions?}
     E -- no --> X3[raise: count mismatch]
     E -- yes --> F{every letter in RING_LETTER_FILES?}
     F -- no --> X4[raise: unknown letters]
     F -- yes --> G{any digit glyph at the wrong hour?}
     G -- yes --> X5[raise]
-    G -- no --> H[triangle: 3 of positions, only if layout == seal]
+    G -- no --> H[triangle: 3 of positions, only if outer == "hexa"]
     H --> I[legend: position -> name/reading, positions must be own]
     I --> J[motto: _validate_motto]
     J --> K[thematic: must be a known METAL_SHADE_NAMES.thematic]
@@ -28,25 +30,26 @@ Pseudocode (language-neutral):
 
     FUNCTION validate_preset(entry):
         name = entry.name.strip(); IF empty → raise
-        positions = tuple(int(p) FOR p IN entry.positions)
-        layout = RING_LAYOUTS entry whose position-set == frozenset(positions)
-        IF no match → raise (list the known layouts)
+        outer = entry.outer; IF not in RING_OUTERS → raise
+        IF RING_OUTER_LOCK has name AND RING_OUTER_LOCK[name] != outer → raise
+        positions = RING_OUTERS[outer].positions
         letters = tuple(str(l) FOR l IN entry.letters)
         IF len(letters) != len(positions) → raise
         IF any letter not in RING_LETTER_FILES → raise
         FOR position, glyph IN zip(positions, letters):
             IF glyph is a digit AND digit != position → raise   # a number only fits its own hour
-        triangle = entry.triangle validated as 3-of-positions, ONLY IF layout == "seal"
+        triangle = entry.triangle validated as 3-of-positions, ONLY IF outer == "hexa"
         legend   = entry.legend validated position-by-position (name + reading required)
         motto    = _validate_motto(name, entry.motto or [], positions)
         thematic = entry.thematic validated against METAL_SHADE_NAMES["thematic"]
-        RETURN {name, positions, letters, layout, triangle, legend, motto, thematic}
+        RETURN {name, positions, letters, outer, triangle, legend, motto, thematic}
 
-## Algorithm — `_validate_motto()`: two mutually exclusive entry forms
+## Algorithm — `_validate_motto()`: three mutually exclusive entry forms
 
-Each `motto` list entry is either a PINNED Great Seal form (`{text,
-pins, clockwise}`) or a CENTERED cross-words form (`{text, center,
-clockwise}`) — never both.
+Each `motto` list entry is a PINNED Great Seal form (`{text, pins,
+clockwise}`), a CENTERED cross-words form (`{text, center,
+clockwise}`), or a free-form CROWN TEXT form (`{text, orientation}`,
+owner decree 2026-08-05, custom rings only) — never more than one.
 
 ```mermaid
 flowchart TB
@@ -54,7 +57,11 @@ flowchart TB
     B -- no --> X1[raise]
     B -- yes --> C{every char is a space or in RING_LETTER_FILES?}
     C -- no --> X2[raise: unknown letters]
-    C -- yes --> D{center field present?}
+    C -- yes --> O{orientation field present?}
+    O -- yes --> O2{pins or center also present?}
+    O2 -- yes --> X0[raise: mutually exclusive]
+    O2 -- no --> O3[free_arc_angles: solve angles around top/bottom anchor]
+    O -- no --> D{center field present?}
     D -- yes --> E{pins also present?}
     E -- yes --> X3[raise: mutually exclusive]
     E -- no --> F{center is one of the card's own positions?}
@@ -64,7 +71,8 @@ flowchart TB
     H --> I{position is one of the card's own positions?}
     I -- no --> X5[raise]
     I -- yes --> J[motto_glyph_angles: solve angles from the pins]
-    G --> K[compute per-word spans + seat, return text+angles+words]
+    O3 --> K[compute per-word spans + seat, return text+angles+words]
+    G --> K
     J --> K
 ```
 
@@ -76,7 +84,11 @@ Pseudocode (language-neutral):
             text = entry.text; IF empty → raise
             IF any char (not space) not in RING_LETTER_FILES → raise
             clockwise = entry.clockwise, default true
-            IF entry.center is not None:
+            IF entry.orientation is not None:
+                IF entry.pins or entry.center present → raise (mutually exclusive)
+                angles = free_arc_angles(text, orientation)   # "top" or "bottom" anchor
+                words = one word, seat = None (not tied to any ring seat)
+            ELIF entry.center is not None:
                 IF entry.pins present → raise (mutually exclusive)
                 IF center not in positions → raise
                 angles = centered_word_angles(text, center, clockwise)

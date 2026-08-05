@@ -64,7 +64,10 @@ data has exactly one home.
   the numeric recipe lives in [Defaults](defaults.md)).
 - **Subdial** — `SUBDIAL_STYLES`, `SUBDIAL_SETS`/`_DEFAULT`/`_TITLES`.
 - **Figure rosters** — `FIGURE_ROSTERS` (`planetary`/`pantheon`).
-- **Ring layouts and letters** — `RING_LAYOUTS` (flame/chalice/seal),
+- **Ring outers, inners and letters** (THE COMPOSITIONAL RING MODEL,
+  owner decree 2026-08-05) — `RING_OUTERS` (bot_cross/top_cross/hexa/
+  cross/full/octa), `RING_OUTER_LOCK` (the five presets' locked outer),
+  `RING_INNERS`/`RING_INNER_PRESET_DEFAULT`/`_DEFAULT`,
   `RING_TWO_METALS_DEFAULT`, THE EYE AT THE APEX (`RING_EYE_GLYPH`/
   `_SHINE_FILE`/`_SHINE_DEFAULT`/`_SHINE_ENLARGE`), `RING_LETTER_
   GROUPS`/`_FILES` (the full Latin/Greek/Numbers/Symbols letter

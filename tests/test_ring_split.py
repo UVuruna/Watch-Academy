@@ -1,13 +1,12 @@
-"""The ring OUTER/INNER split tint (R-21, owner correction 2026-08-05):
-`RingLayer.paint` optionally composes the owner's new
-`assets/instrument/ring/outter/`+`inner/` plates instead of the single
-baked `spec.asset` band, each independently tintable
-(`ring_tint`/`ring_tint_inner`). The split is gated on BOTH the active
-preset's own `RingSpec.use_split_art` opt-in (False for every preset
-that ships today — the art landing on disk must never by itself
-repaint an existing preset) AND the art files' presence on disk
-(`config.dial.RING_OUTER_ASSET`/`RING_INNER_ASSET`) — either failing
-falls back to today's single-plate render, never a crash."""
+"""THE COMPOSITIONAL RING MODEL (owner decree 2026-08-05): a ring is
+ALWAYS the composition of an outer band + an inner band + the letters
+in the outer's own empty fields + an optional crown-text arc — there is
+no more single monolithic plate and no opt-in (`RingSpec.use_split_art`
+is gone; `render.layers.ring.RingLayer.paint` composes unconditionally).
+These probes replace the old R-21 opt-in/graceful-fallback tests with:
+every preset composes its locked outer + its own inner, every outer x
+inner combination renders, and the two bands recolor independently.
+"""
 
 import dataclasses
 import math
@@ -21,7 +20,9 @@ import astral
 import pytest
 from PySide6.QtWidgets import QApplication
 
-from config import defaults, dial
+from app.controller import build_skin
+from app.settings_store import Settings
+from config import constants, dial
 from core.clock_state import build_day_context, build_tick_state
 from data.moon_phases import MoonPhaseRepository
 from data.seasons import SeasonsRepository
@@ -59,88 +60,134 @@ def _diff_count(image_a, image_b, step: int = 4) -> int:
     )
 
 
-def _split_art_present() -> bool:
-    return dial.RING_OUTER_ASSET.exists() and dial.RING_INNER_ASSET.exists()
-
-
-def test_default_preset_ignores_split_art_even_when_present_on_disk(
-    app, frame_args, monkeypatch,
+@pytest.mark.parametrize(
+    "name,outer,inner",
+    [
+        ("DOMY", "bot_cross", "seconds"),
+        ("PILOT", "top_cross", "seconds_cross"),
+        ("Dollar", "hexa", "simple"),
+        ("Templar", "cross", "simple_cross"),
+        ("The One", "full", "simple_point"),
+    ],
+)
+def test_every_preset_composes_its_locked_outer_and_default_inner(
+    app, frame_args, name, outer, inner,
 ):
-    """The owner's split art may already sit on disk (untracked); a
-    preset that has NOT opted in (`use_split_art=False`, every bundled
-    preset today) must render byte-identical whether the files exist or
-    not — the art landing is never itself a verdict."""
+    """Each of the five presets is LOCKED to exactly one outer (owner
+    decree 2026-08-05) and starts on the coordinator's recommended
+    default inner."""
     day, tick = frame_args
-    base = defaults.DEFAULT_SKIN
-    assert base.ring.use_split_art is False
-    with_files = _render(base, day, tick)
-    monkeypatch.setattr(dial, "RING_OUTER_ASSET", dial.RING_OUTER_ASSET.parent / "missing.png")
-    monkeypatch.setattr(dial, "RING_INNER_ASSET", dial.RING_INNER_ASSET.parent / "missing.png")
-    without_files = _render(base, day, tick)
-    assert _diff_count(with_files, without_files) == 0, (
-        "a preset that never opted into the split must not care whether "
-        "the split art exists on disk"
-    )
+    skin = build_skin(Settings(ring=name))
+    assert skin.ring.outer_asset.name == f"{outer}.png"
+    assert skin.ring.inner_asset.name == f"{inner}.png"
+    image = _render(skin, day, tick)
+    assert image.width() == 400 and image.height() == 400
 
 
-@pytest.mark.skipif(not _split_art_present(), reason="owner's split art not on disk")
-def test_opted_in_preset_composes_the_split_plate(app, frame_args):
-    """A preset that flips `use_split_art=True` (none do today; this
-    probe builds one) draws the two independently-tinted bands instead
-    of the single plate — the outer tint and the NEW inner tint each
-    alter the composed pixels on their own."""
+@pytest.mark.parametrize("outer", sorted(constants.RING_OUTERS))
+@pytest.mark.parametrize("inner", constants.RING_INNERS)
+def test_every_outer_by_inner_combination_renders(app, frame_args, outer, inner):
+    """Rule 2 (owner decree 2026-08-05): every outer x inner combination
+    is legal for CUSTOM rings — build one directly on the skin (no
+    custom-ring card needed to prove the render path itself is total)
+    and confirm it paints without raising."""
     day, tick = frame_args
-    single = defaults.DEFAULT_SKIN
-    split_ring = dataclasses.replace(single.ring, use_split_art=True)
-    split = dataclasses.replace(single, ring=split_ring, ring_tint="#3050E0")
-
-    differing_from_single = _diff_count(_render(single, day, tick), _render(split, day, tick))
-    assert differing_from_single > 0, (
-        "an opted-in preset with the split art present must repaint "
-        "differently from the single-plate render"
+    base = build_skin(Settings())
+    skin = dataclasses.replace(
+        base,
+        ring=dataclasses.replace(
+            base.ring,
+            outer_asset=dial.RING_OUTER_ART_DIR / constants.RING_OUTERS[outer]["file"],
+            inner_asset=dial.RING_INNER_ART_DIR / f"{inner}.png",
+            letters={},
+        ),
     )
-
-    inner_tinted = dataclasses.replace(split, ring_tint_inner="#E03050")
-    differing_inner = _diff_count(_render(split, day, tick), _render(inner_tinted, day, tick))
-    assert differing_inner > 0, (
-        "ring_tint_inner must repaint the inner band independently of ring_tint"
-    )
+    image = _render(skin, day, tick)
+    assert image.width() == 400 and image.height() == 400
 
 
-def test_opted_in_preset_falls_back_gracefully_without_the_art_files(
-    app, frame_args, monkeypatch,
-):
-    """`use_split_art=True` with the art missing from disk (a preset
-    shipped/opted-in ahead of the owner committing the files, or this
-    session's own dev checkout before they land) must fall back to the
-    single-plate render — never raise, never draw nothing."""
+def test_ring_inner_choice_is_user_changeable_per_preset(app, frame_args):
+    """Rule 1: the preset's INNER stays user-changeable independent of
+    its locked outer (`Settings.ring_inner`,
+    `app.controller._resolve_ring_inner`)."""
     day, tick = frame_args
-    single = defaults.DEFAULT_SKIN
-    split_ring = dataclasses.replace(single.ring, use_split_art=True)
-    split = dataclasses.replace(single, ring=split_ring)
-
-    monkeypatch.setattr(dial, "RING_OUTER_ASSET", dial.RING_OUTER_ASSET.parent / "missing.png")
-    monkeypatch.setattr(dial, "RING_INNER_ASSET", dial.RING_INNER_ASSET.parent / "missing.png")
-
-    fallback = _render(split, day, tick)
-    baseline = _render(single, day, tick)
-    assert _diff_count(fallback, baseline) == 0, (
-        "opting in without the art files on disk must render identically "
-        "to the single-plate baseline, not crash or draw blank"
+    default = build_skin(Settings(ring="DOMY"))
+    assert default.ring.inner_asset.name == "seconds.png"
+    swapped = build_skin(
+        Settings(ring="DOMY", ring_inner={"DOMY": "simple_octa"})
     )
+    assert swapped.ring.outer_asset.name == "bot_cross.png"  # outer stays locked
+    assert swapped.ring.inner_asset.name == "simple_octa.png"
+    assert _diff_count(_render(default, day, tick), _render(swapped, day, tick)) > 0
+
+
+def test_custom_ring_free_picks_any_outer(app, frame_args):
+    """Rule 2: a custom ring may pick ANY outer, including one no
+    bundled preset locks to (octa)."""
+    day, tick = frame_args
+    custom = ({"name": "OCTARING", "outer": "octa", "letters": ["✠"] * 8},)
+    skin = build_skin(
+        Settings(ring="OCTARING", custom_rings=custom, ring_inner={"OCTARING": "simple_octa"})
+    )
+    assert skin.ring.outer_asset.name == "octa.png"
+    assert skin.ring.inner_asset.name == "simple_octa.png"
+    image = _render(skin, day, tick)
+    assert image.width() == 400
+
+
+def test_custom_ring_crown_text_and_orientation_alter_pixels(app, frame_args):
+    """Rule 3: a custom ring's free-typed CROWN TEXT draws real pixels
+    (bare vs with-text differ); orientation (top/bottom) is verified at
+    the DATA level — the resolved glyph angles flip from centered on
+    the top anchor (0 deg) to the bottom anchor (180 deg), exactly like
+    every other motto form's own angle solve (`core.motto`,
+    `data.rings._validate_motto`) — the SAME level every other motto
+    test in this suite verifies at (the outer crown arc sits beyond the
+    dial radius, so a fixed-size offscreen render clips most of it;
+    that is a rendering-canvas artifact, not a claim about the app
+    window, which grows its own margin for a motto preset — see
+    `test_dial_window_margin_grows_only_for_a_motto_preset`)."""
+    day, tick = frame_args
+    custom = ({"name": "CROWNED", "outer": "bot_cross", "letters": ["A", "B", "C", "D"]},)
+    bare = build_skin(Settings(ring="CROWNED", custom_rings=custom))
+    with_text = build_skin(Settings(
+        ring="CROWNED", custom_rings=custom,
+        custom_ring_crown_text={"CROWNED": "HELLO"},
+    ))
+    assert with_text.ring.motto
+    assert _diff_count(_render(bare, day, tick), _render(with_text, day, tick)) > 0
+    top_angles = with_text.ring.motto[0]["words"][0]["center"]
+    bottom_text = build_skin(Settings(
+        ring="CROWNED", custom_rings=custom,
+        custom_ring_crown_text={"CROWNED": "HELLO"},
+        custom_ring_crown_orientation={"CROWNED": "bottom"},
+    ))
+    bottom_angles = bottom_text.ring.motto[0]["words"][0]["center"]
+    assert top_angles == pytest.approx(0.0)
+    assert bottom_angles == pytest.approx(180.0)
+
+
+def test_custom_ring_crown_text_rejects_unknown_letters_without_crashing(app, frame_args):
+    """A crown text using characters outside the letter library is
+    dropped for this build rather than crashing the running app — a
+    documented, honest gap (see the session's OPEN QUESTIONS)."""
+    day, tick = frame_args
+    custom = ({"name": "CROWNED2", "outer": "bot_cross", "letters": ["A", "B", "C", "D"]},)
+    skin = build_skin(Settings(
+        ring="CROWNED2", custom_rings=custom,
+        custom_ring_crown_text={"CROWNED2": "hello!"},  # lowercase + punctuation
+    ))
+    assert skin.ring.motto == ()
+    _render(skin, day, tick)  # must not raise
 
 
 # --- Region-specific probes: each tint touches ONLY its own band -------------
 #
-# The two plates' own alpha coverage, MEASURED off the actual PNGs
-# (radius fraction of each plate's own half-width, which
-# `draw_pixmap_centered` scales 1:1 onto the dial radius): the outer
-# band (`outter/full.png`) covers ~0.885-1.00, the inner band
+# The two plates' own alpha coverage, MEASURED off the actual PNGs: the
+# outer band (`outter/full.png`) covers ~0.885-1.00, the inner band
 # (`inner/simple.png`) ~0.796-0.894. 0.95 lands outer-only, 0.84
-# inner-only. DOMY's own six letter seats sit at 0/60/120/180/240/300
-# deg (clockwise from top); sampling halfway between them keeps the
-# letter art and the (further-out) motto arc off these plate-only
-# probes.
+# inner-only. `_plain_skin` clears letters/motto outright, so the
+# sample angles below need not dodge any seat.
 
 
 def _pixel_at(image, radius_fraction: float, angle_deg: float):
@@ -155,15 +202,20 @@ _OUTER_ONLY_RADIUS = 0.95
 _INNER_ONLY_RADIUS = 0.84
 
 
-def _split_skin(**overrides):
-    ring = dataclasses.replace(defaults.DEFAULT_SKIN.ring, use_split_art=True)
+def _plain_skin(**overrides):
+    """The "full" outer + "simple" inner pair — the SAME pair the
+    `_OUTER_ONLY_RADIUS`/`_INNER_ONLY_RADIUS` alpha-coverage fractions
+    below were measured against — with letters/crown text CLEARED so
+    the tint-region probes sample the two bands' plate art only."""
+    base = build_skin(Settings(ring="The One", ring_inner={"The One": "simple"}))
     return dataclasses.replace(
-        defaults.DEFAULT_SKIN, ring=ring, show_pointer=False, show_weekday=False,
-        show_earth=False, show_moon=False, **overrides,
+        base, show_pointer=False, show_weekday=False,
+        show_earth=False, show_moon=False,
+        ring=dataclasses.replace(base.ring, letters={}, motto=()),
+        **overrides,
     )
 
 
-@pytest.mark.skipif(not _split_art_present(), reason="owner's split art not on disk")
 def test_outer_ring_tint_recolors_only_the_outer_band_region(app, frame_args):
     """`ring_tint_inner` is pinned EXPLICITLY on both sides (never left
     None) — None follows `ring_tint`, so varying `ring_tint` alone would
@@ -171,10 +223,10 @@ def test_outer_ring_tint_recolors_only_the_outer_band_region(app, frame_args):
     the outer band at all."""
     day, tick = frame_args
     plain_img = _render(
-        _split_skin(ring_tint="#808080", ring_tint_inner="#808080"), day, tick
+        _plain_skin(ring_tint="#808080", ring_tint_inner="#808080"), day, tick
     )
     tinted_img = _render(
-        _split_skin(ring_tint="#FF0000", ring_tint_inner="#808080"), day, tick
+        _plain_skin(ring_tint="#FF0000", ring_tint_inner="#808080"), day, tick
     )
     outer_diff = sum(
         1 for a in _SAMPLE_ANGLES
@@ -190,12 +242,11 @@ def test_outer_ring_tint_recolors_only_the_outer_band_region(app, frame_args):
     assert inner_diff == 0, "ring_tint alone must leave the INNER band region untouched"
 
 
-@pytest.mark.skipif(not _split_art_present(), reason="owner's split art not on disk")
 def test_inner_ring_tint_recolors_only_the_inner_band_region(app, frame_args):
     day, tick = frame_args
-    plain_img = _render(_split_skin(ring_tint="#808080"), day, tick)
+    plain_img = _render(_plain_skin(ring_tint="#808080"), day, tick)
     tinted_img = _render(
-        _split_skin(ring_tint="#808080", ring_tint_inner="#00FF00"), day, tick
+        _plain_skin(ring_tint="#808080", ring_tint_inner="#00FF00"), day, tick
     )
     outer_diff = sum(
         1 for a in _SAMPLE_ANGLES

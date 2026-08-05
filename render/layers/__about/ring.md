@@ -5,13 +5,13 @@
 
 ## Purpose
 
-Paints the outer ring: the donut face (art asset, split outer/inner
-plates, or a procedural fallback), the 24 hour ticks, the 24h numerals
-with any per-skin letters swapped in, the 5-minute numbers along the
-inner edge, and — when the skin carries letter art — the owner's
-gold/silver/bronze letter glyphs and the outer Great Seal motto arc
-("Crown Text" in the Watch Face window), both stamped with a shared
-dark halo and a readable (never-upside-down) rotation.
+Paints the composed ring — THE COMPOSITIONAL RING MODEL (owner decree
+2026-08-05): the outer band + the inner band (always both, no single
+monolithic plate and no procedural fallback any more), the preset's own
+letters at the outer's empty fields, and the outer Great Seal motto arc
+("Crown Text" in the Watch Face window) — the letters and the motto
+stamped with a shared dark halo and a readable (never-upside-down)
+rotation.
 
 `Cadence.STATIC`: nothing on this layer depends on the day or the live
 tick — only the skin (letters, tint, saturation) and the dial's size/DPI —
@@ -33,19 +33,13 @@ so it rebuilds only on a skin/size/DPI change. Not `hover_variable`.
 
 ### RingLayer
 `cadence = Cadence.STATIC`.
-- `paint()`: when the active preset opts in (`RingSpec.use_split_art`,
-  False for every preset that ships today) AND the owner's split art
-  (`config.dial.RING_OUTER_ASSET`/`RING_INNER_ASSET`) is on disk, draws
-  `_draw_split_plate()` instead of the single plate; otherwise, with a
-  ring art asset, draws the tinted/saturated single plate; with no
-  asset, falls back to a procedural donut — ticks, bold numerals per
-  hour (or a letter where the skin defines one), and 5-minute numbers.
-  Either branch then stamps `_draw_letter_art()` and `_draw_motto()` on
-  top.
-- `_draw_split_plate()` (R-21, owner correction 2026-08-05): composes
-  the inner minute-track band then the outer hour-tick band, each with
-  its OWN tint (`ring_tint_inner` follows `ring_tint` when `None`) —
-  the two plates reconstruct the single-plate look side by side.
+- `paint()`: unconditionally composes `_draw_bands()` then stamps
+  `_draw_letter_art()` and `_draw_motto()` on top — there is no
+  disk-presence gate and no procedural fallback any more.
+- `_draw_bands()` (owner decree 2026-08-05, THE COMPOSITIONAL RING
+  MODEL): composes the inner minute-track band (`RingSpec.inner_asset`)
+  then the outer hour-tick band (`RingSpec.outer_asset`), each with its
+  OWN tint (`ring_tint_inner` follows `ring_tint` when `None`).
 - `_draw_ring_glyph()`: the ONE stamp shared by both the ring's six letters
   and the outer motto (Rule #5) — resolves the letter's metal finish, draws
   a multi-sample dark halo from the gold master, rotates the glyph so it

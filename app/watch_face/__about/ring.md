@@ -3,11 +3,14 @@
 **Script:** [Ring Section (script)](../ring.py) · **Flow:** [diagram](../__flow/ring.md)
 
 ## Purpose
-The Watch Face window's Ring page (R-10): preset gallery (thumbnail
-tiles — the layout's own face art via `thumbs.art_thumbnail`), the
-finish pills, the Two-metals/Shine checkboxes — moved verbatim from
-`design_window.DesignDialog._ring_tab` (same conditional rules, Rule
-#5) — plus R-13's "Custom ring…" button.
+The Watch Face window's Ring page (R-10), rebuilt for THE
+COMPOSITIONAL RING MODEL (owner decree 2026-08-05): preset gallery
+(thumbnail tiles of each preset's LOCKED outer, tooltip stating the
+lock), the finish pills, the Two-metals/Shine checkboxes (unchanged),
+an INNER gallery (eight tiles — user-changeable independent of the
+locked outer) and a Crown Text group (read-only preset text, or a
+custom ring's own typed text + top/bottom orientation) — plus R-13's
+"Custom ring…" button.
 
 ## Connections
 
@@ -15,9 +18,10 @@ finish pills, the Two-metals/Shine checkboxes — moved verbatim from
 - [Watch Face Thumbnails](thumbs.md) — `art_thumbnail`
 - [Watch Face Shared Widgets](widgets.md) — `pill`, `tile`
 - [Rings (data)](../../../data/__about/rings.md) — `ring_presets`
-- [Config (folder)](../../../config/___config.md) — `RING_LAYOUTS`,
-  `RING_FINISHES`, `RING_EYE_GLYPH`, `RING_TWO_METALS_DEFAULT`,
-  `RING_EYE_SHINE_DEFAULT`
+- [Config (folder)](../../../config/___config.md) — `RING_OUTERS`,
+  `RING_OUTER_LOCK`, `RING_INNERS`, `RING_INNER_PRESET_DEFAULT`,
+  `RING_INNER_DEFAULT`, `RING_FINISHES`, `RING_EYE_GLYPH`,
+  `RING_TWO_METALS_DEFAULT`, `RING_EYE_SHINE_DEFAULT`
 
 ### Used by
 - `app.watch_face.window` — registered as the Ring section's builder

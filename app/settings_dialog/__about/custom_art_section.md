@@ -11,19 +11,24 @@ a visible sidebar row — it is reached only through the dialog's hidden
 `initial_section="Custom art"` construction mode (dialog.md's Design
 Decisions), opened by the Watch Face Ring section's "Custom ring…" button.
 
-- **Custom ring** — the ring card builder: a layout (Flame / Chalice /
-  Seal), a library letter per position and a unique name; the per-position
-  dropdown is GROUPED (owner spec 2026-07-11) into Latin (the full A–Z),
-  Greek, Numbers (1–10, 20 — growing) and Symbols sections with
-  unselectable headers (`constants.RING_LETTER_GROUPS`) — a NUMBER only
-  fits its own hour (owner rule 2026-07-12), so the Numbers section offers
-  at most the position's own number. A "Thematic color" combo (CUSTOM-THEMATIC
+- **Custom ring** — THE COMPOSITIONAL RING MODEL (owner decree
+  2026-08-05): the ring card builder picks an OUTER
+  (`constants.RING_OUTERS` — any outer is legal, not just the five
+  presets' locked ones), a library letter per empty field and a unique
+  name; the per-position dropdown is GROUPED (owner spec 2026-07-11)
+  into Latin (the full A–Z), Greek, Numbers (1–10, 20 — growing) and
+  Symbols sections with unselectable headers
+  (`constants.RING_LETTER_GROUPS`) — a NUMBER only fits its own hour
+  (owner rule 2026-07-12), so the Numbers section offers at most the
+  position's own number. A "Thematic color" combo (CUSTOM-THEMATIC
   widening, owner 2026-07-27) picks what the card's letters wear under the
   Thematic ring finish — ANY transformer ramp, the five theme colors and
   every metal — stored on the card as the optional `thematic` field; "Auto"
   leaves it absent (moon indigo fallback). Add validates the card
   (`data.rings.validate_preset`) and OK persists it (it appears in the Watch
-  Face window's Ring gallery).
+  Face window's Ring gallery). The INNER band and any CROWN TEXT are NOT
+  part of this builder — they are Settings-level choices, set afterward
+  in the Watch Face Ring section (`app.watch_face.ring`).
 - **Custom hands** (owner spec 2026-07-12) — the hand-pack builder: three
   PNGs pointing UP, a pivot per hand (x from the left, 'center' by default;
   y in pixels from the bottom), a bottom-up z-order and a unique name. Add
@@ -34,7 +39,7 @@ Decisions), opened by the Watch Face Ring section's "Custom ring…" button.
 ## Connections
 
 ### Uses
-- [Config (folder)](../../../config/___config.md) — `constants.RING_LAYOUTS`/
+- [Config (folder)](../../../config/___config.md) — `constants.RING_OUTERS`/
   `RING_LETTER_GROUPS`/`METAL_SHADE_NAMES`/`METAL_SHADE_TITLES`, `defaults`
   (`defaults.paths.assets_dir()` for the bundled-vs-user hand-pack count)
 - [Rings](../../../data/__about/rings.md) — `ring_presets`, `validate_preset`

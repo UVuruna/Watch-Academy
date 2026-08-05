@@ -35,15 +35,18 @@ lives in [The DOMY Canon](CANON.md).
   "Indices" and "Slot" reads "Complications" everywhere a user sees
   them; no stored setting key was renamed. **CORRECTION (owner 2026-08-05,
   LOUD): both debts recorded below were WRONG — the owner's own art and
-  words proved it.** R-21's outer/inner ring-tint split IS built:
-  `render.layers.ring.RingLayer._draw_split_plate` composes the owner's
-  new split art (`assets/instrument/ring/outter/`+`inner/`, untracked —
-  awaits his commit) with independent `ring_tint`/`ring_tint_inner`
-  controls, gated behind a per-preset `RingSpec.use_split_art` opt-in
-  (False for every bundled preset today — landing the art on disk must
-  never by itself repaint an existing preset; the owner still owes the
-  per-preset mapping verdicts and a picker for the outer/inner variant
-  families). "Crown Text" IS the outer Great Seal motto arc
+  words proved it.** R-21's outer/inner ring-tint split IS built, and
+  THE COMPOSITIONAL RING MODEL (owner decree 2026-08-05) made it the
+  ONLY ring render path: `render.layers.ring.RingLayer._draw_bands`
+  composes the owner's outer/inner art
+  (`assets/instrument/ring/outter/`+`inner/`, committed) with
+  independent `ring_tint`/`ring_tint_inner` controls, UNCONDITIONALLY —
+  every ring is now outer x inner x letters x optional crown text; the
+  five bundled presets are each locked to one outer
+  (`constants.RING_OUTER_LOCK`) with a user-changeable inner
+  (`Settings.ring_inner`), and a custom ring picks any outer x inner
+  combination freely, with its own typed crown text + orientation.
+  "Crown Text" IS the outer Great Seal motto arc
   (`skin.ring.motto`, `RingLayer._draw_motto`) — Phase ④'s claim that no
   such element exists was a misread of the render stack; Watch Face
   Opacity/Size/Colors now each carry a Crown Text row

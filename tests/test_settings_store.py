@@ -335,15 +335,46 @@ def test_custom_ring_thematic_pick_round_trips(store):
     `thematic` color pick persists through save/load; a card without
     one stays byte-identical (no key invented)."""
     saved = replace(Settings(), custom_rings=(
-        {"name": "IRONRING", "positions": [12, 20, 24, 4],
+        {"name": "IRONRING", "outer": "bot_cross",
          "letters": ["I", "R", "O", "N"], "thematic": "iron"},
-        {"name": "PLAINRING", "positions": [12, 20, 24, 4],
+        {"name": "PLAINRING", "outer": "bot_cross",
          "letters": ["A", "B", "C", "D"]},
     ))
     store.save(saved)
     loaded = store.load()
     assert loaded.custom_rings[0]["thematic"] == "iron"
     assert "thematic" not in loaded.custom_rings[1]
+
+
+def test_a_pre_compositional_settings_file_loads_cleanly(store):
+    """THE COMPOSITIONAL RING MODEL SETTINGS MIGRATION (owner decree
+    2026-08-05): a settings file written BEFORE this round — `ring`
+    plus a custom card in the old `{name, positions, letters}` shape,
+    no `ring_inner`/`custom_ring_crown_*` keys at all — must load
+    cleanly and resolve to the SAME preset the user had, with the new
+    fields defaulting empty (never renaming the stored `ring` key,
+    per the settings-corruption law)."""
+    import json
+
+    payload = {
+        "schema_version": 1,
+        "window": {"x": None, "y": None, "diameter": 720},
+        "click_through": False,
+        "ring": "domy",  # pre-existing case-insensitive fold
+        "custom_rings": [
+            {"name": "OLDRING", "positions": [12, 20, 24, 4],
+             "letters": ["A", "B", "C", "D"]},
+        ],
+    }
+    store._path.parent.mkdir(parents=True, exist_ok=True)
+    store._path.write_text(json.dumps(payload), encoding="utf-8")
+    loaded = store.load()
+    assert loaded.ring == "DOMY"
+    assert loaded.ring_inner == {}
+    assert loaded.custom_ring_crown_text == {}
+    assert loaded.custom_ring_crown_orientation == {}
+    assert loaded.custom_rings[0]["outer"] == "bot_cross"
+    assert "positions" not in loaded.custom_rings[0]
 
 
 def test_earth_label_migrates_from_the_old_bool_pair(store):

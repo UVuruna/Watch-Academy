@@ -10,35 +10,33 @@ from skins.manifest import missing_assets
 
 
 def test_ring_preset_cards_load_and_validate():
-    """The bundled cards (owner spec: {name, positions, letters}) load
-    with their layouts resolved by the positions signature; a broken
-    card names itself loudly."""
+    """THE COMPOSITIONAL RING MODEL (owner decree 2026-08-05): the
+    bundled cards ({name, outer, letters}) load with the outer's own
+    empty fields; a broken card names itself loudly."""
     import pytest
 
     from config import constants
     from data.rings import ring_presets, validate_preset
 
     presets = ring_presets()
-    assert presets["DOMY"]["layout"] == "flame"
+    assert presets["DOMY"]["outer"] == "bot_cross"
     assert presets["DOMY"]["letters"] == ("M", "Y", "Ω", "D")
-    # The chalice card is PILOT since the CROSS-WORDS round (owner UV
+    # The top_cross card is PILOT since the CROSS-WORDS round (owner UV
     # inbox + PILOT pick 2026-07-27): Π-I-L-Ω-Θ, the guide who carries
     # the traveler home; its four letters initial the light stations.
-    assert presets["PILOT"]["layout"] == "chalice"
+    assert presets["PILOT"]["outer"] == "top_cross"
     assert presets["PILOT"]["letters"] == ("L", "Π", "Ω", "Θ")
-    # The third bundled styling (owner spec 2026-07-11): every hour
-    # number on its OWN position, Omega on the bottom — a seal, so one
-    # metal dresses all six. Named "The One" since the DOLLAR/EYE round
-    # (owner decree 2026-07-27) — the banknote's denomination.
-    assert presets["The One"]["layout"] == "seal"
-    assert presets["The One"]["letters"] == ("12", "16", "20", "Ω", "4", "8")
-    for layout in constants.RING_LAYOUTS.values():
-        assert (dial.RING_FACE_DIR / layout["face"]).exists()
+    # "The One" is locked to the "full" outer (owner decree 2026-08-05):
+    # its single empty field wears Ω — the banknote's denomination.
+    assert presets["The One"]["outer"] == "full"
+    assert presets["The One"]["letters"] == ("Ω",)
+    for outer in constants.RING_OUTERS.values():
+        assert (dial.RING_OUTER_ART_DIR / outer["file"]).exists()
     with pytest.raises(ValueError):
-        validate_preset({"name": "BAD", "positions": [1, 2], "letters": ["M"]})
+        validate_preset({"name": "BAD", "outer": "nope", "letters": ["M"]})
     with pytest.raises(ValueError):
         validate_preset(
-            {"name": "BAD", "positions": [12, 20, 24, 4],
+            {"name": "BAD", "outer": "bot_cross",
              "letters": ["M", "Y", "Ω", "š"]}
         )
 
@@ -55,7 +53,7 @@ def test_dollar_preset_loads_and_splits_metal():
 
     presets = ring_presets()
     mason = presets["Dollar"]
-    assert mason["layout"] == "seal"
+    assert mason["outer"] == "hexa"
     assert mason["positions"] == (12, 16, 20, 24, 4, 8)
     assert mason["letters"] == ("👁", "S", "M", "Ω", "N", "A")
     assert mason["triangle"] == (12, 20, 4)
@@ -109,46 +107,47 @@ def test_dollar_preset_loads_and_splits_metal():
 
 
 def test_ring_preset_triangle_override_validation():
-    """A `triangle` override only makes sense on the seal (6-position)
-    layout, and must be exactly 3 of the preset's own positions."""
+    """A `triangle` override only makes sense on the "hexa" outer, and
+    must be exactly 3 of the preset's own positions."""
     import pytest
 
     from data.rings import validate_preset
 
     with pytest.raises(ValueError):
-        # DOMY's own 4-position signature -> flame layout, not seal.
+        # DOMY's own bot_cross outer, not hexa.
         validate_preset({
-            "name": "BAD", "positions": [12, 20, 24, 4],
+            "name": "BAD", "outer": "bot_cross",
             "letters": ["G", "M", "Ω", "N"], "triangle": [12, 20, 4],
         })
     with pytest.raises(ValueError):
         validate_preset({
-            "name": "BAD", "positions": [12, 16, 20, 24, 4, 8],
+            "name": "BAD", "outer": "hexa",
             "letters": ["G", "S", "M", "Ω", "N", "A"],
             "triangle": [12, 20],  # only 2 positions
         })
     with pytest.raises(ValueError):
         validate_preset({
-            "name": "BAD", "positions": [12, 16, 20, 24, 4, 8],
+            "name": "BAD", "outer": "hexa",
             "letters": ["G", "S", "M", "Ω", "N", "A"],
             "triangle": [12, 20, 99],  # 99 is not one of its positions
         })
 
 
-def test_templar_preset_loads_all_six_seats_with_the_cross_glyph():
-    """TASK 2 (MASON/ICONS round, owner verdicts 2026-07-19, third
-    batch): the new bundled Templar preset — the seal layout, all six
-    positions wearing the templar-cross glyph (the owner's gold master,
+def test_templar_preset_loads_its_locked_cross_outer_with_the_cross_glyph():
+    """THE COMPOSITIONAL RING MODEL (owner decree 2026-08-05): the
+    Templar preset is locked to the "cross" outer — its four empty
+    fields all wear the templar-cross glyph (the owner's gold master,
     silver/bronze derived live like every other letter), no motto, no
-    legend."""
+    legend, and (having shrunk off the "hexa" outer) no triangle
+    override any more."""
     from data.rings import ring_presets
 
     presets = ring_presets()
     templar = presets["Templar"]
-    assert templar["layout"] == "seal"
-    assert templar["positions"] == (12, 16, 20, 24, 4, 8)
-    assert templar["letters"] == ("✠",) * 6
-    assert templar["triangle"] == (12, 20, 4)
+    assert templar["outer"] == "cross"
+    assert templar["positions"] == (12, 18, 24, 6)
+    assert templar["letters"] == ("✠",) * 4
+    assert templar["triangle"] is None
     assert templar["legend"] == {}
     assert templar["motto"] == ()
 
@@ -159,38 +158,37 @@ def test_templar_preset_loads_all_six_seats_with_the_cross_glyph():
 
 
 def test_ring_two_metals_toggle_switches_the_split(monkeypatch):
-    """TASK 3 (MASON/ICONS round, owner verdicts 2026-07-19, third
-    batch): Dollar/The One/Templar all carry the SAME `triangle`
-    override now, but only actually SPLIT into two metals when the
-    owner's per-preset toggle resolves True — the stored choice first,
-    else the documented per-preset default (Dollar True, everything
-    else False — "default matching today's look")."""
+    """TASK 3 (MASON/ICONS round); NARROWED by THE COMPOSITIONAL RING
+    MODEL (owner decree 2026-08-05): only Dollar (the sole preset on
+    the "hexa" outer) still carries a `triangle` override — Templar and
+    The One shrank onto the triangle-less cross/full outers and lost
+    the toggle entirely. The stored choice wins first, else the
+    documented per-preset default (Dollar True — "default matching
+    today's look")."""
     from config import constants
 
-    # Defaults, no stored choice at all: Dollar splits, the others don't.
+    # Default, no stored choice at all: Dollar splits.
     mason = build_skin(replace(Settings(), ring="Dollar")).ring
-    omega = build_skin(replace(Settings(), ring="The One")).ring
-    templar = build_skin(replace(Settings(), ring="Templar")).ring
     assert mason.letter_metal[12] == "gold" and mason.letter_metal[16] == "silver"
-    assert all(metal == "gold" for metal in omega.letter_metal.values())
-    assert all(metal == "gold" for metal in templar.letter_metal.values())
 
-    # Explicit stored choices invert both defaults.
+    # An explicit stored choice inverts the default.
     mason_off = build_skin(replace(
         Settings(), ring="Dollar", ring_two_metals={"Dollar": False},
     )).ring
     assert all(metal == "gold" for metal in mason_off.letter_metal.values())
-    omega_on = build_skin(replace(
-        Settings(), ring="The One", ring_two_metals={"The One": True},
-    )).ring
-    assert omega_on.letter_metal[12] == "gold" and omega_on.letter_metal[16] == "silver"
-    templar_on = build_skin(replace(
+
+    # Templar/The One carry no triangle at all any more — a stray
+    # stored key for them is simply inert (nothing to split).
+    templar = build_skin(replace(
         Settings(), ring="Templar", ring_two_metals={"Templar": True},
     )).ring
-    assert templar_on.letter_metal[12] == "gold" and templar_on.letter_metal[16] == "silver"
+    assert all(metal == "gold" for metal in templar.letter_metal.values())
+    one = build_skin(replace(
+        Settings(), ring="The One", ring_two_metals={"The One": True},
+    )).ring
+    assert all(metal == "gold" for metal in one.letter_metal.values())
 
-    # A preset with NO triangle override at all is never eligible, even
-    # if the settings dict names it (a stray/leftover key, harmless).
+    # DOMY (bot_cross) still carries its own outer-level default triangle.
     domy = build_skin(replace(
         Settings(), ring="DOMY", ring_two_metals={"DOMY": True},
     )).ring
@@ -231,7 +229,7 @@ def test_dollar_eye_shine_toggle_swaps_the_master():
     custom = (
         {
             "name": "MyEye",
-            "positions": [12, 16, 20, 24, 4, 8],
+            "outer": "hexa",
             "letters": ["👁 Gemini ☀", "S", "M", "Ω", "N", "A"],
         },
     )
@@ -468,7 +466,7 @@ def test_custom_ring_picks_its_own_thematic_color():
     from data.rings import validate_preset
 
     custom = (
-        {"name": "IRONRING", "positions": [12, 20, 24, 4],
+        {"name": "IRONRING", "outer": "bot_cross",
          "letters": ["I", "R", "O", "N"], "thematic": "copper"},
     )
     iron = build_skin(replace(
@@ -477,7 +475,7 @@ def test_custom_ring_picks_its_own_thematic_color():
     ))
     assert iron.display.shade("thematic") == "copper"
     plain = (
-        {"name": "PLAINRING", "positions": [12, 20, 24, 4],
+        {"name": "PLAINRING", "outer": "bot_cross",
          "letters": ["A", "B", "C", "D"]},
     )
     bare = build_skin(replace(
@@ -487,7 +485,7 @@ def test_custom_ring_picks_its_own_thematic_color():
     assert bare.display.shade("thematic") == "moon_indigo"
     with _pytest.raises(ValueError):
         validate_preset({
-            "name": "X", "positions": [12, 20, 24, 4],
+            "name": "X", "outer": "bot_cross",
             "letters": ["A", "B", "C", "D"], "thematic": "neon",
         })
 
@@ -548,7 +546,7 @@ def test_motto_validation_rejects_bad_cards():
     from data.rings import validate_preset
 
     base = {
-        "name": "BAD", "positions": [12, 16, 20, 24, 4, 8],
+        "name": "BAD", "outer": "hexa",
         "letters": ["G", "S", "M", "Ω", "N", "A"],
     }
     with pytest.raises(ValueError):
@@ -602,8 +600,8 @@ def test_dial_window_margin_grows_only_for_a_motto_preset():
 def test_build_skin_swaps_only_the_ring():
     domy = build_skin(Settings())
     morph = build_skin(replace(Settings(), ring="PILOT"))
-    assert domy.ring.asset.name == "domy.png"
-    assert morph.ring.asset.name == "morph.png"
+    assert domy.ring.outer_asset.name == "bot_cross.png"
+    assert morph.ring.outer_asset.name == "top_cross.png"
     assert morph.ring.letters == {12: "L", 16: "Π", 8: "Θ", 0: "Ω"}
     # Everything else is identical — the ring preset IS the difference.
     assert morph.hands == domy.hands
@@ -613,18 +611,18 @@ def test_build_skin_swaps_only_the_ring():
 
 
 def test_custom_ring_card_builds_a_seal():
-    """A user card with the six-position signature gets the hexagram
-    face and ONE metal on all six letters (owner correction): gold
-    finish = everything gold, silver = everything silver."""
+    """A user card locked to the "hexa" outer gets the hexa face and
+    ONE metal on all six letters (owner correction): gold finish =
+    everything gold, silver = everything silver."""
     card = {
         "name": "SOLOMON",
-        "positions": [12, 16, 20, 24, 4, 8],
+        "outer": "hexa",
         "letters": ["S", "Ω", "Σ", "M", "Θ", "✠"],
     }
     skin = build_skin(
         replace(Settings(), ring="SOLOMON", custom_rings=(card,))
     )
-    assert skin.ring.asset.name == "hexagram.png"
+    assert skin.ring.outer_asset.name == "hexa.png"
     assert len(skin.ring.letter_art) == 6
     assert all(metal == "gold" for metal in skin.ring.letter_metal.values())
     silver = build_skin(
@@ -708,7 +706,7 @@ def test_bronze_finish_and_theme_metals():
         assert derived.exists(), filename
         assert derived != art_dir / filename
     seal = {
-        "name": "SEALB", "positions": [4, 8, 12, 16, 20, 24],
+        "name": "SEALB", "outer": "hexa",
         "letters": ["S", "O", "L", "M", "N", "A"],
     }
     seal_ring = build_skin(replace(

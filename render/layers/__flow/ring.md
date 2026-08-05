@@ -7,13 +7,8 @@
 ```mermaid
 %%{init: {'flowchart': {'subGraphTitleMargin': {'top': 0, 'bottom': 35}}}}%%
 flowchart TB
-    A[paint] --> B{spec.asset?}
-    B -- yes --> C[draw tinted+saturated ring plate]
-    C --> D[_draw_letter_art] --> E[_draw_motto] --> Z1[return]
-    B -- no --> F[fill procedural donut path]
-    F --> G[FOR EACH hour: draw tick]
-    G --> H[FOR EACH hour: numeral OR per-skin letter]
-    H --> I[FOR EACH 5-minute mark: draw number]
+    A[paint] --> B[_draw_bands: inner then outer, each own tint]
+    B --> D[_draw_letter_art] --> E[_draw_motto] --> Z1[return]
     subgraph GLYPH["_draw_ring_glyph(asset, metal, theta, radius_fraction, height)"]
         J[resolve metal finish file] --> K[multi-sample dark halo from gold master]
         K --> L[translate to dial_point, rotate readable_rotation_deg]
@@ -23,24 +18,14 @@ flowchart TB
     E -.calls per motto glyph.-> GLYPH
 ```
 
-Pseudocode (language-neutral):
+Pseudocode (language-neutral): THE COMPOSITIONAL RING MODEL (owner
+decree 2026-08-05) — always both bands, never a single plate:
 
-    IF ring has an art asset:
-        draw tinted (ring_tint) + saturated (ring_saturation) plate, full size
-        _draw_letter_art()      # per-hour letters, untinted
-        _draw_motto()           # top/bottom Great Seal arcs, untinted
-        RETURN
-
-    fill the donut path (outer minus inner ellipse) with spec.fill
-    FOR EACH hour IN 0..23:
-        draw a tick line at that hour's angle
-    FOR EACH hour IN 0..23:
-        IF a per-skin letter is defined for this hour:
-            draw the letter, letter color/font
-        ELSE:
-            draw the plain numeral, text color/font
-    FOR EACH minute IN (5, 10, ..., 55):
-        draw the minute number along the inner edge
+    _draw_bands():
+        draw inner_asset tinted (ring_tint_inner, follows ring_tint if None) + saturated, full size
+        draw outer_asset tinted (ring_tint) + saturated, full size, ON TOP
+    _draw_letter_art()      # per-hour letters, untinted (unless letter_tint set)
+    _draw_motto()           # top/bottom Crown Text arcs, untinted (unless motto_tint set)
 
     FUNCTION _draw_ring_glyph(gold_asset, metal, theta, radius_fraction, height):
         asset = letter_metal_file(gold_asset, metal)     # derived, disk-cached

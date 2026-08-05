@@ -50,12 +50,13 @@ recognizable.
 - `border_width_fraction`, `radius_fraction: float` — of the dial radius
 
 ### `RingSpec`
-The dial ring: a full image, or a procedural fallback with per-hour
-letter substitutions.
+THE COMPOSITIONAL RING MODEL (owner decree 2026-08-05): the dial ring
+is ALWAYS the composition of an outer band + an inner band + the
+preset's own letters + an optional crown-text motto arc — no single
+monolithic plate and no procedural fallback.
 #### Attributes
-- `asset: Path | None` — full ring image; `None` -> procedural
-- `fill`, `text_color`, `letter_color: str`
-- `width_fraction: float` — ring thickness, of the dial radius
+- `outer_asset: Path` — the outer band plate (the preset's empty letter fields)
+- `inner_asset: Path` — the inner minute-track band
 - `letters: dict[int, str]` — hour -> letter replacing the numeral
 - `letter_art: dict[int, Path]` — hour -> the GOLD master letter file
   (built by `build_skin`; the ring tint never touches it)
@@ -73,11 +74,6 @@ letter substitutions.
   preset that has one, built by `build_skin` from the preset's `motto`
   card field; empty for presets without one
 - `motto_metal: str = "gold"` — the single finish every motto glyph wears
-- `use_split_art: bool = False` — R-21 opt-in (owner correction
-  2026-08-05): `False` for every preset that ships today, so the owner's
-  split ring art landing on disk (`assets/instrument/ring/outter/`+
-  `inner/`) never by itself repaints an existing preset; a preset flips
-  this True only after the owner reviews its split look
 
 ### `WeekdaySpec`
 One weekday theme's seven bodies.

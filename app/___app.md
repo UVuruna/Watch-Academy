@@ -15,6 +15,7 @@ their outputs through the render compositor.
 | `observatory.py` | Algorithmic | the statistics sibling of the Encyclopedia — 5 interactive QPainter charts (documented god-file, ratchet entry) — [about](__about/observatory.md) · [flow](__flow/observatory.md) |
 | `widget.py` | Algorithmic | the frameless, transparent dial window — [about](__about/widget.md) · [flow](__flow/widget.md) |
 | `settings_store.py` | Algorithmic | the `Settings` data table + its atomic JSON store — [about](__about/settings_store.md) · [flow](__flow/settings_store.md) |
+| `settings_ring.py` | Standard | ring-name resolution + custom-ring-card normalization, split out of `settings_store.py` (THE STRUCTURE LAW) — [about](__about/settings_ring.md) |
 | `time_travel.py` | Algorithmic | the scenario-tester dialog + its Quick Jump rows — [about](__about/time_travel.md) · [flow](__flow/time_travel.md) |
 | `slot_descriptor.py` | Standard | the shared `SlotDescriptor` dataclass the controller builds and the Watch Face window reads — [about](__about/slot_descriptor.md) |
 | `weekday_theme_grid.py` | Algorithmic | the shared image+name gallery builders (the weekday-body gallery, the Calendar mount gallery) the Watch Face window uses — [about](__about/weekday_theme_grid.md) · [flow](__flow/weekday_theme_grid.md) |

@@ -46,6 +46,12 @@ halves of the circle (see Design Decisions).
   `position`'s seat angle, letters at the fixed
   `RING_MOTTO_LETTER_STEP_DEG` step. Raises if `text` is empty or
   contains a space — one word only.
+- `free_arc_angles(text, orientation)` (owner decree 2026-08-05, THE
+  COMPOSITIONAL RING MODEL's CROWN TEXT for custom rings): one angle
+  per character of an arbitrary text (spaces allowed), centered on the
+  dial's own top (`orientation="top"`, clockwise) or bottom
+  (`"bottom"`, counter-clockwise) anchor — not tied to any ring seat,
+  unlike `centered_word_angles`.
 - `motto_glyph_angles(text, pins, clockwise=True)`: one angle per
   character of `text` (spaces included, so word gaps get their own
   slot, un-drawn by the caller). `pins` is `(letter, occurrence,
