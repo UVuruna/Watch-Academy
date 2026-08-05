@@ -883,3 +883,32 @@ def test_only_a_two_faced_mount_puts_daylight_in_the_composite_key(app):
         comp = Compositor(_calendar_skin(calendar_mount=mount), AssetCache())
         comp.set_day(day)
         assert comp._two_faced_mount(tick) is expected, mount
+
+
+def test_the_chinese_branches_tile_the_year_with_no_gap():
+    """THE BRANCH'S TRUE SPAN (owner 2026-08-05): a branch opens on its
+    own solar term and closes the day BEFORE the next one — so the
+    twelve cover every day of the year exactly once, with no gap and no
+    overlap. Computed from one table, which is why they cannot
+    disagree about a boundary."""
+    from datetime import date, timedelta
+
+    covered: dict[tuple[int, int], str] = {}
+    for month in range(1, 13):
+        (open_m, open_d), (close_m, close_d), term = (
+            constants.chinese_branch_span(month)
+        )
+        assert term, month
+        start = date(2026, open_m, open_d)
+        end = date(2026 if close_m >= open_m else 2027, close_m, close_d)
+        day = start
+        while day <= end:
+            key = (day.month, day.day)
+            assert key not in covered, f"{key} claimed twice"
+            covered[key] = constants.CHINESE_MONTH_BRANCH_ANIMALS[month]
+            day += timedelta(days=1)
+    assert len(covered) == 365
+    # the Tiger opens the cycle at the start of spring, the Rat holds
+    # the December solstice — the two anchors CANON names
+    assert covered[(2, 4)] == "Tiger"
+    assert covered[(12, 21)] == "Rat"

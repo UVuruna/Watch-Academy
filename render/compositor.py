@@ -3117,9 +3117,22 @@ class Compositor:
         gregorian = (index + 5) % 12 + 1
         animal = constants.CHINESE_MONTH_BRANCH_ANIMALS[gregorian]
         art = octa_slot_art("zodiac/chinese/primary/colored", animal)
+        # THE BRANCH'S TRUE SPAN (owner 2026-08-05): the wedge is a
+        # Gregorian seat, but the branch itself opens on its own solar
+        # term and closes the day before the next — so the hover says
+        # from when to when, and says "approx." because the term drifts
+        # about a day with the leap cycle.
+        (open_m, open_d), (close_m, close_d), term = (
+            constants.chinese_branch_span(gregorian)
+        )
         lines = [
             f"<b>{html.escape(self._tr(animal))}</b>",
             html.escape(self._tr(_MONTHS[gregorian - 1])),
+            "≈ {0} {1} – {2} {3} · {4}".format(
+                open_d, html.escape(self._tr(_MONTHS_SHORT[open_m - 1])),
+                close_d, html.escape(self._tr(_MONTHS_SHORT[close_m - 1])),
+                html.escape(term),
+            ),
         ]
         if self._day is not None and index == chinese_mount_dimmed_index(self._day):
             lines.append(

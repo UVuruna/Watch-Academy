@@ -1392,6 +1392,47 @@ CHINESE_MONTH_BRANCH_ANIMALS = {
     1: "Ox", 2: "Tiger", 3: "Rabbit", 4: "Dragon", 5: "Snake", 6: "Horse",
     7: "Goat", 8: "Monkey", 9: "Rooster", 10: "Dog", 11: "Pig", 12: "Rat",
 }
+# THE BRANCH'S TRUE SPAN (owner 2026-08-05: "na hoveru će stajati tačan
+# datum od kad do kad"). A branch does NOT run from the 1st to the 31st:
+# it opens on its own "jie" solar term and closes the day before the
+# next one. Gregorian month -> (month, day, the term's name) of the day
+# it OPENS; the CLOSE is computed as the day before the next branch's
+# term (`chinese_branch_span`), so the twelve can never disagree about
+# a boundary.
+#
+# The dates are the traditional Gregorian ones and drift by about a day
+# with the leap cycle — which is why the hover says "approx." and why
+# the MOUNT itself stays keyed to the Gregorian month (the wedge is a
+# fixed seat; only the words are the astronomy).
+CHINESE_BRANCH_TERMS = {
+    1: (1, 6, "Xiaohan"),      # Minor Cold — the Ox
+    2: (2, 4, "Lichun"),       # Start of Spring — the Tiger opens the cycle
+    3: (3, 6, "Jingzhe"),      # Awakening of Insects — the Rabbit
+    4: (4, 5, "Qingming"),     # Clear and Bright — the Dragon
+    5: (5, 6, "Lixia"),        # Start of Summer — the Snake
+    6: (6, 6, "Mangzhong"),    # Grain in Ear — the Horse
+    7: (7, 7, "Xiaoshu"),      # Minor Heat — the Goat
+    8: (8, 8, "Liqiu"),        # Start of Autumn — the Monkey
+    9: (9, 8, "Bailu"),        # White Dew — the Rooster
+    10: (10, 8, "Hanlu"),      # Cold Dew — the Dog
+    11: (11, 7, "Lidong"),     # Start of Winter — the Pig
+    12: (12, 7, "Daxue"),      # Major Snow — the Rat, which is why the
+                               # classical calendar calls that lunar
+                               # month "the eleventh"
+}
+
+
+def chinese_branch_span(month: int) -> tuple[tuple[int, int], tuple[int, int], str]:
+    """((open month, open day), (close month, close day), term name) of
+    one branch — the close is the day before the NEXT branch's term, so
+    the twelve tile the year with no gap and no overlap."""
+    open_month, open_day, term = CHINESE_BRANCH_TERMS[month]
+    next_month, next_day, _next_term = CHINESE_BRANCH_TERMS[month % 12 + 1]
+    if next_day > 1:
+        close = (next_month, next_day - 1)
+    else:                       # a term on the 1st closes the month before
+        close = ((next_month - 2) % 12 + 1, 28)
+    return (open_month, open_day), close, term
 
 # Tropical zodiac: (name, symbol), indexed by dial angle // 30 on the
 # year wheel — Cancer's first point IS the summer solstice (dial top),

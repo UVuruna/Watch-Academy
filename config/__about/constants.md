@@ -116,6 +116,16 @@ data has exactly one home.
   SERVANT_ON_TOP` (the per-theme/per-wheel exceptions to the standard
   Sunday duality seating).
 
+## The Chinese branch spans (owner 2026-08-05)
+
+`CHINESE_BRANCH_TERMS` names the "jie" solar term each branch OPENS on
+(Lichun ~4 Feb for the Tiger, Daxue ~7 Dec for the Rat), and
+`chinese_branch_span(month)` computes the CLOSE as the day before the
+next branch's term — so the twelve tile the year with no gap and no
+overlap, from one table. The mount's wedge stays a Gregorian seat; only
+the hover's words are the astronomy, and they say "approx." because the
+term drifts about a day with the leap cycle.
+
 ## Connections
 
 ### Uses
