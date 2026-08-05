@@ -1,10 +1,16 @@
 """Product-defining invariants. These values NEVER change at runtime
 and are not user-tunable — they define what DOMY Watch is.
-from config import calendar_mounts, continents, palette, pantheon
+
+The WEEKDAY theme tables here are DERIVED: `config.registry` holds one
+entry per theme and every table below is computed from it in a single
+assignment (owner decree 2026-08-01). The names stay because the
+program reads them everywhere; the data has exactly one home.
 
 Tunables (things a developer might reasonably adjust) live in defaults.py.
 Win32 API literals live in winapi.py.
 """
+
+from config import registry
 
 # ═══════════════════════════ APP IDENTITY ═══════════════════════════
 APP_NAME = "DOMY Watch"
@@ -1150,114 +1156,13 @@ RING_LETTER_FILES = {
 # Weekday body themes (SYMBOLISM.md canon): "planets" uses the skin's
 # own weekday unit; the others swap in the owner's themed art from
 # assets/skins/domy/weekday/<theme>/ with the canon display names.
-WEEKDAY_THEMES = (
-    "planets",
-    "planet_signs",
-    "greek",
-    "norse",
-    "egypt",
-    "slavic",
-    "alchemy",
-    "japan",
-    "religion",
-    "religion_alt",
-    "profession",
-    # The ANIMAL SOCIETIES (owner 2026-07-13) — three orders of order:
-    # the pack by RANK, the hive by FUNCTION AND AGE, the herd by
-    # MEMORY.
-    "wolf",
-    "bee",
-    "elephant",
-    # The TEXT WAVE themes (owner 2026-07-14): the three Scripture
-    # sets, the deep sky, and the Planets medallion look.
-    "bible",
-    "bible2",
-    "bible_dark",
-    "cosmos",
-    "planets_art",
-    # THE CONTINENTS (owner-sealed matrix 2026-07-21): the six weekday
-    # columns ride the six continents — the dial's OWN Earth-marker faces
-    # (assets/earth/) elevated to a weekday theme (owner exception to the
-    # one-image-one-place law, sealed: quality art never shown large
-    # elsewhere). Bodies follow the user's earth_style and the live sky's
-    # day/night at render (config.continents.continents_body_art); the
-    # Sunday dual is the two poles (Antarctic Ruler / Arctic Servant), the
-    # Ninth is Zealandia with the Pangea easter-egg (core.continents).
-    "continents",
-    # The Inner Wheel on the dial (owner 2026-07-14): the emblem
-    # families as weekday themes — the art lives in assets/emblem/.
-    "virtues",
-    "sins",
-    "moods",
-    # COMPLETION WAVE I (Session 31, 2026-07-29): three casts whose art
-    # had been generated and correctly placed for a week without ever
-    # being registered here — the failure THE THEME COMPLETION LAW
-    # (project CLAUDE.md) was written for. Each ships wired, worded and
-    # seated in the Encyclopedia in the same round.
-    "age_of_heroes",       # Greek Monsters — the Olympians' bestiary
-    "celestial_court",     # Chinese Mythology — gods, immortals, one rebel
-    "corporate",           # The Corporation — the executive committee
-    # COMPLETION WAVE II (Session 32, 2026-07-29): the World of Warcraft
-    # franchise. THREE casts riding the SAME nine seats with different
-    # figures — three THEMES on the dial (backlog structural answer 1:
-    # FIGURE_ROSTERS is a two-value GLOBAL switch, so a franchise's
-    # blocks can only be themes), ONE card in the Encyclopedia with a
-    # three-way switcher (answer 2).
-    "wow_alliance",        # the Grand Alliance's own command
-    "wow_horde",           # the new Horde's leadership
-    "wow_evil",            # the enemies both were made against
-    # COMPLETION WAVE II, second half (Session 32, 2026-07-29): the
-    # Cyberpunk 2077 franchise, the SAME three-casts-one-week shape as
-    # the Warcraft half above — three THEMES on the dial, ONE card in
-    # the Encyclopedia. These three are the only casts in the registry
-    # whose seats carry a ROSTER: a seat may hold several named
-    # factions/figures and rotate through them daily
-    # (`pantheon.WEEKDAY_SEAT_ROSTERS`).
-    "cp_gangs",            # the factions that hold Night City's ground
-    "cp_street",           # the people who live on it
-    "cp_corpo",            # the powers that move behind both
-    # COMPLETION WAVE III (Session 33, 2026-07-29): the Star Wars
-    # franchise, the SAME three-casts-one-week shape a third time — three
-    # THEMES on the dial, ONE card in the Encyclopedia. With these three
-    # the twelve-cast backlog THE THEME COMPLETION LAW was written for is
-    # closed. The Dyad cast carries the wave's only rotating seats
-    # (`pantheon.WEEKDAY_SEAT_ROSTERS`), including the first PLACE-dual
-    # Ninth in the registry.
-    "sw_jedi",             # the side that loses and is right
-    "sw_sith",             # the side that wins
-    "sw_dyad",             # the generation that inherits the result
-)
+WEEKDAY_THEMES = registry.THEMES
 
 # ═══════════════════════════ THEME METAL LOOKS ═══════════════════════════
 # The bronze-plate themes (owner 2026-07-12): their medallions can wear
 # a METAL — bronze is the art as drawn, gold and silver are runtime
 # tritone tints. All other themes are full-color and never tint.
-METAL_THEMES = (
-    "greek", "norse", "profession", "wolf", "bee", "elephant",
-    "cosmos",              # bronze star-chart medallions + colored arc
-    "planets_art",         # the Planets "Art" look (owner 2026-07-18)
-    # Completion wave I (Session 31): all three casts ship a bronze
-    # primary register with a colored/ sibling, so all four looks are
-    # available — no THEME_METALS_OVERRIDE needed for any of them.
-    "age_of_heroes", "celestial_court", "corporate",
-    # Completion wave II (Session 32): the three WoW casts are bronze
-    # carved relief in primary/bronze with a full-paint colored/ sibling
-    # per plate — the same cameo-master shape, so all four looks apply.
-    "wow_alliance", "wow_horde", "wow_evil",
-    # Completion wave II, Cyberpunk half (Session 32): aged-bronze
-    # carved relief in primary/bronze with a full-repaint neon-noir
-    # colored/ sibling per plate (the sheet's own two-register law), so
-    # all four looks apply here too.
-    "cp_gangs", "cp_street", "cp_corpo",
-    # Completion wave III (Session 33): aged-bronze carved relief in
-    # primary/bronze with a full-repaint poster colored/ sibling per
-    # plate (the Star Wars sheet's own two-register law), so all four
-    # looks apply here too. Plates the owner has not generated yet are
-    # graceful-absent in every look alike — a metal is a tint of the
-    # bronze master, so a missing master simply shows nothing rather
-    # than showing a wrong figure.
-    "sw_jedi", "sw_sith", "sw_dyad",
-)
+METAL_THEMES = registry.METAL_THEMES
 # "colored" (owner 2026-07-12) is the FOURTH look: fresh full-color
 # badges from the theme's colored/ subfolder — separate art, no swap.
 THEME_METALS = ("gold", "bronze", "silver", "colored")
@@ -1281,117 +1186,11 @@ def theme_metals(theme: str) -> tuple[str, ...]:
 # ═══════════════════════════ THEME BLURBS & ARTICLES ═══════════════════════════
 # Theme -> symbolism.json blurb key (the encyclopedic text under the
 # hexa diamond hover follows the active theme).
-WEEKDAY_THEME_BLURBS = {
-    "planets": "day",
-    "planet_signs": "day",
-    "greek": "greek",
-    "norse": "norse",
-    "egypt": "egypt",
-    "slavic": "slavic",
-    "alchemy": "alchemy",
-    "japan": "japan",
-    "religion": "religion",
-    "religion_alt": "religion_alt",
-    "profession": "profession",
-    # The animal societies reuse the generic day blurb (the legacy
-    # blurb path never grew theme sets of its own).
-    "wolf": "day",
-    "bee": "day",
-    "elephant": "day",
-    "bible": "day",
-    "bible2": "day",
-    "bible_dark": "day",
-    "cosmos": "day",
-    "planets_art": "day",
-    # The continents reuse the generic day blurb (the hexa-diamond
-    # blurb path never grew a themed set of its own — its rich text
-    # lives in the article, not the one-line arm blurb).
-    "continents": "day",
-    "virtues": "day",
-    "sins": "day",
-    "moods": "day",
-    # Completion wave I (Session 31): each cast carries its OWN arm
-    # blurb set — a figure cast whose members are not the planets has
-    # nothing to say through the generic day line.
-    "age_of_heroes": "age_of_heroes",
-    "celestial_court": "celestial_court",
-    "corporate": "corporate",
-    # Completion wave II (Session 32): one blurb set per CAST, never one
-    # per franchise — the three ride the same seats with different
-    # people, and the hover line names the person (CUBE.md Charter
-    # rule 5).
-    "wow_alliance": "wow_alliance",
-    "wow_horde": "wow_horde",
-    "wow_evil": "wow_evil",
-    # Completion wave II, Cyberpunk half (Session 32): same law again —
-    # one blurb set per CAST. A rotating seat's line names every member
-    # of its roster, so the hover never describes a figure the dial is
-    # not currently able to show.
-    "cp_gangs": "cp_gangs",
-    "cp_street": "cp_street",
-    "cp_corpo": "cp_corpo",
-    # Completion wave III (Session 33): one blurb set per CAST again. Two
-    # figures are seated in TWO of these casts at different ages, so a
-    # shared franchise blurb set would have had to describe one of the
-    # two ages wrongly on every hover.
-    "sw_jedi": "sw_jedi",
-    "sw_sith": "sw_sith",
-    "sw_dyad": "sw_dyad",
-}
+WEEKDAY_THEME_BLURBS = registry.BLURBS
 
 # Theme -> symbolism.json article set (the glyph theme shares the
 # planet articles — same entities, different art).
-WEEKDAY_THEME_ARTICLES = {
-    "planets": "planets",
-    "planet_signs": "planets",
-    "greek": "greek",
-    "norse": "norse",
-    "egypt": "egypt",
-    "slavic": "slavic",
-    "alchemy": "alchemy",
-    "japan": "japan",
-    "religion": "religion",
-    "religion_alt": "religion_alt",
-    "profession": "profession",
-    "wolf": "wolf",
-    "bee": "bee",
-    "elephant": "elephant",
-    "bible": "bible",
-    "bible2": "bible2",
-    "bible_dark": "bible_dark",
-    "cosmos": "cosmos",
-    # The medallion look shares the planet articles — same entities,
-    # different art (like the glyphs).
-    "planets_art": "planets",
-    "continents": "continents",
-    "virtues": "virtues",
-    "sins": "sins",
-    "moods": "moods",
-    # Completion wave I (Session 31): own article set per cast.
-    "age_of_heroes": "age_of_heroes",
-    "celestial_court": "celestial_court",
-    "corporate": "corporate",
-    # Completion wave II (Session 32): own article set per cast, for the
-    # same reason — three sets on one seat are three different people,
-    # and each article argues THAT person's own deed.
-    "wow_alliance": "wow_alliance",
-    "wow_horde": "wow_horde",
-    "wow_evil": "wow_evil",
-    # Completion wave II, Cyberpunk half (Session 32): own article set
-    # per cast. Where a seat carries a roster the article argues every
-    # member of it — they are not one faction seen twice, they are two
-    # answers to the question the seat asks.
-    "cp_gangs": "cp_gangs",
-    "cp_street": "cp_street",
-    "cp_corpo": "cp_corpo",
-    # Completion wave III (Session 33): own article set per cast, and
-    # here the rule earns its keep twice over — Anakin, Leia and Han each
-    # hold a seat in two of these three casts at different ages, and each
-    # article argues that age's own deed (CUBE.md Charter rule 5).
-    "sw_jedi": "sw_jedi",
-    "sw_sith": "sw_sith",
-    "sw_dyad": "sw_dyad",
-}
+WEEKDAY_THEME_ARTICLES = registry.ARTICLES
 
 # ═══════════════════════════ THE NINTH TABLES ═══════════════════════════
 # THE NINTH per weekday theme (CANON.md "The Ninth — Outside the
@@ -1405,81 +1204,7 @@ WEEKDAY_THEME_ARTICLES = {
 # (Rule #5). The zodiac-only ninths (Chinese "The Cat", Astrology
 # "Ophiuchus") stay OUT of this table on purpose — they carry no
 # weekday Sunday duality, so the render side never needs them.
-WEEKDAY_THEME_NINTHS = {
-    "wolf": ("Sigma", "wolf/primary/bronze/Sigma.png"),
-    "bee": ("The Swarm", "bee/primary/bronze/Swarm.png"),
-    "elephant": ("The Graveyard", "elephant/primary/bronze/Graveyard.png"),
-    "cosmos": ("The Big Bang", "cosmos/primary/bronze/Big_Bang.png"),
-    "greek": ("Gaia", "greek/pantheon/bronze/Gaia.png"),
-    "norse": ("Yggdrasil", "norse/pantheon/bronze/Yggdrasil.png"),
-    "egypt": ("The Pharaoh", "egypt/pantheon/bronze/Pharaoh.png"),
-    # TRIGLAV IS ONE PLATE, NOT TWO (Rule #19, fixed 2026-07-29): the
-    # Round Four adjudication locks him as the ninth in BOTH roster
-    # modes, and his sheet drops the art in the PRIMARY register — the
-    # pantheon copy would be the same image under a second name. The
-    # table pointed at that never-drawn copy while `Triglav_gem.png`
-    # sat on disk in `primary/`, so the seat read as pending art.
-    "slavic": ("Triglav", "slavic/primary/bronze/Triglav.png"),
-    "alchemy": ("The Philosopher's Stone", "alchemy/primary/colored/Stone.png"),
-    "profession": ("The Polymath", "profession/primary/bronze/Polymath.png"),
-    "religion": ("Freemasonry", "creeds/primary/colored/Freemasonry.png"),
-    "religion_alt": (
-        "The Unknown God", "creeds/secondary/colored/Unknown_God.png",
-    ),
-    "bible": ("The Holy Trinity", "bible/primary/colored/Holy_Trinity.png"),
-    "bible2": ("Melchizedek", "bible/secondary/colored/Melchizedek.png"),
-    "bible_dark": ("The Ninth Circle", "bible/dark/colored/Ninth_Circle.png"),
-    # THE CONTINENTS' NINTH (owner-sealed matrix 2026-07-21): ZEALANDIA,
-    # the literal Unfound — a true continent 94% drowned, unrecognized
-    # until 2017. Its plate is wired ahead of the owner's art (relative
-    # to WEEKDAY_ART_DIR, reaching the earth family: assets/earth/),
-    # graceful-absent until it lands, exactly like Triglav.
-    "continents": ("Zealandia", "../earth/zealandia.png"),
-    # COMPLETION WAVE I (Session 31): three Excluded ninths, each argued
-    # in its own sheet — Pegasus is born OF the Monday seat and belongs
-    # to neither the monster line nor the god line; the Buddha is the one
-    # being who could tell the Sunday dual's two faces apart (and the one
-    # who extinguished the Ninth's own sin, WISH); the Founder is the
-    # origin an org chart no longer names.
-    "age_of_heroes": ("Pegasus", "age_of_heroes/primary/bronze/Pegasus.png"),
-    "celestial_court": ("Buddha", "celestial_court/primary/bronze/Buddha.png"),
-    "corporate": ("The Founder", "corporate/primary/bronze/Founder.png"),
-    # COMPLETION WAVE II (Session 32): three Excluded ninths, each argued
-    # in the franchise's own sheet — Turalyon kept the same oath for a
-    # thousand years with no Alliance in reach to keep it for; Rexxar
-    # belongs to no people at all and came anyway; Medivh is the one
-    # figure of the Evil cast who never chose what he became and is
-    # nevertheless responsible for most of it.
-    "wow_alliance": ("Turalyon", "wow_alliance/primary/bronze/Turalyon.png"),
-    "wow_horde": ("Rexxar", "wow_horde/primary/bronze/Rexxar.png"),
-    "wow_evil": ("Medivh", "wow_evil/primary/bronze/Medivh.png"),
-    # COMPLETION WAVE II, Cyberpunk half (Session 32): three Excluded
-    # ninths, each argued in the sheet's own terms — NetWatch is the
-    # only power in the Gangs cast with no ground at all; V is the one
-    # figure the Street cast is entirely about and the circle has no
-    # chair for; Alt Cunningham has had no body since 2013 and is the
-    # demonstration of what the Power cast is actually fighting over.
-    # The Alt seat ROTATES with Rache Bartmoss in lockstep with the
-    # Throne and the Mirror (`pantheon.WEEKDAY_SEAT_ROSTERS`).
-    "cp_gangs": ("NetWatch", "cp_gangs/primary/bronze/Netwatch.png"),
-    "cp_street": ("V", "cp_street/primary/bronze/V.png"),
-    "cp_corpo": (
-        "Alt Cunningham", "cp_corpo/primary/bronze/Alt_Cunningham.png",
-    ),
-    # COMPLETION WAVE III (Session 33): three Excluded ninths, each
-    # argued in the Star Wars sheet's own terms — Yoda is presumed dead
-    # by every party in the conflict and trains both of the figures who
-    # finish the story from outside every seat; Plagueis exists in the
-    # films only as a story told once, by the man who murdered him, to
-    # the man being recruited; The Ghosts are the accumulated dead of the
-    # whole saga, which the canon expressly permits (a Ninth need not be
-    # a person). The Ghosts seat ROTATES with EXEGOL — the registry's
-    # first PLACE-vs-PLACE Ninth — through
-    # `pantheon.WEEKDAY_SEAT_ROSTERS`.
-    "sw_jedi": ("Yoda", "sw_jedi/primary/bronze/Yoda.png"),
-    "sw_sith": ("Darth Plagueis", "sw_sith/primary/bronze/Plagueis.png"),
-    "sw_dyad": ("The Ghosts", "sw_dyad/primary/bronze/Ghosts.png"),
-}
+WEEKDAY_THEME_NINTHS = registry.NINTHS
 
 # THE PANGEA EASTER EGG (owner-sealed matrix 2026-07-21; trigger WIDENED
 # to every principal moon phase 2026-07-29): Pangea shows INSTEAD of
@@ -1491,9 +1216,7 @@ WEEKDAY_THEME_NINTHS = {
 # core.continents; render.ninths.theme_ninth reads this alt table when
 # the law fires (mechanism "easter_egg" below). Plate wired ahead of the
 # owner's art (graceful-absent), same earth-family home as Zealandia.
-WEEKDAY_THEME_NINTH_EASTER_EGG = {
-    "continents": ("Pangea", "../earth/pangea.png"),
-}
+WEEKDAY_THEME_NINTH_EASTER_EGG = registry.NINTH_EASTER_EGG
 
 # THE DYAD'S NIGHT FACE (owner Double-Ninth verdict, 2026-07-29):
 # sw_dyad's Ninth is a DAYLIGHT/NIGHT switch, not a date rotation — day
@@ -1505,9 +1228,7 @@ WEEKDAY_THEME_NINTH_EASTER_EGG = {
 # when the mechanism dispatch (`NINTH_MECHANISMS` below) resolves to
 # "daynight". Plate wired ahead of the owner's art (graceful-absent);
 # neither Ghosts nor Exegol has landed yet.
-WEEKDAY_THEME_NINTH_NIGHT = {
-    "sw_dyad": ("Exegol", "sw_dyad/primary/bronze/Exegol.png"),
-}
+WEEKDAY_THEME_NINTH_NIGHT = registry.NINTH_NIGHT
 
 # ═══════════════════════════ NINTH MECHANISMS ═══════════════════════════
 # THE DOUBLE NINTH LAW (standing law, owner decree 2026-07-29): a theme
@@ -1542,11 +1263,7 @@ WEEKDAY_THEME_NINTH_NIGHT = {
 # cadence override) — `tests/test_ninth_mechanisms.py` fails the build
 # if `NINTH_MECHANISMS` ever names anything outside it, or if a double
 # Ninth found in ANY registry above has no entry here at all.
-NINTH_MECHANISMS: dict[str, str] = {
-    "continents": "easter_egg",
-    "sw_dyad": "daynight",
-    "cp_corpo": "term_weekly",
-}
+NINTH_MECHANISMS = registry.MECHANISMS
 NINTH_MECHANISM_KINDS = frozenset({"easter_egg", "daynight", "term_weekly"})
 
 # ═══════════════════════════ DUAL/NINTH TIME WINDOW ═══════════════════════════

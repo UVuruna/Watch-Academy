@@ -199,5 +199,18 @@ def _dual_files():
     return out
 
 
-FILES = _files()
-DUAL_FILES = _dual_files()
+# LAZY, and it has to be (2026-08-05). `constants` reads this module,
+# and the Continents' COMPUTED stems reach `config.continents` ->
+# `config.paths` -> back to `constants` — a cycle if the resolution runs
+# at import time. PEP 562's module `__getattr__` moves it to FIRST
+# ACCESS instead, by which point every module in the ring is built. The
+# result is cached: the tables are read on every paint.
+_CACHE: dict = {}
+_LAZY = {"FILES": _files, "DUAL_FILES": _dual_files}
+
+
+def __getattr__(name: str):
+    """`registry.FILES` / `registry.DUAL_FILES`, resolved once."""
+    if name in _LAZY:
+        return _CACHE.setdefault(name, _LAZY[name]())
+    raise AttributeError(f"module {__name__!r} has no attribute {name!r}")

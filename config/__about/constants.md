@@ -4,18 +4,15 @@
 
 ## Purpose
 
-Product-defining invariants — values that define what DOMY Watch IS
-and never change at runtime, never user-tunable. The largest file in
-`config/` (1,863 lines) and, unlike [Defaults](defaults.md)/
-[Pantheon](pantheon.md), NOT a Session 36 split target: everything here
-predates and postdates that split as one continuous body of canon
-tables, dial-identity constants and enumeration sources.
+Product-defining invariants — the values that define what DOMY Watch IS
+and never change at runtime.
 
-Developer TUNABLES (things a session might reasonably adjust) live in
-[Defaults](defaults.md); Win32 API literals live in
-[Win32 API Literals](winapi.md).
-
-Layer: config — pure, no Qt, no wall clock.
+**The WEEKDAY theme tables here are DERIVED** (2026-08-05):
+`WEEKDAY_THEMES`, `METAL_THEMES`, the blurb and article sets, the three
+Ninth tables and `NINTH_MECHANISMS` are each ONE assignment from
+[the registry](../registry/__about/__init__.md), which holds one entry
+per theme. The names stay because the program reads them everywhere; the
+data has exactly one home.
 
 ## Contents (by topic — see the flow doc for the full section tree)
 
