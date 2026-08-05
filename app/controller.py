@@ -392,18 +392,26 @@ def _resolve_hands(settings: Settings):
 
 
 @profiling.timed("Build skin")
-def build_skin(settings: Settings):
+def build_skin(settings: Settings, location_display: str = ""):
     """The ONE render config: DEFAULT_SKIN with the chosen RING PRESET
     CARD (Database/ring_presets.json + the user's custom cards — owner
     spec: {name, positions, letters}, the positions signature picks the
     layout/face), the letter art of the chosen finish, the chosen HAND
     PACK and the user's display choices overlaid.
 
+    `location_display` (RING VERDICTS round, owner decree 2026-08-05,
+    the LOCATION crown option) is the ACTIVE location's "CITY, COUNTRY"
+    text — `WatchController` passes its own live
+    `_active_location_display` (the same value `_flash_location`
+    resolves, R-30's own formatter, never duplicated); absent (every
+    direct/test caller) the Location crown option simply draws nothing
+    for this build rather than crashing.
+
     The WHOLE build runs inside this watch's own display context (owner
     bug 2026-07-28): every asset path it resolves goes through the ART
     SOURCE, so building watch 2's skin must never see watch 1's."""
     with paths.display(display_for(settings)):
-        return _compose_skin(settings)
+        return _compose_skin(settings, location_display)
 
 
 def _resolve_ring_inner(settings: Settings, card: dict) -> Path:
@@ -422,7 +430,25 @@ def _resolve_ring_inner(settings: Settings, card: dict) -> Path:
     return dial.RING_INNER_ART_DIR / f"{inner}.png"
 
 
-def _compose_skin(settings: Settings):
+def _location_crown_text(text: str) -> str:
+    """The LOCATION crown's own renderable text (RING VERDICTS round,
+    owner decree 2026-08-05) — the motto glyph library is a FIXED set
+    (`constants.RING_CROWN_TEXT_CHARSET`: uppercase Latin/Greek, digits,
+    the space), while a city/country name is free-form (lower case, a
+    comma, accents no glyph exists for). Uppercased, then filtered to
+    that exact drawable set (never a hand-picked substitution list —
+    Rule #5, the SAME set the crown-text field's own input validator
+    enforces), with the leftover run of spaces (the dropped comma among
+    them) collapsed to one. An input that filters down to nothing
+    (every character unsupported) returns "" — the caller's own
+    graceful-absence path (no crown drawn) then applies unchanged."""
+    filtered = "".join(
+        char for char in text.upper() if char in constants.RING_CROWN_TEXT_CHARSET
+    )
+    return " ".join(filtered.split())
+
+
+def _compose_skin(settings: Settings, location_display: str = ""):
     card = ring_presets(settings.custom_rings)[settings.ring]
     outer = constants.RING_OUTERS[card["outer"]]
     # A preset may override the "hexa" outer's own (empty) triangle —
@@ -506,6 +532,29 @@ def _compose_skin(settings: Settings):
                     "end": len(crown_text) - 1, "seat": None,
                 },),
             })
+    # THE LOCATION CROWN (RING VERDICTS round, owner decree 2026-08-05):
+    # when the per-ring toggle is on, the ACTIVE location REPLACES
+    # whatever crown text the ring carries (a preset's own motto or a
+    # custom ring's typed text) — available for bundled presets AND
+    # custom rings alike, since it is keyed by ring name exactly like
+    # `ring_two_metals`. `location_display` is the "CITY, COUNTRY" text
+    # `WatchController._active_location_display` already resolves
+    # through `_location_flash_text` (R-30's own formatter — reused,
+    # never duplicated); an empty/unfiltered result (no controller
+    # context, or a name with no drawable character at all) leaves
+    # whatever crown the ring already had, the same graceful-absence
+    # pattern the custom crown text uses above.
+    if settings.ring_crown_location.get(settings.ring, False):
+        location_text = _location_crown_text(location_display)
+        if location_text:
+            angles = free_arc_angles(location_text, "top")
+            motto_entries = [{
+                "text": location_text, "angles": angles,
+                "words": ({
+                    "text": location_text, "start": 0,
+                    "end": len(location_text) - 1, "seat": None,
+                },),
+            }]
     motto = tuple(
         {
             "text": entry["text"],
@@ -993,6 +1042,18 @@ class WatchController(QObject):
         # directly, so a running simulation (which never touches the
         # home Settings) does not leave the title frozen on the old city.
         self._active_location_name = self._settings.city_name
+        # THE LOCATION CROWN's own text (RING VERDICTS round, owner
+        # decree 2026-08-05): "CITY, COUNTRY", resolved through the SAME
+        # `_location_flash_text` formatter R-30's flash uses (Rule #5 —
+        # one source, never a duplicate). Kept in lockstep with
+        # `_active_location_name` above at every one of its own update
+        # points (`_flash_location`, `_end_simulation`) so `build_skin`
+        # always sees the CURRENT active place, never the home city
+        # frozen mid-simulation.
+        self._active_location_display = _location_flash_text(
+            self._settings.city_name, self._settings.city_path,
+            self._settings.timezone,
+        )
         #: Set by `discard()` (Remove Watch). A discarded watch is DEAD:
         #: its settings file has just been deleted by the manager, so it
         #: must never write it again — see `_flush_position`.
@@ -1102,7 +1163,7 @@ class WatchController(QObject):
         self._theme_rotation_timer = QTimer(self)
         self._theme_rotation_timer.timeout.connect(self._rotate_theme)
         self._configure_theme_rotation()
-        self._skin = build_skin(self._settings)
+        self._skin = build_skin(self._settings, self._active_location_display)
         missing = missing_assets(self._skin)
         if missing:
             # Checked up front: a missing asset would otherwise raise
@@ -1825,12 +1886,25 @@ class WatchController(QObject):
         also becomes `_active_location_name` (R-31), so the tray
         tooltip/menu TITLE follow it too — one location change, one
         call, both symptoms fixed together."""
+        display_text = _location_flash_text(name, path, timezone)
         self._fast_travel_flash.flash(
-            self._widget, None, "", _location_flash_text(name, path, timezone),
-            big=True,
+            self._widget, None, "", display_text, big=True,
         )
         self._active_location_name = name
+        # THE LOCATION CROWN (RING VERDICTS round, owner decree
+        # 2026-08-05): the SAME resolved text, kept alongside the name
+        # so `build_skin` can draw it — a location change must recompose
+        # the skin when the active ring's Location crown is on, exactly
+        # like the flash/tray title already follow it.
+        self._active_location_display = display_text
         self._refresh_watch_title()
+        # THE LOCATION CROWN must FOLLOW the change immediately (owner
+        # verdict): rebuild the skin here rather than relying on
+        # whatever happens to run next — every `_flash_location` caller
+        # (Settings dialog preset pick, Quick Jump, Time Travel,
+        # Greenwich, the poles) is a genuine location change, so this is
+        # never a redundant rebuild on a non-location tick.
+        self._install_skin(build_skin(self._settings, self._active_location_display))
 
     def _flash_jump_location(self, kind: str, city: dict | None) -> None:
         """The shared tail behind `_apply_jump`/`_dialog_jump`: flashes
@@ -1911,7 +1985,7 @@ class WatchController(QObject):
             show_octa_slot=target >= 2,
             show_third_slot=target >= 3,
         )
-        self._install_skin(build_skin(self._settings))
+        self._install_skin(build_skin(self._settings, self._active_location_display))
         self._refresh_menu_gating()
         self._flush_position()
 
@@ -2080,7 +2154,7 @@ class WatchController(QObject):
         if ring == self._settings.ring:
             return
         self._settings = replace(self._settings, ring=ring)
-        self._install_skin(build_skin(self._settings))
+        self._install_skin(build_skin(self._settings, self._active_location_display))
         self._flush_position()
         # The "Two metals" toggle's own eligibility/checked state
         # depends on the ACTIVE preset (TASK 3) — re-gate in place, the
@@ -2094,7 +2168,7 @@ class WatchController(QObject):
         metals = dict(self._settings.ring_two_metals)
         metals[self._settings.ring] = checked
         self._settings = replace(self._settings, ring_two_metals=metals)
-        self._install_skin(build_skin(self._settings))
+        self._install_skin(build_skin(self._settings, self._active_location_display))
         self._flush_position()
 
     def _set_ring_eye_shine(self, checked: bool) -> None:
@@ -2105,7 +2179,7 @@ class WatchController(QObject):
         shine = dict(self._settings.ring_eye_shine)
         shine[self._settings.ring] = checked
         self._settings = replace(self._settings, ring_eye_shine=shine)
-        self._install_skin(build_skin(self._settings))
+        self._install_skin(build_skin(self._settings, self._active_location_display))
         self._flush_position()
 
     def _set_ring_inner(self, inner: str) -> None:
@@ -2117,7 +2191,7 @@ class WatchController(QObject):
         inner_choices = dict(self._settings.ring_inner)
         inner_choices[self._settings.ring] = inner
         self._settings = replace(self._settings, ring_inner=inner_choices)
-        self._install_skin(build_skin(self._settings))
+        self._install_skin(build_skin(self._settings, self._active_location_display))
         self._flush_position()
 
     def _set_custom_ring_crown_text(self, text: str) -> None:
@@ -2131,7 +2205,7 @@ class WatchController(QObject):
         else:
             texts.pop(self._settings.ring, None)
         self._settings = replace(self._settings, custom_ring_crown_text=texts)
-        self._install_skin(build_skin(self._settings))
+        self._install_skin(build_skin(self._settings, self._active_location_display))
         self._flush_position()
 
     def _set_custom_ring_crown_orientation(self, orientation: str) -> None:
@@ -2143,14 +2217,26 @@ class WatchController(QObject):
         self._settings = replace(
             self._settings, custom_ring_crown_orientation=orientations
         )
-        self._install_skin(build_skin(self._settings))
+        self._install_skin(build_skin(self._settings, self._active_location_display))
+        self._flush_position()
+
+    def _set_ring_crown_location(self, checked: bool) -> None:
+        """THE LOCATION CROWN (RING VERDICTS round, owner decree
+        2026-08-05): the active ring's own choice, stored keyed by ring
+        name exactly like `ring_two_metals` — available for a bundled
+        preset (replacing its own motto) or a custom ring (replacing
+        its typed crown text) alike."""
+        choices = dict(self._settings.ring_crown_location)
+        choices[self._settings.ring] = checked
+        self._settings = replace(self._settings, ring_crown_location=choices)
+        self._install_skin(build_skin(self._settings, self._active_location_display))
         self._flush_position()
 
     def _set_hands(self, hands: str) -> None:
         if hands == self._settings.hands:
             return
         self._settings = replace(self._settings, hands=hands)
-        self._install_skin(build_skin(self._settings))
+        self._install_skin(build_skin(self._settings, self._active_location_display))
         self._flush_position()
 
     def _set_weekday_badge(self, mode: str, style: str) -> None:
@@ -2160,7 +2246,7 @@ class WatchController(QObject):
         self._settings = replace(
             self._settings, weekday_slot=mode, day_slot_style=style
         )
-        self._install_skin(build_skin(self._settings))
+        self._install_skin(build_skin(self._settings, self._active_location_display))
         self._flush_position()
 
     def _metal_updates(self, theme: str, metal: str | None) -> dict:
@@ -2190,7 +2276,7 @@ class WatchController(QObject):
         if roster is not None:
             updates["info_slot_roster"] = roster
         self._settings = replace(self._settings, **updates)
-        self._install_skin(build_skin(self._settings))
+        self._install_skin(build_skin(self._settings, self._active_location_display))
         self._flush_position()
 
     def _set_third_slot(
@@ -2209,7 +2295,7 @@ class WatchController(QObject):
         if roster is not None:
             updates["third_slot_roster"] = roster
         self._settings = replace(self._settings, **updates)
-        self._install_skin(build_skin(self._settings))
+        self._install_skin(build_skin(self._settings, self._active_location_display))
         self._flush_position()
 
     def _set_weekday_theme(
@@ -2228,7 +2314,7 @@ class WatchController(QObject):
             **({"weekday_roster": roster} if roster is not None else {}),
             **self._metal_updates(theme, metal),
         )
-        self._install_skin(build_skin(self._settings))
+        self._install_skin(build_skin(self._settings, self._active_location_display))
         self._flush_position()
 
     def _configure_theme_rotation(self) -> None:
@@ -2278,7 +2364,7 @@ class WatchController(QObject):
         if getattr(self._settings, key) == value:
             return
         self._settings = replace(self._settings, **{key: value})
-        self._install_skin(build_skin(self._settings))
+        self._install_skin(build_skin(self._settings, self._active_location_display))
         self._flush_position()
         if key in (
             "pointer", "show_weekday", "show_pointer",
@@ -2309,7 +2395,7 @@ class WatchController(QObject):
         new_mode = mode if checked else "off"
         if self._settings.earth_label != new_mode:
             self._settings = replace(self._settings, earth_label=new_mode)
-            self._install_skin(build_skin(self._settings))
+            self._install_skin(build_skin(self._settings, self._active_location_display))
         self._flush_position()
 
     def _set_visible(self, key: str, checked: bool) -> None:
@@ -2345,7 +2431,7 @@ class WatchController(QObject):
             action.blockSignals(True)
             action.setChecked(target)
             action.blockSignals(False)
-        self._install_skin(build_skin(self._settings))
+        self._install_skin(build_skin(self._settings, self._active_location_display))
         # Toggling the Pointer/Seconds elements moves the gating matrix.
         self._refresh_menu_gating()
         self._refresh_visible_check()
@@ -2841,6 +2927,7 @@ class WatchController(QObject):
             "custom_ring_crown_orientation": wrap(
                 self._set_custom_ring_crown_orientation
             ),
+            "ring_crown_location": wrap(self._set_ring_crown_location),
             "open_custom_ring": self._open_custom_ring_editor,
             # THE CALENDAR MOUNT (owner decree 2026-07-29): WHICH roster
             # rides the Calendar's twelve wedges — ported here from the
@@ -3024,7 +3111,7 @@ class WatchController(QObject):
             return
         metals[theme] = metal
         self._settings = replace(self._settings, theme_metals=metals)
-        self._install_skin(build_skin(self._settings))
+        self._install_skin(build_skin(self._settings, self._active_location_display))
         self._flush_position()
 
     def _set_watch_face_palette(self, pointer: str, style: str, hues: tuple) -> None:
@@ -3045,7 +3132,7 @@ class WatchController(QObject):
         if palettes == self._settings.palettes:
             return
         self._settings = replace(self._settings, palettes=palettes)
-        self._install_skin(build_skin(self._settings))
+        self._install_skin(build_skin(self._settings, self._active_location_display))
         self._flush_position()
 
     def _open_custom_ring_editor(self) -> None:
@@ -3277,7 +3364,7 @@ class WatchController(QObject):
             )
         # Rebuild from DEFAULT_SKIN so cleared overrides (back to "skin
         # default") actually clear instead of sticking.
-        self._install_skin(build_skin(self._settings))
+        self._install_skin(build_skin(self._settings, self._active_location_display))
         # The visibility Z mode may have changed (owner 2026-07-17): swap
         # the window flags (a no-op when unchanged). The swap recreates the
         # native window and DROPS the screenChanged connection (the S18
@@ -3421,7 +3508,18 @@ class WatchController(QObject):
         self._day = None
         if self._active_location_name != self._settings.city_name:
             self._active_location_name = self._settings.city_name
+            # THE LOCATION CROWN (RING VERDICTS round): restore the home
+            # city's own display text too, and rebuild the skin so a
+            # Location-crown ring follows the return exactly like the
+            # tray title does.
+            self._active_location_display = _location_flash_text(
+                self._settings.city_name, self._settings.city_path,
+                self._settings.timezone,
+            )
             self._refresh_watch_title()
+            self._install_skin(
+                build_skin(self._settings, self._active_location_display)
+            )
         self._on_tick(clock_jumped=False)
 
     def _start_simulation(self, moment: datetime, observer, cycles: int = 0) -> None:
@@ -3717,7 +3815,7 @@ class WatchController(QObject):
             # including the menu, whose chrome strings live in the
             # same overlay (Phase 2).
             self._translation_overlay = TranslationStore().load(language)
-            self._install_skin(build_skin(self._settings))
+            self._install_skin(build_skin(self._settings, self._active_location_display))
             self._menu = self._build_menu()
             self._widget.set_menu(self._menu)
             self._widget.set_show_action(self._show_action)

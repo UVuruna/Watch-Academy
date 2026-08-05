@@ -9,6 +9,8 @@ builder in the Settings dialog rather than duplicating its inline
 widgets (see ring.md's Design Decisions).
 """
 
+from PySide6.QtCore import QRegularExpression
+from PySide6.QtGui import QRegularExpressionValidator
 from PySide6.QtWidgets import (
     QCheckBox, QGridLayout, QGroupBox, QHBoxLayout, QLabel, QLineEdit,
     QPushButton, QVBoxLayout, QWidget,
@@ -18,6 +20,31 @@ from app.watch_face import thumbs
 from app.watch_face.widgets import pill, tile
 from config import constants, dial
 from data.rings import ring_presets
+
+
+def _crown_text_validator(parent: QLineEdit) -> QRegularExpressionValidator:
+    """RING VERDICTS round (owner decree 2026-08-05): the crown-text
+    field must only ACCEPT a character the motto renderer can actually
+    draw — a `QRegularExpressionValidator` built straight off
+    `constants.RING_CROWN_TEXT_CHARSET` (DERIVED, never a hand-written
+    list — Rule #5, the exact set `app.controller._location_crown_text`
+    filters the Location crown through too) so an unsupported keystroke
+    is rejected outright instead of silently dropping the whole crown
+    text at build time."""
+    escaped = "".join(
+        "\\" + char if char in "\\^]-" else char
+        for char in sorted(constants.RING_CROWN_TEXT_CHARSET)
+        if char != " "
+    )
+    pattern = QRegularExpression(f"^[{escaped} ]*$")
+    return QRegularExpressionValidator(pattern, parent)
+
+
+def _crown_text_tooltip(tr) -> str:
+    allowed = " ".join(
+        sorted(constants.RING_CROWN_TEXT_CHARSET - {" "})
+    )
+    return tr("Allowed characters: {allowed}").format(allowed=allowed)
 
 
 def build(settings, setters: dict, tr) -> QWidget:
@@ -120,28 +147,50 @@ def _crown_text_group(settings, card: dict, setters, tr) -> QGroupBox:
     """CROWN TEXT (owner decree 2026-08-05): the bundled presets show
     their existing motto text read-only (Dollar's Great Seal, DOMY/
     PILOT's cross words); a custom ring may TYPE its own text and pick
-    an orientation (top/bottom)."""
+    an orientation (top/bottom). The custom field's `QLineEdit` carries
+    a whitelist `QValidator` (RING VERDICTS round, owner decree
+    2026-08-05) so an unsupported character cannot be typed at all —
+    the tooltip states exactly what is allowed. Every ring, preset or
+    custom, ALSO carries the LOCATION checkbox (same round): ticked, it
+    replaces whatever crown text the ring carries with the active
+    location's own "CITY, COUNTRY" (`app.controller._compose_skin`)."""
     group = QGroupBox(tr("Crown text"))
     column = QVBoxLayout(group)
+    location_on = settings.ring_crown_location.get(settings.ring, False)
     if settings.ring in constants.RING_OUTER_LOCK:
         texts = " · ".join(entry["text"] for entry in card["motto"]) or tr("(none)")
-        column.addWidget(QLabel(texts))
-        return group
-    edit = QLineEdit()
-    edit.setPlaceholderText(tr("Custom crown text"))
-    edit.setText(settings.custom_ring_crown_text.get(settings.ring, ""))
-    edit.editingFinished.connect(
-        lambda: setters["custom_ring_crown_text"](edit.text())
+        label = QLabel(texts)
+        label.setEnabled(not location_on)
+        column.addWidget(label)
+    else:
+        edit = QLineEdit()
+        edit.setPlaceholderText(tr("Custom crown text"))
+        edit.setText(settings.custom_ring_crown_text.get(settings.ring, ""))
+        edit.setValidator(_crown_text_validator(edit))
+        edit.setToolTip(_crown_text_tooltip(tr))
+        edit.setEnabled(not location_on)
+        edit.editingFinished.connect(
+            lambda: setters["custom_ring_crown_text"](edit.text())
+        )
+        column.addLayout(_labeled(tr("Text"), edit))
+        orient_row = QHBoxLayout()
+        current = settings.custom_ring_crown_orientation.get(settings.ring, "top")
+        for orientation in ("top", "bottom"):
+            pill_button = pill(
+                tr(orientation.capitalize()), current == orientation,
+                lambda o=orientation: setters["custom_ring_crown_orientation"](o),
+            )
+            pill_button.setEnabled(not location_on)
+            orient_row.addWidget(pill_button)
+        column.addLayout(orient_row)
+    location_box = QCheckBox(tr("Location"))
+    location_box.setChecked(location_on)
+    location_box.setToolTip(
+        tr("Show the active location (CITY, COUNTRY) as the crown text "
+           "instead — follows every location change.")
     )
-    column.addLayout(_labeled(tr("Text"), edit))
-    orient_row = QHBoxLayout()
-    current = settings.custom_ring_crown_orientation.get(settings.ring, "top")
-    for orientation in ("top", "bottom"):
-        orient_row.addWidget(pill(
-            tr(orientation.capitalize()), current == orientation,
-            lambda o=orientation: setters["custom_ring_crown_orientation"](o),
-        ))
-    column.addLayout(orient_row)
+    location_box.toggled.connect(setters["ring_crown_location"])
+    column.addWidget(location_box)
     return group
 
 

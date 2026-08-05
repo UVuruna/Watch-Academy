@@ -81,6 +81,13 @@ class Settings:
     ring_inner: dict = field(default_factory=dict)
     custom_ring_crown_text: dict = field(default_factory=dict)
     custom_ring_crown_orientation: dict = field(default_factory=dict)
+    # THE LOCATION CROWN (RING VERDICTS round, owner decree 2026-08-05):
+    # per-ring choice to replace the crown text (a preset's own motto or
+    # a custom ring's typed text) with the ACTIVE location ("CITY,
+    # COUNTRY") — keyed by ring name exactly like `ring_two_metals`,
+    # available for bundled presets AND custom rings alike
+    # (`app.controller._compose_skin`).
+    ring_crown_location: dict = field(default_factory=dict)
     # Install defaults per the owner's 2026-07-12 list: hexa primary,
     # gradient-dark Umbra, atmosphere Earth, STEEL hands, 720 dial.
     pointer: str = "hexa"
@@ -383,6 +390,9 @@ class SettingsStore:
                 raw, "custom_ring_crown_orientation", by_fold,
                 ("top", "bottom").__contains__,
             )
+            ring_crown_location = load_named_dict(
+                raw, "ring_crown_location", by_fold, is_bool
+            )
             # One-time migration (2026-07-12): the South slot became a
             # MODE + per-family STYLE pair — the six old combined
             # values map onto it (external user data, not an API shim).
@@ -580,6 +590,7 @@ class SettingsStore:
                 ring_inner=ring_inner,
                 custom_ring_crown_text=custom_ring_crown_text,
                 custom_ring_crown_orientation=custom_ring_crown_orientation,
+                ring_crown_location=ring_crown_location,
                 jump_cities=jump_cities,
                 ring_tint=ring_tint,
                 earth_scale=_load_scale(raw, "earth_scale", *constants.ELEMENT_SCALE_RANGE, 1.0),
@@ -662,6 +673,7 @@ class SettingsStore:
             "custom_ring_crown_orientation": dict(
                 settings.custom_ring_crown_orientation
             ),
+            "ring_crown_location": dict(settings.ring_crown_location),
             "pointer": settings.pointer,
             "umbra_form": settings.umbra_form,
             "umbra_contrast": settings.umbra_contrast,
