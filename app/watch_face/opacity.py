@@ -3,9 +3,10 @@ the Watch Face window's Opacity page: every render alpha channel this
 Phase's render hooks make speakable, grouped "Clock body" (the star
 diamonds, the Aura's two arcs, the Umbra) and "Bodies on the ring" (the
 Moon below the horizon, the Moon/Earth transit, the inactive weekday
-icons) — replacing the placeholder page. LIVE-APPLY (Rule #5): every
-slider release calls its setter through `setters`; the window rebuilds
-this page fresh on the next pick, like every other Watch Face section.
+icons, the Crown Text) — replacing the placeholder page. LIVE-APPLY
+(Rule #5): every slider release calls its setter through `setters`; the
+window rebuilds this page fresh on the next pick, like every other
+Watch Face section.
 
 Four rows were MOVED here from the RETIRED `app.settings_dialog.
 display_section._build_opacity_group` (Pointer/Aura sunlight/Aura
@@ -35,7 +36,16 @@ now would be a new feature this task never asked for, not a move:
 darkness drawn over the Moon disc) and the reveal-week opacity ramp
 tied to `defaults.REVEAL_WEEK_DURATION_S`. Left alone, undebted — no
 control anywhere points at them for this round to remove.
-"""
+
+CROWN TEXT OPACITY (R-24/Phase-6-debt correction, owner 2026-08-05:
+"Crown tekst je onaj tekst koji piše oko sata — faith, hope,
+suffering") — the outer Great Seal motto arc IS this element
+(`skins.manifest.SkinDefinition.motto_alpha`,
+`render.layers.ring.RingLayer._draw_motto`); a plain DIRECT row (like
+`umbra_alpha` — no per-skin variance exists to reset to), greyed out
+with a tooltip when the active ring preset carries no motto
+(`setters["ring_has_motto"]`, the SAME graceful-truth shape
+`aura_group`'s Colorful gate uses in `colors.py`)."""
 
 from PySide6.QtCore import Qt
 from PySide6.QtWidgets import (
@@ -154,4 +164,12 @@ def _ring_bodies_group(settings, setters, tr, defaults: dict) -> QGroupBox:
         tr, settings, setters, "ghost_alpha", defaults["ghost_alpha"],
         "Inactive icons", form,
     )
+    crown_slider = _direct_row(
+        tr, settings, setters, "motto_alpha", 1.0, "Crown Text", form,
+    )
+    if not setters["ring_has_motto"]():
+        crown_slider.setEnabled(False)
+        crown_slider.setToolTip(
+            tr("The active ring preset carries no Crown Text (Great Seal motto).")
+        )
     return group

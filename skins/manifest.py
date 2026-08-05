@@ -104,6 +104,17 @@ class RingSpec:
     # build_skin. Unlike `letter_metal` this is NOT per-hour: the motto
     # is read as ONE continuous inscription, not a seat-by-seat split.
     motto_metal: str = "gold"
+    # THE OUTER/INNER SPLIT OPT-IN (R-21, owner correction 2026-08-05):
+    # False (default, every preset that exists today) draws the single
+    # baked `asset` plate exactly as before, even when the owner's split
+    # art (`dial.RING_OUTER_ASSET`/`RING_INNER_ASSET`) happens to be on
+    # disk — the art landing is not itself a verdict on which presets
+    # should SHOW it (owner: "he will spec the mapping later"). Only a
+    # preset that flips this to True AND finds both files on disk
+    # (`render.layers.ring.RingLayer.paint`) composes the split bands;
+    # either condition failing falls back to the single plate — never a
+    # crash, never a silent visual change for existing presets.
+    use_split_art: bool = False
 
 
 @dataclass(frozen=True)
@@ -342,6 +353,13 @@ class SkinDefinition:
     # the finish picks the owner's letter art set (gold = M/D/Y/P/H
     # gold + silver Omega; silver = the inverse) — letters never tint.
     ring_tint: str | None = None
+    # THE OUTER/INNER SPLIT TINT (R-21, owner correction 2026-08-05):
+    # None (default) makes the inner minute-track band follow
+    # `ring_tint` exactly like every release before the split art
+    # existed; a hex overrides it independently. Read only when the
+    # split art is on disk (`render.layers.ring.RingLayer.paint`) — a
+    # no-op on the single-plate fallback.
+    ring_tint_inner: str | None = None
     ring_finish: str = "gold"
     subdial_style: str = "black"       # complication plates (owner A/B
                                        # 2026-07-15): "theme" tints the
@@ -401,6 +419,29 @@ class SkinDefinition:
     # `render.layers.ring.RingLayer._draw_ring_glyph` — None (default)
     # leaves the metal finish untouched, exactly as today.
     letter_tint: str | None = None
+    # CROWN TEXT (R-24/Phase-6-debt correction, owner 2026-08-05: "Crown
+    # tekst je onaj tekst koji piše oko sata — faith, hope, suffering")
+    # — the outer Great Seal MOTTO arc (`RingSpec.motto`,
+    # `render.layers.ring.RingLayer._draw_motto`) IS this element; these
+    # three fields are its own opacity/size/color controls, independent
+    # of the ring letters' own `ring_letter_scale`/`letter_tint`:
+    #   * `motto_alpha` — a plain layer-alpha multiplier, 1.0 = today's
+    #     full opacity (no skin varies this yet, so a direct value like
+    #     `umbra_alpha`, not a None-override).
+    #   * `motto_scale` — multiplies `dial.RING_MOTTO_SIZE` ON TOP OF
+    #     `ring_letter_scale` (which still scales it too, unchanged) —
+    #     1.0 = today's size. `config.defaults.dial_window_margin_
+    #     fraction` reads this so the window never clips a scaled-up
+    #     Crown Text.
+    #   * `motto_tint` — an EXTRA tint layered over the motto glyphs'
+    #     metal finish, resolved INDEPENDENTLY of `letter_tint` (the two
+    #     controls no longer share one recolor): None (default) follows
+    #     `ring_tint`, like the hands; a hex overrides it.
+    # A no-op for every preset without a motto (The One, Templar, every
+    # custom ring) — nothing draws, nothing to grey but the control.
+    motto_alpha: float = 1.0
+    motto_scale: float = 1.0
+    motto_tint: str | None = None
     # THE DISPLAY CONTEXT (owner bug 2026-07-28, multi-watch colour
     # leak): this watch's OWN art source, subdial plate set and metal
     # shades — see `config.paths.DisplayContext`. It rides the SKIN

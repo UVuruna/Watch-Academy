@@ -10,21 +10,30 @@ OK/Cancel state to keep in sync (contrast the RETIRED
 the dialog's own OK; Phase 6 FINAL cleanup deleted that copy outright —
 this module's `tint_picker` builders are the ONLY ones left, Rule #5).
 
+CORRECTION (owner 2026-08-05, LOUD — both items below were WRONGLY
+declared impossible; the owner's own art proved otherwise): R-21's
+Outer/Inner ring-tint split and R-24's Crown Text color/size ARE built
+this round —
+
+  * R-21's Outer/Inner ring-tint split: the owner's split ring art
+    (`assets/instrument/ring/outter/`+`inner/`, untracked) IS the new
+    ART this needed — `render.layers.ring.RingLayer._draw_split_plate`
+    composes both bands, each with its OWN tint
+    (`ring_tint`/`ring_tint_inner`). The "Inner (Minute track)" row
+    below greys out with a tooltip when the split art is absent from
+    disk (`setters["ring_has_split_art"]`) — graceful truth, not a
+    dead control.
+  * R-24's Crown Text color: the outer arc IS the Great Seal motto
+    inscription (`RingSpec.motto`) — it always had a seat, just no
+    control. `motto_tint` (this section) and `motto_scale`/`motto_alpha`
+    (Size/Opacity sections) now read it independently of
+    `letter_tint`/`ring_letter_scale`. See `skins.manifest.
+    SkinDefinition`'s Crown Text fields for the full design note.
+
 DEBT (owner honesty rule — a control that does nothing must never
-ship): four items below are NOT built, each recorded where it would
+ship): two items below are NOT built, each recorded where it would
 otherwise live —
 
-  * R-21's Outer/Inner ring-tint split (hour markers vs minute track):
-    the ring band is ONE baked plate (`render.layers.ring.RingLayer.
-    paint`'s `spec.asset`) with no separable layer per element —
-    splitting the tint needs new ring ART, not a UI hook.
-  * R-24's Crown Text color (and, by extension, Phase 6's proposed Size
-    slider for it): no "Crown Text" element exists anywhere in the
-    render stack — `render/skin_geometry.py`, `render/layers/ring.py`
-    and `skins/manifest.py` were read end to end for this round and
-    carry no such seat. The outer arc IS the Great Seal motto
-    inscription (`RingSpec.motto`/`motto_metal`), already wired through
-    `ring_finish`; nothing else reads as a third, separate text.
   * R-25's Indices saturation as a SEPARATE slider: `ring_saturation`
     already scales the ring plate AND its letters TOGETHER, a UNIFIED
     target sealed by owner decree (Session 21-D, fix round E,
@@ -65,6 +74,7 @@ def build(settings, setters: dict, tr) -> QWidget:
     layout.addWidget(_aura_group(settings, setters, tr))
     layout.addWidget(_hands_group(settings, setters, tr))
     layout.addWidget(_indices_group(settings, setters, tr))
+    layout.addWidget(_crown_text_group(settings, setters, tr))
     layout.addWidget(_metal_group(settings, setters, tr))
     layout.addWidget(_saturation_group(settings, setters, tr))
     widget = QWidget()
@@ -99,11 +109,33 @@ def _tint_group(
 def _ring_tint_group(settings, setters, tr) -> QGroupBox:
     """R-21 item 1: the Clock/ring tint picker, MOVED here (renamed
     "Ring tint" in THIS window — the stored key is untouched; the
-    retired Settings dialog copy was deleted outright by Phase 6)."""
-    return _tint_group(
+    retired Settings dialog copy was deleted outright by Phase 6). Now
+    also carries R-21's OUTER/INNER split (owner correction 2026-08-05):
+    an "Inner (Minute track)" tint picker for `ring_tint_inner`, nested
+    below the outer/whole-band picker (which stays the "Ring tint"
+    label — its own semantics never changed). Greyed out with a
+    tooltip when the owner's split art (`ring_has_split_art`) is not on
+    disk — the picker would repaint nothing today."""
+    group = _tint_group(
         tr, "Ring tint", settings.ring_tint, setters["ring_tint"],
         "Gray (default)", "Pick the ring tint",
     )
+    inner = _tint_group(
+        tr, "Inner (Minute track)", settings.ring_tint_inner,
+        setters["ring_tint_inner"], "Follow outer (default)",
+        "Pick the inner (minute track) tint",
+    )
+    has_split_art = setters["ring_has_split_art"]()
+    if not has_split_art:
+        inner.setEnabled(False)
+        inner.setToolTip(
+            tr(
+                "The split ring art (outer/inner) is not installed yet — "
+                "the ring still draws as one band."
+            )
+        )
+    group.layout().addWidget(inner)
+    return group
 
 
 def _palette_group(settings, setters, tr) -> QGroupBox:
@@ -223,12 +255,33 @@ def _indices_group(settings, setters, tr) -> QGroupBox:
     OVER the metal finish (Gold/Bronze/Silver stay chosen in the Metal
     shades group below); "Gray" (None) leaves the metal finish
     untouched, today's behavior on every release before this Phase.
-    Crown Text has no control here — see the module docstring's debt
-    note (no such element exists to color)."""
+    Crown Text has its OWN independent tint below (`_crown_text_group`)
+    — the two controls no longer share one recolor."""
     return _tint_group(
         tr, "Indices color", settings.letter_tint, setters["letter_tint"],
         "Metal finish only (default)", "Pick the indices tint",
     )
+
+
+def _crown_text_group(settings, setters, tr) -> QGroupBox:
+    """R-24/Phase-6-debt correction (owner 2026-08-05, LOUD: "Crown
+    tekst je onaj tekst koji piše oko sata — faith, hope, suffering") —
+    the outer Great Seal motto arc's own free color, independent of
+    `letter_tint`: "Follow ring" (default, None) reads `ring_tint`
+    exactly like the Hands do; a preset or custom hex overrides it.
+    Greyed out with a tooltip when the active ring preset carries no
+    motto (`setters["ring_has_motto"]`) — the same graceful-truth
+    pattern the Aura group's Colorful gate uses above."""
+    group = _tint_group(
+        tr, "Crown Text color", settings.motto_tint, setters["motto_tint"],
+        "Follow ring (default)", "Pick the Crown Text tint",
+    )
+    if not setters["ring_has_motto"]():
+        group.setEnabled(False)
+        group.setToolTip(
+            tr("The active ring preset carries no Crown Text (Great Seal motto).")
+        )
+    return group
 
 
 def _metal_group(settings, setters, tr) -> QGroupBox:

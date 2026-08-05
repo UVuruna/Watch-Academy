@@ -45,6 +45,12 @@ class Settings:
     z_mode: str = "bottom"
     ring: str = "DOMY"                  # ring preset CARD name (bundled or custom)
     ring_tint: str | None = None        # #RRGGBB multiplying ring+hands+Umbra
+    # THE OUTER/INNER SPLIT TINT (R-21, owner correction 2026-08-05): the
+    # inner minute-track band's own tint — None follows `ring_tint`
+    # exactly like every release before the split art existed. Read only
+    # when the owner's split art (assets/instrument/ring/outter+inner/)
+    # is on disk; a no-op on the single-plate fallback.
+    ring_tint_inner: str | None = None
     ring_finish: str = "gold"           # letter metals (triangle/12h rules)
     # The user's custom ring cards ({name, positions, letters}) — merged
     # with Database/ring_presets.json by data/rings.py.
@@ -286,6 +292,17 @@ class Settings:
     # layered over the ring letters' metal finish (None = metal only,
     # today's behavior) — `render.layers.ring.RingLayer._draw_ring_glyph`.
     letter_tint: str | None = None
+    # CROWN TEXT (R-24/Phase-6-debt correction, owner 2026-08-05: "Crown
+    # tekst je onaj tekst koji piše oko sata — faith, hope, suffering")
+    # — the outer Great Seal MOTTO arc's own opacity/size/color, kept
+    # SEPARATE from `ring_letter_scale`/`letter_tint` (see
+    # `skins.manifest.SkinDefinition`'s matching fields for the full
+    # design note). `motto_scale` multiplies ON TOP of `ring_letter_scale`
+    # (unaffected, never renamed); `motto_tint` resolves independently of
+    # `letter_tint`.
+    motto_alpha: float = 1.0
+    motto_scale: float = 1.0
+    motto_tint: str | None = None
     # Custom palettes keyed "pointer_style" -> tuple of #RRGGBB hues.
     palettes: dict = field(default_factory=dict)
 
@@ -601,6 +618,12 @@ class SettingsStore:
                     raw, "hands_saturation", *constants.HANDS_SATURATION_RANGE, 1.0
                 ),
                 letter_tint=_load_hex(raw, "letter_tint"),
+                ring_tint_inner=_load_hex(raw, "ring_tint_inner"),
+                motto_alpha=_load_scale(raw, "motto_alpha", 0.0, 1.0, 1.0),
+                motto_scale=_load_scale(
+                    raw, "motto_scale", *constants.ELEMENT_SCALE_RANGE, 1.0
+                ),
+                motto_tint=_load_hex(raw, "motto_tint"),
                 palettes=_load_palettes(raw.get("palettes", {})),
                 **choices,
             )
@@ -709,6 +732,10 @@ class SettingsStore:
             "hands_tint": settings.hands_tint,
             "hands_saturation": settings.hands_saturation,
             "letter_tint": settings.letter_tint,
+            "ring_tint_inner": settings.ring_tint_inner,
+            "motto_alpha": settings.motto_alpha,
+            "motto_scale": settings.motto_scale,
+            "motto_tint": settings.motto_tint,
             "palettes": {
                 key: list(palette) for key, palette in settings.palettes.items()
             },

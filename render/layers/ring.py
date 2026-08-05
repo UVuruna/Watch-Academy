@@ -21,6 +21,23 @@ class RingLayer(Layer):
 
     def paint(self, painter: QPainter, ctx: RenderContext) -> None:
         spec = self._skin.ring
+        if (
+            spec.use_split_art
+            and dial.RING_OUTER_ASSET.exists()
+            and dial.RING_INNER_ASSET.exists()
+        ):
+            # THE OUTER/INNER SPLIT (R-21, owner correction 2026-08-05):
+            # the owner's new split art replaces the single baked plate
+            # with two independently-tinted bands — see
+            # `_draw_split_plate` and `config.dial`'s own section note.
+            # Gated on the PRESET'S OWN opt-in (`RingSpec.use_split_art`)
+            # as well as the files' presence — the art landing on disk
+            # must never by itself repaint an existing preset (owner:
+            # "he will spec the mapping later").
+            self._draw_split_plate(painter, ctx)
+            self._draw_letter_art(painter, ctx)
+            self._draw_motto(painter, ctx)
+            return
         if spec.asset is not None:
             # The ring art carries numerals and minutes; the ring tint
             # multiplies the art. The LETTERS are the owner's separate
@@ -97,9 +114,34 @@ class RingLayer(Layer):
             rect = QRectF(center.x() - box / 2, center.y() - box / 2, box, box)
             painter.drawText(rect, Qt.AlignmentFlag.AlignCenter, str(minute))
 
+    def _draw_split_plate(self, painter: QPainter, ctx: RenderContext) -> None:
+        """R-21: the two independently-tinted bands
+        (`dial.RING_OUTER_ASSET`/`RING_INNER_ASSET`, graceful absence
+        gated by `paint()`) — inner drawn FIRST so the outer band's own
+        edge sits on top, exactly matching the single-plate look the two
+        together reconstruct (session's side-by-side render check).
+        `ring_tint_inner` None follows `ring_tint`, the SAME
+        "follow-unless-overridden" shape `hands_tint` already uses —
+        the outer band's tint semantics are UNCHANGED (still
+        `ring_tint`, no migration)."""
+        inner_tint = (
+            ctx.skin.ring_tint_inner
+            if ctx.skin.ring_tint_inner is not None
+            else ctx.skin.ring_tint
+        )
+        draw_pixmap_centered(
+            painter, ctx, dial.RING_INNER_ASSET, QPointF(0, 0), 2 * ctx.radius,
+            tint=inner_tint, saturation=ctx.skin.ring_saturation,
+        )
+        draw_pixmap_centered(
+            painter, ctx, dial.RING_OUTER_ASSET, QPointF(0, 0), 2 * ctx.radius,
+            tint=ctx.skin.ring_tint, saturation=ctx.skin.ring_saturation,
+        )
+
     def _draw_ring_glyph(
         self, painter: QPainter, ctx: RenderContext, gold_asset: Path,
         metal: str, theta: float, radius_fraction: float, height: float,
+        tint: str | None = None, opacity: float = 1.0,
     ) -> None:
         """One letter-art glyph stamped on the ring circle — the shared
         stamp (Rule #5) behind BOTH the ring's own six banknote letters
@@ -113,7 +155,11 @@ class RingLayer(Layer):
         ring hue either way, but the RING SATURATION slider still grays
         it (owner 2026-07-18, Session 21-D: "the ring plate + its
         letters" is one target); the shadow copy skips it — a pure
-        black silhouette has no saturation to scale."""
+        black silhouette has no saturation to scale. `tint`/`opacity`
+        are per-CALLER (Crown Text round, owner correction 2026-08-05):
+        `_draw_letter_art` passes `letter_tint`/1.0 (unchanged behavior);
+        `_draw_motto` resolves its OWN independent `motto_tint`/
+        `motto_alpha` — the two controls no longer share one recolor."""
         shadow_radius = height * dial.RING_LETTER_SHADOW_RADIUS
         samples = dial.RING_LETTER_SHADOW_SAMPLES
         # Silver/bronze are derived from the gold master AT LOAD (owner
@@ -121,13 +167,14 @@ class RingLayer(Layer):
         # shadow silhouette is metal-invariant (same alpha mask on every
         # finish), so it always reads the gold file directly.
         asset = letter_metal_file(gold_asset, metal)
-        # THE INDICES FREE COLOR (Watch Face Phase 4, R-24): an EXTRA
-        # tint layered OVER the metal finish already resolved above
-        # (None, the default, leaves it untouched — today's behavior on
-        # every release before this one).
+        # THE INDICES/CROWN TEXT FREE COLOR (Watch Face Phase 4, R-24;
+        # Crown Text correction 2026-08-05): an EXTRA tint layered OVER
+        # the metal finish already resolved above (None, the default,
+        # leaves it untouched — today's behavior on every release before
+        # this one).
         pixmap = ctx.cache.pixmap_by_height(
             asset, height, ctx.dpr, saturation=ctx.skin.ring_saturation,
-            tint=ctx.skin.letter_tint,
+            tint=tint,
         )
         shadow = ctx.cache.pixmap_by_height(
             gold_asset, height, ctx.dpr, tint=palette.SHADOW_STAMP_TINT
@@ -138,7 +185,7 @@ class RingLayer(Layer):
         painter.save()
         painter.translate(pos)
         painter.rotate(rotation)
-        painter.setOpacity(dial.RING_LETTER_SHADOW_ALPHA)
+        painter.setOpacity(dial.RING_LETTER_SHADOW_ALPHA * opacity)
         for k in range(samples):
             angle = 2.0 * math.pi * k / samples
             painter.drawPixmap(
@@ -148,7 +195,7 @@ class RingLayer(Layer):
                 ),
                 shadow,
             )
-        painter.setOpacity(1.0)
+        painter.setOpacity(opacity)
         painter.drawPixmap(QPointF(-logical_w / 2, -height / 2), pixmap)
         painter.restore()
 
@@ -172,6 +219,7 @@ class RingLayer(Layer):
                 painter, ctx, gold_asset, metal, theta,
                 dial.RING_LETTER_RADIUS_FRACTION,
                 height * self._skin.ring.letter_zoom.get(hour, 1.0),
+                tint=ctx.skin.letter_tint,
             )
 
     def _draw_motto(self, painter: QPainter, ctx: RenderContext) -> None:
@@ -187,17 +235,34 @@ class RingLayer(Layer):
         DISJOINT (top 300-360-60 deg, bottom 120-180-240 deg) so both
         share ONE radius (`RING_MOTTO_RADIUS_FRACTION`) — no more two
         concentric rings of text. Empty (no-op) for every preset
-        without a motto."""
+        without a motto.
+
+        CROWN TEXT controls (owner correction 2026-08-05: "Crown tekst
+        je onaj tekst koji piše oko sata — faith, hope, suffering", the
+        proof this IS the motto arc): `motto_scale` multiplies the
+        height ON TOP OF `ring_letter_scale` (which still applies too,
+        unchanged); `motto_tint` resolves independently of
+        `letter_tint` — None follows `ring_tint`, the SAME
+        "follow-unless-overridden" shape `hands_tint` uses;
+        `motto_alpha` is a plain opacity multiplier passed straight to
+        `_draw_ring_glyph`."""
         mottos = self._skin.ring.motto
         if not mottos:
             return
         height = (
-            2 * ctx.radius * dial.RING_MOTTO_SIZE * ctx.skin.ring_letter_scale
+            2 * ctx.radius * dial.RING_MOTTO_SIZE
+            * ctx.skin.ring_letter_scale * ctx.skin.motto_scale
         )
         metal = self._skin.ring.motto_metal
+        tint = (
+            ctx.skin.motto_tint
+            if ctx.skin.motto_tint is not None
+            else ctx.skin.ring_tint
+        )
         for motto in mottos:
             for gold_asset, theta in motto["glyphs"]:
                 self._draw_ring_glyph(
                     painter, ctx, gold_asset, metal, theta % 360.0,
                     dial.RING_MOTTO_RADIUS_FRACTION, height,
+                    tint=tint, opacity=ctx.skin.motto_alpha,
                 )

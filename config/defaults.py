@@ -529,7 +529,10 @@ def dial_window_margin_fraction(skin) -> float:
     margin for The One/Templar or a custom ring. MOTO-FIX round (owner correction 2026-07-19): both
     mottos now share ONE radius (the two arcs are angularly disjoint),
     so this measures from `RING_MOTTO_RADIUS_FRACTION` alone —
-    `RING_MOTTO_RADIUS_STEP` is gone."""
+    `RING_MOTTO_RADIUS_STEP` is gone. CROWN TEXT SIZE (owner correction
+    2026-08-05): `skin.motto_scale` multiplies ON TOP of
+    `ring_letter_scale` here too, so a Crown Text SIZE slider pick never
+    clips against the transparent window edge (Space & Legibility law)."""
     marker = max(skin.year_marker.scale, skin.year_marker.moon_scale)
     glow_extent = (
         dial.GLOW_RING_RADIUS_FRACTION
@@ -544,7 +547,7 @@ def dial_window_margin_fraction(skin) -> float:
     if skin.ring.motto:
         motto_extent = (
             dial.RING_MOTTO_RADIUS_FRACTION
-            + dial.RING_MOTTO_SIZE * skin.ring_letter_scale
+            + dial.RING_MOTTO_SIZE * skin.ring_letter_scale * skin.motto_scale
             * (1.0 + 2.0 * dial.RING_LETTER_SHADOW_RADIUS)
         )
     return (

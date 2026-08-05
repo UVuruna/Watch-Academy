@@ -891,6 +891,10 @@ def _overlay_display_settings(skin, settings: Settings, display):
         hands_tint=settings.hands_tint,
         hands_saturation=settings.hands_saturation,
         letter_tint=settings.letter_tint,
+        ring_tint_inner=settings.ring_tint_inner,
+        motto_alpha=settings.motto_alpha,
+        motto_scale=settings.motto_scale,
+        motto_tint=settings.motto_tint,
         display=display,
     )
 
@@ -2846,6 +2850,20 @@ class WatchController(QObject):
             "letter_tint": wrap(
                 lambda v: self._set_display_choice("letter_tint", v)
             ),
+            # --- Crown Text (R-24/Phase-6-debt correction, owner --------
+            # 2026-08-05: the outer Great Seal motto arc's own controls) -
+            "ring_tint_inner": wrap(
+                lambda v: self._set_display_choice("ring_tint_inner", v)
+            ),
+            "motto_alpha": wrap(
+                lambda v: self._set_display_choice("motto_alpha", v)
+            ),
+            "motto_scale": wrap(
+                lambda v: self._set_display_choice("motto_scale", v)
+            ),
+            "motto_tint": wrap(
+                lambda v: self._set_display_choice("motto_tint", v)
+            ),
             "metal_shade_gold": wrap(
                 lambda v: self._set_display_choice("metal_shade_gold", v)
             ),
@@ -2884,6 +2902,24 @@ class WatchController(QObject):
             # true "Skin default" reset target — read here instead of
             # widening `builder(settings, setters, tr)`'s shared shape.
             "opacity_skin_defaults": self._opacity_skin_defaults,
+            # A data PROVIDER (Rule #5, the same shape as
+            # `opacity_skin_defaults`/`slot_descriptors` above): whether
+            # the ACTIVE ring preset carries a Crown Text motto at all —
+            # Opacity/Size/Colors each grey their Crown Text row when
+            # this reads False (graceful truth, not a dead control).
+            "ring_has_motto": lambda: bool(self._skin.ring.motto),
+            # Same shape: whether the ACTIVE ring preset actually
+            # composes the split outer/inner plates right now — BOTH
+            # the preset's own opt-in (`RingSpec.use_split_art`, False
+            # for every preset that ships today) AND the owner's art
+            # files on disk must hold, matching
+            # `render.layers.ring.RingLayer.paint`'s own gate exactly;
+            # Colors greys the "Inner (Minute track)" row otherwise.
+            "ring_has_split_art": lambda: (
+                self._skin.ring.use_split_art
+                and dial.RING_OUTER_ASSET.exists()
+                and dial.RING_INNER_ASSET.exists()
+            ),
         }
 
     def _opacity_skin_defaults(self) -> dict:
