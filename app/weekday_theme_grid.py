@@ -108,6 +108,88 @@ def build_weekday_theme_grid(current_theme: str, on_pick, tr) -> QScrollArea:
     return _scrollable(content)
 
 
+# --- Kinship GROUPS — the Watch Face content tree's Level 2/3 -----------
+#
+# The Watch Face window's Themes & Slots content tree (R-17/R-18) never
+# dumps all ~30 weekday themes flat — it shows kinship groups first
+# (Level 2), then that ONE group's own tiles (Level 3). These three
+# functions expose the SAME `pantheon.WEEKDAY_MENU_TOP`/`_GROUPS` data
+# `build_weekday_theme_grid` already reads, through the SAME `_tile`/
+# `_add_section` primitives, so the tree never forks a second copy of
+# the theme list (Rule #5) — it is a different SHAPE over identical data.
+
+#: "Planets" stands in for the flat `WEEKDAY_MENU_TOP` entries so every
+#: Level-2 tile is a real, clickable group — the top list has no title
+#: of its own in the flat gallery above.
+PLANETS_GROUP_TITLE = "Planets"
+
+
+def weekday_group_titles() -> tuple[str, ...]:
+    """Level-2 group titles, in menu order."""
+    return (PLANETS_GROUP_TITLE,) + tuple(
+        title for title, _keys in pantheon.WEEKDAY_MENU_GROUPS
+    )
+
+
+def weekday_group_keys(group_title: str) -> tuple[str, ...]:
+    """The theme keys inside one Level-2 group."""
+    if group_title == PLANETS_GROUP_TITLE:
+        return pantheon.WEEKDAY_MENU_TOP
+    return next(
+        keys for title, keys in pantheon.WEEKDAY_MENU_GROUPS
+        if title == group_title
+    )
+
+
+def build_weekday_group_grid(current_group: str | None, on_pick, tr) -> QScrollArea:
+    """Level 2 — one tile per kinship group; no per-group art (a group
+    is a folder, not a theme), so each tile shows its first member's
+    plate as a representative icon."""
+    content = QWidget()
+    column = QVBoxLayout(content)
+    column.setSpacing(12)
+    tiles = []
+    for title in weekday_group_titles():
+        first_key = weekday_group_keys(title)[0]
+        tiles.append(_tile(
+            tr(title),
+            paths.art_file(pantheon.weekday_theme_body_art(first_key, "sun")),
+            title == current_group,
+            lambda t=title: on_pick(t),
+        ))
+    _add_section(column, None, tiles)
+    column.addStretch(1)
+    return _scrollable(content)
+
+
+def build_weekday_theme_tiles(
+    group_title: str, current_theme: str, default_theme: str, on_pick, tr,
+) -> QScrollArea:
+    """Level 3 — one group's own theme tiles. The pointer's documented
+    DEFAULT theme (`constants.WATCH_FACE_KINDS_BY_POINTER`, see
+    themes.md) carries a "★ " prefix wherever it appears, so the
+    default is visible without opening a tooltip."""
+    content = QWidget()
+    column = QVBoxLayout(content)
+    column.setSpacing(12)
+    tiles = [
+        _tile(
+            (
+                f"★ {tr(pantheon.WEEKDAY_THEME_TITLES[key])}"
+                if key == default_theme
+                else tr(pantheon.WEEKDAY_THEME_TITLES[key])
+            ),
+            paths.art_file(pantheon.weekday_theme_body_art(key, "sun")),
+            key == current_theme,
+            lambda k=key: on_pick(k),
+        )
+        for key in weekday_group_keys(group_title)
+    ]
+    _add_section(column, None, tiles)
+    column.addStretch(1)
+    return _scrollable(content)
+
+
 def build_calendar_mount_grid(current_mount: str, on_pick, tr) -> QScrollArea:
     """A scrollable gallery of every roster that may ride the Calendar
     pointer's twelve wedges (owner decree 2026-07-29 — the choice moved

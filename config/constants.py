@@ -656,6 +656,59 @@ ROSE_ARM_SYSTEMS = {"primary": "character_2d", "secondary": "vertices_3d"}
 # ignored on them so the stored choice survives a pointer switch.
 DAYLIGHT_SWITCH_POINTERS = ("calendar", "rose")
 
+# ═══════════════════════════ WATCH FACE CONTENT KINDS (R-18) ═══════════════════════════
+# THE POINTER/CONTENT AUTHORITY MATRIX (owner-approved Theme Dictionary,
+# Watch Face Phase ③): which CONTENT KIND an active pointer carries —
+# read by the Watch Face window's Themes & Slots section to filter its
+# Level-1 tabs for the FULL-FACE layout (0 subdials). SUBDIAL slots
+# (1/2/3 present) ignore this table entirely — the owner's verdict P-4
+# is that a subdial offers EVERY content kind regardless of pointer.
+#
+# Four kinds, of which only ONE has a rendering path today (owner
+# decree — see `app.watch_face.theme_tree` for the debt note on the
+# other three, never wired as UI here):
+#   "week"  — the weekday-cast bodies (`pantheon.WEEKDAY_THEME_TITLES`);
+#             the ONLY kind this table actually gates in the UI, since
+#             it is the only one a Watch Face pick can reach — the
+#             classic weekday unit and slot 1 share one `weekday_theme`
+#             setting, and it renders on full-face ONLY together with
+#             `Settings.show_weekday` (Watch Face Phase ③ therefore
+#             lets the reader PRE-PICK the theme even at 0 subdials —
+#             it takes effect the moment a subdial turns on).
+#   "dozen" — the Calendar's twelve wedge-content rosters (CANON.md §The
+#             Two Dozen Systems) — carried by the Calendar MOUNT pick
+#             (`calendar_mounts.CALENDAR_MOUNTS`), never the slot system.
+#   "cube"  — the Character Cube seatings (CUBE.md §The Seatings) on the
+#             Calendar's 12 axes / the Rose's 24 seats — NOT wired to
+#             any picker yet (debt, Watch Face Phase ③ report).
+#   "wheel" — the pointer's OWN palette-style wheel content (Trinity's
+#             Court/Family/Genesis, the Prism's Persons/One Soul/
+#             Council, ... `POINTER_PALETTE_LABELS`) — already picked
+#             via `palette_style` in the Pointer section, not this one.
+#
+# Rose reads its shape (`Settings.pointer_shape`) as part of its own
+# key, since the owner's sheet gives the star and the polygon shape
+# different offers on the SAME pointer.
+WATCH_FACE_KINDS_BY_POINTER = {
+    "trio": {"week", "wheel"},
+    "cross": {"week", "wheel"},
+    "hexa": {"week", "wheel"},
+    "octa": {"week", "wheel"},
+    "rose_star": {"week", "cube", "wheel"},
+    "rose_polygon": {"cube"},
+    "calendar": {"dozen", "cube"},
+    "aurora": set(),
+}
+
+
+def watch_face_kinds(pointer: str, pointer_shape: str) -> set:
+    """The content kinds `pointer` carries in FULL-FACE — resolves the
+    Rose's shape-dependent split; every other pointer ignores
+    `pointer_shape`."""
+    key = f"rose_{pointer_shape}" if pointer == "rose" else pointer
+    return WATCH_FACE_KINDS_BY_POINTER.get(key, set())
+
+
 # ═══════════════════════════ TRIO & GENESIS ARM THEMES ═══════════════════════════
 # The trio's theological themes per arm angle (SYMBOLISM.md trio canon:
 # Faith vertical toward God, Hope on the dawn side, Love with Venus).

@@ -756,6 +756,24 @@ def rotation_themes(settings: "Settings") -> tuple[str, ...]:
     return ()
 
 
+def slot_layout_target(settings: "Settings") -> int:
+    """The FACE LAYOUT the current flags encode, 0-3 (Watch Face R-17 /
+    Ctrl+N's `_cycle_slots`): Full face / 1 / 2 / 3 subdials. The SAME
+    "strictly 1 → 2 → 3, never a gap" arithmetic
+    `render.slot_layout.enabled_slots` enforces at render time — this
+    pure reader lets both the controller's cycling shortcut and the
+    Watch Face FACE LAYOUT row derive the same number from one place
+    (Rule #5) instead of each re-deriving it."""
+    return (
+        int(settings.show_weekday)
+        + int(settings.show_weekday and settings.show_octa_slot)
+        + int(
+            settings.show_weekday and settings.show_octa_slot
+            and settings.show_third_slot
+        )
+    )
+
+
 def _load_rotation_group(raw: dict) -> str:
     """The rotation dropdown value — with the one-time migration from
     the pre-2026-07-14 Enabled checkbox (external user data: enabled
