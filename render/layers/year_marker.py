@@ -16,17 +16,20 @@ from render.skin_geometry import hover_factor
 from render.subdial import display_year
 
 
-def earth_region(latitude: float, default: str) -> str:
-    """The Earth marker's ART REGION: the active location's continent
-    — except at extreme latitudes, where the planet honestly shows its
-    POLE (owner 2026-07-15: the Quick Jump flips onto the poles). The
-    latitude rides the day context, so a running simulation carries
-    its own observer here."""
+def earth_region(latitude: float, longitude: float) -> str:
+    """The Earth marker's ART REGION: the active location's continent,
+    computed LIVE from its own coordinates — except at extreme
+    latitudes, where the planet honestly shows its POLE (owner
+    2026-07-15: the Quick Jump flips onto the poles). Both coordinates
+    ride the day context, so a running simulation (Quick Jump, Time
+    Travel, Greenwich) carries its own observer here — the marker's
+    face is recomputed every paint instead of freezing on whatever
+    continent the skin was built with (owner bug R-28, 2026-08)."""
     if latitude >= continents_theme.EARTH_POLE_LATITUDE:
         return "north_pole"
     if latitude <= -continents_theme.EARTH_POLE_LATITUDE:
         return "south_pole"
-    return default
+    return continents_theme.continent_from_coordinates(latitude, longitude)
 
 
 class YearMarkerLayer(Layer):
@@ -183,7 +186,7 @@ class YearMarkerLayer(Layer):
             painter.restore()
         variant = (
             f"{ctx.skin.earth_style}_"
-            f"{earth_region(ctx.day.latitude, spec.default_variant)}_"
+            f"{earth_region(ctx.day.latitude, ctx.day.longitude)}_"
             f"{'day' if ctx.tick.is_daylight else 'night'}"
         )
         asset = (

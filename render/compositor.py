@@ -2988,7 +2988,7 @@ class Compositor:
         (owner 2026-07-12): the day art on the Day side, the night art
         on the Night side — atmosphere or clean per the Earth setting."""
         marker = self._skin.year_marker
-        region = earth_region(self._day.latitude, marker.default_variant)
+        region = earth_region(self._day.latitude, self._day.longitude)
         path = marker.variants.get(
             f"{self._skin.earth_style}_{region}_{kind}"
         )

@@ -15,9 +15,12 @@ or lunar eclipse — the marker RELOCATES radially onto the ring band
 centerline and grows a colored glow (golden/silver normally, red/bronze for
 an eclipse, muted silver when the eclipse is real but not visible from the
 active location). The module also exports a standalone helper,
-`earth_region(latitude, default)`, imported directly by
+`earth_region(latitude, longitude)`, imported directly by
 `render/compositor.py` for hover/tooltip text — not only used internally by
-the layer.
+the layer. It resolves the continent LIVE from the day context's own
+coordinates on every call (R-28 fix, 2026-08) — nothing about the region is
+baked into the skin, so a Quick Jump/Time Travel/Greenwich simulation moves
+the Earth marker's face exactly like an ordinary location change does.
 
 `Cadence.MINUTE`: eclipse windows, season-event glow and moon transit
 opacity are all evaluated against `ctx.tick`, and both markers relocate
@@ -66,6 +69,9 @@ layer, and their lift twin lives in `HoverLiftLayer`.
   totality) gray to darken it without a translucent color wash.
 
 ### earth_region (module function)
-`earth_region(latitude, default) -> str` — the Earth marker's art region:
-the active location's continent, except at extreme latitudes where the
-planet honestly shows its pole.
+`earth_region(latitude, longitude) -> str` — the Earth marker's art region:
+the active location's continent (via `config.continents.
+continent_from_coordinates`), except at extreme latitudes where the planet
+honestly shows its pole. Both coordinates come straight from the day
+context, so the region is recomputed every paint — no stale skin-baked
+default.

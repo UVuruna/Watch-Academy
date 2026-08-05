@@ -86,3 +86,27 @@ def continents_dual_art(earth_style: str, is_daylight: bool) -> Path:
     return earth_face_art(
         earth_style, CONTINENTS_DUAL_REGION, "day" if is_daylight else "night"
     )
+
+
+def continent_from_coordinates(latitude: float, longitude: float) -> str:
+    """The LOCATION Earth marker's continent for ANY raw (latitude,
+    longitude) pair — a coarse but honest geographic estimate (owner
+    bug 2026-07-12: the marker was pinned to Europe). This is the ONE
+    place that turns coordinates into a continent name; `earth_region`
+    (render/layers/year_marker.py) calls it EVERY paint with the
+    active observer's own coordinates — the home city, a Quick Jump
+    city, Greenwich, or a Time Travel jump alike — so the marker's
+    face always matches the CURRENT location, not whatever place the
+    skin happened to be built from (owner bug R-28, 2026-08: the
+    marker followed the poles but froze on the old continent for an
+    ordinary city change). Pole latitudes are handled by the caller
+    BEFORE this runs — see `EARTH_POLE_LATITUDE`."""
+    if longitude < -30.0:
+        return "north_america" if latitude >= 8.5 else "south_america"
+    if latitude < -10.0 and longitude >= 110.0:
+        return "oceania"
+    if longitude < 35.0:
+        return "europe" if latitude >= 35.0 else "africa"
+    if longitude < 52.0 and latitude < 12.0:
+        return "africa"                  # the Horn and Madagascar
+    return "europe" if longitude < 45.0 and latitude >= 40.0 else "asia"

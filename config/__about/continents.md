@@ -32,6 +32,13 @@ Layer: config — pure, no Qt, no wall clock.
   current phase.
 - `continents_dual_art(earth_style, is_daylight)` — the live SERVANT
   plate (the Arctic, the Antarctic Ruler's antiphase mirror).
+- `continent_from_coordinates(latitude, longitude)` — the LOCATION
+  Earth marker's continent estimate for any raw coordinates; the ONE
+  place that turns a lat/lon pair into a continent name. Used by
+  `render.layers.year_marker.earth_region` (R-28 fix, 2026-08) so the
+  active location's face is resolved LIVE every paint, never baked
+  into the skin — a Quick Jump/Time Travel/Greenwich simulation moves
+  it exactly like an ordinary location change does.
 
 ## Connections
 
@@ -58,6 +65,9 @@ Layer: config — pure, no Qt, no wall clock.
   face.
 - `continents_dual_art(earth_style, is_daylight)`: the Servant plate
   (always the `north_pole`/Arctic region), same day/night law.
+- `continent_from_coordinates(latitude, longitude)`: a coarse but
+  honest continent estimate from raw coordinates alone (no city
+  metadata needed) — pole latitudes are the CALLER's concern.
 
 ## Design Decisions
 

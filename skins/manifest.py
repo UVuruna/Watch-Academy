@@ -143,7 +143,6 @@ class YearMarkerSpec:
     drawn comes from the Elements switches (show_earth / show_moon)."""
 
     variants: dict[str, Path]          # "europe_day" / "europe_night" / ... -> image
-    default_variant: str               # e.g. "europe"
     day_color: str                     # procedural Earth fallbacks
     night_color: str
     orbit_fraction: float              # Earth orbit, fraction of the dial radius

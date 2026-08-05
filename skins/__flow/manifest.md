@@ -44,7 +44,6 @@ SkinDefinition
     dual_names: tuple | None = None
   year_marker: YearMarkerSpec
     variants: dict[key -> Path]         -- e.g. "europe_day"
-    default_variant: str
     day_color, night_color: str
     orbit_fraction, scale: float        -- Earth
     moon_asset: Path | None

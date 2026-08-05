@@ -1205,33 +1205,19 @@ def test_letter_groups_cover_the_library_exactly():
 
 
 def test_earth_marker_follows_the_location_continent():
-    """Owner bug 2026-07-12: the Earth marker was pinned to Europe —
-    the picked continent decides (Americas splits by SUBREGION: owner
-    rule — Central America and the Caribbean wear the north art), and
-    hand-tuned coordinates fall back to a coarse estimate."""
-    def variant(**kwargs):
-        return build_skin(replace(Settings(), **kwargs)).year_marker.default_variant
+    """Owner bug 2026-07-12 (and its R-28 relapse, 2026-08): the Earth
+    marker was pinned to Europe — `earth_region` resolves the ACTIVE
+    coordinates' continent LIVE, every paint, so it never freezes on
+    whichever place the skin was originally built from."""
+    from render.layers.year_marker import earth_region
 
-    assert variant() == "europe"                        # Belgrade default
-    assert variant(
-        city_path=("Oceania", "Australia and New Zealand", "Australia", "Sydney"),
-        latitude=-33.87, longitude=151.21,
-    ) == "oceania"
-    assert variant(
-        city_path=("Americas", "Northern America", "United States", "New York"),
-        latitude=40.7, longitude=-74.0,
-    ) == "north_america"
-    assert variant(
-        city_path=("Americas", "Caribbean", "Jamaica", "Kingston"),
-        latitude=18.0, longitude=-76.8,
-    ) == "north_america"                                # owner rule
-    assert variant(
-        city_path=("Americas", "South America", "Brazil", "Rio de Janeiro"),
-        latitude=-22.9, longitude=-43.2,
-    ) == "south_america"
-    # No picked city: the geographic fallback.
-    assert variant(city_path=(), latitude=35.7, longitude=139.7) == "asia"
-    assert variant(city_path=(), latitude=-1.3, longitude=36.8) == "africa"
+    assert earth_region(44.82, 20.46) == "europe"          # Belgrade
+    assert earth_region(-33.87, 151.21) == "oceania"        # Sydney
+    assert earth_region(40.7, -74.0) == "north_america"     # New York
+    assert earth_region(18.0, -76.8) == "north_america"     # Kingston (owner rule)
+    assert earth_region(-22.9, -43.2) == "south_america"    # Rio de Janeiro
+    assert earth_region(35.7, 139.7) == "asia"              # Tokyo
+    assert earth_region(-1.3, 36.8) == "africa"             # Nairobi
 
 
 def test_earth_pole_regions_full_res_and_latitude_override():
@@ -1257,11 +1243,27 @@ def test_earth_pole_regions_full_res_and_latitude_override():
                 size = QImageReader(str(path)).size()
                 assert size.width() >= 1500, (key, size.width())
     # The latitude override: poles beyond the knob, continents inside.
-    assert earth_region(89.99, "europe") == "north_pole"
-    assert earth_region(-89.99, "europe") == "south_pole"
-    assert earth_region(continents.EARTH_POLE_LATITUDE, "asia") == "north_pole"
-    assert earth_region(69.65, "europe") == "europe"      # Tromsø stays
-    assert earth_region(44.82, "europe") == "europe"
+    assert earth_region(89.99, 20.46) == "north_pole"
+    assert earth_region(-89.99, 20.46) == "south_pole"
+    assert earth_region(continents.EARTH_POLE_LATITUDE, 100.0) == "north_pole"
+    assert earth_region(69.65, 18.96) == "europe"      # Tromsø stays
+    assert earth_region(44.82, 20.46) == "europe"
+
+
+def test_earth_marker_follows_a_simulated_jump_not_the_home_skin():
+    """R-28 regression: the skin's home continent (Belgrade/Europe)
+    must NOT leak into a simulated location's face — a Quick Jump/Time
+    Travel/Greenwich observer's OWN coordinates decide, exactly like
+    the home city does, because `earth_region` never reads anything
+    baked into the skin at build time."""
+    from render.layers.year_marker import earth_region
+
+    home_skin = build_skin(Settings())          # Belgrade, the default home
+    assert not hasattr(home_skin.year_marker, "default_variant")
+    # A Quick Jump to Tokyo, WITHOUT touching the home settings/skin:
+    assert earth_region(35.7, 139.7) == "asia"
+    # Greenwich itself:
+    assert earth_region(51.48, -0.0077) == "europe"
 
 
 def test_working_set_downscales_oversized_dial_art():

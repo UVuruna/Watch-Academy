@@ -98,7 +98,9 @@ full moon at bottom, clockwise). Which is drawn comes from the Elements
 switches (`show_earth` / `show_moon`).
 #### Attributes
 - `variants: dict[str, Path]` — e.g. `"europe_day"`/`"europe_night"` -> image
-- `default_variant: str`
+  (no baked-in default continent — `render.layers.year_marker.earth_region`
+  resolves the region LIVE from the day context's own coordinates every
+  paint, R-28 fix)
 - `day_color`, `night_color: str` — procedural Earth fallbacks
 - `orbit_fraction`, `scale: float` — Earth orbit / size
 - `moon_asset: Path | None`, `moon_lit_color`, `moon_dark_color: str`

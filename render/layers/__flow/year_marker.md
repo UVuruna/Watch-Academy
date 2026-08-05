@@ -62,7 +62,7 @@ Pseudocode (language-neutral):
         pos = dial_point(year_angle, radius * orbit)
         IF glowing: draw_event_glow(pos, size, color, strength)  # gold/red
         IF almanac: draw the day arrow at this tick
-        variant = f"{earth_style}_{earth_region(latitude, default)}_{day_or_night}"
+        variant = f"{earth_style}_{earth_region(latitude, longitude)}_{day_or_night}"
         asset = eclipse art IF a solar eclipse is active ELSE variant's asset
         IF asset exists:
             clip to the marker disc; draw it; draw the label (one of 4 modes)
@@ -77,6 +77,6 @@ Pseudocode (language-neutral):
             multiply the WHOLE disc by a neutral (or copper, for totality)
             gray — a true brightness cut, not a translucent color wash
 
-    FUNCTION earth_region(latitude, default) -> region_name:
+    FUNCTION earth_region(latitude, longitude) -> region_name:
         IF latitude at/beyond the pole threshold: RETURN "north_pole"/"south_pole"
-        ELSE: RETURN default                          # the active continent
+        ELSE: RETURN continent_from_coordinates(latitude, longitude)  # live estimate
