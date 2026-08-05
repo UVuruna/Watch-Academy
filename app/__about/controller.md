@@ -176,6 +176,18 @@ transit `render.daylight.moon_transit_opacity` already computed) and
 `umbra_alpha` is a DIRECT value (R-15, owner-requested, no skin default
 to fall back to — the Umbra was always fully opaque before this Phase).
 
+**Crown Text + Ring split additions (owner correction 2026-08-05):**
+`motto_alpha`/`motto_scale`/`motto_tint` (the outer Great Seal/cross-
+station motto arc, `RingLayer._draw_motto`) and `ring_tint_inner` (the
+split art's own inner-band tint, `RingLayer._draw_split_plate`) are
+direct pass-throughs the same shape as the Phase 4 fields above — see
+[Skins Manifest](../../skins/__about/manifest.md) and
+[Ring (layer)](../../render/layers/__about/ring.md) for the render-side
+design notes. The ROADMAP's earlier "no such element"/"one baked
+plate" debts were both WRONG (Phase ④ never found the actual motto/
+split-art mechanism); this round corrected them, not merely added new
+controls.
+
 ### `watch_title(settings, full=False) -> str`
 The watch's own display NAME — `full=False` is just `settings.city_name`;
 `full=True` is `f"{location}-{ring_finish} {ring}-{palette_label} {pointer}"`,

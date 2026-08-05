@@ -7,8 +7,8 @@ Phase ④ (R-15/R-35/R-36 + the moved rows): the Watch Face window's real
 Opacity page, replacing the placeholder — every render alpha channel
 this Phase's render hooks make speakable, grouped "Clock body" (Pointer,
 Aura sunlight/twilight, Umbra) and "Bodies on the ring" (Moon below
-horizon, Moon/Earth transit, Inactive icons). LIVE-APPLY, sliders apply
-on release.
+horizon, Moon/Earth transit, Inactive icons, Crown Text). LIVE-APPLY,
+sliders apply on release.
 
 Four rows were MOVED from the RETIRED `app.settings_dialog.
 display_section._build_opacity_group` (Phase 6 FINAL cleanup deleted
@@ -16,7 +16,13 @@ that copy outright). Three are NEW:
 R-15 Umbra opacity (owner-requested, a layer-alpha multiplier), R-35
 "Moon — hover over Earth" (reads as the existing Moon/Earth rim-TRANSIT
 dimming — there is no mouse-hover state on this dial), R-36 "Inactive
-icons" (the weekday ghost bodies' existing opacity).
+icons" (the weekday ghost bodies' existing opacity). A fourth,
+"Crown Text" (`motto_alpha`, R-24/Phase-6-debt correction, owner
+2026-08-05), was added the same round the Phase ④ debt note calling
+"Crown Text" nonexistent was corrected — the outer Great Seal motto arc
+IS this element (`skin.ring.motto`, `RingLayer._draw_motto`); a direct
+row like `umbra_alpha`, greyed out with a tooltip
+(`setters["ring_has_motto"]`) on motto-less presets.
 
 ## Connections
 

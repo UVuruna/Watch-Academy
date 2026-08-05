@@ -67,11 +67,17 @@ letter substitutions.
   Eye's shine masters)
 - `letter_legend: dict[int, dict]` — hour -> `{name, reading}`, the
   per-letter hover legend (empty for presets that carry none)
-- `motto: tuple[dict, ...]` — the outer motto arc: one
+- `motto: tuple[dict, ...]` — the outer motto arc ("Crown Text" in the
+  Watch Face window): one
   `{"text", "glyphs": ((asset, angle), ...), "words": [...]}` entry per
   preset that has one, built by `build_skin` from the preset's `motto`
   card field; empty for presets without one
 - `motto_metal: str = "gold"` — the single finish every motto glyph wears
+- `use_split_art: bool = False` — R-21 opt-in (owner correction
+  2026-08-05): `False` for every preset that ships today, so the owner's
+  split ring art landing on disk (`assets/instrument/ring/outter/`+
+  `inner/`) never by itself repaints an existing preset; a preset flips
+  this True only after the owner reviews its split look
 
 ### `WeekdaySpec`
 One weekday theme's seven bodies.
@@ -153,7 +159,13 @@ for the full field-by-field default/meaning table):
   `show_pointer`, `show_seconds`, `colorful`, `earth_style`,
   `earth_label`, `weekday_theme`, `show_weekday_names`,
   `show_info_slot_names`, `legend`
-- **Ring** — `ring_tint`, `ring_finish`, `ring_letter_scale`, `subdial_style`
+- **Ring** — `ring_tint`, `ring_tint_inner` (R-21 split, follows
+  `ring_tint` when `None`), `ring_finish`, `ring_letter_scale`,
+  `subdial_style`
+- **Crown Text** (R-24/Phase-6-debt correction, owner 2026-08-05) —
+  `motto_alpha`, `motto_scale` (multiplies `ring_letter_scale`),
+  `motto_tint` (follows `ring_tint` when `None`) — the outer Great Seal
+  motto arc's own opacity/size/color, independent of `letter_tint`
 - **Year line** — `era_notation`, `show_era_suffix`, `third_era`
   (consumed by `core.deep_time.format_year_line`/`format_official`)
 - **Display context & runtime-only** — `display: paths.DisplayContext`

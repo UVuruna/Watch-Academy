@@ -34,7 +34,10 @@ rebuilds the full roster across a restart.
 Frozen dataclass — the ONE table of every persisted user choice: window
 geometry (`window_x`/`window_y`/`diameter`), visibility Z mode
 (`z_mode`), the ring preset/tint/finish and its per-preset metal-split
-and eye-shine dicts, the pointer/palette/umbra/calendar-mount choices,
+and eye-shine dicts, the R-21 split inner tint (`ring_tint_inner`), the
+Crown Text trio (`motto_alpha`/`motto_scale`/`motto_tint`, R-24/
+Phase-6-debt correction, owner 2026-08-05 — the outer Great Seal motto
+arc's own opacity/size/color), the pointer/palette/umbra/calendar-mount choices,
 the Pointers REWORK phase-1 quartet (`pointer_shape`, `polygon_curvature`,
 `polygon_edge`, `hide_night_borders`), the three Slots (mode/style/theme/
 roster each), theme rotation, art source, metal shades, translation

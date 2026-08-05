@@ -5,12 +5,13 @@
 
 ## Purpose
 
-Paints the outer ring: the donut face (art asset or a procedural fallback),
-the 24 hour ticks, the 24h numerals with any per-skin letters swapped in,
-the 5-minute numbers along the inner edge, and — when the skin carries
-letter art — the owner's gold/silver/bronze letter glyphs and the outer
-Great Seal motto arc, both stamped with a shared dark halo and a
-readable (never-upside-down) rotation.
+Paints the outer ring: the donut face (art asset, split outer/inner
+plates, or a procedural fallback), the 24 hour ticks, the 24h numerals
+with any per-skin letters swapped in, the 5-minute numbers along the
+inner edge, and — when the skin carries letter art — the owner's
+gold/silver/bronze letter glyphs and the outer Great Seal motto arc
+("Crown Text" in the Watch Face window), both stamped with a shared
+dark halo and a readable (never-upside-down) rotation.
 
 `Cadence.STATIC`: nothing on this layer depends on the day or the live
 tick — only the skin (letters, tint, saturation) and the dial's size/DPI —
@@ -32,16 +33,30 @@ so it rebuilds only on a skin/size/DPI change. Not `hover_variable`.
 
 ### RingLayer
 `cadence = Cadence.STATIC`.
-- `paint()`: with a ring art asset, draws the tinted/saturated plate then
-  `_draw_letter_art()` and `_draw_motto()` on top (untinted); with no asset,
-  falls back to a procedural donut — ticks, bold numerals per hour (or a
-  letter where the skin defines one), and 5-minute numbers.
+- `paint()`: when the active preset opts in (`RingSpec.use_split_art`,
+  False for every preset that ships today) AND the owner's split art
+  (`config.dial.RING_OUTER_ASSET`/`RING_INNER_ASSET`) is on disk, draws
+  `_draw_split_plate()` instead of the single plate; otherwise, with a
+  ring art asset, draws the tinted/saturated single plate; with no
+  asset, falls back to a procedural donut — ticks, bold numerals per
+  hour (or a letter where the skin defines one), and 5-minute numbers.
+  Either branch then stamps `_draw_letter_art()` and `_draw_motto()` on
+  top.
+- `_draw_split_plate()` (R-21, owner correction 2026-08-05): composes
+  the inner minute-track band then the outer hour-tick band, each with
+  its OWN tint (`ring_tint_inner` follows `ring_tint` when `None`) —
+  the two plates reconstruct the single-plate look side by side.
 - `_draw_ring_glyph()`: the ONE stamp shared by both the ring's six letters
   and the outer motto (Rule #5) — resolves the letter's metal finish, draws
   a multi-sample dark halo from the gold master, rotates the glyph so it
-  reads upright through the lower half of the ring (`angles.readable_rotation_deg`).
+  reads upright through the lower half of the ring (`angles.readable_rotation_deg`);
+  `tint`/`opacity` are per-caller (`_draw_letter_art` passes
+  `letter_tint`/1.0, `_draw_motto` its own `motto_tint`/`motto_alpha`).
 - `_draw_letter_art()`: stamps every hour's letter art at its ring position,
   scaled by `ring_letter_scale` and the per-hour shine-enlarge multiplier.
-- `_draw_motto()`: stamps the preset's motto texts (e.g. ANNUIT COEPTIS /
-  NOVUS ORDO SECLORUM) along two angularly-disjoint top/bottom arcs sharing
-  one radius; a no-op for presets with no motto.
+- `_draw_motto()` ("Crown Text" in the Watch Face window, R-24/Phase-6-debt
+  correction, owner 2026-08-05): stamps the preset's motto texts (e.g.
+  ANNUIT COEPTIS / NOVUS ORDO SECLORUM) along two angularly-disjoint
+  top/bottom arcs sharing one radius, scaled by `motto_scale` (on top of
+  `ring_letter_scale`), tinted by `motto_tint` (follows `ring_tint` when
+  `None`) and dimmed by `motto_alpha`; a no-op for presets with no motto.

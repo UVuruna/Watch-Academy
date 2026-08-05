@@ -33,15 +33,26 @@ lives in [The DOMY Canon](CANON.md).
   `show_weekday_names`/`archetype_names` keys the old buried/Settings-
   only toggles wrote. Label sweep (R-11/R-19/R-27): "Ring letters" reads
   "Indices" and "Slot" reads "Complications" everywhere a user sees
-  them; no stored setting key was renamed. **Recorded debts the rework
-  does NOT close:** the ring's outer/inner tint split needs new art
-  before it can be a real control (R-21); no "Crown Text" render
-  element exists to attach a Colors/Opacity control to (Phase ④
-  verified this — the brief describes something the dial never grew);
-  a per-pointer default theme table is pending the Theme Dictionary
-  registry; the dozen/cube slot-content kinds have no render path yet
-  (Themes & Slots' content tree explains this in place rather than
-  offering a picker that draws nothing).
+  them; no stored setting key was renamed. **CORRECTION (owner 2026-08-05,
+  LOUD): both debts recorded below were WRONG — the owner's own art and
+  words proved it.** R-21's outer/inner ring-tint split IS built:
+  `render.layers.ring.RingLayer._draw_split_plate` composes the owner's
+  new split art (`assets/instrument/ring/outter/`+`inner/`, untracked —
+  awaits his commit) with independent `ring_tint`/`ring_tint_inner`
+  controls, gated behind a per-preset `RingSpec.use_split_art` opt-in
+  (False for every bundled preset today — landing the art on disk must
+  never by itself repaint an existing preset; the owner still owes the
+  per-preset mapping verdicts and a picker for the outer/inner variant
+  families). "Crown Text" IS the outer Great Seal motto arc
+  (`skin.ring.motto`, `RingLayer._draw_motto`) — Phase ④'s claim that no
+  such element exists was a misread of the render stack; Watch Face
+  Opacity/Size/Colors now each carry a Crown Text row
+  (`motto_alpha`/`motto_scale`/`motto_tint`), greyed out with a tooltip
+  on the presets that carry no motto. A per-pointer default theme table
+  is still pending the Theme Dictionary registry; the dozen/cube
+  slot-content kinds still have no render path (Themes & Slots' content
+  tree explains this in place rather than offering a picker that draws
+  nothing) — those two debts stand.
 - **THE ENCYCLOPEDIA REWORK (WORKPLAN Session 27, owner-sealed
   2026-07-28/29) — DONE:** the browser reads on THREE levels now — six
   WHOLES on a home screen that never scrolls (The Instrument · The

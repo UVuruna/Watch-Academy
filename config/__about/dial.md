@@ -30,6 +30,13 @@ Layer: config — pure, no Qt, no wall clock.
 - **Ring faces** — `RING_FACE_DIR`, the tint swatch geometry, the ring
   letter art/shadow/motto arc constants (`RING_LETTER_*`, `RING_MOTTO_
   *`).
+- **Ring OUTER/INNER split art** (R-21, owner correction 2026-08-05) —
+  `RING_OUTER_ART_DIR`/`RING_INNER_ART_DIR`, `RING_OUTER_ASSET`/
+  `RING_INNER_ASSET` (the ONE variant pair — "full" outer + "simple"
+  inner — this round ships; a future variant picker replaces these two
+  constants with a lookup). Gated at render time by BOTH files existing
+  on disk AND the active preset's own `RingSpec.use_split_art` opt-in
+  (`render.layers.ring.RingLayer.paint`) — neither alone enables it.
 - **Hand sizing** — `HAND_SECOND_REACH_FRACTION`, `HAND_MINUTE_REACH_
   FRACTION` (tip-to-pivot lengths; the hour hand follows each pack's
   own ratio).
