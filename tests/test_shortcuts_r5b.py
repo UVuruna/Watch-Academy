@@ -699,3 +699,48 @@ def test_ctrl_numpad_plus_still_matches_fast_travel_future(app):
     )
     _press(widget, Qt.Key.Key_Plus, numpad_modifiers)
     assert seen == ["fast_travel_future"]
+
+
+def test_greenwich_shortcut_is_ctrl_0_and_actually_dispatches(app):
+    """R-38 audit: `location_greenwich` EXISTS and WORKS — Ctrl+0, "the
+    ZERO meridian's own digit" (Ctrl+G is `open_guide`'s). A real
+    QKeyEvent through the widget must reach the controller's handler,
+    not merely `_on_shortcut` called directly."""
+    assert shortcuts.shortcut_display("location_greenwich") == "Ctrl+0"
+    widget = _bare_widget(app)
+    seen = []
+    widget.shortcut_triggered.connect(seen.append)
+    _press(widget, Qt.Key.Key_0, Qt.KeyboardModifier.ControlModifier)
+    assert seen == ["location_greenwich"]
+
+
+def test_shortcuts_window_enumerates_the_config_table_exactly(app):
+    """R-37: the Shortcuts window's rows come STRAIGHT off
+    `config.shortcuts.SHORTCUTS`, one row per entry, in the table's own
+    order — never a hand-maintained second copy that can drift (the
+    exact failure mode R-38 found in a stale code comment elsewhere)."""
+    from app.shortcuts_window import ShortcutsDialog
+
+    dialog = ShortcutsDialog()
+    assert dialog._table.rowCount() == len(shortcuts.SHORTCUTS)
+    for row, (action_id, _key, _modifiers, description) in enumerate(
+        shortcuts.SHORTCUTS
+    ):
+        assert dialog._table.item(row, 0).text() == shortcuts.shortcut_display(
+            action_id
+        )
+        assert dialog._table.item(row, 1).text() == description
+    dialog.deleteLater()
+
+
+def test_shortcuts_menu_entry_opens_the_window(controller, monkeypatch):
+    """R-37: the right-click menu carries a "Shortcuts…" entry wired to
+    `_open_shortcuts`."""
+    from app.shortcuts_window import ShortcutsDialog
+
+    opened = []
+    monkeypatch.setattr(
+        ShortcutsDialog, "exec", lambda self: opened.append(1) or 0
+    )
+    controller._open_shortcuts()
+    assert opened == [1]

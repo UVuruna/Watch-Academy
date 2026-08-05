@@ -50,6 +50,7 @@ from app.observatory import ObservatoryDialog
 from app.legend_popup import LegendPopup
 from app.pointer_theme import PointerThemeDialog
 from app.report import ReportDialog
+from app.shortcuts_window import ShortcutsDialog
 from app.scheduler import MinuteScheduler
 from app.settings_dialog.dialog import SettingsDialog
 from app.settings_store import (
@@ -151,7 +152,9 @@ def _ring_eye_shine(settings: Settings, card: dict) -> bool:
     )
 
 
-def watch_title(settings: Settings, full: bool = False) -> str:
+def watch_title(
+    settings: Settings, full: bool = False, location_name: str | None = None,
+) -> str:
     """The watch's own display NAME (owner INSTRUCTION.txt item 2A,
     R5 MENU REWORK round). A single watch shows just its LOCATION in
     the right-click/tray menus (`full=False`, the default); the FULL
@@ -164,6 +167,15 @@ def watch_title(settings: Settings, full: bool = False) -> str:
     the ONE place that KNOWS the format, so that round only had to
     loop it, never reinvent it.
 
+    `location_name` (R-31 fix, 2026-08) overrides `settings.city_name`
+    for the LOCATION word alone: a running Quick Jump/Time Travel/
+    Greenwich simulation moves the observer WITHOUT touching the home
+    `Settings`, so the tray tooltip/menu title used to freeze on the
+    home city forever — `WatchController` passes its own live
+    `_active_location_name` here, which the exact same jump/settings
+    paths that flash the location (R-30, `_flash_location`) keep
+    current.
+
     Deliberately UNTRANSLATED (no `tr`): a NAME is an identifier, not
     UI chrome — the same treatment the ring preset name and the
     pointer's own `POINTER_DISPLAY_NAMES` already get (protected proper
@@ -171,8 +183,9 @@ def watch_title(settings: Settings, full: bool = False) -> str:
     pointer's own wheel-pair (`constants.POINTER_PALETTE_LABELS`), read
     by the ACTIVE `palette_style` — the SAME table the Design menu's
     pair labels translate from (Rule #5, one source)."""
+    location = settings.city_name if location_name is None else location_name
     if not full:
-        return settings.city_name
+        return location
     labels = constants.POINTER_PALETTE_LABELS.get(
         settings.pointer, constants.POINTER_PALETTE_LABELS["default"]
     )
@@ -183,9 +196,27 @@ def watch_title(settings: Settings, full: bool = False) -> str:
     palette_label = labels[styles.index(style)]
     pointer_name = constants.POINTER_DISPLAY_NAMES[settings.pointer]
     return (
-        f"{settings.city_name}-{settings.ring_finish.capitalize()} "
+        f"{location}-{settings.ring_finish.capitalize()} "
         f"{settings.ring}-{palette_label} {pointer_name}"
     )
+
+
+def _location_flash_text(name: str, path: tuple = (), timezone: str = "") -> str:
+    """R-30: "CITY, COUNTRY" for the location-change flash. COUNTRY is
+    `path[2]` when a full picked-city path is known (`data.locations.
+    CityRecord.path` is always (continent, subregion, country[, admin],
+    city) — a Settings dialog preset pick carries it). A Quick Jump
+    city stores only name/lat/lon/timezone (no path) and a hand-tuned
+    coordinate has no picked path either — COUNTRY is genuinely
+    unavailable there, so the honest fallback is the IANA timezone's
+    own region ("Europe/London" -> "Europe"); a bare name is the last
+    resort (the poles carry neither)."""
+    if len(path) > 2:
+        return f"{name}, {path[2]}"
+    if timezone and "/" in timezone:
+        region = timezone.split("/", 1)[0].replace("_", " ")
+        return f"{name}, {region}"
+    return name
 
 
 def _guard_exclusive_choice(action: QAction, apply) -> None:
@@ -310,38 +341,6 @@ def _filtered_moon_events(
             if fraction in _QUARTER_MOON_FRACTIONS
         )
     return tuple(when for when, _fraction in events)
-
-
-def _earth_continent(settings: Settings) -> str:
-    """The Earth-marker art variant for the ACTIVE location (owner bug
-    2026-07-12: the marker was always Europe). The picker's continent
-    decides ("Americas" splits by latitude — the art has north and
-    south); hand-tuned coordinates without a picked city fall back to
-    a coarse geographic estimate."""
-    picker = settings.city_path[0] if settings.city_path else None
-    if picker == "Americas":
-        # Owner rule: Central America and the Caribbean wear the
-        # north_america art — only the South America subregion goes south.
-        subregion = settings.city_path[1] if len(settings.city_path) > 1 else ""
-        return (
-            "south_america" if subregion == "South America" else "north_america"
-        )
-    named = {
-        "Africa": "africa", "Asia": "asia",
-        "Europe": "europe", "Oceania": "oceania",
-    }
-    if picker in named:
-        return named[picker]
-    lat, lon = settings.latitude, settings.longitude
-    if lon < -30.0:
-        return "north_america" if lat >= 8.5 else "south_america"
-    if lat < -10.0 and lon >= 110.0:
-        return "oceania"
-    if lon < 35.0:
-        return "europe" if lat >= 35.0 else "africa"
-    if lon < 52.0 and lat < 12.0:
-        return "africa"                  # the Horn and Madagascar
-    return "europe" if lon < 45.0 and lat >= 40.0 else "asia"
 
 
 def _resolve_hands(settings: Settings):
@@ -779,9 +778,11 @@ def _overlay_display_settings(skin, settings: Settings, display):
     marker = dataclasses.replace(
         marker,
         moon_hidden_alpha=settings.moon_hidden_alpha,
-        # The Earth marker wears the ACTIVE location's continent art
-        # (owner bug 2026-07-12: it was pinned to Europe).
-        default_variant=_earth_continent(settings),
+        # The Earth marker's continent is no longer baked into the skin
+        # (owner bug R-28, 2026-08): `earth_region` computes it LIVE
+        # from the day context's own coordinates every paint, so it
+        # follows Quick Jump/Time Travel/Greenwich the same way it
+        # follows the home settings.
         # THE MOON TRANSIT OPACITY OVERRIDE (Watch Face Phase 4, R-35):
         # None (default) keeps the skin's own `dial.MOON_TRANSIT_OPACITY`.
         transit_alpha=(
@@ -933,6 +934,14 @@ class WatchController(QObject):
         self._store = SettingsStore(settings_path or paths.settings_path(watch_index))
         self._settings = self._load_settings_or_recover()
         self._save_failed = False
+        # R-31: the tray tooltip/menu TITLE's own LIVE location word —
+        # starts as the home city, moved by `_flash_location` on every
+        # location change (Settings preset pick, Quick Jump, Time
+        # Travel, Greenwich, the poles) and restored by `_end_simulation`
+        # when a simulation ends. Never re-derived from `self._settings`
+        # directly, so a running simulation (which never touches the
+        # home Settings) does not leave the title frozen on the old city.
+        self._active_location_name = self._settings.city_name
         #: Set by `discard()` (Remove Watch). A discarded watch is DEAD:
         #: its settings file has just been deleted by the manager, so it
         #: must never write it again — see `_flush_position`.
@@ -997,7 +1006,12 @@ class WatchController(QObject):
             # very first frame (owner INSTRUCTION.txt item 2A) —
             # `_title_label` already exists (set inside the `_build_menu`
             # call above).
-            self._tray.set_tooltip(watch_title(self._settings, full=True))
+            self._tray.set_tooltip(
+                watch_title(
+                    self._settings, full=True,
+                    location_name=self._active_location_name,
+                )
+            )
             # Every dialog title bar (Settings, Time Travel, Guide,
             # Encyclopedia, Observatory) inherits this MULTI-RESOLUTION
             # icon instead of the generic Windows icon (owner report
@@ -1752,6 +1766,47 @@ class WatchController(QObject):
             self._widget, icon_path, theme["emoji"], self._ui(option["title"])
         )
 
+    # Every `_compute_jump` kind that LANDS somewhere new (R-30) — the
+    # unit/eclipse jumps (`_step_fast_travel`) chain through the SAME
+    # `_apply_jump`/`_dialog_jump` tails but never appear here, so they
+    # stay silent exactly like before this round.
+    _LOCATION_JUMP_KINDS = frozenset({"north_pole", "south_pole", "greenwich", "city"})
+
+    def _flash_location(self, name: str, path: tuple = (), timezone: str = "") -> None:
+        """R-30/R-31: a large, centered "CITY, COUNTRY" flash across the
+        dial's own middle on every LOCATION change — the Settings
+        dialog's preset pick (`_apply_settings_dialog_result`) and
+        every `_compute_jump` landing named in `_LOCATION_JUMP_KINDS`
+        (`_apply_jump`/`_dialog_jump`: Quick Jump cycling, Greenwich,
+        the poles, Time Travel's own Quick Jump rows) — the SAME
+        overlay `_flash_fast_travel` uses, `big=True`. The SAME `name`
+        also becomes `_active_location_name` (R-31), so the tray
+        tooltip/menu TITLE follow it too — one location change, one
+        call, both symptoms fixed together."""
+        self._fast_travel_flash.flash(
+            self._widget, None, "", _location_flash_text(name, path, timezone),
+            big=True,
+        )
+        self._active_location_name = name
+        self._refresh_watch_title()
+
+    def _flash_jump_location(self, kind: str, city: dict | None) -> None:
+        """The shared tail behind `_apply_jump`/`_dialog_jump`: flashes
+        the landed-on place when `kind` actually changed the location
+        (`_LOCATION_JUMP_KINDS`), silent for every other jump kind (a
+        day/month/year/century/millennium/eclipse step never flashes,
+        unchanged from before this round)."""
+        if kind not in self._LOCATION_JUMP_KINDS:
+            return
+        if kind == "north_pole":
+            self._flash_location(self._ui("North Pole"))
+        elif kind == "south_pole":
+            self._flash_location(self._ui("South Pole"))
+        elif kind == "greenwich":
+            self._flash_location("Greenwich", (), defaults.GREENWICH_TIMEZONE)
+        else:                               # "city" — the user's own place
+            self._flash_location(city["name"], (), city["timezone"])
+
     def _step_fast_travel(self, direction: int) -> None:
         """Ctrl+minus/Ctrl+plus: one step past (`direction=-1`)/future
         (`direction=1`) along the ACTIVE (theme, option) — riding the
@@ -1917,11 +1972,22 @@ class WatchController(QObject):
         via the `_install_skin` it always runs first — either path ends
         with a correct label. Public entry point: `refresh_title()`
         (ADD WATCH round — the manager calls it on every SURVIVING
-        watch after the roster changes)."""
+        watch after the roster changes). The LOCATION word itself reads
+        `self._active_location_name` (R-31), not `settings.city_name`
+        directly — a running simulation moves it without ever touching
+        the home `Settings`."""
         self._title_label.setText(
-            watch_title(self._settings, full=self._watch_count() >= 2)
+            watch_title(
+                self._settings, full=self._watch_count() >= 2,
+                location_name=self._active_location_name,
+            )
         )
-        self._tray.set_tooltip(watch_title(self._settings, full=True))
+        self._tray.set_tooltip(
+            watch_title(
+                self._settings, full=True,
+                location_name=self._active_location_name,
+            )
+        )
 
     def _refresh_open_mini_windows(self) -> None:
         """Keep any OPEN Design/Pointer Theme/Slot Theme window in step
@@ -2386,7 +2452,12 @@ class WatchController(QObject):
         # roster size) this row switches to the full multi-attribute
         # form too — the tray HOVER tooltip below stays full regardless
         # of count, always has.
-        title_label = QLabel(watch_title(settings, full=self._watch_count() >= 2))
+        title_label = QLabel(
+            watch_title(
+                settings, full=self._watch_count() >= 2,
+                location_name=self._active_location_name,
+            )
+        )
         title_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         title_label.setStyleSheet(
             "font-weight: 700; font-size: 13px; padding: 6px 12px;"
@@ -2621,6 +2692,11 @@ class WatchController(QObject):
         )
         time_travel.triggered.connect(self._open_time_travel)
         menu.addAction(time_travel)
+        # R-37: a plain reference window, no shortcut of its own (it is
+        # the thing that explains every OTHER row's shortcut column).
+        shortcuts_action = QAction(f"⌨️ {tr('Shortcuts…')}", menu)
+        shortcuts_action.triggered.connect(self._open_shortcuts)
+        menu.addAction(shortcuts_action)
         # QUICK JUMP DIED HERE (owner rounds 2026-07-14/15; Session 16
         # rework, slika 12; RETIRED R5 MENU REWORK item 4 — Rule #6, no
         # both-paths): the deep 4-5-level submenu chain this used to be
@@ -2658,6 +2734,12 @@ class WatchController(QObject):
         # dial (item 1's non-modal trio is Encyclopedia/Guide/
         # Observatory only).
         ReportDialog(self._translation_overlay).exec()
+
+    def _open_shortcuts(self) -> None:
+        """⌨️ Shortcuts… (R-37) — a read-only reference table, same
+        MODAL treatment as Report: nothing here ever needs to stay open
+        alongside the dial."""
+        ShortcutsDialog(self._translation_overlay).exec()
 
     def _open_guide(self) -> None:
         """📖 Guide… — the help book is a CARD in the Encyclopedia now
@@ -3268,6 +3350,11 @@ class WatchController(QObject):
                 latitude=new_settings.latitude, longitude=new_settings.longitude
             )
             self._day = None                # full rebuild for the new place
+            self._flash_location(          # R-30: the Settings preset pick
+                new_settings.city_name,
+                new_settings.city_path,
+                new_settings.timezone,
+            )
         # Rebuild from DEFAULT_SKIN so cleared overrides (back to "skin
         # default") actually clear instead of sticking.
         self._install_skin(build_skin(self._settings))
@@ -3331,10 +3418,13 @@ class WatchController(QObject):
         """One `_compute_jump` step, applied straight to the LIVE dial
         (`_start_simulation`) instead of a dialog draft — the shared
         tail every keyboard travel shortcut uses. A clamp (`None`) is a
-        silent no-op, matching every other Quick Jump caller."""
+        silent no-op, matching every other Quick Jump caller. Flashes
+        the landed-on place (R-30) when `kind` actually changed the
+        location — never on a clamp."""
         result = self._compute_jump(moment, observer, cycles, kind, city)
         if result is not None:
             self._start_simulation(*result)
+            self._flash_jump_location(kind, city)
 
     def _open_time_travel(self) -> None:
         # A running simulation SEEDS the dialog (owner 2026-07-14):
@@ -3401,10 +3491,17 @@ class WatchController(QObject):
     def _end_simulation(self) -> None:
         """NOW (owner 2026-07-15): back to the present immediately —
         the running simulation ends and the dial rebuilds from the
-        real wall clock; a no-op when nothing is simulated."""
+        real wall clock; a no-op when nothing is simulated. Also
+        restores the tray tooltip/menu TITLE's location word (R-31) to
+        the home city — a jump's `_flash_location` moved it away from
+        `settings.city_name` without ever touching the home Settings,
+        so ending the simulation must move it back the same way."""
         self._simulation = None
         self._sim_cycles = 0
         self._day = None
+        if self._active_location_name != self._settings.city_name:
+            self._active_location_name = self._settings.city_name
+            self._refresh_watch_title()
         self._on_tick(clock_jumped=False)
 
     def _start_simulation(self, moment: datetime, observer, cycles: int = 0) -> None:
@@ -3633,6 +3730,7 @@ class WatchController(QObject):
             return None
         new_moment, new_observer, new_cycles = result
         self._start_simulation(new_moment, new_observer, new_cycles)
+        self._flash_jump_location(kind, city)      # R-30
         return (
             new_moment.astimezone(self._tz).replace(tzinfo=None), new_cycles,
             new_observer.latitude, new_observer.longitude,

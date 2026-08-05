@@ -354,8 +354,16 @@ class ClockWidget(QWidget):
         # ARTICLE-DEPTH LAW (CUBE.md §Display laws) — Space and its
         # modifiers belong wholly to the article jump (SPACE primary,
         # Shift+SPACE secondary, Ctrl+SPACE tertiary), and Greenwich
-        # moved to Ctrl+G. Either way a held modifier must fall through
-        # to the shortcut table instead of firing the bare jump.
+        # moved off Space entirely. R-38 (2026-08) audit: Greenwich
+        # briefly PARKED on Ctrl+G, which `open_guide` already owned (a
+        # silent double-bind `test_no_two_shortcuts_share_a_chord` now
+        # pins against) — its REAL, current, working binding is Ctrl+0
+        # (`shortcuts.SHORTCUTS`'s own `location_greenwich` row, "the
+        # ZERO meridian's own digit"); this comment previously still
+        # said "Ctrl+G" after that second move, which is exactly the
+        # kind of stale note that made the binding hard to trust. Either
+        # way a held modifier must fall through to the shortcut table
+        # instead of firing the bare jump.
         if (
             event.key() == Qt.Key.Key_Space
             and event.modifiers() == Qt.KeyboardModifier.NoModifier

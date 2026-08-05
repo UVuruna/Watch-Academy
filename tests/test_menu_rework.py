@@ -97,10 +97,14 @@ def test_watch_title_falls_back_to_the_default_pair_off_the_table():
 
 def test_watch_title_is_untranslated_never_touches_tr():
     """A NAME, not UI chrome (docstring rationale) — the signature
-    itself carries no `tr`/overlay parameter."""
+    carries no `tr`/overlay parameter; R-31 added `location_name` (an
+    override for the LOCATION word alone, read by a live simulation),
+    still no translation hook."""
     import inspect
 
-    assert list(inspect.signature(watch_title).parameters) == ["settings", "full"]
+    assert list(inspect.signature(watch_title).parameters) == [
+        "settings", "full", "location_name",
+    ]
 
 
 # --- The TITLE row + tray tooltip ------------------------------------------------
@@ -444,6 +448,62 @@ def test_return_to_now_still_ends_the_simulation_after_live_jumps(controller):
     assert controller._simulation is not None
     controller._end_simulation()
     assert controller._simulation is None
+    dialog.deleteLater()
+
+
+def test_location_jump_flashes_and_moves_the_tray_title(controller):
+    """R-30/R-31 regression: a `_dialog_jump` LOCATION landing (kind
+    "city") — unlike a plain day/month step — flashes the "CITY,
+    COUNTRY" overlay AND moves the tray tooltip/menu TITLE's own
+    location word, even though the home `Settings.city_name` never
+    changes. `_end_simulation` must restore it afterward."""
+    home_name = controller._settings.city_name
+    assert controller._active_location_name == home_name
+    dialog = TimeTravelDialog(
+        controller._settings.latitude, controller._settings.longitude,
+        initial_moment=datetime(2026, 6, 20, 12, 0),
+        coverage=controller._travel_coverage(),
+        core_coverage=controller._bundled_coverage(),
+        jump_callback=controller._dialog_jump,
+    )
+    tokyo = {
+        "name": "Tokyo", "latitude": 35.7, "longitude": 139.7,
+        "timezone": "Asia/Tokyo",
+    }
+    dialog._on_jump("city", tokyo)
+    assert controller._active_location_name == "Tokyo"
+    assert controller._active_location_name != home_name
+    assert "Tokyo" in controller._tray._icon.toolTip()
+    assert "Tokyo" in controller._title_label.text()
+    assert controller._fast_travel_flash._text_label.text() == "Tokyo, Asia"
+    # A non-location jump (a plain day step) leaves the location alone.
+    dialog._on_jump("next_day")
+    assert controller._active_location_name == "Tokyo"
+    controller._end_simulation()
+    assert controller._active_location_name == home_name
+    assert home_name in controller._tray._icon.toolTip()
+    dialog.deleteLater()
+
+
+def test_settings_location_change_flashes_and_updates_the_title(controller, monkeypatch):
+    """R-30/R-31: the Settings dialog's own preset pick is a LOCATION
+    change too — same flash, same tray/title update, no simulation
+    involved at all."""
+    from app.settings_dialog.dialog import SettingsDialog
+
+    dialog = SettingsDialog(
+        controller._settings, controller._skin, controller._translation_overlay,
+    )
+    new_settings = dataclasses.replace(
+        controller._settings,
+        city_name="Oslo", city_path=("Europe", "Northern Europe", "Norway", "Oslo"),
+        latitude=59.91, longitude=10.75, timezone="Europe/Oslo",
+    )
+    monkeypatch.setattr(dialog, "result_settings", lambda: new_settings)
+    controller._apply_settings_dialog_result(dialog)
+    assert controller._active_location_name == "Oslo"
+    assert "Oslo" in controller._tray._icon.toolTip()
+    assert controller._fast_travel_flash._text_label.text() == "Oslo, Norway"
     dialog.deleteLater()
 
 

@@ -285,6 +285,13 @@ REPORT_REFRESH_MS = 1000
 REPORT_BAR_TOP_N = 10
 REPORT_CHART_HEIGHT_PX = 170
 
+# ═══════════════════════════ THE SHORTCUTS WINDOW ═══════════════════════════
+# R-37: a modal reference window listing EVERY keyboard shortcut, read
+# straight off `config.shortcuts.SHORTCUTS` (Rule #19 — never a
+# hand-written copy that can drift from the real table).
+SHORTCUTS_WINDOW_WIDTH_PX = 560
+SHORTCUTS_WINDOW_HEIGHT_PX = 640
+
 # ─── THE OBSERVATORY (Session 17, owner 2026-07-16) ────────────────────
 # The statistics sibling of the Encyclopedia ("kao enciklopedija, samo
 # sa statistikom"): dark, QPainter-drawn interactive charts over the
@@ -752,7 +759,6 @@ DEFAULT_SKIN = SkinDefinition(
             for continent in continents._CONTINENTS
             for phase in ("day", "night")
         },
-        default_variant="europe",
         day_color=palette.SKIN_EARTH_DAY,
         night_color=palette.SKIN_EARTH_NIGHT,
         # Owner spec: the Earth's outer edge TOUCHES the ring's inner

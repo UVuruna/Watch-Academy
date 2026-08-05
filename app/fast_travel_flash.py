@@ -1,6 +1,11 @@
 """Fast Travel's transient flash overlay (R5b FINAL MAP round, owner
 spec sealed 2026-07-21): icon + option text, popping above the dial on
 every Ctrl+[ / Ctrl+] theme/option change and fading out on its own.
+
+R-30 (2026-08) reuses this SAME overlay for a LOCATION change (`big=
+True`): large, centered "CITY, COUNTRY" text across the middle of the
+dial instead of the small icon+text popup above/below it — one
+mechanism, two positions, never a second flash class.
 """
 
 from PySide6.QtCore import QPropertyAnimation, Qt, QTimer
@@ -35,10 +40,6 @@ class FastTravelFlash(QWidget):
         self.setAttribute(Qt.WidgetAttribute.WA_TranslucentBackground)
         self._icon_label = QLabel()
         self._text_label = QLabel()
-        self._text_label.setStyleSheet(
-            f"color: {palette.FAST_TRAVEL_FLASH_TEXT_COLOR};"
-            f"font-weight: 600; font-size: {shortcuts.FAST_TRAVEL_FLASH_FONT_PX}px;"
-        )
         layout = QHBoxLayout(self)
         pad = shortcuts.FAST_TRAVEL_FLASH_PADDING_PX
         layout.setContentsMargins(pad, pad, pad, pad)
@@ -60,27 +61,49 @@ class FastTravelFlash(QWidget):
         self._hold_timer.setSingleShot(True)
         self._hold_timer.timeout.connect(self._fade.start)
 
-    def flash(self, dial_widget: QWidget, icon_path, emoji: str, text: str) -> None:
+    def flash(
+        self, dial_widget: QWidget, icon_path, emoji: str, text: str,
+        *, big: bool = False,
+    ) -> None:
         """Show `text` beside `icon_path` (graceful-absent to `emoji` —
         Rule #1) positioned ABOVE `dial_widget`'s current geometry,
         falling BELOW it when the dial hugs the screen top, then holds
-        before fading. A flash already in flight restarts cleanly."""
+        before fading. A flash already in flight restarts cleanly.
+
+        `big=True` (R-30, a LOCATION change) instead centers the flash
+        across the MIDDLE of the dial in large letters — no icon (an
+        empty `icon_path`/`emoji` hides that label entirely) — the
+        SAME widget/timers/fade, just a different size and position."""
         self._fade.stop()
         self._hold_timer.stop()
         self._opacity.setOpacity(1.0)
+        has_icon = icon_path is not None or bool(emoji)
+        self._icon_label.setVisible(has_icon)
         if icon_path is not None:
             size = shortcuts.FAST_TRAVEL_FLASH_ICON_PX
             self._icon_label.setPixmap(QIcon(str(icon_path)).pixmap(size, size))
             self._icon_label.setText("")
-        else:
+        elif emoji:
             self._icon_label.setPixmap(QIcon().pixmap(0, 0))
             self._icon_label.setText(emoji)
             self._icon_label.setStyleSheet(
                 f"font-size: {shortcuts.FAST_TRAVEL_FLASH_ICON_PX}px;"
             )
+        font_px = (
+            shortcuts.LOCATION_FLASH_FONT_PX
+            if big
+            else shortcuts.FAST_TRAVEL_FLASH_FONT_PX
+        )
+        self._text_label.setStyleSheet(
+            f"color: {palette.FAST_TRAVEL_FLASH_TEXT_COLOR};"
+            f"font-weight: 600; font-size: {font_px}px;"
+        )
         self._text_label.setText(text)
         self.adjustSize()
-        self._position_above_or_below(dial_widget)
+        if big:
+            self._position_centered(dial_widget)
+        else:
+            self._position_above_or_below(dial_widget)
         self.show()
         native.assert_topmost(int(self.winId()))
         hold_ms = max(
@@ -104,3 +127,12 @@ class FastTravelFlash(QWidget):
         else:
             y = above_y
         self.move(max(avail.left(), min(x, avail.right() - self.width())), y)
+
+    def _position_centered(self, dial_widget: QWidget) -> None:
+        """R-30: dead center of the dial itself (a location change is
+        the dial's own new identity, not a corner note)."""
+        dial_geo = dial_widget.frameGeometry()
+        center = dial_geo.center()
+        self.move(
+            center.x() - self.width() // 2, center.y() - self.height() // 2
+        )

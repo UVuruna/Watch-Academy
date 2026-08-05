@@ -263,7 +263,10 @@ FAST_TRAVEL_THEMES = (
 # The small transient overlay ([Fast Travel Flash](../app/fast_travel_flash.md))
 # flashed above the dial on every Ctrl+[ / Ctrl+] theme/option change —
 # icon + option text, auto-fading, falling BELOW the dial instead when
-# the dial hugs the screen top.
+# the dial hugs the screen top. R-30 (2026-08) reuses the SAME overlay,
+# `big=True`, for a LOCATION change (Settings preset pick, Quick Jump,
+# Time Travel city change): large centered "CITY, COUNTRY" text across
+# the middle of the dial instead of the small icon+text popup above it.
 FAST_TRAVEL_FLASH_DURATION_S = 1.2   # total time on screen (hold + fade)
 FAST_TRAVEL_FLASH_FADE_MS = 250      # the trailing fade-out's own span
 FAST_TRAVEL_FLASH_GAP_PX = 12        # gap between the flash and the dial edge
@@ -271,6 +274,7 @@ FAST_TRAVEL_FLASH_ICON_PX = 28
 FAST_TRAVEL_FLASH_FONT_PX = 15
 FAST_TRAVEL_FLASH_PADDING_PX = 10
 FAST_TRAVEL_FLASH_RADIUS_PX = 10
+LOCATION_FLASH_FONT_PX = 32           # R-30: large letters, dial-center flash
 
 # THE CALENDAR WHEEL ICON (ECLIPSE ICON WIRING round, owner 2026-07-20/
 # 21 — "ADD a computed calendar icon... so the 📅 fallback dies"): the

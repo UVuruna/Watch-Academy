@@ -27,7 +27,7 @@ for the procedure):
    `_compose_skin`/`apply_display_settings`/`display_for`/
    `_overlay_display_settings` functions and their small pure helpers
    (`_letter_metal`, `_ring_two_metals`, `_ring_eye_shine`, `_theme_metal`,
-   `_earth_continent`, `_resolve_hands`, `_themed_weekday_set`,
+   `_resolve_hands`, `_themed_weekday_set`,
    `_pantheon_weekday_set`, `_classic_slot_theme`) — turning a `Settings`
    into a `SkinDefinition`. Pure, testable, no `QObject` involved.
 2. **The Qt window/tray/menu shell** — `__init__`'s wiring, `run()`,
@@ -36,10 +36,11 @@ for the procedure):
    pair (`_on_widget_moved`/`_flush_position`), `refresh_title()`.
 3. **Dialog opening/lifecycle** — the non-modal one-live-instance dance
    for Design/Pointer Theme/Slot Theme/Watch Face/Encyclopedia/
-   Observatory/Guide, plus the modal Settings/Time Travel/Report openers
-   (`_open_design`, `_open_pointer_theme`, `_open_slot_theme`,
-   `_open_watch_face`, `_open_encyclopedia_at`, `_open_observatory`,
-   `_open_guide`, `_open_settings`, `_open_report`) and their
+   Observatory/Guide, plus the modal Settings/Time Travel/Report/
+   Shortcuts openers (`_open_design`, `_open_pointer_theme`,
+   `_open_slot_theme`, `_open_watch_face`, `_open_encyclopedia_at`,
+   `_open_observatory`, `_open_guide`, `_open_settings`, `_open_report`,
+   `_open_shortcuts` — R-37) and their
    `_design_setters`/`_watch_face_setters`/`_slot_descriptors` callable
    bundles. `_apply_settings_dialog_result` is the ONE apply path an
    accepted `SettingsDialog` takes, however it was reached — the plain
@@ -182,7 +183,8 @@ always passes `True`; the menu TITLE row passes `watch_count() >= 2`.
 
 ### Small pure helpers
 `_letter_metal`, `_ring_two_metals`, `_ring_eye_shine`, `_theme_metal`,
-`_earth_continent`, `_resolve_hands`, `_next_rotation_theme`,
+`_location_flash_text` (R-30, the flash's own "CITY, COUNTRY" formatter),
+`_resolve_hands`, `_next_rotation_theme`,
 `_filtered_sun_anchors`, `_filtered_moon_events`, `_slot_seconds`,
 `_effective_weekday_slot`, `_classic_slot_theme`, `_themed_weekday_set`,
 `_pantheon_weekday_set` — each a small, independently testable piece of
