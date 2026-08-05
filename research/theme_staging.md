@@ -193,7 +193,15 @@ without wiring it fails the guard again, which is the point.
 
 | Folder | Plates | Ruled | Owes |
 |--------|--------|-------|------|
-| `archetypes/banknote/primary/colored` | 15 | WIRE as the Banknote article's own illustrations — the page draws vectors today (`render/cube_diagrams.py:banknote_axes`) and the plates fill its figure slots | the wiring round |
+| — | — | *the table is EMPTY since 2026-08-05 — kept so the guard's contract stays visible* | — |
+
+**The banknote row left this table 2026-08-05, last of all** — the
+five offices' intaglio plates now string above the Banknote Axes
+page's computed diagram in the seal's own MASON order
+(`app/encyclopedia/pages.py`, root `config.archetypes.
+BANKNOTE_ART_DIR` — a config table, so the reachability collector
+sees it itself). The Eye stays absent on purpose: one image, one
+place — its art is the ring letter library's.
 
 **The triads and dualities rows left this table 2026-08-05** — the
 wiring round the owner ordered that day seated both families in the

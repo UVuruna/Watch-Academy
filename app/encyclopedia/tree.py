@@ -757,10 +757,17 @@ def _build_topics(
             # a file — the axes, the Cube's own figures and the two
             # projections are compositions the canon exempted from
             # generation, and the program draws them from
-            # `config.cube`'s coordinates (root Rule #19).
+            # `config.cube`'s coordinates (root Rule #19). An art cell
+            # may also be a TUPLE — a strip above the article (the
+            # Banknote Axes' five office plates, wired 2026-08-05),
+            # exactly like the eclipse overviews string their emblems.
             "entries": [
                 {
-                    "images": () if row[1] is None else (row[1],),
+                    "images": (
+                        () if row[1] is None
+                        else tuple(row[1]) if isinstance(row[1], tuple)
+                        else (row[1],)
+                    ),
                     "name": row[0],
                     "article": ("emblem", family, row[0]),
                     **({"diagram": row[2]} if len(row) > 2 else {}),

@@ -204,7 +204,16 @@ _CUBE_ENTRIES = (
     ("The Sacrificial Protector",
      archetypes.VERTICES_ART_DIR / "Sacrificial_Protector.png"),
     ("The Hexagram Projection", None, ("hexagram", "")),
-    ("The Banknote Axes", None, ("banknote", "")),
+    # The five offices' intaglio plates (wired 2026-08-05 — the staging
+    # ledger's last row): strung in the seal's own MASON order above
+    # the computed axes diagram. The Eye is absent on purpose — one
+    # image, one place; its art is the ring letter library's.
+    ("The Banknote Axes", tuple(
+        archetypes.BANKNOTE_ART_DIR / f"{stem}.png"
+        for stem in ("Malignant_Accuser", "Anointed_Aegis",
+                     "Satanic_Scourge", "Omnific_Originator",
+                     "Nazarene_Advocate")
+    ), ("banknote", "")),
 )
 _DOUBLE_TRINITY_ENTRIES = (
     ("The Double Trinity", None, ("trinity", "")),

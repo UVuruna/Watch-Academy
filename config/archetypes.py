@@ -212,6 +212,14 @@ CROSSES_ART_DIR = ARCHETYPE_ART_DIR / "crosses" / "primary" / "colored"
 # concept page's lancet and its 1:1 circle companion.
 TRIADS_ART_DIR = ARCHETYPE_ART_DIR / "triads"
 DUALITIES_ART_DIR = ARCHETYPE_ART_DIR / "dualities"
+# THE BANKNOTE ENGRAVINGS (wired 2026-08-05, closing the ledger's last
+# §Art Outside The Weeks row): the five offices' intaglio plates — the
+# one art family in the banknote craft, not stained glass (sheet
+# `research/prompts/archetype/banknote_offices_prompts.md`). The
+# Encyclopedia's Banknote Axes page strings them above its computed
+# diagram; the Eye has no plate here (one image, one place — its art
+# lives in the ring letter library).
+BANKNOTE_ART_DIR = ARCHETYPE_ART_DIR / "banknote" / "primary" / "colored"
 
 # ═══════════════════════════ THE EIGHT AGES ═══════════════════════════
 # The Eight Ages, shared by both registers: (angle, age name, row-2

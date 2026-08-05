@@ -84,7 +84,8 @@ Tetramorph's paragraph two reuses its evangelist rondel.
 - [Encyclopedia Tree](../../app/encyclopedia/__about/tree.md) — the public art
   roots (`CROSSES_ART_DIR`, the Cube families, and since 2026-08-05
   `TRIADS_ART_DIR`/`DUALITIES_ART_DIR` — the Triads and Dualities
-  cards' lancet + 1:1 pages)
+  cards' lancet + 1:1 pages — plus `BANKNOTE_ART_DIR`, the five office
+  plates the Banknote Axes page strings above its diagram)
 
 ## Functions
 
