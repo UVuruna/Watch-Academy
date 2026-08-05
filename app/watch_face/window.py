@@ -3,12 +3,13 @@ Watch Face & Settings UI rework: a left `QListWidget` sidebar beside a
 right `QStackedWidget` page per section (the same list+stack shape
 `app.settings_dialog.dialog.SettingsDialog` already uses), replacing —
 over several phases — Design/Pointer Theme/Slot Theme and the Settings
-dialog's own Display/Colors groups. Phase ①+② wired five sections;
-Phase ③ (see themes.md) replaced the Themes & Slots placeholder with
-the real section; Phase ④ (see colors.md/opacity.md) replaces the last
-two placeholders — every section is now real, and the sidebar has
-carried its final shape since Phase ①. The OLD windows/dialog groups
-are untouched until Phase 6 retires them.
+dialog's own Display/Colors/Themes groups. Phase ①+② wired five
+sections; Phase ③ (see themes.md) replaced the Themes & Slots
+placeholder with the real section; Phase ④ (see colors.md/opacity.md)
+replaced the last two placeholders — every section was real by then,
+and the sidebar has carried its final shape since Phase ①. Phase 6
+FINAL cleanup then DELETED the old windows/dialog groups outright —
+this window is now the ONLY place any of that content lives.
 """
 
 from PySide6.QtCore import Qt

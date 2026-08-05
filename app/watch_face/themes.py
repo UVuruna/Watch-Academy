@@ -1,19 +1,25 @@
-"""Themes & Slots section (R-17/R-18/R-19/R-20, see themes.md) — the
-Watch Face window's FACE LAYOUT row, SLOT PICKER, the content tree
-(delegated to `theme_tree.py`), the subdial plate pills and the theme
-rotation controls.
+"""Themes & Slots section (R-17/R-18/R-19/R-20, Phase 6 FINAL cleanup,
+see themes.md) — the Watch Face window's FACE LAYOUT row, SLOT PICKER,
+the content tree (delegated to `theme_tree.py`), the subdial plate
+pills, the Artwork/Subdial-set picks and the theme rotation controls
+(the interval pair PLUS, since Phase 6, the rotation GROUP picker and
+the per-theme metal combos — R-20 had deferred those two to "the old
+Settings copy until Phase 6"; Phase 6 retires that copy, so they move
+here verbatim instead of being dropped).
 """
 
 from dataclasses import dataclass
 
 from PySide6.QtWidgets import (
-    QCheckBox, QComboBox, QGroupBox, QHBoxLayout, QLabel, QPushButton,
-    QSpinBox, QVBoxLayout, QWidget,
+    QCheckBox, QComboBox, QGridLayout, QGroupBox, QHBoxLayout, QLabel,
+    QPushButton, QSpinBox, QVBoxLayout, QWidget,
 )
 
 from app.settings_store import slot_layout_target
 from app.watch_face import theme_tree
 from app.watch_face.widgets import pill
+from app.weekday_theme_grid import build_calendar_mount_grid
+from config import constants, pantheon
 
 _MEDALS = {1: "🥇", 2: "🥈", 3: "🥉"}
 _FACE_LAYOUT_TITLES = ("Full face", "1 subdial", "2 subdials", "3 subdials")
@@ -86,7 +92,15 @@ def _populate(root, settings, setters, tr, rebuild) -> None:
             content_source, full_face, settings.pointer,
             settings.pointer_shape, tr,
         ))
+    if settings.pointer == "calendar":
+        # THE CALENDAR MOUNT (owner decree 2026-07-29, ported from the
+        # retired Pointer Theme window's second tab, Phase 6 FINAL
+        # cleanup): WHICH roster rides the twelve wedges — only the
+        # Calendar pointer has wedges to mount one on.
+        root.addWidget(_calendar_mount_group(settings, setters, tr))
     root.addWidget(_subdial_plate_group(settings, setters, tr))
+    root.addWidget(_artwork_group(settings, setters, tr))
+    root.addWidget(_subdial_set_group(settings, setters, tr))
     root.addWidget(_rotation_group(settings, setters, tr))
 
 
@@ -132,6 +146,18 @@ def _names_checkbox(active, tr) -> QCheckBox:
     return checkbox
 
 
+def _calendar_mount_group(settings, setters, tr) -> QGroupBox:
+    """The Calendar mount gallery, wrapped in its own group box —
+    `build_calendar_mount_grid` is the SAME gallery the retired Pointer
+    Theme window built (Rule #5, no second copy)."""
+    group = QGroupBox(tr("Calendar mount"))
+    layout = QVBoxLayout(group)
+    layout.addWidget(build_calendar_mount_grid(
+        settings.calendar_mount, setters["calendar_mount"], tr,
+    ))
+    return group
+
+
 def _subdial_plate_group(settings, setters, tr) -> QGroupBox:
     """R-20: moved from `design_window.DesignDialog._complications_tab`
     — `settings.subdial_style` unchanged."""
@@ -147,14 +173,132 @@ def _subdial_plate_group(settings, setters, tr) -> QGroupBox:
     return group
 
 
+def _artwork_group(settings, setters, tr) -> QGroupBox:
+    """The ART SOURCE pick (owner 2026-07-14, ported verbatim from
+    `app.settings_dialog.themes_section._build_artwork_group`, Phase 6
+    FINAL cleanup): the Gemini and ChatGPT generations coexist — one
+    combo switches every plate, emblem and badge; files missing in the
+    chosen source fall back to the other. LIVE-APPLY here (the old
+    Settings copy only ever applied it on OK)."""
+    group = QGroupBox(tr("Artwork"))
+    row = QHBoxLayout(group)
+    combo = QComboBox()
+    for source in constants.ART_SOURCES:
+        combo.addItem(constants.ART_SOURCE_TITLES[source], source)
+    index = combo.findData(settings.art_source)
+    if index >= 0:
+        combo.setCurrentIndex(index)
+    combo.currentIndexChanged.connect(
+        lambda _i: setters["art_source"](combo.currentData())
+    )
+    row.addWidget(combo)
+    row.addStretch(1)
+    return group
+
+
+def _subdial_set_group(settings, setters, tr) -> QGroupBox:
+    """The SUBDIAL PLATE SET pick (owner decree 2026-07-21, Rsub round,
+    ported verbatim from
+    `app.settings_dialog.themes_section._build_subdial_set_group`,
+    Phase 6 FINAL cleanup) — NOT the same setting as the Subdial plate
+    pills above (`subdial_style`, theme/black background): this picks
+    WHICH of the five hand-picked plate looks draws (`settings.
+    subdial_set`); the active letter finish still decides which color
+    draws within it."""
+    group = QGroupBox(tr("Subdial plate set"))
+    row = QHBoxLayout(group)
+    combo = QComboBox()
+    for name in constants.SUBDIAL_SETS:
+        combo.addItem(tr(constants.SUBDIAL_SET_TITLES[name]), name)
+    index = combo.findData(settings.subdial_set)
+    if index >= 0:
+        combo.setCurrentIndex(index)
+    combo.currentIndexChanged.connect(
+        lambda _i: setters["subdial_set"](combo.currentData())
+    )
+    row.addWidget(combo)
+    row.addStretch(1)
+    return group
+
+
+def _rotation_selection(group_key: str, custom_themes: tuple) -> tuple:
+    """The themes the CURRENT rotation pick would rotate (ported
+    verbatim from
+    `app.settings_dialog.themes_section._SectionMixin._rotation_
+    selection`, Phase 6 FINAL cleanup)."""
+    if group_key == "custom":
+        return custom_themes
+    for title, keys in pantheon.WEEKDAY_MENU_GROUPS:
+        if title == group_key:
+            return keys
+    return ()
+
+
 def _rotation_group(settings, setters, tr) -> QGroupBox:
-    """R-20: the interval + follow-ring pair only, moved from
-    `app.settings_dialog.themes_section._build_theme_rotation_group`
-    (same `theme_rotation_minutes`/`theme_metal_follow_ring` keys) —
-    the rotation GROUP picker and the per-theme metal combos stay in
-    the old Settings copy until Phase 6."""
+    """Cycle the CHECKED weekday themes every N minutes/hours instead
+    of wearing one forever. R-20 shipped the interval + follow-ring
+    pair alone (`theme_rotation_minutes`/`theme_metal_follow_ring`);
+    Phase 6 FINAL cleanup adds the rotation GROUP picker (None / one
+    kinship family / Custom) and the per-theme metal combos, ported
+    verbatim from `app.settings_dialog.themes_section.
+    _build_theme_rotation_group` — LIVE-APPLY here instead of the old
+    copy's on-OK commit."""
     group = QGroupBox(tr("Theme rotation"))
     layout = QVBoxLayout(group)
+    group_combo = QComboBox()
+    group_combo.addItem(tr("None"), "none")
+    for title, _keys in pantheon.WEEKDAY_MENU_GROUPS:
+        group_combo.addItem(tr(title), title)
+    group_combo.addItem(tr("Custom"), "custom")
+    index = group_combo.findData(settings.theme_rotation_group)
+    if index >= 0:
+        group_combo.setCurrentIndex(index)
+    group_combo.currentIndexChanged.connect(
+        lambda _i: setters["theme_rotation_group"](group_combo.currentData())
+    )
+    layout.addWidget(group_combo)
+    if settings.theme_rotation_group == "custom":
+        grid = QGridLayout()
+        grid.setHorizontalSpacing(24)
+        for index, (key, label) in enumerate(
+            pantheon.WEEKDAY_THEME_TITLES.items()
+        ):
+            box = QCheckBox(tr(label))
+            box.setChecked(key in settings.theme_rotation_themes)
+            box.toggled.connect(
+                lambda checked, k=key: setters["theme_rotation_themes"](
+                    tuple(sorted(
+                        (set(settings.theme_rotation_themes) | {k})
+                        if checked
+                        else (set(settings.theme_rotation_themes) - {k})
+                    ))
+                )
+            )
+            grid.addWidget(box, index // 4, index % 4)
+        layout.addLayout(grid)
+    selected = set(_rotation_selection(
+        settings.theme_rotation_group, settings.theme_rotation_themes
+    ))
+    metal_row = QHBoxLayout()
+    for theme in constants.METAL_THEMES:
+        if theme not in pantheon.WEEKDAY_THEME_TITLES or theme not in selected:
+            continue
+        metal_row.addWidget(QLabel(tr(pantheon.WEEKDAY_THEME_TITLES[theme])))
+        combo = QComboBox()
+        for metal in constants.theme_metals(theme):
+            combo.addItem(tr(metal.capitalize()), metal)
+        combo.setCurrentIndex(
+            combo.findData(settings.theme_metals.get(theme, "colored"))
+        )
+        combo.setEnabled(not settings.theme_metal_follow_ring)
+        combo.currentIndexChanged.connect(
+            lambda _i, c=combo, t=theme: setters["theme_metal"](
+                t, c.currentData()
+            )
+        )
+        metal_row.addWidget(combo)
+    metal_row.addStretch(1)
+    layout.addLayout(metal_row)
     row = QHBoxLayout()
     row.addWidget(QLabel(tr("Every")))
     minutes = settings.theme_rotation_minutes

@@ -5,19 +5,19 @@
 ## Purpose
 The Watch Face window's Pointer page (R-04): the pointer-variant
 gallery, the palette-style wheel pills, the shape/curvature/edge rows
-and "Hide night borders" — moved verbatim from
+and "Hide night borders" — moved verbatim from the RETIRED
 `design_window.DesignDialog._pointer_tab` (same conditional rules, Rule
-#5) — plus two additions this phase:
+#5; Phase 6 FINAL cleanup deleted that window outright) — plus two
+additions this phase:
 
-- **R-05:** the "Daylight - Night" checkbox, moved here from
-  `app/settings_dialog/display_section.py`'s Archetype group. The OLD
-  copy in Settings stays in place until Phase 6 removes it; both wire
-  the SAME `daylight` setting. Unlike the Settings copy (always
-  enabled — "inert elsewhere" there), THIS copy is enabled only while
-  the active pointer actually carries the switch
-  (`constants.DAYLIGHT_SWITCH_POINTERS`), per the owner's Watch Face
-  spec — an intentional tightening, not a regression, since the row now
-  lives beside the pointer it gates on.
+- **R-05:** the "Daylight - Night" checkbox, moved here from the
+  also-RETIRED `app/settings_dialog/display_section.py`'s Archetype
+  group — same `daylight` setting, now with only ONE reader/writer.
+  Unlike that old Settings copy (always enabled — "inert elsewhere"
+  there), THIS copy is enabled only while the active pointer actually
+  carries the switch (`constants.DAYLIGHT_SWITCH_POINTERS`), per the
+  owner's Watch Face spec — an intentional tightening, not a
+  regression, since the row now lives beside the pointer it gates on.
 - **R-06:** the Earth group (Clean/Atmosphere tiles + label pills),
   moved verbatim from `design_window.DesignDialog._earth_tab`. Sizes do
   NOT live here — see `size.py`.

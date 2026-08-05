@@ -24,10 +24,8 @@ state and calls `repaint_selection` after a pick instead of rebuilding.
 
 ### Used by
 - [Watch Face Colors Section](colors.md) — every tint control on the
-  Colors page
-- [Colors Section](../../settings_dialog/__about/colors_section.md) —
-  the Ring tint group's grids/custom row/label, refactored to delegate
-  here instead of duplicating the logic
+  Colors page (the sole reader since Phase 6 FINAL cleanup deleted the
+  Settings dialog's own Colors section, which used to delegate here too)
 
 ## Functions
 - `round_swatch(chip, hue, size, selected)`: the Paint-style filled

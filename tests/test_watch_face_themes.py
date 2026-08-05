@@ -7,13 +7,13 @@ the pointer's default weekday theme is starred.
 
 import pytest
 from PySide6.QtWidgets import (
-    QApplication, QLabel, QPushButton, QToolButton,
+    QApplication, QCheckBox, QComboBox, QLabel, QPushButton, QToolButton,
 )
 
 from app.settings_store import Settings, replace, slot_layout_target
 from app.watch_face import theme_tree, themes
 from app.watch_face.window import WatchFaceDialog
-from config import constants, palette
+from config import calendar_mounts, constants, palette
 from tests.test_watch_face import _setters, fake_descriptors
 
 #: The "next" role's gradient top color — pills painted with it are the
@@ -203,3 +203,110 @@ def test_subdial_slot_offers_every_content_kind_regardless_of_pointer():
     tabs = {b.text() for b in widget.findChildren(QPushButton)}
     assert {"Weekday themes", "Complications", "Astrology",
             "Ascendant", "Chinese zodiac"} <= tabs
+
+
+# --- Phase 6 FINAL cleanup: pieces ported from retired Settings sections ------
+
+
+class _RecordingSetters(dict):
+    """Answers ANY key and remembers what it was called with (the SAME
+    shape `tests/test_watch_face_pointer.py` uses)."""
+
+    def __init__(self, settings: Settings):
+        super().__init__()
+        self.calls: list[tuple[str, tuple]] = []
+        self["slot_descriptors"] = lambda: fake_descriptors(settings)
+
+    def __missing__(self, key):
+        def record(*args):
+            self.calls.append((key, args))
+        self[key] = record
+        return record
+
+
+def test_calendar_mount_group_appears_only_for_the_calendar_pointer(app):
+    non_calendar = themes.build(
+        replace(Settings(), pointer="octa"),
+        _RecordingSetters(replace(Settings(), pointer="octa")), lambda s: s,
+    )
+    assert not any(
+        "Calendar mount" in b.text() or False
+        for b in non_calendar.findChildren(QLabel)
+    )
+    calendar_settings = replace(Settings(), pointer="calendar")
+    page = themes.build(
+        calendar_settings, _RecordingSetters(calendar_settings), lambda s: s,
+    )
+    tiles = page.findChildren(QToolButton)
+    labels = [tile.text() for tile in tiles]
+    assert "None" in labels
+    for key, mount in calendar_mounts.CALENDAR_MOUNTS.items():
+        assert f"{mount.title} ({mount.seats})" in labels, key
+
+
+def test_calendar_mount_pick_calls_its_setter(app):
+    settings = replace(Settings(), pointer="calendar", calendar_mount="zodiac")
+    setters = _RecordingSetters(settings)
+    page = themes.build(settings, setters, lambda s: s)
+    button = next(
+        b for b in page.findChildren(QToolButton) if b.text() == "None"
+    )
+    button.click()
+    assert ("calendar_mount", ("off",)) in setters.calls
+
+
+def test_artwork_and_subdial_set_combos_exist_and_restore_the_stored_pick(app):
+    settings = replace(Settings(), art_source="chatgpt", subdial_set="solo")
+    page = themes.build(settings, _RecordingSetters(settings), lambda s: s)
+    combos = page.findChildren(QComboBox)
+    art_combo = next(
+        c for c in combos
+        if any(c.itemData(i) == "chatgpt" for i in range(c.count()))
+    )
+    assert art_combo.currentData() == "chatgpt"
+    subdial_combo = next(
+        c for c in combos
+        if any(c.itemData(i) == "solo" for i in range(c.count()))
+    )
+    assert subdial_combo.currentData() == "solo"
+
+
+def test_rotation_group_picker_shows_the_custom_grid_only_in_custom_mode(app):
+    settings = replace(Settings(), theme_rotation_group="custom")
+    page = themes.build(settings, _RecordingSetters(settings), lambda s: s)
+    labels = {b.text() for b in page.findChildren(QCheckBox)}
+    from config import pantheon
+    assert any(
+        pantheon.WEEKDAY_THEME_TITLES[key] in labels
+        for key in pantheon.WEEKDAY_THEME_TITLES
+    )
+
+
+def test_rotation_group_picker_hides_the_custom_grid_when_not_custom(app):
+    settings = replace(Settings(), theme_rotation_group="none")
+    page = themes.build(settings, _RecordingSetters(settings), lambda s: s)
+    from config import pantheon
+    labels = {b.text() for b in page.findChildren(QCheckBox)}
+    assert not any(
+        pantheon.WEEKDAY_THEME_TITLES[key] in labels
+        for key in pantheon.WEEKDAY_THEME_TITLES
+    )
+
+
+def test_per_theme_metal_combo_calls_theme_metal_setter(app):
+    settings = replace(
+        Settings(), theme_rotation_group="custom",
+        theme_rotation_themes=("greek",),
+    )
+    setters = _RecordingSetters(settings)
+    page = themes.build(settings, setters, lambda s: s)
+    from config import constants as cfg_constants
+
+    metal_combo = next(
+        c for c in page.findChildren(QComboBox)
+        if set(c.itemData(i) for i in range(c.count()))
+        >= set(cfg_constants.theme_metals("greek"))
+    )
+    index = metal_combo.findData("bronze")
+    metal_combo.setCurrentIndex(index)
+    assert ("theme_metal", ("greek", "bronze")) in setters.calls

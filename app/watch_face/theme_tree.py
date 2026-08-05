@@ -70,10 +70,10 @@ def _clear(layout) -> None:
 
 
 def build(active, full_face: bool, pointer: str, pointer_shape: str, tr) -> QWidget:
-    """`active` is a `SlotDescriptor` (see slot_theme.py) — the SAME
-    object the Slot Theme window reads. `full_face=True` filters
-    Level 1 through `constants.watch_face_kinds`; a real subdial
-    offers every kind (owner verdict P-4)."""
+    """`active` is a `SlotDescriptor` (see `app.slot_descriptor`) —
+    built fresh by `app.controller._slot_descriptors()` on every call.
+    `full_face=True` filters Level 1 through `constants.watch_face_kinds`;
+    a real subdial offers every kind (owner verdict P-4)."""
     root = QVBoxLayout()
     widget = QWidget()
 

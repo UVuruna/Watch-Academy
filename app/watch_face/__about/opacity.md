@@ -10,8 +10,9 @@ Aura sunlight/twilight, Umbra) and "Bodies on the ring" (Moon below
 horizon, Moon/Earth transit, Inactive icons). LIVE-APPLY, sliders apply
 on release.
 
-Four rows are MOVED from `app.settings_dialog.display_section.
-_build_opacity_group` (that copy stays until Phase 6). Three are NEW:
+Four rows were MOVED from the RETIRED `app.settings_dialog.
+display_section._build_opacity_group` (Phase 6 FINAL cleanup deleted
+that copy outright). Three are NEW:
 R-15 Umbra opacity (owner-requested, a layer-alpha multiplier), R-35
 "Moon — hover over Earth" (reads as the existing Moon/Earth rim-TRANSIT
 dimming — there is no mouse-hover state on this dial), R-36 "Inactive

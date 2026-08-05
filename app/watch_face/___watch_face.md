@@ -1,23 +1,26 @@
 # watch_face/
 
-The Watch Face window — Phase ①+② of the owner-approved "Watch Face &
-Settings UI rework": ONE window consolidating what today are FOUR
-separate windows (Design, Pointer Theme, Slot Theme, and the Settings
-dialog's own visual groups) into a single left-sidebar + right-page shell
-(the same list+stack shape [Settings Dialog](../settings_dialog/___settings_dialog.md)
-already uses) with EIGHT sections.
+The Watch Face window — the owner-approved "Watch Face & Settings UI
+rework": ONE window consolidating what USED TO BE four separate windows
+(Design, Pointer Theme, Slot Theme, and the Settings dialog's own visual
+groups — ALL DELETED by Phase 6 FINAL cleanup) into a single left-sidebar
++ right-page shell (the same list+stack shape [Settings Dialog]
+(../settings_dialog/___settings_dialog.md) still uses for its own three
+remaining sections) with EIGHT sections.
 
 **Phase ①+② built the frame plus five real sections** (Pointer, Ring,
 Hands, Umbra & Aura, Size) and the thumbnail service. **Phase ③ (R-17/
 R-18/R-19/R-20) added the sixth: Themes & Slots** — the FACE LAYOUT row,
 the SLOT PICKER, the breadcrumb content tree, the subdial plate pills
 and the theme rotation controls. **Phase ④ (R-15/R-21..R-25/R-35/R-36)
-replaces the last two placeholders: Colors and Opacity** — every
-section now has a real builder; Phase 6 retires the old Design/Pointer
-Theme/Slot Theme windows and the Settings dialog's Display/Colors
-groups they absorb.
-**The old windows are UNTOUCHED this phase** — they keep working exactly
-as before, side by side with this new one, until Phase 6 removes them.
+replaced the last two placeholders: Colors and Opacity** — every
+section had a real builder by then. **Phase 6 (FINAL cleanup) DELETED**
+the old Design/Pointer Theme/Slot Theme windows and the Settings
+dialog's Display/Colors/Themes sections outright, porting into the
+Themes & Slots and Colors sections the few pieces they still solely
+owned (the theme rotation GROUP picker + per-theme metal combos, the
+Artwork/Subdial-set combos, the Calendar mount gallery) so nothing was
+silently dropped.
 
 ## Files
 
@@ -45,52 +48,53 @@ as before, side by side with this new one, until Phase 6 removes them.
 `None` for a not-yet-built placeholder page. `_build()` walks it once per
 (re)build: a `QListWidget` row per section, a matching page in a
 `QStackedWidget`, `currentRowChanged` wired straight to
-`setCurrentIndex` — the same live-apply, keep-the-open-row rebuild
-`design_window.DesignDialog._build` already does for its `QTabWidget`
-(the identical "a fresh container always opens at index 0" bug, guarded
-the same way).
+`setCurrentIndex` — the same live-apply, keep-the-open-row rebuild the
+RETIRED `design_window.DesignDialog._build` used to do for its
+`QTabWidget` (the identical "a fresh container always opens at index 0"
+bug, guarded the same way).
 
 ## Connections
 
 ### Uses
 - [Theme](../__about/theme.md) — `apply_theme`, `size_to_screen`
 - [Config (folder)](../../config/___config.md) — every pointer/ring/umbra/
-  size table `design_window.py` already read
+  size table
 - [Rings (data)](../../data/__about/rings.md), [Hands (data)]
   (../../data/__about/hands.md)
 - [Raster Store](../../render/__about/raster_store.md) — `thumbs.py`'s
   cache, reused verbatim (Rule #5, no second cache mechanism)
-- `render.skin_geometry.daylight_active` — same duck-typed law
-  `design_window.py` reads off the raw `Settings` object
+- `render.skin_geometry.daylight_active` — the same duck-typed law
+  `pointer.py`'s night-borders row reads off the raw `Settings` object
 - [Settings Dialog](../settings_dialog/___settings_dialog.md) — `ring.py`'s
-  "Custom ring…" button opens it, navigated to the Custom art section
-  (`dialog.SettingsDialog(..., initial_section="Custom art")`)
-- [Slot Theme](../__about/slot_theme.md) — `SlotDescriptor` (`themes.py`/
-  `theme_tree.py` read the SAME descriptor triple the Slot Theme window
-  builds, never a second copy, Rule #5)
+  "Custom ring…" button opens it, navigated to the hidden Custom art
+  mode (`dialog.SettingsDialog(..., initial_section="Custom art")`)
+- [Slot Descriptor](../__about/slot_descriptor.md) — the shared
+  `SlotDescriptor` dataclass (`themes.py`/`theme_tree.py` read the SAME
+  triple `app.controller._slot_descriptors()` builds, never a second
+  copy, Rule #5)
 
 ### Used by
 - [Watch Controller](../__about/controller.md) — `_open_watch_face`
   (non-modal, one live instance); `_watch_face_setters()` wraps every
-  setter so a pick both applies AND refreshes the open window, the SAME
-  pattern `_design_setters()` uses
+  setter so a pick both applies AND refreshes the open window
 
 ## Design Decisions
 - **R-33 honesty note:** pointer variants carry no dedicated preview art
-  (`design_window.md`'s own asset-honesty note — they are procedural/
-  abstract, and no render path can compose a small preview without a
-  fully-built `Skin`). `thumbs.pointer_swatch_icon` therefore draws a pie
-  of the pointer's ACTIVE palette wheel's own hues instead — real derived
-  content (the exact colors the pointer paints), not invented art. See
-  `thumbs.md` for the full note.
-- **R-13 honesty note:** the existing custom-ring flow
+  (they are procedural/abstract, and no render path can compose a small
+  preview without a fully-built `Skin`). `thumbs.pointer_swatch_icon`
+  therefore draws a pie of the pointer's ACTIVE palette wheel's own hues
+  instead — real derived content (the exact colors the pointer paints),
+  not invented art. See `thumbs.md` for the full note.
+- **R-13 honesty note:** the custom-ring/custom-hands flow
   (`app/settings_dialog/custom_art_section.py`) is a plain-Python mixin
   baked directly onto `SettingsDialog`, not a standalone dialog —
   embedding it here would mean duplicating its inline widgets. `ring.py`'s
   "Custom ring…" button opens the EXISTING Settings dialog instead,
-  navigated straight to its Custom art section via the new
-  `initial_section` parameter (a small, additive change to
-  `dialog.SettingsDialog`, not a duplicate editor).
+  navigated straight to its hidden, no-sidebar Custom art page via the
+  `initial_section` parameter (Phase 6 FINAL cleanup: since the ordinary
+  sidebar shrank to Location/Language/System, this is now the ONLY way
+  that page is ever reached — see `settings_dialog/dialog.md`'s Design
+  Decisions).
 - **Placeholder pages carry no builder module of their own** — `window.py`
   renders them inline (`_placeholder_page`) since there is nothing to
   test or extract yet; a later phase replaces the `None` registry entry

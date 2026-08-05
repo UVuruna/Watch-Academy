@@ -33,8 +33,9 @@ three ported verbatim from `app.slot_theme.SlotThemeDialog._style_tab`.
 - [Config (folder)](../../../config/___config.md) —
   `constants.SLOT_COMPLICATION_TITLES`, `ZODIAC_SLOT_STYLES`,
   `CHINESE_SLOT_STYLES`, `watch_face_kinds`
-- [Slot Theme](../../__about/slot_theme.md) — `SlotDescriptor` (the
-  data shape both windows read; imported, never redefined)
+- [Slot Descriptor](../../__about/slot_descriptor.md) — `SlotDescriptor`
+  (the data shape `app.controller._slot_descriptors()` builds; imported,
+  never redefined)
 
 ### Used by
 - [Themes & Slots Section](themes.md) — the whole tree, for whichever

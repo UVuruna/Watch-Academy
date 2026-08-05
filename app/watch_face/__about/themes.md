@@ -19,26 +19,52 @@ R-20) — replaces the placeholder. Top to bottom:
 3. **The content tree** ([theme_tree.py](theme_tree.md)) — delegated
    whole; this module only decides WHICH descriptor is active and
    whether the layout is FULL FACE (no slot enabled) or a real subdial.
-4. **Subdial plate pills** (Theme background / Classic black,
-   `settings.subdial_style`) — moved from
+4. **Calendar mount gallery** (Phase 6 FINAL cleanup, owner decree
+   2026-07-29): shown ONLY while the Calendar pointer is active — WHICH
+   roster rides its twelve wedges, ported from the retired Pointer
+   Theme window's second tab (`build_calendar_mount_grid`, Rule #5, no
+   second copy of the gallery itself).
+5. **Subdial plate pills** (Theme background / Classic black,
+   `settings.subdial_style`) — moved from the retired
    `design_window.DesignDialog._complications_tab`.
-5. **Theme rotation controls** (interval amount+unit, "Follow ring
-   color") — moved from
-   `app.settings_dialog.themes_section._build_theme_rotation_group`,
-   narrowed to ONLY the interval + follow-ring pair (the rotation GROUP
-   picker and the per-theme metal combos stay in the old Settings copy
-   until Phase 6 — R-20 asked for the interval alone).
+6. **Artwork combo** (Phase 6 FINAL cleanup): the Gemini/ChatGPT ART
+   SOURCE pick, ported verbatim from the retired
+   `app.settings_dialog.themes_section._build_artwork_group`
+   (`settings.art_source`) — LIVE-APPLY here instead of that copy's
+   on-OK commit.
+7. **Subdial plate SET combo** (Phase 6 FINAL cleanup): WHICH of the
+   five hand-picked plate looks draws (`settings.subdial_set` — NOT the
+   same setting as the Subdial plate pills above), ported verbatim from
+   the retired `app.settings_dialog.themes_section.
+   _build_subdial_set_group`.
+8. **Theme rotation controls** — R-20 shipped the interval amount+unit
+   and "Follow ring color" pair alone, moved from
+   `app.settings_dialog.themes_section._build_theme_rotation_group`
+   and narrowing it to ONLY that pair (the rotation GROUP picker — None
+   / one kinship family / Custom — and the per-theme metal combos were
+   deliberately deferred: "the old Settings copy until Phase 6"). Phase
+   6 FINAL cleanup now PORTS those two remaining pieces here too,
+   verbatim, before deleting `themes_section.py` outright — an R-20
+   debt closed, not silently dropped.
 
 ## Connections
 
 ### Uses
 - [Content Tree](theme_tree.md) — the Level 1/2/3 breadcrumb picker
 - [Watch Face Shared Widgets](widgets.md) — `pill`
+- [Weekday Theme Grid](../../__about/weekday_theme_grid.md) —
+  `build_calendar_mount_grid` (the Calendar mount gallery)
 - [Config (folder)](../../../config/___config.md) —
-  `constants.watch_face_kinds`
+  `constants.watch_face_kinds`, `constants.ART_SOURCES`/
+  `ART_SOURCE_TITLES`, `constants.SUBDIAL_SETS`/`SUBDIAL_SET_TITLES`,
+  `constants.METAL_THEMES`/`theme_metals`, `pantheon.WEEKDAY_MENU_GROUPS`/
+  `WEEKDAY_THEME_TITLES`
 - [Watch Controller](../../__about/controller.md) —
   `setters["slot_layout"]`, `setters["slot_descriptors"]`,
-  `setters["subdial_style"]`, `setters["theme_rotation_minutes"]`,
+  `setters["calendar_mount"]`, `setters["subdial_style"]`,
+  `setters["art_source"]`, `setters["subdial_set"]`,
+  `setters["theme_rotation_minutes"]`, `setters["theme_rotation_group"]`,
+  `setters["theme_rotation_themes"]`, `setters["theme_metal"]`,
   `setters["theme_metal_follow_ring"]`
 
 ### Used by

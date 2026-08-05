@@ -5,10 +5,10 @@ the Saturation sliders — replacing the placeholder page. LIVE-APPLY
 (Rule #5, same shape as every other Watch Face section): every pick
 calls its setter immediately through `setters`, and the window rebuilds
 this page fresh (`window.WatchFaceDialog.refresh`) — there is no
-OK/Cancel state to keep in sync (contrast
-`app.settings_dialog.colors_section`, whose mixin buffers picks until
-the dialog's own OK; that copy stays until Phase 6 retires it, and now
-shares this module's `tint_picker` builders — Rule #5).
+OK/Cancel state to keep in sync (contrast the RETIRED
+`app.settings_dialog.colors_section`, whose mixin buffered picks until
+the dialog's own OK; Phase 6 FINAL cleanup deleted that copy outright —
+this module's `tint_picker` builders are the ONLY ones left, Rule #5).
 
 DEBT (owner honesty rule — a control that does nothing must never
 ship): four items below are NOT built, each recorded where it would
@@ -98,8 +98,8 @@ def _tint_group(
 
 def _ring_tint_group(settings, setters, tr) -> QGroupBox:
     """R-21 item 1: the Clock/ring tint picker, MOVED here (renamed
-    "Ring tint" in THIS window only — the stored key and the Settings
-    dialog's own label are untouched; that copy stays until Phase 6)."""
+    "Ring tint" in THIS window — the stored key is untouched; the
+    retired Settings dialog copy was deleted outright by Phase 6)."""
     return _tint_group(
         tr, "Ring tint", settings.ring_tint, setters["ring_tint"],
         "Gray (default)", "Pick the ring tint",

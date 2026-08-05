@@ -3,12 +3,13 @@ window's Pointer page: pointer-variant gallery (icon =
 `thumbs.pointer_swatch_icon`'s palette-wheel swatch, the honest fallback
 documented in thumbs.md), the wheel/palette-style pills, the
 shape/curvature/edge rows and "Hide night borders" — moved verbatim from
-`design_window.DesignDialog._pointer_tab` (same conditional rules, Rule
-#5), plus R-05's "Daylight - Night" checkbox (moved here from
-`app/settings_dialog/display_section.py`'s Archetype group — the OLD
-copy stays there until Phase 6, both wire the SAME `daylight` setting)
-and R-06's Earth group (moved from `design_window.DesignDialog.
-_earth_tab` — sizes do NOT live here, see size.py).
+the RETIRED `design_window.DesignDialog._pointer_tab` (same conditional
+rules, Rule #5; Phase 6 FINAL cleanup deleted that window outright), plus
+R-05's "Daylight - Night" checkbox (moved here from the also-RETIRED
+`app/settings_dialog/display_section.py`'s Archetype group — same
+`daylight` setting, now with only ONE reader/writer) and R-06's Earth
+group (moved from `design_window.DesignDialog._earth_tab` — sizes do
+NOT live here, see size.py).
 """
 
 from PySide6.QtCore import Qt

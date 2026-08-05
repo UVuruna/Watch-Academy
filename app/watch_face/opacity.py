@@ -7,11 +7,11 @@ icons) — replacing the placeholder page. LIVE-APPLY (Rule #5): every
 slider release calls its setter through `setters`; the window rebuilds
 this page fresh on the next pick, like every other Watch Face section.
 
-Four rows are MOVED here from `app.settings_dialog.display_section.
-_build_opacity_group` (Pointer/Aura sunlight/Aura twilight/Moon below
-horizon) — that OLD copy stays until Phase 6 retires it; both apply
-through the SAME `Settings` fields, so neither reading fights the
-other. Three rows are NEW this Phase:
+Four rows were MOVED here from the RETIRED `app.settings_dialog.
+display_section._build_opacity_group` (Pointer/Aura sunlight/Aura
+twilight/Moon below horizon) — Phase 6 FINAL cleanup deleted that copy
+outright; this module is now the ONLY reader/writer of those four
+`Settings` fields. Three rows are NEW this Phase:
 
   * R-15 Umbra opacity (owner-requested): a plain layer-alpha
     multiplier at composite time
