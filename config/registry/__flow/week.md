@@ -1,6 +1,6 @@
 # Week Registry — Flow
 
-**About:** [description](../__about/__init__.md)
+**About:** [description](../__about/week.md)
 
 ## One theme entry, and who reads which field
 

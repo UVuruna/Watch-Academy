@@ -12,7 +12,7 @@ don't generate). Writing them into the registry would be the same
 mapping in a second place, and the second place is always the one that
 goes stale.
 
-Its own module so every group table under [week/](../week/___week.md)
+Its own module so every group table under [week/](week.md)
 can import it without importing its siblings.
 
 Layer: config — pure, imports nothing.
@@ -20,6 +20,6 @@ Layer: config — pure, imports nothing.
 ## Connections
 
 ### Used by
-- every module under [week/](../week/___week.md)
+- every module under [week/](week.md)
 - [Registry derivation](__init__.md) — resolves the sentinel in
   `_files()` / `_dual_files()`

@@ -13,6 +13,7 @@ no section banners and `render/layers.py` at 3,521 had been flagged for
 weeks and tolerated, because no test failed. This one fails.
 """
 
+import ast
 from pathlib import Path
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
@@ -59,14 +60,12 @@ RATCHET: dict[str, tuple[str, str]] = {
         "the second config god-file; Session 36's map covers defaults.py only",
         "a constants split round after Session 36, same snapshot method",
     ),
-    "config/pantheon.py": (
-        "the weekday theme registry outgrew Session 36's estimate — twelve "
-        "wave casts plus the roster/rotation engine total ~1.55k lines even "
-        "after the continents carve (math in config/pantheon.md); entry "
-        "APPROVED by the owner 2026-07-29 in the coordination session",
-        "a pantheon split round — static tables vs the rotation engine vs "
-        "the cast tables; not yet scheduled",
-    ),
+    # `config/pantheon.py` (1,549 lines) LEFT this list on 2026-08-05 without
+    # being touched: the threshold now measures LOGIC, and 962 of its lines
+    # are the declarative cast tables. Its 587 lines of actual behaviour —
+    # the rotation engine, the seat resolvers, the title-plate resolver —
+    # were never the god-file the law was written against. The ratchet
+    # shrinks; it never grows back.
     "app/observatory.py": (
         "the statistics window in one file",
         "the app split round",
@@ -106,6 +105,55 @@ def _line_count(path: Path) -> int:
         return sum(1 for _ in handle)
 
 
+def _declared_data_lines(path: Path) -> int:
+    """Lines spanned by top-level DECLARATIVE data — a module-level
+    assignment whose value is a literal dict/list/tuple/set (or a
+    literal nested inside one). Docstrings count too.
+
+    THE MEASURE IS LOGIC, NOT LENGTH (owner ruling 2026-08-05). The law
+    exists so nobody has to hold a thousand lines of BEHAVIOUR in their
+    head at once; a registry is a DIRECTORY — thirty-five sibling
+    entries of one kind, read by looking one up, never top to bottom.
+    Splitting such a table across files makes one subject live in eight
+    places and forces a reader to chase imports to compare two entries,
+    which is the opposite of what the law is for. So a declarative table
+    is subtracted before the threshold is applied, and a file that is
+    ALL table can be as long as its subject is.
+
+    A literal that CALLS anything, or a comprehension, is not
+    declarative and is not subtracted: the moment a table computes, it
+    is logic again.
+    """
+    try:
+        tree = ast.parse(path.read_text(encoding="utf-8", errors="replace"))
+    except SyntaxError:
+        return 0
+    total = 0
+    for node in tree.body:
+        value = None
+        if isinstance(node, (ast.Assign, ast.AnnAssign)):
+            value = node.value
+        elif isinstance(node, ast.Expr) and isinstance(node.value, ast.Constant):
+            value = node.value          # the module docstring
+        if value is None or not isinstance(
+            value, (ast.Dict, ast.List, ast.Tuple, ast.Set, ast.Constant)
+        ):
+            continue
+        if any(
+            isinstance(child, (ast.Call, ast.comprehension, ast.Lambda))
+            for child in ast.walk(value)
+        ):
+            continue                    # it computes — that is logic
+        end = getattr(node, "end_lineno", node.lineno)
+        total += end - node.lineno + 1
+    return total
+
+
+def _logic_lines(path: Path) -> int:
+    """What the threshold actually measures."""
+    return _line_count(path) - _declared_data_lines(path)
+
+
 def test_no_file_crosses_the_threshold_outside_the_ratchet():
     """No new god-file, ever: every .py over MAX_LINES must be a named,
     owner-approved ratchet entry — otherwise the build fails."""
@@ -114,9 +162,11 @@ def test_no_file_crosses_the_threshold_outside_the_ratchet():
         rel = path.relative_to(PROJECT_ROOT).as_posix()
         if rel in RATCHET:
             continue
-        lines = _line_count(path)
-        if lines > MAX_LINES:
-            offenders.append(f"{rel} ({lines} lines)")
+        logic = _logic_lines(path)
+        if logic > MAX_LINES:
+            offenders.append(
+                f"{rel} ({logic} lines of logic, {_line_count(path)} total)"
+            )
     assert not offenders, (
         "THE STRUCTURE LAW (root CLAUDE.md, Rule #20): these files crossed "
         f"the {MAX_LINES}-line violation threshold and are NOT in the "
@@ -134,8 +184,8 @@ def test_the_ratchet_only_shrinks():
         path = PROJECT_ROOT / rel
         if not path.exists():
             stale.append(f"{rel} (file no longer exists)")
-        elif _line_count(path) <= MAX_LINES:
-            stale.append(f"{rel} (healed — {_line_count(path)} lines)")
+        elif _logic_lines(path) <= MAX_LINES:
+            stale.append(f"{rel} (healed — {_logic_lines(path)} lines of logic)")
     assert not stale, (
         "THE STRUCTURE LAW ratchet must SHRINK: delete these entries — "
         + ", ".join(sorted(stale))
