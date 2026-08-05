@@ -1102,10 +1102,15 @@ RING_OUTERS = {
 # bundled preset is locked to exactly one outer — the preset's INNER
 # stays user-changeable (`RING_INNER_PRESET_DEFAULT` below is only the
 # starting default). `data.rings.validate_preset` enforces this lock
-# for every bundled card.
+# for every bundled card. RING VERDICTS round (owner correction
+# 2026-08-05): "The One" moved off "full" onto "octa" — Ω alone at the
+# midnight seat with the seven other empty fields wearing their own
+# NUMBER glyphs (3/6/9/12/15/18/21), exactly what those number plates
+# were made for. "full" itself is now PRESET-FREE — no bundled card
+# locks to it any more, custom rings only.
 RING_OUTER_LOCK = {
     "DOMY": "bot_cross", "PILOT": "top_cross", "Dollar": "hexa",
-    "Templar": "cross", "The One": "full",
+    "Templar": "cross", "The One": "octa",
 }
 # THE EIGHT INNER VARIANTS (owner's measured art,
 # `assets/instrument/ring/inner/*.png`): "seconds*" carry the minute
@@ -1116,12 +1121,17 @@ RING_INNERS = (
     "seconds", "seconds_cross", "seconds_octa", "simple",
     "simple_cross", "simple_octa", "simple_point", "simple_seconds",
 )
-# The coordinator's recommended per-preset default inner (owner may
-# re-verdict later — implemented as defaults, user-changeable in
-# Settings ▸ Ring like `RING_TWO_METALS_DEFAULT`/`RING_EYE_SHINE_DEFAULT`).
+# The owner's FINAL per-preset default inner (RING VERDICTS round,
+# 2026-08-05 correction — supersedes the coordinator's first pass):
+# DOMY/PILOT/Dollar all read "seconds" (the minute numbers, today's
+# banknote look shared across the whole trio); Templar reads
+# "seconds_cross" (numbers + the cross-marker overlay, matching its
+# own outer); The One reads "simple_octa" (ticks + the octa marker,
+# matching its own new octa outer). Still user-changeable in
+# Settings ▸ Ring like `RING_TWO_METALS_DEFAULT`/`RING_EYE_SHINE_DEFAULT`.
 RING_INNER_PRESET_DEFAULT = {
-    "DOMY": "seconds", "PILOT": "seconds_cross", "Dollar": "simple",
-    "Templar": "simple_cross", "The One": "simple_point",
+    "DOMY": "seconds", "PILOT": "seconds", "Dollar": "seconds",
+    "Templar": "seconds_cross", "The One": "simple_octa",
 }
 RING_INNER_DEFAULT = "simple"       # every custom ring's own fallback
 # THE METAL-SPLIT OPTION (TASK 3, MASON/ICONS round, owner verdicts
@@ -1212,6 +1222,18 @@ RING_LETTER_FILES = {
     "👁 Gemini": "Eye_gem.png",
     "👁 Gemini ☀": "Eye_shine_gem.png",
 }
+# THE CROWN TEXT WHITELIST (RING VERDICTS round, owner decree
+# 2026-08-05): the exact set of characters the motto renderer can draw
+# one-per-character — a custom ring's crown-text field validates
+# against this set so an unsupported character can never be TYPED at
+# all (replaces the old silent-drop-on-build behaviour). DERIVED, never
+# hand-written: every SINGLE-character key of `RING_LETTER_FILES` (the
+# multi-character symbol keys — "👁 ChatGPT" and friends — are the
+# custom ring-LETTER builder's own picks, never typed into running
+# text) plus the space that separates words.
+RING_CROWN_TEXT_CHARSET = frozenset(
+    {letter for letter in RING_LETTER_FILES if len(letter) == 1} | {" "}
+)
 
 # ═══════════════════════════ WEEKDAY THEMES ═══════════════════════════
 # Weekday body themes (SYMBOLISM.md canon): "planets" uses the skin's
