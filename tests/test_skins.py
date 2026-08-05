@@ -159,9 +159,11 @@ def test_templar_preset_loads_its_locked_cross_outer_with_the_cross_glyph():
     """THE COMPOSITIONAL RING MODEL (owner decree 2026-08-05): the
     Templar preset is locked to the "cross" outer — its four empty
     fields all wear the templar-cross glyph (the owner's gold master,
-    silver/bronze derived live like every other letter), no motto, no
-    legend, and (having shrunk off the "hexa" outer) no triangle
-    override any more."""
+    silver/bronze derived live like every other letter), no motto and
+    (having shrunk off the "hexa" outer) no triangle override any
+    more. The SAME DAY's later decree (§THE TEMPLAR RING, CANON.md)
+    gave the four crosses their hover legend — the glyph repeats, the
+    station never: four watches, four DIFFERENT texts, pinned here."""
     from data.rings import ring_presets
 
     presets = ring_presets()
@@ -170,7 +172,11 @@ def test_templar_preset_loads_its_locked_cross_outer_with_the_cross_glyph():
     assert templar["positions"] == (12, 18, 24, 6)
     assert templar["letters"] == ("✠",) * 4
     assert templar["triangle"] is None
-    assert templar["legend"] == {}
+    assert set(templar["legend"]) == {12, 18, 24, 6}
+    names = [templar["legend"][p]["name"] for p in (12, 18, 24, 6)]
+    readings = [templar["legend"][p]["reading"] for p in (12, 18, 24, 6)]
+    assert len(set(names)) == 4, "four identical crosses, four names"
+    assert len(set(readings)) == 4, "the station text never repeats"
     assert templar["motto"] == ()
 
     art_dir = dial.RING_LETTER_ART_DIR

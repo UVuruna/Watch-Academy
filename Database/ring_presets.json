@@ -81,7 +81,41 @@
         "3",
         "6",
         "9"
-      ]
+      ],
+      "legend": {
+        "12": {
+          "name": "12 — The Noon",
+          "reading": "The present — the Judge's hour and the poem's first greeting: good day, TODAY. The dial's time doctrine holds that the past never existed and the future never comes; noon is the hour that says so in full light. \"This is the day which the LORD hath made\" (Psalm 118:24).\n\nDown the axis: Ω — the present against The One who holds all of time; the day's height facing the deep that begins and completes it (Revelation 1:8)."
+        },
+        "15": {
+          "name": "15 — The Afternoon",
+          "reading": "The working hour — the day's labor carried onto its far slope: \"man goeth forth unto his work and to his labour until the evening\" (Psalm 104:23). The card of hours needs no emblem here; the number is the work itself, counted.\n\nAcross the wheel: 3 — the working afternoon against the souls' still hour; the hand at its task facing the deep where no hand moves."
+        },
+        "18": {
+          "name": "18 — The Evening Frontier",
+          "reading": "Day meets night — the frontier hour and the poem's second greeting: good evening, life flowing in love toward tomorrow. The Hebrew day BEGINS at sunset — \"the evening and the morning were the first day\" (Genesis 1:5) — so this frontier is a beginning worn as an ending.\n\nAcross the wheel: 6 — evening against dawn, the two frontiers of the night: one closes the light, the other gives it back."
+        },
+        "21": {
+          "name": "21 — The Vesper Hour",
+          "reading": "The feast and the rest after work — the Rose's own hour, love's red thinned by moonlight. What the afternoon earned, the vesper hour enjoys and lays down: \"he giveth his beloved sleep\" (Psalm 127:2).\n\nAcross the wheel: 9 — the vesper rest against the climbing morning; the day laid down facing the day picking itself up."
+        },
+        "24": {
+          "name": "Ω — The One",
+          "reading": "Where the count would close at 24 stands the letter that closes the alphabet: \"I am Alpha and Omega… which is, and which was, and which is to come\" (Revelation 1:8) — the definition of The One — with Exodus 3:14, I AM THAT I AM, the name spoken by itself. On the card of hours the midnight seat is the one hour no number can say: the hour that ends one day and begins the next is not a count but a completion. E PLURIBUS UNUM — out of many hours, one wheel.\n\nUp the axis: 12 — The One against the noon it judges from; the deep that holds all of time facing the hour that can only hold today."
+        },
+        "3": {
+          "name": "3 — The Souls' Hour",
+          "reading": "The deep of night — the Ages wheel's Unborn wedge pools here: the ancestors and the not-yet-born in one moonlight community, the sea a soul comes from and returns to. The only hour awake with nothing but the stars: \"when I consider thy heavens… the moon and the stars\" (Psalm 8:3).\n\nAcross the wheel: 15 — the still hour against the working afternoon; the community of souls facing the single pair of hands at its task."
+        },
+        "6": {
+          "name": "6 — The New Morning",
+          "reading": "Rebirth without the past — the poem's fourth greeting: the finished night needs no more thought. \"His compassions fail not. They are new every morning\" (Lamentations 3:22–23).\n\nAcross the wheel: 18 — dawn against evening: the frontier that returns the light facing the frontier that surrendered it."
+        },
+        "9": {
+          "name": "9 — The Climbing Morning",
+          "reading": "Life rising toward noon — spring's own green in the Rose, the day on its most alive climb. \"In the morning sow thy seed\" (Ecclesiastes 11:6): the morning hour is the sowing hour, because everything it does still has the whole day to grow in.\n\nAcross the wheel: 21 — the climb against the rest; seed-time facing the feast."
+        }
+      }
     },
     {
       "name": "Templar",
@@ -91,7 +125,25 @@
         "✠",
         "✠",
         "✠"
-      ]
+      ],
+      "legend": {
+        "12": {
+          "name": "✠ — The Noon Watch",
+          "reading": "Good day — the cross at zenith, duty kept in full light: \"walk while ye have the light\" (John 12:35). Four crosses ring this card and the glyph never changes — only the hour does; the card's whole doctrine is constancy under changing light, the vigil that does not pick its weather.\n\nDown the spine: the Midnight Watch — the same cross in all of the light and in none of it."
+        },
+        "18": {
+          "name": "✠ — The Evening Watch",
+          "reading": "Good evening — the frontier post where day meets night, life flowing in love toward tomorrow: \"abide with us: for it is toward evening, and the day is far spent\" (Luke 24:29). The order's banner was the Beauceant, black over white — a duality worn as cloth — and this is the hour its two fields touch.\n\nAcross the crossbar: the Morning Watch — the watch that hands the light away facing the watch that receives it back."
+        },
+        "24": {
+          "name": "✠ — The Midnight Watch",
+          "reading": "Good night — the peaceful death, full of understanding; the watch kept when every other light is out: \"at midnight there was a cry made… behold, the bridegroom cometh\" (Matthew 25:6). The vigil hour proves the vigil: anyone stands guard at noon.\n\nUp the spine: the Noon Watch — the same cross, the opposite weather."
+        },
+        "6": {
+          "name": "✠ — The Morning Watch",
+          "reading": "The new morning — rebirth without the past: \"weeping may endure for a night, but joy cometh in the morning\" (Psalm 30:5). The night's watch ends not in relief but in renewal — the fourth greeting hands the wheel back to the first.\n\nAcross the crossbar: the Evening Watch — the receiving frontier facing the surrendering one."
+        }
+      }
     },
     {
       "name": "Dollar",

@@ -27,7 +27,9 @@ offending card.
   metal triangle (splits a 6-letter preset into two 3-letter metal
   groups); only valid when the card's own outer is `"hexa"`.
 - **`legend`** — `position → {name, reading}`, the per-letter hover
-  legend text.
+  legend text. Since the 2026-08-05 decree every bundled card carries
+  one (The One's eight hour-stations, Templar's four watches — CANON.md
+  §THE HOUR RING / §THE TEMPLAR RING).
 - **`motto`** — a list of motto/crown-text entries; see
   [flow](../__flow/rings.md) for the three mutually exclusive forms
   (pinned / centered / free-form crown text) and their angle-solving.
