@@ -14,7 +14,12 @@ location-repository lifecycle, and assembling the final `Settings` on OK.
 `__init__` calls every `_build_*_group()` method (one per mixin) to construct
 the seven `(title, [group_boxes])` sections; those calls resolve through the
 MRO onto whichever mixin actually defines the method — the shell itself
-defines none of the group builders.
+defines none of the group builders. A section's group entry may instead be a
+`(group_box, stretch)` pair (R-29): the page's `QVBoxLayout` gives that ONE
+group the layout's stretch factor instead of the trailing spacer, so it
+consumes every pixel of leftover vertical space — used by the Location
+page's Quick Jump cities group, whose own list otherwise sat capped in a
+mostly-empty page.
 
 ## Connections
 

@@ -119,9 +119,15 @@ class SettingsDialog(
         # panels") — only ONE panel is visible at a time now, so the cap
         # moved from the whole dialog onto each panel individually.
         tr = self._tr
-        sections: list[tuple[str, list[QGroupBox]]] = [
+        # Each entry is a group OR a (group, stretch) pair (R-29): the
+        # Quick Jump cities group is the ONE row that should consume
+        # every pixel of vertical space the Location page has left over
+        # (owner bug — its list was capped to a fixed height while the
+        # page around it sat mostly empty).
+        sections: list[tuple[str, list[QGroupBox | tuple[QGroupBox, int]]]] = [
             (tr("Location"), [
-                self._build_location_group(), self._build_jump_cities_group(),
+                self._build_location_group(),
+                (self._build_jump_cities_group(), 1),
             ]),
             (tr("Display"), [
                 self._build_opacity_group(), self._build_sizes_group(),
@@ -152,9 +158,16 @@ class SettingsDialog(
             page = QWidget()
             page_layout = QVBoxLayout(page)
             page_layout.setContentsMargins(0, 0, 0, 0)
-            for group in groups:
-                page_layout.addWidget(group)
-            page_layout.addStretch(1)
+            has_stretchy_group = False
+            for entry in groups:
+                group, stretch = entry if isinstance(entry, tuple) else (entry, 0)
+                page_layout.addWidget(group, stretch)
+                has_stretchy_group = has_stretchy_group or stretch > 0
+            # A page with its own stretchy group (R-29) already claims
+            # all leftover space; the trailing spacer would otherwise
+            # split it with a competing stretch factor.
+            if not has_stretchy_group:
+                page_layout.addStretch(1)
             pages.append(page)
             panel_scroll = QScrollArea()
             panel_scroll.setWidgetResizable(True)

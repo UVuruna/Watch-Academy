@@ -26,7 +26,15 @@ onto [Settings Dialog](dialog.md)'s `QDialog` shell.
   (navigating the home picker to add a jump city would silently change home
   on OK — the deliberate design reason for the separate box), plus the
   current list and a Remove button. Each saved city jumps the OBSERVER
-  there; the moment stays.
+  there; the moment stays. The list itself carries NO height cap (R-29) —
+  the enclosing Location page gives this group the layout's stretch
+  factor (`dialog.py`'s section table), so it fills every pixel left
+  below the Location group instead of sitting capped in empty space.
+  A DOUBLE-CLICK on a saved city (R-32) applies it AS THE LOCATION
+  immediately, through the SAME `_apply_city_selection` body a home
+  combo pick already runs (Rule #5) — no `city_path` combo walk (a
+  Quick Jump city carries no picker path), same precedent as a
+  hand-tuned coordinate.
 
 `_current_path()` (the combo cascade's current selection) and
 `_restore_path()` (re-selecting a stored city path on open) are called from
@@ -60,7 +68,11 @@ same `self`.
 - `_on_level(level)`: repopulates everything below the changed combo
 - `_show_major_cities()`: pins a country's IANA-canonical cities into the
   results list on country change
-- `_on_city()`: fills lat/lng/timezone from the selected city's record
+- `_on_city()`: fills lat/lng/timezone from the selected city's record,
+  via `_apply_city_selection`
+- `_apply_city_selection(name, latitude, longitude, timezone)`: the ONE
+  body that lands a city's coordinates on the Location fields —
+  `_on_city()` and `_apply_jump_city_as_location()` (R-32) both call it
 - `_restore_path(path)`: re-selects a stored city path on dialog open
 - `_filter_cities(text)`: live search over all 45k cities
 - `_fit_results()`: wraps the suggestion box height to its row count
@@ -71,4 +83,6 @@ same `self`.
 - `_filter_jump_cities(text)`: live search feeding the jump results list
 - `_add_jump_city(item)`: appends a picked city to the jump list
 - `_remove_jump_city()`: removes the selected jump-list row
+- `_apply_jump_city_as_location(item)`: R-32 — double-click applies the
+  clicked jump-list row as the location, via `_apply_city_selection`
 - `_refresh_jump_list()`: repaints the jump list from `self._jump_cities`

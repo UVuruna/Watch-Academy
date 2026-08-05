@@ -2190,3 +2190,52 @@ def test_finish_switcher_lives_in_the_top_row():
     for hue in palette.ENCYCLOPEDIA_FINISH_GRADIENT:
         assert hue in colored_qss
     dialog.deleteLater()
+
+
+def test_quick_jump_list_has_no_height_cap_and_stretches(app):
+    """R-29: the saved Quick Jump cities list must consume every pixel
+    of vertical space left below the Location group — no fixed
+    `maximumHeight`, and the enclosing page gives it (not the trailing
+    spacer) the layout's stretch factor."""
+    from PySide6.QtWidgets import QSizePolicy
+
+    dialog = SettingsDialog(Settings(), defaults.DEFAULT_SKIN)
+    assert dialog._jump_list.maximumHeight() >= 16_000_000  # Qt's QWIDGETSIZE_MAX
+    assert (
+        dialog._jump_list.sizePolicy().verticalPolicy()
+        == QSizePolicy.Policy.Expanding
+    )
+    from PySide6.QtWidgets import QVBoxLayout
+
+    location_page = dialog._jump_list.parent()
+    while location_page is not None and not isinstance(
+        location_page.layout(), QVBoxLayout
+    ):
+        location_page = location_page.parent()
+    page_layout = location_page.layout()
+    stretches = [
+        page_layout.stretch(i) for i in range(page_layout.count())
+        if page_layout.itemAt(i).widget() is not None
+    ]
+    assert any(s > 0 for s in stretches)
+    dialog.deleteLater()
+
+
+def test_double_click_jump_city_applies_it_as_the_location(app):
+    """R-32: double-clicking a saved Quick Jump city sets it as the
+    location immediately — through the SAME `_apply_city_selection`
+    body a home combo pick runs (Rule #5), not a second implementation."""
+    dialog = SettingsDialog(Settings(), defaults.DEFAULT_SKIN)
+    dialog._jump_cities.append({
+        "name": "Tokyo", "latitude": 35.7, "longitude": 139.7,
+        "timezone": "Asia/Tokyo",
+    })
+    dialog._refresh_jump_list()
+    item = dialog._jump_list.item(0)
+    dialog._apply_jump_city_as_location(item)
+    result = dialog.result_settings()
+    assert result.city_name == "Tokyo"
+    assert result.timezone == "Asia/Tokyo"
+    assert result.latitude == pytest.approx(35.7)
+    assert result.longitude == pytest.approx(139.7)
+    dialog.deleteLater()

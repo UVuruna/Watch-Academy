@@ -20,6 +20,7 @@ from PySide6.QtWidgets import (
     QListWidget,
     QListWidgetItem,
     QPushButton,
+    QSizePolicy,
 )
 
 from config import constants
@@ -179,11 +180,28 @@ class _LocationSectionMixin:
             if child.name == name and child.is_city
         )
         record = node.record
-        self._city_name = record.name
-        self._timezone = record.timezone
-        self._tz_label.setText(record.timezone)
-        self._latitude.setValue(record.latitude)
-        self._longitude.setValue(record.longitude)
+        self._apply_city_selection(
+            record.name, record.latitude, record.longitude, record.timezone
+        )
+
+    def _apply_city_selection(
+        self, name: str, latitude: float, longitude: float, timezone: str,
+    ) -> None:
+        """The ONE place a picked city's coordinates land on the
+        Location fields (Rule #5) — the home combo picker's `_on_city()`
+        above and a DOUBLE-CLICK on a saved Quick Jump city (R-32,
+        `_apply_jump_city_as_location`) both funnel here, so there is
+        exactly one "apply a city" body to maintain. Like a hand-tuned
+        coordinate (`_restore_path`'s own precedent), this does not
+        touch the Continent/Subregion/Country/Region/City combos — a
+        Quick Jump city carries no picker PATH to walk them to (only
+        name/lat/lon/timezone), so `city_path` on OK simply reflects
+        whatever the combos already showed."""
+        self._city_name = name
+        self._timezone = timezone
+        self._tz_label.setText(timezone)
+        self._latitude.setValue(latitude)
+        self._longitude.setValue(longitude)
 
     def _restore_path(self, path: tuple[str, ...]) -> None:
         """Re-select the stored city path: (continent, subregion,
@@ -291,6 +309,9 @@ class _LocationSectionMixin:
         silently change home on OK."""
         tr = self._tr
         group = QGroupBox(tr("Quick Jump cities"))
+        group.setSizePolicy(
+            QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Expanding
+        )
         form = QFormLayout(group)
         self._jump_search = QLineEdit()
         self._jump_search.setPlaceholderText(tr("City name…"))
@@ -302,7 +323,21 @@ class _LocationSectionMixin:
         self._jump_results.itemClicked.connect(self._add_jump_city)
         form.addRow("", self._jump_results)
         self._jump_list = QListWidget()
-        self._jump_list.setMaximumHeight(120)
+        # R-29: no height cap — the Location page gives this GROUP a
+        # stretch factor (`dialog.py`'s section table) so the list is
+        # free to consume every pixel of vertical space left below the
+        # Location group instead of sitting capped in a mostly-empty
+        # page.
+        self._jump_list.setSizePolicy(
+            QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Expanding
+        )
+        # R-32: double-click applies the city AS THE LOCATION straight
+        # away — the SAME `_apply_city_selection` body a single combo
+        # pick already runs through (Rule #5), never a second "set the
+        # location" implementation.
+        self._jump_list.itemDoubleClicked.connect(
+            self._apply_jump_city_as_location
+        )
         form.addRow(tr("Cities"), self._jump_list)
         remove = QPushButton(tr("Remove selected"))
         remove.clicked.connect(self._remove_jump_city)
@@ -370,6 +405,16 @@ class _LocationSectionMixin:
         if 0 <= row < len(self._jump_cities):
             del self._jump_cities[row]
             self._refresh_jump_list()
+
+    def _apply_jump_city_as_location(self, item: QListWidgetItem) -> None:
+        """R-32: double-click a saved Quick Jump city to set it as the
+        LOCATION right away — through `_apply_city_selection`, the SAME
+        body `_on_city()` runs for a home combo pick."""
+        row = self._jump_list.row(item)
+        city = self._jump_cities[row]
+        self._apply_city_selection(
+            city["name"], city["latitude"], city["longitude"], city["timezone"]
+        )
 
     def _refresh_jump_list(self) -> None:
         self._jump_list.clear()
