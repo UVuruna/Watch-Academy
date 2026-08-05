@@ -12,6 +12,7 @@ import pytest
 from PySide6.QtWidgets import QApplication, QLabel, QListWidget, QToolButton
 
 from app.settings_store import Settings
+from app.slot_theme import SlotDescriptor
 from app.watch_face.window import WatchFaceDialog, _SECTIONS
 from config import constants, shortcuts
 from data.hands import hand_packs
@@ -23,17 +24,68 @@ def app():
     return QApplication.instance() or QApplication([])
 
 
-def _setters() -> dict:
+def _noop(*_args, **_kwargs) -> None:
+    return None
+
+
+def fake_descriptors(settings: Settings) -> tuple:
+    """A `SlotDescriptor` triple matching `settings`' OWN enablement —
+    the same shape `app.controller._slot_descriptors()` builds, stubbed
+    with no-op setters (Rule #5's test-side twin: see `_RecordingSetters`
+    in test_design_window.py for the analogous stub)."""
+    return (
+        SlotDescriptor(
+            index=1, title="1st Slot", mode_value=settings.weekday_slot,
+            style_value=settings.day_slot_style,
+            theme_value=settings.weekday_theme,
+            roster_value=settings.weekday_roster,
+            names_value=settings.show_weekday_names,
+            enabled_value=settings.show_weekday,
+            set_mode=_noop, set_style_mode=_noop, set_weekday=_noop,
+            set_names=_noop,
+        ),
+        SlotDescriptor(
+            index=2, title="2nd Slot", mode_value=settings.octa_slot,
+            style_value=settings.info_slot_style,
+            theme_value=settings.info_slot_theme,
+            roster_value=settings.info_slot_roster,
+            names_value=settings.show_info_slot_names,
+            enabled_value=settings.show_weekday and settings.show_octa_slot,
+            set_mode=_noop, set_style_mode=_noop, set_weekday=_noop,
+            set_names=_noop,
+        ),
+        SlotDescriptor(
+            index=3, title="3rd Slot", mode_value=settings.third_slot,
+            style_value=settings.third_slot_style,
+            theme_value=settings.third_slot_theme,
+            roster_value=settings.third_slot_roster,
+            names_value=settings.show_info_slot_names,
+            enabled_value=(
+                settings.show_weekday and settings.show_octa_slot
+                and settings.show_third_slot
+            ),
+            set_mode=_noop, set_style_mode=_noop, set_weekday=_noop,
+            set_names=_noop,
+        ),
+    )
+
+
+def _setters(settings: Settings | None = None) -> dict:
     """Every key answers a no-op — the real dialog wires live setters
     through the controller (see `_RecordingSetters` in
-    test_design_window.py for the analogous stub)."""
-    return defaultdict(lambda: (lambda *_args, **_kwargs: None))
+    test_design_window.py for the analogous stub). `slot_descriptors`
+    is a DATA PROVIDER, not a scalar setter (Rule #5), so it needs a
+    real return value, not a no-op."""
+    base = defaultdict(lambda: _noop)
+    base["slot_descriptors"] = lambda: fake_descriptors(
+        settings if settings is not None else Settings()
+    )
+    return base
 
 
 def _dialog(settings: Settings | None = None) -> WatchFaceDialog:
-    return WatchFaceDialog(
-        settings if settings is not None else Settings(), _setters()
-    )
+    settings = settings if settings is not None else Settings()
+    return WatchFaceDialog(settings, _setters(settings))
 
 
 # --- R-01: the frame ---------------------------------------------------------
