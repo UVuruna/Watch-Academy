@@ -161,6 +161,19 @@ element visibility, saturation, custom palette, archetype mode, earth
 label) onto an already-built skin — called by `_install_skin` after the
 PRISTINE `build_skin` so cleared overrides really clear.
 
+**Watch Face Phase 4 additions:** the Umbra tint mode/tint/saturation/
+alpha, the Aura-off tint mode/tint, the Hands tint/saturation and the
+Indices (`letter_tint`) fields are direct pass-throughs (each already
+carries its own honest default, no override/None dance). Three fields
+DO follow the None-override dance, mirroring `star_alpha`: `ghost_alpha`
+(overrides `WeekdaySpec.ghost_opacity`, R-36 "Inactive icons"),
+`moon_transit_alpha` (overrides `YearMarkerSpec.transit_alpha`, R-35
+"Moon — hover over Earth" — the closest honest reading of that brief;
+there is no mouse-hover state on this dial, only the Moon/Earth rim
+transit `render.daylight.moon_transit_opacity` already computed) and
+`umbra_alpha` is a DIRECT value (R-15, owner-requested, no skin default
+to fall back to — the Umbra was always fully opaque before this Phase).
+
 ### `watch_title(settings, full=False) -> str`
 The watch's own display NAME — `full=False` is just `settings.city_name`;
 `full=True` is `f"{location}-{ring_finish} {ring}-{palette_label} {pointer}"`,

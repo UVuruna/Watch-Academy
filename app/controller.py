@@ -730,6 +730,11 @@ def _overlay_display_settings(skin, settings: Settings, display):
             * (star.twilight_alpha / star.day_alpha),
         )
     weekday = skin.weekday_set
+    if settings.ghost_alpha is not None:
+        # THE GHOST OPACITY OVERRIDE (Watch Face Phase 4, R-36 —
+        # "Inactive icons"): None (default) keeps the active theme's own
+        # `ghost_opacity` — themes differ today.
+        weekday = dataclasses.replace(weekday, ghost_opacity=settings.ghost_alpha)
     if settings.slot_scale != 1.0:
         # ONE slot size (owner 2026-07-14): the multiplier scales the
         # spec values directly — bodies, subdials, hit regions alike.
@@ -777,6 +782,13 @@ def _overlay_display_settings(skin, settings: Settings, display):
         # The Earth marker wears the ACTIVE location's continent art
         # (owner bug 2026-07-12: it was pinned to Europe).
         default_variant=_earth_continent(settings),
+        # THE MOON TRANSIT OPACITY OVERRIDE (Watch Face Phase 4, R-35):
+        # None (default) keeps the skin's own `dial.MOON_TRANSIT_OPACITY`.
+        transit_alpha=(
+            settings.moon_transit_alpha
+            if settings.moon_transit_alpha is not None
+            else marker.transit_alpha
+        ),
     )
     # A stored "tertiary" wheel only holds where the pointer serves one
     # (trio/hexa/octa — CUBE.md); everywhere else it normalizes to
@@ -868,6 +880,18 @@ def _overlay_display_settings(skin, settings: Settings, display):
         ),
         pointer_saturation=settings.pointer_saturation,
         ring_saturation=settings.ring_saturation,
+        # Watch Face Phase 4 — Colors + Opacity: every new field is a
+        # direct pass-through (Rule #5, no override/None dance needed —
+        # each already carries its own honest default).
+        umbra_tint_mode=settings.umbra_tint_mode,
+        umbra_tint=settings.umbra_tint,
+        umbra_saturation=settings.umbra_saturation,
+        umbra_alpha=settings.umbra_alpha,
+        aura_off_tint_mode=settings.aura_off_tint_mode,
+        aura_off_tint=settings.aura_off_tint,
+        hands_tint=settings.hands_tint,
+        hands_saturation=settings.hands_saturation,
+        letter_tint=settings.letter_tint,
         display=display,
     )
 
@@ -2834,7 +2858,111 @@ class WatchController(QObject):
                     "theme_metal_follow_ring", v
                 )
             ),
+            # --- Colors (Phase 4, R-21..R-25) --------------------------
+            "pointer_saturation": wrap(
+                lambda v: self._set_display_choice("pointer_saturation", v)
+            ),
+            "ring_saturation": wrap(
+                lambda v: self._set_display_choice("ring_saturation", v)
+            ),
+            "hands_saturation": wrap(
+                lambda v: self._set_display_choice("hands_saturation", v)
+            ),
+            "umbra_saturation": wrap(
+                lambda v: self._set_display_choice("umbra_saturation", v)
+            ),
+            "ring_tint": wrap(lambda v: self._set_display_choice("ring_tint", v)),
+            "palettes": wrap(self._set_watch_face_palette),
+            "umbra_tint_mode": wrap(
+                lambda v: self._set_display_choice("umbra_tint_mode", v)
+            ),
+            "umbra_tint": wrap(
+                lambda v: self._set_display_choice("umbra_tint", v)
+            ),
+            "aura_off_tint_mode": wrap(
+                lambda v: self._set_display_choice("aura_off_tint_mode", v)
+            ),
+            "aura_off_tint": wrap(
+                lambda v: self._set_display_choice("aura_off_tint", v)
+            ),
+            "hands_tint": wrap(
+                lambda v: self._set_display_choice("hands_tint", v)
+            ),
+            "letter_tint": wrap(
+                lambda v: self._set_display_choice("letter_tint", v)
+            ),
+            "metal_shade_gold": wrap(
+                lambda v: self._set_display_choice("metal_shade_gold", v)
+            ),
+            "metal_shade_bronze": wrap(
+                lambda v: self._set_display_choice("metal_shade_bronze", v)
+            ),
+            "metal_shade_silver": wrap(
+                lambda v: self._set_display_choice("metal_shade_silver", v)
+            ),
+            # --- Opacity (Phase 4, R-15/R-35/R-36 + the moved rows) ----
+            "star_alpha": wrap(
+                lambda v: self._set_display_choice("star_alpha", v)
+            ),
+            "aura_day_alpha": wrap(
+                lambda v: self._set_display_choice("aura_day_alpha", v)
+            ),
+            "aura_twilight_alpha": wrap(
+                lambda v: self._set_display_choice("aura_twilight_alpha", v)
+            ),
+            "moon_hidden_alpha": wrap(
+                lambda v: self._set_display_choice("moon_hidden_alpha", v)
+            ),
+            "umbra_alpha": wrap(
+                lambda v: self._set_display_choice("umbra_alpha", v)
+            ),
+            "moon_transit_alpha": wrap(
+                lambda v: self._set_display_choice("moon_transit_alpha", v)
+            ),
+            "ghost_alpha": wrap(
+                lambda v: self._set_display_choice("ghost_alpha", v)
+            ),
+            # A data PROVIDER, not a scalar setter (Rule #5, the SAME
+            # "slot_descriptors" shape above): the Opacity section's
+            # None-override sliders (Pointer/Aura/Moon transit/Inactive
+            # icons) need the ACTIVE skin's own resolved value to show a
+            # true "Skin default" reset target — read here instead of
+            # widening `builder(settings, setters, tr)`'s shared shape.
+            "opacity_skin_defaults": self._opacity_skin_defaults,
         }
+
+    def _opacity_skin_defaults(self) -> dict:
+        """The active skin's own opacity values, keyed exactly like
+        their matching `Settings` override field."""
+        skin = self._skin
+        return {
+            "star_alpha": skin.star.day_alpha,
+            "aura_day_alpha": skin.background.day_alpha,
+            "aura_twilight_alpha": skin.background.twilight_alpha,
+            "moon_transit_alpha": skin.year_marker.transit_alpha,
+            "ghost_alpha": skin.weekday_set.ghost_opacity,
+        }
+
+    def _set_watch_face_palette(self, pointer: str, style: str, hues: tuple) -> None:
+        """R-21 item 2 — the Watch Face Palette chips' LIVE-APPLY twin of
+        `SettingsDialog.result_settings`'s palette-on-OK commit: the SAME
+        `palettes` dict, keyed `f"{pointer}_{style}"`, with the SAME
+        preset-equals-no-override rule (a hue tuple that matches the
+        owner preset again is dropped, not stored, so a later preset
+        retune keeps reaching this (pointer, style) unless the reader
+        chose otherwise)."""
+        key = f"{pointer}_{style}"
+        preset = palette.PALETTE_PRESETS[(pointer, style)]
+        palettes = dict(self._settings.palettes)
+        if tuple(hues) != tuple(preset):
+            palettes[key] = tuple(hues)
+        else:
+            palettes.pop(key, None)
+        if palettes == self._settings.palettes:
+            return
+        self._settings = replace(self._settings, palettes=palettes)
+        self._install_skin(build_skin(self._settings))
+        self._flush_position()
 
     def _open_custom_ring_editor(self) -> None:
         """R-13: the Watch Face Ring section's "Custom ring…" button —
