@@ -68,13 +68,14 @@ _BANNER = re.compile(r"^\s*#.*?([═─=\-]{%d,})" % MIN_BANNER_RUN)
 # RATCHET at 1,549 lines). Added 2026-08-01 by the docs-migration session,
 # WITHOUT the owner's prior approval, because the alternative was a red
 # guard blocking every session's Stop hook. The owner must rule on it.
-PATCHING_RATCHET: dict[str, str] = {
-    "config/pantheon.py": (
-        "~30 documented exceptions patched onto the derived "
-        "WEEKDAY_THEME_FILES table; folding them into the comprehension "
-        "changes merge-vs-replace and key order — owner ruling needed"
-    ),
-}
+# EMPTY, and that is the point (2026-08-05). `config/pantheon.py` held the
+# only entry: ~30 exceptions patched onto WEEKDAY_THEME_FILES after its own
+# definition. The owner set aside both narrow fixes in favour of the deeper
+# answer, and it landed — `config/registry/` gives every theme ONE entry and
+# pantheon computes each table from it in one assignment, so the exceptions
+# are fields now and there is nothing left to patch. The list may only
+# shrink; it has reached zero.
+PATCHING_RATCHET: dict[str, str] = {}
 
 
 def _tree(rel: str) -> tuple[ast.Module, list[str]]:

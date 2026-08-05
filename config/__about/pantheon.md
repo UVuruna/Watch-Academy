@@ -4,31 +4,18 @@
 
 ## Purpose
 
-The weekday THEME registry — who sits on which day, in which art. One
-of six modules Session 36 (THE CONFIG SPLIT, [Work Plan Structure](../../WORKPLAN-STRUCTURE.md))
-carved out of `config/defaults.py`.
+The weekday theme ENGINE — the resolvers, not the data.
+
+Every `WEEKDAY_*` table this module used to declare moved to
+[the registry](../registry/__about/__init__.md) on 2026-08-05 (owner decree
+2026-08-01): one entry per theme, each table computed from it in ONE
+assignment. The names are kept here because thirty-odd call sites read
+them, and they resolve to the registry's own tables — there is no second
+copy to keep in step, and the ~30 post-definition patches that made this
+file the last `PATCHING_RATCHET` entry are gone with them. The ratchet is
+empty.
 
 Layer: config — pure, no Qt, no wall clock.
-
-## Over the god-file threshold — an open item
-
-**This file is 1,549 lines**, over root Rule #20's ~1,000-line
-threshold, and is NOT in the project's structure-guard ratchet as of
-this migration. This migration does not touch code (docs only, per its
-own hard constraints), so it flags rather than fixes: the file remains
-a **CANNOT FIX HERE** item for a dedicated split session, not a false
-"solved."
-
-Why the file grew past the Session 36 split map's own estimate
-(~1,270 lines): twelve new weekday casts (Sessions 31–33) each added a
-row to `WEEKDAY_THEME_NAMES`, `WEEKDAY_THEME_DIRS`/`_FILES` and
-`WEEKDAY_THEME_TITLES` — these tables alone, plus `WEEKDAY_PANTHEON`,
-`weekday_art()` and `WEEKDAY_MENU_TOP`/`_GROUPS`, already total
-roughly 1,090 lines with nothing else in the file. The rotation/roster
-engine (`WEEKDAY_SEAT_ROSTERS`, `rotating_art_file()` and their
-private helpers, ~460 lines) cannot move to another DAG-peer module —
-the fixed DAG forbids one new module importing another, and this
-cluster is inseparable from the weekday tables it serves.
 
 ## Contents
 
