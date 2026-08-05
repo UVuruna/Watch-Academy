@@ -64,18 +64,18 @@ def _diff_count(image_a, image_b, step: int = 4) -> int:
     "name,outer,inner",
     [
         ("DOMY", "bot_cross", "seconds"),
-        ("PILOT", "top_cross", "seconds_cross"),
-        ("Dollar", "hexa", "simple"),
-        ("Templar", "cross", "simple_cross"),
-        ("The One", "full", "simple_point"),
+        ("PILOT", "top_cross", "seconds"),
+        ("Dollar", "hexa", "seconds"),
+        ("Templar", "cross", "seconds_cross"),
+        ("The One", "octa", "simple_octa"),
     ],
 )
 def test_every_preset_composes_its_locked_outer_and_default_inner(
     app, frame_args, name, outer, inner,
 ):
     """Each of the five presets is LOCKED to exactly one outer (owner
-    decree 2026-08-05) and starts on the coordinator's recommended
-    default inner."""
+    decree 2026-08-05) and starts on the owner's FINAL verdict default
+    inner (RING VERDICTS round, 2026-08-05 correction)."""
     day, tick = frame_args
     skin = build_skin(Settings(ring=name))
     assert skin.ring.outer_asset.name == f"{outer}.png"
@@ -202,12 +202,23 @@ _OUTER_ONLY_RADIUS = 0.95
 _INNER_ONLY_RADIUS = 0.84
 
 
+_PLAIN_CUSTOM_RING = (
+    {"name": "PLAINFULL", "outer": "full", "letters": ["Ω"]},
+)
+
+
 def _plain_skin(**overrides):
     """The "full" outer + "simple" inner pair — the SAME pair the
     `_OUTER_ONLY_RADIUS`/`_INNER_ONLY_RADIUS` alpha-coverage fractions
     below were measured against — with letters/crown text CLEARED so
-    the tint-region probes sample the two bands' plate art only."""
-    base = build_skin(Settings(ring="The One", ring_inner={"The One": "simple"}))
+    the tint-region probes sample the two bands' plate art only.
+    "full" is PRESET-FREE since the RING VERDICTS round moved "The One"
+    onto "octa" (owner correction 2026-08-05) — a custom ring card picks
+    it directly instead, the same pair as before this round."""
+    base = build_skin(Settings(
+        ring="PLAINFULL", custom_rings=_PLAIN_CUSTOM_RING,
+        ring_inner={"PLAINFULL": "simple"},
+    ))
     return dataclasses.replace(
         base, show_pointer=False, show_weekday=False,
         show_earth=False, show_moon=False,

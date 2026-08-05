@@ -26,10 +26,15 @@ def test_ring_preset_cards_load_and_validate():
     # the traveler home; its four letters initial the light stations.
     assert presets["PILOT"]["outer"] == "top_cross"
     assert presets["PILOT"]["letters"] == ("L", "Π", "Ω", "Θ")
-    # "The One" is locked to the "full" outer (owner decree 2026-08-05):
-    # its single empty field wears Ω — the banknote's denomination.
-    assert presets["The One"]["outer"] == "full"
-    assert presets["The One"]["letters"] == ("Ω",)
+    # "The One" is locked to the "octa" outer (RING VERDICTS round,
+    # owner correction 2026-08-05): Ω alone at the midnight/24h seat —
+    # the banknote's denomination — the other seven empty fields
+    # wearing their own NUMBER glyphs, exactly what those plates were
+    # made for. "full" is now PRESET-FREE (custom rings only).
+    assert presets["The One"]["outer"] == "octa"
+    assert presets["The One"]["letters"] == (
+        "12", "15", "18", "21", "Ω", "3", "6", "9",
+    )
     for outer in constants.RING_OUTERS.values():
         assert (dial.RING_OUTER_ART_DIR / outer["file"]).exists()
     with pytest.raises(ValueError):
@@ -106,6 +111,23 @@ def test_dollar_preset_loads_and_splits_metal():
     assert all(metal == "gold" for metal in numbers.letter_metal.values())
 
 
+def test_the_one_composes_octa_omega_and_the_seven_number_plates():
+    """RING VERDICTS round (owner correction 2026-08-05): "The One" is
+    locked to the "octa" outer — Ω at the midnight/24h seat, and each of
+    the other seven empty fields wears the NUMBER glyph belonging to
+    its own hour (3/6/9/12/15/18/21), exactly the number plates were
+    made for. `data.rings.validate_preset`'s own "a number only fits
+    its own hour" rule holds card-wide since every digit here IS the
+    position it stands on."""
+    art_dir = dial.RING_LETTER_ART_DIR
+    ring = build_skin(replace(Settings(), ring="The One")).ring
+    assert ring.outer_asset.name == "octa.png"
+    assert ring.letter_art[0] == art_dir / "Omega.png"     # 24h -> hour 0
+    for hour in (3, 6, 9, 12, 15, 18, 21):
+        assert ring.letter_art[hour] == art_dir / f"{hour}.png"
+    assert missing_assets(build_skin(replace(Settings(), ring="The One"))) == []
+
+
 def test_ring_preset_triangle_override_validation():
     """A `triangle` override only makes sense on the "hexa" outer, and
     must be exactly 3 of the preset's own positions."""
@@ -161,8 +183,8 @@ def test_ring_two_metals_toggle_switches_the_split(monkeypatch):
     """TASK 3 (MASON/ICONS round); NARROWED by THE COMPOSITIONAL RING
     MODEL (owner decree 2026-08-05): only Dollar (the sole preset on
     the "hexa" outer) still carries a `triangle` override — Templar and
-    The One shrank onto the triangle-less cross/full outers and lost
-    the toggle entirely. The stored choice wins first, else the
+    The One sit on the triangle-less cross/octa outers and never had
+    the toggle. The stored choice wins first, else the
     documented per-preset default (Dollar True — "default matching
     today's look")."""
     from config import constants
