@@ -9,7 +9,7 @@ the split into `app/watch_face/`).
 from collections import defaultdict
 
 import pytest
-from PySide6.QtWidgets import QApplication, QLabel, QListWidget, QToolButton
+from PySide6.QtWidgets import QApplication, QListWidget, QToolButton
 
 from app.settings_store import Settings
 from app.slot_theme import SlotDescriptor
@@ -70,16 +70,31 @@ def fake_descriptors(settings: Settings) -> tuple:
     )
 
 
+def fake_opacity_defaults() -> dict:
+    """The Opacity section's data PROVIDER stub (Watch Face Phase 4,
+    Rule #5 — the same shape `slot_descriptors` established): a plain
+    dict of skin-default alphas, since a test stub carries no real
+    `WatchController._skin` to read."""
+    return {
+        "star_alpha": 1.0,
+        "aura_day_alpha": 0.5,
+        "aura_twilight_alpha": 0.3,
+        "moon_transit_alpha": 0.5,
+        "ghost_alpha": 0.3,
+    }
+
+
 def _setters(settings: Settings | None = None) -> dict:
     """Every key answers a no-op — the real dialog wires live setters
     through the controller (see `_RecordingSetters` in
     test_design_window.py for the analogous stub). `slot_descriptors`
-    is a DATA PROVIDER, not a scalar setter (Rule #5), so it needs a
-    real return value, not a no-op."""
+    and `opacity_skin_defaults` are DATA PROVIDERS, not scalar setters
+    (Rule #5), so they need a real return value, not a no-op."""
     base = defaultdict(lambda: _noop)
     base["slot_descriptors"] = lambda: fake_descriptors(
         settings if settings is not None else Settings()
     )
+    base["opacity_skin_defaults"] = fake_opacity_defaults
     return base
 
 
@@ -103,16 +118,10 @@ def test_window_builds_with_all_eight_sidebar_entries(app):
     dialog.deleteLater()
 
 
-def test_placeholder_pages_read_arrives_in_a_later_phase(app):
-    dialog = _dialog()
-    for title, builder in _SECTIONS:
-        if builder is not None:
-            continue
-        index = [t for t, _b in _SECTIONS].index(title)
-        page = dialog._stack.widget(index)
-        labels = [w.text() for w in page.findChildren(QLabel)]
-        assert any("Arrives in a later phase" in text for text in labels)
-    dialog.deleteLater()
+def test_no_placeholder_pages_remain(app):
+    """Phase ④ (Colors + Opacity) closed the last two placeholders —
+    every `_SECTIONS` entry now carries a real builder."""
+    assert all(builder is not None for _title, builder in _SECTIONS)
 
 
 def test_refresh_keeps_the_selected_sidebar_row(app):
