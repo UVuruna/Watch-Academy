@@ -677,6 +677,23 @@ three arms — TIME itself:
 | top (12h) | yellow | **the PRESENT** | the only ideal — *the past never happened, and the future never comes*; living here is the Judge's seat |
 | 20h | red | **the FUTURE** | determination — who stares only ahead is Lucifer's kin, forever imagining and wanting MORE |
 
+**THE TRAVEL DOCTRINE (owner seal 2026-08-05).** The three arms hold
+three truths about time, and the seal states them whole: the PAST
+never existed — it is a story the present tells and retells, edited
+at every telling; the FUTURE will never come — whatever arrives,
+arrives as the present; the PRESENT cannot be grasped — it is gone in
+the naming — and yet it is the ONLY one that exists. Inside that one
+existing hour a person can still TRAVEL, and the direction of travel
+is the character: into the past travel Judas's kin, who forever
+prosecute their own finished deeds; into the future travel Lucifer's
+kin, who forever inhabit an ideal of themselves and wait for its
+arrival. Neither traveler is anywhere — the one place they could
+stand is the one they left. The cure doctrine (§The Triads) already
+names the medicines seat by seat: hope for the backward traveler,
+love-in-deed for the forward one. Stacked parallels like these ride
+other wheels too, but the Trinity carries the MOST of them — its
+three arms are the only geometry on the dial that is time itself.
+
 ### The poem's cycle (owner canon 2026-07-16)
 
 The four greetings ride the Seasons cross as the CYCLE OF A DAY =
@@ -1218,7 +1235,9 @@ blue arm's prescription); Lucifer was drunk on his own future, and
 LOVE-IN-DEED — given to others, now — was the cure he refused
 (1 John 3:18 stays on the red arm). The WORD remains on God's arm
 (John 1:1). Zoroaster's *humata, hukhta, hvarshta* blesses the
-process row.
+process row. The time row's full statement — the three truths and
+the two travelers — is THE TRAVEL DOCTRINE, sealed 2026-08-05 under
+§The Time reading of the Trinity.
 
 **Owner doctrine for Misli–Reči–Dela:** each of the three is a
 place where a person can do wrong or do good — three gates to
@@ -1228,8 +1247,11 @@ them.)
 
 **PROPOSED additions (status after the owner's 2026-07-17 review):**
 
-- **Thesis – Antithesis – Synthesis** (Hegel) — STILL OPEN, owner
-  studying the three concepts (the agent's compressed "synthesis
+- **Thesis – Antithesis – Synthesis** (Hegel) — ADOPTED by the art
+  doctrine's seal below (2026-07-22 lists Dialectic among the four
+  abstract trios, dial mapping included; the 2026-08-05 wiring round
+  writes its articles). The owner's study note stands as written
+  (the agent's compressed "synthesis
   becomes the next thesis" was rightly corrected by the owner: the
   full turn is thesis → antithesis → synthesis, and the synthesis
   STANDS as a new thesis only until life raises a NEW antithesis
@@ -1467,6 +1489,53 @@ Two Crosses):
   at noon); HOPE/FAITH/LOVE ride the top half and SALVATION arcs
   through the bottom (the light path ends in the Creator's hands at
   midnight) — the Two Crosses' chiasm drawn as typography.
+
+**THE HOUR RING — THE ONE (owner decree 2026-08-05: the last two
+bundled cards receive their hover legends; until this decree The One
+and Templar were the only presets whose letters said nothing).** The
+One is the only card whose letters are the HOURS THEMSELVES — seven
+numerals and the Omega on the octa outer. That is its doctrine, not
+its poverty: every other card borrows an alphabet to read the wheel,
+this one lets the wheel read itself. The numbers-only-on-their-own-
+hour law (owner 2026-07-12) exists FOR this card — a numeral IS its
+seat, so the glyph and the station are one thing. The eight stations
+walk the day as a life in miniature, the four greetings of the
+poem's cycle (sealed 2026-07-16) at the cardinal seats and the four
+walking hours between them:
+
+| Seat | Glyph | Station |
+|---|---|---|
+| 12h | 12 | NOON — the present, the Judge's hour; the poem's "good day, TODAY" |
+| 15h | 15 | THE AFTERNOON — the working hour, labor until evening (Psalm 104:23) |
+| 18h | 18 | THE EVENING FRONTIER — day meets night; the Hebrew day BEGINS at sunset (Genesis 1:5): the evening is a beginning worn as an ending |
+| 21h | 21 | THE VESPER HOUR — the feast and the rest after work; the Rose's own hour of love thinned by moonlight |
+| 24h | Ω | THE ONE — where the count would close at 24 stands the letter that closes the alphabet: Revelation 1:8, Exodus 3:14; E PLURIBUS UNUM is this seat's motto (§Trinity) |
+| 03h | 3 | THE SOULS' HOUR — the Unborn wedge's own moonlight pool (the Ages, sealed): the ancestors and the not-yet-born in one community |
+| 06h | 6 | THE NEW MORNING — rebirth without the past; the poem's fourth greeting |
+| 09h | 9 | THE CLIMBING MORNING — life rising toward noon; spring's own green in the Rose |
+
+The hover legend quotes these stations reading by reading — the one
+glyph that is not a number gets the card's whole theology, and the
+seven that are numbers get the hour they already are.
+
+**THE TEMPLAR RING — THE FOUR WATCHES (owner decree 2026-08-05,
+same round: "sva 4 znaka da imaju različit tekst").** Four identical
+crosses on the seasons-cross hours (12h · 18h · 24h · 06h) — and the
+owner's rule is exactly that the GLYPH repeats while the STATION
+never does. The ✠ is the cross pattée the order wore; the card's
+thematic finish is the Beauceant (`templar_black`), the black-over-
+white war banner Jacques de Vitry glossed as fair to friends and
+terrible to enemies — a DUALITY worn as cloth, which seats this card
+beside the dial's own day–night law. The four watches read the
+poem's cycle as a knight's vigil — the cross does not change, the
+hour does, and that constancy under changing light IS the card:
+
+| Seat | Watch | Reading |
+|---|---|---|
+| 12h | THE NOON WATCH | good day — the cross at zenith, duty in full light; *"walk while ye have the light"* (John 12:35) |
+| 18h | THE EVENING WATCH | good evening — the frontier post where day meets night; *"abide with us: for it is toward evening"* (Luke 24:29) |
+| 24h | THE MIDNIGHT WATCH | good night — the peaceful death full of understanding; the watch kept when every other light is out (Matthew 25:6) |
+| 06h | THE MORNING WATCH | the new morning — rebirth without the past; *"joy cometh in the morning"* (Psalm 30:5) |
 
 **THE OUTER MOTTO ARC (MOTO-FIX round, owner correction 2026-07-19, the
 dollar's Great Seal reference image — the first round's layout was
