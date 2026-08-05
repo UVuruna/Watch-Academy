@@ -68,6 +68,7 @@ its own — this file is the ONLY doc in the folder; no `__about/`, no
 | `test_shortcuts_r5b.py` | R5b FINAL MAP: the sealed shortcut table, the SLOTS/FAST TRAVEL/LOCATIONS families, the Fast Travel flash overlay, two real `ClockWidget.keyPressEvent` fixes (bare-Space-only, KeypadModifier masking). |
 | `test_skins.py` | Ring presets and the built render config: the DOMY/PILOT/third bundled card goldens (layout, letters), `missing_assets` validation. *(In the structure-law ratchet — owed a test-hygiene split.)* |
 | `test_startup_warm.py` | THE SLOW START fix (14.78s→1.46s for three watches): first paint runs NO metal recolor, the background drain builds it, the warm pass runs ONCE per process, legend-off skips the hover sweep entirely. |
+| `test_art_reachability.py` | GUARD — see below. |
 | `test_structure_law.py` | GUARD — see below. |
 | `test_sun.py` | Golden sun values: Belgrade DST hexagram jump −4.17°→+10.76°, the four Tromsø daylight regimes, Longyearbyen polar-night solar noon, Santiago de Compostela/Kamchatka angles, the mockup day 20.6.2025. |
 | `test_system_trio.py` | The native SPACE-without-focus keyboard hook's install/uninstall bookkeeping and callback contract, stale-hover clearing off themed elements, the permanent crash-log file and a synthetic unhandled exception. |
@@ -132,6 +133,16 @@ four). It exits **2**, which is what makes a hook BLOCKING.
   PySide6 and must read no wall clock (`datetime.now`/`.today`,
   `time.time`); `core/__main__.py` is exempt from the wall-clock check
   only, as documented CLI glue.
+- **`test_art_reachability.py`** — NO ART SITS UNSEEN, widened to the WHOLE
+  `assets/` tree (owner ruling 2026-08-05, after an audit found ~280
+  archetype plates nothing could draw). Every directory holding a `.png` is
+  RESOLVED (the collector walks `config`'s Path tables, then applies the
+  resolvers that BUILD paths — the colored swap, the Ninth/dual plates, the
+  pantheon candidates, THE DIAL LAW's circle register, the Scale's two look
+  homes, the mounts and zodiac styles), NAMED in `RESOLVED_ELSEWHERE` with
+  the runtime reader that builds its path from variables, or a NAMED DEBT in
+  the ledger's §Art Outside The Weeks. Two shrink guards keep both lists
+  honest.
 - **`test_theme_completeness.py`** — THE THEME COMPLETION LAW: a registered
   theme (every `constants.WEEKDAY_THEMES` key) must resolve its article
   set, blurb set, title article and (if it has one) Ninth article, with two

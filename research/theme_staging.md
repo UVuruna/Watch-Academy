@@ -175,3 +175,41 @@ old note pointed at is renamed:
 table ever drifts.
 
 A row leaves THIS table when its plates land, not when its wiring does.
+
+---
+
+## Art Outside The Weeks — the debt the widened guard found
+
+**Opened 2026-08-05** by the owner's ruling that the completion law
+covers the WHOLE `assets/` tree, not only `assets/weeks/`. The audit
+that followed found ~280 plates under `assets/archetypes/` that no
+config table resolves. Most were closed the same day — the `circle/`
+registers became every seat's dial plate under THE DIAL LAW — and what
+remains is here, with the owner's own ruling on each.
+
+`tests/test_art_reachability.py` reads the FIRST cell of every row
+below. A folder leaves this table only by being wired; deleting a row
+without wiring it fails the guard again, which is the point.
+
+| Folder | Plates | Ruled | Owes |
+|--------|--------|-------|------|
+| `archetypes/banknote/primary/colored` | 15 | WIRE as the Banknote article's own illustrations — the page draws vectors today (`render/cube_diagrams.py:banknote_axes`) and the plates fill its figure slots | the wiring round |
+| `archetypes/triads/callings/primary/colored` | 6 | ENCYCLOPEDIA-ONLY set, `mount: none` — the Trinity's three wheels are sealed (Court, Family, Genesis), so a triad has nowhere to sit without unseating one | a seat in a whole + its text |
+| `archetypes/triads/callings/circle/colored` | 6 | same set, its 1:1 plates | with the above |
+| `archetypes/triads/dialectic/primary/colored` | 6 | ENCYCLOPEDIA-ONLY set | a seat in a whole + its text |
+| `archetypes/triads/dialectic/circle/colored` | 6 | same set, its 1:1 plates | with the above |
+| `archetypes/triads/theological/primary/colored` | 6 | ENCYCLOPEDIA-ONLY set | a seat in a whole + its text |
+| `archetypes/triads/theological/circle/colored` | 6 | same set, its 1:1 plates | with the above |
+| `archetypes/triads/time/primary/colored` | 6 | ENCYCLOPEDIA-ONLY set | a seat in a whole + its text |
+| `archetypes/triads/time/circle/colored` | 6 | same set, its 1:1 plates | with the above |
+| `archetypes/dualities/good_evil/primary/colored` | 4 | ENCYCLOPEDIA-ONLY — a two-armed pointer does not exist and will not | a seat in a whole + its text |
+| `archetypes/dualities/good_evil/circle/colored` | 4 | same set, its 1:1 plates | with the above |
+| `archetypes/dualities/self_others/primary/colored` | 4 | ENCYCLOPEDIA-ONLY | a seat in a whole + its text |
+| `archetypes/dualities/self_others/circle/colored` | 4 | same set, its 1:1 plates | with the above |
+
+**79 plates in 13 folders**, every one of them named. Their prompt
+sheets are already written —
+[Triads Prompts](prompts/archetype/triads_prompts.md),
+[Dualities Prompts](prompts/archetype/dualities_prompts.md),
+[Banknote Offices Prompts](prompts/archetype/banknote_offices_prompts.md)
+— so what they owe is code and text, never generation.

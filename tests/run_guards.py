@@ -32,6 +32,10 @@ FAST_GUARDS = (
 FULL_GUARDS = FAST_GUARDS + (
     "test_docs_coverage.py",
     "test_doc_links.py",
+    # NO ART SITS UNSEEN over the whole assets/ tree (owner ruling
+    # 2026-08-05). It walks the tree and imports config, so it runs at
+    # the session's END rather than after every edit.
+    "test_art_reachability.py",
 )
 
 
