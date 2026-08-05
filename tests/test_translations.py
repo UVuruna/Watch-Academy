@@ -95,7 +95,18 @@ def test_phase2_chrome_speaks_the_overlay():
     titles = {group.title() for group in dialog.findChildren(QGroupBox)}
     assert "№Location" in titles
     assert "№Language" in titles
-    assert "№Custom ring" in titles
+    # Phase 6 FINAL cleanup: "Custom ring" is no longer an ordinary
+    # sidebar section -- it lives on the hidden `initial_section=
+    # "Custom art"` page the Watch Face Ring section's "Custom ring…"
+    # button opens; checked separately below.
+    custom_art_dialog = SettingsDialog(
+        settings, build_skin(settings), overlay,
+        initial_section="Custom art",
+    )
+    custom_art_titles = {
+        group.title() for group in custom_art_dialog.findChildren(QGroupBox)
+    }
+    assert "№Custom ring" in custom_art_titles
     from datetime import datetime as _datetime
 
     travel = TimeTravelDialog(

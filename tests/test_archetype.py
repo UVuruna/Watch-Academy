@@ -1228,11 +1228,13 @@ def test_earth_label_four_modes_render_distinctly(app):
 
 def test_menu_gating(app, tmp_path, monkeypatch):
     """The Archetype toggle grays on the archetype-less Aurora/Calendar
-    (and with the Pointer element off). R5 MENU REWORK shrank the rest
-    of this to the two window-opening entries: Pointer Theme / Slot
-    Theme gray while the mode is ON (the Design/Earth controls moved
-    into their own window, see tests/test_menu_rework.py for its own
-    gating coverage). The full controller wiring, TEMP home."""
+    (and with the Pointer element off). R5 MENU REWORK's own two
+    window-opening gates (Pointer Theme / Slot Theme graying while the
+    mode is ON) are GONE along with those windows (Phase 6 FINAL
+    cleanup, see `_refresh_menu_gating`'s own docstring) -- the Watch
+    Face window recomputes its own content live on every `refresh()`
+    instead of being gated here; see tests/test_menu_rework.py for its
+    own gating coverage. The full controller wiring, TEMP home."""
     monkeypatch.setenv("APPDATA", str(tmp_path))
     from app.controller import WatchController
 
@@ -1245,16 +1247,11 @@ def test_menu_gating(app, tmp_path, monkeypatch):
         assert not controller._archetype_action.isEnabled()
         controller._set_display_choice("pointer", "trio")
         assert controller._archetype_action.isEnabled()
-        assert controller._pointer_theme_action.isEnabled()
-        assert controller._slot_theme_action.isEnabled()
         controller._set_display_choice("archetype_mode", True)
-        assert not controller._pointer_theme_action.isEnabled()
-        assert not controller._slot_theme_action.isEnabled()
         # The settings underneath stay the user's own.
         assert controller._settings.show_weekday
         controller._set_display_choice("archetype_mode", False)
-        assert controller._pointer_theme_action.isEnabled()
-        assert controller._slot_theme_action.isEnabled()
+        assert controller._archetype_action.isEnabled()
     finally:
         controller._profiling_timer.stop()
         controller._tray.hide()

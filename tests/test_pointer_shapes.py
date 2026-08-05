@@ -940,11 +940,13 @@ def test_the_settings_reach_the_skin(app):
 
 @pytest.fixture
 def controller(app, tmp_path, monkeypatch):
-    """A REAL WatchController — the exact object whose `_design_setters()`
-    the Design window's Pointer tab calls through, so this is the
-    faithful proof that a row's pick both PERSISTS to `Settings` and
-    reaches the INSTALLED skin, not a re-test of `build_skin` alone
-    (already golden-tested above)."""
+    """A REAL WatchController — the exact object whose
+    `_watch_face_setters()` the Watch Face window's Pointer section
+    calls through (Phase 6 FINAL cleanup retired the Design window
+    this fixture used to describe), so this is the faithful proof
+    that a row's pick both PERSISTS to `Settings` and reaches the
+    INSTALLED skin, not a re-test of `build_skin` alone (already
+    golden-tested above)."""
     monkeypatch.setenv("APPDATA", str(tmp_path))
     made = WatchController(app)
     yield made
@@ -953,12 +955,13 @@ def controller(app, tmp_path, monkeypatch):
 
 
 def test_the_four_design_rows_persist_and_reach_the_live_skin(controller):
-    """Rule #25 pin: every new Design ▸ Pointer row writes through the
+    """Rule #25 pin: every new Pointer-page row writes through the
     SAME `_set_display_choice` mechanism the neighboring rows use
-    (Rule #5, no new mechanism) — `_design_setters()` is the exact dict
-    `_open_design()` hands the window, so calling through it here is
-    the real wiring, not a stand-in."""
-    setters = controller._design_setters()
+    (Rule #5, no new mechanism) — `_watch_face_setters()` is the exact
+    dict `_open_watch_face()` hands the window (the sole survivor of
+    the retired Design window this test used to name), so calling
+    through it here is the real wiring, not a stand-in."""
+    setters = controller._watch_face_setters()
     setters["pointer"]("octa")
     setters["pointer_shape"]("polygon")
     assert controller._settings.pointer_shape == "polygon"

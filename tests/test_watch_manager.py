@@ -47,8 +47,7 @@ def manager(app, tmp_path, monkeypatch):
     yield made
     for watch in made._watches:
         for dialog in (
-            watch._encyclopedia, watch._observatory,
-            watch._design, watch._pointer_theme, watch._slot_theme,
+            watch._encyclopedia, watch._observatory, watch._watch_face,
         ):
             if dialog is not None:
                 dialog.close()
