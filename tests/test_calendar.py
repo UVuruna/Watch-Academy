@@ -527,10 +527,16 @@ def test_the_four_new_dozens_are_seated_exactly_where_canon_says():
     assert virtues.members[0] == "Magnanimity"         # 12h, the crown
     assert virtues.members[6] == "Just Indignation"    # 24h, the root
 
-    vices = calendar_mounts.CALENDAR_MOUNTS["vices"]
+    # THE VICES ARE THE SAME WHEEL'S PAINT FACE (owner ruling
+    # 2026-08-05) — one theme in two depictions, a virtue and its vice
+    # sharing ONE seat, so they are reached through the wheel, never as
+    # a mount of their own.
+    vices = virtues.paint
+    assert vices is not None
     assert vices.system == "B" and vices.centre == "cunning"
     assert vices.members[0] == "Vanity"                # 12h, the crown
     assert vices.members[6] == "Envy"                  # 24h, the root
+    assert "vices" not in calendar_mounts.CALENDAR_MOUNTS
 
     # The golden ANGLES themselves (not just tuple order) — proof each
     # figure's seat lands on its CANON-sealed wedge center.
@@ -541,7 +547,9 @@ def test_the_four_new_dozens_are_seated_exactly_where_canon_says():
     assert hour_of("olympians", 11) == pytest.approx(11.0)   # Hera, 10-12h
     assert hour_of("apostles", 5) == pytest.approx(23.0)     # Judas, 22-24h
     assert hour_of("virtues", 0) == pytest.approx(12.0)      # Magnanimity, crown
-    assert hour_of("vices", 6) == pytest.approx(0.0)         # Envy, root (24h≡0h)
+    # Envy rides the same seat Just Indignation does — one wedge, two
+    # readings — so the wheel's own index 6 IS the vice's root.
+    assert hour_of("virtues", 6) == pytest.approx(0.0)       # root (24h≡0h)
 
 
 def test_the_sins_dozen_is_seated_exactly_where_canon_says():
@@ -603,10 +611,14 @@ def test_new_dozens_rim_members_carry_real_committed_art():
     ahead of this wiring round (owner PromptPainter drop under
     `assets/calendars/{olympians,apostles,virtues,vices}/`) — never the
     name fallback, exactly like the zodiac/chinese mounts."""
-    for key in ("olympians", "apostles", "virtues", "vices"):
+    for key in ("olympians", "apostles", "virtues"):
         entries = calendar_mount_entries(key)
         assert len(entries) == 12
         assert all(art is not None and art.exists() for _n, art in entries), key
+    # the Virtue Wheel's PAINT face carries its own twelve plates
+    night = calendar_mount_entries("virtues", daylight=False)
+    assert len(night) == 12
+    assert all(art is not None and art.exists() for _n, art in night)
 
 
 def test_new_dozens_axle_plates_resolve_real_art():
@@ -735,12 +747,16 @@ def test_axle_always_centers_are_unconditionally_present(app):
     assert "ophiuchus" not in ordinary.thirteenth_candidates    # still rule-driven
     for mount, centre in (
         ("olympians", "hestia"), ("apostles", "jesus"),
-        ("virtues", "prudence"), ("vices", "cunning"),
+        ("virtues", "prudence"),
         ("emotions", "peace"), ("sins", "hardness_of_heart"),
     ):
         assert calendar_mounts.CALENDAR_MOUNTS[mount].centre == centre, mount
         skin = _calendar_skin(calendar_mount=mount)
         assert active_thirteenth(skin, ordinary) == centre, mount
+    # THE AXLE TURNS WITH ITS OWN WHEEL: the Virtue Wheel's paint face
+    # brings Cunning, the dark charioteer, on the same date by night.
+    wheel = _calendar_skin(calendar_mount="virtues")
+    assert active_thirteenth(wheel, ordinary, daylight=False) == "cunning"
     # The existing Ophiuchus golden pair, unaffected by the Axle seal.
     shows, _t2 = _day_tick(app, datetime(2026, 12, 5, 12, 0))
     hides, _t3 = _day_tick(app, datetime(2025, 12, 5, 12, 0))
@@ -815,3 +831,55 @@ def test_chinese_mount_renders_and_hover_names_the_animal(app):
     text = chinese.tooltip_at(radius + point.x(), radius + point.y(), 360.0)
     assert text is not None and "Horse" in text and "<img" in text
     assert "June" in text                     # "animal + its month" (owner spec)
+
+
+def test_the_virtue_wheel_turns_with_the_sky(app):
+    """ONE THEME IN TWO DEPICTIONS (owner ruling 2026-08-05). The wheel
+    shows the virtue by day and the vice by night — the SAME
+    `TickState.is_daylight` the centre seat and the Dyad's Ninth read —
+    while every other roster ignores the flag entirely."""
+    from render.calendar_mount import calendar_mount_entries, calendar_mount_face
+
+    day = calendar_mount_entries("virtues", daylight=True)
+    night = calendar_mount_entries("virtues", daylight=False)
+    assert [n for n, _a in day][:2] == ["Magnanimity", "Truthfulness"]
+    assert [n for n, _a in night][:2] == ["Vanity", "Boastfulness"]
+    assert len(day) == len(night) == 12          # one seat, two readings
+
+    # the axle is the same charioteer's two faces
+    assert calendar_mount_face("virtues", True).centre == "prudence"
+    assert calendar_mount_face("virtues", False).centre == "cunning"
+
+    # a roster with no paint face is untouched by the flag
+    assert (calendar_mount_entries("emotions", daylight=False)
+            == calendar_mount_entries("emotions", daylight=True))
+
+
+def test_a_stored_vices_mount_lands_on_the_wheel_that_absorbed_it(tmp_path):
+    """The retired key migrates instead of failing validation and
+    offering the user a reset — the documented external-data pattern
+    (`app.settings_store.MERGED_MOUNTS`), the same shape the theme-key
+    renames already use."""
+    from app.settings_store import SettingsStore
+
+    path = tmp_path / "settings.json"
+    store = SettingsStore(path)
+    store.save(store.load())                       # a full, valid file
+    raw = json.loads(path.read_text(encoding="utf-8"))
+    raw["calendar_mount"] = "vices"                # what an old file holds
+    path.write_text(json.dumps(raw), encoding="utf-8")
+    assert SettingsStore(path).load().calendar_mount == "virtues"
+
+
+def test_only_a_two_faced_mount_puts_daylight_in_the_composite_key(app):
+    """The lit wedge's deletion made the composite purely DAILY (owner
+    2026-07-29) and this feature must not undo that: the intraday term
+    appears ONLY while the Virtue Wheel rides the wedges."""
+    from render.compositor import Compositor
+
+    day, tick = _day_tick(app, datetime(2026, 3, 15, 12, 0))
+    for mount, expected in (("zodiac", None), ("emotions", None),
+                            ("virtues", True)):
+        comp = Compositor(_calendar_skin(calendar_mount=mount), AssetCache())
+        comp.set_day(day)
+        assert comp._two_faced_mount(tick) is expected, mount

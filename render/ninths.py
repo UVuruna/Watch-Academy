@@ -53,13 +53,17 @@ def thirteenth_plate(key: str) -> tuple[str, Path | None]:
         art = resolved if resolved.exists() else None
     else:
         mount = next(
-            m for m in calendar_mounts.CALENDAR_MOUNTS.values() if m.centre == key
+            face
+            for m in calendar_mounts.CALENDAR_MOUNTS.values()
+            for face in (m, m.paint) if face is not None and face.centre == key
         )
         art = octa_slot_art(mount.art_dir, name.replace(" ", "_"))
     return name, art
 
 
-def active_thirteenth(skin: SkinDefinition, day: DayContext) -> str | None:
+def active_thirteenth(
+    skin: SkinDefinition, day: DayContext, daylight: bool = True,
+) -> str | None:
     """THE BLUE MOON LAW's CORRECTED resolution (owner overrule,
     retiring R12's global "any pointer, any theme" law — its own
     screenshot caught Ophiuchus on the hexa pointer with the Greek
@@ -105,6 +109,8 @@ def active_thirteenth(skin: SkinDefinition, day: DayContext) -> str | None:
         return None
     candidates = day.thirteenth_candidates
     mount = calendar_mounts.CALENDAR_MOUNTS.get(skin.calendar_mount)
+    if mount is not None and mount.paint is not None and not daylight:
+        mount = mount.paint          # the axle turns with its own wheel
     key = mount.centre if mount is not None and mount.centre else (
         "ophiuchus" if calendar_wheel(skin) == "zodiac" else "sol"
     )

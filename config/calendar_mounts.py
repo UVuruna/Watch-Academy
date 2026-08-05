@@ -120,6 +120,17 @@ class CalendarMount(NamedTuple):
     names (the Slavic months are Croatian proper nouns with ASCII
     plates), else None — art is always graceful-absent, a missing
     plate falling back to the member's NAME.
+
+    `paint` is the roster's DARK DEPICTION, and it is a whole mount of
+    its own: the same twelve SEATS holding the same twelve members'
+    other face, with its own plates and its own axle. Only the Virtue
+    Wheel carries one (owner ruling 2026-08-05) — a virtue and its vice
+    share ONE seat, so they are one theme in two depictions, never two
+    rosters. The dial shows the light face by day and the paint face by
+    night (`render.calendar_mount.calendar_mount_entries` reads the
+    SAME `TickState.is_daylight` the centre seat and the Dyad's Ninth
+    already read); the hover shows BOTH, which is how a vice is read at
+    noon.
     """
 
     title: str
@@ -128,6 +139,7 @@ class CalendarMount(NamedTuple):
     art_dir: str
     centre: str | None = None
     art_stems: tuple[str, ...] | None = None
+    paint: "CalendarMount | None" = None
     # WHICH member is TODAY'S (the mark that earns the emphasis):
     # "sign" — the running zodiac sign; "month" — the running Gregorian
     # month (every month-keyed roster); None — the set names no
@@ -282,8 +294,18 @@ CALENDAR_MOUNTS = {
     # cannot carry). Centres are the axle's two faces, both ALWAYS-
     # CENTERS, present on every date: PRUDENCE (light, the charioteer) and
     # CUNNING (paint, the dark charioteer) — CANON §The Virtue Wheel.
+    # ONE THEME IN TWO DEPICTIONS (owner ruling 2026-08-05, replacing
+    # the two separate "virtues"/"vices" mounts). A virtue and its vice
+    # SHARE ONE SEAT — Magnanimity and Vanity are one wedge read twice,
+    # not two rosters — so the wheel is one mount whose `paint` face is
+    # the dark reading, and the axle is one charioteer with two faces:
+    # Prudence in the light, Cunning in the paint. The dial shows the
+    # light face by day and the paint face by night; the hover shows
+    # both, which is how a vice is read at noon. A stored
+    # `calendar_mount == "vices"` migrates to this key
+    # (`app.settings_store`) — the documented external-data pattern.
     "virtues": CalendarMount(
-        title="Virtues",
+        title="Virtue Wheel",
         system="B",
         members=(
             "Magnanimity", "Truthfulness", "Courage", "Right Ambition",
@@ -297,21 +319,21 @@ CALENDAR_MOUNTS = {
             "Magnificence", "Wit", "Just_Indignation", "Temperance",
             "Patience", "Modesty", "Generosity", "Friendliness",
         ),
-    ),
-    "vices": CalendarMount(
-        title="Vices",
-        system="B",
-        members=(
-            "Vanity", "Boastfulness", "Cowardice", "Over-ambition",
-            "Vulgarity", "Buffoonery", "Envy", "Gluttony", "Wrath",
-            "Shamelessness", "Greed", "Flattery",
-        ),
-        art_dir="vices/primary/colored",
-        centre="cunning",
-        art_stems=(
-            "Vanity", "Boastfulness", "Cowardice", "Over_Ambition",
-            "Vulgarity", "Buffoonery", "Envy", "Gluttony", "Wrath",
-            "Shamelessness", "Greed", "Flattery",
+        paint=CalendarMount(
+            title="Vices",
+            system="B",
+            members=(
+                "Vanity", "Boastfulness", "Cowardice", "Over-ambition",
+                "Vulgarity", "Buffoonery", "Envy", "Gluttony", "Wrath",
+                "Shamelessness", "Greed", "Flattery",
+            ),
+            art_dir="vices/primary/colored",
+            centre="cunning",
+            art_stems=(
+                "Vanity", "Boastfulness", "Cowardice", "Over_Ambition",
+                "Vulgarity", "Buffoonery", "Envy", "Gluttony", "Wrath",
+                "Shamelessness", "Greed", "Flattery",
+            ),
         ),
     ),
     # THE SINS DOZEN (CANON §The Sins Dozen) — the FIFTH Dozen, System

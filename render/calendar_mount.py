@@ -113,7 +113,22 @@ def calendar_mount_mark_height(mount: str, radius: float) -> float:
     return 2 * radius * calendar_mounts.CALENDAR_MOUNT_MARK_SCALE / per_wedge
 
 
-def calendar_mount_entries(mount: str) -> tuple[tuple[str, Path | None], ...]:
+def calendar_mount_face(mount: str, daylight: bool = True):
+    """WHICH depiction of a mount is on the dial right now.
+
+    A roster with a `paint` face is ONE theme in two depictions (the
+    Virtue Wheel: a virtue and its vice share one seat). The light face
+    holds the day, the paint face the night — the SAME
+    `TickState.is_daylight` the centre seat and the Dyad's Ninth read,
+    so the whole instrument switches on one signal rather than three.
+    Every other roster has no paint face and ignores the flag."""
+    entry = calendar_mounts.CALENDAR_MOUNTS[mount]
+    return entry if daylight or entry.paint is None else entry.paint
+
+
+def calendar_mount_entries(
+    mount: str, daylight: bool = True,
+) -> tuple[tuple[str, Path | None], ...]:
     """A mount set's (display_name, art_path_or_None) pairs in SEAT
     ORDER — twelve of them for a Dozen, twenty-four for a 24-set. Every
     field comes from the roster's own `calendar_mounts.CALENDAR_MOUNTS` entry
@@ -124,7 +139,7 @@ def calendar_mount_entries(mount: str) -> tuple[tuple[str, Path | None], ...]:
     routes the caller to the name-fallback, never a gap. `art_stems`
     covers the sets whose plates are not named for the member (the
     Slavic months are Croatian proper nouns with ASCII stems)."""
-    entry = calendar_mounts.CALENDAR_MOUNTS[mount]
+    entry = calendar_mount_face(mount, daylight)
     return tuple(
         (name, octa_slot_art(entry.art_dir, stem))
         for name, stem in zip(entry.members, entry.stems)
@@ -188,7 +203,8 @@ def _draw_calendar_mount(
     mark_height = calendar_mount_mark_height(mount, ctx.radius)
     current = calendar_mount_current_index(mount, ctx.day)
     dimmed = chinese_mount_dimmed_index(ctx.day) if mount == "chinese" else None
-    for index, (name, art) in enumerate(calendar_mount_entries(mount)):
+    for index, (name, art) in enumerate(
+        calendar_mount_entries(mount, ctx.daylight)):
         pos = dial_point(calendar_mount_angle(mount, index), mount_radius)
         if index == dimmed:
             alpha = calendar_mounts.CALENDAR_MOUNT_DIMMED_ALPHA

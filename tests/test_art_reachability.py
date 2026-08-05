@@ -161,7 +161,10 @@ def _resolved_dirs() -> set[Path]:
             add(seat)
             add(seat.parent / "colored")
     for mount in calendar_mounts.CALENDAR_MOUNTS.values():
-        add(_ASSETS / "calendars" / mount.art_dir)
+        # a two-depiction wheel carries its dark face's plates too
+        for face in (mount, mount.paint):
+            if face is not None:
+                add(_ASSETS / "calendars" / face.art_dir)
     for table in (constants.ZODIAC_STYLE_ART_DIRS,
                   constants.CHINESE_STYLE_ART_DIRS):
         for rel in table.values():

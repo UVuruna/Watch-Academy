@@ -625,6 +625,18 @@ class Compositor:
         self.refresh_composites()
         self._cache.flush()
 
+    def _two_faced_mount(self, tick: TickState) -> bool | None:
+        """The daylight state, but ONLY while a two-depiction mount is
+        the one riding the wedges — otherwise None, so the composite key
+        stays purely daily (owner 2026-07-29's deletion of the lit wedge
+        is not undone by this)."""
+        if self._skin.pointer != "calendar":
+            return None
+        mount = calendar_mounts.CALENDAR_MOUNTS.get(self._skin.calendar_mount)
+        if mount is None or mount.paint is None:
+            return None
+        return tick.is_daylight
+
     def _rotation(self) -> float:
         """Star/Aura/Umbra/slot rotation: solar offset, or 0 upright."""
         return self._day.star_rotation if self._skin.solar_rotation else 0.0
@@ -647,7 +659,12 @@ class Compositor:
         # "Composite rebuild" stays flat). The Calendar's lit wedge used
         # to be the ONE intraday term in this key; deleting it (owner
         # 2026-07-29) makes the composite purely DAILY again.
-        key = (round(size * dpr), self._day.cache_key)
+        # ONE intraday term survives, and only when it is real: a mount
+        # with a PAINT face (the Virtue Wheel) shows its light reading by
+        # day and its dark one by night, so its cached segment must
+        # rebuild when the sky turns. Every other configuration keys
+        # purely on the day, exactly as the lit-wedge deletion left it.
+        key = (round(size * dpr), self._day.cache_key, self._two_faced_mount(tick))
         if self._composite_key != key:
             self._composites = [None] * len(self._cached_groups)
             self._composite_key = key
@@ -659,6 +676,7 @@ class Compositor:
         overhang = size * defaults.dial_window_margin_fraction(self._skin)
         ctx = RenderContext(
             skin=self._skin, day=self._day, tick=tick,
+            daylight=tick.is_daylight,
             radius=size / 2, cache=self._cache, dpr=dpr,
             rotation=self._rotation(), hovered=self._hovered,
             reveal_active=reveal, archetype_lit=archetype_lit,
@@ -1232,7 +1250,10 @@ class Compositor:
         # see render.slot_layout.slot_layout) — is its OWN hit target,
         # checked first; a showing 13th's hit disc mirrors the DRAWN
         # size exactly (`CenterBodyLayer._draw_thirteenth`).
-        thirteenth = active_thirteenth(self._skin, self._day)
+        thirteenth = active_thirteenth(
+            self._skin, self._day,
+            self._last_tick.is_daylight if self._last_tick is not None else True,
+        )
         if thirteenth is not None and hit(
             QPointF(0.0, 0.0),
             radius * weekday.center_scale
@@ -1869,7 +1890,8 @@ class Compositor:
         graceful guard)."""
         if self._day is None:
             return None
-        return active_thirteenth(self._skin, self._day)
+        daylight = self._last_tick.is_daylight if self._last_tick is not None else True
+        return active_thirteenth(self._skin, self._day, daylight)
 
     def _thirteenth_tooltip(self, key: str) -> str:
         """THE BLUE MOON LAW's 13th (owner overrule, CORRECTED
@@ -3115,10 +3137,24 @@ class Compositor:
         above."""
         from render.calendar_mount import calendar_mount_entries
 
-        name, art = calendar_mount_entries(mount)[index]
-        return _hover_badge(art) + _centered_html(
-            f"<b>{html.escape(self._tr(name))}</b>"
-        )
+        daylight = self._last_tick.is_daylight if self._last_tick is not None else True
+        name, art = calendar_mount_entries(mount, daylight)[index]
+        # A TWO-DEPICTION seat names BOTH faces (owner ruling 2026-08-05):
+        # the dial can only show one at a time, so the hover is where a
+        # vice is read at noon. The SHOWN face leads, its opposite follows.
+        other = calendar_mounts.CALENDAR_MOUNTS[mount].paint
+        if other is not None:
+            opposite = (
+                other.members[index] if daylight
+                else calendar_mounts.CALENDAR_MOUNTS[mount].members[index]
+            )
+            title = (
+                f"<b>{html.escape(self._tr(name))}</b>"
+                f" · {html.escape(self._tr(opposite))}"
+            )
+        else:
+            title = f"<b>{html.escape(self._tr(name))}</b>"
+        return _hover_badge(art) + _centered_html(title)
 
     def _calendar_mount_tooltip(self, point: QPointF, radius: float) -> str | None:
         """The mounted set's seat under the cursor (DESIGN ZODIAC law,
@@ -3308,6 +3344,8 @@ class Compositor:
         painter.translate(size / 2 + overhang, size / 2 + overhang)
         ctx = RenderContext(
             skin=self._skin, day=self._day, tick=None,
+            daylight=(self._last_tick.is_daylight
+                      if self._last_tick is not None else True),
             radius=size / 2, cache=self._cache, dpr=dpr,
             rotation=self._rotation(), hovered=None,
             reveal_active=False, archetype_lit=None,

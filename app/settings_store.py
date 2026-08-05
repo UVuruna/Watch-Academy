@@ -435,6 +435,8 @@ class SettingsStore:
             # shim (Rule #6 governs code, not files already on disk).
             if raw.get("palette_style") in RETIRED_SLOTS:
                 raw["palette_style"] = RETIRED_SLOTS[raw["palette_style"]]
+            if raw.get("calendar_mount") in MERGED_MOUNTS:
+                raw["calendar_mount"] = MERGED_MOUNTS[raw["calendar_mount"]]
             if isinstance(raw.get("palettes"), dict):
                 raw["palettes"] = {
                     _migrate_palette_key(key): hues
@@ -931,6 +933,14 @@ def _load_hex(raw: dict, key: str) -> str | None:
 # their positional successors. Read by the settings migration above —
 # one table, so a stored file and a stored palette key cannot disagree.
 RETIRED_SLOTS = {"paint": "primary", "light": "secondary", "cube": "tertiary"}
+
+# Calendar mounts that MERGED into another (owner ruling 2026-08-05): the
+# Vices are the Virtue Wheel's own paint face, one theme in two
+# depictions, so a settings file that still selects the retired key lands
+# on the wheel that absorbed it instead of failing validation and
+# offering the user a reset. The documented external-data migration
+# pattern — never a Rule-#6 shim.
+MERGED_MOUNTS = {"vices": "virtues"}
 
 
 def _migrate_palette_key(key: str) -> str:

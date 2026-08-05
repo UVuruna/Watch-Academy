@@ -23,11 +23,11 @@ Layer: config — pure, no Qt, no wall clock.
   registered 12-sets.
 - **THE CALENDAR MOUNT REGISTRY** — `CalendarMount` (a `NamedTuple`:
   `title`, `system` "A"/"B", `members`, `art_dir`, `centre`, optional
-  `art_stems`, optional `follows`), `almanac_seat_order(by_month)` (the
+  `art_stems`, optional `follows`, optional `paint` — the roster's DARK DEPICTION, a whole mount of its own on the same twelve seats), `almanac_seat_order(by_month)` (the
   June-first rotation every month-keyed mount shares), `EMOTIONS_
   DOZEN`, and `CALENDAR_MOUNTS` — the ONE dict of every roster that may
   ride the twelve wedges: `zodiac`, `almanac`, `months` (Slavic),
-  `chinese`, `emotions`, `olympians`, `apostles`, `virtues`, `vices`,
+  `chinese`, `emotions`, `olympians`, `apostles`, `virtues` (whose `paint` face is the Vices — one theme in two depictions, owner ruling 2026-08-05),
   `sins`. `CALENDAR_MOUNT_MODES` derives the legal `Settings.
   calendar_mount` values from it.
 - **Mount rendering geometry** — `CALENDAR_MOUNT_RADIUS_FRACTION`
@@ -64,7 +64,7 @@ Systems and the Four Dozens):
   shifted 15° so their CENTERS sit on the cardinals — one CROWN (12h),
   one ROOT (24h), six opposition axes. Carries dozens defined by
   OPPOSITES (`almanac`, `months`, `chinese`, `emotions`, `virtues`,
-  `vices`, `sins`).
+  `sins`) — the Vices ride the Virtue Wheel as its `paint` face.
 
 A mount's `centre` names a `constants.THIRTEENTHS` key. Two laws
 govern whether that seat actually shows: a CALENDAR-DRIVEN centre

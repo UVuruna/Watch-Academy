@@ -44,6 +44,12 @@ class RenderContext:
                                      # Omega double-click raises every
                                      # non-active weekday body to full
                                      # opacity for REVEAL_WEEK_DURATION_S
+    daylight: bool = True            # is the sun up on the traveled moment?
+                                     # A DAY-scale fact, so a CACHED layer may
+                                     # know it even though `tick` is None
+                                     # there — the Virtue Wheel's two
+                                     # depictions turn on it (owner 2026-08-05)
+                                     # and the composite key carries it.
     archetype_lit: int | None = None  # Archetype mode (owner 2026-07-16):
 
 
