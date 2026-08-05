@@ -32,6 +32,7 @@ their outputs through the render compositor.
 | `ui_style.py` | Standard | the shared vivid gradient-pill button styling — [about](__about/ui_style.md) |
 | `encyclopedia/` | — | the article browser, on three levels — [Encyclopedia (subfolder)](encyclopedia/___encyclopedia.md) |
 | `settings_dialog/` | — | the M6 settings window, one mixin per nav section — [Settings Dialog (subfolder)](settings_dialog/___settings_dialog.md) |
+| `watch_face/` | — | the consolidated Watch Face window (Phase ①+②) — [Watch Face (subfolder)](watch_face/___watch_face.md) |
 
 ## Connections
 

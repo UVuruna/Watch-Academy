@@ -54,6 +54,7 @@ TRIVIAL = frozenset({
     "render/__init__.py",
     "render/layers/__init__.py",
     "skins/__init__.py",
+    "app/watch_face/__init__.py",
 })
 
 # ALGORITHMIC — a real algorithm, a GUI window/widget, a config/data
@@ -92,6 +93,13 @@ FLOW_REQUIRED = frozenset({
     "app/theme.py",
     "app/time_travel.py",
     "app/warm.py",
+    "app/watch_face/hands.py",
+    "app/watch_face/pointer.py",
+    "app/watch_face/ring.py",
+    "app/watch_face/size.py",
+    "app/watch_face/thumbs.py",
+    "app/watch_face/umbra_aura.py",
+    "app/watch_face/window.py",
     "app/weekday_theme_grid.py",
     "app/widget.py",
     "config/archetypes.py",
