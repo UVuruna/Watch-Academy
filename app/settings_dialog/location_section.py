@@ -270,7 +270,7 @@ class _LocationSectionMixin:
             self._results.hide()
             return
         row_height = self._results.sizeHintForRow(0)
-        self._results.setFixedHeight(min(120, rows * row_height + 10))
+        self._results.setFixedHeight(min(120, rows * row_height + 10))  # layout-law: exempt - live-search dropdown computed from its rows; scrolls only past 120px of results
         self._results.show()
 
     def _pick_result(self, item: QListWidgetItem) -> None:

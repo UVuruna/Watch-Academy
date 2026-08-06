@@ -26,6 +26,9 @@ TESTS_DIR = Path(__file__).resolve().parent
 FAST_GUARDS = (
     "test_structure_law.py",
     "test_config_sections.py",
+    # THE SPACE & LEGIBILITY LAW, static half — a grep over GUI sources,
+    # costs nothing, belongs where the damage is done.
+    "test_layout_law.py",
 )
 # THE DOCS LAW walks every .md in the project — still fast, but it only
 # needs to hold when the session tries to END.
@@ -36,6 +39,10 @@ FULL_GUARDS = FAST_GUARDS + (
     # 2026-08-05). It walks the tree and imports config, so it runs at
     # the session's END rather than after every edit.
     "test_art_reachability.py",
+    # THE SPACE & LEGIBILITY LAW, runtime half — opens every registered
+    # window offscreen and measures it (plus the DESIGN REVIEW shots).
+    # Builds a QApplication, so it runs at the session's END only.
+    "test_layout_audit.py",
 )
 
 

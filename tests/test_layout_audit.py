@@ -1,270 +1,478 @@
-"""THE SPACE & LEGIBILITY LAW — the audit (rules/GUI.md).
+"""THE SPACE & LEGIBILITY LAW — the runtime audit (rules/GUI.md).
 
-Three conditions, checked on a REAL constructed window at its declared
-minimum AND larger:
+Expanded 2026-08-06 (owner order, after the Watch Face rework shipped a
+window whose sections overflow even a 4K screen): the registry now holds
+EVERY top-level window of the project, the checks are the reference set
+from Remote User's audit (OVERLAP and ITEM CUT included — sizes can all
+be green while two cells are painted over each other), and every window
+is screenshotted at its minimum for the DESIGN REVIEW gate
+(`.claude/shots/`, graded >= 8/10 in `.claude/layout-proof.md`).
 
-1. **Nothing clipped** — every visible child's geometry lies inside its
-   parent's contents rect.
-2. **No text elided** — every visible `QLabel` that carries text is at
-   least as wide as the text it must show.
-3. **No scrollbar over empty space** — a visible scrollbar is legal only
-   when the content genuinely exceeds the viewport in that same axis. A
-   bar shown while the viewport still has room is the exact defect the
-   law names.
+Checked, on a REAL constructed window at its declared minimum AND larger:
 
-Headless (QT_QPA_PLATFORM=offscreen). Offscreen Qt lays widgets out for
-real — geometries, size hints and scrollbar ranges are all computed —
-so the measurements below are the same ones a visible window would give.
+  A. CLIPPED      — a widget got less room than it minimally needs
+  B. ELIDED       — text does not fit its own element
+  C. SCROLL+SLACK — something scrolls while a spacer in the same window
+                    holds unused space; and a visible bar with an empty
+                    range (a bar over content that already fits)
+  D. ITEM CUT     — a list/table row wider than the column it sits in
+                    (item views truncate silently; items are not widgets)
+  E. OVERLAP      — two cells of one layout drawn on the same pixels
+
+plus the two preconditions the law puts on every window:
+
+  - a DECLARED minimum size, COMPUTED from real content, and
+  - that minimum FITS THE SCREEN FLOOR 1280x720 — a window demanding a
+    screen the user does not have is the absurd-minimum bug; the answer
+    is REFLOW, never widen (`.claude/layout-frame.json` may raise the
+    floor, with a written reason).
+
+Windows NOT in the registry, and why:
+  - ClockWidget — the frameless transparent dial itself; its size is the
+    user-chosen dial diameter plus a computed margin, there is no text
+    layout to starve (hover text lives in LegendPopup, which IS audited).
+  - _EnlargeDialog (observatory) — a child that fits one chart to the
+    screen; it holds exactly one stretched chart and no prose.
+  - FastTravelFlash — a transient frameless flash overlay, shown for
+    milliseconds during a jump; nothing on it is read.
+
+The platform: native when a desktop exists (real fonts, real DPI — the
+Remote User lesson: offscreen's substitute fonts measured a different
+window than the one the owner photographed), offscreen as the headless
+fallback. Windows are shown with WA_DontShowOnScreen, so a guard run
+never flashes windows across the owner's screen.
 """
 
-import os
+from __future__ import annotations
 
-os.environ.setdefault("QT_QPA_PLATFORM", "offscreen")
+import json
+import math
+import os
+import sys
+from dataclasses import replace
+from pathlib import Path
 
 import pytest
+from PySide6.QtCore import QPoint, QSize, Qt
 from PySide6.QtWidgets import (
     QAbstractScrollArea,
     QApplication,
+    QCheckBox,
+    QHeaderView,
     QLabel,
+    QLayout,
+    QLineEdit,
+    QListWidget,
+    QPushButton,
+    QSpacerItem,
+    QTableWidget,
+    QWidget,
 )
 
-from app.encyclopedia.dialog import EncyclopediaDialog
-from config import encyclopedia_ui
+PROJECT_ROOT = Path(__file__).resolve().parents[1]
+if str(PROJECT_ROOT) not in sys.path:      # standalone report mode (main())
+    sys.path.insert(0, str(PROJECT_ROOT))
 
-#: The sizes every window is audited at: its own minimum, and a larger
-#: one — the law binds "at the declared minimum AND larger".
+# px of slack tolerated before a spacer counts as "unused space"
+SLACK_TOLERANCE = 24
+
+# px of padding assumed between a framed element's frame and its text
+TEXT_PADDING = 8
+
+# The screen every window must survive. Raising it needs
+# `.claude/layout-frame.json` = {"width": W, "height": H, "reason": "..."}.
+_FRAME_FILE = PROJECT_ROOT / ".claude" / "layout-frame.json"
+FLOOR_WIDTH, FLOOR_HEIGHT = 1280, 720
+if _FRAME_FILE.is_file():
+    _frame = json.loads(_FRAME_FILE.read_text(encoding="utf-8"))
+    if _frame.get("reason"):
+        FLOOR_WIDTH = int(_frame.get("width", FLOOR_WIDTH))
+        FLOOR_HEIGHT = int(_frame.get("height", FLOOR_HEIGHT))
+
+# The DESIGN REVIEW shots: one per window state, at the declared minimum.
+SHOT_DIR = PROJECT_ROOT / ".claude" / "shots"
+
+#: The larger size every window is audited at besides its minimum.
 _LARGER = (1400, 900)
 
 
 @pytest.fixture(scope="module")
 def app():
-    return QApplication.instance() or QApplication([])
+    return _make_app()
 
 
-def _settle(dialog, width: int, height: int) -> None:
-    dialog.resize(width, height)
-    dialog.show()
-    QApplication.processEvents()
-    # A second pass: the first one installs the layout, the second lets
-    # the scroll areas react to the geometry it produced.
-    QApplication.processEvents()
-
-
-def _is_scrolled_content(widget) -> bool:
-    """A scroll area's inner widget is SUPPOSED to exceed its viewport —
-    that is what makes it scroll, and the content stays reachable. Such
-    a widget is governed by `_scrollbar_over_empty_space` instead. Only
-    genuinely unreachable overflow counts as clipping."""
-    parent = widget.parentWidget()
-    if parent is None:
-        return False
-    grandparent = parent.parentWidget()
-    return isinstance(grandparent, QAbstractScrollArea) and (
-        grandparent.viewport() is parent
-    )
-
-
-def _clipped(root) -> list[str]:
-    faults = []
-    for child in root.findChildren(object):
-        if not hasattr(child, "geometry") or not hasattr(child, "isVisible"):
-            continue
-        if not child.isVisible():
-            continue
-        parent = child.parentWidget()
-        if parent is None or _is_scrolled_content(child):
-            continue
-        area = parent.contentsRect()
-        box = child.geometry()
-        if not area.contains(box) and box.width() and box.height():
-            faults.append(
-                f"{type(child).__name__} {box.getRect()} escapes "
-                f"{type(parent).__name__} {area.getRect()}"
-            )
-    return faults
-
-
-def _elided(root) -> list[str]:
-    faults = []
-    for label in root.findChildren(QLabel):
-        if not label.isVisible() or not label.text().strip():
-            continue
-        if label.wordWrap() or label.textFormat().name == "RichText":
-            continue                      # wrapping labels grow downward
-        needed = label.sizeHint().width()
-        if needed > label.width() + 1:
-            faults.append(
-                f"QLabel {label.text()[:40]!r} needs {needed}px, "
-                f"has {label.width()}px"
-            )
-    return faults
-
-
-def _scrollbar_over_empty_space(root) -> list[str]:
-    faults = []
-    for area in root.findChildren(QAbstractScrollArea):
-        if not area.isVisible():
-            continue
-        viewport = area.viewport()
-        for bar, extent, axis in (
-            (area.verticalScrollBar(), viewport.height(), "vertical"),
-            (area.horizontalScrollBar(), viewport.width(), "horizontal"),
-        ):
-            if not bar.isVisible():
-                continue
-            # A visible bar whose range is empty means it is showing over
-            # content that already fits — unused space with a bar on it.
-            if bar.maximum() <= bar.minimum():
-                faults.append(
-                    f"{type(area).__name__}: {axis} scrollbar visible with "
-                    f"no range while the viewport is {extent}px"
-                )
-    return faults
-
-
-def _audit(dialog) -> list[str]:
-    return _clipped(dialog) + _elided(dialog) + _scrollbar_over_empty_space(dialog)
-
-
-@pytest.fixture
-def encyclopedia(app):
-    """The session zoom is a MODULE-LEVEL global that survives a window
-    close by design (Ctrl+MouseWheel, "persisted for the session at
-    least"), so whatever ran before this test would otherwise decide
-    what the audit measures. Two sibling suites leave it at 2.5, and
-    that is how the zoom finding below was found in the first place —
-    but an audit whose subject depends on test ORDER measures nothing.
-    Pinned to 1.0 here and restored afterwards."""
-    from app.encyclopedia import dialog as dialog_module
-
-    previous = dialog_module._session_zoom
-    dialog_module._session_zoom = 1.0
-    dialog = EncyclopediaDialog()
-    yield dialog
-    dialog.close()
-    dialog_module._session_zoom = previous
-
-
-def test_the_encyclopedia_cards_outgrow_their_box_when_zoomed(app):
-    """A REAL, PRE-EXISTING defect this session's audit uncovered, kept
-    visible rather than quietly skipped (owner report pending).
-
-    `app/encyclopedia/cards.py` `CardGrid.fit` grows the FONT with the
-    session zoom but clamps the CARD to the unzoomed width:
-
-        width = max(MIN, min(round(width * zoom), width))   # zoom>=1 -> width
-        font_px = ... round(width * CARD_FONT_RATIO * zoom) ...
-
-    So at any zoom above 1.0, with the window at its own minimum width,
-    the home cards' subtitles need more room than the card has and get
-    cut — exactly what THE SPACE & LEGIBILITY LAW forbids. At 1400px and
-    wider it is fine at every zoom, so this is minimum-width-only.
-
-    This test PINS THE CURRENT BEHAVIOUR so the finding cannot be lost.
-    When the owner picks a remedy (the law's order: free space, reflow to
-    fewer columns, raised minimum, scroll), this test flips to asserting
-    no faults."""
-    from app.encyclopedia import dialog as dialog_module
-
-    previous = dialog_module._session_zoom
+def _make_app() -> QApplication:
+    """Native platform first (real fonts, real DPI), offscreen only when
+    there is no desktop to talk to."""
+    existing = QApplication.instance()
+    if existing is not None:
+        return existing
     try:
-        dialog_module._session_zoom = 2.0
-        dialog = EncyclopediaDialog()
-        _settle(dialog, *_minimum(dialog))
-        cramped = _elided(dialog)
-        _settle(dialog, *_LARGER)
-        roomy = _elided(dialog)
-        dialog.close()
-    finally:
-        dialog_module._session_zoom = previous
-
-    assert cramped, "the zoom defect is gone — flip this test to assert []"
-    assert roomy == [], "wider than the minimum it must still hold"
+        return QApplication([])
+    except Exception:
+        os.environ["QT_QPA_PLATFORM"] = "offscreen"
+        return QApplication([])
 
 
-def _minimum(dialog) -> tuple[int, int]:
-    return dialog.minimumWidth(), dialog.minimumHeight()
+def _settle(window: QWidget, width: int, height: int) -> None:
+    window.setAttribute(Qt.WidgetAttribute.WA_DontShowOnScreen, True)
+    window.resize(width, height)
+    window.show()
+    QApplication.processEvents()
+    # A second pass: the first installs the layout, the second lets the
+    # scroll areas react to the geometry it produced.
+    QApplication.processEvents()
 
 
-def test_the_audit_actually_inspects_something(encyclopedia):
-    """A green audit that measured nothing is worse than no audit. Pin
-    that the window really does present labels and scroll areas to the
-    three checks above."""
-    labels, areas, widgets = 0, 0, 0
-    # Counted across the SAME screens the audit walks — Home carries no
-    # scroll area at all, so measuring only there would leave the
-    # scrollbar check untested and silently green.
-    for show in (
-        encyclopedia.show_home,
-        lambda: encyclopedia.navigate_to("instrument", 0),
-    ):
-        show()
-        _settle(encyclopedia, *_minimum(encyclopedia))
-        labels += len([
-            label for label in encyclopedia.findChildren(QLabel)
-            if label.isVisible() and label.text().strip()
-        ])
-        areas += len([
-            area for area in encyclopedia.findChildren(QAbstractScrollArea)
-            if area.isVisible()
-        ])
-        widgets += len([
-            child for child in encyclopedia.findChildren(object)
-            if hasattr(child, "geometry") and hasattr(child, "isVisible")
-            and child.isVisible()
-        ])
-    assert labels, "no visible text — the elision check would be vacuous"
-    assert areas, "no scroll area — the scrollbar check would be vacuous"
-    assert widgets > 10, f"only {widgets} widgets laid out"
+# --- the checks (reference set — Remote User's audit) -----------------------
 
 
-def test_encyclopedia_holds_at_its_declared_minimum(encyclopedia):
-    width, height = _minimum(encyclopedia)
-    assert height == encyclopedia_ui.ENCYCLOPEDIA_MIN_HEIGHT_PX
-    _settle(encyclopedia, width, height)
-
-    assert _audit(encyclopedia) == []
-
-
-def test_encyclopedia_holds_larger_than_its_minimum(encyclopedia):
-    _settle(encyclopedia, *_LARGER)
-
-    assert _audit(encyclopedia) == []
+def _walk(window: QWidget):
+    yield window
+    for child in window.findChildren(QWidget):
+        if child.isVisible():
+            yield child
 
 
-@pytest.fixture
-def settings_dialog(app):
-    """The Settings window, built the way the controller builds it."""
+def check_declared_minimum(window: QWidget) -> list[str]:
+    minimum = window.minimumSize()
+    if minimum.width() <= 0 or minimum.height() <= 0:
+        return ["no declared minimum size - the law requires one, COMPUTED "
+                "from the longest real content (setMinimumSize)"]
+    if minimum.width() > FLOOR_WIDTH or minimum.height() > FLOOR_HEIGHT:
+        return [f"ABSURD MINIMUM {minimum.width()}x{minimum.height()} - it "
+                f"does not fit the screen floor {FLOOR_WIDTH}x{FLOOR_HEIGHT}: "
+                "the window demands a screen the user does not have. REFLOW "
+                "it (ladder step 2); widening your way out is the bug itself"]
+    return []
+
+
+def _layout_cells(layout: QLayout, path: str = ""):
+    """Every cell a layout hands out, recursing into nested layouts —
+    a row inside a column is where colliding siblings actually live."""
+    for i in range(layout.count()):
+        item = layout.itemAt(i)
+        if item is None:
+            continue
+        child = item.layout()
+        if child is not None:
+            yield from _layout_cells(child, f"{path}/layout{i}")
+            continue
+        widget = item.widget()
+        if widget is None or widget.isHidden():
+            continue
+        name = widget.objectName() or widget.__class__.__name__
+        yield f"{path}/{name}", item.geometry()
+
+
+def check_overlap(window: QWidget) -> list[str]:
+    """E. OVERLAP — every other check asks whether an element got its own
+    SIZE; this one asks where it was PUT. Qt does not clip a layout short
+    of space — it overlaps it, so sizes stay green while two cells paint
+    the same pixels."""
+    problems = []
+    for widget in _walk(window):
+        layout = widget.layout()
+        if layout is None:
+            continue
+        cells = list(_layout_cells(layout))
+        for i, (name_a, rect_a) in enumerate(cells):
+            for name_b, rect_b in cells[i + 1:]:
+                if rect_a.intersects(rect_b):
+                    hit = rect_a.intersected(rect_b)
+                    problems.append(
+                        f"OVERLAP in "
+                        f"{widget.objectName() or widget.__class__.__name__}: "
+                        f"'{name_a}' {rect_a.x()},{rect_a.y()} "
+                        f"{rect_a.width()}x{rect_a.height()} is drawn over "
+                        f"'{name_b}' {rect_b.x()},{rect_b.y()} "
+                        f"{rect_b.width()}x{rect_b.height()} "
+                        f"({hit.width()}x{hit.height()} px shared)")
+    return problems
+
+
+def check_clipping(window: QWidget) -> list[str]:
+    problems = []
+    for widget in _walk(window):
+        if isinstance(widget, QHeaderView):
+            # Qt returns an orientation-blind SQUARE for a header's
+            # minimumSizeHint — only the header's own axis is meaningful.
+            hint = widget.sizeHint()
+            if widget.orientation() == Qt.Orientation.Horizontal:
+                need = QSize(widget.width(),
+                             max(hint.height(), widget.fontMetrics().height()))
+            else:
+                need = QSize(max(hint.width(), 8), widget.height())
+        elif (widget.minimumSize() == widget.maximumSize()
+                and widget.minimumSize().width() > 0):
+            # A deliberately FIXED widget (setFixedSize: min == max — the
+            # 22px round color swatches). Qt's minimumSizeHint for e.g. a
+            # QPushButton quotes text margins the swatch never uses; the
+            # static law's exemption line governs these, and the elision/
+            # overlap checks still see them.
+            continue
+        else:
+            need = widget.minimumSizeHint()
+            layout = widget.layout()
+            if layout is not None and layout.hasHeightForWidth():
+                # A container of WRAPPING children has no single minimum
+                # height — heightForWidth at the width it ACTUALLY has is
+                # the honest question.
+                need = QSize(
+                    need.width(),
+                    max(need.height(), layout.heightForWidth(widget.width())))
+        if need.width() > widget.width() or need.height() > widget.height():
+            problems.append(
+                f"CLIPPED {widget.__class__.__name__} "
+                f"'{widget.objectName() or '-'}': has "
+                f"{widget.width()}x{widget.height()}, needs at least "
+                f"{need.width()}x{need.height()}")
+    return problems
+
+
+def _visible_text(widget: QWidget) -> str:
+    if isinstance(widget, (QLabel, QPushButton, QCheckBox)):
+        return widget.text()
+    if isinstance(widget, QLineEdit):
+        return widget.text() or widget.placeholderText()
+    return ""
+
+
+def check_elision(window: QWidget) -> list[str]:
+    problems = []
+    for widget in _walk(window):
+        text = _visible_text(widget)
+        if not text:
+            continue
+        metrics = widget.fontMetrics()
+        # A QLabel paints straight into its contentsRect; framed controls
+        # lose their frame plus padding.
+        padding = 0 if isinstance(widget, QLabel) else TEXT_PADDING
+        available = widget.contentsRect().width() - padding
+        if isinstance(widget, QLabel) and widget.wordWrap():
+            wanted = metrics.boundingRect(
+                0, 0, max(available, 1), 10_000, 0x1000, text).height()
+            if wanted > widget.contentsRect().height():
+                problems.append(
+                    f"ELIDED (wrapped text taller than its element) "
+                    f"{widget.__class__.__name__} '{text[:40]}': needs "
+                    f"{wanted}px height, has {widget.contentsRect().height()}")
+            continue
+        wanted = metrics.horizontalAdvance(text)
+        if wanted > available:
+            problems.append(
+                f"ELIDED {widget.__class__.__name__} '{text[:40]}': text "
+                f"needs {wanted}px, element offers {available}px")
+    return problems
+
+
+def check_item_views(window: QWidget) -> list[str]:
+    """D. ITEM CUT — item views truncate silently; an item is not a
+    QWidget, so the widget checks above never see its text. The needed
+    width is Qt's OWN sizeHintForColumn, never a hand-rolled estimate."""
+    problems = []
+    for widget in _walk(window):
+        if isinstance(widget, QTableWidget):
+            for col in range(widget.columnCount()):
+                wanted = widget.sizeHintForColumn(col)
+                if wanted > widget.columnWidth(col):
+                    texts = [widget.item(r, col).text()
+                             for r in range(widget.rowCount())
+                             if widget.item(r, col) is not None]
+                    longest = max(texts, key=len, default="")
+                    problems.append(
+                        f"ITEM CUT {widget.__class__.__name__} column {col} "
+                        f"(longest '{longest[:40]}'): needs {wanted}px, "
+                        f"column offers {widget.columnWidth(col)}px")
+        elif isinstance(widget, QListWidget) and widget.count():
+            wanted = widget.sizeHintForColumn(0)
+            if wanted > widget.viewport().width():
+                longest = max(
+                    (widget.item(r).text() for r in range(widget.count())),
+                    key=len, default="")
+                problems.append(
+                    f"ITEM CUT {widget.__class__.__name__} "
+                    f"'{widget.objectName() or '-'}' "
+                    f"(longest '{longest[:40]}'): needs {wanted}px, list "
+                    f"offers {widget.viewport().width()}px")
+    return problems
+
+
+def _ancestor_spacer_slack(widget: QWidget, window: QWidget,
+                           vertical: bool) -> list[str]:
+    """Spacers between `widget` and `window` that were handed real space
+    ON THE SCROLLED AXIS — a 600x0 spacer holds no vertical space, so it
+    is no excuse for a vertical scrollbar and no fault beside one."""
+    slack = []
+    node = widget.parentWidget()
+    while node is not None:
+        layout = node.layout()
+        if layout is not None:
+            for index in range(layout.count()):
+                item = layout.itemAt(index)
+                if isinstance(item, QSpacerItem):
+                    geometry = item.geometry()
+                    held = geometry.height() if vertical else geometry.width()
+                    if held > SLACK_TOLERANCE:
+                        slack.append(
+                            f"{node.__class__.__name__}"
+                            f"'{node.objectName() or '-'}' holds a spacer "
+                            f"of {geometry.width()}x{geometry.height()}px")
+        if node is window:
+            break
+        node = node.parentWidget()
+    return slack
+
+
+def check_scroll_with_free_space(window: QWidget) -> list[str]:
+    problems = []
+    for widget in _walk(window):
+        if not isinstance(widget, QAbstractScrollArea):
+            continue
+        for axis, vertical, bar in (
+                ("vertically", True, widget.verticalScrollBar()),
+                ("horizontally", False, widget.horizontalScrollBar())):
+            if bar is None:
+                continue
+            if bar.isVisible() and bar.maximum() <= bar.minimum():
+                problems.append(
+                    f"SCROLLBAR OVER FITTING CONTENT "
+                    f"{widget.__class__.__name__} "
+                    f"'{widget.objectName() or '-'}': {axis} bar visible "
+                    "with an empty range - the content already fits")
+                continue
+            if bar.maximum() <= 0:
+                continue
+            slack = _ancestor_spacer_slack(widget, window, vertical)
+            if slack:
+                problems.append(
+                    f"SCROLL+SLACK {widget.__class__.__name__} "
+                    f"'{widget.objectName() or '-'}' scrolls {axis} while "
+                    f"the same window holds unused space: "
+                    + "; ".join(slack)
+                    + " - ladder step 1: the starving element takes the "
+                      "free space before any scrollbar appears")
+    return problems
+
+
+def _audit(window: QWidget) -> list[str]:
+    return (check_overlap(window)
+            + check_clipping(window)
+            + check_elision(window)
+            + check_item_views(window)
+            + check_scroll_with_free_space(window))
+
+
+# --- the window registry ----------------------------------------------------
+#
+# Every factory builds its window in the FULLEST realistic state it will
+# ever show — an empty window passes any audit and proves nothing.
+
+
+def _noop(*_args, **_kwargs) -> None:
+    return None
+
+
+class _AuditSetters(dict):
+    """The Watch Face `setters` contract without a live controller: every
+    unknown key is a no-op callable; the three DATA PROVIDERS the section
+    builders actually read are seeded with real values below."""
+
+    def __missing__(self, _key):
+        return _noop
+
+
+def _audit_settings():
+    from app.settings_store import Settings
+
+    # pointer="calendar" is the FULLEST Themes & Slots section: only the
+    # Calendar pointer mounts a roster on its wedges, so this state shows
+    # every group the section can hold.
+    return replace(Settings(), pointer="calendar")
+
+
+def _audit_setters(settings) -> _AuditSetters:
+    from app.controller import build_skin
+    from app.slot_descriptor import SlotDescriptor
+
+    skin = build_skin(settings)
+    descriptors = (
+        SlotDescriptor(
+            index=1, title="1st Slot",
+            mode_value=settings.weekday_slot,
+            style_value=settings.day_slot_style,
+            theme_value=settings.weekday_theme,
+            roster_value=settings.weekday_roster,
+            names_value=settings.show_weekday_names,
+            enabled_value=settings.show_weekday,
+            set_mode=_noop, set_style_mode=_noop,
+            set_weekday=_noop, set_names=_noop,
+        ),
+        SlotDescriptor(
+            index=2, title="2nd Slot",
+            mode_value=settings.octa_slot,
+            style_value=settings.info_slot_style,
+            theme_value=settings.info_slot_theme,
+            roster_value=settings.info_slot_roster,
+            names_value=settings.show_info_slot_names,
+            enabled_value=settings.show_octa_slot,
+            set_mode=_noop, set_style_mode=_noop,
+            set_weekday=_noop, set_names=_noop,
+        ),
+        SlotDescriptor(
+            index=3, title="3rd Slot",
+            mode_value=settings.third_slot,
+            style_value=settings.third_slot_style,
+            theme_value=settings.third_slot_theme,
+            roster_value=settings.third_slot_roster,
+            names_value=settings.show_info_slot_names,
+            enabled_value=settings.show_third_slot,
+            set_mode=_noop, set_style_mode=_noop,
+            set_weekday=_noop, set_names=_noop,
+        ),
+    )
+    setters = _AuditSetters()
+    setters["slot_descriptors"] = lambda: descriptors
+    setters["ring_has_crown_text"] = lambda: bool(skin.ring.crown_text)
+    setters["opacity_skin_defaults"] = lambda: {
+        "star_alpha": skin.star.day_alpha,
+        "aura_day_alpha": skin.background.day_alpha,
+        "aura_twilight_alpha": skin.background.twilight_alpha,
+        "moon_transit_alpha": skin.year_marker.transit_alpha,
+        "ghost_alpha": skin.weekday_set.ghost_opacity,
+    }
+    return setters
+
+
+def make_watch_face() -> QWidget:
+    from app.watch_face.window import WatchFaceDialog
+
+    settings = _audit_settings()
+    return WatchFaceDialog(settings, _audit_setters(settings))
+
+
+def make_settings_dialog() -> QWidget:
     from app.controller import build_skin
     from app.settings_dialog.dialog import SettingsDialog
     from app.settings_store import Settings
 
     settings = Settings()
-    dialog = SettingsDialog(settings, build_skin(settings))
-    yield dialog
-    dialog.done(0)          # releases its hold on the city database
+    return SettingsDialog(settings, build_skin(settings))
 
 
-def test_settings_holds_at_its_declared_minimum(settings_dialog):
-    """This arc changed how Settings gets the 5.6 MB city database (a
-    shared, reference-counted repository). The window is audited in
-    full anyway — the law binds the window, not the diff."""
-    hint = settings_dialog.minimumSizeHint()
-    _settle(settings_dialog, hint.width(), hint.height())
+def make_encyclopedia() -> QWidget:
+    """Session zoom pinned to 1.0 — it is a module-level global two
+    sibling suites leave at 2.5, and an audit whose subject depends on
+    test ORDER measures nothing (the zoom defect itself stays pinned by
+    its own test below)."""
+    from app.encyclopedia import dialog as dialog_module
+    from app.encyclopedia.dialog import EncyclopediaDialog
 
-    assert _audit(settings_dialog) == []
-
-
-def test_settings_holds_larger_than_its_minimum(settings_dialog):
-    _settle(settings_dialog, *_LARGER)
-
-    assert _audit(settings_dialog) == []
+    dialog_module._session_zoom = 1.0
+    return EncyclopediaDialog()
 
 
-@pytest.fixture
-def observatory(app):
-    """The Observatory window. This arc swapped its bundled data for the
-    process-wide `shared_observatory`, so it is audited too."""
+def make_observatory() -> QWidget:
     from datetime import datetime
     from zoneinfo import ZoneInfo
 
@@ -275,39 +483,239 @@ def observatory(app):
 
     city = defaults.DEFAULT_CITY
     tz = ZoneInfo(city["timezone"])
-    dialog = ObservatoryDialog(
+    return ObservatoryDialog(
         datetime.now(tz),
-        astral.Observer(latitude=city["latitude"], longitude=city["longitude"]),
+        astral.Observer(latitude=city["latitude"],
+                        longitude=city["longitude"]),
         tz,
     )
-    yield dialog
-    dialog.close()
 
 
-def test_observatory_holds_at_its_declared_minimum(observatory):
-    hint = observatory.minimumSizeHint()
-    _settle(observatory, hint.width(), hint.height())
+def make_report() -> QWidget:
+    """FULLEST state: the profiling registry seeded with real-shaped rows
+    (long dotted names, spread durations) so the table, the bar chart and
+    the sparkline all carry content — an empty report measures nothing."""
+    from app.report import ReportDialog
+    from config import profiling
 
-    assert _audit(observatory) == []
+    profiling.reset()
+    for name in ("compositor.paint_full_face",
+                 "watch_manager.rebuild_day_context_after_clock_jump",
+                 "encyclopedia.warm_hover_articles",
+                 "observatory.recompute_year_charts"):
+        for _ in range(7):
+            with profiling.measure(name):
+                math.sqrt(12345.6789)
+    dialog = ReportDialog()
+    dialog._refresh()
+    return dialog
 
 
-def test_observatory_holds_larger_than_its_minimum(observatory):
-    _settle(observatory, *_LARGER)
+def make_shortcuts() -> QWidget:
+    from app.shortcuts_window import ShortcutsDialog
 
-    assert _audit(observatory) == []
+    return ShortcutsDialog()
 
 
-def test_encyclopedia_holds_on_every_screen_it_opens(encyclopedia):
-    """Home, the theme galleries and the reader are three different
-    layouts inside one window — the law binds all three, not just
-    whichever one happens to be showing."""
-    width, height = _minimum(encyclopedia)
-    for show in (
-        encyclopedia.show_home,
-        lambda: encyclopedia.navigate_to("instrument", 0),
-    ):
-        show()
-        for size in ((width, height), _LARGER):
-            _settle(encyclopedia, *size)
-            faults = _audit(encyclopedia)
-            assert faults == [], f"at {size}: {faults}"
+def make_time_travel() -> QWidget:
+    from datetime import datetime, timezone
+
+    from app.time_travel import TimeTravelDialog
+    from config import defaults
+
+    city = defaults.DEFAULT_CITY
+    return TimeTravelDialog(
+        city["latitude"], city["longitude"],
+        initial_moment=datetime(2026, 6, 20, 12, 0, tzinfo=timezone.utc),
+        coverage=(1900, 2100), core_coverage=(1600, 2400),
+        era_notation="bce_ce", show_era_suffix=True,
+        deep_pack=True, jump_callback=_noop,
+    )
+
+
+def make_legend_popup() -> QWidget:
+    """The hover legend, with a real long article blurb — its width is
+    computed from the measured text, and that computation is what gets
+    audited here."""
+    from app.legend_popup import LegendPopup
+
+    popup = LegendPopup()
+    popup.show_html(
+        "<b>Tuesday — Mars, the Red Wanderer</b><br>"
+        "The third body of the week wears the red of iron oxide and war: "
+        "a full-length hover paragraph, long enough to exercise the "
+        "measured-width path and the wrap cap both, exactly as the "
+        "longest bundled blurb does in the running dial.",
+        QPoint(0, 0),
+    )
+    return popup
+
+
+def _nav_states(window: QWidget):
+    """One state per sidebar section of a list+stack dialog — the stack
+    shows ONE page at a time, so a single-state audit would measure only
+    whichever page happens to be current."""
+    nav = window._nav_list
+    return [(nav.item(i).text(), (lambda i=i: nav.setCurrentRow(i)))
+            for i in range(nav.count())]
+
+
+def _encyclopedia_states(window: QWidget):
+    return [
+        ("Home", window.show_home),
+        ("Reader", lambda: window.navigate_to("instrument", 0)),
+    ]
+
+
+# (name, factory, states) — states(window) -> [(label, activate)] or None
+WINDOWS = (
+    ("WatchFaceDialog", make_watch_face, _nav_states),
+    ("SettingsDialog", make_settings_dialog, _nav_states),
+    ("EncyclopediaDialog", make_encyclopedia, _encyclopedia_states),
+    ("ObservatoryDialog", make_observatory, None),
+    ("ReportDialog", make_report, None),
+    ("ShortcutsDialog", make_shortcuts, None),
+    ("TimeTravelDialog", make_time_travel, None),
+    ("LegendPopup", make_legend_popup, None),
+)
+
+
+def _shot_name(label: str) -> str:
+    return "".join(c if c.isalnum() else "_" for c in label).strip("_") + ".png"
+
+
+def _effective_minimum(window: QWidget) -> tuple[int, int]:
+    """The declared minimum when there is one, else the layout's own hint
+    — the audit still MEASURES an undeclared window (and separately fails
+    it for not declaring), so the fix list carries real numbers."""
+    minimum = window.minimumSize()
+    if minimum.width() > 0 and minimum.height() > 0:
+        return minimum.width(), minimum.height()
+    hint = window.minimumSizeHint()
+    return max(hint.width(), 1), max(hint.height(), 1)
+
+
+def audit_window(name: str, factory, states) -> list[str]:
+    window: QWidget = factory()
+    window.setAttribute(Qt.WidgetAttribute.WA_DontShowOnScreen, True)
+    window.show()
+    QApplication.processEvents()
+
+    problems = [f"[{name}] {p}" for p in check_declared_minimum(window)]
+    width, height = _effective_minimum(window)
+    state_list = states(window) if states else [("", None)]
+    for label, activate in state_list:
+        if activate is not None:
+            activate()
+        full = f"{name} - {label}" if label else name
+        for size_label, w, h in (("minimum", width, height),
+                                 ("minimum+50%", int(width * 1.5),
+                                  int(height * 1.5))):
+            _settle(window, w, h)
+            problems += [f"[{full} @ {size_label} {w}x{h}] {p}"
+                         for p in _audit(window)]
+            if size_label == "minimum":
+                # The DESIGN REVIEW shot: the window at the size the
+                # grade has to hold at, written by the audit itself so
+                # the picture can never be of a different build than the
+                # one just measured.
+                SHOT_DIR.mkdir(parents=True, exist_ok=True)
+                window.grab().save(str(SHOT_DIR / _shot_name(full)), "PNG")
+
+    if hasattr(window, "done"):
+        window.done(0)      # a QDialog: releases held repositories too
+    else:
+        window.close()
+    return problems
+
+
+@pytest.mark.parametrize("name,factory,states", WINDOWS,
+                         ids=[w[0] for w in WINDOWS])
+def test_layout_audit(app, name, factory, states):
+    problems = audit_window(name, factory, states)
+    assert not problems, (
+        "THE SPACE & LEGIBILITY LAW (rules/GUI.md) - runtime audit "
+        "failed:\n  " + "\n  ".join(problems)
+        + "\nLadder: (1) the starving element takes the free space, "
+          "(2) reflow into more rows, (3) raise the window minimum, "
+          "(4) scroll only when the window is genuinely full."
+    )
+
+
+def test_the_audit_actually_inspects_something(app):
+    """A green audit that measured nothing is worse than no audit: pin
+    that the walked windows really present text, scroll areas and a
+    non-trivial widget count to the checks above."""
+    window = make_watch_face()
+    window.setAttribute(Qt.WidgetAttribute.WA_DontShowOnScreen, True)
+    labels = areas = widgets = 0
+    for label, activate in _nav_states(window):
+        activate()
+        _settle(window, *_effective_minimum(window))
+        labels += sum(1 for w in window.findChildren(QLabel)
+                      if w.isVisible() and w.text().strip())
+        areas += sum(1 for w in window.findChildren(QAbstractScrollArea)
+                     if w.isVisible())
+        widgets += sum(1 for w in window.findChildren(QWidget)
+                       if w.isVisible())
+    window.done(0)
+    assert labels, "no visible text — the elision check would be vacuous"
+    assert areas, "no scroll area — the scrollbar check would be vacuous"
+    assert widgets > 30, f"only {widgets} widgets laid out"
+
+
+def test_the_encyclopedia_cards_outgrow_their_box_when_zoomed(app):
+    """A REAL, PRE-EXISTING defect the first audit uncovered, kept
+    visible rather than quietly skipped (owner report pending).
+
+    `app/encyclopedia/cards.py` `CardGrid.fit` grows the FONT with the
+    session zoom but clamps the CARD to the unzoomed width, so at any
+    zoom above 1.0, at the minimum window width, the home cards'
+    subtitles are cut — exactly what the law forbids. This test PINS THE
+    CURRENT BEHAVIOUR so the finding cannot be lost. When the owner
+    picks a remedy (the law's order: free space, reflow to fewer
+    columns, raised minimum, scroll), it flips to asserting no faults."""
+    from app.encyclopedia import dialog as dialog_module
+    from app.encyclopedia.dialog import EncyclopediaDialog
+
+    previous = dialog_module._session_zoom
+    try:
+        dialog_module._session_zoom = 2.0
+        dialog = EncyclopediaDialog()
+        dialog.setAttribute(Qt.WidgetAttribute.WA_DontShowOnScreen, True)
+        _settle(dialog, *_effective_minimum(dialog))
+        cramped = check_elision(dialog)
+        _settle(dialog, *_LARGER)
+        roomy = check_elision(dialog)
+        dialog.close()
+    finally:
+        dialog_module._session_zoom = previous
+
+    assert cramped, "the zoom defect is gone — flip this test to assert []"
+    assert roomy == [], "wider than the minimum it must still hold"
+
+
+def main() -> int:
+    """Report mode: measure EVERY window, print every problem, never stop
+    at the first — the fix list of MIGRATE-LAYOUT.md step 4."""
+    _make_app()
+    failed = False
+    for name, factory, states in WINDOWS:
+        try:
+            problems = audit_window(name, factory, states)
+        except Exception as error:      # a factory that cannot build is a finding too
+            print(f"{name}: BROKEN FACTORY - {error!r}", file=sys.stderr)
+            failed = True
+            continue
+        if problems:
+            failed = True
+            print(f"{name}: FAIL ({len(problems)} findings)", file=sys.stderr)
+            for p in problems:
+                print("  " + p, file=sys.stderr)
+        else:
+            print(f"{name}: PASS (audited at minimum and +50%)")
+    return 1 if failed else 0
+
+
+if __name__ == "__main__":
+    sys.exit(main())

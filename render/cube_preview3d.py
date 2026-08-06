@@ -142,8 +142,8 @@ class _CubePreviewPanel(QWidget):
         """The stage is exactly `side x side`; a button row (if any)
         keeps its own natural height beneath it, and the panel's width
         is fixed to the stage so it never grows past its page."""
-        self._stage.setFixedSize(side, side)
-        self.setFixedWidth(side)
+        self._stage.setFixedSize(side, side)  # layout-law: exempt - square 3D stage, aspect fixed by design
+        self.setFixedWidth(side)  # layout-law: exempt - panel width follows the square stage above
 
 
 def _stage(gadget, model: dict, view_name: str):

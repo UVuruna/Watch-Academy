@@ -28,7 +28,7 @@ def round_swatch(
     """Paint-style color circle (owner spec): a plain filled round
     button; the active swatch wears a white ring."""
     border = "2px solid #FFFFFF" if selected else "1px solid #666"
-    chip.setFixedSize(size, size)
+    chip.setFixedSize(size, size)  # layout-law: exempt - round color swatch, square by design, no text
     chip.setStyleSheet(
         f"background-color: {hue}; border: {border};"
         f"border-radius: {size // 2}px;"
