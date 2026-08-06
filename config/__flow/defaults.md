@@ -64,11 +64,11 @@ it lives in `defaults.py`, the one module allowed to import every peer.
 
 ```mermaid
 flowchart TB
-    A["dial.RING_LETTER_RADIUS_FRACTION,\ndial.RING_LETTER_ART_SCALE,\ndial.RING_LETTER_SHADOW_RADIUS"] --> D[letter_extent]
+    A["dial.RING_JEWEL_RADIUS_FRACTION,\ndial.RING_JEWEL_ART_SCALE,\ndial.RING_JEWEL_SHADOW_RADIUS"] --> D[jewel_extent]
     B["dial.GLOW_RING_RADIUS_FRACTION,\nglow.GLOW_RADIUS_SCALE,\nskin.hover_enlarge"] --> C[glow_extent]
     E["dial.RING_CROWN_TEXT_RADIUS_FRACTION\n(only if skin.ring.crown_text)"] --> F[crown_text_extent, else 0.0]
     I["dial.RING_LIVE_CROWN, dial.CROWN_RADIUS_FRACTION,\ndial.NUMERAL_UNIT_FRACTION, dial.CROWN_NUMERAL_SIZE_FRACTION\n(only if skin.ring_name in RING_LIVE_CROWN)"] --> J[live_crown_extent, else 0.0]
-    C --> G["margin = (MAX(glow, letter, crown_text, live_crown) - 1.0) / 2\n+ DIAL_WINDOW_MARGIN_EPSILON"]
+    C --> G["margin = (MAX(glow, jewel, crown_text, live_crown) - 1.0) / 2\n+ DIAL_WINDOW_MARGIN_EPSILON"]
     D --> G
     F --> G
     J --> G
@@ -81,7 +81,7 @@ entry (their live time is drawn by `render.layers.numerals.
 LiveCrownLayer`, not a preset card field), so `crown_text_extent` stayed
 0.0 for both and the window clipped the live glyphs at default size —
 the SAME reach shape `crown_text_extent` uses
-(`center_radius + full_height * (1 + 2·RING_LETTER_SHADOW_RADIUS)`),
+(`center_radius + full_height * (1 + 2·RING_JEWEL_SHADOW_RADIUS)`),
 anchored at the live crown's own `CROWN_RADIUS_FRACTION`.
 
 ## DEFAULT_SKIN's own shape

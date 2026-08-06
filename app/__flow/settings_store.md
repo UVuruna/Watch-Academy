@@ -14,7 +14,7 @@ Settings (frozen dataclass)
     z_mode                       "bottom" | "normal" | "top"
   Ring
     ring, ring_tint, ring_finish
-    custom_rings                 tuple of {name, positions, letters, thematic?}
+    custom_rings                 tuple of {name, positions, jewels, thematic?}
     ring_two_metals              {preset_name: bool}
     ring_eye_shine               {preset_name: bool}
   Pointer / Wheel
@@ -54,7 +54,7 @@ Settings (frozen dataclass)
     city_name, city_path, latitude, longitude, timezone
     jump_cities                  tuple of {name, latitude, longitude, timezone}
   Sizing
-    moon_scale, slot_scale, ring_letter_scale, hover_enlarge
+    moon_scale, slot_scale, ring_jewels_scale, hover_enlarge
   Saturation / opacity
     pointer_saturation, ring_saturation
     star_alpha, aura_day_alpha, aura_twilight_alpha

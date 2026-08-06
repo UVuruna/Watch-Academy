@@ -10,7 +10,7 @@ carved out of `config/defaults.py`, which had grown into a
 ~3,700-line god-file (root `CLAUDE.md` Rule #20). Everything about how
 the drawn DIAL itself is sized and shaped: the window/diameter
 presets, the procedural fallback geometry, the ring band (face, tick,
-letters, crown-text arc), hand reach, the subdial/slot seating geometry,
+jewels, crown-text arc), hand reach, the subdial/slot seating geometry,
 and `OMEGA_HIT_RADIUS_FRACTION` (dial hit-test geometry).
 
 Layer: config — pure, no Qt, no wall clock.
@@ -28,11 +28,11 @@ Layer: config — pure, no Qt, no wall clock.
   `ring.png` and never touches these.
 - **Moon/Earth rim transit** — `MOON_TRANSIT_OPACITY`.
 - **Ring faces** — `RING_FACE_DIR`, the tint swatch geometry, the ring
-  letter art/shadow/crown-text arc constants (`RING_LETTER_*`, `RING_CROWN_TEXT_
-  *`). `RING_LETTER_SHADOW_MAX_GAP_PX` (THE PIXELATION FIX, 1440p owner
+  jewel art/shadow/crown-text arc constants (`RING_JEWEL_*`, `RING_CROWN_TEXT_
+  *`). `RING_JEWEL_SHADOW_MAX_GAP_PX` (THE PIXELATION FIX, 1440p owner
   bug 2026-08-06) is the device-pixel gap `render.layers.ring.
   _shadow_sample_count` keeps between adjacent halo stamps above the
-  `RING_LETTER_SHADOW_SAMPLES` floor.
+  `RING_JEWEL_SHADOW_SAMPLES` floor.
 - **Ring OUTER/INNER composition** (THE COMPOSITIONAL RING MODEL, owner
   decree 2026-08-05) — `RING_OUTER_ART_DIR`/`RING_INNER_ART_DIR`; the
   active outer/inner file names come from `constants.RING_OUTERS`/
@@ -52,9 +52,9 @@ Layer: config — pure, no Qt, no wall clock.
   octa slot text width and the Umbra's own four contrast spans
   (`full`/`half`/`light`/`dark`).
 - **`OMEGA_HIT_RADIUS_FRACTION`** — dial HIT geometry, computed from
-  `RING_LETTER_ART_SCALE * 1.5` (the 24h double-click's round hit
+  `RING_JEWEL_ART_SCALE * 1.5` (the 24h double-click's round hit
   region).
-- **`GLOW_RING_RADIUS_FRACTION`** — a straight alias of `RING_LETTER_
+- **`GLOW_RING_RADIUS_FRACTION`** — a straight alias of `RING_JEWEL_
   RADIUS_FRACTION` (the ring band centerline every event glow
   relocates to).
 
@@ -66,7 +66,7 @@ Layer: config — pure, no Qt, no wall clock.
 ### Used by
 - [Config (folder)](../___config.md) — `defaults.py`'s `DEFAULT_SKIN`
   reads `RING_FACE_DIR` and both `HAND_*_REACH_FRACTION`s from here;
-  `defaults.dial_window_margin_fraction` reads the ring/letter/crown-text
+  `defaults.dial_window_margin_fraction` reads the ring/jewel/crown-text
   geometry from here
 - [Render (folder)](../../render/___render.md) — every dial-drawing
   layer

@@ -12,7 +12,7 @@ from config import paths
 # --- Season/moon event glow rendering (windows live in constants) ---------------
 # Turning-point glow REWORK (owner 2026-07-16): at a GLOW event the
 # glowing marker relocates RADIALLY to the ring band centerline — the
-# radius where the hour numerals and ring letters sit — keeping its event
+# radius where the hour numerals and ring jewels sit — keeping its event
 # ANGLE (New Moon still at the 12h reading). The compact halo then
 # STRADDLES the ring, shining both inside and outside the circle, so it
 # reads over any background (a white Compass tip, the bright yellow top

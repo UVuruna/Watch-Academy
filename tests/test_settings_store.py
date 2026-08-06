@@ -200,7 +200,7 @@ def test_display_choices_round_trip(store):
         earth_scale=1.5,
         moon_scale=0.8,
         slot_scale=1.25,
-        ring_letter_scale=1.3,
+        ring_jewels_scale=1.3,
         hover_enlarge=1.4,
         show_earth=False,
         show_moon=False,
@@ -364,7 +364,7 @@ def test_custom_ring_card_motto_field_migrates_to_crown_text(store):
     from app.settings_ring import migrate_legacy_ring_card
 
     legacy_card = {
-        "name": "OLDCROWN", "outer": "bot_cross", "letters": ["A", "B", "C", "D"],
+        "name": "OLDCROWN", "outer": "bot_cross", "jewels": ["A", "B", "C", "D"],
         "motto": [{"text": "AB", "orientation": "top"}],
     }
     migrated = migrate_legacy_ring_card(legacy_card)
@@ -373,10 +373,69 @@ def test_custom_ring_card_motto_field_migrates_to_crown_text(store):
     # A card already carrying `crown_text` is left untouched (no
     # clobbering a fresh save with a stale `motto` sibling key).
     fresh_card = {
-        "name": "NEWCROWN", "outer": "bot_cross", "letters": ["A", "B", "C", "D"],
+        "name": "NEWCROWN", "outer": "bot_cross", "jewels": ["A", "B", "C", "D"],
         "crown_text": [{"text": "CD", "orientation": "bottom"}],
     }
     assert migrate_legacy_ring_card(fresh_card) == fresh_card
+
+
+def test_jewel_keys_migrate_from_the_old_letter_names(store):
+    """JEWELS naming sweep (owner ruling 2026-08-06, "one term for one
+    thing"): a settings file saved before the rename carries
+    `ring_letter_scale`/`letter_tint` — `load()` must read them as the
+    fallback default for the new `ring_jewels_scale`/`jewels_tint`
+    fields instead of silently reverting to 1.0/None (data loss) or
+    raising SettingsCorruptError."""
+    store.path.write_text(
+        '{"schema_version": 1, "window": {"x": 1, "y": 2, "diameter": 360},'
+        ' "ring_letter_scale": 1.4, "letter_tint": "#654321"}',
+        encoding="utf-8",
+    )
+    loaded = store.load()
+    assert loaded.ring_jewels_scale == pytest.approx(1.4)
+    assert loaded.jewels_tint == "#654321"
+    # The NEW keys win when both are present (post-migration re-save).
+    store.path.write_text(
+        '{"schema_version": 1, "window": {"x": 1, "y": 2, "diameter": 360},'
+        ' "ring_letter_scale": 1.4, "ring_jewels_scale": 0.8}',
+        encoding="utf-8",
+    )
+    assert store.load().ring_jewels_scale == pytest.approx(0.8)
+    # A file that never carried either key keeps the ordinary defaults.
+    store.path.write_text(
+        '{"schema_version": 1, "window": {"x": 1, "y": 2, "diameter": 360}}',
+        encoding="utf-8",
+    )
+    fresh = store.load()
+    assert fresh.ring_jewels_scale == pytest.approx(1.0)
+    assert fresh.jewels_tint is None
+    # save() writes only the new keys — a re-save fully migrates the file.
+    store.save(loaded)
+    assert "ring_letter_scale" not in store.path.read_text(encoding="utf-8")
+    assert "letter_tint" not in store.path.read_text(encoding="utf-8")
+    assert "ring_jewels_scale" in store.path.read_text(encoding="utf-8")
+    assert "jewels_tint" in store.path.read_text(encoding="utf-8")
+
+
+def test_custom_ring_card_letters_field_migrates_to_jewels(store):
+    """JEWELS naming sweep (owner ruling 2026-08-06): a stored
+    custom-ring card's old `letters` field is read as the fallback in
+    `data.rings.validate_preset` — an unmigrated card would otherwise
+    raise (zero jewels for N positions) rather than load."""
+    from data.rings import validate_preset
+
+    legacy_card = {
+        "name": "OLDLETTERS", "outer": "bot_cross",
+        "letters": ["A", "B", "C", "D"],
+    }
+    card = validate_preset(legacy_card)
+    assert card["jewels"] == ("A", "B", "C", "D")
+    # The NEW key wins when both are present.
+    both_card = {
+        "name": "BOTHKEYS", "outer": "bot_cross",
+        "letters": ["A", "B", "C", "D"], "jewels": ["W", "X", "Y", "Z"],
+    }
+    assert validate_preset(both_card)["jewels"] == ("W", "X", "Y", "Z")
 
 
 def test_ring_two_metals_round_trips_and_drops_stale_entries(store):
@@ -408,9 +467,9 @@ def test_custom_ring_thematic_pick_round_trips(store):
     one stays byte-identical (no key invented)."""
     saved = replace(Settings(), custom_rings=(
         {"name": "IRONRING", "outer": "bot_cross",
-         "letters": ["I", "R", "O", "N"], "thematic": "iron"},
+         "jewels": ["I", "R", "O", "N"], "thematic": "iron"},
         {"name": "PLAINRING", "outer": "bot_cross",
-         "letters": ["A", "B", "C", "D"]},
+         "jewels": ["A", "B", "C", "D"]},
     ))
     store.save(saved)
     loaded = store.load()
@@ -435,7 +494,7 @@ def test_a_pre_compositional_settings_file_loads_cleanly(store):
         "ring": "domy",  # pre-existing case-insensitive fold
         "custom_rings": [
             {"name": "OLDRING", "positions": [12, 20, 24, 4],
-             "letters": ["A", "B", "C", "D"]},
+             "jewels": ["A", "B", "C", "D"]},
         ],
     }
     store._path.parent.mkdir(parents=True, exist_ok=True)

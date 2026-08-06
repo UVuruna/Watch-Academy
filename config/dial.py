@@ -1,4 +1,4 @@
-"""Dial geometry and window sizing — the drawn ring, its letters,
+"""Dial geometry and window sizing — the drawn ring, its jewels,
 the crown text arc, hand reach, procedural fallback geometry, subdial
 seating and the transparent window's own margin computation.
 
@@ -48,12 +48,12 @@ WATCHDOG_RESHOW_MS = 200
 RING_TICK_WIDTH = 0.004
 RING_TICK_REACH = 1.03               # tick end, fraction of the ring inner radius
 RING_NUMERAL_SIZE = 0.085            # font pixel size
-RING_LETTER_SIZE = 0.105
+RING_JEWEL_SIZE = 0.105
 RING_TEXT_BOX = 0.16                 # square text-layout box
 RING_MINUTE_SIZE = 0.05
 RING_MINUTE_RADIUS = 0.92            # fraction of the ring inner radius
 RING_NUMERAL_MIN_PX = 7              # legibility floors at tiny dial sizes
-RING_LETTER_MIN_PX = 8
+RING_JEWEL_MIN_PX = 8
 RING_MINUTE_MIN_PX = 6
 BODY_LABEL_MIN_PX = 6
 
@@ -107,30 +107,30 @@ PALETTE_SWATCH_PX = 34               # pointer palette circles (owner:
 TICK_HOVER_INNER_FRACTION = 0.86
 TICK_HOVER_OUTER_FRACTION = 0.945
 
-# The owner's GOLD letter art (a full latin/greek library for future
+# The owner's GOLD jewel art (a full latin/greek library for future
 # ring presets), overlaid on the ring by calculation so the tint never
 # touches them; the silver look is derived by desaturation at load.
-RING_LETTER_ART_DIR = paths.assets_dir() / "instrument" / "ring" / "letters"
-RING_LETTER_RADIUS_FRACTION = 0.943  # letter center = the middle of the OUTER
+RING_JEWEL_ART_DIR = paths.assets_dir() / "instrument" / "ring" / "letters"
+RING_JEWEL_RADIUS_FRACTION = 0.943  # letter center = the middle of the OUTER
                                      # hour band alone (owner spec; measured
                                      # 0.888–0.998 on both ring faces — the
                                      # seconds scale is NOT part of the band)
-RING_LETTER_ART_SCALE = 0.075        # letter height, of the dial diameter
+RING_JEWEL_ART_SCALE = 0.075        # letter height, of the dial diameter
                                      # (deliberate slight oversize — owner
                                      # default; the Settings slider scales it)
 # Letter shadow (owner spec): a tight, intense dark halo on all sides —
 # a gradient border, as if lit from above. Stamped as N offset copies of
 # the blackened letter at `alpha` each, `radius` of the letter height.
-RING_LETTER_SHADOW_RADIUS = 0.05     # of the letter height
-RING_LETTER_SHADOW_ALPHA = 0.55      # per stamp AT THE FLOOR sample count
-                                     # (`RING_LETTER_SHADOW_SAMPLES`) — the
+RING_JEWEL_SHADOW_RADIUS = 0.05     # of the letter height
+RING_JEWEL_SHADOW_ALPHA = 0.55      # per stamp AT THE FLOOR sample count
+                                     # (`RING_JEWEL_SHADOW_SAMPLES`) — the
                                      # per-stamp alpha actually drawn is
                                      # renormalized when more samples are
                                      # added (`render.layers.ring.
                                      # _normalized_shadow_alpha`) so the
                                      # composited darkness stays this look
                                      # at any sample count.
-RING_LETTER_SHADOW_SAMPLES = 8       # offsets around the circle — the
+RING_JEWEL_SHADOW_SAMPLES = 8       # offsets around the circle — the
                                      # FLOOR: today's look at ordinary
                                      # dial sizes, never fewer
 # PIXELATION FIX (1440p owner bug, 2026-08-06): at large dial sizes the
@@ -140,25 +140,25 @@ RING_LETTER_SHADOW_SAMPLES = 8       # offsets around the circle — the
 # grows the sample count so adjacent stamps stay under this many
 # device pixels apart along the stamp circle (built once per skin/size/
 # DPI change, like the rest of this STATIC layer — never per frame).
-RING_LETTER_SHADOW_MAX_GAP_PX = 1.0
+RING_JEWEL_SHADOW_MAX_GAP_PX = 1.0
 
 # The outer GREAT SEAL CROWN TEXT ARC (TASK 1, owner "može radi" 2026-07-19,
 # CANON.md §The Banknote; corrected MOTO-FIX round, owner correction
 # 2026-07-19, the dollar's Great Seal reference image): curved text
 # OUTSIDE the ring band, reusing the SAME letter-art library/finish/
-# shadow stamp as the ring's own six letters
+# shadow stamp as the ring's own six jewels
 # (`render.layers.ring.RingLayer._draw_ring_glyph`), just smaller and
 # further out — decorative inscription, not the primary Dollar seats.
 # ONE SHARED RADIUS (MOTO-FIX round): the first round's design had both
-# crown texts' pinned letters land on the SAME angle (O at noon, S at 16h),
+# crown texts' pinned jewels land on the SAME angle (O at noon, S at 16h),
 # needing two concentric radii to coexist; the corrected layout puts
 # ANNUIT COEPTIS over the TOP and NOVUS ORDO SECLORUM under the BOTTOM
 # instead — angularly DISJOINT arcs that never collide, so both now
 # draw at this one radius (`core/__about/crown_text.md`'s Design Decisions).
 RING_CROWN_TEXT_SIZE = 0.0375             # crown text letter height, of the dial
-                                     # diameter — half RING_LETTER_ART_SCALE
+                                     # diameter — half RING_JEWEL_ART_SCALE
                                      # (decorative, smaller than the six
-                                     # primary banknote letters)
+                                     # primary banknote jewels)
 # The WORD-HOVER band (owner 2026-07-27, "HOVER tekst osim na slova
 # treba i na reči"): how far above/below the crown text radius (fraction of
 # the dial RADIUS) a hover still answers as an arc WORD — the crown text
@@ -169,7 +169,7 @@ RING_CROWN_TEXT_RADIUS_FRACTION = 1.13    # BOTH arcs (MOTO-FIX round) — clear
                                      # the primary letters' own max reach
                                      # (~1.0255 with shadow at scale 1.0)
                                      # AND the ring-letter hover ceiling
-                                     # (GREETINGS_LETTER_OUTER_FRACTION,
+                                     # (GREETINGS_JEWEL_OUTER_FRACTION,
                                      # 1.08) with margin
 
 # ANNUIT WORD-GAP round (owner correction 2026-07-19, third batch): the
@@ -187,10 +187,10 @@ RING_CROWN_TEXT_LETTER_STEP_DEG = 60.0 / 9
 # --- Ring OUTER/INNER composition (owner decree 2026-08-05) -----------------------
 # THE COMPOSITIONAL RING MODEL: a ring is ALWAYS the composition of an
 # OUTER band (`RING_OUTER_ART_DIR`, `constants.RING_OUTERS[name]["file"]`
-# — the hour-tick band with the preset's own empty letter fields) + an
+# — the hour-tick band with the preset's own empty jewel fields) + an
 # INNER band (`RING_INNER_ART_DIR`, `constants.RING_INNERS` — the
 # minute-track band, independently tintable via `ring_tint_inner`) +
-# the letters + an optional crown-text crown text arc. There is no single
+# the jewels + an optional crown-text crown text arc. There is no single
 # monolithic plate and no procedural fallback any more — the old
 # `domy.png`/`morph.png`/`hexagram.png` faces are DELETED;
 # `render.layers.ring.RingLayer.paint` always composes both bands.
@@ -220,14 +220,14 @@ TIME_TEXT_WIDTH_FRACTION = 0.95
 
 # Omega (24h) double-click (owner 2026-07-16; hit region reworked
 # 2026-07-17, slika 9): the hit is the FULL ROUND AREA at the 24h ring
-# seat — a circle CENTERED on the Omega letter position (180°, the ring
-# letter band) with a radius covering the whole letter cell. The old
-# narrow annular wedge only answered on the letter glyph itself (its
+# seat — a circle CENTERED on the Omega jewel position (180°, the ring
+# jewel band) with a radius covering the whole jewel cell. The old
+# narrow annular wedge only answered on the jewel glyph itself (its
 # lower part), so the double-click kept missing; the round area is
-# derived from the ring-letter art size (a letter spans ~2× its
+# derived from the ring-jewel art size (a letter spans ~2× its
 # ART_SCALE of the radius, so 1.5× the ART_SCALE comfortably covers the
 # cell and its corners without reaching the 22h/2h numerals). Tunable.
-OMEGA_HIT_RADIUS_FRACTION = RING_LETTER_ART_SCALE * 1.5
+OMEGA_HIT_RADIUS_FRACTION = RING_JEWEL_ART_SCALE * 1.5
 
 
 # The slot ROUNDEL (owner 2026-07-14, watch-subdial inspiration):
@@ -321,7 +321,7 @@ UMBRA_CONTRAST_SPANS = {
     "dark": (128, 0),
 }
 
-GLOW_RING_RADIUS_FRACTION = RING_LETTER_RADIUS_FRACTION  # ring band centerline
+GLOW_RING_RADIUS_FRACTION = RING_JEWEL_RADIUS_FRACTION  # ring band centerline
 
 
 # --- The dial NUMERALS (research/hour_numerals.md) ---------------------------------
@@ -355,12 +355,12 @@ NUMERAL_UNIT_FRACTION = 0.040 / 90.0
 
 # The band the OUTER numerals stand in — its centreline and its width, as
 # fractions of the dial RADIUS. The centreline is the hour band's own
-# middle, the same measurement `RING_LETTER_RADIUS_FRACTION` names; the
+# middle, the same measurement `RING_JEWEL_RADIUS_FRACTION` names; the
 # width is what the "Outer ring size" setting scales (a multiplier, 1.0 =
 # the measured band). MEASURED on the owner's outer plates: the metal
 # runs 0.8858 -> 0.9998 of the radius on all six, so the centreline is
-# 0.9428 (RING_LETTER_RADIUS_FRACTION's own 0.943) and the width 0.114.
-NUMERAL_OUTER_RADIUS_FRACTION = RING_LETTER_RADIUS_FRACTION
+# 0.9428 (RING_JEWEL_RADIUS_FRACTION's own 0.943) and the width 0.114.
+NUMERAL_OUTER_RADIUS_FRACTION = RING_JEWEL_RADIUS_FRACTION
 NUMERAL_OUTER_BAND_WIDTH_FRACTION = 0.114
 NUMERAL_OUTER_RING_SIZE_RANGE = (0.5, 2.0)
 NUMERAL_OUTER_RING_SIZE_DEFAULT = 1.0
@@ -576,7 +576,7 @@ NUMERAL_PLATE_CACHE_MAX = 16
 # sun travels, so the star/pointer rotates toward true solar noon while
 # the hour band and every numeral stay fixed, 12 always on top.
 # HELIOCENTRIC stands the star still and turns the WORLD beneath it: the
-# outer band, the letters, the crown text, the aura and umbra, the
+# outer band, the jewels, the crown text, the aura and umbra, the
 # weekday seats, the Earth and Moon markers and the hour hand all ride
 # ONE world offset — and the whole dial turns over at night.
 #

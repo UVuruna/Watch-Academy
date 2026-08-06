@@ -8,10 +8,10 @@
 📁 dial.py
   Window                DEFAULT_DIAL_DIAMETER, MIN/MAX, SIZE_PRESETS,
                          menu size-slider, text-visibility thresholds
-  Procedural fallback    RING_TICK_*, RING_NUMERAL/LETTER/MINUTE_*,
+  Procedural fallback    RING_TICK_*, RING_NUMERAL/JEWEL/MINUTE_*,
                          NAME_LABEL_*, MARKER_BORDER_WIDTH
   Moon/Earth transit     MOON_TRANSIT_OPACITY
-  Ring faces             RING_FACE_DIR, RING_TINT_*, RING_LETTER_*,
+  Ring faces             RING_FACE_DIR, RING_TINT_*, RING_JEWEL_*,
                          RING_CROWN_TEXT_*
   Hand sizing            HAND_SECOND_REACH_FRACTION, HAND_MINUTE_REACH_FRACTION
   Arm outline             ARM_OUTLINE_WIDTH
@@ -39,9 +39,9 @@ SLOT_SEAT_OUTWARD
 
 ```mermaid
 flowchart LR
-    A[dial.py: RING_LETTER_RADIUS_FRACTION,\nRING_LETTER_ART_SCALE,\nRING_LETTER_SHADOW_RADIUS,\nRING_CROWN_TEXT_RADIUS_FRACTION] --> D["defaults.dial_window_margin_fraction(skin)"]
+    A[dial.py: RING_JEWEL_RADIUS_FRACTION,\nRING_JEWEL_ART_SCALE,\nRING_JEWEL_SHADOW_RADIUS,\nRING_CROWN_TEXT_RADIUS_FRACTION] --> D["defaults.dial_window_margin_fraction(skin)"]
     B[glow.py: GLOW_RADIUS_SCALE] --> D
-    C["dial.py: GLOW_RING_RADIUS_FRACTION\n(= RING_LETTER_RADIUS_FRACTION)"] --> D
+    C["dial.py: GLOW_RING_RADIUS_FRACTION\n(= RING_JEWEL_RADIUS_FRACTION)"] --> D
     F["dial.py: RING_LIVE_CROWN,\nCROWN_RADIUS_FRACTION,\nNUMERAL_UNIT_FRACTION,\nCROWN_NUMERAL_SIZE_FRACTION"] --> D
     D --> E[per-side transparent window margin,\nrecomputed on every skin install]
 ```
@@ -54,7 +54,7 @@ before this round: neither The One nor Templar carries a static
 FRACTION`) stayed 0.0 for both too.
 
 `dial_window_margin_fraction` is a COORDINATOR function in
-`defaults.py` because it needs both `dial.py`'s ring/letter/crown-text
+`defaults.py` because it needs both `dial.py`'s ring/jewel/crown-text
 geometry AND `glow.py`'s glow extent — the fixed import DAG forbids
 `dial.py` and `glow.py` from importing each other, so the value that
 needs both lives one level up, in the remnant.

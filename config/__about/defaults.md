@@ -15,7 +15,7 @@ carved out of this file (`dial.py`, `shortcuts.py`, `pantheon.py`,
 What stays here are two kinds of thing: values that fit no single new
 module's charter, and COORDINATOR values/functions that legitimately
 need more than one new module's data
-(`dial_window_margin_fraction` combines `dial.py`'s ring/letter/crown-text
+(`dial_window_margin_fraction` combines `dial.py`'s ring/jewel/crown-text
 geometry with `glow.py`'s own glow extent; `ECLIPSE_SOLAR_ART` needs
 `pantheon.py`'s `weekday_art`). The fixed import DAG lets a new module
 import only stdlib + `config.{paths, constants, palette}`, never each
@@ -105,9 +105,9 @@ Layer: config — pure, no Qt, no wall clock.
   or `None` for an unknown type or a missing file
 - `dial_window_margin_fraction(skin)`: the per-side transparent window
   margin (fraction of the dial diameter) for the CURRENT skin —
-  recomputed on every skin install so a size/hover/letter slider
+  recomputed on every skin install so a size/hover/jewel slider
   re-sizes the window to fit exactly. `max()`s four graceful-absent
-  extent terms: the event glow, the ring letters, a preset's static
+  extent terms: the event glow, the ring jewels, a preset's static
   `crown_text` arc, and — Crown Polish round, owner correction
   2026-08-06 — the LIVE crown's own reach for every preset
   `dial.RING_LIVE_CROWN` names (The One, Templar): neither carries a

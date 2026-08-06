@@ -75,9 +75,11 @@ _LEGACY_OUTER_BY_POSITIONS = {
 def migrate_legacy_ring_card(entry: dict) -> dict:
     """SETTINGS MIGRATION (owner decree 2026-08-05): a custom ring
     saved before the compositional ring model stored `{name, positions,
-    letters}` — no `outer` yet. Migrated in place by matching the
-    positions signature; an unmatched entry is left untouched and fails
-    loudly in `validate_preset`.
+    letters}` (JEWELS naming sweep, owner ruling 2026-08-06: the field
+    is now `jewels`, read as a fallback in `data.rings.validate_preset`)
+    — no `outer` yet. Migrated in place by matching the positions
+    signature; an unmatched entry is left untouched and fails loudly in
+    `validate_preset`.
 
     Also migrates a card's `motto` field onto `crown_text` (TASK 1,
     owner ruling 2026-08-06, "one term for one thing" — `motto` is
@@ -106,13 +108,16 @@ def migrate_legacy_ring_card(entry: dict) -> dict:
 def normalized_ring_card(entry: dict) -> dict:
     """One custom ring card, validated by the shared card validator and
     stored in its JSON-serializable shape. `outer` (owner decree
-    2026-08-05) replaces the old `positions` field;
-    `migrate_legacy_ring_card` upgrades a pre-existing stored card."""
+    2026-08-05) replaces the old `positions` field; `jewels` (JEWELS
+    naming sweep, owner ruling 2026-08-06) replaces the old `letters`
+    field. `migrate_legacy_ring_card` upgrades a pre-existing stored
+    card; `data.rings.validate_preset` reads a stored `letters` key as
+    the fallback when `jewels` is absent."""
     card = validate_preset(migrate_legacy_ring_card(entry))
     normalized = {
         "name": card["name"],
         "outer": card["outer"],
-        "letters": list(card["letters"]),
+        "jewels": list(card["jewels"]),
     }
     if card["thematic"] is not None:
         normalized["thematic"] = card["thematic"]

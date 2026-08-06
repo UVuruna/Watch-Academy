@@ -38,7 +38,7 @@ Layer: config — pure, no Qt, no wall clock.
   DOES) paired with a process (what HAPPENS to the object).
 - `UNION_FIELDS` — three persons (God, The Devil, Jesus), four offices
   each, every office paired with its process.
-- `RING_LETTER_SEATS` — the four ring letters (Δ, M, Y, Ω) and the hour
+- `RING_JEWEL_SEATS` — the four ring jewels (Δ, M, Y, Ω) and the hour
   each stands on, per the Greek-alphabet-place arithmetic (Δ 4th at
   04h, M 12th at 12h, Y 20th at 20h, Ω 24th/last at 24h).
 
@@ -56,6 +56,6 @@ Layer: config — pure, no Qt, no wall clock.
   ring_position_angle` is the mapping every fixed ring hour already
   shares (Rule #5) — this module only says which hour a station stands
   on.
-- **`RING_LETTER_SEATS` lives here because the article states it and
-  the computed ring-letter diagram draws it** — one source, so the
+- **`RING_JEWEL_SEATS` lives here because the article states it and
+  the computed ring-jewel diagram draws it** — one source, so the
   figure can never disagree with the prose it stands beside.

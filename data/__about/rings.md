@@ -8,9 +8,9 @@
 Loads the ring preset "cards" — bundled ones from
 `Database/ring_presets.json` plus the user's CUSTOM cards from
 settings. THE COMPOSITIONAL RING MODEL (owner decree 2026-08-05): one
-card = one dial styling, `{name, outer, letters}`, plus the optional
+card = one dial styling, `{name, outer, jewels}`, plus the optional
 fields below. `outer` names a `constants.RING_OUTERS` entry directly —
-the outer band whose empty hour fields the letters stand in; the
+the outer band whose empty hour fields the jewels stand in; the
 INNER band and any CROWN TEXT are Settings-level choices
 (`app.settings_store.Settings.ring_inner`/`custom_ring_crown_text`),
 not card fields. Each of the SIX bundled presets is LOCKED to exactly
@@ -26,9 +26,9 @@ duplicate name raises naming the offending card.
   must be one of `constants.METAL_SHADE_NAMES["thematic"]` (CHI's own
   is `"ceramic"`, the ring-rework round's new porcelain ramp).
 - **`triangle`** — a 3-position override of the `"hexa"` outer's own
-  metal triangle (splits a 6-letter preset into two 3-letter metal
+  metal triangle (splits a 6-jewel preset into two 3-jewel metal
   groups); only valid when the card's own outer is `"hexa"`.
-- **`legend`** — `position → {name, reading}`, the per-letter hover
+- **`legend`** — `position → {name, reading}`, the per-jewel hover
   legend text. Since the 2026-08-05 decree every bundled card carries
   one (The One's eight hour-stations, Templar's four watches — CANON.md
   §THE HOUR RING / §THE TEMPLAR RING); every bundled reading now closes
@@ -41,8 +41,8 @@ duplicate name raises naming the offending card.
   ONE TERM ONE HOVER LAW (ring_rework §3, owner ruling 2026-08-06):
   when present, `render.compositor._ring_word_legend_tooltip` shows
   THIS for every word of the entry instead of falling back to the
-  seat's own letter legend (fixes the reported bug where ANNUIT
-  COEPTIS's hover narrated the Anointed Aegis letter under it instead
+  seat's own jewel legend (fixes the reported bug where ANNUIT
+  COEPTIS's hover narrated the Anointed Aegis jewel under it instead
   of the Latin motto itself).
 - **`about`** — theme-and-name marketing copy for the Settings preset
   picker (ring_rework §5, owner ruling 2026-08-06), never a seat
@@ -54,7 +54,7 @@ duplicate name raises naming the offending card.
 ### Uses
 - [Config (folder)](../../config/___config.md) —
   `constants.RING_OUTERS`, `constants.RING_OUTER_LOCK`,
-  `constants.RING_LETTER_FILES`, `constants.METAL_SHADE_NAMES`,
+  `constants.RING_JEWEL_FILES`, `constants.METAL_SHADE_NAMES`,
   `paths.database_dir()`
 - [Crown Text](../../core/__about/crown_text.md) — `crown_glyph_angles`,
   `centered_word_angles`, `free_arc_angles`, `_occurrence_index` — the
@@ -75,7 +75,7 @@ duplicate name raises naming the offending card.
 ## Functions
 
 - `ring_presets(custom=())`: `name → validated card` for every bundled
-  + custom preset (`{name, positions, letters, outer, triangle,
+  + custom preset (`{name, positions, jewels, outer, triangle,
   legend, crown_text, thematic, about}`); a duplicated name raises.
 - `validate_preset(entry)`: the shared card validator — see
   [flow](../__flow/rings.md).

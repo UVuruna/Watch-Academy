@@ -54,7 +54,7 @@ class Settings:
     # when the owner's split art (assets/instrument/ring/outter+inner/)
     # is on disk; a no-op on the single-plate fallback.
     ring_tint_inner: str | None = None
-    ring_finish: str = "gold"           # letter metals (triangle/12h rules)
+    ring_finish: str = "gold"           # jewel metals (triangle/12h rules)
     # The user's custom ring cards ({name, positions, letters}) — merged
     # with Database/ring_presets.json by data/rings.py.
     custom_rings: tuple = ()
@@ -192,7 +192,7 @@ class Settings:
                                         # the standard dark AP field
     # THE SUBDIAL SET (owner decree 2026-07-21, Rsub round): which of
     # the five hand-picked plates (assets/subdial/set1..4, solo) draws
-    # — the active letter finish (ring_finish) still picks the color
+    # — the active jewel finish (ring_finish) still picks the color
     # WITHIN the chosen set. "set1" is the owner's install default.
     subdial_set: str = "set1"
     # THE METAL SHADES (R8a round, owner spec 2026-07-21 night): which
@@ -270,7 +270,11 @@ class Settings:
     # and the subdials share the SLOT slider — the old separate
     # weekday/south-slot scales are gone).
     slot_scale: float = 1.0
-    ring_letter_scale: float = 1.0
+    # RENAMED from `ring_letter_scale` (JEWELS naming sweep, owner ruling
+    # 2026-08-06); `load()` reads a stored file's old `ring_letter_scale`
+    # key as the fallback when the new key is absent (one-release
+    # migration, save writes only the new key).
+    ring_jewels_scale: float = 1.0
     hover_enlarge: float = 1.2
     # SATURATION (owner 2026-07-18, Settings ▸ Colors, Session 21-D —
     # moved out of Display/Element sizes into its OWN "Saturation" group
@@ -322,18 +326,22 @@ class Settings:
     # `ring_tint` like every hand today; a hex overrides it independently.
     hands_tint: str | None = None
     hands_saturation: float = 1.0       # the hand pack's own HSV scale (0..1)
-    # THE INDICES FREE COLOR (Watch Face Phase 4, R-24): an EXTRA tint
-    # layered over the ring letters' metal finish (None = metal only,
+    # THE JEWELS FREE COLOR (Watch Face Phase 4, R-24): an EXTRA tint
+    # layered over the ring jewels' metal finish (None = metal only,
     # today's behavior) — `render.layers.ring.RingLayer._draw_ring_glyph`.
-    letter_tint: str | None = None
+    # RENAMED from `jewels_tint` (JEWELS naming sweep, owner ruling
+    # 2026-08-06, "one term for one thing"); `load()` reads a stored
+    # file's old `jewels_tint` key as the fallback default when the new
+    # key is absent (one-release migration, save writes only the new key).
+    jewels_tint: str | None = None
     # CROWN TEXT (R-24/Phase-6-debt correction, owner 2026-08-05: "Crown
     # tekst je onaj tekst koji piše oko sata — faith, hope, suffering")
     # — the outer Great Seal CROWN TEXT arc's own opacity/size/color, kept
-    # SEPARATE from `ring_letter_scale`/`letter_tint` (see
+    # SEPARATE from `ring_jewels_scale`/`jewels_tint` (see
     # `skins.manifest.SkinDefinition`'s matching fields for the full
-    # design note). `crown_text_scale` multiplies ON TOP of `ring_letter_scale`
+    # design note). `crown_text_scale` multiplies ON TOP of `ring_jewels_scale`
     # (unaffected, never renamed); `crown_text_tint` resolves independently of
-    # `letter_tint`. RENAMED from `motto_*` (TASK 1, owner ruling
+    # `jewels_tint`. RENAMED from `motto_*` (TASK 1, owner ruling
     # 2026-08-06, "one term for one thing"); `load()` reads a stored file's
     # old `motto_alpha`/`motto_scale`/`motto_tint` keys as the fallback
     # default when the new keys are absent (the SAME one-release migration
@@ -683,7 +691,13 @@ class SettingsStore:
                         *constants.ELEMENT_SCALE_RANGE, 1.0,
                     ),
                 ),
-                ring_letter_scale=load_scale(raw, "ring_letter_scale", *constants.ELEMENT_SCALE_RANGE, 1.0),
+                # One-release migration (JEWELS naming sweep, owner ruling
+                # 2026-08-06): "ring_letter_scale" is read as the fallback
+                # default when the new key is absent.
+                ring_jewels_scale=load_scale(
+                    raw, "ring_jewels_scale", *constants.ELEMENT_SCALE_RANGE,
+                    load_scale(raw, "ring_letter_scale", *constants.ELEMENT_SCALE_RANGE, 1.0),
+                ),
                 hover_enlarge=load_scale(raw, "hover_enlarge", *constants.HOVER_ENLARGE_RANGE, 1.2),
                 # One-release migration (Session 21-D, owner rename for
                 # clarity now that RING has its own saturation slider):
@@ -717,7 +731,14 @@ class SettingsStore:
                 hands_saturation=load_scale(
                     raw, "hands_saturation", *constants.HANDS_SATURATION_RANGE, 1.0
                 ),
-                letter_tint=load_hex(raw, "letter_tint"),
+                # One-release migration (JEWELS naming sweep, owner ruling
+                # 2026-08-06): "letter_tint" is read as the fallback default
+                # when the new key is absent.
+                jewels_tint=(
+                    load_hex(raw, "jewels_tint")
+                    if "jewels_tint" in raw
+                    else load_hex(raw, "letter_tint")
+                ),
                 ring_tint_inner=load_hex(raw, "ring_tint_inner"),
                 # RENAMED from `motto_*` (TASK 1, owner ruling 2026-08-06):
                 # a stored file's old key is the fallback default when the
@@ -836,7 +857,7 @@ class SettingsStore:
             "earth_scale": settings.earth_scale,
             "moon_scale": settings.moon_scale,
             "slot_scale": settings.slot_scale,
-            "ring_letter_scale": settings.ring_letter_scale,
+            "ring_jewels_scale": settings.ring_jewels_scale,
             "hover_enlarge": settings.hover_enlarge,
             "pointer_saturation": settings.pointer_saturation,
             "ring_saturation": settings.ring_saturation,
@@ -853,7 +874,7 @@ class SettingsStore:
             "aura_off_tint": settings.aura_off_tint,
             "hands_tint": settings.hands_tint,
             "hands_saturation": settings.hands_saturation,
-            "letter_tint": settings.letter_tint,
+            "jewels_tint": settings.jewels_tint,
             "ring_tint_inner": settings.ring_tint_inner,
             "crown_text_alpha": settings.crown_text_alpha,
             "crown_text_scale": settings.crown_text_scale,

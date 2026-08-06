@@ -73,7 +73,7 @@ STAR = (
 # ═══════════════════════════ DOMY AND SAFE CIPHERS & PAGE REGISTRY ═══════════════════════════
 # THE ASSEMBLED CIPHERS (encyclopedia, "DOMY and SAFE"). Built by
 # ASSEMBLY rather than walking order, exactly as MASON is assembled from
-# the letters ringing the Banknote's hexagram: the application's own name
+# the jewels ringing the Banknote's hexagram: the application's own name
 # is the dark cross, and the word for its purpose is the bright cross
 # read back down from the summit.
 DOMY = (
@@ -148,7 +148,7 @@ UNION_FIELDS = {
 # the ring-letters article states it and the computed ring-letter
 # diagram draws it — one source, so the figure can never disagree with
 # the prose it stands beside.
-RING_LETTER_SEATS = (
+RING_JEWEL_SEATS = (
     ("Δ", 4),
     ("M", 12),
     ("Y", 20),

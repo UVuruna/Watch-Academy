@@ -535,7 +535,7 @@ POINTER_ARM_LABELS = {
 # spec, design/background/cross.png) — slim diamonds with gaps between
 # them, never the fat rhombi a regular 4-star would give. The TRIO is
 # likewise "half of hexa" (owner spec, FINAL.txt #7): three hexa-shaped
-# arms at 12h/4h/20h — where the ring letters M, D, Y point — with
+# arms at 12h/4h/20h — where the ring jewels M, D, Y point — with
 # gaps; its three hues center on the arms (thirds 8-16 / 16-24 / 0-8).
 POINTER_ARM_HALF_ANGLE_DEG = {
     "hexa": 30.0, "cross": 22.5, "octa": 22.5, "trio": 30.0,
@@ -932,11 +932,11 @@ EARTH_STYLES = ("clean", "atmo")
 # and the rest in silver, the SILVER finish is the exact inverse; on
 # the hexagram BOTH metals form triangles (12/20/4 vs 24/8/16). Silver
 # and bronze letters are derived from the gold master AT LOAD (owner
-# 2026-07-19, render.asset_recolor.letter_metal_file).
+# 2026-07-19, render.asset_recolor.jewel_metal_file).
 RING_FINISHES = ("gold", "silver", "bronze", "thematic")
 # THE THEMATIC FINISH (ENLARGE/THEMATIC round, owner 2026-07-27,
 # "četvrta opcija za ring THEMATIC ... bojiti PREKO NOVOG PROGRAMA"):
-# the 4th ring letter finish — instead of a metal, the letters wear the
+# the 4th ring jewel finish — instead of a metal, the jewels wear the
 # ACTIVE PRESET's own theme color, drawn by the SAME recolor
 # transformer (a colored RAMP beside the metal ramps in
 # recolor/presets/metals.json — "adding a metal costs one entry and
@@ -944,7 +944,7 @@ RING_FINISHES = ("gold", "silver", "bronze", "thematic")
 # METAL_SHADE_NAMES["thematic"]); a custom/unknown ring falls back to
 # the moon indigo (the app's own signature hue). Outside the ring band
 # (subdial borders, hands, follow-the-ring theme metals) the thematic
-# finish reads as GOLD — the color belongs to the letters and the
+# finish reads as GOLD — the color belongs to the jewels and the
 # words, not to every metal surface (documented containment).
 RING_THEMATIC_SHADES = {
     "DOMY": "cross_red",        # the suffering cross
@@ -1019,7 +1019,7 @@ METAL_SHADE_TITLES = {
 # the tapisserie field wears the clock tint (the AP design in the
 # theme color) and the tick circle joins the finish metal; "black" —
 # the standard dark AP field as drawn, white ticks. Both: rim, mini
-# hand and complication texts in the letter-finish metal, shadowed.
+# hand and complication texts in the jewel-finish metal, shadowed.
 SUBDIAL_STYLES = ("theme", "black")
 
 # The subdial PLATE SETS (owner decree 2026-07-21, Rsub round —
@@ -1047,9 +1047,9 @@ FIGURE_ROSTERS = ("planetary", "pantheon")
 # THE COMPOSITIONAL RING MODEL (owner decree 2026-08-05, coordinator's
 # pixel analysis on the actual PNGs): a ring is ALWAYS the composition
 # of an OUTER band (`assets/instrument/ring/outter/`, carries the empty
-# hour fields the letters stand in) + an INNER band
+# hour fields the jewels stand in) + an INNER band
 # (`assets/instrument/ring/inner/`, the minute track) + the preset's
-# own letters in the outer's empty fields + an optional CROWN TEXT
+# own jewels in the outer's empty fields + an optional CROWN TEXT
 # (crown text) arc. The old monolithic single-plate faces (`domy.png`,
 # `morph.png`, `hexagram.png`) are DEAD — deleted from disk the same
 # session this table replaced `RING_LAYOUTS`. `positions` is the empty
@@ -1179,25 +1179,25 @@ RING_EYE_SHINE_DEFAULT = {"Dollar": True}
 # (originally it rode high, which would have drawn the zoomed triangle
 # off-seat). ChatGPT: plain 0.97 vs shine 0.46 of frame -> 2.11;
 # Gemini: 0.98 vs 0.59 -> 1.67. `app.controller.build_skin` stamps the
-# factor into `SkinDefinition.ring.letter_zoom` for the shine stems so
+# factor into `SkinDefinition.ring.jewel_zoom` for the shine stems so
 # the triangle draws the SAME size and only the rays extend beyond it.
 RING_EYE_SHINE_ENLARGE = {"gem": 1.67, "gpt": 2.11}
-# The full letter library (glyph -> art file) — presets and the custom
+# The full jewel library (glyph -> art file) — presets and the custom
 # ring builder choose from these, GOLD masters only; silver and bronze
 # are derived from the gold master at load (owner 2026-07-19,
-# render.asset_recolor.letter_metal_file — no more pre-rendered files). The
+# render.asset_recolor.jewel_metal_file — no more pre-rendered files). The
 # library is GROUPED (owner spec 2026-07-11):
 # the builder shows Latin / Greek / Numbers / Symbols sections. Numbers
 # exist ONLY for the ring positions they belong to (owner decision: a
 # number makes no sense away from its own hour) — every empty field
 # across every RING_OUTERS outer EXCEPT 24, which always wears Ω (the
 # NUMBERS bundled preset's own reading, kept for every other outer).
-_LATIN_LETTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+_LATIN_JEWEL_GLYPHS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 _RING_NUMBERS = (
     "3", "4", "6", "8", "9", "12", "15", "16", "18", "20", "21",
 )
-RING_LETTER_GROUPS = {
-    "Latin": tuple(_LATIN_LETTERS),
+RING_JEWEL_GROUPS = {
+    "Latin": tuple(_LATIN_JEWEL_GLYPHS),
     "Greek": ("Ω", "Π", "Φ", "Ψ", "Σ", "Θ"),
     "Numbers": _RING_NUMBERS,
     "Symbols": (
@@ -1205,11 +1205,11 @@ RING_LETTER_GROUPS = {
         "👁 ChatGPT", "👁 ChatGPT ☀", "👁 Gemini", "👁 Gemini ☀",
     ),
 }
-RING_LETTER_FILES = {
+RING_JEWEL_FILES = {
     # The WHOLE library is PNG at 512 px height (owner decision
     # 2026-07-12 — the traced SVGs parsed in seconds; 512 covers every
     # on-dial size with room to spare).
-    **{letter: f"{letter}.png" for letter in _LATIN_LETTERS},
+    **{letter: f"{letter}.png" for letter in _LATIN_JEWEL_GLYPHS},
     "Ω": "Omega.png",
     "Π": "Pi.png",
     "Φ": "Phi.png",
@@ -1241,12 +1241,12 @@ RING_LETTER_FILES = {
 # one-per-character — a custom ring's crown-text field validates
 # against this set so an unsupported character can never be TYPED at
 # all (replaces the old silent-drop-on-build behaviour). DERIVED, never
-# hand-written: every SINGLE-character key of `RING_LETTER_FILES` (the
+# hand-written: every SINGLE-character key of `RING_JEWEL_FILES` (the
 # multi-character symbol keys — "👁 ChatGPT" and friends — are the
 # custom ring-LETTER builder's own picks, never typed into running
 # text) plus the space that separates words.
 RING_CROWN_TEXT_CHARSET = frozenset(
-    {letter for letter in RING_LETTER_FILES if len(letter) == 1} | {" "}
+    {letter for letter in RING_JEWEL_FILES if len(letter) == 1} | {" "}
 )
 
 # ═══════════════════════════ WEEKDAY THEMES ═══════════════════════════

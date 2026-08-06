@@ -64,7 +64,7 @@ data has exactly one home.
   the numeric recipe lives in [Defaults](defaults.md)).
 - **Subdial** — `SUBDIAL_STYLES`, `SUBDIAL_SETS`/`_DEFAULT`/`_TITLES`.
 - **Figure rosters** — `FIGURE_ROSTERS` (`planetary`/`pantheon`).
-- **Ring outers, inners and letters** (THE COMPOSITIONAL RING MODEL,
+- **Ring outers, inners and jewels** (THE COMPOSITIONAL RING MODEL,
   owner decree 2026-08-05; RING VERDICTS correction, same day) —
   `RING_OUTERS` (bot_cross/top_cross/hexa/cross/full/octa),
   `RING_OUTER_LOCK` (the five presets' locked outer — "The One" moved
@@ -73,10 +73,10 @@ data has exactly one home.
   "seconds", Templar "seconds_cross", The One "simple_octa", CHI
   "simple" — ruled "može", Crown Polish round, owner 2026-08-06)/`_DEFAULT`,
   `RING_TWO_METALS_DEFAULT`, THE EYE AT THE APEX (`RING_EYE_GLYPH`/
-  `_SHINE_FILE`/`_SHINE_DEFAULT`/`_SHINE_ENLARGE`), `RING_LETTER_
-  GROUPS`/`_FILES` (the full Latin/Greek/Numbers/Symbols letter
+  `_SHINE_FILE`/`_SHINE_DEFAULT`/`_SHINE_ENLARGE`), `RING_JEWEL_
+  GROUPS`/`_FILES` (the full Latin/Greek/Numbers/Symbols jewel
   library), `RING_CROWN_TEXT_CHARSET` (the crown-text whitelist —
-  every single-character `RING_LETTER_FILES` key plus the space,
+  every single-character `RING_JEWEL_FILES` key plus the space,
   derived, never hand-written; shared by the custom crown-text field's
   `QValidator` and the Location crown's own text filter).
 - **Weekday themes — the master list** — `WEEKDAY_THEMES` (every

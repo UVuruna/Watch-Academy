@@ -92,7 +92,7 @@ COUNCIL = (
 # --- trio — THE TRINITY, three arms, three wheels -------------------
 # PRIMARY: the theological trio (owner spec, FINAL.txt #7) — Faith
 # yellow at 12h, Love red at 20h, Hope blue at 4h, the hexa primary
-# hues at the M, Y, D ring-letter positions.
+# hues at the M, Y, D ring-jewel positions.
 TRINITY = ("#F8E600", "#B60000", "#002FFF")
 # SECONDARY: the FAMILY triangle (CANON, placement APPROVED
 # 2026-07-16) — the same derivation from the hexa SECONDARY primaries
@@ -429,21 +429,21 @@ LABEL_OUTLINE_RGBA = (0, 0, 0, 210)
 
 MARKER_BORDER_RGBA = (255, 255, 255, 200)
 
-CALENDAR_ARROW_COLOR = "#FFD235"     # gold, matching the ring letters/ticks
+CALENDAR_ARROW_COLOR = "#FFD235"     # gold, matching the ring jewels/ticks
 
 CALENDAR_ICON_WEDGE_COLORS = ("#A67C00", "#FFBF00")
 
 CALENDAR_ICON_RING_COLOR = "#1A1A1A"
 
 # Bronze ring LETTERS are derived AT LOAD from the gold master (owner
-# 2026-07-19, `render.asset_recolor.letter_metal_file` — retired the
-# pre-rendered files); BRONZE_LETTER_TINT anchors the "bronze" shade's
+# 2026-07-19, `render.asset_recolor.jewel_metal_file` — retired the
+# pre-rendered files); BRONZE_JEWEL_TINT anchors the "bronze" shade's
 # hue/saturation above and still supplies the eclipse glow color below —
 # it is a COLOR CONSTANT, not a recipe (the recipe itself is METAL_SHADES).
-BRONZE_LETTER_TINT = "#CD7F32"
+BRONZE_JEWEL_TINT = "#CD7F32"
 
 # The shadow STAMP's tint: a pixmap re-rendered pure black and offset
-# under the real art (ring letters, weekday bodies). Black is not a
+# under the real art (ring jewels, weekday bodies). Black is not a
 # design choice here but the definition of a cast shadow — it is named
 # so the shadow pass owns no literal of its own.
 SHADOW_STAMP_TINT = "#000000"
@@ -469,7 +469,7 @@ GLOW_ECLIPSE_SOLAR_COLOR = "#FF3B30"       # red — the eclipsed Sun's glow
 # orange-red than the plain total/partial red, so the two read distinct.
 GLOW_ECLIPSE_SOLAR_ANNULAR_COLOR = "#FF7A1A"
 
-GLOW_ECLIPSE_LUNAR_COLOR = BRONZE_LETTER_TINT  # bronze copper — blood moon
+GLOW_ECLIPSE_LUNAR_COLOR = BRONZE_JEWEL_TINT  # bronze copper — blood moon
 
 # INVISIBLE-FROM-HERE muting (owner verdict "može", fix round E,
 # 2026-07-19): an eclipse the observer cannot actually see (below the
@@ -534,7 +534,7 @@ SMALL_SECONDS_TICK_RGBA = (255, 255, 255, 235)
 SMALL_SECONDS_TICK_SHADOW_RGBA = (0, 0, 0, 140)
 
 # Complication TEXTS on the subdials (owner 2026-07-15): always the
-# letter-finish metal color — never white — over a drop shadow so they
+# jewel-finish metal color — never white — over a drop shadow so they
 # read on both plate styles.
 SUBDIAL_TEXT_SHADOW_RGBA = (0, 0, 0, 180)
 
@@ -544,8 +544,8 @@ SUBDIAL_TEXT_SHADOW_RGBA = (0, 0, 0, 180)
 SUBDIAL_SHADOW_RGBA = (0, 0, 0, 100)
 
 # SILVER has no entry here on purpose (2026-07-20 rework): it is the
-# achromatic VALUE alone, the exact letter-metal "straight desaturation"
-# recipe (`letter_metal_file`) — never a stored target color like gold/
+# achromatic VALUE alone, the exact jewel-metal "straight desaturation"
+# recipe (`jewel_metal_file`) — never a stored target color like gold/
 # bronze, so it can never drift toward a hue by accident.
 SUBDIAL_RECOLOR_COLORS = {
     "gold": "#FFD235",
@@ -647,13 +647,13 @@ LEGEND_MORE_HINT_COLOR = "#9A9A9A"
 # line with Home/Download; restyled from filled gradient pills to
 # border-only frames in the finish's OWN color — Colored/Bronze/Gold/
 # Silver read at a glance instead of hiding behind a generic caption).
-# Bronze matches BRONZE_LETTER_TINT (below, out of definition order —
+# Bronze matches BRONZE_JEWEL_TINT (below, out of definition order —
 # copied as a literal rather than forward-referenced) so the switcher
 # border and the ring-letter bronze read as the SAME bronze; gold/
 # silver are the classic heraldic metals, unused as a plain hex
 # anywhere else in the palette tables.
 ENCYCLOPEDIA_FINISH_BORDER_COLORS = {
-    "Bronze": "#CD7F32",         # == BRONZE_LETTER_TINT
+    "Bronze": "#CD7F32",         # == BRONZE_JEWEL_TINT
     "Gold": "#D4AF37",
     "Silver": "#C0C0C0",
 }

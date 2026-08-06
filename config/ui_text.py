@@ -96,7 +96,7 @@ UI_STRINGS: tuple[str, ...] = (
     # (`calendar_mounts.CALENDAR_MOUNTS`). "None" is the mount-off tile.
     "Weekday bodies", "Calendar mount", "None",
     "Zodiac signs", "Months", "Slavic months", "Chinese zodiac", "Emotions",
-    "Gold letters", "Silver letters", "Thematic letters",
+    "Gold jewels", "Silver jewels", "Thematic jewels",
     "Clean", "Atmosphere", "Date", "Names",
     "The day name written on the weekday bodies.",
     "Moon — below horizon",
@@ -104,7 +104,7 @@ UI_STRINGS: tuple[str, ...] = (
     "Slavic gods", "Alchemy", "Japanese week", "Creeds", "Mysteries",
     "Professions",
     # The theme METALS (bronze-plate themes + the ring finish menu).
-    "Gold", "Bronze", "Silver", "Bronze letters", "Follow ring color",
+    "Gold", "Bronze", "Silver", "Bronze jewels", "Follow ring color",
     "Day length",
     # South slot style dropdowns (owner 2026-07-12): Astrology, the
     # Ascendant (the rising sign right now) and the Chinese zodiac
@@ -145,7 +145,7 @@ UI_STRINGS: tuple[str, ...] = (
     # The custom diameter slider (owner 2026-07-17, ROADMAP 15e).
     "Diameter",
     "Palette — {pointer} {style}",
-    "Clock tint — dial, hands and Umbra (letters excluded)",
+    "Clock tint — dial, hands and Umbra (jewels excluded)",
     "Custom hands", "Hours", "Minutes", "Seconds", "Browse…",
     "Add hands", "Pivot X", "Pivot Y", "center",
     "Z-order (bottom → top)",
@@ -158,20 +158,21 @@ UI_STRINGS: tuple[str, ...] = (
     "City", "Latitude", "Longitude", "Timezone",
     "not found", "{n} found",
     "Star", "Aura — sunlight", "Aura — twilight", "Skin default", "Default",
-    # "Ring letters" (R-11/R-19/R-27 label sweep, Phase 6 FINAL cleanup):
-    # renamed to "Indices" everywhere it labels the hour-marker glyphs
-    # (the Watch Face Size section's scale slider; the Colors section's
-    # free-tint row) — one catalog entry, same stored keys
-    # (`ring_letter_scale`/`letter_tint`).
-    "Indices", "Hover enlarge",
+    # "Ring letters" (R-11/R-19/R-27 label sweep, Phase 6 FINAL cleanup),
+    # RENAMED to "Jewels" (JEWELS naming sweep, owner ruling 2026-08-06,
+    # "one term for one thing") — everywhere it labels the hour-marker
+    # glyphs (the Watch Face Size section's scale slider; the Colors
+    # section's free-tint row) — one catalog entry, same stored keys
+    # (`ring_jewels_scale`/`jewels_tint`).
+    "Jewels", "Hover enlarge",
     "Reset to preset", "Custom…", "Gray (default)", "the untouched art",
     "Unique name", "Add ring", "{n} custom ring(s) saved",
     # The custom card's Thematic color pick (ENLARGE/THEMATIC round,
     # widened for custom rings, owner 2026-07-27).
     "Thematic color", "Auto (moon indigo)",
     "Added '{name}' — OK saves it; find it under Design ▸ Ring",
-    "Flame — Masculine ({n} letters)", "Chalice — Feminine ({n} letters)",
-    "Seal — Union ({n} letters)",
+    "Flame — Masculine ({n} jewels)", "Chalice — Feminine ({n} jewels)",
+    "Seal — Union ({n} jewels)",
     "Latin", "Greek", "Numbers", "Symbols",
     "Top", "Top Right", "Bottom Right", "Bottom", "Bottom Left", "Top Left",
     "Right", "Left",

@@ -2,10 +2,13 @@
 
 One card = one dial styling: the COMPOSITIONAL model (owner decree
 2026-08-05) — an OUTER band (config.constants.RING_OUTERS) whose empty
-hour fields carry the preset's own LETTERS, an INNER band (the user's
+hour fields carry the preset's own JEWELS, an INNER band (the user's
 own changeable pick, config.constants.RING_INNERS) and an optional
-CROWN TEXT arc. `{name, outer, letters}` is the whole card;
-`outer` resolves the empty positions directly (no signature guessing).
+CROWN TEXT arc. `{name, outer, jewels}` is the whole card (JEWELS
+naming sweep, owner ruling 2026-08-06: the field was `letters`, a
+stored card under that key still loads via `validate_preset`'s
+fallback); `outer` resolves the empty positions directly (no signature
+guessing).
 Validation is loud (Rule #1): a broken card must name itself, never
 render blank.
 """
@@ -26,9 +29,9 @@ def _validate_crown_text(name: str, raw: list, positions: tuple) -> tuple:
     `{text, pins}` — `pins` is `[letter, occurrence, position]` triples
     (JSON has no tuples). Every pin's position must be one of the
     preset's own ring positions (the crown text's key letters land on the
-    SAME hexagram seats the ring's own letters occupy) and every
+    SAME hexagram seats the ring's own jewels occupy) and every
     character of `text` must be a space or a letter the shared library
-    (`constants.RING_LETTER_FILES`) can draw — the crown text reuses that
+    (`constants.RING_JEWEL_FILES`) can draw — the crown text reuses that
     exact PNG library, never new art. Each entry may also carry
     `clockwise` (MOTO-FIX round, owner correction 2026-07-19; default
     true): true reads the arc sweeping increasing angle (the TOP arc,
@@ -77,11 +80,11 @@ def _validate_crown_text(name: str, raw: list, positions: tuple) -> tuple:
             raise ValueError(f"ring preset {name!r}: a crown text entry needs text")
         unknown = {
             char for char in text
-            if char != " " and char not in constants.RING_LETTER_FILES
+            if char != " " and char not in constants.RING_JEWEL_FILES
         }
         if unknown:
             raise ValueError(
-                f"ring preset {name!r}: crown text {text!r} uses unknown letters "
+                f"ring preset {name!r}: crown text {text!r} uses unknown jewels "
                 f"{sorted(unknown)}"
             )
         clockwise = bool(crown_entry.get("clockwise", True))
@@ -183,8 +186,8 @@ def _validate_crown_text(name: str, raw: list, positions: tuple) -> tuple:
 
 
 def validate_preset(entry: dict) -> dict:
-    """One card checked: known outer, library letters, matching counts.
-    Returns {name, outer, positions, letters, triangle, legend, crown_text,
+    """One card checked: known outer, library jewels, matching counts.
+    Returns {name, outer, positions, jewels, triangle, legend, crown_text,
     thematic}. `outer` (owner decree 2026-08-05, the compositional ring
     model) resolves the empty hour fields directly from
     `constants.RING_OUTERS` — no more guessing a "layout" from a
@@ -215,19 +218,23 @@ def validate_preset(entry: dict) -> dict:
             f"ring preset {name!r} is locked to outer {locked!r}, got {outer!r}"
         )
     positions = constants.RING_OUTERS[outer]["positions"]
-    letters = tuple(str(letter) for letter in entry.get("letters", ()))
-    if len(letters) != len(positions):
+    # JEWELS naming sweep (owner ruling 2026-08-06): the field is now
+    # `jewels`; a card stored under the old `letters` key (bundled JSON
+    # or a stored custom card) is read as the fallback.
+    jewels_raw = entry.get("jewels", entry.get("letters", ()))
+    jewels = tuple(str(jewel) for jewel in jewels_raw)
+    if len(jewels) != len(positions):
         raise ValueError(
-            f"ring preset {name!r}: {len(letters)} letters for "
+            f"ring preset {name!r}: {len(jewels)} jewels for "
             f"{len(positions)} positions (outer {outer!r})"
         )
-    unknown = [l for l in letters if l not in constants.RING_LETTER_FILES]
+    unknown = [j for j in jewels if j not in constants.RING_JEWEL_FILES]
     if unknown:
-        raise ValueError(f"ring preset {name!r}: unknown letters {unknown}")
+        raise ValueError(f"ring preset {name!r}: unknown jewels {unknown}")
     # A NUMBER may only stand on its own hour (owner rule 2026-07-12:
     # a 4 at 12h makes no sense — that is why only the six ring-hour
     # numbers exist at all).
-    for position, glyph in zip(positions, letters):
+    for position, glyph in zip(positions, jewels):
         if glyph.isdigit() and int(glyph) != position:
             raise ValueError(
                 f"ring preset {name!r}: number {glyph} cannot stand at "
@@ -256,14 +263,14 @@ def validate_preset(entry: dict) -> dict:
                 f"ring preset {name!r}: legend position {position} is "
                 f"not one of its own positions {positions}"
             )
-        letter_name = str(value.get("name", "")).strip()
+        jewel_name = str(value.get("name", "")).strip()
         reading = str(value.get("reading", "")).strip()
-        if not letter_name or not reading:
+        if not jewel_name or not reading:
             raise ValueError(
                 f"ring preset {name!r}: legend entry {position} needs "
                 "both a name and a reading"
             )
-        legend[position] = {"name": letter_name, "reading": reading}
+        legend[position] = {"name": jewel_name, "reading": reading}
     crown_text = _validate_crown_text(name, entry.get("crown_text") or [], positions)
     # The optional THEMATIC color pick (ENLARGE/THEMATIC round, widened
     # for CUSTOM rings, owner 2026-07-27): a card may name ANY of the
@@ -290,7 +297,7 @@ def validate_preset(entry: dict) -> dict:
     return {
         "name": name,
         "positions": positions,
-        "letters": letters,
+        "jewels": jewels,
         "outer": outer,
         "triangle": triangle,
         "legend": legend,

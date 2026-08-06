@@ -47,9 +47,9 @@ dump. Two dispatch-like corners get their own diagram further down.
                               METAL_SHADE_NAMES (per metal, incl. thematic's 21)
   Subdial                     SUBDIAL_SETS (5: set1-4, solo)
   Figure rosters               FIGURE_ROSTERS (2: planetary, pantheon)
-  Ring outers/inners/letters  RING_OUTERS (6: bot_cross/top_cross/hexa/
+  Ring outers/inners/jewels  RING_OUTERS (6: bot_cross/top_cross/hexa/
                               cross/full/octa), RING_INNERS (8),
-                              RING_LETTER_GROUPS (Latin/Greek/Numbers/Symbols)
+                              RING_JEWEL_GROUPS (Latin/Greek/Numbers/Symbols)
   Weekday themes — MASTER LIST
     ├─ WEEKDAY_THEMES          ~38 registered theme keys
     ├─ METAL_THEMES            bronze-plate-capable subset

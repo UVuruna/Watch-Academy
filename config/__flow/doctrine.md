@@ -25,7 +25,7 @@
     The Devil  Destroyer/Punishment · Tempter/Ruin · Prosecutor/Guilt · Catalyst/Critique
     Jesus      Redeemer/Renewal · Advocate/Salvation · Shepherd/Mercy · Preserver/Stewardship
 
-  RING_LETTER_SEATS
+  RING_JEWEL_SEATS
     Δ (delta, 4th letter)  -> 04h
     M (mu, 12th letter)    -> 12h
     Y (upsilon, 20th)      -> 20h

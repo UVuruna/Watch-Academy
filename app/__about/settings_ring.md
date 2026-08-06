@@ -35,5 +35,5 @@ the legacy custom-ring-card migration (`positions` → `outer`).
   the compositional ring model (`positions`, no `outer`) upgraded in
   place by matching its positions signature.
 - `normalized_ring_card(entry)`: one custom ring card, validated and
-  stored in its JSON-serializable shape (`{name, outer, letters,
+  stored in its JSON-serializable shape (`{name, outer, jewels,
   thematic?}`).

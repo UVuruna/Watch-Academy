@@ -253,14 +253,14 @@ THEME_RADIUS_PILL_PX = 999       # nav selection pill, checkbox indicator
 # split it, so the Week's Sunday pairs still leave the text visible.
 READER_IMAGE_MAX_HEIGHT_FRACTION = 0.35
 # The unlocked hidden mode (owner 2026-07-16, top-only round): hovering
-# within this many degrees of the 12h ring letter opens the Four
-# Greetings. The hit zone is the LETTER band OUTSIDE the tick scale
+# within this many degrees of the 12h ring jewel opens the Four
+# Greetings. The hit zone is the JEWEL band OUTSIDE the tick scale
 # (owner round two: the ticks at that angle must keep their own
 # day/year/moon reading), and the stanzas breathe with a small margin,
-# not a full blank line. The 24h (Omega) letter no longer answers this
+# not a full blank line. The 24h (Omega) jewel no longer answers this
 # hover — that spot now carries the reveal-week double-click below.
-GREETINGS_LETTER_HALF_DEG = 6.0
-GREETINGS_LETTER_OUTER_FRACTION = 1.08
+GREETINGS_JEWEL_HALF_DEG = 6.0
+GREETINGS_JEWEL_OUTER_FRACTION = 1.08
 GREETINGS_STANZA_GAP_PX = 6
 
 
@@ -292,7 +292,7 @@ INSTRUMENT_DIAGRAM_YEAR_RING_RATIO = 0.27  # ...tighter on the year wheel,
 INSTRUMENT_DIAGRAM_LABEL_RATIO = 0.026  # a label's pixel size, per side
 INSTRUMENT_DIAGRAM_CAPTION_RATIO = 0.022
 INSTRUMENT_DIAGRAM_CAPTION_Y = 0.90     # where the one-line caption sits
-INSTRUMENT_DIAGRAM_GLYPH_RATIO = 0.075  # a ring letter, per side
+INSTRUMENT_DIAGRAM_GLYPH_RATIO = 0.075  # a ring jewel, per side
 INSTRUMENT_DIAGRAM_MOON_RATIO = 0.045   # one phase disc's radius, per side
 INSTRUMENT_DIAGRAM_PHASE_STEPS = 8      # phases shown around the lunation
 INSTRUMENT_DIAGRAM_CHART_INSET = 0.10   # the envelope plot's own margin
