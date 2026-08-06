@@ -312,6 +312,31 @@ AURA_OFF_BLACK = "#000000"
 # 3. THE RING
 # ==================================================================
 
+# --- The dial NUMERALS (research/hour_numerals.md §3, §5, §6) -----------------------
+# THE COLOUR PARITY: the ring is NUMERAL_RING_GROUND and against it the
+# numerals alternate — the alternation IS the point, since parity is then
+# readable without counting. An EVEN numeral is a white plate laid on the
+# ring; an ODD one is a cut-out, the ring seen through the numeral. Rule B
+# has no body of its own, so at border 0 an odd numeral is exactly ring on
+# ring and exists ONLY through its relief: the odd hours recede, the even
+# hours advance, and the dial gains depth without gaining ink.
+NUMERAL_RING_GROUND = "#656A70"
+NUMERAL_WHITE = "#FFFFFF"
+NUMERAL_PARITY_COLORS = {
+    "even": {"body": NUMERAL_WHITE, "border": NUMERAL_RING_GROUND},
+    "odd": {"body": NUMERAL_RING_GROUND, "border": NUMERAL_WHITE},
+}
+# The relief's two copies (ledger §5): the SHADE is the dark side wall
+# every style casts, the LIT rim is the emboss recipe's bright return.
+# Both are drawn at the "darkness" setting's own alpha.
+NUMERAL_SHADE_COLOR = "#000000"
+NUMERAL_LIT_COLOR = "#FFFFFF"
+NUMERAL_CONTACT_BLUR_COLOR = "#000000"
+# The INNER band's WHITE GLOW (ring_rework §2) — worn by its numerals and
+# by all five families of tick line alike.
+NUMERAL_INNER_INK = "#FFFFFF"
+NUMERAL_INNER_GLOW_COLOR = "#FFFFFF"
+
 # --- Ring tint (owner spec, FINAL.txt #6) ------------------------------------------
 # One hue recolors the WHOLE clock body: the ring art, the hands and
 # the Umbra are channel-multiplied by it (gray stays gray under None).

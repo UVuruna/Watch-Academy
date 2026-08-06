@@ -19,6 +19,7 @@ CLOCKWISE from the TOP (12:00 noon top, 00:00 midnight bottom,
 | `clock_state.py` | Algorithmic | the two-tier render state, `DayContext` + `TickState` — [about](__about/clock_state.md) · [flow](__flow/clock_state.md) |
 | `continents.py` | Algorithmic | the Continents theme's Zealandia/Pangea Ninth-seat law — [about](__about/continents.md) · [flow](__flow/continents.md) |
 | `crown_text.py` | Algorithmic | outer Great Seal / station-word ring-arc glyph angles — [about](__about/crown_text.md) · [flow](__flow/crown_text.md) |
+| `numerals.py` | Algorithmic | the dial numerals' seating, light and relief mathematics + the live crown's sequences — [about](__about/numerals.md) · [flow](__flow/numerals.md) |
 | `cube_seating.py` | Algorithmic | the Character Cube's geometry — Calendar-12 and Rose-24 — [about](__about/cube_seating.md) · [flow](__flow/cube_seating.md) |
 | `deep_time.py` | Algorithmic | Deep Time calendar mathematics — eras, the 400-year proxy, Julian Day, ΔT — [about](__about/deep_time.md) · [flow](__flow/deep_time.md) |
 | `moon.py` | Algorithmic | moon phase fraction and analytic illumination — [about](__about/moon.md) · [flow](__flow/moon.md) |

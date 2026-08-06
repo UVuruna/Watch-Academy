@@ -7,15 +7,15 @@ deliberately tiny.
 """
 
 import math
-from dataclasses import dataclass, replace
+from dataclasses import dataclass, field, replace
 from datetime import date, datetime, timedelta
 
 import astral
 import astral.moon
 import astral.sun
 
-from config import constants
-from core import angles, ascendant, blue_moon
+from config import constants, dial
+from core import angles, ascendant, blue_moon, numerals
 from core.moon import (
     MoonWindow,
     chinese_zodiac,
@@ -153,6 +153,13 @@ class TickState:
     ascendant_sign: str = ""        # the rising sign right now ("Virgo") —
                                     # the South slot's Ascendant mode
                                     # (owner request 2026-07-12)
+    # THE LIVE CROWN (ring_rework.md §3): every crown zone's own "HH:MM"
+    # at this tick — `dial.CROWN_TIME_ZONES`' keys, "local" for the
+    # watch's own civil time and the tz name for a foreign one (Templar
+    # keeps the hour of Jerusalem). Resolved here, once per minute, so
+    # `render.layers.numerals.LiveCrownLayer` never touches a clock or a
+    # timezone on the paint path.
+    crown_zone_hm: dict = field(default_factory=dict)
     eclipse_event: EclipseEvent | None = None  # active catalog eclipse
                                     # within ITS ±3h window, else None —
                                     # always None without the Deep Time pack
@@ -254,6 +261,12 @@ def build_tick_state(now_local: datetime, day: DayContext) -> TickState:
         is_daylight=_is_daylight(now_local, day.sun),
         is_moon_up=_is_moon_up(now_local, day),
         time_hm=now_local.strftime("%H:%M"),
+        # THE LIVE CROWN (ring_rework.md §3): every crown zone's own
+        # "HH:MM", resolved once here so the MINUTE-cadence crown
+        # layer never converts a timezone on the paint path.
+        crown_zone_hm=numerals.crown_zone_hm(
+            now_local, dial.CROWN_TIME_ZONES
+        ),
         ascendant_sign=ascendant.ascendant_sign(
             now_local, day.latitude, day.longitude
         ),

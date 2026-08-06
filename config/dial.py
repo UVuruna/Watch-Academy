@@ -322,3 +322,153 @@ UMBRA_CONTRAST_SPANS = {
 }
 
 GLOW_RING_RADIUS_FRACTION = RING_LETTER_RADIUS_FRACTION  # ring band centerline
+
+
+# --- The dial NUMERALS (research/hour_numerals.md) ---------------------------------
+# THE LIVE NUMERAL BANDS (ring_rework.md §2): the two numeral bands are
+# RENDERED — at startup and on every settings change, never per frame —
+# rather than shipped as art, because the outer band ROTATES in the
+# Heliocentric mode and a numeral's seat belongs to the ANGLE it lands
+# on, not to the hour it carries. `core.numerals` owns the mathematics,
+# `render/numeral_*.py` the paint; everything tunable is here.
+
+NUMERAL_HOUR_COUNT = 24              # 0 .. 23, bare labels, no leading zero
+NUMERAL_HOUR_STEP_DEG = 15.0         # deg(h) = (h - 12) * 15
+NUMERAL_MINUTE_STEP_DEG = 6.0        # one minute / one second mark
+NUMERAL_MINUTE_LABEL_STEP = 5        # the inner band labels every 5th minute
+NUMERAL_SHORT_TICK_OFFSET_DEG = 6    # the SHORT stroke flanking a LONG one
+
+# One "unit" is the ledger's own length unit (§8: "lengths are in the
+# same units as the numeral's own size, so a setting survives any change
+# of dial resolution"). This is what one unit is worth as a fraction of
+# the DIAL DIAMETER: the SETTLED default size of 90 units therefore draws
+# a 0.05-of-diameter numeral — 36 px on the 720 default dial.
+NUMERAL_UNIT_FRACTION = 0.040 / 90.0
+
+# The band the OUTER numerals stand in — its centreline and its width, as
+# fractions of the dial RADIUS. The centreline is the hour band's own
+# middle, the same measurement `RING_LETTER_RADIUS_FRACTION` names; the
+# width is what the "Outer ring size" setting scales (a multiplier, 1.0 =
+# the measured band).
+NUMERAL_OUTER_RADIUS_FRACTION = RING_LETTER_RADIUS_FRACTION
+NUMERAL_OUTER_BAND_WIDTH_FRACTION = 0.11
+NUMERAL_OUTER_RING_SIZE_RANGE = (0.5, 2.0)
+NUMERAL_OUTER_RING_SIZE_DEFAULT = 1.0
+
+# The INNER band: the minute numerals' own centreline plus where each
+# family of tick LINE starts and ends, all fractions of the dial radius.
+# The lines run INWARD from the band's outer edge, so a longer kind
+# simply reaches further in.
+NUMERAL_INNER_RADIUS_FRACTION = 0.790
+NUMERAL_TICK_OUTER_FRACTION = 0.845
+NUMERAL_TICK_LENGTHS = {
+    "day": 0.012,                    # the 360 day ticks — the faintest hairline
+    "second": 0.022,                 # the sixty second marks
+    "short": 0.028,                  # the stroke beside a printed number
+    "long": 0.045,                   # the twelve five-minute strokes
+    "pointer": 0.058,                # the four quarter arrows
+}
+NUMERAL_TICK_WIDTHS = {
+    "day": 0.0016,
+    "second": 0.0026,
+    "short": 0.0030,
+    "long": 0.0048,
+    "pointer": 0.0062,
+}
+# The POINTER kind is the quarter ARROW: the same radial run, widened into
+# a head at its outer end. The head starts this far along the run (from the
+# outer edge inward) and is this many times the shaft's own half-width.
+NUMERAL_POINTER_HEAD_FRACTION = 0.34
+NUMERAL_POINTER_HEAD_WIDTH = 2.6
+
+# THE FACES (ledger §7) — roster label -> (Qt family, Qt style). Qt sees a
+# family plus a style where a designer says "Bahnschrift Bold", so this
+# table is the ONE mapping (`render.numeral_fonts`); no caller builds a
+# QFont from a roster label itself.
+#
+# VERIFIED ON THIS MACHINE 2026-08-06 (render.numeral_fonts.glyph_coverage,
+# by GLYPH GEOMETRY, not by cmap): the recovered `Bernard MT Condensed`
+# draws all ten digits perfectly and draws NOTHING AT ALL for ':' '.' 'h'
+# 'm' 'i' — zero-area outlines with non-zero advances, while
+# QRawFont.supportsCharacter answers True for every one of them. It
+# therefore stays the hour band's default (digits are the hour band's
+# whole job) and is NOT the crown's default, since the crown needs the
+# colon and the h/min cut. `Eras Bold ITC` covers every glyph.
+NUMERAL_OUTER_FACES = {
+    "Bernard MT Condensed": ("Bernard MT Condensed", ""),
+    "Bahnschrift Bold": ("Bahnschrift", "Bold"),
+    "Poppins SemiBold": ("Poppins", "SemiBold"),
+    "Poppins Black": ("Poppins", "Black"),
+    "Roboto Bold": ("Roboto", "Bold"),
+    "Impact": ("Impact", ""),
+    "Palatino Linotype Bold": ("Palatino Linotype", "Bold"),
+}
+NUMERAL_INNER_FACES = {
+    "Eras Bold ITC": ("Eras Bold ITC", ""),
+    "Unispace": ("Unispace", "Bold"),
+    "Poppins Black": ("Poppins", "Black"),
+    "Arial Black": ("Arial", "Black"),
+    "Segoe UI Black": ("Segoe UI", "Black"),
+}
+NUMERAL_OUTER_FACE_DEFAULT = "Bernard MT Condensed"
+NUMERAL_INNER_FACE_DEFAULT = "Eras Bold ITC"
+# The CROWN's own face is picked for FULL coverage, not inherited from the
+# hour band: the live crown needs the colon (and the h/min cut), which the
+# hour band's default cannot draw on this install — see the verified note
+# above. `render.numeral_fonts.first_covering_face` proves this pick at
+# settings-apply time and fails loudly rather than substituting silently.
+CROWN_FACE_DEFAULT = "Bahnschrift Bold"
+# The size the coverage proof rasterizes/measures at — large enough that a
+# hairline glyph still reports a non-zero outline, small enough to be free.
+NUMERAL_COVERAGE_PROBE_PX = 80
+NUMERAL_COVERAGE_PROBE_INK = "#FFFFFF"
+
+# THE SETTLED SETTINGS (ledger §8) at their SETTLED defaults.
+NUMERAL_SEATINGS = ("arc", "upright")
+NUMERAL_SEATING_DEFAULT = "arc"
+NUMERAL_RELIEF_STYLES = ("cast", "extrude", "emboss")
+NUMERAL_RELIEF_DEFAULT = "extrude"
+NUMERAL_LIGHTS = ("radial", "fixed")
+NUMERAL_LIGHT_DEFAULT = "radial"
+NUMERAL_SIZE_RANGE = (40, 140)
+NUMERAL_OUTER_SIZE_DEFAULT = 90
+NUMERAL_INNER_SIZE_DEFAULT = 55
+NUMERAL_BORDER_RANGE = (0.0, 16.0)
+NUMERAL_BORDER_DEFAULT = 0.0
+NUMERAL_DEPTH_RANGE = (0.0, 16.0)
+NUMERAL_DEPTH_DEFAULT = 3.0
+NUMERAL_DARKNESS_RANGE = (0.0, 1.0)
+NUMERAL_DARKNESS_DEFAULT = 1.0
+NUMERAL_CONTACT_BLUR_RANGE = (0.0, 8.0)
+NUMERAL_CONTACT_BLUR_DEFAULT = 0.5
+NUMERAL_EMBOSS_LIT_FACTOR = -0.6     # ledger §5: the lit rim, the other way
+
+# The INNER band's own relief is not the outer's black shadow but a WHITE
+# GLOW (ring_rework §2) — small radius, strong intensity, a border+glow
+# and never a diffuse halo — worn by its numerals AND its lines alike.
+NUMERAL_GLOW_RADIUS_UNITS = 1.6      # in numeral units, like every length
+NUMERAL_GLOW_PASSES = 3              # composited copies = the intensity
+NUMERAL_GLOW_BORDER_UNITS = 0.9      # the crisp white border under the glow
+
+# THE LIVE CROWN (ring_rework §3): the time in the arc, rendered as
+# exactly the digits-and-colon set ONCE per settings change and merely
+# re-composed once a minute. `zone` None is this watch's own civil time;
+# a named zone is resolved through tzdata in core.clock_state.
+CROWN_TIME_FORMATS = ("hh:mm", "12h 35min")
+CROWN_TIME_FORMAT_DEFAULT = "hh:mm"
+CROWN_SMALL_CUT_FRACTION = 0.62      # the h/min cut, of the digit size
+CROWN_NUMERAL_SIZE_FRACTION = 0.55   # crown digit height, of the hour numeral
+CROWN_RADIUS_FRACTION = RING_CROWN_TEXT_RADIUS_FRACTION
+RING_LIVE_CROWN = {
+    # The One — the top arc keeps this watch's OWN civil time; its bottom
+    # arc is "City, Country", already drawn by the existing
+    # `Settings.ring_crown_location` path through RingLayer.
+    "The One": {"zone": None, "orientation": "top"},
+    # Templar — the top arc keeps the hour of JERUSALEM; its bottom arc,
+    # NON NOBIS DOMINE, is a static plate arc declared in the preset card.
+    "Templar": {"zone": "Asia/Jerusalem", "orientation": "top"},
+}
+CROWN_TIME_ZONES = {
+    entry["zone"] or "local": entry["zone"]
+    for entry in RING_LIVE_CROWN.values()
+}
