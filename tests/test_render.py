@@ -594,10 +594,14 @@ def test_ring_saturation_grays_the_tinted_ring_plate_not_the_pointer(app):
         image = Compositor(skin, AssetCache()).render_offscreen(
             480.0, 1.0, day, tick
         )
-        # Inside the donut band, on the horizontal axis (18h side) —
-        # away from any hand/star overlay; probed to land on a
-        # colorful (not white/black-edge) pixel of the tinted plate.
-        return image.pixelColor(470, 240)
+        # Inside the donut band on the 18h side, away from any hand or
+        # star overlay, and probed to land on a colorful (not
+        # white/black-edge) pixel of the tinted plate. HALF AN HOUR off
+        # the axis (97.5 deg, r = 0.94 R): the live numeral bands
+        # (ring_rework.md §2) draw a white "18" exactly on the axis
+        # itself now, and a white numeral has no saturation to measure
+        # in either arm. Between two hour seats the plate is still bare.
+        return image.pixelColor(464, 269)
 
     full_px = ring_pixel(tinted)
     grayed_px = ring_pixel(grayed_ring)
