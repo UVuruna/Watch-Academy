@@ -44,6 +44,7 @@ Owner-facing notes, audits and one-off generated reports living at
 | [Encyclopedia Expansion](encyclopedia_expansion.md) | Design + ship-ready copy for the Encyclopedia's second half — "The Instrument" articles, Virtues/Sins/Moods, the WEEK mode |
 | [The Dial Numerals](hour_numerals.md) | Settings ledger for both numeral bands — the classic/solar modes, the angle-based seating law, the two font rosters, the cast/extrude/emboss relief and the light law, every setting marked SETTLED or OPEN |
 | [The Ring Rework Ledger](ring_rework.md) | Every ruling of the 2026-08-06 rework round — the Geocentric/Heliocentric world-modes, the night inversion, live band rendering, the crown_text rename and hover law, the six presets (LOOP, CHI, ceramic) — all SETTLED, the implementation session's brief |
+| [Crown Content Dossier](crown_content.md) | Ship-ready copy for the rework's wiring: every crown-text hover (each text explains ITSELF), the per-seat alphabet-ordinal hover lines, the two GUIDE world-mode passages, the CHI article draft, and the six approved About texts verbatim |
 | [Guide Redesign and Shot List](guide_shotlist.md) | The Guide's 30-chapter redesign plan plus the numbered 37-screenshot shot list |
 | [Image Generation Automation — the Plan](image_automation_plan.md) | Design proposal for a separate browser-automation tool (PromptPainter) that drives Gemini/ChatGPT from the prompt sheets |
 | [The Pantheon Catalog](pantheon_catalog.md) | Both weekday rosters seat by seat, every alternative argued, every dilemma flagged for the owner's decision |
