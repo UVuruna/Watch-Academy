@@ -570,6 +570,20 @@ def _compose_skin(settings: Settings, location_display: str = ""):
                     "text": location_text, "start": 0,
                     "end": len(location_text) - 1, "seat": None,
                 },),
+                # THE ONE's OWN LOCATION LINE (ring_rework §3, owner
+                # ruling 2026-08-06): verbatim from
+                # research/crown_content.md §1 — the counterpart to the
+                # live-hour crown's own reading (dial.RING_LIVE_CROWN_READING).
+                "reading": {
+                    "title": "City, Country",
+                    "text": (
+                        "the bottom arc names the city and country the "
+                        "watch is set to: the counterpart to the live "
+                        "hour above it — WHERE anchors WHEN, the two "
+                        "lines that make a clock a fact about a "
+                        "specific place rather than an abstraction."
+                    ),
+                },
             }]
     crown_arc = tuple(
         {
@@ -599,6 +613,13 @@ def _compose_skin(settings: Settings, location_display: str = ""):
                 }
                 for word in entry["words"]
             ),
+            # THE ONE TERM ONE HOVER LAW (ring_rework §3, owner ruling
+            # 2026-08-06): an entry's own `reading`, when it carries
+            # one, wins over the seat's letter legend in
+            # render.compositor._ring_word_legend_tooltip. Custom rings'
+            # free-typed/location crowns never carry one (graceful
+            # absence — dict.get default).
+            "reading": entry.get("reading"),
         }
         for entry in crown_arc_entries
     )

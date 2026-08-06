@@ -177,7 +177,14 @@ def test_templar_preset_loads_its_locked_cross_outer_with_the_cross_glyph():
     readings = [templar["legend"][p]["reading"] for p in (12, 18, 24, 6)]
     assert len(set(names)) == 4, "four identical crosses, four names"
     assert len(set(readings)) == 4, "the station text never repeats"
-    assert templar["crown_text"] == ()
+    # ring_rework §3c (owner ruling 2026-08-06): NON NOBIS DOMINE joined
+    # the card as its own bottom free-arc crown text (the order's own
+    # motto — its live top arc, the hour of Jerusalem, is wave-3 code,
+    # not a card entry).
+    assert [entry["text"] for entry in templar["crown_text"]] == [
+        "NON NOBIS DOMINE"
+    ]
+    assert templar["crown_text"][0]["reading"]["title"] == "NON NOBIS DOMINE"
 
     art_dir = dial.RING_LETTER_ART_DIR
     skin = build_skin(replace(Settings(), ring="Templar")).ring
@@ -411,6 +418,7 @@ def test_thematic_finish_wears_the_preset_color():
     assert constants.RING_THEMATIC_SHADES == {
         "DOMY": "cross_red", "LOOP": "cross_blue", "Dollar": "dollar_green",
         "The One": "moon_indigo", "Templar": "templar_black",
+        "CHI": "ceramic",
     }
 
 
@@ -541,9 +549,11 @@ def test_mason_crown_text_arc_loads_and_pins_its_key_letters():
 
     # The crown-text-free bundled presets stay crown-text-free (graceful
     # absence); DOMY and LOOP carry their own cross words now
-    # (CROSS-WORDS round — see test_cross_words_ring_the_dial).
+    # (CROSS-WORDS round — see test_cross_words_ring_the_dial). Templar
+    # gained NON NOBIS DOMINE in the ring-rework round (owner ruling
+    # 2026-08-06) — see test_templar_preset_loads_its_locked_cross_outer_
+    # with_the_cross_glyph.
     assert presets["The One"]["crown_text"] == ()
-    assert presets["Templar"]["crown_text"] == ()
 
     # build_skin resolves the crown text onto real assets, one glyph per
     # NON-SPACE character (spaces are dropped — RingLayer's draw loop
@@ -601,16 +611,18 @@ def test_dial_window_margin_grows_only_for_a_crown_text_preset():
     preset carries one, and stay UNCHANGED for every preset that does
     not — the graceful-absence pattern `triangle`/`legend` already use.
     CROSS-WORDS round (owner UV inbox 2026-07-27): DOMY and LOOP now
-    carry their station words as arc text too, so the crown-text-free
-    baseline is Templar/The One. MOTO-FIX round (owner correction
-    2026-07-19): both crown texts share ONE radius, so the expected extent
-    drops the old `RING_CROWN_TEXT_RADIUS_STEP` term (deleted, Rule #6)."""
-    templar = build_skin(replace(Settings(), ring="Templar"))
+    carry their station words as arc text too; the ring-rework round
+    (owner ruling 2026-08-06) gave Templar its own NON NOBIS DOMINE
+    crown text, so the crown-text-free baseline is The One alone. MOTO-FIX
+    round (owner correction 2026-07-19): both crown texts share ONE
+    radius, so the expected extent drops the old
+    `RING_CROWN_TEXT_RADIUS_STEP` term (deleted, Rule #6)."""
+    the_one = build_skin(replace(Settings(), ring="The One"))
     mason = build_skin(replace(Settings(), ring="Dollar"))
     domy = build_skin(Settings())
-    templar_margin = defaults.dial_window_margin_fraction(templar)
+    the_one_margin = defaults.dial_window_margin_fraction(the_one)
     mason_margin = defaults.dial_window_margin_fraction(mason)
-    assert mason_margin > templar_margin
+    assert mason_margin > the_one_margin
     # The cross-word presets reserve the SAME crown-text reach as the Dollar.
     assert defaults.dial_window_margin_fraction(domy) == mason_margin
     # The crown text arc's own outer reach is the binding term for the Dollar.

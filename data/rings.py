@@ -85,6 +85,24 @@ def _validate_crown_text(name: str, raw: list, positions: tuple) -> tuple:
                 f"{sorted(unknown)}"
             )
         clockwise = bool(crown_entry.get("clockwise", True))
+        # EVERY CROWN TEXT CARRIES ITS OWN HOVER (ring_rework §3, owner
+        # ruling 2026-08-06): an optional `reading` {title, text} —
+        # when present, `render.compositor._ring_word_legend_tooltip`
+        # shows THIS for every word of this entry instead of the seat's
+        # own letter legend (the exact reported bug: ANNUIT's hover
+        # used to narrate the Anointed Aegis letter under it instead of
+        # the Latin motto itself).
+        reading_raw = crown_entry.get("reading")
+        reading = None
+        if reading_raw is not None:
+            reading_title = str(reading_raw.get("title", "")).strip()
+            reading_text = str(reading_raw.get("text", "")).strip()
+            if not reading_title or not reading_text:
+                raise ValueError(
+                    f"ring preset {name!r}: crown text {text!r} reading "
+                    "needs both a title and a text"
+                )
+            reading = {"title": reading_title, "text": reading_text}
         # THE CROWN TEXT form (custom rings, owner decree 2026-08-05):
         # `{"text", "orientation"}` — free-form, user-typed text arcing
         # from the top or from the bottom, NOT pinned to any ring seat.
@@ -106,6 +124,7 @@ def _validate_crown_text(name: str, raw: list, positions: tuple) -> tuple:
             resolved.append({
                 "text": text, "angles": angles,
                 "words": _words(text, (), None),
+                "reading": reading,
             })
             continue
         # The CROSS-WORDS form (owner UV inbox 2026-07-27): a single
@@ -134,6 +153,7 @@ def _validate_crown_text(name: str, raw: list, positions: tuple) -> tuple:
             resolved.append({
                 "text": text, "angles": angles,
                 "words": _words(text, (), center),
+                "reading": reading,
             })
             continue
         pins = []
@@ -157,6 +177,7 @@ def _validate_crown_text(name: str, raw: list, positions: tuple) -> tuple:
         resolved.append({
             "text": text, "angles": angles,
             "words": _words(text, pin_indices, None),
+            "reading": reading,
         })
     return tuple(resolved)
 
@@ -260,6 +281,12 @@ def validate_preset(entry: dict) -> dict:
                 f"{thematic!r} (known: "
                 f"{sorted(constants.METAL_SHADE_NAMES['thematic'])})"
             )
+    # The optional ABOUT text (RING PICKER round, owner ruling
+    # 2026-08-06): theme-and-name marketing copy for the preset picker
+    # — never a seat listing. Optional so a custom ring need not carry
+    # one; the six bundled cards ship it VERBATIM from the approved
+    # round (research/crown_content.md §5).
+    about = str(entry.get("about", "")).strip() or None
     return {
         "name": name,
         "positions": positions,
@@ -269,6 +296,7 @@ def validate_preset(entry: dict) -> dict:
         "legend": legend,
         "crown_text": crown_text,
         "thematic": thematic,
+        "about": about,
     }
 
 

@@ -91,6 +91,20 @@
       "detail_gain": 1.00,
       "specular": { "start": 0.87, "strength": 0.44 }
     },
+    "ceramic": {
+      "_comment": "THEMATIC ring ramp (owner ring-rework round, 2026-08-06): CHI - cold porcelain white, high lightness, near-zero saturation. Anchor stops #7E7A73/#A8A49C/#D8D4CC/#EDEAE3/#FBFAF6 (approved round).",
+      "stops": [
+        [0.00, "#7E7A73"],
+        [0.25, "#A8A49C"],
+        [0.55, "#D8D4CC"],
+        [0.82, "#EDEAE3"],
+        [1.00, "#FBFAF6"]
+      ],
+      "gamma": 1.00,
+      "contrast": 0.24,
+      "detail_gain": 0.85,
+      "specular": { "start": 0.90, "strength": 0.28 }
+    },
     "gold": {
       "stops": [
         [0.00, "#1A1005"],

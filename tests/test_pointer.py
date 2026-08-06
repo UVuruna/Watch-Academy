@@ -1493,13 +1493,15 @@ def test_mason_ring_letters_answer_their_own_hover_legend(july_wednesday):
     assert domy._tick_tooltip(point_at(16), radius) is None
 
 
-def test_ring_arc_words_answer_their_seat_legend(july_wednesday):
+def test_ring_arc_words_answer_their_own_entry_reading(july_wednesday):
     """WORD-HOVER round (owner 2026-07-27, "HOVER tekst osim na slova
-    treba i na reči"): hovering an arc WORD in the outside-the-band
-    crown-text band answers with the legend of the word's own seat — a
-    station word (DOMY/LOOP) its station, a Dollar crown-text word its
-    pinned letter (ANNUIT→A, ORDO→Ω, …). Between the words the band
-    stays silent."""
+    treba i na reči") CORRECTED by THE ONE TERM ONE HOVER LAW
+    (ring_rework §3, owner ruling 2026-08-06): hovering an arc WORD in
+    the outside-the-band crown-text band now answers with the crown
+    TEXT's own `reading` — the exact reported bug is that ANNUIT used
+    to narrate the Anointed Aegis (the A letter's own seat legend)
+    instead of the Latin motto; that legend must NOT appear any more.
+    Between the words the band stays silent."""
     from app.controller import build_skin
     from app.settings_store import Settings, replace as settings_replace
 
@@ -1517,9 +1519,9 @@ def test_ring_arc_words_answer_their_seat_legend(july_wednesday):
     domy = Compositor(build_skin(Settings()), AssetCache())
     domy.render_offscreen(360.0, 1.0, day, tick)
     fear = domy._tick_tooltip(point_at(120.0), radius)
-    assert fear is not None and "FEAR" in fear and "Ysteria" in fear
+    assert fear is not None and "FEAR" in fear and "panic" in fear
     suffering = domy._tick_tooltip(point_at(0.0), radius)
-    assert "SUFFERING" in suffering and "Miseria" in suffering
+    assert "SUFFERING" in suffering and "noon light" in suffering
     assert domy._tick_tooltip(point_at(90.0), radius) is None  # between words
 
     loop = Compositor(
@@ -1527,16 +1529,18 @@ def test_ring_arc_words_answer_their_seat_legend(july_wednesday):
     )
     loop.render_offscreen(360.0, 1.0, day, tick)
     salvation = loop._tick_tooltip(point_at(180.0), radius)
-    assert "SALVATION" in salvation and "Opheleia" in salvation
+    assert "SALVATION" in salvation and "help that delivers" in salvation
 
     dollar = Compositor(
         build_skin(settings_replace(Settings(), ring="Dollar")), AssetCache()
     )
     dollar.render_offscreen(360.0, 1.0, day, tick)
     annuit = dollar._tick_tooltip(point_at(316.7), radius)
-    assert "ANNUIT" in annuit and "Anointed Aegis" in annuit
+    assert "ANNUIT COEPTIS" in annuit and "favored our undertakings" in annuit
+    assert "Anointed Aegis" not in annuit    # THE reported bug, fixed
     ordo = dollar._tick_tooltip(point_at(186.0), radius)
-    assert "ORDO" in ordo and "Omnific Originator" in ordo
+    assert "NOVUS ORDO SECLORUM" in ordo and "new order of the ages" in ordo
+    assert "Omnific Originator" not in ordo
 
 
 def _max_alpha_in_box(image, cx, cy, half):

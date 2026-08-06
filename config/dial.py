@@ -471,6 +471,37 @@ CROWN_TIME_ZONES = {
     entry["zone"] or "local": entry["zone"]
     for entry in RING_LIVE_CROWN.values()
 }
+# THE LIVE CROWN'S OWN HOVER (ring_rework §3, owner ruling 2026-08-06 —
+# "the live time/location crowns say whose hour they keep"): the live
+# glyphs (`render.layers.numerals.LiveCrownLayer`) carry no `crown_text`
+# card entry to hang a `reading` on, so their hover text lives here,
+# read by `render.compositor._live_crown_tooltip`. Verbatim from
+# research/crown_content.md §1.
+RING_LIVE_CROWN_READING = {
+    "The One": {
+        "title": "the civil hour of your own city",
+        "text": (
+            "the top arc reads whatever a clock on your own wall would "
+            "read, in your own timezone — The One is the hour ring, so "
+            "its live text is the plainest possible statement of its "
+            "doctrine: the wheel telling you what hour it already is."
+        ),
+    },
+    "Templar": {
+        "title": "the hour of Jerusalem, the city of the vow",
+        "text": (
+            "the top arc keeps a second zone regardless of where the "
+            "watch itself sits — a knight's watch was always measured "
+            "against the city his order swore to, not against wherever "
+            "he was standing."
+        ),
+    },
+}
+# Generous half-angle (Rule #7 — no per-glyph geometry solved for text
+# that is rasterized fresh every minute): comfortably covers the widest
+# live format ("12h 35min", CROWN_TIME_FORMATS) at the crown texts' own
+# fixed per-glyph step.
+RING_LIVE_CROWN_HOVER_HALF_DEG = RING_CROWN_TEXT_LETTER_STEP_DEG * 6.0
 
 # THE ONE COPY RULE's ceiling on the process-wide plate cache
 # (`render.numeral_bands._PLATES`). A plate's key carries the band's

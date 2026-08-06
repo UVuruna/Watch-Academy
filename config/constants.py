@@ -952,6 +952,7 @@ RING_THEMATIC_SHADES = {
     "Dollar": "dollar_green",   # the banknote's ink
     "The One": "moon_indigo",   # the winter-solstice violet
     "Templar": "templar_black", # the Beauceant
+    "CHI": "ceramic",           # the cold porcelain of the 24th letter
 }
 
 # THE METAL SHADES (R8a round, owner spec 2026-07-21 night — the retry
@@ -983,7 +984,7 @@ METAL_SHADE_NAMES = {
     # the sync.
     "thematic": (
         "cross_red", "cross_blue", "dollar_green",
-        "moon_indigo", "templar_black",
+        "moon_indigo", "templar_black", "ceramic",
         "gold", "gold_dark_amber", "gold_amber", "gold_pale",
         "gold_champagne",
         "silver", "bronze", "bronze_dark", "bronze_light",
@@ -1002,7 +1003,7 @@ METAL_SHADE_TITLES = {
     "gunmetal": "Gunmetal", "silver": "Silver", "platinum": "Platinum",
     "cross_red": "Cross red", "cross_blue": "Cross blue",
     "dollar_green": "Dollar green", "moon_indigo": "Moon indigo",
-    "templar_black": "Templar black",
+    "templar_black": "Templar black", "ceramic": "Ceramic",
     # The remaining transformer ramps, pickable by a CUSTOM ring's own
     # thematic choice (ENLARGE/THEMATIC round, widened same day):
     "gold": "Gold", "gold_dark_amber": "Gold dark amber",
@@ -1110,7 +1111,7 @@ RING_OUTERS = {
 # locks to it any more, custom rings only.
 RING_OUTER_LOCK = {
     "DOMY": "bot_cross", "LOOP": "top_cross", "Dollar": "hexa",
-    "Templar": "cross", "The One": "octa",
+    "Templar": "cross", "The One": "octa", "CHI": "full",
 }
 # THE EIGHT INNER VARIANTS (owner's measured art,
 # `assets/instrument/ring/inner/*.png`): "seconds*" carry the minute
@@ -1132,6 +1133,10 @@ RING_INNERS = (
 RING_INNER_PRESET_DEFAULT = {
     "DOMY": "seconds", "LOOP": "seconds", "Dollar": "seconds",
     "Templar": "seconds_cross", "The One": "simple_octa",
+    # PROPOSED (S5, ring-rework CHI task, awaiting owner veto): "simple"
+    # — the emptiest inner for the emptiest dial (a single X on the
+    # solid "full" outer plate); still user-changeable in Settings ▸ Ring.
+    "CHI": "simple",
 }
 RING_INNER_DEFAULT = "simple"       # every custom ring's own fallback
 # THE METAL-SPLIT OPTION (TASK 3, MASON/ICONS round, owner verdicts

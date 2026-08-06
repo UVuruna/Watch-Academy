@@ -2716,6 +2716,9 @@ class Compositor:
         word_legend = self._ring_word_legend_tooltip(theta, distance, radius)
         if word_legend is not None:
             return word_legend
+        live_crown = self._live_crown_tooltip(theta, distance, radius)
+        if live_crown is not None:
+            return live_crown
         if not (
             radius * dial.TICK_HOVER_INNER_FRACTION
             <= distance
@@ -2827,18 +2830,29 @@ class Compositor:
     def _ring_word_legend_tooltip(
         self, theta: float, distance: float, radius: float
     ) -> str | None:
-        """The per-WORD hover on the outer arc text (WORD-HOVER round,
-        owner 2026-07-27): hovering a station word (DOMY/LOOP) or a
-        Great Seal crown text word (the Dollar) answers with the legend of
-        the SEAT that word belongs to — the station words sit ON their
-        station's seat, and the Dollar's five words each carry exactly
-        one pinned letter (ANNUIT→A, COEPTIS→S, NOVUS→N, ORDO→Ω,
-        SECLORUM→M: the five words spell the five letters). Geometry is
-        pre-solved by `app.controller.build_skin` into
-        `ring.crown_text[…]["words"]` (angular center + half-span per word);
-        here only the band/angle test and the legend lookup run. A word
-        with no seat, or a seat without a legend entry, stays silent —
-        the graceful-absence pattern the letter legend already uses."""
+        """The per-WORD hover on the outer arc text.
+
+        THE ONE TERM ONE HOVER LAW (ring_rework §3, owner ruling
+        2026-08-06 — "every crown text carries ITS OWN hover"): when
+        the crown-text entry itself carries a `reading` (Database/
+        ring_presets.json, `data.rings._validate_crown_text`), every
+        word of THAT entry answers with the entry's own reading —
+        ANNUIT COEPTIS explains the Latin motto itself, never the
+        Anointed Aegis legend of the letter it happens to hang on (the
+        exact reported bug the WORD-HOVER round shipped, corrected
+        here). Only entries carrying no `reading` of their own (a
+        custom ring's free-typed/location crown) fall back to the old
+        behaviour: the legend of the SEAT that word belongs to — the
+        station words sit ON their station's seat, and the Dollar's
+        five words each carry exactly one pinned letter (ANNUIT→A,
+        COEPTIS→S, NOVUS→N, ORDO→Ω, SECLORUM→M: the five words spell
+        the five letters). Geometry is pre-solved by
+        `app.controller.build_skin` into `ring.crown_text[…]["words"]`
+        (angular center + half-span per word); here only the band/angle
+        test and the reading/legend lookup run. A word with no seat and
+        no entry reading, or a seat without a legend entry, stays
+        silent — the graceful-absence pattern the letter legend already
+        uses."""
         crown_text = self._skin.ring.crown_text
         if not crown_text:
             return None
@@ -2862,15 +2876,23 @@ class Compositor:
         screen_theta = (theta + offset) % 360.0
         for entry in crown_text:
             arc_centre = _crown_arc_centre(entry)
+            entry_reading = entry.get("reading")
             for word in entry.get("words", ()):
-                if word["seat"] is None:
-                    continue
                 center = world.arc_seat_deg(word["center"], arc_centre, offset)
                 delta = min(
                     (screen_theta - center) % 360.0,
                     (center - screen_theta) % 360.0,
                 )
                 if delta > word["half"]:
+                    continue
+                if entry_reading is not None:
+                    # THE ONE TERM ONE HOVER LAW: the entry speaks for
+                    # itself, regardless of which (if any) seat this
+                    # word happens to hang on.
+                    return _hover_title(
+                        html.escape(entry_reading["title"])
+                    ) + _article_body_html(entry_reading["text"])
+                if word["seat"] is None:
                     continue
                 seat_entry = legend.get(word["seat"] % 24)
                 if seat_entry is None:
@@ -2880,6 +2902,47 @@ class Compositor:
                     html.escape(title)
                 ) + _article_body_html(seat_entry["reading"])
         return None
+
+    def _live_crown_tooltip(
+        self, theta: float, distance: float, radius: float
+    ) -> str | None:
+        """The LIVE crown's own hover (ring_rework §1/§3, owner ruling
+        2026-08-06 — "the live time/location crowns say whose hour they
+        keep"): The One's civil-hour top arc and Templar's Jerusalem-
+        hour top arc (`render.layers.numerals.LiveCrownLayer`,
+        `dial.RING_LIVE_CROWN`) carry no `crown_text` card entry at all
+        — they are rasterized fresh every minute — so their hover text
+        lives HERE, in `dial.RING_LIVE_CROWN_READING`, rather than in
+        any card. Geometry is approximate on purpose (Rule #7 — the
+        live glyphs are never solved into named word spans the way a
+        static crown-text entry is): the whole top half of the crown
+        band answers, generously covering every digit format the
+        setting allows (`hh:mm` / `12h 35min`)."""
+        if self._skin.ring_name not in dial.RING_LIVE_CROWN:
+            return None
+        entry = dial.RING_LIVE_CROWN[self._skin.ring_name]
+        band = dial.RING_CROWN_TEXT_RADIUS_FRACTION
+        half_band = dial.RING_CROWN_TEXT_HOVER_HALF_FRACTION
+        if not (
+            radius * (band - half_band)
+            <= distance
+            <= radius * (band + half_band)
+        ):
+            return None
+        offset = self._world_offset()
+        screen_theta = (theta + offset) % 360.0
+        anchor = 0.0 if entry["orientation"] == "top" else 180.0
+        delta = min(
+            (screen_theta - anchor) % 360.0, (anchor - screen_theta) % 360.0
+        )
+        if delta > dial.RING_LIVE_CROWN_HOVER_HALF_DEG:
+            return None
+        reading = dial.RING_LIVE_CROWN_READING.get(self._skin.ring_name)
+        if reading is None:
+            return None
+        return _hover_title(
+            html.escape(reading["title"])
+        ) + _article_body_html(reading["text"])
 
     def _ascendant_text(self, style: str | None = None) -> str:
         """The Ascendant hover (owner request 2026-07-12, formatting
