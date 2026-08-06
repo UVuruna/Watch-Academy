@@ -637,6 +637,69 @@ def test_dial_window_margin_grows_only_for_a_crown_text_preset():
     assert mason_margin == pytest.approx(expected_margin)
 
 
+def test_dial_window_margin_reserves_for_the_live_crown():
+    """Crown Polish round TASK 2 (owner correction 2026-08-06 — The
+    One's top crown arc clipped by the window edge at default size):
+    `dial.RING_LIVE_CROWN` names The One and Templar, but NEITHER
+    carries a `crown_text` card entry, so `crown_text_extent` stayed
+    0.0 for both and the window was sized to the plain ring
+    letters/glow alone. `dial_window_margin_fraction` must now reserve
+    the live crown's own reach — THE TIME CROWN LOOK's stamped shadow,
+    the exact same `(1 + 2*RING_LETTER_SHADOW_RADIUS)` factor the ring
+    letters and the static crown text arc already answer to."""
+    the_one = build_skin(replace(Settings(), ring="The One"))
+    templar = build_skin(replace(Settings(), ring="Templar"))
+    assert "The One" in dial.RING_LIVE_CROWN
+    assert "Templar" in dial.RING_LIVE_CROWN
+    assert "DOMY" not in dial.RING_LIVE_CROWN
+
+    def live_crown_extent(skin) -> float:
+        live_height = (
+            skin.numeral_outer_size * dial.NUMERAL_UNIT_FRACTION
+            * dial.CROWN_NUMERAL_SIZE_FRACTION
+        )
+        return (
+            dial.CROWN_RADIUS_FRACTION
+            + live_height * (1.0 + 2.0 * dial.RING_LETTER_SHADOW_RADIUS)
+        )
+
+    def crown_text_extent(skin) -> float:
+        if not skin.ring.crown_text:
+            return 0.0
+        return (
+            dial.RING_CROWN_TEXT_RADIUS_FRACTION
+            + dial.RING_CROWN_TEXT_SIZE * skin.ring_letter_scale
+            * skin.crown_text_scale
+            * (1.0 + 2.0 * dial.RING_LETTER_SHADOW_RADIUS)
+        )
+
+    # The One carries a live crown alone (no static crown_text card
+    # entry) — the live term is the exact reach.
+    assert not the_one.ring.crown_text
+    expected_one = (
+        live_crown_extent(the_one) - 1.0
+    ) / 2.0 + defaults.DIAL_WINDOW_MARGIN_EPSILON
+    assert defaults.dial_window_margin_fraction(the_one) == pytest.approx(
+        expected_one
+    )
+    # Templar carries BOTH a live crown (its own Jerusalem hour) and a
+    # static crown_text arc (NON NOBIS DOMINE) — whichever reaches
+    # further binds the window, and the live term alone must not be
+    # silently dropped from the max() just because the static term wins.
+    assert templar.ring.crown_text
+    expected_templar = (
+        max(live_crown_extent(templar), crown_text_extent(templar)) - 1.0
+    ) / 2.0 + defaults.DIAL_WINDOW_MARGIN_EPSILON
+    assert defaults.dial_window_margin_fraction(templar) == pytest.approx(
+        expected_templar
+    )
+    # DOMY carries no live crown at all (`RING_LIVE_CROWN` names only The
+    # One and Templar) — its margin is unaffected by this round, exactly
+    # as `test_dial_window_margin_grows_only_for_a_crown_text_preset`
+    # above already pins against the Dollar's own crown_text extent.
+    assert "DOMY" not in dial.RING_LIVE_CROWN
+
+
 def test_build_skin_swaps_only_the_ring():
     domy = build_skin(Settings())
     morph = build_skin(replace(Settings(), ring="LOOP"))

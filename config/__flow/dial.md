@@ -42,8 +42,16 @@ flowchart LR
     A[dial.py: RING_LETTER_RADIUS_FRACTION,\nRING_LETTER_ART_SCALE,\nRING_LETTER_SHADOW_RADIUS,\nRING_CROWN_TEXT_RADIUS_FRACTION] --> D["defaults.dial_window_margin_fraction(skin)"]
     B[glow.py: GLOW_RADIUS_SCALE] --> D
     C["dial.py: GLOW_RING_RADIUS_FRACTION\n(= RING_LETTER_RADIUS_FRACTION)"] --> D
+    F["dial.py: RING_LIVE_CROWN,\nCROWN_RADIUS_FRACTION,\nNUMERAL_UNIT_FRACTION,\nCROWN_NUMERAL_SIZE_FRACTION"] --> D
     D --> E[per-side transparent window margin,\nrecomputed on every skin install]
 ```
+
+The fourth term (Crown Polish round, owner correction 2026-08-06) is the
+LIVE crown's own reach — a no-op for every preset `RING_LIVE_CROWN` does
+not name, which is what left The One's top arc clipped at default size
+before this round: neither The One nor Templar carries a static
+`crown_text` card entry, so the THIRD term (`RING_CROWN_TEXT_RADIUS_
+FRACTION`) stayed 0.0 for both too.
 
 `dial_window_margin_fraction` is a COORDINATOR function in
 `defaults.py` because it needs both `dial.py`'s ring/letter/crown-text

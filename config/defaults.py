@@ -538,7 +538,26 @@ def dial_window_margin_fraction(skin) -> float:
     `RING_CROWN_TEXT_RADIUS_STEP` is gone. CROWN TEXT SIZE (owner correction
     2026-08-05): `skin.crown_text_scale` multiplies ON TOP of
     `ring_letter_scale` here too, so a Crown Text SIZE slider pick never
-    clips against the transparent window edge (Space & Legibility law)."""
+    clips against the transparent window edge (Space & Legibility law).
+
+    THE LIVE CROWN'S OWN TERM (Crown Polish round, owner correction
+    2026-08-06 — The One's top arc clipped by the window edge at default
+    size): `dial.RING_LIVE_CROWN` names The One and Templar, but NEITHER
+    carries a `crown_text` card entry (their live time is not a card
+    field — `render.layers.numerals.LiveCrownLayer`), so
+    `crown_text_extent` stayed 0.0 for both and the window was sized to
+    the plain ring letters/glow alone while the live glyphs, styled by
+    THE TIME CROWN LOOK's own letter-shadow stamp
+    (`render.numeral_bands._crown_letter_glyph_image`/
+    `_crown_colon_image`), reach out to `CROWN_RADIUS_FRACTION` plus
+    their own half-height-and-shadow — genuinely further than the
+    unclipped extents this function already knew about. `live_crown_
+    extent` is the SAME shape `crown_text_extent` uses (a centre radius
+    plus a full glyph height scaled by `(1 + 2·RING_LETTER_SHADOW_
+    RADIUS)`, the exact reach `_crown_letter_glyph_image`'s baked shadow
+    occupies), anchored at the crown's own `CROWN_RADIUS_FRACTION`
+    instead of the static arc's, and 0.0 (another no-op term) for every
+    preset `RING_LIVE_CROWN` does not name."""
     marker = max(skin.year_marker.scale, skin.year_marker.moon_scale)
     glow_extent = (
         dial.GLOW_RING_RADIUS_FRACTION
@@ -556,8 +575,19 @@ def dial_window_margin_fraction(skin) -> float:
             + dial.RING_CROWN_TEXT_SIZE * skin.ring_letter_scale * skin.crown_text_scale
             * (1.0 + 2.0 * dial.RING_LETTER_SHADOW_RADIUS)
         )
+    live_crown_extent = 0.0
+    if skin.ring_name in dial.RING_LIVE_CROWN:
+        live_crown_height = (
+            skin.numeral_outer_size * dial.NUMERAL_UNIT_FRACTION
+            * dial.CROWN_NUMERAL_SIZE_FRACTION
+        )
+        live_crown_extent = (
+            dial.CROWN_RADIUS_FRACTION
+            + live_crown_height * (1.0 + 2.0 * dial.RING_LETTER_SHADOW_RADIUS)
+        )
     return (
-        max(glow_extent, letter_extent, crown_text_extent) - 1.0
+        max(glow_extent, letter_extent, crown_text_extent, live_crown_extent)
+        - 1.0
     ) / 2.0 + DIAL_WINDOW_MARGIN_EPSILON
 
 # --- Shared app content (NOT skin-specific — a skin is a dial design) -----------

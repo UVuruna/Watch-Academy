@@ -106,7 +106,13 @@ Layer: config — pure, no Qt, no wall clock.
 - `dial_window_margin_fraction(skin)`: the per-side transparent window
   margin (fraction of the dial diameter) for the CURRENT skin —
   recomputed on every skin install so a size/hover/letter slider
-  re-sizes the window to fit exactly
+  re-sizes the window to fit exactly. `max()`s four graceful-absent
+  extent terms: the event glow, the ring letters, a preset's static
+  `crown_text` arc, and — Crown Polish round, owner correction
+  2026-08-06 — the LIVE crown's own reach for every preset
+  `dial.RING_LIVE_CROWN` names (The One, Templar): neither carries a
+  `crown_text` card entry, so this fourth term used to stay 0.0 and the
+  window clipped the live glyphs at default size
 - `pole_is_light(pole, on_date)`, `pole_emoji(pole, on_date)`,
   `pole_icon_name(pole, on_date)`: the season-dependent light/dark
   glyph for one pole's Quick Jump row, from a plain calendar-date
