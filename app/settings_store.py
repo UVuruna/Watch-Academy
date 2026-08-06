@@ -10,16 +10,18 @@ silently.
 import dataclasses
 import json
 import os
-import re
 from dataclasses import dataclass, field
 from pathlib import Path
 from zoneinfo import ZoneInfo
 
+from app.settings_fields import (
+    _HEX_COLOR, MERGED_MOUNTS, RETIRED_SLOTS, load_alpha, load_bool, load_choice,
+    load_earth_label, load_hex, load_numerals, load_palettes,
+    load_rotation_group, load_scale, migrate_palette_key, save_numerals,
+)
 from app.settings_ring import fold_ring_name, load_named_dict, normalized_ring_card
 from config import calendar_mounts, constants, defaults, dial, pantheon
 from data.rings import ring_presets
-
-_HEX_COLOR = re.compile(r"^#[0-9A-Fa-f]{6}$")
 
 
 class SettingsCorruptError(Exception):
@@ -324,6 +326,27 @@ class Settings:
     crown_text_alpha: float = 1.0
     crown_text_scale: float = 1.0
     crown_text_tint: str | None = None
+    # THE LIVE NUMERAL BANDS (ring_rework.md §5 + hour_numerals.md §8):
+    # the two hand-drawn numeral bands' own settings, at the ledger's
+    # SETTLED defaults. Every one of them carries a default here, so a
+    # settings file written before this round loads clean — an absent
+    # key is simply the SETTLED value, never a corrupt read. Their
+    # ranges and rosters live in `config.dial`; the render side keys its
+    # band cache on them (`render.layers.numerals.band_spec`).
+    numeral_outer_size: int = dial.NUMERAL_OUTER_SIZE_DEFAULT
+    numeral_inner_size: int = dial.NUMERAL_INNER_SIZE_DEFAULT
+    numeral_outer_ring_size: float = dial.NUMERAL_OUTER_RING_SIZE_DEFAULT
+    numeral_face: str = dial.NUMERAL_OUTER_FACE_DEFAULT
+    numeral_inner_face: str = dial.NUMERAL_INNER_FACE_DEFAULT
+    crown_face: str = dial.CROWN_FACE_DEFAULT
+    numeral_seating: str = dial.NUMERAL_SEATING_DEFAULT
+    numeral_relief: str = dial.NUMERAL_RELIEF_DEFAULT
+    numeral_depth: float = dial.NUMERAL_DEPTH_DEFAULT
+    numeral_light: str = dial.NUMERAL_LIGHT_DEFAULT
+    numeral_darkness: float = dial.NUMERAL_DARKNESS_DEFAULT
+    numeral_contact_blur: float = dial.NUMERAL_CONTACT_BLUR_DEFAULT
+    numeral_border: float = dial.NUMERAL_BORDER_DEFAULT
+    crown_time_format: str = dial.CROWN_TIME_FORMAT_DEFAULT
     # Custom palettes keyed "pointer_style" -> tuple of #RRGGBB hues.
     palettes: dict = field(default_factory=dict)
 
@@ -443,7 +466,7 @@ class SettingsStore:
                 raw["calendar_mount"] = MERGED_MOUNTS[raw["calendar_mount"]]
             if isinstance(raw.get("palettes"), dict):
                 raw["palettes"] = {
-                    _migrate_palette_key(key): hues
+                    migrate_palette_key(key): hues
                     for key, hues in raw["palettes"].items()
                 }
             for key, default, allowed in (
@@ -515,40 +538,40 @@ class SettingsStore:
                 window_y=None if window["y"] is None else int(window["y"]),
                 diameter=diameter,
                 # Additive keys (still schema 1): absent in older files.
-                click_through=_load_bool(raw, "click_through", False),
-                show_era_suffix=_load_bool(raw, "show_era_suffix", False),
-                archetype_mode=_load_bool(raw, "archetype_mode", False),
-                archetype_names=_load_bool(raw, "archetype_names", True),
-                cube_look=_load_bool(raw, "cube_look", False),
-                daylight=_load_bool(raw, "daylight", True),
+                click_through=load_bool(raw, "click_through", False),
+                show_era_suffix=load_bool(raw, "show_era_suffix", False),
+                archetype_mode=load_bool(raw, "archetype_mode", False),
+                archetype_names=load_bool(raw, "archetype_names", True),
+                cube_look=load_bool(raw, "cube_look", False),
+                daylight=load_bool(raw, "daylight", True),
                 # Pointers REWORK phase 1 (owner sheet 2026-07-29) —
                 # additive keys: a file written before it simply gets
                 # the star shape, no curvature and today's borders.
-                polygon_curvature=_load_scale(
+                polygon_curvature=load_scale(
                     raw, "polygon_curvature",
                     *constants.POLYGON_CURVATURE_RANGE,
                     constants.POLYGON_CURVATURE_DEFAULT,
                 ),
-                hide_night_borders=_load_bool(
+                hide_night_borders=load_bool(
                     raw, "hide_night_borders", False
                 ),
-                earth_label=_load_earth_label(raw),
-                solar_rotation=_load_bool(raw, "solar_rotation", True),
-                legend=_load_bool(raw, "legend", True),
-                show_earth=_load_bool(raw, "show_earth", True),
-                show_moon=_load_bool(raw, "show_moon", True),
-                show_weekday=_load_bool(raw, "show_weekday", True),
-                show_pointer=_load_bool(raw, "show_pointer", True),
-                colorful=_load_bool(raw, "colorful", True),
-                show_seconds=_load_bool(raw, "show_seconds", True),
+                earth_label=load_earth_label(raw),
+                solar_rotation=load_bool(raw, "solar_rotation", True),
+                legend=load_bool(raw, "legend", True),
+                show_earth=load_bool(raw, "show_earth", True),
+                show_moon=load_bool(raw, "show_moon", True),
+                show_weekday=load_bool(raw, "show_weekday", True),
+                show_pointer=load_bool(raw, "show_pointer", True),
+                colorful=load_bool(raw, "colorful", True),
+                show_seconds=load_bool(raw, "show_seconds", True),
                 # Canon (owner 2026-07-14): ONE slot out of the box.
-                show_octa_slot=_load_bool(raw, "show_octa_slot", False),
-                show_third_slot=_load_bool(raw, "show_third_slot", False),
-                show_weekday_names=_load_bool(raw, "show_weekday_names", True),
-                show_info_slot_names=_load_bool(
+                show_octa_slot=load_bool(raw, "show_octa_slot", False),
+                show_third_slot=load_bool(raw, "show_third_slot", False),
+                show_weekday_names=load_bool(raw, "show_weekday_names", True),
+                show_info_slot_names=load_bool(
                     raw, "show_info_slot_names", True
                 ),
-                moon_hidden_alpha=_load_scale(
+                moon_hidden_alpha=load_scale(
                     raw, "moon_hidden_alpha", 0.0, 1.0, 0.5
                 ),
                 hands=(
@@ -556,7 +579,7 @@ class SettingsStore:
                     if isinstance(raw.get("hands"), str) and raw["hands"].strip()
                     else "STEEL"
                 ),
-                theme_rotation_group=_load_rotation_group(raw),
+                theme_rotation_group=load_rotation_group(raw),
                 theme_rotation_minutes=(
                     int(raw["theme_rotation_minutes"])
                     if isinstance(raw.get("theme_rotation_minutes"), int)
@@ -581,7 +604,7 @@ class SettingsStore:
                     # it even though it is metal-capable.
                     and str(metal) in constants.theme_metals(str(theme))
                 },
-                theme_metal_follow_ring=_load_bool(
+                theme_metal_follow_ring=load_bool(
                     raw, "theme_metal_follow_ring", False
                 ),
                 city_name=str(location.get("name", defaults.DEFAULT_CITY["name"])),
@@ -599,74 +622,75 @@ class SettingsStore:
                 ring_crown_location=ring_crown_location,
                 jump_cities=jump_cities,
                 ring_tint=ring_tint,
-                earth_scale=_load_scale(raw, "earth_scale", *constants.ELEMENT_SCALE_RANGE, 1.0),
-                moon_scale=_load_scale(raw, "moon_scale", *constants.ELEMENT_SCALE_RANGE, 1.0),
+                earth_scale=load_scale(raw, "earth_scale", *constants.ELEMENT_SCALE_RANGE, 1.0),
+                moon_scale=load_scale(raw, "moon_scale", *constants.ELEMENT_SCALE_RANGE, 1.0),
                 # One-time migration (2026-07-14): the separate weekday
                 # and south-slot scales merged into slot_scale — older
                 # files inherit their weekday value.
-                slot_scale=_load_scale(
+                slot_scale=load_scale(
                     raw, "slot_scale", *constants.ELEMENT_SCALE_RANGE,
-                    _load_scale(
+                    load_scale(
                         raw, "weekday_scale",
                         *constants.ELEMENT_SCALE_RANGE, 1.0,
                     ),
                 ),
-                ring_letter_scale=_load_scale(raw, "ring_letter_scale", *constants.ELEMENT_SCALE_RANGE, 1.0),
-                hover_enlarge=_load_scale(raw, "hover_enlarge", *constants.HOVER_ENLARGE_RANGE, 1.2),
+                ring_letter_scale=load_scale(raw, "ring_letter_scale", *constants.ELEMENT_SCALE_RANGE, 1.0),
+                hover_enlarge=load_scale(raw, "hover_enlarge", *constants.HOVER_ENLARGE_RANGE, 1.2),
                 # One-release migration (Session 21-D, owner rename for
                 # clarity now that RING has its own saturation slider):
                 # "palette_saturation" is read as the fallback default
                 # when the new key is absent; the file is rewritten
                 # under the new key on the next save.
-                pointer_saturation=_load_scale(
+                pointer_saturation=load_scale(
                     raw, "pointer_saturation",
                     *constants.POINTER_SATURATION_RANGE,
-                    _load_scale(
+                    load_scale(
                         raw, "palette_saturation",
                         *constants.POINTER_SATURATION_RANGE, 1.0,
                     ),
                 ),
-                ring_saturation=_load_scale(
+                ring_saturation=load_scale(
                     raw, "ring_saturation",
                     *constants.RING_SATURATION_RANGE, 1.0,
                 ),
-                star_alpha=_load_alpha(raw, "star_alpha"),
-                aura_day_alpha=_load_alpha(raw, "aura_day_alpha"),
-                aura_twilight_alpha=_load_alpha(raw, "aura_twilight_alpha"),
-                umbra_alpha=_load_scale(raw, "umbra_alpha", 0.0, 1.0, 1.0),
-                moon_transit_alpha=_load_alpha(raw, "moon_transit_alpha"),
-                ghost_alpha=_load_alpha(raw, "ghost_alpha"),
-                umbra_tint=_load_hex(raw, "umbra_tint"),
-                umbra_saturation=_load_scale(
+                star_alpha=load_alpha(raw, "star_alpha"),
+                aura_day_alpha=load_alpha(raw, "aura_day_alpha"),
+                aura_twilight_alpha=load_alpha(raw, "aura_twilight_alpha"),
+                umbra_alpha=load_scale(raw, "umbra_alpha", 0.0, 1.0, 1.0),
+                moon_transit_alpha=load_alpha(raw, "moon_transit_alpha"),
+                ghost_alpha=load_alpha(raw, "ghost_alpha"),
+                umbra_tint=load_hex(raw, "umbra_tint"),
+                umbra_saturation=load_scale(
                     raw, "umbra_saturation", *constants.UMBRA_SATURATION_RANGE, 1.0
                 ),
-                aura_off_tint=_load_hex(raw, "aura_off_tint"),
-                hands_tint=_load_hex(raw, "hands_tint"),
-                hands_saturation=_load_scale(
+                aura_off_tint=load_hex(raw, "aura_off_tint"),
+                hands_tint=load_hex(raw, "hands_tint"),
+                hands_saturation=load_scale(
                     raw, "hands_saturation", *constants.HANDS_SATURATION_RANGE, 1.0
                 ),
-                letter_tint=_load_hex(raw, "letter_tint"),
-                ring_tint_inner=_load_hex(raw, "ring_tint_inner"),
+                letter_tint=load_hex(raw, "letter_tint"),
+                ring_tint_inner=load_hex(raw, "ring_tint_inner"),
                 # RENAMED from `motto_*` (TASK 1, owner ruling 2026-08-06):
                 # a stored file's old key is the fallback default when the
                 # new one is absent — a saved watch never reads as corrupt
                 # or silently drops its Crown Text opacity/size/color.
-                crown_text_alpha=_load_scale(
+                crown_text_alpha=load_scale(
                     raw, "crown_text_alpha", 0.0, 1.0,
-                    _load_scale(raw, "motto_alpha", 0.0, 1.0, 1.0),
+                    load_scale(raw, "motto_alpha", 0.0, 1.0, 1.0),
                 ),
-                crown_text_scale=_load_scale(
+                crown_text_scale=load_scale(
                     raw, "crown_text_scale", *constants.ELEMENT_SCALE_RANGE,
-                    _load_scale(
+                    load_scale(
                         raw, "motto_scale", *constants.ELEMENT_SCALE_RANGE, 1.0
                     ),
                 ),
                 crown_text_tint=(
-                    _load_hex(raw, "crown_text_tint")
+                    load_hex(raw, "crown_text_tint")
                     if "crown_text_tint" in raw
-                    else _load_hex(raw, "motto_tint")
+                    else load_hex(raw, "motto_tint")
                 ),
-                palettes=_load_palettes(raw.get("palettes", {})),
+                **load_numerals(raw),
+                palettes=load_palettes(raw.get("palettes", {})),
                 **choices,
             )
             return loaded
@@ -784,6 +808,7 @@ class SettingsStore:
             "crown_text_alpha": settings.crown_text_alpha,
             "crown_text_scale": settings.crown_text_scale,
             "crown_text_tint": settings.crown_text_tint,
+            **save_numerals(settings),
             "palettes": {
                 key: list(palette) for key, palette in settings.palettes.items()
             },
@@ -858,143 +883,6 @@ def slot_layout_target(settings: "Settings") -> int:
             and settings.show_third_slot
         )
     )
-
-
-def _load_rotation_group(raw: dict) -> str:
-    """The rotation dropdown value — with the one-time migration from
-    the pre-2026-07-14 Enabled checkbox (external user data: enabled
-    meant the checked list, i.e. today's "custom")."""
-    value = raw.get("theme_rotation_group")
-    if value is None:
-        return "custom" if raw.get("theme_rotation") is True else "none"
-    value = str(value)
-    allowed = {"none", "custom"} | {
-        title for title, _ in pantheon.WEEKDAY_MENU_GROUPS
-    }
-    if value not in allowed:
-        raise ValueError(f"theme_rotation_group {value!r} unknown")
-    return value
-
-
-def _load_bool(raw: dict, key: str, default: bool) -> bool:
-    """A REAL JSON boolean or absent — a hand-edited "false" string
-    would otherwise coerce to True silently (review finding; Rule #1:
-    errors must be visible)."""
-    value = raw.get(key, default)
-    if not isinstance(value, bool):
-        raise ValueError(f"{key} {value!r} is not true/false")
-    return value
-
-
-def _load_earth_label(raw: dict) -> str:
-    """The Earth marker's label enum (owner 2026-07-18, ROADMAP 15h):
-    the new `earth_label` key wins outright when present; otherwise it
-    is derived from the OLD bool pair (`show_earth_date`/`earth_weekday`,
-    the latter falling back to the pre-rename `archetype_earth_day`
-    key) — T,F -> "date"; F,T -> "weekday"; T,T -> "date_weekday" (the
-    old combined "Full Date" meaning, before "full" meant date+year);
-    F,F -> "off". External user data migration, not an API shim
-    (Rule #6 — the old bool pair no longer exists anywhere else)."""
-    if "earth_label" in raw:
-        value = str(raw["earth_label"])
-    else:
-        old_date = _load_bool(raw, "show_earth_date", True)
-        old_weekday = _load_bool(
-            raw, "earth_weekday", _load_bool(raw, "archetype_earth_day", False)
-        )
-        if old_date and old_weekday:
-            value = "date_weekday"
-        elif old_date:
-            value = "date"
-        elif old_weekday:
-            value = "weekday"
-        else:
-            value = "off"
-    if value not in constants.EARTH_LABEL_MODES:
-        raise ValueError(f"earth_label {value!r} unknown")
-    return value
-
-
-def _load_scale(raw: dict, key: str, low: float, high: float, default: float) -> float:
-    """Size multiplier: absent = the default; out of range = corrupt."""
-    value = float(raw.get(key, default))
-    if not low <= value <= high:
-        raise ValueError(f"{key} {value} outside {low}..{high}")
-    return value
-
-
-def _load_alpha(raw: dict, key: str) -> float | None:
-    """Opacity override: null/absent = use the skin's own value."""
-    value = raw.get(key)
-    if value is None:
-        return None
-    value = float(value)
-    if not 0.0 <= value <= 1.0:
-        raise ValueError(f"{key} {value} outside 0..1")
-    return value
-
-
-def _load_hex(raw: dict, key: str) -> str | None:
-    """A `#RRGGBB` override or None — the SAME validation `ring_tint`
-    has always run inline (Watch Face Phase 4: shared here so the four
-    new tint overrides do not each repeat it, Rule #5)."""
-    value = raw.get(key)
-    if value is None:
-        return None
-    value = str(value).upper()
-    if not _HEX_COLOR.match(value):
-        raise ValueError(f"{key} {value!r} not #RRGGBB")
-    return value
-
-
-# The wheel slots as they were named before 2026-07-28, mapped onto
-# their positional successors. Read by the settings migration above —
-# one table, so a stored file and a stored palette key cannot disagree.
-RETIRED_SLOTS = {"paint": "primary", "light": "secondary", "cube": "tertiary"}
-
-# Calendar mounts that MERGED into another (owner ruling 2026-08-05): the
-# Vices are the Virtue Wheel's own paint face, one theme in two
-# depictions, so a settings file that still selects the retired key lands
-# on the wheel that absorbed it instead of failing validation and
-# offering the user a reset. The documented external-data migration
-# pattern — never a Rule-#6 shim.
-MERGED_MOUNTS = {"vices": "virtues"}
-
-
-def _migrate_palette_key(key: str) -> str:
-    """"hexa_paint" -> "hexa_primary"; anything already positional (or
-    unrecognizable) passes through untouched for the validator to
-    judge."""
-    pointer, _, slot = str(key).rpartition("_")
-    if pointer and slot in RETIRED_SLOTS:
-        return f"{pointer}_{RETIRED_SLOTS[slot]}"
-    return key
-
-
-def _load_palettes(raw: dict) -> dict:
-    """Custom palettes keyed "pointer_style"; every hue validated so a
-    hand-edited color cannot detonate inside a paint pass."""
-    if not isinstance(raw, dict):
-        raise ValueError("palettes must be an object")
-    valid_keys = {
-        f"{pointer}_{style}"
-        for pointer in constants.POINTER_POINTS
-        for style in constants.PALETTE_STYLES
-    }
-    palettes: dict = {}
-    for key, hues in raw.items():
-        if key not in valid_keys:
-            raise ValueError(f"palettes key {key!r} unknown")
-        pointer = key.rsplit("_", 1)[0]
-        if len(hues) != constants.POINTER_POINTS[pointer]:
-            raise ValueError(
-                f"palettes[{key!r}] needs {constants.POINTER_POINTS[pointer]} hues"
-            )
-        for hue in hues:
-            if not _HEX_COLOR.match(str(hue)):
-                raise ValueError(f"palettes[{key!r}] bad color {hue!r}")
-        palettes[key] = tuple(str(hue).upper() for hue in hues)
-    return palettes
 
 
 def replace(settings: Settings, **changes) -> Settings:

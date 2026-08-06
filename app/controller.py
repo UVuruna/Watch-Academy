@@ -1010,6 +1010,28 @@ def _overlay_display_settings(skin, settings: Settings, display):
         crown_text_alpha=settings.crown_text_alpha,
         crown_text_scale=settings.crown_text_scale,
         crown_text_tint=settings.crown_text_tint,
+        # THE LIVE NUMERAL BANDS (ring_rework.md §2/§5): direct
+        # pass-throughs, exactly like the Phase-4 fields above — each
+        # already carries the ledger's own SETTLED default, and the
+        # render side keys its band cache on them, so a changed knob
+        # re-renders both plates once and never per frame. `ring_name`
+        # rides along so the numeral layers can ask
+        # `dial.RING_LIVE_CROWN` whether this preset keeps a live time.
+        numeral_outer_size=settings.numeral_outer_size,
+        numeral_inner_size=settings.numeral_inner_size,
+        numeral_outer_ring_size=settings.numeral_outer_ring_size,
+        numeral_face=settings.numeral_face,
+        numeral_inner_face=settings.numeral_inner_face,
+        crown_face=settings.crown_face,
+        numeral_seating=settings.numeral_seating,
+        numeral_relief=settings.numeral_relief,
+        numeral_depth=settings.numeral_depth,
+        numeral_light=settings.numeral_light,
+        numeral_darkness=settings.numeral_darkness,
+        numeral_contact_blur=settings.numeral_contact_blur,
+        numeral_border=settings.numeral_border,
+        crown_time_format=settings.crown_time_format,
+        ring_name=settings.ring,
         display=display,
     )
 
@@ -3170,6 +3192,23 @@ class WatchController(QObject):
             "letter_tint": wrap(
                 lambda v: self._set_display_choice("letter_tint", v)
             ),
+            # --- The LIVE NUMERAL BANDS (ring_rework.md §5) ------------
+            # Every knob of the two hand-drawn bands is a plain display
+            # choice: persist, rebuild the skin, and the render side
+            # re-renders both plates ONCE under the new cache key.
+            **{
+                key: wrap(
+                    lambda v, key=key: self._set_display_choice(key, v)
+                )
+                for key in (
+                    "numeral_outer_size", "numeral_inner_size",
+                    "numeral_outer_ring_size", "numeral_face",
+                    "numeral_inner_face", "crown_face", "numeral_seating",
+                    "numeral_relief", "numeral_depth", "numeral_light",
+                    "numeral_darkness", "numeral_contact_blur",
+                    "numeral_border", "crown_time_format",
+                )
+            },
             # --- Crown Text (R-24/Phase-6-debt correction, owner --------
             # 2026-08-05: the outer Great Seal crown text arc's own controls) -
             "ring_tint_inner": wrap(

@@ -115,6 +115,7 @@ FLOW_REQUIRED = frozenset({
     "config/taxonomy.py",
     "config/ui_text.py",
     "core/angles.py",
+    "core/numerals.py",
     "core/ascendant.py",
     "core/blue_moon.py",
     "core/clock_state.py",

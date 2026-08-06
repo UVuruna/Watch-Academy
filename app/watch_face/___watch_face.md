@@ -32,6 +32,7 @@ silently dropped.
 | `widgets.py` | Standard | shared pill/tile builders every section imports — [about](__about/widgets.md) |
 | `pointer.py` | Algorithmic | R-04/R-05/R-06: pointer gallery, shape/curvature/edge, night borders, Daylight-Night, Earth — [about](__about/pointer.md) · [flow](__flow/pointer.md) |
 | `ring.py` | Algorithmic | R-10/R-13: ring gallery, finish, two-metals/shine, Custom ring… — [about](__about/ring.md) · [flow](__flow/ring.md) |
+| `numerals.py` | Standard | the two live-rendered numeral bands' faces, sizes, seating, relief and the live crown's format — [about](__about/numerals.md) |
 | `hands.py` | Algorithmic | R-14: hand-pack gallery, large hour-hand tiles — [about](__about/hands.md) · [flow](__flow/hands.md) |
 | `umbra_aura.py` | Algorithmic | umbra form + contrast pills — [about](__about/umbra_aura.md) · [flow](__flow/umbra_aura.md) |
 | `size.py` | Algorithmic | diameter + every element scale slider — [about](__about/size.md) · [flow](__flow/size.md) |

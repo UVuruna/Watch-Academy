@@ -444,6 +444,47 @@ class SkinDefinition:
     crown_text_alpha: float = 1.0
     crown_text_scale: float = 1.0
     crown_text_tint: str | None = None
+    # THE LIVE NUMERAL BANDS (ring_rework.md §2/§5 + hour_numerals.md
+    # §8): the dial's two numeral bands are RENDERED — at startup and on
+    # every settings change, never per frame — so every knob the ledger
+    # SETTLED rides the skin the way every other display choice does.
+    # `render.layers.numerals.band_spec` turns these into the band cache
+    # key; `config.dial` holds the rosters, ranges and SETTLED defaults.
+    #   * `numeral_outer_size` / `numeral_inner_size` — the two bands'
+    #     numeral heights, in the ledger's own units (§8), so a setting
+    #     survives any change of dial resolution.
+    #   * `numeral_outer_ring_size` — the WIDTH of the band the letters
+    #     and numbers stand in, as a multiplier of the measured band.
+    #   * `numeral_face` / `numeral_inner_face` — the two rosters (§7);
+    #     `crown_face` is the LIVE CROWN's own, picked for full glyph
+    #     coverage rather than inherited (see config.dial's verified
+    #     note: the hour band's default cannot draw a colon here).
+    #   * `numeral_seating` — `arc` or `upright` (§4); the inner band
+    #     follows the outer's pick.
+    #   * `numeral_relief` / `numeral_depth` / `numeral_light` /
+    #     `numeral_darkness` / `numeral_contact_blur` / `numeral_border`
+    #     — the relief and light model (§5, §6) at its SETTLED defaults.
+    #   * `crown_time_format` — `hh:mm` (the standard default) or
+    #     `12h 35min`, whose h/min ride a smaller cut of the same face.
+    numeral_outer_size: int = dial.NUMERAL_OUTER_SIZE_DEFAULT
+    numeral_inner_size: int = dial.NUMERAL_INNER_SIZE_DEFAULT
+    numeral_outer_ring_size: float = dial.NUMERAL_OUTER_RING_SIZE_DEFAULT
+    numeral_face: str = dial.NUMERAL_OUTER_FACE_DEFAULT
+    numeral_inner_face: str = dial.NUMERAL_INNER_FACE_DEFAULT
+    crown_face: str = dial.CROWN_FACE_DEFAULT
+    numeral_seating: str = dial.NUMERAL_SEATING_DEFAULT
+    numeral_relief: str = dial.NUMERAL_RELIEF_DEFAULT
+    numeral_depth: float = dial.NUMERAL_DEPTH_DEFAULT
+    numeral_light: str = dial.NUMERAL_LIGHT_DEFAULT
+    numeral_darkness: float = dial.NUMERAL_DARKNESS_DEFAULT
+    numeral_contact_blur: float = dial.NUMERAL_CONTACT_BLUR_DEFAULT
+    numeral_border: float = dial.NUMERAL_BORDER_DEFAULT
+    crown_time_format: str = dial.CROWN_TIME_FORMAT_DEFAULT
+    # The ACTIVE ring preset's name — the ONE thing the numeral layers
+    # need from the card, so `dial.RING_LIVE_CROWN` can say whether this
+    # watch carries a live crown at all (The One, Templar) without the
+    # render layer reaching back into `data.rings`.
+    ring_name: str = ""
     # THE DISPLAY CONTEXT (owner bug 2026-07-28, multi-watch colour
     # leak): this watch's OWN art source, subdial plate set and metal
     # shades — see `config.paths.DisplayContext`. It rides the SKIN
