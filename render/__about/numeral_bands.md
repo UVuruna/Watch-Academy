@@ -12,7 +12,9 @@ Three products, one cache:
 |---|---|---|
 | OUTER band plate — the metal AND the hour numerals standing on it | `outer_band_plate` | its `BandSpec` changes (including `offset_deg`) |
 | INNER band plate — the minute NUMBERS alone, in white border + glow | `inner_band_plate` | its `BandSpec` changes |
-| The ELEVEN crown glyphs — digits 0–9 and the colon, in crown size and relief | `crown_glyph_set` | its `CrownSpec` changes |
+| The ELEVEN crown glyphs — digits 0–9 and the colon, in the crown-text size family | `crown_glyph_set` | its `CrownSpec` changes |
+| Each crown glyph's own INK WIDTH, for the advance law | `crown_glyph_ink` | its `CrownSpec` changes |
+| A font of a given face fitted to a target INK height | `crown_font_for_ink_height` | never (pure per call) |
 
 A `BandSpec`/`CrownSpec` is a frozen dataclass carrying exactly what can
 make two plates differ: the pixel diameter, the face, the size, the band
@@ -91,10 +93,11 @@ year of plates. Beyond the ceiling the oldest inserted plate is dropped.
 `crown_glyph_set` rasterizes the eleven glyphs ONCE. `compose_crown` then
 does the per-minute work: it takes a glyph sequence from
 `core.numerals.crown_sequence`, looks each glyph up in the finished set,
-and returns `(image, angle, rotation)` triples laid out along the crown arc
-by `core.numerals.crown_arc_angles`. That is a dictionary lookup and some
-arithmetic — no font shaping, no rasterization, no allocation of anything
-larger than a tuple, so a MINUTE-cadence layer can afford it every tick.
+and returns `(image, angle, rotation)` triples laid out along the crown
+arc by `core.numerals.crown_advance_angles`. That is a dictionary lookup
+and some arithmetic — no font shaping, no rasterization, no allocation of
+anything larger than a tuple, so a MINUTE-cadence layer can afford it
+every tick.
 
 The `"12h 35min"` format's `h`/`min` run is rendered in the SMALL CUT
 (`config.dial.CROWN_SMALL_CUT_FRACTION` of the digit size) — the plate
@@ -102,6 +105,49 @@ library has no lowercase, so these come from the same face as the digits,
 which is why the crown's default face is chosen for full coverage rather
 than inherited from the hour band (see
 [Numeral Fonts](numeral_fonts.md)).
+
+### THE VISUAL DEFECTS WAVE (owner defects 2026-08-07)
+
+Three of the five rulings land in this module.
+
+**ONE CROWN SIZE LAW.** The owner saw "2 3 : 3 9" in tiny dim glyphs at
+the top of the window while NON NOBIS DOMINE stood large and silver
+below. Root cause: two size laws on one ring. The static crown arc is
+sized `2 * radius * RING_CROWN_TEXT_SIZE * crown_text_scale`
+([Ring Layer](../layers/__about/ring.md)); the LIVE crown was sized
+`numeral_outer_size * NUMERAL_UNIT_FRACTION * CROWN_NUMERAL_SIZE_FRACTION`
+— a law borrowed from the HOUR BAND, landing ~19% smaller. Then a second,
+larger shortfall compounded it: that number was handed to
+`QFont.setPixelSize`, which sets the EM box, while a jewel plate is
+blitted by its IMAGE height, which is its ink plus 0.8% padding. On the
+default face a digit therefore drew only 0.717 of the box it was given.
+
+The fix: `CrownSpec.height_px` is the glyph BOX, handed in by
+[the crown layer](../layers/__about/numerals.md) from the SAME expression
+the static arc uses; the colon is scaled to that box exactly as a letter
+plate is; and a digit's font is FITTED by
+`crown_font_for_ink_height`, which probes the face's own ink/em ratio at
+`CROWN_FIT_PROBE_PX` and scales until the ink fills
+`CROWN_PLATE_INK_FRACTION` (0.992 — MEASURED off A/N/O/M/X.png, all 512
+px tall with 508 px of ink). Probed, never tabled, so a roster change
+cannot leave a stale per-face constant behind.
+`CROWN_NUMERAL_SIZE_FRACTION` is retired.
+
+**THE CROWN ADVANCE LAW.** The other half of "scattered": a fixed
+angular step gave the colon — 0.22 glyph-heights of ink — exactly the arc
+of a 1.45-wide M. `_build_crown` now records each glyph's own INK WIDTH
+(the path's, never the tile's, which carries shadow padding on both
+sides), `crown_glyph_ink` publishes it, and `compose_crown` advances each
+glyph by its ink plus `CROWN_TRACKING_FRACTION` of the box.
+
+**ONE METAL PER CROWN.** The colon rendered GOLD beside gray digits.
+Root cause: `jewel_metal_file` honestly falls back to the gold master
+until the background recolor drains, and this module BAKES its tiles once
+and caches them — so the fallback froze in place for the life of the
+process, while the font-drawn digits went straight to the real metal's
+body tone through `_crown_metal_body_color`. `CrownSpec.colon_source`
+carries the RESOLVED path into the cache key, so the drain's arrival is a
+new key and the crown rebuilds in the metal the rest of the ring wears.
 
 ### THE TIME CROWN LOOK (owner correction 2026-08-06)
 
@@ -133,7 +179,8 @@ glyph now goes through THE LETTER pipeline instead:
 `light`/`darkness`/`border_units` fields entirely and gained `metal`
 (`RingSpec.crown_text_metal` — the SAME `settings.ring_finish` the ring
 jewels wear) and `shade`, so two watches with different active shades
-never collide in the shared `_CROWNS` cache.
+never collide in the shared `_CROWNS` cache. The 2026-08-07 round
+replaced `size_units` with `height_px` and added `colon_source` (above).
 
 ## Never on the paint path, never on the disk
 

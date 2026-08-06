@@ -557,7 +557,17 @@ def dial_window_margin_fraction(skin) -> float:
     RADIUS)`, the exact reach `_crown_jewel_glyph_image`'s baked shadow
     occupies), anchored at the crown's own `CROWN_RADIUS_FRACTION`
     instead of the static arc's, and 0.0 (another no-op term) for every
-    preset `RING_LIVE_CROWN` does not name."""
+    preset `RING_LIVE_CROWN` does not name.
+
+    ONE CROWN SIZE LAW (owner defect 2026-08-07 — "the live time crown
+    is microscopic"): the live term used to size itself off the HOUR
+    BAND (`numeral_outer_size * NUMERAL_UNIT_FRACTION *
+    CROWN_NUMERAL_SIZE_FRACTION`) while the static arc beside it sized
+    itself off `RING_CROWN_TEXT_SIZE` — two size laws in one crown.
+    Both terms now read `RING_CROWN_TEXT_SIZE * crown_text_scale`, and
+    THE DECOUPLED SCALES (same round) drops the `ring_jewels_scale`
+    factor from the static term: both sliders default to 1.0, so the
+    folded constant is 1.0 and no default window changes size."""
     marker = max(skin.year_marker.scale, skin.year_marker.moon_scale)
     glow_extent = (
         dial.GLOW_RING_RADIUS_FRACTION
@@ -572,18 +582,15 @@ def dial_window_margin_fraction(skin) -> float:
     if skin.ring.crown_text:
         crown_text_extent = (
             dial.RING_CROWN_TEXT_RADIUS_FRACTION
-            + dial.RING_CROWN_TEXT_SIZE * skin.ring_jewels_scale * skin.crown_text_scale
+            + dial.RING_CROWN_TEXT_SIZE * skin.crown_text_scale
             * (1.0 + 2.0 * dial.RING_JEWEL_SHADOW_RADIUS)
         )
     live_crown_extent = 0.0
     if skin.ring_name in dial.RING_LIVE_CROWN:
-        live_crown_height = (
-            skin.numeral_outer_size * dial.NUMERAL_UNIT_FRACTION
-            * dial.CROWN_NUMERAL_SIZE_FRACTION
-        )
         live_crown_extent = (
             dial.CROWN_RADIUS_FRACTION
-            + live_crown_height * (1.0 + 2.0 * dial.RING_JEWEL_SHADOW_RADIUS)
+            + dial.RING_CROWN_TEXT_SIZE * skin.crown_text_scale
+            * (1.0 + 2.0 * dial.RING_JEWEL_SHADOW_RADIUS)
         )
     return (
         max(glow_extent, jewel_extent, crown_text_extent, live_crown_extent)

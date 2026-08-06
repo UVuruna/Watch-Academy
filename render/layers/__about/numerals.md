@@ -43,14 +43,47 @@ the outer band's `numeral_relief`/`numeral_depth`/`numeral_light`/
 crown at all (see [Numeral Bands](../../__about/numeral_bands.md) for
 the glyph build itself).
 
+**ONE CROWN SIZE LAW / ONE METAL PER CROWN** (owner defects 2026-08-07).
+`crown_spec` now also solves:
+
+- `height_px` — the glyph BOX, from the SAME expression
+  [Ring Layer](ring.md) uses for the static arc,
+  `2 * radius * RING_CROWN_TEXT_SIZE * crown_text_scale`, in DEVICE
+  pixels. It replaces `size_units`, which read the HOUR BAND's
+  `numeral_outer_size` and put a second, smaller size family on one ring
+  — the owner's "microscopic" crown. `ring_jewels_scale` is deliberately
+  absent (THE DECOUPLED SCALES, below).
+- `colon_source` — the file `jewel_metal_file` ACTUALLY resolved for the
+  colon plate, in the cache KEY so the crown's baked tiles cannot outlive
+  the background recolor's gold fallback (the gold colon beside silver
+  digits the owner photographed on Templar).
+
+`LiveCrownLayer` lays the arc out by THE CROWN ADVANCE LAW: it passes
+`crown_glyph_ink`, the crown radius and
+`height_px * CROWN_TRACKING_FRACTION` to `compose_crown`, so each glyph
+takes the arc its own ink needs instead of a fixed step.
+
+**THE DECOUPLED SCALES** (owner defect 2026-08-07): the Jewels slider
+used to grow the crown, because the crown height multiplied
+`ring_jewels_scale` AND `crown_text_scale`. Each term now scales its own
+family only — Jewels scales jewels, Crown Text scales EVERY crown arc,
+static and live. Both default to 1.0, so the folded constant is exactly
+1.0 and no default dial moved a pixel.
+
 ## Which presets carry a live crown
 
 `config.dial.RING_LIVE_CROWN` names them, and it is the only place that
 list lives:
 
 - **The One** — the top arc is the watch's OWN civil time. Its bottom arc
-  is "City, Country", which the existing `Settings.ring_crown_location`
-  path already draws through `RingLayer`; this layer does not duplicate it.
+  is "City, Country", drawn through `RingLayer`'s own crown-text arc from
+  the jewel LETTER PLATES. Since the 2026-08-07 round that bottom arc is
+  RULED BY THE PRESET (`RING_LIVE_CROWN["The One"]["location"] ==
+  "bottom"`, wired in `app.controller._compose_skin`) rather than served
+  only by the per-ring `Settings.ring_crown_location` toggle — the toggle
+  is OFF by default and draws at the TOP, straight through the live time,
+  so the ruled line simply did not exist on the owner's dial. The toggle
+  still wins when the user ticks it; the two never draw together.
 - **Templar** — the top arc is the hour of **Jerusalem**
   (`Asia/Jerusalem`, resolved through `tzdata` in `core.clock_state`, whose
   `TickState.crown_zone_hm` carries every crown zone's `HH:MM` for the

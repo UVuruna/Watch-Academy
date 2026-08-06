@@ -616,19 +616,36 @@ def test_dial_window_margin_grows_only_for_a_crown_text_preset():
     crown text, so the crown-text-free baseline is The One alone. MOTO-FIX
     round (owner correction 2026-07-19): both crown texts share ONE
     radius, so the expected extent drops the old
-    `RING_CROWN_TEXT_RADIUS_STEP` term (deleted, Rule #6)."""
+    `RING_CROWN_TEXT_RADIUS_STEP` term (deleted, Rule #6).
+
+    ONE CROWN SIZE LAW (owner defect 2026-08-07): The One's own crown is
+    LIVE rather than a card entry, and it used to be sized off the hour
+    band — smaller, so it reserved less. Now that both crowns share the
+    `RING_CROWN_TEXT_SIZE` box at the same radius, The One reserves
+    EXACTLY what the Dollar does. That equality is the fix, not a
+    regression: the term this test guards is that a crown of either kind
+    is reserved for, and a preset carrying NEITHER (a bare custom ring)
+    still reserves nothing extra — pinned below."""
     the_one = build_skin(replace(Settings(), ring="The One"))
     mason = build_skin(replace(Settings(), ring="Dollar"))
     domy = build_skin(Settings())
     the_one_margin = defaults.dial_window_margin_fraction(the_one)
     mason_margin = defaults.dial_window_margin_fraction(mason)
-    assert mason_margin > the_one_margin
+    assert mason_margin == pytest.approx(the_one_margin)
+    # A ring with NEITHER crown reserves strictly less — the graceful
+    # absence this test was written for, now proved on a skin that
+    # genuinely carries no crown at all rather than on The One.
+    crownless = replace(
+        mason, ring=replace(mason.ring, crown_text=()), ring_name="Crownless",
+    )
+    assert "Crownless" not in dial.RING_LIVE_CROWN
+    assert defaults.dial_window_margin_fraction(crownless) < mason_margin
     # The cross-word presets reserve the SAME crown-text reach as the Dollar.
     assert defaults.dial_window_margin_fraction(domy) == mason_margin
     # The crown text arc's own outer reach is the binding term for the Dollar.
     expected_crown_text_extent = (
         dial.RING_CROWN_TEXT_RADIUS_FRACTION
-        + dial.RING_CROWN_TEXT_SIZE * mason.ring_jewels_scale
+        + dial.RING_CROWN_TEXT_SIZE * mason.crown_text_scale
         * (1.0 + 2.0 * dial.RING_JEWEL_SHADOW_RADIUS)
     )
     expected_margin = (
@@ -654,13 +671,14 @@ def test_dial_window_margin_reserves_for_the_live_crown():
     assert "DOMY" not in dial.RING_LIVE_CROWN
 
     def live_crown_extent(skin) -> float:
-        live_height = (
-            skin.numeral_outer_size * dial.NUMERAL_UNIT_FRACTION
-            * dial.CROWN_NUMERAL_SIZE_FRACTION
-        )
+        # ONE CROWN SIZE LAW (owner defect 2026-08-07): the live crown
+        # is sized by the SAME `RING_CROWN_TEXT_SIZE * crown_text_scale`
+        # box the static arc beside it uses — it used to be sized off
+        # the HOUR BAND instead, which is why it read "microscopic".
         return (
             dial.CROWN_RADIUS_FRACTION
-            + live_height * (1.0 + 2.0 * dial.RING_JEWEL_SHADOW_RADIUS)
+            + dial.RING_CROWN_TEXT_SIZE * skin.crown_text_scale
+            * (1.0 + 2.0 * dial.RING_JEWEL_SHADOW_RADIUS)
         )
 
     def crown_text_extent(skin) -> float:
@@ -668,8 +686,7 @@ def test_dial_window_margin_reserves_for_the_live_crown():
             return 0.0
         return (
             dial.RING_CROWN_TEXT_RADIUS_FRACTION
-            + dial.RING_CROWN_TEXT_SIZE * skin.ring_jewels_scale
-            * skin.crown_text_scale
+            + dial.RING_CROWN_TEXT_SIZE * skin.crown_text_scale
             * (1.0 + 2.0 * dial.RING_JEWEL_SHADOW_RADIUS)
         )
 

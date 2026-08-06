@@ -112,7 +112,14 @@ Layer: config — pure, no Qt, no wall clock.
   2026-08-06 — the LIVE crown's own reach for every preset
   `dial.RING_LIVE_CROWN` names (The One, Templar): neither carries a
   `crown_text` card entry, so this fourth term used to stay 0.0 and the
-  window clipped the live glyphs at default size
+  window clipped the live glyphs at default size. ONE CROWN SIZE LAW
+  (owner defect 2026-08-07): both crown terms now read
+  `RING_CROWN_TEXT_SIZE * crown_text_scale` — the live term used to be
+  sized off the hour band, and the static term used to multiply
+  `ring_jewels_scale` as well (THE DECOUPLED SCALES). Both sliders
+  default to 1.0, so the folded constant is 1.0 and no default window
+  changed size; The One now reserves exactly what the Dollar does,
+  because its live crown genuinely reaches as far
 - `pole_is_light(pole, on_date)`, `pole_emoji(pole, on_date)`,
   `pole_icon_name(pole, on_date)`: the season-dependent light/dark
   glyph for one pole's Quick Jump row, from a plain calendar-date

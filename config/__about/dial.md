@@ -29,7 +29,18 @@ Layer: config — pure, no Qt, no wall clock.
 - **Moon/Earth rim transit** — `MOON_TRANSIT_OPACITY`.
 - **Ring faces** — `RING_FACE_DIR`, the tint swatch geometry, the ring
   jewel art/shadow/crown-text arc constants (`RING_JEWEL_*`, `RING_CROWN_TEXT_
-  *`). `RING_JEWEL_SHADOW_MAX_GAP_PX` (THE PIXELATION FIX, 1440p owner
+  *`). **THE LIVE CROWN'S OWN SIZE AND ADVANCE** (owner defects
+  2026-08-07): `CROWN_PLATE_INK_FRACTION` (0.992 — MEASURED off the jewel
+  plates, which are their ink plus 0.8% padding) is what a fitted digit's
+  ink must fill of its box, probed per face at `CROWN_FIT_PROBE_PX`;
+  `CROWN_TRACKING_FRACTION` (0.56 of the box) is the extra advance each
+  glyph takes beyond its own ink width. Together they retire
+  `CROWN_NUMERAL_SIZE_FRACTION`, which sized the live crown off the HOUR
+  BAND while the static arc beside it used `RING_CROWN_TEXT_SIZE` — two
+  size laws on one ring, and the reason the owner's time crown read
+  "microscopic". `RING_LIVE_CROWN` gained a `location` key (the
+  orientation of a location arc the PRESET owns — The One's ruled bottom
+  line) and `RING_LIVE_CROWN_LOCATION_READING` its hover. `RING_JEWEL_SHADOW_MAX_GAP_PX` (THE PIXELATION FIX, 1440p owner
   bug 2026-08-06) is the device-pixel gap `render.layers.ring.
   _shadow_sample_count` keeps between adjacent halo stamps above the
   `RING_JEWEL_SHADOW_SAMPLES` floor.

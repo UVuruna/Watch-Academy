@@ -733,7 +733,7 @@ def test_colon_resolves_through_the_jewel_pipeline(app):
         numeral_bands.clear_cache()
         spec = numeral_bands.CrownSpec(
             pixels=720, dpr=1.0, face=dial.CROWN_FACE_DEFAULT,
-            size_units=124.0, metal="silver", shade="silver",
+            height_px=720 * dial.RING_CROWN_TEXT_SIZE, metal="silver", shade="silver",
         )
         glyphs = numeral_bands.crown_glyph_set(spec)
     finally:
@@ -757,7 +757,7 @@ def test_the_crown_face_no_longer_needs_to_draw_a_colon(app, monkeypatch):
     numeral_bands.clear_cache()
     spec = numeral_bands.CrownSpec(
         pixels=720, dpr=1.0, face=dial.CROWN_FACE_DEFAULT,
-        size_units=124.0, metal="gold", shade="classic",
+        height_px=720 * dial.RING_CROWN_TEXT_SIZE, metal="gold", shade="classic",
     )
     numeral_bands.crown_glyph_set(spec)
     assert ":" not in seen["glyphs"]
@@ -772,7 +772,7 @@ def test_digits_wear_the_crown_metal_body_color_not_band_parity(app):
     numeral_bands.clear_cache()
     spec = numeral_bands.CrownSpec(
         pixels=720, dpr=1.0, face=dial.CROWN_FACE_DEFAULT,
-        size_units=124.0, metal="gold", shade="classic",
+        height_px=720 * dial.RING_CROWN_TEXT_SIZE, metal="gold", shade="classic",
     )
     digit = numeral_bands.crown_glyph_set(spec)["5"]
     counts = {}
@@ -814,7 +814,7 @@ def test_digit_glyph_carries_the_jewel_shadow_stamp(app, monkeypatch):
 
     spec = numeral_bands.CrownSpec(
         pixels=720, dpr=1.0, face=dial.CROWN_FACE_DEFAULT,
-        size_units=124.0, metal="gold", shade="classic",
+        height_px=720 * dial.RING_CROWN_TEXT_SIZE, metal="gold", shade="classic",
     )
     numeral_bands.clear_cache()
     with_shadow = numeral_bands.crown_glyph_set(spec)["5"]

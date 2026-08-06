@@ -24,7 +24,7 @@ from PySide6.QtWidgets import QApplication, QGroupBox, QWidget
 from app import controller as controller_module
 from app.settings_store import Settings, SettingsStore
 from app.watch_face import colors, opacity
-from config import defaults
+from config import defaults, dial
 from core.clock_state import build_day_context, build_tick_state
 from data.moon_phases import MoonPhaseRepository
 from data.seasons import SeasonsRepository
@@ -311,19 +311,47 @@ def test_crown_text_tint_recolors_crown_text_independently_of_ring_tint(app, fra
     assert differing > 0, "crown_text_tint must repaint the Crown Text independently of ring_tint"
 
 
-def test_crown_text_controls_are_no_ops_on_a_crown_text_less_preset(app, frame_args):
-    """"The One" ships with no `crown_text` entry at all — the three Crown
-    Text knobs must draw NOTHING different (graceful truth: the Colors/
-    Opacity/Size rows grey themselves out for exactly this reason)."""
+def test_crown_text_scale_reaches_the_live_crown_too(app, frame_args):
+    """THE DECOUPLED SCALES (owner defect 2026-08-07): "Crown Text
+    scales ALL crown arcs — static and live."
+
+    This test used to assert the opposite for The One, on the premise
+    that the preset "ships with no `crown_text` entry at all". The
+    premise was never the whole truth: The One's crown is LIVE (its own
+    civil hour, `render.layers.numerals.LiveCrownLayer`), and that crown
+    is a crown. It answered only to `numeral_outer_size` before, which
+    is the same defect from the other side — the Crown Text slider could
+    not size the one crown The One actually has."""
     day, tick = frame_args
     base = controller_module.build_skin(Settings(ring="The One"))
     knobbed = controller_module.build_skin(
-        Settings(
-            ring="The One", crown_text_alpha=0.1, crown_text_scale=1.6,
-            crown_text_tint="#FF00FF",
-        )
+        Settings(ring="The One", crown_text_scale=1.6)
     )
     differing = _diff_count(_render(base, day, tick), _render(knobbed, day, tick), step=2)
-    assert differing == 0, (
-        "Crown Text knobs must be a no-op on a crown-text-less ring preset"
+    assert differing > 0, (
+        "crown_text_scale must size The One's LIVE crown"
     )
+
+
+def test_jewels_scale_is_a_no_op_on_the_crown(app, frame_args):
+    """The other half of THE DECOUPLED SCALES, and the owner's own
+    discovery: the Jewels slider must not grow the crown. Proved on
+    Templar, which carries BOTH crowns — the live Jerusalem hour and the
+    static NON NOBIS DOMINE arc — so a leak through either would show.
+    The jewels themselves are held still by rendering the DIFFERENCE
+    only over the crown's own radius band."""
+    from render.numeral_bands import CrownSpec  # noqa: F401  (documents intent)
+    from render.context import RenderContext
+    from render.layers.numerals import crown_spec
+
+    def crown_boxes(jewels_scale):
+        skin = controller_module.build_skin(
+            Settings(ring="Templar", ring_jewels_scale=jewels_scale)
+        )
+        ctx = RenderContext(
+            radius=360.0, dpr=1.0, skin=skin, cache=None, tick=None, day=None,
+        )
+        static = 2 * ctx.radius * dial.RING_CROWN_TEXT_SIZE * skin.crown_text_scale
+        return static, crown_spec(skin, ctx).height_px
+
+    assert crown_boxes(1.0) == crown_boxes(1.6) == crown_boxes(0.6)

@@ -514,16 +514,51 @@ NUMERAL_GLOW_BORDER_UNITS = 9.0      # the crisp white border under the glow —
 CROWN_TIME_FORMATS = ("hh:mm", "12h 35min")
 CROWN_TIME_FORMAT_DEFAULT = "hh:mm"
 CROWN_SMALL_CUT_FRACTION = 0.62      # the h/min cut, of the digit size
-CROWN_NUMERAL_SIZE_FRACTION = 0.55   # crown digit height, of the hour numeral
 CROWN_RADIUS_FRACTION = RING_CROWN_TEXT_RADIUS_FRACTION
+# ONE CROWN SIZE LAW (owner defect 2026-08-07 — the live time crown read
+# "microscopic, scattered" beside NON NOBIS DOMINE): the live crown's
+# glyph BOX is `RING_CROWN_TEXT_SIZE` exactly like the static arc's, so
+# `CROWN_NUMERAL_SIZE_FRACTION` (which sized it off the HOUR BAND
+# instead) is retired. These two constants are what turn that shared box
+# into a drawn glyph.
+#
+# INK: a jewel plate is its own ink plus 0.8% padding — MEASURED on
+# A/N/O/M/X.png, all 512 px tall with 508 px of ink. A digit has no
+# plate, so its FONT is sized (per face, at render time) until its own
+# path bounding height hits this same fraction of the box; that is what
+# makes a 3 and an N read as one family whatever face is picked.
+CROWN_PLATE_INK_FRACTION = 0.992
+# The reference size the ink/em ratio is PROBED at (`render.numeral_bands.
+# crown_font_for_ink_height`). Deliberately large and deliberately NOT
+# `NUMERAL_COVERAGE_PROBE_PX` (80): at 80 px the outline's own grid
+# fitting skews the ratio by ~2%, which lands a 200 px crown 5 px off
+# its target. A big probe measures the pure outline.
+CROWN_FIT_PROBE_PX = 1024
+# ADVANCE: the crown lays glyphs out by their OWN ink width plus this
+# much tracking (of the glyph box height) — never a fixed angular step,
+# which spaced a 0.22-wide colon exactly as far as a 1.45-wide M and was
+# half of what the owner saw as "scattered". MEASURED to reproduce
+# today's static-arc spacing on average: the static step
+# (RING_CROWN_TEXT_LETTER_STEP_DEG at RING_CROWN_TEXT_RADIUS_FRACTION)
+# is 1.753 glyph-heights of arc, and the mean letter-plate ink width is
+# 1.19 glyph-heights — the difference is the tracking below.
+CROWN_TRACKING_FRACTION = 0.56
+# `location` (THE RULED LOCATION ARC, owner defect 2026-08-07 — "The
+# One's bottom location line does not exist"): the orientation of a
+# location arc the PRESET itself owns, drawn whatever the user's own
+# per-ring `Settings.ring_crown_location` toggle says. Until this round
+# the ledger's "its bottom arc is City, Country" was served only by that
+# toggle — which is OFF by default and, when ticked, draws at the TOP,
+# straight through the live time. A preset's ruled arc is not a user
+# pick, so it lives here; None (the default, every other preset) leaves
+# the toggle as the only source, unchanged.
 RING_LIVE_CROWN = {
-    # The One — the top arc keeps this watch's OWN civil time; its bottom
-    # arc is "City, Country", already drawn by the existing
-    # `Settings.ring_crown_location` path through RingLayer.
-    "The One": {"zone": None, "orientation": "top"},
+    # The One — the top arc keeps this watch's OWN civil time; the bottom
+    # arc names the city and country the watch is set to.
+    "The One": {"zone": None, "orientation": "top", "location": "bottom"},
     # Templar — the top arc keeps the hour of JERUSALEM; its bottom arc,
     # NON NOBIS DOMINE, is a static plate arc declared in the preset card.
-    "Templar": {"zone": "Asia/Jerusalem", "orientation": "top"},
+    "Templar": {"zone": "Asia/Jerusalem", "orientation": "top", "location": None},
 }
 CROWN_TIME_ZONES = {
     entry["zone"] or "local": entry["zone"]
@@ -554,6 +589,21 @@ RING_LIVE_CROWN_READING = {
             "he was standing."
         ),
     },
+}
+# THE LOCATION ARC's own hover — verbatim from research/crown_content.md
+# §1, the counterpart to RING_LIVE_CROWN_READING above. Stated ONCE here
+# (Rule #5) and read by BOTH the preset's ruled bottom arc and the user's
+# own per-ring Location toggle in `app.controller._compose_skin`; before
+# the 2026-08-07 round it was a dict literal inlined in that one branch,
+# so the ruled arc would have had to copy it.
+RING_LIVE_CROWN_LOCATION_READING = {
+    "title": "City, Country",
+    "text": (
+        "the bottom arc names the city and country the watch is set "
+        "to: the counterpart to the live hour above it — WHERE anchors "
+        "WHEN, the two lines that make a clock a fact about a specific "
+        "place rather than an abstraction."
+    ),
 }
 # Generous half-angle (Rule #7 — no per-glyph geometry solved for text
 # that is rasterized fresh every minute): comfortably covers the widest

@@ -22,7 +22,10 @@ from PySide6.QtGui import QPainter
 from config import dial, paths
 from core import numerals
 from render.context import Cadence, Layer, RenderContext
-from render.numeral_bands import BandSpec, CrownSpec, compose_crown, crown_glyph_set
+from render.asset_recolor import jewel_metal_file
+from render.numeral_bands import (
+    BandSpec, CrownSpec, compose_crown, crown_glyph_ink, crown_glyph_set,
+)
 from render.painting import dial_point
 
 
@@ -93,15 +96,38 @@ def crown_spec(skin, ctx: RenderContext) -> CrownSpec:
     `numeral_darkness`/`numeral_border` knobs, which no longer reach the
     crown at all. `shade` is resolved here (not left to the glyph
     builder's own ambient read) so it rides the cache key: two watches
-    with different active shades must never share one baked tile."""
+    with different active shades must never share one baked tile.
+
+    ONE CROWN SIZE LAW (owner defect 2026-08-07 — the live crown read
+    "microscopic" beside NON NOBIS DOMINE): `height_px` is the glyph
+    BOX, solved from the SAME expression
+    `render.layers.ring.RingLayer._draw_crown_text` uses for the static
+    arc — `2 * radius * RING_CROWN_TEXT_SIZE * crown_text_scale` — in
+    DEVICE pixels. It replaces `size_units`, which read the HOUR BAND's
+    `numeral_outer_size` and put a second, smaller size family on the
+    same ring. THE DECOUPLED SCALES (same round): `ring_jewels_scale`
+    is deliberately absent — it sizes jewels and nothing else now.
+
+    ONE METAL PER CROWN (same round — the colon rendered GOLD while the
+    digits rendered gray): `colon_source` is the file
+    `jewel_metal_file` actually resolved for the colon plate, put in
+    the key so the crown's BAKED tiles cannot outlive the background
+    recolor's gold fallback. See `CrownSpec` for the full root cause.
+    """
     metal = skin.ring.crown_text_metal
     return CrownSpec(
         pixels=max(2, round(2 * ctx.radius * ctx.dpr)),
         dpr=ctx.dpr,
         face=skin.crown_face,
-        size_units=float(skin.numeral_outer_size),
+        height_px=(
+            2 * ctx.radius * dial.RING_CROWN_TEXT_SIZE
+            * skin.crown_text_scale * ctx.dpr
+        ),
         metal=metal,
         shade=paths.metal_shade(metal),
+        colon_source=str(
+            jewel_metal_file(dial.RING_JEWEL_ART_DIR / "time.png", metal)
+        ),
     )
 
 
@@ -131,11 +157,20 @@ class LiveCrownLayer(Layer):
         sequence = numerals.crown_sequence(
             hour, minute, self._skin.crown_time_format
         )
-        glyphs = crown_glyph_set(crown_spec(self._skin, ctx))
+        spec = crown_spec(self._skin, ctx)
+        glyphs = crown_glyph_set(spec)
         radius = ctx.radius * dial.CROWN_RADIUS_FRACTION
+        # THE CROWN ADVANCE LAW (owner defect 2026-08-07): the arc is
+        # laid out in DEVICE pixels — the ink widths and the tracking
+        # both come from `spec.height_px`, which is already device — so
+        # the radius is multiplied by `dpr` to match. The ratio is what
+        # becomes an angle, so the answer is resolution-independent.
         for image, angle, rotation in compose_crown(
             glyphs, sequence, self._entry["orientation"],
             offset_deg=ctx.world_offset,
+            ink=crown_glyph_ink(spec),
+            radius_px=radius * ctx.dpr,
+            tracking_px=spec.height_px * dial.CROWN_TRACKING_FRACTION,
         ):
             logical_w = image.width() / image.devicePixelRatio()
             logical_h = image.height() / image.devicePixelRatio()
