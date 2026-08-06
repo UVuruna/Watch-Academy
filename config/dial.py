@@ -471,3 +471,41 @@ CROWN_TIME_ZONES = {
     entry["zone"] or "local": entry["zone"]
     for entry in RING_LIVE_CROWN.values()
 }
+
+# THE ONE COPY RULE's ceiling on the process-wide plate cache
+# (`render.numeral_bands._PLATES`). A plate's key carries the band's
+# ROTATION, and in the Heliocentric mode that rotation changes with the
+# solar offset — i.e. once a DAY, twice with the night phase. Without a
+# ceiling a watch left running for a year would hold a year of plates;
+# with it the cache keeps the working set (a couple of watches x two
+# phases x a transient size) and drops the oldest beyond it.
+NUMERAL_PLATE_CACHE_MAX = 16
+
+# --- THE TWO WORLD-MODES (research/ring_rework.md §1) ------------------------------
+# Which of the two turns: the sky, or the world. GEOCENTRIC is the dial
+# every release before this one drew — the observer stands still and the
+# sun travels, so the star/pointer rotates toward true solar noon while
+# the hour band and every numeral stay fixed, 12 always on top.
+# HELIOCENTRIC stands the star still and turns the WORLD beneath it: the
+# outer band, the letters, the crown text, the aura and umbra, the
+# weekday seats, the Earth and Moon markers and the hour hand all ride
+# ONE world offset — and the whole dial turns over at night.
+#
+# Solar Rotation stays its OWN switch: it says whether the solar part of
+# that offset is taken at all, in either mode. `core.world` owns the
+# mathematics; no other module may name these strings.
+WORLD_MODES = ("geocentric", "heliocentric")
+WORLD_MODE_DEFAULT = "geocentric"
+WORLD_MODE_LABELS = {
+    "geocentric": "Geocentric (Ptolemy)",
+    "heliocentric": "Heliocentric (Copernicus)",
+}
+# THE NIGHT INVERSION: night is daylight moved half a circle — 0h stands
+# where 12 stood, noon at the bottom, every glyph re-seated readably at
+# its new angle by the seating law.
+WORLD_NIGHT_PHASE_DEG = 180.0
+# THE FLIP. A GENUINE transition (a real sunset, a real sunrise) turns
+# the world through one short eased move. A clock correction is NOT a
+# transition and NOT a new day (owner bug 2026-08-06) — it snaps.
+WORLD_FLIP_DURATION_S = 1.5
+WORLD_FLIP_FRAME_MS = 16             # ~60 fps, armed for the move alone

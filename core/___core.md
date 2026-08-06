@@ -24,6 +24,7 @@ CLOCKWISE from the TOP (12:00 noon top, 00:00 midnight bottom,
 | `deep_time.py` | Algorithmic | Deep Time calendar mathematics — eras, the 400-year proxy, Julian Day, ΔT — [about](__about/deep_time.md) · [flow](__flow/deep_time.md) |
 | `moon.py` | Algorithmic | moon phase fraction and analytic illumination — [about](__about/moon.md) · [flow](__flow/moon.md) |
 | `sun.py` | Algorithmic | sun events and daylight-regime classification — [about](__about/sun.md) · [flow](__flow/sun.md) |
+| `world.py` | Algorithmic | THE TWO WORLD-MODES — the pointer rotation and the world offset, phase included — [about](__about/world.md) · [flow](__flow/world.md) |
 | `year_wheel.py` | Algorithmic | year-marker angle, piecewise-linear between season anchors — [about](__about/year_wheel.md) · [flow](__flow/year_wheel.md) |
 | `__main__.py` | Standard | `python -m core` CLI selftest — prints the full computed state — [about](__about/__main__.md) |
 | `__init__.py` | Trivial | module docstring only, no code |

@@ -22,7 +22,7 @@ from config import archetypes, calendar_mounts, constants, defaults, dial, encyc
 from config.ui_text import ui
 from data.encyclopedia import EncyclopediaRepository, shared_encyclopedia
 from data.symbolism import SymbolismRepository, shared_symbolism
-from core import angles, continents
+from core import angles, continents, world
 from core.clock_state import DayContext, TickState
 from core.deep_time import (
     format_anno_lucis,
@@ -120,6 +120,15 @@ def _centered_html(*lines: str) -> str:
         for line in lines
     )
     return f"<div align='center'>{body}</div>"
+
+
+def _crown_arc_centre(entry: dict) -> float:
+    """One crown-text entry's own arc centre — the axis THE ARC READING
+    LAW reflects about (`core.world.arc_centre_deg`). Computed from the
+    SAME glyph seats `render.layers.ring.RingLayer._draw_crown_text`
+    passes to `arc_seats` (Rule #5), so a word's hover zone and its
+    drawn letters can never disagree about where the arc went."""
+    return world.arc_centre_deg([theta for _asset, theta in entry["glyphs"]])
 
 
 def _ordinal(n: int) -> str:
@@ -521,6 +530,17 @@ class Compositor:
         # every non-active weekday body to full opacity until this
         # monotonic deadline; None = no reveal running.
         self._reveal_until: float | None = None
+        # THE NIGHT INVERSION's own state (ring_rework §1, core.world).
+        # `_flip_target` is the phase this dial belongs at RIGHT NOW —
+        # 0 by day, 180 by night, always 0 in Geocentric — and None only
+        # before the first tick has ever been seen (the first paint
+        # SNAPS it into place). `_flip_started` is the monotonic instant
+        # a GENUINE transition began, or None when the phase is simply
+        # standing (which is every moment of a polar day or a polar
+        # night, and every moment after a clock correction snapped).
+        self._flip_from: float = 0.0
+        self._flip_target: float | None = None
+        self._flip_started: float | None = None
 
     @staticmethod
     def _plan_steps(
@@ -569,7 +589,12 @@ class Compositor:
         anywhere on the seat. The toggle semantics are untouched."""
         radius = size / 2
         point = QPointF(x - radius, y - radius)
-        center = dial_point(180.0, radius * dial.RING_LETTER_RADIUS_FRACTION)
+        # The Omega seat is a ring LETTER, so it rides THE WORLD OFFSET
+        # with the band it stands on (0.0 in Geocentric).
+        center = dial_point(
+            (180.0 + self._world_offset()) % 360.0,
+            radius * dial.RING_LETTER_RADIUS_FRACTION,
+        )
         hit_radius = radius * dial.OMEGA_HIT_RADIUS_FRACTION
         return math.hypot(
             point.x() - center.x(), point.y() - center.y()
@@ -666,9 +691,107 @@ class Compositor:
             return None
         return tick.is_daylight
 
-    def _rotation(self) -> float:
-        """Star/Aura/Umbra/slot rotation: solar offset, or 0 upright."""
-        return self._day.star_rotation if self._skin.solar_rotation else 0.0
+    # --- THE TWO WORLD-MODES (ring_rework §1, core.world) ---------------------
+
+    def note_daylight(
+        self, is_daylight: bool, animate: bool, now: float | None = None,
+    ) -> bool:
+        """Report the sun's ACTUAL state and say whether the dial may
+        TURN to meet it. Returns True when a flip animation started, so
+        the caller can arm its frame timer for exactly that long.
+
+        `animate=False` is the SNAP, and it is not an optimization: a
+        WM_TIMECHANGE clock correction is not a sunset and a day-context
+        rebuild is not a transition (owner bug 2026-08-06), so both
+        apply the phase instantly, with no intermediate frame and no
+        hover sweep. `animate=True` is only ever a genuine sunrise or
+        sunset — an ordinary day has two, polar day and polar night have
+        ZERO for months and this method simply keeps answering False."""
+        target = (
+            world.night_phase_deg(is_daylight)
+            if self._skin.world_mode == "heliocentric"
+            else 0.0
+        )
+        if self._flip_target is None or not animate or target == self._flip_target:
+            self._flip_from = target
+            self._flip_target = target
+            self._flip_started = None
+            return False
+        self._flip_from = self.phase_deg(now)
+        self._flip_target = target
+        self._flip_started = monotonic() if now is None else now
+        return True
+
+    def phase_deg(self, now: float | None = None) -> float:
+        """The night phase RIGHT NOW — 0 or 180 while standing, an eased
+        value in between while a flip runs (`core.world.flip_phase_deg`)."""
+        if self._flip_target is None:
+            return 0.0
+        if self._flip_started is None:
+            return self._flip_target
+        moment = monotonic() if now is None else now
+        return world.flip_phase_deg(
+            self._flip_from, self._flip_target, moment - self._flip_started,
+        )
+
+    def flip_active(self, now: float | None = None) -> bool:
+        """True while the turning move is still moving."""
+        if self._flip_started is None:
+            return False
+        moment = monotonic() if now is None else now
+        if moment - self._flip_started >= dial.WORLD_FLIP_DURATION_S:
+            self._flip_started = None
+            self._flip_from = self._flip_target
+            return False
+        return True
+
+    def _world_theta(self, point: QPointF) -> float:
+        """The cursor's dial angle in the WORLD's own frame — the screen
+        angle with THE WORLD OFFSET taken back off.
+
+        Every hover that reads the dial BAND (the 360 ticks and their
+        time/date/moon readings, the ring letters and the crown words,
+        the day/night and twilight wedges, the Calendar's own wedges)
+        answers about a wall-clock mark, so it must ask the question in
+        the frame those marks are drawn in. The POINTER's own hovers
+        (the star arms) keep the screen frame and their own
+        `_rotation()` term instead. 0.0 in Geocentric leaves every one
+        of them exactly as it was."""
+        return (
+            math.degrees(math.atan2(point.x(), -point.y()))
+            - self._world_offset()
+        ) % 360.0
+
+    def _phase_target(self) -> float:
+        """The phase the CACHED composite is painted at — never the
+        animated value, so the band plate is re-rendered ONCE per phase
+        and the move itself is a rotation of finished pixels."""
+        return 0.0 if self._flip_target is None else self._flip_target
+
+    def _rotation(self, phase_deg: float | None = None) -> float:
+        """THE POINTER ROTATION (`core.world`): Star/Aura/Umbra/slot
+        rotation. Geocentric — the solar offset, or 0 upright, exactly
+        as every release before this one. Heliocentric — the night phase
+        alone: the star stands still and the world turns under it."""
+        if self._day is None:
+            return 0.0          # before the first day context (hit tests)
+        phase = self.phase_deg() if phase_deg is None else phase_deg
+        return world.pointer_rotation_deg(
+            self._skin.world_mode, self._day.star_rotation,
+            self._skin.solar_rotation, phase,
+        )
+
+    def _world_offset(self, phase_deg: float | None = None) -> float:
+        """THE WORLD OFFSET (`core.world`): how far the dial FACE has
+        turned — 0.0 in Geocentric, so that mode is a bit-for-bit
+        no-op."""
+        if self._day is None:
+            return 0.0          # before the first day context (hit tests)
+        phase = self.phase_deg() if phase_deg is None else phase_deg
+        return world.world_offset_deg(
+            self._skin.world_mode, self._day.star_rotation,
+            self._skin.solar_rotation, phase,
+        )
 
     @profiling.timed("Paint frame")
     @paths.in_display
@@ -676,6 +799,11 @@ class Compositor:
         if self._day is None:
             raise RuntimeError("Compositor.paint() before the first day context")
         self._last_tick = tick
+        if self._flip_target is None:
+            # The first frame this compositor ever paints (a fresh skin
+            # install, a test's render_offscreen): the phase SNAPS into
+            # place — there is no previous state to have turned from.
+            self.note_daylight(tick.is_daylight, animate=False)
         reveal = self.reveal_active()
         # The archetype hour-space (owner 2026-07-16) turns with the
         # hour hand — but the archetype figures paint LIVE (ROADMAP
@@ -693,7 +821,16 @@ class Compositor:
         # day and its dark one by night, so its cached segment must
         # rebuild when the sky turns. Every other configuration keys
         # purely on the day, exactly as the lit-wedge deletion left it.
-        key = (round(size * dpr), self._day.cache_key, self._two_faced_mount(tick))
+        # THE NIGHT PHASE joins the key (ring_rework §1): the cached
+        # segments carry the outer band, the letters, the crown text and
+        # the daylight arcs, all of which sit half a circle apart in the
+        # two phases. It is the TARGET phase, never the animated one, so
+        # a dial ever only holds TWO phase variants — the flip itself is
+        # a rotation of these finished pixels, not a re-render per frame.
+        key = (
+            round(size * dpr), self._day.cache_key,
+            self._two_faced_mount(tick), self._phase_target(),
+        )
         if self._composite_key != key:
             self._composites = [None] * len(self._cached_groups)
             self._composite_key = key
@@ -703,11 +840,23 @@ class Compositor:
         # LIVE from the user's settings (owner 2026-07-17), matching the
         # widget's own window sizing.
         overhang = size * defaults.dial_window_margin_fraction(self._skin)
+        # THE FLIP, as ONE orchestrated turning move: the live layers
+        # take the animated phase directly, and the cached segments —
+        # painted once at the TARGET phase — are simply ROTATED by the
+        # difference. Every baked member's rotation is phase-linear
+        # (band, letters, crown, daylight arcs, umbra, star), so turning
+        # the finished pixels is exactly turning all of them, and not
+        # one plate is re-rendered mid-move. `flip_delta` is 0.0 the
+        # instant the move ends, and always 0.0 in Geocentric.
+        phase = self.phase_deg()
+        flip_delta = phase - self._phase_target()
         ctx = RenderContext(
             skin=self._skin, day=self._day, tick=tick,
             daylight=tick.is_daylight,
             radius=size / 2, cache=self._cache, dpr=dpr,
-            rotation=self._rotation(), hovered=self._hovered,
+            rotation=self._rotation(phase),
+            world_offset=self._world_offset(phase),
+            hovered=self._hovered,
             reveal_active=reveal, archetype_lit=archetype_lit,
         )
         for kind, payload in self._steps:
@@ -719,6 +868,15 @@ class Compositor:
                             self._cached_groups[payload], size, dpr,
                         )
                     self._composites[payload] = pixmap
+                if flip_delta:
+                    painter.save()
+                    painter.setRenderHints(_RENDER_HINTS)
+                    painter.translate(size / 2, size / 2)
+                    painter.rotate(flip_delta)
+                    painter.translate(-size / 2, -size / 2)
+                    painter.drawPixmap(QPointF(-overhang, -overhang), pixmap)
+                    painter.restore()
+                    continue
                 painter.drawPixmap(QPointF(-overhang, -overhang), pixmap)
                 continue
             layer = payload
@@ -1248,7 +1406,7 @@ class Compositor:
         outer = radius * self._skin.background.aura_radius_fraction
         if not (radius * 0.08 <= distance <= outer):
             return None
-        theta = math.degrees(math.atan2(point.x(), -point.y())) % 360.0
+        theta = self._world_theta(point)
         step = constants.CALENDAR_WEDGE_DEG
         if calendar_wheel(self._skin) == "almanac":
             index = int((theta + step / 2.0) // step) % 12
@@ -1362,9 +1520,13 @@ class Compositor:
             or (eclipse is not None and eclipse.kind == "lunar")
             else marker.moon_orbit_fraction
         )
+        # THE MARKERS RIDE THE WORLD (core.world): both are drawn on the
+        # turning dial face, so their hit discs take the same offset the
+        # paint does — 0.0 in Geocentric.
+        offset = self._world_offset()
         if self._skin.show_moon and hit(
             dial_point(
-                angles.moon_cycle_angle(self._last_tick.moon_fraction),
+                angles.moon_cycle_angle(self._last_tick.moon_fraction) + offset,
                 radius * moon_orbit,
             ),
             radius * marker.moon_scale,
@@ -1377,7 +1539,7 @@ class Compositor:
             else marker.orbit_fraction
         )
         if self._skin.show_earth and hit(
-            dial_point(self._last_tick.year_angle, radius * earth_orbit),
+            dial_point(self._last_tick.year_angle + offset, radius * earth_orbit),
             radius * marker.scale,
         ):
             return "earth"
@@ -2514,7 +2676,7 @@ class Compositor:
         running lunation, then the cycle reading at that angle — new
         at the top, full at the bottom, as the marker rides)."""
         distance = math.hypot(point.x(), point.y())
-        theta = math.degrees(math.atan2(point.x(), -point.y())) % 360.0
+        theta = self._world_theta(point)
         # The unlocked hidden mode (owner 2026-07-16, top-only round):
         # ONLY the 12h ring LETTER — M on DOMY, whatever glyph another
         # ring seats there — opens the Four Greetings. Only the letter
@@ -2689,13 +2851,24 @@ class Compositor:
         ):
             return None
         legend = self._skin.ring.letter_legend
+        # THE ARC READING LAW reaches the hover too (core.world): the
+        # drawn arc is REFLECTED, not merely rotated, whenever the world
+        # offset carries it across the horizon — so the stored word
+        # centre is mapped FORWARD through the same map and compared in
+        # screen space, instead of un-rotating the cursor. `_world_theta`
+        # already took the offset off, so it goes back on here. Both are
+        # identities in Geocentric.
+        offset = self._world_offset()
+        screen_theta = (theta + offset) % 360.0
         for entry in crown_text:
+            arc_centre = _crown_arc_centre(entry)
             for word in entry.get("words", ()):
                 if word["seat"] is None:
                     continue
+                center = world.arc_seat_deg(word["center"], arc_centre, offset)
                 delta = min(
-                    (theta - word["center"]) % 360.0,
-                    (word["center"] - theta) % 360.0,
+                    (screen_theta - center) % 360.0,
+                    (center - screen_theta) % 360.0,
                 )
                 if delta > word["half"]:
                     continue
@@ -3069,7 +3242,7 @@ class Compositor:
         outer = radius * self._skin.background.aura_radius_fraction
         if not (radius * 0.08 <= distance <= outer):
             return None
-        theta = math.degrees(math.atan2(point.x(), -point.y())) % 360.0
+        theta = self._world_theta(point)
         step = constants.CALENDAR_WEDGE_DEG
         day = self._day
         if calendar_wheel(self._skin) == "almanac":
@@ -3235,7 +3408,7 @@ class Compositor:
         Dark title. Polar days/nights cover the whole wheel."""
         sun = self._day.sun
         distance = math.hypot(point.x(), point.y())
-        theta = math.degrees(math.atan2(point.x(), -point.y())) % 360.0
+        theta = self._world_theta(point)
         angle = angles.time_to_dial_angle
 
         def within(start: float, end: float) -> bool:
@@ -3300,7 +3473,7 @@ class Compositor:
         distance = math.hypot(point.x(), point.y())
         if distance > radius * self._skin.background.aura_radius_fraction:
             return None
-        theta = math.degrees(math.atan2(point.x(), -point.y())) % 360.0
+        theta = self._world_theta(point)
 
         def within(start: float, end: float) -> bool:
             span_end = end if end > start else end + 360.0
@@ -3361,8 +3534,12 @@ class Compositor:
         if not archetype_active(self._skin):
             return None
         return archetype_lit_index(
-            self._skin.pointer, tick.hour_angle, self._rotation(),
-            arm_offset_deg(self._skin),
+            # The DRAWN hour hand carries the world offset, so the arm
+            # it stands in must be judged on the drawn angle; the arms
+            # themselves keep the pointer rotation. Both terms are 0 in
+            # Geocentric, leaving this exactly what it was.
+            self._skin.pointer, tick.hour_angle + self._world_offset(),
+            self._rotation(), arm_offset_deg(self._skin),
         )
 
     def _render_group(
@@ -3389,7 +3566,10 @@ class Compositor:
             daylight=(self._last_tick.is_daylight
                       if self._last_tick is not None else True),
             radius=size / 2, cache=self._cache, dpr=dpr,
-            rotation=self._rotation(), hovered=None,
+            # The TARGET phase, never the animated one — see `paint`.
+            rotation=self._rotation(self._phase_target()),
+            world_offset=self._world_offset(self._phase_target()),
+            hovered=None,
             reveal_active=False, archetype_lit=None,
         )
         for layer in layers:

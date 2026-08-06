@@ -150,6 +150,21 @@ class Settings:
     # load() migrates an older file's pair, and the pre-rename
     # archetype_earth_day key, onto this single enum).
     earth_label: str = "date"
+    # THE TWO WORLD-MODES (ring_rework.md §1): "geocentric" (the
+    # default — today's dial, bit for bit) or "heliocentric" (the
+    # star stands, the world turns, and the dial inverts at night).
+    # Absent from an older settings file = the default, so every
+    # stored watch loads clean. Solar Rotation stays its own switch.
+    #
+    # The key is `world_mode`, never the bare `mode` this round first
+    # wrote (2026-08-06 escalation): `mode` is the most generic word
+    # there is, this file is ONE flat namespace of 112 keys, and a
+    # hand-seeded profile carrying somebody else's top-level `mode`
+    # would have been read as a world-mode. `world_mode` cannot
+    # collide, matches `dial.WORLD_MODE_*` and `core.world`, and needs
+    # no migration BECAUSE no generation of this file ever wrote a
+    # top-level `mode` — an unknown key is simply not read.
+    world_mode: str = dial.WORLD_MODE_DEFAULT
     solar_rotation: bool = True
     octa_slot: str = "time"             # South slot MODE
     day_slot_style: str = "sign"        # the DAY slot badge's own style
@@ -367,6 +382,36 @@ class SettingsStore:
         try:
             # utf-8-sig: hand-edited files saved with a BOM must still parse
             raw = json.loads(self._path.read_text(encoding="utf-8-sig"))
+            # THE IDENTITY MARKERS, named out loud (2026-08-06
+            # escalation). Both have been required since the first
+            # release (0.14.001) and neither is new — but a file
+            # without them used to die on a bare `KeyError('window')`,
+            # whose entire message is the word `window`. That message
+            # read to a later session as "the code now demands a
+            # section it never wrote" and cost a round of
+            # investigation; naming the file's own top-level keys back
+            # to the reader is the difference between a diagnosis and
+            # a riddle.
+            #
+            # They stay REQUIRED on purpose: defaulting them would
+            # turn an unreadable file into a SILENT reset of 112
+            # settings, which is the one thing this module's docstring
+            # forbids. A file the app itself wrote always carries
+            # them, so no stored watch is affected.
+            if not isinstance(raw, dict):
+                raise ValueError(
+                    f"not a DOMY Watch settings file: the JSON root is "
+                    f"{type(raw).__name__}, not an object"
+                )
+            missing = [
+                key for key in ("schema_version", "window") if key not in raw
+            ]
+            if missing:
+                raise ValueError(
+                    "not a DOMY Watch settings file: no "
+                    + ", ".join(repr(key) for key in missing)
+                    + f" (its own top-level keys: {sorted(raw)})"
+                )
             window = raw["window"]
             diameter = int(window["diameter"])
             if not dial.MIN_DIAL_DIAMETER <= diameter <= dial.MAX_DIAL_DIAMETER:
@@ -556,6 +601,10 @@ class SettingsStore:
                     raw, "hide_night_borders", False
                 ),
                 earth_label=load_earth_label(raw),
+                world_mode=load_choice(
+                    raw, "world_mode", dial.WORLD_MODES,
+                    dial.WORLD_MODE_DEFAULT,
+                ),
                 solar_rotation=load_bool(raw, "solar_rotation", True),
                 legend=load_bool(raw, "legend", True),
                 show_earth=load_bool(raw, "show_earth", True),
@@ -733,6 +782,7 @@ class SettingsStore:
             "hide_night_borders": settings.hide_night_borders,
             "earth_label": settings.earth_label,
             "z_mode": settings.z_mode,
+            "world_mode": settings.world_mode,
             "solar_rotation": settings.solar_rotation,
             "octa_slot": settings.octa_slot,
             "day_slot_style": settings.day_slot_style,

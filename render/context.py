@@ -34,9 +34,25 @@ class RenderContext:
     radius: float                    # logical px, dial radius
     cache: AssetCache
     dpr: float
-    rotation: float = 0.0            # Star/Aura/Umbra/slot rotation: the solar
-                                     # offset, or 0 in upright mode (the noon
-                                     # marker stays solar — day.star_rotation)
+    rotation: float = 0.0            # THE POINTER ROTATION (core.world):
+                                     # Star/Aura/Umbra/slot rotation — the
+                                     # solar offset, or 0 in upright mode, in
+                                     # GEOCENTRIC; the night PHASE alone in
+                                     # HELIOCENTRIC, where the star stands
+                                     # still and the world turns instead (the
+                                     # noon marker stays solar —
+                                     # day.star_rotation)
+    world_offset: float = 0.0        # THE WORLD OFFSET (core.world): how far
+                                     # the WORLD has turned under the pointer
+                                     # — the outer numeral band, the ring
+                                     # letters, the crown text, the daylight
+                                     # arcs, the Earth/Moon markers, the hour
+                                     # hand and every hover hit zone that
+                                     # reads the dial band ride this ONE
+                                     # number together. Exactly 0.0 in
+                                     # GEOCENTRIC, so that mode is a
+                                     # bit-for-bit no-op. The INNER band and
+                                     # the minute/seconds hands NEVER take it.
     hovered: str | None = None       # element under the cursor ("earth",
                                      # "moon", "octa_slot", "body:<name>") —
                                      # drawn hover_enlarge times larger

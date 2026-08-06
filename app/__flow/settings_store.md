@@ -24,6 +24,7 @@ Settings (frozen dataclass)
     archetype_mode, archetype_names, cube_look
     daylight
     pointer_shape, polygon_curvature, polygon_edge, hide_night_borders
+    world_mode                   "geocentric" | "heliocentric"
     solar_rotation
   Slots (three, same shape)
     weekday_slot / octa_slot / third_slot        mode

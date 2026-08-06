@@ -12,6 +12,14 @@ tip `minute_reach_fraction`, and the hours follow the pack's own
 hours/minutes tip ratio — the counterweight below the pivot comes along at
 the same scale.
 
+THE WORLD OFFSET ([World](../../../core/__about/world.md)) reaches the
+HOUR hand alone: it must point at the rotated hour numerals so the read
+stays true when the band turns. The minute and seconds hands never take
+it — they read the inner band, which never rotates in any mode — and
+`tick.hour_angle` itself stays plain zone time, so every NON-visual
+consumer of it (the archetype hour-space, the ninth's solar windows)
+keeps reading it unrotated.
+
 `Cadence.MINUTE`: hands sweep continuously with wall-clock time, so they
 must repaint every tick. Not `hover_variable` — `MINUTE` already guarantees
 a live repaint every frame, and hands have no individually-hoverable

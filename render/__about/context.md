@@ -15,7 +15,9 @@ from-3-o'clock only inside the pie/position helpers in
 ## Connections
 
 ### Uses
-- [Core (folder)](../../core/___core.md) — `DayContext`, `TickState`
+- [Core (folder)](../../core/___core.md) — `DayContext`, `TickState`;
+  [World](../../core/__about/world.md) supplies the two rotation numbers
+  the compositor stamps on every context
 - [Assets](assets.md) — `AssetCache`
 - [Skins (folder)](../../skins/___skins.md) — `SkinDefinition`
 
@@ -37,8 +39,16 @@ stack.
 ### RenderContext (frozen dataclass)
 - `skin`, `day`, `tick` (`None` while compositing STATIC/DAILY groups),
   `radius`, `cache`, `dpr` — the paint's fixed inputs
-- `rotation` — the Star/Aura/Umbra/slot solar offset, or 0 in upright
-  mode
+- `rotation` — THE POINTER ROTATION ([World](../../core/__about/world.md)):
+  the Star/Aura/Umbra/slot rotation. Geocentric — the solar offset, or 0
+  in upright mode. Heliocentric — the night PHASE alone, because the
+  star stands still and the world turns under it
+- `world_offset` — THE WORLD OFFSET (same module): how far the dial FACE
+  has turned. The outer numeral band, the ring letters, the crown text,
+  the daylight arcs, the Earth and Moon markers, the hour hand and every
+  hover hit zone that reads the dial band ride this ONE number together.
+  Exactly `0.0` in Geocentric, so that mode is a bit-for-bit no-op; the
+  INNER band and the minute/seconds hands never take it
 - `hovered` — the element under the cursor (`"earth"`, `"moon"`,
   `"octa_slot"`, `"body:<name>"`, …), drawn `hover_enlarge` times larger
 - `reveal_active` — the Omega-reveal window is open

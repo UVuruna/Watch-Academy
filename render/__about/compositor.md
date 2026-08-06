@@ -17,6 +17,30 @@ LIVE every frame, so a hover enter/leave or an Omega reveal rebuilds
 NOTHING. `render_offscreen()` reuses the exact same `paint()` path for
 tests and the settings preview.
 
+**THE TWO WORLD-MODES (`ring_rework.md` §1,
+[World](../../core/__about/world.md)):** this class is where the mode
+becomes two numbers. `_rotation()` answers the POINTER rotation and
+`_world_offset()` the WORLD offset; every layer and every hit test reads
+one of the two, and both are stamped on the `RenderContext`. It also owns
+the NIGHT PHASE and its flip:
+
+- `note_daylight(is_daylight, animate)` — the caller reports the sun's
+  ACTUAL state and says whether the dial may turn to meet it. `animate=
+  False` is the SNAP a clock correction and a day-context rebuild take
+  (owner bug 2026-08-06: a WM_TIMECHANGE is not a sunset). Returns True
+  only when a genuine flip started, which on a polar day or polar night
+  is never.
+- `phase_deg()` / `flip_active()` — the eased phase and whether the move
+  is still moving.
+- The composite key carries the TARGET phase, so a dial ever only holds
+  TWO phase variants; the flip itself ROTATES the finished cached pixels
+  by the difference, because every baked member's rotation is
+  phase-linear. Not one plate is re-rendered mid-move, and nothing on the
+  paint path touches the disk.
+- `_world_theta(point)` takes the world offset back off a cursor angle,
+  so every hover that reads the dial BAND asks its question in the frame
+  those marks are drawn in.
+
 ## THIS FILE IS A DOCUMENTED GOD-FILE (3,311 lines)
 
 It carries THREE separate responsibilities in one class, and is named
@@ -102,8 +126,8 @@ violated in the code, not papered over here).
   `QImage` — tests and the settings preview.
 
 ## Design Decisions
-- **The composite key is size/DPI + the day alone** — never hover, never
-  reveal. That is the entire point of the 15f cache split: those two
+- **The composite key is size/DPI + the day + the night PHASE** — never
+  hover, never reveal, and never the ANIMATED phase. That is the entire point of the 15f cache split: those two
   states live only in the LIVE layers, so toggling them never triggers
   "Composite rebuild".
 - **Hit-testing and painting read the SAME geometry functions**, never

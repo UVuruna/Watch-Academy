@@ -14,6 +14,14 @@ drawn one layer down by `BackgroundLayer`; the Calendar pointer draws its
 own two hexagrams / twelve-point star over its own wedges through this same
 class.
 
+THE TWO WORLD-MODES ([World](../../../core/__about/world.md)): the ARMS take
+`ctx.rotation` (the pointer rotation — the solar offset in Geocentric,
+the night phase alone in Heliocentric, where the star stands still), and
+the lit-arc CLIP takes `ctx.world_offset`, because the clip is wall-clock
+dial space and in Heliocentric the wall-clock band itself has turned.
+With the solar part on, the two meet: the sunlit arc lands centred on the
+dial top, exactly under the pointer's own untilted top arm.
+
 `Cadence.DAILY`: which arcs are lit (`lit_regions(ctx.day.sun, ...)`) and
 where the border clips fall depend only on the day's sunrise/sunset, not the
 live tick. Not `hover_variable` — the star has no individually-hoverable

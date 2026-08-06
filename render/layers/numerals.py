@@ -32,10 +32,10 @@ def band_spec(skin, band: str, ctx: RenderContext) -> BandSpec:
     shared by both band layers and by every test that wants the same
     plate an on-screen watch would get).
 
-    `offset_deg` is the OUTER band's Heliocentric rotation. It is 0.0
-    today (wave 4 plugs in the solar offset and the night inversion),
-    but it rides the key from the start so turning the band on rebuilds
-    the plate without changing this function's shape."""
+    `offset_deg` is THE WORLD OFFSET (`core.world`) for the OUTER band
+    — the solar offset plus the night inversion, 0.0 in the Geocentric
+    mode. The INNER band NEVER rotates, in any mode (ledger §2), so it
+    keys on 0.0 and its plate is shared across both phases."""
     pixels = max(2, round(2 * ctx.radius * ctx.dpr))
     size = (
         skin.numeral_outer_size if band == "outer" else skin.numeral_inner_size
@@ -57,7 +57,7 @@ def band_spec(skin, band: str, ctx: RenderContext) -> BandSpec:
         darkness=skin.numeral_darkness,
         contact_blur_units=skin.numeral_contact_blur,
         border_units=skin.numeral_border,
-        offset_deg=0.0,
+        offset_deg=ctx.world_offset if band == "outer" else 0.0,
     )
 
 
@@ -134,6 +134,7 @@ class LiveCrownLayer(Layer):
         radius = ctx.radius * dial.CROWN_RADIUS_FRACTION
         for image, angle, rotation in compose_crown(
             glyphs, sequence, self._entry["orientation"],
+            offset_deg=ctx.world_offset,
         ):
             logical_w = image.width() / image.devicePixelRatio()
             logical_h = image.height() / image.devicePixelRatio()

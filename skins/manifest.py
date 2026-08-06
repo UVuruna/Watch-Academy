@@ -298,6 +298,15 @@ class SkinDefinition:
     # abbreviated weekday) or "full" (date over the YEAR). A GENERAL
     # Earth option — works in BOTH normal and archetype mode.
     earth_label: str = "date"
+    # THE TWO WORLD-MODES (ring_rework.md §1, `core.world`): which of the
+    # two turns. "geocentric" is the dial every release before this one
+    # drew — the star travels toward true solar noon, the hour band and
+    # every numeral stay fixed, 12 on top. "heliocentric" stands the
+    # star still and turns the WORLD instead, and inverts the whole dial
+    # at night. Solar Rotation below stays its OWN independent switch.
+    # Named in full — a bare `mode` beside `archetype_mode`/`z_mode` in
+    # a flat namespace names nothing at all.
+    world_mode: str = dial.WORLD_MODE_DEFAULT
     solar_rotation: bool = True        # False -> Star/Aura/Umbra stand upright
     octa_slot: str = "time"            # South slot MODE (OCTA_SLOT_MODES)
     day_slot_style: str = "sign"       # the DAY slot badge's own style

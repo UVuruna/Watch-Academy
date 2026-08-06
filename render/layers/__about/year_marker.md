@@ -22,6 +22,13 @@ coordinates on every call (R-28 fix, 2026-08) — nothing about the region is
 baked into the skin, so a Quick Jump/Time Travel/Greenwich simulation moves
 the Earth marker's face exactly like an ordinary location change does.
 
+THE WORLD OFFSET ([World](../../../core/__about/world.md)): both markers are
+drawn ON the turning dial face, so both take `ctx.world_offset`. At night
+that is +180, which stands the WINTER solstice where the summer solstice
+stood and the FULL moon where the new moon stood. The rim-transit test
+between them keeps the RAW angles — the same offset on both leaves their
+separation unchanged.
+
 `Cadence.MINUTE`: eclipse windows, season-event glow and moon transit
 opacity are all evaluated against `ctx.tick`, and both markers relocate
 within a tick-scale window — needs a per-tick repaint. Not `hover_variable`

@@ -42,8 +42,16 @@ class HandLayer(Layer):
 
     def paint(self, painter: QPainter, ctx: RenderContext) -> None:
         spec = self._spec
+        # THE WORLD OFFSET (core.world, ledger §1): the HOUR hand is a
+        # world member — it must point at the rotated hour numerals so
+        # the read stays true when the band turns. The MINUTE and
+        # SECONDS hands never take it: they read the inner band, which
+        # never rotates in any mode. Timekeeping itself is untouched —
+        # `tick.hour_angle` is still plain zone time and every
+        # NON-visual consumer of it (the archetype hour-space, the
+        # ninth's solar windows) keeps reading it unrotated.
         angle = {
-            "hour": ctx.tick.hour_angle,
+            "hour": ctx.tick.hour_angle + ctx.world_offset,
             "minute": ctx.tick.minute_angle,
             "second": ctx.tick.second_angle,
         }[self._kind]

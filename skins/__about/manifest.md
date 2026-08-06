@@ -148,7 +148,9 @@ for the full field-by-field default/meaning table):
 - **Pointer & palette** — `pointer` (which of the 7 wheels:
   `config.constants.POINTER_POINTS`), `pointer_shape`, `polygon_curvature`,
   `polygon_edge`, `palette_style`, `cube_look`, `daylight`,
-  `hide_night_borders`, `solar_rotation`, `archetype_mode`,
+  `hide_night_borders`, `world_mode` (THE TWO WORLD-MODES —
+  `"geocentric"`/`"heliocentric"`, `core.world`), `solar_rotation`
+  (its own independent switch in either mode), `archetype_mode`,
   `archetype_names`, `pointer_saturation`, `ring_saturation`,
   `calendar_mount`
 - **Umbra** — `umbra_form` (`"fine"` 30-section | `"coarse"` 24-section |

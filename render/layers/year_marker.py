@@ -45,10 +45,18 @@ class YearMarkerLayer(Layer):
         if ctx.skin.show_earth and self._gate(ctx, "earth"):
             self._draw_earth(painter, ctx)
         if ctx.skin.show_moon and self._gate(ctx, "moon"):
-            moon_angle = angles.moon_cycle_angle(ctx.tick.moon_fraction)
+            # THE WORLD OFFSET (core.world): the moon wheel is drawn ON
+            # the turning dial face, so the marker rides it. New moon is
+            # at the top by day (`moon_cycle_angle`'s own law) and the
+            # night's +180 therefore stands the FULL moon there instead
+            # (ledger §1). The transit test below keeps the RAW angles —
+            # both markers take the same offset, so their separation is
+            # unchanged and adding it twice would only invite drift.
+            seat = angles.moon_cycle_angle(ctx.tick.moon_fraction)
+            moon_angle = (seat + ctx.world_offset) % 360.0
             # The rim transit only exists while the Earth is also shown.
             opacity = (
-                moon_transit_opacity(spec, ctx.tick.year_angle, moon_angle)
+                moon_transit_opacity(spec, ctx.tick.year_angle, seat)
                 if ctx.skin.show_earth
                 else 1.0
             )
@@ -130,11 +138,17 @@ class YearMarkerLayer(Layer):
             ctx.skin.pointer == "calendar"
             and calendar_wheel(ctx.skin) == "almanac"
         )
+        # THE WORLD OFFSET (core.world): the year wheel is drawn ON the
+        # turning dial face, so the Earth rides it — the summer solstice
+        # stands at the top by day and the WINTER solstice takes the top
+        # at night (ledger §1). 0.0 in Geocentric.
         year_angle = (
-            almanac_marker_angle(ctx.day.local_date)
-            if almanac
-            else ctx.tick.year_angle
-        )
+            (
+                almanac_marker_angle(ctx.day.local_date)
+                if almanac
+                else ctx.tick.year_angle
+            ) + ctx.world_offset
+        ) % 360.0
         # During its ±12 h event window the Earth RELOCATES radially to the
         # ring band centerline (owner 2026-07-16), keeping its year-wheel
         # angle, so the GOLDEN halo straddles the ring. A SOLAR eclipse

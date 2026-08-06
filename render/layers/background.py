@@ -70,8 +70,13 @@ class BackgroundLayer(Layer):
             )
             for start, end, hue, alpha in bands:
                 painter.save()
-                if solar_frame:
-                    painter.rotate(ctx.rotation)
+                # A boundary-less regime's bands run in the SOLAR frame
+                # (the pointer's); every other band is wall-clock and
+                # rides THE WORLD OFFSET instead (core.world) — both are
+                # 0.0-equivalent in Geocentric.
+                painter.rotate(
+                    ctx.rotation if solar_frame else ctx.world_offset
+                )
                 painter.setOpacity(alpha)
                 painter.setBrush(QColor(hue))
                 draw_pie(painter, aura_radius, start, end)
@@ -91,7 +96,13 @@ class BackgroundLayer(Layer):
         if ctx.skin.pointer == "calendar":
             self._paint_aura(
                 painter, ctx, aura_radius, aura_palette_for(ctx.skin),
-                calendar_wedge_bounds(calendar_wheel(ctx.skin)), 0.0,
+                calendar_wedge_bounds(calendar_wheel(ctx.skin)),
+                # Calendar-FIXED still means "never rides the SOLAR
+                # rotation" (owner spec) — but the wedges are hour
+                # wedges drawn on the dial face, so in Heliocentric they
+                # turn with the world like every other wall-clock mark.
+                # 0.0 in Geocentric, exactly as before.
+                ctx.world_offset,
             )
             if ctx.skin.calendar_mount != "off":
                 _draw_calendar_mount(painter, ctx, ctx.skin.calendar_mount)
@@ -159,7 +170,14 @@ class BackgroundLayer(Layer):
             return
         for start, end, alpha in lit_regions(ctx.day.sun, spec):
             painter.save()
-            painter.setClipPath(pie_path(radius, start, end))
+            # The lit arcs are WALL-CLOCK dial space and therefore ride
+            # THE WORLD OFFSET (core.world) — see `StarLayer._paint_pass`
+            # for the same clip and the same reason. 0.0 in Geocentric.
+            painter.setClipPath(
+                pie_path(
+                    radius, start + ctx.world_offset, end + ctx.world_offset
+                )
+            )
             painter.setOpacity(alpha)
             painter.rotate(rotation)
             for color, (wedge_start, wedge_end) in zip(hues, wedges):

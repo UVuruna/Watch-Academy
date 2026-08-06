@@ -18,13 +18,19 @@ A `BandSpec`/`CrownSpec` is a frozen dataclass carrying exactly what can
 make two plates differ: the pixel diameter, the face, the size, the band
 width, the seating, the relief style, the depth, the light, the darkness,
 the contact blur, the border and — for the outer band alone — the
-`offset_deg` the Heliocentric rotation will drive. Because the spec IS the
-key, a changed rotation re-renders the band without any caller changing
-shape, which is exactly what wave 4 needs.
+`offset_deg` THE WORLD OFFSET drives
+([World](../../core/__about/world.md)). Because the spec IS the key, a
+changed rotation re-renders the band without any caller changing shape.
+The INNER band always keys on `0.0` — it never rotates in any mode — so
+its plate is shared across both phases.
 
 `_PLATES` and `_CROWNS` are module-level dicts: N watches showing the same
 settings hold ONE copy of each plate, like `render.assets.shared_cache`
-and every other shared book.
+and every other shared book. `_PLATES` carries the ONE COPY RULE's own
+ceiling (`dial.NUMERAL_PLATE_CACHE_MAX`): in the Heliocentric mode the
+band's rotation moves with solar noon — once a day, twice with the night
+phase — so without a bound a watch left running for a year would hold a
+year of plates. Beyond the ceiling the oldest inserted plate is dropped.
 
 ## The live crown
 

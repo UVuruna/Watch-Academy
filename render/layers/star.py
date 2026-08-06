@@ -52,7 +52,18 @@ class StarLayer(Layer):
         rotated frame — the standing order."""
         painter.save()
         if clip is not None:
-            painter.setClipPath(pie_path(ctx.radius, *clip))
+            # The clip is WALL-CLOCK dial space, so it rides THE WORLD
+            # OFFSET (core.world): in Heliocentric the wall-clock band
+            # itself has turned, and with the solar part on the sunlit
+            # arc lands centred on the dial top — exactly under the
+            # pointer's own top arm, which no longer tilts. 0.0 in
+            # Geocentric leaves the standing order untouched.
+            painter.setClipPath(
+                pie_path(
+                    ctx.radius,
+                    clip[0] + ctx.world_offset, clip[1] + ctx.world_offset,
+                )
+            )
         painter.setOpacity(alpha)
         painter.rotate(wheel_rotation(ctx.skin, ctx.rotation))
         self._draw_arms(painter, ctx, fill)

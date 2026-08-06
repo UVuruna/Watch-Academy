@@ -56,6 +56,13 @@ for the full field tree.
   never reset silently. Every enum field is checked against its closed
   set (`ValueError` on an unknown value — a bad value would otherwise
   `KeyError` deep inside a paint pass, where Qt swallows exceptions).
+  The file's IDENTITY is two keys, required since 0.14.001 and named
+  out loud in the error: `schema_version` and the `window` section. A
+  JSON object without them is not a settings file of this app, and it
+  says so with that file's own top-level keys — the 2026-08-06
+  escalation was a bare `KeyError('window')` being read as a new
+  demand. They are deliberately NOT defaulted: defaulting them turns an
+  unreadable file into a silent reset of 112 settings.
 - `save(settings)`: atomic write (`tmp` + `os.replace`)
 - `quarantine() -> Path`: renames a corrupt file to `.bak` (overwriting
   an older one) so a fresh default file can be reseeded
@@ -81,5 +88,12 @@ Carries the offending `path` and the original parse/validation `cause`.
   `pointer_saturation` rename — each documented at its own call site
   rather than collected in one changelog, so the reason lives beside the
   code that still needs it.
+- **A persisted key is named in FULL, never by a generic word**
+  (2026-08-06): the world-mode setting is `world_mode`, not the `mode`
+  its first round wrote. This file is ONE flat namespace of 112 keys
+  beside `z_mode`/`archetype_mode`, so a hand-seeded profile carrying
+  somebody else's top-level `mode` would have been read as a world
+  mode. No migration is owed BECAUSE no generation ever wrote a
+  top-level `mode` — an unrecognized key is simply not read.
 - **A hand-edited `"false"` string is corruption, not `True`**
   (`_load_bool`): a real JSON boolean or absent only — never coerced.

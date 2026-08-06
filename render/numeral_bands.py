@@ -83,13 +83,23 @@ def _unit_px(spec_pixels: int) -> float:
 
 
 def band_plate(spec: BandSpec) -> QImage:
-    """The band's finished plate, built at most once per spec."""
+    """The band's finished plate, built at most once per spec.
+
+    THE ONE COPY RULE's own ceiling rides here (`NUMERAL_PLATE_CACHE_MAX`):
+    the key carries `offset_deg`, and in the Heliocentric mode that
+    offset moves with the solar noon — once a day, twice with the night
+    phase. Unbounded, a watch left running for a year would hold a year
+    of plates; bounded, it holds the working set and drops the OLDEST
+    inserted beyond it (Python dicts keep insertion order, so this is
+    the whole eviction)."""
     plate = _PLATES.get(spec)
     if plate is None:
         plate = (
             _build_outer(spec) if spec.band == "outer" else _build_inner(spec)
         )
         _PLATES[spec] = plate
+        while len(_PLATES) > dial.NUMERAL_PLATE_CACHE_MAX:
+            del _PLATES[next(iter(_PLATES))]
     return plate
 
 
@@ -331,19 +341,30 @@ def _crown_glyph_image(
 
 
 def compose_crown(
-    glyph_set: dict, sequence: tuple, orientation: str, step_deg: float | None = None,
+    glyph_set: dict, sequence: tuple, orientation: str,
+    step_deg: float | None = None, offset_deg: float = 0.0,
 ) -> tuple[tuple[QImage, float, float], ...]:
     """The per-MINUTE work of the live crown: `(image, dial angle, glyph
     rotation)` for every glyph of `sequence`, laid out along the crown
     arc. A dictionary lookup and some arithmetic — no shaping, no
     rasterization — which is what lets a MINUTE-cadence layer afford it
     every tick. Spaces consume a slot and draw nothing, exactly as they
-    do in every other crown arc."""
+    do in every other crown arc.
+
+    `offset_deg` is THE WORLD OFFSET (`core.world`): the live crown is
+    crown text like any other, so it rides the turning world with the
+    letters beside it. The seats go through `world.arc_seats`, not a
+    bare addition — THE ARC READING LAW (ledger §1, "nothing is
+    mirrored"): an offset that carries the arc across the horizon
+    reverses which way the run reads, and the reflection puts the time
+    back the right way round. `0.0` — the Geocentric answer — leaves
+    every angle exactly where it always was."""
     from core.angles import readable_rotation_deg
+    from core.world import arc_seats
 
     angles = numerals.crown_arc_angles(len(sequence), orientation, step_deg)
     return tuple(
-        (glyph_set[glyph], angle % 360.0, readable_rotation_deg(angle % 360.0))
-        for glyph, angle in zip(sequence, angles)
+        (glyph_set[glyph], seat, readable_rotation_deg(seat))
+        for glyph, seat in zip(sequence, arc_seats(angles, offset_deg))
         if glyph != " "
     )

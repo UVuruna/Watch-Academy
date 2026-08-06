@@ -2,7 +2,11 @@
 LIVE-RENDERED numeral bands (research/hour_numerals.md §8 +
 research/ring_rework.md §5).
 
-Three groups, in the order the reader meets them on the dial: the OUTER
+The page opens with the MODE (§1) — Geocentric (Ptolemy) or Heliocentric
+(Copernicus), the one pick that says whether the hour band is a fixed
+ring or a turning world — and then the bands themselves.
+
+Four groups, in the order the reader meets them on the dial: the OUTER
 band (its face, its numeral size, the width of the band the letters and
 numbers stand in, and the seating law), the INNER band (its own face and
 size — the ledger settles that nothing else about it is user-changeable:
@@ -26,6 +30,7 @@ from config import dial
 
 def build(settings, setters: dict, tr) -> QWidget:
     layout = QVBoxLayout()
+    layout.addWidget(_mode_group(settings, setters, tr))
     layout.addWidget(_outer_group(settings, setters, tr))
     layout.addWidget(_inner_group(settings, setters, tr))
     layout.addWidget(_relief_group(settings, setters, tr))
@@ -84,6 +89,37 @@ def _number_row(
     row.addWidget(label)
     form.addRow(tr(title), row)
     return slider
+
+
+def _mode_group(settings, setters, tr) -> QGroupBox:
+    """THE TWO WORLD-MODES (ring_rework.md §1) — the one setting that
+    decides whether the hour band below is a fixed ring of markers or a
+    world that turns. It leads this page for that reason: everything
+    under it describes the band, and this says whether the band moves.
+
+    Solar Rotation is NOT here — it is its own independent switch in the
+    right-click menu, exactly as before, and it keeps meaning the same
+    thing in both modes (whether the solar offset is taken at all)."""
+    group = QGroupBox(tr("Mode — which one turns"))
+    form = QFormLayout(group)
+    mode = _choice_row(
+        tr, settings, setters, "world_mode", dial.WORLD_MODES, "Mode", form,
+        labels=dial.WORLD_MODE_LABELS,
+    )
+    mode.setToolTip(tr(
+        "Geocentric: the observer stands still and the sun travels — the "
+        "pointer turns toward true solar noon and 12 stays on top. "
+        "Heliocentric: the sun stands still and the world turns — the hour "
+        "band carries solar noon to the top, and the whole dial turns over "
+        "at night, 0h on top and noon at the bottom."
+    ))
+    note = QLabel(tr(
+        "The hands and the minute ring always show ordinary zone time — "
+        "the mode moves only what is drawn."
+    ))
+    note.setWordWrap(True)
+    form.addRow(note)
+    return group
 
 
 def _outer_group(settings, setters, tr) -> QGroupBox:

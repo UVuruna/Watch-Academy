@@ -15,6 +15,13 @@ upright. THE DAYLIGHT SWITCH (owner correction 2026-07-29): with
 day and night vanish from the WHOLE dial (flat noon everywhere), not just
 the star.
 
+THE TWO WORLD-MODES ([World](../../../core/__about/world.md)): the UMBRA and
+the aura's own wedges take `ctx.rotation` (the pointer rotation) as they
+always did; the lit-arc CLIP, the Aurora's boundary-carrying bands and
+the Calendar's twelve hour wedges are wall-clock marks and take
+`ctx.world_offset` instead. A boundary-LESS Aurora regime keeps the solar
+frame (`ctx.rotation`). All of it is `0.0` in Geocentric.
+
 `Cadence.DAILY`: the Umbra/Aura shape depends only on the day's sunrise and
 sunset times (`ctx.day.sun`) and the skin, never on the live tick — it does
 not need to repaint every minute, only when the day context changes. Not

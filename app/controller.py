@@ -924,6 +924,11 @@ def _overlay_display_settings(skin, settings: Settings, display):
         umbra_contrast=settings.umbra_contrast,
         palette_style=palette_style,
         calendar_mount=settings.calendar_mount,
+        # THE TWO WORLD-MODES (ring_rework.md §1): a plain pass-through
+        # — `core.world` turns it into the pointer rotation and the
+        # world offset, and "geocentric" (the default) makes both
+        # exactly what every release before this one computed.
+        world_mode=settings.world_mode,
         # Aurora is ALWAYS solar-rotated (owner spec 2026-07-12): its
         # bands anchor to the real sun events, so the whole wheel keeps
         # the solar frame regardless of the toggle.
@@ -1259,6 +1264,16 @@ class WatchController(QObject):
         self._wake_timer.setInterval(defaults.WAKE_COALESCE_MS)
         self._wake_timer.timeout.connect(self._refresh_after_jump)
 
+        # THE FLIP (ring_rework §1): a GENUINE sunrise/sunset turns the
+        # world through one short eased move, so for exactly that long —
+        # and never a millisecond more — the dial needs animation-cadence
+        # repaints instead of its minute tick. The compositor owns the
+        # motion's own clock; this timer only asks for frames, and stops
+        # itself the moment the move is over.
+        self._flip_timer = QTimer(self)
+        self._flip_timer.setInterval(dial.WORLD_FLIP_FRAME_MS)
+        self._flip_timer.timeout.connect(self._on_flip_frame)
+
         self._save_timer = QTimer(self)
         self._save_timer.setSingleShot(True)
         self._save_timer.setInterval(defaults.SETTINGS_WRITE_DEBOUNCE_MS)
@@ -1549,6 +1564,8 @@ class WatchController(QObject):
         self._app.removeNativeEventFilter(self._power_filter)
         if self._wake_timer.isActive():
             self._wake_timer.stop()
+        if self._flip_timer.isActive():
+            self._flip_timer.stop()
         if self._save_timer.isActive():
             self._save_timer.stop()
         self._hover_poller.stop()
@@ -1689,7 +1706,33 @@ class WatchController(QObject):
                 # covers the first build, and a bare clock correction
                 # inside the SAME day speaks nothing new at all.
                 self._start_hover_warm()
-        self._widget.set_tick(build_tick_state(now, self._day))
+        tick = build_tick_state(now, self._day)
+        # THE NIGHT INVERSION (ring_rework §1): report the SUN'S ACTUAL
+        # STATE — above the horizon or below — and say whether the dial
+        # may TURN to meet it. A clock jump is not a sunset and a
+        # day-context rebuild is not a transition (owner bug
+        # 2026-08-06), so both APPLY the phase instantly, with no
+        # intermediate frame and no hover sweep. On a polar day or a
+        # polar night nothing ever changes here and nothing ever fires.
+        if self._compositor.note_daylight(
+            tick.is_daylight, animate=not (clock_jumped or day_changed)
+        ):
+            self._flip_timer.start()
+        self._widget.set_tick(tick)
+
+    def _on_flip_frame(self) -> None:
+        """One frame of the turning move — and the last one stops the
+        timer, so animation-cadence repaints exist ONLY for the move's
+        own ~1.5 s."""
+        if self._discarded:
+            # A discarded watch has no window left to repaint — the
+            # timer is stopped in `_teardown_windows` too, this is the
+            # in-flight frame that was already queued when it went.
+            self._flip_timer.stop()
+            return
+        if not self._compositor.flip_active():
+            self._flip_timer.stop()
+        self._widget.update()
 
     def _on_wake(self) -> None:
         """Resume-from-sleep / system clock change. Runs inside the
@@ -3207,6 +3250,10 @@ class WatchController(QObject):
                     "numeral_relief", "numeral_depth", "numeral_light",
                     "numeral_darkness", "numeral_contact_blur",
                     "numeral_border", "crown_time_format",
+                    # THE WORLD MODE (ring_rework.md §1) rides the same
+                    # path: persist, rebuild the skin, and the fresh
+                    # compositor snaps to the phase on its first paint.
+                    "world_mode",
                 )
             },
             # --- Crown Text (R-24/Phase-6-debt correction, owner --------

@@ -23,6 +23,11 @@ the dial origin. A settings change rebuilds the composite, which asks for a
 plate under the new key, which builds once and is then shared by every
 watch on those settings.
 
+THE WORLD OFFSET ([World](../../../core/__about/world.md)) reaches the OUTER
+band's `BandSpec.offset_deg` and the live crown's own arc — the INNER
+band keys on `0.0` in every mode, so its plate is shared across both
+phases (ledger §2: "the inner band NEVER rotates").
+
 `LiveCrownLayer` is the ONE minute-cadence element of this round. It is
 minute-cadence and nothing more: the eleven glyphs it draws were rasterized
 at settings-apply time, so its per-tick work is a sequence lookup, an arc

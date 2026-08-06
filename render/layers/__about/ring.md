@@ -13,6 +13,12 @@ letters at the outer's empty fields, and the outer Great Seal crown text arc
 stamped with a shared dark halo and a readable (never-upside-down)
 rotation.
 
+THE WORLD OFFSET ([World](../../../core/__about/world.md)): the letters and
+the crown text are WORLD members — every seat takes `ctx.world_offset`
+before its readable rotation is derived, so a glyph carried into the
+lower half re-seats readably at its new angle instead of hanging upside
+down. `0.0` in Geocentric leaves every seat exactly where it always was.
+
 `Cadence.STATIC`: nothing on this layer depends on the day or the live
 tick — only the skin (letters, tint, saturation) and the dial's size/DPI —
 so it rebuilds only on a skin/size/DPI change. Not `hover_variable`.

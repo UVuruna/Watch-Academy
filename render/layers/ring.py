@@ -13,7 +13,7 @@ from PySide6.QtCore import QPointF
 from PySide6.QtGui import QPainter
 
 from config import dial, palette
-from core import angles
+from core import angles, world
 from render.asset_recolor import letter_metal_file
 from render.context import Cadence, Layer, RenderContext
 from render.painting import dial_point, draw_pixmap_centered
@@ -177,7 +177,16 @@ class RingLayer(Layer):
             * ctx.skin.ring_letter_scale
         )
         for hour, gold_asset in self._skin.ring.letter_art.items():
-            theta = angles.ring_position_angle(hour)
+            # THE WORLD OFFSET (core.world): the letters are world
+            # members — they ride the turning band with the numerals
+            # beside them, and `_draw_ring_glyph` derives the readable
+            # rotation from the SEATED angle, so a letter carried into
+            # the lower half re-seats readably instead of hanging
+            # upside down. 0.0 in Geocentric leaves every seat exactly
+            # where it always was.
+            theta = (
+                angles.ring_position_angle(hour) + ctx.world_offset
+            ) % 360.0
             metal = self._skin.ring.letter_metal.get(hour, "gold")
             # The Eye's SHINE ENLARGE (owner UV inbox 2026-07-27):
             # build_skin stamps a per-hour height multiplier for the
@@ -232,9 +241,21 @@ class RingLayer(Layer):
             else ctx.skin.ring_tint
         )
         for crown_entry in crown_texts:
-            for gold_asset, theta in crown_entry["glyphs"]:
+            glyphs = crown_entry["glyphs"]
+            # THE ARC READING LAW (core.world.arc_seats, ledger §1
+            # "nothing is mirrored"): a bare `+ world_offset` keeps every
+            # LETTER upright but reverses which way the WORD reads the
+            # moment the arc crosses the horizon — observed on the real
+            # dial 2026-08-06, where DOMY's ANGER came up "REGNA" in the
+            # night phase. The reflection about the arc's own new centre
+            # turns the run back around. 0.0 in Geocentric is the
+            # identity, so nothing moves there.
+            seats = world.arc_seats(
+                [theta for _asset, theta in glyphs], ctx.world_offset
+            )
+            for (gold_asset, _theta), seat in zip(glyphs, seats):
                 self._draw_ring_glyph(
-                    painter, ctx, gold_asset, metal, theta % 360.0,
+                    painter, ctx, gold_asset, metal, seat,
                     dial.RING_CROWN_TEXT_RADIUS_FRACTION, height,
                     tint=tint, opacity=ctx.skin.crown_text_alpha,
                 )
