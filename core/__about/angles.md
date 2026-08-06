@@ -39,7 +39,17 @@ the project's dial convention (`DIAL_OFFSET_DEG = 180`).
   [Crown Text](crown_text.md) glyph angle is built from.
 - `readable_rotation_deg(theta)`: the glyph rotation that keeps ring-band
   letters upright all the way around — the lower half (90-270 deg) flips
-  180 deg so text never reads upside down.
+  180 deg so text never reads upside down, and a glyph standing on one of
+  the four SQUARE angles (0/90/180/270) stands upright.
+  **ONE SEATING LAW** (owner defect 2026-08-07): this used to be a second,
+  forked copy of the law [Numerals](numerals.md)' `seat_rotation` already
+  wrote, and the fork differed on exactly those square angles — so The
+  One's 18 (right) and 6 (left) JEWELS lay sideways beside upright
+  NUMERALS on the same ring. It is now a thin alias of
+  `seat_rotation(theta, "arc")`, folded into (-180, 180] (this door's own
+  long-standing output range; `seat_rotation` states the law unfolded).
+  Every non-square angle is bit-identical to the old fork, so nothing else
+  on any dial moved.
 - `hours_between(angle_a, angle_b)`: shortest SIGNED hours from `angle_b`
   to `angle_a`, wrapped to [-12, 12) — 15 deg/hour, the same mapping
   `time_to_dial_angle` uses. Pure building block for solar-anchor

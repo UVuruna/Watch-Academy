@@ -56,10 +56,25 @@ def readable_rotation_deg(theta: float) -> float:
     travel around the circle (owner spec): tangential, but the LOWER
     half (90-270 deg) flips 180 deg so text never reads upside down —
     Omega stands upright at the bottom. Shared by the ring's own jewels
-    and the outer crown text arc (`render.layers.ring.RingLayer`, Rule #5)."""
-    if 90.0 < theta < 270.0:
-        return theta - 180.0
-    return theta if theta <= 90.0 else theta - 360.0
+    and the outer crown text arc (`render.layers.ring.RingLayer`, Rule #5).
+
+    ONE SEATING LAW (owner defect 2026-08-07 — The One's 18 at the right
+    and 6 at the left "lie sideways"): this used to be a SECOND, forked
+    copy of the law `core.numerals.seat_rotation` already wrote, and the
+    fork differed on exactly the four SQUARE angles — where the numerals
+    stand UPRIGHT and the jewels beside them lay down tangentially. Two
+    laws, one ring, visibly disagreeing. Rule #5 says there is one law,
+    so this is now a thin alias of `seat_rotation`'s `"arc"` seating and
+    the square-angle rule reaches the jewels and the crown arcs too.
+    `seat_rotation` states the law UNFOLDED (its own documented
+    contract — `rot(120) == 300`), while this door has always answered
+    in (-180, 180]; the fold below is the only difference between them
+    and it is a no-op physically. With it, every NON-square angle is
+    bit-identical to the old fork (pinned by `tests/test_angles.py`), so
+    nothing else on any dial moves."""
+    from core.numerals import fold_angle, seat_rotation
+
+    return fold_angle(seat_rotation(theta, "arc"))
 
 
 def hours_between(angle_a: float, angle_b: float) -> float:

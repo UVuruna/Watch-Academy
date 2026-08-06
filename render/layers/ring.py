@@ -223,9 +223,17 @@ class RingLayer(Layer):
 
         CROWN TEXT controls (owner correction 2026-08-05: "Crown tekst
         je onaj tekst koji piše oko sata — faith, hope, suffering", the
-        proof this IS the crown text arc): `crown_text_scale` multiplies the
-        height ON TOP OF `ring_jewels_scale` (which still applies too,
-        unchanged); `crown_text_tint` resolves independently of
+        proof this IS the crown text arc): `crown_text_scale` is the
+        crown's ONLY size term. THE DECOUPLED SCALES (owner defect
+        2026-08-07 — "the Jewels slider grows the crown"): the height
+        used to be `RING_CROWN_TEXT_SIZE * ring_jewels_scale *
+        crown_text_scale`, so one slider moved two things and the user
+        could never size the two families against each other. Each term
+        now scales its own family and nothing else. Both sliders default
+        to 1.0, so the folded constant is exactly 1.0 and every default
+        dial is pixel-identical to the release before this one
+        (`tests/test_ring_crown.py::test_crown_default_size_unchanged`).
+        `crown_text_tint` resolves independently of
         `jewels_tint` — None follows `ring_tint`, the SAME
         "follow-unless-overridden" shape `hands_tint` uses;
         `crown_text_alpha` is a plain opacity multiplier passed straight to
@@ -235,7 +243,7 @@ class RingLayer(Layer):
             return
         height = (
             2 * ctx.radius * dial.RING_CROWN_TEXT_SIZE
-            * ctx.skin.ring_jewels_scale * ctx.skin.crown_text_scale
+            * ctx.skin.crown_text_scale
         )
         metal = self._skin.ring.crown_text_metal
         tint = (

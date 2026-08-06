@@ -79,7 +79,14 @@ so it rebuilds only on a skin/size/DPI change. Not `hover_variable`.
 - `_draw_ring_glyph()`: the ONE stamp shared by both the ring's six letters
   and the outer crown text (Rule #5) — resolves the letter's metal finish, draws
   a multi-sample dark halo from the gold master, rotates the glyph so it
-  reads upright through the lower half of the ring (`angles.readable_rotation_deg`);
+  reads upright through the lower half of the ring
+  (`angles.readable_rotation_deg` — since 2026-08-07 THE ONE SEATING LAW,
+  an alias of `core.numerals.seat_rotation`, so a jewel standing on one of
+  the four SQUARE angles stands UPRIGHT exactly like the numeral beside it;
+  before that these were two forks of one law and The One's 18 and 6 lay
+  sideways. Templar's crosses at 90/270 are symmetric, so this is
+  invisible there; LOOP's Π at 16h is not on a square angle and does not
+  move);
   `tint`/`opacity` are per-caller (`_draw_jewels` passes
   `jewels_tint`/1.0, `_draw_crown_text` its own `crown_text_tint`/`crown_text_alpha`).
   `draw_shadow=False` (SHADOW/SHINE round, owner ruling 2026-08-06) skips
@@ -103,6 +110,12 @@ so it rebuilds only on a skin/size/DPI change. Not `hover_variable`.
 - `_draw_crown_text()` ("Crown Text" in the Watch Face window, R-24/Phase-6-debt
   correction, owner 2026-08-05): stamps the preset's crown texts (e.g.
   ANNUIT COEPTIS / NOVUS ORDO SECLORUM) along two angularly-disjoint
-  top/bottom arcs sharing one radius, scaled by `crown_text_scale` (on top of
-  `ring_jewels_scale`), tinted by `crown_text_tint` (follows `ring_tint` when
-  `None`) and dimmed by `crown_text_alpha`; a no-op for presets with no crown text.
+  top/bottom arcs sharing one radius, scaled by `crown_text_scale` ALONE
+  (THE DECOUPLED SCALES, owner defect 2026-08-07: `ring_jewels_scale` used
+  to multiply this too, so the Jewels slider grew the crown — each term
+  now scales its own family, and since both default to 1.0 the folded
+  constant is exactly 1.0 and no default dial changed), tinted by
+  `crown_text_tint` (follows `ring_tint` when `None`) and dimmed by
+  `crown_text_alpha`; a no-op for presets with no crown text. The LIVE
+  crown ([Numerals](numerals.md)) answers `crown_text_scale` through the
+  same expression, so one slider sizes every crown arc on the dial.

@@ -307,6 +307,52 @@ def crown_arc_angles(
     return tuple(start + step * index for index in range(count))
 
 
+def crown_advance_angles(
+    advances_deg: tuple[float, ...], orientation: str,
+) -> tuple[float, ...]:
+    """THE CROWN ADVANCE LAW (owner defect 2026-08-07): one dial angle
+    per glyph, where each glyph occupies its OWN angular width
+    `advances_deg[i]` and the whole run is CENTERED on the top
+    (`"top"`) or bottom (`"bottom"`) anchor.
+
+    The fixed-step layout this replaces (`crown_arc_angles`) gave the
+    colon — 0.22 glyph-heights of ink — exactly as much arc as an M at
+    1.45, which is what read as "scattered" on the owner's own
+    screenshot of The One. Here every glyph is centred in its own slot,
+    so a run of digits closes up and the colon takes only the room it
+    needs.
+
+    Direction follows the same rule as every other crown arc: "top"
+    reads clockwise (left-to-right over the top), "bottom" reads
+    counter-clockwise (left-to-right under the bottom), because dial-x
+    is monotonic in OPPOSITE senses across the two halves. Feeding a
+    run of EQUAL advances reproduces `crown_arc_angles` exactly, which
+    is how `tests/test_numerals.py` pins the two against each other."""
+    if orientation not in ("top", "bottom"):
+        raise ValueError(f"crown orientation {orientation!r} must be top/bottom")
+    if not advances_deg:
+        raise ValueError("a live crown needs at least one glyph")
+    sign = 1.0 if orientation == "top" else -1.0
+    anchor = 0.0 if orientation == "top" else 180.0
+    total = sum(advances_deg)
+    cursor = -total / 2.0
+    seats = []
+    for advance in advances_deg:
+        seats.append(anchor + sign * (cursor + advance / 2.0))
+        cursor += advance
+    return tuple(seats)
+
+
+def arc_degrees(length: float, radius: float) -> float:
+    """`length` (any unit) as degrees of arc on a circle of `radius`
+    (the same unit) — the one place the crown's PIXEL widths become
+    ANGLES. Pure geometry, so it stays in core beside the law that
+    consumes it."""
+    if radius <= 0.0:
+        raise ValueError("arc radius must be positive")
+    return 360.0 * length / (2.0 * math.pi * radius)
+
+
 def crown_zone_hm(now_local: datetime, zones: dict[str, str | None]) -> dict:
     """`zone key -> "HH:MM"` for every zone a live crown may keep
     (`dial.RING_LIVE_CROWN`'s own zone names, resolved once per minute

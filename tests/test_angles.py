@@ -4,7 +4,7 @@ from datetime import time
 
 import pytest
 
-from core import angles
+from core import angles, numerals
 
 
 @pytest.mark.parametrize(
@@ -62,12 +62,62 @@ def test_ring_position_angle_matches_the_six_hexagram_seats():
 
 
 def test_readable_rotation_flips_only_the_lower_half():
-    # Upper half (and the exact top/right poles): no flip.
+    # Upper half: no flip.
     assert angles.readable_rotation_deg(0.0) == pytest.approx(0.0)
     assert angles.readable_rotation_deg(45.0) == pytest.approx(45.0)
-    assert angles.readable_rotation_deg(90.0) == pytest.approx(90.0)
     assert angles.readable_rotation_deg(315.0) == pytest.approx(-45.0)
     # Lower half: flipped 180 deg so Omega stands upright at the bottom.
     assert angles.readable_rotation_deg(180.0) == pytest.approx(0.0)
     assert angles.readable_rotation_deg(135.0) == pytest.approx(-45.0)
     assert angles.readable_rotation_deg(225.0) == pytest.approx(45.0)
+
+
+def test_jewels_stand_upright_on_the_square_angles():
+    """ONE SEATING LAW (owner defect 2026-08-07): The One's own 18 (the
+    right, 90 deg) and 6 (the left, 270 deg) lay SIDEWAYS while the
+    numerals beside them stood upright, because the jewels and the crown
+    arcs went through this door while the numerals went through
+    `core.numerals.seat_rotation` — two forks of one law, disagreeing on
+    exactly the four square angles. This door is now that law."""
+    for square in (0.0, 90.0, 180.0, 270.0, 360.0, -90.0):
+        assert angles.readable_rotation_deg(square) == pytest.approx(0.0)
+
+
+def test_one_seating_law_for_jewels_and_numerals():
+    """The two doors agree at EVERY angle now, not only the square ones
+    — the reconciliation Rule #5 demands (no second copy left to drift
+    out of step with the first)."""
+    for tenth in range(3600):
+        theta = tenth / 10.0
+        assert angles.readable_rotation_deg(theta) == pytest.approx(
+            numerals.fold_angle(numerals.seat_rotation(theta, "arc"))
+        )
+
+
+def test_upright_law_survives_a_rotated_offset():
+    """The Heliocentric case: with the world turned by an arbitrary
+    offset, whatever jewel LANDS on a square angle is the one that
+    stands up — the law is about the SEAT, never about the hour."""
+    offset = 37.5
+    seated = [
+        (hour, (angles.ring_position_angle(hour) + offset) % 360.0)
+        for hour in range(1, 25)
+    ]
+    upright = [
+        hour for hour, theta in seated
+        if angles.readable_rotation_deg(theta) == pytest.approx(0.0)
+    ]
+    # 37.5 deg is 2.5 hours of band: no hour seat lands square, so
+    # nothing stands upright — every jewel rides the arc.
+    assert upright == []
+    # Turn the world by a whole 90 deg and exactly the four hours that
+    # moved ONTO the square angles stand up.
+    seated = [
+        (hour, (angles.ring_position_angle(hour) + 90.0) % 360.0)
+        for hour in range(1, 25)
+    ]
+    upright = sorted(
+        hour for hour, theta in seated
+        if angles.readable_rotation_deg(theta) == pytest.approx(0.0)
+    )
+    assert upright == [6, 12, 18, 24]

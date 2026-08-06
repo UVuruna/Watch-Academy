@@ -67,6 +67,28 @@ crown_sequence(hour, minute, fmt):
     hh = "%02d" % hour ; mm = "%02d" % minute
     if fmt == "hh:mm":           return hh + ":" + mm
     return str(hour) + "h" + " " + str(minute) + "min"   # small-cut h/min
+
+arc_degrees(length, radius):     return 360 * length / (2*pi*radius)
+
+crown_advance_angles(advances, orientation):     # THE CROWN ADVANCE LAW
+    sign   = +1 if orientation == "top" else -1  # bottom reads the other way
+    anchor =  0 if orientation == "top" else 180
+    cursor = -sum(advances) / 2                  # the whole run, centred
+    for a in advances:                           # each glyph in ITS OWN slot
+        yield anchor + sign * (cursor + a / 2)
+        cursor += a
+```
+
+## The crown advance (owner defect 2026-08-07)
+
+```mermaid
+flowchart LR
+    A["glyph tile"] --> B["ink width px<br/>(the PATH, not the tile —<br/>the tile carries shadow padding)"]
+    B --> C["+ tracking<br/>= box * CROWN_TRACKING_FRACTION"]
+    C --> D["arc_degrees(width, crown radius)"]
+    D --> E["crown_advance_angles(...)"]
+    E --> F["each glyph centred in its own slot"]
+    G["OLD: one fixed step for every glyph"] -.->|"a 0.22-wide colon got<br/>the arc of a 1.45-wide M"| H["'2 3 : 3 9' — scattered"]
 ```
 
 ## The inner band's tick vocabulary

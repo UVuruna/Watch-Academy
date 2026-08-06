@@ -17,12 +17,28 @@ for any moment:
 - where each numeral sits (`hour_angle`, `minute_angle`),
 - WHICH seats carry a numeral at all (`numeral_hours`,
   `inner_number_seats`, `inner_composition`),
-- how far it turns so it still reads (`seat_rotation`),
+- how far it turns so it still reads (`seat_rotation`) — **THE ONE
+  SEATING LAW** for the whole ring since 2026-08-07:
+  [Angles](angles.md)' `readable_rotation_deg`, which the JEWELS and the
+  crown arcs go through, is now an alias of this function rather than a
+  second fork of it (the fork disagreed on the four square angles, and
+  that is why The One's 18 and 6 lay sideways),
 - which way its relief is thrown (`light_offset`),
 - how many copies that relief is (`relief_offsets`),
 - which colour role it wears (`parity_role`),
 - which glyphs the LIVE CROWN needs and in what order
-  (`crown_glyph_alphabet`, `crown_sequence`, `crown_arc_angles`).
+  (`crown_glyph_alphabet`, `crown_sequence`, `crown_arc_angles`,
+  `crown_advance_angles`, `arc_degrees`).
+
+**THE CROWN ADVANCE LAW** (owner defect 2026-08-07): the live crown's
+glyphs no longer advance at a fixed angular step. `crown_advance_angles`
+takes one ANGULAR WIDTH per glyph — each glyph's own ink width plus the
+crown's tracking, turned into degrees by `arc_degrees` — and centres each
+glyph in its own slot on the top or bottom anchor. The fixed step gave a
+0.22-glyph-height-wide colon exactly the arc of a 1.45-wide M, which is
+what the owner saw as "2 3 : 3 9", scattered. `crown_arc_angles` (the
+fixed step) stays for the callers that only pin the arc's DIRECTION, and
+feeding equal advances to the new law reproduces it exactly.
 
 **THE COMPOSITION LAW** (THE FIDELITY RULING, owner correction
 2026-08-06, [the ring ledger](../../research/ring_rework.md) §2): a seat
