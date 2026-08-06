@@ -730,7 +730,9 @@ def test_encyclopedia_expansion_wiring():
     QApplication.instance() or QApplication([])
     topics = _topics()
     assert len(topics["week"]["entries"]) == 7
-    assert len(topics["instrument"]["entries"]) == 8
+    # ring_rework §4d (owner ruling 2026-08-06): CHI's own article joined
+    # the instrument topic (Database/encyclopedia.json's "chi" key).
+    assert len(topics["instrument"]["entries"]) == 9
     for family in ("virtues", "sins"):
         assert len(topics[family]["entries"]) == 8
     # Moods leads with the comparative WHEEL article and closes with
@@ -899,7 +901,9 @@ def test_ring_letters_article_carries_the_mason_lore():
 
     QApplication.instance() or QApplication([])
     topics = _topics()
-    assert len(topics["instrument"]["entries"]) == 8   # no new topic key
+    # ring_rework §4d (owner ruling 2026-08-06) added ONE new entry
+    # (CHI's own article) to this SAME topic — still no new topic KEY.
+    assert len(topics["instrument"]["entries"]) == 9
 
     article = EncyclopediaRepository().instrument("ring_letters")["base"]
     assert "inverted cross" in article

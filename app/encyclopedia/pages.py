@@ -313,7 +313,7 @@ _VSM_DAYS = {
 }
 _INSTRUMENT_KEYS = (
     "dial", "solar_rotation", "twilight", "year_wheel", "moon_lunations",
-    "paint_light", "metals", "ring_letters",
+    "paint_light", "metals", "ring_letters", "chi",
 )
 
 

@@ -9,7 +9,7 @@ builder in the Settings dialog rather than duplicating its inline
 widgets (see ring.md's Design Decisions).
 """
 
-from PySide6.QtCore import QRegularExpression
+from PySide6.QtCore import Qt, QRegularExpression
 from PySide6.QtGui import QRegularExpressionValidator
 from PySide6.QtWidgets import (
     QCheckBox, QGridLayout, QGroupBox, QHBoxLayout, QLabel, QLineEdit,
@@ -51,6 +51,7 @@ def build(settings, setters: dict, tr) -> QWidget:
     layout = QVBoxLayout()
     presets = ring_presets(settings.custom_rings)
     layout.addLayout(_preset_gallery(settings, presets, setters, tr))
+    layout.addWidget(_preset_about(presets, settings.ring, tr))
     layout.addLayout(_finish_row(settings, setters, tr))
     active_card = presets[settings.ring]
     outer = constants.RING_OUTERS[active_card["outer"]]
@@ -86,26 +87,52 @@ def build(settings, setters: dict, tr) -> QWidget:
 
 
 def _preset_gallery(settings, presets: dict, setters, tr) -> QGridLayout:
-    """One tile per preset, thumbnailed off its LOCKED outer's own art
-    (`constants.RING_OUTER_LOCK`) — the tooltip states which outer the
-    preset is locked to (owner decree 2026-08-05: every bundled preset
-    is locked to exactly one outer; only the INNER stays changeable)."""
+    """One tile per preset, THUMBNAILED FROM ITS OWN COMPOSED PREVIEW
+    (ring_rework §5, owner ruling 2026-08-06: "preset picker: name +
+    mini preview + the About" — COMPUTED, never a stored/generated
+    image: `thumbs.ring_preset_thumbnail` stamps the card's own outer
+    plate and its own letters at their real seats, at thumbnail scale).
+    A card with no drawable preview (a broken custom ring) falls back
+    to the bare outer plate, same graceful-absence pattern
+    `art_thumbnail` already documents. The tooltip states which outer
+    the preset is locked to (owner decree 2026-08-05: every bundled
+    preset is locked to exactly one outer; only the INNER stays
+    user-changeable) AND, when the card carries one, its own About
+    text — hovering ANY tile previews it, not only the active one."""
     grid = QGridLayout()
     for index, name in enumerate(sorted(presets)):
         card = presets[name]
         outer_name = card["outer"]
         face = constants.RING_OUTERS[outer_name]["file"]
-        icon = thumbs.art_thumbnail(dial.RING_OUTER_ART_DIR / face)
+        icon = (
+            thumbs.ring_preset_thumbnail(card)
+            or thumbs.art_thumbnail(dial.RING_OUTER_ART_DIR / face)
+        )
         row, col = divmod(index, 4)
         preset_tile = tile(
             tr(name), icon, settings.ring == name,
             lambda n=name: setters["ring"](n),
         )
-        preset_tile.setToolTip(
-            tr("Locked outer: {outer}").format(outer=outer_name)
-        )
+        tooltip = tr("Locked outer: {outer}").format(outer=outer_name)
+        if card["about"]:
+            tooltip += "\n\n" + card["about"]
+        preset_tile.setToolTip(tooltip)
         grid.addWidget(preset_tile, row, col)
     return pack_grid(grid, 4)
+
+
+def _preset_about(presets: dict, ring: str, tr) -> QLabel:
+    """THE SPACE & LEGIBILITY LAW (owner decree 2026-08-05): the active
+    preset's own About, in the reader's own words, word-wrapped —
+    never clipped, never only a tooltip nobody hovers. A card without
+    an About (a custom ring) leaves this label empty rather than
+    reserving dead space with a placeholder sentence."""
+    card = presets.get(ring)
+    label = QLabel(tr(card["about"]) if card and card["about"] else "")
+    label.setWordWrap(True)
+    label.setAlignment(Qt.AlignmentFlag.AlignLeft | Qt.AlignmentFlag.AlignTop)
+    label.setStyleSheet("font-style: italic;")
+    return label
 
 
 def _finish_row(settings, setters, tr) -> QHBoxLayout:

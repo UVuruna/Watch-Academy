@@ -21,7 +21,8 @@ fallback for pointer variants, which carry no preview art of their own
   `palette.effective_palette_style`
 
 ### Used by
-- `app.watch_face.ring` — `art_thumbnail` for each preset's face art
+- `app.watch_face.ring` — `ring_preset_thumbnail` for each preset's own
+  composed preview (fallback `art_thumbnail` on its bare outer plate)
 - `app.watch_face.hands` — `art_thumbnail` for each pack's hours image
 - `app.watch_face.pointer` — `art_thumbnail` for the Earth style tiles,
   `pointer_swatch_icon` for the pointer gallery
@@ -31,6 +32,14 @@ fallback for pointer variants, which carry no preview art of their own
   existing art file, or `None` if the source is missing/unreadable (the
   caller's documented no-icon fallback, matching
   `design_window._tile`'s own contract)
+- `ring_preset_thumbnail(card)`: the RING PRESET PICKER's own mini
+  preview (ring_rework §5, owner ruling 2026-08-06) — COMPUTED, never
+  stored/generated: composes the card's own outer plate PNG with its
+  own letter masters stamped at their real seats (gold, no recolor
+  pass — identification, not a finish preview), at thumbnail scale.
+  Disk-cached; the cache name folds in every source file's own content
+  fingerprint (`raster_store.source_prefix`) so a changed master
+  invalidates it.
 - `pointer_swatch_icon(pointer, style)`: the honest pointer-variant
   fallback — a pie of the pointer's active palette wheel's own hues
 

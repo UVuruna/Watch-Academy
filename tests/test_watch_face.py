@@ -174,6 +174,37 @@ def test_ring_section_lists_every_ring_preset(app):
     dialog.deleteLater()
 
 
+def test_ring_section_shows_the_active_presets_about_text(app):
+    """ring_rework §5 (owner ruling 2026-08-06, "preset picker: name +
+    mini preview + the About"): the picker carries a word-wrapped label
+    with the ACTIVE preset's own About — switching the active ring
+    (a fresh `refresh`, exactly like the sidebar-selection tests above)
+    must show the newly active card's own text, not the old one's."""
+    from PySide6.QtWidgets import QLabel
+
+    settings = Settings(ring="CHI")
+    dialog = _dialog(settings)
+    page = dialog._stack.widget(1)               # Ring is index 1
+    labels = [label.text() for label in page.findChildren(QLabel)]
+    assert any("Chi" in text and "letter" in text for text in labels)
+    dialog.deleteLater()
+
+
+def test_ring_section_tiles_carry_a_computed_preview_icon(app):
+    """Every preset tile's icon comes from `thumbs.ring_preset_thumbnail`
+    (COMPUTED from the card's own outer + letters, never a stored or
+    generated image) — a non-null icon for every bundled preset."""
+    dialog = _dialog(Settings())
+    page = dialog._stack.widget(1)
+    tiles = {
+        tile.text(): tile for tile in page.findChildren(QToolButton)
+    }
+    for name in ring_presets(Settings().custom_rings):
+        assert name in tiles
+        assert not tiles[name].icon().isNull(), name
+    dialog.deleteLater()
+
+
 def test_hands_section_lists_every_hand_pack(app):
     dialog = _dialog()
     page = dialog._stack.widget(3)                # Hands is index 3

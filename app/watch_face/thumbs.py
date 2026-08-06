@@ -21,13 +21,16 @@ wheel (`config.palette.PALETTE_PRESETS`) instead — real derived content,
 not invented art.
 """
 
+import hashlib
 from pathlib import Path
 
-from PySide6.QtCore import QRectF, Qt
+from PySide6.QtCore import QPointF, QRectF, Qt
 from PySide6.QtGui import QColor, QIcon, QImage, QPainter, QPixmap
 
-from config import palette, paths
+from config import constants, dial, palette, paths
+from core import angles
 from render import raster_store
+from render.painting import dial_point
 
 # The source render size every thumbnail is produced at — every gallery
 # displays it scaled down through Qt's own icon scaling, so one cached
@@ -71,6 +74,92 @@ def art_thumbnail(source: Path | None) -> QIcon | None:
         # A cold cache is only slower, never wrong (the repository's
         # documented fallback contract) — still hand back the icon.
         return QIcon(QPixmap.fromImage(scaled))
+    return QIcon(str(cache_path))
+
+
+def ring_preset_thumbnail(card: dict) -> QIcon | None:
+    """The RING PRESET PICKER's own mini preview (ring_rework §5, owner
+    ruling 2026-08-06: "preset picker: name + mini SVG preview + the
+    About" — SVG in the ledger's shorthand, PNG in this codebase's
+    actual asset library; owner law "compute, don't generate" is kept:
+    this composes the card's OWN outer plate and OWN letter masters at
+    thumbnail scale, never a stored/generated image). Geometry mirrors
+    `render.layers.ring.RingLayer._draw_letter_art` at zero world
+    offset (a picker preview is never mid-rotation) — gold masters only
+    (no recolor pass: identification, not a faithful finish preview).
+    Disk-cached like every other thumbnail; the cache name folds in
+    every source file's own content fingerprint (Rule #5's "computed
+    name" convention `pointer_swatch_icon` already uses, extended with
+    a real fingerprint since — unlike a palette wheel's own Python
+    values — these sources are art files that DO change on disk)."""
+    outer = constants.RING_OUTERS[card["outer"]]
+    outer_path = paths.art_file(dial.RING_OUTER_ART_DIR / outer["file"])
+    if outer_path is None or not outer_path.exists():
+        return None
+    sources = [outer_path]
+    for letter in card["letters"]:
+        letter_path = paths.art_file(
+            dial.RING_LETTER_ART_DIR / constants.RING_LETTER_FILES[letter]
+        )
+        if letter_path is not None and letter_path.exists():
+            sources.append(letter_path)
+    digest = hashlib.sha1(
+        "|".join(raster_store.source_prefix(p) for p in sources).encode("utf-8")
+    ).hexdigest()[:16]
+    cache_path = (
+        _cache_dir()
+        / f"ring_preview_{card['name']}_{digest}_v{_THUMB_CACHE_VERSION}.png"
+    )
+    if cache_path.exists():
+        return QIcon(str(cache_path))
+    outer_image = QImage(str(outer_path)).scaled(
+        THUMB_SOURCE_PX, THUMB_SOURCE_PX,
+        Qt.AspectRatioMode.KeepAspectRatio,
+        Qt.TransformationMode.SmoothTransformation,
+    )
+    if outer_image.isNull():
+        return None
+    canvas = QImage(
+        outer_image.width(), outer_image.height(), QImage.Format.Format_ARGB32
+    )
+    canvas.fill(Qt.GlobalColor.transparent)
+    painter = QPainter(canvas)
+    painter.setRenderHint(QPainter.RenderHint.Antialiasing)
+    painter.setRenderHint(QPainter.RenderHint.SmoothPixmapTransform)
+    painter.translate(canvas.width() / 2.0, canvas.height() / 2.0)
+    painter.drawImage(
+        QPointF(-outer_image.width() / 2.0, -outer_image.height() / 2.0),
+        outer_image,
+    )
+    radius = canvas.width() / 2.0
+    letter_height = 2 * radius * dial.RING_LETTER_ART_SCALE
+    for position, letter in zip(card["positions"], card["letters"]):
+        letter_path = paths.art_file(
+            dial.RING_LETTER_ART_DIR / constants.RING_LETTER_FILES[letter]
+        )
+        if letter_path is None or not letter_path.exists():
+            continue
+        glyph = QImage(str(letter_path))
+        if glyph.isNull():
+            continue
+        glyph = glyph.scaledToHeight(
+            max(1, round(letter_height)),
+            Qt.TransformationMode.SmoothTransformation,
+        )
+        theta = angles.ring_position_angle(position)
+        center = dial_point(theta, radius * dial.RING_LETTER_RADIUS_FRACTION)
+        painter.drawImage(
+            QPointF(
+                center.x() - glyph.width() / 2.0,
+                center.y() - glyph.height() / 2.0,
+            ),
+            glyph,
+        )
+    painter.end()
+    try:
+        raster_store.atomic_save(canvas, cache_path)
+    except OSError:
+        return QIcon(QPixmap.fromImage(canvas))
     return QIcon(str(cache_path))
 
 

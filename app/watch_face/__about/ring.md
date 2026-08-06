@@ -5,25 +5,29 @@
 ## Purpose
 The Watch Face window's Ring page (R-10), rebuilt for THE
 COMPOSITIONAL RING MODEL (owner decree 2026-08-05): preset gallery
-(thumbnail tiles of each preset's LOCKED outer, tooltip stating the
-lock), the finish pills, the Two-metals/Shine checkboxes (unchanged),
-an INNER gallery (eight tiles — user-changeable independent of the
-locked outer) and a Crown Text group (read-only preset text, or a
-custom ring's own typed text + top/bottom orientation) — plus R-13's
-"Custom ring…" button. RING VERDICTS round (owner correction
-2026-08-05) added two things to the Crown Text group: the typed
-field's `QLineEdit` now carries a WHITELIST `QValidator`
-(`_crown_text_validator`, built straight off
-`constants.RING_CROWN_TEXT_CHARSET`) so an unsupported character can
-never be typed at all — a tooltip states exactly what is allowed — and
-every ring (preset or custom) gained a "Location" checkbox that
-replaces the crown text with the active location's own "CITY, COUNTRY"
-(`setters["ring_crown_location"]`).
+(thumbnail tiles of each preset's own COMPUTED preview — the outer
+plate with its letters stamped at their seats, ring_rework §5, owner
+ruling 2026-08-06 — tooltip stating the locked outer AND the card's own
+About text), the finish pills, the Two-metals/Shine checkboxes
+(unchanged), an INNER gallery (eight tiles — user-changeable
+independent of the locked outer), a word-wrapped label showing the
+ACTIVE preset's own About (THE SPACE & LEGIBILITY LAW — never only a
+tooltip) and a Crown Text group (read-only preset text, or a custom
+ring's own typed text + top/bottom orientation) — plus R-13's "Custom
+ring…" button. RING VERDICTS round (owner correction 2026-08-05) added
+two things to the Crown Text group: the typed field's `QLineEdit` now
+carries a WHITELIST `QValidator` (`_crown_text_validator`, built
+straight off `constants.RING_CROWN_TEXT_CHARSET`) so an unsupported
+character can never be typed at all — a tooltip states exactly what is
+allowed — and every ring (preset or custom) gained a "Location"
+checkbox that replaces the crown text with the active location's own
+"CITY, COUNTRY" (`setters["ring_crown_location"]`).
 
 ## Connections
 
 ### Uses
-- [Watch Face Thumbnails](thumbs.md) — `art_thumbnail`
+- [Watch Face Thumbnails](thumbs.md) — `ring_preset_thumbnail`,
+  `art_thumbnail` (fallback)
 - [Watch Face Shared Widgets](widgets.md) — `pill`, `tile`
 - [Rings (data)](../../../data/__about/rings.md) — `ring_presets`
 - [Config (folder)](../../../config/___config.md) — `RING_OUTERS`,
