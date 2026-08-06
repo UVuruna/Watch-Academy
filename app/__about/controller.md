@@ -26,7 +26,7 @@ for the procedure):
 1. **Skin building from settings** — the module-level `build_skin`/
    `_compose_skin`/`apply_display_settings`/`display_for`/
    `_overlay_display_settings` functions and their small pure helpers
-   (`_letter_metal`, `_ring_two_metals`, `_ring_eye_shine`, `_theme_metal`,
+   (`_jewel_metal`, `_ring_two_metals`, `_ring_eye_shine`, `_theme_metal`,
    `_resolve_hands`, `_themed_weekday_set`,
    `_pantheon_weekday_set`, `_classic_slot_theme`) — turning a `Settings`
    into a `SkinDefinition`. Pure, testable, no `QObject` involved.
@@ -182,7 +182,7 @@ still constructs and behaves as before that round.
 
 ### `build_skin(settings, location_display="") -> SkinDefinition`
 The ONE render config: `DEFAULT_SKIN` with the chosen ring preset card,
-the chosen finish's letter art, the chosen hand pack and the user's
+the chosen finish's jewel art, the chosen hand pack and the user's
 display choices overlaid — built inside this watch's own display
 context (`paths.display(display_for(settings))`, owner bug fix
 2026-07-28: building watch 2's skin must never see watch 1's art
@@ -204,7 +204,7 @@ PRISTINE `build_skin` so cleared overrides really clear.
 
 **Watch Face Phase 4 additions:** the Umbra tint mode/tint/saturation/
 alpha, the Aura-off tint mode/tint, the Hands tint/saturation and the
-Indices (`letter_tint`) fields are direct pass-throughs (each already
+Indices (`jewels_tint`) fields are direct pass-throughs (each already
 carries its own honest default, no override/None dance). Three fields
 DO follow the None-override dance, mirroring `star_alpha`: `ghost_alpha`
 (overrides `WeekdaySpec.ghost_opacity`, R-36 "Inactive icons"),
@@ -234,7 +234,7 @@ deliberately UNTRANSLATED (a name, not chrome). The tray hover tooltip
 always passes `True`; the menu TITLE row passes `watch_count() >= 2`.
 
 ### Small pure helpers
-`_letter_metal`, `_ring_two_metals`, `_ring_eye_shine`, `_theme_metal`,
+`_jewel_metal`, `_ring_two_metals`, `_ring_eye_shine`, `_theme_metal`,
 `_location_flash_text` (R-30, the flash's own "CITY, COUNTRY" formatter),
 `_location_crown_text` (RING VERDICTS round, owner decree 2026-08-05 —
 uppercases and filters `_location_flash_text`'s own output down to

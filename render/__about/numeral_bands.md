@@ -63,7 +63,7 @@ white outline at all — the loudest single difference between his art and
 wave 3's screen.
 
 **3 · Render time changes WHAT, never HOW it looks.** The user's picks
-(font, size, which seats carry letters, which inner variant) decide the
+(font, size, which seats carry jewels, which inner variant) decide the
 CONTENT of a seat. The style is fixed by the measured constants above.
 
 ### Why the halo is a dilation and not a blur
@@ -108,31 +108,31 @@ than inherited from the hour band (see
 The owner's furious correction: the live crown used to build its glyphs
 through the OUTER BAND's own numeral relief/parity machinery
 (`draw_relief` + `draw_body` in [Numeral Relief](numeral_relief.md)) — a
-white/gray plate-and-frame that is not his letters' look at all. Every
+white/gray plate-and-frame that is not his jewels' look at all. Every
 glyph now goes through THE LETTER pipeline instead:
 
-- **The colon is HIS plate.** `time.png` (`config.dial.RING_LETTER_ART_DIR`)
-  resolves through `render.asset_recolor.letter_metal_file` — the EXACT
-  door every ring letter resolves its finish through — scaled to the
+- **The colon is HIS plate.** `time.png` (`config.dial.RING_JEWEL_ART_DIR`)
+  resolves through `render.asset_recolor.jewel_metal_file` — the EXACT
+  door every ring jewel resolves its finish through — scaled to the
   crown's own glyph height and stamped with the shadow below. No font
   ever draws it; `assert_covers` no longer asks any face to cover `":"`.
 - **The ten digits (and the `"12h 35min"` h/min cut) have no plate**, so
   they wear the crown's own metal BODY COLOR
-  (`_crown_metal_body_color`) — the SAME ramp `letter_metal_file`
+  (`_crown_metal_body_color`) — the SAME ramp `jewel_metal_file`
   recolors onto, sampled flat at the recipe's own `body_position`
   instead of recolored pixel-by-pixel (there is no baked shading on a
   font glyph to preserve).
 - **Both wear THE LETTER SHADOW LAW's stamped halo** —
   `shadow_sample_count`/`normalized_shadow_alpha`/`_stamp_shadow`, the
   SAME construction `render.layers.ring.RingLayer._draw_ring_glyph`
-  stamps live for a real letter (moved here from `render.layers.ring`
+  stamps live for a real jewel (moved here from `render.layers.ring`
   so both callers can import it without a cycle), baked into the tile
   ONCE instead of drawn every repaint.
 
 `CrownSpec` dropped the outer band's `relief_style`/`depth_units`/
 `light`/`darkness`/`border_units` fields entirely and gained `metal`
 (`RingSpec.crown_text_metal` — the SAME `settings.ring_finish` the ring
-letters wear) and `shade`, so two watches with different active shades
+jewels wear) and `shade`, so two watches with different active shades
 never collide in the shared `_CROWNS` cache.
 
 ## Never on the paint path, never on the disk
@@ -149,7 +149,7 @@ Nothing reads or writes a file — the plates are computed, not stored.
 - [Numeral Relief](numeral_relief.md) — the per-glyph paint (the band
   builders only — the live crown's own glyphs no longer use it)
 - [Numeral Fonts](numeral_fonts.md) — the proven faces
-- [Asset Recolor](asset_recolor.md) — `letter_metal_file`, the colon's
+- [Asset Recolor](asset_recolor.md) — `jewel_metal_file`, the colon's
   own door
 - `recolor` package — the metal ramp the crown's flat digit body color
   is sampled from (THE TIME CROWN LOOK)

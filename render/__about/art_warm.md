@@ -3,12 +3,12 @@
 **Script:** [Art Warm (script)](../art_warm.py) · **Flow:** [diagram](../__flow/art_warm.md)
 
 ## Purpose
-Build the dial's derived art (the ring letters' metal finishes) OFF the
+Build the dial's derived art (the ring jewels' metal finishes) OFF the
 GUI thread, so a paint never waits on a recolor. Owner decree
 2026-07-28, after a slow-start measurement: a cold raster cache used to
 run 15 metal recolors — 3.6 s of numpy each — INSIDE `paintEvent`, so
 three watches meant ~15 s with nothing on screen. [Asset
-Recolor](asset_recolor.md)'s `letter_metal_file` now hands back the
+Recolor](asset_recolor.md)'s `jewel_metal_file` now hands back the
 gold master while a finish is missing and records the recipe in its
 lazy ledger; this module drains that ledger on the shared background
 thread and calls back so the dial repaints in its real metal.

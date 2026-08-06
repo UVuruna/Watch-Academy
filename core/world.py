@@ -12,7 +12,7 @@ element with one of them:
 
     pointer_rotation_deg   the star/pointer, its arms and diamond seats,
                            the umbra, the aura's own wedges
-    world_offset_deg       the outer numeral band, the ring letters, the
+    world_offset_deg       the outer numeral band, the ring jewels, the
                            crown text, the daylight arcs, the Earth and
                            Moon markers, the hour hand, every hover hit
                            zone that reads the dial band
@@ -121,7 +121,7 @@ def pointer_rotation_deg(
 # horizon, its glyphs are mirrored about the arc's OWN new centre, which
 # reverses the run's direction without moving the arc itself. Being a
 # plain affine map on angles, it applies unchanged to a WORD's hover
-# centre, so the hit zones follow the letters exactly.
+# centre, so the hit zones follow the jewels exactly.
 
 
 def arc_centre_deg(angles) -> float:

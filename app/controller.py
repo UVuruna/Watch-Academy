@@ -97,7 +97,7 @@ from render.compositor import Compositor
 from skins.manifest import HandSpec, HandsSpec, missing_assets
 
 
-def _letter_metal(position: int, outer_metal: dict, finish: str) -> str:
+def _jewel_metal(position: int, outer_metal: dict, finish: str) -> str:
     """The owner's metal rules (extended with bronze 2026-07-12):
     4-position outers — the trio of one metal forms the outer's own
     TRIANGLE and the remaining letter wears the ACCENT metal (gold ->
@@ -119,7 +119,7 @@ def _letter_metal(position: int, outer_metal: dict, finish: str) -> str:
 
 
 def _ring_two_metals(settings: Settings, card: dict) -> bool:
-    """Whether the ACTIVE preset splits its letters into two metal
+    """Whether the ACTIVE preset splits its jewels into two metal
     groups or wears one finish on all of them (TASK 3, MASON/ICONS
     round; WIDENED in the ENLARGE/THEMATIC round, owner 2026-07-27:
     "hoću da Two Metals opcija bude i za DOMY tj LOOP"). Eligible now:
@@ -156,7 +156,7 @@ def _ring_eye_shine(settings: Settings, card: dict) -> bool:
     (`Settings.ring_eye_shine`) wins; absent, the owner's documented
     per-preset default (`constants.RING_EYE_SHINE_DEFAULT`, Dollar
     True — the banknote's own eye radiates)."""
-    if constants.RING_EYE_GLYPH not in card["letters"]:
+    if constants.RING_EYE_GLYPH not in card["jewels"]:
         return False
     return settings.ring_eye_shine.get(
         card["name"], constants.RING_EYE_SHINE_DEFAULT.get(card["name"], False)
@@ -405,7 +405,7 @@ def build_skin(settings: Settings, location_display: str = ""):
     """The ONE render config: DEFAULT_SKIN with the chosen RING PRESET
     CARD (Database/ring_presets.json + the user's custom cards — owner
     spec: {name, positions, letters}, the positions signature picks the
-    layout/face), the letter art of the chosen finish, the chosen HAND
+    layout/face), the jewel art of the chosen finish, the chosen HAND
     PACK and the user's display choices overlaid.
 
     `location_display` (RING VERDICTS round, owner decree 2026-08-05,
@@ -463,7 +463,7 @@ def _compose_skin(settings: Settings, location_display: str = ""):
     # A preset may override the "hexa" outer's own (empty) triangle —
     # ROADMAP 15b, Dollar's Trinity/Union metal split — but only when
     # the owner's per-preset "Two metals" toggle is actually on
-    # (TASK 3, MASON/ICONS round) — see `_letter_metal`'s and
+    # (TASK 3, MASON/ICONS round) — see `_jewel_metal`'s and
     # `_ring_two_metals`'s docstrings.
     two_metals = _ring_two_metals(settings, card)
     metal_layout = {
@@ -473,19 +473,19 @@ def _compose_skin(settings: Settings, location_display: str = ""):
     # adaptive eye glyph swaps its whole stem for the glory-of-rays
     # master when the per-preset toggle is on — see `_ring_eye_shine`.
     eye_shine = _ring_eye_shine(settings, card)
-    letters = {}
-    letter_art = {}
-    letter_metal = {}
-    letter_legend = {}
-    letter_zoom = {}
-    letter_no_shadow = {}
-    for position, glyph in zip(card["positions"], card["letters"]):
+    jewels = {}
+    jewel_art = {}
+    jewel_metal = {}
+    jewel_legend = {}
+    jewel_zoom = {}
+    jewel_no_shadow = {}
+    for position, glyph in zip(card["positions"], card["jewels"]):
         hour = position % 24                     # cards say 24, hours say 0
-        letters[hour] = glyph
-        # The letter art is ALWAYS the gold master — silver/bronze are
+        jewels[hour] = glyph
+        # The jewel art is ALWAYS the gold master — silver/bronze are
         # derived from it AT LOAD (owner 2026-07-19,
-        # render.asset_recolor.letter_metal_file), never pre-rendered files.
-        filename = constants.RING_LETTER_FILES[glyph]
+        # render.asset_recolor.jewel_metal_file), never pre-rendered files.
+        filename = constants.RING_JEWEL_FILES[glyph]
         if eye_shine and glyph == constants.RING_EYE_GLYPH:
             filename = constants.RING_EYE_SHINE_FILE
         stem = filename[:-len(".png")]
@@ -500,17 +500,17 @@ def _compose_skin(settings: Settings, location_display: str = ""):
                 if stem.endswith(("_gem", "_gpt"))
                 else paths.ART_SUFFIX[settings.art_source]
             )
-            letter_zoom[hour] = constants.RING_EYE_SHINE_ENLARGE[source]
+            jewel_zoom[hour] = constants.RING_EYE_SHINE_ENLARGE[source]
             # SHADOW/SHINE round (owner ruling 2026-08-06): the baked
             # glory-of-rays master already carries its own light, so the
             # ring's cast-shadow stamp is skipped for this seat — same
             # condition as the enlarge factor just above (any resolved
             # "Eye_shine*" stem, toggle-driven or an explicit custom pick).
-            letter_no_shadow[hour] = True
-        letter_art[hour] = dial.RING_LETTER_ART_DIR / filename
-        letter_metal[hour] = _letter_metal(position, metal_layout, settings.ring_finish)
+            jewel_no_shadow[hour] = True
+        jewel_art[hour] = dial.RING_JEWEL_ART_DIR / filename
+        jewel_metal[hour] = _jewel_metal(position, metal_layout, settings.ring_finish)
         if position in card["legend"]:
-            letter_legend[hour] = card["legend"][position]
+            jewel_legend[hour] = card["legend"][position]
     # The outer GREAT SEAL CROWN TEXT ARC (TASK 1, owner "može radi"
     # 2026-07-19): the preset's own `crown_text` card already carries the
     # resolved per-glyph angles (data.rings.validate_preset ->
@@ -518,7 +518,7 @@ def _compose_skin(settings: Settings, location_display: str = ""):
     # character with its gold-master asset path (spaces are dropped, so
     # RingLayer's draw loop never has to check for them) and pick the
     # ONE finish the whole inscription wears (the same settings.
-    # ring_finish the Trinity-triangle letters use — the crown text is read
+    # ring_finish the Trinity-triangle jewels use — the crown text is read
     # as one continuous inscription, not a seat-by-seat split).
     crown_arc_entries = list(card["crown_text"])
     # CROWN TEXT for CUSTOM rings (owner decree 2026-08-05): the
@@ -527,14 +527,14 @@ def _compose_skin(settings: Settings, location_display: str = ""):
     # (`Settings.custom_ring_crown_text`/`custom_ring_crown_orientation`,
     # like `ring_inner`), resolved here rather than baked into the
     # card at creation time — the user can retype it any time. Unknown
-    # characters (outside the letter library) silently drop the crown
+    # characters (outside the jewel library) silently drop the crown
     # text for this build rather than crashing the running app on a
     # keystroke; a KNOWN GAP — see the session's OPEN QUESTIONS for the
     # honest alternative (a visible validation message).
     if settings.ring not in constants.RING_OUTER_LOCK:
         crown_text = settings.custom_ring_crown_text.get(settings.ring, "")
         if crown_text and not any(
-            char != " " and char not in constants.RING_LETTER_FILES
+            char != " " and char not in constants.RING_JEWEL_FILES
             for char in crown_text
         ):
             orientation = settings.custom_ring_crown_orientation.get(
@@ -589,7 +589,7 @@ def _compose_skin(settings: Settings, location_display: str = ""):
         {
             "text": entry["text"],
             "glyphs": tuple(
-                (dial.RING_LETTER_ART_DIR / constants.RING_LETTER_FILES[char], angle)
+                (dial.RING_JEWEL_ART_DIR / constants.RING_JEWEL_FILES[char], angle)
                 for char, angle in zip(entry["text"], entry["angles"])
                 if char != " "
             ),
@@ -629,12 +629,12 @@ def _compose_skin(settings: Settings, location_display: str = ""):
             defaults.DEFAULT_SKIN.ring,
             outer_asset=dial.RING_OUTER_ART_DIR / outer["file"],
             inner_asset=_resolve_ring_inner(settings, card),
-            letters=letters,
-            letter_art=letter_art,
-            letter_metal=letter_metal,
-            letter_legend=letter_legend,
-            letter_zoom=letter_zoom,
-            letter_no_shadow=letter_no_shadow,
+            jewels=jewels,
+            jewel_art=jewel_art,
+            jewel_metal=jewel_metal,
+            jewel_legend=jewel_legend,
+            jewel_zoom=jewel_zoom,
+            jewel_no_shadow=jewel_no_shadow,
             crown_text=crown_arc,
             crown_text_metal=settings.ring_finish,
         ),
@@ -1005,15 +1005,15 @@ def _overlay_display_settings(skin, settings: Settings, display):
         # 2026-07-27): `skin.ring_finish` feeds the METAL surfaces
         # outside the ring band (subdial borders/plates, hands, slot
         # roundels) — under the thematic finish those read as GOLD; the
-        # theme color itself travels only through `ring.letter_metal`/
-        # `ring.crown_text_metal` ("thematic"), which the letter recolor
+        # theme color itself travels only through `ring.jewel_metal`/
+        # `ring.crown_text_metal` ("thematic"), which the jewel recolor
         # pipeline resolves to the active preset's ramp.
         ring_finish=(
             "gold" if settings.ring_finish == "thematic"
             else settings.ring_finish
         ),
         subdial_style=settings.subdial_style,
-        ring_letter_scale=settings.ring_letter_scale,
+        ring_jewels_scale=settings.ring_jewels_scale,
         hover_enlarge=settings.hover_enlarge,
         palette_override=settings.palettes.get(
             f"{settings.pointer}_{palette_style}"
@@ -1031,7 +1031,7 @@ def _overlay_display_settings(skin, settings: Settings, display):
         aura_off_tint=settings.aura_off_tint,
         hands_tint=settings.hands_tint,
         hands_saturation=settings.hands_saturation,
-        letter_tint=settings.letter_tint,
+        jewels_tint=settings.jewels_tint,
         ring_tint_inner=settings.ring_tint_inner,
         crown_text_alpha=settings.crown_text_alpha,
         crown_text_scale=settings.crown_text_scale,
@@ -1830,7 +1830,7 @@ class WatchController(QObject):
 
     def _collect_secret(self, char: str) -> None:
         """Typing HIDDEN_MODE_SECRET on the focused dial unlocks the
-        hidden extras — the Four Greetings on the ring letters, in the
+        hidden extras — the Four Greetings on the ring jewels, in the
         Encyclopedia's Trinity topic, and, bound to their CANONICAL
         home (ROADMAP queue #6), a second reading in the Encyclopedia's
         Seasons topic. The unlock lives for THIS SESSION only (owner
@@ -3184,8 +3184,8 @@ class WatchController(QObject):
             "slot_scale": wrap(
                 lambda v: self._set_display_choice("slot_scale", v)
             ),
-            "ring_letter_scale": wrap(
-                lambda v: self._set_display_choice("ring_letter_scale", v)
+            "ring_jewels_scale": wrap(
+                lambda v: self._set_display_choice("ring_jewels_scale", v)
             ),
             "hover_enlarge": wrap(
                 lambda v: self._set_display_choice("hover_enlarge", v)
@@ -3253,8 +3253,8 @@ class WatchController(QObject):
             "hands_tint": wrap(
                 lambda v: self._set_display_choice("hands_tint", v)
             ),
-            "letter_tint": wrap(
-                lambda v: self._set_display_choice("letter_tint", v)
+            "jewels_tint": wrap(
+                lambda v: self._set_display_choice("jewels_tint", v)
             ),
             # --- The LIVE NUMERAL BANDS (ring_rework.md §5) ------------
             # Every knob of the two hand-drawn bands is a plain display

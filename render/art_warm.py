@@ -7,7 +7,7 @@ once per open watch, so three watches meant ~15 s before any dial
 appeared. The owner's ruling: "FIRST DEFAULT - recolor u pozadini. Kad
 završi prikaže."
 
-So the paint no longer recolors. `render.asset_recolor.letter_metal_file`
+So the paint no longer recolors. `render.asset_recolor.jewel_metal_file`
 draws the GOLD MASTER while the derived finish is missing and RECORDS the
 recipe in the lazy ledger; this module drains that ledger on the shared
 background thread and calls back so the dial repaints in its real metal.
@@ -18,7 +18,7 @@ the hover sweep (`app.warm.run_warm` owns that order). It runs once per
 PROCESS at startup, never once per watch (every watch shares one raster
 cache, so N watches asking for the same file is one job, not N) — and
 again ON DEMAND whenever a later paint observes a missing finish: a
-finish/shade/theme switch records fresh recipes, `letter_metal_file`
+finish/shade/theme switch records fresh recipes, `jewel_metal_file`
 rings `asset_recolor`'s stale notifier, and `app.watch_manager.
 AppController.kick_art_warm` drains them (owner bug 2026-08-02 — the
 startup-only drain left switched dials gold until restart).

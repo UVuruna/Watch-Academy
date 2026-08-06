@@ -210,7 +210,7 @@ def subdial_plate_file(
     position, does). The SOLO set ships one hand-drawn file
     (`dial.SUBDIAL_SOLO_FINISH`, silver): silver wins AS DRAWN,
     gold/bronze are disk-cached live recolors of it, exactly like the
-    ring letters derive silver/bronze from gold. A TINT (the "theme"
+    ring jewels derive silver/bronze from gold. A TINT (the "theme"
     plate style, owner 2026-07-15 A/B spec) recolors the dark
     tapisserie field to the clock tint on TOP of whichever plate above
     was resolved — that pass runs even on an already-correct finish,

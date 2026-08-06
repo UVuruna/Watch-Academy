@@ -4,7 +4,7 @@
 
 ## Purpose
 Disk-cached recolors derived from a single master file: the ring
-letter's GOLD/SILVER/BRONZE finish, the subdial plate's bezel/field
+jewel's GOLD/SILVER/BRONZE finish, the subdial plate's bezel/field
 recolor, and the public door to `AssetCache`'s TRITONE tint. A surgical
 sibling of [Assets](assets.md) (God-File Split Phase 2), which keeps
 `AssetCache` itself at its own unchanged import path.
@@ -39,7 +39,7 @@ band never pays for it.
   `_recolored_plate` write atomically (owner crash 2026-07-31: the GUI
   thread's unlocked `exists()` check raced a direct `QImage.save` and
   painted a truncated PNG)
-- the STALE NOTIFIER (`set_art_stale_notifier`) — `letter_metal_file`
+- the STALE NOTIFIER (`set_art_stale_notifier`) — `jewel_metal_file`
   rings it on every observed miss, so a finish/shade/theme switch after
   the startup warm still gets its recipes built ([Watch
   Manager](../../app/__about/watch_manager.md)'s `kick_art_warm`; owner
@@ -49,8 +49,8 @@ band never pays for it.
   `metal_shade`, `settings_path`), `defaults`, `profiling`
 
 ### Used by
-- [Layers (subfolder)](../layers/___layers.md) — `letter_metal_file`
-  (ring letter finish at paint time)
+- [Layers (subfolder)](../layers/___layers.md) — `jewel_metal_file`
+  (ring jewel finish at paint time)
 - [Asset Variants](asset_variants.md) — `_recolored_plate`
   (`subdial_plate_file`'s recolor step), `tinted_pixmap`
   (`eclipse_solar_type_icon`'s annular tint) — the reverse edge the
@@ -61,11 +61,11 @@ band never pays for it.
   background drain)
 - `app.encyclopedia`, `app.encyclopedia_warm`, `app.controller`,
   `app.tray` — `metal_variant_path`/`ensure_variant`/`variant_pending`
-  (Encyclopedia look-cycle and warm sweep), `letter_metal_file` (skin
+  (Encyclopedia look-cycle and warm sweep), `jewel_metal_file` (skin
   assembly), `tinted_pixmap` (the per-watch tray icon tint)
 
 ## Functions
-- `letter_metal_file(path, metal)`: disk-cached ring letter finish,
+- `jewel_metal_file(path, metal)`: disk-cached ring jewel finish,
   derived from the gold master, shade-aware.
 - `metal_variant_path(path, metal)`: PURE cache-path computation + a
   ledger recipe entry — no pixel work.

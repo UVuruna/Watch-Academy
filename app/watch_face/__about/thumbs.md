@@ -14,7 +14,7 @@ fallback for pointer variants, which carry no preview art of their own
 ### Uses
 - [Raster Store](../../../render/__about/raster_store.md) —
   `source_prefix`/`atomic_save`, the SAME content-fingerprint disk cache
-  the ring-letter metal recolor cache uses (Rule #5, no second cache
+  the ring-jewel metal recolor cache uses (Rule #5, no second cache
   mechanism)
 - [Config (folder)](../../../config/___config.md) — `paths.art_file`,
   `paths.settings_path`, `palette.PALETTE_PRESETS`,
@@ -35,7 +35,7 @@ fallback for pointer variants, which carry no preview art of their own
 - `ring_preset_thumbnail(card)`: the RING PRESET PICKER's own mini
   preview (ring_rework §5, owner ruling 2026-08-06) — COMPUTED, never
   stored/generated: composes the card's own outer plate PNG with its
-  own letter masters stamped at their real seats (gold, no recolor
+  own jewel masters stamped at their real seats (gold, no recolor
   pass — identification, not a finish preview), at thumbnail scale.
   Disk-cached; the cache name folds in every source file's own content
   fingerprint (`raster_store.source_prefix`) so a changed master

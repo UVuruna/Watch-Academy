@@ -50,55 +50,55 @@ class StarSpec:
 class RingSpec:
     """THE COMPOSITIONAL RING MODEL (owner decree 2026-08-05): a ring is
     ALWAYS the composition of an OUTER band + an INNER band + the
-    letters in the outer's own empty fields + an optional crown-text arc — there is no more single monolithic plate and no
+    jewels in the outer's own empty fields + an optional crown-text arc — there is no more single monolithic plate and no
     procedural fallback; `render.layers.ring.RingLayer.paint` composes
     `outer_asset` then `inner_asset` unconditionally."""
 
-    outer_asset: Path                  # the outer band plate (empty letter fields)
+    outer_asset: Path                  # the outer band plate (empty jewel fields)
     inner_asset: Path                  # the inner minute-track band
-    letters: dict[int, str] = field(default_factory=dict)  # hour -> letter replacing the numeral
-    # The owner's GOLD letter art: hour -> the master file, ALWAYS gold
+    jewels: dict[int, str] = field(default_factory=dict)  # hour -> jewel glyph replacing the numeral
+    # The owner's GOLD jewel art: hour -> the master file, ALWAYS gold
     # (built by the controller's build_skin). The ring tint never
     # touches it.
-    letter_art: dict[int, Path] = field(default_factory=dict)
+    jewel_art: dict[int, Path] = field(default_factory=dict)
     # hour -> the active FINISH ("gold"/"silver"/"bronze", the preset's
-    # accent letter wearing the opposite metal) — silver/bronze are
+    # accent jewel wearing the opposite metal) — silver/bronze are
     # derived from the gold master AT LOAD (owner 2026-07-19,
-    # `render.asset_recolor.letter_metal_file`; retired the ~15 MB of
+    # `render.asset_recolor.jewel_metal_file`; retired the ~15 MB of
     # pre-rendered `_silver.png`/`_bronze.png` files).
-    letter_metal: dict[int, str] = field(default_factory=dict)
-    # hour -> a HEIGHT multiplier for that seat's letter art (CROSS-
+    jewel_metal: dict[int, str] = field(default_factory=dict)
+    # hour -> a HEIGHT multiplier for that seat's jewel art (CROSS-
     # WORDS/SHINE round, owner UV inbox 2026-07-27): the Eye's shine
     # masters pad the triangle with the glory of rays, so build_skin
     # stamps `constants.RING_EYE_SHINE_ENLARGE[source]` here and the
     # triangle draws the SAME size as the no-light master — only the
-    # rays extend beyond it. Absent hour = 1.0 (every plain letter).
-    letter_zoom: dict[int, float] = field(default_factory=dict)
+    # rays extend beyond it. Absent hour = 1.0 (every plain jewel).
+    jewel_zoom: dict[int, float] = field(default_factory=dict)
     # hour -> True when that seat's baked-in art already carries its own
     # light (SHADOW/SHINE round, owner ruling 2026-08-06: "the Eye with
     # SHINE renders NO shadow — the baked shine replaces it"): the Dollar's
     # Eye-of-Providence glory-of-rays master IS the light, so the ring's
     # own cast-shadow stamp would fight it. Stamped by `build_skin`
-    # alongside `letter_zoom` (Rule #5, same per-hour plumbing shape,
+    # alongside `jewel_zoom` (Rule #5, same per-hour plumbing shape,
     # SAME condition — any seat whose resolved art stem starts with
     # "Eye_shine", toggle-driven or an explicit custom pick alike).
-    # Absent hour = False (every ordinary letter keeps its shadow).
-    letter_no_shadow: dict[int, bool] = field(default_factory=dict)
-    # The per-letter HOVER LEGEND (ROADMAP 15b, owner "malo legende"):
+    # Absent hour = False (every ordinary jewel keeps its shadow).
+    jewel_no_shadow: dict[int, bool] = field(default_factory=dict)
+    # The per-jewel HOVER LEGEND (ROADMAP 15b, owner "malo legende"):
     # hour -> {name, reading} for a preset that carries one (the
     # Dollar, DOMY and LOOP today — CROSS-WORDS round 2026-07-27;
     # empty {} for The One/Templar and any custom ring) — see
     # data.rings.validate_preset and render.compositor's ring-band
     # hover.
-    letter_legend: dict[int, dict] = field(default_factory=dict)
+    jewel_legend: dict[int, dict] = field(default_factory=dict)
     # The outer GREAT SEAL CROWN TEXT ARC (TASK 1, owner "može radi"
     # 2026-07-19, CANON.md §The Banknote; corrected MOTO-FIX round,
     # owner correction 2026-07-19, the dollar's Great Seal reference
     # image): built once by app.controller.build_skin from the preset's
     # own `crown_text` card field (data.rings.validate_preset ->
     # core.crown_text.crown_glyph_angles) — curved text just outside the
-    # ring band, its pinned letters landing on the SAME six hexagram
-    # seats the ring's own banknote letters occupy (MASON outside, the
+    # ring band, its pinned jewels landing on the SAME six hexagram
+    # seats the ring's own banknote jewels occupy (MASON outside, the
     # Eye inside at the crown — the G's seat before the DOLLAR/EYE
     # round). Each entry: {"text": the crown text string (spaces included,
     # for reference), "glyphs": a tuple of (gold_asset_path, dial_angle)
@@ -112,9 +112,9 @@ class RingSpec:
     # scheme is gone.
     crown_text: tuple[dict, ...] = ()
     # The SINGLE finish every crown text glyph wears (owner: "in the ring
-    # letter metal/color family") — the same settings.ring_finish the
-    # ring's own Trinity-triangle letters wear, resolved once in
-    # build_skin. Unlike `letter_metal` this is NOT per-hour: the crown text
+    # jewel metal/color family") — the same settings.ring_finish the
+    # ring's own Trinity-triangle jewels wear, resolved once in
+    # build_skin. Unlike `jewel_metal` this is NOT per-hour: the crown text
     # is read as ONE continuous inscription, not a seat-by-seat split.
     crown_text_metal: str = "gold"
 
@@ -361,8 +361,8 @@ class SkinDefinition:
                                        # toggle independently)
     # Ring recolor (owner spec, FINAL.txt #6): ONE hue multiplies the
     # ring art, the hands and the Umbra (None = untouched gray art);
-    # the finish picks the owner's letter art set (gold = M/D/Y/P/H
-    # gold + silver Omega; silver = the inverse) — letters never tint.
+    # the finish picks the owner's jewel art set (gold = M/D/Y/P/H
+    # gold + silver Omega; silver = the inverse) — jewels never tint.
     ring_tint: str | None = None
     # THE OUTER/INNER SPLIT TINT (R-21, owner correction 2026-08-05):
     # None (default) makes the inner minute-track band follow
@@ -382,7 +382,7 @@ class SkinDefinition:
     # in apply_display_settings) and the shared hover-enlarge factor —
     # the element under the cursor draws this much larger.
     hover_enlarge: float = 1.2
-    ring_letter_scale: float = 1.0     # multiplies RING_LETTER_ART_SCALE
+    ring_jewels_scale: float = 1.0     # multiplies RING_JEWEL_ART_SCALE
     # Runtime-only (settings dialog): the user's custom hues for the
     # active (pointer, palette_style) — never serialized to skin.json.
     palette_override: tuple[str, ...] | None = None
@@ -398,7 +398,7 @@ class SkinDefinition:
     # 1.0 unchanged, 0.0 grays every Aura hue to its own brightness.
     pointer_saturation: float = 1.0
     # RING (new, Session 21-D): scales the RING BAND art's (the ring
-    # plate + its letter/numeral overlay) HSV saturation in
+    # plate + its jewel/numeral overlay) HSV saturation in
     # `render.layers.ring.RingLayer`, applied AFTER the ring_tint recolor —
     # 1.0 unchanged, 0.0 grays it to its own brightness. The Umbra and
     # hands do not read this (see layers.md's RingLayer note).
@@ -426,26 +426,26 @@ class SkinDefinition:
     hands_tint: str | None = None
     hands_saturation: float = 1.0
     # THE INDICES FREE COLOR (Watch Face Phase 4, R-24): an EXTRA tint
-    # layered over the ring letters' metal finish in
+    # layered over the ring jewels' metal finish in
     # `render.layers.ring.RingLayer._draw_ring_glyph` — None (default)
     # leaves the metal finish untouched, exactly as today.
-    letter_tint: str | None = None
+    jewels_tint: str | None = None
     # CROWN TEXT (R-24/Phase-6-debt correction, owner 2026-08-05: "Crown
     # tekst je onaj tekst koji piše oko sata — faith, hope, suffering")
     # — the outer Great Seal CROWN TEXT arc (`RingSpec.crown_text`,
     # `render.layers.ring.RingLayer._draw_crown_text`) IS this element; these
     # three fields are its own opacity/size/color controls, independent
-    # of the ring letters' own `ring_letter_scale`/`letter_tint`:
+    # of the ring jewels' own `ring_jewels_scale`/`jewels_tint`:
     #   * `crown_text_alpha` — a plain layer-alpha multiplier, 1.0 = today's
     #     full opacity (no skin varies this yet, so a direct value like
     #     `umbra_alpha`, not a None-override).
     #   * `crown_text_scale` — multiplies `dial.RING_CROWN_TEXT_SIZE` ON TOP OF
-    #     `ring_letter_scale` (which still scales it too, unchanged) —
+    #     `ring_jewels_scale` (which still scales it too, unchanged) —
     #     1.0 = today's size. `config.defaults.dial_window_margin_
     #     fraction` reads this so the window never clips a scaled-up
     #     Crown Text.
     #   * `crown_text_tint` — an EXTRA tint layered over the crown text glyphs'
-    #     metal finish, resolved INDEPENDENTLY of `letter_tint` (the two
+    #     metal finish, resolved INDEPENDENTLY of `jewels_tint` (the two
     #     controls no longer share one recolor): None (default) follows
     #     `ring_tint`, like the hands; a hex overrides it.
     # A no-op for every preset without a crown text (The One, Templar, every
@@ -462,7 +462,7 @@ class SkinDefinition:
     #   * `numeral_outer_size` / `numeral_inner_size` — the two bands'
     #     numeral heights, in the ledger's own units (§8), so a setting
     #     survives any change of dial resolution.
-    #   * `numeral_outer_ring_size` — the WIDTH of the band the letters
+    #   * `numeral_outer_ring_size` — the WIDTH of the band the jewels
     #     and numbers stand in, as a multiplier of the measured band.
     #   * `numeral_face` / `numeral_inner_face` — the two rosters (§7);
     #     `crown_face` is the LIVE CROWN's own, picked for full glyph
@@ -517,7 +517,7 @@ def missing_assets(skin: SkinDefinition) -> list[Path]:
         skin.hands.hour.asset,
         skin.hands.minute.asset,
         skin.hands.second.asset if skin.hands.second else None,
-        *skin.ring.letter_art.values(),
+        *skin.ring.jewel_art.values(),
         *(path for crown_entry in skin.ring.crown_text for path, _ in crown_entry["glyphs"]),
         *skin.weekday_set.bodies.values(),
         *skin.year_marker.variants.values(),

@@ -8,7 +8,7 @@
 %%{init: {'flowchart': {'subGraphTitleMargin': {'top': 0, 'bottom': 35}}}}%%
 flowchart TB
     subgraph WIN["ClockWidget — frameless, translucent, square window"]
-        MARGIN["transparent margin (letter overhang, halo, event glow)"]
+        MARGIN["transparent margin (jewel overhang, halo, event glow)"]
         DIAL["dial_diameter × dial_diameter
         painted entirely by compositor.paint()"]
     end

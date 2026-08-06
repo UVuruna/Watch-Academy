@@ -4,9 +4,9 @@ draws its icon from here, never loading a raw `QIcon(path)` itself.
 
 Disk cache: REUSES `render.raster_store`'s content-fingerprint naming
 (`source_prefix`/`atomic_save`) verbatim — the SAME cache convention the
-ring-letter metal recolor cache (`render/asset_recolor.py`) already
+ring-jewel metal recolor cache (`render/asset_recolor.py`) already
 uses (Rule #5, no second cache mechanism). A cached thumbnail survives a
-git checkout exactly like the letter cache does, and `raster_store.
+git checkout exactly like the jewel cache does, and `raster_store.
 collect_garbage` sweeps a stale one the same way.
 
 Honest fallback (R-33, documented rather than faked): POINTER variants
@@ -82,9 +82,9 @@ def ring_preset_thumbnail(card: dict) -> QIcon | None:
     ruling 2026-08-06: "preset picker: name + mini SVG preview + the
     About" — SVG in the ledger's shorthand, PNG in this codebase's
     actual asset library; owner law "compute, don't generate" is kept:
-    this composes the card's OWN outer plate and OWN letter masters at
+    this composes the card's OWN outer plate and OWN jewel masters at
     thumbnail scale, never a stored/generated image). Geometry mirrors
-    `render.layers.ring.RingLayer._draw_letter_art` at zero world
+    `render.layers.ring.RingLayer._draw_jewels` at zero world
     offset (a picker preview is never mid-rotation) — gold masters only
     (no recolor pass: identification, not a faithful finish preview).
     Disk-cached like every other thumbnail; the cache name folds in
@@ -97,12 +97,12 @@ def ring_preset_thumbnail(card: dict) -> QIcon | None:
     if outer_path is None or not outer_path.exists():
         return None
     sources = [outer_path]
-    for letter in card["letters"]:
-        letter_path = paths.art_file(
-            dial.RING_LETTER_ART_DIR / constants.RING_LETTER_FILES[letter]
+    for jewel in card["jewels"]:
+        jewel_path = paths.art_file(
+            dial.RING_JEWEL_ART_DIR / constants.RING_JEWEL_FILES[jewel]
         )
-        if letter_path is not None and letter_path.exists():
-            sources.append(letter_path)
+        if jewel_path is not None and jewel_path.exists():
+            sources.append(jewel_path)
     digest = hashlib.sha1(
         "|".join(raster_store.source_prefix(p) for p in sources).encode("utf-8")
     ).hexdigest()[:16]
@@ -132,22 +132,22 @@ def ring_preset_thumbnail(card: dict) -> QIcon | None:
         outer_image,
     )
     radius = canvas.width() / 2.0
-    letter_height = 2 * radius * dial.RING_LETTER_ART_SCALE
-    for position, letter in zip(card["positions"], card["letters"]):
-        letter_path = paths.art_file(
-            dial.RING_LETTER_ART_DIR / constants.RING_LETTER_FILES[letter]
+    jewel_height = 2 * radius * dial.RING_JEWEL_ART_SCALE
+    for position, jewel in zip(card["positions"], card["jewels"]):
+        jewel_path = paths.art_file(
+            dial.RING_JEWEL_ART_DIR / constants.RING_JEWEL_FILES[jewel]
         )
-        if letter_path is None or not letter_path.exists():
+        if jewel_path is None or not jewel_path.exists():
             continue
-        glyph = QImage(str(letter_path))
+        glyph = QImage(str(jewel_path))
         if glyph.isNull():
             continue
         glyph = glyph.scaledToHeight(
-            max(1, round(letter_height)),
+            max(1, round(jewel_height)),
             Qt.TransformationMode.SmoothTransformation,
         )
         theta = angles.ring_position_angle(position)
-        center = dial_point(theta, radius * dial.RING_LETTER_RADIUS_FRACTION)
+        center = dial_point(theta, radius * dial.RING_JEWEL_RADIUS_FRACTION)
         painter.drawImage(
             QPointF(
                 center.x() - glyph.width() / 2.0,

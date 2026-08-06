@@ -9,7 +9,7 @@
   ✏️ Unique name field
   🔘 "Add ring" button
   🔽 Thematic color combo (Auto / any metal or theme-color ramp)
-  🔤 per-position letter combo row (rebuilt on layout change — grouped
+  🔤 per-position jewel combo row (rebuilt on layout change — grouped
      Latin / Greek / Numbers / Symbols; Numbers capped to the position's
      own hour)
   🏷️ status label ("N custom ring(s) saved")
@@ -30,7 +30,7 @@
     ON ring layout changed:
         clear the slot row
         FOR EACH position in the chosen layout:
-            add a grouped letter combo (its Numbers section limited to
+            add a grouped jewel combo (its Numbers section limited to
             THIS position's own hour)
 
     ON "Add ring":

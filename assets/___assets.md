@@ -104,8 +104,8 @@ skin folders: DOMY and MORPH are ring preset names, nothing more).
                              fajlova": the pre-rendered <Stem>_silver.png/
                              <Stem>_bronze.png files and their two generators are
                              retired — silver/bronze are now derived from the gold
-                             master AT LOAD, render.asset_recolor.letter_metal_file, disk-
-                             cached). Active per preset (RING_LETTER_FILES): domy
+                             master AT LOAD, render.asset_recolor.jewel_metal_file, disk-
+                             cached). Active per preset (RING_JEWEL_FILES): domy
                              M/D/Y+Omega, morph M/Pi/H+Omega. Overlaid by
                              calculation so the ring TINT never touches them; each
                              preset's ACCENT letter wears the opposite metal (domy

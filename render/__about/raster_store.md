@@ -7,8 +7,8 @@ The disk raster cache's own module — the one place that knows HOW a
 derived image lands on disk safely and WHAT its name is keyed by.
 
 Born from the owner's 2026-07-31 crash log: the background art warm
-wrote a letter recolor **directly to its final cache path** with
-`QImage.save`, the GUI thread's `letter_metal_file` saw the path exist
+wrote a jewel recolor **directly to its final cache path** with
+`QImage.save`, the GUI thread's `jewel_metal_file` saw the path exist
 mid-write, and `paintEvent` loaded a truncated PNG — `ValueError`
 inside the paint, an unterminated `QPainter`, and a permanently broken
 window. A cache file must either be COMPLETE on disk or NOT THERE;

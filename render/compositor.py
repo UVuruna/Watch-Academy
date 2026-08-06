@@ -510,7 +510,7 @@ class Compositor:
         self._composite_key: tuple | None = None
         self._hovered: str | None = None    # hover-enlarge target
         # Hidden mode (owner 2026-07-14, top-only round 2026-07-16):
-        # unlocked, the 12h ring letter opens the Four Greetings legend.
+        # unlocked, the 12h ring jewel opens the Four Greetings legend.
         self._hidden_unlocked = False
         # Reveal-week (owner 2026-07-16): an Omega double-click raises
         # every non-active weekday body to full opacity until this
@@ -568,9 +568,9 @@ class Compositor:
         """True when (x, y) — widget-local, same coordinates as
         `set_hover`/`tooltip_at` — lands on the Omega (24h) ring seat:
         the FULL ROUND AREA (owner slika 9, 2026-07-17), a circle CENTERED
-        on the Omega letter position (180°, the ring letter band) whose
-        radius covers the whole letter cell. The old narrow annular wedge
-        only answered on the letter glyph itself (practically its lower
+        on the Omega jewel position (180°, the ring jewel band) whose
+        radius covers the whole jewel cell. The old narrow annular wedge
+        only answered on the jewel glyph itself (practically its lower
         part), so the double-click kept missing; the round area lands
         anywhere on the seat. The toggle semantics are untouched."""
         radius = size / 2
@@ -579,7 +579,7 @@ class Compositor:
         # with the band it stands on (0.0 in Geocentric).
         center = dial_point(
             (180.0 + self._world_offset()) % 360.0,
-            radius * dial.RING_LETTER_RADIUS_FRACTION,
+            radius * dial.RING_JEWEL_RADIUS_FRACTION,
         )
         hit_radius = radius * dial.OMEGA_HIT_RADIUS_FRACTION
         return math.hypot(
@@ -736,7 +736,7 @@ class Compositor:
         angle with THE WORLD OFFSET taken back off.
 
         Every hover that reads the dial BAND (the 360 ticks and their
-        time/date/moon readings, the ring letters and the crown words,
+        time/date/moon readings, the ring jewels and the crown words,
         the day/night and twilight wedges, the Calendar's own wedges)
         answers about a wall-clock mark, so it must ask the question in
         the frame those marks are drawn in. The POINTER's own hovers
@@ -808,7 +808,7 @@ class Compositor:
         # rebuild when the sky turns. Every other configuration keys
         # purely on the day, exactly as the lit-wedge deletion left it.
         # THE NIGHT PHASE joins the key (ring_rework §1): the cached
-        # segments carry the outer band, the letters, the crown text and
+        # segments carry the outer band, the jewels, the crown text and
         # the daylight arcs, all of which sit half a circle apart in the
         # two phases. It is the TARGET phase, never the animated one, so
         # a dial ever only holds TWO phase variants — the flip itself is
@@ -821,7 +821,7 @@ class Compositor:
             self._composites = [None] * len(self._cached_groups)
             self._composite_key = key
         # The cached segments carry the window's transparent margin (the
-        # ring letters and event glow overhang the dial square) — each is
+        # ring jewels and event glow overhang the dial square) — each is
         # blit back-shifted so the dial lands at (0, 0). The margin is
         # LIVE from the user's settings (owner 2026-07-17), matching the
         # widget's own window sizing.
@@ -2670,14 +2670,14 @@ class Compositor:
         # their own day/year/moon reading. The 24h (Omega) letter used
         # to share this trigger; it now belongs to the reveal-week
         # double-click instead (see Compositor.hit_omega).
-        half = encyclopedia_ui.GREETINGS_LETTER_HALF_DEG
-        in_letter_band = (
+        half = encyclopedia_ui.GREETINGS_JEWEL_HALF_DEG
+        in_jewel_band = (
             radius * dial.TICK_HOVER_OUTER_FRACTION
             < distance
-            <= radius * encyclopedia_ui.GREETINGS_LETTER_OUTER_FRACTION
+            <= radius * encyclopedia_ui.GREETINGS_JEWEL_OUTER_FRACTION
         )
         if (
-            in_letter_band
+            in_jewel_band
             and self._hidden_unlocked
             and (theta <= half or theta >= 360.0 - half)
         ):
@@ -2692,8 +2692,8 @@ class Compositor:
         # Greetings, this is not an Easter egg); a preset without a
         # legend (The One/Templar, every custom ring) falls through
         # unchanged.
-        if in_letter_band:
-            legend = self._ring_letter_legend_tooltip(theta, half)
+        if in_jewel_band:
+            legend = self._ring_jewel_legend_tooltip(theta, half)
             if legend is not None:
                 return legend
         # The arc WORDS answer too (WORD-HOVER round, owner 2026-07-27:
@@ -2785,27 +2785,27 @@ class Compositor:
             line_moon,
         )
 
-    def _ring_letter_legend_tooltip(
+    def _ring_jewel_legend_tooltip(
         self, theta: float, half: float
     ) -> str | None:
         """The per-letter HOVER LEGEND (ROADMAP 15b): `skin.ring.
-        letter_legend` is hour -> {name, reading}, built by
+        jewel_legend` is hour -> {name, reading}, built by
         `app.controller.build_skin` from the active ring preset's
         optional `legend` card (`data.rings.validate_preset`) — the
         Dollar, DOMY and LOOP today (CROSS-WORDS round). Finds the legend entry
-        whose OWN letter position is within `half` degrees of the
+        whose OWN jewel position is within `half` degrees of the
         hovered angle (the same half-width the 12h Four Greetings
-        trigger uses — every ring letter occupies the same angular
+        trigger uses — every ring jewel occupies the same angular
         slot) and returns its title + reading, or None off any legend
         letter."""
-        legend = self._skin.ring.letter_legend
+        legend = self._skin.ring.jewel_legend
         if not legend:
             return None
         for hour, entry in legend.items():
-            letter_theta = angles.ring_position_angle(hour)
+            jewel_theta = angles.ring_position_angle(hour)
             delta = min(
-                (theta - letter_theta) % 360.0,
-                (letter_theta - theta) % 360.0,
+                (theta - jewel_theta) % 360.0,
+                (jewel_theta - theta) % 360.0,
             )
             if delta <= half:
                 return _hover_title(
@@ -2850,7 +2850,7 @@ class Compositor:
             <= radius * (band + half_band)
         ):
             return None
-        legend = self._skin.ring.letter_legend
+        legend = self._skin.ring.jewel_legend
         # THE ARC READING LAW reaches the hover too (core.world): the
         # drawn arc is REFLECTED, not merely rotated, whenever the world
         # offset carries it across the horizon — so the stored word
@@ -2951,7 +2951,7 @@ class Compositor:
         """The Four Greetings legend (owner 2026-07-14): the verses
         CENTERED in italic with their line breaks kept, then the
         reading and the watchmaker's commentary as a justified column
-        — Serbian in every language, on the 12h/24h ring letters."""
+        — Serbian in every language, on the 12h/24h ring jewels."""
         data = _greetings()
         gap = encyclopedia_ui.GREETINGS_STANZA_GAP_PX
         # Small margins, not blank lines (owner round two) — Qt
@@ -3596,7 +3596,7 @@ class Compositor:
     ) -> QPixmap:
         """Rasterize ONE contiguous run of hover-invariant STATIC/DAILY
         layers into a padded pixmap (owner 2026-07-17, ROADMAP 15f).
-        These layers include the ring letters, which OVERHANG the dial
+        These layers include the ring jewels, which OVERHANG the dial
         square (owner spec) — the pixmap is padded by the same LIVE
         margin the window carries (owner 2026-07-17), or they clip right
         here (owner bug report: the Omega's bottom was cut flat). Hover

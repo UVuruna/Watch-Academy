@@ -24,7 +24,7 @@ THE ONE COPY RULE (owner 2026-07-28, extended 2026-08-06): `_PLATES` and
 ONE copy of each plate — exactly like `render.assets.shared_cache` and
 every other shared book. The SPEC dataclasses below are the cache keys:
 they carry precisely what can make two plates differ, `offset_deg` and
-the preset's own letter seats included.
+the preset's own jewel seats included.
 
 Nothing here runs on the paint path and nothing here touches the disk:
 the plates are COMPUTED. The layers only ever blit what they find.
@@ -42,7 +42,7 @@ from recolor import ramp as recolor_ramp
 from recolor import space as recolor_space
 from recolor.recipe import load as recolor_recipe
 from render import numeral_relief as relief
-from render.asset_recolor import letter_metal_file, ring_recolored_image
+from render.asset_recolor import jewel_metal_file, ring_recolored_image
 from render.numeral_fonts import assert_covers, numeral_font
 from render.painting import dial_point
 
@@ -51,42 +51,42 @@ from render.painting import dial_point
 # The stamped-shadow math every RING GLYPH wears — moved here from
 # `render.layers.ring` (THE TIME CROWN LOOK, owner correction 2026-08-06,
 # `research/ring_rework.md` §3): the live crown's glyph tiles now bake
-# the SAME shadow stamp the ring's own letters wear, and this module (not
+# the SAME shadow stamp the ring's own jewels wear, and this module (not
 # `render.layers.ring`) is the shared home both `RingLayer._draw_ring_glyph`
-# (a live stamp, every STATIC repaint) and `_crown_letter_glyph_image`/
+# (a live stamp, every STATIC repaint) and `_crown_jewel_glyph_image`/
 # `_crown_colon_image` below (a BAKED stamp, once per settings change) can
 # import without a cycle — `render.layers.ring` already imports FROM this
 # module, never the other way.
 def shadow_sample_count(pixel_radius: float) -> int:
     """Sample count for the shadow stamp ring at `pixel_radius` (DEVICE
-    pixels). Below `RING_LETTER_SHADOW_SAMPLES` (today's look at
+    pixels). Below `RING_JEWEL_SHADOW_SAMPLES` (today's look at
     ordinary dial sizes) the stamps overlap and fuse into a smooth halo;
     at large pixel radii that fixed count spreads the same 8 copies far
     enough apart that the gaps between them show as a scalloped, jagged
     edge (THE PIXELATION FIX, 1440p owner bug, 2026-08-06). This grows
-    the count so adjacent stamps stay under `RING_LETTER_SHADOW_MAX_GAP_PX`
+    the count so adjacent stamps stay under `RING_JEWEL_SHADOW_MAX_GAP_PX`
     apart along the stamp circle's own circumference — the floor never
     shrinks below the original 8."""
     if pixel_radius <= 0:
-        return dial.RING_LETTER_SHADOW_SAMPLES
+        return dial.RING_JEWEL_SHADOW_SAMPLES
     needed = math.ceil(
-        2.0 * math.pi * pixel_radius / dial.RING_LETTER_SHADOW_MAX_GAP_PX
+        2.0 * math.pi * pixel_radius / dial.RING_JEWEL_SHADOW_MAX_GAP_PX
     )
-    return max(dial.RING_LETTER_SHADOW_SAMPLES, needed)
+    return max(dial.RING_JEWEL_SHADOW_SAMPLES, needed)
 
 
 def normalized_shadow_alpha(samples: int) -> float:
     """Per-stamp opacity for `samples` copies so the COMPOSITED darkness
-    stays what `RING_LETTER_SHADOW_SAMPLES` stamps at
-    `RING_LETTER_SHADOW_ALPHA` each look like, whatever `samples` grows
+    stays what `RING_JEWEL_SHADOW_SAMPLES` stamps at
+    `RING_JEWEL_SHADOW_ALPHA` each look like, whatever `samples` grows
     to (`shadow_sample_count`) — extra stamps close the pixel gaps that
     scallop the edge at large dial sizes, they never darken it. Solves
     the standard "N over-composited equal-alpha layers reach target
     coverage" equation, `target = 1 - (1-a)**n`, backwards for a
     per-stamp `a` at the ACTUAL sample count; at the floor count this is
-    `RING_LETTER_SHADOW_ALPHA` exactly (identity, checked by
+    `RING_JEWEL_SHADOW_ALPHA` exactly (identity, checked by
     `tests/test_ring_split.py`)."""
-    target = 1.0 - (1.0 - dial.RING_LETTER_SHADOW_ALPHA) ** dial.RING_LETTER_SHADOW_SAMPLES
+    target = 1.0 - (1.0 - dial.RING_JEWEL_SHADOW_ALPHA) ** dial.RING_JEWEL_SHADOW_SAMPLES
     if samples <= 0:
         return 0.0
     return 1.0 - (1.0 - target) ** (1.0 / samples)
@@ -129,12 +129,12 @@ class BandSpec:
     contact_blur_units: float = dial.NUMERAL_CONTACT_BLUR_DEFAULT
     border_units: float = dial.NUMERAL_BORDER_DEFAULT
     offset_deg: float = 0.0    # the Heliocentric band rotation
-    # THE COMPOSITION LAW's own two keys. `letter_hours` are the OUTER
-    # seats the preset's letter art holds (ring counting, midnight =
+    # THE COMPOSITION LAW's own two keys. `jewel_hours` are the OUTER
+    # seats the preset's jewel art holds (ring counting, midnight =
     # 24) — no numeral is drawn on them. `inner_variant` names the
     # INNER plate the user picked, which decides which five-minute
     # seats carry a number and which carry one of his arrows.
-    letter_hours: tuple = ()
+    jewel_hours: tuple = ()
     inner_variant: str = ""
     # The ring's own two recolors, so a COMPUTED plate answers the
     # sliders exactly as the printed plate it replaces did.
@@ -263,7 +263,7 @@ def _seats(spec: BandSpec) -> tuple[tuple[str, float, QPointF], ...]:
         fraction = outer_centreline(spec.ring_size)
         pairs = [
             (str(hour), numerals.hour_angle(hour, spec.offset_deg))
-            for hour in numerals.numeral_hours(spec.letter_hours)
+            for hour in numerals.numeral_hours(spec.jewel_hours)
         ]
     else:
         fraction = dial.NUMERAL_INNER_RADIUS_FRACTION
@@ -417,17 +417,17 @@ def crown_glyph_set(spec: CrownSpec) -> dict:
     """The crown's glyphs, rasterized ONCE per settings change into
     tightly-cropped little images, keyed by glyph — THE TIME CROWN LOOK
     (owner correction 2026-08-06, `research/ring_rework.md` §3): every
-    glyph now wears the SAME two things a ring letter wears, never the
+    glyph now wears the SAME two things a ring jewel wears, never the
     outer band's parity plate-and-frame.
 
     The COLON comes from HIS plate — `time.png`, through the exact
-    letter pipeline every ring letter goes through
+    letter pipeline every ring jewel goes through
     (`_crown_colon_image`): he built it "precisely for this". The TEN
     DIGITS (and the `"12h 35min"` format's h/min small cut, drawn from
     the SAME face at `dial.CROWN_SMALL_CUT_FRACTION` of the digit size —
     the plate library has no lowercase) have no plate of their own, so
     they wear the crown's own metal BODY COLOR and THE LETTER SHADOW
-    LAW's stamped halo instead (`_crown_letter_glyph_image`) — never a
+    LAW's stamped halo instead (`_crown_jewel_glyph_image`) — never a
     numeral relief pass, never a parity fill."""
     glyphs = _CROWNS.get(spec)
     if glyphs is not None:
@@ -450,7 +450,7 @@ def crown_glyph_set(spec: CrownSpec) -> dict:
             built[glyph] = _crown_colon_image(spec, height_px)
         else:
             font = numeral_font("outer", spec.face, height_px)
-            built[glyph] = _crown_letter_glyph_image(
+            built[glyph] = _crown_jewel_glyph_image(
                 glyph, font, height_px, body_color, spec.dpr,
             )
     _CROWNS[spec] = built
@@ -460,7 +460,7 @@ def crown_glyph_set(spec: CrownSpec) -> dict:
 def _crown_metal_body_color(metal: str, shade: str) -> QColor:
     """The crown glyphs' flat body fill — THE TIME CROWN LOOK's own
     "crown's metal finish" term. A digit has no drawn master to
-    recolor pixel-by-pixel the way `letter_metal_file` recolors a real
+    recolor pixel-by-pixel the way `jewel_metal_file` recolors a real
     letter plate (there is no shading to preserve): it wears the
     SAME ramp's own BODY tone instead, sampled at the recipe's own
     `body_position` — the identical reference point
@@ -479,7 +479,7 @@ def _crown_metal_body_color(metal: str, shade: str) -> QColor:
     return color
 
 
-def _crown_letter_glyph_image(
+def _crown_jewel_glyph_image(
     glyph: str, font, height_px: float, body_color: QColor, dpr: float,
 ) -> QImage:
     """One digit (or h/min small-cut letter) on its own little
@@ -490,7 +490,7 @@ def _crown_letter_glyph_image(
     tone (`_crown_metal_body_color`) rather than a recolored master."""
     path = relief.glyph_path(glyph, font)
     bounds = path.boundingRect()
-    shadow_radius_px = height_px * dial.RING_LETTER_SHADOW_RADIUS
+    shadow_radius_px = height_px * dial.RING_JEWEL_SHADOW_RADIUS
     pad = shadow_radius_px + 2.0
     side = int(math.ceil(max(bounds.width(), bounds.height()) + 2 * pad))
     tile = relief.blank_plate(max(2, side))
@@ -526,21 +526,21 @@ def _image_silhouette(image: QImage, color: str) -> QImage:
 
 def _crown_colon_image(spec: CrownSpec, height_px: float) -> QImage:
     """THE COLON, from HIS plate: `time.png`, resolved through the exact
-    same door every ring letter resolves its finish through
-    (`render.asset_recolor.letter_metal_file` — the gold master stands
-    in until a background recolor lands, `letter_metal_file`'s own
+    same door every ring jewel resolves its finish through
+    (`render.asset_recolor.jewel_metal_file` — the gold master stands
+    in until a background recolor lands, `jewel_metal_file`'s own
     documented Rule #1 fallback), scaled to the crown's own glyph height
     and finished with THE LETTER SHADOW LAW's stamped halo — never
     font-drawn (`crown_glyph_set` no longer asks any face for a colon
     outline at all)."""
-    resolved = letter_metal_file(dial.RING_LETTER_ART_DIR / "time.png", spec.metal)
+    resolved = jewel_metal_file(dial.RING_JEWEL_ART_DIR / "time.png", spec.metal)
     source = QImage(str(resolved))
     if source.isNull():
         raise ValueError(f"crown colon plate unreadable: {resolved}")
     scaled = source.scaledToHeight(
         max(1, round(height_px)), Qt.TransformationMode.SmoothTransformation,
     )
-    shadow_radius_px = height_px * dial.RING_LETTER_SHADOW_RADIUS
+    shadow_radius_px = height_px * dial.RING_JEWEL_SHADOW_RADIUS
     pad = shadow_radius_px + 2.0
     tile = relief.blank_plate(
         max(2, int(math.ceil(scaled.width() + 2 * pad))),

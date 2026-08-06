@@ -14,7 +14,7 @@ or a world that turns:
 | Group | Rows |
 |---|---|
 | **Mode — which one turns** | world_mode (`Geocentric (Ptolemy)` / `Heliocentric (Copernicus)`, `dial.WORLD_MODE_LABELS`) |
-| **Hour ring — the outer band** | ring face (the 7-face roster), numeral size, **outer ring size** (the width of the band the letters and numbers stand in), seating (`arc` / `upright`) |
+| **Hour ring — the outer band** | ring face (the 7-face roster), numeral size, **outer ring size** (the width of the band the jewels and numbers stand in), seating (`arc` / `upright`) |
 | **Minute ring — the inner band** | inner face (the 5-face roster), numeral size |
 | **Relief** | relief style (`cast` / `extrude` / `emboss`), depth, light (`radial` / `fixed`), darkness, contact blur, border |
 | **The live crown** | crown face, time format (`12:35` / `12h 35min`) |

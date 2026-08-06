@@ -13,7 +13,7 @@ times). The watches share one asset tree, one raster cache and one
 ## Connections
 
 ### Uses
-- [Art Warm](../../render/__about/art_warm.md) — phase 1, the letter recolors
+- [Art Warm](../../render/__about/art_warm.md) — phase 1, the jewel recolors
 - [Asset Variants](../../render/__about/asset_variants.md) — phase 2, working-set downscales
 - [Encyclopedia Warm](encyclopedia_warm.md) — phase 3
 - [Compositor](../../render/__about/compositor.md) — phase 4, through each watch's

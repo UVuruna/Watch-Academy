@@ -20,7 +20,7 @@ become paint. Three responsibilities and nothing else:
    GLOW. Both are built as a WHOLE-BAND silhouette layer, blurred ONCE
    and composited under the crisp pass — never per glyph, and never as N
    stamped copies around a circle, which is the construction that
-   scalloped the ring letters' shadow at 1440p.
+   scalloped the ring jewels' shadow at 1440p.
 
 Every length that reaches a pen or a blur is a DEVICE-pixel length
 derived from the plate's own pixel size: no fixed sample counts, no

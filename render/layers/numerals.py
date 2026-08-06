@@ -5,7 +5,7 @@ that used to live here are gone. They stacked a computed plate on top of
 `RingLayer`'s printed one, which is exactly the construction the ruling
 outlaws — an Ω with a 0 showing under it. The bands are now part of the
 ring's own composition ([Ring](ring.md)), which draws his inner base
-art, the live inner numbers, the computed outer band, the letters and
+art, the live inner numbers, the computed outer band, the jewels and
 the crown arc in one ordered pass. `band_spec` stayed here, because it
 is the shared door BOTH the ring layer and every test go through to ask
 for the plate an on-screen watch would get.
@@ -72,8 +72,8 @@ def band_spec(skin, band: str, ctx: RenderContext) -> BandSpec:
         contact_blur_units=skin.numeral_contact_blur,
         border_units=skin.numeral_border,
         offset_deg=ctx.world_offset if band == "outer" else 0.0,
-        letter_hours=(
-            tuple(sorted(skin.ring.letters)) if band == "outer" else ()
+        jewel_hours=(
+            tuple(sorted(skin.ring.jewels)) if band == "outer" else ()
         ),
         inner_variant="" if band == "outer" else skin.ring.inner_asset.stem,
         tint=tint,
@@ -88,7 +88,7 @@ def crown_spec(skin, ctx: RenderContext) -> CrownSpec:
     THE TIME CROWN LOOK (owner correction 2026-08-06, `research/
     ring_rework.md` §3): the crown's own finish is
     `skin.ring.crown_text_metal` — the SAME `settings.ring_finish` the
-    ring's own letters wear (`app.controller.build_skin`) — never the
+    ring's own jewels wear (`app.controller.build_skin`) — never the
     outer band's `numeral_relief`/`numeral_depth`/`numeral_light`/
     `numeral_darkness`/`numeral_border` knobs, which no longer reach the
     crown at all. `shade` is resolved here (not left to the glyph

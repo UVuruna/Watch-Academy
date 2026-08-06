@@ -2,7 +2,7 @@
 the Lighter/Darker preset grids and the "Custom…" hue picker, extracted
 from `app.settings_dialog.colors_section` (Rule #5, Watch Face Phase 4)
 so every color control that recolors through a `#RRGGBB` hue — Ring
-tint, Umbra tint, Aura-off tint, Hands tint, Indices tint — draws the
+tint, Umbra tint, Aura-off tint, Hands tint, Jewels tint — draws the
 SAME picker instead of five near-identical copies.
 
 Stateless builders: every function takes the CURRENT value and reads it

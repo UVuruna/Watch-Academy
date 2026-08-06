@@ -11,7 +11,7 @@ take the hue. Source alpha is preserved.
 Surgical sibling split (`research/REFACTOR_PLAN.md` §8): this file now
 holds ONLY `AssetCache` — every module-level helper that used to live
 alongside it moved to [Asset Recolor](asset_recolor.md) (the metal/tint
-family: `letter_metal_file`, `metal_variant_file`, `tinted_pixmap`,
+family: `jewel_metal_file`, `metal_variant_file`, `tinted_pixmap`,
 `_recolored_plate`) or [Asset Variants](asset_variants.md) (everything
 else: `ring_face_color`, the moon-phase family, `subdial_plate_file`,
 the working-set family, the two computed icons). `AssetCache`'s own
@@ -78,7 +78,7 @@ class AssetCache:
         actually grays; 1.0 is a no-op, the default for every OTHER
         caller). Raises ValueError for missing/unreadable assets — a
         broken skin must be visible, never silently blank. (Silver and
-        bronze ring letters are PRE-RENDERED files —
+        bronze ring jewels are PRE-RENDERED files —
         setup/make_*_letters.py — not runtime effects.)"""
         # Deferred (not module-level) on purpose: asset_variants.py
         # imports asset_recolor.py, which imports AssetCache from this
@@ -138,7 +138,7 @@ class AssetCache:
         active SHADE comes from `config.paths.metal_shade` and resolves
         through `defaults.METAL_SHADES` to a named RAMP in
         `recolor/presets/metals.json`. `source_metal` is the metal the
-        art was DRAWN in — badges in bronze, ring letters on the gold
+        art was DRAWN in — badges in bronze, ring jewels on the gold
         master — because the transform is source-agnostic and must be
         told where it starts. `mask_mode` is `"chroma"` for art that
         mixes metal with gray stone and `"alpha"` for glyphs, which is
@@ -250,7 +250,7 @@ class AssetCache:
         alpha restored from the source at the end.
 
         PURE BLACK is a SILHOUETTE, not a tritone (owner bug
-        2026-07-12: the letter shadow tints with #000000, and the
+        2026-07-12: the jewel shadow tints with #000000, and the
         tritone left bright gold pixels bright — a red halo instead of
         a dark one): the source alpha filled solid black."""
         if QColor(tint).lightness() == 0:

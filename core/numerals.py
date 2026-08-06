@@ -190,17 +190,17 @@ def parity_role(label: str) -> str:
     return "even" if int(label) % 2 == 0 else "odd"
 
 
-def numeral_hours(letter_hours) -> tuple[int, ...]:
+def numeral_hours(jewel_hours) -> tuple[int, ...]:
     """THE COMPOSITION LAW (the Fidelity Ruling, ring_rework.md §2): the
     hours of the OUTER band that carry a NUMERAL — every hour except the
     ones the preset seats a LETTER on.
 
     One seat, one content: an Ω and a 0 never stand on the same hour
-    again, which is the defect the ruling was issued for. `letter_hours`
+    again, which is the defect the ruling was issued for. `jewel_hours`
     arrives in the ring's own 1..24 counting (`config.constants.
     RING_OUTERS[...]["positions"]`, where MIDNIGHT is 24), so 24 folds
     to the band's own 0 here — the one place the two countings meet."""
-    seated = {hour % dial.NUMERAL_HOUR_COUNT for hour in letter_hours}
+    seated = {hour % dial.NUMERAL_HOUR_COUNT for hour in jewel_hours}
     return tuple(
         hour for hour in range(dial.NUMERAL_HOUR_COUNT) if hour not in seated
     )

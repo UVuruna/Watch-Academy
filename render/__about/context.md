@@ -44,7 +44,7 @@ stack.
   in upright mode. Heliocentric — the night PHASE alone, because the
   star stands still and the world turns under it
 - `world_offset` — THE WORLD OFFSET (same module): how far the dial FACE
-  has turned. The outer numeral band, the ring letters, the crown text,
+  has turned. The outer numeral band, the ring jewels, the crown text,
   the daylight arcs, the Earth and Moon markers, the hour hand and every
   hover hit zone that reads the dial band ride this ONE number together.
   Exactly `0.0` in Geocentric, so that mode is a bit-for-bit no-op; the

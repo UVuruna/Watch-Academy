@@ -45,7 +45,7 @@ so it rebuilds only on a skin/size/DPI change. Not `hover_variable`.
 ## Connections
 
 ### Uses
-- [Asset Recolor](../../__about/asset_recolor.md) — `letter_metal_file` (gold master →
+- [Asset Recolor](../../__about/asset_recolor.md) — `jewel_metal_file` (gold master →
   silver/bronze finish, disk-cached)
 - [Numeral Bands](../../__about/numeral_bands.md) — the two computed band plates
 - [Numeral Layers](numerals.md) — `band_spec`, the shared cache key
@@ -63,7 +63,7 @@ so it rebuilds only on a skin/size/DPI change. Not `hover_variable`.
 ### RingLayer
 `cadence = Cadence.STATIC`.
 - `paint()`: unconditionally composes `_draw_bands()` then stamps
-  `_draw_letter_art()` and `_draw_crown_text()` on top — there is no
+  `_draw_jewels()` and `_draw_crown_text()` on top — there is no
   disk-presence gate and no procedural fallback any more.
 - `_draw_bands()` (THE FIDELITY RULING, owner correction 2026-08-06):
   blits the inner variant's NUMBERLESS base art, then the COMPUTED inner
@@ -80,15 +80,15 @@ so it rebuilds only on a skin/size/DPI change. Not `hover_variable`.
   and the outer crown text (Rule #5) — resolves the letter's metal finish, draws
   a multi-sample dark halo from the gold master, rotates the glyph so it
   reads upright through the lower half of the ring (`angles.readable_rotation_deg`);
-  `tint`/`opacity` are per-caller (`_draw_letter_art` passes
-  `letter_tint`/1.0, `_draw_crown_text` its own `crown_text_tint`/`crown_text_alpha`).
+  `tint`/`opacity` are per-caller (`_draw_jewels` passes
+  `jewels_tint`/1.0, `_draw_crown_text` its own `crown_text_tint`/`crown_text_alpha`).
   `draw_shadow=False` (SHADOW/SHINE round, owner ruling 2026-08-06) skips
   the halo entirely — the Dollar's Eye with Shine on already carries its
   own baked light. THE PIXELATION FIX (1440p owner bug, 2026-08-06): the
-  halo's own sample count is no longer the fixed `RING_LETTER_SHADOW_
+  halo's own sample count is no longer the fixed `RING_JEWEL_SHADOW_
   SAMPLES` — `shadow_sample_count()` grows it with the stamp circle's
   PIXEL radius (`ctx.dpr`-scaled) so adjacent stamps stay under
-  `dial.RING_LETTER_SHADOW_MAX_GAP_PX` device pixels apart (the floor
+  `dial.RING_JEWEL_SHADOW_MAX_GAP_PX` device pixels apart (the floor
   never drops below the original 8), and `normalized_shadow_alpha()`
   renormalizes each stamp's opacity so the composited darkness matches
   the original look at the floor count. Both functions moved to
@@ -97,12 +97,12 @@ so it rebuilds only on a skin/size/DPI change. Not `hover_variable`.
   SAME shadow, and `numeral_bands` is the shared home both this layer
   and the crown builder can import without a cycle (this layer already
   imports FROM `numeral_bands`, never the other way).
-- `_draw_letter_art()`: stamps every hour's letter art at its ring position,
-  scaled by `ring_letter_scale` and the per-hour shine-enlarge multiplier;
-  `RingSpec.letter_no_shadow` (per-hour) turns `draw_shadow` off for that seat.
+- `_draw_jewels()`: stamps every hour's jewel art at its ring position,
+  scaled by `ring_jewels_scale` and the per-hour shine-enlarge multiplier;
+  `RingSpec.jewel_no_shadow` (per-hour) turns `draw_shadow` off for that seat.
 - `_draw_crown_text()` ("Crown Text" in the Watch Face window, R-24/Phase-6-debt
   correction, owner 2026-08-05): stamps the preset's crown texts (e.g.
   ANNUIT COEPTIS / NOVUS ORDO SECLORUM) along two angularly-disjoint
   top/bottom arcs sharing one radius, scaled by `crown_text_scale` (on top of
-  `ring_letter_scale`), tinted by `crown_text_tint` (follows `ring_tint` when
+  `ring_jewels_scale`), tinted by `crown_text_tint` (follows `ring_tint` when
   `None`) and dimmed by `crown_text_alpha`; a no-op for presets with no crown text.

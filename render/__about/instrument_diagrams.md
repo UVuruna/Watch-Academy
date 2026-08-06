@@ -17,7 +17,7 @@ constant can never leave a stale illustration on the page (root Rule
 | `year_wheel` | four equal quarters, each anchor at its real instant | `PALETTE_PRESETS[("cross", "tertiary")]` |
 | `moon_lunations` | eight phases around the wheel, terminator and all | `core.angles.moon_cycle_angle`, `MOON_PHASE_NAMES` |
 | `metals` | gold at noon, silver at midnight; three finishes below | `ENCYCLOPEDIA_FINISH_BORDER_COLORS` |
-| `ring_letters` | Δ·M·Y·Ω at the hour of its alphabet place | `doctrine.RING_LETTER_SEATS`, `angles.ring_position_angle` |
+| `ring_jewels` | Δ·M·Y·Ω at the hour of its alphabet place | `doctrine.RING_JEWEL_SEATS`, `angles.ring_position_angle` |
 | `oscillations` | the La2004 amplitude envelope over ±200,000 years | `data.observatory.ObservatoryData.laskar_envelope()` |
 | `chi` | the real `"full"` outer band plate, X seated at 24h in its own ceramic finish | `render.numeral_bands.band_plate`, `render.assets.shared_cache`, `constants.RING_THEMATIC_SHADES["CHI"]` |
 

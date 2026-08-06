@@ -8,7 +8,7 @@
 %%{init: {'flowchart': {'subGraphTitleMargin': {'top': 0, 'bottom': 35}}}}%%
 flowchart TB
     A[paint] --> B[_draw_bands: inner then outer, each own tint]
-    B --> D[_draw_letter_art] --> E[_draw_crown_text] --> Z1[return]
+    B --> D[_draw_jewels] --> E[_draw_crown_text] --> Z1[return]
     subgraph GLYPH["_draw_ring_glyph(asset, metal, theta, radius_fraction, height, draw_shadow)"]
         J[resolve metal finish file] --> L[translate to dial_point, rotate readable_rotation_deg]
         L --> S{draw_shadow?}
@@ -26,23 +26,23 @@ decree 2026-08-05) — always both bands, never a single plate:
     _draw_bands():
         draw inner_asset tinted (ring_tint_inner, follows ring_tint if None) + saturated, full size
         draw outer_asset tinted (ring_tint) + saturated, full size, ON TOP
-    _draw_letter_art()      # per-hour letters, untinted (unless letter_tint set)
+    _draw_jewels()      # per-hour letters, untinted (unless jewels_tint set)
     _draw_crown_text()      # top/bottom Crown Text arcs, untinted (unless crown_text_tint set)
 
     FUNCTION _draw_ring_glyph(gold_asset, metal, theta, radius_fraction, height, draw_shadow=True):
-        asset = letter_metal_file(gold_asset, metal)     # derived, disk-cached
+        asset = jewel_metal_file(gold_asset, metal)     # derived, disk-cached
         rotation = readable_rotation_deg(theta)           # flips upright below center
         translate to dial_point(theta, radius * radius_fraction); rotate
         IF draw_shadow:
-            samples = shadow_sample_count(shadow_radius * ctx.dpr)   # >= floor RING_LETTER_SHADOW_SAMPLES
+            samples = shadow_sample_count(shadow_radius * ctx.dpr)   # >= floor RING_JEWEL_SHADOW_SAMPLES
             alpha = normalized_shadow_alpha(samples)                  # composited darkness == floor look
             FOR EACH of `samples` halo copies around a small radius:
                 draw the gold-tinted shadow silhouette at `alpha`
         draw the metal-finish pixmap centered, full opacity
 
-    FUNCTION _draw_letter_art():
-        FOR EACH (hour, gold_asset) IN skin's letter_art:
-            _draw_ring_glyph(..., height * letter_zoom[hour], draw_shadow=NOT letter_no_shadow[hour])
+    FUNCTION _draw_jewels():
+        FOR EACH (hour, gold_asset) IN skin's jewel_art:
+            _draw_ring_glyph(..., height * jewel_zoom[hour], draw_shadow=NOT jewel_no_shadow[hour])
 
     FUNCTION _draw_crown_text():
         IF skin has no crown texts: RETURN

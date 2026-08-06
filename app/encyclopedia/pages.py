@@ -207,7 +207,7 @@ _CUBE_ENTRIES = (
     # The five offices' intaglio plates (wired 2026-08-05 — the staging
     # ledger's last row): strung in the seal's own MASON order above
     # the computed axes diagram. The Eye is absent on purpose — one
-    # image, one place; its art is the ring letter library's.
+    # image, one place; its art is the ring jewel library's.
     ("The Banknote Axes", tuple(
         archetypes.BANKNOTE_ART_DIR / f"{stem}.png"
         for stem in ("Malignant_Accuser", "Anointed_Aegis",
@@ -313,7 +313,7 @@ _VSM_DAYS = {
 }
 _INSTRUMENT_KEYS = (
     "dial", "solar_rotation", "twilight", "year_wheel", "moon_lunations",
-    "paint_light", "metals", "ring_letters", "chi",
+    "paint_light", "metals", "ring_jewels", "chi",
 )
 
 

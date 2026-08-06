@@ -58,21 +58,21 @@ monolithic plate and no procedural fallback.
 - `outer_asset: Path` — the outer band plate (the preset's empty letter fields)
 - `inner_asset: Path` — the inner minute-track band
 - `letters: dict[int, str]` — hour -> letter replacing the numeral
-- `letter_art: dict[int, Path]` — hour -> the GOLD master letter file
+- `jewel_art: dict[int, Path]` — hour -> the GOLD master letter file
   (built by `build_skin`; the ring tint never touches it)
-- `letter_metal: dict[int, str]` — hour -> active finish
+- `jewel_metal: dict[int, str]` — hour -> active finish
   (`"gold"`/`"silver"`/`"bronze"`); silver/bronze are derived from the
-  gold master at load time (`render.asset_recolor.letter_metal_file`)
-- `letter_zoom: dict[int, float]` — hour -> height multiplier (absent =
+  gold master at load time (`render.asset_recolor.jewel_metal_file`)
+- `jewel_zoom: dict[int, float]` — hour -> height multiplier (absent =
   1.0) for seats whose art pads the glyph with extra rays (e.g. the
   Eye's shine masters)
-- `letter_no_shadow: dict[int, bool]` — hour -> True when that seat's
+- `jewel_no_shadow: dict[int, bool]` — hour -> True when that seat's
   baked-in art already carries its own light and the ring's cast-shadow
   stamp should be skipped (SHADOW/SHINE round, owner ruling 2026-08-06:
   the Dollar's Eye with Shine on); absent = False, every ordinary letter
-  keeps its shadow — stamped by `build_skin` alongside `letter_zoom`,
+  keeps its shadow — stamped by `build_skin` alongside `jewel_zoom`,
   same per-hour condition
-- `letter_legend: dict[int, dict]` — hour -> `{name, reading}`, the
+- `jewel_legend: dict[int, dict]` — hour -> `{name, reading}`, the
   per-letter hover legend (empty for presets that carry none)
 - `crown_text: tuple[dict, ...]` — the outer crown text arc ("Crown Text" in the
   Watch Face window): one
@@ -164,12 +164,12 @@ for the full field-by-field default/meaning table):
   `earth_label`, `weekday_theme`, `show_weekday_names`,
   `show_info_slot_names`, `legend`
 - **Ring** — `ring_tint`, `ring_tint_inner` (R-21 split, follows
-  `ring_tint` when `None`), `ring_finish`, `ring_letter_scale`,
+  `ring_tint` when `None`), `ring_finish`, `ring_jewels_scale`,
   `subdial_style`
 - **Crown Text** (R-24/Phase-6-debt correction, owner 2026-08-05) —
-  `crown_text_alpha`, `crown_text_scale` (multiplies `ring_letter_scale`),
+  `crown_text_alpha`, `crown_text_scale` (multiplies `ring_jewels_scale`),
   `crown_text_tint` (follows `ring_tint` when `None`) — the outer Great Seal
-  crown text arc's own opacity/size/color, independent of `letter_tint`
+  crown text arc's own opacity/size/color, independent of `jewels_tint`
 - **Year line** — `era_notation`, `show_era_suffix`, `third_era`
   (consumed by `core.deep_time.format_year_line`/`format_official`)
 - **Display context & runtime-only** — `display: paths.DisplayContext`
@@ -183,7 +183,7 @@ for the full field-by-field default/meaning table):
 
 ### `missing_assets(skin) -> list[Path]`
 Every asset the skin references (background, ring, moon, hands, ring
-letter art and crown-text glyphs, weekday bodies, year-marker variants) that
+jewel art and crown-text glyphs, weekday bodies, year-marker variants) that
 does not exist on disk, resolved through the active art source
 (`paths.art_file`). The caller must surface a non-empty result visibly —
 a missing asset would otherwise fail inside `paintEvent`, where Qt

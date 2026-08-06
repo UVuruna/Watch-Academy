@@ -52,7 +52,7 @@ default, `WA_TranslucentBackground`, `WA_ShowWithoutActivating`).
   `activateWindow()`, meant for "normal" z-mode where the dial otherwise
   rides above others only while focused
 - `set_dial_diameter(diameter, margin_fraction=None)`: the window is the
-  dial plus a transparent margin on every side (for overhanging letters,
+  dial plus a transparent margin on every side (for overhanging jewels,
   halos and the event glow); `margin_fraction` is supplied live by the
   controller on every skin install
 - `paintEvent()`: delegates to `compositor.paint(painter, size, dpr, tick)`;

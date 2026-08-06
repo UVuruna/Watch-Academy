@@ -32,7 +32,7 @@ def recolor(
 
     `mask_mode` is `"chroma"` for art that mixes metal with neutral stone
     (badge medallions) and `"alpha"` for art where every opaque pixel is
-    metal (ring letters and numerals). `image_key` is the source file's
+    metal (ring jewels and numerals). `image_key` is the source file's
     stem, consulted ONLY for the per-image backup overrides that the
     shared formula is supposed to make unnecessary.
     """

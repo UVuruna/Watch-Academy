@@ -35,7 +35,7 @@ at settings-apply time, so its per-tick work is a sequence lookup, an arc
 layout and eleven-at-most `drawImage` calls.
 
 `crown_spec` resolves `skin.ring.crown_text_metal` (the SAME
-`settings.ring_finish` the ring's own letters wear) and its active
+`settings.ring_finish` the ring's own jewels wear) and its active
 `paths.metal_shade` into the `CrownSpec.metal`/`.shade` fields THE TIME
 CROWN LOOK (owner correction 2026-08-06) styles every glyph by — never
 the outer band's `numeral_relief`/`numeral_depth`/`numeral_light`/

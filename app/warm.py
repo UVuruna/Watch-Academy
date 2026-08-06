@@ -14,7 +14,7 @@ so the work is done ONCE for the process.
 THE ORDER is the priority the owner asked for — what he is looking at
 first, what he might look at last:
 
-1. **Dial art** (`render.art_warm`) — the letter recolors the dials are
+1. **Dial art** (`render.art_warm`) — the jewel recolors the dials are
    currently standing in for with their gold masters. Each one repaints
    the dial the moment it lands.
 2. **Working set** — the downscaled dial copies of oversized sources.

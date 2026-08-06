@@ -29,7 +29,7 @@ from PySide6.QtGui import QPainter
 
 from config import dial, palette
 from core import angles, numerals, world
-from render.asset_recolor import letter_metal_file
+from render.asset_recolor import jewel_metal_file
 from render.context import Cadence, Layer, RenderContext
 from render.layers.numerals import band_spec
 from render.numeral_bands import (
@@ -40,21 +40,21 @@ from render.painting import dial_point, draw_pixmap_centered
 
 class RingLayer(Layer):
     """The composed ring: his inner base art, the live inner numbers,
-    the computed outer band, the preset's own letters (with per-hour
+    the computed outer band, the preset's own jewels (with per-hour
     metal finish) and the optional crown-text arc."""
 
     cadence = Cadence.STATIC
 
     def paint(self, painter: QPainter, ctx: RenderContext) -> None:
         self._draw_bands(painter, ctx)
-        self._draw_letter_art(painter, ctx)
+        self._draw_jewels(painter, ctx)
         self._draw_crown_text(painter, ctx)
 
     def _draw_bands(self, painter: QPainter, ctx: RenderContext) -> None:
         """The two bands, inner first so the outer band's own edge sits
         on top — and the ORDER is the composition (THE FIDELITY
         RULING): base art, its numbers, then the whole outer band, and
-        only then the letters `paint` draws next, which need the metal
+        only then the jewels `paint` draws next, which need the metal
         under them and nothing over them.
 
         The INNER art blitted here is the variant's NUMBERLESS BASE, not
@@ -99,10 +99,10 @@ class RingLayer(Layer):
         tint: str | None = None, opacity: float = 1.0, draw_shadow: bool = True,
     ) -> None:
         """One letter-art glyph stamped on the ring circle — the shared
-        stamp (Rule #5) behind BOTH the ring's own six banknote letters
-        (`_draw_letter_art`) and the outer crown text arc (`_draw_crown_text`,
+        stamp (Rule #5) behind BOTH the ring's own six banknote jewels
+        (`_draw_jewels`) and the outer crown text arc (`_draw_crown_text`,
         TASK 1, owner "može radi" 2026-07-19): the metal finish (derived
-        from the gold master, `render.asset_recolor.letter_metal_file`), a
+        from the gold master, `render.asset_recolor.jewel_metal_file`), a
         tight dark halo (owner spec: a gradient border, lit from above)
         and a tangential ROTATION that flips 180° through the lower half
         so text never reads upside down (Ω stands upright at the
@@ -112,7 +112,7 @@ class RingLayer(Layer):
         letters" is one target); the shadow copy skips it — a pure
         black silhouette has no saturation to scale. `tint`/`opacity`
         are per-CALLER (Crown Text round, owner correction 2026-08-05):
-        `_draw_letter_art` passes `letter_tint`/1.0 (unchanged behavior);
+        `_draw_jewels` passes `jewels_tint`/1.0 (unchanged behavior);
         `_draw_crown_text` resolves its OWN independent `crown_text_tint`/
         `crown_text_alpha` — the two controls no longer share one recolor.
         `draw_shadow=False` (SHADOW/SHINE round, owner ruling
@@ -124,16 +124,16 @@ class RingLayer(Layer):
         1440p owner bug 2026-08-06) — the fixed 8 stamps of every
         earlier release separated into a scalloped edge once the dial
         grew past its usual sizes; growing the count keeps every stamp
-        under `RING_LETTER_SHADOW_MAX_GAP_PX` device pixels from its
+        under `RING_JEWEL_SHADOW_MAX_GAP_PX` device pixels from its
         neighbor, and `_normalized_shadow_alpha` renormalizes each
         stamp's opacity so the composited darkness matches today's
         look at the floor count — smoother, never darker."""
-        shadow_radius = height * dial.RING_LETTER_SHADOW_RADIUS
+        shadow_radius = height * dial.RING_JEWEL_SHADOW_RADIUS
         # Silver/bronze are derived from the gold master AT LOAD (owner
         # 2026-07-19), disk-cached like every other derived asset — the
         # shadow silhouette is metal-invariant (same alpha mask on every
         # finish), so it always reads the gold file directly.
-        asset = letter_metal_file(gold_asset, metal)
+        asset = jewel_metal_file(gold_asset, metal)
         # THE INDICES/CROWN TEXT FREE COLOR (Watch Face Phase 4, R-24;
         # Crown Text correction 2026-08-05): an EXTRA tint layered OVER
         # the metal finish already resolved above (None, the default,
@@ -170,17 +170,17 @@ class RingLayer(Layer):
         painter.drawPixmap(QPointF(-logical_w / 2, -height / 2), pixmap)
         painter.restore()
 
-    def _draw_letter_art(self, painter: QPainter, ctx: RenderContext) -> None:
-        """The owner's letter art at the preset's hour positions — gold
+    def _draw_jewels(self, painter: QPainter, ctx: RenderContext) -> None:
+        """The owner's jewel art at the preset's hour positions — gold
         masters, silver/bronze derived at load (the accent letter wears
         the opposite metal, owner spec). Stamped by `_draw_ring_glyph`
         (Rule #5, shared with the outer crown text arc)."""
         height = (
-            2 * ctx.radius * dial.RING_LETTER_ART_SCALE
-            * ctx.skin.ring_letter_scale
+            2 * ctx.radius * dial.RING_JEWEL_ART_SCALE
+            * ctx.skin.ring_jewels_scale
         )
-        for hour, gold_asset in self._skin.ring.letter_art.items():
-            # THE WORLD OFFSET (core.world): the letters are world
+        for hour, gold_asset in self._skin.ring.jewel_art.items():
+            # THE WORLD OFFSET (core.world): the jewels are world
             # members — they ride the turning band with the numerals
             # beside them, and `_draw_ring_glyph` derives the readable
             # rotation from the SEATED angle, so a letter carried into
@@ -190,20 +190,20 @@ class RingLayer(Layer):
             theta = (
                 angles.ring_position_angle(hour) + ctx.world_offset
             ) % 360.0
-            metal = self._skin.ring.letter_metal.get(hour, "gold")
+            metal = self._skin.ring.jewel_metal.get(hour, "gold")
             # The Eye's SHINE ENLARGE (owner UV inbox 2026-07-27):
             # build_skin stamps a per-hour height multiplier for the
             # shine masters so the triangle stays the no-light size and
-            # only the rays extend beyond it (1.0 for plain letters).
+            # only the rays extend beyond it (1.0 for plain jewels).
             # SHADOW/SHINE round (owner ruling 2026-08-06): the same
             # per-hour plumbing skips the cast shadow for that seat —
             # the baked shine already carries its own light.
             self._draw_ring_glyph(
                 painter, ctx, gold_asset, metal, theta,
-                dial.RING_LETTER_RADIUS_FRACTION,
-                height * self._skin.ring.letter_zoom.get(hour, 1.0),
-                tint=ctx.skin.letter_tint,
-                draw_shadow=not self._skin.ring.letter_no_shadow.get(hour, False),
+                dial.RING_JEWEL_RADIUS_FRACTION,
+                height * self._skin.ring.jewel_zoom.get(hour, 1.0),
+                tint=ctx.skin.jewels_tint,
+                draw_shadow=not self._skin.ring.jewel_no_shadow.get(hour, False),
             )
 
     def _draw_crown_text(self, painter: QPainter, ctx: RenderContext) -> None:
@@ -214,7 +214,7 @@ class RingLayer(Layer):
         (ANNUIT COEPTIS's own A/S pin the TOP arc at 8h/16h, NOVUS ORDO
         SECLORUM's own N/O/M pin the BOTTOM arc at 4h/24h/20h — MASON
         outside, G inside) — drawn via the SAME stamp the ring's own
-        six letters use (`_draw_ring_glyph`, Rule #5), just smaller
+        six jewels use (`_draw_ring_glyph`, Rule #5), just smaller
         (`RING_CROWN_TEXT_SIZE`) and further out. The two arcs are angularly
         DISJOINT (top 300-360-60 deg, bottom 120-180-240 deg) so both
         share ONE radius (`RING_CROWN_TEXT_RADIUS_FRACTION`) — no more two
@@ -224,9 +224,9 @@ class RingLayer(Layer):
         CROWN TEXT controls (owner correction 2026-08-05: "Crown tekst
         je onaj tekst koji piše oko sata — faith, hope, suffering", the
         proof this IS the crown text arc): `crown_text_scale` multiplies the
-        height ON TOP OF `ring_letter_scale` (which still applies too,
+        height ON TOP OF `ring_jewels_scale` (which still applies too,
         unchanged); `crown_text_tint` resolves independently of
-        `letter_tint` — None follows `ring_tint`, the SAME
+        `jewels_tint` — None follows `ring_tint`, the SAME
         "follow-unless-overridden" shape `hands_tint` uses;
         `crown_text_alpha` is a plain opacity multiplier passed straight to
         `_draw_ring_glyph`."""
@@ -235,7 +235,7 @@ class RingLayer(Layer):
             return
         height = (
             2 * ctx.radius * dial.RING_CROWN_TEXT_SIZE
-            * ctx.skin.ring_letter_scale * ctx.skin.crown_text_scale
+            * ctx.skin.ring_jewels_scale * ctx.skin.crown_text_scale
         )
         metal = self._skin.ring.crown_text_metal
         tint = (

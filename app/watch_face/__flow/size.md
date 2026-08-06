@@ -9,7 +9,7 @@
 🎚️ Earth scale slider, + Default
 🎚️ Moon scale slider, + Default
 🎚️ Complications scale slider (`slot_scale`), + Default
-🎚️ Indices scale slider (`ring_letter_scale`), + Default
+🎚️ Jewels scale slider (`ring_jewels_scale`), + Default
 🎚️ Hover enlarge slider, + Default
 
 ## Behaviour (pseudocode)

@@ -1,6 +1,6 @@
 """Colors section (R-21..R-25, see colors.md) — the Watch Face window's
 Colors page: Ring tint, Pointer palette chips, Umbra coloring, Aura
-coloring (Colorful-off only), Hands/Indices free color, Metal shades and
+coloring (Colorful-off only), Hands/Jewels free color, Metal shades and
 the Saturation sliders — replacing the placeholder page. LIVE-APPLY
 (Rule #5, same shape as every other Watch Face section): every pick
 calls its setter immediately through `setters`, and the window rebuilds
@@ -26,15 +26,15 @@ this round —
     inscription (`RingSpec.crown_text`) — it always had a seat, just no
     control. `crown_text_tint` (this section) and `crown_text_scale`/`crown_text_alpha`
     (Size/Opacity sections) now read it independently of
-    `letter_tint`/`ring_letter_scale`. See `skins.manifest.
+    `jewels_tint`/`ring_jewels_scale`. See `skins.manifest.
     SkinDefinition`'s Crown Text fields for the full design note.
 
 DEBT (owner honesty rule — a control that does nothing must never
 ship): two items below are NOT built, each recorded where it would
 otherwise live —
 
-  * R-25's Indices saturation as a SEPARATE slider: `ring_saturation`
-    already scales the ring plate AND its letters TOGETHER, a UNIFIED
+  * R-25's Jewels saturation as a SEPARATE slider: `ring_saturation`
+    already scales the ring plate AND its jewels TOGETHER, a UNIFIED
     target sealed by owner decree (Session 21-D, fix round E,
     2026-07-19 — `render.layers.ring.RingLayer`'s own docstring).
     Splitting it back apart reverses that sealed decision without the
@@ -72,7 +72,7 @@ def build(settings, setters: dict, tr) -> QWidget:
     layout.addWidget(_umbra_group(settings, setters, tr))
     layout.addWidget(_aura_group(settings, setters, tr))
     layout.addWidget(_hands_group(settings, setters, tr))
-    layout.addWidget(_indices_group(settings, setters, tr))
+    layout.addWidget(_jewels_group(settings, setters, tr))
     layout.addWidget(_crown_text_group(settings, setters, tr))
     layout.addWidget(_metal_group(settings, setters, tr))
     layout.addWidget(_saturation_group(settings, setters, tr))
@@ -86,7 +86,7 @@ def _tint_group(
     dialog_title: str,
 ) -> QGroupBox:
     """The shared body of every simple tint control here (Ring/Hands/
-    Indices/Umbra-custom/Aura-custom): the preset grids plus the Custom
+    Jewels/Umbra-custom/Aura-custom): the preset grids plus the Custom
     row plus the live label — one shape, five callers (Rule #5)."""
     group = QGroupBox(tr(title))
     column = QVBoxLayout(group)
@@ -238,16 +238,16 @@ def _hands_group(settings, setters, tr) -> QGroupBox:
     )
 
 
-def _indices_group(settings, setters, tr) -> QGroupBox:
-    """R-24: Indices (ring letters) free color — an EXTRA tint layered
+def _jewels_group(settings, setters, tr) -> QGroupBox:
+    """R-24: Jewels (ring jewels) free color — an EXTRA tint layered
     OVER the metal finish (Gold/Bronze/Silver stay chosen in the Metal
     shades group below); "Gray" (None) leaves the metal finish
     untouched, today's behavior on every release before this Phase.
     Crown Text has its OWN independent tint below (`_crown_text_group`)
     — the two controls no longer share one recolor."""
     return _tint_group(
-        tr, "Indices color", settings.letter_tint, setters["letter_tint"],
-        "Metal finish only (default)", "Pick the indices tint",
+        tr, "Jewels color", settings.jewels_tint, setters["jewels_tint"],
+        "Metal finish only (default)", "Pick the jewels tint",
     )
 
 
@@ -255,7 +255,7 @@ def _crown_text_group(settings, setters, tr) -> QGroupBox:
     """R-24/Phase-6-debt correction (owner 2026-08-05, LOUD: "Crown
     tekst je onaj tekst koji piše oko sata — faith, hope, suffering") —
     the outer Great Seal crown text arc's own free color, independent of
-    `letter_tint`: "Follow ring" (default, None) reads `ring_tint`
+    `jewels_tint`: "Follow ring" (default, None) reads `ring_tint`
     exactly like the Hands do; a preset or custom hex overrides it.
     Greyed out with a tooltip when the active ring preset carries no
     crown text (`setters["ring_has_crown_text"]`) — the same graceful-truth
@@ -302,7 +302,7 @@ def _metal_group(settings, setters, tr) -> QGroupBox:
 def _saturation_group(settings, setters, tr) -> QGroupBox:
     """R-25: the two owner-sealed sliders (Aura/Ring, unchanged) plus
     two bounded additions this Phase's render hooks make possible
-    (Hands/Umbra) — Indices, Pointer and Crown stay OUT, each for its
+    (Hands/Umbra) — Jewels, Pointer and Crown stay OUT, each for its
     own reason in the module docstring's debt note."""
     group = QGroupBox(tr("Saturation"))
     form = QFormLayout(group)

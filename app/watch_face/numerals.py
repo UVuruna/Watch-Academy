@@ -7,7 +7,7 @@ The page opens with the MODE (§1) — Geocentric (Ptolemy) or Heliocentric
 ring or a turning world — and then the bands themselves.
 
 Four groups, in the order the reader meets them on the dial: the OUTER
-band (its face, its numeral size, the width of the band the letters and
+band (its face, its numeral size, the width of the band the jewels and
 numbers stand in, and the seating law), the INNER band (its own face and
 size — the ledger settles that nothing else about it is user-changeable:
 it never rotates and it follows the outer band's seating), and the

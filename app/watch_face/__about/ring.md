@@ -6,7 +6,7 @@
 The Watch Face window's Ring page (R-10), rebuilt for THE
 COMPOSITIONAL RING MODEL (owner decree 2026-08-05): preset gallery
 (thumbnail tiles of each preset's own COMPUTED preview — the outer
-plate with its letters stamped at their seats, ring_rework §5, owner
+plate with its jewels stamped at their seats, ring_rework §5, owner
 ruling 2026-08-06 — tooltip stating the locked outer AND the card's own
 About text), the finish pills, the Two-metals/Shine checkboxes
 (unchanged), an INNER gallery (eight tiles — user-changeable
@@ -42,8 +42,8 @@ checkbox that replaces the crown text with the active location's own
 ## Design Decisions
 - **Whitelist, not a hand list:** the validator's character class is
   built from `constants.RING_CROWN_TEXT_CHARSET` (every SINGLE-
-  character key of `RING_LETTER_FILES` — the multi-character symbol
-  keys are the custom-builder's own letter picks, never typed running
+  character key of `RING_JEWEL_FILES` — the multi-character symbol
+  keys are the custom-builder's own jewel picks, never typed running
   text — plus the space), the exact same set
   `app.controller._location_crown_text` filters the Location crown
   through. One source, never two lists drifting apart (Rule #5).
@@ -51,7 +51,7 @@ checkbox that replaces the crown text with the active location's own
   custom-ring flow is a plain-Python mixin baked directly onto
   `SettingsDialog` — there is no standalone custom-ring editor `QDialog`
   to embed. Rather than duplicate its inline widgets (a name field, a
-  layout combo, a per-position letter-combo row, thematic color, "Add
+  layout combo, a per-position jewel-combo row, thematic color, "Add
   ring"), the "Custom ring…" button opens the EXISTING Settings dialog
   through `setters["open_custom_ring"]`, navigated straight to its
   Custom art section via the new `dialog.SettingsDialog(...,

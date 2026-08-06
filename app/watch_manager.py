@@ -158,7 +158,7 @@ class AppController:
         self._watches.append(watch)
         watch.run()
         # A watch added mid-session brings art the process has never
-        # resolved (its own ring letters at its own shade) — give it the
+        # resolved (its own ring jewels at its own shade) — give it the
         # same "paint first, warm after" treatment, for itself alone.
         self._armed = {watch}
         self._arm_warm([watch])
@@ -220,7 +220,7 @@ class AppController:
           what RECORDS which derived files it wants.
 
         Called for the STARTUP roster and again for a single watch added
-        mid-session (ADD WATCH): a new dial brings its own ring letters,
+        mid-session (ADD WATCH): a new dial brings its own ring jewels,
         so it needs its own drain — but only for itself, never a second
         walk of what the process already warmed."""
         pending = set(watches)

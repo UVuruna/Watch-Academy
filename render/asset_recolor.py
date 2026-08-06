@@ -1,6 +1,6 @@
 """Disk-cached recolors derived from a single master file — the metal
 finish/tint family split out of `assets.py` (surgical sibling
-extraction, `research/REFACTOR_PLAN.md` §8): `letter_metal_file` and
+extraction, `research/REFACTOR_PLAN.md` §8): `jewel_metal_file` and
 `metal_variant_file` derive gold/silver/bronze from one drawn asset via
 `AssetCache`'s hue-selective/whole-glyph recolor kernels; `_recolored_
 plate` is the subdial plate's own bezel/field recolor, built the SAME
@@ -23,8 +23,8 @@ from render import raster_store
 from render.assets import AssetCache
 
 
-def letter_metal_path(path: Path, metal: str) -> Path:
-    """WHERE the ring letter's GOLD, SILVER, BRONZE or THEMATIC finish
+def jewel_metal_path(path: Path, metal: str) -> Path:
+    """WHERE the ring jewel's GOLD, SILVER, BRONZE or THEMATIC finish
     lives on disk — a PURE path computation that also RECORDS the recipe
     in the lazy ledger. NO pixel work (the twin of `metal_variant_path`,
     Rule #5 — one ledger, two families).
@@ -34,7 +34,7 @@ def letter_metal_path(path: Path, metal: str) -> Path:
     the 76 pre-rendered `_silver.png`/`_bronze.png` files) and is
     SHADE-aware (R8a redo, owner spec 2026-07-21 night): every metal,
     gold included, runs through `AssetCache._recolored` (the SAME door
-    badge medallions use) in `alpha` mask mode — a ring letter mixes no
+    badge medallions use) in `alpha` mask mode — a ring jewel mixes no
     gray stone the way a medallion does, so unlike the badge's
     chroma-window detection every alpha>0 pixel simply IS a metal pixel.
     The source metal is GOLD here (the master these are drawn on)
@@ -55,13 +55,13 @@ def letter_metal_path(path: Path, metal: str) -> Path:
     )
     _PENDING_VARIANTS.setdefault(
         str(cache),
-        (path, metal, defaults.METAL_SOURCE_LETTER,
-         defaults.METAL_MASK_LETTER, shade),
+        (path, metal, defaults.METAL_SOURCE_JEWEL,
+         defaults.METAL_MASK_JEWEL, shade),
     )
     return cache
 
 
-def letter_metal_file(path: Path, metal: str) -> Path:
+def jewel_metal_file(path: Path, metal: str) -> Path:
     """The file the DIAL should draw RIGHT NOW: the derived finish when
     it is already on disk, otherwise the GOLD MASTER.
 
@@ -72,7 +72,7 @@ def letter_metal_file(path: Path, metal: str) -> Path:
     (oklab, guided box filter, specular ramp) on the GUI thread, times
     one per open watch, before any dial appeared at all. The pixels are
     identical either way; only WHERE they are paid moved. The master is
-    the honest stand-in: gold is the metal the letters are actually
+    the honest stand-in: gold is the metal the jewels are actually
     drawn in, so a not-yet-recolored dial is a GOLD dial, never a blank
     one (Rule #1 — a documented, visible fallback, not a silent one).
 
@@ -86,8 +86,8 @@ def letter_metal_file(path: Path, metal: str) -> Path:
     `render.art_warm.warm_pending_art` drains the ledger on the
     background thread and the controller repaints; a caller that needs
     the real pixels NOW (an export) uses `ensure_variant` on
-    `letter_metal_path`."""
-    derived = letter_metal_path(path, metal)
+    `jewel_metal_path`."""
+    derived = jewel_metal_path(path, metal)
     if derived is None or derived.exists():
         return derived
     if _ART_STALE_NOTIFIER is not None:
@@ -102,12 +102,12 @@ def _recolored_plate(
     """`master` (the resolved plate — the solo set's silver file, or any
     set's file under a "theme" tint request) with its brushed metal
     BEZEL colorized to `finish` — built the SAME recipe the ring
-    letters use to derive silver/bronze live from gold (Rule #5,
-    `letter_metal_file`): SILVER is the achromatic VALUE alone (no hue
+    jewels use to derive silver/bronze live from gold (Rule #5,
+    `jewel_metal_file`): SILVER is the achromatic VALUE alone (no hue
     at all, whatever metal `master` itself happens to be drawn in — the
     letters' "straight desaturation" rule, masked here to the rim
     only); GOLD and BRONZE tint that same achromatic base by their own
-    color (the letters' "tint the desaturated result" rule). Only
+    color (the jewels' "tint the desaturated result" rule). Only
     bright, unsaturated pixels INSIDE the radial bezel band take the
     recolor — the field's own specular highlights stay neutral (owner
     correction 2026-07-15: without the radial mask the interiors drank
@@ -160,7 +160,7 @@ def _recolored_plate(
     )[..., None]
     if finish == "silver":
         # The achromatic base alone, masked to the rim — the same
-        # "silver is a straight desaturation" recipe letters use.
+        # "silver is a straight desaturation" recipe jewels use.
         rim = np.repeat(value[..., None], 3, axis=-1)
     else:
         target = QColor(palette.SUBDIAL_RECOLOR_COLORS[finish])
@@ -229,7 +229,7 @@ _VARIANT_LOCKS_GUARD = threading.Lock()
 # DOLLAR NA DOMY thematic bude zlatni i ne uradi RECOLOR dok ne ugasim
 # i upalim APP"): the startup warm was the only drain of this ledger,
 # so recipes recorded AFTER it finished — every finish/shade/theme
-# switch — sat unbuilt forever. `letter_metal_file` calls this the
+# switch — sat unbuilt forever. `jewel_metal_file` calls this the
 # moment a paint observes a missing finish; `app.watch_manager`
 # installs its `kick_art_warm` here, which starts (or re-runs) a
 # background drain. Must stay cheap and thread-agnostic: it is called
@@ -342,16 +342,16 @@ def ensure_variant(path: Path | None) -> Path | None:
     return path
 
 
-def letter_metal_variant(path: Path, metal: str | None) -> Path:
-    """The ring letter's derived finish with its PIXELS GUARANTEED — the
+def jewel_metal_variant(path: Path, metal: str | None) -> Path:
+    """The ring jewel's derived finish with its PIXELS GUARANTEED — the
     eager door, for callers that cannot accept the gold master standing
     in (an export, a test measuring the actual metal). Exactly
     `metal_variant_file`'s twin for the letter family (Rule #5).
 
-    The DIAL never uses this: it draws through `letter_metal_file`, which
+    The DIAL never uses this: it draws through `jewel_metal_file`, which
     returns the master on a cache miss and lets the background warm catch
     up (owner decree 2026-07-28)."""
-    return ensure_variant(letter_metal_path(path, metal))
+    return ensure_variant(jewel_metal_path(path, metal))
 
 
 def metal_variant_file(path: Path, metal: str | None) -> Path:

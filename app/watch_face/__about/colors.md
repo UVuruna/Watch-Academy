@@ -5,7 +5,7 @@
 ## Purpose
 Phase ④ (R-21..R-25): the Watch Face window's real Colors page,
 replacing the placeholder — Ring tint, the Pointer palette chips, Umbra
-coloring, Aura coloring (Colorful-off only), Hands/Indices free color,
+coloring, Aura coloring (Colorful-off only), Hands/Jewels free color,
 Metal shades, and the Saturation sliders. LIVE-APPLY like every other
 Watch Face section — no OK/Cancel buffer, the window rebuilds this page
 fresh on every pick.
@@ -26,7 +26,7 @@ fresh on every pick.
 - [Watch Controller](../../__about/controller.md) — every setter key
   this page calls (`ring_tint`, `ring_tint_inner`, `palettes`,
   `umbra_tint_mode`, `umbra_tint`, `aura_off_tint_mode`, `aura_off_tint`,
-  `hands_tint`, `letter_tint`, `crown_text_tint`,
+  `hands_tint`, `jewels_tint`, `crown_text_tint`,
   `metal_shade_gold`/`bronze`/`silver`, `pointer_saturation`,
   `ring_saturation`, `hands_saturation`, `umbra_saturation`) is wired in
   `_watch_face_setters()`, plus the data PROVIDER `ring_has_crown_text` the
@@ -48,10 +48,10 @@ fresh on every pick.
   inscription (`RingSpec.crown_text`) — it always had a seat, just no
   control; `crown_text_tint` (this section) and `crown_text_scale`/`crown_text_alpha`
   (Size/Opacity sections) now read it independently of
-  `letter_tint`/`ring_letter_scale`. See `skins.manifest.
+  `jewels_tint`/`ring_jewels_scale`. See `skins.manifest.
   SkinDefinition`'s Crown Text fields for the full design note.
-- **R-25's Indices saturation as a separate slider**: `ring_saturation`
-  already scales the ring plate AND its letters together, a UNIFIED
+- **R-25's Jewels saturation as a separate slider**: `ring_saturation`
+  already scales the ring plate AND its jewels together, a UNIFIED
   target sealed by owner decree (Session 21-D, fix round E,
   2026-07-19) — splitting it apart reverses that decision without the
   owner asking.

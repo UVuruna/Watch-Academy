@@ -44,7 +44,7 @@ flowchart TB
     B --> C{element found?}
     C -- yes --> D["route to its own _*_tooltip\n(body, slot, archetype, thirteenth, sun_servant)"]
     C -- no --> E{point falls on a ring/calendar/\ntwilight/tick zone?}
-    E -- yes --> F["route to that zone's _*_tooltip\n(_tick_tooltip, _calendar_tooltip,\n_twilight_tooltip, _ring_letter_legend_tooltip, ...)"]
+    E -- yes --> F["route to that zone's _*_tooltip\n(_tick_tooltip, _calendar_tooltip,\n_twilight_tooltip, _ring_jewel_legend_tooltip, ...)"]
     E -- no --> G[None]
     D --> H["_centered / _highlight_terms\nwrap the article text into HTML"]
     F --> H

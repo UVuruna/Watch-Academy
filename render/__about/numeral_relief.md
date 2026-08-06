@@ -36,7 +36,7 @@ numbers into paint. It owns three things:
    intensity, a border-and-glow rather than a diffuse halo). Both soft
    passes are drawn as a whole-band silhouette layer, blurred ONCE and
    composited under the crisp pass — never per glyph, and never as N
-   stamped copies around a circle (the defect that scalloped the letter
+   stamped copies around a circle (the defect that scalloped the jewel
    shadow at 1440p). `draw_inner_ink` paints an inner element the way he
    drew every element of his inner plates: a RING-GROUND body inside a
    crisp WHITE rim, never white ink on white.

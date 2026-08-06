@@ -129,7 +129,7 @@ def draw_slot_roundel(
 
 
 def _finish_color(ctx: RenderContext) -> QColor:
-    """The letter-finish metal color — the ONE hue of every subdial
+    """The jewel-finish metal color — the ONE hue of every subdial
     accent: the mini hand, the theme-style ticks and all complication
     texts (owner 2026-07-15: 'u boji kao i kazaljka')."""
     return QColor(
@@ -190,7 +190,7 @@ def draw_small_seconds(
     set's own seconds hand rotating inside the subdial, behind eight
     tick marks just inside the rim — four LARGER at the cardinal
     points, four smaller between them. Colors (owner 2026-07-15 A/B
-    spec): the hand ALWAYS wears the letter-finish metal over its own
+    spec): the hand ALWAYS wears the jewel-finish metal over its own
     drop shadow; the ticks are white on the "black" plate style and
     finish-colored on the "theme" style — shadowed either way."""
     spec = ctx.skin.hands.second

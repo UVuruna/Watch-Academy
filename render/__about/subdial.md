@@ -39,7 +39,7 @@ and is shared with the calendar mounts and the thirteenth plates.
   (recolored to the requested finish/tint), or a procedural rimmed
   circle when no plate art exists.
 - `draw_fitted_text`/`draw_two_lines`: fit-to-width one/two-line slot
-  text in the letter-finish metal over a shadow.
+  text in the jewel-finish metal over a shadow.
 - `draw_small_seconds(painter, ctx, pos, diameter)`: the small-seconds
   complication — eight rim ticks plus the active set's own seconds hand
   in miniature, both in the finish metal.
@@ -49,6 +49,6 @@ and is shared with the calendar mounts and the thirteenth plates.
   2026-07-20) — only the LIVE shadow is keyed to the seat's dial
   position; the plate itself is one master, recolored on demand
   ([Asset Recolor](asset_recolor.md)), per root Rule #19.
-- **Every subdial accent wears the letter-finish metal** (`_finish_color`),
+- **Every subdial accent wears the jewel-finish metal** (`_finish_color`),
   never plain white — texts and the small-seconds hand/ticks alike,
   always over a drop shadow so they read on both plate styles.

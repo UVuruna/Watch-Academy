@@ -31,7 +31,7 @@ _SRGB_GAMMA = 2.4
 # float64, so the matrices must carry the dtype themselves. float32's
 # 24-bit mantissa is ~7 decimal digits against an 8-bit output
 # quantum of 1/255 — verified: max |delta| vs the float64 pipeline is
-# far below half a quantum on real letter art.
+# far below half a quantum on real jewel art.
 LUMA_WEIGHTS = np.array([0.2126, 0.7152, 0.0722], dtype=np.float32)
 
 # Oklab forward: linear sRGB -> LMS, then cube root, then LMS' -> Lab.

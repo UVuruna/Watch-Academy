@@ -203,7 +203,7 @@ def _subdial_set_group(settings, setters, tr) -> QGroupBox:
     Phase 6 FINAL cleanup) — NOT the same setting as the Subdial plate
     pills above (`subdial_style`, theme/black background): this picks
     WHICH of the five hand-picked plate looks draws (`settings.
-    subdial_set`); the active letter finish still decides which color
+    subdial_set`); the active jewel finish still decides which color
     draws within it."""
     group = QGroupBox(tr("Subdial plate set"))
     row = QHBoxLayout(group)

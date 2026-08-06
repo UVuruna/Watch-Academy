@@ -2,9 +2,9 @@
 (owner decree 2026-08-05): a preset gallery (thumbnail tiles of the
 LOCKED outer — the tooltip states the lock), an INNER gallery (eight
 tiles, applies to the active preset — user-changeable independent of
-the outer's lock), the letters-finish pills, the Two-metals/Shine
+the outer's lock), the jewels-finish pills, the Two-metals/Shine
 checkboxes (unchanged, R-10/TASK 3/DOLLAR-EYE) and R-13's "Custom
-ring…" button, which opens the custom-ring flow's outer/letter/crown
+ring…" button, which opens the custom-ring flow's outer/jewel/crown
 builder in the Settings dialog rather than duplicating its inline
 widgets (see ring.md's Design Decisions).
 """
@@ -69,7 +69,7 @@ def build(settings, setters: dict, tr) -> QWidget:
         checkbox.setChecked(two_metals)
         checkbox.toggled.connect(setters["ring_two_metals"])
         layout.addWidget(checkbox)
-    if constants.RING_EYE_GLYPH in active_card["letters"]:
+    if constants.RING_EYE_GLYPH in active_card["jewels"]:
         shine = settings.ring_eye_shine.get(
             settings.ring,
             constants.RING_EYE_SHINE_DEFAULT.get(settings.ring, False),
@@ -91,7 +91,7 @@ def _preset_gallery(settings, presets: dict, setters, tr) -> QGridLayout:
     (ring_rework §5, owner ruling 2026-08-06: "preset picker: name +
     mini preview + the About" — COMPUTED, never a stored/generated
     image: `thumbs.ring_preset_thumbnail` stamps the card's own outer
-    plate and its own letters at their real seats, at thumbnail scale).
+    plate and its own jewels at their real seats, at thumbnail scale).
     A card with no drawable preview (a broken custom ring) falls back
     to the bare outer plate, same graceful-absence pattern
     `art_thumbnail` already documents. The tooltip states which outer
@@ -139,7 +139,7 @@ def _finish_row(settings, setters, tr) -> QHBoxLayout:
     row = QHBoxLayout()
     for finish in constants.RING_FINISHES:
         row.addWidget(pill(
-            tr(f"{finish.capitalize()} letters"), settings.ring_finish == finish,
+            tr(f"{finish.capitalize()} jewels"), settings.ring_finish == finish,
             lambda f=finish: setters["ring_finish"](f),
         ))
     return row

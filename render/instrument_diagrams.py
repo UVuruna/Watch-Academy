@@ -2,7 +2,7 @@
 
 Seven Encyclopedia pages describe how this dial works: the 24-hour face,
 the star's solar tilt, the twilight bands, the year wheel, the moon's
-lunations, the three metals and the ring letters. Every one of them is a
+lunations, the three metals and the ring jewels. Every one of them is a
 FIGURE OF THE PROGRAM'S OWN GEOMETRY — the same numbers the dial is
 drawn from — so root Rule #19 answers before any prompt sheet does:
 compute, never generate. An eighth page joins them from the far end of
@@ -43,7 +43,7 @@ INSTRUMENT_FIGURES = (
     "year_wheel",
     "moon_lunations",
     "metals",
-    "ring_letters",
+    "ring_jewels",
     "oscillations",
     "chi",
 )
@@ -434,7 +434,7 @@ def _metals(_key: str, size: int) -> QPixmap:
     return pixmap
 
 
-def _ring_letters(_key: str, size: int) -> QPixmap:
+def _ring_jewels(_key: str, size: int) -> QPixmap:
     """D · Ω · M · Y — and the reason: each is a Greek letter standing
     at the hour equal to its PLACE in the Greek alphabet. The seats come
     from `config.doctrine`, so the figure cannot drift from the canon
@@ -444,7 +444,7 @@ def _ring_letters(_key: str, size: int) -> QPixmap:
     radius = size * encyclopedia_ui.INSTRUMENT_DIAGRAM_RING_RATIO
     _dial_face(painter, center, radius, size)
     painter.setFont(_font(size, encyclopedia_ui.INSTRUMENT_DIAGRAM_GLYPH_RATIO))
-    for glyph, place in doctrine.RING_LETTER_SEATS:
+    for glyph, place in doctrine.RING_JEWEL_SEATS:
         angle = angles.ring_position_angle(place)
         _text(painter, _on_dial(center, radius * 0.78, angle), glyph, size, color=_ACCENT)
         painter.setFont(_font(size))
@@ -465,15 +465,15 @@ def _chi(_key: str, size: int) -> QPixmap:
     `"full"` outer plate (`constants.RING_OUTERS["full"]`) with its
     hour numerals built by the SAME fidelity engine the dial's own ring
     composes with (`render.numeral_bands.band_plate`, the plate the
-    `dial`/`ring_letters` figures only sketch the geometry of) — every
+    `dial`/`ring_jewels` figures only sketch the geometry of) — every
     hour but the 24th, which the letter owns — and the X master
     recolored to CHI's own ceramic thematic shade
     (`constants.RING_THEMATIC_SHADES["CHI"]`) through the SAME asset
-    cache the dial's own ring letters recolor through
+    cache the dial's own ring jewels recolor through
     (`render.assets.shared_cache`, THE ONE COPY RULE). Root Rule #19
     rules out a hand-drawn stand-in here specifically: the article is
     ABOUT what the porcelain finish looks like, so only the real
-    recolored pixels teach it — never `letter_metal_file`'s deferred
+    recolored pixels teach it — never `jewel_metal_file`'s deferred
     door (built for the live dial's first-paint budget), because a
     plate cached once at import time must never freeze on the GOLD
     fallback it returns before a background warm-up finishes."""
@@ -488,7 +488,7 @@ def _chi(_key: str, size: int) -> QPixmap:
         band="outer", pixels=size, dpr=1.0,
         face=dial.NUMERAL_OUTER_FACE_DEFAULT,
         size_units=float(dial.NUMERAL_OUTER_SIZE_DEFAULT),
-        letter_hours=(24,),
+        jewel_hours=(24,),
     )
     painter.drawImage(QPointF(0, 0), band_plate(outer_spec))
 
@@ -496,12 +496,12 @@ def _chi(_key: str, size: int) -> QPixmap:
         metal_shades={"thematic": constants.RING_THEMATIC_SHADES["CHI"]}
     )):
         glyph = shared_cache().pixmap_by_height(
-            dial.RING_LETTER_ART_DIR / constants.RING_LETTER_FILES["X"],
-            2 * radius * dial.RING_LETTER_ART_SCALE, 1.0, metal="thematic",
+            dial.RING_JEWEL_ART_DIR / constants.RING_JEWEL_FILES["X"],
+            2 * radius * dial.RING_JEWEL_ART_SCALE, 1.0, metal="thematic",
         )
     theta = angles.ring_position_angle(24)
     painter.save()
-    painter.translate(_on_dial(center, radius * dial.RING_LETTER_RADIUS_FRACTION, theta))
+    painter.translate(_on_dial(center, radius * dial.RING_JEWEL_RADIUS_FRACTION, theta))
     painter.rotate(angles.readable_rotation_deg(theta))
     painter.drawPixmap(QPointF(-glyph.width() / 2.0, -glyph.height() / 2.0), glyph)
     painter.restore()
@@ -584,7 +584,7 @@ _DRAWERS = {
     "year_wheel": _year_wheel,
     "moon_lunations": _moon_lunations,
     "metals": _metals,
-    "ring_letters": _ring_letters,
+    "ring_jewels": _ring_jewels,
     "oscillations": _oscillations,
     "chi": _chi,
 }

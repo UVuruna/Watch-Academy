@@ -24,7 +24,7 @@ def detint(
 ) -> np.ndarray:
     """Divide out the SOURCE metal's own chromaticity, measured from its
     own masked pixels — the step that makes the transform work from ANY
-    metal to any other (gold masters -> bronze/silver for ring letters,
+    metal to any other (gold masters -> bronze/silver for ring jewels,
     bronze masters -> gold/silver for badges) through one code path.
 
     The reference is normalized to unit luminance before dividing, so

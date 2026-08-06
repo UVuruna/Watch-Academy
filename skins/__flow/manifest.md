@@ -23,14 +23,14 @@ SkinDefinition
     radius_fraction: float
   ring: RingSpec
     asset: Path | None                  -- None -> procedural ring
-    fill, text_color, letter_color: str
+    fill, text_color: str
     width_fraction: float
-    letters: dict[hour -> str]
-    letter_art: dict[hour -> Path]      -- always the GOLD master
-    letter_metal: dict[hour -> str]     -- active finish, derived at load
-    letter_zoom: dict[hour -> float]    -- default 1.0
-    letter_no_shadow: dict[hour -> bool] -- default False (Eye shine on -> True)
-    letter_legend: dict[hour -> dict]   -- {name, reading}
+    jewels: dict[hour -> str]
+    jewel_art: dict[hour -> Path]      -- always the GOLD master
+    jewel_metal: dict[hour -> str]     -- active finish, derived at load
+    jewel_zoom: dict[hour -> float]    -- default 1.0
+    jewel_no_shadow: dict[hour -> bool] -- default False (Eye shine on -> True)
+    jewel_legend: dict[hour -> dict]   -- {name, reading}
     crown_text: tuple[dict, ...]        -- outer arc text, per preset
     crown_text_metal: str = "gold"
   weekday_set: WeekdaySpec
@@ -118,7 +118,7 @@ SkinDefinition
   RING
     ring_tint: str | None = None              -- #RRGGBB or None
     ring_finish: str = "gold"                 -- gold | silver | bronze
-    ring_letter_scale: float = 1.0
+    ring_jewels_scale: float = 1.0
     subdial_style: str = "black"              -- theme | black
 
   YEAR LINE
@@ -136,7 +136,7 @@ SkinDefinition
 
 ```mermaid
 flowchart TB
-    A["skin: SkinDefinition"] --> B["collect every asset field: background, ring (+letter_art +crown_text glyphs), moon, hands (hour/minute/second), weekday bodies, year-marker variants"]
+    A["skin: SkinDefinition"] --> B["collect every asset field: background, ring (+jewel_art +crown_text glyphs), moon, hands (hour/minute/second), weekday bodies, year-marker variants"]
     B --> C["drop the None entries"]
     C --> D["resolve each Path through paths.art_file() -- active art source, with fallback"]
     D --> E{"path.exists()?"}
@@ -154,7 +154,7 @@ Pseudocode:
             skin.year_marker.moon_asset,
             skin.hands.hour.asset, skin.hands.minute.asset,
             skin.hands.second.asset IF skin.hands.second ELSE None,
-            *skin.ring.letter_art.values(),
+            *skin.ring.jewel_art.values(),
             *(path for crown_entry in skin.ring.crown_text for path, _ in crown_entry["glyphs"]),
             *skin.weekday_set.bodies.values(),
             *skin.year_marker.variants.values(),

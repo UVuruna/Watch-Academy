@@ -14,14 +14,14 @@ Decisions), opened by the Watch Face Ring section's "Custom ring…" button.
 - **Custom ring** — THE COMPOSITIONAL RING MODEL (owner decree
   2026-08-05): the ring card builder picks an OUTER
   (`constants.RING_OUTERS` — any outer is legal, not just the five
-  presets' locked ones), a library letter per empty field and a unique
+  presets' locked ones), a library jewel per empty field and a unique
   name; the per-position dropdown is GROUPED (owner spec 2026-07-11)
   into Latin (the full A–Z), Greek, Numbers (1–10, 20 — growing) and
   Symbols sections with unselectable headers
-  (`constants.RING_LETTER_GROUPS`) — a NUMBER only fits its own hour
+  (`constants.RING_JEWEL_GROUPS`) — a NUMBER only fits its own hour
   (owner rule 2026-07-12), so the Numbers section offers at most the
   position's own number. A "Thematic color" combo (CUSTOM-THEMATIC
-  widening, owner 2026-07-27) picks what the card's letters wear under the
+  widening, owner 2026-07-27) picks what the card's jewels wear under the
   Thematic ring finish — ANY transformer ramp, the five theme colors and
   every metal — stored on the card as the optional `thematic` field; "Auto"
   leaves it absent (moon indigo fallback). Add validates the card
@@ -40,7 +40,7 @@ Decisions), opened by the Watch Face Ring section's "Custom ring…" button.
 
 ### Uses
 - [Config (folder)](../../../config/___config.md) — `constants.RING_OUTERS`/
-  `RING_LETTER_GROUPS`/`METAL_SHADE_NAMES`/`METAL_SHADE_TITLES`, `defaults`
+  `RING_JEWEL_GROUPS`/`METAL_SHADE_NAMES`/`METAL_SHADE_TITLES`, `defaults`
   (`defaults.paths.assets_dir()` for the bundled-vs-user hand-pack count)
 - [Rings](../../../data/__about/rings.md) — `ring_presets`, `validate_preset`
   (deferred import in `_add_custom_ring`)
@@ -58,9 +58,9 @@ Decisions), opened by the Watch Face Ring section's "Custom ring…" button.
 
 ### _CustomArtSectionMixin
 - `_build_custom_ring_group() -> QGroupBox`: the ring card builder
-- `_rebuild_ring_slots()`: rebuilds the per-position letter combos when the
+- `_rebuild_ring_slots()`: rebuilds the per-position jewel combos when the
   layout changes
-- `_letter_combo(position) -> QComboBox`: one grouped letter-library
+- `_jewel_combo(position) -> QComboBox`: one grouped jewel-library
   dropdown for a ring position
 - `_add_custom_ring()`: validates and appends a new ring card
 - `_build_custom_hands_group() -> QGroupBox`: the hand-pack builder

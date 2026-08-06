@@ -26,7 +26,7 @@ Pseudocode:
             IF should_stop() -> RETURN
             sweep()
 
-1. **Dial art** — the letter recolors the dials are currently standing
+1. **Dial art** — the jewel recolors the dials are currently standing
    in for with their gold masters; each lands with an immediate repaint
    via `on_art_ready` (a queued Qt signal, since this runs off the GUI
    thread).

@@ -5,9 +5,9 @@ disk safely, and WHAT a cache file is named after (see
 Two invariants live here:
 
 1. **Complete or absent** (owner crash 2026-07-31): `ensure_variant`
-   wrote a letter recolor straight to its final cache path while the
+   wrote a jewel recolor straight to its final cache path while the
    GUI thread was painting; the path "existed" the moment the encoder
-   opened it, `letter_metal_file` handed the half-written PNG to
+   opened it, `jewel_metal_file` handed the half-written PNG to
    `pixmap_by_height`, and the resulting `ValueError` escaped
    `paintEvent` with the `QPainter` still active — a cascade of
    `QBackingStore::endPaint` errors and a dead window. `atomic_save`
@@ -32,7 +32,7 @@ import threading
 from pathlib import Path
 
 # The sampled fingerprint window: size + first 64 KiB + last 4 KiB.
-# Small sources (every ring letter) are covered whole; for large photo
+# Small sources (every ring jewel) are covered whole; for large photo
 # art any pixel change ripples the PNG/JPEG compression stream, so the
 # head+tail sample catches real edits without reading gigabytes at
 # startup. Documented limit: a same-size edit that leaves both windows

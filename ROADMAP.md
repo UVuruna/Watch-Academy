@@ -64,7 +64,7 @@ lives in [The DOMY Canon](CANON.md).
   "seconds_cross", The One → "simple_octa",
   `constants.RING_INNER_PRESET_DEFAULT`). The custom crown-text field
   now carries a whitelist `QValidator` (`constants.
-  RING_CROWN_TEXT_CHARSET`, derived from `RING_LETTER_FILES`) so an
+  RING_CROWN_TEXT_CHARSET`, derived from `RING_JEWEL_FILES`) so an
   unsupported keystroke is rejected outright, replacing the old
   silent-drop-at-build behaviour. A new LOCATION crown option
   (`Settings.ring_crown_location`, per ring, presets and custom alike)
@@ -214,7 +214,7 @@ lives in [The DOMY Canon](CANON.md).
   crown_glyph_angles`, even spacing between pins, solved once at load
   by `data.rings.validate_preset`), the draw reuses the ring's own
   letter-art stamp (`render.layers.RingLayer._draw_ring_glyph`, shared
-  with `_draw_letter_art`, Rule #5) at two concentric radii (the two
+  with `_draw_jewels`, Rule #5) at two concentric radii (the two
   crown texts' own O/S pins share an angle by design), and
   `defaults.dial_window_margin_fraction` grows to fit whenever a preset
   carries a `crown_text` (no-op for every other preset). (2) THE OPPOSITION
@@ -250,7 +250,7 @@ lives in [The DOMY Canon](CANON.md).
   (`render/compositor.py`'s `_tick_tooltip`/`_greetings_tooltip`,
   `app/encyclopedia.py`'s `EncyclopediaDialog.__init__`,
   `app/controller.py`'s `_collect_secret`) and the pinned tests
-  (`test_greetings_ride_the_top_ring_letter_only_when_unlocked`,
+  (`test_greetings_ride_the_top_ring_jewel_only_when_unlocked`,
   `test_hidden_mode_binds_the_poem_to_seasons_too`), and found both
   exactly spec-shaped — no gap to close. See owner queue items 1 and
   6 above for the evidence. 515 tests green, unchanged.
@@ -296,7 +296,7 @@ lives in [The DOMY Canon](CANON.md).
    ring position can match; the 24h (Omega) letter answers the
    reveal-week double-click instead (`Compositor.hit_omega`). Pinned
    by `tests/test_pointer.py::
-   test_greetings_ride_the_top_ring_letter_only_when_unlocked` (top
+   test_greetings_ride_the_top_ring_jewel_only_when_unlocked` (top
    open with the full poem text, Omega/bottom silent).
 2. **Omega double-click = reveal week — CLOSED (owner decree
    2026-07-29: superseded/absorbed by later functionality; not open
@@ -669,7 +669,7 @@ lives in [The DOMY Canon](CANON.md).
    shipped, gold/silver/bronze, no missing-art flag needed). The
    preset's own optional `triangle` field (CANON §The Banknote's two
    triangles — Trinity 12/20/4, Union 16/24/8) overrides the seal
-   layout's one-metal reading so `_letter_metal` splits Mason 3+3
+   layout's one-metal reading so `_jewel_metal` splits Mason 3+3
    instead of Omega's six-of-one (`data/rings.py`, `app/controller.py`).
    The per-letter HOVER LEGEND rides a new optional `legend` card field
    (hour -> `{name, reading}`, quoted verbatim from CANON) answered by
@@ -679,7 +679,7 @@ lives in [The DOMY Canon](CANON.md).
    [Compositor](render/__about/compositor.md). ENCYCLOPEDIA lore for the ring
    presets' own symbolism (DOMY traces the INVERTED cross, MORPH the
    upright cross, the seal the hexagram — CANON §The Banknote closes
-   it) grows the EXISTING `instrument/ring_letters` article (Rule #5,
+   it) grows the EXISTING `instrument/ring_jewels` article (Rule #5,
    no new topic) with two `[[Subhead]]` sections — see
    [Encyclopedia](app/encyclopedia/___encyclopedia.md). 4 new tests
    (`tests/test_skins.py`, `tests/test_pointer.py`,
@@ -1148,7 +1148,7 @@ lives in [The DOMY Canon](CANON.md).
   asset. (1) Ring letters — the 76 pre-rendered `<Stem>_silver.png`/
   `<Stem>_bronze.png` files (~15 MB) and their two generators
   (`setup/make_silver_letters.py`, `setup/make_bronze_letters.py`) are
-  gone; `render.assets.letter_metal_file` derives both from the gold
+  gone; `render.assets.jewel_metal_file` derives both from the gold
   master at paint time (silver = grayscale desaturation, bronze = a
   straight multiply with `BRONZE_LETTER_TINT` off the silver result —
   the sealed recipes, reproduced exactly). (2) The Encyclopedia's eight

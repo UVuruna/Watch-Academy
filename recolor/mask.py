@@ -9,7 +9,7 @@ whole recolor for exactly this one difference):
   own body hue, times a saturation ramp that leaves the neutral stone
   alone. (Owner insight 2026-07-12; the window idea survives the rewrite
   untouched, only its color space changed.)
-- `"alpha"` — ring letters and numerals, where every opaque pixel simply
+- `"alpha"` — ring jewels and numerals, where every opaque pixel simply
   IS metal: a glyph mixes no stone, so there is nothing to detect.
 
 WHY OKLAB AND WHY A RATIO: HSV hue is computed from `max-min` over a
