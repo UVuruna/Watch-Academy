@@ -1195,7 +1195,7 @@ RING_LETTER_GROUPS = {
     "Greek": ("Ω", "Π", "Φ", "Ψ", "Σ", "Θ"),
     "Numbers": _RING_NUMBERS,
     "Symbols": (
-        "✠",
+        "✠", "$", "&", ":",
         "👁 ChatGPT", "👁 ChatGPT ☀", "👁 Gemini", "👁 Gemini ☀",
     ),
 }
@@ -1213,6 +1213,14 @@ RING_LETTER_FILES = {
     **{number: f"{number}.png" for number in _RING_NUMBERS},
     # Symbols (the owner is growing this set for custom rings):
     "✠": "templar.png",
+    # THREE NEW PLATES (TASK 3, owner drop 2026-08-06): the dollar
+    # sign, the ampersand and the colon (a literal ":" cannot be a
+    # Windows filename, so its master is `time.png`). Legal in custom
+    # crown text automatically — `RING_CROWN_TEXT_CHARSET` below
+    # derives from this table's own single-character keys.
+    "$": "$.png",
+    "&": "&.png",
+    ":": "time.png",
     # The Eye of Providence (DOLLAR/EYE round, 2026-07-27): the
     # adaptive glyph (the Dollar's own — source and shine resolved by
     # the switches) plus the four explicit custom-builder variants.

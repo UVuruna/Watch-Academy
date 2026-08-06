@@ -1230,6 +1230,32 @@ def test_letter_groups_cover_the_library_exactly():
         assert gold.exists(), glyph
 
 
+def test_three_new_plates_resolve_and_validate_in_crown_text():
+    """TASK 3 (owner drop 2026-08-06): the dollar sign, the ampersand
+    and the colon (':' cannot be a filename, so its master is
+    `time.png`) join the shared letter library in the SYMBOLS group —
+    wiring `RING_LETTER_FILES` alone makes them legal in a custom
+    ring's crown text too, since `data.rings._validate_crown_text`
+    reads that same table (Rule #5, no separate charset to keep in
+    sync) and `constants.RING_CROWN_TEXT_CHARSET` derives from it."""
+    from config import constants
+    from data.rings import validate_preset
+
+    for glyph, filename in (("$", "$.png"), ("&", "&.png"), (":", "time.png")):
+        assert constants.RING_LETTER_FILES[glyph] == filename
+        assert glyph in constants.RING_LETTER_GROUPS["Symbols"]
+        assert glyph in constants.RING_CROWN_TEXT_CHARSET
+        gold = paths.art_file(dial.RING_LETTER_ART_DIR / filename)
+        assert gold.exists(), glyph
+
+    card = validate_preset({
+        "name": "NEWPLATES", "outer": "bot_cross",
+        "letters": ["A", "B", "C", "D"],
+        "crown_text": [{"text": "$ & :", "orientation": "top"}],
+    })
+    assert card["crown_text"][0]["text"] == "$ & :"
+
+
 def test_earth_marker_follows_the_location_continent():
     """Owner bug 2026-07-12 (and its R-28 relapse, 2026-08): the Earth
     marker was pinned to Europe — `earth_region` resolves the ACTIVE
