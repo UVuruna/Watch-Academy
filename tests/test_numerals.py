@@ -224,7 +224,7 @@ def test_parity_roles_and_their_colours():
 
 # --------------------------------------------------------- THE COMPOSITION LAW
 
-def test_a_letter_seat_carries_no_numeral():
+def test_a_jewel_seat_carries_no_numeral():
     """THE FIDELITY RULING's first law (ring_rework §2): the composition
     places EITHER the preset's letter OR a numeral at a position, never
     both. An Ω with a 0 under it is the defect it was issued for."""
@@ -476,7 +476,7 @@ def _glyph_ink(image, angle: float, radius: float, box: int = 26) -> int:
     return count
 
 
-def test_the_bands_seat_list_skips_every_letter_hour(app, frame_args):
+def test_the_bands_seat_list_skips_every_jewel_hour(app, frame_args):
     """THE COMPOSITION LAW where no font can hide it (this one runs on
     any platform): the band builder's own seat list — the exact list it
     turns into paths — carries no letter hour, whatever the preset."""
@@ -488,10 +488,10 @@ def test_the_bands_seat_list_skips_every_letter_hour(app, frame_args):
             cache=AssetCache(), dpr=1.0,
         )
         spec = band_spec(skin, "outer", ctx)
-        assert set(spec.letter_hours) == set(skin.ring.letters), ring
+        assert set(spec.jewel_hours) == set(skin.ring.jewels), ring
         seated = {int(label) for label, _angle, _c in numeral_bands._seats(spec)}
-        assert not seated & set(skin.ring.letters), ring
-        assert seated | set(skin.ring.letters) == set(range(24)), ring
+        assert not seated & set(skin.ring.jewels), ring
+        assert seated | set(skin.ring.jewels) == set(range(24)), ring
 
 
 def test_a_1440_outer_band_carries_a_numeral_at_every_free_hour(app, frame_args):
@@ -503,7 +503,7 @@ def test_a_1440_outer_band_carries_a_numeral_at_every_free_hour(app, frame_args)
     image = _band_image("outer", 1440, app, frame_args)
     assert image.width() == 1440
     radius = 720 * dial.NUMERAL_OUTER_RADIUS_FRACTION
-    letters = set(skin.ring.letters)
+    letters = set(skin.ring.jewels)
     assert letters, "The One seats eight letters — the fixture is wrong"
     for hour in range(24):
         angle = numerals.hour_angle(hour)
@@ -514,13 +514,13 @@ def test_a_1440_outer_band_carries_a_numeral_at_every_free_hour(app, frame_args)
             assert ink > 0, f"hour {hour} is blank"
 
 
-def test_the_omega_seat_carries_no_numeral_under_the_letter(app, frame_args):
+def test_the_omega_seat_carries_no_numeral_under_the_jewel(app, frame_args):
     """The DEFECT THE RULING WAS ISSUED FOR, pinned: DOMY's Ω sits at
     24h, and the band must draw nothing at all there — sampled on the
     real plate, at the seat's own pixels."""
     _require_a_font_database()
     skin = build_skin(Settings(ring="DOMY"))
-    assert skin.ring.letters[0] == "Ω"
+    assert skin.ring.jewels[0] == "Ω"
     image = _band_image("outer", 1440, app, frame_args, ring="DOMY")
     radius = 720 * dial.NUMERAL_OUTER_RADIUS_FRACTION
     assert _glyph_ink(image, numerals.hour_angle(0), radius, box=34) == 0
@@ -715,20 +715,20 @@ def test_an_unknown_stored_numeral_choice_is_corrupt_not_silently_default(tmp_pa
 # letter wears — metal finish + THE LETTER SHADOW LAW's stamped halo —
 # never the outer band's parity plate-and-frame.
 
-def test_colon_resolves_through_the_letter_pipeline(app):
+def test_colon_resolves_through_the_jewel_pipeline(app):
     """The colon draws NO font glyph at all any more — it is HIS plate,
     `time.png`, resolved through the exact door every ring letter
-    resolves its finish through (`render.asset_recolor.letter_metal_
+    resolves its finish through (`render.asset_recolor.jewel_metal_
     file`, the SAME call `RingLayer._draw_ring_glyph` makes for a real
     letter)."""
     calls = []
-    original = numeral_bands.letter_metal_file
+    original = numeral_bands.jewel_metal_file
 
     def spy(path, metal):
         calls.append((path, metal))
         return original(path, metal)
 
-    numeral_bands.letter_metal_file = spy
+    numeral_bands.jewel_metal_file = spy
     try:
         numeral_bands.clear_cache()
         spec = numeral_bands.CrownSpec(
@@ -737,9 +737,9 @@ def test_colon_resolves_through_the_letter_pipeline(app):
         )
         glyphs = numeral_bands.crown_glyph_set(spec)
     finally:
-        numeral_bands.letter_metal_file = original
+        numeral_bands.jewel_metal_file = original
         numeral_bands.clear_cache()
-    assert (dial.RING_LETTER_ART_DIR / "time.png", "silver") in calls
+    assert (dial.RING_JEWEL_ART_DIR / "time.png", "silver") in calls
     assert ":" in glyphs
 
 
@@ -798,9 +798,9 @@ def test_digits_wear_the_crown_metal_body_color_not_band_parity(app):
     numeral_bands.clear_cache()
 
 
-def test_digit_glyph_carries_the_letter_shadow_stamp(app, monkeypatch):
+def test_digit_glyph_carries_the_jewel_shadow_stamp(app, monkeypatch):
     """The stamped halo really is baked into the tile: at
-    `RING_LETTER_SHADOW_RADIUS` 0 every shadow copy lands exactly on the
+    `RING_JEWEL_SHADOW_RADIUS` 0 every shadow copy lands exactly on the
     glyph's own silhouette (no reach beyond it); at the real radius the
     copies are offset outward and the tile carries MORE opaque pixels
     for the identical glyph."""
@@ -819,7 +819,7 @@ def test_digit_glyph_carries_the_letter_shadow_stamp(app, monkeypatch):
     numeral_bands.clear_cache()
     with_shadow = numeral_bands.crown_glyph_set(spec)["5"]
 
-    monkeypatch.setattr(dial, "RING_LETTER_SHADOW_RADIUS", 0.0)
+    monkeypatch.setattr(dial, "RING_JEWEL_SHADOW_RADIUS", 0.0)
     numeral_bands.clear_cache()
     without_shadow = numeral_bands.crown_glyph_set(spec)["5"]
 

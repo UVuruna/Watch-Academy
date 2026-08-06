@@ -53,7 +53,7 @@ has not landed here yet.
   `make_bronze_letters.py`) and the moon phase plate generator
   (`make_moon_phases.py`) are DELETED (Rule #6, no leftovers) — their
   ~22 MB combined output is now computed live and disk-cached
-  (`render.asset_recolor.letter_metal_file`,
+  (`render.asset_recolor.jewel_metal_file`,
   `render.asset_variants.moon_phase_file`) instead of shipped as
   pre-rendered files. This is Rule #19 (Compute, Don't Generate)
   applied retroactively: a recolor/geometry formula replaced a file

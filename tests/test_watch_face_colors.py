@@ -2,7 +2,7 @@
 regressions: both sections build without a placeholder, every setter
 key they call is wired in `WatchController._watch_face_setters`, the
 new `Settings` fields round-trip through `SettingsStore`, and the
-render-level hooks (Umbra tint/alpha, Aura-off color, Hands/Indices
+render-level hooks (Umbra tint/alpha, Aura-off color, Hands/Jewels
 tint) actually alter the composed pixels — never a control that paints
 nothing (root CLAUDE.md's honesty rule)."""
 
@@ -74,7 +74,7 @@ def test_colors_section_builds_a_real_page_not_a_placeholder(app):
     assert "Umbra coloring" in titles
     assert any(title.startswith("Aura coloring") for title in titles)
     assert "Hands color" in titles
-    assert "Indices color" in titles
+    assert "Jewels color" in titles
     assert "Metal shades" in titles
     assert "Saturation" in titles
 
@@ -108,7 +108,7 @@ def test_watch_face_window_no_longer_lists_colors_or_opacity_as_placeholders():
 
 _COLORS_SETTER_KEYS = (
     "ring_tint", "palettes", "umbra_tint_mode", "umbra_tint",
-    "aura_off_tint_mode", "aura_off_tint", "hands_tint", "letter_tint",
+    "aura_off_tint_mode", "aura_off_tint", "hands_tint", "jewels_tint",
     "metal_shade_gold", "metal_shade_bronze", "metal_shade_silver",
     "pointer_saturation", "ring_saturation", "hands_saturation",
     "umbra_saturation",
@@ -142,7 +142,7 @@ def test_new_colors_and_opacity_fields_round_trip():
     settings = Settings(
         umbra_tint_mode="custom", umbra_tint="#FF0000", umbra_saturation=0.3,
         umbra_alpha=0.4, aura_off_tint_mode="black", aura_off_tint="#123456",
-        hands_tint="#00FF00", hands_saturation=0.7, letter_tint="#0000FF",
+        hands_tint="#00FF00", hands_saturation=0.7, jewels_tint="#0000FF",
         moon_transit_alpha=0.9, ghost_alpha=0.2,
     )
     path = Path(tempfile.mktemp(suffix=".json"))
@@ -263,7 +263,7 @@ def test_hands_tint_overrides_the_ring_tint_independently(app, frame_args):
     assert differing > 0
 
 
-def test_letter_tint_adds_an_extra_recolor_over_the_metal_finish(app, frame_args):
+def test_jewels_tint_adds_an_extra_recolor_over_the_metal_finish(app, frame_args):
     """DEFAULT_SKIN carries no ring letter art on its own (a bare
     fallback ring, see `skins.manifest.missing_assets`'s referenced-
     asset list) — the real letter art only exists once a ring PRESET
@@ -271,9 +271,9 @@ def test_letter_tint_adds_an_extra_recolor_over_the_metal_finish(app, frame_args
     does, not the raw skin fixture the other render tests use."""
     day, tick = frame_args
     base = controller_module.build_skin(Settings())
-    tinted = controller_module.build_skin(Settings(letter_tint="#FF00FF"))
+    tinted = controller_module.build_skin(Settings(jewels_tint="#FF00FF"))
     differing = _diff_count(_render(base, day, tick), _render(tinted, day, tick), step=2)
-    assert differing > 0, "letter_tint must repaint the ring letters"
+    assert differing > 0, "jewels_tint must repaint the ring letters"
 
 
 # --- Crown Text controls (owner correction 2026-08-05): the -----------------

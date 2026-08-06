@@ -27,7 +27,7 @@ def _image() -> QImage:
 
 
 def test_atomic_save_publishes_a_complete_decodable_file(tmp_path):
-    target = tmp_path / "cache" / "letter_gold_classic_v6.png"
+    target = tmp_path / "cache" / "jewel_gold_classic_v6.png"
     atomic_save(_image(), target)
 
     assert target.exists()
@@ -118,11 +118,11 @@ def test_collect_garbage_sweeps_orphans_and_keeps_the_living(tmp_path):
     prefix = source_prefix(source)
     stamp = prefix.split("_")[0]
 
-    living = cache / f"{prefix}_letter_gold_classic_v6.png"
+    living = cache / f"{prefix}_jewel_gold_classic_v6.png"
     living.write_bytes(b"keep")
     icon = cache / "calendar_wheel_icon_64.png"
     icon.write_bytes(b"keep")
-    mtime_era = cache / f"{'a' * 16}_1785493132_letter_thematic_cross_red_v6.png"
+    mtime_era = cache / f"{'a' * 16}_1785493132_jewel_thematic_cross_red_v6.png"
     mtime_era.write_bytes(b"corpse-corpse")
     old_content = cache / f"{stamp}_deadbeef0123_w800_face.png"
     old_content.write_bytes(b"corpse")

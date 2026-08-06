@@ -103,7 +103,7 @@ def test_every_outer_by_inner_combination_renders(app, frame_args, outer, inner)
             base.ring,
             outer_asset=dial.RING_OUTER_ART_DIR / constants.RING_OUTERS[outer]["file"],
             inner_asset=dial.RING_INNER_ART_DIR / f"{inner}.png",
-            letters={},
+            jewels={},
         ),
     )
     image = _render(skin, day, tick)
@@ -129,7 +129,7 @@ def test_custom_ring_free_picks_any_outer(app, frame_args):
     """Rule 2: a custom ring may pick ANY outer, including one no
     bundled preset locks to (octa)."""
     day, tick = frame_args
-    custom = ({"name": "OCTARING", "outer": "octa", "letters": ["✠"] * 8},)
+    custom = ({"name": "OCTARING", "outer": "octa", "jewels": ["✠"] * 8},)
     skin = build_skin(
         Settings(ring="OCTARING", custom_rings=custom, ring_inner={"OCTARING": "simple_octa"})
     )
@@ -152,7 +152,7 @@ def test_custom_ring_crown_text_and_orientation_alter_pixels(app, frame_args):
     window, which grows its own margin for a crown-text preset — see
     `test_dial_window_margin_grows_only_for_a_crown_text_preset`)."""
     day, tick = frame_args
-    custom = ({"name": "CROWNED", "outer": "bot_cross", "letters": ["A", "B", "C", "D"]},)
+    custom = ({"name": "CROWNED", "outer": "bot_cross", "jewels": ["A", "B", "C", "D"]},)
     bare = build_skin(Settings(ring="CROWNED", custom_rings=custom))
     with_text = build_skin(Settings(
         ring="CROWNED", custom_rings=custom,
@@ -171,12 +171,12 @@ def test_custom_ring_crown_text_and_orientation_alter_pixels(app, frame_args):
     assert bottom_angles == pytest.approx(180.0)
 
 
-def test_custom_ring_crown_text_rejects_unknown_letters_without_crashing(app, frame_args):
+def test_custom_ring_crown_text_rejects_unknown_jewels_without_crashing(app, frame_args):
     """A crown text using characters outside the letter library is
     dropped for this build rather than crashing the running app — a
     documented, honest gap (see the session's OPEN QUESTIONS)."""
     day, tick = frame_args
-    custom = ({"name": "CROWNED2", "outer": "bot_cross", "letters": ["A", "B", "C", "D"]},)
+    custom = ({"name": "CROWNED2", "outer": "bot_cross", "jewels": ["A", "B", "C", "D"]},)
     skin = build_skin(Settings(
         ring="CROWNED2", custom_rings=custom,
         custom_ring_crown_text={"CROWNED2": "hello!"},  # lowercase + punctuation
@@ -207,7 +207,7 @@ _INNER_ONLY_RADIUS = 0.84
 
 
 _PLAIN_CUSTOM_RING = (
-    {"name": "PLAINFULL", "outer": "full", "letters": ["Ω"]},
+    {"name": "PLAINFULL", "outer": "full", "jewels": ["Ω"]},
 )
 
 
@@ -226,7 +226,7 @@ def _plain_skin(**overrides):
     return dataclasses.replace(
         base, show_pointer=False, show_weekday=False,
         show_earth=False, show_moon=False,
-        ring=dataclasses.replace(base.ring, letters={}, crown_text=()),
+        ring=dataclasses.replace(base.ring, jewels={}, crown_text=()),
         **overrides,
     )
 
@@ -285,8 +285,8 @@ def test_shadow_sample_count_scales_with_pixel_radius():
     a scalloped edge at 1440p because the stamps' PIXEL spacing grows
     with the dial's pixel radius while the sample count stayed
     constant. Below the floor's own gap threshold the count never
-    drops below `RING_LETTER_SHADOW_SAMPLES`; a large pixel radius
-    grows it so adjacent stamps stay under `RING_LETTER_SHADOW_MAX_GAP_PX`
+    drops below `RING_JEWEL_SHADOW_SAMPLES`; a large pixel radius
+    grows it so adjacent stamps stay under `RING_JEWEL_SHADOW_MAX_GAP_PX`
     device pixels apart along the stamp circle.
 
     Moved from `render.layers.ring` to `render.numeral_bands` (Crown
@@ -295,21 +295,21 @@ def test_shadow_sample_count_scales_with_pixel_radius():
     shared home both callers can import without a cycle."""
     from render.numeral_bands import shadow_sample_count
 
-    assert shadow_sample_count(0.0) == dial.RING_LETTER_SHADOW_SAMPLES
+    assert shadow_sample_count(0.0) == dial.RING_JEWEL_SHADOW_SAMPLES
     # A tiny pixel radius needs far fewer than 8 samples to stay under
     # the 1px gap threshold, so the FLOOR (not the formula) wins here.
-    assert shadow_sample_count(0.1) == dial.RING_LETTER_SHADOW_SAMPLES
+    assert shadow_sample_count(0.1) == dial.RING_JEWEL_SHADOW_SAMPLES
 
     # A big 1440p-scale pixel radius: the gap between adjacent stamps
     # at the FLOOR count would be far more than one pixel apart.
     large_radius = 400.0
-    floor_gap = 2.0 * math.pi * large_radius / dial.RING_LETTER_SHADOW_SAMPLES
-    assert floor_gap > dial.RING_LETTER_SHADOW_MAX_GAP_PX
+    floor_gap = 2.0 * math.pi * large_radius / dial.RING_JEWEL_SHADOW_SAMPLES
+    assert floor_gap > dial.RING_JEWEL_SHADOW_MAX_GAP_PX
 
     samples = shadow_sample_count(large_radius)
-    assert samples > dial.RING_LETTER_SHADOW_SAMPLES
+    assert samples > dial.RING_JEWEL_SHADOW_SAMPLES
     actual_gap = 2.0 * math.pi * large_radius / samples
-    assert actual_gap <= dial.RING_LETTER_SHADOW_MAX_GAP_PX
+    assert actual_gap <= dial.RING_JEWEL_SHADOW_MAX_GAP_PX
 
 
 def test_normalized_shadow_alpha_matches_floor_look_and_never_darkens():
@@ -319,9 +319,9 @@ def test_normalized_shadow_alpha_matches_floor_look_and_never_darkens():
     stamps close pixel gaps, they never make the halo darker."""
     from render.numeral_bands import normalized_shadow_alpha
 
-    floor = dial.RING_LETTER_SHADOW_SAMPLES
+    floor = dial.RING_JEWEL_SHADOW_SAMPLES
     assert normalized_shadow_alpha(floor) == pytest.approx(
-        dial.RING_LETTER_SHADOW_ALPHA
+        dial.RING_JEWEL_SHADOW_ALPHA
     )
 
     def composited(samples: int) -> float:
@@ -333,7 +333,7 @@ def test_normalized_shadow_alpha_matches_floor_look_and_never_darkens():
         assert composited(samples) == pytest.approx(target, rel=1e-9)
         # More samples at the SAME composited coverage means a smaller
         # per-stamp alpha, not a bigger one.
-        assert normalized_shadow_alpha(samples) < dial.RING_LETTER_SHADOW_ALPHA
+        assert normalized_shadow_alpha(samples) < dial.RING_JEWEL_SHADOW_ALPHA
 
 
 def test_ring_shadow_halo_has_no_gaps_at_a_large_dial_size(app, frame_args):
@@ -349,7 +349,7 @@ def test_ring_shadow_halo_has_no_gaps_at_a_large_dial_size(app, frame_args):
 
     day, tick = frame_args
     skin = build_skin(Settings(ring="DOMY"))
-    assert 0 in skin.ring.letter_art  # the Omega seat this probe relies on
+    assert 0 in skin.ring.jewel_art  # the Omega seat this probe relies on
     diameter = 1440.0
     image = Compositor(skin, AssetCache()).render_offscreen(diameter, 1.0, day, tick)
 
@@ -359,8 +359,8 @@ def test_ring_shadow_halo_has_no_gaps_at_a_large_dial_size(app, frame_args):
     seat_x = radius * math.sin(math.radians(theta))
     seat_y = -radius * math.cos(math.radians(theta))
 
-    height = diameter * dial.RING_LETTER_ART_SCALE * skin.ring_letter_scale
-    shadow_radius_px = height * dial.RING_LETTER_SHADOW_RADIUS
+    height = diameter * dial.RING_JEWEL_ART_SCALE * skin.ring_jewels_scale
+    shadow_radius_px = height * dial.RING_JEWEL_SHADOW_RADIUS
 
     alphas = []
     for k in range(64):
@@ -374,15 +374,15 @@ def test_ring_shadow_halo_has_no_gaps_at_a_large_dial_size(app, frame_args):
 
 def test_eye_shine_on_draws_no_shadow_shine_off_does(app, frame_args):
     """SHADOW/SHINE round (owner ruling 2026-08-06): with the Dollar's
-    Eye Shine toggle ON, the ring build stamps `letter_no_shadow[12] =
+    Eye Shine toggle ON, the ring build stamps `jewel_no_shadow[12] =
     True` and the rendered glyph carries no cast-shadow halo; with the
     toggle OFF the Eye is an ordinary letter and keeps its shadow like
     every other seat."""
     day, tick = frame_args
     shine_on = build_skin(Settings(ring="Dollar"))
     shine_off = build_skin(Settings(ring="Dollar", ring_eye_shine={"Dollar": False}))
-    assert shine_on.ring.letter_no_shadow == {12: True}
-    assert shine_off.ring.letter_no_shadow == {}
+    assert shine_on.ring.jewel_no_shadow == {12: True}
+    assert shine_off.ring.jewel_no_shadow == {}
 
     # Render path must not raise either way, and must actually differ
     # (the shadow-off render omits a real ring of dark pixels).

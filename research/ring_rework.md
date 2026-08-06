@@ -1,5 +1,10 @@
 # The Ring Rework & the Two World-Modes — Decision Ledger
 
+**JEWELS naming sweep (owner ruling 2026-08-06):** `letter(s)`/`letter art`/
+`Indices` → **JEWELS** everywhere in this document and in the code it
+describes — the art glyph plates worn in metal/thematic finish (Latin/Greek
+letters, number plates, templar cross, the Eye, the colon plate).
+
 Every ruling of the 2026-08-06 rework round, SETTLED with the owner in one
 sitting. This ledger is the implementation session's brief: nothing here is
 open, and nothing here is wired into `config/` yet. It extends — never
@@ -86,7 +91,7 @@ screen and diverged from his art:
    the band; the style is fixed by the owner's art.
 
 **The pixelation defect (1440p):** today's letter shadow is stamped as 8
-discrete silhouette copies around a circle (`RING_LETTER_SHADOW_SAMPLES`,
+discrete silhouette copies around a circle (`RING_JEWEL_SHADOW_SAMPLES`,
 `config/dial.py`) — at dial sizes the copies fuse, at 1440p they separate
 into scalloped edges. The new engine draws relief and glow procedurally at
 device resolution (true gaussian, step count derived from the pixel radius);

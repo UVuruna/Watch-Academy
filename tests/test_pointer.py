@@ -1392,7 +1392,7 @@ def test_earth_hover_card_era_flips_to_darkness_past_6423(july_wednesday):
     assert ">Age of Light<" not in earth
 
 
-def test_greetings_ride_the_top_ring_letter_only_when_unlocked(july_wednesday):
+def test_greetings_ride_the_top_ring_jewel_only_when_unlocked(july_wednesday):
     """The hidden mode (owner 2026-07-14, placement round two; TOP-ONLY
     round 2026-07-16): unlocked, hovering the 12h ring LETTER — the band
     OUTSIDE the tick scale — opens the Four Greetings (verses + reading
@@ -1408,7 +1408,7 @@ def test_greetings_ride_the_top_ring_letter_only_when_unlocked(july_wednesday):
     compositor.render_offscreen(360.0, 1.0, day, tick)
     letters = (
         dial.TICK_HOVER_OUTER_FRACTION
-        + encyclopedia_ui.GREETINGS_LETTER_OUTER_FRACTION
+        + encyclopedia_ui.GREETINGS_JEWEL_OUTER_FRACTION
     ) / 2
     top = QPointF(0.0, -180.0 * letters)
     bottom = QPointF(0.0, 180.0 * letters)
@@ -1427,7 +1427,7 @@ def test_greetings_ride_the_top_ring_letter_only_when_unlocked(july_wednesday):
     assert "zora povratka" not in poem
 
 
-def test_mason_ring_letters_answer_their_own_hover_legend(july_wednesday):
+def test_mason_ring_jewels_answer_their_own_hover_legend(july_wednesday):
     """The per-letter HOVER LEGEND (ROADMAP 15b, "malo legende oko tih
     naših odabira"): every Dollar ring letter answers what it stands
     for, quoted from CANON.md's Banknote table — independent of the
@@ -1446,7 +1446,7 @@ def test_mason_ring_letters_answer_their_own_hover_legend(july_wednesday):
     compositor.render_offscreen(360.0, 1.0, day, tick)
     letters = (
         dial.TICK_HOVER_OUTER_FRACTION
-        + encyclopedia_ui.GREETINGS_LETTER_OUTER_FRACTION
+        + encyclopedia_ui.GREETINGS_JEWEL_OUTER_FRACTION
     ) / 2
     radius = 180.0
 
@@ -1620,7 +1620,7 @@ def test_omega_double_click_reveals_the_week(july_wednesday):
     # annular wedge MISSED it — it sat just inside the ring band).
     # hit_omega takes WIDGET-LOCAL coordinates (the dial center sits at
     # (radius, radius), same convention as set_hover/tooltip_at).
-    letter = dial.RING_LETTER_RADIUS_FRACTION
+    letter = dial.RING_JEWEL_RADIUS_FRACTION
     x, y = 180.0, 180.0 + 180.0 * letter        # bottom = 24h/Omega center
     assert compositor.hit_omega(x, y, 360.0)
     assert not compositor.hit_omega(180.0, 180.0 - 180.0 * letter, 360.0)  # top: not Omega
@@ -1643,7 +1643,7 @@ def test_omega_double_click_reveals_the_week(july_wednesday):
     assert not compositor.reveal_active(now=1200.0 + defaults.REVEAL_WEEK_DURATION_S)
 
 
-def test_omega_hit_is_the_full_letter_circle(july_wednesday):
+def test_omega_hit_is_the_full_jewel_circle(july_wednesday):
     """Owner slika 9 (2026-07-17): the Omega double-click hit is the FULL
     ROUND AREA at the 24h seat — a circle on the letter cell. The letter
     CENTER and points in the GAP between its strokes all land now; the OLD
@@ -1653,19 +1653,19 @@ def test_omega_hit_is_the_full_letter_circle(july_wednesday):
     comp = Compositor(defaults.DEFAULT_SKIN, AssetCache())
     comp.render_offscreen(360.0, 1.0, day, tick)
     radius = 180.0
-    letter_r = radius * dial.RING_LETTER_RADIUS_FRACTION
+    jewel_r = radius * dial.RING_JEWEL_RADIUS_FRACTION
     # The letter centre lands — and it sits BELOW the old annulus's inner
     # bound (the exact spot the owner's screenshot kept missing).
-    assert comp.hit_omega(180.0, 180.0 + letter_r, 360.0)
-    assert dial.RING_LETTER_RADIUS_FRACTION < dial.TICK_HOVER_OUTER_FRACTION
+    assert comp.hit_omega(180.0, 180.0 + jewel_r, 360.0)
+    assert dial.RING_JEWEL_RADIUS_FRACTION < dial.TICK_HOVER_OUTER_FRACTION
     # A point ABOVE the centre (the gap between the strokes) lands too.
     inset = radius * dial.OMEGA_HIT_RADIUS_FRACTION * 0.5
-    assert comp.hit_omega(180.0, 180.0 + letter_r - inset, 360.0)
+    assert comp.hit_omega(180.0, 180.0 + jewel_r - inset, 360.0)
     # Well outside the circle — radially and laterally — does not.
-    assert not comp.hit_omega(180.0, 180.0 + letter_r + radius * 0.3, 360.0)
-    assert not comp.hit_omega(180.0 + radius * 0.3, 180.0 + letter_r, 360.0)
+    assert not comp.hit_omega(180.0, 180.0 + jewel_r + radius * 0.3, 360.0)
+    assert not comp.hit_omega(180.0 + radius * 0.3, 180.0 + jewel_r, 360.0)
     # The TOP (12h) letter is never the Omega.
-    assert not comp.hit_omega(180.0, 180.0 - letter_r, 360.0)
+    assert not comp.hit_omega(180.0, 180.0 - jewel_r, 360.0)
 
 
 def test_reveal_week_raises_ghost_opacity_and_lifts_the_center_body(
@@ -2247,7 +2247,7 @@ def test_window_margin_is_tight_and_never_clips():
     for earth_scale, hover, letters in ((1.0, 1.2, 1.0), (2.0, 2.0, 2.0)):
         settings = dc.replace(
             Settings(), earth_scale=earth_scale, moon_scale=earth_scale,
-            hover_enlarge=hover, ring_letter_scale=letters,
+            hover_enlarge=hover, ring_jewels_scale=letters,
         )
         skin = apply_display_settings(defaults.DEFAULT_SKIN, settings)
         margin = defaults.dial_window_margin_fraction(skin)
@@ -2258,12 +2258,12 @@ def test_window_margin_is_tight_and_never_clips():
             dial.GLOW_RING_RADIUS_FRACTION
             + marker * glow.GLOW_RADIUS_SCALE * skin.hover_enlarge
         )
-        letter_reach = (
-            dial.RING_LETTER_RADIUS_FRACTION
-            + dial.RING_LETTER_ART_SCALE * skin.ring_letter_scale
-            * (1.0 + 2.0 * dial.RING_LETTER_SHADOW_RADIUS)
+        jewel_reach = (
+            dial.RING_JEWEL_RADIUS_FRACTION
+            + dial.RING_JEWEL_ART_SCALE * skin.ring_jewels_scale
+            * (1.0 + 2.0 * dial.RING_JEWEL_SHADOW_RADIUS)
         )
-        reach = max(glow_reach, letter_reach)
+        reach = max(glow_reach, jewel_reach)
         # Lower bound — never clips the drawn extent.
         assert window_half >= reach
         # Upper bound — the ONLY slack is 2·epsilon (tight, no waste).
@@ -2642,7 +2642,7 @@ def test_window_margin_is_live_from_the_settings(app):
     max_skin = build_skin(
         replace(
             Settings(), earth_scale=2.0, moon_scale=2.0,
-            hover_enlarge=2.0, ring_letter_scale=2.0,
+            hover_enlarge=2.0, ring_jewels_scale=2.0,
         )
     )
     assert defaults.dial_window_margin_fraction(max_skin) > 0.1465

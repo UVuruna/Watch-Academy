@@ -3,7 +3,7 @@
 Measured before the fix, on a cold raster cache: the owner's three
 watches took **14.78 s** to put a dial on screen (4.20 + 4.79 + 5.67),
 every second of it inside `paintEvent`. cProfile attributed it entirely
-to 15 metal recolors per watch through `letter_metal_file` — 3.45 s of
+to 15 metal recolors per watch through `jewel_metal_file` — 3.45 s of
 numpy (oklab, guided box filter, specular ramp) plus 0.48 s of PNG
 encoding, run synchronously on the GUI thread. On top of that, EVERY
 watch started its OWN warm thread, so the same 795 working-set files,
@@ -151,11 +151,11 @@ def test_the_drain_builds_a_whole_batch_and_leaves_nothing(app, cold_cache):
     """The pooled drain (0.14.704) keeps the serial contract: every
     recorded recipe built exactly once, the ledger left empty, one
     on_ready per landed finish."""
-    letters_dir = paths.assets_dir() / "instrument" / "ring" / "letters"
-    letters = [letters_dir / name for name in ("A.png", "B.png", "C.png", "D.png")]
+    jewels_dir = paths.assets_dir() / "instrument" / "ring" / "letters"
+    letters = [jewels_dir / name for name in ("A.png", "B.png", "C.png", "D.png")]
     for letter in letters:
         assert letter.exists()
-        asset_recolor.letter_metal_file(letter, "silver")
+        asset_recolor.jewel_metal_file(letter, "silver")
 
     landed = []
     built = warm_pending_art(on_ready=lambda: landed.append(True))
@@ -164,7 +164,7 @@ def test_the_drain_builds_a_whole_batch_and_leaves_nothing(app, cold_cache):
     assert len(landed) == len(letters)
     assert pending_art() == []
     for letter in letters:
-        assert asset_recolor.letter_metal_path(letter, "silver").exists()
+        assert asset_recolor.jewel_metal_path(letter, "silver").exists()
 
 
 def test_a_finish_switch_after_the_warm_drains_again(app, cold_cache):
@@ -194,7 +194,7 @@ def test_a_finish_switch_after_the_warm_drains_again(app, cold_cache):
 
         # The paint under the NEW finish: records the recipe, observes
         # the miss, stands the gold master in — and rings the notifier.
-        stand_in = asset_recolor.letter_metal_file(letter, "silver")
+        stand_in = asset_recolor.jewel_metal_file(letter, "silver")
         assert stand_in == art_file(letter), "the miss must stand the master in"
 
         assert manager._art_thread is not None, (
@@ -203,9 +203,9 @@ def test_a_finish_switch_after_the_warm_drains_again(app, cold_cache):
         manager._art_thread.join(timeout=120)
         assert not manager._art_thread.is_alive(), "the drain hung"
         assert pending_art() == [], "the kicked drain left work behind"
-        derived = asset_recolor.letter_metal_path(letter, "silver")
+        derived = asset_recolor.jewel_metal_path(letter, "silver")
         assert derived.exists(), "the switched finish was never built"
-        assert asset_recolor.letter_metal_file(letter, "silver") == derived
+        assert asset_recolor.jewel_metal_file(letter, "silver") == derived
     finally:
         asset_recolor.set_art_stale_notifier(None)
 

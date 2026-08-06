@@ -65,7 +65,7 @@ def test_occurrence_index_raises_when_not_enough_occurrences():
 # --- The two Great Seal crown texts, exactly as Database/ring_presets.json ships them ---
 
 
-def test_annuit_coeptis_pinned_letters_land_on_their_seats():
+def test_annuit_coeptis_pinned_jewels_land_on_their_seats():
     """ANNUIT WORD-GAP round (owner correction 2026-07-19, third batch):
     the TOP arc — A pinned at 8h, S at 16h, reading CLOCKWISE over the
     top through noon — but the 13 character-steps no longer spread
@@ -102,7 +102,7 @@ def test_annuit_coeptis_pinned_letters_land_on_their_seats():
     assert all(angle % 360.0 != pytest.approx(0.0) for angle in angles)
 
 
-def test_novus_ordo_seclorum_pinned_letters_land_on_their_seats():
+def test_novus_ordo_seclorum_pinned_jewels_land_on_their_seats():
     """MOTO-FIX round (owner correction 2026-07-19): the BOTTOM arc — N
     pinned at 4h, ORDO's own final O (the 3rd "O" overall) pinned at
     the bottom (24h), M at 20h — reading COUNTERCLOCKWISE

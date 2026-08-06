@@ -305,7 +305,7 @@ def test_earth_and_moon_take_the_top_at_night(app):
         assert earth_night._element_at(spot, RADIUS, 0.0, "sun") == expected
 
 
-def test_a_ring_letter_hit_zone_follows_its_rotated_seat(app):
+def test_a_ring_jewel_hit_zone_follows_its_rotated_seat(app):
     """The Omega seat is a ring LETTER at 180 deg. In Heliocentric night
     it stands at the TOP instead — and its hit zone goes with it, or the
     reveal-week double-click would fire on empty ring."""
@@ -316,7 +316,7 @@ def test_a_ring_letter_hit_zone_follows_its_rotated_seat(app):
         "heliocentric", day, tick, solar_rotation=False,
     )
     from render.painting import dial_point
-    seat = RADIUS * dial.RING_LETTER_RADIUS_FRACTION
+    seat = RADIUS * dial.RING_JEWEL_RADIUS_FRACTION
     top = dial_point(0.0, seat)
     bottom = dial_point(180.0, seat)
     assert night.hit_omega(RADIUS + top.x(), RADIUS + top.y(), SIZE)

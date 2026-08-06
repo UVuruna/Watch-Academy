@@ -94,7 +94,7 @@ def test_location_crown_renders_the_active_location_on_a_bundled_preset():
 def test_location_crown_renders_on_a_custom_ring_too():
     """Rule 3: available for CUSTOM rings too — replacing the ring's own
     typed crown text (or drawing one where none was typed at all)."""
-    custom = ({"name": "CROWNLOC", "outer": "bot_cross", "letters": ["A", "B", "C", "D"]},)
+    custom = ({"name": "CROWNLOC", "outer": "bot_cross", "jewels": ["A", "B", "C", "D"]},)
     located = build_skin(
         replace(
             Settings(), ring="CROWNLOC", custom_rings=custom,

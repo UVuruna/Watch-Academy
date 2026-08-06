@@ -76,7 +76,7 @@ def test_ceramic_ramp_reads_visibly_distinct_from_silver():
     from render.assets import AssetCache
 
     QApplication.instance() or QApplication([])
-    letter = dial.RING_LETTER_ART_DIR / constants.RING_LETTER_FILES["X"]
+    letter = dial.RING_JEWEL_ART_DIR / constants.RING_JEWEL_FILES["X"]
     cache = AssetCache()
     with paths.display(paths.display_context(
         metal_shades={"thematic": "ceramic"}
@@ -101,7 +101,7 @@ def test_chi_preset_validates_and_locks_its_outer():
     chi = presets["CHI"]
     assert chi["outer"] == "full"
     assert chi["positions"] == (24,)
-    assert chi["letters"] == ("X",)
+    assert chi["jewels"] == ("X",)
     assert chi["thematic"] == "ceramic"
     assert chi["about"]
     assert constants.RING_OUTER_LOCK["CHI"] == "full"
@@ -116,7 +116,7 @@ def test_chi_crown_text_chars_all_drawable():
     assert texts == ["IXΘYΣ", "IN HOC SIGNO VINCES"]
     for text in texts:
         for char in text:
-            assert char == " " or char in constants.RING_LETTER_FILES
+            assert char == " " or char in constants.RING_JEWEL_FILES
 
 
 def test_chi_crown_text_carries_its_own_reading():
@@ -131,7 +131,7 @@ def test_chi_builds_a_skin_with_no_missing_assets():
     from skins.manifest import missing_assets
 
     skin = build_skin(replace(Settings(), ring="CHI"))
-    assert skin.ring.letter_art
+    assert skin.ring.jewel_art
     assert missing_assets(skin) == []
 
 

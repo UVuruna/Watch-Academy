@@ -886,11 +886,11 @@ def test_encyclopedia_expansion_wiring():
     dialog.deleteLater()
 
 
-def test_ring_letters_article_carries_the_mason_lore():
+def test_ring_jewels_article_carries_the_mason_lore():
     """ROADMAP 15b (owner: "malo legende oko tih naših odabira"): the
     ring presets' OWN symbolism — DOMY traces the inverted cross, MORPH
     the upright cross, the seal (MASON G / NUMBERS) the hexagram — is
-    added to the EXISTING `instrument/ring_letters` article (Rule #5,
+    added to the EXISTING `instrument/ring_jewels` article (Rule #5,
     no duplicate topic), and the MASON G banknote reading (CANON.md
     §The Banknote) closes it. The instrument topic still resolves and
     keeps its entry count."""
@@ -905,7 +905,7 @@ def test_ring_letters_article_carries_the_mason_lore():
     # (CHI's own article) to this SAME topic — still no new topic KEY.
     assert len(topics["instrument"]["entries"]) == 9
 
-    article = EncyclopediaRepository().instrument("ring_letters")["base"]
+    article = EncyclopediaRepository().instrument("ring_jewels")["base"]
     assert "inverted cross" in article
     assert "UPRIGHT cross" in article
     assert "hexagram" in article and "SEAL" in article
@@ -916,7 +916,7 @@ def test_ring_letters_article_carries_the_mason_lore():
 
     dialog = EncyclopediaDialog()
     dialog.show_topic("instrument")
-    text = dialog._reader._article_text(("instrument", "ring_letters"))
+    text = dialog._reader._article_text(("instrument", "ring_jewels"))
     assert "inverted cross" in text and "hexagram" in text.lower()
     dialog.deleteLater()
 
