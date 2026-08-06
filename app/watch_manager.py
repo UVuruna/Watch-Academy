@@ -71,6 +71,13 @@ class AppController:
         self._art_lock = threading.Lock()
         self._art_thread: threading.Thread | None = None
         self._art_rerun = False
+        # The on-demand HOVER queue (owner bug 2026-08-06), same shape:
+        # one worker, a pending list instead of a rerun flag, because a
+        # sweep belongs to ONE watch and two different watches both
+        # needing one must both be served — in turn, never at once.
+        self._hover_lock = threading.Lock()
+        self._hover_thread: threading.Thread | None = None
+        self._hover_pending: list = []
         #: The live warm/drain progress line every watch's menu shows
         #: while background work runs (0.14.710); None = idle, row
         #: hidden. Written by the warm/drain threads, read on the GUI
@@ -107,6 +114,9 @@ class AppController:
         # The menu's warm-status row reads the manager's live progress
         # line the same deferred way (0.14.710).
         watch._warm_status_provider = lambda: self._warm_status
+        # Hover sweeps come HERE instead of each watch spawning its own
+        # Python thread (owner bug 2026-08-06).
+        watch._on_hover_warm = self.request_hover_warm
         return watch
 
     def _next_index(self) -> int:
@@ -166,6 +176,12 @@ class AppController:
         paths.settings_path(watch.watch_index).unlink(missing_ok=True)
         self._watches.remove(watch)
         self._armed.discard(watch)
+        with self._hover_lock:
+            # A queued sweep for a watch that no longer exists would
+            # build articles for a dead dial (`_drain_hover` skips it
+            # anyway — this just keeps the reference from surviving).
+            if watch in self._hover_pending:
+                self._hover_pending.remove(watch)
         self._refresh_all_titles()
 
     # --- lifecycle --------------------------------------------------------------
@@ -292,6 +308,46 @@ class AppController:
                     self._art_rerun = False
         finally:
             self._warm_status = None
+
+    # --- the on-demand hover queue -------------------------------------------
+
+    def request_hover_warm(self, watch) -> None:
+        """A watch's day changed (or its skin was reinstalled) and it
+        wants its hover articles rebuilt. Owner bug 2026-08-06, measured
+        in his own profiling.json: one sweep walks 7,201 probes of pure
+        Python and has been clocked at 58.2 s, and every watch used to
+        start its own thread for it — five of them at once, all fighting
+        for the GIL against five GUI threads, is the two-minute freeze he
+        saw after a Windows time SYNC.
+
+        `run_warm` already serializes the STARTUP sweeps for exactly this
+        reason ("N concurrent Python sweeps would do the opposite"); this
+        is the same rule for the sweeps that arrive later. One worker, a
+        queue, at most one sweep running anywhere in the process."""
+        if self._quitting:
+            return
+        with self._hover_lock:
+            if watch not in self._hover_pending:
+                self._hover_pending.append(watch)
+            if self._hover_thread is not None and self._hover_thread.is_alive():
+                return
+            self._hover_thread = threading.Thread(
+                target=self._drain_hover, daemon=True, name="DOMY hover warm",
+            )
+            self._hover_thread.start()
+
+    def _drain_hover(self) -> None:
+        """Serve the queue one watch at a time. A watch removed while it
+        waited is skipped — its sweep would build articles for a dial
+        that no longer exists."""
+        while True:
+            with self._hover_lock:
+                if not self._hover_pending or self._quitting:
+                    return
+                watch = self._hover_pending.pop(0)
+            if watch not in self._watches:
+                continue
+            watch.hover_sweep()()
 
     def _emit_art_ready(self) -> None:
         """A recolor landed: every live watch repaints (the art is

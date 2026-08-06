@@ -86,9 +86,10 @@ for the procedure):
   them; applies their results
 - [Core (folder)](../../core/___core.md) — `build_day_context`,
   `build_tick_state`, `core.deep_time.*`
-- [Data (folder)](../../data/___data.md) — `DeepTimeRepository`,
-  `MoonPhaseRepository`, `SeasonsRepository`, `SymbolismRepository`,
-  `TranslationStore`
+- [Data (folder)](../../data/___data.md) — the PROCESS-WIDE accessors
+  `shared_deep_time`, `shared_moon_phases`, `shared_seasons`,
+  `shared_symbolism`, `shared_encyclopedia` (never the repository
+  classes directly — see THE ONE COPY RULE below); `TranslationStore`
 - [Compositor](../../render/__about/compositor.md), [Assets](../../render/__about/assets.md) — rendering
 - [Skins Manifest](../../skins/__about/manifest.md) — `missing_assets`
 - [Config (folder)](../../config/___config.md) — defaults, paths, shortcuts
@@ -126,7 +127,30 @@ still constructs and behaves as before that round.
 - `_on_tick(clock_jumped)`: rebuilds the day context on a cache-key
   change or a reported clock jump; unreadable/out-of-coverage
   astronomical data dies VISIBLY (a dialog, then exit) — never a
-  silently wrong dial
+  silently wrong dial. **A clock jump is NOT a new day** (owner bug
+  2026-08-06): both rebuild the context, but only a changed `cache_key`
+  starts the hover-article sweep — an NTP correction of a few seconds
+  speaks no new text, and the sweep is the most expensive work the app
+  owns (7,201 probes, measured at 58.2 s)
+- `_on_wake()` / `_refresh_after_jump()`: the WM_TIMECHANGE /
+  resume-from-sleep path. `_on_wake` runs inside the native event filter
+  and does the cheapest possible thing — it re-aims `_wake_timer`, a
+  restartable single-shot. Windows BROADCASTS the message to every
+  top-level window and Qt runs it through EVERY installed filter, so
+  with N watches one SYNC used to fire N^2 refreshes; the coalescer
+  collapses the burst into one. `_teardown_windows` uninstalls the
+  filter — it is installed on the APPLICATION and outlived its watch
+  (640 zombie tracebacks in the owner's crash.log, 2026-08-06)
+- `_symbolism()` / `_encyclopedia_repository()`: THE ONE COPY RULE. Both
+  return the PROCESS-WIDE repository for the active language, never a
+  fresh one. `_install_skin` calls them, so a private instance meant a
+  1.12 MB + 439 KB reparse on every settings change, on every watch. A
+  landed retranslation calls `reset_shared_symbolism()` /
+  `reset_shared_encyclopedia()`
+- `_start_hover_warm()`: hands the sweep to [Watch
+  Manager](watch_manager.md)'s queue when one is attached, so at most
+  ONE sweep runs in the process; a stand-alone watch (tests) still uses
+  its own thread
 - `_build_menu()`: the shared tray/right-click `_StayOpenMenu` — TITLE
   row, Add/Remove Watch, Show (tray-only), Watch Face… (the ONE flat
   entry that replaced the R5 Design…/Pointer Theme…/Slot Theme… mini

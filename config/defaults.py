@@ -70,6 +70,12 @@ DEFAULT_CITY = {
 # --- Tick scheduling -----------------------------------------------------------
 TICK_EPSILON_MS = 50                 # fire just past the minute/second boundary
 CLOCK_JUMP_THRESHOLD_S = 5           # actual vs expected tick time -> full refresh
+# Windows broadcasts WM_TIMECHANGE to every top-level window and Qt runs
+# each message through every installed native filter, so one SYNC used to
+# fire N^2 refreshes (owner bug 2026-08-06). A restartable single-shot
+# this long swallows the whole burst; the delay is invisible next to the
+# clock correction that caused it.
+WAKE_COALESCE_MS = 400
 
 # True click-through: the window takes NO mouse input (recovery via the
 # tray only). Hover info survives through a cursor poller that shows the

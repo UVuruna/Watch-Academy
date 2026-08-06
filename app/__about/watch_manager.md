@@ -81,6 +81,15 @@ later in the session.
   line goes to the console AND to the live `_warm_status` string each
   watch's menu status row reads at menu-open (0.14.710, the owner's
   "INFO LOADING" ask); None = idle, row hidden
+- `request_hover_warm(watch)` / `_drain_hover()`: THE HOVER QUEUE
+  (owner bug 2026-08-06). A day change or skin install asks for a
+  hover-article sweep; one worker serves the queue one watch at a time.
+  Every watch used to start its own thread for it, and a sweep is
+  7,201 pure-Python probes clocked at 58.2 s — five of them at once,
+  against five GUI threads, is what froze the owner's dials for two
+  minutes after a Windows time SYNC. `run_warm` already serialized the
+  STARTUP sweeps for exactly this reason; this is the same rule for the
+  sweeps that arrive later. A watch removed while queued is skipped
 - `quit_all()`: the Exit action on ANY watch closes the WHOLE process —
   every watch's own `_prepare_quit()` runs before the one shared
   `app.quit()`
@@ -91,6 +100,18 @@ later in the session.
   lightweight self-rescheduling `QTimer` — a handful of them costs
   nothing measurable on Windows, while a shared one would force every
   watch to repaint at the fastest cadence any sibling needs.
+- **THE ONE COPY RULE, extended 2026-08-06.** The 2026-07-28 ruling
+  ("*čovjek dakle samo 1 treba da se učitava u ram*") gave the process
+  one `AssetCache` and one warm thread; it did NOT reach the parsed
+  TEXT and the bundled databases, which stayed per-watch. They are now
+  process-wide too, through accessors beside their own classes:
+  `shared_symbolism` / `shared_encyclopedia` (one per LANGUAGE — the
+  only key that legitimately makes the text differ),
+  `shared_seasons` / `shared_moon_phases` / `shared_deep_time` (calendar
+  data, identical whatever the observer), `shared_observatory`, and the
+  memoized bundled halves of `ring_presets()` / `hand_packs()`. What
+  stays per-watch is exactly what the owner named: the observer and the
+  visual picks.
 - **`art_source`/`subdial_set` stay per-process globals** — a documented
   limit, not solved by this round. With several watches, whichever watch
   last touched Settings/Design wins those two globals for every other

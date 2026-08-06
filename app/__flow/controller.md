@@ -7,15 +7,24 @@
 ```mermaid
 %%{init: {'flowchart': {'subGraphTitleMargin': {'top': 0, 'bottom': 35}}}}%%
 flowchart TB
+    W["WM_TIMECHANGE / resume from sleep
+    (BROADCAST to every top-level window,
+    run through EVERY installed filter)"] --> WC["_on_wake:
+    re-aim _wake_timer (restartable single-shot)"]
+    WC --> WR["_refresh_after_jump — ONE per burst"]
+    WR --> B
     A[MinuteScheduler fires] --> B["_on_tick(clock_jumped)"]
     B --> C["now = wall clock in the active timezone
     (or the frozen simulation moment, while one runs)"]
-    C --> D{"(local date, UTC offset) changed,
-    OR clock_jumped, OR no day context yet?"}
-    D -- yes --> E["self._day = build_day_context(...)
-    (repositories: seasons, moon, deep time)"]
-    D -- no --> F[keep self._day]
-    E --> F
+    C --> D{"day_changed = (local date, UTC offset) changed
+    or no day context yet"}
+    D -- "day_changed OR clock_jumped" --> E["self._day = build_day_context(...)
+    (repositories: seasons, moon, deep time — all PROCESS-WIDE)"]
+    D -- neither --> F[keep self._day]
+    E --> S{"day_changed?"}
+    S -- yes --> HW["_start_hover_warm -> the manager's ONE queue"]
+    S -- "no (a bare clock correction)" --> F
+    HW --> F
     F --> G["tick = build_tick_state(self._day, now, ...)"]
     G --> H["widget.set_tick(tick) -> repaint"]
 ```
@@ -23,6 +32,14 @@ flowchart TB
 Unreadable or out-of-coverage astronomical data raises OUT of
 `build_day_context` — the controller shows a visible dialog and exits
 rather than let the dial silently render something wrong.
+
+**The two seams marked above are the 2026-08-06 fix.** A clock jump
+rebuilds the day CONTEXT (it may have crossed midnight, a zone or a
+travel target) but never starts the hover sweep — an NTP correction of a
+few seconds speaks no new article, and the sweep is 7,201 pure-Python
+probes measured at 58.2 s. And because Windows broadcasts the message to
+every window while Qt runs it through every installed filter, N watches
+saw one SYNC as N² wakes until the coalescer collapsed the burst.
 
 ## Layout — the right-click / tray menu (`_build_menu`)
 

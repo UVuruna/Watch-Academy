@@ -48,6 +48,25 @@ project-specific laws and deltas that TIGHTEN the root rules.
   **The full suite takes ~18 minutes** — run a targeted subset while working
   and the full suite before committing. `python -m core --city NAME --at ISO`
   eyeballs any moment; the GUI drive recipe is `.claude/skills/verify/SKILL.md`.
+- **THE ONE COPY RULE (owner 2026-07-28, extended 2026-08-06):** the
+  only things that may differ between two watches are the OBSERVER
+  (location/timezone) and the VISUAL picks. Every bundled book and
+  database is loaded ONCE per process — `render.assets.shared_cache`,
+  `data.symbolism.shared_symbolism` / `data.encyclopedia.
+  shared_encyclopedia` (one per LANGUAGE), `shared_seasons`,
+  `shared_moon_phases`, `shared_deep_time`, `shared_observatory`, and
+  the memoized bundled halves of `ring_presets()` / `hand_packs()`.
+  Never construct those repository classes directly in app code.
+- **Clock jumps (owner bug 2026-08-06, root cause recorded):** a
+  WM_TIMECHANGE is BROADCAST to every top-level window and Qt runs it
+  through EVERY installed native filter, so N watches saw one SYNC as
+  N² wakes; the filter is app-scoped and must be uninstalled in
+  `_teardown_windows`. **A clock jump is not a new day** — it rebuilds
+  the day context but must never start the hover sweep. The dev machine
+  now syncs hourly (`w32time` Automatic, `SpecialPollInterval` 3600),
+  so a jump big enough to cross `CLOCK_JUMP_THRESHOLD_S` is rare here —
+  do not let that hide a regression; `tests/test_sync_freeze.py` is the
+  tooth.
 - **Win+D ground truth (verified):** the OS raises the desktop layer above
   ALL windows (TOPMOST included), no Qt events arrive — do not chase this
   as a bug; WorkerW glue is the only workaround (optional, M4).

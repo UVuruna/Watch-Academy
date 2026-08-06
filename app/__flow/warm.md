@@ -39,3 +39,20 @@ Pseudocode:
 `should_stop` is polled between phases, never mid-phase — a daemon
 thread dies with the process regardless, so the check only avoids
 leaving a half-written cache file on the way out.
+
+## The sweeps that arrive LATER
+
+Phase 4 covers the STARTUP roster. A day change or a skin install asks
+for a sweep long after this thread is gone, and those requests obey the
+same rule through [Watch Manager](../__about/watch_manager.md)'s queue —
+`request_hover_warm(watch)` appends, one `_drain_hover` worker serves:
+
+    watch A day changes ─┐
+    watch B day changes ─┼─> _hover_pending ─> ONE worker ─> sweep, sweep, …
+    watch C day changes ─┘
+
+Every watch used to start its own thread here instead. Five of them at
+once, each 7,201 pure-Python probes, against five GUI threads, is what
+froze the owner's dials for two minutes after a Windows time SYNC on
+2026-08-06 — the very failure phase 4's ordering already existed to
+prevent.

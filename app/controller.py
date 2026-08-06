@@ -75,12 +75,17 @@ from core.deep_time import (
 )
 from core.motto import free_arc_angles
 from core.moon import chinese_name_of_year
-from data.deep_time import DeepTimeRepository
+from data.deep_time import shared_deep_time
 from data.hands import HAND_NAMES, hand_packs
-from data.moon_phases import MoonPhaseRepository
+from data.moon_phases import shared_moon_phases
 from data.rings import ring_presets
-from data.seasons import SeasonsRepository
-from data.symbolism import SymbolismRepository
+from data.seasons import shared_seasons
+from data.encyclopedia import (
+    EncyclopediaRepository, reset_shared_encyclopedia, shared_encyclopedia,
+)
+from data.symbolism import (
+    SymbolismRepository, reset_shared_symbolism, shared_symbolism,
+)
 from data.translations import TranslationStore, collect_corpus, translate_texts
 from render.assets import shared_cache
 from render.asset_variants import calendar_wheel_icon_file
@@ -1075,7 +1080,7 @@ class WatchController(QObject):
         self._hidden_unlocked = False
         # DEEP TIME detection (Session 16) also lives BEFORE the menu
         # build — the eclipse jump entries gray without the pack.
-        self._deep = DeepTimeRepository.detect()
+        self._deep = shared_deep_time()
         # Time Travel state also lives BEFORE the menu build now (fix
         # round E, 2026-07-19): the Quick Jump pole labels read the
         # traveled date via `_effective_travel_date`, which checks
@@ -1100,6 +1105,14 @@ class WatchController(QObject):
         # AFTER construction, exactly like `_on_add_watch`; a watch
         # built stand-alone (tests) simply never shows the row.
         self._warm_status_provider = None
+        # The hover-warm handoff (owner bug 2026-08-06), wired by the
+        # manager the same way. A watch that HAS a manager never starts
+        # its own sweep thread — it queues the sweep on the ONE shared
+        # warm worker, because the sweep is pure Python and N of them
+        # running at once fight each other for the GIL and starve the
+        # GUI threads. A stand-alone watch (every test) falls back to
+        # its own thread, exactly as before.
+        self._on_hover_warm = None
         self._menu = self._build_menu()
         self._legend = LegendPopup()
         self._fast_travel_flash = FastTravelFlash()
@@ -1149,8 +1162,8 @@ class WatchController(QObject):
         # → Time Travel spans the full pack coverage and the eclipse
         # jumps are alive; absent → the bundled span with the friendly
         # clamp.
-        self._seasons = SeasonsRepository(deep=self._deep)
-        self._moon_phases = MoonPhaseRepository(deep=self._deep)
+        self._seasons = shared_seasons(deep=self._deep)
+        self._moon_phases = shared_moon_phases(deep=self._deep)
         # Translation overlay (owner spec): apply whatever the cache
         # already holds; missing entries translate in the background.
         self._translation_thread: threading.Thread | None = None
@@ -1180,6 +1193,7 @@ class WatchController(QObject):
         self._compositor = Compositor(
             self._skin, shared_cache(), self._symbolism(),
             overlay=self._translation_overlay,
+            encyclopedia=self._encyclopedia_repository(),
         )
         self._day = None
         # Time Travel: a frozen (moment, observer) rendered instead of the
@@ -1199,6 +1213,17 @@ class WatchController(QObject):
         # the scheduled tick never fired while the machine slept.
         self._power_filter = native.PowerEventFilter(self._on_wake)
         app.installNativeEventFilter(self._power_filter)
+        # THE WAKE COALESCER (owner bug 2026-08-06). Windows BROADCASTS
+        # WM_TIMECHANGE to every top-level window, and Qt runs every
+        # native message through EVERY installed filter — with N watches
+        # that is N deliveries x N filters, so one SYNC used to fire this
+        # watch's refresh up to N^2 times. A restartable single-shot
+        # collapses the whole burst into ONE refresh; restarting an
+        # already-active QTimer re-aims it instead of queuing a second.
+        self._wake_timer = QTimer(self)
+        self._wake_timer.setSingleShot(True)
+        self._wake_timer.setInterval(defaults.WAKE_COALESCE_MS)
+        self._wake_timer.timeout.connect(self._refresh_after_jump)
 
         self._save_timer = QTimer(self)
         self._save_timer.setSingleShot(True)
@@ -1384,8 +1409,17 @@ class WatchController(QObject):
     def _start_hover_warm(self) -> None:
         """Obsolete any running sweep and start a fresh one — called on
         skin install and day change (a new skin/day speaks new articles;
-        a warm re-run costs header reads only)."""
+        a warm re-run costs header reads only).
+
+        With a manager attached the sweep is QUEUED on the one shared
+        warm worker rather than given a thread of its own; see
+        `_on_hover_warm`."""
+        if self._discarded:
+            return
         self._hover_warm_generation += 1
+        if self._on_hover_warm is not None:
+            self._on_hover_warm(self)
+            return
         threading.Thread(
             target=self._warm_hover_articles, daemon=True
         ).start()
@@ -1424,6 +1458,18 @@ class WatchController(QObject):
             if dialog is not None:
                 dialog.close()
         self._scheduler.stop()
+        # THE LEAKED FILTER (owner bug 2026-08-06, root cause found in
+        # his crash.log: 640 `Internal C++ object (ClockWidget) already
+        # deleted` tracebacks, every one of them from
+        # `native.py -> _on_wake`). A native event filter is installed on
+        # the APPLICATION, so it outlives the watch that installed it —
+        # every REMOVED watch left a zombie behind that kept ticking a
+        # dead dial on every clock change for the rest of the session,
+        # and each one made the next SYNC storm worse. Uninstall it in
+        # the one teardown both Exit and Remove Watch run through.
+        self._app.removeNativeEventFilter(self._power_filter)
+        if self._wake_timer.isActive():
+            self._wake_timer.stop()
         if self._save_timer.isActive():
             self._save_timer.stop()
         self._hover_poller.stop()
@@ -1499,7 +1545,17 @@ class WatchController(QObject):
             cycles = 0
         day_key = (now.date(), now.utcoffset())
         first_day_build = self._day is None
-        if first_day_build or self._day.cache_key != day_key or clock_jumped:
+        # A CLOCK JUMP AND A NEW DAY ARE NOT THE SAME EVENT (owner bug
+        # 2026-08-06, measured). Both rebuild the day context — a jump
+        # may have crossed midnight, a zone, or a Time Travel target —
+        # but only a genuinely NEW DAY speaks new ARTICLES. A Windows
+        # NTP correction of 5-10 s changes not one hover text, and the
+        # sweep it used to trigger is the most expensive thing this app
+        # owns: 7,201 pure-Python probes per watch (the owner's
+        # profiling.json: "Hover warmup" max 58.2 s), started by every
+        # watch at once. Five watches x one SYNC = a two-minute freeze.
+        day_changed = first_day_build or self._day.cache_key != day_key
+        if day_changed or clock_jumped:
             try:
                 with profiling.measure("Day context"):
                     # The repositories take the REAL astronomical year
@@ -1548,14 +1604,24 @@ class WatchController(QObject):
                 )
                 raise SystemExit(1) from error
             self._compositor.set_day(self._day)
-            if not first_day_build:
-                # A NEW day (or travel jump) speaks new articles — the
-                # startup chain already covers the first build.
+            if day_changed and not first_day_build:
+                # A NEW day (or a travel jump that landed on a different
+                # date) speaks new articles — the startup chain already
+                # covers the first build, and a bare clock correction
+                # inside the SAME day speaks nothing new at all.
                 self._start_hover_warm()
         self._widget.set_tick(build_tick_state(now, self._day))
 
     def _on_wake(self) -> None:
-        """Resume-from-sleep / system clock change: full refresh now."""
+        """Resume-from-sleep / system clock change. Runs inside the
+        native event filter, so it does the cheapest possible thing:
+        re-aim the coalescing shot and return. See `_wake_timer`."""
+        if self._discarded:
+            return
+        self._wake_timer.start()
+
+    def _refresh_after_jump(self) -> None:
+        """The coalesced burst's ONE refresh."""
         self._on_tick(clock_jumped=True)
 
     def _on_screen_changed(self) -> None:
@@ -2073,8 +2139,25 @@ class WatchController(QObject):
     def _symbolism(self) -> SymbolismRepository:
         """The article source with the active language's overlay laid
         over the English originals (owner spec: we ship only English;
-        the user's machine translates once and caches)."""
-        return SymbolismRepository(overlay=self._translation_overlay or None)
+        the user's machine translates once and caches).
+
+        PROCESS-WIDE, one per language (owner bug 2026-08-06). This used
+        to return a NEW repository on every call, and `_install_skin`
+        calls it — so a 1.12 MB parse was discarded and redone on every
+        settings change, on every watch. The book is the same book."""
+        return shared_symbolism(
+            self._settings.language, self._translation_overlay or None
+        )
+
+    def _encyclopedia_repository(self) -> EncyclopediaRepository:
+        """`_symbolism`'s sibling for the Encyclopedia's own content —
+        process-wide, one per language, for the same reason. Passed
+        explicitly into every `Compositor`: left to its own default the
+        compositor builds a private one, and a compositor is rebuilt on
+        every skin install."""
+        return shared_encyclopedia(
+            self._settings.language, self._translation_overlay or None
+        )
 
     def _refresh_watch_title(self) -> None:
         """Keep the menu's TITLE header and the tray hover tooltip in
@@ -2133,6 +2216,7 @@ class WatchController(QObject):
         self._compositor = Compositor(
             skin, shared_cache(), self._symbolism(),
             overlay=self._translation_overlay,
+            encyclopedia=self._encyclopedia_repository(),
         )
         self._compositor.set_hidden_unlocked(self._hidden_unlocked)
         self._widget.set_renderer(self._compositor)
@@ -3314,6 +3398,7 @@ class WatchController(QObject):
             # the same TRAVELED date as the poles' light/dark glyph
             # law — a running Time Travel simulation, else today.
             travel_date=self._effective_travel_date(),
+            language=self._settings.language,
             # THE DOUBLE NINTH LAW's daynight mechanism (owner decree
             # 2026-07-29, sw_dyad's Ghosts/Exegol): the SAME live sky
             # state the dial's own center seat reads.
@@ -3815,6 +3900,11 @@ class WatchController(QObject):
             # including the menu, whose chrome strings live in the
             # same overlay (Phase 2).
             self._translation_overlay = TranslationStore().load(language)
+            # Fresh text landed: the process-wide repositories cached for
+            # this language now hold the PRE-translation strings, so drop
+            # them before the skin install below reads them again.
+            reset_shared_symbolism()
+            reset_shared_encyclopedia()
             self._install_skin(build_skin(self._settings, self._active_location_display))
             self._menu = self._build_menu()
             self._widget.set_menu(self._menu)
