@@ -1,21 +1,4 @@
 {
-  "hooks": {
-    "PostToolUse": [
-      {
-        "matcher": "Edit|Write",
-        "hooks": [
-          { "type": "command", "command": "python tests/run_guards.py --fast" }
-        ]
-      }
-    ],
-    "Stop": [
-      {
-        "hooks": [
-          { "type": "command", "command": "python tests/run_guards.py" }
-        ]
-      }
-    ]
-  },
   "permissions": {
     "allow": [
       "Bash(xargs -I {} find {} -type d)",
@@ -57,7 +40,31 @@
       "Bash(python -c ' *)",
       "Bash(grep -nE \"^\\\\*\\\\*.*→ \\\\`assets\" research/prompts/starwars/starwars_prompts.md)",
       "Bash(sed 's/```//')",
-      "Bash(cd \"/u/Coding/UVuruna/Gadgets/DOMY Watch\" && head -42 research/prompts/starwars/starwars_descriptive_prompts.md && echo \"===SAMPLE ENTRY===\" && sed -n '/^### Monday/,/^### Tuesday/p' research/prompts/starwars/starwars_descriptive_prompts.md | head -22)"
+      "Bash(cd \"/u/Coding/UVuruna/Gadgets/DOMY Watch\" && head -42 research/prompts/starwars/starwars_descriptive_prompts.md && echo \"===SAMPLE ENTRY===\" && sed -n '/^### Monday/,/^### Tuesday/p' research/prompts/starwars/starwars_descriptive_prompts.md | head -22)",
+      "Bash(python tests/run_guards.py)"
+    ]
+  },
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python tests/run_guards.py --fast"
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python tests/run_guards.py"
+          }
+        ]
+      }
     ]
   }
 }
