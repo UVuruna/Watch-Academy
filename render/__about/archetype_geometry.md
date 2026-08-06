@@ -56,3 +56,16 @@ the other skin queries in [Skin Geometry](skin_geometry.md).
 - **Missing/placeholder art reads CIRCLE-sized** — there is no aspect
   ratio to classify, so it falls back to the same size the weekday
   bodies use rather than guessing a portrait height.
+
+## THE HEADER SIZE CACHE (owner bug 2026-08-06)
+
+`archetype_art_size` opens the file and decodes its PNG header. In
+Archetype mode that runs for every arm plus the centre on every tick —
+up to nine file opens per second per watch, for a number that cannot
+change while the app runs.
+
+`_ART_SIZES` caches by resolved path and is consulted BEFORE the
+`exists()` stat (a remembered header already proves the file was there).
+**A None is never cached**: None means "the glass has not landed yet",
+exactly the answer that must stay live. `reset_art_size_cache()` is
+cleared with the other two resolution caches when a drain lands.

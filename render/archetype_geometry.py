@@ -52,6 +52,22 @@ def archetype_center_lit(hour_angle: float, noon_angle: float) -> bool:
     return dist_axis <= archetypes.ARCHETYPE_CENTER_WINDOW_DEG
 
 
+#: Decoded PNG header sizes, POSITIVE RESULTS ONLY (owner bug
+#: 2026-08-06). `archetype_art_size` opens the file and decodes its
+#: header, and Archetype mode calls it for every arm plus the centre on
+#: every tick — up to nine file opens per second per watch for a number
+#: that cannot change while the app runs. A None is never cached: None
+#: means "the glass has not landed yet", exactly the answer that must
+#: stay live (same rule as `config.paths._ART_FILE_CACHE`, and the same
+#: reset hook clears both when a drain lands).
+_ART_SIZES: dict[str, object] = {}
+
+
+def reset_art_size_cache() -> None:
+    """Forget every decoded header: new art has landed on disk."""
+    _ART_SIZES.clear()
+
+
 def archetype_art_size(path):
     """The pixel size of REAL archetype art (the owner's glass) — or
     None when the file is missing or a committed 1×1 placeholder (the
@@ -59,7 +75,15 @@ def archetype_art_size(path):
     header is read; readiness AND the two-type classification both
     derive from it."""
     resolved = paths.art_file(path)
-    if resolved is None or not resolved.exists():
+    if resolved is None:
+        return None
+    # The cache answers BEFORE the stat, not after it — a remembered
+    # header already proves the file was there, and this runs per arm
+    # per tick.
+    cached = _ART_SIZES.get(str(resolved))
+    if cached is not None:
+        return cached
+    if not resolved.exists():
         return None
     size = QImageReader(str(resolved)).size()
     if (
@@ -68,6 +92,7 @@ def archetype_art_size(path):
         or size.height() <= archetypes.ARCHETYPE_ART_MIN_PX
     ):
         return None
+    _ART_SIZES[str(resolved)] = size
     return size
 
 

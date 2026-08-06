@@ -47,7 +47,10 @@ def pantheon_seat(theme: str, body: str):
         return None
     for rel in table["files"][body]:
         path = weekday_art(f"{rel}.png")
-        if _paths.art_file(path).exists():
+        # `existing_art_file` answers from the resolution cache without a
+        # second stat, and it tolerates a None resolution — the old
+        # `art_file(path).exists()` would have raised on one.
+        if _paths.existing_art_file(path) is not None:
             return (
                 path,
                 table["names"][body],
@@ -72,6 +75,18 @@ def pantheon_seat(theme: str, body: str):
 ROTATION_DAYS = 1
 _VERSION_SUFFIX = re.compile(r"^_v\d*$", re.IGNORECASE)
 
+#: Daily-rotation pools per (directory, stems), NON-EMPTY RESULTS ONLY
+#: (owner bug 2026-08-06). `_rotation_candidates_in` is reached from
+#: every weekday body and every seated slot on every tick, and it walked
+#: the directory once PER STEM. Cleared whenever new art lands — see
+#: `reset_rotation_cache` and its caller in `app.watch_manager`.
+_ROTATION_CACHE: dict[tuple[str, tuple[str, ...]], list] = {}
+
+
+def reset_rotation_cache() -> None:
+    """Forget every scanned rotation pool: new art has landed on disk."""
+    _ROTATION_CACHE.clear()
+
 
 def _sourceless_core(name_stem: str) -> str:
     """A filename stem with its terminal source suffix stripped
@@ -94,14 +109,25 @@ def _rotation_candidates_in(
     recognised (the active-source pick happens in `_rotation_candidates`).
     A synthetic tmp tree with suffix-less names exercises the naming
     tolerance directly (no dependency on the real bundled assets)."""
+    key = (str(directory), stems)
+    cached = _ROTATION_CACHE.get(key)
+    if cached is not None:
+        return list(cached)
     if not directory.is_dir():
         return []
+    # ONE directory walk, not one PER STEM (owner bug 2026-08-06): this
+    # runs for every weekday body and every seated slot on every tick,
+    # and the `iterdir()` used to sit INSIDE the stem loop.
+    entries = [
+        entry for entry in directory.iterdir()
+        if entry.suffix.lower() == ".png"
+    ]
     candidates: list[Path] = []
     seen_names: set[str] = set()
     for stem in stems:
         stem_lower = stem.lower()
-        for entry in directory.iterdir():
-            if entry.name in seen_names or entry.suffix.lower() != ".png":
+        for entry in entries:
+            if entry.name in seen_names:
                 continue
             core = _sourceless_core(entry.stem)
             if not core.lower().startswith(stem_lower):
@@ -110,6 +136,12 @@ def _rotation_candidates_in(
             if tail == "" or _VERSION_SUFFIX.match(tail):
                 candidates.append(entry)
                 seen_names.add(entry.name)
+    if candidates:
+        # NON-EMPTY RESULTS ONLY — an empty pool is "the art has not
+        # landed yet", and remembering that would keep a freshly
+        # generated figure off the dial until the next restart. Same
+        # rule, same reason, as `config.paths._ART_FILE_CACHE`.
+        _ROTATION_CACHE[key] = list(candidates)
     return candidates
 
 
@@ -132,8 +164,8 @@ def _rotation_candidates(
             if key in seen_cores:
                 continue
             seen_cores.add(key)
-            picked = paths.art_file(directory / f"{core}.png")
-            if picked is not None and picked.exists() and picked not in seen_files:
+            picked = paths.existing_art_file(directory / f"{core}.png")
+            if picked is not None and picked not in seen_files:
                 resolved.append(picked)
                 seen_files.add(picked)
     resolved.sort(key=lambda p: (p.name, str(p)))
@@ -253,8 +285,8 @@ def rotating_art_file(canonical_path: Path, on_date: date) -> Path | None:
     already calls, which is why the roster hooks in here rather than at
     four call sites. None when the canonical path resolves to nothing on
     disk (not even a master)."""
-    resolved = paths.art_file(canonical_path)
-    if resolved is None or not resolved.exists():
+    resolved = paths.existing_art_file(canonical_path)
+    if resolved is None:
         return None
     stems = _seat_roster_of(canonical_path)
     if stems is not None:

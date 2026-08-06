@@ -58,3 +58,11 @@ clockwise-from-top dial angle converts to Qt's counterclockwise-from-
 - **No skin knowledge here.** Skin-dependent geometry (which arm, which
   wheel) lives in [Skin Geometry](skin_geometry.md); this module only
   draws what it is told.
+
+## `name_label_px` is memoized (owner bug 2026-08-06)
+
+It is pure in `(name, target_width)` — the font is a fresh default
+`QFont` and both bounds are module constants — yet it built a
+`QFontMetricsF` and shaped the text again for all seven-to-nine weekday
+(or archetype) labels on every tick, per watch. `functools.lru_cache`
+now measures each distinct pair once.

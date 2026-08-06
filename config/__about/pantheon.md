@@ -103,3 +103,18 @@ Layer: config — pure, no Qt, no wall clock.
   names that lived in the pre-split `config/defaults.py` were
   snapshotted from the original file and compared against their new
   homes in one process: 0 differences.
+
+## THE ROTATION POOL CACHE (owner bug 2026-08-06)
+
+`_rotation_candidates_in` is reached from every weekday body and every
+seated slot on every tick, and it called `directory.iterdir()` once PER
+STEM. Two changes: ONE walk per call instead of N, and `_ROTATION_CACHE`
+keyed by (directory, stems).
+
+**NON-EMPTY RESULTS ONLY** — an empty pool means "the art has not landed
+yet", and remembering that would keep a freshly generated figure off the
+dial until the next restart. Same rule and same reason as
+[Paths](paths.md)' art cache; `reset_rotation_cache()` is cleared beside
+it whenever new art lands.
+
+Measured: 6 `iterdir()` calls per paint, per watch, down to zero.

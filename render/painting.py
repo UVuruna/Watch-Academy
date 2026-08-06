@@ -7,6 +7,7 @@ counterclockwise-from-3-o'clock convention.
 """
 
 import math
+from functools import lru_cache
 from pathlib import Path
 
 from PySide6.QtCore import QPointF, QRectF, Qt
@@ -93,12 +94,19 @@ def tinted_gray(value: int, tint: str | None) -> QColor:
     return QColor(channel(hue.red()), channel(hue.green()), channel(hue.blue()))
 
 
+@lru_cache(maxsize=512)
 def name_label_px(name: str, target_width: float) -> int:
     """The measured pixel font size that fits `name` within
     `target_width`, capped at `dial.NAME_LABEL_MAX_PX`, floored at
     `dial.BODY_LABEL_MIN_PX` — the shared per-name fit (Rule #5):
     a SHORT text no longer inflates past a sane ceiling, a LONG one
-    still shrinks to fit (measured, never guessed)."""
+    still shrinks to fit (measured, never guessed).
+
+    MEMOIZED (owner bug 2026-08-06): pure in `(name, target_width)` —
+    the font is a fresh default `QFont` every call and the two bounds
+    are module constants — yet it built a `QFontMetricsF` and shaped the
+    text again for all seven-to-nine weekday (or archetype) labels on
+    every tick, per watch."""
     font = QFont()
     font.setBold(True)
     font.setPixelSize(100)

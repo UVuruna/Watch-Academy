@@ -225,6 +225,41 @@ def metal_shade(metal: str) -> str:
 # tree and ONTO the filename — `<Figure>[_vN]_<src>.png`, source last.
 ART_SUFFIX = {"gemini": "gem", "chatgpt": "gpt"}
 
+#: Resolved art paths, POSITIVE RESULTS ONLY (owner bug 2026-08-06).
+#:
+#: `art_file` runs on every single image draw — `AssetCache.pixmap_by_
+#: height` calls it BEFORE its own cache lookup, because the resolved
+#: path IS part of the cache key — so a pixmap cache HIT still paid 1-3
+#: `Path.exists()` stats. Measured at roughly 12-20 draws per tick per
+#: watch, that is ~30 filesystem stats per second per watch, forever,
+#: whether or not anything on screen changed.
+#:
+#: A MISS IS NEVER CACHED, and that is the whole design. Art appears at
+#: runtime in this app — the owner drops files in, and a recolor drain
+#: lands derived work — and a remembered "not there" would keep a dial
+#: standing in with its gold master until the next restart. That exact
+#: failure has already happened here once (0.14.707). A file that DOES
+#: exist, on the other hand, does not stop existing while the app runs.
+#:
+#: Keyed by the active art source too: the same canonical path resolves
+#: to a different file when the user switches Gemini/ChatGPT.
+_ART_FILE_CACHE: dict[tuple[str, str], Path] = {}
+
+#: Every resolved path the cache above has PROVEN to exist. Callers that
+#: need "resolved, and actually on disk" ask `existing_art_file`, which
+#: answers from this set without a second stat — the hot rotation and
+#: roster paths in `config.pantheon` used to re-stat a file `art_file`
+#: had just found.
+_ART_FILE_FOUND: set[str] = set()
+
+
+def reset_art_file_cache() -> None:
+    """Forget every resolved art path — for tests that write art into a
+    temporary tree, and whenever new art lands (see
+    `app.watch_manager.AppController._emit_art_ready`)."""
+    _ART_FILE_CACHE.clear()
+    _ART_FILE_FOUND.clear()
+
 
 def art_file(path: Path | None) -> Path | None:
     """Resolve a CANONICAL (suffix-less) art path to the file that
@@ -248,12 +283,40 @@ def art_file(path: Path | None) -> Path | None:
     if stem.endswith(("_gem", "_gpt")):
         return path
     parent, ext = path.parent, path.suffix
-    active = ART_SUFFIX[art_source()]
+    source = art_source()
+    key = (str(path), source)
+    resolved = _ART_FILE_CACHE.get(key)
+    if resolved is not None:
+        return resolved
+    active = ART_SUFFIX[source]
     ordered = [active] + [s for s in ART_SUFFIX.values() if s != active]
     for suffix in ordered:
         candidate = parent / f"{stem}_{suffix}{ext}"
         if candidate.exists():
+            _ART_FILE_CACHE[key] = candidate
+            _ART_FILE_FOUND.add(str(candidate))
             return candidate
     if path.exists():
+        _ART_FILE_CACHE[key] = path
+        _ART_FILE_FOUND.add(str(path))
         return path
+    # Nothing on disk: return the canonical path UNCACHED so the art can
+    # still be noticed the moment it lands (see `_ART_FILE_CACHE`).
     return path
+
+
+def existing_art_file(path: Path | None) -> Path | None:
+    """`art_file`, but None when nothing is actually on disk — and
+    WITHOUT a stat once the resolution is cached (owner bug 2026-08-06).
+
+    `art_file` returns the canonical path unchanged when it finds
+    nothing, so every caller that cares had to stat the result itself.
+    On the rotation and roster paths that runs per body per tick, on a
+    file the resolver had just proven to exist."""
+    resolved = art_file(path)
+    if resolved is None:
+        return None
+    if str(resolved) in _ART_FILE_FOUND:
+        return resolved
+    return resolved if resolved.exists() else None
+

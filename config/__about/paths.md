@@ -110,3 +110,31 @@ its work via `with paths.display(context):`.
   active source → cross-source → suffix-less → the canonical path
   itself, unchanged — the caller (never this module) owns the
   documented missing-art fallback (Rule #1).
+
+## THE ART RESOLUTION CACHE (owner bug 2026-08-06)
+
+`art_file` runs on EVERY image draw — `render.assets.AssetCache.
+pixmap_by_height` calls it BEFORE its own cache lookup, because the
+resolved path IS part of the cache key — so even a pixmap cache HIT paid
+1-3 `Path.exists()` stats. Measured on one real dial: 31 `exists()` calls
+per paint, at the default one-paint-per-second cadence, per watch.
+
+- `_ART_FILE_CACHE` — resolved paths, keyed by (canonical path, active
+  art source). **POSITIVE RESULTS ONLY.**
+- `_ART_FILE_FOUND` — the resolved paths proven to exist, so
+  `existing_art_file` can answer "resolved AND on disk" without a
+  second stat.
+- `existing_art_file(path)` — `art_file`, but None when nothing is on
+  disk. The hot rotation and roster paths in
+  [Pantheon](pantheon.md) used to re-stat a file `art_file` had just
+  found.
+- `reset_art_file_cache()` — called by
+  [Watch Manager](../../app/__about/watch_manager.md) whenever a recolor
+  drain lands new art.
+
+**A MISS IS NEVER CACHED, and that is the design.** Art appears at
+runtime here — the owner drops files in, and the drain builds derived
+work — so a remembered "not there" would keep a dial standing in with
+its gold master until the next restart. That failure has already
+happened once (0.14.707). A file that DOES exist does not stop existing
+while the app runs.
