@@ -57,6 +57,12 @@ Nothing here is ever called from `paint()`. The band builder
 being applied, writes the result into a cached `QImage`, and the layers
 blit that image. No disk is touched at any point.
 
+`blank_plate(width, height=None)` (Crown Polish round, owner correction
+2026-08-06): `height` defaults to `width` — every band tile is square —
+but the live crown's own colon tile is not (`time.png` is a tall narrow
+plate), so [Numeral Bands](numeral_bands.md)'s `_crown_colon_image` is
+the one caller that passes both.
+
 ## Connections
 
 ### Uses

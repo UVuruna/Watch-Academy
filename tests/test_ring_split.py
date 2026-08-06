@@ -68,14 +68,18 @@ def _diff_count(image_a, image_b, step: int = 4) -> int:
         ("Dollar", "hexa", "seconds"),
         ("Templar", "cross", "seconds_cross"),
         ("The One", "octa", "simple_octa"),
+        # CHI (Crown Polish round, owner ruling "može" 2026-08-06):
+        # constants.RING_INNER_PRESET_DEFAULT["CHI"] — the emptiest
+        # inner for the emptiest dial.
+        ("CHI", "full", "simple"),
     ],
 )
 def test_every_preset_composes_its_locked_outer_and_default_inner(
     app, frame_args, name, outer, inner,
 ):
-    """Each of the five presets is LOCKED to exactly one outer (owner
-    decree 2026-08-05) and starts on the owner's FINAL verdict default
-    inner (RING VERDICTS round, 2026-08-05 correction)."""
+    """Each of the six presets is LOCKED to exactly one outer (owner
+    decree 2026-08-05) and starts on its own default inner (RING
+    VERDICTS round, 2026-08-05 correction; CHI's own "može" 2026-08-06)."""
     day, tick = frame_args
     skin = build_skin(Settings(ring=name))
     assert skin.ring.outer_asset.name == f"{outer}.png"
@@ -283,13 +287,18 @@ def test_shadow_sample_count_scales_with_pixel_radius():
     constant. Below the floor's own gap threshold the count never
     drops below `RING_LETTER_SHADOW_SAMPLES`; a large pixel radius
     grows it so adjacent stamps stay under `RING_LETTER_SHADOW_MAX_GAP_PX`
-    device pixels apart along the stamp circle."""
-    from render.layers.ring import _shadow_sample_count
+    device pixels apart along the stamp circle.
 
-    assert _shadow_sample_count(0.0) == dial.RING_LETTER_SHADOW_SAMPLES
+    Moved from `render.layers.ring` to `render.numeral_bands` (Crown
+    Polish round, owner correction 2026-08-06): the live crown's baked
+    glyph tiles now stamp the SAME shadow, and `numeral_bands` is the
+    shared home both callers can import without a cycle."""
+    from render.numeral_bands import shadow_sample_count
+
+    assert shadow_sample_count(0.0) == dial.RING_LETTER_SHADOW_SAMPLES
     # A tiny pixel radius needs far fewer than 8 samples to stay under
     # the 1px gap threshold, so the FLOOR (not the formula) wins here.
-    assert _shadow_sample_count(0.1) == dial.RING_LETTER_SHADOW_SAMPLES
+    assert shadow_sample_count(0.1) == dial.RING_LETTER_SHADOW_SAMPLES
 
     # A big 1440p-scale pixel radius: the gap between adjacent stamps
     # at the FLOOR count would be far more than one pixel apart.
@@ -297,26 +306,26 @@ def test_shadow_sample_count_scales_with_pixel_radius():
     floor_gap = 2.0 * math.pi * large_radius / dial.RING_LETTER_SHADOW_SAMPLES
     assert floor_gap > dial.RING_LETTER_SHADOW_MAX_GAP_PX
 
-    samples = _shadow_sample_count(large_radius)
+    samples = shadow_sample_count(large_radius)
     assert samples > dial.RING_LETTER_SHADOW_SAMPLES
     actual_gap = 2.0 * math.pi * large_radius / samples
     assert actual_gap <= dial.RING_LETTER_SHADOW_MAX_GAP_PX
 
 
 def test_normalized_shadow_alpha_matches_floor_look_and_never_darkens():
-    """`_normalized_shadow_alpha` is an IDENTITY at the floor sample
+    """`normalized_shadow_alpha` is an IDENTITY at the floor sample
     count (today's look, unchanged) and renormalizes downward as
     samples grow so the composited coverage stays constant — the extra
     stamps close pixel gaps, they never make the halo darker."""
-    from render.layers.ring import _normalized_shadow_alpha
+    from render.numeral_bands import normalized_shadow_alpha
 
     floor = dial.RING_LETTER_SHADOW_SAMPLES
-    assert _normalized_shadow_alpha(floor) == pytest.approx(
+    assert normalized_shadow_alpha(floor) == pytest.approx(
         dial.RING_LETTER_SHADOW_ALPHA
     )
 
     def composited(samples: int) -> float:
-        alpha = _normalized_shadow_alpha(samples)
+        alpha = normalized_shadow_alpha(samples)
         return 1.0 - (1.0 - alpha) ** samples
 
     target = composited(floor)
@@ -324,7 +333,7 @@ def test_normalized_shadow_alpha_matches_floor_look_and_never_darkens():
         assert composited(samples) == pytest.approx(target, rel=1e-9)
         # More samples at the SAME composited coverage means a smaller
         # per-stamp alpha, not a bigger one.
-        assert _normalized_shadow_alpha(samples) < dial.RING_LETTER_SHADOW_ALPHA
+        assert normalized_shadow_alpha(samples) < dial.RING_LETTER_SHADOW_ALPHA
 
 
 def test_ring_shadow_halo_has_no_gaps_at_a_large_dial_size(app, frame_args):

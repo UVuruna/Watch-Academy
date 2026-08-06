@@ -177,12 +177,19 @@ def draw_inner_ink(
     painter.restore()
 
 
-def blank_plate(pixels: int) -> QImage:
+def blank_plate(width: int, height: int | None = None) -> QImage:
     """A transparent DEVICE-resolution plate, DPR 1.0 while it is being
     painted. Everything drawn into it is measured in device pixels; the
     DPR stamp is applied at the very end (`stamp_dpr`), so no geometry
-    is ever scaled twice."""
-    image = QImage(pixels, pixels, QImage.Format.Format_ARGB32_Premultiplied)
+    is ever scaled twice. `height` defaults to `width` (every existing
+    caller wants a square tile); the live crown's colon tile
+    (`render.numeral_bands._crown_colon_image`) is the one caller that
+    is not square — `time.png` is a tall narrow plate, not a glyph
+    bounding box."""
+    image = QImage(
+        width, width if height is None else height,
+        QImage.Format.Format_ARGB32_Premultiplied,
+    )
     image.fill(Qt.GlobalColor.transparent)
     return image
 

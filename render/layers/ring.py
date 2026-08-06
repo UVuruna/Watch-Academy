@@ -32,44 +32,10 @@ from core import angles, numerals, world
 from render.asset_recolor import letter_metal_file
 from render.context import Cadence, Layer, RenderContext
 from render.layers.numerals import band_spec
-from render.numeral_bands import band_plate
+from render.numeral_bands import (
+    band_plate, normalized_shadow_alpha, shadow_sample_count,
+)
 from render.painting import dial_point, draw_pixmap_centered
-
-
-def _shadow_sample_count(pixel_radius: float) -> int:
-    """Sample count for the shadow stamp ring at `pixel_radius` (DEVICE
-    pixels, i.e. already multiplied by `ctx.dpr`) — THE PIXELATION FIX
-    (1440p owner bug, 2026-08-06). Below `RING_LETTER_SHADOW_SAMPLES`
-    (today's look at ordinary dial sizes) the stamps overlap and fuse
-    into a smooth halo; at large pixel radii that fixed count spreads
-    the same 8 copies far enough apart that the gaps between them show
-    as a scalloped, jagged edge. This grows the count so adjacent
-    stamps stay under `RING_LETTER_SHADOW_MAX_GAP_PX` apart along the
-    stamp circle's own circumference — the floor never shrinks below
-    the original 8."""
-    if pixel_radius <= 0:
-        return dial.RING_LETTER_SHADOW_SAMPLES
-    needed = math.ceil(
-        2.0 * math.pi * pixel_radius / dial.RING_LETTER_SHADOW_MAX_GAP_PX
-    )
-    return max(dial.RING_LETTER_SHADOW_SAMPLES, needed)
-
-
-def _normalized_shadow_alpha(samples: int) -> float:
-    """Per-stamp opacity for `samples` copies so the COMPOSITED darkness
-    stays what `RING_LETTER_SHADOW_SAMPLES` stamps at
-    `RING_LETTER_SHADOW_ALPHA` each look like, whatever `samples` grows
-    to (`_shadow_sample_count`) — extra stamps close the pixel gaps
-    that scallop the edge at large dial sizes, they never darken it.
-    Solves the standard "N over-composited equal-alpha layers reach
-    target coverage" equation, `target = 1 - (1-a)**n`, backwards for a
-    per-stamp `a` at the ACTUAL sample count; at the floor count this is
-    `RING_LETTER_SHADOW_ALPHA` exactly (identity, checked by
-    `tests/test_ring_split.py`)."""
-    target = 1.0 - (1.0 - dial.RING_LETTER_SHADOW_ALPHA) ** dial.RING_LETTER_SHADOW_SAMPLES
-    if samples <= 0:
-        return 0.0
-    return 1.0 - (1.0 - target) ** (1.0 / samples)
 
 
 class RingLayer(Layer):
@@ -188,8 +154,8 @@ class RingLayer(Layer):
                 gold_asset, height, ctx.dpr, tint=palette.SHADOW_STAMP_TINT
             )
             pixel_radius = shadow_radius * ctx.dpr
-            samples = _shadow_sample_count(pixel_radius)
-            stamp_alpha = _normalized_shadow_alpha(samples)
+            samples = shadow_sample_count(pixel_radius)
+            stamp_alpha = normalized_shadow_alpha(samples)
             painter.setOpacity(stamp_alpha * opacity)
             for k in range(samples):
                 angle = 2.0 * math.pi * k / samples

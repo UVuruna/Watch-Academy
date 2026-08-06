@@ -34,6 +34,15 @@ minute-cadence and nothing more: the eleven glyphs it draws were rasterized
 at settings-apply time, so its per-tick work is a sequence lookup, an arc
 layout and eleven-at-most `drawImage` calls.
 
+`crown_spec` resolves `skin.ring.crown_text_metal` (the SAME
+`settings.ring_finish` the ring's own letters wear) and its active
+`paths.metal_shade` into the `CrownSpec.metal`/`.shade` fields THE TIME
+CROWN LOOK (owner correction 2026-08-06) styles every glyph by — never
+the outer band's `numeral_relief`/`numeral_depth`/`numeral_light`/
+`numeral_darkness`/`numeral_border` knobs, which no longer reach the
+crown at all (see [Numeral Bands](../../__about/numeral_bands.md) for
+the glyph build itself).
+
 ## Which presets carry a live crown
 
 `config.dial.RING_LIVE_CROWN` names them, and it is the only place that

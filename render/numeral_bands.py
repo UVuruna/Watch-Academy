@@ -34,14 +34,79 @@ import math
 from dataclasses import dataclass
 
 from PySide6.QtCore import QPointF, QRectF, Qt
-from PySide6.QtGui import QColor, QImage, QPainterPath
+from PySide6.QtGui import QColor, QImage, QPainter, QPainterPath
 
-from config import dial, palette
+from config import constants, defaults, dial, palette
 from core import numerals
+from recolor import ramp as recolor_ramp
+from recolor import space as recolor_space
+from recolor.recipe import load as recolor_recipe
 from render import numeral_relief as relief
-from render.asset_recolor import ring_recolored_image
+from render.asset_recolor import letter_metal_file, ring_recolored_image
 from render.numeral_fonts import assert_covers, numeral_font
 from render.painting import dial_point
+
+
+# ------------------------------------------------------- THE LETTER SHADOW LAW
+# The stamped-shadow math every RING GLYPH wears — moved here from
+# `render.layers.ring` (THE TIME CROWN LOOK, owner correction 2026-08-06,
+# `research/ring_rework.md` §3): the live crown's glyph tiles now bake
+# the SAME shadow stamp the ring's own letters wear, and this module (not
+# `render.layers.ring`) is the shared home both `RingLayer._draw_ring_glyph`
+# (a live stamp, every STATIC repaint) and `_crown_letter_glyph_image`/
+# `_crown_colon_image` below (a BAKED stamp, once per settings change) can
+# import without a cycle — `render.layers.ring` already imports FROM this
+# module, never the other way.
+def shadow_sample_count(pixel_radius: float) -> int:
+    """Sample count for the shadow stamp ring at `pixel_radius` (DEVICE
+    pixels). Below `RING_LETTER_SHADOW_SAMPLES` (today's look at
+    ordinary dial sizes) the stamps overlap and fuse into a smooth halo;
+    at large pixel radii that fixed count spreads the same 8 copies far
+    enough apart that the gaps between them show as a scalloped, jagged
+    edge (THE PIXELATION FIX, 1440p owner bug, 2026-08-06). This grows
+    the count so adjacent stamps stay under `RING_LETTER_SHADOW_MAX_GAP_PX`
+    apart along the stamp circle's own circumference — the floor never
+    shrinks below the original 8."""
+    if pixel_radius <= 0:
+        return dial.RING_LETTER_SHADOW_SAMPLES
+    needed = math.ceil(
+        2.0 * math.pi * pixel_radius / dial.RING_LETTER_SHADOW_MAX_GAP_PX
+    )
+    return max(dial.RING_LETTER_SHADOW_SAMPLES, needed)
+
+
+def normalized_shadow_alpha(samples: int) -> float:
+    """Per-stamp opacity for `samples` copies so the COMPOSITED darkness
+    stays what `RING_LETTER_SHADOW_SAMPLES` stamps at
+    `RING_LETTER_SHADOW_ALPHA` each look like, whatever `samples` grows
+    to (`shadow_sample_count`) — extra stamps close the pixel gaps that
+    scallop the edge at large dial sizes, they never darken it. Solves
+    the standard "N over-composited equal-alpha layers reach target
+    coverage" equation, `target = 1 - (1-a)**n`, backwards for a
+    per-stamp `a` at the ACTUAL sample count; at the floor count this is
+    `RING_LETTER_SHADOW_ALPHA` exactly (identity, checked by
+    `tests/test_ring_split.py`)."""
+    target = 1.0 - (1.0 - dial.RING_LETTER_SHADOW_ALPHA) ** dial.RING_LETTER_SHADOW_SAMPLES
+    if samples <= 0:
+        return 0.0
+    return 1.0 - (1.0 - target) ** (1.0 / samples)
+
+
+def _stamp_shadow(painter: QPainter, radius_px: float, draw_copy) -> None:
+    """The shared shadow-stamp LOOP: `draw_copy(dx, dy)` paints one
+    silhouette copy shifted by `(dx, dy)` from the glyph's own centred
+    position; this function only decides HOW MANY copies and at what
+    per-stamp opacity (`shadow_sample_count`/`normalized_shadow_alpha`),
+    then walks them around the circle of radius `radius_px`. Shared by
+    the path-based digit stamp and the image-based colon stamp below —
+    the two glyph FAMILIES differ, the stamp law does not (Rule #5)."""
+    samples = shadow_sample_count(radius_px)
+    painter.save()
+    painter.setOpacity(normalized_shadow_alpha(samples))
+    for k in range(samples):
+        angle = 2.0 * math.pi * k / samples
+        draw_copy(radius_px * math.cos(angle), radius_px * math.sin(angle))
+    painter.restore()
 
 
 @dataclass(frozen=True)
@@ -80,17 +145,25 @@ class BandSpec:
 @dataclass(frozen=True)
 class CrownSpec:
     """The live crown's own key — the eleven glyphs are rasterized once
-    per change of it."""
+    per change of it.
+
+    THE TIME CROWN LOOK (owner correction 2026-08-06, `research/
+    ring_rework.md` §3): the crown no longer carries the outer band's
+    own relief/depth/light/darkness/border knobs — those styled the
+    parity plate-and-frame look the owner ruled OFF the time crown
+    entirely. What replaces them is the SAME two things every ring
+    letter answers to: `metal` (the crown's own finish,
+    `RingSpec.crown_text_metal` — gold/silver/bronze/thematic) and its
+    active `shade`, both resolved once by `render.layers.numerals.
+    crown_spec` and carried here so two watches with different shades
+    never collide in the shared `_CROWNS` cache."""
 
     pixels: int
     dpr: float
     face: str
     size_units: float
-    relief_style: str = dial.NUMERAL_RELIEF_DEFAULT
-    depth_units: float = dial.NUMERAL_DEPTH_DEFAULT
-    light: str = dial.NUMERAL_LIGHT_DEFAULT
-    darkness: float = dial.NUMERAL_DARKNESS_DEFAULT
-    border_units: float = dial.NUMERAL_BORDER_DEFAULT
+    metal: str = "gold"
+    shade: str = ""
 
 
 _PLATES: dict[BandSpec, QImage] = {}
@@ -342,56 +415,147 @@ def _build_inner(spec: BandSpec) -> QImage:
 
 def crown_glyph_set(spec: CrownSpec) -> dict:
     """The crown's glyphs, rasterized ONCE per settings change into
-    tightly-cropped little images, keyed by glyph.
+    tightly-cropped little images, keyed by glyph — THE TIME CROWN LOOK
+    (owner correction 2026-08-06, `research/ring_rework.md` §3): every
+    glyph now wears the SAME two things a ring letter wears, never the
+    outer band's parity plate-and-frame.
 
-    The ELEVEN the ledger counts (digits 0-9 and the colon) are always
-    built; the `"12h 35min"` format's h/min cut adds its three lowercase
-    letters, drawn from the SAME face at
-    `dial.CROWN_SMALL_CUT_FRACTION` of the digit size — the plate
-    library has no lowercase, which is exactly why the crown's default
-    face is chosen for coverage rather than inherited from the hour
-    band."""
+    The COLON comes from HIS plate — `time.png`, through the exact
+    letter pipeline every ring letter goes through
+    (`_crown_colon_image`): he built it "precisely for this". The TEN
+    DIGITS (and the `"12h 35min"` format's h/min small cut, drawn from
+    the SAME face at `dial.CROWN_SMALL_CUT_FRACTION` of the digit size —
+    the plate library has no lowercase) have no plate of their own, so
+    they wear the crown's own metal BODY COLOR and THE LETTER SHADOW
+    LAW's stamped halo instead (`_crown_letter_glyph_image`) — never a
+    numeral relief pass, never a parity fill."""
     glyphs = _CROWNS.get(spec)
     if glyphs is not None:
         return glyphs
     alphabet = numerals.crown_glyph_alphabet()
-    assert_covers("outer", spec.face, alphabet)
+    # The colon no longer asks the FONT for anything (it is a raster
+    # plate now) — requiring font coverage for it would reject faces
+    # that only fail to draw a glyph this module never asks them to draw.
+    assert_covers("outer", spec.face, tuple(g for g in alphabet if g != ":"))
     unit = _unit_px(spec.pixels)
     full_px = spec.size_units * unit * dial.CROWN_NUMERAL_SIZE_FRACTION
     small_px = full_px * dial.CROWN_SMALL_CUT_FRACTION
-    depth_px = spec.depth_units * unit * dial.CROWN_NUMERAL_SIZE_FRACTION
-    border_px = spec.border_units * unit * dial.CROWN_NUMERAL_SIZE_FRACTION
+    body_color = _crown_metal_body_color(spec.metal, spec.shade)
     built = {}
     for glyph, small in zip(alphabet, numerals.crown_small_cut(alphabet)):
         if glyph == " ":
             continue
-        font = numeral_font("outer", spec.face, small_px if small else full_px)
-        built[glyph] = _crown_glyph_image(
-            glyph, font, spec, depth_px, border_px,
-        )
+        height_px = small_px if small else full_px
+        if glyph == ":":
+            built[glyph] = _crown_colon_image(spec, height_px)
+        else:
+            font = numeral_font("outer", spec.face, height_px)
+            built[glyph] = _crown_letter_glyph_image(
+                glyph, font, height_px, body_color, spec.dpr,
+            )
     _CROWNS[spec] = built
     return built
 
 
-def _crown_glyph_image(
-    glyph: str, font, spec: CrownSpec, depth_px: float, border_px: float,
+def _crown_metal_body_color(metal: str, shade: str) -> QColor:
+    """The crown glyphs' flat body fill — THE TIME CROWN LOOK's own
+    "crown's metal finish" term. A digit has no drawn master to
+    recolor pixel-by-pixel the way `letter_metal_file` recolors a real
+    letter plate (there is no shading to preserve): it wears the
+    SAME ramp's own BODY tone instead, sampled at the recipe's own
+    `body_position` — the identical reference point
+    `render.assets.AssetCache._recolored` centers a letter's mask on
+    when the letter IS the source metal. One ramp, one law, two ways of
+    reaching a color depending on whether there is art to recolor."""
+    ramp_name = defaults.METAL_SHADES[metal][shade or constants.METAL_SHADE_DEFAULT[metal]]
+    recipe = recolor_recipe()
+    body_linear = recolor_ramp.body_color(
+        recipe.metal(ramp_name), recipe.tuning.body_position,
+    )
+    body_srgb = recolor_space.linear_to_srgb(body_linear)
+    color = QColor.fromRgbF(
+        *(max(0.0, min(1.0, float(channel))) for channel in body_srgb)
+    )
+    return color
+
+
+def _crown_letter_glyph_image(
+    glyph: str, font, height_px: float, body_color: QColor, dpr: float,
 ) -> QImage:
-    """One crown glyph on its own little transparent tile, upright, with
-    its relief already baked in. The RELIEF is thrown STRAIGHT OUTWARD
-    (the crown arc's own radial direction is the glyph's own up, once
-    the arc rotation is applied at compose time), so the tile can be
-    rotated as a whole without bending its own shadow."""
+    """One digit (or h/min small-cut letter) on its own little
+    transparent tile — THE LETTER SHADOW LAW baked in exactly as
+    `render.layers.ring.RingLayer._draw_ring_glyph` stamps it for a real
+    letter, just built ONCE here instead of every STATIC repaint. No
+    plate exists for a digit, so its BODY is the crown's own flat metal
+    tone (`_crown_metal_body_color`) rather than a recolored master."""
     path = relief.glyph_path(glyph, font)
     bounds = path.boundingRect()
-    pad = depth_px + border_px + 2.0
+    shadow_radius_px = height_px * dial.RING_LETTER_SHADOW_RADIUS
+    pad = shadow_radius_px + 2.0
     side = int(math.ceil(max(bounds.width(), bounds.height()) + 2 * pad))
     tile = relief.blank_plate(max(2, side))
     painter = relief.plate_painter(tile)
-    throw = numerals.light_offset(0.0, depth_px, spec.light)
-    relief.draw_relief(
-        painter, path, spec.relief_style, depth_px, throw, spec.darkness,
+    painter.setPen(Qt.PenStyle.NoPen)
+    painter.setBrush(QColor(palette.SHADOW_STAMP_TINT))
+    _stamp_shadow(
+        painter, shadow_radius_px,
+        lambda dx, dy: painter.drawPath(path.translated(dx, dy)),
     )
-    relief.draw_body(painter, path, numerals.parity_role("0"), border_px)
+    painter.setBrush(body_color)
+    painter.drawPath(path)
+    painter.end()
+    return relief.stamp_dpr(tile, dpr)
+
+
+def _image_silhouette(image: QImage, color: str) -> QImage:
+    """`image`'s own alpha, filled flat with `color` — the shadow
+    stamp's silhouette for a RASTER glyph (the colon). The live paint
+    path gets this for free (`ctx.cache.pixmap_by_height(...,
+    tint=SHADOW_STAMP_TINT)`); the crown bakes its tiles outside the
+    AssetCache, so the same silhouette is built directly here."""
+    silhouette = QImage(image.size(), QImage.Format.Format_ARGB32_Premultiplied)
+    silhouette.fill(QColor(color))
+    painter = QPainter(silhouette)
+    painter.setCompositionMode(
+        QPainter.CompositionMode.CompositionMode_DestinationIn
+    )
+    painter.drawImage(0, 0, image)
+    painter.end()
+    return silhouette
+
+
+def _crown_colon_image(spec: CrownSpec, height_px: float) -> QImage:
+    """THE COLON, from HIS plate: `time.png`, resolved through the exact
+    same door every ring letter resolves its finish through
+    (`render.asset_recolor.letter_metal_file` — the gold master stands
+    in until a background recolor lands, `letter_metal_file`'s own
+    documented Rule #1 fallback), scaled to the crown's own glyph height
+    and finished with THE LETTER SHADOW LAW's stamped halo — never
+    font-drawn (`crown_glyph_set` no longer asks any face for a colon
+    outline at all)."""
+    resolved = letter_metal_file(dial.RING_LETTER_ART_DIR / "time.png", spec.metal)
+    source = QImage(str(resolved))
+    if source.isNull():
+        raise ValueError(f"crown colon plate unreadable: {resolved}")
+    scaled = source.scaledToHeight(
+        max(1, round(height_px)), Qt.TransformationMode.SmoothTransformation,
+    )
+    shadow_radius_px = height_px * dial.RING_LETTER_SHADOW_RADIUS
+    pad = shadow_radius_px + 2.0
+    tile = relief.blank_plate(
+        max(2, int(math.ceil(scaled.width() + 2 * pad))),
+        max(2, int(math.ceil(scaled.height() + 2 * pad))),
+    )
+    painter = relief.plate_painter(tile)
+    silhouette = _image_silhouette(scaled, palette.SHADOW_STAMP_TINT)
+    half_w, half_h = scaled.width() / 2.0, scaled.height() / 2.0
+    _stamp_shadow(
+        painter, shadow_radius_px,
+        lambda dx, dy: painter.drawImage(
+            QPointF(-half_w + dx, -half_h + dy), silhouette,
+        ),
+    )
+    painter.drawImage(QPointF(-half_w, -half_h), scaled)
     painter.end()
     return relief.stamp_dpr(tile, spec.dpr)
 

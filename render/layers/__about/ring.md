@@ -86,12 +86,17 @@ so it rebuilds only on a skin/size/DPI change. Not `hover_variable`.
   the halo entirely — the Dollar's Eye with Shine on already carries its
   own baked light. THE PIXELATION FIX (1440p owner bug, 2026-08-06): the
   halo's own sample count is no longer the fixed `RING_LETTER_SHADOW_
-  SAMPLES` — `_shadow_sample_count()` grows it with the stamp circle's
+  SAMPLES` — `shadow_sample_count()` grows it with the stamp circle's
   PIXEL radius (`ctx.dpr`-scaled) so adjacent stamps stay under
   `dial.RING_LETTER_SHADOW_MAX_GAP_PX` device pixels apart (the floor
-  never drops below the original 8), and `_normalized_shadow_alpha()`
+  never drops below the original 8), and `normalized_shadow_alpha()`
   renormalizes each stamp's opacity so the composited darkness matches
-  the original look at the floor count.
+  the original look at the floor count. Both functions moved to
+  `render.numeral_bands` (Crown Polish round, owner correction
+  2026-08-06) — the live crown's own baked glyph tiles now stamp the
+  SAME shadow, and `numeral_bands` is the shared home both this layer
+  and the crown builder can import without a cycle (this layer already
+  imports FROM `numeral_bands`, never the other way).
 - `_draw_letter_art()`: stamps every hour's letter art at its ring position,
   scaled by `ring_letter_scale` and the per-hour shine-enlarge multiplier;
   `RingSpec.letter_no_shadow` (per-hour) turns `draw_shadow` off for that seat.

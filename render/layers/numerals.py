@@ -19,7 +19,7 @@ and at most eleven `drawImage` calls.
 from PySide6.QtCore import QPointF
 from PySide6.QtGui import QPainter
 
-from config import dial
+from config import dial, paths
 from core import numerals
 from render.context import Cadence, Layer, RenderContext
 from render.numeral_bands import BandSpec, CrownSpec, compose_crown, crown_glyph_set
@@ -83,17 +83,25 @@ def band_spec(skin, band: str, ctx: RenderContext) -> BandSpec:
 
 def crown_spec(skin, ctx: RenderContext) -> CrownSpec:
     """The live crown's own cache key — the eleven glyphs rebuild only
-    when one of these changes."""
+    when one of these changes.
+
+    THE TIME CROWN LOOK (owner correction 2026-08-06, `research/
+    ring_rework.md` §3): the crown's own finish is
+    `skin.ring.crown_text_metal` — the SAME `settings.ring_finish` the
+    ring's own letters wear (`app.controller.build_skin`) — never the
+    outer band's `numeral_relief`/`numeral_depth`/`numeral_light`/
+    `numeral_darkness`/`numeral_border` knobs, which no longer reach the
+    crown at all. `shade` is resolved here (not left to the glyph
+    builder's own ambient read) so it rides the cache key: two watches
+    with different active shades must never share one baked tile."""
+    metal = skin.ring.crown_text_metal
     return CrownSpec(
         pixels=max(2, round(2 * ctx.radius * ctx.dpr)),
         dpr=ctx.dpr,
         face=skin.crown_face,
         size_units=float(skin.numeral_outer_size),
-        relief_style=skin.numeral_relief,
-        depth_units=skin.numeral_depth,
-        light=skin.numeral_light,
-        darkness=skin.numeral_darkness,
-        border_units=skin.numeral_border,
+        metal=metal,
+        shade=paths.metal_shade(metal),
     )
 
 

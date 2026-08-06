@@ -103,6 +103,38 @@ which is why the crown's default face is chosen for full coverage rather
 than inherited from the hour band (see
 [Numeral Fonts](numeral_fonts.md)).
 
+### THE TIME CROWN LOOK (owner correction 2026-08-06)
+
+The owner's furious correction: the live crown used to build its glyphs
+through the OUTER BAND's own numeral relief/parity machinery
+(`draw_relief` + `draw_body` in [Numeral Relief](numeral_relief.md)) — a
+white/gray plate-and-frame that is not his letters' look at all. Every
+glyph now goes through THE LETTER pipeline instead:
+
+- **The colon is HIS plate.** `time.png` (`config.dial.RING_LETTER_ART_DIR`)
+  resolves through `render.asset_recolor.letter_metal_file` — the EXACT
+  door every ring letter resolves its finish through — scaled to the
+  crown's own glyph height and stamped with the shadow below. No font
+  ever draws it; `assert_covers` no longer asks any face to cover `":"`.
+- **The ten digits (and the `"12h 35min"` h/min cut) have no plate**, so
+  they wear the crown's own metal BODY COLOR
+  (`_crown_metal_body_color`) — the SAME ramp `letter_metal_file`
+  recolors onto, sampled flat at the recipe's own `body_position`
+  instead of recolored pixel-by-pixel (there is no baked shading on a
+  font glyph to preserve).
+- **Both wear THE LETTER SHADOW LAW's stamped halo** —
+  `shadow_sample_count`/`normalized_shadow_alpha`/`_stamp_shadow`, the
+  SAME construction `render.layers.ring.RingLayer._draw_ring_glyph`
+  stamps live for a real letter (moved here from `render.layers.ring`
+  so both callers can import it without a cycle), baked into the tile
+  ONCE instead of drawn every repaint.
+
+`CrownSpec` dropped the outer band's `relief_style`/`depth_units`/
+`light`/`darkness`/`border_units` fields entirely and gained `metal`
+(`RingSpec.crown_text_metal` — the SAME `settings.ring_finish` the ring
+letters wear) and `shade`, so two watches with different active shades
+never collide in the shared `_CROWNS` cache.
+
 ## Never on the paint path, never on the disk
 
 Every function here allocates and rasterizes. All of them are called from
@@ -114,8 +146,13 @@ Nothing reads or writes a file — the plates are computed, not stored.
 
 ### Uses
 - [Numerals](../../core/__about/numerals.md) — all the math
-- [Numeral Relief](numeral_relief.md) — the per-glyph paint
+- [Numeral Relief](numeral_relief.md) — the per-glyph paint (the band
+  builders only — the live crown's own glyphs no longer use it)
 - [Numeral Fonts](numeral_fonts.md) — the proven faces
+- [Asset Recolor](asset_recolor.md) — `letter_metal_file`, the colon's
+  own door
+- `recolor` package — the metal ramp the crown's flat digit body color
+  is sampled from (THE TIME CROWN LOOK)
 
 ### Used by
 - [Numeral Layers](../layers/__about/numerals.md)

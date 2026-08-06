@@ -707,3 +707,176 @@ def test_an_unknown_stored_numeral_choice_is_corrupt_not_silently_default(tmp_pa
     )
     with pytest.raises(SettingsCorruptError):
         SettingsStore(path).load()
+
+
+# --------------------------------------------------- THE TIME CROWN LOOK
+# Crown Polish round (owner correction 2026-08-06, research/ring_rework.md
+# §3): the live crown's digits-and-colon wear the SAME look every ring
+# letter wears — metal finish + THE LETTER SHADOW LAW's stamped halo —
+# never the outer band's parity plate-and-frame.
+
+def test_colon_resolves_through_the_letter_pipeline(app):
+    """The colon draws NO font glyph at all any more — it is HIS plate,
+    `time.png`, resolved through the exact door every ring letter
+    resolves its finish through (`render.asset_recolor.letter_metal_
+    file`, the SAME call `RingLayer._draw_ring_glyph` makes for a real
+    letter)."""
+    calls = []
+    original = numeral_bands.letter_metal_file
+
+    def spy(path, metal):
+        calls.append((path, metal))
+        return original(path, metal)
+
+    numeral_bands.letter_metal_file = spy
+    try:
+        numeral_bands.clear_cache()
+        spec = numeral_bands.CrownSpec(
+            pixels=720, dpr=1.0, face=dial.CROWN_FACE_DEFAULT,
+            size_units=124.0, metal="silver", shade="silver",
+        )
+        glyphs = numeral_bands.crown_glyph_set(spec)
+    finally:
+        numeral_bands.letter_metal_file = original
+        numeral_bands.clear_cache()
+    assert (dial.RING_LETTER_ART_DIR / "time.png", "silver") in calls
+    assert ":" in glyphs
+
+
+def test_the_crown_face_no_longer_needs_to_draw_a_colon(app, monkeypatch):
+    """The colon is a raster plate now (above) — `crown_glyph_set` must
+    not ask the FONT to cover ':' any more, since it never draws one."""
+    seen = {}
+    original = numeral_bands.assert_covers
+
+    def spy(band, face, glyphs):
+        seen["glyphs"] = glyphs
+        return original(band, face, glyphs)
+
+    monkeypatch.setattr(numeral_bands, "assert_covers", spy)
+    numeral_bands.clear_cache()
+    spec = numeral_bands.CrownSpec(
+        pixels=720, dpr=1.0, face=dial.CROWN_FACE_DEFAULT,
+        size_units=124.0, metal="gold", shade="classic",
+    )
+    numeral_bands.crown_glyph_set(spec)
+    assert ":" not in seen["glyphs"]
+    assert set("0123456789") <= set(seen["glyphs"])
+    numeral_bands.clear_cache()
+
+
+def test_digits_wear_the_crown_metal_body_color_not_band_parity(app):
+    """A digit has no plate of its own, so THE TIME CROWN LOOK gives it
+    the crown's own flat metal BODY tone — never the outer band's white/
+    ring-ground parity fill (`palette.NUMERAL_PARITY_COLORS`)."""
+    numeral_bands.clear_cache()
+    spec = numeral_bands.CrownSpec(
+        pixels=720, dpr=1.0, face=dial.CROWN_FACE_DEFAULT,
+        size_units=124.0, metal="gold", shade="classic",
+    )
+    digit = numeral_bands.crown_glyph_set(spec)["5"]
+    counts = {}
+    for y in range(digit.height()):
+        for x in range(digit.width()):
+            color = digit.pixelColor(x, y)
+            if color.alpha() > 200:
+                key = (color.red(), color.green(), color.blue())
+                counts[key] = counts.get(key, 0) + 1
+    dominant = max(counts, key=counts.get)
+    expected = numeral_bands._crown_metal_body_color("gold", "classic")
+    assert abs(dominant[0] - expected.red()) <= 6
+    assert abs(dominant[1] - expected.green()) <= 6
+    assert abs(dominant[2] - expected.blue()) <= 6
+    for role in ("even", "odd"):
+        parity = QColor(palette.NUMERAL_PARITY_COLORS[role]["body"])
+        distance = (
+            abs(dominant[0] - parity.red())
+            + abs(dominant[1] - parity.green())
+            + abs(dominant[2] - parity.blue())
+        )
+        assert distance > 60, f"the crown digit reads as band-parity {role}"
+    numeral_bands.clear_cache()
+
+
+def test_digit_glyph_carries_the_letter_shadow_stamp(app, monkeypatch):
+    """The stamped halo really is baked into the tile: at
+    `RING_LETTER_SHADOW_RADIUS` 0 every shadow copy lands exactly on the
+    glyph's own silhouette (no reach beyond it); at the real radius the
+    copies are offset outward and the tile carries MORE opaque pixels
+    for the identical glyph."""
+    def _opaque_count(image) -> int:
+        return sum(
+            1
+            for y in range(image.height())
+            for x in range(image.width())
+            if image.pixelColor(x, y).alpha() > 0
+        )
+
+    spec = numeral_bands.CrownSpec(
+        pixels=720, dpr=1.0, face=dial.CROWN_FACE_DEFAULT,
+        size_units=124.0, metal="gold", shade="classic",
+    )
+    numeral_bands.clear_cache()
+    with_shadow = numeral_bands.crown_glyph_set(spec)["5"]
+
+    monkeypatch.setattr(dial, "RING_LETTER_SHADOW_RADIUS", 0.0)
+    numeral_bands.clear_cache()
+    without_shadow = numeral_bands.crown_glyph_set(spec)["5"]
+
+    assert _opaque_count(with_shadow) > _opaque_count(without_shadow)
+    numeral_bands.clear_cache()
+
+
+# ------------------------------------------------- THE LIVE CROWN'S MARGIN
+# Crown Polish round TASK 2 (owner correction 2026-08-06): The One's top
+# crown arc was clipped by the window edge at default size —
+# `dial_window_margin_fraction` never reserved for `dial.RING_LIVE_CROWN`.
+
+def test_the_ones_live_crown_stays_inside_the_window_at_default_size(
+    app, frame_args,
+):
+    """The pixel side of the TASK 2 fix, mirroring
+    tests/test_pointer.py::test_window_margin_renders_glow_without_clipping's
+    own construction: The One's DEFAULT skin, rendered into the LIVE
+    margin-sized window at `dial.DEFAULT_DIAL_DIAMETER`. The outermost
+    frame must stay fully transparent (the crown never clips) and the
+    live glyphs must actually be present near the top (the margin is not
+    merely oversized, the arc genuinely reaches close to the edge)."""
+    from config import defaults
+    from PySide6.QtCore import Qt as _Qt
+    from PySide6.QtGui import QImage, QPainter
+
+    day, tick = frame_args
+    skin = build_skin(Settings(ring="The One"))
+    diameter = dial.DEFAULT_DIAL_DIAMETER
+    margin_px = round(diameter * defaults.dial_window_margin_fraction(skin))
+    window = diameter + 2 * margin_px
+
+    comp = Compositor(skin, AssetCache())
+    comp.set_day(day)
+    image = QImage(window, window, QImage.Format.Format_ARGB32_Premultiplied)
+    image.fill(_Qt.GlobalColor.transparent)
+    painter = QPainter(image)
+    painter.translate(margin_px, margin_px)     # the widget's own offset
+    comp.paint(painter, float(diameter), 1.0, tick)
+    painter.end()
+
+    # NEVER CLIPPED — the outermost 1-px frame is fully transparent.
+    border_alpha = max(
+        max(
+            image.pixelColor(i, 0).alpha(),
+            image.pixelColor(i, window - 1).alpha(),
+            image.pixelColor(0, i).alpha(),
+            image.pixelColor(window - 1, i).alpha(),
+        )
+        for i in range(window)
+    )
+    assert border_alpha == 0
+    # The live crown genuinely draws SOMETHING near the top of the window
+    # (the top arc keeps the civil hour) — not just an oversized margin.
+    top_band = any(
+        image.pixelColor(x, y).alpha() > 30
+        for y in range(0, margin_px + 4)
+        for x in range(window // 4, 3 * window // 4)
+    )
+    assert top_band, "the live crown's top arc never reached near the edge"
