@@ -261,6 +261,26 @@ follows a location change the same tick the flash/tray title do,
 never lagging a tick behind. `_set_ring_crown_location` is the ONE
 setter the Watch Face Ring section's "Location" checkbox calls.
 
+**THE RULED LOCATION ARC (owner defect 2026-08-07):** the ledger rules
+The One's BOTTOM crown arc to be "City, Country", and until this round
+nothing drew it — the toggle above is OFF by default and, when ticked,
+draws at the TOP, straight through the live time crown. A preset's ruled
+arc is not a user pick, so it is declared in
+`dial.RING_LIVE_CROWN[...]["location"]` (the orientation, or `None`) and
+APPENDED by `_compose_skin` beside the preset's own crown text. The user
+toggle still wins when ticked, so the two never draw together.
+
+**The separator.** `constants.RING_JEWEL_FILES` has no COMMA plate (52
+entries: uppercase Latin/Greek, digits, `$`, `&`, `✠`, the Eye, the
+colon), so `_location_crown_text` drops the comma and collapses the gap
+to ONE SPACE — "Belgrade, Serbia" reads "BELGRADE SERBIA". That is the
+existing formatter reused, not a new rule: it is what the Location
+toggle has drawn since the RING VERDICTS round.
+
+`dial.RING_LIVE_CROWN_LOCATION_READING` holds the arc's hover text once
+(it was a dict literal inlined in the toggle's branch), shared by both
+paths.
+
 ## Classes (menu plumbing)
 
 ### `_StayOpenMenu(QMenu)`

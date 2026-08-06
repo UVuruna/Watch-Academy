@@ -560,6 +560,38 @@ def _compose_skin(settings: Settings, location_display: str = ""):
     # context, or a name with no drawable character at all) leaves
     # whatever crown the ring already had, the same graceful-absence
     # pattern the custom crown text uses above.
+    #
+    # THE RULED LOCATION ARC (owner defect 2026-08-07 — "The One's bottom
+    # location line does not exist; implement it"): the ledger
+    # (ring_rework §4, row D) rules The One's BOTTOM arc to be "City,
+    # Country", and that is a property of the PRESET, not of the user
+    # toggle above. `dial.RING_LIVE_CROWN[...]["location"]` names its
+    # orientation; the arc is APPENDED (never replacing the preset's own
+    # crown text, and never at "top", where it would run straight through
+    # the live time). The user toggle still wins when it is ticked — it
+    # already produced a location crown, and two of them would double.
+    #
+    # SEPARATOR: `_location_crown_text` drops the comma and collapses the
+    # gap to ONE SPACE, because the jewel library has no comma plate
+    # (`constants.RING_JEWEL_FILES` — 52 entries, uppercase Latin/Greek,
+    # digits, $, &, ✠, the Eye and the colon). "Belgrade, Serbia" reads
+    # "BELGRADE SERBIA". That is the product's existing separator
+    # practice, not a new invention: it is what the user toggle has drawn
+    # since the RING VERDICTS round, and reusing it keeps ONE formatter
+    # (Rule #5) instead of teaching the ruled arc a second one.
+    ruled_location = dial.RING_LIVE_CROWN.get(settings.ring, {}).get("location")
+    if ruled_location and not settings.ring_crown_location.get(settings.ring, False):
+        location_text = _location_crown_text(location_display)
+        if location_text:
+            crown_arc_entries = list(crown_arc_entries) + [{
+                "text": location_text,
+                "angles": free_arc_angles(location_text, ruled_location),
+                "words": ({
+                    "text": location_text, "start": 0,
+                    "end": len(location_text) - 1, "seat": None,
+                },),
+                "reading": dict(dial.RING_LIVE_CROWN_LOCATION_READING),
+            }]
     if settings.ring_crown_location.get(settings.ring, False):
         location_text = _location_crown_text(location_display)
         if location_text:
@@ -574,16 +606,9 @@ def _compose_skin(settings: Settings, location_display: str = ""):
                 # ruling 2026-08-06): verbatim from
                 # research/crown_content.md §1 — the counterpart to the
                 # live-hour crown's own reading (dial.RING_LIVE_CROWN_READING).
-                "reading": {
-                    "title": "City, Country",
-                    "text": (
-                        "the bottom arc names the city and country the "
-                        "watch is set to: the counterpart to the live "
-                        "hour above it — WHERE anchors WHEN, the two "
-                        "lines that make a clock a fact about a "
-                        "specific place rather than an abstraction."
-                    ),
-                },
+                # Stated once in config since 2026-08-07, shared with the
+                # preset's own ruled bottom arc above (Rule #5).
+                "reading": dict(dial.RING_LIVE_CROWN_LOCATION_READING),
             }]
     crown_arc = tuple(
         {
