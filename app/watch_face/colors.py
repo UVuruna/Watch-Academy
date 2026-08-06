@@ -22,9 +22,9 @@ this round —
     UNCONDITIONALLY now, each with its OWN tint
     (`ring_tint`/`ring_tint_inner`). The "Inner (Minute track)" row
     below is always live — no more disk-presence gate.
-  * R-24's Crown Text color: the outer arc IS the Great Seal motto
-    inscription (`RingSpec.motto`) — it always had a seat, just no
-    control. `motto_tint` (this section) and `motto_scale`/`motto_alpha`
+  * R-24's Crown Text color: the outer arc IS the Great Seal crown text
+    inscription (`RingSpec.crown_text`) — it always had a seat, just no
+    control. `crown_text_tint` (this section) and `crown_text_scale`/`crown_text_alpha`
     (Size/Opacity sections) now read it independently of
     `letter_tint`/`ring_letter_scale`. See `skins.manifest.
     SkinDefinition`'s Crown Text fields for the full design note.
@@ -254,20 +254,20 @@ def _indices_group(settings, setters, tr) -> QGroupBox:
 def _crown_text_group(settings, setters, tr) -> QGroupBox:
     """R-24/Phase-6-debt correction (owner 2026-08-05, LOUD: "Crown
     tekst je onaj tekst koji piše oko sata — faith, hope, suffering") —
-    the outer Great Seal motto arc's own free color, independent of
+    the outer Great Seal crown text arc's own free color, independent of
     `letter_tint`: "Follow ring" (default, None) reads `ring_tint`
     exactly like the Hands do; a preset or custom hex overrides it.
     Greyed out with a tooltip when the active ring preset carries no
-    motto (`setters["ring_has_motto"]`) — the same graceful-truth
+    crown text (`setters["ring_has_crown_text"]`) — the same graceful-truth
     pattern the Aura group's Colorful gate uses above."""
     group = _tint_group(
-        tr, "Crown Text color", settings.motto_tint, setters["motto_tint"],
+        tr, "Crown Text color", settings.crown_text_tint, setters["crown_text_tint"],
         "Follow ring (default)", "Pick the Crown Text tint",
     )
-    if not setters["ring_has_motto"]():
+    if not setters["ring_has_crown_text"]():
         group.setEnabled(False)
         group.setToolTip(
-            tr("The active ring preset carries no Crown Text (Great Seal motto).")
+            tr("The active ring preset carries no Crown Text (Great Seal inscription).")
         )
     return group
 

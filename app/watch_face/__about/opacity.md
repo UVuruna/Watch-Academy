@@ -17,12 +17,12 @@ R-15 Umbra opacity (owner-requested, a layer-alpha multiplier), R-35
 "Moon — hover over Earth" (reads as the existing Moon/Earth rim-TRANSIT
 dimming — there is no mouse-hover state on this dial), R-36 "Inactive
 icons" (the weekday ghost bodies' existing opacity). A fourth,
-"Crown Text" (`motto_alpha`, R-24/Phase-6-debt correction, owner
+"Crown Text" (`crown_text_alpha`, R-24/Phase-6-debt correction, owner
 2026-08-05), was added the same round the Phase ④ debt note calling
-"Crown Text" nonexistent was corrected — the outer Great Seal motto arc
-IS this element (`skin.ring.motto`, `RingLayer._draw_motto`); a direct
+"Crown Text" nonexistent was corrected — the outer Great Seal crown text arc
+IS this element (`skin.ring.crown_text`, `RingLayer._draw_crown_text`); a direct
 row like `umbra_alpha`, greyed out with a tooltip
-(`setters["ring_has_motto"]`) on motto-less presets.
+(`setters["ring_has_crown_text"]`) on crown-text-less presets.
 
 ## Connections
 

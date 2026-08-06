@@ -30,7 +30,7 @@ offending card.
   legend text. Since the 2026-08-05 decree every bundled card carries
   one (The One's eight hour-stations, Templar's four watches — CANON.md
   §THE HOUR RING / §THE TEMPLAR RING).
-- **`motto`** — a list of motto/crown-text entries; see
+- **`crown_text`** — a list of crown-text entries; see
   [flow](../__flow/rings.md) for the three mutually exclusive forms
   (pinned / centered / free-form crown text) and their angle-solving.
 
@@ -41,9 +41,9 @@ offending card.
   `constants.RING_OUTERS`, `constants.RING_OUTER_LOCK`,
   `constants.RING_LETTER_FILES`, `constants.METAL_SHADE_NAMES`,
   `paths.database_dir()`
-- [Motto](../../core/__about/motto.md) — `motto_glyph_angles`,
+- [Crown Text](../../core/__about/crown_text.md) — `crown_glyph_angles`,
   `centered_word_angles`, `free_arc_angles`, `_occurrence_index` — the
-  per-glyph angle solve for the optional `motto` field
+  per-glyph angle solve for the optional `crown_text` field
 
 ### Used by
 - [Watch Controller](../../app/__about/controller.md) — `build_skin` resolves
@@ -61,10 +61,10 @@ offending card.
 
 - `ring_presets(custom=())`: `name → validated card` for every bundled
   + custom preset (`{name, positions, letters, outer, triangle,
-  legend, motto, thematic}`); a duplicated name raises.
+  legend, crown_text, thematic}`); a duplicated name raises.
 - `validate_preset(entry)`: the shared card validator — see
   [flow](../__flow/rings.md).
-- `_validate_motto(name, raw, positions)` (private): the `motto`
+- `_validate_crown_text(name, raw, positions)` (private): the `crown_text`
   field's own validator and angle solver.
 
 ### _bundled_presets()

@@ -8,15 +8,15 @@ Default + the five `dial.SIZE_PRESETS` buttons (the SAME two-way
 slider/spinbox sync `display_section._build_sizes_group` uses, plus
 `design_window.DesignDialog._size_tab`'s preset row) and every element
 scale slider — Earth, Moon, Complications (`slot_scale`), Indices
-(`ring_letter_scale`), Crown Text (`motto_scale`, R-24/Phase-6-debt
+(`ring_letter_scale`), Crown Text (`crown_text_scale`, R-24/Phase-6-debt
 correction, owner 2026-08-05), Hover enlarge — wired to the SAME
 stored setting keys the Settings dialog's "Element sizes" group uses
 (Rule #5, no renamed keys this phase; only the on-screen labels read
 "Complications"/"Indices" instead of "Slot"/"Ring letters"). The Crown
-Text row multiplies `motto_scale` ON TOP OF `ring_letter_scale`
+Text row multiplies `crown_text_scale` ON TOP OF `ring_letter_scale`
 (unaffected) and greys itself out with a tooltip
-(`setters["ring_has_motto"]`) when the active ring preset carries no
-motto.
+(`setters["ring_has_crown_text"]`) when the active ring preset carries no
+crown text.
 
 ## Connections
 

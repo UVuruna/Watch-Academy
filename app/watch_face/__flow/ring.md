@@ -12,7 +12,7 @@
 ☑️ "Shine" — only when the active card seats the adaptive Eye glyph
 📦 Inner gallery — one tile per `RING_INNERS` entry, icon =
    `thumbs.art_thumbnail(RING_INNER_ART_DIR / f"{inner}.png")`
-📝 Crown text group — bundled preset: read-only joined motto text;
+📝 Crown text group — bundled preset: read-only joined crown text;
    custom ring: a text field + top/bottom orientation pills
 🔘 "Custom ring…" button
 

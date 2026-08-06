@@ -276,52 +276,54 @@ def test_letter_tint_adds_an_extra_recolor_over_the_metal_finish(app, frame_args
     assert differing > 0, "letter_tint must repaint the ring letters"
 
 
-# --- Crown Text (motto) controls (owner correction 2026-08-05): the ---------
-# ROADMAP's Phase-④ claim "no such element" was wrong — `skin.ring.motto`
+# --- Crown Text controls (owner correction 2026-08-05): the -----------------
+# ROADMAP's Phase-④ claim "no such element" was wrong — `skin.ring.crown_text`
 # is the outer Great Seal/cross-station arc, drawn by
-# `RingLayer._draw_motto`. `motto_alpha`/`motto_scale`/`motto_tint` are
-# the three new Colors/Opacity/Size controls attached to it; the default
-# bundled ring is "DOMY" (carries a motto), "The One" carries none.
+# `RingLayer._draw_crown_text`. `crown_text_alpha`/`crown_text_scale`/
+# `crown_text_tint` are the three new Colors/Opacity/Size controls attached
+# to it; the default bundled ring is "DOMY" (carries crown text), "The One"
+# carries none.
 
 
-def test_motto_alpha_actually_dims_the_composed_crown_text(app, frame_args):
+def test_crown_text_alpha_actually_dims_the_composed_crown_text(app, frame_args):
     day, tick = frame_args
     base = controller_module.build_skin(Settings())
-    dimmed = controller_module.build_skin(Settings(motto_alpha=0.1))
+    dimmed = controller_module.build_skin(Settings(crown_text_alpha=0.1))
     differing = _diff_count(_render(base, day, tick), _render(dimmed, day, tick), step=2)
-    assert differing > 0, "motto_alpha must change the composed Crown Text pixels"
+    assert differing > 0, "crown_text_alpha must change the composed Crown Text pixels"
 
 
-def test_motto_scale_changes_the_composed_crown_text_size(app, frame_args):
+def test_crown_text_scale_changes_the_composed_crown_text_size(app, frame_args):
     day, tick = frame_args
     base = controller_module.build_skin(Settings())
-    enlarged = controller_module.build_skin(Settings(motto_scale=1.6))
+    enlarged = controller_module.build_skin(Settings(crown_text_scale=1.6))
     differing = _diff_count(_render(base, day, tick), _render(enlarged, day, tick), step=2)
-    assert differing > 0, "motto_scale must change the composed Crown Text size"
+    assert differing > 0, "crown_text_scale must change the composed Crown Text size"
 
 
-def test_motto_tint_recolors_crown_text_independently_of_ring_tint(app, frame_args):
+def test_crown_text_tint_recolors_crown_text_independently_of_ring_tint(app, frame_args):
     day, tick = frame_args
     base = controller_module.build_skin(Settings(ring_tint="#3050E0"))
     tinted = controller_module.build_skin(
-        Settings(ring_tint="#3050E0", motto_tint="#FF00FF")
+        Settings(ring_tint="#3050E0", crown_text_tint="#FF00FF")
     )
     differing = _diff_count(_render(base, day, tick), _render(tinted, day, tick), step=2)
-    assert differing > 0, "motto_tint must repaint the Crown Text independently of ring_tint"
+    assert differing > 0, "crown_text_tint must repaint the Crown Text independently of ring_tint"
 
 
-def test_crown_text_controls_are_no_ops_on_a_motto_less_preset(app, frame_args):
-    """"The One" ships with no `motto` entry at all — the three Crown
+def test_crown_text_controls_are_no_ops_on_a_crown_text_less_preset(app, frame_args):
+    """"The One" ships with no `crown_text` entry at all — the three Crown
     Text knobs must draw NOTHING different (graceful truth: the Colors/
     Opacity/Size rows grey themselves out for exactly this reason)."""
     day, tick = frame_args
     base = controller_module.build_skin(Settings(ring="The One"))
     knobbed = controller_module.build_skin(
         Settings(
-            ring="The One", motto_alpha=0.1, motto_scale=1.6, motto_tint="#FF00FF",
+            ring="The One", crown_text_alpha=0.1, crown_text_scale=1.6,
+            crown_text_tint="#FF00FF",
         )
     )
     differing = _diff_count(_render(base, day, tick), _render(knobbed, day, tick), step=2)
     assert differing == 0, (
-        "Crown Text knobs must be a no-op on a motto-less ring preset"
+        "Crown Text knobs must be a no-op on a crown-text-less ring preset"
     )

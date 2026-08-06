@@ -8,7 +8,7 @@
 %%{init: {'flowchart': {'subGraphTitleMargin': {'top': 0, 'bottom': 35}}}}%%
 flowchart TB
     A[paint] --> B[_draw_bands: inner then outer, each own tint]
-    B --> D[_draw_letter_art] --> E[_draw_motto] --> Z1[return]
+    B --> D[_draw_letter_art] --> E[_draw_crown_text] --> Z1[return]
     subgraph GLYPH["_draw_ring_glyph(asset, metal, theta, radius_fraction, height, draw_shadow)"]
         J[resolve metal finish file] --> L[translate to dial_point, rotate readable_rotation_deg]
         L --> S{draw_shadow?}
@@ -17,7 +17,7 @@ flowchart TB
         K --> M[draw metal pixmap]
     end
     D -.calls per letter.-> GLYPH
-    E -.calls per motto glyph.-> GLYPH
+    E -.calls per crown-text glyph.-> GLYPH
 ```
 
 Pseudocode (language-neutral): THE COMPOSITIONAL RING MODEL (owner
@@ -27,7 +27,7 @@ decree 2026-08-05) — always both bands, never a single plate:
         draw inner_asset tinted (ring_tint_inner, follows ring_tint if None) + saturated, full size
         draw outer_asset tinted (ring_tint) + saturated, full size, ON TOP
     _draw_letter_art()      # per-hour letters, untinted (unless letter_tint set)
-    _draw_motto()           # top/bottom Crown Text arcs, untinted (unless motto_tint set)
+    _draw_crown_text()      # top/bottom Crown Text arcs, untinted (unless crown_text_tint set)
 
     FUNCTION _draw_ring_glyph(gold_asset, metal, theta, radius_fraction, height, draw_shadow=True):
         asset = letter_metal_file(gold_asset, metal)     # derived, disk-cached
@@ -44,8 +44,8 @@ decree 2026-08-05) — always both bands, never a single plate:
         FOR EACH (hour, gold_asset) IN skin's letter_art:
             _draw_ring_glyph(..., height * letter_zoom[hour], draw_shadow=NOT letter_no_shadow[hour])
 
-    FUNCTION _draw_motto():
-        IF skin has no motto texts: RETURN
-        FOR EACH motto IN skin's mottos:
-            FOR EACH (gold_asset, theta) IN motto's glyphs:
-                _draw_ring_glyph(..., dial.RING_MOTTO_RADIUS_FRACTION, height)
+    FUNCTION _draw_crown_text():
+        IF skin has no crown texts: RETURN
+        FOR EACH crown_entry IN skin's crown_text:
+            FOR EACH (gold_asset, theta) IN crown_entry's glyphs:
+                _draw_ring_glyph(..., dial.RING_CROWN_TEXT_RADIUS_FRACTION, height)

@@ -216,14 +216,14 @@ transit `render.daylight.moon_transit_opacity` already computed) and
 to fall back to — the Umbra was always fully opaque before this Phase).
 
 **Crown Text + Ring split additions (owner correction 2026-08-05):**
-`motto_alpha`/`motto_scale`/`motto_tint` (the outer Great Seal/cross-
-station motto arc, `RingLayer._draw_motto`) and `ring_tint_inner` (the
+`crown_text_alpha`/`crown_text_scale`/`crown_text_tint` (the outer Great Seal/cross-
+station crown text arc, `RingLayer._draw_crown_text`) and `ring_tint_inner` (the
 split art's own inner-band tint, `RingLayer._draw_split_plate`) are
 direct pass-throughs the same shape as the Phase 4 fields above — see
 [Skins Manifest](../../skins/__about/manifest.md) and
 [Ring (layer)](../../render/layers/__about/ring.md) for the render-side
 design notes. The ROADMAP's earlier "no such element"/"one baked
-plate" debts were both WRONG (Phase ④ never found the actual motto/
+plate" debts were both WRONG (Phase ④ never found the actual crown-text/
 split-art mechanism); this round corrected them, not merely added new
 controls.
 
@@ -238,7 +238,7 @@ always passes `True`; the menu TITLE row passes `watch_count() >= 2`.
 `_location_flash_text` (R-30, the flash's own "CITY, COUNTRY" formatter),
 `_location_crown_text` (RING VERDICTS round, owner decree 2026-08-05 —
 uppercases and filters `_location_flash_text`'s own output down to
-`constants.RING_CROWN_TEXT_CHARSET`, the exact set the motto renderer
+`constants.RING_CROWN_TEXT_CHARSET`, the exact set the crown-text renderer
 can draw), `_resolve_hands`, `_next_rotation_theme`,
 `_filtered_sun_anchors`, `_filtered_moon_events`, `_slot_seconds`,
 `_effective_weekday_slot`, `_classic_slot_theme`, `_themed_weekday_set`,
@@ -248,7 +248,7 @@ the skin-building responsibility.
 **THE LOCATION CROWN (RING VERDICTS round, owner decree 2026-08-05):**
 a per-ring toggle (`Settings.ring_crown_location`, keyed by ring name
 like `ring_two_metals`) that REPLACES whatever crown text the active
-ring carries — a bundled preset's own motto or a custom ring's typed
+ring carries — a bundled preset's own crown text or a custom ring's typed
 text — with the active location's "CITY, COUNTRY", available for
 presets and custom rings alike (`_compose_skin`). `WatchController`
 keeps a live `_active_location_display` string in lockstep with

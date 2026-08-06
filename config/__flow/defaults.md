@@ -66,8 +66,8 @@ it lives in `defaults.py`, the one module allowed to import every peer.
 flowchart TB
     A["dial.RING_LETTER_RADIUS_FRACTION,\ndial.RING_LETTER_ART_SCALE,\ndial.RING_LETTER_SHADOW_RADIUS"] --> D[letter_extent]
     B["dial.GLOW_RING_RADIUS_FRACTION,\nglow.GLOW_RADIUS_SCALE,\nskin.hover_enlarge"] --> C[glow_extent]
-    E["dial.RING_MOTTO_RADIUS_FRACTION\n(only if skin.ring.motto)"] --> F[motto_extent, else 0.0]
-    C --> G["margin = (MAX(glow, letter, motto) - 1.0) / 2\n+ DIAL_WINDOW_MARGIN_EPSILON"]
+    E["dial.RING_CROWN_TEXT_RADIUS_FRACTION\n(only if skin.ring.crown_text)"] --> F[crown_text_extent, else 0.0]
+    C --> G["margin = (MAX(glow, letter, crown_text) - 1.0) / 2\n+ DIAL_WINDOW_MARGIN_EPSILON"]
     D --> G
     F --> G
     G --> H[per-side transparent window margin,\nrecomputed on EVERY skin install]

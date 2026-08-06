@@ -18,7 +18,7 @@ purity test).
 | `encyclopedia.py` | Standard | the Encyclopedia's own sections, overlay-localized — [about](__about/encyclopedia.md) |
 | `cube_model_export.py` | Algorithmic | Character Cube canon exported as a 3D Preview MODEL — [about](__about/cube_model_export.md) · [flow](__flow/cube_model_export.md) |
 | `translations.py` | Algorithmic | corpus collection, gtx client, hash-tracked cache, sr transliteration — [about](__about/translations.md) · [flow](__flow/translations.md) |
-| `rings.py` | Algorithmic | ring preset cards, layout resolution, motto angle solving — [about](__about/rings.md) · [flow](__flow/rings.md) |
+| `rings.py` | Algorithmic | ring preset cards, layout resolution, crown-text angle solving — [about](__about/rings.md) · [flow](__flow/rings.md) |
 | `hands.py` | Standard | hand pack loading + validation — [about](__about/hands.md) |
 | `_io.py` | Trivial | `load_json_checked()` / `year_bounds()` — the shared JSON loader every repository above calls |
 | `__init__.py` | Trivial | docstring only, no code |
@@ -28,7 +28,7 @@ purity test).
 ### Uses
 - [Config (folder)](../config/___config.md) — paths and coverage ranges
 - [Core (folder)](../core/___core.md) — `YearAnchors`, `MoonWindow`,
-  `EclipseEvent`, `cube_seating`, `deep_time`, `motto`
+  `EclipseEvent`, `cube_seating`, `deep_time`, `crown_text`
 - [Database (folder)](../Database/___database.md) — the JSON/SQLite
   files
 - [Config Cube](../config/__about/cube.md) — the Character Cube canon

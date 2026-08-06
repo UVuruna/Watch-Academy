@@ -31,7 +31,7 @@ def app():
 
 def test_crown_text_validator_accepts_every_charset_character(app):
     """Every character `constants.RING_CROWN_TEXT_CHARSET` names — the
-    exact set the motto renderer can draw one-per-character — is
+    exact set the crown-text renderer can draw one-per-character — is
     ACCEPTABLE, derived programmatically, never a hand-written list."""
     edit = QLineEdit()
     validator = _crown_text_validator(edit)
@@ -43,7 +43,7 @@ def test_crown_text_validator_accepts_every_charset_character(app):
 @pytest.mark.parametrize("bad", ["hello", "HELLO!", "café", "A,B", "A-B"])
 def test_crown_text_validator_rejects_unsupported_characters(app, bad):
     """Lowercase letters, punctuation and accents are all OUTSIDE the
-    motto renderer's drawable set — the validator must refuse them
+    crown-text renderer's drawable set — the validator must refuse them
     (the field's own keystroke, not merely a build-time drop)."""
     edit = QLineEdit()
     validator = _crown_text_validator(edit)
@@ -80,15 +80,15 @@ def test_location_crown_text_filters_to_the_drawable_charset():
 def test_location_crown_renders_the_active_location_on_a_bundled_preset():
     """Rule 3 (owner decree 2026-08-05): available for BUNDLED presets
     too — ticking Location on DOMY (which carries its own cross-word
-    motto) REPLACES that motto with the active location text."""
+    crown text) REPLACES that crown text with the active location text."""
     bare = build_skin(replace(Settings(), ring="DOMY"), "Belgrade, Serbia")
     located = build_skin(
         replace(Settings(), ring="DOMY", ring_crown_location={"DOMY": True}),
         "Belgrade, Serbia",
     )
-    assert bare.ring.motto and bare.ring.motto[0]["text"] != "BELGRADE SERBIA"
-    assert len(located.ring.motto) == 1
-    assert located.ring.motto[0]["text"] == "BELGRADE SERBIA"
+    assert bare.ring.crown_text and bare.ring.crown_text[0]["text"] != "BELGRADE SERBIA"
+    assert len(located.ring.crown_text) == 1
+    assert located.ring.crown_text[0]["text"] == "BELGRADE SERBIA"
 
 
 def test_location_crown_renders_on_a_custom_ring_too():
@@ -103,8 +103,8 @@ def test_location_crown_renders_on_a_custom_ring_too():
         ),
         "Athens, Greece",
     )
-    assert len(located.ring.motto) == 1
-    assert located.ring.motto[0]["text"] == "ATHENS GREECE"
+    assert len(located.ring.crown_text) == 1
+    assert located.ring.crown_text[0]["text"] == "ATHENS GREECE"
 
 
 def test_location_crown_absent_context_leaves_the_ring_untouched():
@@ -115,7 +115,7 @@ def test_location_crown_absent_context_leaves_the_ring_untouched():
     skin = build_skin(
         replace(Settings(), ring="DOMY", ring_crown_location={"DOMY": True})
     )
-    assert skin.ring.motto == build_skin(replace(Settings(), ring="DOMY")).ring.motto
+    assert skin.ring.crown_text == build_skin(replace(Settings(), ring="DOMY")).ring.crown_text
 
 
 # --- Follows a live location change (controller level) -----------------------
@@ -146,8 +146,8 @@ def test_location_crown_follows_a_live_location_change(controller):
     controller._install_skin(
         build_skin(controller._settings, controller._active_location_display)
     )
-    before = controller._skin.ring.motto[0]["text"]
+    before = controller._skin.ring.crown_text[0]["text"]
     controller._jump_to_place("greenwich")
-    after = controller._skin.ring.motto[0]["text"]
+    after = controller._skin.ring.crown_text[0]["text"]
     assert after != before
     assert "GREENWICH" in after

@@ -31,8 +31,8 @@ SkinDefinition
     letter_zoom: dict[hour -> float]    -- default 1.0
     letter_no_shadow: dict[hour -> bool] -- default False (Eye shine on -> True)
     letter_legend: dict[hour -> dict]   -- {name, reading}
-    motto: tuple[dict, ...]             -- outer arc text, per preset
-    motto_metal: str = "gold"
+    crown_text: tuple[dict, ...]        -- outer arc text, per preset
+    crown_text_metal: str = "gold"
   weekday_set: WeekdaySpec
     bodies: dict[name -> Path | None]
     body_names, body_colors: dict[name -> str]
@@ -135,7 +135,7 @@ SkinDefinition
 
 ```mermaid
 flowchart TB
-    A["skin: SkinDefinition"] --> B["collect every asset field: background, ring (+letter_art +motto glyphs), moon, hands (hour/minute/second), weekday bodies, year-marker variants"]
+    A["skin: SkinDefinition"] --> B["collect every asset field: background, ring (+letter_art +crown_text glyphs), moon, hands (hour/minute/second), weekday bodies, year-marker variants"]
     B --> C["drop the None entries"]
     C --> D["resolve each Path through paths.art_file() -- active art source, with fallback"]
     D --> E{"path.exists()?"}
@@ -154,7 +154,7 @@ Pseudocode:
             skin.hands.hour.asset, skin.hands.minute.asset,
             skin.hands.second.asset IF skin.hands.second ELSE None,
             *skin.ring.letter_art.values(),
-            *(path for motto in skin.ring.motto for path, _ in motto["glyphs"]),
+            *(path for crown_entry in skin.ring.crown_text for path, _ in crown_entry["glyphs"]),
             *skin.weekday_set.bodies.values(),
             *skin.year_marker.variants.values(),
         ]

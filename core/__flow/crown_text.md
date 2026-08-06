@@ -1,8 +1,8 @@
-# Motto — Flow
+# Crown Text — Flow
 
-**About:** [description](../__about/motto.md)
+**About:** [description](../__about/crown_text.md)
 
-## Algorithm — `motto_glyph_angles`
+## Algorithm — `crown_glyph_angles`
 
 ```mermaid
 flowchart TB
@@ -33,7 +33,7 @@ flowchart TB
 
 Pseudocode (language-neutral):
 
-    FUNCTION motto_glyph_angles(text, pins, clockwise=True):
+    FUNCTION crown_glyph_angles(text, pins, clockwise=True):
         resolved = sorted [(index of the Nth occurrence of letter, ring_position)
                             FOR (letter, occurrence, ring_position) IN pins]
         ASSERT len(resolved) >= 2, no two pins share an index,
@@ -54,7 +54,7 @@ Pseudocode (language-neutral):
     FUNCTION _tight_two_pin_angles(text, [(index_a, pos_a), (index_b, pos_b)], clockwise):
         angle_a = ring_position_angle(pos_a)
         angle_b = ring_position_angle(pos_b)
-        step = RING_MOTTO_LETTER_STEP_DEG * (1 IF clockwise ELSE -1)
+        step = RING_CROWN_TEXT_LETTER_STEP_DEG * (1 IF clockwise ELSE -1)
         unwrap angle_b past angle_a in the `clockwise` direction
         ASSERT text has exactly one interior space, at index `gap`
         angles[index_a] = angle_a

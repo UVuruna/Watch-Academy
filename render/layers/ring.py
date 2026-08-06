@@ -1,7 +1,6 @@
 """The RING layer — THE COMPOSITIONAL RING MODEL (owner decree
 2026-08-05): a ring is ALWAYS the composition of an outer band, an
-inner band, the preset's own letters and an optional crown-text motto
-arc. No monolithic single-plate ring face and no procedural fallback
+inner band, the preset's own letters and an optional crown-text arc. No monolithic single-plate ring face and no procedural fallback
 exist any more — every skin's `RingSpec` carries a real
 `outer_asset`/`inner_asset` pair (`config.defaults`, `app.controller.
 _compose_skin`), so this layer composes unconditionally.
@@ -59,14 +58,14 @@ def _normalized_shadow_alpha(samples: int) -> float:
 class RingLayer(Layer):
     """The composed ring: outer band, inner band, the preset's own
     letters (with per-hour metal finish) and the optional crown-text
-    motto arc."""
+    arc."""
 
     cadence = Cadence.STATIC
 
     def paint(self, painter: QPainter, ctx: RenderContext) -> None:
         self._draw_bands(painter, ctx)
         self._draw_letter_art(painter, ctx)
-        self._draw_motto(painter, ctx)
+        self._draw_crown_text(painter, ctx)
 
     def _draw_bands(self, painter: QPainter, ctx: RenderContext) -> None:
         """The outer + inner band composition — inner drawn FIRST so the
@@ -98,7 +97,7 @@ class RingLayer(Layer):
     ) -> None:
         """One letter-art glyph stamped on the ring circle — the shared
         stamp (Rule #5) behind BOTH the ring's own six banknote letters
-        (`_draw_letter_art`) and the outer motto arc (`_draw_motto`,
+        (`_draw_letter_art`) and the outer crown text arc (`_draw_crown_text`,
         TASK 1, owner "može radi" 2026-07-19): the metal finish (derived
         from the gold master, `render.asset_recolor.letter_metal_file`), a
         tight dark halo (owner spec: a gradient border, lit from above)
@@ -111,8 +110,8 @@ class RingLayer(Layer):
         black silhouette has no saturation to scale. `tint`/`opacity`
         are per-CALLER (Crown Text round, owner correction 2026-08-05):
         `_draw_letter_art` passes `letter_tint`/1.0 (unchanged behavior);
-        `_draw_motto` resolves its OWN independent `motto_tint`/
-        `motto_alpha` — the two controls no longer share one recolor.
+        `_draw_crown_text` resolves its OWN independent `crown_text_tint`/
+        `crown_text_alpha` — the two controls no longer share one recolor.
         `draw_shadow=False` (SHADOW/SHINE round, owner ruling
         2026-08-06) skips the halo stamp entirely — the Dollar's Eye
         with its Shine toggle on already carries its own baked light,
@@ -172,7 +171,7 @@ class RingLayer(Layer):
         """The owner's letter art at the preset's hour positions — gold
         masters, silver/bronze derived at load (the accent letter wears
         the opposite metal, owner spec). Stamped by `_draw_ring_glyph`
-        (Rule #5, shared with the outer motto arc)."""
+        (Rule #5, shared with the outer crown text arc)."""
         height = (
             2 * ctx.radius * dial.RING_LETTER_ART_SCALE
             * ctx.skin.ring_letter_scale
@@ -195,47 +194,47 @@ class RingLayer(Layer):
                 draw_shadow=not self._skin.ring.letter_no_shadow.get(hour, False),
             )
 
-    def _draw_motto(self, painter: QPainter, ctx: RenderContext) -> None:
-        """The outer GREAT SEAL MOTTO ARC (MOTO-FIX round, owner
+    def _draw_crown_text(self, painter: QPainter, ctx: RenderContext) -> None:
+        """The outer GREAT SEAL CROWN TEXT ARC (MOTO-FIX round, owner
         correction 2026-07-19, the dollar's Great Seal reference
-        image): each character of the preset's `motto` texts —
-        pre-solved to its own dial angle by `data.rings`/`core.motto`
+        image): each character of the preset's `crown_text` texts —
+        pre-solved to its own dial angle by `data.rings`/`core.crown_text`
         (ANNUIT COEPTIS's own A/S pin the TOP arc at 8h/16h, NOVUS ORDO
         SECLORUM's own N/O/M pin the BOTTOM arc at 4h/24h/20h — MASON
         outside, G inside) — drawn via the SAME stamp the ring's own
         six letters use (`_draw_ring_glyph`, Rule #5), just smaller
-        (`RING_MOTTO_SIZE`) and further out. The two arcs are angularly
+        (`RING_CROWN_TEXT_SIZE`) and further out. The two arcs are angularly
         DISJOINT (top 300-360-60 deg, bottom 120-180-240 deg) so both
-        share ONE radius (`RING_MOTTO_RADIUS_FRACTION`) — no more two
+        share ONE radius (`RING_CROWN_TEXT_RADIUS_FRACTION`) — no more two
         concentric rings of text. Empty (no-op) for every preset
-        without a motto.
+        without crown text.
 
         CROWN TEXT controls (owner correction 2026-08-05: "Crown tekst
         je onaj tekst koji piše oko sata — faith, hope, suffering", the
-        proof this IS the motto arc): `motto_scale` multiplies the
+        proof this IS the crown text arc): `crown_text_scale` multiplies the
         height ON TOP OF `ring_letter_scale` (which still applies too,
-        unchanged); `motto_tint` resolves independently of
+        unchanged); `crown_text_tint` resolves independently of
         `letter_tint` — None follows `ring_tint`, the SAME
         "follow-unless-overridden" shape `hands_tint` uses;
-        `motto_alpha` is a plain opacity multiplier passed straight to
+        `crown_text_alpha` is a plain opacity multiplier passed straight to
         `_draw_ring_glyph`."""
-        mottos = self._skin.ring.motto
-        if not mottos:
+        crown_texts = self._skin.ring.crown_text
+        if not crown_texts:
             return
         height = (
-            2 * ctx.radius * dial.RING_MOTTO_SIZE
-            * ctx.skin.ring_letter_scale * ctx.skin.motto_scale
+            2 * ctx.radius * dial.RING_CROWN_TEXT_SIZE
+            * ctx.skin.ring_letter_scale * ctx.skin.crown_text_scale
         )
-        metal = self._skin.ring.motto_metal
+        metal = self._skin.ring.crown_text_metal
         tint = (
-            ctx.skin.motto_tint
-            if ctx.skin.motto_tint is not None
+            ctx.skin.crown_text_tint
+            if ctx.skin.crown_text_tint is not None
             else ctx.skin.ring_tint
         )
-        for motto in mottos:
-            for gold_asset, theta in motto["glyphs"]:
+        for crown_entry in crown_texts:
+            for gold_asset, theta in crown_entry["glyphs"]:
                 self._draw_ring_glyph(
                     painter, ctx, gold_asset, metal, theta % 360.0,
-                    dial.RING_MOTTO_RADIUS_FRACTION, height,
-                    tint=tint, opacity=ctx.skin.motto_alpha,
+                    dial.RING_CROWN_TEXT_RADIUS_FRACTION, height,
+                    tint=tint, opacity=ctx.skin.crown_text_alpha,
                 )

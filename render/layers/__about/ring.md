@@ -8,8 +8,8 @@
 Paints the composed ring — THE COMPOSITIONAL RING MODEL (owner decree
 2026-08-05): the outer band + the inner band (always both, no single
 monolithic plate and no procedural fallback any more), the preset's own
-letters at the outer's empty fields, and the outer Great Seal motto arc
-("Crown Text" in the Watch Face window) — the letters and the motto
+letters at the outer's empty fields, and the outer Great Seal crown text arc
+("Crown Text" in the Watch Face window) — the letters and the crown text
 stamped with a shared dark halo and a readable (never-upside-down)
 rotation.
 
@@ -34,18 +34,18 @@ so it rebuilds only on a skin/size/DPI change. Not `hover_variable`.
 ### RingLayer
 `cadence = Cadence.STATIC`.
 - `paint()`: unconditionally composes `_draw_bands()` then stamps
-  `_draw_letter_art()` and `_draw_motto()` on top — there is no
+  `_draw_letter_art()` and `_draw_crown_text()` on top — there is no
   disk-presence gate and no procedural fallback any more.
 - `_draw_bands()` (owner decree 2026-08-05, THE COMPOSITIONAL RING
   MODEL): composes the inner minute-track band (`RingSpec.inner_asset`)
   then the outer hour-tick band (`RingSpec.outer_asset`), each with its
   OWN tint (`ring_tint_inner` follows `ring_tint` when `None`).
 - `_draw_ring_glyph()`: the ONE stamp shared by both the ring's six letters
-  and the outer motto (Rule #5) — resolves the letter's metal finish, draws
+  and the outer crown text (Rule #5) — resolves the letter's metal finish, draws
   a multi-sample dark halo from the gold master, rotates the glyph so it
   reads upright through the lower half of the ring (`angles.readable_rotation_deg`);
   `tint`/`opacity` are per-caller (`_draw_letter_art` passes
-  `letter_tint`/1.0, `_draw_motto` its own `motto_tint`/`motto_alpha`).
+  `letter_tint`/1.0, `_draw_crown_text` its own `crown_text_tint`/`crown_text_alpha`).
   `draw_shadow=False` (SHADOW/SHINE round, owner ruling 2026-08-06) skips
   the halo entirely — the Dollar's Eye with Shine on already carries its
   own baked light. THE PIXELATION FIX (1440p owner bug, 2026-08-06): the
@@ -59,9 +59,9 @@ so it rebuilds only on a skin/size/DPI change. Not `hover_variable`.
 - `_draw_letter_art()`: stamps every hour's letter art at its ring position,
   scaled by `ring_letter_scale` and the per-hour shine-enlarge multiplier;
   `RingSpec.letter_no_shadow` (per-hour) turns `draw_shadow` off for that seat.
-- `_draw_motto()` ("Crown Text" in the Watch Face window, R-24/Phase-6-debt
-  correction, owner 2026-08-05): stamps the preset's motto texts (e.g.
+- `_draw_crown_text()` ("Crown Text" in the Watch Face window, R-24/Phase-6-debt
+  correction, owner 2026-08-05): stamps the preset's crown texts (e.g.
   ANNUIT COEPTIS / NOVUS ORDO SECLORUM) along two angularly-disjoint
-  top/bottom arcs sharing one radius, scaled by `motto_scale` (on top of
-  `ring_letter_scale`), tinted by `motto_tint` (follows `ring_tint` when
-  `None`) and dimmed by `motto_alpha`; a no-op for presets with no motto.
+  top/bottom arcs sharing one radius, scaled by `crown_text_scale` (on top of
+  `ring_letter_scale`), tinted by `crown_text_tint` (follows `ring_tint` when
+  `None`) and dimmed by `crown_text_alpha`; a no-op for presets with no crown text.

@@ -311,15 +311,19 @@ class Settings:
     letter_tint: str | None = None
     # CROWN TEXT (R-24/Phase-6-debt correction, owner 2026-08-05: "Crown
     # tekst je onaj tekst koji piše oko sata — faith, hope, suffering")
-    # — the outer Great Seal MOTTO arc's own opacity/size/color, kept
+    # — the outer Great Seal CROWN TEXT arc's own opacity/size/color, kept
     # SEPARATE from `ring_letter_scale`/`letter_tint` (see
     # `skins.manifest.SkinDefinition`'s matching fields for the full
-    # design note). `motto_scale` multiplies ON TOP of `ring_letter_scale`
-    # (unaffected, never renamed); `motto_tint` resolves independently of
-    # `letter_tint`.
-    motto_alpha: float = 1.0
-    motto_scale: float = 1.0
-    motto_tint: str | None = None
+    # design note). `crown_text_scale` multiplies ON TOP of `ring_letter_scale`
+    # (unaffected, never renamed); `crown_text_tint` resolves independently of
+    # `letter_tint`. RENAMED from `motto_*` (TASK 1, owner ruling
+    # 2026-08-06, "one term for one thing"); `load()` reads a stored file's
+    # old `motto_alpha`/`motto_scale`/`motto_tint` keys as the fallback
+    # default when the new keys are absent (the SAME one-release migration
+    # shape `pointer_saturation` uses for `palette_saturation` below).
+    crown_text_alpha: float = 1.0
+    crown_text_scale: float = 1.0
+    crown_text_tint: str | None = None
     # Custom palettes keyed "pointer_style" -> tuple of #RRGGBB hues.
     palettes: dict = field(default_factory=dict)
 
@@ -643,11 +647,25 @@ class SettingsStore:
                 ),
                 letter_tint=_load_hex(raw, "letter_tint"),
                 ring_tint_inner=_load_hex(raw, "ring_tint_inner"),
-                motto_alpha=_load_scale(raw, "motto_alpha", 0.0, 1.0, 1.0),
-                motto_scale=_load_scale(
-                    raw, "motto_scale", *constants.ELEMENT_SCALE_RANGE, 1.0
+                # RENAMED from `motto_*` (TASK 1, owner ruling 2026-08-06):
+                # a stored file's old key is the fallback default when the
+                # new one is absent — a saved watch never reads as corrupt
+                # or silently drops its Crown Text opacity/size/color.
+                crown_text_alpha=_load_scale(
+                    raw, "crown_text_alpha", 0.0, 1.0,
+                    _load_scale(raw, "motto_alpha", 0.0, 1.0, 1.0),
                 ),
-                motto_tint=_load_hex(raw, "motto_tint"),
+                crown_text_scale=_load_scale(
+                    raw, "crown_text_scale", *constants.ELEMENT_SCALE_RANGE,
+                    _load_scale(
+                        raw, "motto_scale", *constants.ELEMENT_SCALE_RANGE, 1.0
+                    ),
+                ),
+                crown_text_tint=(
+                    _load_hex(raw, "crown_text_tint")
+                    if "crown_text_tint" in raw
+                    else _load_hex(raw, "motto_tint")
+                ),
                 palettes=_load_palettes(raw.get("palettes", {})),
                 **choices,
             )
@@ -763,9 +781,9 @@ class SettingsStore:
             "hands_saturation": settings.hands_saturation,
             "letter_tint": settings.letter_tint,
             "ring_tint_inner": settings.ring_tint_inner,
-            "motto_alpha": settings.motto_alpha,
-            "motto_scale": settings.motto_scale,
-            "motto_tint": settings.motto_tint,
+            "crown_text_alpha": settings.crown_text_alpha,
+            "crown_text_scale": settings.crown_text_scale,
+            "crown_text_tint": settings.crown_text_tint,
             "palettes": {
                 key: list(palette) for key, palette in settings.palettes.items()
             },

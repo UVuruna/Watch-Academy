@@ -1,5 +1,5 @@
 """Dial geometry and window sizing — the drawn ring, its letters,
-the motto arc, hand reach, procedural fallback geometry, subdial
+the crown text arc, hand reach, procedural fallback geometry, subdial
 seating and the transparent window's own margin computation.
 
 Layer: config — pure, no Qt, no wall clock.
@@ -142,7 +142,7 @@ RING_LETTER_SHADOW_SAMPLES = 8       # offsets around the circle — the
 # DPI change, like the rest of this STATIC layer — never per frame).
 RING_LETTER_SHADOW_MAX_GAP_PX = 1.0
 
-# The outer GREAT SEAL MOTTO ARC (TASK 1, owner "može radi" 2026-07-19,
+# The outer GREAT SEAL CROWN TEXT ARC (TASK 1, owner "može radi" 2026-07-19,
 # CANON.md §The Banknote; corrected MOTO-FIX round, owner correction
 # 2026-07-19, the dollar's Great Seal reference image): curved text
 # OUTSIDE the ring band, reusing the SAME letter-art library/finish/
@@ -150,22 +150,22 @@ RING_LETTER_SHADOW_MAX_GAP_PX = 1.0
 # (`render.layers.ring.RingLayer._draw_ring_glyph`), just smaller and
 # further out — decorative inscription, not the primary Dollar seats.
 # ONE SHARED RADIUS (MOTO-FIX round): the first round's design had both
-# mottos' pinned letters land on the SAME angle (O at noon, S at 16h),
+# crown texts' pinned letters land on the SAME angle (O at noon, S at 16h),
 # needing two concentric radii to coexist; the corrected layout puts
 # ANNUIT COEPTIS over the TOP and NOVUS ORDO SECLORUM under the BOTTOM
 # instead — angularly DISJOINT arcs that never collide, so both now
-# draw at this one radius (`core.motto.md`'s Design Decisions).
-RING_MOTTO_SIZE = 0.0375             # motto letter height, of the dial
+# draw at this one radius (`core/__about/crown_text.md`'s Design Decisions).
+RING_CROWN_TEXT_SIZE = 0.0375             # crown text letter height, of the dial
                                      # diameter — half RING_LETTER_ART_SCALE
                                      # (decorative, smaller than the six
                                      # primary banknote letters)
 # The WORD-HOVER band (owner 2026-07-27, "HOVER tekst osim na slova
-# treba i na reči"): how far above/below the motto radius (fraction of
-# the dial RADIUS) a hover still answers as an arc WORD — the motto
-# letter height is 2*RING_MOTTO_SIZE of the radius (0.075), so ±0.05
+# treba i na reči"): how far above/below the crown text radius (fraction of
+# the dial RADIUS) a hover still answers as an arc WORD — the crown text
+# letter height is 2*RING_CROWN_TEXT_SIZE of the radius (0.075), so ±0.05
 # covers the glyphs with a little air.
-RING_MOTTO_HOVER_HALF_FRACTION = 0.05
-RING_MOTTO_RADIUS_FRACTION = 1.13    # BOTH arcs (MOTO-FIX round) — clears
+RING_CROWN_TEXT_HOVER_HALF_FRACTION = 0.05
+RING_CROWN_TEXT_RADIUS_FRACTION = 1.13    # BOTH arcs (MOTO-FIX round) — clears
                                      # the primary letters' own max reach
                                      # (~1.0255 with shadow at scale 1.0)
                                      # AND the ring-letter hover ceiling
@@ -173,16 +173,16 @@ RING_MOTTO_RADIUS_FRACTION = 1.13    # BOTH arcs (MOTO-FIX round) — clears
                                      # 1.08) with margin
 
 # ANNUIT WORD-GAP round (owner correction 2026-07-19, third batch): the
-# TIGHT per-character step every motto letter now advances at, derived
+# TIGHT per-character step every crown text letter now advances at, derived
 # from NOVUS ORDO SECLORUM's own pin geometry (two 60 deg segments over
-# 9 characters each = 6.667 deg/char). A motto pinned only at its first
+# 9 characters each = 6.667 deg/char). A crown text pinned only at its first
 # and last character (ANNUIT COEPTIS) advances every letter at this
-# fixed step from BOTH pins inward (`core.motto._tight_two_pin_angles`)
+# fixed step from BOTH pins inward (`core.crown_text._tight_two_pin_angles`)
 # instead of spreading the whole span evenly — the owner's "too wide"
 # complaint — letting the single interior word gap absorb whatever
 # angular slack remains, so the eye/G area breathes like the Great
 # Seal's own gap over the eye.
-RING_MOTTO_LETTER_STEP_DEG = 60.0 / 9
+RING_CROWN_TEXT_LETTER_STEP_DEG = 60.0 / 9
 
 # --- Ring OUTER/INNER composition (owner decree 2026-08-05) -----------------------
 # THE COMPOSITIONAL RING MODEL: a ring is ALWAYS the composition of an
@@ -190,7 +190,7 @@ RING_MOTTO_LETTER_STEP_DEG = 60.0 / 9
 # — the hour-tick band with the preset's own empty letter fields) + an
 # INNER band (`RING_INNER_ART_DIR`, `constants.RING_INNERS` — the
 # minute-track band, independently tintable via `ring_tint_inner`) +
-# the letters + an optional crown-text motto arc. There is no single
+# the letters + an optional crown-text crown text arc. There is no single
 # monolithic plate and no procedural fallback any more — the old
 # `domy.png`/`morph.png`/`hexagram.png` faces are DELETED;
 # `render.layers.ring.RingLayer.paint` always composes both bands.

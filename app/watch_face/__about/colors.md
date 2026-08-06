@@ -26,10 +26,10 @@ fresh on every pick.
 - [Watch Controller](../../__about/controller.md) — every setter key
   this page calls (`ring_tint`, `ring_tint_inner`, `palettes`,
   `umbra_tint_mode`, `umbra_tint`, `aura_off_tint_mode`, `aura_off_tint`,
-  `hands_tint`, `letter_tint`, `motto_tint`,
+  `hands_tint`, `letter_tint`, `crown_text_tint`,
   `metal_shade_gold`/`bronze`/`silver`, `pointer_saturation`,
   `ring_saturation`, `hands_saturation`, `umbra_saturation`) is wired in
-  `_watch_face_setters()`, plus the data PROVIDER `ring_has_motto` the
+  `_watch_face_setters()`, plus the data PROVIDER `ring_has_crown_text` the
   Crown Text row reads to grey itself out (the Inner-tint row is always
   live now — THE COMPOSITIONAL RING MODEL, owner decree 2026-08-05);
   `test_watch_face_colors.py`'s static check pins it
@@ -44,9 +44,9 @@ fresh on every pick.
   UNCONDITIONALLY, each band with its OWN tint
   (`ring_tint`/`ring_tint_inner`) — the "Inner (Minute track)" row
   below is always live now, no more disk-presence gate. R-24's Crown
-  Text color IS built too: the outer arc IS the Great Seal motto
-  inscription (`RingSpec.motto`) — it always had a seat, just no
-  control; `motto_tint` (this section) and `motto_scale`/`motto_alpha`
+  Text color IS built too: the outer arc IS the Great Seal crown text
+  inscription (`RingSpec.crown_text`) — it always had a seat, just no
+  control; `crown_text_tint` (this section) and `crown_text_scale`/`crown_text_alpha`
   (Size/Opacity sections) now read it independently of
   `letter_tint`/`ring_letter_scale`. See `skins.manifest.
   SkinDefinition`'s Crown Text fields for the full design note.

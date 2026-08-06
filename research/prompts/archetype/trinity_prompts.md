@@ -19,7 +19,7 @@ The scriptural anchors the articles will argue from (never inscribed
 in the art): Jesus is literally called the Advocate — *Parakletos*,
 1 John 2:1 — and Satan literally the Accuser — *Kategoros*,
 Revelation 12:10; Job 1–2 and Zechariah 3 stage heaven AS a
-courtroom. The mottos **E PLURIBUS UNUM** (The One) and **ANNUIT
+courtroom. The crown texts **E PLURIBUS UNUM** (The One) and **ANNUIT
 COEPTIS** (the Eye) belong to the ARTICLES and the UI — the house
 rule stands: images never carry lettering.
 
@@ -105,7 +105,7 @@ SMALL round stained-glass rondel, night-window register, photorealistic render, 
 
 ## Status
 
-- Owner picks: **The One** as God's type name (2026-07-16); mottos
+- Owner picks: **The One** as God's type name (2026-07-16); crown texts
   E PLURIBUS UNUM (The One) / ANNUIT COEPTIS (the Eye) — article
   inscriptions only.
 - The PRISM archetype (Love/Courage/Pride/Hatred/Fear/Humility) has

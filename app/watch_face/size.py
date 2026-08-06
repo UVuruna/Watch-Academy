@@ -3,18 +3,18 @@
 `display_section._build_sizes_group` uses, plus `design_window.
 DesignDialog._size_tab`'s preset row) and every element scale slider —
 Earth, Moon, Complications (`slot_scale`), Indices (`ring_letter_scale`),
-Crown Text (`motto_scale`), Hover enlarge — wired to the SAME stored
+Crown Text (`crown_text_scale`), Hover enlarge — wired to the SAME stored
 setting keys the Settings dialog's "Element sizes" group uses (Rule #5;
 only the on-screen labels differ, per the owner's Watch Face naming).
 
 CROWN TEXT (R-24/Phase-6-debt correction, owner 2026-08-05: "Crown
 tekst je onaj tekst koji piše oko sata — faith, hope, suffering") — the
-outer Great Seal motto arc IS this element
-(`skins.manifest.SkinDefinition.motto_scale`,
-`render.layers.ring.RingLayer._draw_motto`); it multiplies ON TOP of
+outer Great Seal crown text arc IS this element
+(`skins.manifest.SkinDefinition.crown_text_scale`,
+`render.layers.ring.RingLayer._draw_crown_text`); it multiplies ON TOP of
 `ring_letter_scale` (unaffected). Its row greys out with a tooltip when
-the active ring preset carries no motto
-(`setters["ring_has_motto"]`) — the one row in `_SCALE_ROWS` that is
+the active ring preset carries no crown text
+(`setters["ring_has_crown_text"]`) — the one row in `_SCALE_ROWS` that is
 not always meaningful, so `_scale_form` special-cases it by key rather
 than widening every row's shape for one exception.
 """
@@ -34,7 +34,7 @@ _SCALE_ROWS = (
     ("moon_scale", "Moon", constants.ELEMENT_SCALE_RANGE, 100),
     ("slot_scale", "Complications", constants.ELEMENT_SCALE_RANGE, 100),
     ("ring_letter_scale", "Indices", constants.ELEMENT_SCALE_RANGE, 100),
-    ("motto_scale", "Crown Text", constants.ELEMENT_SCALE_RANGE, 100),
+    ("crown_text_scale", "Crown Text", constants.ELEMENT_SCALE_RANGE, 100),
     ("hover_enlarge", "Hover enlarge", constants.HOVER_ENLARGE_RANGE, 120),
 )
 
@@ -123,12 +123,12 @@ def _scale_form(settings, setters, tr) -> QFormLayout:
         reset.clicked.connect(_make_reset(slider, key, default, setters))
         # CROWN TEXT (owner correction 2026-08-05): the one row that is
         # not always meaningful — greyed out with a tooltip when the
-        # active ring preset carries no motto (module docstring).
-        if key == "motto_scale" and not setters["ring_has_motto"]():
+        # active ring preset carries no crown text (module docstring).
+        if key == "crown_text_scale" and not setters["ring_has_crown_text"]():
             slider.setEnabled(False)
             reset.setEnabled(False)
             tooltip = tr(
-                "The active ring preset carries no Crown Text (Great Seal motto)."
+                "The active ring preset carries no Crown Text (Great Seal inscription)."
             )
             slider.setToolTip(tooltip)
             reset.setToolTip(tooltip)

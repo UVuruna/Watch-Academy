@@ -38,8 +38,8 @@ eye-shine and Location-crown dicts (`ring_crown_location`, RING
 VERDICTS round, owner decree 2026-08-05 — per-ring, replaces the crown
 text with the active location), the R-21 split inner tint
 (`ring_tint_inner`), the
-Crown Text trio (`motto_alpha`/`motto_scale`/`motto_tint`, R-24/
-Phase-6-debt correction, owner 2026-08-05 — the outer Great Seal motto
+Crown Text trio (`crown_text_alpha`/`crown_text_scale`/`crown_text_tint`, R-24/
+Phase-6-debt correction, owner 2026-08-05 — the outer Great Seal crown text
 arc's own opacity/size/color), the pointer/palette/umbra/calendar-mount choices,
 the Pointers REWORK phase-1 quartet (`pointer_shape`, `polygon_curvature`,
 `polygon_edge`, `hide_night_borders`), the three Slots (mode/style/theme/

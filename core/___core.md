@@ -18,9 +18,9 @@ CLOCKWISE from the TOP (12:00 noon top, 00:00 midnight bottom,
 | `blue_moon.py` | Algorithmic | the Blue Moon Law — the hidden 13th member of every 12-set — [about](__about/blue_moon.md) · [flow](__flow/blue_moon.md) |
 | `clock_state.py` | Algorithmic | the two-tier render state, `DayContext` + `TickState` — [about](__about/clock_state.md) · [flow](__flow/clock_state.md) |
 | `continents.py` | Algorithmic | the Continents theme's Zealandia/Pangea Ninth-seat law — [about](__about/continents.md) · [flow](__flow/continents.md) |
+| `crown_text.py` | Algorithmic | outer Great Seal / station-word ring-arc glyph angles — [about](__about/crown_text.md) · [flow](__flow/crown_text.md) |
 | `cube_seating.py` | Algorithmic | the Character Cube's geometry — Calendar-12 and Rose-24 — [about](__about/cube_seating.md) · [flow](__flow/cube_seating.md) |
 | `deep_time.py` | Algorithmic | Deep Time calendar mathematics — eras, the 400-year proxy, Julian Day, ΔT — [about](__about/deep_time.md) · [flow](__flow/deep_time.md) |
-| `motto.py` | Algorithmic | outer Great Seal / station-word ring-arc glyph angles — [about](__about/motto.md) · [flow](__flow/motto.md) |
 | `moon.py` | Algorithmic | moon phase fraction and analytic illumination — [about](__about/moon.md) · [flow](__flow/moon.md) |
 | `sun.py` | Algorithmic | sun events and daylight-regime classification — [about](__about/sun.md) · [flow](__flow/sun.md) |
 | `year_wheel.py` | Algorithmic | year-marker angle, piecewise-linear between season anchors — [about](__about/year_wheel.md) · [flow](__flow/year_wheel.md) |

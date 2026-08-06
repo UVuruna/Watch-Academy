@@ -21,7 +21,7 @@ flowchart TB
     G -- yes --> X5[raise]
     G -- no --> H[triangle: 3 of positions, only if outer == "hexa"]
     H --> I[legend: position -> name/reading, positions must be own]
-    I --> J[motto: _validate_motto]
+    I --> J[crown_text: _validate_crown_text]
     J --> K[thematic: must be a known METAL_SHADE_NAMES.thematic]
     K --> L[return resolved card]
 ```
@@ -39,21 +39,21 @@ Pseudocode (language-neutral):
         FOR position, glyph IN zip(positions, letters):
             IF glyph is a digit AND digit != position → raise   # a number only fits its own hour
         triangle = entry.triangle validated as 3-of-positions, ONLY IF outer == "hexa"
-        legend   = entry.legend validated position-by-position (name + reading required)
-        motto    = _validate_motto(name, entry.motto or [], positions)
-        thematic = entry.thematic validated against METAL_SHADE_NAMES["thematic"]
-        RETURN {name, positions, letters, outer, triangle, legend, motto, thematic}
+        legend     = entry.legend validated position-by-position (name + reading required)
+        crown_text = _validate_crown_text(name, entry.crown_text or [], positions)
+        thematic   = entry.thematic validated against METAL_SHADE_NAMES["thematic"]
+        RETURN {name, positions, letters, outer, triangle, legend, crown_text, thematic}
 
-## Algorithm — `_validate_motto()`: three mutually exclusive entry forms
+## Algorithm — `_validate_crown_text()`: three mutually exclusive entry forms
 
-Each `motto` list entry is a PINNED Great Seal form (`{text, pins,
+Each `crown_text` list entry is a PINNED Great Seal form (`{text, pins,
 clockwise}`), a CENTERED cross-words form (`{text, center,
 clockwise}`), or a free-form CROWN TEXT form (`{text, orientation}`,
 owner decree 2026-08-05, custom rings only) — never more than one.
 
 ```mermaid
 flowchart TB
-    A[motto entry] --> B{text present?}
+    A[crown text entry] --> B{text present?}
     B -- no --> X1[raise]
     B -- yes --> C{every char is a space or in RING_LETTER_FILES?}
     C -- no --> X2[raise: unknown letters]
@@ -70,7 +70,7 @@ flowchart TB
     D -- no --> H[for each pin: letter/occurrence/position]
     H --> I{position is one of the card's own positions?}
     I -- no --> X5[raise]
-    I -- yes --> J[motto_glyph_angles: solve angles from the pins]
+    I -- yes --> J[crown_glyph_angles: solve angles from the pins]
     O3 --> K[compute per-word spans + seat, return text+angles+words]
     G --> K
     J --> K
@@ -78,7 +78,7 @@ flowchart TB
 
 Pseudocode (language-neutral):
 
-    FUNCTION _validate_motto(name, raw_entries, positions):
+    FUNCTION _validate_crown_text(name, raw_entries, positions):
         resolved = []
         FOR EACH entry IN raw_entries:
             text = entry.text; IF empty → raise
@@ -96,7 +96,7 @@ Pseudocode (language-neutral):
             ELSE:
                 FOR EACH (letter, occurrence, position) IN entry.pins:
                     IF position not in positions → raise
-                angles = motto_glyph_angles(text, pins, clockwise)
+                angles = crown_glyph_angles(text, pins, clockwise)
                 words = per-word spans; a word's seat = the ONE pin landing inside it (else none)
             resolved.append({text, angles, words})
         RETURN tuple(resolved)

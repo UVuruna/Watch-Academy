@@ -39,12 +39,12 @@ control anywhere points at them for this round to remove.
 
 CROWN TEXT OPACITY (R-24/Phase-6-debt correction, owner 2026-08-05:
 "Crown tekst je onaj tekst koji piše oko sata — faith, hope,
-suffering") — the outer Great Seal motto arc IS this element
-(`skins.manifest.SkinDefinition.motto_alpha`,
-`render.layers.ring.RingLayer._draw_motto`); a plain DIRECT row (like
+suffering") — the outer Great Seal crown text arc IS this element
+(`skins.manifest.SkinDefinition.crown_text_alpha`,
+`render.layers.ring.RingLayer._draw_crown_text`); a plain DIRECT row (like
 `umbra_alpha` — no per-skin variance exists to reset to), greyed out
-with a tooltip when the active ring preset carries no motto
-(`setters["ring_has_motto"]`, the SAME graceful-truth shape
+with a tooltip when the active ring preset carries no crown text
+(`setters["ring_has_crown_text"]`, the SAME graceful-truth shape
 `aura_group`'s Colorful gate uses in `colors.py`)."""
 
 from PySide6.QtCore import Qt
@@ -165,11 +165,11 @@ def _ring_bodies_group(settings, setters, tr, defaults: dict) -> QGroupBox:
         "Inactive icons", form,
     )
     crown_slider = _direct_row(
-        tr, settings, setters, "motto_alpha", 1.0, "Crown Text", form,
+        tr, settings, setters, "crown_text_alpha", 1.0, "Crown Text", form,
     )
-    if not setters["ring_has_motto"]():
+    if not setters["ring_has_crown_text"]():
         crown_slider.setEnabled(False)
         crown_slider.setToolTip(
-            tr("The active ring preset carries no Crown Text (Great Seal motto).")
+            tr("The active ring preset carries no Crown Text (Great Seal inscription).")
         )
     return group

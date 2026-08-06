@@ -45,8 +45,8 @@ def ring_position_angle(position: int) -> float:
     `(hour*15+DIAL_OFFSET_DEG)%360` and the compositor's per-letter
     legend hover's `((hour-12)*15)%360` — both the SAME formula written
     two ways; Rule #5, one shared function now). Used by the ring's own
-    letters, the per-letter hover legend and the outer Great Seal motto
-    arc (`core.motto`) alike, so a pinned letter and its ring seat always
+    letters, the per-letter hover legend and the outer Great Seal crown text
+    arc (`core.crown_text`) alike, so a pinned letter and its ring seat always
     agree by construction."""
     return (position * 15.0 + constants.DIAL_OFFSET_DEG) % 360.0
 
@@ -56,7 +56,7 @@ def readable_rotation_deg(theta: float) -> float:
     travel around the circle (owner spec): tangential, but the LOWER
     half (90-270 deg) flips 180 deg so text never reads upside down —
     Omega stands upright at the bottom. Shared by the ring's own letters
-    and the outer motto arc (`render.layers.ring.RingLayer`, Rule #5)."""
+    and the outer crown text arc (`render.layers.ring.RingLayer`, Rule #5)."""
     if 90.0 < theta < 270.0:
         return theta - 180.0
     return theta if theta <= 90.0 else theta - 360.0

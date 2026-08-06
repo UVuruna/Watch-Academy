@@ -1,4 +1,4 @@
-"""The outer Great Seal motto arc — per-glyph angle math (TASK 1, owner
+"""The outer Great Seal crown text arc — per-glyph angle math (TASK 1, owner
 "može radi" 2026-07-19, CANON.md §The Banknote; corrected MOTO-FIX
 round, owner correction 2026-07-19, the dollar's Great Seal reference
 image; corrected ANNUIT WORD-GAP round, owner correction 2026-07-19,
@@ -6,21 +6,21 @@ third batch, the tight-letters-plus-one-big-word-gap look)."""
 
 import pytest
 
-from config.dial import RING_MOTTO_LETTER_STEP_DEG
+from config.dial import RING_CROWN_TEXT_LETTER_STEP_DEG
 from core.angles import readable_rotation_deg
-from core.motto import (
+from core.crown_text import (
     _occurrence_index,
     centered_word_angles,
-    motto_glyph_angles,
+    crown_glyph_angles,
 )
 
 
 def test_centered_word_sits_symmetrically_on_its_seat():
     """CROSS-WORDS round (owner UV inbox 2026-07-27): a station word is
-    CENTERED on its seat at the mottos' own fixed letter step —
+    CENTERED on its seat at the crown texts' own fixed letter step —
     clockwise for a top-half seat, counterclockwise for a bottom-half
     one, so both read left-to-right to a viewer."""
-    step = RING_MOTTO_LETTER_STEP_DEG
+    step = RING_CROWN_TEXT_LETTER_STEP_DEG
     # SUFFERING over the crown: 9 letters, midpoint exactly at 0 deg.
     top = centered_word_angles("SUFFERING", 12, clockwise=True)
     assert len(top) == 9
@@ -62,7 +62,7 @@ def test_occurrence_index_raises_when_not_enough_occurrences():
         _occurrence_index("NOVUS ORDO SECLORUM", "A", 1)   # no A at all
 
 
-# --- The two Great Seal mottos, exactly as Database/ring_presets.json ships them ---
+# --- The two Great Seal crown texts, exactly as Database/ring_presets.json ships them ---
 
 
 def test_annuit_coeptis_pinned_letters_land_on_their_seats():
@@ -71,17 +71,17 @@ def test_annuit_coeptis_pinned_letters_land_on_their_seats():
     top through noon — but the 13 character-steps no longer spread
     EVENLY across the whole 120 deg span (that read too wide); instead
     ANNUIT's own 6 letters (indices 0-5) advance from A at the tight
-    `RING_MOTTO_LETTER_STEP_DEG` step, COEPTIS's own 7 letters (indices
+    `RING_CROWN_TEXT_LETTER_STEP_DEG` step, COEPTIS's own 7 letters (indices
     7-13) advance backward from S at the same step, and the single
     interior space (index 6, the word gap) absorbs the whole leftover
     slack — a BIG gap that straddles the G's own seat (noon/360 deg,
     between T at index 5 and C at index 7), never pinning to it."""
     text = "ANNUIT COEPTIS"
-    angles = motto_glyph_angles(text, (("A", 1, 8), ("S", 1, 16)))
+    angles = crown_glyph_angles(text, (("A", 1, 8), ("S", 1, 16)))
     assert len(angles) == len(text)
     assert angles[0] == pytest.approx(300.0)     # A -> 8h
     assert angles[13] == pytest.approx(420.0)    # S -> 16h (unwrapped)
-    step = RING_MOTTO_LETTER_STEP_DEG
+    step = RING_CROWN_TEXT_LETTER_STEP_DEG
     # ANNUIT's own tight run: A(0) N(1) N(2) U(3) I(4) T(5).
     annuit_run = [angles[i + 1] - angles[i] for i in range(0, 5)]
     assert annuit_run == pytest.approx([step] * 5)
@@ -109,7 +109,7 @@ def test_novus_ordo_seclorum_pinned_letters_land_on_their_seats():
     (`clockwise=False`), left-to-right THROUGH the bottom, same as
     reading a coin's lower banner."""
     text = "NOVUS ORDO SECLORUM"
-    angles = motto_glyph_angles(
+    angles = crown_glyph_angles(
         text, (("N", 1, 4), ("O", 3, 24), ("M", 1, 20)), clockwise=False
     )
     assert len(angles) == len(text)
@@ -123,16 +123,16 @@ def test_novus_ordo_seclorum_pinned_letters_land_on_their_seats():
     second_segment = [angles[i + 1] - angles[i] for i in range(9, 18)]
     assert second_segment == pytest.approx([-60.0 / 9] * 9)
     # The whole run is monotonically DEcreasing (reads counterclockwise
-    # — the bottom arc's own direction, core/motto.md's Design
+    # — the bottom arc's own direction, core/crown_text.md's Design
     # Decisions).
     assert all(b < a for a, b in zip(angles, angles[1:]))
     # The bottom arc stays entirely within its own 120/240 span; the top
     # arc (recomputed here) stays entirely within its own 300/60 span —
-    # MOTO-FIX round: the two mottos no longer share ANY angle (the
+    # MOTO-FIX round: the two crown texts no longer share ANY angle (the
     # first round's "MASON reads twice" shared-O/shared-S design is
     # gone, the arcs are now angularly disjoint).
     assert all(120.0 <= (angle % 360.0) <= 240.0 for angle in angles)
-    annuit = motto_glyph_angles("ANNUIT COEPTIS", (("A", 1, 8), ("S", 1, 16)))
+    annuit = crown_glyph_angles("ANNUIT COEPTIS", (("A", 1, 8), ("S", 1, 16)))
     assert all((angle % 360.0) >= 300.0 or (angle % 360.0) <= 60.0 for angle in annuit)
 
 
@@ -158,18 +158,18 @@ def test_bottom_arc_glyph_orientation_points_top_toward_center():
 def test_pins_must_cover_first_and_last_character():
     with pytest.raises(ValueError):
         # Missing the final character's pin.
-        motto_glyph_angles("ANNUIT COEPTIS", (("A", 1, 8), ("O", 1, 12)))
+        crown_glyph_angles("ANNUIT COEPTIS", (("A", 1, 8), ("O", 1, 12)))
     with pytest.raises(ValueError):
         # Missing the first character's pin.
-        motto_glyph_angles("ANNUIT COEPTIS", (("O", 1, 12), ("S", 1, 16)))
+        crown_glyph_angles("ANNUIT COEPTIS", (("O", 1, 12), ("S", 1, 16)))
 
 
 def test_pins_need_at_least_two_and_must_not_collide():
     with pytest.raises(ValueError):
-        motto_glyph_angles("ANNUIT COEPTIS", (("A", 1, 8),))
+        crown_glyph_angles("ANNUIT COEPTIS", (("A", 1, 8),))
     with pytest.raises(ValueError):
         # Two different pins resolving to the SAME character index.
-        motto_glyph_angles(
+        crown_glyph_angles(
             "ANNUIT COEPTIS",
             (("A", 1, 8), ("A", 1, 12), ("S", 1, 16)),
         )
@@ -178,10 +178,10 @@ def test_pins_need_at_least_two_and_must_not_collide():
 def test_pins_out_of_reading_order_still_resolve_by_index():
     """`pins` may be given in any order — resolution sorts by the
     RESOLVED character index, not by argument order."""
-    forward = motto_glyph_angles(
+    forward = crown_glyph_angles(
         "ANNUIT COEPTIS", (("A", 1, 8), ("O", 1, 12), ("S", 1, 16))
     )
-    shuffled = motto_glyph_angles(
+    shuffled = crown_glyph_angles(
         "ANNUIT COEPTIS", (("S", 1, 16), ("A", 1, 8), ("O", 1, 12))
     )
     assert forward == shuffled

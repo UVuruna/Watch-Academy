@@ -20,7 +20,7 @@ the project's dial convention (`DIAL_OFFSET_DEG = 180`).
   `second_hand_angle`, `star_rotation_deg`
 - [Ascendant](ascendant.md) does NOT use this module (its own sidereal
   math is self-contained)
-- [Motto](motto.md) — `ring_position_angle`, `readable_rotation_deg`
+- [Crown Text](crown_text.md) — `ring_position_angle`, `readable_rotation_deg`
 - [Layers](../../render/layers/___layers.md), [Compositor](../../render/__about/compositor.md)
   (render layer, M3) — hour hand, ring letters, hover geometry
 - [Tests (folder)](../../tests/___tests.md) — golden angle values
@@ -36,7 +36,7 @@ the project's dial convention (`DIAL_OFFSET_DEG = 180`).
   the bottom (180 deg), clockwise.
 - `ring_position_angle(position)`: dial angle of a FIXED ring position/hour
   (the six hexagram seats and every other ring hour) — the base every
-  [Motto](motto.md) glyph angle is built from.
+  [Crown Text](crown_text.md) glyph angle is built from.
 - `readable_rotation_deg(theta)`: the glyph rotation that keeps ring-band
   letters upright all the way around — the lower half (90-270 deg) flips
   180 deg so text never reads upside down.
