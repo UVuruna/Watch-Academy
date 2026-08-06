@@ -185,6 +185,14 @@ and quiet.
 | Arial Black | the safe heavyweight |
 | Segoe UI Black | Windows' own black cut |
 
+**Verified on this install, 2026-08-06** (`render.numeral_fonts.glyph_coverage`,
+by glyph GEOMETRY — `QRawFont.supportsCharacter` answers True for all of them):
+the recovered **Bernard MT Condensed** draws its ten digits perfectly and draws
+**nothing at all** for `:` `.` `h` `m` `i` (empty outlines, non-zero advances),
+so it keeps the hour ring — which needs digits only — while the live crown,
+which needs the colon and the h/min cut, defaults to **Bahnschrift Bold**
+instead of inheriting it; Eras Bold ITC covers every glyph.
+
 Bernard MT Condensed and Eras Bold ITC are the faces the original artwork
 was drawn in. They are Monotype/ITC and ship with Microsoft Office, not with
 Windows — they were **recovered from `illustrator/Clock 24h.ai`**, which

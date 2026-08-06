@@ -17,6 +17,7 @@ live every tick). The geometry, path and drawing helpers every layer shares —
 | `background.py` | Algorithmic | Umbra brightness wheel + Aura hue wedges over the sunlit arc — [about](__about/background.md) · [flow](__flow/background.md) |
 | `star.py` | Algorithmic | the drawn hexagram/polygon arms, filled where the sun is up, bordered everywhere — [about](__about/star.md) · [flow](__flow/star.md) |
 | `ring.py` | Algorithmic | outer ring donut/art, hour ticks, 24h numerals, per-skin letters, crown-text arc — [about](__about/ring.md) · [flow](__flow/ring.md) |
+| `numerals.py` | Standard | the two live-rendered numeral bands + the live crown time — [about](__about/numerals.md) |
 | `weekday.py` | Algorithmic | the seven weekday bodies on the pointer's arm slots, ghost vs. center-only — [about](__about/weekday.md) · [flow](__flow/weekday.md) |
 | `slot.py` | Algorithmic | seated subdial complications (date, seconds, ascendant, zodiac, Chinese, weekday) — [about](__about/slot.md) · [flow](__flow/slot.md) |
 | `archetype.py` | Algorithmic | Archetype mode's arm figures + centre figure — [about](__about/archetype.md) · [flow](__flow/archetype.md) |

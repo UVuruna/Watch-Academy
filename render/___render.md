@@ -31,6 +31,9 @@ hover-invariant groups, and answers every hit-test/tooltip question.
 |------|------|----------|
 | `context.py` | Algorithmic | the render protocol — `Cadence`, `RenderContext`, `Layer` — [about](__about/context.md) · [flow](__flow/context.md) |
 | `painting.py` | Algorithmic | shared QPainter primitives, the ONE dial-to-Qt angle conversion — [about](__about/painting.md) · [flow](__flow/painting.md) |
+| `numeral_fonts.py` | Standard | roster label -> a PROVEN QFont; the glyph-coverage check — [about](__about/numeral_fonts.md) |
+| `numeral_relief.py` | Standard | one numeral painted: body, border and real page-space relief — [about](__about/numeral_relief.md) |
+| `numeral_bands.py` | Standard | the two band plates + the crown glyph set, built once and cached process-wide — [about](__about/numeral_bands.md) |
 | `skin_geometry.py` | Algorithmic | every "what does this skin say" query — palettes, arms, duality, daylight — [about](__about/skin_geometry.md) · [flow](__flow/skin_geometry.md) |
 | `shapes.py` | Algorithmic | star/polygon/arm path geometry — [about](__about/shapes.md) · [flow](__flow/shapes.md) |
 | `slot_layout.py` | Algorithmic | the slot position matrix and seat geometry — [about](__about/slot_layout.md) · [flow](__flow/slot_layout.md) |

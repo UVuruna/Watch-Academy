@@ -52,6 +52,11 @@ from render.layers.background import BackgroundLayer
 from render.layers.center_body import CenterBodyLayer
 from render.layers.hand import HandLayer
 from render.layers.hover_lift import HoverLiftLayer
+from render.layers.numerals import (
+    InnerNumeralLayer,
+    LiveCrownLayer,
+    OuterNumeralLayer,
+)
 from render.layers.ring import RingLayer
 from render.layers.slot import SlotLayer
 from render.layers.star import StarLayer
@@ -341,6 +346,16 @@ def _build_layers(skin: SkinDefinition) -> list[Layer]:
             # the weekday unit and the slots are overridden OFF at the
             # render level (enabled_slots), never in settings.
             layers.append(ArchetypeLayer(skin))
+        elif name == "ring":
+            # THE LIVE NUMERAL BANDS (ring_rework.md §2): the ring's own
+            # plates, letters and static crown-text stamps are unchanged
+            # — the two hand-drawn numeral bands are stacked directly on
+            # top of them, in the ring's own z spot, so nothing above or
+            # below moves. Both are STATIC, so they are baked into the
+            # cached composite and cost nothing per frame.
+            layers.append(RingLayer(skin))
+            layers.append(InnerNumeralLayer(skin))
+            layers.append(OuterNumeralLayer(skin))
         elif not skipped.get(name, False):
             layers.append(factories[name]())
     if (
@@ -360,6 +375,11 @@ def _build_layers(skin: SkinDefinition) -> list[Layer]:
         # rides ABOVE the hands like the center body — "the center
         # occludes the hands", his accepted cost.
         layers.append(SlotLayer(skin, centered=True))
+    if skin.ring_name in dial.RING_LIVE_CROWN:
+        # THE LIVE CROWN (ring_rework.md §3): only The One and Templar
+        # keep a time in the arc, and only they build this layer — the
+        # ONE minute-cadence element of the numeral round.
+        layers.append(LiveCrownLayer(skin, skin.ring_name))
     # LAST: the hover z-lift (owner 2026-07-13) — the enlarged element
     # repaints above everything, hands included.
     layers.append(HoverLiftLayer(skin))
