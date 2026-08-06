@@ -115,8 +115,8 @@ Others). Read by the
 The bundled ring styling cards — DOMY, LOOP, The One, Templar and
 Dollar (renamed from MORPH/NUMBERS/MASON G in the MASON/ICONS round,
 then Mason → Dollar and Omega → The One in the DOLLAR/EYE round, then
-Morph → PILOT in the CROSS-WORDS round and PILOT → LOOP in the LOOP
-round, owner decrees 2026-07-27/2026-08-06) —
+Morph → LOOP across two further renames, owner decrees
+2026-07-27/2026-08-06) —
 loaded by [Ring Presets](../data/__about/rings.md) together with the user's
 custom cards. The Dollar's apex seats the Eye of Providence (adaptive
 glyph, art source + Shine toggle) and its legend reads each letter as
