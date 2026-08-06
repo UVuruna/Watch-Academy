@@ -147,10 +147,21 @@ still constructs and behaves as before that round.
   1.12 MB + 439 KB reparse on every settings change, on every watch. A
   landed retranslation calls `reset_shared_symbolism()` /
   `reset_shared_encyclopedia()`
-- `_start_hover_warm()`: hands the sweep to [Watch
-  Manager](watch_manager.md)'s queue when one is attached, so at most
-  ONE sweep runs in the process; a stand-alone watch (tests) still uses
-  its own thread
+- `_start_hover_warm()` / `hover_warm_signature()`: hands the sweep to
+  [Watch Manager](watch_manager.md)'s queue when one is attached, so at
+  most ONE sweep runs in the process; a stand-alone watch (tests) still
+  uses its own thread. The SIGNATURE is what the sweep would BUILD —
+  skin, day cache key, daylight state and diameter — so watches that
+  would produce identical work sweep once between them. It folds the
+  skin in through its `repr`, not `hash` (several specs hold dicts, so
+  the object is genuinely unhashable, and hashing a hand-picked subset
+  would stop noticing whichever field someone adds next). **None means
+  SWEEP** — an uncomputable signature is never treated as a match
+- `_apply_language()`: takes the PROCESS-WIDE translation claim
+  (`data.translations.claim_translation`) before building the corpus.
+  The per-watch `_translation_thread` guard let five watches on one
+  language start five workers on the same corpus, all writing one cache
+  file
 - `_build_menu()`: the shared tray/right-click `_StayOpenMenu` — TITLE
   row, Add/Remove Watch, Show (tray-only), Watch Face… (the ONE flat
   entry that replaced the R5 Design…/Pointer Theme…/Slot Theme… mini

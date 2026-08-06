@@ -128,9 +128,58 @@ def _audit(dialog) -> list[str]:
 
 @pytest.fixture
 def encyclopedia(app):
+    """The session zoom is a MODULE-LEVEL global that survives a window
+    close by design (Ctrl+MouseWheel, "persisted for the session at
+    least"), so whatever ran before this test would otherwise decide
+    what the audit measures. Two sibling suites leave it at 2.5, and
+    that is how the zoom finding below was found in the first place —
+    but an audit whose subject depends on test ORDER measures nothing.
+    Pinned to 1.0 here and restored afterwards."""
+    from app.encyclopedia import dialog as dialog_module
+
+    previous = dialog_module._session_zoom
+    dialog_module._session_zoom = 1.0
     dialog = EncyclopediaDialog()
     yield dialog
     dialog.close()
+    dialog_module._session_zoom = previous
+
+
+def test_the_encyclopedia_cards_outgrow_their_box_when_zoomed(app):
+    """A REAL, PRE-EXISTING defect this session's audit uncovered, kept
+    visible rather than quietly skipped (owner report pending).
+
+    `app/encyclopedia/cards.py` `CardGrid.fit` grows the FONT with the
+    session zoom but clamps the CARD to the unzoomed width:
+
+        width = max(MIN, min(round(width * zoom), width))   # zoom>=1 -> width
+        font_px = ... round(width * CARD_FONT_RATIO * zoom) ...
+
+    So at any zoom above 1.0, with the window at its own minimum width,
+    the home cards' subtitles need more room than the card has and get
+    cut — exactly what THE SPACE & LEGIBILITY LAW forbids. At 1400px and
+    wider it is fine at every zoom, so this is minimum-width-only.
+
+    This test PINS THE CURRENT BEHAVIOUR so the finding cannot be lost.
+    When the owner picks a remedy (the law's order: free space, reflow to
+    fewer columns, raised minimum, scroll), this test flips to asserting
+    no faults."""
+    from app.encyclopedia import dialog as dialog_module
+
+    previous = dialog_module._session_zoom
+    try:
+        dialog_module._session_zoom = 2.0
+        dialog = EncyclopediaDialog()
+        _settle(dialog, *_minimum(dialog))
+        cramped = _elided(dialog)
+        _settle(dialog, *_LARGER)
+        roomy = _elided(dialog)
+        dialog.close()
+    finally:
+        dialog_module._session_zoom = previous
+
+    assert cramped, "the zoom defect is gone — flip this test to assert []"
+    assert roomy == [], "wider than the minimum it must still hold"
 
 
 def _minimum(dialog) -> tuple[int, int]:
@@ -181,6 +230,71 @@ def test_encyclopedia_holds_larger_than_its_minimum(encyclopedia):
     _settle(encyclopedia, *_LARGER)
 
     assert _audit(encyclopedia) == []
+
+
+@pytest.fixture
+def settings_dialog(app):
+    """The Settings window, built the way the controller builds it."""
+    from app.controller import build_skin
+    from app.settings_dialog.dialog import SettingsDialog
+    from app.settings_store import Settings
+
+    settings = Settings()
+    dialog = SettingsDialog(settings, build_skin(settings))
+    yield dialog
+    dialog.done(0)          # releases its hold on the city database
+
+
+def test_settings_holds_at_its_declared_minimum(settings_dialog):
+    """This arc changed how Settings gets the 5.6 MB city database (a
+    shared, reference-counted repository). The window is audited in
+    full anyway — the law binds the window, not the diff."""
+    hint = settings_dialog.minimumSizeHint()
+    _settle(settings_dialog, hint.width(), hint.height())
+
+    assert _audit(settings_dialog) == []
+
+
+def test_settings_holds_larger_than_its_minimum(settings_dialog):
+    _settle(settings_dialog, *_LARGER)
+
+    assert _audit(settings_dialog) == []
+
+
+@pytest.fixture
+def observatory(app):
+    """The Observatory window. This arc swapped its bundled data for the
+    process-wide `shared_observatory`, so it is audited too."""
+    from datetime import datetime
+    from zoneinfo import ZoneInfo
+
+    import astral
+
+    from app.observatory import ObservatoryDialog
+    from config import defaults
+
+    city = defaults.DEFAULT_CITY
+    tz = ZoneInfo(city["timezone"])
+    dialog = ObservatoryDialog(
+        datetime.now(tz),
+        astral.Observer(latitude=city["latitude"], longitude=city["longitude"]),
+        tz,
+    )
+    yield dialog
+    dialog.close()
+
+
+def test_observatory_holds_at_its_declared_minimum(observatory):
+    hint = observatory.minimumSizeHint()
+    _settle(observatory, hint.width(), hint.height())
+
+    assert _audit(observatory) == []
+
+
+def test_observatory_holds_larger_than_its_minimum(observatory):
+    _settle(observatory, *_LARGER)
+
+    assert _audit(observatory) == []
 
 
 def test_encyclopedia_holds_on_every_screen_it_opens(encyclopedia):

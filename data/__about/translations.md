@@ -60,3 +60,26 @@ Latin transliteration.
 - `save(lang, corpus_slice, texts)`: merges freshly translated entries
   into the user's cache and writes it atomically (`os.replace`); the
   bundled file is never written at runtime.
+
+## ONE run, ONE writer, ONE corpus (owner bug 2026-08-06)
+
+`WatchController._apply_language` guarded on its OWN `_translation_
+thread`, which is per watch. Five watches sharing a language therefore
+started five workers: the same corpus translated five times through the
+same endpoint, and five writers on one cache file.
+
+- `claim_translation(language)` / `release_translation(language)` — the
+  process-wide claim. Taken BEFORE the corpus is built, so the 1.5 MB of
+  reading behind `missing()` happens once too. The worker releases in a
+  `finally`: a claim left standing would block every later retry, and
+  the run is resumable by design.
+- `_SAVE_LOCK` serializes `save()`'s read-merge-write. **This was a
+  correctness bug, not a slowdown**: the interleaving A-reads, B-reads,
+  A-writes, B-writes silently DROPS every entry A had persisted, and the
+  resumable-chunk design makes the loss invisible — the next run simply
+  retranslates what it thinks is missing. The temp file also carries the
+  writer's thread id, so a stale `.tmp` from a killed process is never
+  mistaken for this one's.
+- `_CORPUS` memoizes `collect_corpus()`, which re-reads symbolism.json
+  (1.12 MB) and encyclopedia.json (439 KB); it ran once per watch at
+  startup and again inside the worker.

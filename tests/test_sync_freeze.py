@@ -34,6 +34,7 @@ import os
 os.environ.setdefault("QT_QPA_PLATFORM", "offscreen")
 
 import dataclasses
+import re
 import threading
 from datetime import timedelta
 from time import monotonic, sleep
@@ -184,17 +185,23 @@ def test_teardown_is_wired_into_discard(app):
 
 class _FakeWatch:
     """A watch whose sweep records whether any sibling was sweeping at
-    the same moment."""
+    the same moment, and how many times it ran."""
 
-    def __init__(self, live: list, overlaps: list):
+    def __init__(self, live: list, overlaps: list, signature=None, swept=None):
         self._live = live
         self._overlaps = overlaps
+        self._signature = signature
+        self._swept = swept if swept is not None else []
+
+    def hover_warm_signature(self):
+        return self._signature
 
     def hover_sweep(self):
         def sweep():
             if self._live:
                 self._overlaps.append(1)
             self._live.append(self)
+            self._swept.append(self)
             sleep(0.05)
             self._live.remove(self)
         return sweep
@@ -208,6 +215,7 @@ def _bare_manager(watches):
     manager._hover_lock = threading.Lock()
     manager._hover_thread = None
     manager._hover_pending = []
+    manager._hover_done = set()
     manager._watches = watches
     return manager
 
@@ -215,7 +223,8 @@ def _bare_manager(watches):
 def test_five_watches_asking_at_once_sweep_one_at_a_time():
     """The owner's exact shape: one SYNC, five watches, five sweeps.
     They must queue, never overlap — five concurrent pure-Python sweeps
-    against five GUI threads IS the freeze."""
+    against five GUI threads IS the freeze. Signatures are None here, so
+    every watch is genuinely swept (see the dedup tests below)."""
     live, overlaps = [], []
     watches = [_FakeWatch(live, overlaps) for _ in range(5)]
     manager = _bare_manager(watches)
@@ -268,6 +277,106 @@ def test_a_quitting_manager_refuses_new_sweeps():
 
     assert manager._hover_pending == []
     assert manager._hover_thread is None
+
+
+def test_watches_that_would_build_the_same_thing_sweep_once():
+    """Deduplicated by WHAT the sweep builds, not by who asked. Five
+    dials on the same theme/ring/palette/diameter/day walk the same
+    7,201 probes to the same articles — the first warms the shared
+    caches and the rest are pure GIL."""
+    live, overlaps, swept = [], [], []
+    watches = [
+        _FakeWatch(live, overlaps, signature=1234, swept=swept)
+        for _ in range(5)
+    ]
+    manager = _bare_manager(watches)
+
+    for watch in watches:
+        manager.request_hover_warm(watch)
+    manager._hover_thread.join(timeout=10)
+
+    assert len(swept) == 1, f"swept {len(swept)} times, expected 1"
+
+
+def test_watches_that_would_build_different_things_all_sweep():
+    """Different city, different daylight, different theme — different
+    signature, and every one of them must actually run."""
+    live, overlaps, swept = [], [], []
+    watches = [
+        _FakeWatch(live, overlaps, signature=index, swept=swept)
+        for index in range(4)
+    ]
+    manager = _bare_manager(watches)
+
+    for watch in watches:
+        manager.request_hover_warm(watch)
+    manager._hover_thread.join(timeout=10)
+
+    assert len(swept) == 4
+    assert overlaps == []
+
+
+def test_an_unknown_signature_is_always_swept():
+    """ACCURACY OVER SPEED. `hover_warm_signature` returns None when it
+    cannot be computed; None must never be treated as "same as the last
+    None" — that would silently skip real work."""
+    live, overlaps, swept = [], [], []
+    watches = [
+        _FakeWatch(live, overlaps, signature=None, swept=swept)
+        for _ in range(3)
+    ]
+    manager = _bare_manager(watches)
+
+    for watch in watches:
+        manager.request_hover_warm(watch)
+    manager._hover_thread.join(timeout=10)
+
+    assert len(swept) == 3, "an uncomputable signature must never dedupe"
+    assert manager._hover_done == set()
+
+
+def test_a_real_watch_signature_moves_with_the_day(app):
+    """The signature is only worth anything if it actually CHANGES when
+    the sweep's output would — and if it is computable at all. It went
+    permanently None twice while being written (the compositor's tick is
+    only set by a real paint; the skin holds dicts and cannot be hashed),
+    and a permanently-None signature is a dedup that never fires."""
+    watch = WatchController(app)
+    try:
+        watch._on_tick(clock_jumped=False)
+        base = watch.hover_warm_signature()
+        assert base is not None, "the signature must be computable, not just safe"
+        watch._day = dataclasses.replace(
+            watch._day, local_date=watch._day.local_date - timedelta(days=1)
+        )
+        assert watch.hover_warm_signature() != base
+    finally:
+        watch._teardown_windows()
+
+
+def test_two_identical_watches_share_one_signature(app):
+    """The whole point: same settings, same work, one sweep."""
+    first, second = WatchController(app), WatchController(app)
+    try:
+        for watch in (first, second):
+            watch._on_tick(clock_jumped=False)
+        assert first.hover_warm_signature() == second.hover_warm_signature()
+    finally:
+        first._teardown_windows()
+        second._teardown_windows()
+
+
+def test_the_skin_repr_carries_no_object_addresses(app):
+    """The signature folds the skin in through `repr` because the skin
+    holds dicts and cannot be hashed. That only works while no field's
+    repr prints an identity — an address would make every watch look
+    different and silently disable the dedup."""
+    watch = WatchController(app)
+    try:
+        text = repr(watch._skin)
+        assert not re.search(r"0x[0-9a-fA-F]{6,}|object at ", text), text[:400]
+    finally:
+        watch._teardown_windows()
 
 
 # --- 5. one process, one copy of every book ------------------------------------

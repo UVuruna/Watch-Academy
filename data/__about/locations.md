@@ -57,3 +57,21 @@ leaves). `is_city` is `record is not None`.
   ł, …) through `constants.CITY_NAME_TRANSLITERATIONS` — the search-
   folding key shared by `find_city` and the picker's own filter.
 - `_is_city_leaf(value)` (private): `"latitude" in value`.
+
+## Process-wide, reference counted (owner bug 2026-08-06)
+
+`world_locations.json` is 5.6 MB — the largest bundled JSON — and the
+tree it parses to is identical for every watch: only the city each one
+PICKS differs. Two Settings dialogs open at once used to hold two
+independent parsed trees, and reopening the same dialog reparsed from
+scratch every time.
+
+- `shared_locations()` — THE process-wide repository.
+- `acquire()` / `release()` — the picker's hold. `load()` stays the
+  plain "ensure parsed" every query calls, so it must NOT count as a
+  hold.
+- The count is why `release()` cannot be a bool: the FIRST picker to
+  close must not pull the tree out from under a sibling still open.
+
+Shared does NOT mean resident forever — the last release still frees the
+5.6 MB, which was the owner's original intent for this repository.

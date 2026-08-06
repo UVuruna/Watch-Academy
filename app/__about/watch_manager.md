@@ -90,6 +90,16 @@ later in the session.
   minutes after a Windows time SYNC. `run_warm` already serialized the
   STARTUP sweeps for exactly this reason; this is the same rule for the
   sweeps that arrive later. A watch removed while queued is skipped
+- `_emit_art_ready()`: a recolor landed — every live watch repaints,
+  and the three RESOLUTION CACHES are cleared first
+  ([Paths](../../config/__about/paths.md),
+  [Pantheon](../../config/__about/pantheon.md),
+  [Archetype Geometry](../../render/__about/archetype_geometry.md)).
+  All three deliberately remember only what they FOUND, so they cannot
+  hide art that arrives later — but a pool scanned before a sibling
+  version landed would still be one file short. Clearing costs nothing
+  (they refill on the next paint) and keeps the 0.14.707 failure — a
+  dial stuck on its gold master until restart — structurally impossible
 - `quit_all()`: the Exit action on ANY watch closes the WHOLE process —
   every watch's own `_prepare_quit()` runs before the one shared
   `app.quit()`

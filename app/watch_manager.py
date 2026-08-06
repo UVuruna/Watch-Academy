@@ -46,8 +46,8 @@ from PySide6.QtWidgets import QApplication
 from app.controller import WatchController
 from app.settings_store import SettingsStore
 from app.warm import run_warm
-from config import paths
-from render import asset_recolor
+from config import pantheon, paths
+from render import archetype_geometry, asset_recolor
 from render.art_warm import warm_pending_art
 
 
@@ -78,6 +78,12 @@ class AppController:
         self._hover_lock = threading.Lock()
         self._hover_thread: threading.Thread | None = None
         self._hover_pending: list = []
+        #: Signatures of sweeps this process has already walked — see
+        #: `_drain_hover`. One short digest per distinct (skin, day,
+        #: daylight, diameter) combination the user actually produces, so
+        #: a session running for weeks adds a few hundred 40-character
+        #: strings and nothing that matters.
+        self._hover_done: set = set()
         #: The live warm/drain progress line every watch's menu shows
         #: while background work runs (0.14.710); None = idle, row
         #: hidden. Written by the warm/drain threads, read on the GUI
@@ -339,7 +345,16 @@ class AppController:
     def _drain_hover(self) -> None:
         """Serve the queue one watch at a time. A watch removed while it
         waited is skipped — its sweep would build articles for a dial
-        that no longer exists."""
+        that no longer exists.
+
+        DEDUPLICATED BY WHAT THE SWEEP BUILDS, not by which watch asked
+        (owner 2026-08-06). Five watches on the same theme, ring, palette,
+        diameter, day and daylight state would walk the same 7,201 probes
+        to the same articles five times over; the first walk warms the
+        process-wide caches and the rest are pure GIL. A watch whose
+        signature cannot be computed (`hover_warm_signature` returns
+        None) is ALWAYS swept — accuracy over speed, an unknown is never
+        treated as a match."""
         while True:
             with self._hover_lock:
                 if not self._hover_pending or self._quitting:
@@ -347,12 +362,28 @@ class AppController:
                 watch = self._hover_pending.pop(0)
             if watch not in self._watches:
                 continue
+            signature = watch.hover_warm_signature()
+            if signature is not None and signature in self._hover_done:
+                continue
             watch.hover_sweep()()
+            if signature is not None:
+                self._hover_done.add(signature)
 
     def _emit_art_ready(self) -> None:
         """A recolor landed: every live watch repaints (the art is
         shared, so any dial may be the one standing in with a master).
         Qt queues the cross-thread signal onto each GUI thread."""
+        # NEW ART ON DISK INVALIDATES THE RESOLUTION CACHES (owner bug
+        # 2026-08-06). Both caches deliberately remember only what they
+        # FOUND, never what was missing, so they cannot hide art that
+        # arrives later — but a pool that was scanned before a sibling
+        # version landed would still be one file short. Clearing here
+        # costs nothing (the caches refill on the next paint) and keeps
+        # the 0.14.707 failure — a dial stuck on its gold master until
+        # restart — structurally impossible.
+        paths.reset_art_file_cache()
+        pantheon.reset_rotation_cache()
+        archetype_geometry.reset_art_size_cache()
         for watch in list(self._watches):
             watch.art_ready.emit()
 

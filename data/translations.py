@@ -11,6 +11,7 @@ transliteration.
 import hashlib
 import json
 import os
+import threading
 import urllib.parse
 import urllib.request
 from pathlib import Path
@@ -47,10 +48,21 @@ def transliterate_sr(text: str) -> str:
     return "".join(out)
 
 
+#: The corpus is derived from bundled files that cannot change while the
+#: app runs, and building it re-reads symbolism.json (1.12 MB) plus
+#: encyclopedia.json (439 KB). It used to be built once per WATCH at
+#: startup and again inside the translate worker (owner bug 2026-08-06,
+#: THE ONE COPY RULE).
+_CORPUS: dict | None = None
+
+
 def collect_corpus() -> dict:
     """key → English text for everything translatable (Phase 1: the
     reading content — articles, blurbless hover corpora, guide
-    captions)."""
+    captions). Built ONCE per process — see `_CORPUS`."""
+    global _CORPUS
+    if _CORPUS is not None:
+        return _CORPUS
     canon = load_json_checked(
         paths.database_dir() / "symbolism.json", "Symbolism database"
     )
@@ -111,7 +123,38 @@ def collect_corpus() -> dict:
     # hover labels and name tables. The English string IS the key.
     for text in ui_text.UI_STRINGS:
         corpus[f"ui/{text}"] = text
+    _CORPUS = corpus
     return corpus
+
+
+#: ONE translation run per language for the whole process (owner bug
+#: 2026-08-06). `WatchController._apply_language` guarded on its OWN
+#: `_translation_thread`, which is per watch — so five watches sharing a
+#: language each started a worker, each translating the SAME corpus
+#: through the same endpoint and each writing the SAME cache file.
+_IN_FLIGHT: set[str] = set()
+_IN_FLIGHT_LOCK = threading.Lock()
+
+#: Serializes `TranslationStore.save`'s read-merge-write. Without it the
+#: interleaving A-reads, B-reads, A-writes, B-writes silently DROPS every
+#: entry A persisted — a corruption bug, not a slowdown.
+_SAVE_LOCK = threading.Lock()
+
+
+def claim_translation(language: str) -> bool:
+    """True when THIS caller now owns the translation run for
+    `language`; False when someone else already does. The owner must
+    call `release_translation` when the run ends."""
+    with _IN_FLIGHT_LOCK:
+        if language in _IN_FLIGHT:
+            return False
+        _IN_FLIGHT.add(language)
+        return True
+
+
+def release_translation(language: str) -> None:
+    with _IN_FLIGHT_LOCK:
+        _IN_FLIGHT.discard(language)
 
 
 @profiling.timed("Translate chunk")
@@ -203,17 +246,31 @@ class TranslationStore:
         }
 
     def save(self, lang: str, corpus_slice: dict, texts: dict) -> None:
-        """Merge freshly translated entries into the cache (atomic)."""
-        path = self._path(lang)
-        data = {"hashes": {}, "texts": {}}
-        if path.exists():
-            data = json.loads(path.read_text(encoding="utf-8"))
-        for key, translated in texts.items():
-            data["texts"][key] = translated
-            data["hashes"][key] = self._hash(corpus_slice[key])
-        self._dir.mkdir(parents=True, exist_ok=True)
-        tmp = path.with_suffix(".json.tmp")
-        tmp.write_text(
-            json.dumps(data, ensure_ascii=False, indent=1), encoding="utf-8"
-        )
-        os.replace(tmp, path)
+        """Merge freshly translated entries into the cache (atomic).
+
+        LOCKED (owner bug 2026-08-06). Read-merge-write is not atomic
+        just because the final `os.replace` is: with two writers the
+        interleaving A-reads, B-reads, A-writes, B-writes loses every
+        entry A had just persisted, and the resumable-chunk design means
+        the loss is silent — the next run simply retranslates what it
+        thinks is missing. `claim_translation` now keeps a second writer
+        from existing at all; this lock is the belt to that suspender,
+        and also covers a language SWITCH racing a running worker.
+
+        The temp file carries the writer's thread id: with the lock held
+        two live writers cannot collide, but a stale `.tmp` left by a
+        killed process must never be mistaken for this one's."""
+        with _SAVE_LOCK:
+            path = self._path(lang)
+            data = {"hashes": {}, "texts": {}}
+            if path.exists():
+                data = json.loads(path.read_text(encoding="utf-8"))
+            for key, translated in texts.items():
+                data["texts"][key] = translated
+                data["hashes"][key] = self._hash(corpus_slice[key])
+            self._dir.mkdir(parents=True, exist_ok=True)
+            tmp = path.with_suffix(f".{threading.get_ident()}.tmp")
+            tmp.write_text(
+                json.dumps(data, ensure_ascii=False, indent=1), encoding="utf-8"
+            )
+            os.replace(tmp, path)

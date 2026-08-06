@@ -16,6 +16,7 @@ a `WatchController` itself still knows nothing about its siblings.
 """
 
 import dataclasses
+import hashlib
 import re
 import sys
 import random
@@ -86,7 +87,10 @@ from data.encyclopedia import (
 from data.symbolism import (
     SymbolismRepository, reset_shared_symbolism, shared_symbolism,
 )
-from data.translations import TranslationStore, collect_corpus, translate_texts
+from data.translations import (
+    TranslationStore, claim_translation, collect_corpus, release_translation,
+    translate_texts,
+)
 from render.assets import shared_cache
 from render.asset_variants import calendar_wheel_icon_file
 from render.compositor import Compositor
@@ -1398,6 +1402,51 @@ class WatchController(QObject):
         self._warm_status_action.setVisible(status is not None)
         if status is not None:
             self._warm_status_label.setText(status)
+
+    def hover_warm_signature(self):
+        """What this watch's hover sweep would BUILD, as a hashable key —
+        or None when it cannot be computed, in which case the caller must
+        run the sweep (owner bug 2026-08-06; accuracy > speed, so an
+        unknown signature never means "skip").
+
+        Two watches whose signatures match would walk the same 7,201
+        probes to the same articles and the same images, so the second
+        walk is pure waste. Everything `Compositor.warm_hover_articles`
+        actually reads goes in:
+
+        - the SKIN, which decides every seat, figure, ring and palette;
+        - the DAY context's cache key (a new day speaks new articles);
+        - `is_daylight`, because the day/night mechanism swaps whole
+          depictions (Ghosts/Exegol, virtue/vice) — two watches in
+          different cities can share a date and still differ here;
+        - the DIAMETER, which decides the pixel heights that get built.
+
+        The daylight state comes from `_effective_is_daylight()` — the
+        controller's own answer, honoring a running Time Travel
+        simulation — rather than the compositor's `_last_tick`, which is
+        only populated by a real paint and would leave the signature
+        permanently None in any headless context.
+
+        The skin enters through its `repr`, not through `hash`: several
+        of its specs hold dicts, so the object is genuinely unhashable,
+        and hashing a hand-picked subset of fields would silently stop
+        noticing whichever field someone adds next. The repr covers
+        every field automatically, carries no object addresses (pinned
+        by `tests/test_sync_freeze.py`), and is identical for two
+        watches built from the same settings. Anything unexpected
+        returns None, and None always means SWEEP."""
+        if self._day is None or not self._skin.legend:
+            return None
+        try:
+            material = repr((
+                repr(self._skin),
+                self._day.cache_key,
+                self._effective_is_daylight(),
+                float(self._settings.diameter),
+            ))
+        except Exception:
+            return None
+        return hashlib.sha1(material.encode("utf-8")).hexdigest()
 
     def hover_sweep(self):
         """This watch's hover warm as a callable, for the shared warm
@@ -3854,11 +3903,27 @@ class WatchController(QObject):
         self._translation_overlay = store.load(language)
         if not start_missing or self._translation_thread is not None:
             return
-        if store.missing(language, collect_corpus()):
-            self._translation_thread = threading.Thread(
-                target=self._translate_worker, args=(language,), daemon=True
-            )
-            self._translation_thread.start()
+        # ONE RUN PER LANGUAGE FOR THE WHOLE PROCESS (owner bug
+        # 2026-08-06). `_translation_thread` is per WATCH, so five
+        # watches sharing a language each started a worker: the same
+        # corpus translated five times through the same endpoint, and
+        # five writers on one cache file. The claim is taken BEFORE the
+        # corpus is built so the 1.5 MB of reading behind `missing()`
+        # happens once too.
+        if not claim_translation(language):
+            return
+        started = False
+        try:
+            if store.missing(language, collect_corpus()):
+                self._translation_thread = threading.Thread(
+                    target=self._translate_worker, args=(language,), daemon=True
+                )
+                self._translation_thread.start()
+                started = True
+        finally:
+            if not started:
+                release_translation(language)
+        if started:
             self._translation_poller.start()
             self._tray.notify(
                 self._ui("Translating"),
@@ -3885,6 +3950,11 @@ class WatchController(QObject):
             self._translation_error = None
         except Exception as error:      # network/JSON — surfaced by the poller
             self._translation_error = error
+        finally:
+            # Always hand the language back, success or failure — a claim
+            # left standing would block every later retry for the rest of
+            # the session (the run is resumable by design).
+            release_translation(language)
 
     def _poll_translation(self) -> None:
         thread = self._translation_thread

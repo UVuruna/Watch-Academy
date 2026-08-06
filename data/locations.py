@@ -63,14 +63,37 @@ class LocationRepository:
     def __init__(self, path: Path | None = None):
         self._path = path or (paths.database_dir() / "world_locations.json")
         self._tree: dict | None = None
+        #: How many pickers are currently holding the tree. The file is
+        #: 5.6 MB and this repository is process-wide (owner bug
+        #: 2026-08-06): two watches with Settings open at once used to
+        #: hold two independent parsed trees, and reopening the SAME
+        #: dialog reparsed from scratch every time. Releasing on a
+        #: plain flag would then let the FIRST picker to close pull the
+        #: tree out from under the second — hence a count, not a bool.
+        self._holders = 0
 
     def load(self) -> None:
+        """Ensure the tree is parsed. Every query calls this, so it must
+        NOT count as taking a hold — see `acquire`."""
         if self._tree is None:
             self._tree = load_json_checked(self._path, "World locations database")
 
+    def acquire(self) -> None:
+        """A picker is opening: take a hold and make sure the tree is
+        there. Paired with `release`."""
+        self._holders += 1
+        self.load()
+
     def release(self) -> None:
-        """Drop the parsed tree (call when the picker closes)."""
-        self._tree = None
+        """Drop the parsed tree once the LAST holder is done with it
+        (the owner's original intent: the 5.6 MB tree must not sit in
+        RAM for the life of the process just because Settings was opened
+        once). Extra releases are ignored rather than driving the count
+        negative — and a release while a SIBLING picker is still open
+        keeps the tree, which is the whole point of counting."""
+        self._holders = max(0, self._holders - 1)
+        if self._holders == 0:
+            self._tree = None
 
     def children(self, node_path: tuple[str, ...] = ()) -> list[LocationNode]:
         """Children of the node at `node_path` (empty tuple = continents).
@@ -144,3 +167,23 @@ class LocationRepository:
             longitude=float(leaf["longitude"]),
             timezone=leaf["timezone"],
         )
+
+
+#: THE process-wide city database (owner bug 2026-08-06). The bundled
+#: file is 5.6 MB — the largest JSON in the app — and the tree it parses
+#: to is identical for every watch: what differs is only the city each
+#: one PICKS out of it. Two Settings dialogs open at once used to hold
+#: two independent parsed trees, and reopening the same dialog reparsed
+#: from scratch every time.
+_SHARED: "LocationRepository | None" = None
+
+
+def shared_locations() -> "LocationRepository":
+    """The one city database this process uses. It still RELEASES when
+    the last picker closes (`LocationRepository.release`) — shared does
+    not mean resident forever."""
+    global _SHARED
+    if _SHARED is None:
+        _SHARED = LocationRepository()
+    return _SHARED
+

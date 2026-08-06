@@ -53,7 +53,7 @@ from app.settings_store import Settings, replace
 from app.theme import apply_theme, size_to_screen, style_dialog_buttons
 from config import constants, defaults
 from config.ui_text import ui
-from data.locations import LocationRepository
+from data.locations import shared_locations
 
 
 class SettingsDialog(
@@ -81,7 +81,11 @@ class SettingsDialog(
         self.setWindowFlag(Qt.WindowType.WindowStaysOnTopHint, True)
         self._settings = settings
         self._skin = skin
-        self._locations = LocationRepository()
+        # THE ONE COPY RULE: the 5.6 MB city tree is shared, and this
+        # dialog takes a COUNTED hold on it so a sibling picker closing
+        # cannot pull it away (owner bug 2026-08-06).
+        self._locations = shared_locations()
+        self._locations.acquire()
         self._timezone = settings.timezone
         self._city_name = settings.city_name
         # The major-cities suggestions only appear on USER interaction
