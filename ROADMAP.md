@@ -46,12 +46,12 @@ lives in [The DOMY Canon](CANON.md).
   (`constants.RING_OUTER_LOCK`) with a user-changeable inner
   (`Settings.ring_inner`), and a custom ring picks any outer x inner
   combination freely, with its own typed crown text + orientation.
-  "Crown Text" IS the outer Great Seal motto arc
-  (`skin.ring.motto`, `RingLayer._draw_motto`) — Phase ④'s claim that no
+  "Crown Text" IS the outer Great Seal crown text arc
+  (`skin.ring.crown_text`, `RingLayer._draw_crown_text`) — Phase ④'s claim that no
   such element exists was a misread of the render stack; Watch Face
   Opacity/Size/Colors now each carry a Crown Text row
-  (`motto_alpha`/`motto_scale`/`motto_tint`), greyed out with a tooltip
-  on the presets that carry no motto. A per-pointer default theme table
+  (`crown_text_alpha`/`crown_text_scale`/`crown_text_tint`), greyed out with a tooltip
+  on the presets that carry no crown text. A per-pointer default theme table
   is still pending the Theme Dictionary registry; the dozen/cube
   slot-content kinds still have no render path (Themes & Slots' content
   tree explains this in place rather than offering a picker that draws
@@ -60,7 +60,7 @@ lives in [The DOMY Canon](CANON.md).
   "full" outer onto "octa" — Ω alone at the midnight seat, the other
   seven empty fields wearing their own NUMBER glyphs; "full" is now
   preset-free (custom rings only). Every preset's inner default was
-  re-verdicted (DOMY/PILOT/Dollar → "seconds", Templar →
+  re-verdicted (DOMY/LOOP/Dollar → "seconds", Templar →
   "seconds_cross", The One → "simple_octa",
   `constants.RING_INNER_PRESET_DEFAULT`). The custom crown-text field
   now carries a whitelist `QValidator` (`constants.
@@ -96,7 +96,7 @@ lives in [The DOMY Canon](CANON.md).
 - **Suite:** 521 green tests (`python -m pytest tests`; Session 16
   added the Deep Time and analytic-illumination goldens; Fix round G
   added 12 more for the Observatory's adaptive ticks/splitter/enlarge;
-  the MOTO round added 13 more for the outer motto arc's angle math and
+  the MOTO round added 13 more for the outer crown text arc's angle math and
   the axis-opposition legend lines; the MASON/ICONS round added 6 more
   for the tight-letter word-gap law, the Templar preset, the metal-split
   toggle and the icon wiring).
@@ -206,24 +206,24 @@ lives in [The DOMY Canon](CANON.md).
   variants + 1 stray duplicate) — see
   [Subdial Prompts](research/prompts/instrument/subdial_circle_prompts.md).
 - **THE MOTO ROUND (owner "може radi" 2026-07-19) — DONE:** two
-  features on the Mason ring. (1) THE OUTER MOTTO ARC — ANNUIT
+  features on the Mason ring. (1) THE OUTER CROWN TEXT ARC — ANNUIT
   COEPTIS and NOVUS ORDO SECLORUM render as curved text just outside
   the ring band, their key letters pinned exactly onto the ring's own
   six seats (N/4h, O/noon, M/20h, A/8h, S/16h — "MASON outside, G
-  inside"); the per-glyph angle math is pure (`core.motto.
-  motto_glyph_angles`, even spacing between pins, solved once at load
+  inside"); the per-glyph angle math is pure (`core.crown_text.
+  crown_glyph_angles`, even spacing between pins, solved once at load
   by `data.rings.validate_preset`), the draw reuses the ring's own
   letter-art stamp (`render.layers.RingLayer._draw_ring_glyph`, shared
   with `_draw_letter_art`, Rule #5) at two concentric radii (the two
-  mottos' own O/S pins share an angle by design), and
+  crown texts' own O/S pins share an angle by design), and
   `defaults.dial_window_margin_fraction` grows to fit whenever a preset
-  carries a `motto` (no-op for every other preset). (2) THE OPPOSITION
+  carries a `crown_text` (no-op for every other preset). (2) THE OPPOSITION
   READINGS — the per-letter hover legend gains a second paragraph, the
   THREE AXES across the center (N↔S the Nazarene against Satan, A↔M
   the Angel against the Master, G↔Ω God against the End) — sealed into
   CANON.md §The Banknote verbatim. See [The DOMY Canon](CANON.md),
   [Ring Presets](data/__about/rings.md), [Layers](render/layers/___layers.md) and
-  [Motto](core/__about/motto.md). 13 new tests, 513 green.
+  [Crown Text](core/__about/crown_text.md). 13 new tests, 513 green.
 - **THE MOON PAGES round (owner 2026-07-16 writers' queue #8b) —
   DONE (2026-07-19).** The bulk had already landed in session 14
   (commit `fd52ffd`): the `moon` topic's EIGHT house-voice phase
@@ -257,16 +257,16 @@ lives in [The DOMY Canon](CANON.md).
 - **THE MASON/ICONS round (owner verdicts 2026-07-19, third batch) —
   DONE.** Four tasks. (1) **THE ANNUIT WORD-GAP LAW** — ANNUIT COEPTIS's
   own letters now sit TIGHT, at the same per-character step NOVUS ORDO
-  SECLORUM already reads (`RING_MOTTO_LETTER_STEP_DEG`, 60°/9 chars ≈
+  SECLORUM already reads (`RING_CROWN_TEXT_LETTER_STEP_DEG`, 60°/9 chars ≈
   6.667°), advancing inward from BOTH its own pins; the leftover slack
   becomes ONE BIG WORD GAP over the G's own seat instead of spreading
   evenly across the whole span (the previous round's "too wide" look) —
-  `core.motto._tight_two_pin_angles`, the new 2-pin-only code path (3+
+  `core.crown_text._tight_two_pin_angles`, the new 2-pin-only code path (3+
   pins, NOVUS's own shape, is untouched). (2) **RING PRESET RENAMES +
   TEMPLAR** — the bundled cards renamed "MORPH" → "Morph", "MASON G" →
   "Mason", "NUMBERS" → "Omega" (`app.settings_store` migrates a stored
   old name), plus a new bundled **Templar** preset (the seal layout, all
-  six positions wearing the templar-cross glyph, no motto, no legend).
+  six positions wearing the templar-cross glyph, no crown text, no legend).
   (3) **THE METAL-SPLIT OPTION** — Mason/Omega/Templar (every seal
   preset carrying its own `triangle` override) now offer a per-preset
   "Two metals" toggle in the Ring menu (`Settings.ring_two_metals`,
@@ -279,7 +279,7 @@ lives in [The DOMY Canon](CANON.md).
   Quick Jump pole rows' interim ⚪/⚫ emoji (documented emoji fallback
   when a file is absent) and wire onto the Sun/Moon submenus' own
   eclipse entries only — UI CHROME, not ART, so the one-image-one-place
-  law does not apply to them. See [Motto](core/__about/motto.md), [Ring
+  law does not apply to them. See [Crown Text](core/__about/crown_text.md), [Ring
   Presets](data/__about/rings.md), [Watch Controller](app/__about/controller.md) and
   [Config (folder)](config/___config.md). 6 new tests, 521 green.
 

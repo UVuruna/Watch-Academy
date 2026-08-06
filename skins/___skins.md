@@ -6,11 +6,11 @@ rendering is driven by one `SkinDefinition` instance: `DEFAULT_SKIN` in
 overlays the chosen RING PRESET and the user's display choices at build
 time (`build_skin` in [Watch Controller](../app/__about/controller.md)).
 
-**DOMY and PILOT are ring preset names — nothing more** (owner
+**DOMY and LOOP are ring preset names — nothing more** (owner
 decision): a ring face in `assets/ring/` plus its Greek-ordinal letter
 positions, read by `data.rings.ring_presets()` from
-`Database/ring_presets.json` (five presets today: DOMY, PILOT, The One,
-Templar, Dollar — PILOT was renamed from "MORPH"). There are no skin
+`Database/ring_presets.json` (five presets today: DOMY, LOOP, The One,
+Templar, Dollar — LOOP was renamed from "MORPH"). There are no skin
 folders and no skin.json packs; all art is shared app content under
 `assets/`.
 

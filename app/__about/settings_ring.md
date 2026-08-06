@@ -8,7 +8,7 @@ Ring-name resolution + custom-ring-card normalization, split out of
 [Settings Store](settings_store.md) (THE STRUCTURE LAW, owner decree
 2026-08-05 — the compositional ring model's own migration pushed the
 settings file over the line-of-logic threshold). Holds the bundled
-preset RENAME table (Mason → Dollar, Omega → The One, Morph → PILOT),
+preset RENAME table (Mason → Dollar, Omega → The One, Morph/Pilot → LOOP),
 the shared per-ring-name dict loader (`ring_two_metals`,
 `ring_eye_shine`, `ring_inner`, the crown-text fields all use it) and
 the legacy custom-ring-card migration (`positions` → `outer`).

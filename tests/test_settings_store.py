@@ -208,7 +208,7 @@ def test_display_choices_round_trip(store):
         show_seconds=False,
         show_octa_slot=False,
         language="sr-Latn",
-        ring="PILOT",
+        ring="LOOP",
         ring_two_metals={"Dollar": False, "The One": True},
         ring_eye_shine={"Dollar": False},
         theme_metals={"greek": "gold", "norse": "silver"},
@@ -260,8 +260,9 @@ def test_ring_renames_migrate_stored_settings(store):
     shim, Rule #6) — an older settings file naming ANY generation's
     old value loads onto the current one instead of raising
     SettingsCorruptError. "MORPH"/"Morph" -> "PILOT" (CROSS-WORDS
-    round, owner UV inbox + PILOT pick 2026-07-27) needs its own entry
-    — the fold alone bridged only the old pure-case rename."""
+    round, owner UV inbox + PILOT pick 2026-07-27) -> "LOOP" (LOOP
+    round, owner ruling 2026-08-06) chains three generations onto the
+    current name — the fold alone bridges only a pure-case rename."""
     store.path.write_text(
         '{"schema_version": 1, "window": {"x": 1, "y": 2, "diameter": 360},'
         ' "ring": "MASON G"}',
@@ -291,13 +292,19 @@ def test_ring_renames_migrate_stored_settings(store):
         ' "ring": "MORPH"}',
         encoding="utf-8",
     )
-    assert store.load().ring == "PILOT"
+    assert store.load().ring == "LOOP"
     store.path.write_text(
         '{"schema_version": 1, "window": {"x": 1, "y": 2, "diameter": 360},'
         ' "ring": "Morph"}',
         encoding="utf-8",
     )
-    assert store.load().ring == "PILOT"
+    assert store.load().ring == "LOOP"
+    store.path.write_text(
+        '{"schema_version": 1, "window": {"x": 1, "y": 2, "diameter": 360},'
+        ' "ring": "PILOT"}',
+        encoding="utf-8",
+    )
+    assert store.load().ring == "LOOP"
     store.path.write_text(
         '{"schema_version": 1, "window": {"x": 1, "y": 2, "diameter": 360},'
         ' "ring": "no such preset"}',
@@ -305,6 +312,69 @@ def test_ring_renames_migrate_stored_settings(store):
     )
     with pytest.raises(SettingsCorruptError):
         store.load()
+
+
+def test_crown_text_keys_migrate_from_the_old_motto_names(store):
+    """TASK 1 (owner ruling 2026-08-06, "one term for one thing"): a
+    settings file saved before the rename carries `motto_alpha`/
+    `motto_scale`/`motto_tint` — `load()` must read them as the
+    fallback default for the new `crown_text_alpha`/`crown_text_scale`/
+    `crown_text_tint` fields instead of silently reverting to 1.0/1.0/
+    None (data loss) or raising SettingsCorruptError."""
+    store.path.write_text(
+        '{"schema_version": 1, "window": {"x": 1, "y": 2, "diameter": 360},'
+        ' "motto_alpha": 0.4, "motto_scale": 1.5, "motto_tint": "#123456"}',
+        encoding="utf-8",
+    )
+    loaded = store.load()
+    assert loaded.crown_text_alpha == pytest.approx(0.4)
+    assert loaded.crown_text_scale == pytest.approx(1.5)
+    assert loaded.crown_text_tint == "#123456"
+    # The NEW keys win when both are present (post-migration re-save).
+    store.path.write_text(
+        '{"schema_version": 1, "window": {"x": 1, "y": 2, "diameter": 360},'
+        ' "motto_alpha": 0.4, "crown_text_alpha": 0.9}',
+        encoding="utf-8",
+    )
+    assert store.load().crown_text_alpha == pytest.approx(0.9)
+    # A file that never carried either key keeps the ordinary defaults.
+    store.path.write_text(
+        '{"schema_version": 1, "window": {"x": 1, "y": 2, "diameter": 360}}',
+        encoding="utf-8",
+    )
+    fresh = store.load()
+    assert fresh.crown_text_alpha == pytest.approx(1.0)
+    assert fresh.crown_text_scale == pytest.approx(1.0)
+    assert fresh.crown_text_tint is None
+    # save() writes only the new keys — a re-save fully migrates the file.
+    store.save(loaded)
+    assert "motto_alpha" not in store.path.read_text(encoding="utf-8")
+    assert "crown_text_alpha" in store.path.read_text(encoding="utf-8")
+
+
+def test_custom_ring_card_motto_field_migrates_to_crown_text(store):
+    """TASK 1: `app.settings_ring.migrate_legacy_ring_card` upgrades a
+    stored custom-ring card's old `motto` field onto `crown_text` before
+    `validate_preset` runs — `data.rings.validate_preset` only reads
+    `crown_text` now, so an unmigrated card would silently lose its
+    crown-arc entries (an optional field, no loud failure) rather than
+    read as corrupt."""
+    from app.settings_ring import migrate_legacy_ring_card
+
+    legacy_card = {
+        "name": "OLDCROWN", "outer": "bot_cross", "letters": ["A", "B", "C", "D"],
+        "motto": [{"text": "AB", "orientation": "top"}],
+    }
+    migrated = migrate_legacy_ring_card(legacy_card)
+    assert "motto" not in migrated
+    assert migrated["crown_text"] == [{"text": "AB", "orientation": "top"}]
+    # A card already carrying `crown_text` is left untouched (no
+    # clobbering a fresh save with a stale `motto` sibling key).
+    fresh_card = {
+        "name": "NEWCROWN", "outer": "bot_cross", "letters": ["A", "B", "C", "D"],
+        "crown_text": [{"text": "CD", "orientation": "bottom"}],
+    }
+    assert migrate_legacy_ring_card(fresh_card) == fresh_card
 
 
 def test_ring_two_metals_round_trips_and_drops_stale_entries(store):

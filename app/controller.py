@@ -74,7 +74,7 @@ from core.deep_time import (
     real_year,
     shift_calendar,
 )
-from core.motto import free_arc_angles
+from core.crown_text import free_arc_angles
 from core.moon import chinese_name_of_year
 from data.deep_time import shared_deep_time
 from data.hands import HAND_NAMES, hand_packs
@@ -110,7 +110,7 @@ def _letter_metal(position: int, outer_metal: dict, finish: str) -> str:
     per-preset "Two metals" toggle is on (TASK 3, MASON/ICONS round,
     `_ring_two_metals`), so the Trinity vertices wear the finish metal
     and the Union vertices the accent, the same rule as the 4-position
-    outers applied to a 3+3 split; DOMY/PILOT's own bot_cross/top_cross
+    outers applied to a 3+3 split; DOMY/LOOP's own bot_cross/top_cross
     triangle, and any eligible preset with the toggle off, keep the
     plain one-metal reading)."""
     if not outer_metal["triangle"] or position in outer_metal["triangle"]:
@@ -122,10 +122,10 @@ def _ring_two_metals(settings: Settings, card: dict) -> bool:
     """Whether the ACTIVE preset splits its letters into two metal
     groups or wears one finish on all of them (TASK 3, MASON/ICONS
     round; WIDENED in the ENLARGE/THEMATIC round, owner 2026-07-27:
-    "hoću da Two Metals opcija bude i za DOMY tj PILOT"). Eligible now:
+    "hoću da Two Metals opcija bude i za DOMY tj LOOP"). Eligible now:
     every preset with its OWN `triangle` override (Dollar today, the
     only preset on the "hexa" outer) AND every preset whose OUTER
-    carries a triangle by default (bot_cross/top_cross — DOMY, PILOT,
+    carries a triangle by default (bot_cross/top_cross — DOMY, LOOP,
     custom rings on either outer), whose 3+1 split used to be
     unconditional. Every other outer (cross/full/octa, and a
     triangle-less hexa custom card) stays ineligible (always False —
@@ -441,7 +441,7 @@ def _resolve_ring_inner(settings: Settings, card: dict) -> Path:
 
 def _location_crown_text(text: str) -> str:
     """The LOCATION crown's own renderable text (RING VERDICTS round,
-    owner decree 2026-08-05) — the motto glyph library is a FIXED set
+    owner decree 2026-08-05) — the crown-text glyph library is a FIXED set
     (`constants.RING_CROWN_TEXT_CHARSET`: uppercase Latin/Greek, digits,
     the space), while a city/country name is free-form (lower case, a
     comma, accents no glyph exists for). Uppercased, then filtered to
@@ -511,18 +511,18 @@ def _compose_skin(settings: Settings, location_display: str = ""):
         letter_metal[hour] = _letter_metal(position, metal_layout, settings.ring_finish)
         if position in card["legend"]:
             letter_legend[hour] = card["legend"][position]
-    # The outer GREAT SEAL MOTTO ARC (TASK 1, owner "može radi"
-    # 2026-07-19): the preset's own `motto` card already carries the
+    # The outer GREAT SEAL CROWN TEXT ARC (TASK 1, owner "može radi"
+    # 2026-07-19): the preset's own `crown_text` card already carries the
     # resolved per-glyph angles (data.rings.validate_preset ->
-    # core.motto.motto_glyph_angles) — here we only pair each non-space
+    # core.crown_text.crown_glyph_angles) — here we only pair each non-space
     # character with its gold-master asset path (spaces are dropped, so
     # RingLayer's draw loop never has to check for them) and pick the
     # ONE finish the whole inscription wears (the same settings.
-    # ring_finish the Trinity-triangle letters use — the motto is read
+    # ring_finish the Trinity-triangle letters use — the crown text is read
     # as one continuous inscription, not a seat-by-seat split).
-    motto_entries = list(card["motto"])
+    crown_arc_entries = list(card["crown_text"])
     # CROWN TEXT for CUSTOM rings (owner decree 2026-08-05): the
-    # bundled presets keep their existing motto text (above); a custom
+    # bundled presets keep their existing crown text (above); a custom
     # ring's own free-typed inscription is a SETTINGS-level choice
     # (`Settings.custom_ring_crown_text`/`custom_ring_crown_orientation`,
     # like `ring_inner`), resolved here rather than baked into the
@@ -541,7 +541,7 @@ def _compose_skin(settings: Settings, location_display: str = ""):
                 settings.ring, "top"
             )
             angles = free_arc_angles(crown_text, orientation)
-            motto_entries.append({
+            crown_arc_entries.append({
                 "text": crown_text, "angles": angles,
                 "words": ({
                     "text": crown_text, "start": 0,
@@ -550,7 +550,7 @@ def _compose_skin(settings: Settings, location_display: str = ""):
             })
     # THE LOCATION CROWN (RING VERDICTS round, owner decree 2026-08-05):
     # when the per-ring toggle is on, the ACTIVE location REPLACES
-    # whatever crown text the ring carries (a preset's own motto or a
+    # whatever crown text the ring carries (a preset's own crown text or a
     # custom ring's typed text) — available for bundled presets AND
     # custom rings alike, since it is keyed by ring name exactly like
     # `ring_two_metals`. `location_display` is the "CITY, COUNTRY" text
@@ -564,14 +564,14 @@ def _compose_skin(settings: Settings, location_display: str = ""):
         location_text = _location_crown_text(location_display)
         if location_text:
             angles = free_arc_angles(location_text, "top")
-            motto_entries = [{
+            crown_arc_entries = [{
                 "text": location_text, "angles": angles,
                 "words": ({
                     "text": location_text, "start": 0,
                     "end": len(location_text) - 1, "seat": None,
                 },),
             }]
-    motto = tuple(
+    crown_arc = tuple(
         {
             "text": entry["text"],
             "glyphs": tuple(
@@ -594,13 +594,13 @@ def _compose_skin(settings: Settings, location_display: str = ""):
                     "half": (
                         abs(entry["angles"][word["end"]]
                             - entry["angles"][word["start"]]) / 2.0
-                        + dial.RING_MOTTO_LETTER_STEP_DEG / 2.0
+                        + dial.RING_CROWN_TEXT_LETTER_STEP_DEG / 2.0
                     ),
                 }
                 for word in entry["words"]
             ),
         }
-        for entry in motto_entries
+        for entry in crown_arc_entries
     )
     skin = dataclasses.replace(
         defaults.DEFAULT_SKIN,
@@ -614,8 +614,8 @@ def _compose_skin(settings: Settings, location_display: str = ""):
             letter_legend=letter_legend,
             letter_zoom=letter_zoom,
             letter_no_shadow=letter_no_shadow,
-            motto=motto,
-            motto_metal=settings.ring_finish,
+            crown_text=crown_arc,
+            crown_text_metal=settings.ring_finish,
         ),
         hands=_resolve_hands(settings),
     )
@@ -783,7 +783,7 @@ def display_for(settings: Settings) -> paths.DisplayContext:
     post-mortem.
 
     THE THEMATIC pseudo-metal's shade follows the ACTIVE ring preset
-    (ENLARGE/THEMATIC round, owner 2026-07-27): DOMY cross red, PILOT
+    (ENLARGE/THEMATIC round, owner 2026-07-27): DOMY cross red, LOOP
     cross blue, Dollar green, The One moon indigo, Templar black. A
     CUSTOM ring may carry its OWN pick on its card — any transformer
     ramp, metals included (owner: "iron, copper... sve") — else the
@@ -980,7 +980,7 @@ def _overlay_display_settings(skin, settings: Settings, display):
         # outside the ring band (subdial borders/plates, hands, slot
         # roundels) — under the thematic finish those read as GOLD; the
         # theme color itself travels only through `ring.letter_metal`/
-        # `ring.motto_metal` ("thematic"), which the letter recolor
+        # `ring.crown_text_metal` ("thematic"), which the letter recolor
         # pipeline resolves to the active preset's ramp.
         ring_finish=(
             "gold" if settings.ring_finish == "thematic"
@@ -1007,9 +1007,9 @@ def _overlay_display_settings(skin, settings: Settings, display):
         hands_saturation=settings.hands_saturation,
         letter_tint=settings.letter_tint,
         ring_tint_inner=settings.ring_tint_inner,
-        motto_alpha=settings.motto_alpha,
-        motto_scale=settings.motto_scale,
-        motto_tint=settings.motto_tint,
+        crown_text_alpha=settings.crown_text_alpha,
+        crown_text_scale=settings.crown_text_scale,
+        crown_text_tint=settings.crown_text_tint,
         display=display,
     )
 
@@ -2339,7 +2339,7 @@ class WatchController(QObject):
         """CROWN TEXT (owner decree 2026-08-05): a custom ring's own
         free-typed crown inscription, stored keyed by ring name
         (`Settings.custom_ring_crown_text`) — empty clears it (no
-        motto drawn)."""
+        crown text drawn)."""
         texts = dict(self._settings.custom_ring_crown_text)
         if text:
             texts[self._settings.ring] = text
@@ -2365,7 +2365,7 @@ class WatchController(QObject):
         """THE LOCATION CROWN (RING VERDICTS round, owner decree
         2026-08-05): the active ring's own choice, stored keyed by ring
         name exactly like `ring_two_metals` — available for a bundled
-        preset (replacing its own motto) or a custom ring (replacing
+        preset (replacing its own crown text) or a custom ring (replacing
         its typed crown text) alike."""
         choices = dict(self._settings.ring_crown_location)
         choices[self._settings.ring] = checked
@@ -3171,18 +3171,18 @@ class WatchController(QObject):
                 lambda v: self._set_display_choice("letter_tint", v)
             ),
             # --- Crown Text (R-24/Phase-6-debt correction, owner --------
-            # 2026-08-05: the outer Great Seal motto arc's own controls) -
+            # 2026-08-05: the outer Great Seal crown text arc's own controls) -
             "ring_tint_inner": wrap(
                 lambda v: self._set_display_choice("ring_tint_inner", v)
             ),
-            "motto_alpha": wrap(
-                lambda v: self._set_display_choice("motto_alpha", v)
+            "crown_text_alpha": wrap(
+                lambda v: self._set_display_choice("crown_text_alpha", v)
             ),
-            "motto_scale": wrap(
-                lambda v: self._set_display_choice("motto_scale", v)
+            "crown_text_scale": wrap(
+                lambda v: self._set_display_choice("crown_text_scale", v)
             ),
-            "motto_tint": wrap(
-                lambda v: self._set_display_choice("motto_tint", v)
+            "crown_text_tint": wrap(
+                lambda v: self._set_display_choice("crown_text_tint", v)
             ),
             "metal_shade_gold": wrap(
                 lambda v: self._set_display_choice("metal_shade_gold", v)
@@ -3224,10 +3224,10 @@ class WatchController(QObject):
             "opacity_skin_defaults": self._opacity_skin_defaults,
             # A data PROVIDER (Rule #5, the same shape as
             # `opacity_skin_defaults`/`slot_descriptors` above): whether
-            # the ACTIVE ring preset carries a Crown Text motto at all —
+            # the ACTIVE ring preset carries a Crown Text at all —
             # Opacity/Size/Colors each grey their Crown Text row when
             # this reads False (graceful truth, not a dead control).
-            "ring_has_motto": lambda: bool(self._skin.ring.motto),
+            "ring_has_crown_text": lambda: bool(self._skin.ring.crown_text),
         }
 
     def _opacity_skin_defaults(self) -> dict:

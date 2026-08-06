@@ -66,7 +66,7 @@ its own — this file is the ONLY doc in the folder; no `__about/`, no
 | `test_settings_dialog.py` | M6 settings window: location-picker cascade over the real database, opacity overrides, the palette editor. *(In the structure-law ratchet — owed a test-hygiene split.)* |
 | `test_settings_store.py` | Round-trip, atomic-write cleanup, BOM tolerance, corruption/quarantine-to-`.bak`, Session 16 keys; ADD WATCH per-watch `settings.<N>.json` naming and `discover_watch_indices()`'s startup scan. |
 | `test_shortcuts_r5b.py` | R5b FINAL MAP: the sealed shortcut table, the SLOTS/FAST TRAVEL/LOCATIONS families, the Fast Travel flash overlay, two real `ClockWidget.keyPressEvent` fixes (bare-Space-only, KeypadModifier masking). |
-| `test_skins.py` | Ring presets and the built render config: the DOMY/PILOT/third bundled card goldens (layout, letters), `missing_assets` validation. *(In the structure-law ratchet — owed a test-hygiene split.)* |
+| `test_skins.py` | Ring presets and the built render config: the DOMY/LOOP/third bundled card goldens (layout, letters), `missing_assets` validation. *(In the structure-law ratchet — owed a test-hygiene split.)* |
 | `test_startup_warm.py` | THE SLOW START fix (14.78s→1.46s for three watches): first paint runs NO metal recolor, the background drain builds it, the warm pass runs ONCE per process, legend-off skips the hover sweep entirely. |
 | `test_art_reachability.py` | GUARD — see below. |
 | `test_figure_plates.py` | GUARD — see below. |

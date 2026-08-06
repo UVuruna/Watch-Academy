@@ -112,14 +112,15 @@ Others). Read by the
 `encyclopedia/<section>/<key>/...` overlay keys.
 
 ### `ring_presets.json`
-The bundled ring styling cards — DOMY, PILOT, The One, Templar and
+The bundled ring styling cards — DOMY, LOOP, The One, Templar and
 Dollar (renamed from MORPH/NUMBERS/MASON G in the MASON/ICONS round,
 then Mason → Dollar and Omega → The One in the DOLLAR/EYE round, then
-Morph → PILOT in the CROSS-WORDS round, owner decrees 2026-07-27) —
+Morph → PILOT in the CROSS-WORDS round and PILOT → LOOP in the LOOP
+round, owner decrees 2026-07-27/2026-08-06) —
 loaded by [Ring Presets](../data/__about/rings.md) together with the user's
 custom cards. The Dollar's apex seats the Eye of Providence (adaptive
 glyph, art source + Shine toggle) and its legend reads each letter as
-office + Cube term; DOMY and PILOT carry the Two Crosses' station
+office + Cube term; DOMY and LOOP carry the Two Crosses' station
 words and legends (CANON.md §The Banknote). Since the 2026-08-05
 decree ALL five bundled cards carry a per-letter hover legend: The
 One reads its eight stations as the hours themselves (CANON.md §THE

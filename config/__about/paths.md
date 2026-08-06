@@ -98,7 +98,7 @@ its work via `with paths.display(context):`.
   source, subdial set and metal shades were three module globals that
   `apply_display_settings` overwrote on every skin install — last-writer-
   wins across multiple open watches. The owner's report (2026-07-28): a
-  DOMY watch and a PILOT watch, both on the `thematic` ring finish, came
+  DOMY watch and a LOOP watch, both on the `thematic` ring finish, came
   out the SAME RED — DOMY's shade, because DOMY was built last. A
   `DisplayContext` per watch, installed thread-locally for the duration
   of that watch's own paint/hover/dialog work, closes the hazard.

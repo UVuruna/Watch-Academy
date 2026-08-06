@@ -1,7 +1,7 @@
 # Cross Words Prompts — the Eight Words Behind the Station Letters
 
 The CROSS-WORDS round (owner UV inbox 2026-07-27, CANON.md §The
-Banknote — The Cross Rings): the DOMY and PILOT ring letters each
+Banknote — The Cross Rings): the DOMY and LOOP ring letters each
 INITIAL their own station, and the hover legend names the classical
 WORD that carries the link — Y *Ysteria*, Ω *Orgē*, D *Detestatio*,
 M *Miseria* on the dark cross; Θ *Tharsos*, L *Latria*, Π *Pothos*,
@@ -24,10 +24,10 @@ one-image-one-place law).
 | **Orge** | Ω | DOMY | Anger | 24h livid bruise-violet, midnight |
 | **Detestatio** | D | DOMY | Hate | 04h midnight blue, frost |
 | **Miseria** | M | DOMY | Suffering | 12h blackened gold, darkened noon |
-| **Tharsos** | Θ | PILOT | Hope | 08h living green, morning |
-| **Latria** | L | PILOT | Faith | 12h radiant yellow, noon |
-| **Pothos** | Π | PILOT | Love | 16h burning orange, evening |
-| **Opheleia** | Ω | PILOT | Salvation | 24h pure white on midnight blue-black |
+| **Tharsos** | Θ | LOOP | Hope | 08h living green, morning |
+| **Latria** | L | LOOP | Faith | 12h radiant yellow, noon |
+| **Pothos** | Π | LOOP | Love | 16h burning orange, evening |
+| **Opheleia** | Ω | LOOP | Salvation | 24h pure white on midnight blue-black |
 
 **Register & look (the tree law, `assets/___assets.md`):** the
 **secondary** register of the crosses family, **colored** look — the

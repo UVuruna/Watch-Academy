@@ -1496,8 +1496,8 @@ def test_mason_ring_letters_answer_their_own_hover_legend(july_wednesday):
 def test_ring_arc_words_answer_their_seat_legend(july_wednesday):
     """WORD-HOVER round (owner 2026-07-27, "HOVER tekst osim na slova
     treba i na reči"): hovering an arc WORD in the outside-the-band
-    motto band answers with the legend of the word's own seat — a
-    station word (DOMY/PILOT) its station, a Dollar motto word its
+    crown-text band answers with the legend of the word's own seat — a
+    station word (DOMY/LOOP) its station, a Dollar crown-text word its
     pinned letter (ANNUIT→A, ORDO→Ω, …). Between the words the band
     stays silent."""
     from app.controller import build_skin
@@ -1505,7 +1505,7 @@ def test_ring_arc_words_answer_their_seat_legend(july_wednesday):
 
     day, tick = july_wednesday
     radius = 180.0
-    band = dial.RING_MOTTO_RADIUS_FRACTION
+    band = dial.RING_CROWN_TEXT_RADIUS_FRACTION
 
     def point_at(theta_deg: float) -> QPointF:
         theta = math.radians(theta_deg)
@@ -1522,11 +1522,11 @@ def test_ring_arc_words_answer_their_seat_legend(july_wednesday):
     assert "SUFFERING" in suffering and "Miseria" in suffering
     assert domy._tick_tooltip(point_at(90.0), radius) is None  # between words
 
-    pilot = Compositor(
-        build_skin(settings_replace(Settings(), ring="PILOT")), AssetCache()
+    loop = Compositor(
+        build_skin(settings_replace(Settings(), ring="LOOP")), AssetCache()
     )
-    pilot.render_offscreen(360.0, 1.0, day, tick)
-    salvation = pilot._tick_tooltip(point_at(180.0), radius)
+    loop.render_offscreen(360.0, 1.0, day, tick)
+    salvation = loop._tick_tooltip(point_at(180.0), radius)
     assert "SALVATION" in salvation and "Opheleia" in salvation
 
     dollar = Compositor(
@@ -1550,14 +1550,14 @@ def _max_alpha_in_box(image, cx, cy, half):
     return best
 
 
-def test_mason_motto_arc_paints_outside_the_ring(july_wednesday):
+def test_mason_crown_text_arc_paints_outside_the_ring(july_wednesday):
     """MOTO-FIX round (owner correction 2026-07-19, the Great Seal
     reference image): ANNUIT COEPTIS now arcs over the TOP (its own A
     pinned at 8h, S at 16h) and NOVUS ORDO SECLORUM under the BOTTOM
     (its own N at 4h, ORDO's own final O at the bottom/24h, M at 20h) —
     both at the SAME radius. Ink lands exactly at every pin, including
     the bottom/24h seat that the FIRST round's arc never reached (it is
-    now exactly where ORDO's own O pins). No motto letter pins noon
+    now exactly where ORDO's own O pins). No crown-text letter pins noon
     anymore (the arc passes OVER the G, never onto it) and the 90/270
     deg gaps — the dial's left/right sides, in the 60 deg dead zones
     between the two 120 deg arcs — stay transparent."""
@@ -1567,7 +1567,7 @@ def test_mason_motto_arc_paints_outside_the_ring(july_wednesday):
     day, tick = july_wednesday
     dial_diameter = 720
     dial_radius_px = dial_diameter / 2.0
-    motto_radius_px = dial_radius_px * dial.RING_MOTTO_RADIUS_FRACTION
+    crown_text_radius_px = dial_radius_px * dial.RING_CROWN_TEXT_RADIUS_FRACTION
 
     mason_skin = build_skin(settings_replace(Settings(), ring="Dollar"))
     mason_image, _, mason_margin = _render_window_frame(
@@ -1577,7 +1577,7 @@ def test_mason_motto_arc_paints_outside_the_ring(july_wednesday):
     cy = mason_margin + dial_radius_px
 
     def alpha_at(theta_deg: float) -> int:
-        offset = dial_point(theta_deg, motto_radius_px)
+        offset = dial_point(theta_deg, crown_text_radius_px)
         return _max_alpha_in_box(
             mason_image, round(cx + offset.x()), round(cy + offset.y()), 10
         )
@@ -1592,7 +1592,7 @@ def test_mason_motto_arc_paints_outside_the_ring(july_wednesday):
     assert alpha_at(180.0) > 0    # O (ORDO's own) -> 24h
     assert alpha_at(120.0) > 0    # M -> 20h
 
-    # No motto letter pins noon anymore — the arc passes OVER the G.
+    # No crown-text letter pins noon anymore — the arc passes OVER the G.
     assert alpha_at(0.0) == 0
     # The dial's left/right sides sit in the 60 deg gaps neither arc
     # reaches (top 300-360-60, bottom 120-180-240).

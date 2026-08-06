@@ -1,14 +1,14 @@
-"""The outer Great Seal motto arc — pure per-glyph angle math.
+"""The outer Great Seal crown text arc — pure per-glyph angle math.
 
 TASK 1 (owner "može radi" 2026-07-19, CANON.md §The Banknote): while
 the Dollar ring preset is active (born "MASON G", then "Mason" —
-TASK 2 and the DOLLAR/EYE round renames), the two Great Seal mottos
+TASK 2 and the DOLLAR/EYE round renames), the two Great Seal crown texts
 render as curved text OUTSIDE the ring band, laid out so specific KEY
 LETTERS land exactly on the ring's own six hexagram seats — MASON
 outside, the Eye of Providence inside at the crown (the seat the G
 held before the 2026-07-27 decree), the dollar-bill mechanic on our
-dial. Given a motto string and
-its PINNED letter -> ring-position constraints, `motto_glyph_angles`
+dial. Given a crown text string and
+its PINNED letter -> ring-position constraints, `crown_glyph_angles`
 solves every character's dial angle: pinned characters land exactly on
 their seat, and the run of characters between two consecutive pins is
 spaced EVENLY across the angular gap between them (owner spec: "even
@@ -19,9 +19,9 @@ a broken pin config (a typo'd occurrence, an out-of-order pin) fails
 loudly there, never mid-paint.
 
 MOTO-FIX round (owner correction 2026-07-19, the dollar's Great Seal
-reference image — the first layout was "katastrofa", both mottos
+reference image — the first layout was "katastrofa", both crown texts
 sweeping the SAME overlapping top-heavy arc at two radii): the two
-mottos now sit on DISJOINT arcs, exactly like the real seal — ANNUIT
+crown texts now sit on DISJOINT arcs, exactly like the real seal — ANNUIT
 COEPTIS over the TOP (8h -> 16h through noon), NOVUS ORDO SECLORUM
 under the BOTTOM (4h -> 20h through the bottom/24h) — sharing ONE
 radius. The new `clockwise` parameter picks the arc: the top arc reads
@@ -36,15 +36,15 @@ this round.
 
 ANNUIT WORD-GAP round (owner correction 2026-07-19, third batch — "the
 letters should sit TIGHT... and the leftover slack becomes ONE BIG WORD
-GAP"): a motto pinned ONLY at its first and last character (ANNUIT
+GAP"): a crown text pinned ONLY at its first and last character (ANNUIT
 COEPTIS's own 2 pins, A and S) no longer spreads its 13 character-steps
 EVENLY across the whole 120 deg span — that read too wide next to NOVUS
 ORDO SECLORUM's own tight look. NOVUS's 3 pins already happen to divide
 its two segments into 9 steps of exactly `defaults.
-RING_MOTTO_LETTER_STEP_DEG` each (60 deg / 9 chars) — this round makes
+RING_CROWN_TEXT_LETTER_STEP_DEG` each (60 deg / 9 chars) — this round makes
 that step a named config constant and reuses it explicitly for the
 2-pin case: letters advance inward from BOTH pins at that fixed step,
-and whatever angular slack remains lands as one big gap at the motto's
+and whatever angular slack remains lands as one big gap at the crown text's
 own (single) interior space — the eye/G area breathes like the Great
 Seal's own gap over the eye. `_tight_two_pin_angles` is the new
 2-pin-only code path; NOVUS's 3-pin case is untouched (its own even
@@ -81,24 +81,24 @@ def _tight_two_pin_angles(
     clockwise: bool,
 ) -> tuple[float, ...]:
     """ANNUIT WORD-GAP round (owner correction 2026-07-19, third batch):
-    the layout for a motto pinned ONLY at its first and last character —
-    "a pinned two-word motto" (ANNUIT COEPTIS today). Every letter
+    the layout for a crown text pinned ONLY at its first and last character —
+    "a pinned two-word crown text" (ANNUIT COEPTIS today). Every letter
     advances from BOTH pins INWARD at the fixed
-    `dial.RING_MOTTO_LETTER_STEP_DEG` step (the same tight
+    `dial.RING_CROWN_TEXT_LETTER_STEP_DEG` step (the same tight
     per-character spacing NOVUS ORDO SECLORUM's own 3-pin segments
     already produce), instead of spreading the whole span evenly across
     every character (the previous round's "too wide" look). Whatever
-    angular slack is left over lands entirely on the motto's own single
+    angular slack is left over lands entirely on the crown text's own single
     INTERIOR SPACE — centered between its two flanking letters, since a
     space never draws (`RingLayer`'s draw loop skips it) so its own
     angle is otherwise inconsequential. Requires exactly one interior
-    space: a "pinned two-word motto" is the only shape this ever draws
-    (Rule #7) — a future 2-pin motto of a different shape fails loudly
+    space: a "pinned two-word crown text" is the only shape this ever draws
+    (Rule #7) — a future 2-pin crown text of a different shape fails loudly
     here rather than silently drawing pins that never meet the gap."""
     (index_a, position_a), (index_b, position_b) = resolved
     angle_a = ring_position_angle(position_a)
     angle_b = ring_position_angle(position_b)
-    step = dial.RING_MOTTO_LETTER_STEP_DEG
+    step = dial.RING_CROWN_TEXT_LETTER_STEP_DEG
     if clockwise:
         while angle_b <= angle_a:
             angle_b += 360.0
@@ -109,7 +109,7 @@ def _tight_two_pin_angles(
     spaces = [index for index, char in enumerate(text) if char == " "]
     if len(spaces) != 1:
         raise ValueError(
-            f"motto {text!r}: the tight two-pin layout needs exactly one "
+            f"crown text {text!r}: the tight two-pin layout needs exactly one "
             f"interior word gap (found {len(spaces)})"
         )
     gap = spaces[0]
@@ -132,23 +132,23 @@ def centered_word_angles(
     """One dial angle per character of `text`, the whole word CENTERED
     on ring seat `position` — the CROSS-WORDS round (owner UV inbox,
     2026-07-27): the DOMY dark-cross stations (FEAR ANGER HATE
-    SUFFERING) and the PILOT light-cross stations (HOPE FAITH LOVE
+    SUFFERING) and the LOOP light-cross stations (HOPE FAITH LOVE
     SALVATION) ring the dial one word per station seat, drawn by the
-    same outside-the-band stamp as the Dollar's Great Seal mottos.
-    Letters advance at the mottos' own fixed
-    `dial.RING_MOTTO_LETTER_STEP_DEG` step and the word's midpoint
+    same outside-the-band stamp as the Dollar's Great Seal crown texts.
+    Letters advance at the crown texts' own fixed
+    `dial.RING_CROWN_TEXT_LETTER_STEP_DEG` step and the word's midpoint
     lands exactly on the seat angle. `clockwise` picks the reading
-    direction exactly as in `motto_glyph_angles` below: True for a
+    direction exactly as in `crown_glyph_angles` below: True for a
     top-half seat, False for a bottom-half seat — either way the word
     reads left-to-right to a viewer (dial-x runs opposite ways across
-    the two halves; see `motto_glyph_angles`'s own docstring). One
-    word only: a space belongs to the pinned-motto shape, not to a
+    the two halves; see `crown_glyph_angles`'s own docstring). One
+    word only: a space belongs to the pinned-crown text shape, not to a
     station word (Rule #7 — fails loudly, never draws a half-gap)."""
     if not text or " " in text:
         raise ValueError(
             f"centered word {text!r} must be one non-empty word"
         )
-    step = dial.RING_MOTTO_LETTER_STEP_DEG
+    step = dial.RING_CROWN_TEXT_LETTER_STEP_DEG
     if not clockwise:
         step = -step
     start = ring_position_angle(position) - step * (len(text) - 1) / 2.0
@@ -159,15 +159,15 @@ def free_arc_angles(text: str, orientation: str) -> tuple[float, ...]:
     """One dial angle per CHARACTER of an arbitrary CROWN TEXT (custom
     rings, owner decree 2026-08-05: "displayed arcing from 12 upward
     (top) or from the bottom") — spaces included (a space still
-    consumes one evenly-spaced slot, exactly like `motto_glyph_angles`;
+    consumes one evenly-spaced slot, exactly like `crown_glyph_angles`;
     the caller skips drawing them). Unlike `centered_word_angles` this
     is not tied to any ring seat or letter position — it is simply
     centered on the dial's own top (`orientation="top"`) or bottom
-    (`orientation="bottom"`) anchor, at the mottos' own fixed
-    `dial.RING_MOTTO_LETTER_STEP_DEG` step. "top" reads clockwise
+    (`orientation="bottom"`) anchor, at the crown texts' own fixed
+    `dial.RING_CROWN_TEXT_LETTER_STEP_DEG` step. "top" reads clockwise
     (left-to-right over the top, like ANNUIT COEPTIS); "bottom" reads
     counter-clockwise (left-to-right under the bottom, like NOVUS ORDO
-    SECLORUM) — the same direction flip `motto_glyph_angles` documents
+    SECLORUM) — the same direction flip `crown_glyph_angles` documents
     and for the same reason (dial-x is monotonic in opposite senses
     across the two halves)."""
     if not text:
@@ -176,14 +176,14 @@ def free_arc_angles(text: str, orientation: str) -> tuple[float, ...]:
         raise ValueError(f"crown orientation {orientation!r} must be top/bottom")
     anchor = 12 if orientation == "top" else 24
     clockwise = orientation == "top"
-    step = dial.RING_MOTTO_LETTER_STEP_DEG
+    step = dial.RING_CROWN_TEXT_LETTER_STEP_DEG
     if not clockwise:
         step = -step
     start = ring_position_angle(anchor) - step * (len(text) - 1) / 2.0
     return tuple(start + step * k for k in range(len(text)))
 
 
-def motto_glyph_angles(
+def crown_glyph_angles(
     text: str,
     pins: tuple[tuple[str, int, int], ...],
     clockwise: bool = True,
@@ -200,8 +200,8 @@ def motto_glyph_angles(
     sorted), but the FIRST pin (by resolved index) must land on text's
     own first character and the LAST on its own last character — every
     glyph belongs to some interior segment; no floating, unpinned
-    lead/tail. Both Great Seal mottos pin their own first and last
-    letter, so this is never a real limitation for today's two mottos;
+    lead/tail. Both Great Seal crown texts pin their own first and last
+    letter, so this is never a real limitation for today's two crown texts;
     a future preset that violates it fails loudly here rather than
     silently drawing a lopsided arc (Rule #7 — no defensive handling for
     a scenario our own data never produces).
@@ -227,19 +227,19 @@ def motto_glyph_angles(
     or tops-inward (bottom half) from the angle alone, so feeding it
     either direction's angles draws every glyph upright automatically.
 
-    With exactly 2 pins (a motto pinned only at its own first and last
+    With exactly 2 pins (a crown text pinned only at its own first and last
     character, e.g. ANNUIT COEPTIS) the ANNUIT WORD-GAP layout applies
     (`_tight_two_pin_angles`, owner correction 2026-07-19, third batch):
     every letter advances at the fixed `defaults.
-    RING_MOTTO_LETTER_STEP_DEG` step from BOTH pins inward, and the
-    leftover slack becomes one big gap at the motto's own single
+    RING_CROWN_TEXT_LETTER_STEP_DEG` step from BOTH pins inward, and the
+    leftover slack becomes one big gap at the crown text's own single
     interior space. With 3+ pins (NOVUS ORDO SECLORUM's own 3) every
     character strictly between two consecutive pins is instead the EVEN
     linear interpolation of that segment's own two pinned angles —
     unchanged by this round, since NOVUS's own segments already land on
     the tight step by construction."""
     if len(pins) < 2:
-        raise ValueError("motto_glyph_angles needs at least 2 pins to interpolate")
+        raise ValueError("crown_glyph_angles needs at least 2 pins to interpolate")
     resolved = sorted(
         (_occurrence_index(text, letter, occurrence), position)
         for letter, occurrence, position in pins
@@ -247,11 +247,11 @@ def motto_glyph_angles(
     for (index_a, _), (index_b, _) in zip(resolved, resolved[1:]):
         if index_a == index_b:
             raise ValueError(
-                f"motto pins for {text!r} collide at character index {index_a}"
+                f"crown text pins for {text!r} collide at character index {index_a}"
             )
     if resolved[0][0] != 0 or resolved[-1][0] != len(text) - 1:
         raise ValueError(
-            f"motto pins for {text!r} must cover index 0 and "
+            f"crown text pins for {text!r} must cover index 0 and "
             f"{len(text) - 1} (resolved to {[index for index, _ in resolved]})"
         )
     if len(resolved) == 2:

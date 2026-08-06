@@ -36,7 +36,7 @@
       "specular": { "start": 0.86, "strength": 0.48 }
     },
     "cross_blue": {
-      "_comment": "THEMATIC ring ramp (owner 2026-07-27): PILOT - the salvation cross's deep blue.",
+      "_comment": "THEMATIC ring ramp (owner 2026-07-27): LOOP - the salvation cross's deep blue.",
       "stops": [
         [0.00, "#050A1A"],
         [0.25, "#122B66"],

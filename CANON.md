@@ -276,10 +276,10 @@ ALL-SEEING EYE sits at the CENTER during the archetype reveal — the
 Great Seal's Eye of Providence read through DOMY, the triangle's
 three sides in the three arm colors, its iris the only uncolored
 glass (the same objectivity-as-clear-light doctrine as the Union
-rosette). The mottos belong to the ARTICLES, never inscribed in art:
-**E PLURIBUS UNUM** — out of many, one — is The One's motto (both
+rosette). The crown texts belong to the ARTICLES, never inscribed in art:
+**E PLURIBUS UNUM** — out of many, one — is The One's crown text (both
 natures in one person); **ANNUIT COEPTIS** — Providence favors the
-undertaking — is the Eye's. (The Great Seal's third motto, NOVUS
+undertaking — is the Eye's. (The Great Seal's third crown text, NOVUS
 ORDO SECLORUM, stays in reserve.)
 
 Trinity archetype articles run in TWO ROWS (like the hexa zodiac
@@ -1359,9 +1359,9 @@ alongside this file.
 
 Long before this application, the owner built
 `InGodWeTrust_UVS_BIG.png` (root): the back of the ONE-dollar bill,
-sky above and fire below, the three Great Seal mottos translated —
+sky above and fire below, the three Great Seal crown texts translated —
 and over the pyramid of the Great Seal a HEXAGRAM whose six
-vertices circle six letters picked from the Seal's own mottos
+vertices circle six letters picked from the Seal's own crown texts
 (*Annuit Coeptis / Novus Ordo Seclorum*), colored exactly as our
 wheel:
 
@@ -1379,7 +1379,7 @@ seats):
 
 - **The six letters spell G + MASON** — the folk-famous dollar-bill
   hexagram (the star over the Great Seal picking M-A-S-O-N out of
-  the mottos) — which the owner's version UPGRADES with the G at
+  the crown texts) — which the owner's version UPGRADES with the G at
   the apex and with our exact wheel colors. Freemasonry already
   holds the Creeds' center; the banknote holds its letters.
 - **The two interlaced triangles are our two doctrines.** The
@@ -1396,7 +1396,7 @@ seats):
 - The note's frame IS the dial: sky along the top edge, fire along
   the bottom — day at the top of the wheel, night at the bottom.
 - The denomination is **THE ONE**; the note says **IN GOD WE
-  TRUST**; the three mottos are the three we already seated
+  TRUST**; the three crown texts are the three we already seated
   (E Pluribus Unum → The One, Annuit Coeptis → the Eye, Novus Ordo
   Seclorum → the prophecy of the returning One).
 
@@ -1456,8 +1456,9 @@ Accuser (Prosecutor ↔ Preserver; Abnegation against Megalomania),
 **👁 ↔ Ω** the Judge against the Creator (the weighing above facing
 the making below; the two ends of Obligation).
 
-**THE CROSS RINGS — DOMY AND PILOT (owner decree 2026-07-27, UV
-inbox; PILOT pick confirmed by the owner over PLOT).** The two
+**THE CROSS RINGS — DOMY AND LOOP (owner decree 2026-07-27, UV
+inbox; the LOOP reading sealed 2026-08-06, replacing the retired
+"pilot/guide" one — the owner explicitly dislikes it).** The two
 four-letter rings are the TWO CROSSES worn as jewelry (CUBE.md §The
 Two Crosses):
 
@@ -1469,21 +1470,23 @@ Two Crosses):
   (wretchedness) for **Suffering**. A second cipher layer beside the
   sealed DOLOR–ODIUM–METUS–ΥΒΡΙΣ assembly: the same four letters,
   read seat by seat.
-- **PILOT** (born MORPH) is the light cross: new letters **Θ L Π Ω**,
-  each initialing its light station — **Θ**(08h) *Tharsos* (θάρσος —
-  courage, the good heart) for **Hope**, **L**(12h) *Latria*
-  (λατρεία — the whole service of worship) and *Loyalty* for
+- **LOOP** (born MORPH, renamed once before) is the light cross: letters
+  **Θ L Π Ω**, each initialing its light station — **Θ**(08h)
+  *Tharsos* (θάρσος — courage, the good heart) for **Hope**, **L**(12h)
+  *Latria* (λατρεία — the whole service of worship) and *Loyalty* for
   **Faith**, **Π**(16h) *Pothos* (πόθος — the longing that moves) for
   **Love**, **Ω**(24h) *Ōpheleia* (ὠφέλεια — the help that delivers)
-  for **Salvation**. Rearranged with one added I the letters spell
-  **PILOT** — Π-I-L-Ω-Θ, the guide who carries the traveler through
-  danger to the destination: the four light phases are the forces
-  that pilot a life. (The letter L breaks MORPH's alphabetical-hour
-  cipher — Λ is the 11th letter, not the 12th — a deliberate trade:
-  the station initials outrank the old cipher on this card; Θ, Π and
-  Ω still sit on their alphabet hours.)
+  for **Salvation**. The card's own name reads INFINITY, not a
+  journey: Ω, the letter of every ending, is the letter that bends an
+  ending into O, the circle that never closes off — and Θ's own round
+  eye already wears that same shape. Read the four stations round the
+  wheel — L(12h) → Π(16h) → Ω(24h) → Θ(8h) — and the run does not
+  stop at the last: it returns from Ω's own midnight straight back to
+  Θ's own morning, a LOOP, world without end, exactly as the light
+  cross's own doctrine says: Salvation at midnight does not close the
+  day, it delivers the next Hope at dawn.
 - **The station words ring the dial** exactly like the Dollar's Great
-  Seal mottos: one word per station seat, centered on it, outside the
+  Seal crown texts: one word per station seat, centered on it, outside the
   ring band — FEAR/ANGER/HATE arc under the bottom half and SUFFERING
   stands exposed over the crown (the dark path ends before the Judge
   at noon); HOPE/FAITH/LOVE ride the top half and SALVATION arcs
@@ -1509,7 +1512,7 @@ walking hours between them:
 | 15h | 15 | THE AFTERNOON — the working hour, labor until evening (Psalm 104:23) |
 | 18h | 18 | THE EVENING FRONTIER — day meets night; the Hebrew day BEGINS at sunset (Genesis 1:5): the evening is a beginning worn as an ending |
 | 21h | 21 | THE VESPER HOUR — the feast and the rest after work; the Rose's own hour of love thinned by moonlight |
-| 24h | Ω | THE ONE — where the count would close at 24 stands the letter that closes the alphabet: Revelation 1:8, Exodus 3:14; E PLURIBUS UNUM is this seat's motto (§Trinity) |
+| 24h | Ω | THE ONE — where the count would close at 24 stands the letter that closes the alphabet: Revelation 1:8, Exodus 3:14; E PLURIBUS UNUM is this seat's crown text (§Trinity) |
 | 03h | 3 | THE SOULS' HOUR — the Unborn wedge's own moonlight pool (the Ages, sealed): the ancestors and the not-yet-born in one community |
 | 06h | 6 | THE NEW MORNING — rebirth without the past; the poem's fourth greeting |
 | 09h | 9 | THE CLIMBING MORNING — life rising toward noon; spring's own green in the Rose |
@@ -1537,15 +1540,15 @@ hour does, and that constancy under changing light IS the card:
 | 24h | THE MIDNIGHT WATCH | good night — the peaceful death full of understanding; the watch kept when every other light is out (Matthew 25:6) |
 | 06h | THE MORNING WATCH | the new morning — rebirth without the past; *"joy cometh in the morning"* (Psalm 30:5) |
 
-**THE OUTER MOTTO ARC (MOTO-FIX round, owner correction 2026-07-19, the
+**THE OUTER CROWN TEXT ARC (MOTO-FIX round, owner correction 2026-07-19, the
 dollar's Great Seal reference image — the first round's layout was
 "katastrofa"):** while the Dollar ring preset is active, ANNUIT
 COEPTIS and NOVUS ORDO SECLORUM themselves now ring the dial as curved
-text OUTSIDE the ring band — the same two Great Seal mottos the
+text OUTSIDE the ring band — the same two Great Seal crown texts the
 hexagram's own G/S/M/Ω/N/A were picked FROM, drawn back onto the wheel
 whole, laid out EXACTLY like the real seal: ANNUIT COEPTIS arcs over
 the TOP (its own first letter A pinned at 8h, last letter S at 16h,
-reading clockwise the short way through noon — no motto letter pins
+reading clockwise the short way through noon — no crown-text letter pins
 noon anymore, the arc simply passes over the G) and NOVUS ORDO SECLORUM
 arcs under the BOTTOM (its own first letter N pinned at 4h, ORDO's own
 final O at the very bottom/24h, last letter M at 20h, reading
@@ -1555,11 +1558,11 @@ lower-banner direction). The two arcs are angularly DISJOINT (top
 the outside-the-ring reading becomes **A(8) S(16)** on top, **M(20)
 O(24) N(4)** below: MASON outside, G inside (owner: "MASON spolja, G
 iznutra na 12"), completing the reading this section already named. The
-first round's "MASON reads twice" design (both mottos' own O and own S
+first round's "MASON reads twice" design (both crown texts' own O and own S
 sharing the identical seat, drawn at two concentric radii) is retired.
 Implementation and the full per-letter angle table:
 [Ring Presets](data/__about/rings.md), [Layers](render/layers/___layers.md),
-[Motto](core/__about/motto.md).
+[Crown Text](core/__about/crown_text.md).
 
 **THE THREE OPPOSITIONS (MOTO round, owner "može" 2026-07-19, sealed
 verbatim):** the six letters also read as THREE AXES across the

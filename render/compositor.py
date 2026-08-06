@@ -2517,7 +2517,7 @@ class Compositor:
         # The per-letter HOVER LEGEND (owner ROADMAP 15b, "malo legende
         # oko tih naših odabira"): a ring preset may carry a `legend`
         # per position (Database/ring_presets.json — the Dollar, DOMY
-        # and PILOT today, CROSS-WORDS round 2026-07-27) — what that
+        # and LOOP today, CROSS-WORDS round 2026-07-27) — what that
         # letter stands for, quoted verbatim from CANON.md's Banknote
         # table. Checked on every letter the active preset seats,
         # independent of the hidden-mode unlock (unlike the Four
@@ -2530,7 +2530,7 @@ class Compositor:
                 return legend
         # The arc WORDS answer too (WORD-HOVER round, owner 2026-07-27:
         # "HOVER tekst osim na slova treba i na reči") — the band just
-        # outside the ring where the motto/station words draw.
+        # outside the ring where the crown-text/station words draw.
         word_legend = self._ring_word_legend_tooltip(theta, distance, radius)
         if word_legend is not None:
             return word_legend
@@ -2621,7 +2621,7 @@ class Compositor:
         letter_legend` is hour -> {name, reading}, built by
         `app.controller.build_skin` from the active ring preset's
         optional `legend` card (`data.rings.validate_preset`) — the
-        Dollar, DOMY and PILOT today (CROSS-WORDS round). Finds the legend entry
+        Dollar, DOMY and LOOP today (CROSS-WORDS round). Finds the legend entry
         whose OWN letter position is within `half` degrees of the
         hovered angle (the same half-width the 12h Four Greetings
         trigger uses — every ring letter occupies the same angular
@@ -2646,22 +2646,22 @@ class Compositor:
         self, theta: float, distance: float, radius: float
     ) -> str | None:
         """The per-WORD hover on the outer arc text (WORD-HOVER round,
-        owner 2026-07-27): hovering a station word (DOMY/PILOT) or a
-        Great Seal motto word (the Dollar) answers with the legend of
+        owner 2026-07-27): hovering a station word (DOMY/LOOP) or a
+        Great Seal crown text word (the Dollar) answers with the legend of
         the SEAT that word belongs to — the station words sit ON their
         station's seat, and the Dollar's five words each carry exactly
         one pinned letter (ANNUIT→A, COEPTIS→S, NOVUS→N, ORDO→Ω,
         SECLORUM→M: the five words spell the five letters). Geometry is
         pre-solved by `app.controller.build_skin` into
-        `ring.motto[…]["words"]` (angular center + half-span per word);
+        `ring.crown_text[…]["words"]` (angular center + half-span per word);
         here only the band/angle test and the legend lookup run. A word
         with no seat, or a seat without a legend entry, stays silent —
         the graceful-absence pattern the letter legend already uses."""
-        motto = self._skin.ring.motto
-        if not motto:
+        crown_text = self._skin.ring.crown_text
+        if not crown_text:
             return None
-        band = dial.RING_MOTTO_RADIUS_FRACTION
-        half_band = dial.RING_MOTTO_HOVER_HALF_FRACTION
+        band = dial.RING_CROWN_TEXT_RADIUS_FRACTION
+        half_band = dial.RING_CROWN_TEXT_HOVER_HALF_FRACTION
         if not (
             radius * (band - half_band)
             <= distance
@@ -2669,7 +2669,7 @@ class Compositor:
         ):
             return None
         legend = self._skin.ring.letter_legend
-        for entry in motto:
+        for entry in crown_text:
             for word in entry.get("words", ()):
                 if word["seat"] is None:
                     continue

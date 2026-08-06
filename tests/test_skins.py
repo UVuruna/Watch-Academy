@@ -1,5 +1,5 @@
 """Ring presets and the built render config (the skin-pack system is
-gone — DOMY and PILOT are ring preset names, nothing more)."""
+gone — DOMY and LOOP are ring preset names, nothing more)."""
 
 import pytest
 
@@ -21,11 +21,11 @@ def test_ring_preset_cards_load_and_validate():
     presets = ring_presets()
     assert presets["DOMY"]["outer"] == "bot_cross"
     assert presets["DOMY"]["letters"] == ("M", "Y", "Ω", "D")
-    # The top_cross card is PILOT since the CROSS-WORDS round (owner UV
-    # inbox + PILOT pick 2026-07-27): Π-I-L-Ω-Θ, the guide who carries
-    # the traveler home; its four letters initial the light stations.
-    assert presets["PILOT"]["outer"] == "top_cross"
-    assert presets["PILOT"]["letters"] == ("L", "Π", "Ω", "Θ")
+    # The top_cross card is LOOP since the LOOP round (owner ruling
+    # 2026-08-06): Ω bends its own ending into O, the circle without
+    # end; its four letters initial the light stations.
+    assert presets["LOOP"]["outer"] == "top_cross"
+    assert presets["LOOP"]["letters"] == ("L", "Π", "Ω", "Θ")
     # "The One" is locked to the "octa" outer (RING VERDICTS round,
     # owner correction 2026-08-05): Ω alone at the midnight/24h seat —
     # the banknote's denomination — the other seven empty fields
@@ -159,7 +159,7 @@ def test_templar_preset_loads_its_locked_cross_outer_with_the_cross_glyph():
     """THE COMPOSITIONAL RING MODEL (owner decree 2026-08-05): the
     Templar preset is locked to the "cross" outer — its four empty
     fields all wear the templar-cross glyph (the owner's gold master,
-    silver/bronze derived live like every other letter), no motto and
+    silver/bronze derived live like every other letter), no crown text and
     (having shrunk off the "hexa" outer) no triangle override any
     more. The SAME DAY's later decree (§THE TEMPLAR RING, CANON.md)
     gave the four crosses their hover legend — the glyph repeats, the
@@ -177,7 +177,7 @@ def test_templar_preset_loads_its_locked_cross_outer_with_the_cross_glyph():
     readings = [templar["legend"][p]["reading"] for p in (12, 18, 24, 6)]
     assert len(set(names)) == 4, "four identical crosses, four names"
     assert len(set(readings)) == 4, "the station text never repeats"
-    assert templar["motto"] == ()
+    assert templar["crown_text"] == ()
 
     art_dir = dial.RING_LETTER_ART_DIR
     skin = build_skin(replace(Settings(), ring="Templar")).ring
@@ -288,28 +288,28 @@ def test_dollar_eye_shine_toggle_swaps_the_master():
 
 def test_cross_words_ring_the_dial():
     """CROSS-WORDS round (owner UV inbox 2026-07-27): DOMY wears its
-    dark-cross station words (FEAR ANGER HATE SUFFERING) and PILOT its
+    dark-cross station words (FEAR ANGER HATE SUFFERING) and LOOP its
     light-cross station words (HOPE FAITH LOVE SALVATION) as
     outside-the-band arc text — one word CENTERED on its station seat
-    (`core.motto.centered_word_angles`, the mottos' own letter step),
+    (`core.crown_text.centered_word_angles`, the crown texts' own letter step),
     clockwise over the top half and counterclockwise under the bottom
     so every word reads left-to-right to a viewer; and both presets
     answer the per-letter hover legend on every seat, like the Dollar."""
     from core.angles import ring_position_angle
     from data.rings import ring_presets
 
-    step = dial.RING_MOTTO_LETTER_STEP_DEG
+    step = dial.RING_CROWN_TEXT_LETTER_STEP_DEG
     expectations = {
         "DOMY": {"SUFFERING": (12, True), "FEAR": (20, False),
                  "ANGER": (24, False), "HATE": (4, False)},
-        "PILOT": {"HOPE": (8, True), "FAITH": (12, True),
+        "LOOP": {"HOPE": (8, True), "FAITH": (12, True),
                   "LOVE": (16, True), "SALVATION": (24, False)},
     }
     presets = ring_presets()
     for ring, words in expectations.items():
         card = presets[ring]
-        assert {m["text"] for m in card["motto"]} == set(words)
-        for entry in card["motto"]:
+        assert {m["text"] for m in card["crown_text"]} == set(words)
+        for entry in card["crown_text"]:
             seat, clockwise = words[entry["text"]]
             angles = entry["angles"]
             mid = (angles[0] + angles[-1]) / 2.0
@@ -321,16 +321,16 @@ def test_cross_words_ring_the_dial():
         # The hover legend answers on every seat of both cross rings.
         assert sorted(card["legend"]) == sorted(card["positions"])
     # build_skin resolves every word glyph onto a real letter asset.
-    for ring in ("DOMY", "PILOT"):
+    for ring in ("DOMY", "LOOP"):
         skin = build_skin(replace(Settings(), ring=ring))
-        assert len(skin.ring.motto) == 4
+        assert len(skin.ring.crown_text) == 4
         assert missing_assets(skin) == []
 
 
-def test_motto_words_map_to_their_seats():
+def test_crown_text_words_map_to_their_seats():
     """WORD-HOVER round (owner 2026-07-27): every arc word knows the
     SEAT whose legend it answers with — a station word its own station,
-    and each Dollar motto word the seat of its ONE pinned letter (the
+    and each Dollar crown text word the seat of its ONE pinned letter (the
     five words spell the five letters: ANNUIT→A, COEPTIS→S, NOVUS→N,
     ORDO→Ω, SECLORUM→M)."""
     from data.rings import ring_presets
@@ -338,19 +338,19 @@ def test_motto_words_map_to_their_seats():
     presets = ring_presets()
     dollar_words = {
         w["text"]: w["seat"]
-        for e in presets["Dollar"]["motto"] for w in e["words"]
+        for e in presets["Dollar"]["crown_text"] for w in e["words"]
     }
     assert dollar_words == {
         "ANNUIT": 8, "COEPTIS": 16, "NOVUS": 4, "ORDO": 24, "SECLORUM": 20,
     }
     domy_words = {
         w["text"]: w["seat"]
-        for e in presets["DOMY"]["motto"] for w in e["words"]
+        for e in presets["DOMY"]["crown_text"] for w in e["words"]
     }
     assert domy_words == {"SUFFERING": 12, "FEAR": 20, "ANGER": 24, "HATE": 4}
     # build_skin carries the solved hover geometry per word.
     skin = build_skin(replace(Settings(), ring="Dollar"))
-    words = [w for e in skin.ring.motto for w in e["words"]]
+    words = [w for e in skin.ring.crown_text for w in e["words"]]
     assert all(
         w["seat"] is not None and w["half"] > 0.0 for w in words
     )
@@ -358,18 +358,18 @@ def test_motto_words_map_to_their_seats():
 
 def test_two_metals_toggle_now_covers_the_cross_rings():
     """ENLARGE/THEMATIC round (owner 2026-07-27, "hoću da Two Metals
-    opcija bude i za DOMY tj PILOT"): the flame/chalice presets are
+    opcija bude i za DOMY tj LOOP"): the flame/chalice presets are
     eligible too — default ON (today's 3+1 look), stored OFF dresses
     every letter in the ONE finish."""
     domy_off = build_skin(replace(
         Settings(), ring_two_metals={"DOMY": False},
     )).ring
     assert all(m == "gold" for m in domy_off.letter_metal.values())
-    pilot_off = build_skin(replace(
-        Settings(), ring="PILOT", ring_finish="silver",
-        ring_two_metals={"PILOT": False},
+    loop_off = build_skin(replace(
+        Settings(), ring="LOOP", ring_finish="silver",
+        ring_two_metals={"LOOP": False},
     )).ring
-    assert all(m == "silver" for m in pilot_off.letter_metal.values())
+    assert all(m == "silver" for m in loop_off.letter_metal.values())
     # Default stays the split look.
     domy_on = build_skin(Settings()).ring
     assert domy_on.letter_metal[12] == "gold"
@@ -379,7 +379,7 @@ def test_two_metals_toggle_now_covers_the_cross_rings():
 def test_thematic_finish_wears_the_preset_color():
     """ENLARGE/THEMATIC round (owner 2026-07-27): the 4th ring finish —
     the letters wear the ACTIVE preset's own theme color through the
-    recolor transformer (DOMY cross red, PILOT cross blue, Dollar
+    recolor transformer (DOMY cross red, LOOP cross blue, Dollar
     green, The One moon indigo, Templar black); outside the ring band
     the skin reads gold (documented containment)."""
     from config import constants, paths
@@ -387,15 +387,15 @@ def test_thematic_finish_wears_the_preset_color():
     thematic = build_skin(replace(Settings(), ring_finish="thematic"))
     assert thematic.ring.letter_metal[12] == "thematic"   # the triangle
     assert thematic.ring.letter_metal[0] == "silver"      # the accent
-    assert thematic.ring.motto_metal == "thematic"
+    assert thematic.ring.crown_text_metal == "thematic"
     assert thematic.ring_finish == "gold"                 # containment
     # The shade rides THIS skin (owner bug 2026-07-28) — never a process
     # global, so building another watch's skin cannot repaint this one.
     assert thematic.display.shade("thematic") == "cross_red"   # DOMY's
     dollar = build_skin(replace(Settings(), ring="Dollar", ring_finish="thematic"))
     assert dollar.display.shade("thematic") == "dollar_green"
-    pilot = build_skin(replace(Settings(), ring="PILOT", ring_finish="thematic"))
-    assert pilot.display.shade("thematic") == "cross_blue"
+    loop = build_skin(replace(Settings(), ring="LOOP", ring_finish="thematic"))
+    assert loop.display.shade("thematic") == "cross_blue"
     # ...and the earlier skins are UNMOVED by the later builds.
     assert thematic.display.shade("thematic") == "cross_red"
     assert dollar.display.shade("thematic") == "dollar_green"
@@ -409,7 +409,7 @@ def test_thematic_finish_wears_the_preset_color():
     assert all(m == "thematic" for m in flat.letter_metal.values())
     # The full preset->shade table is pinned.
     assert constants.RING_THEMATIC_SHADES == {
-        "DOMY": "cross_red", "PILOT": "cross_blue", "Dollar": "dollar_green",
+        "DOMY": "cross_red", "LOOP": "cross_blue", "Dollar": "dollar_green",
         "The One": "moon_indigo", "Templar": "templar_black",
     }
 
@@ -446,7 +446,7 @@ def test_two_watches_keep_their_own_thematic_color():
     regression pin.
 
     Reported: "Boji oba isto (kao poslednji ucitani sat — imamo DOMY i
-    PILOT tematic i oba su crvena)". Root cause: the art source, subdial
+    LOOP tematic i oba su crvena)". Root cause: the art source, subdial
     set and metal shades were PROCESS-WIDE module globals that
     `apply_display_settings` overwrote on every skin build.
     `AppController.__init__` builds EVERY watch before the first one
@@ -463,23 +463,23 @@ def test_two_watches_keep_their_own_thematic_color():
     from render.asset_recolor import letter_metal_path
 
     # Real order: every watch's skin is built before any of them paints.
-    pilot = build_skin(replace(Settings(), ring="PILOT", ring_finish="thematic"))
+    loop = build_skin(replace(Settings(), ring="LOOP", ring_finish="thematic"))
     domy = build_skin(replace(Settings(), ring="DOMY", ring_finish="thematic"))
-    assert pilot.display.shade("thematic") == "cross_blue"
+    assert loop.display.shade("thematic") == "cross_blue"
     assert domy.display.shade("thematic") == "cross_red"
 
     # The SAME master letter, resolved by each watch in turn — so the only
     # thing that can make the two answers differ is the watch's own shade.
     master = Path(domy.ring.letter_art[12])
     derived = {}
-    for name, skin in (("PILOT", pilot), ("DOMY", domy)):
+    for name, skin in (("LOOP", loop), ("DOMY", domy)):
         # Exactly what the compositor does: install THIS watch's context,
         # then resolve. (`paths.in_display` wraps every real entry point.)
         with paths.display(skin.display):
             derived[name] = letter_metal_path(master, "thematic")
 
-    assert derived["PILOT"] != derived["DOMY"], derived
-    assert "cross_blue" in derived["PILOT"].name
+    assert derived["LOOP"] != derived["DOMY"], derived
+    assert "cross_blue" in derived["LOOP"].name
     assert "cross_red" in derived["DOMY"].name
 
 
@@ -518,7 +518,7 @@ def test_custom_ring_picks_its_own_thematic_color():
         })
 
 
-def test_mason_motto_arc_loads_and_pins_its_key_letters():
+def test_mason_crown_text_arc_loads_and_pins_its_key_letters():
     """MOTO-FIX round (owner correction 2026-07-19, the Great Seal
     reference image): ANNUIT COEPTIS pins its own A at 8h and S at 16h
     (the TOP arc); NOVUS ORDO SECLORUM pins its own N at 4h, ORDO's own
@@ -529,30 +529,30 @@ def test_mason_motto_arc_loads_and_pins_its_key_letters():
 
     presets = ring_presets()
     mason = presets["Dollar"]
-    assert [entry["text"] for entry in mason["motto"]] == [
+    assert [entry["text"] for entry in mason["crown_text"]] == [
         "ANNUIT COEPTIS", "NOVUS ORDO SECLORUM",
     ]
-    annuit, novus = mason["motto"]
+    annuit, novus = mason["crown_text"]
     assert annuit["angles"][0] % 360.0 == pytest.approx(300.0)    # A -> 8h
     assert annuit["angles"][13] % 360.0 == pytest.approx(60.0)    # S -> 16h
     assert novus["angles"][0] % 360.0 == pytest.approx(240.0)     # N -> 4h
     assert novus["angles"][9] % 360.0 == pytest.approx(180.0)     # O -> 24h (bottom)
     assert novus["angles"][18] % 360.0 == pytest.approx(120.0)    # M -> 20h
 
-    # The motto-free bundled presets stay motto-free (graceful
-    # absence); DOMY and PILOT carry their own cross words now
+    # The crown-text-free bundled presets stay crown-text-free (graceful
+    # absence); DOMY and LOOP carry their own cross words now
     # (CROSS-WORDS round — see test_cross_words_ring_the_dial).
-    assert presets["The One"]["motto"] == ()
-    assert presets["Templar"]["motto"] == ()
+    assert presets["The One"]["crown_text"] == ()
+    assert presets["Templar"]["crown_text"] == ()
 
-    # build_skin resolves the motto onto real assets, one glyph per
+    # build_skin resolves the crown text onto real assets, one glyph per
     # NON-SPACE character (spaces are dropped — RingLayer's draw loop
     # never has to check for them), wearing the active ring_finish.
     art_dir = dial.RING_LETTER_ART_DIR
     gold_skin = build_skin(replace(Settings(), ring="Dollar")).ring
-    assert gold_skin.motto_metal == "gold"
-    assert len(gold_skin.motto) == 2
-    annuit_glyphs, novus_glyphs = gold_skin.motto
+    assert gold_skin.crown_text_metal == "gold"
+    assert len(gold_skin.crown_text) == 2
+    annuit_glyphs, novus_glyphs = gold_skin.crown_text
     assert len(annuit_glyphs["glyphs"]) == 13    # "ANNUIT COEPTIS" minus 1 space
     assert len(novus_glyphs["glyphs"]) == 17     # "NOVUS ORDO SECLORUM" minus 2 spaces
     first_asset, first_angle = annuit_glyphs["glyphs"][0]
@@ -562,14 +562,14 @@ def test_mason_motto_arc_loads_and_pins_its_key_letters():
     silver_skin = build_skin(
         replace(Settings(), ring="Dollar", ring_finish="silver")
     ).ring
-    assert silver_skin.motto_metal == "silver"
+    assert silver_skin.crown_text_metal == "silver"
 
     assert missing_assets(build_skin(replace(Settings(), ring="Dollar"))) == []
 
 
-def test_motto_validation_rejects_bad_cards():
+def test_crown_text_validation_rejects_bad_cards():
     """Unknown letters, pin positions outside the preset's own six, and
-    a broken angle solve (data.rings delegates to core.motto) all fail
+    a broken angle solve (data.rings delegates to core.crown_text) all fail
     loudly at load time (Rule #1) — never a silent blank arc."""
     from data.rings import validate_preset
 
@@ -580,54 +580,54 @@ def test_motto_validation_rejects_bad_cards():
     with pytest.raises(ValueError):
         # "Ž" is not in RING_LETTER_FILES.
         validate_preset({
-            **base, "motto": [{"text": "ŽANNUIT", "pins": [["Ž", 1, 8]]}],
+            **base, "crown_text": [{"text": "ŽANNUIT", "pins": [["Ž", 1, 8]]}],
         })
     with pytest.raises(ValueError):
         # 10 is not one of this preset's own positions.
         validate_preset({
             **base,
-            "motto": [{"text": "AB", "pins": [["A", 1, 10], ["B", 1, 12]]}],
+            "crown_text": [{"text": "AB", "pins": [["A", 1, 10], ["B", 1, 12]]}],
         })
     with pytest.raises(ValueError):
-        # Only 1 pin — core.motto needs at least 2 to interpolate.
+        # Only 1 pin — core.crown_text needs at least 2 to interpolate.
         validate_preset({
-            **base, "motto": [{"text": "AB", "pins": [["A", 1, 8]]}],
+            **base, "crown_text": [{"text": "AB", "pins": [["A", 1, 8]]}],
         })
 
 
-def test_dial_window_margin_grows_only_for_a_motto_preset():
+def test_dial_window_margin_grows_only_for_a_crown_text_preset():
     """TASK 1's margin interaction: `dial_window_margin_fraction` must
-    reserve enough for the outer motto arc's own reach when the active
+    reserve enough for the outer crown text arc's own reach when the active
     preset carries one, and stay UNCHANGED for every preset that does
     not — the graceful-absence pattern `triangle`/`legend` already use.
-    CROSS-WORDS round (owner UV inbox 2026-07-27): DOMY and PILOT now
-    carry their station words as arc text too, so the motto-free
+    CROSS-WORDS round (owner UV inbox 2026-07-27): DOMY and LOOP now
+    carry their station words as arc text too, so the crown-text-free
     baseline is Templar/The One. MOTO-FIX round (owner correction
-    2026-07-19): both mottos share ONE radius, so the expected extent
-    drops the old `RING_MOTTO_RADIUS_STEP` term (deleted, Rule #6)."""
+    2026-07-19): both crown texts share ONE radius, so the expected extent
+    drops the old `RING_CROWN_TEXT_RADIUS_STEP` term (deleted, Rule #6)."""
     templar = build_skin(replace(Settings(), ring="Templar"))
     mason = build_skin(replace(Settings(), ring="Dollar"))
     domy = build_skin(Settings())
     templar_margin = defaults.dial_window_margin_fraction(templar)
     mason_margin = defaults.dial_window_margin_fraction(mason)
     assert mason_margin > templar_margin
-    # The cross-word presets reserve the SAME motto reach as the Dollar.
+    # The cross-word presets reserve the SAME crown-text reach as the Dollar.
     assert defaults.dial_window_margin_fraction(domy) == mason_margin
-    # The motto arc's own outer reach is the binding term for the Dollar.
-    expected_motto_extent = (
-        dial.RING_MOTTO_RADIUS_FRACTION
-        + dial.RING_MOTTO_SIZE * mason.ring_letter_scale
+    # The crown text arc's own outer reach is the binding term for the Dollar.
+    expected_crown_text_extent = (
+        dial.RING_CROWN_TEXT_RADIUS_FRACTION
+        + dial.RING_CROWN_TEXT_SIZE * mason.ring_letter_scale
         * (1.0 + 2.0 * dial.RING_LETTER_SHADOW_RADIUS)
     )
     expected_margin = (
-        expected_motto_extent - 1.0
+        expected_crown_text_extent - 1.0
     ) / 2.0 + defaults.DIAL_WINDOW_MARGIN_EPSILON
     assert mason_margin == pytest.approx(expected_margin)
 
 
 def test_build_skin_swaps_only_the_ring():
     domy = build_skin(Settings())
-    morph = build_skin(replace(Settings(), ring="PILOT"))
+    morph = build_skin(replace(Settings(), ring="LOOP"))
     assert domy.ring.outer_asset.name == "bot_cross.png"
     assert morph.ring.outer_asset.name == "top_cross.png"
     assert morph.ring.letters == {12: "L", 16: "Π", 8: "Θ", 0: "Ω"}
@@ -667,7 +667,7 @@ def test_default_config_assets_all_exist():
     """Every asset the built config references ships in the repo (a miss
     would otherwise surface inside paintEvent, where Qt swallows it)."""
     assert missing_assets(build_skin(Settings())) == []
-    assert missing_assets(build_skin(replace(Settings(), ring="PILOT"))) == []
+    assert missing_assets(build_skin(replace(Settings(), ring="LOOP"))) == []
     assert missing_assets(
         build_skin(replace(Settings(), weekday_theme="norse", earth_style="atmo"))
     ) == []
@@ -689,13 +689,13 @@ def test_letter_art_follows_the_finish():
     assert silver.letter_metal[12] == "silver"          # the triangle inverts
     assert silver.letter_metal[20] == "silver"
     assert silver.letter_metal[0] == "gold"             # Omega back to gold
-    morph = build_skin(replace(Settings(), ring="PILOT")).ring
+    morph = build_skin(replace(Settings(), ring="LOOP")).ring
     assert morph.letter_art[16] == art_dir / "Pi.png"   # triangle 8/16/24 gold
     assert morph.letter_metal[16] == "gold"
     assert morph.letter_metal[0] == "gold"
     assert morph.letter_metal[12] == "silver"
     morph_silver = build_skin(
-        replace(Settings(), ring="PILOT", ring_finish="silver")
+        replace(Settings(), ring="LOOP", ring_finish="silver")
     ).ring
     assert morph_silver.letter_metal[12] == "gold"
     assert morph_silver.letter_metal[0] == "silver"

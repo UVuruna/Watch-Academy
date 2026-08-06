@@ -2,7 +2,7 @@
 
 Pure dataclasses, importable from config (which builds DEFAULT_SKIN) and
 from render (which consumes the built config). The controller overlays
-the RING PRESET (DOMY/PILOT are ring preset names — nothing more) and
+the RING PRESET (DOMY/LOOP are ring preset names — nothing more) and
 the user's display choices onto DEFAULT_SKIN at build time. Asset fields
 hold absolute paths; a None asset means "draw procedurally".
 """
@@ -50,8 +50,7 @@ class StarSpec:
 class RingSpec:
     """THE COMPOSITIONAL RING MODEL (owner decree 2026-08-05): a ring is
     ALWAYS the composition of an OUTER band + an INNER band + the
-    letters in the outer's own empty fields + an optional crown-text
-    motto arc — there is no more single monolithic plate and no
+    letters in the outer's own empty fields + an optional crown-text arc — there is no more single monolithic plate and no
     procedural fallback; `render.layers.ring.RingLayer.paint` composes
     `outer_asset` then `inner_asset` unconditionally."""
 
@@ -87,37 +86,37 @@ class RingSpec:
     letter_no_shadow: dict[int, bool] = field(default_factory=dict)
     # The per-letter HOVER LEGEND (ROADMAP 15b, owner "malo legende"):
     # hour -> {name, reading} for a preset that carries one (the
-    # Dollar, DOMY and PILOT today — CROSS-WORDS round 2026-07-27;
+    # Dollar, DOMY and LOOP today — CROSS-WORDS round 2026-07-27;
     # empty {} for The One/Templar and any custom ring) — see
     # data.rings.validate_preset and render.compositor's ring-band
     # hover.
     letter_legend: dict[int, dict] = field(default_factory=dict)
-    # The outer GREAT SEAL MOTTO ARC (TASK 1, owner "može radi"
+    # The outer GREAT SEAL CROWN TEXT ARC (TASK 1, owner "može radi"
     # 2026-07-19, CANON.md §The Banknote; corrected MOTO-FIX round,
     # owner correction 2026-07-19, the dollar's Great Seal reference
     # image): built once by app.controller.build_skin from the preset's
-    # own `motto` card field (data.rings.validate_preset ->
-    # core.motto.motto_glyph_angles) — curved text just outside the
+    # own `crown_text` card field (data.rings.validate_preset ->
+    # core.crown_text.crown_glyph_angles) — curved text just outside the
     # ring band, its pinned letters landing on the SAME six hexagram
     # seats the ring's own banknote letters occupy (MASON outside, the
     # Eye inside at the crown — the G's seat before the DOLLAR/EYE
-    # round). Each entry: {"text": the motto string (spaces included,
+    # round). Each entry: {"text": the crown text string (spaces included,
     # for reference), "glyphs": a tuple of (gold_asset_path, dial_angle)
     # pairs, ONE per non-space character, ready for render.layers.
     # RingLayer to draw — spaces are already filtered out here, so the
     # render loop never checks for them. Empty for every preset but
     # the Dollar today; both entries now draw at the SAME
-    # RING_MOTTO_RADIUS_FRACTION — the two arcs are angularly disjoint
+    # RING_CROWN_TEXT_RADIUS_FRACTION — the two arcs are angularly disjoint
     # (ANNUIT COEPTIS over the top, NOVUS ORDO SECLORUM under the
     # bottom) so they never collide; the old two-radius-by-list-order
     # scheme is gone.
-    motto: tuple[dict, ...] = ()
-    # The SINGLE finish every motto glyph wears (owner: "in the ring
+    crown_text: tuple[dict, ...] = ()
+    # The SINGLE finish every crown text glyph wears (owner: "in the ring
     # letter metal/color family") — the same settings.ring_finish the
     # ring's own Trinity-triangle letters wear, resolved once in
-    # build_skin. Unlike `letter_metal` this is NOT per-hour: the motto
+    # build_skin. Unlike `letter_metal` this is NOT per-hour: the crown text
     # is read as ONE continuous inscription, not a seat-by-seat split.
-    motto_metal: str = "gold"
+    crown_text_metal: str = "gold"
 
 
 @dataclass(frozen=True)
@@ -424,27 +423,27 @@ class SkinDefinition:
     letter_tint: str | None = None
     # CROWN TEXT (R-24/Phase-6-debt correction, owner 2026-08-05: "Crown
     # tekst je onaj tekst koji piše oko sata — faith, hope, suffering")
-    # — the outer Great Seal MOTTO arc (`RingSpec.motto`,
-    # `render.layers.ring.RingLayer._draw_motto`) IS this element; these
+    # — the outer Great Seal CROWN TEXT arc (`RingSpec.crown_text`,
+    # `render.layers.ring.RingLayer._draw_crown_text`) IS this element; these
     # three fields are its own opacity/size/color controls, independent
     # of the ring letters' own `ring_letter_scale`/`letter_tint`:
-    #   * `motto_alpha` — a plain layer-alpha multiplier, 1.0 = today's
+    #   * `crown_text_alpha` — a plain layer-alpha multiplier, 1.0 = today's
     #     full opacity (no skin varies this yet, so a direct value like
     #     `umbra_alpha`, not a None-override).
-    #   * `motto_scale` — multiplies `dial.RING_MOTTO_SIZE` ON TOP OF
+    #   * `crown_text_scale` — multiplies `dial.RING_CROWN_TEXT_SIZE` ON TOP OF
     #     `ring_letter_scale` (which still scales it too, unchanged) —
     #     1.0 = today's size. `config.defaults.dial_window_margin_
     #     fraction` reads this so the window never clips a scaled-up
     #     Crown Text.
-    #   * `motto_tint` — an EXTRA tint layered over the motto glyphs'
+    #   * `crown_text_tint` — an EXTRA tint layered over the crown text glyphs'
     #     metal finish, resolved INDEPENDENTLY of `letter_tint` (the two
     #     controls no longer share one recolor): None (default) follows
     #     `ring_tint`, like the hands; a hex overrides it.
-    # A no-op for every preset without a motto (The One, Templar, every
+    # A no-op for every preset without a crown text (The One, Templar, every
     # custom ring) — nothing draws, nothing to grey but the control.
-    motto_alpha: float = 1.0
-    motto_scale: float = 1.0
-    motto_tint: str | None = None
+    crown_text_alpha: float = 1.0
+    crown_text_scale: float = 1.0
+    crown_text_tint: str | None = None
     # THE DISPLAY CONTEXT (owner bug 2026-07-28, multi-watch colour
     # leak): this watch's OWN art source, subdial plate set and metal
     # shades — see `config.paths.DisplayContext`. It rides the SKIN
@@ -469,7 +468,7 @@ def missing_assets(skin: SkinDefinition) -> list[Path]:
         skin.hands.minute.asset,
         skin.hands.second.asset if skin.hands.second else None,
         *skin.ring.letter_art.values(),
-        *(path for motto in skin.ring.motto for path, _ in motto["glyphs"]),
+        *(path for crown_entry in skin.ring.crown_text for path, _ in crown_entry["glyphs"]),
         *skin.weekday_set.bodies.values(),
         *skin.year_marker.variants.values(),
     ]

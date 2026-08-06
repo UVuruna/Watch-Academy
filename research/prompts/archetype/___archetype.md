@@ -22,7 +22,7 @@ WAVE's three third wheels and the Thirteen-Axes wave's edge/sacred plates.
 | [Council Prompts](council_prompts.md) | CUBE WAVE Prism third wheel: the UNION, all six Double-Trinity offices on the six arms, Lord's Day centre |
 | [Character Prompts](character_prompts.md) | CUBE WAVE Compass third wheel: the Cube at depth zero — eight directions, each a virtue-above/fall-below window + circle |
 | [Crosses Prompts](crosses_prompts.md) | CUBE WAVE Two Crosses (Encyclopedia/legend plates, no wheel slot): Path of Light / Path of Darkness, TRUST/DISTRUST centres, eight stations |
-| [Cross Words Prompts](cross_words_prompts.md) | The eight classical WORDS the DOMY/PILOT ring letters borrow, as 1:1 medallions in the Crosses family's secondary register |
+| [Cross Words Prompts](cross_words_prompts.md) | The eight classical WORDS the DOMY/LOOP ring letters borrow, as 1:1 medallions in the Crosses family's secondary register |
 | [Banknote Offices Prompts](banknote_offices_prompts.md) | The five Double-Trinity OFFICES as engraved intaglio banknote plates |
 | [Edges Prompts](edges_prompts.md) | THIRTEEN-AXES wave: eight new edge seats (Prudence, Ardor, Steadfastness, Reform, Meekness, Aspiration, Self-Mastery, Diligence), each a lancet + circle |
 | [Axes Prompts](axes_prompts.md) | THIRTEEN-AXES wave: the SACRED plates (The One's six-petal rosette, the Sacred Axis, its circle, the six people of the two sacred seats) |

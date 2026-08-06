@@ -4,44 +4,44 @@ One card = one dial styling: the COMPOSITIONAL model (owner decree
 2026-08-05) — an OUTER band (config.constants.RING_OUTERS) whose empty
 hour fields carry the preset's own LETTERS, an INNER band (the user's
 own changeable pick, config.constants.RING_INNERS) and an optional
-CROWN TEXT (motto) arc. `{name, outer, letters}` is the whole card;
+CROWN TEXT arc. `{name, outer, letters}` is the whole card;
 `outer` resolves the empty positions directly (no signature guessing).
 Validation is loud (Rule #1): a broken card must name itself, never
 render blank.
 """
 
 from config import constants, paths
-from core.motto import (
+from core.crown_text import (
     _occurrence_index,
     centered_word_angles,
     free_arc_angles,
-    motto_glyph_angles,
+    crown_glyph_angles,
 )
 from data._io import load_json_checked
 
 
-def _validate_motto(name: str, raw: list, positions: tuple) -> tuple:
-    """The optional `motto` card field (TASK 1, owner "može radi"
-    2026-07-19, CANON.md §The Banknote): a list of motto entries, each
+def _validate_crown_text(name: str, raw: list, positions: tuple) -> tuple:
+    """The optional `crown_text` card field (TASK 1, owner "može radi"
+    2026-07-19, CANON.md §The Banknote): a list of crown text entries, each
     `{text, pins}` — `pins` is `[letter, occurrence, position]` triples
     (JSON has no tuples). Every pin's position must be one of the
-    preset's own ring positions (the motto's key letters land on the
+    preset's own ring positions (the crown text's key letters land on the
     SAME hexagram seats the ring's own letters occupy) and every
     character of `text` must be a space or a letter the shared library
-    (`constants.RING_LETTER_FILES`) can draw — the motto reuses that
+    (`constants.RING_LETTER_FILES`) can draw — the crown text reuses that
     exact PNG library, never new art. Each entry may also carry
     `clockwise` (MOTO-FIX round, owner correction 2026-07-19; default
     true): true reads the arc sweeping increasing angle (the TOP arc,
     ANNUIT COEPTIS's own), false sweeps decreasing angle (the BOTTOM
-    arc, NOVUS ORDO SECLORUM's own) — see `core.motto.motto_glyph_angles`
+    arc, NOVUS ORDO SECLORUM's own) — see `core.crown_text.crown_glyph_angles`
     for why the bottom arc must reverse direction to still read
     left-to-right to a viewer. The per-glyph angle math itself
-    (`core.motto.motto_glyph_angles`) runs HERE, at load time, so a
+    (`core.crown_text.crown_glyph_angles`) runs HERE, at load time, so a
     broken pin config (a typo'd occurrence, an out-of-order pin) fails
     loudly at startup, never mid-paint. Returns a tuple of
     `{"text": str, "angles": tuple[float, ...]}`, empty for every
-    preset without a `motto` field (The One, Templar, every custom
-    ring; DOMY and PILOT carry the CENTERED cross-word form, the
+    preset without a `crown_text` field (The One, Templar, every custom
+    ring; DOMY and LOOP carry the CENTERED cross-word form, the
     Dollar the pinned Great Seal form)."""
     def _words(text: str, pins: tuple, center: int | None) -> tuple:
         """Per-WORD spans + the seat each word answers for (WORD-HOVER
@@ -71,37 +71,37 @@ def _validate_motto(name: str, raw: list, positions: tuple) -> tuple:
         return tuple(words)
 
     resolved = []
-    for motto_entry in raw:
-        text = str(motto_entry.get("text", ""))
+    for crown_entry in raw:
+        text = str(crown_entry.get("text", ""))
         if not text:
-            raise ValueError(f"ring preset {name!r}: a motto entry needs text")
+            raise ValueError(f"ring preset {name!r}: a crown text entry needs text")
         unknown = {
             char for char in text
             if char != " " and char not in constants.RING_LETTER_FILES
         }
         if unknown:
             raise ValueError(
-                f"ring preset {name!r}: motto {text!r} uses unknown letters "
+                f"ring preset {name!r}: crown text {text!r} uses unknown letters "
                 f"{sorted(unknown)}"
             )
-        clockwise = bool(motto_entry.get("clockwise", True))
+        clockwise = bool(crown_entry.get("clockwise", True))
         # THE CROWN TEXT form (custom rings, owner decree 2026-08-05):
         # `{"text", "orientation"}` — free-form, user-typed text arcing
         # from the top or from the bottom, NOT pinned to any ring seat.
         # Mutually exclusive with `center`/`pins` (the bundled presets'
         # own Great Seal / cross-word forms).
-        orientation = motto_entry.get("orientation")
+        orientation = crown_entry.get("orientation")
         if orientation is not None:
-            if motto_entry.get("pins") or motto_entry.get("center") is not None:
+            if crown_entry.get("pins") or crown_entry.get("center") is not None:
                 raise ValueError(
-                    f"ring preset {name!r}: motto {text!r} cannot carry "
+                    f"ring preset {name!r}: crown text {text!r} cannot carry "
                     f"`orientation` together with `center`/`pins`"
                 )
             try:
                 angles = free_arc_angles(text, str(orientation))
             except ValueError as error:
                 raise ValueError(
-                    f"ring preset {name!r}: motto {text!r}: {error}"
+                    f"ring preset {name!r}: crown text {text!r}: {error}"
                 ) from error
             resolved.append({
                 "text": text, "angles": angles,
@@ -110,26 +110,26 @@ def _validate_motto(name: str, raw: list, positions: tuple) -> tuple:
             continue
         # The CROSS-WORDS form (owner UV inbox 2026-07-27): a single
         # station word CENTERED on one of the preset's own seats —
-        # `{"text", "center", "clockwise"}`, the DOMY/PILOT cross
+        # `{"text", "center", "clockwise"}`, the DOMY/LOOP cross
         # stations. Mutually exclusive with the pinned Great Seal form.
-        center = motto_entry.get("center")
+        center = crown_entry.get("center")
         if center is not None:
-            if motto_entry.get("pins"):
+            if crown_entry.get("pins"):
                 raise ValueError(
-                    f"ring preset {name!r}: motto {text!r} cannot carry "
+                    f"ring preset {name!r}: crown text {text!r} cannot carry "
                     f"both `center` and `pins`"
                 )
             center = int(center)
             if center not in positions:
                 raise ValueError(
-                    f"ring preset {name!r}: motto center {center} is not "
+                    f"ring preset {name!r}: crown text center {center} is not "
                     f"one of its own positions {positions}"
                 )
             try:
                 angles = centered_word_angles(text, center, clockwise=clockwise)
             except ValueError as error:
                 raise ValueError(
-                    f"ring preset {name!r}: motto {text!r}: {error}"
+                    f"ring preset {name!r}: crown text {text!r}: {error}"
                 ) from error
             resolved.append({
                 "text": text, "angles": angles,
@@ -137,18 +137,18 @@ def _validate_motto(name: str, raw: list, positions: tuple) -> tuple:
             })
             continue
         pins = []
-        for letter, occurrence, position in motto_entry.get("pins", ()):
+        for letter, occurrence, position in crown_entry.get("pins", ()):
             if position not in positions:
                 raise ValueError(
-                    f"ring preset {name!r}: motto pin position {position} "
+                    f"ring preset {name!r}: crown text pin position {position} "
                     f"is not one of its own positions {positions}"
                 )
             pins.append((str(letter), int(occurrence), int(position)))
         try:
-            angles = motto_glyph_angles(text, tuple(pins), clockwise=clockwise)
+            angles = crown_glyph_angles(text, tuple(pins), clockwise=clockwise)
         except ValueError as error:
             raise ValueError(
-                f"ring preset {name!r}: motto {text!r}: {error}"
+                f"ring preset {name!r}: crown text {text!r}: {error}"
             ) from error
         pin_indices = tuple(
             (_occurrence_index(text, letter, occurrence), position)
@@ -163,7 +163,7 @@ def _validate_motto(name: str, raw: list, positions: tuple) -> tuple:
 
 def validate_preset(entry: dict) -> dict:
     """One card checked: known outer, library letters, matching counts.
-    Returns {name, outer, positions, letters, triangle, legend, motto,
+    Returns {name, outer, positions, letters, triangle, legend, crown_text,
     thematic}. `outer` (owner decree 2026-08-05, the compositional ring
     model) resolves the empty hour fields directly from
     `constants.RING_OUTERS` — no more guessing a "layout" from a
@@ -176,9 +176,9 @@ def validate_preset(entry: dict) -> dict:
     metal groups instead (the Dollar banknote's Trinity/Union read,
     CANON.md §The Banknote). `legend` is an optional hour(position) ->
     {name, reading} map — the per-letter HOVER LEGEND text, quoted
-    verbatim from CANON. `motto` (TASK 1, widened 2026-08-05 with the
-    free-form CROWN TEXT) is an optional list of motto/crown-text
-    entries — see `_validate_motto`."""
+    verbatim from CANON. `crown_text` (TASK 1, widened 2026-08-05 with the
+    free-form CROWN TEXT) is an optional list of crown-text
+    entries — see `_validate_crown_text`."""
     name = str(entry.get("name", "")).strip()
     if not name:
         raise ValueError(f"ring preset without a name: {entry!r}")
@@ -243,7 +243,7 @@ def validate_preset(entry: dict) -> dict:
                 "both a name and a reading"
             )
         legend[position] = {"name": letter_name, "reading": reading}
-    motto = _validate_motto(name, entry.get("motto") or [], positions)
+    crown_text = _validate_crown_text(name, entry.get("crown_text") or [], positions)
     # The optional THEMATIC color pick (ENLARGE/THEMATIC round, widened
     # for CUSTOM rings, owner 2026-07-27): a card may name ANY of the
     # transformer's ramps (the five ring theme colors plus every metal
@@ -267,7 +267,7 @@ def validate_preset(entry: dict) -> dict:
         "outer": outer,
         "triangle": triangle,
         "legend": legend,
-        "motto": motto,
+        "crown_text": crown_text,
         "thematic": thematic,
     }
 

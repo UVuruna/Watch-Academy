@@ -23,9 +23,14 @@ LEGACY_RING_NAMES = {
     "numbers": "The One",
     "omega": "The One",
     # CROSS-WORDS round (owner UV inbox + PILOT pick 2026-07-27): the
-    # chalice card "MORPH"/"Morph" becomes "PILOT" (Π-I-L-Ω-Θ — the
-    # guide who carries the traveler home).
-    "morph": "PILOT",
+    # chalice card "MORPH"/"Morph" became "PILOT" (Π-I-L-Ω-Θ), then
+    # LOOP ROUND (owner ruling 2026-08-06): "PILOT" -> "LOOP" — L-Ω-Ω-Π
+    # read around the wheel spells LOOP, the infinity reading (Omega
+    # bent from ending into the circle without end) replacing the
+    # retired "pilot/guide" one. Both first-generation names chain
+    # straight to the CURRENT one.
+    "morph": "LOOP",
+    "pilot": "LOOP",
 }
 
 
@@ -72,15 +77,29 @@ def migrate_legacy_ring_card(entry: dict) -> dict:
     saved before the compositional ring model stored `{name, positions,
     letters}` — no `outer` yet. Migrated in place by matching the
     positions signature; an unmatched entry is left untouched and fails
-    loudly in `validate_preset`."""
+    loudly in `validate_preset`.
+
+    Also migrates a card's `motto` field onto `crown_text` (TASK 1,
+    owner ruling 2026-08-06, "one term for one thing" — `motto` is
+    retired everywhere including a stored custom-ring card): a card
+    saved before the rename carries its crown-arc entries under the
+    old key, and `data.rings.validate_preset` now only reads
+    `crown_text` — without this step the text would silently vanish on
+    load rather than fail loudly, since the field is optional."""
     if "outer" in entry or "positions" not in entry:
-        return entry
-    positions = frozenset(int(p) for p in entry["positions"])
-    outer = _LEGACY_OUTER_BY_POSITIONS.get(positions)
-    if outer is None:
-        return entry
-    migrated = dict(entry)
-    migrated["outer"] = outer
+        migrated_positions = entry
+    else:
+        positions = frozenset(int(p) for p in entry["positions"])
+        outer = _LEGACY_OUTER_BY_POSITIONS.get(positions)
+        if outer is None:
+            migrated_positions = entry
+        else:
+            migrated_positions = dict(entry)
+            migrated_positions["outer"] = outer
+    if "motto" not in migrated_positions or "crown_text" in migrated_positions:
+        return migrated_positions
+    migrated = dict(migrated_positions)
+    migrated["crown_text"] = migrated.pop("motto")
     return migrated
 
 

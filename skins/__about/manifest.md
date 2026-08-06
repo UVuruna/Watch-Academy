@@ -8,7 +8,7 @@ Typed, Qt-free render configuration — the six unit specs (background,
 star, ring, weekday_set, year_marker, hands) plus `SkinDefinition`'s
 user-overridable display scalars. Pure dataclasses with no I/O:
 `config.defaults.DEFAULT_SKIN` is the one canonical instance; the app
-controller's `build_skin` overlays the ring PRESET (DOMY/PILOT are ring
+controller's `build_skin` overlays the ring PRESET (DOMY/LOOP are ring
 preset NAMES — nothing more) and the user's display choices onto it at
 build time.
 
@@ -52,7 +52,7 @@ recognizable.
 ### `RingSpec`
 THE COMPOSITIONAL RING MODEL (owner decree 2026-08-05): the dial ring
 is ALWAYS the composition of an outer band + an inner band + the
-preset's own letters + an optional crown-text motto arc — no single
+preset's own letters + an optional crown-text arc — no single
 monolithic plate and no procedural fallback.
 #### Attributes
 - `outer_asset: Path` — the outer band plate (the preset's empty letter fields)
@@ -74,12 +74,12 @@ monolithic plate and no procedural fallback.
   same per-hour condition
 - `letter_legend: dict[int, dict]` — hour -> `{name, reading}`, the
   per-letter hover legend (empty for presets that carry none)
-- `motto: tuple[dict, ...]` — the outer motto arc ("Crown Text" in the
+- `crown_text: tuple[dict, ...]` — the outer crown text arc ("Crown Text" in the
   Watch Face window): one
   `{"text", "glyphs": ((asset, angle), ...), "words": [...]}` entry per
-  preset that has one, built by `build_skin` from the preset's `motto`
+  preset that has one, built by `build_skin` from the preset's `crown_text`
   card field; empty for presets without one
-- `motto_metal: str = "gold"` — the single finish every motto glyph wears
+- `crown_text_metal: str = "gold"` — the single finish every crown-text glyph wears
 
 ### `WeekdaySpec`
 One weekday theme's seven bodies.
@@ -165,9 +165,9 @@ for the full field-by-field default/meaning table):
   `ring_tint` when `None`), `ring_finish`, `ring_letter_scale`,
   `subdial_style`
 - **Crown Text** (R-24/Phase-6-debt correction, owner 2026-08-05) —
-  `motto_alpha`, `motto_scale` (multiplies `ring_letter_scale`),
-  `motto_tint` (follows `ring_tint` when `None`) — the outer Great Seal
-  motto arc's own opacity/size/color, independent of `letter_tint`
+  `crown_text_alpha`, `crown_text_scale` (multiplies `ring_letter_scale`),
+  `crown_text_tint` (follows `ring_tint` when `None`) — the outer Great Seal
+  crown text arc's own opacity/size/color, independent of `letter_tint`
 - **Year line** — `era_notation`, `show_era_suffix`, `third_era`
   (consumed by `core.deep_time.format_year_line`/`format_official`)
 - **Display context & runtime-only** — `display: paths.DisplayContext`
@@ -181,7 +181,7 @@ for the full field-by-field default/meaning table):
 
 ### `missing_assets(skin) -> list[Path]`
 Every asset the skin references (background, ring, moon, hands, ring
-letter art and motto glyphs, weekday bodies, year-marker variants) that
+letter art and crown-text glyphs, weekday bodies, year-marker variants) that
 does not exist on disk, resolved through the active art source
 (`paths.art_file`). The caller must surface a non-empty result visibly —
 a missing asset would otherwise fail inside `paintEvent`, where Qt

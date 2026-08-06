@@ -108,7 +108,7 @@ def discover_watch_indices() -> list[int]:
 # one watch open that was last-writer-wins: `AppController.__init__`
 # builds EVERY watch before the first one paints, so all of them then
 # rendered with the LAST watch's choices. The owner's report
-# (2026-07-28): a DOMY watch and a PILOT watch, both on the `thematic`
+# (2026-07-28): a DOMY watch and a LOOP watch, both on the `thematic`
 # ring finish, came out THE SAME RED — DOMY's shade, because DOMY was
 # built last. The `watch_manager` docstring had already flagged the same
 # hazard for the art source and subdial set; `thematic` inherited it.

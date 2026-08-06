@@ -24,7 +24,7 @@ from data.rings import ring_presets
 
 def _crown_text_validator(parent: QLineEdit) -> QRegularExpressionValidator:
     """RING VERDICTS round (owner decree 2026-08-05): the crown-text
-    field must only ACCEPT a character the motto renderer can actually
+    field must only ACCEPT a character the crown-text renderer can actually
     draw — a `QRegularExpressionValidator` built straight off
     `constants.RING_CROWN_TEXT_CHARSET` (DERIVED, never a hand-written
     list — Rule #5, the exact set `app.controller._location_crown_text`
@@ -145,8 +145,8 @@ def _inner_group(settings, setters, tr) -> QGroupBox:
 
 def _crown_text_group(settings, card: dict, setters, tr) -> QGroupBox:
     """CROWN TEXT (owner decree 2026-08-05): the bundled presets show
-    their existing motto text read-only (Dollar's Great Seal, DOMY/
-    PILOT's cross words); a custom ring may TYPE its own text and pick
+    their existing crown text read-only (Dollar's Great Seal, DOMY/
+    LOOP's cross words); a custom ring may TYPE its own text and pick
     an orientation (top/bottom). The custom field's `QLineEdit` carries
     a whitelist `QValidator` (RING VERDICTS round, owner decree
     2026-08-05) so an unsupported character cannot be typed at all —
@@ -158,7 +158,7 @@ def _crown_text_group(settings, card: dict, setters, tr) -> QGroupBox:
     column = QVBoxLayout(group)
     location_on = settings.ring_crown_location.get(settings.ring, False)
     if settings.ring in constants.RING_OUTER_LOCK:
-        texts = " · ".join(entry["text"] for entry in card["motto"]) or tr("(none)")
+        texts = " · ".join(entry["text"] for entry in card["crown_text"]) or tr("(none)")
         label = QLabel(texts)
         label.setEnabled(not location_on)
         column.addWidget(label)

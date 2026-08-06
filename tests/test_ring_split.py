@@ -64,7 +64,7 @@ def _diff_count(image_a, image_b, step: int = 4) -> int:
     "name,outer,inner",
     [
         ("DOMY", "bot_cross", "seconds"),
-        ("PILOT", "top_cross", "seconds"),
+        ("LOOP", "top_cross", "seconds"),
         ("Dollar", "hexa", "seconds"),
         ("Templar", "cross", "seconds_cross"),
         ("The One", "octa", "simple_octa"),
@@ -140,13 +140,13 @@ def test_custom_ring_crown_text_and_orientation_alter_pixels(app, frame_args):
     (bare vs with-text differ); orientation (top/bottom) is verified at
     the DATA level — the resolved glyph angles flip from centered on
     the top anchor (0 deg) to the bottom anchor (180 deg), exactly like
-    every other motto form's own angle solve (`core.motto`,
-    `data.rings._validate_motto`) — the SAME level every other motto
+    every other crown-text form's own angle solve (`core.crown_text`,
+    `data.rings._validate_crown_text`) — the SAME level every other crown-text
     test in this suite verifies at (the outer crown arc sits beyond the
     dial radius, so a fixed-size offscreen render clips most of it;
     that is a rendering-canvas artifact, not a claim about the app
-    window, which grows its own margin for a motto preset — see
-    `test_dial_window_margin_grows_only_for_a_motto_preset`)."""
+    window, which grows its own margin for a crown-text preset — see
+    `test_dial_window_margin_grows_only_for_a_crown_text_preset`)."""
     day, tick = frame_args
     custom = ({"name": "CROWNED", "outer": "bot_cross", "letters": ["A", "B", "C", "D"]},)
     bare = build_skin(Settings(ring="CROWNED", custom_rings=custom))
@@ -154,15 +154,15 @@ def test_custom_ring_crown_text_and_orientation_alter_pixels(app, frame_args):
         ring="CROWNED", custom_rings=custom,
         custom_ring_crown_text={"CROWNED": "HELLO"},
     ))
-    assert with_text.ring.motto
+    assert with_text.ring.crown_text
     assert _diff_count(_render(bare, day, tick), _render(with_text, day, tick)) > 0
-    top_angles = with_text.ring.motto[0]["words"][0]["center"]
+    top_angles = with_text.ring.crown_text[0]["words"][0]["center"]
     bottom_text = build_skin(Settings(
         ring="CROWNED", custom_rings=custom,
         custom_ring_crown_text={"CROWNED": "HELLO"},
         custom_ring_crown_orientation={"CROWNED": "bottom"},
     ))
-    bottom_angles = bottom_text.ring.motto[0]["words"][0]["center"]
+    bottom_angles = bottom_text.ring.crown_text[0]["words"][0]["center"]
     assert top_angles == pytest.approx(0.0)
     assert bottom_angles == pytest.approx(180.0)
 
@@ -177,7 +177,7 @@ def test_custom_ring_crown_text_rejects_unknown_letters_without_crashing(app, fr
         ring="CROWNED2", custom_rings=custom,
         custom_ring_crown_text={"CROWNED2": "hello!"},  # lowercase + punctuation
     ))
-    assert skin.ring.motto == ()
+    assert skin.ring.crown_text == ()
     _render(skin, day, tick)  # must not raise
 
 
@@ -186,7 +186,7 @@ def test_custom_ring_crown_text_rejects_unknown_letters_without_crashing(app, fr
 # The two plates' own alpha coverage, MEASURED off the actual PNGs: the
 # outer band (`outter/full.png`) covers ~0.885-1.00, the inner band
 # (`inner/simple.png`) ~0.796-0.894. 0.95 lands outer-only, 0.84
-# inner-only. `_plain_skin` clears letters/motto outright, so the
+# inner-only. `_plain_skin` clears letters/crown text outright, so the
 # sample angles below need not dodge any seat.
 
 
@@ -222,7 +222,7 @@ def _plain_skin(**overrides):
     return dataclasses.replace(
         base, show_pointer=False, show_weekday=False,
         show_earth=False, show_moon=False,
-        ring=dataclasses.replace(base.ring, letters={}, motto=()),
+        ring=dataclasses.replace(base.ring, letters={}, crown_text=()),
         **overrides,
     )
 

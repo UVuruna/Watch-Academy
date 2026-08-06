@@ -948,7 +948,7 @@ RING_FINISHES = ("gold", "silver", "bronze", "thematic")
 # words, not to every metal surface (documented containment).
 RING_THEMATIC_SHADES = {
     "DOMY": "cross_red",        # the suffering cross
-    "PILOT": "cross_blue",      # the salvation cross
+    "LOOP": "cross_blue",      # the salvation cross
     "Dollar": "dollar_green",   # the banknote's ink
     "The One": "moon_indigo",   # the winter-solstice violet
     "Templar": "templar_black", # the Beauceant
@@ -1049,14 +1049,14 @@ FIGURE_ROSTERS = ("planetary", "pantheon")
 # hour fields the letters stand in) + an INNER band
 # (`assets/instrument/ring/inner/`, the minute track) + the preset's
 # own letters in the outer's empty fields + an optional CROWN TEXT
-# (motto) arc. The old monolithic single-plate faces (`domy.png`,
+# (crown text) arc. The old monolithic single-plate faces (`domy.png`,
 # `morph.png`, `hexagram.png`) are DEAD — deleted from disk the same
 # session this table replaced `RING_LAYOUTS`. `positions` is the empty
 # hour fields, MEASURED off the art (owner naming keeps the pre-
 # existing "24" convention for the bottom/midnight seat rather than
 # "0" — `core.angles.ring_position_angle` treats them identically).
 # `triangle` is the DEFAULT 3-of-N metal-split subset for outers that
-# have one built in (bot_cross/top_cross, today's DOMY/PILOT look);
+# have one built in (bot_cross/top_cross, today's DOMY/LOOP look);
 # empty for every other outer — a preset may still override it via its
 # own `triangle` card field, but ONLY when its outer is `"hexa"`
 # (`data.rings.validate_preset`).
@@ -1070,7 +1070,7 @@ RING_OUTERS = {
     "top_cross": {
         "file": "top_cross.png",
         "positions": (12, 16, 24, 8),
-        "triangle": (8, 16, 24),     # points DOWN (the Chalice, PILOT's own)
+        "triangle": (8, 16, 24),     # points DOWN (the Chalice, LOOP's own)
         "theme": "Feminine",
     },
     "hexa": {
@@ -1109,7 +1109,7 @@ RING_OUTERS = {
 # were made for. "full" itself is now PRESET-FREE — no bundled card
 # locks to it any more, custom rings only.
 RING_OUTER_LOCK = {
-    "DOMY": "bot_cross", "PILOT": "top_cross", "Dollar": "hexa",
+    "DOMY": "bot_cross", "LOOP": "top_cross", "Dollar": "hexa",
     "Templar": "cross", "The One": "octa",
 }
 # THE EIGHT INNER VARIANTS (owner's measured art,
@@ -1123,14 +1123,14 @@ RING_INNERS = (
 )
 # The owner's FINAL per-preset default inner (RING VERDICTS round,
 # 2026-08-05 correction — supersedes the coordinator's first pass):
-# DOMY/PILOT/Dollar all read "seconds" (the minute numbers, today's
+# DOMY/LOOP/Dollar all read "seconds" (the minute numbers, today's
 # banknote look shared across the whole trio); Templar reads
 # "seconds_cross" (numbers + the cross-marker overlay, matching its
 # own outer); The One reads "simple_octa" (ticks + the octa marker,
 # matching its own new octa outer). Still user-changeable in
 # Settings ▸ Ring like `RING_TWO_METALS_DEFAULT`/`RING_EYE_SHINE_DEFAULT`.
 RING_INNER_PRESET_DEFAULT = {
-    "DOMY": "seconds", "PILOT": "seconds", "Dollar": "seconds",
+    "DOMY": "seconds", "LOOP": "seconds", "Dollar": "seconds",
     "Templar": "seconds_cross", "The One": "simple_octa",
 }
 RING_INNER_DEFAULT = "simple"       # every custom ring's own fallback
@@ -1223,7 +1223,7 @@ RING_LETTER_FILES = {
     "👁 Gemini ☀": "Eye_shine_gem.png",
 }
 # THE CROWN TEXT WHITELIST (RING VERDICTS round, owner decree
-# 2026-08-05): the exact set of characters the motto renderer can draw
+# 2026-08-05): the exact set of characters the crown text renderer can draw
 # one-per-character — a custom ring's crown-text field validates
 # against this set so an unsupported character can never be TYPED at
 # all (replaces the old silent-drop-on-build behaviour). DERIVED, never

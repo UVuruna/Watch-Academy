@@ -14,7 +14,7 @@ the remnant's own true contents. What stays here: app-level tunables
 that don't fit any one new module's charter, and a handful of
 COORDINATOR values/functions that legitimately need more than one new
 module's data (dial_window_margin_fraction combines dial.py's ring/
-letter/motto geometry with glow.py's own glow extent; ECLIPSE_SOLAR_ART
+letter/crown text geometry with glow.py's own glow extent; ECLIPSE_SOLAR_ART
 needs pantheon.py's weekday_art) -- the fixed import DAG lets a new
 module import only stdlib + config.{paths, constants, palette}, never
 each other and never this file, so a value two new modules both need
@@ -526,17 +526,17 @@ def dial_window_margin_fraction(skin) -> float:
     window to fit exactly. `skin.year_marker.scale`/`.moon_scale` already
     carry the user's earth/moon multiplier (apply_display_settings).
 
-    TASK 1 (owner "može radi" 2026-07-19): a preset with a `motto` arc
-    (the Dollar's Great Seal mottos; DOMY's and PILOT's cross-station
+    TASK 1 (owner "može radi" 2026-07-19): a preset with a `crown_text` arc
+    (the Dollar's Great Seal crown texts; DOMY's and LOOP's cross-station
     words since the CROSS-WORDS round, 2026-07-27) reaches further out
-    than the plain ring letters — `motto_extent` is 0.0 (a no-op term
+    than the plain ring letters — `crown_text_extent` is 0.0 (a no-op term
     in the max()) for every OTHER preset, exactly the graceful-absence
     pattern `triangle`/`legend` already use, so this never grows the
     margin for The One/Templar or a custom ring. MOTO-FIX round (owner correction 2026-07-19): both
-    mottos now share ONE radius (the two arcs are angularly disjoint),
-    so this measures from `RING_MOTTO_RADIUS_FRACTION` alone —
-    `RING_MOTTO_RADIUS_STEP` is gone. CROWN TEXT SIZE (owner correction
-    2026-08-05): `skin.motto_scale` multiplies ON TOP of
+    crown texts now share ONE radius (the two arcs are angularly disjoint),
+    so this measures from `RING_CROWN_TEXT_RADIUS_FRACTION` alone —
+    `RING_CROWN_TEXT_RADIUS_STEP` is gone. CROWN TEXT SIZE (owner correction
+    2026-08-05): `skin.crown_text_scale` multiplies ON TOP of
     `ring_letter_scale` here too, so a Crown Text SIZE slider pick never
     clips against the transparent window edge (Space & Legibility law)."""
     marker = max(skin.year_marker.scale, skin.year_marker.moon_scale)
@@ -549,15 +549,15 @@ def dial_window_margin_fraction(skin) -> float:
         + dial.RING_LETTER_ART_SCALE * skin.ring_letter_scale
         * (1.0 + 2.0 * dial.RING_LETTER_SHADOW_RADIUS)
     )
-    motto_extent = 0.0
-    if skin.ring.motto:
-        motto_extent = (
-            dial.RING_MOTTO_RADIUS_FRACTION
-            + dial.RING_MOTTO_SIZE * skin.ring_letter_scale * skin.motto_scale
+    crown_text_extent = 0.0
+    if skin.ring.crown_text:
+        crown_text_extent = (
+            dial.RING_CROWN_TEXT_RADIUS_FRACTION
+            + dial.RING_CROWN_TEXT_SIZE * skin.ring_letter_scale * skin.crown_text_scale
             * (1.0 + 2.0 * dial.RING_LETTER_SHADOW_RADIUS)
         )
     return (
-        max(glow_extent, letter_extent, motto_extent) - 1.0
+        max(glow_extent, letter_extent, crown_text_extent) - 1.0
     ) / 2.0 + DIAL_WINDOW_MARGIN_EPSILON
 
 # --- Shared app content (NOT skin-specific — a skin is a dial design) -----------

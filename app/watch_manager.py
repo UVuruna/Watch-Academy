@@ -32,7 +32,7 @@ art source, subdial plate set and metal shades
 (`config.paths.DisplayContext`, carried on the skin). Those three USED to
 be process-wide globals written by `apply_display_settings` on every skin
 install, and that was the owner's 2026-07-28 colour bug: with a DOMY and
-a PILOT watch both on the `thematic` finish, both dials wore the
+a LOOP watch both on the `thematic` finish, both dials wore the
 LAST-BUILT watch's red. Every render/hover/dialog entry point now
 installs its own watch's context (`config.paths.in_display`).
 """
