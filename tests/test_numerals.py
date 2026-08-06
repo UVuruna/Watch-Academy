@@ -33,6 +33,7 @@ from core.clock_state import build_day_context, build_tick_state
 from data.moon_phases import MoonPhaseRepository
 from data.seasons import SeasonsRepository
 from render import numeral_bands, numeral_fonts
+from render.numeral_bands import outer_centreline
 from render.assets import AssetCache
 from render.compositor import Compositor, _build_layers
 from render.context import Cadence, RenderContext
@@ -410,6 +411,35 @@ def test_a_rotated_outer_band_moves_its_ink_with_the_hours(app, frame_args):
     radius = 720 * dial.NUMERAL_OUTER_RADIUS_FRACTION
     assert _ink_near(image, 30.0, radius) > 0          # hour 12 moved to +30
     assert _ink_near(image, 0.0, radius) > 0           # hour 10 took the top
+
+
+def test_outer_ring_size_moves_the_bands_outer_edge_alone():
+    """ring_rework §5's "outer ring size" is the WIDTH of the band the
+    letters and numbers stand in. The inner edge is fixed — it abuts the
+    minute band — so the width multiplier moves the outer edge, and the
+    centreline follows by half the change."""
+    width = dial.NUMERAL_OUTER_BAND_WIDTH_FRACTION
+    assert outer_centreline(1.0) == pytest.approx(
+        dial.NUMERAL_OUTER_RADIUS_FRACTION
+    )
+    assert outer_centreline(2.0) == pytest.approx(
+        dial.NUMERAL_OUTER_RADIUS_FRACTION + width / 2.0
+    )
+    assert outer_centreline(0.5) == pytest.approx(
+        dial.NUMERAL_OUTER_RADIUS_FRACTION - width / 4.0
+    )
+
+
+def test_a_wider_outer_ring_really_draws_further_out(app, frame_args):
+    wide = _band_image(
+        "outer", 1440, app, frame_args, numeral_outer_ring_size=2.0,
+    )
+    far = 720 * outer_centreline(2.0)
+    near = 720 * outer_centreline(1.0)
+    assert _ink_near(wide, numerals.hour_angle(12), far) > 0
+    assert _ink_near(wide, numerals.hour_angle(12), far) > _ink_near(
+        wide, numerals.hour_angle(12), near - 40
+    )
 
 
 def test_the_inner_band_wears_a_white_glow_around_its_ink(app, frame_args):

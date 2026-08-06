@@ -101,13 +101,28 @@ def inner_band_plate(spec: BandSpec) -> QImage:
     return band_plate(spec)
 
 
+def outer_centreline(ring_size: float) -> float:
+    """The OUTER band's centreline as a fraction of the dial radius, for
+    an "Outer ring size" of `ring_size` (ring_rework.md §5 — "the width
+    of the band the LETTERS and NUMBERS stand in").
+
+    The band's INNER edge is fixed: it abuts the minute band below it,
+    and pushing into that would collide with the ticks. So the width
+    multiplier moves the OUTER edge alone, and the centreline follows it
+    by half the change. `ring_size` 1.0 is the measured band and returns
+    `dial.NUMERAL_OUTER_RADIUS_FRACTION` exactly."""
+    width = dial.NUMERAL_OUTER_BAND_WIDTH_FRACTION
+    inner_edge = dial.NUMERAL_OUTER_RADIUS_FRACTION - width / 2.0
+    return inner_edge + width * ring_size / 2.0
+
+
 def _seats(spec: BandSpec) -> tuple[tuple[str, float, QPointF], ...]:
     """`(label, seat angle, page-space centre)` for every numeral of the
     band. The OUTER band's angles carry `offset_deg`; the INNER band
     NEVER rotates, in any mode (ledger §2)."""
     radius = spec.pixels / 2.0
     if spec.band == "outer":
-        fraction = dial.NUMERAL_OUTER_RADIUS_FRACTION
+        fraction = outer_centreline(spec.ring_size)
         pairs = [
             (label, numerals.hour_angle(hour, spec.offset_deg))
             for hour, label in enumerate(numerals.hour_labels())
