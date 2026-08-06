@@ -12,10 +12,10 @@ FINAL cleanup then DELETED the old windows/dialog groups outright —
 this window is now the ONLY place any of that content lives.
 """
 
-from PySide6.QtCore import Qt
+from PySide6.QtCore import QSize, Qt
 from PySide6.QtWidgets import (
-    QDialog, QHBoxLayout, QLabel, QListWidget, QStackedWidget, QVBoxLayout,
-    QWidget,
+    QDialog, QFrame, QHBoxLayout, QLabel, QListWidget, QScrollArea,
+    QStackedWidget, QStyle, QVBoxLayout, QWidget,
 )
 
 from app.theme import apply_theme, size_to_screen
@@ -24,6 +24,12 @@ from app.watch_face import (
 )
 from config import constants, defaults
 from config.ui_text import ui
+
+# THE SPACE & LEGIBILITY LAW's screen floor (rules/GUI.md): the computed
+# window minimum below may never demand a screen the user does not have.
+# Content past the floor scrolls instead (ladder step 4 — at the floor
+# the window is genuinely full).
+_SCREEN_FLOOR = (1280, 720)
 
 # Section registry: (title, builder). `builder(settings, setters, tr) ->
 # QWidget`, or `None` for a not-yet-built placeholder page — a later
@@ -71,8 +77,12 @@ class WatchFaceDialog(QDialog):
         self._layout = QVBoxLayout(self)
         self._body = QHBoxLayout()
         self._layout.addLayout(self._body, stretch=1)
-        self._build()
+        # Theme BEFORE build: `_build` computes the content column and the
+        # window minimum from the pages' size hints, and the QSS paddings
+        # are part of the real size (measured 20px on the Colors groups) —
+        # hints taken un-themed under-measure exactly that much.
         apply_theme(self)
+        self._build()
         size_to_screen(self, 1, 1, defaults.DIALOG_SQUARE_HEIGHT_FRACTION)
 
     def refresh(self, settings, setters: dict) -> None:
@@ -97,18 +107,68 @@ class WatchFaceDialog(QDialog):
                 widget.setParent(None)
                 widget.deleteLater()
         nav_list = QListWidget()
-        nav_list.setFixedWidth(defaults.SETTINGS_NAV_WIDTH_PX)
+        nav_list.setFixedWidth(defaults.SETTINGS_NAV_WIDTH_PX)  # layout-law: exempt - sidebar width by design; the audit's ITEM CUT check verifies every nav item fits
         stack = QStackedWidget()
+        pages: list[QWidget] = []
         for title, builder in _SECTIONS:
             nav_list.addItem(self._tr(title))
             if builder is None:
                 page = _placeholder_page(self._tr)
             else:
                 page = builder(self._settings, self._setters, self._tr)
-            stack.addWidget(page)
+            pages.append(page)
+        for page in pages:
+            holder = QWidget()
+            holder_layout = QVBoxLayout(holder)
+            holder_layout.setContentsMargins(0, 0, 0, 0)
+            holder_layout.addWidget(page)
+            # Content packs to the top; leftover height stays EMPTY below
+            # instead of being wedged between the rows.
+            holder_layout.addStretch(1)
+            page_scroll = QScrollArea()
+            page_scroll.setWidgetResizable(True)
+            page_scroll.setFrameShape(QFrame.Shape.NoFrame)
+            page_scroll.setWidget(holder)
+            stack.addWidget(page_scroll)
         nav_list.currentRowChanged.connect(stack.setCurrentIndex)
         nav_list.setCurrentRow(max(0, min(previous, nav_list.count() - 1)))
         self._body.addWidget(nav_list)
         self._body.addWidget(stack, stretch=1)
         self._nav_list = nav_list
         self._stack = stack
+        # ONE readable content column for every section (the fix for the
+        # owner's 2026-08-06 screenshots: bare pages in the stack made the
+        # window's minimum the TALLEST section — 2090px — while maximized
+        # the rows stretched across the whole 4K screen). The column width
+        # is COMPUTED from the widest section's own hint — polished FIRST,
+        # because the theme's paddings are part of the real size (hints
+        # taken un-polished measured 20px short on the Colors groups) —
+        # so no section is starved and none inflated past what any need.
+        for page in pages:
+            page.ensurePolished()
+            for child in page.findChildren(QWidget):
+                child.ensurePolished()
+        column_width = max(page.minimumSizeHint().width() for page in pages)
+        for page in pages:
+            page.setMaximumWidth(column_width)
+        self._declare_minimum(pages, column_width)
+
+    def _declare_minimum(self, pages: list[QWidget], column_width: int) -> None:
+        """The DECLARED minimum, computed from measured content (THE
+        SPACE & LEGIBILITY LAW): wide enough for the sidebar plus the
+        widest section column plus the scrollbar — no section ever needs
+        a horizontal scrollbar — and tall enough for the tallest section
+        up to the screen floor, where the vertical scrollbar lawfully
+        takes over (the window is genuinely full there)."""
+        scrollbar = self.style().pixelMetric(
+            QStyle.PixelMetric.PM_ScrollBarExtent
+        )
+        margins = self._layout.contentsMargins()
+        chrome_w = margins.left() + margins.right() + self._body.spacing()
+        chrome_h = margins.top() + margins.bottom()
+        width = (defaults.SETTINGS_NAV_WIDTH_PX + column_width
+                 + scrollbar + chrome_w)
+        tallest = max(page.minimumSizeHint().height() for page in pages)
+        floor_w, floor_h = _SCREEN_FLOOR
+        self.setMinimumSize(QSize(min(width, floor_w),
+                                  min(tallest + chrome_h, floor_h)))

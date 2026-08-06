@@ -83,15 +83,22 @@ class _BarChart(QWidget):
             painter.end()
             return
         top = max(total for _, total in self._rows)
-        label_w = 150
+        font = painter.font()
+        font.setPixelSize(11)
+        painter.setFont(font)
+        # The label column follows the LONGEST live name (the law: a
+        # fixed 150px cut long names at the left edge — design review
+        # 2026-08-06), capped at 2/5 of the chart so the bars keep room.
+        label_w = min(
+            max((painter.fontMetrics().horizontalAdvance(name)
+                 for name, _ in self._rows), default=150) + 8,
+            self.width() * 2 // 5,
+        )
         value_w = 78
         gap = 2
         row_h = max(
             12, min(24, (self.height() - 8) // len(self._rows))
         )
-        font = painter.font()
-        font.setPixelSize(11)
-        painter.setFont(font)
         for index, (name, total) in enumerate(self._rows):
             y = 4 + index * row_h
             bar_span = self.width() - label_w - value_w - 16
@@ -217,6 +224,14 @@ class ReportDialog(QDialog):
         self._table.horizontalHeader().setSectionResizeMode(
             0, QHeaderView.ResizeMode.Stretch
         )
+        # The numeric columns size to their own contents — left at Qt's
+        # default Interactive they sit at ~100px each regardless of what
+        # they hold, and that unearned width was exactly what the
+        # stretched Function column was missing (audit 2026-08-06).
+        for index in range(1, len(self.COLUMNS)):
+            self._table.horizontalHeader().setSectionResizeMode(
+                index, QHeaderView.ResizeMode.ResizeToContents
+            )
         self._table.verticalHeader().setVisible(False)
         self._table.setEditTriggers(
             QTableWidget.EditTrigger.NoEditTriggers
@@ -283,6 +298,21 @@ class ReportDialog(QDialog):
                 self._table.selectRow(row)
         self._table.setSortingEnabled(True)
         self._table.sortItems(sort_column, sort_order)
+        # THE SPACE & LEGIBILITY LAW: the table's minimum width follows
+        # its own live columns (Qt's own hints — text + margins), so the
+        # stretched Function column can never squeeze below the longest
+        # live name; the dialog's declared minimum follows via the
+        # layout. Capped under the 1280 screen floor — past the cap the
+        # names would need a wider screen than the law allows demanding.
+        header = self._table.horizontalHeader()
+        needed = sum(
+            max(self._table.sizeHintForColumn(column),
+                header.sectionSizeHint(column))
+            for column in range(self._table.columnCount())
+        )
+        chrome = (2 * self._table.frameWidth()
+                  + self._table.verticalScrollBar().sizeHint().width())
+        self._table.setMinimumWidth(min(needed + chrome, 1200))
         self._refresh_charts()
 
     def _refresh_charts(self) -> None:

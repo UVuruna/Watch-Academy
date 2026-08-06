@@ -17,7 +17,7 @@ from PySide6.QtWidgets import (
 )
 
 from app.watch_face import thumbs
-from app.watch_face.widgets import pill, tile
+from app.watch_face.widgets import pack_grid, pill, tile
 from config import constants, dial
 from data.rings import ring_presets
 
@@ -105,7 +105,7 @@ def _preset_gallery(settings, presets: dict, setters, tr) -> QGridLayout:
             tr("Locked outer: {outer}").format(outer=outer_name)
         )
         grid.addWidget(preset_tile, row, col)
-    return grid
+    return pack_grid(grid, 4)
 
 
 def _finish_row(settings, setters, tr) -> QHBoxLayout:
@@ -125,7 +125,7 @@ def _inner_group(settings, setters, tr) -> QGroupBox:
     `ring_two_metals`/`ring_eye_shine` (`Settings.ring_inner`,
     `app.controller._resolve_ring_inner`)."""
     group = QGroupBox(tr("Inner (minute track)"))
-    grid = QGridLayout(group)
+    grid = pack_grid(QGridLayout(group), 4)
     default = constants.RING_INNER_PRESET_DEFAULT.get(
         settings.ring, constants.RING_INNER_DEFAULT
     )

@@ -34,6 +34,7 @@ from PySide6.QtWidgets import (
     QPushButton,
     QScrollArea,
     QSplitter,
+    QStyle,
     QVBoxLayout,
     QWidget,
 )
@@ -976,7 +977,7 @@ def _build_info_panel(
     for label, color, description in info_rows or []:
         row = QHBoxLayout()
         chip = QLabel()
-        chip.setFixedSize(12, 12)
+        chip.setFixedSize(12, 12)  # layout-law: exempt - decorative 12px legend color chip, carries no text
         chip.setStyleSheet(f"background: {color}; border-radius: 6px; margin-top: 3px;")
         row.addWidget(chip, alignment=Qt.AlignmentFlag.AlignTop)
         column = QVBoxLayout()
@@ -1050,7 +1051,7 @@ class _EnlargeDialog(QDialog):
         content.addLayout(chart_column, stretch=1)
 
         self._info_panel = _build_info_panel(caption, info_rows, tr)
-        self._info_panel.setFixedWidth(defaults.OBSERVATORY_INFO_PANEL_WIDTH_PX)
+        self._info_panel.setFixedWidth(defaults.OBSERVATORY_INFO_PANEL_WIDTH_PX)  # layout-law: exempt - fixed info column by design; the audit's elision check verifies its content fits
         content.addWidget(self._info_panel)
 
         self._refresh_legend()
@@ -1108,7 +1109,7 @@ class _EnlargeDialog(QDialog):
         values = self._chart._legend_values()
         for label, color in self._chart._legend():
             chip = QLabel()
-            chip.setFixedSize(12, 12)
+            chip.setFixedSize(12, 12)  # layout-law: exempt - decorative 12px legend color chip, carries no text
             chip.setStyleSheet(f"background: {color}; border-radius: 6px;")
             self._legend_row.addWidget(chip)
             value = values.get(label)
@@ -1119,6 +1120,22 @@ class _EnlargeDialog(QDialog):
             self._legend_row.addWidget(text)
             self._legend_row.addSpacing(14)
         self._legend_row.addStretch(1)
+
+
+class _ChartPane(QWidget):
+    """A splitter pane whose minimum height follows its own WRAPPED
+    caption: QSplitter sizes panes off `minimumSizeHint`, which ignores
+    heightForWidth, so a pane with a wrapping caption could be squeezed
+    until the chart painted straight over the caption (audit finding
+    2026-08-06 — 11px of chart on the caption's pixels)."""
+
+    def minimumSizeHint(self):          # noqa: N802 — Qt override
+        hint = super().minimumSizeHint()
+        layout = self.layout()
+        if layout is not None and layout.hasHeightForWidth():
+            width = self.width() or hint.width()
+            hint.setHeight(max(hint.height(), layout.heightForWidth(width)))
+        return hint
 
 
 class ObservatoryDialog(QDialog):
@@ -1388,6 +1405,25 @@ class ObservatoryDialog(QDialog):
         column.addLayout(buttons)
 
         apply_theme(self)
+        # THE SPACE & LEGIBILITY LAW: the DECLARED minimum, computed from
+        # the content's own hints (post-theme) and capped at the screen
+        # floor — past the cap the chart column's scroll area lawfully
+        # takes over VERTICALLY (the window is genuinely full there). The
+        # WIDTH must cover the widest panel plus the scrollbar beside it:
+        # sized off the outer hint alone, the filter row's own Enlarge
+        # button was cut at the window's opening minimum (design review
+        # 2026-08-06).
+        scrollbar = self.style().pixelMetric(
+            QStyle.PixelMetric.PM_ScrollBarExtent
+        )
+        margins = column.contentsMargins()
+        width = max(
+            self.sizeHint().width(),
+            self._splitter.minimumSizeHint().width() + scrollbar
+            + margins.left() + margins.right(),
+        )
+        self.setMinimumSize(min(width, 1280),
+                            min(self.sizeHint().height(), 720))
 
     def _section(self, title: str) -> QLabel:
         label = QLabel(f"<b>{title}</b>")
@@ -1412,7 +1448,7 @@ class ObservatoryDialog(QDialog):
         filter_row: QHBoxLayout | None = None, caption: str | None = None,
         info_rows: list[tuple[str, str, str]] | None = None,
     ) -> None:
-        panel = QWidget()
+        panel = _ChartPane()
         layout = QVBoxLayout(panel)
         layout.setContentsMargins(0, 0, 0, 0)
         layout.setSpacing(defaults.GUIDE_SPACING_PX)

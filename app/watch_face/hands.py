@@ -9,7 +9,7 @@ from PySide6.QtCore import QSize
 from PySide6.QtWidgets import QGridLayout, QWidget
 
 from app.watch_face import thumbs
-from app.watch_face.widgets import tile
+from app.watch_face.widgets import pack_grid, tile
 from data.hands import hand_packs
 
 # Deliberately larger than the Ring/Pointer gallery tiles (owner spec:
@@ -31,5 +31,5 @@ def build(settings, setters: dict, tr) -> QWidget:
         row, col = divmod(index, 4)
         grid.addWidget(button, row, col)
     widget = QWidget()
-    widget.setLayout(grid)
+    widget.setLayout(pack_grid(grid, 4))
     return widget

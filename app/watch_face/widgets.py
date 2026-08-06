@@ -6,10 +6,21 @@ each redefining its own styled button.
 
 from PySide6.QtCore import Qt
 from PySide6.QtGui import QIcon
-from PySide6.QtWidgets import QPushButton, QToolButton
+from PySide6.QtWidgets import QGridLayout, QPushButton, QToolButton
 
 from app.ui_style import style_button
-from config import palette
+from config import defaults, palette
+
+
+def pack_grid(grid: QGridLayout, columns: int) -> QGridLayout:
+    """Left-pack a gallery grid: the trailing stretch column takes the
+    window's surplus, so the tiles keep their own size and a modest gap
+    instead of drifting apart with every extra pixel (the owner's
+    2026-08-06 screenshots — tiles scattered across a 4K window)."""
+    grid.setHorizontalSpacing(defaults.GUIDE_SPACING_PX)
+    grid.setVerticalSpacing(defaults.GUIDE_SPACING_PX)
+    grid.setColumnStretch(columns, 1)
+    return grid
 
 
 def pill(label: str, checked: bool, on_click) -> QPushButton:

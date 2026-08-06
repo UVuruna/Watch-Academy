@@ -31,6 +31,7 @@ from PySide6.QtWidgets import (
     QLabel,
     QPushButton,
     QScrollArea,
+    QSizePolicy,
     QSpinBox,
     QTimeEdit,
     QVBoxLayout,
@@ -248,6 +249,16 @@ class TimeTravelDialog(QDialog):
         # the SAME opening size Settings/Guide use, keeps it a normal
         # resizable window past this first paint.
         size_to_screen(self, 1, 1, defaults.DIALOG_SQUARE_HEIGHT_FRACTION)
+        # THE SPACE & LEGIBILITY LAW: the DECLARED minimum, computed from
+        # the dialog's own content — width from the widest row, height
+        # from heightForWidth at that width (the wrapped rows decide it),
+        # never a guessed round number.
+        min_width = self.minimumSizeHint().width()
+        dialog_layout = self.layout()
+        min_height = (dialog_layout.heightForWidth(min_width)
+                      if dialog_layout.hasHeightForWidth()
+                      else self.minimumSizeHint().height())
+        self.setMinimumSize(min_width, min_height)
 
     # --- The astronomical target ---------------------------------------------
 
@@ -423,14 +434,17 @@ class TimeTravelDialog(QDialog):
         row_layout.setContentsMargins(4, 2, 4, 2)
         left = QPushButton(_BACKWARD)
         style_button(left, "neutral", small=True)
-        left.setFixedWidth(defaults.TIME_TRAVEL_ARROW_BUTTON_PX)
+        # Fixed POLICY, not a fixed number: the button stays exactly its
+        # own glyph's hint (34 was 5px short of the themed glyph — audit
+        # finding 2026-08-06) and never stretches into a bar.
+        left.setSizePolicy(QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Fixed)
         left.clicked.connect(lambda: self._on_jump(f"prev_{kind}"))
         center = QHBoxLayout()
         center.addWidget(self._icon_or_emoji_label(icon_key, fallback_emoji))
         center.addWidget(QLabel(self._tr(label_text)))
         right = QPushButton(_FORWARD)
         style_button(right, "neutral", small=True)
-        right.setFixedWidth(defaults.TIME_TRAVEL_ARROW_BUTTON_PX)
+        right.setSizePolicy(QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Fixed)
         right.clicked.connect(lambda: self._on_jump(f"next_{kind}"))
         row_layout.addWidget(left)
         row_layout.addStretch(1)

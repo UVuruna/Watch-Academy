@@ -40,6 +40,7 @@ from PySide6.QtWidgets import (
     QListWidget,
     QScrollArea,
     QStackedWidget,
+    QStyle,
     QVBoxLayout,
     QWidget,
 )
@@ -139,7 +140,7 @@ class SettingsDialog(
                 (tr("System"), [self._build_system_group()]),
             ]
             self._nav_list = QListWidget()
-            self._nav_list.setFixedWidth(defaults.SETTINGS_NAV_WIDTH_PX)
+            self._nav_list.setFixedWidth(defaults.SETTINGS_NAV_WIDTH_PX)  # layout-law: exempt - sidebar width by design; the audit's ITEM CUT check verifies every nav item fits
             self._stack = QStackedWidget()
             pages = []
             for title, groups in sections:
@@ -203,6 +204,23 @@ class SettingsDialog(
         size_to_screen(
             self, 1, 1, defaults.DIALOG_SQUARE_HEIGHT_FRACTION,
             min_width=min_width,
+        )
+        # THE SPACE & LEGIBILITY LAW: the DECLARED minimum, computed from
+        # the content itself — sidebar + the widest panel + its scrollbar
+        # across; the tallest panel up to the screen floor down (panels
+        # scroll lawfully past it — the window is genuinely full there).
+        # Without this the minimum was whatever the layout defaulted to
+        # (~290x160), and the window could be shrunk into garbage.
+        scrollbar = self.style().pixelMetric(
+            QStyle.PixelMetric.PM_ScrollBarExtent
+        )
+        margins = layout.contentsMargins()
+        tallest = max(page.sizeHint().height() for page in pages)
+        chrome_h = (margins.top() + margins.bottom() + layout.spacing()
+                    + buttons.sizeHint().height())
+        self.setMinimumSize(
+            min(content_width + nav_width + scrollbar + 24, 1280),
+            min(tallest + chrome_h, 720),
         )
 
         if self._custom_art_only:

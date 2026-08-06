@@ -225,16 +225,29 @@ class Card(QFrame):
             self.setMaximumHeight(16777215)
         else:
             self.setFixedHeight(height)
+            # The REAL vertical overhead, measured off the live layout:
+            # margins + one spacing per gap + the card's own border. The
+            # old PAD*3 estimate ran short, so the image came out too
+            # tall — cut at the bottom, and the title drawn 2px over the
+            # line below it (audit findings 2026-08-06).
+            column = self.layout()
+            margins = column.contentsMargins()
+            gaps = column.spacing() * (3 if self._footer.isVisible() else 2)
             text_height = (
                 self._title.heightForWidth(inner)
                 + self._about.heightForWidth(inner)
                 + (self._footer.sizeHint().height() if self._footer.isVisible()
                    else 0)
-                + encyclopedia_ui.ENCYCLOPEDIA_CARD_PAD_PX * 3
+                + margins.top() + margins.bottom() + gaps
+                + 2 * encyclopedia_ui.ENCYCLOPEDIA_CARD_EDGE_PX
             )
-            image_height = max(
-                encyclopedia_ui.ENCYCLOPEDIA_CARD_IMAGE_MIN_PX, height - text_height,
-            )
+            # The image yields to the TEXT, never the other way around:
+            # the old IMAGE_MIN floor made a slot a few px short push its
+            # overflow into the labels (title 3px over the about line,
+            # 6px off the last wrapped line — audit findings 2026-08-06).
+            # The mosaic is decoration; the words are the law's protected
+            # content.
+            image_height = max(8, height - text_height)
         self._image.setFixedHeight(image_height)
         if self._source.isNull():
             return

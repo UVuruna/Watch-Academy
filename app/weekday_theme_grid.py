@@ -70,8 +70,11 @@ def _add_section(column: QVBoxLayout, title: str | None, tiles: list) -> None:
     for index, tile in enumerate(tiles):
         row, col = divmod(index, _MAX_COLUMNS)
         grid.addWidget(tile, row, col)
+    # Left-packed since the 2026-08-06 design pass: the centered wrap
+    # made every gallery row float mid-column, reading as scattered
+    # tiles (the owner's Watch Face screenshots) — the trailing stretch
+    # alone keeps tiles at their own size, packed to the reading edge.
     wrap = QHBoxLayout()
-    wrap.addStretch(1)
     wrap.addLayout(grid)
     wrap.addStretch(1)
     column.addLayout(wrap)

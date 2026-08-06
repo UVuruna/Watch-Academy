@@ -91,7 +91,7 @@ class LegendPopup(QWidget):
             self._measure.setTextWidth(cap)
             pad = 2 * encyclopedia_ui.LEGEND_PADDING_PX
             wanted = math.ceil(self._measure.idealWidth()) + pad
-            self._label.setFixedWidth(max(wanted, 1))
+            self._label.setFixedWidth(max(wanted, 1))  # layout-law: exempt - width computed from the measured ideal text width just above
             # Fixed-width table columns do NOT squeeze below their
             # declared widths — content wider than the cap (e.g. the
             # hexa two-column legend on a scaled-down laptop) scrolls
@@ -109,6 +109,15 @@ class LegendPopup(QWidget):
                 self._label.height() + 2,
                 round(screen.height() * encyclopedia_ui.LEGEND_MAX_HEIGHT_FRACTION),
             )
+            # THE SPACE & LEGIBILITY LAW: the popup's DECLARED minimum is
+            # its own measured content — it is never user-resized, so a
+            # smaller size exists only in a test, and the audit measures
+            # it at the size the user actually gets. Qt's own widget
+            # floor (the scroll area's minimal hint) is respected too.
+            floor_hint = self.minimumSizeHint()
+            width = max(width, floor_hint.width())
+            height = max(height, floor_hint.height())
+            self.setMinimumSize(width, height)
             self.resize(width, height)
         screen = (
             QGuiApplication.screenAt(anchor) or QGuiApplication.primaryScreen()

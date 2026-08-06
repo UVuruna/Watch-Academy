@@ -14,22 +14,32 @@ NOT live here, see size.py).
 
 from PySide6.QtCore import Qt
 from PySide6.QtWidgets import (
-    QCheckBox, QGridLayout, QHBoxLayout, QLabel, QSlider, QVBoxLayout, QWidget,
+    QCheckBox, QGridLayout, QGroupBox, QHBoxLayout, QLabel, QSlider,
+    QVBoxLayout, QWidget,
 )
 
 from app.watch_face import thumbs
-from app.watch_face.widgets import pill, tile
+from app.watch_face.widgets import pack_grid, pill, tile
 from config import constants, continents, dial
 from render.skin_geometry import daylight_active
 
 
 def build(settings, setters: dict, tr) -> QWidget:
+    """Named groups since the 2026-08-06 design pass: the gallery, the
+    palette pills, the shape rows and the Earth rows each sit under
+    their own heading — bare rows floating in the column read as
+    anonymous buttons."""
     layout = QVBoxLayout()
     layout.addLayout(_pointer_gallery(settings, setters, tr))
-    layout.addLayout(_palette_style_row(settings, setters, tr))
+    palette_group = QGroupBox(tr("Palette"))
+    palette_group.setLayout(_palette_style_row(settings, setters, tr))
+    layout.addWidget(palette_group)
     if settings.pointer != "aurora":
-        _add_shape_rows(layout, settings, setters, tr)
-        _add_night_borders(layout, settings, setters, tr)
+        shape_group = QGroupBox(tr("Shape"))
+        shape_layout = QVBoxLayout(shape_group)
+        _add_shape_rows(shape_layout, settings, setters, tr)
+        _add_night_borders(shape_layout, settings, setters, tr)
+        layout.addWidget(shape_group)
     _add_daylight_switch(layout, settings, setters, tr)
     layout.addWidget(_earth_group(settings, setters, tr))
     widget = QWidget()
@@ -56,7 +66,7 @@ def _pointer_gallery(settings, setters, tr) -> QGridLayout:
             ),
             row, col,
         )
-    return grid
+    return pack_grid(grid, 3)
 
 
 def _palette_style_row(settings, setters, tr) -> QHBoxLayout:
@@ -139,7 +149,8 @@ def _earth_group(settings, setters, tr) -> QWidget:
     """R-06: moved verbatim from `design_window.DesignDialog.
     _earth_tab` — sizes do NOT live here (see `size.py`'s Earth/Moon
     scale sliders)."""
-    layout = QVBoxLayout()
+    group = QGroupBox(tr("Earth"))
+    layout = QVBoxLayout(group)
     style_row = QHBoxLayout()
     for style, title in (("clean", "Clean"), ("atmo", "Atmosphere")):
         icon = thumbs.art_thumbnail(
@@ -164,6 +175,4 @@ def _earth_group(settings, setters, tr) -> QWidget:
         button.setEnabled(enabled)
         label_row.addWidget(button)
     layout.addLayout(label_row)
-    group = QWidget()
-    group.setLayout(layout)
     return group

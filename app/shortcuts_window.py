@@ -67,3 +67,26 @@ class ShortcutsDialog(QDialog):
         column.addLayout(row)
 
         apply_theme(self)
+        # THE SPACE & LEGIBILITY LAW: minimums COMPUTED from the table's
+        # own content (after the theme, whose paddings are part of the
+        # real size) — wide enough that the stretched Action column never
+        # squeezes below its longest row, tall enough for the whole list
+        # up to the screen floor minus this dialog's own chrome, where
+        # scrolling lawfully takes over (the window is genuinely full).
+        header = self._table.horizontalHeader()
+        needed = sum(
+            max(self._table.sizeHintForColumn(index),
+                header.sectionSizeHint(index))
+            for index in range(self._table.columnCount())
+        )
+        table_chrome = (2 * self._table.frameWidth()
+                        + self._table.verticalScrollBar().sizeHint().width())
+        self._table.setMinimumWidth(needed + table_chrome)
+        rows_height = sum(self._table.sizeHintForRow(index)
+                          for index in range(self._table.rowCount()))
+        full_height = (header.sizeHint().height() + rows_height
+                       + 2 * self._table.frameWidth())
+        margins = column.contentsMargins()
+        dialog_chrome = (margins.top() + margins.bottom() + column.spacing()
+                         + close.sizeHint().height())
+        self._table.setMinimumHeight(min(full_height, 720 - dialog_chrome))

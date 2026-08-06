@@ -21,6 +21,11 @@ modules instead of one method per subclass.
 - `app.watch_face.pointer` / `.ring` / `.hands` / `.umbra_aura` / `.size`
 
 ## Functions
+- `pack_grid(grid, columns)`: left-packs a gallery grid — GUIDE_SPACING
+  gaps plus a trailing stretch column that swallows the window's
+  surplus, so tiles keep their own size instead of drifting apart with
+  every extra pixel (the owner's 2026-08-06 screenshots: tiles scattered
+  across a 4K window). Every section gallery routes through it.
 - `pill(label, checked, on_click)`: a small `QPushButton`, "next" style
   when checked, else "neutral"
 - `tile(label, icon, checked, on_click)`: a `QToolButton` with

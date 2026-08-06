@@ -48,3 +48,15 @@ immediately; there is nothing to commit, no OK/Cancel.
 - Sidebar selection persistence mirrors `design_window.py`'s tab
   persistence exactly, for the same reason: every pick routes through
   `refresh()`, which rebuilds the whole sidebar+stack pair.
+- **One scrolling content column per section (layout law, 2026-08-06).**
+  Bare pages in the stack made the window's minimum the TALLEST section
+  (Colors — 2090px, taller than any screen) while a maximized window
+  stretched every row across the whole 4K width — the owner's
+  screenshots. Each page now sits top-packed inside a `QScrollArea`,
+  capped at a content-column width COMPUTED as the widest section's own
+  polished hint (`ensurePolished` first — QSS paddings are part of the
+  real size), and `_declare_minimum` declares the window minimum from
+  that column: sidebar + column + scrollbar across, the tallest section
+  up to the 1280x720 screen floor down — past the floor the scrollbar
+  lawfully takes over. Verified by `tests/test_layout_audit.py`, which
+  walks all nine sections at the declared minimum and +50%.
