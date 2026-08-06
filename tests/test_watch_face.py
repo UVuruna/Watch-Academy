@@ -106,15 +106,18 @@ def _dialog(settings: Settings | None = None) -> WatchFaceDialog:
 # --- R-01: the frame ---------------------------------------------------------
 
 
-def test_window_builds_with_all_eight_sidebar_entries(app):
+def test_window_builds_with_all_nine_sidebar_entries(app):
+    """NUMERALS joined the sidebar with the live numeral bands
+    (ring_rework.md §5) — it sits right after Ring, since it settles how
+    that same band is written."""
     dialog = _dialog()
-    assert dialog._nav_list.count() == 8
-    titles = [dialog._nav_list.item(i).text() for i in range(8)]
+    assert dialog._nav_list.count() == 9
+    titles = [dialog._nav_list.item(i).text() for i in range(9)]
     assert titles == [
-        "Pointer", "Ring", "Hands", "Umbra & Aura", "Opacity",
+        "Pointer", "Ring", "Numerals", "Hands", "Umbra & Aura", "Opacity",
         "Themes & Slots", "Colors", "Size",
     ]
-    assert dialog._stack.count() == 8
+    assert dialog._stack.count() == 9
     dialog.deleteLater()
 
 
@@ -173,7 +176,7 @@ def test_ring_section_lists_every_ring_preset(app):
 
 def test_hands_section_lists_every_hand_pack(app):
     dialog = _dialog()
-    page = dialog._stack.widget(2)                # Hands is index 2
+    page = dialog._stack.widget(3)                # Hands is index 3
     tiles = page.findChildren(QToolButton)
     names = {tile.text() for tile in tiles}
     expected = set(hand_packs())

@@ -336,6 +336,10 @@ NUMERAL_CONTACT_BLUR_COLOR = "#000000"
 # by all five families of tick line alike.
 NUMERAL_INNER_INK = "#FFFFFF"
 NUMERAL_INNER_GLOW_COLOR = "#FFFFFF"
+# The ink the FONT COVERAGE proof draws with when it has to fall back
+# to render-and-count-non-blank-pixels (`render.numeral_fonts`) — any
+# opaque colour would do; white is the numerals' own.
+NUMERAL_COVERAGE_PROBE_INK = "#FFFFFF"
 
 # --- Ring tint (owner spec, FINAL.txt #6) ------------------------------------------
 # One hue recolors the WHOLE clock body: the ring art, the hands and

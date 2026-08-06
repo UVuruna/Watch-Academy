@@ -24,7 +24,7 @@ from functools import lru_cache
 from PySide6.QtCore import Qt
 from PySide6.QtGui import QColor, QFont, QImage, QPainter, QRawFont
 
-from config import dial
+from config import dial, palette
 
 
 class NumeralFontError(Exception):
@@ -104,7 +104,7 @@ def _renders_non_blank(font: QFont, glyph: str) -> bool:
     image.fill(Qt.GlobalColor.transparent)
     painter = QPainter(image)
     painter.setFont(font)
-    painter.setPen(QColor(dial.NUMERAL_COVERAGE_PROBE_INK))
+    painter.setPen(QColor(palette.NUMERAL_COVERAGE_PROBE_INK))
     painter.drawText(image.rect(), Qt.AlignmentFlag.AlignCenter, glyph)
     painter.end()
     for y in range(0, side, 2):

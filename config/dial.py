@@ -421,7 +421,6 @@ CROWN_FACE_DEFAULT = "Bahnschrift Bold"
 # The size the coverage proof rasterizes/measures at — large enough that a
 # hairline glyph still reports a non-zero outline, small enough to be free.
 NUMERAL_COVERAGE_PROBE_PX = 80
-NUMERAL_COVERAGE_PROBE_INK = "#FFFFFF"
 
 # THE SETTLED SETTINGS (ledger §8) at their SETTLED defaults.
 NUMERAL_SEATINGS = ("arc", "upright")
