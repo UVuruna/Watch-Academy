@@ -10,19 +10,73 @@ Three products, one cache:
 
 | Product | Built by | Rebuilt when |
 |---|---|---|
-| OUTER band plate — the 24 hour numerals in relief | `outer_band_plate` | its `BandSpec` changes (including `offset_deg`) |
-| INNER band plate — the twelve minute numerals + the five tick families, in white glow | `inner_band_plate` | its `BandSpec` changes |
+| OUTER band plate — the metal AND the hour numerals standing on it | `outer_band_plate` | its `BandSpec` changes (including `offset_deg`) |
+| INNER band plate — the minute NUMBERS alone, in white border + glow | `inner_band_plate` | its `BandSpec` changes |
 | The ELEVEN crown glyphs — digits 0–9 and the colon, in crown size and relief | `crown_glyph_set` | its `CrownSpec` changes |
 
 A `BandSpec`/`CrownSpec` is a frozen dataclass carrying exactly what can
 make two plates differ: the pixel diameter, the face, the size, the band
 width, the seating, the relief style, the depth, the light, the darkness,
-the contact blur, the border and — for the outer band alone — the
+the contact blur, the border, the ring tint/saturation, the preset's own
+LETTER seats or INNER variant, and — for the outer band alone — the
 `offset_deg` THE WORLD OFFSET drives
 ([World](../../core/__about/world.md)). Because the spec IS the key, a
 changed rotation re-renders the band without any caller changing shape.
 The INNER band always keys on `0.0` — it never rotates in any mode — so
 its plate is shared across both phases.
+
+## THE FIDELITY RULING (owner correction 2026-08-06)
+
+The first live-rendered bands reached the owner's screen and diverged from
+his art. Three laws followed
+([the ledger](../../research/ring_rework.md) §2), and this module is where
+they are implemented.
+
+**1 · The band COMPOSES; it never stacks.** The outer plate is drawn
+WHOLE — the flat `#656A70` annulus with its black outer rim, then a
+numeral at every hour the preset does not seat a LETTER on. The printed
+outer PNG is not blitted anywhere any more, because it already carries
+printed numerals, and a live numeral over them is the defect the ruling was
+issued for (an Ω with a 0 showing beneath it). The INNER band is the same
+law read the other way: `RingLayer` blits the variant's NUMBERLESS base
+plate (his own art — 360 day hairlines, 60 minute strokes, the quarter/octa
+arrows) and this module composes only the NUMBERS into the seats that base
+leaves empty. `config.dial.RING_INNER_COMPOSITION` is that map, and it is
+his own construction: `seconds.png` IS `simple_point.png` with the numbers
+set into it.
+
+**2 · His art is the look.** Every geometry and style constant this module
+reads was MEASURED off his plates at their native 3600 px, not chosen:
+
+| Measured on his plates | Constant |
+|---|---|
+| metal 0.8858 → 0.9998 of the radius, flat `#656A70` (83.7% of band pixels) | `NUMERAL_OUTER_RADIUS_FRACTION`, `NUMERAL_OUTER_BAND_WIDTH_FRACTION` |
+| a hard black rim, 0.0035 of the radius, on the OUTER edge alone | `NUMERAL_BAND_RIM_FRACTION`, `palette.NUMERAL_BAND_RIM` |
+| digit cap height 0.0436 of the dial diameter | `NUMERAL_OUTER_SIZE_DEFAULT` |
+| the odd numerals' white rim, 2.4 px mean-thick at 3600 | `NUMERAL_BORDER_DEFAULT` |
+| black reaching 11.1 px outward / 11.3 px inward of a glyph — SYMMETRIC | `NUMERAL_SHADOW_REACH_UNITS` + `NUMERAL_CONTACT_BLUR_DEFAULT` |
+| inner elements: a ring-ground body inside a white rim, under a white glow | `palette.NUMERAL_INNER_INK` / `NUMERAL_INNER_BORDER` |
+
+Two of those corrected the ledger's own first-pass guesses: size 90 drew a
+visibly thinner band than his, and border 0 left an odd numeral with no
+white outline at all — the loudest single difference between his art and
+wave 3's screen.
+
+**3 · Render time changes WHAT, never HOW it looks.** The user's picks
+(font, size, which seats carry letters, which inner variant) decide the
+CONTENT of a seat. The style is fixed by the measured constants above.
+
+### Why the halo is a dilation and not a blur
+
+His black runs SOLID for about 11 px and only then fades over 3. A blurred
+silhouette cannot make that plateau — a blur wide enough to reach 11 px is
+already smoke at its own edge. So the halo is a DILATION
+(`numeral_relief.draw_dilated`: the glyph stroked with a `2 x reach` pen
+under the same glyph filled), and the CONTACT BLUR is only its soft edge.
+The halo takes NO throw, because his is symmetric to within a fifth of a
+pixel; the ledger's directional relief (`draw_relief`, `cast`/`extrude`/
+`emboss` at the settled depth) is drawn over it and lies inside it until
+the user asks for a deeper one.
 
 `_PLATES` and `_CROWNS` are module-level dicts: N watches showing the same
 settings hold ONE copy of each plate, like `render.assets.shared_cache`

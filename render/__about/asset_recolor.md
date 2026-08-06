@@ -20,6 +20,17 @@ original/master path rather than crashing (Rule #1).
 
 ## Connections
 
+## `ring_recolored_image`
+
+A COMPUTED band plate ([Numeral Bands](numeral_bands.md)) is not a file, so
+it cannot go through `AssetCache.pixmap_by_height` — but it must still
+answer the Ring TINT and Ring SATURATION sliders exactly as the printed
+plate it replaced did. This is that one door: the tritone tint first, the
+HSV saturation after, the same order `pixmap_by_height` uses (Rule #5).
+Both no-ops return the image untouched, which is the common case — the
+tint is `None` and the saturation `1.0` on every default skin, so a plain
+band never pays for it.
+
 ### Uses
 - [Assets](assets.md) — `AssetCache._recolored`, `AssetCache._tinted`
   (the recolor doors this module wraps in a disk-cached, path-in/

@@ -1,32 +1,33 @@
 # render/layers/numerals.py
 
-The three layers that put the live-rendered numerals on the dial.
+The band cache key, and the one live-crown layer.
 
-| Layer | Cadence | Draws |
+| Name | Kind | Answers |
 |---|---|---|
-| `OuterNumeralLayer` | `STATIC` | the 24 hour numerals band plate |
-| `InnerNumeralLayer` | `STATIC` | the minute numerals + tick lines band plate |
-| `LiveCrownLayer` | `MINUTE` | the crown's live time, re-composed each tick |
+| `band_spec` | function | the `BandSpec` an on-screen watch would ask for |
+| `crown_spec` | function | the `CrownSpec` for the live crown's glyph set |
+| `LiveCrownLayer` | `Cadence.MINUTE` | the crown's live time, re-composed each tick |
 
 ## Purpose
 
-`RingLayer` still draws everything it drew before — the outer plate PNG,
-the inner plate PNG, the preset's letter art and the static `crown_text`
-stamps. These layers ADD the hand-drawn numerals on top of that
-composition; nothing was replaced.
+**The two BAND layers that used to live here are gone** (THE FIDELITY
+RULING, owner correction 2026-08-06). They stacked a computed plate on top
+of `RingLayer`'s printed one, which is exactly the construction the ruling
+outlaws — an Ω with a printed 0 showing under it. Both bands are now part
+of the ring's own ordered composition ([Ring](ring.md)); a band layer
+reappearing in the stack IS that defect coming back, and
+`tests/test_numerals.py` fails the suite if one does.
 
-The two band layers are `STATIC`, so the compositor bakes them into its
-cached pixmap and they cost nothing per frame. Each asks
-[Numeral Bands](../../__about/numeral_bands.md) for a plate keyed by the
-skin's numeral settings and the plate pixel size, and blits it centred on
-the dial origin. A settings change rebuilds the composite, which asks for a
-plate under the new key, which builds once and is then shared by every
-watch on those settings.
-
-THE WORLD OFFSET ([World](../../../core/__about/world.md)) reaches the OUTER
-band's `BandSpec.offset_deg` and the live crown's own arc — the INNER
-band keys on `0.0` in every mode, so its plate is shared across both
-phases (ledger §2: "the inner band NEVER rotates").
+`band_spec` stayed, because it is the shared door BOTH the ring layer and
+every test go through to ask for a plate. Besides the numeral settings it
+carries: the OUTER band's `offset_deg` (THE WORLD OFFSET,
+[World](../../../core/__about/world.md)), the preset's LETTER seats, the
+picked INNER variant's name, and the ring's tint/saturation — because two
+presets sharing every numeral setting still compose different bands, and a
+COMPUTED plate must answer the Ring sliders exactly as the printed plate it
+replaces did. The INNER band keys on `offset_deg = 0.0` in every mode, so
+its plate is shared across both phases (ledger §2: "the inner band NEVER
+rotates").
 
 `LiveCrownLayer` is the ONE minute-cadence element of this round. It is
 minute-cadence and nothing more: the eleven glyphs it draws were rasterized
@@ -57,5 +58,7 @@ Every other preset builds no `LiveCrownLayer` at all.
 - [Render Context](../../__about/context.md) — `Cadence`, `Layer`
 
 ### Used by
-- [Compositor](../../__about/compositor.md) — stacks them just above
-  `RingLayer`
+- [Ring Layer](ring.md) — asks `band_spec` for both band plates and
+  composes them
+- [Compositor](../../__about/compositor.md) — builds `LiveCrownLayer` for
+  the two presets that keep a time in the arc

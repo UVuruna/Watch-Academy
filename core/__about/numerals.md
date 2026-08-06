@@ -7,20 +7,34 @@ wall clock anywhere near them.
 
 ## Purpose
 
-The outer band carries the 24 hour numerals, the inner band the twelve
-five-minute numerals and the five families of tick line. Both are drawn by
-hand at run time (never shipped as art) because the outer band ROTATES: in
-the Heliocentric mode the whole hour band turns so true solar noon stands
-at the top, so a numeral's seat belongs to the ANGLE it lands on, never to
-the hour it carries. This module answers, for any moment:
+The outer band carries the hour numerals, the inner band the five-minute
+numbers. The outer band is drawn by hand at run time (never shipped as
+art) because it ROTATES: in the Heliocentric mode the whole hour band
+turns so true solar noon stands at the top, so a numeral's seat belongs to
+the ANGLE it lands on, never to the hour it carries. This module answers,
+for any moment:
 
 - where each numeral sits (`hour_angle`, `minute_angle`),
+- WHICH seats carry a numeral at all (`numeral_hours`,
+  `inner_number_seats`, `inner_composition`),
 - how far it turns so it still reads (`seat_rotation`),
 - which way its relief is thrown (`light_offset`),
 - how many copies that relief is (`relief_offsets`),
 - which colour role it wears (`parity_role`),
 - which glyphs the LIVE CROWN needs and in what order
   (`crown_glyph_alphabet`, `crown_sequence`, `crown_arc_angles`).
+
+**THE COMPOSITION LAW** (THE FIDELITY RULING, owner correction
+2026-08-06, [the ring ledger](../../research/ring_rework.md) §2): a seat
+carries exactly ONE content. `numeral_hours(letter_hours)` returns the
+hours of the outer band that carry a NUMERAL — every hour except the ones
+the preset seats a LETTER on — and is the one place the ring's own 1..24
+counting (midnight = 24) folds into the band's 0..23.
+`inner_number_seats(variant)` is the same law on the inner band: each
+shipped variant is one of the owner's NUMBERLESS plates plus the
+five-minute seats that carry a number, so a seat holding one of his arrows
+never also holds a number. An Ω with a 0 under it is the defect both
+functions exist to make impossible.
 
 Everything is a plain float, tuple or string. `render/` turns them into
 pixels; nothing here knows that pixels exist.
@@ -51,7 +65,11 @@ its relief the opposite way from the upper half.
 
 **Parity** (ledger §3) — an EVEN numeral is a white plate on the ring, an
 ODD one is a cut-out of ring colour. `parity_role` answers `"even"` /
-`"odd"` for a label; the hexes live in `config/palette.py`.
+`"odd"` for a label; the hexes live in `config/palette.py`. The BORDER is
+what makes rule B visible at all, which is why its default is a measured
+number and not zero (see
+[Numeral Bands](../../render/__about/numeral_bands.md) → The Fidelity
+Ruling).
 
 **The live crown** (ring_rework §3) — exactly ELEVEN glyphs exist (the ten
 digits and the colon), so `crown_glyph_alphabet()` is what the renderer

@@ -4,7 +4,10 @@
 
 ```mermaid
 flowchart TD
-    A["hour h (0..23) + offset_deg"] --> B["deg = fold((h-12)*15 + offset)"]
+    Z["hour h (0..23)"] --> Y{"does the preset seat a LETTER here?"}
+    Y -->|yes| X["draw NOTHING - one seat, one content"]
+    Y -->|no| A["hour h + offset_deg"]
+    A --> B["deg = fold((h-12)*15 + offset)"]
     B --> C{seating}
     C -->|upright| D["rot = 0"]
     C -->|arc| E{"deg mod 90 == 0 ?"}
@@ -40,6 +43,14 @@ seat_rotation(deg, seating):
     if deg mod 90 == 0:          return 0                # the square angles
     if abs(deg) > 90:            return deg + 180        # the lower half
     return deg                                           # the upper half
+
+numeral_hours(letter_hours):     # THE COMPOSITION LAW
+    seated = {h mod 24 for h in letter_hours}   # cards say 24, hours say 0
+    return [h for h in 0..23 if h not in seated]
+
+inner_number_seats(variant):     # the same law on the inner band
+    return [(str(m), minute_angle(m))
+            for m in RING_INNER_COMPOSITION[variant].numbers]
 
 light_offset(deg, depth, light, fixed):
     if light == "fixed":         return fixed            # y positive UP

@@ -29,7 +29,7 @@ from zoneinfo import ZoneInfo
 
 import astral
 import pytest
-from PySide6.QtGui import QFontDatabase
+from PySide6.QtGui import QColor, QFontDatabase
 from PySide6.QtWidgets import QApplication
 
 from app.controller import build_skin
@@ -44,12 +44,8 @@ from render.numeral_bands import outer_centreline
 from render.assets import AssetCache
 from render.compositor import Compositor, _build_layers
 from render.context import Cadence, RenderContext
-from render.layers.numerals import (
-    InnerNumeralLayer,
-    LiveCrownLayer,
-    OuterNumeralLayer,
-    band_spec,
-)
+from render.layers.numerals import LiveCrownLayer, band_spec
+from render.layers.ring import RingLayer
 from render.painting import dial_point
 
 
@@ -226,19 +222,48 @@ def test_parity_roles_and_their_colours():
     assert palette.NUMERAL_RING_GROUND == "#656A70"
 
 
-# ------------------------------------------------------------ the tick vocabulary
+# --------------------------------------------------------- THE COMPOSITION LAW
 
-def test_inner_tick_plan_names_all_five_kinds_at_the_right_counts():
-    plan = numerals.inner_tick_plan()
-    assert len(plan) == 360                              # the DAY ticks
-    kinds = [kind for _, kind in plan]
-    assert kinds.count(numerals.TICK_POINTER) == 4        # the quarter arrows
-    assert kinds.count(numerals.TICK_LONG) == 8           # 12 minus the 4 pointers
-    assert kinds.count(numerals.TICK_SHORT) == 24         # two beside each LONG
-    assert set(kinds) == {
-        numerals.TICK_DAY, numerals.TICK_SECOND, numerals.TICK_SHORT,
-        numerals.TICK_LONG, numerals.TICK_POINTER,
+def test_a_letter_seat_carries_no_numeral():
+    """THE FIDELITY RULING's first law (ring_rework §2): the composition
+    places EITHER the preset's letter OR a numeral at a position, never
+    both. An Ω with a 0 under it is the defect it was issued for."""
+    assert 24 not in numerals.numeral_hours((12, 20, 24, 4))   # DOMY
+    assert 0 not in numerals.numeral_hours((12, 20, 24, 4))    # 24 folds to 0
+    assert numerals.numeral_hours((24,)) == tuple(range(1, 24))  # CHI: X at 24h
+    assert numerals.numeral_hours(()) == tuple(range(24))
+    # Every hour is accounted for exactly once, whatever the preset.
+    for seats in ((12, 16, 20, 24, 4, 8), (12, 15, 18, 21, 24, 3, 6, 9)):
+        drawn = numerals.numeral_hours(seats)
+        assert len(set(drawn)) == len(drawn)
+        assert set(drawn) | {seat % 24 for seat in seats} == set(range(24))
+
+
+def test_every_shipped_inner_variant_composes_from_a_real_base_plate():
+    """The INNER half of the composition law: each variant is one of the
+    owner's NUMBERLESS plates plus the seats that carry a number — and a
+    seat that carries one of his arrows never carries a number."""
+    from config import constants
+    assert set(dial.RING_INNER_COMPOSITION) == set(constants.RING_INNERS)
+    arrow_seats = {
+        "simple": (), "simple_point": (0,), "simple_cross": (0, 15, 30, 45),
+        "simple_octa": (0, 15, 30, 45),
     }
+    for variant, entry in dial.RING_INNER_COMPOSITION.items():
+        base = dial.RING_INNER_ART_DIR / f"{entry['base']}.png"
+        assert base.exists(), f"{variant} names a base plate that is not there"
+        assert entry["base"] in constants.RING_INNERS
+        numbers = set(entry["numbers"])
+        assert not numbers & set(arrow_seats[entry["base"]]), variant
+        assert numbers <= set(range(0, 60, dial.NUMERAL_MINUTE_LABEL_STEP))
+
+
+def test_the_inner_seats_are_labelled_bare_and_never_rotate():
+    seats = dict(numerals.inner_number_seats("seconds"))
+    assert seats["5"] == 30.0 and seats["30"] == 180.0
+    assert "0" not in seats                    # the arrow holds the top seat
+    assert numerals.inner_number_seats("simple") == ()
+    assert numerals.inner_composition("a-custom-file")["numbers"] == ()
 
 
 # --------------------------------------------------------------- the live crown
@@ -301,44 +326,23 @@ def test_only_the_two_live_crown_presets_build_the_layer(app):
 
 def test_the_live_crown_is_the_only_minute_cadence_numeral_layer():
     assert LiveCrownLayer.cadence is Cadence.MINUTE
-    assert OuterNumeralLayer.cadence is Cadence.STATIC
-    assert InnerNumeralLayer.cadence is Cadence.STATIC
+    assert RingLayer.cadence is Cadence.STATIC
 
 
-def test_both_numeral_bands_are_stacked_above_the_ring(app):
-    layers = _build_layers(build_skin(Settings(ring="The One")))
-    kinds = [type(layer).__name__ for layer in layers]
-    assert kinds.index("RingLayer") < kinds.index("InnerNumeralLayer")
-    assert kinds.index("InnerNumeralLayer") < kinds.index("OuterNumeralLayer")
+def test_the_bands_are_no_longer_layers_of_their_own(app):
+    """THE FIDELITY RULING replaced stacking with composition: the two
+    band layers that used to sit on top of `RingLayer` are gone, and the
+    ring composes both itself. A band layer reappearing in the stack IS
+    the stacking defect coming back."""
+    kinds = [
+        type(layer).__name__
+        for layer in _build_layers(build_skin(Settings(ring="The One")))
+    ]
+    assert "RingLayer" in kinds
+    assert not [name for name in kinds if "NumeralLayer" in name]
 
 
 # ------------------------------------------------------------------ the fonts
-
-def _require_a_font_database() -> None:
-    """Skip ONLY for the honest reason, and name it (2026-08-06).
-
-    These two tests used to skip saying "<family> is not installed on
-    this machine" — which was FALSE: `C:\\Windows\\Fonts\\bahnschrift.ttf`
-    is right there, and under the native platform Qt lists 115 families
-    including both defaults. The real cause is the OFFSCREEN QPA plugin
-    this module asks for at import: on this machine it exposes ZERO font
-    families, so every family reads as missing and the skip hid a check
-    that simply could not run.
-
-    So: an EMPTY database is an environment fact and skips, naming the
-    platform and how to run the check for real. A NON-empty database
-    that lacks the configured default face is a genuine defect — a stale
-    pick in `config/dial.py`, exactly what the tests below were written
-    to catch — and FAILS."""
-    if not QFontDatabase.families():
-        pytest.skip(
-            "the QPA platform in use exposes no font families at all "
-            f"(QT_QPA_PLATFORM="
-            f"{os.environ.get('QT_QPA_PLATFORM', 'native')!r}) — run this "
-            "module on its own (`python -m pytest tests/test_numerals.py`) "
-            "and the native platform answers with every installed family"
-        )
-
 
 def _installed(family: str) -> bool:
     return family in set(QFontDatabase.families())
@@ -401,9 +405,36 @@ def test_a_changed_setting_rebuilds_the_band_key(app, frame_args):
 
 # ----------------------------------------------------------- rendering smoke
 
-def _band_image(band: str, pixels: int, app, frame_args, **overrides):
+def _require_a_font_database() -> None:
+    """Skip ONLY for the honest reason, and name it (2026-08-06).
+
+    These two tests used to skip saying "<family> is not installed on
+    this machine" — which was FALSE: `C:\\Windows\\Fonts\\bahnschrift.ttf`
+    is right there, and under the native platform Qt lists 115 families
+    including both defaults. The real cause is the OFFSCREEN QPA plugin
+    this module asks for at import: on this machine it exposes ZERO font
+    families, so every family reads as missing and the skip hid a check
+    that simply could not run.
+
+    So: an EMPTY database is an environment fact and skips, naming the
+    platform and how to run the check for real. A NON-empty database
+    that lacks the configured default face is a genuine defect — a stale
+    pick in `config/dial.py`, exactly what the tests below were written
+    to catch — and FAILS."""
+    if not QFontDatabase.families():
+        pytest.skip(
+            "the QPA platform in use exposes no font families at all "
+            f"(QT_QPA_PLATFORM="
+            f"{os.environ.get('QT_QPA_PLATFORM', 'native')!r}) — run this "
+            "module on its own (`python -m pytest tests/test_numerals.py`) "
+            "and the native platform answers with every installed family"
+        )
+
+
+
+def _band_image(band: str, pixels: int, app, frame_args, ring="The One", **overrides):
     day, tick = frame_args
-    skin = build_skin(Settings(ring="The One", **overrides))
+    skin = build_skin(Settings(ring=ring, **overrides))
     ctx = RenderContext(
         skin=skin, day=day, tick=tick, radius=pixels / 2.0,
         cache=AssetCache(), dpr=1.0,
@@ -424,22 +455,118 @@ def _ink_near(image, angle: float, radius: float, box: int = 26) -> int:
     )
 
 
-def test_a_1440_outer_band_carries_ink_at_every_hour_seat(app, frame_args):
+def _glyph_ink(image, angle: float, radius: float, box: int = 26) -> int:
+    """Pixels that are NOT the band's own flat metal in a small box on a
+    dial seat — i.e. the numeral, its border and its halo. The band now
+    carries its own base, so plain alpha would answer "yes" everywhere."""
+    ground = QColor(palette.NUMERAL_RING_GROUND)
+    center = dial_point(angle, radius)
+    cx = int(image.width() / 2 + center.x())
+    cy = int(image.height() / 2 + center.y())
+    count = 0
+    for y in range(max(0, cy - box), min(image.height(), cy + box)):
+        for x in range(max(0, cx - box), min(image.width(), cx + box)):
+            color = image.pixelColor(x, y)
+            if color.alpha() == 0:
+                continue
+            if abs(color.red() - ground.red()) > 12 or abs(
+                color.blue() - ground.blue()
+            ) > 12:
+                count += 1
+    return count
+
+
+def test_the_bands_seat_list_skips_every_letter_hour(app, frame_args):
+    """THE COMPOSITION LAW where no font can hide it (this one runs on
+    any platform): the band builder's own seat list — the exact list it
+    turns into paths — carries no letter hour, whatever the preset."""
+    day, tick = frame_args
+    for ring in ("DOMY", "The One", "Dollar", "CHI"):
+        skin = build_skin(Settings(ring=ring))
+        ctx = RenderContext(
+            skin=skin, day=day, tick=tick, radius=720.0,
+            cache=AssetCache(), dpr=1.0,
+        )
+        spec = band_spec(skin, "outer", ctx)
+        assert set(spec.letter_hours) == set(skin.ring.letters), ring
+        seated = {int(label) for label, _angle, _c in numeral_bands._seats(spec)}
+        assert not seated & set(skin.ring.letters), ring
+        assert seated | set(skin.ring.letters) == set(range(24)), ring
+
+
+def test_a_1440_outer_band_carries_a_numeral_at_every_free_hour(app, frame_args):
+    """THE COMPOSITION LAW on the real plate: a numeral stands at every
+    hour The One does not seat a letter on, and NOTHING stands where one
+    does."""
+    _require_a_font_database()
+    skin = build_skin(Settings(ring="The One"))
     image = _band_image("outer", 1440, app, frame_args)
     assert image.width() == 1440
     radius = 720 * dial.NUMERAL_OUTER_RADIUS_FRACTION
+    letters = set(skin.ring.letters)
+    assert letters, "The One seats eight letters — the fixture is wrong"
     for hour in range(24):
         angle = numerals.hour_angle(hour)
-        assert _ink_near(image, angle, radius) > 0, f"hour {hour} is blank"
+        ink = _glyph_ink(image, angle, radius)
+        if hour in letters:
+            assert ink == 0, f"hour {hour} carries a letter AND a numeral"
+        else:
+            assert ink > 0, f"hour {hour} is blank"
 
 
-def test_the_outer_band_is_empty_between_the_seats(app, frame_args):
-    """Half-way between two hour seats there is nothing — proof the ink
-    above is the numerals themselves, not a filled band."""
+def test_the_omega_seat_carries_no_numeral_under_the_letter(app, frame_args):
+    """The DEFECT THE RULING WAS ISSUED FOR, pinned: DOMY's Ω sits at
+    24h, and the band must draw nothing at all there — sampled on the
+    real plate, at the seat's own pixels."""
+    _require_a_font_database()
+    skin = build_skin(Settings(ring="DOMY"))
+    assert skin.ring.letters[0] == "Ω"
+    image = _band_image("outer", 1440, app, frame_args, ring="DOMY")
+    radius = 720 * dial.NUMERAL_OUTER_RADIUS_FRACTION
+    assert _glyph_ink(image, numerals.hour_angle(0), radius, box=34) == 0
+    # ... while its neighbours still carry theirs.
+    assert _glyph_ink(image, numerals.hour_angle(1), radius) > 0
+    assert _glyph_ink(image, numerals.hour_angle(23), radius) > 0
+
+
+def test_the_outer_band_is_bare_metal_between_the_seats(app, frame_args):
+    """Half-way between two hour seats there is only the band's own flat
+    ground — proof the ink above is the numerals themselves, and proof
+    the base really is the measured flat colour rather than a plate."""
+    _require_a_font_database()
     image = _band_image("outer", 1440, app, frame_args)
     radius = 720 * dial.NUMERAL_OUTER_RADIUS_FRACTION
     between = numerals.hour_angle(12) + dial.NUMERAL_HOUR_STEP_DEG / 2.0
-    assert _ink_near(image, between, radius, box=6) == 0
+    assert _glyph_ink(image, between, radius, box=6) == 0
+    center = dial_point(between, radius)
+    pixel = image.pixelColor(
+        int(image.width() / 2 + center.x()), int(image.height() / 2 + center.y())
+    )
+    assert pixel.name().upper() == palette.NUMERAL_RING_GROUND
+    assert pixel.alpha() == 255
+
+
+def test_the_band_base_reproduces_the_owners_measured_annulus(app, frame_args):
+    """The plates' own geometry, MEASURED at 3600 px and pinned here:
+    metal from 0.8858 to 0.9998 of the radius, a black rim on the outer
+    edge alone, nothing outside either."""
+    image = _band_image("outer", 1440, app, frame_args)
+    inner, outer = numeral_bands.outer_band_edges(1.0)
+    assert inner == pytest.approx(0.8858, abs=0.001)
+    assert outer == pytest.approx(0.9998, abs=0.001)
+    between = numerals.hour_angle(12) + dial.NUMERAL_HOUR_STEP_DEG / 2.0
+
+    def at(fraction):
+        point = dial_point(between, 720 * fraction)
+        return image.pixelColor(
+            int(image.width() / 2 + point.x()),
+            int(image.height() / 2 + point.y()),
+        )
+
+    assert at(inner - 0.006).alpha() == 0                  # nothing inside
+    assert at(0.94).name().upper() == palette.NUMERAL_RING_GROUND
+    assert at(outer - 0.0015).name().upper() == palette.NUMERAL_BAND_RIM
+    assert at(outer + 0.006).alpha() == 0                  # nothing outside
 
 
 def test_a_rotated_outer_band_moves_its_ink_with_the_hours(app, frame_args):
@@ -476,22 +603,37 @@ def test_outer_ring_size_moves_the_bands_outer_edge_alone():
 
 
 def test_a_wider_outer_ring_really_draws_further_out(app, frame_args):
+    """Hour 13 — The One seats letters on 12/15/18/21/24/3/6/9, so 13 is
+    one of the seats that actually carries a numeral."""
+    _require_a_font_database()
     wide = _band_image(
-        "outer", 1440, app, frame_args, numeral_outer_ring_size=2.0,
+        "outer", 1440, app, frame_args, numeral_outer_ring_size=1.5,
     )
-    far = 720 * outer_centreline(2.0)
+    angle = numerals.hour_angle(13)
+    far = 720 * outer_centreline(1.5)
     near = 720 * outer_centreline(1.0)
-    assert _ink_near(wide, numerals.hour_angle(12), far) > 0
-    assert _ink_near(wide, numerals.hour_angle(12), far) > _ink_near(
-        wide, numerals.hour_angle(12), near - 40
+    assert _glyph_ink(wide, angle, far) > 0
+    assert _glyph_ink(wide, angle, far) > _glyph_ink(wide, angle, near - 40)
+
+
+def test_an_arrow_seat_carries_no_number(app, frame_args):
+    """The INNER half of the composition law on the real plate: The One
+    reads `simple_octa`, whose five-minute seats ALL carry one of his
+    arrows, so the live plate it composes is empty — the band on screen
+    is his art untouched."""
+    image = _band_image("inner", 1440, app, frame_args)
+    assert not any(
+        image.pixelColor(x, y).alpha() > 0
+        for y in range(0, 1440, 3) for x in range(0, 1440, 3)
     )
 
 
 def test_the_inner_band_wears_a_white_glow_around_its_ink(app, frame_args):
     """ring_rework §2: the inner band's relief is a WHITE GLOW — so a
     ring of PARTIAL alpha must surround the solid ink of a numeral, and
-    it must be white, not black."""
-    image = _band_image("inner", 1440, app, frame_args)
+    it must be white, not black. DOMY reads `seconds`, which composes a
+    number into every five-minute seat but the arrow's own."""
+    image = _band_image("inner", 1440, app, frame_args, ring="DOMY")
     radius = 720 * dial.NUMERAL_INNER_RADIUS_FRACTION
     center = dial_point(numerals.minute_angle(15), radius)
     cx = int(image.width() / 2 + center.x())
@@ -535,8 +677,13 @@ def test_a_settings_file_without_the_numeral_keys_loads_clean(tmp_path):
     assert loaded.numeral_depth == 3.0
     assert loaded.numeral_light == "radial"
     assert loaded.numeral_darkness == 1.0
-    assert loaded.numeral_contact_blur == 0.5
-    assert loaded.numeral_border == 0.0
+    # The Fidelity Ruling's own measured defaults, not the ledger's
+    # first-pass guesses: an odd numeral needs its white rim and the
+    # halo needs its soft edge, or the band is not his art.
+    assert loaded.numeral_contact_blur == 2.0
+    assert loaded.numeral_border == 4.0
+    assert loaded.numeral_outer_size == 124
+    assert loaded.numeral_inner_size == 84
     assert loaded.crown_time_format == "hh:mm"
 
 

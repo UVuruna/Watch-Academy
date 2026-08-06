@@ -6,12 +6,31 @@
 ## Purpose
 
 Paints the composed ring — THE COMPOSITIONAL RING MODEL (owner decree
-2026-08-05): the outer band + the inner band (always both, no single
-monolithic plate and no procedural fallback any more), the preset's own
-letters at the outer's empty fields, and the outer Great Seal crown text arc
-("Crown Text" in the Watch Face window) — the letters and the crown text
-stamped with a shared dark halo and a readable (never-upside-down)
-rotation.
+2026-08-05), sharpened by THE FIDELITY RULING (owner correction
+2026-08-06, [the ledger](../../../research/ring_rework.md) §2). FIVE
+things, drawn in ONE ordered pass, and the ORDER is the composition:
+
+| # | Drawn | Source |
+|---|---|---|
+| 1 | the INNER base — 360 day hairlines, 60 minute strokes, the quarter/octa ARROWS | HIS ART, blitted (`RING_INNER_COMPOSITION[variant]["base"]`) |
+| 2 | the live INNER numbers | computed, into the seats step 1 leaves empty |
+| 3 | the OUTER band — the metal, its black rim AND the hour numerals | computed whole |
+| 4 | the preset's LETTER art | HIS ART, on the seats step 3 left bare |
+| 5 | the CROWN TEXT arc outside the band | HIS ART |
+
+Nothing is stacked on content it can collide with, which is the ruling's
+first law. **The outer plate PNG is no longer blitted at all** — it
+already carries printed numerals, and a live numeral drawn over them is
+the defect the ruling was issued for (an Ω with a printed 0 beneath it).
+The INNER plate blitted here is the NUMBERLESS twin its variant composes
+from, not the file the user picked: `seconds.png` IS `simple_point.png`
+with the numbers set into it, so blitting the base and composing the
+numbers live reproduces his plate exactly — the number even OCCLUDES the
+inner half of the five-minute stroke it stands on, leaving the outer stub
+showing, which is what his own numbered plates do.
+
+The letters and the crown text are stamped with a shared dark halo and a
+readable (never-upside-down) rotation.
 
 THE WORLD OFFSET ([World](../../../core/__about/world.md)): the letters and
 the crown text are WORLD members — every seat takes `ctx.world_offset`
@@ -28,6 +47,10 @@ so it rebuilds only on a skin/size/DPI change. Not `hover_variable`.
 ### Uses
 - [Asset Recolor](../../__about/asset_recolor.md) — `letter_metal_file` (gold master →
   silver/bronze finish, disk-cached)
+- [Numeral Bands](../../__about/numeral_bands.md) — the two computed band plates
+- [Numeral Layers](numerals.md) — `band_spec`, the shared cache key
+- [Numerals](../../../core/__about/numerals.md) — `inner_composition`, the
+  numberless base each variant composes from
 - [Render Context](../../__about/context.md) — `Cadence`, `Layer`, `RenderContext`
 - [Painting](../../__about/painting.md) — `dial_point`, `draw_pixmap_centered`
 
@@ -42,10 +65,17 @@ so it rebuilds only on a skin/size/DPI change. Not `hover_variable`.
 - `paint()`: unconditionally composes `_draw_bands()` then stamps
   `_draw_letter_art()` and `_draw_crown_text()` on top — there is no
   disk-presence gate and no procedural fallback any more.
-- `_draw_bands()` (owner decree 2026-08-05, THE COMPOSITIONAL RING
-  MODEL): composes the inner minute-track band (`RingSpec.inner_asset`)
-  then the outer hour-tick band (`RingSpec.outer_asset`), each with its
-  OWN tint (`ring_tint_inner` follows `ring_tint` when `None`).
+- `_draw_bands()` (THE FIDELITY RULING, owner correction 2026-08-06):
+  blits the inner variant's NUMBERLESS base art, then the COMPUTED inner
+  number plate, then the COMPUTED outer band — in that order, so the
+  letters `paint()` stamps next have the metal under them and nothing
+  over them. `RingSpec.outer_asset` is no longer drawn (it still names
+  the preset's outer, which `render.asset_variants.ring_face_color`
+  samples); `ring_tint_inner` follows `ring_tint` when `None`, and both
+  computed plates answer the tint/saturation sliders through their own
+  `BandSpec` ([Numeral Layers](numerals.md)).
+- `_blit_band()`: the shared blit for both computed plates (Rule #5) —
+  one `drawImage` of a plate built at most once per settings change.
 - `_draw_ring_glyph()`: the ONE stamp shared by both the ring's six letters
   and the outer crown text (Rule #5) — resolves the letter's metal finish, draws
   a multi-sample dark halo from the gold master, rotates the glyph so it
