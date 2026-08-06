@@ -7,7 +7,11 @@ FIGURE OF THE PROGRAM'S OWN GEOMETRY — the same numbers the dial is
 drawn from — so root Rule #19 answers before any prompt sheet does:
 compute, never generate. An eighth page joins them from the far end of
 the same instrument, the Great Oscillations, drawn from the very
-envelope the Observatory charts.
+envelope the Observatory charts; a ninth, CHI (wave 5), is the odd one
+out among them — not a SKETCH of the program's geometry but the real
+`"full"` outer plate composed live and the X master recolored through
+the actual asset cache, because that article's whole point is what the
+ceramic finish looks like.
 
 That is the whole test applied here: if changing a constant would make
 the painted plate a LIE, the plate must not be painted. Move
@@ -25,10 +29,10 @@ from PySide6.QtGui import (
     QColor, QFont, QFontMetricsF, QPainter, QPen, QPixmap,
 )
 
-from config import constants, doctrine, encyclopedia_ui, palette
+from config import constants, dial, doctrine, encyclopedia_ui, palette, paths
 from core import angles
 
-# The eight figures this module draws, in the order the Instrument topic
+# The nine figures this module draws, in the order the Instrument topic
 # reads them. `app.encyclopedia.tree` imports this tuple rather than
 # keeping a second list of the same names (Rule #5) — a page can only
 # declare a diagram that exists here.
@@ -41,6 +45,7 @@ INSTRUMENT_FIGURES = (
     "metals",
     "ring_letters",
     "oscillations",
+    "chi",
 )
 
 _INK = palette.THEME_COLORS["text_primary"]
@@ -453,6 +458,62 @@ def _ring_letters(_key: str, size: int) -> QPixmap:
     return pixmap
 
 
+# --- the CHI band ---------------------------------------------------------
+
+def _chi(_key: str, size: int) -> QPixmap:
+    """The composed CHI band itself, not a diagram OF it: the real
+    `"full"` outer plate (`constants.RING_OUTERS["full"]`) with its
+    hour numerals built by the SAME fidelity engine the dial's own ring
+    composes with (`render.numeral_bands.band_plate`, the plate the
+    `dial`/`ring_letters` figures only sketch the geometry of) — every
+    hour but the 24th, which the letter owns — and the X master
+    recolored to CHI's own ceramic thematic shade
+    (`constants.RING_THEMATIC_SHADES["CHI"]`) through the SAME asset
+    cache the dial's own ring letters recolor through
+    (`render.assets.shared_cache`, THE ONE COPY RULE). Root Rule #19
+    rules out a hand-drawn stand-in here specifically: the article is
+    ABOUT what the porcelain finish looks like, so only the real
+    recolored pixels teach it — never `letter_metal_file`'s deferred
+    door (built for the live dial's first-paint budget), because a
+    plate cached once at import time must never freeze on the GOLD
+    fallback it returns before a background warm-up finishes."""
+    from render.assets import shared_cache
+    from render.numeral_bands import BandSpec, band_plate
+
+    pixmap, painter = _canvas(size)
+    center = QPointF(size / 2, size / 2)
+    radius = size / 2.0
+
+    outer_spec = BandSpec(
+        band="outer", pixels=size, dpr=1.0,
+        face=dial.NUMERAL_OUTER_FACE_DEFAULT,
+        size_units=float(dial.NUMERAL_OUTER_SIZE_DEFAULT),
+        letter_hours=(24,),
+    )
+    painter.drawImage(QPointF(0, 0), band_plate(outer_spec))
+
+    with paths.display(paths.display_context(
+        metal_shades={"thematic": constants.RING_THEMATIC_SHADES["CHI"]}
+    )):
+        glyph = shared_cache().pixmap_by_height(
+            dial.RING_LETTER_ART_DIR / constants.RING_LETTER_FILES["X"],
+            2 * radius * dial.RING_LETTER_ART_SCALE, 1.0, metal="thematic",
+        )
+    theta = angles.ring_position_angle(24)
+    painter.save()
+    painter.translate(_on_dial(center, radius * dial.RING_LETTER_RADIUS_FRACTION, theta))
+    painter.rotate(angles.readable_rotation_deg(theta))
+    painter.drawPixmap(QPointF(-glyph.width() / 2.0, -glyph.height() / 2.0), glyph)
+    painter.restore()
+
+    painter.setFont(_font(size))
+    _caption(painter, size,
+             "the full outer band, computed live · X in its own "
+             "ceramic thematic shade")
+    painter.end()
+    return pixmap
+
+
 # --- the deep-time figure -----------------------------------------------------
 
 def _oscillations(_key: str, size: int) -> QPixmap:
@@ -525,6 +586,7 @@ _DRAWERS = {
     "metals": _metals,
     "ring_letters": _ring_letters,
     "oscillations": _oscillations,
+    "chi": _chi,
 }
 _CACHE: dict = {}
 

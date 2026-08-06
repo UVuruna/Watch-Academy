@@ -51,6 +51,8 @@ and the measured autopsy of the retired kernel it replaced.
 - [Asset Recolor](asset_recolor.md) — `_recolored`, `_tinted`
 - [Asset Variants](asset_variants.md) — the reverse `pixmap_by_height`
   edge
+- [Instrument Diagrams](instrument_diagrams.md) — `shared_cache` recolors
+  the `chi` figure's own X master to its ceramic thematic shade
 
 ## Classes
 

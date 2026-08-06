@@ -119,3 +119,5 @@ Nothing reads or writes a file — the plates are computed, not stored.
 
 ### Used by
 - [Numeral Layers](../layers/__about/numerals.md)
+- [Instrument Diagrams](instrument_diagrams.md) — `band_plate` composes
+  the `chi` figure's own outer band

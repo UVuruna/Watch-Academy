@@ -3,7 +3,7 @@
 **Script:** [Instrument Diagrams (script)](../instrument_diagrams.py) · **Flow:** [diagram](../__flow/instrument_diagrams.md)
 
 ## Purpose
-The clock explaining itself. Eight Encyclopedia pages carry a figure of
+The clock explaining itself. Nine Encyclopedia pages carry a figure of
 the instrument's OWN behaviour, and every one is drawn live from the
 same numbers the dial is drawn from — never painted, so a moved
 constant can never leave a stale illustration on the page (root Rule
@@ -19,6 +19,17 @@ constant can never leave a stale illustration on the page (root Rule
 | `metals` | gold at noon, silver at midnight; three finishes below | `ENCYCLOPEDIA_FINISH_BORDER_COLORS` |
 | `ring_letters` | Δ·M·Y·Ω at the hour of its alphabet place | `doctrine.RING_LETTER_SEATS`, `angles.ring_position_angle` |
 | `oscillations` | the La2004 amplitude envelope over ±200,000 years | `data.observatory.ObservatoryData.laskar_envelope()` |
+| `chi` | the real `"full"` outer band plate, X seated at 24h in its own ceramic finish | `render.numeral_bands.band_plate`, `render.assets.shared_cache`, `constants.RING_THEMATIC_SHADES["CHI"]` |
+
+`chi` is the one figure among the nine that is not a sketch of the
+program's geometry: every other drawer reads the SAME angles/values the
+dial reads but paints them with this module's own primitives
+(`_on_dial`, `_text`, plain pens); `chi`'s article is about what a real
+recolored finish looks like, so it composes the ACTUAL outer plate
+(`render.numeral_bands.band_plate`, the fidelity engine `render.layers.
+ring.RingLayer` blits on the live dial) and recolors the real X master
+through the real asset cache (`render.assets.shared_cache`) — a
+schematic X would not teach "ceramic" at all.
 
 ## Connections
 
@@ -29,6 +40,10 @@ constant can never leave a stale illustration on the page (root Rule
   mapping
 - [Observatory Data](../../data/__about/observatory.md) — the La2004
   envelope bundle (the `oscillations` figure alone)
+- [Numeral Bands](numeral_bands.md) — `band_plate`, the outer plate's
+  own fidelity engine (the `chi` figure alone)
+- [Assets](assets.md) — `shared_cache`, the process-wide recolor cache
+  (the `chi` figure alone)
 
 ### Used by
 - [Diagrams](diagrams.md) — the one door a page's `(kind, key)` goes
@@ -38,7 +53,7 @@ constant can never leave a stale illustration on the page (root Rule
 
 ## Design Decisions
 - **One kind, `"instrument"`; the KEY names the figure.** The facade
-  routes by kind, so this module answers exactly one kind with eight
+  routes by kind, so this module answers exactly one kind with nine
   keys.
 - **`INSTRUMENT_FIGURES` is the single source of truth** — the topic
   tree imports it instead of keeping a parallel list (Rule #5).
