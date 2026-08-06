@@ -119,12 +119,22 @@ seat-placement rationale lives on the glyph's hover, never in the About.
 ### The live crown (time in the arc)
 
 No seconds. The engine renders **exactly 11 glyphs — digits 0–9 and the
-colon — once per settings change**, in crown size and relief, caches them,
-and once a minute merely re-composes the arc from the finished glyphs. No
-new PNG art is needed — the colon comes from the same face as the digits.
+colon — once per settings change**, in crown size, caches them, and once a
+minute merely re-composes the arc from the finished glyphs.
+
+**The look is the LETTERS' look (owner correction 2026-08-06, superseding
+this section's first draft):** the time wears the same rendered-letters
+treatment as everything on the ring — the crown's metal finish and the
+letter shadow law, never the outer band's parity plate-and-frame styling.
+The colon is the owner's OWN plate, `assets/instrument/ring/letters/
+time.png`, made for exactly this and wired under `':'` in the letter
+library; the digits (which have no plates) render from the crown face and
+are styled by the same fidelity machinery into that family. An earlier
+"white frame for the digits" idea is moot — the time crown carries no
+parity framing at all.
 **Digital-time format is a setting** with two variants: `hh:mm` (12:35) —
-the standard default — and `12h 35min` (its h/min in a small font cut, the
-plate library has no lowercase).
+the standard default — and `12h 35min` (its h/min in a small cut, styled
+the same way; the plate library has no lowercase).
 
 ## 4. The six bundled presets
 
