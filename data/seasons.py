@@ -16,10 +16,32 @@ from core.year_wheel import YearAnchors
 from data._io import load_json_checked, year_bounds
 
 
+#: THE process-wide seasons repository. Owner ruling 2026-07-28, applied
+#: here 2026-08-06: *"svi stvarno čitaju iste stvari identične"*. A
+#: `year_anchors(year)` answer is calendar data — the same instants no
+#: matter which watch asks or where its observer stands — so N watches
+#: holding N parses of the same 476 KB file, and N copies of the same
+#: extracted anchors, was pure waste. The LOCATION is what differs
+#: between watches, never the astronomy database.
+_SHARED: "SeasonsRepository | None" = None
+
+
+def shared_seasons(deep=None) -> "SeasonsRepository":
+    """The one seasons repository this process uses. `deep` is honored
+    on FIRST call only — the Deep Time pack is itself a process-wide
+    singleton (`data.deep_time.shared_deep_time`), so every caller
+    passes the same one."""
+    global _SHARED
+    if _SHARED is None:
+        _SHARED = SeasonsRepository(deep=deep)
+    return _SHARED
+
+
 class SeasonsRepository:
     def __init__(self, path: Path | None = None, deep=None):
         self._path = path or (paths.database_dir() / "seasons_utc.json")
         self._cache: dict[int, YearAnchors] = {}
+        self._coverage: tuple[int, int] | None = None
         # The optional Deep Time pack (Session 16): the controller
         # detects it ONCE at startup and injects it — years the bundled
         # JSON does not hold chain to it; bundled years stay bundled
@@ -30,8 +52,17 @@ class SeasonsRepository:
         """The inclusive (first, last) calendar years the bundled seasons
         database actually holds, read from the data — so Time Travel can
         validate a target BEFORE it reaches the day build (owner
-        2026-07-16: a far-year jump used to crash the app)."""
-        return year_bounds(load_json_checked(self._path, "Seasons database"))
+        2026-07-16: a far-year jump used to crash the app).
+
+        Cached like `year_anchors` is (owner bug 2026-08-06): the bounds
+        are two integers read from a 476 KB file, and every uncached
+        call reparsed the whole thing — twice per Time Travel open, per
+        watch."""
+        if self._coverage is None:
+            self._coverage = year_bounds(
+                load_json_checked(self._path, "Seasons database")
+            )
+        return self._coverage
 
     def year_anchors(self, year: int) -> YearAnchors:
         """Six anchor instants bracketing `year`, parsed once per year;

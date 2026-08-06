@@ -41,8 +41,8 @@ from app.ui_style import style_button
 from config import constants, defaults, encyclopedia_ui, palette, pantheon, paths
 from config import encyclopedia_tree as tree
 from config.ui_text import ui
-from data.encyclopedia import EncyclopediaRepository
-from data.symbolism import SymbolismRepository
+from data.encyclopedia import shared_encyclopedia
+from data.symbolism import shared_symbolism
 
 # THE SESSION ZOOM (owner round R8b item 5b): Ctrl+MouseWheel scales
 # fonts/images/cards together; module-level so it SURVIVES a Home ->
@@ -63,6 +63,7 @@ class EncyclopediaDialog(QDialog):
         stay_on_top: bool = False,
         travel_date: date | None = None,
         is_daylight: bool = True,
+        language: str = "en",
     ):
         super().__init__()
         self._overlay = translations or {}
@@ -83,8 +84,12 @@ class EncyclopediaDialog(QDialog):
         # stays interactive while it is open; WA_DeleteOnClose tears the
         # C++ object down the moment the window closes.
         self.setAttribute(Qt.WidgetAttribute.WA_DeleteOnClose)
-        self._symbolism = SymbolismRepository(overlay=self._overlay)
-        self._encyclopedia = EncyclopediaRepository(overlay=self._overlay)
+        # THE SAME BOOKS THE DIAL READS (owner bug 2026-08-06). This
+        # window used to parse its own private copies — 1.12 MB +
+        # 439 KB per open, per watch, on top of the copies the
+        # compositor already held.
+        self._symbolism = shared_symbolism(language, self._overlay or None)
+        self._encyclopedia = shared_encyclopedia(language, self._overlay or None)
         # `is_daylight` feeds THE DOUBLE NINTH LAW's daynight mechanism
         # (owner decree 2026-07-29, sw_dyad's Ghosts/Exegol) — the
         # controller reads it from the SAME live tick the dial paints

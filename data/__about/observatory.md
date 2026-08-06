@@ -53,3 +53,12 @@ The two derived half-year series (`light`, `dark`) are computed here,
 not stored, so the bundle stays minimal and `light = spring + summer`
 is guaranteed by construction rather than by two separately-authored
 numbers agreeing.
+
+## Functions
+
+### shared_observatory()
+THE process-wide bundles (owner bug 2026-08-06). The three files are
+pure static science — nothing in them depends on a watch, its observer
+or its theme — yet every Observatory window on every watch re-parsed all
+three, and the instrument-diagram plates built a second, independent
+copy of their own. Both call sites now read this one.

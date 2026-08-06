@@ -65,3 +65,14 @@ data; a missing table or meta key raises loudly. Calendar fields are
 stored per-event (not as ISO strings) because `datetime.fromisoformat`
 cannot parse negative years; eclipses additionally carry `jd_ut` as the
 one monotonic ordering key across the whole span.
+
+## Functions
+
+### shared_deep_time()
+THE process-wide pack, or `None` when it is not installed (a
+supported state). The heaviest sharing win by file size: the pack is
+59 MB and every watch used to open its OWN read-only sqlite connection
+with its own anchor/window caches. Safe to share because every caller
+lives on the one GUI thread; sqlite3's default `check_same_thread=True`
+turns any future violation into a loud error, never silent corruption.
+Detection is memoized — absent means absent for the session.

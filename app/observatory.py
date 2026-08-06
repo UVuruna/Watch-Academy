@@ -44,7 +44,7 @@ from config import constants, defaults, encyclopedia_ui, palette
 from config.ui_text import ui
 from core.deep_time import julian_day_of, real_year
 from core.sun import day_length_curve
-from data.observatory import ObservatoryData
+from data.observatory import shared_observatory
 
 # Plot margins: left (y labels), top, right, bottom (x labels).
 _MARGIN = (58, 26, 18, 32)
@@ -1159,7 +1159,7 @@ class ObservatoryDialog(QDialog):
             defaults.DIALOG_A4_HEIGHT_FRACTION,
         )
 
-        data = ObservatoryData()
+        data = shared_observatory()
         column = QVBoxLayout(self)
 
         astro_year = real_year(now.year, cycles)

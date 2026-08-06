@@ -12,6 +12,34 @@ from config import paths
 from data._io import load_json_checked
 
 
+#: THE process-wide article source, ONE per language (owner bug
+#: 2026-08-06). `WatchController._symbolism()` built a NEW repository on
+#: every call, and every skin install calls it — so a 1.12 MB JSON parse
+#: was thrown away and redone on every settings change, on every watch,
+#: plus once more for each open Encyclopedia window. The book does not
+#: change because a second dial is looking at it; see
+#: `data.encyclopedia.shared_encyclopedia`, its twin.
+_SHARED: dict[str, "SymbolismRepository"] = {}
+
+
+def shared_symbolism(
+    language: str = "en", overlay: dict | None = None
+) -> "SymbolismRepository":
+    """The one symbolism repository for `language`. The overlay is
+    honored on FIRST call per language; `reset_shared_symbolism()` drops
+    the cached ones when a retranslation lands."""
+    repository = _SHARED.get(language)
+    if repository is None:
+        repository = _SHARED[language] = SymbolismRepository(overlay=overlay)
+    return repository
+
+
+def reset_shared_symbolism() -> None:
+    """The active language's overlay was reloaded — drop the stale
+    repositories so the next reader rebuilds against the new text."""
+    _SHARED.clear()
+
+
 class SymbolismRepository:
     def __init__(self, path: Path | None = None, overlay: dict | None = None):
         """`overlay` = the active language's translated texts (key →

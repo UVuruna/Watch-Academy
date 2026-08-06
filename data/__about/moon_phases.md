@@ -40,3 +40,12 @@ normalized to `"Third Quarter"` on load.
   entry for chains to the injected Deep Time pack (the WHOLE window
   comes from one source, never mixed with the bundle); without a pack
   it raises `ValueError` naming the supported range.
+
+## Functions
+
+### shared_moon_phases(deep=None)
+THE process-wide repository — the twin of
+[`shared_seasons`](seasons.md), and the one that saved the most: the
+bundled file is 2.9 MB and every watch used to parse its own copy.
+`coverage()` is cached too since 2026-08-06; it was the app's single
+most expensive repeat parse — two integers, read by reparsing 2.9 MB.

@@ -272,13 +272,29 @@ def validate_preset(entry: dict) -> dict:
     }
 
 
+#: The BUNDLED presets, parsed and validated ONCE per process (owner bug
+#: 2026-08-06). The file is small but this function sits on the skin
+#: install path — every settings change, on every watch, re-read and
+#: re-validated all of it. The bundled entries are identical for every
+#: watch; only the CUSTOM list and the PICK are per-watch, and the
+#: custom list is validated fresh below on every call, as it must be.
+_BUNDLED: list | None = None
+
+
+def _bundled_presets() -> list:
+    global _BUNDLED
+    if _BUNDLED is None:
+        raw = load_json_checked(
+            paths.database_dir() / "ring_presets.json", "Ring presets database"
+        )
+        _BUNDLED = list(raw["presets"])
+    return _BUNDLED
+
+
 def ring_presets(custom: tuple = ()) -> dict:
     """name -> validated card for every bundled + custom preset."""
-    raw = load_json_checked(
-        paths.database_dir() / "ring_presets.json", "Ring presets database"
-    )
     presets: dict = {}
-    for entry in list(raw["presets"]) + list(custom):
+    for entry in _bundled_presets() + list(custom):
         card = validate_preset(entry)
         if card["name"] in presets:
             raise ValueError(f"ring preset name {card['name']!r} is duplicated")

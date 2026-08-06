@@ -13,6 +13,22 @@ from config import defaults, paths
 from data._io import load_json_checked
 
 
+#: THE process-wide Observatory bundles (owner bug 2026-08-06). These
+#: three files are pure static science — nothing in them depends on a
+#: watch, its observer or its theme — yet every Observatory window
+#: opened on every watch re-parsed all three, and the instrument-diagram
+#: plates built a second, independent copy of their own.
+_SHARED: "ObservatoryData | None" = None
+
+
+def shared_observatory() -> "ObservatoryData":
+    """The one Observatory repository this process uses."""
+    global _SHARED
+    if _SHARED is None:
+        _SHARED = ObservatoryData()
+    return _SHARED
+
+
 class ObservatoryData:
     def __init__(self):
         database = paths.database_dir()

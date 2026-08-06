@@ -21,8 +21,8 @@ from pathlib import Path
 from config import constants, continents as continents_theme, defaults, pantheon, paths
 from core import continents
 from data.encyclopedia import EncyclopediaRepository
-from data.moon_phases import MoonPhaseRepository
-from data.seasons import SeasonsRepository
+from data.moon_phases import shared_moon_phases
+from data.seasons import shared_seasons
 from render.asset_recolor import metal_variant_path
 
 from app.encyclopedia.pages import (
@@ -547,7 +547,9 @@ def _continents_topic(travel_date: date) -> dict:
         "weekday": constants.WEEKDAY_FULL_NAMES["sun"],
     }
     pangea = continents.ninth_is_pangea_from_repos(
-        travel_date, SeasonsRepository(), MoonPhaseRepository()
+        # THE ONE COPY RULE — this used to build a fresh pair (476 KB +
+        # 2.9 MB of parsing) on every call.
+        travel_date, shared_seasons(), shared_moon_phases()
     )
     ninth_name, ninth_rel = (
         constants.WEEKDAY_THEME_NINTH_EASTER_EGG["continents"]

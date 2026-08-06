@@ -41,3 +41,11 @@ from the image and pivot alone.
   `hands.json` — checks `name`, that all three hand images exist (`.png`
   or `.svg`), that every hand has a `pivot.y`, and that `z_order`
   (if present) is a permutation of `HAND_NAMES`.
+
+### _walk(root, packs) / _BUNDLED
+The bundled packs are walked and parsed ONCE per process (owner bug
+2026-08-06) for the same reason as [`_bundled_presets`](rings.md): the
+shipped `assets/instrument/hands` tree cannot change while the app runs.
+The USER directory is re-walked on every call — a pack the user just
+added must appear without a restart — and the duplicate-name guard still
+sees bundled and user packs together.

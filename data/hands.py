@@ -54,18 +54,33 @@ def _load_pack(directory: Path) -> tuple[str, dict]:
     }
 
 
+#: The BUNDLED packs, walked and parsed ONCE per process (owner bug
+#: 2026-08-06). Like `data.rings.ring_presets` this sits on the skin
+#: install path, and the shipped `assets/instrument/hands` tree cannot
+#: change while the app runs. The USER directory is re-walked on every
+#: call — a pack the user just added must appear without a restart.
+_BUNDLED: dict[str, dict] | None = None
+
+
+def _walk(root, packs: dict[str, dict]) -> None:
+    if not root.exists():
+        return
+    for directory in sorted(root.iterdir()):
+        if not (directory / "hands.json").exists():
+            continue
+        name, pack = _load_pack(directory)
+        if name in packs:
+            raise ValueError(f"hand pack name {name!r} appears twice")
+        packs[name] = pack
+
+
 def hand_packs() -> dict[str, dict]:
     """name → pack for every bundled + user pack (duplicates are loud)."""
-    packs: dict[str, dict] = {}
-    roots = [paths.assets_dir() / "instrument" / "hands", user_hands_dir()]
-    for root in roots:
-        if not root.exists():
-            continue
-        for directory in sorted(root.iterdir()):
-            if not (directory / "hands.json").exists():
-                continue
-            name, pack = _load_pack(directory)
-            if name in packs:
-                raise ValueError(f"hand pack name {name!r} appears twice")
-            packs[name] = pack
+    global _BUNDLED
+    if _BUNDLED is None:
+        bundled: dict[str, dict] = {}
+        _walk(paths.assets_dir() / "instrument" / "hands", bundled)
+        _BUNDLED = bundled
+    packs = dict(_BUNDLED)
+    _walk(user_hands_dir(), packs)
     return packs

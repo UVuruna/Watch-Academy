@@ -20,8 +20,8 @@ from PySide6.QtGui import QImage, QPainter, QPixmap
 
 from config import archetypes, calendar_mounts, constants, defaults, dial, encyclopedia_ui, glow, palette, pantheon, paths, profiling
 from config.ui_text import ui
-from data.encyclopedia import EncyclopediaRepository
-from data.symbolism import SymbolismRepository
+from data.encyclopedia import EncyclopediaRepository, shared_encyclopedia
+from data.symbolism import SymbolismRepository, shared_symbolism
 from core import angles, continents
 from core.clock_state import DayContext, TickState
 from core.deep_time import (
@@ -466,14 +466,23 @@ class Compositor:
         # translation overlay; standalone uses read the originals. The
         # same overlay (Phase 2b) also translates the hover INFO lines
         # — labels, day/month/sign/phase names.
-        self._symbolism = symbolism or SymbolismRepository()
+        # THE ONE COPY RULE (owner 2026-08-06): the controller always
+        # passes the process-wide repositories in. The fallbacks below
+        # exist for direct construction (tests, tools) and reach for the
+        # SHARED English books — a private copy only when an overlay
+        # makes the text genuinely different from the shared one.
         self._overlay = overlay or {}
+        self._symbolism = symbolism or (
+            SymbolismRepository(overlay=self._overlay)
+            if self._overlay else shared_symbolism()
+        )
         # THE NINTH's own article family lives in encyclopedia.json, not
         # symbolism.json (round R3b item 3/4: the CENTER seat's solar-
         # window hover speaks it) — the SAME overlay, a sibling
         # repository, never a second translation path.
-        self._encyclopedia = encyclopedia or EncyclopediaRepository(
-            overlay=self._overlay
+        self._encyclopedia = encyclopedia or (
+            EncyclopediaRepository(overlay=self._overlay)
+            if self._overlay else shared_encyclopedia()
         )
         self._day: DayContext | None = None
         self._last_tick: TickState | None = None

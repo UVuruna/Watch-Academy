@@ -66,3 +66,11 @@ offending card.
   [flow](../__flow/rings.md).
 - `_validate_motto(name, raw, positions)` (private): the `motto`
   field's own validator and angle solver.
+
+### _bundled_presets()
+The bundled presets, parsed and validated ONCE per process (owner bug
+2026-08-06). `ring_presets(custom)` sits on the skin-install path, so
+every settings change on every watch re-read and re-validated the whole
+file. The bundled entries are identical for every watch; the CUSTOM list
+and the pick are per-watch, and the custom entries are still validated
+fresh on every call.

@@ -9,6 +9,37 @@ from config import paths
 from data._io import load_json_checked
 
 
+#: THE process-wide Encyclopedia content, ONE per language (owner bug
+#: 2026-08-06). The articles are the same book for every watch — only
+#: which ENTRIES a dial shows differs, and that is driven by its theme
+#: pick, not by a second copy of the book. Keyed by language because the
+#: overlay is the one thing that legitimately changes the text; a watch
+#: is never a key.
+#:
+#: Before this, a fresh 439 KB parse happened on every skin install (~24
+#: call sites, the theme-rotation timer among them) AND again for every
+#: Encyclopedia window opened on every watch.
+_SHARED: dict[str, "EncyclopediaRepository"] = {}
+
+
+def shared_encyclopedia(
+    language: str = "en", overlay: dict | None = None
+) -> "EncyclopediaRepository":
+    """The one Encyclopedia repository for `language`. The overlay is
+    honored on FIRST call per language; a retranslation calls
+    `reset_shared_encyclopedia()` to drop the stale ones."""
+    repository = _SHARED.get(language)
+    if repository is None:
+        repository = _SHARED[language] = EncyclopediaRepository(overlay=overlay)
+    return repository
+
+
+def reset_shared_encyclopedia() -> None:
+    """The active language's overlay was reloaded (a translation round
+    landed) — the cached repositories now hold stale text."""
+    _SHARED.clear()
+
+
 class EncyclopediaRepository:
     def __init__(self, overlay: dict | None = None):
         self._path = paths.database_dir() / "encyclopedia.json"

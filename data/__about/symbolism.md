@@ -45,3 +45,16 @@ element/trio articles, and the two-row archetype-wheel articles.
 - `trio_article(virtue)`: `{base}` of one Trinity-arm virtue.
 - `chinese_article(animal)` / `chinese_element(element)`: `{base}` of
   one Chinese zodiac animal / Wu Xing element.
+
+## Functions
+
+### shared_symbolism(language='en', overlay=None) / reset_shared_symbolism()
+THE process-wide article source, ONE per language (owner bug
+2026-08-06). `WatchController._symbolism()` built a NEW repository on
+every call and every skin install calls it, so a 1.12 MB parse was
+thrown away and redone on every settings change, on every watch, plus
+once more for each open Encyclopedia window. The book does not change
+because a second dial is looking at it. The LANGUAGE is the only
+legitimate key; a watch never is. `reset_shared_symbolism()` drops the
+cached repositories when a retranslation lands — without it the app
+would serve pre-translation text for the rest of the session.

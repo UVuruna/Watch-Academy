@@ -461,10 +461,10 @@ def _oscillations(_key: str, size: int) -> QPixmap:
     painted version of this chart would be a picture of a number that
     changes when the bundle changes — the plainest Rule #19 case in the
     whole book."""
-    from data.observatory import ObservatoryData
+    from data.observatory import shared_observatory
 
     pixmap, painter = _canvas(size)
-    envelope = ObservatoryData().laskar_envelope()
+    envelope = shared_observatory().laskar_envelope()
     years = envelope["years"]
     high = envelope["envelope_days"]
     signed = envelope["signed_days"]

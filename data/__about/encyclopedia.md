@@ -49,3 +49,14 @@ Serbian and any machine-translated language apply automatically.
 - `_section(section, key)` (private): the shared localized lookup
   every public method above delegates to — `{title, base}` of
   `data[section][key]`, overlaid.
+
+## Functions
+
+### shared_encyclopedia(language='en', overlay=None) / reset_shared_encyclopedia()
+THE process-wide Encyclopedia content, ONE per language — the twin of
+[`shared_symbolism`](symbolism.md), same reasoning. Before 2026-08-06 a
+fresh 439 KB parse happened on every skin install (~24 call sites, the
+theme-rotation timer among them) AND again for every Encyclopedia window
+on every watch. Pass it explicitly into every `Compositor`: left to its
+own default the compositor builds a private one, and a compositor is
+rebuilt on every skin install.

@@ -14,10 +14,26 @@ from core.moon import MoonWindow
 from data._io import load_json_checked, year_bounds
 
 
+#: THE process-wide moon repository — the twin of
+#: `data.seasons.shared_seasons`, and the one that saved the most: the
+#: bundled file is 2.9 MB and every watch used to parse its own copy.
+_SHARED: "MoonPhaseRepository | None" = None
+
+
+def shared_moon_phases(deep=None) -> "MoonPhaseRepository":
+    """The one moon repository this process uses; `deep` is honored on
+    FIRST call only (see `data.seasons.shared_seasons`)."""
+    global _SHARED
+    if _SHARED is None:
+        _SHARED = MoonPhaseRepository(deep=deep)
+    return _SHARED
+
+
 class MoonPhaseRepository:
     def __init__(self, path: Path | None = None, deep=None):
         self._path = path or (paths.database_dir() / "moonPhases_utc.json")
         self._cache: dict[int, MoonWindow] = {}
+        self._coverage: tuple[int, int] | None = None
         # The optional Deep Time pack (Session 16) — same chaining rule
         # as SeasonsRepository: bundled years stay bundled, missing
         # years fall through to the pack.
@@ -27,8 +43,16 @@ class MoonPhaseRepository:
         """The inclusive (first, last) calendar years the bundled moon
         database actually holds, read from the data — Time Travel
         intersects this with the seasons coverage to validate a target
-        before the day build (owner 2026-07-16)."""
-        return year_bounds(load_json_checked(self._path, "Moon phases database"))
+        before the day build (owner 2026-07-16).
+
+        Cached like `moon_window` is (owner bug 2026-08-06). This one was
+        the app's single most expensive repeat parse: two integers, read
+        by reparsing 2.9 MB of JSON, on every call."""
+        if self._coverage is None:
+            self._coverage = year_bounds(
+                load_json_checked(self._path, "Moon phases database")
+            )
+        return self._coverage
 
     def moon_window(self, year: int) -> MoonWindow:
         """All principal-phase events of `year` plus its neighbor years,

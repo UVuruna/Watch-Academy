@@ -40,6 +40,31 @@ class DeepEclipse:
     jd_ut: float                    # the catalog ordering key
 
 
+#: THE process-wide Deep Time pack. The heaviest sharing win in the app
+#: by file size (owner bug 2026-08-06): the pack is 59 MB and every
+#: watch used to open its OWN read-only sqlite connection to it, each
+#: with its own anchor/window caches. The pack is immutable calendar
+#: data — nothing in it depends on a watch's observer.
+#:
+#: Sharing one connection is safe because every caller lives on the ONE
+#: GUI thread (`_on_tick` and the day build); sqlite3's default
+#: `check_same_thread=True` turns any future violation of that into a
+#: loud error rather than silent corruption.
+_SHARED: "DeepTimeRepository | None" = None
+_DETECTED = False
+
+
+def shared_deep_time() -> "DeepTimeRepository | None":
+    """The one Deep Time repository this process uses, or None when the
+    pack is not installed (a supported state — see `detect`). The
+    detection itself is memoized: absent means absent for the session."""
+    global _SHARED, _DETECTED
+    if not _DETECTED:
+        _SHARED = DeepTimeRepository.detect()
+        _DETECTED = True
+    return _SHARED
+
+
 class DeepTimeRepository:
     def __init__(self, path: Path):
         self._path = path
@@ -65,7 +90,10 @@ class DeepTimeRepository:
     def detect(cls, path: Path | None = None) -> "DeepTimeRepository | None":
         """THE resolution point (owner spec 2026-07-17): the pack file
         exists → repository; absent → None (a supported state — the
-        bundled coverage stays authoritative). Called once at startup."""
+        bundled coverage stays authoritative). Called once at startup.
+
+        Prefer `shared_deep_time()` for the app's own use — `detect` is
+        the raw door, kept for tests that point at their own pack."""
         path = path or paths.deep_time_path()
         if not path.exists():
             return None
