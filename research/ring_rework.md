@@ -63,6 +63,28 @@ and on every settings change**, never per frame:
 | Relief | black SHADOW per hour_numerals.md (cast/extrude/emboss, radial light, parity colours) | WHITE GLOW — small radius, high intensity: a white border+glow, never a diffuse halo; same recipe for every inner element |
 | User-changeable | everything in the decision ledger | ONLY the numeral font (+ sizes, §5) |
 
+### The Fidelity Ruling (owner correction 2026-08-06, on seeing wave 3 live)
+
+Three laws, ruled after the first live-rendered bands reached the owner's
+screen and diverged from his art:
+
+1. **The live band composes the WHOLE ring — it never paints over the
+   printed plates' own content.** The composition chooses, per position,
+   what stands there: a letter plate OR a numeral, never both stacked. An
+   Ω with a 0 showing beneath it is the defect that triggered this ruling.
+   There is no reason to keep the old full-ring plate underneath a band
+   the engine builds from parts on the spot.
+2. **The owner's art IS the look.** Everything he created is used and
+   reproduced exactly: his plates and arrow/pointer art directly where
+   they exist, and where the engine draws (numerals, ticks, lines) it must
+   match his originals using shadow and glow — compared SIDE BY SIDE
+   against the pre-rework rendering. A delivered look that differs from
+   his art is a defect — for the letters and for every inner-band element,
+   arrows included.
+3. **Render time changes WHAT, never HOW it looks.** The user's picks
+   (font, display, letters vs numbers per position) decide the content of
+   the band; the style is fixed by the owner's art.
+
 **The pixelation defect (1440p):** today's letter shadow is stamped as 8
 discrete silhouette copies around a circle (`RING_LETTER_SHADOW_SAMPLES`,
 `config/dial.py`) — at dial sizes the copies fuse, at 1440p they separate
