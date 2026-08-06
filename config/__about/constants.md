@@ -70,7 +70,8 @@ data has exactly one home.
   `RING_OUTER_LOCK` (the five presets' locked outer — "The One" moved
   onto "octa"; "full" is now preset-free, custom rings only),
   `RING_INNERS`/`RING_INNER_PRESET_DEFAULT` (DOMY/LOOP/Dollar all
-  "seconds", Templar "seconds_cross", The One "simple_octa")/`_DEFAULT`,
+  "seconds", Templar "seconds_cross", The One "simple_octa", CHI
+  "simple" — ruled "može", Crown Polish round, owner 2026-08-06)/`_DEFAULT`,
   `RING_TWO_METALS_DEFAULT`, THE EYE AT THE APEX (`RING_EYE_GLYPH`/
   `_SHINE_FILE`/`_SHINE_DEFAULT`/`_SHINE_ENLARGE`), `RING_LETTER_
   GROUPS`/`_FILES` (the full Latin/Greek/Numbers/Symbols letter

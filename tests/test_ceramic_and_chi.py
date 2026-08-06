@@ -105,7 +105,8 @@ def test_chi_preset_validates_and_locks_its_outer():
     assert chi["thematic"] == "ceramic"
     assert chi["about"]
     assert constants.RING_OUTER_LOCK["CHI"] == "full"
-    assert constants.RING_INNER_PRESET_DEFAULT["CHI"] == "simple"  # PROPOSED
+    # RULED "može" (Crown Polish round, owner 2026-08-06).
+    assert constants.RING_INNER_PRESET_DEFAULT["CHI"] == "simple"
 
 
 def test_chi_crown_text_chars_all_drawable():

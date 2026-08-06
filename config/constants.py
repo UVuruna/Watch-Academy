@@ -1133,9 +1133,10 @@ RING_INNERS = (
 RING_INNER_PRESET_DEFAULT = {
     "DOMY": "seconds", "LOOP": "seconds", "Dollar": "seconds",
     "Templar": "seconds_cross", "The One": "simple_octa",
-    # PROPOSED (S5, ring-rework CHI task, awaiting owner veto): "simple"
-    # — the emptiest inner for the emptiest dial (a single X on the
-    # solid "full" outer plate); still user-changeable in Settings ▸ Ring.
+    # RULED "može" (Crown Polish round, owner 2026-08-06 — the S5
+    # ring-rework CHI proposal is approved as written): "simple" — the
+    # emptiest inner for the emptiest dial (a single X on the solid
+    # "full" outer plate); still user-changeable in Settings ▸ Ring.
     "CHI": "simple",
 }
 RING_INNER_DEFAULT = "simple"       # every custom ring's own fallback
