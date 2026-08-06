@@ -31,14 +31,6 @@ from config import dial
 SHADE = "shade"
 LIT = "lit"
 
-# The inner band's line vocabulary (ring_rework.md §2), most specific
-# LAST so a single walk can let the later kind win a shared angle.
-TICK_DAY = "day"          # the 360 day ticks — one per degree
-TICK_SECOND = "second"    # the sixty second marks — every 6 deg
-TICK_SHORT = "short"      # the stroke beside a printed number
-TICK_LONG = "long"        # the twelve five-minute strokes
-TICK_POINTER = "pointer"  # the four quarter arrows
-
 
 def fold_angle(deg: float) -> float:
     """`deg` folded into (-180, 180] — the one normalization every
@@ -198,32 +190,45 @@ def parity_role(label: str) -> str:
     return "even" if int(label) % 2 == 0 else "odd"
 
 
-def inner_tick_plan() -> tuple[tuple[float, str], ...]:
-    """Every line of the INNER band as `(angle_deg, kind)`, one entry
-    per drawn angle, most specific kind winning.
+def numeral_hours(letter_hours) -> tuple[int, ...]:
+    """THE COMPOSITION LAW (the Fidelity Ruling, ring_rework.md §2): the
+    hours of the OUTER band that carry a NUMERAL — every hour except the
+    ones the preset seats a LETTER on.
 
-    The walk is one degree wide (`TICK_DAY`, the 360 day ticks); every
-    sixth degree is a `TICK_SECOND`; the twelve five-minute seats carry
-    a `TICK_LONG`; the two neighbours of a LONG that stands beside a
-    printed number are `TICK_SHORT`; and the four quarter angles are
-    `TICK_POINTER`. Precedence is resolved HERE so no render pass has
-    to ask which kind wins at a shared angle."""
-    kinds: dict[int, str] = {}
-    for degree in range(360):
-        kinds[degree] = TICK_DAY
-    for degree in range(0, 360, int(dial.NUMERAL_MINUTE_STEP_DEG)):
-        kinds[degree] = TICK_SECOND
-    long_step = int(
-        dial.NUMERAL_MINUTE_STEP_DEG * dial.NUMERAL_MINUTE_LABEL_STEP
+    One seat, one content: an Ω and a 0 never stand on the same hour
+    again, which is the defect the ruling was issued for. `letter_hours`
+    arrives in the ring's own 1..24 counting (`config.constants.
+    RING_OUTERS[...]["positions"]`, where MIDNIGHT is 24), so 24 folds
+    to the band's own 0 here — the one place the two countings meet."""
+    seated = {hour % dial.NUMERAL_HOUR_COUNT for hour in letter_hours}
+    return tuple(
+        hour for hour in range(dial.NUMERAL_HOUR_COUNT) if hour not in seated
     )
-    for degree in range(0, 360, long_step):
-        for side in (-dial.NUMERAL_SHORT_TICK_OFFSET_DEG,
-                     dial.NUMERAL_SHORT_TICK_OFFSET_DEG):
-            kinds[int(degree + side) % 360] = TICK_SHORT
-        kinds[degree] = TICK_LONG
-    for degree in (0, 90, 180, 270):
-        kinds[degree] = TICK_POINTER
-    return tuple((float(degree), kinds[degree]) for degree in sorted(kinds))
+
+
+def inner_composition(variant: str) -> dict:
+    """One inner variant's own composition — `{"base", "numbers"}`, the
+    numberless plate of the owner's that carries its ticks and arrows,
+    and the five-minute seats that carry a live NUMBER.
+
+    An unknown variant composes as the bare plate it names with no
+    numbers at all: a custom ring may point at any inner file, and a
+    band with no numbers is a legitimate band (`simple` is one), never
+    a reason to fail a render."""
+    entry = dial.RING_INNER_COMPOSITION.get(variant)
+    if entry is None:
+        return {"base": variant, "numbers": ()}
+    return entry
+
+
+def inner_number_seats(variant: str) -> tuple[tuple[str, float], ...]:
+    """`(label, dial angle)` for every NUMBER the inner band composes —
+    the ledger's bare labels (`"5"`, `"10"` ... no leading zero) at the
+    minute's own angle. Empty for every numberless variant."""
+    return tuple(
+        (str(minute), minute_angle(minute))
+        for minute in inner_composition(variant)["numbers"]
+    )
 
 
 def crown_glyph_alphabet() -> tuple[str, ...]:

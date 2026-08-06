@@ -332,9 +332,19 @@ NUMERAL_PARITY_COLORS = {
 NUMERAL_SHADE_COLOR = "#000000"
 NUMERAL_LIT_COLOR = "#FFFFFF"
 NUMERAL_CONTACT_BLUR_COLOR = "#000000"
-# The INNER band's WHITE GLOW (ring_rework §2) — worn by its numerals and
-# by all five families of tick line alike.
-NUMERAL_INNER_INK = "#FFFFFF"
+# The hard black line on the OUTER edge of the hour band — MEASURED on
+# the owner's six outer plates (pure #000000, 0.0035 of the radius wide,
+# on the outer edge alone; the inner edge carries none). THE FIDELITY
+# RULING: the engine now draws the metal those plates used to ship, so
+# the rim is drawn with it.
+NUMERAL_BAND_RIM = "#000000"
+# The INNER band's own two colours, MEASURED on his inner plates: every
+# element there — number, stub, minute stroke, arrow — is a
+# NUMERAL_RING_GROUND body inside a WHITE border, under a white glow.
+# The ink was white-on-white before the Fidelity Ruling, which is the
+# second-loudest difference between his art and wave 3's screen.
+NUMERAL_INNER_INK = NUMERAL_RING_GROUND
+NUMERAL_INNER_BORDER = "#FFFFFF"
 NUMERAL_INNER_GLOW_COLOR = "#FFFFFF"
 # The ink the FONT COVERAGE proof draws with when it has to fall back
 # to render-and-count-non-blank-pixels (`render.numeral_fonts`) — any

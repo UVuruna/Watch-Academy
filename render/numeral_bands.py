@@ -1,13 +1,30 @@
 """The two band plates and the crown's glyph set — built ONCE per
 settings change, cached process-wide, blitted every frame.
 
+THE FIDELITY RULING (owner correction 2026-08-06, ring_rework.md §2) is
+what this module now implements, in its own three laws:
+
+1. **The band COMPOSES; it never stacks.** The outer plate is the metal
+   AND the numerals, drawn together, with a numeral at every hour the
+   preset does not seat a LETTER on — so the old printed plate is gone
+   from under it and an Ω never again stands over a 0. The inner plate
+   is the numbers alone, composed into the empty five-minute seats of
+   the owner's own numberless base art.
+2. **His art is the look.** Every tick, every arrow and every day
+   hairline on the inner band IS his plate, blitted (`RingLayer`); what
+   this module draws — the numerals, the metal, the stubs — was fitted
+   glyph by glyph against `assets/instrument/ring/outter/full.png` and
+   `inner/seconds.png` rather than styled.
+3. **Render time changes WHAT, never HOW.** The user's picks decide the
+   content of a seat; `config.dial`'s measured constants decide the
+   style.
+
 THE ONE COPY RULE (owner 2026-07-28, extended 2026-08-06): `_PLATES` and
 `_CROWNS` are module-level, so N watches showing the same settings hold
 ONE copy of each plate — exactly like `render.assets.shared_cache` and
 every other shared book. The SPEC dataclasses below are the cache keys:
-they carry precisely what can make two plates differ, `offset_deg`
-included, so wave 4's Heliocentric rotation re-renders a band without
-changing any caller's shape.
+they carry precisely what can make two plates differ, `offset_deg` and
+the preset's own letter seats included.
 
 Nothing here runs on the paint path and nothing here touches the disk:
 the plates are COMPUTED. The layers only ever blit what they find.
@@ -16,12 +33,13 @@ the plates are COMPUTED. The layers only ever blit what they find.
 import math
 from dataclasses import dataclass
 
-from PySide6.QtCore import QPointF, Qt
-from PySide6.QtGui import QImage, QPainterPath
+from PySide6.QtCore import QPointF, QRectF, Qt
+from PySide6.QtGui import QColor, QImage, QPainterPath
 
-from config import dial
+from config import dial, palette
 from core import numerals
 from render import numeral_relief as relief
+from render.asset_recolor import ring_recolored_image
 from render.numeral_fonts import assert_covers, numeral_font
 from render.painting import dial_point
 
@@ -45,7 +63,18 @@ class BandSpec:
     darkness: float = dial.NUMERAL_DARKNESS_DEFAULT
     contact_blur_units: float = dial.NUMERAL_CONTACT_BLUR_DEFAULT
     border_units: float = dial.NUMERAL_BORDER_DEFAULT
-    offset_deg: float = 0.0    # the Heliocentric band rotation (wave 4)
+    offset_deg: float = 0.0    # the Heliocentric band rotation
+    # THE COMPOSITION LAW's own two keys. `letter_hours` are the OUTER
+    # seats the preset's letter art holds (ring counting, midnight =
+    # 24) — no numeral is drawn on them. `inner_variant` names the
+    # INNER plate the user picked, which decides which five-minute
+    # seats carry a number and which carry one of his arrows.
+    letter_hours: tuple = ()
+    inner_variant: str = ""
+    # The ring's own two recolors, so a COMPUTED plate answers the
+    # sliders exactly as the printed plate it replaces did.
+    tint: str | None = None
+    saturation: float = 1.0
 
 
 @dataclass(frozen=True)
@@ -126,23 +155,46 @@ def outer_centreline(ring_size: float) -> float:
     return inner_edge + width * ring_size / 2.0
 
 
+def outer_band_edges(ring_size: float) -> tuple[float, float]:
+    """The OUTER band's metal edges — `(inner, outer)` as fractions of
+    the dial radius. MEASURED off the owner's six outer plates, which
+    all carry the same annulus: 0.8858 to 0.9998. The inner edge is
+    fixed and the "Outer ring size" multiplier moves the outer one
+    (`outer_centreline`'s own rule, stated once as geometry here)."""
+    width = dial.NUMERAL_OUTER_BAND_WIDTH_FRACTION
+    inner_edge = dial.NUMERAL_OUTER_RADIUS_FRACTION - width / 2.0
+    return inner_edge, inner_edge + width * ring_size
+
+
+def _annulus(radius: float, inner: float, outer: float) -> QPainterPath:
+    """The ring between two radius fractions, as an even-odd path."""
+    path = QPainterPath()
+    path.setFillRule(Qt.FillRule.OddEvenFill)
+    for fraction in (outer, inner):
+        span = radius * fraction
+        path.addEllipse(QRectF(-span, -span, 2 * span, 2 * span))
+    return path
+
+
 def _seats(spec: BandSpec) -> tuple[tuple[str, float, QPointF], ...]:
     """`(label, seat angle, page-space centre)` for every numeral of the
-    band. The OUTER band's angles carry `offset_deg`; the INNER band
-    NEVER rotates, in any mode (ledger §2)."""
+    band — THE COMPOSITION LAW's own list, so a seat that carries other
+    content simply is not in it.
+
+    The OUTER band's angles carry `offset_deg` and skip the preset's
+    LETTER seats (`core.numerals.numeral_hours`); the INNER band NEVER
+    rotates in any mode (ledger §2) and carries only the five-minute
+    seats its variant leaves empty of arrows."""
     radius = spec.pixels / 2.0
     if spec.band == "outer":
         fraction = outer_centreline(spec.ring_size)
         pairs = [
-            (label, numerals.hour_angle(hour, spec.offset_deg))
-            for hour, label in enumerate(numerals.hour_labels())
+            (str(hour), numerals.hour_angle(hour, spec.offset_deg))
+            for hour in numerals.numeral_hours(spec.letter_hours)
         ]
     else:
         fraction = dial.NUMERAL_INNER_RADIUS_FRACTION
-        pairs = [
-            (label, numerals.minute_angle(int(label)))
-            for label in numerals.minute_labels()
-        ]
+        pairs = list(numerals.inner_number_seats(spec.inner_variant))
     return tuple(
         (label, angle, dial_point(angle, radius * fraction))
         for label, angle in pairs
@@ -150,20 +202,26 @@ def _seats(spec: BandSpec) -> tuple[tuple[str, float, QPointF], ...]:
 
 
 def _build_outer(spec: BandSpec) -> QImage:
-    """The 24 hour numerals, in relief, on transparency.
+    """The whole OUTER band: the metal, then the hour numerals standing
+    on it — THE FIDELITY RULING's first law. No printed plate is blitted
+    under this any more, so nothing the engine draws can collide with
+    something already baked into a PNG.
 
-    Three passes, in this order: the CONTACT BLUR (a whole-band
-    silhouette, blurred once — never a per-glyph halo and never N
-    stamped copies), the RELIEF copies, then the bodies. Doing the blur
-    as one band-wide layer is what keeps the edge smooth at 1440p; the
-    radius comes from the plate's own pixel size, so it scales by
+    Four passes, in this order: the BASE (a flat `NUMERAL_RING_GROUND`
+    annulus with the black rim on its outer edge — measured, not
+    designed), the HALO (every glyph dilated by
+    `NUMERAL_SHADOW_REACH_UNITS`, thrown by the light, blurred ONCE as
+    one band-wide layer and composited `NUMERAL_GLOW_PASSES` times), the
+    RELIEF copies, then the bodies in their parity colours. Doing the
+    blur band-wide is what keeps the edge smooth at 1440p; every radius
+    comes from the plate's own pixel size, so it scales by
     construction."""
     assert_covers("outer", spec.face, numerals.hour_labels())
     unit = _unit_px(spec.pixels)
+    radius = spec.pixels / 2.0
     font = numeral_font("outer", spec.face, spec.size_units * unit)
     depth_px = spec.depth_units * unit
     border_px = spec.border_units * unit
-    seats = _seats(spec)
     paths = tuple(
         (
             label,
@@ -173,115 +231,113 @@ def _build_outer(spec: BandSpec) -> QImage:
                 numerals.seat_rotation(angle, spec.seating),
             ),
         )
-        for label, angle, center in seats
+        for label, angle, center in _seats(spec)
     )
     plate = relief.blank_plate(spec.pixels)
-    blur_px = spec.contact_blur_units * unit
-    if blur_px > 0.0:
+    painter = relief.plate_painter(plate)
+    inner_edge, outer_edge = outer_band_edges(spec.ring_size)
+    painter.setPen(Qt.PenStyle.NoPen)
+    painter.setBrush(QColor(palette.NUMERAL_RING_GROUND))
+    painter.drawPath(_annulus(radius, inner_edge, outer_edge))
+    painter.setBrush(QColor(palette.NUMERAL_BAND_RIM))
+    painter.drawPath(
+        _annulus(
+            radius, outer_edge - dial.NUMERAL_BAND_RIM_FRACTION, outer_edge,
+        )
+    )
+    painter.end()
+    throws = {
+        label: numerals.light_offset(
+            angle, depth_px, spec.light,
+            tuple(value * unit for value in spec.fixed_offset),
+        )
+        for label, angle, _path in paths
+    }
+    halo_px = border_px / 2.0 + dial.NUMERAL_SHADOW_REACH_UNITS * unit
+    if halo_px > 0.0 and paths:
+        # The halo takes NO throw — MEASURED on his plates, where the
+        # black reaches 11.1 px outward and 11.3 px inward of a numeral:
+        # symmetric to within a fifth of a pixel at 3600. The LIGHT is
+        # the ledger's own directional relief (`draw_relief` below),
+        # which at the settled depth lies inside this halo and only
+        # emerges when the user asks for a deeper one.
         silhouette = relief.blank_plate(spec.pixels)
         painter = relief.plate_painter(silhouette)
-        painter.setPen(Qt.PenStyle.NoPen)
-        painter.setBrush(Qt.GlobalColor.black)
         for _label, _angle, path in paths:
-            painter.drawPath(path)
+            relief.draw_dilated(
+                painter, path, halo_px, palette.NUMERAL_SHADE_COLOR,
+            )
         painter.end()
+        blur_px = spec.contact_blur_units * unit
         relief.composite(
-            plate, relief.box_blur_alpha(silhouette, blur_px), 1.0,
+            plate, relief.box_blur_alpha(silhouette, blur_px), spec.darkness,
             dial.NUMERAL_GLOW_PASSES,
         )
     painter = relief.plate_painter(plate)
-    for _label, angle, path in paths:
+    for label, _angle, path in paths:
         relief.draw_relief(
-            painter, path, spec.relief_style, depth_px,
-            numerals.light_offset(
-                angle, depth_px, spec.light,
-                tuple(value * unit for value in spec.fixed_offset),
-            ),
+            painter, path, spec.relief_style, depth_px, throws[label],
             spec.darkness,
         )
     for label, _angle, path in paths:
         relief.draw_body(painter, path, numerals.parity_role(label), border_px)
     painter.end()
-    return relief.stamp_dpr(plate, spec.dpr)
-
-
-def _tick_path(kind: str, angle: float, radius: float) -> QPainterPath:
-    """One tick LINE as a path: a radial stroke running inward from the
-    band's outer edge, its length and width from the kind's own row in
-    `config.dial`. The POINTER kind is the quarter ARROW — the same
-    radial run, closed into a head at its inner end."""
-    outer = radius * dial.NUMERAL_TICK_OUTER_FRACTION
-    inner = outer - radius * dial.NUMERAL_TICK_LENGTHS[kind]
-    half = radius * dial.NUMERAL_TICK_WIDTHS[kind] / 2.0
-    start = dial_point(angle, outer)
-    end = dial_point(angle, inner)
-    path = QPainterPath()
-    direction = QPointF(end.x() - start.x(), end.y() - start.y())
-    length = math.hypot(direction.x(), direction.y()) or 1.0
-    normal = QPointF(-direction.y() / length * half, direction.x() / length * half)
-    if kind == numerals.TICK_POINTER:
-        head = QPointF(
-            start.x() + direction.x() * dial.NUMERAL_POINTER_HEAD_FRACTION,
-            start.y() + direction.y() * dial.NUMERAL_POINTER_HEAD_FRACTION,
-        )
-        wide = QPointF(normal.x() * dial.NUMERAL_POINTER_HEAD_WIDTH,
-                       normal.y() * dial.NUMERAL_POINTER_HEAD_WIDTH)
-        path.moveTo(start + wide)
-        path.lineTo(head + normal)
-        path.lineTo(end + normal)
-        path.lineTo(end - normal)
-        path.lineTo(head - normal)
-        path.lineTo(start - wide)
-        path.closeSubpath()
-        return path
-    path.moveTo(start + normal)
-    path.lineTo(end + normal)
-    path.lineTo(end - normal)
-    path.lineTo(start - normal)
-    path.closeSubpath()
-    return path
+    return relief.stamp_dpr(
+        ring_recolored_image(plate, spec.tint, spec.saturation), spec.dpr,
+    )
 
 
 def _build_inner(spec: BandSpec) -> QImage:
-    """The minute numerals plus the five families of tick LINE, all in
-    WHITE GLOW (ring_rework §2: small radius, strong intensity, a
-    border+glow, never a diffuse halo — the same recipe for every inner
-    element). The glow is one band-wide blurred silhouette composited
-    `NUMERAL_GLOW_PASSES` times: several small passes read as a tight
-    bright edge where one wide pass reads as smoke."""
+    """The INNER band's live half: the minute NUMBERS, in the WHITE
+    BORDER + GLOW every element of the owner's inner plates wears
+    (ring_rework §2: small radius, strong intensity, a border+glow,
+    never a diffuse halo). The glow is one band-wide blurred silhouette
+    composited `NUMERAL_GLOW_PASSES` times: several small passes read as
+    a tight bright edge where one wide pass reads as smoke.
+
+    The band's ticks and arrows are NOT here — `RingLayer` blits them
+    from his numberless base plate first, and these numbers compose into
+    it. They also OCCLUDE, exactly as they do in his own numbered
+    plates: a five-minute stroke runs 0.798 to 0.888 of the radius and a
+    number stands over its inner half, leaving the outer stub showing.
+    Reproducing that needs no extra geometry at all — the number is
+    opaque and simply covers what it covers. A variant whose seats all
+    carry arrows (`simple`, `simple_octa`) builds an EMPTY plate, which
+    is correct: the whole band is then his art, untouched."""
     assert_covers("inner", spec.face, numerals.minute_labels())
     unit = _unit_px(spec.pixels)
-    radius = spec.pixels / 2.0
     font = numeral_font("inner", spec.face, spec.size_units * unit)
     border_px = dial.NUMERAL_GLOW_BORDER_UNITS * unit
+    seats = _seats(spec)
     elements = [
-        _tick_path(kind, angle, radius)
-        for angle, kind in numerals.inner_tick_plan()
-    ]
-    elements += [
         relief.seated_path(
             label, font, center, numerals.seat_rotation(angle, spec.seating),
         )
-        for label, angle, center in _seats(spec)
+        for label, angle, center in seats
     ]
     plate = relief.blank_plate(spec.pixels)
-    silhouette = relief.blank_plate(spec.pixels)
-    painter = relief.plate_painter(silhouette)
-    painter.setPen(Qt.PenStyle.NoPen)
-    painter.setBrush(Qt.GlobalColor.white)
-    for path in elements:
-        painter.drawPath(path)
-    painter.end()
-    relief.composite(
-        plate,
-        relief.box_blur_alpha(silhouette, dial.NUMERAL_GLOW_RADIUS_UNITS * unit),
-        1.0, dial.NUMERAL_GLOW_PASSES,
+    if elements:
+        silhouette = relief.blank_plate(spec.pixels)
+        painter = relief.plate_painter(silhouette)
+        painter.setPen(Qt.PenStyle.NoPen)
+        painter.setBrush(QColor(palette.NUMERAL_INNER_INK))
+        for path in elements:
+            painter.drawPath(path)
+        painter.end()
+        relief.composite(
+            plate,
+            relief.box_blur_alpha(
+                silhouette, dial.NUMERAL_GLOW_RADIUS_UNITS * unit
+            ),
+            1.0, dial.NUMERAL_GLOW_PASSES,
+        )
+        painter = relief.plate_painter(plate)
+        for path in elements:
+            relief.draw_inner_ink(painter, path, border_px)
+        painter.end()
+    return relief.stamp_dpr(
+        ring_recolored_image(plate, spec.tint, spec.saturation), spec.dpr,
     )
-    painter = relief.plate_painter(plate)
-    for path in elements:
-        relief.draw_inner_ink(painter, path, border_px)
-    painter.end()
-    return relief.stamp_dpr(plate, spec.dpr)
 
 
 def crown_glyph_set(spec: CrownSpec) -> dict:

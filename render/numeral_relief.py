@@ -96,12 +96,45 @@ def draw_relief(
     painter.restore()
 
 
+def draw_dilated(
+    painter: QPainter, path: QPainterPath, reach_px: float, color: str,
+) -> None:
+    """The glyph GROWN by `reach_px` in every direction and filled flat
+    — the outer band's black halo (THE FIDELITY RULING, measured on the
+    owner's plates: the black around a numeral runs SOLID for ~10 px at
+    3600 and only then fades over ~3).
+
+    A blurred silhouette cannot make that plateau — a blur wide enough
+    to reach 10 px is already a smoke cloud at its own edge — so the
+    halo is a DILATION: the outline stroked with a pen `2 * reach_px`
+    wide (round join and cap, so corners grow round exactly as they do
+    in his art) under the same path filled. The soft edge is the
+    contact blur laid over this, and that separation is what lets the
+    plateau and the falloff be tuned against the plates independently."""
+    painter.save()
+    pen = QPen(QColor(color))
+    pen.setWidthF(max(0.0, 2.0 * reach_px))
+    pen.setJoinStyle(Qt.PenJoinStyle.RoundJoin)
+    pen.setCapStyle(Qt.PenCapStyle.RoundCap)
+    painter.setPen(pen if reach_px > 0.0 else Qt.PenStyle.NoPen)
+    painter.setBrush(QColor(color))
+    painter.drawPath(path)
+    painter.restore()
+
+
 def draw_body(
     painter: QPainter, path: QPainterPath, role: str, border_px: float,
 ) -> None:
     """The numeral itself in its PARITY colours (ledger §3). At border 0
     an odd numeral is ring on ring — deliberate: it exists only through
-    the relief already laid down beneath it."""
+    the relief already laid down beneath it.
+
+    The border is laid down FIRST and the body over it, so the border
+    grows OUTWARD only and never eats into the glyph (THE FIDELITY
+    RULING, measured: his even numerals' white is the full glyph and
+    their ring-ground rim stands outside it; one `drawPath` with both a
+    pen and a brush strokes centred instead, which shaved half the pen
+    width off every stroke of every numeral)."""
     colors = palette.NUMERAL_PARITY_COLORS[role]
     painter.save()
     if border_px > 0.0:
@@ -109,8 +142,9 @@ def draw_body(
         pen.setWidthF(border_px)
         pen.setJoinStyle(Qt.PenJoinStyle.RoundJoin)
         painter.setPen(pen)
-    else:
-        painter.setPen(Qt.PenStyle.NoPen)
+        painter.setBrush(QColor(colors["border"]))
+        painter.drawPath(path)
+    painter.setPen(Qt.PenStyle.NoPen)
     painter.setBrush(QColor(colors["body"]))
     painter.drawPath(path)
     painter.restore()
@@ -119,18 +153,25 @@ def draw_body(
 def draw_inner_ink(
     painter: QPainter, path: QPainterPath, border_px: float,
 ) -> None:
-    """An INNER-band element (numeral or line): white ink with a crisp
-    white border — the glow itself is a separate whole-band pass, so
-    this stays hard-edged (ring_rework §2: "a white border+glow, never
-    a diffuse halo")."""
+    """An INNER-band element (number or stub) exactly as the owner drew
+    every element of his inner plates: a RING-GROUND body inside a crisp
+    WHITE border. The glow itself is a separate whole-band pass, so this
+    stays hard-edged (ring_rework §2: "a white border+glow, never a
+    diffuse halo").
+
+    The body is NOT white (THE FIDELITY RULING, measured): his minute
+    strokes, arrows and numbers are all the ring's own grey with a white
+    rim, and a white body loses that rim entirely — the inner band went
+    flat white on wave 3's screen for exactly this reason."""
     painter.save()
     if border_px > 0.0:
-        pen = QPen(QColor(palette.NUMERAL_INNER_INK))
+        pen = QPen(QColor(palette.NUMERAL_INNER_BORDER))
         pen.setWidthF(border_px)
         pen.setJoinStyle(Qt.PenJoinStyle.RoundJoin)
         painter.setPen(pen)
-    else:
-        painter.setPen(Qt.PenStyle.NoPen)
+        painter.setBrush(QColor(palette.NUMERAL_INNER_BORDER))
+        painter.drawPath(path)
+    painter.setPen(Qt.PenStyle.NoPen)
     painter.setBrush(QColor(palette.NUMERAL_INNER_INK))
     painter.drawPath(path)
     painter.restore()

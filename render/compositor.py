@@ -52,11 +52,7 @@ from render.layers.background import BackgroundLayer
 from render.layers.center_body import CenterBodyLayer
 from render.layers.hand import HandLayer
 from render.layers.hover_lift import HoverLiftLayer
-from render.layers.numerals import (
-    InnerNumeralLayer,
-    LiveCrownLayer,
-    OuterNumeralLayer,
-)
+from render.layers.numerals import LiveCrownLayer
 from render.layers.ring import RingLayer
 from render.layers.slot import SlotLayer
 from render.layers.star import StarLayer
@@ -355,16 +351,6 @@ def _build_layers(skin: SkinDefinition) -> list[Layer]:
             # the weekday unit and the slots are overridden OFF at the
             # render level (enabled_slots), never in settings.
             layers.append(ArchetypeLayer(skin))
-        elif name == "ring":
-            # THE LIVE NUMERAL BANDS (ring_rework.md §2): the ring's own
-            # plates, letters and static crown-text stamps are unchanged
-            # — the two hand-drawn numeral bands are stacked directly on
-            # top of them, in the ring's own z spot, so nothing above or
-            # below moves. Both are STATIC, so they are baked into the
-            # cached composite and cost nothing per frame.
-            layers.append(RingLayer(skin))
-            layers.append(InnerNumeralLayer(skin))
-            layers.append(OuterNumeralLayer(skin))
         elif not skipped.get(name, False):
             layers.append(factories[name]())
     if (

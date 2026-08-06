@@ -5,7 +5,8 @@ extraction, `research/REFACTOR_PLAN.md` §8): `letter_metal_file` and
 `AssetCache`'s hue-selective/whole-glyph recolor kernels; `_recolored_
 plate` is the subdial plate's own bezel/field recolor, built the SAME
 recipe; `tinted_pixmap` is the public door to `AssetCache`'s TRITONE
-gradient-map tint. See [Asset Recolor](asset_recolor.md) for the full
+gradient-map tint and `ring_recolored_image` the same door for a
+COMPUTED band plate. See [Asset Recolor](asset_recolor.md) for the full
 recipe.
 """
 
@@ -374,3 +375,29 @@ def tinted_pixmap(source: QPixmap, tint: str) -> QPixmap:
     icon tint and lives outside render/ entirely (Rule #5 — one
     algorithm, a clean non-private door for the second caller)."""
     return AssetCache._tinted(source, tint)
+
+
+def ring_recolored_image(
+    image: QImage, tint: str | None, saturation: float,
+) -> QImage:
+    """A COMPUTED band plate put through the ring's own two recolors, in
+    the ring's own order — tritone tint first, HSV saturation after
+    (`AssetCache.pixmap_by_height`'s order, Rule #5: a computed plate
+    must answer the Ring tint/saturation sliders exactly as the printed
+    plate it replaces did).
+
+    Both no-ops return the image untouched, which is the common case:
+    the tint is None and the saturation 1.0 on every default skin, so a
+    plain band never pays for this at all."""
+    if tint is None and saturation == 1.0:
+        return image
+    dpr = image.devicePixelRatio()
+    pixmap = QPixmap.fromImage(image)
+    pixmap.setDevicePixelRatio(dpr)
+    if tint is not None:
+        pixmap = AssetCache._tinted(pixmap, tint)
+    if saturation != 1.0:
+        pixmap = AssetCache._saturated(pixmap, saturation)
+    result = pixmap.toImage()
+    result.setDevicePixelRatio(dpr)
+    return result

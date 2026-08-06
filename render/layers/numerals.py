@@ -1,19 +1,19 @@
-"""The three NUMERAL layers — the two live-rendered bands and the live
-crown.
+"""The NUMERAL layer family — the band cache keys and the live crown.
 
-`RingLayer` still draws everything it always drew (the outer plate PNG,
-the inner plate PNG, the preset's letter art and the static `crown_text`
-stamps); these layers ADD the hand-drawn numerals on top of that
-composition. Nothing was replaced.
+THE FIDELITY RULING (owner correction 2026-08-06): the two BAND layers
+that used to live here are gone. They stacked a computed plate on top of
+`RingLayer`'s printed one, which is exactly the construction the ruling
+outlaws — an Ω with a 0 showing under it. The bands are now part of the
+ring's own composition ([Ring](ring.md)), which draws his inner base
+art, the live inner numbers, the computed outer band, the letters and
+the crown arc in one ordered pass. `band_spec` stayed here, because it
+is the shared door BOTH the ring layer and every test go through to ask
+for the plate an on-screen watch would get.
 
-The two band layers are STATIC, so the compositor bakes them into its
-cached pixmap and they cost nothing per frame: each asks
-[Numeral Bands](../__about/numeral_bands.md) for a plate keyed by the
-skin's numeral settings and the plate's own pixel size, and blits it
-centred on the dial origin. `LiveCrownLayer` is the ONE minute-cadence
-element of this round, and it is minute-cadence and nothing more — its
-glyphs were rasterized at settings-apply time, so a tick costs a
-sequence lookup, an arc layout and at most eleven `drawImage` calls.
+`LiveCrownLayer` is the ONE minute-cadence element of this round, and it
+is minute-cadence and nothing more — its glyphs were rasterized at
+settings-apply time, so a tick costs a sequence lookup, an arc layout
+and at most eleven `drawImage` calls.
 """
 
 from PySide6.QtCore import QPointF
@@ -22,26 +22,40 @@ from PySide6.QtGui import QPainter
 from config import dial
 from core import numerals
 from render.context import Cadence, Layer, RenderContext
-from render.numeral_bands import BandSpec, CrownSpec, band_plate, compose_crown, crown_glyph_set
+from render.numeral_bands import BandSpec, CrownSpec, compose_crown, crown_glyph_set
 from render.painting import dial_point
 
 
 def band_spec(skin, band: str, ctx: RenderContext) -> BandSpec:
     """The cache key for one band under this skin at this size/DPI —
     the ONE place a skin's numeral settings become a spec (Rule #5,
-    shared by both band layers and by every test that wants the same
+    shared by the ring layer and by every test that wants the same
     plate an on-screen watch would get).
 
     `offset_deg` is THE WORLD OFFSET (`core.world`) for the OUTER band
     — the solar offset plus the night inversion, 0.0 in the Geocentric
     mode. The INNER band NEVER rotates, in any mode (ledger §2), so it
-    keys on 0.0 and its plate is shared across both phases."""
+    keys on 0.0 and its plate is shared across both phases.
+
+    THE COMPOSITION LAW's own two keys ride here too: the OUTER band
+    takes the preset's LETTER seats (so no numeral is drawn where a
+    letter stands) and the INNER band takes the picked variant's name
+    (so no number is drawn where one of his arrows stands). Both are
+    part of the key, because two presets sharing every numeral setting
+    still compose different bands."""
     pixels = max(2, round(2 * ctx.radius * ctx.dpr))
     size = (
         skin.numeral_outer_size if band == "outer" else skin.numeral_inner_size
     )
     face = (
         skin.numeral_face if band == "outer" else skin.numeral_inner_face
+    )
+    tint = (
+        skin.ring_tint if band == "outer"
+        else (
+            skin.ring_tint_inner if skin.ring_tint_inner is not None
+            else skin.ring_tint
+        )
     )
     return BandSpec(
         band=band,
@@ -58,6 +72,12 @@ def band_spec(skin, band: str, ctx: RenderContext) -> BandSpec:
         contact_blur_units=skin.numeral_contact_blur,
         border_units=skin.numeral_border,
         offset_deg=ctx.world_offset if band == "outer" else 0.0,
+        letter_hours=(
+            tuple(sorted(skin.ring.letters)) if band == "outer" else ()
+        ),
+        inner_variant="" if band == "outer" else skin.ring.inner_asset.stem,
+        tint=tint,
+        saturation=skin.ring_saturation,
     )
 
 
@@ -75,33 +95,6 @@ def crown_spec(skin, ctx: RenderContext) -> CrownSpec:
         darkness=skin.numeral_darkness,
         border_units=skin.numeral_border,
     )
-
-
-class _BandLayer(Layer):
-    """The shared blit (Rule #5): both bands differ only in which spec
-    they ask for."""
-
-    cadence = Cadence.STATIC
-    band = "outer"
-
-    def paint(self, painter: QPainter, ctx: RenderContext) -> None:
-        plate = band_plate(band_spec(self._skin, self.band, ctx))
-        logical = plate.width() / plate.devicePixelRatio()
-        painter.drawImage(QPointF(-logical / 2.0, -logical / 2.0), plate)
-
-
-class OuterNumeralLayer(_BandLayer):
-    """The 24 hour numerals, in relief, at whatever angle the moment
-    demands."""
-
-    band = "outer"
-
-
-class InnerNumeralLayer(_BandLayer):
-    """The minute numerals plus the LONG/SHORT/POINTER/SECOND/DAY tick
-    lines, in white glow. Never rotates, in any mode."""
-
-    band = "inner"
 
 
 class LiveCrownLayer(Layer):

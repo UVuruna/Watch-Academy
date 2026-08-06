@@ -1,9 +1,24 @@
 """The RING layer — THE COMPOSITIONAL RING MODEL (owner decree
-2026-08-05): a ring is ALWAYS the composition of an outer band, an
-inner band, the preset's own letters and an optional crown-text arc. No monolithic single-plate ring face and no procedural fallback
-exist any more — every skin's `RingSpec` carries a real
-`outer_asset`/`inner_asset` pair (`config.defaults`, `app.controller.
-_compose_skin`), so this layer composes unconditionally.
+2026-08-05), sharpened into THE FIDELITY RULING (owner correction
+2026-08-06, `research/ring_rework.md` §2).
+
+A ring is the composition of five things drawn in ONE ordered pass:
+
+1. the INNER base art — his own numberless plate, carrying the 360 day
+   hairlines, the 60 minute strokes and the quarter/octa ARROWS;
+2. the live INNER numbers, composed into the five-minute seats that
+   base leaves empty;
+3. the OUTER band, drawn whole by [Numeral Bands](../__about/numeral_bands.md)
+   — the metal AND the hour numerals, with a numeral at every hour the
+   preset does not seat a letter on;
+4. the preset's own LETTER art, on the seats step 3 left bare;
+5. the optional CROWN TEXT arc outside the band.
+
+Nothing is stacked on top of content it can collide with, which is the
+ruling's first law: the outer plate PNG is no longer blitted at all (an
+Ω with a printed 0 under it was the defect that issued the ruling), and
+the inner plate blitted here is the NUMBERLESS one its variant composes
+from (`config.dial.RING_INNER_COMPOSITION`).
 """
 
 import math
@@ -13,9 +28,11 @@ from PySide6.QtCore import QPointF
 from PySide6.QtGui import QPainter
 
 from config import dial, palette
-from core import angles, world
+from core import angles, numerals, world
 from render.asset_recolor import letter_metal_file
 from render.context import Cadence, Layer, RenderContext
+from render.layers.numerals import band_spec
+from render.numeral_bands import band_plate
 from render.painting import dial_point, draw_pixmap_centered
 
 
@@ -56,9 +73,9 @@ def _normalized_shadow_alpha(samples: int) -> float:
 
 
 class RingLayer(Layer):
-    """The composed ring: outer band, inner band, the preset's own
-    letters (with per-hour metal finish) and the optional crown-text
-    arc."""
+    """The composed ring: his inner base art, the live inner numbers,
+    the computed outer band, the preset's own letters (with per-hour
+    metal finish) and the optional crown-text arc."""
 
     cadence = Cadence.STATIC
 
@@ -68,27 +85,47 @@ class RingLayer(Layer):
         self._draw_crown_text(painter, ctx)
 
     def _draw_bands(self, painter: QPainter, ctx: RenderContext) -> None:
-        """The outer + inner band composition — inner drawn FIRST so the
-        outer band's own edge sits on top. `ring_tint_inner` None
-        follows `ring_tint`, the SAME "follow-unless-overridden" shape
-        `hands_tint` uses — the outer band's tint semantics are the
-        product's own long-standing ones (RING SATURATION, owner
-        2026-07-18, Session 21-D, scales the plate's saturation AFTER
-        the tint recolor — both plates are grayscale-mastered)."""
+        """The two bands, inner first so the outer band's own edge sits
+        on top — and the ORDER is the composition (THE FIDELITY
+        RULING): base art, its numbers, then the whole outer band, and
+        only then the letters `paint` draws next, which need the metal
+        under them and nothing over them.
+
+        The INNER art blitted here is the variant's NUMBERLESS BASE, not
+        the file the user picked: `seconds.png` IS `simple_point.png`
+        with numbers set into it, so blitting the base and composing the
+        numbers live reproduces his plate exactly while letting the font
+        and size be picks. `ring_tint_inner` None follows `ring_tint`,
+        the SAME "follow-unless-overridden" shape `hands_tint` uses —
+        the outer band's tint semantics are the product's own
+        long-standing ones (RING SATURATION, owner 2026-07-18, Session
+        21-D, scales saturation AFTER the tint recolor), and the
+        computed plates answer both through their own spec."""
         spec = self._skin.ring
         inner_tint = (
             ctx.skin.ring_tint_inner
             if ctx.skin.ring_tint_inner is not None
             else ctx.skin.ring_tint
         )
+        base = numerals.inner_composition(spec.inner_asset.stem)["base"]
         draw_pixmap_centered(
-            painter, ctx, spec.inner_asset, QPointF(0, 0), 2 * ctx.radius,
+            painter, ctx, dial.RING_INNER_ART_DIR / f"{base}.png",
+            QPointF(0, 0), 2 * ctx.radius,
             tint=inner_tint, saturation=ctx.skin.ring_saturation,
         )
-        draw_pixmap_centered(
-            painter, ctx, spec.outer_asset, QPointF(0, 0), 2 * ctx.radius,
-            tint=ctx.skin.ring_tint, saturation=ctx.skin.ring_saturation,
-        )
+        self._blit_band(painter, ctx, "inner")
+        self._blit_band(painter, ctx, "outer")
+
+    def _blit_band(
+        self, painter: QPainter, ctx: RenderContext, band: str,
+    ) -> None:
+        """One COMPUTED band plate, centred on the dial origin (Rule #5,
+        the shared blit both bands go through). The plate is built at
+        most once per settings change and cached process-wide, so this
+        is a single `drawImage` on a STATIC layer the compositor bakes."""
+        plate = band_plate(band_spec(self._skin, band, ctx))
+        logical = plate.width() / plate.devicePixelRatio()
+        painter.drawImage(QPointF(-logical / 2.0, -logical / 2.0), plate)
 
     def _draw_ring_glyph(
         self, painter: QPainter, ctx: RenderContext, gold_asset: Path,

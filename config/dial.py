@@ -331,55 +331,84 @@ GLOW_RING_RADIUS_FRACTION = RING_LETTER_RADIUS_FRACTION  # ring band centerline
 # Heliocentric mode and a numeral's seat belongs to the ANGLE it lands
 # on, not to the hour it carries. `core.numerals` owns the mathematics,
 # `render/numeral_*.py` the paint; everything tunable is here.
+#
+# THE FIDELITY RULING (owner correction 2026-08-06, ring_rework.md §2):
+# the live band COMPOSES the whole ring — it never paints over a printed
+# plate's own content, and the style it draws in is not a designer's
+# choice but a MEASUREMENT of the owner's own art. Every geometry
+# number in this section that carries a "measured" note was read off
+# `assets/instrument/ring/outter/*.png` and
+# `assets/instrument/ring/inner/*.png` at their native 3600 px
+# (`tests/test_numerals.py` re-measures the plates and fails if a
+# constant drifts away from them).
 
 NUMERAL_HOUR_COUNT = 24              # 0 .. 23, bare labels, no leading zero
 NUMERAL_HOUR_STEP_DEG = 15.0         # deg(h) = (h - 12) * 15
 NUMERAL_MINUTE_STEP_DEG = 6.0        # one minute / one second mark
 NUMERAL_MINUTE_LABEL_STEP = 5        # the inner band labels every 5th minute
-NUMERAL_SHORT_TICK_OFFSET_DEG = 6    # the SHORT stroke flanking a LONG one
 
 # One "unit" is the ledger's own length unit (§8: "lengths are in the
 # same units as the numeral's own size, so a setting survives any change
 # of dial resolution"). This is what one unit is worth as a fraction of
-# the DIAL DIAMETER: the SETTLED default size of 90 units therefore draws
-# a 0.05-of-diameter numeral — 36 px on the 720 default dial.
+# the DIAL DIAMETER.
 NUMERAL_UNIT_FRACTION = 0.040 / 90.0
 
 # The band the OUTER numerals stand in — its centreline and its width, as
 # fractions of the dial RADIUS. The centreline is the hour band's own
 # middle, the same measurement `RING_LETTER_RADIUS_FRACTION` names; the
 # width is what the "Outer ring size" setting scales (a multiplier, 1.0 =
-# the measured band).
+# the measured band). MEASURED on the owner's outer plates: the metal
+# runs 0.8858 -> 0.9998 of the radius on all six, so the centreline is
+# 0.9428 (RING_LETTER_RADIUS_FRACTION's own 0.943) and the width 0.114.
 NUMERAL_OUTER_RADIUS_FRACTION = RING_LETTER_RADIUS_FRACTION
-NUMERAL_OUTER_BAND_WIDTH_FRACTION = 0.11
+NUMERAL_OUTER_BAND_WIDTH_FRACTION = 0.114
 NUMERAL_OUTER_RING_SIZE_RANGE = (0.5, 2.0)
 NUMERAL_OUTER_RING_SIZE_DEFAULT = 1.0
+# THE BAND'S OWN BASE (the Fidelity Ruling's first law): the engine draws
+# the metal the numerals stand on instead of blitting a plate that already
+# carries printed numerals under them. MEASURED: a FLAT #656A70
+# (`palette.NUMERAL_RING_GROUND`, 83.7% of every plate's band pixels is
+# that exact value — there is no gradient and no bevel to reproduce) with
+# a hard black rim on its OUTER edge alone.
+NUMERAL_BAND_RIM_FRACTION = 0.0035   # rim width, of the dial radius
 
-# The INNER band: the minute numerals' own centreline plus where each
-# family of tick LINE starts and ends, all fractions of the dial radius.
-# The lines run INWARD from the band's outer edge, so a longer kind
-# simply reaches further in.
-NUMERAL_INNER_RADIUS_FRACTION = 0.790
-NUMERAL_TICK_OUTER_FRACTION = 0.845
-NUMERAL_TICK_LENGTHS = {
-    "day": 0.012,                    # the 360 day ticks — the faintest hairline
-    "second": 0.022,                 # the sixty second marks
-    "short": 0.028,                  # the stroke beside a printed number
-    "long": 0.045,                   # the twelve five-minute strokes
-    "pointer": 0.058,                # the four quarter arrows
+# The INNER band's ONLY live geometry: the minute numerals' own
+# centreline, a fraction of the dial radius. Everything else on that band
+# — the 360 day ticks, the 60 minute strokes and the quarter/octa ARROWS
+# — is the owner's own art, blitted from `RING_INNER_COMPOSITION`'s
+# numberless base plate (the Fidelity Ruling's second law: his art is
+# used directly wherever it exists), and a number OCCLUDES the inner half
+# of the five-minute stroke it stands on exactly as it does in his own
+# numbered plates, which needs no geometry here at all.
+NUMERAL_INNER_RADIUS_FRACTION = 0.8215
+
+# THE INNER BAND'S COMPOSITION (the Fidelity Ruling): every shipped inner
+# variant is exactly ONE numberless base plate of the owner's plus a set
+# of five-minute seats that carry a NUMBER — which is precisely how his
+# numbered plates were drawn (`seconds.png` IS `simple_point.png` with
+# the numbers set into it). The engine blits the base and composes the
+# numbers live, so the user's font/size pick changes WHAT stands in the
+# seat and never HOW the band looks. A seat that carries an arrow in the
+# base never carries a number: one content per seat, never stacked.
+RING_INNER_COMPOSITION = {
+    "simple": {"base": "simple", "numbers": ()},
+    "simple_point": {"base": "simple_point", "numbers": ()},
+    "simple_cross": {"base": "simple_cross", "numbers": ()},
+    "simple_octa": {"base": "simple_octa", "numbers": ()},
+    "seconds": {
+        "base": "simple_point",
+        "numbers": (5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55),
+    },
+    "seconds_cross": {
+        "base": "simple_cross",
+        "numbers": (5, 10, 20, 25, 35, 40, 50, 55),
+    },
+    "seconds_octa": {
+        "base": "simple_octa",
+        "numbers": (5, 10, 20, 25, 35, 40, 50, 55),
+    },
+    "simple_seconds": {"base": "simple_point", "numbers": (15, 30, 45)},
 }
-NUMERAL_TICK_WIDTHS = {
-    "day": 0.0016,
-    "second": 0.0026,
-    "short": 0.0030,
-    "long": 0.0048,
-    "pointer": 0.0062,
-}
-# The POINTER kind is the quarter ARROW: the same radial run, widened into
-# a head at its outer end. The head starts this far along the run (from the
-# outer edge inward) and is this many times the shaft's own half-width.
-NUMERAL_POINTER_HEAD_FRACTION = 0.34
-NUMERAL_POINTER_HEAD_WIDTH = 2.6
 
 # THE FACES (ledger §7) — roster label -> (Qt family, Qt style). Qt sees a
 # family plus a style where a designer says "Bahnschrift Bold", so this
@@ -422,7 +451,14 @@ CROWN_FACE_DEFAULT = "Bahnschrift Bold"
 # hairline glyph still reports a non-zero outline, small enough to be free.
 NUMERAL_COVERAGE_PROBE_PX = 80
 
-# THE SETTLED SETTINGS (ledger §8) at their SETTLED defaults.
+# THE SETTLED SETTINGS (ledger §8). The DEFAULTS are the owner's own art
+# (the Fidelity Ruling): size, border and the shadow below were fitted
+# against `outter/full.png` glyph by glyph, not chosen — the ledger's
+# first-pass guesses (size 90, border 0) drew a band visibly lighter and
+# thinner than the plates they replace, and an odd numeral at border 0
+# has no white outline at all, which is the single loudest difference
+# between his art and wave 3's screen. The RANGES are untouched, so a
+# user who wants the recessed look still has it.
 NUMERAL_SEATINGS = ("arc", "upright")
 NUMERAL_SEATING_DEFAULT = "arc"
 NUMERAL_RELIEF_STYLES = ("cast", "extrude", "emboss")
@@ -430,24 +466,46 @@ NUMERAL_RELIEF_DEFAULT = "extrude"
 NUMERAL_LIGHTS = ("radial", "fixed")
 NUMERAL_LIGHT_DEFAULT = "radial"
 NUMERAL_SIZE_RANGE = (40, 140)
-NUMERAL_OUTER_SIZE_DEFAULT = 90
-NUMERAL_INNER_SIZE_DEFAULT = 55
+NUMERAL_OUTER_SIZE_DEFAULT = 124     # measured: cap height 0.0436 of the
+                                     # dial diameter on every outer plate
+NUMERAL_INNER_SIZE_DEFAULT = 84     # measured against inner/seconds.png
 NUMERAL_BORDER_RANGE = (0.0, 16.0)
-NUMERAL_BORDER_DEFAULT = 0.0
+NUMERAL_BORDER_DEFAULT = 4.0         # measured: his odd numerals' white ring
+                                     # is 2.4 px mean-thick at 3600 px; this
+                                     # pen reproduces it to within 2%
 NUMERAL_DEPTH_RANGE = (0.0, 16.0)
-NUMERAL_DEPTH_DEFAULT = 3.0
+NUMERAL_DEPTH_DEFAULT = 3.0          # the ledger's own SETTLED depth, kept:
+                                     # the directional relief lies INSIDE the
+                                     # measured halo and only emerges when the
+                                     # user asks for a deeper one
 NUMERAL_DARKNESS_RANGE = (0.0, 1.0)
 NUMERAL_DARKNESS_DEFAULT = 1.0
 NUMERAL_CONTACT_BLUR_RANGE = (0.0, 8.0)
-NUMERAL_CONTACT_BLUR_DEFAULT = 0.5
+NUMERAL_CONTACT_BLUR_DEFAULT = 2.0   # measured: the halo's own soft edge
 NUMERAL_EMBOSS_LIT_FACTOR = -0.6     # ledger §5: the lit rim, the other way
+
+# THE OUTER BAND'S BLACK HALO — the thing the owner's numerals actually
+# wear. MEASURED across his eight upright-ish even seats: the black
+# reaches 11.1 px beyond the glyph outward and 11.3 px inward at 3600 px
+# — SYMMETRIC, so his relief is an outer glow and not a cast light — and
+# covers 0.53 of the glyph's own area. A blurred silhouette alone cannot
+# make that plateau (a blur wide enough to reach 11 px is smoke at its
+# edge), so the halo is a DILATION: the glyph stroked with a pen this
+# many units wide under everything else, `NUMERAL_CONTACT_BLUR_DEFAULT`
+# softening its edge. This is the band's own style, not a user setting;
+# the DEPTH setting's directional relief is drawn over it and stays
+# inside it until the user raises depth past this reach.
+NUMERAL_SHADOW_REACH_UNITS = 2.8     # beyond the border, in numeral units
 
 # The INNER band's own relief is not the outer's black shadow but a WHITE
 # GLOW (ring_rework §2) — small radius, strong intensity, a border+glow
-# and never a diffuse halo — worn by its numerals AND its lines alike.
-NUMERAL_GLOW_RADIUS_UNITS = 1.6      # in numeral units, like every length
+# and never a diffuse halo — worn by its numerals AND its stubs alike.
+NUMERAL_GLOW_RADIUS_UNITS = 4.0      # in numeral units, like every length
 NUMERAL_GLOW_PASSES = 3              # composited copies = the intensity
-NUMERAL_GLOW_BORDER_UNITS = 0.9      # the crisp white border under the glow
+NUMERAL_GLOW_BORDER_UNITS = 9.0      # the crisp white border under the glow —
+                                     # MEASURED: thick enough that two digits'
+                                     # rims MERGE the way his do, so no minute
+                                     # stroke shows through the gap between them
 
 # THE LIVE CROWN (ring_rework §3): the time in the arc, rendered as
 # exactly the digits-and-colon set ONCE per settings change and merely
