@@ -122,8 +122,25 @@ RING_LETTER_ART_SCALE = 0.075        # letter height, of the dial diameter
 # a gradient border, as if lit from above. Stamped as N offset copies of
 # the blackened letter at `alpha` each, `radius` of the letter height.
 RING_LETTER_SHADOW_RADIUS = 0.05     # of the letter height
-RING_LETTER_SHADOW_ALPHA = 0.55      # per stamp (stamps overlap -> intense)
-RING_LETTER_SHADOW_SAMPLES = 8       # offsets around the circle
+RING_LETTER_SHADOW_ALPHA = 0.55      # per stamp AT THE FLOOR sample count
+                                     # (`RING_LETTER_SHADOW_SAMPLES`) — the
+                                     # per-stamp alpha actually drawn is
+                                     # renormalized when more samples are
+                                     # added (`render.layers.ring.
+                                     # _normalized_shadow_alpha`) so the
+                                     # composited darkness stays this look
+                                     # at any sample count.
+RING_LETTER_SHADOW_SAMPLES = 8       # offsets around the circle — the
+                                     # FLOOR: today's look at ordinary
+                                     # dial sizes, never fewer
+# PIXELATION FIX (1440p owner bug, 2026-08-06): at large dial sizes the
+# fixed 8 stamps separate into a scalloped, jagged ring because their
+# PIXEL spacing grows with the dial's pixel radius while the sample
+# count stayed constant. `render.layers.ring._shadow_sample_count`
+# grows the sample count so adjacent stamps stay under this many
+# device pixels apart along the stamp circle (built once per skin/size/
+# DPI change, like the rest of this STATIC layer — never per frame).
+RING_LETTER_SHADOW_MAX_GAP_PX = 1.0
 
 # The outer GREAT SEAL MOTTO ARC (TASK 1, owner "može radi" 2026-07-19,
 # CANON.md §The Banknote; corrected MOTO-FIX round, owner correction

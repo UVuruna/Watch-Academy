@@ -29,7 +29,10 @@ Layer: config — pure, no Qt, no wall clock.
 - **Moon/Earth rim transit** — `MOON_TRANSIT_OPACITY`.
 - **Ring faces** — `RING_FACE_DIR`, the tint swatch geometry, the ring
   letter art/shadow/motto arc constants (`RING_LETTER_*`, `RING_MOTTO_
-  *`).
+  *`). `RING_LETTER_SHADOW_MAX_GAP_PX` (THE PIXELATION FIX, 1440p owner
+  bug 2026-08-06) is the device-pixel gap `render.layers.ring.
+  _shadow_sample_count` keeps between adjacent halo stamps above the
+  `RING_LETTER_SHADOW_SAMPLES` floor.
 - **Ring OUTER/INNER composition** (THE COMPOSITIONAL RING MODEL, owner
   decree 2026-08-05) — `RING_OUTER_ART_DIR`/`RING_INNER_ART_DIR`; the
   active outer/inner file names come from `constants.RING_OUTERS`/

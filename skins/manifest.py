@@ -75,6 +75,16 @@ class RingSpec:
     # triangle draws the SAME size as the no-light master — only the
     # rays extend beyond it. Absent hour = 1.0 (every plain letter).
     letter_zoom: dict[int, float] = field(default_factory=dict)
+    # hour -> True when that seat's baked-in art already carries its own
+    # light (SHADOW/SHINE round, owner ruling 2026-08-06: "the Eye with
+    # SHINE renders NO shadow — the baked shine replaces it"): the Dollar's
+    # Eye-of-Providence glory-of-rays master IS the light, so the ring's
+    # own cast-shadow stamp would fight it. Stamped by `build_skin`
+    # alongside `letter_zoom` (Rule #5, same per-hour plumbing shape,
+    # SAME condition — any seat whose resolved art stem starts with
+    # "Eye_shine", toggle-driven or an explicit custom pick alike).
+    # Absent hour = False (every ordinary letter keeps its shadow).
+    letter_no_shadow: dict[int, bool] = field(default_factory=dict)
     # The per-letter HOVER LEGEND (ROADMAP 15b, owner "malo legende"):
     # hour -> {name, reading} for a preset that carries one (the
     # Dollar, DOMY and PILOT today — CROSS-WORDS round 2026-07-27;

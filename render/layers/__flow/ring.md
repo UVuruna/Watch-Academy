@@ -9,10 +9,12 @@
 flowchart TB
     A[paint] --> B[_draw_bands: inner then outer, each own tint]
     B --> D[_draw_letter_art] --> E[_draw_motto] --> Z1[return]
-    subgraph GLYPH["_draw_ring_glyph(asset, metal, theta, radius_fraction, height)"]
-        J[resolve metal finish file] --> K[multi-sample dark halo from gold master]
-        K --> L[translate to dial_point, rotate readable_rotation_deg]
-        L --> M[draw metal pixmap]
+    subgraph GLYPH["_draw_ring_glyph(asset, metal, theta, radius_fraction, height, draw_shadow)"]
+        J[resolve metal finish file] --> L[translate to dial_point, rotate readable_rotation_deg]
+        L --> S{draw_shadow?}
+        S -->|yes| K[sample count from pixel radius, normalized alpha, multi-sample dark halo from gold master]
+        S -->|no| M
+        K --> M[draw metal pixmap]
     end
     D -.calls per letter.-> GLYPH
     E -.calls per motto glyph.-> GLYPH
@@ -27,17 +29,20 @@ decree 2026-08-05) — always both bands, never a single plate:
     _draw_letter_art()      # per-hour letters, untinted (unless letter_tint set)
     _draw_motto()           # top/bottom Crown Text arcs, untinted (unless motto_tint set)
 
-    FUNCTION _draw_ring_glyph(gold_asset, metal, theta, radius_fraction, height):
+    FUNCTION _draw_ring_glyph(gold_asset, metal, theta, radius_fraction, height, draw_shadow=True):
         asset = letter_metal_file(gold_asset, metal)     # derived, disk-cached
         rotation = readable_rotation_deg(theta)           # flips upright below center
         translate to dial_point(theta, radius * radius_fraction); rotate
-        FOR EACH of N halo samples around a small radius:
-            draw the gold-tinted shadow silhouette, low opacity
+        IF draw_shadow:
+            samples = shadow_sample_count(shadow_radius * ctx.dpr)   # >= floor RING_LETTER_SHADOW_SAMPLES
+            alpha = normalized_shadow_alpha(samples)                  # composited darkness == floor look
+            FOR EACH of `samples` halo copies around a small radius:
+                draw the gold-tinted shadow silhouette at `alpha`
         draw the metal-finish pixmap centered, full opacity
 
     FUNCTION _draw_letter_art():
         FOR EACH (hour, gold_asset) IN skin's letter_art:
-            _draw_ring_glyph(..., height * letter_zoom[hour])
+            _draw_ring_glyph(..., height * letter_zoom[hour], draw_shadow=NOT letter_no_shadow[hour])
 
     FUNCTION _draw_motto():
         IF skin has no motto texts: RETURN

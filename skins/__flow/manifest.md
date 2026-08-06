@@ -29,6 +29,7 @@ SkinDefinition
     letter_art: dict[hour -> Path]      -- always the GOLD master
     letter_metal: dict[hour -> str]     -- active finish, derived at load
     letter_zoom: dict[hour -> float]    -- default 1.0
+    letter_no_shadow: dict[hour -> bool] -- default False (Eye shine on -> True)
     letter_legend: dict[hour -> dict]   -- {name, reading}
     motto: tuple[dict, ...]             -- outer arc text, per preset
     motto_metal: str = "gold"

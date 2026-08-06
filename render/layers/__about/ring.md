@@ -46,8 +46,19 @@ so it rebuilds only on a skin/size/DPI change. Not `hover_variable`.
   reads upright through the lower half of the ring (`angles.readable_rotation_deg`);
   `tint`/`opacity` are per-caller (`_draw_letter_art` passes
   `letter_tint`/1.0, `_draw_motto` its own `motto_tint`/`motto_alpha`).
+  `draw_shadow=False` (SHADOW/SHINE round, owner ruling 2026-08-06) skips
+  the halo entirely — the Dollar's Eye with Shine on already carries its
+  own baked light. THE PIXELATION FIX (1440p owner bug, 2026-08-06): the
+  halo's own sample count is no longer the fixed `RING_LETTER_SHADOW_
+  SAMPLES` — `_shadow_sample_count()` grows it with the stamp circle's
+  PIXEL radius (`ctx.dpr`-scaled) so adjacent stamps stay under
+  `dial.RING_LETTER_SHADOW_MAX_GAP_PX` device pixels apart (the floor
+  never drops below the original 8), and `_normalized_shadow_alpha()`
+  renormalizes each stamp's opacity so the composited darkness matches
+  the original look at the floor count.
 - `_draw_letter_art()`: stamps every hour's letter art at its ring position,
-  scaled by `ring_letter_scale` and the per-hour shine-enlarge multiplier.
+  scaled by `ring_letter_scale` and the per-hour shine-enlarge multiplier;
+  `RingSpec.letter_no_shadow` (per-hour) turns `draw_shadow` off for that seat.
 - `_draw_motto()` ("Crown Text" in the Watch Face window, R-24/Phase-6-debt
   correction, owner 2026-08-05): stamps the preset's motto texts (e.g.
   ANNUIT COEPTIS / NOVUS ORDO SECLORUM) along two angularly-disjoint

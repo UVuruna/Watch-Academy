@@ -271,3 +271,112 @@ def test_inner_ring_tint_recolors_only_the_inner_band_region(app, frame_args):
     )
     assert inner_diff > 0, "ring_tint_inner must repaint the INNER band region"
     assert outer_diff == 0, "ring_tint_inner alone must leave the OUTER band region untouched"
+
+
+# --- THE PIXELATION FIX + Eye-shine-no-shadow (owner round, 2026-08-06) ------
+
+
+def test_shadow_sample_count_scales_with_pixel_radius():
+    """THE PIXELATION FIX: the fixed 8-stamp shadow ring separated into
+    a scalloped edge at 1440p because the stamps' PIXEL spacing grows
+    with the dial's pixel radius while the sample count stayed
+    constant. Below the floor's own gap threshold the count never
+    drops below `RING_LETTER_SHADOW_SAMPLES`; a large pixel radius
+    grows it so adjacent stamps stay under `RING_LETTER_SHADOW_MAX_GAP_PX`
+    device pixels apart along the stamp circle."""
+    from render.layers.ring import _shadow_sample_count
+
+    assert _shadow_sample_count(0.0) == dial.RING_LETTER_SHADOW_SAMPLES
+    # A tiny pixel radius needs far fewer than 8 samples to stay under
+    # the 1px gap threshold, so the FLOOR (not the formula) wins here.
+    assert _shadow_sample_count(0.1) == dial.RING_LETTER_SHADOW_SAMPLES
+
+    # A big 1440p-scale pixel radius: the gap between adjacent stamps
+    # at the FLOOR count would be far more than one pixel apart.
+    large_radius = 400.0
+    floor_gap = 2.0 * math.pi * large_radius / dial.RING_LETTER_SHADOW_SAMPLES
+    assert floor_gap > dial.RING_LETTER_SHADOW_MAX_GAP_PX
+
+    samples = _shadow_sample_count(large_radius)
+    assert samples > dial.RING_LETTER_SHADOW_SAMPLES
+    actual_gap = 2.0 * math.pi * large_radius / samples
+    assert actual_gap <= dial.RING_LETTER_SHADOW_MAX_GAP_PX
+
+
+def test_normalized_shadow_alpha_matches_floor_look_and_never_darkens():
+    """`_normalized_shadow_alpha` is an IDENTITY at the floor sample
+    count (today's look, unchanged) and renormalizes downward as
+    samples grow so the composited coverage stays constant — the extra
+    stamps close pixel gaps, they never make the halo darker."""
+    from render.layers.ring import _normalized_shadow_alpha
+
+    floor = dial.RING_LETTER_SHADOW_SAMPLES
+    assert _normalized_shadow_alpha(floor) == pytest.approx(
+        dial.RING_LETTER_SHADOW_ALPHA
+    )
+
+    def composited(samples: int) -> float:
+        alpha = _normalized_shadow_alpha(samples)
+        return 1.0 - (1.0 - alpha) ** samples
+
+    target = composited(floor)
+    for samples in (floor + 1, floor * 4, floor * 20):
+        assert composited(samples) == pytest.approx(target, rel=1e-9)
+        # More samples at the SAME composited coverage means a smaller
+        # per-stamp alpha, not a bigger one.
+        assert _normalized_shadow_alpha(samples) < dial.RING_LETTER_SHADOW_ALPHA
+
+
+def test_ring_shadow_halo_has_no_gaps_at_a_large_dial_size(app, frame_args):
+    """Renders DOMY's ring letters at a large (1440) pixel height and
+    samples the halo's alpha channel all the way around the shadow
+    stamp circle for the Omega seat (hour 0, straight down — theta 180
+    puts `readable_rotation_deg` at 0, so the glyph-local stamp offsets
+    ARE the screen offsets, no extra rotation math needed) — with the
+    old fixed-8-sample stamp this would show near-zero-alpha valleys
+    between the copies (the 1440p scalloped-edge defect); the scaled
+    sample count keeps every angle covered."""
+    from core.angles import ring_position_angle
+
+    day, tick = frame_args
+    skin = build_skin(Settings(ring="DOMY"))
+    assert 0 in skin.ring.letter_art  # the Omega seat this probe relies on
+    diameter = 1440.0
+    image = Compositor(skin, AssetCache()).render_offscreen(diameter, 1.0, day, tick)
+
+    radius = diameter / 2.0
+    theta = ring_position_angle(0)
+    assert theta == pytest.approx(180.0)
+    seat_x = radius * math.sin(math.radians(theta))
+    seat_y = -radius * math.cos(math.radians(theta))
+
+    height = diameter * dial.RING_LETTER_ART_SCALE * skin.ring_letter_scale
+    shadow_radius_px = height * dial.RING_LETTER_SHADOW_RADIUS
+
+    alphas = []
+    for k in range(64):
+        angle = 2.0 * math.pi * k / 64
+        x = round(radius + seat_x + shadow_radius_px * math.cos(angle))
+        y = round(radius + seat_y + shadow_radius_px * math.sin(angle))
+        alphas.append(image.pixelColor(x, y).alpha())
+
+    assert min(alphas) > 0, "the shadow halo must cover the full circle, no gaps"
+
+
+def test_eye_shine_on_draws_no_shadow_shine_off_does(app, frame_args):
+    """SHADOW/SHINE round (owner ruling 2026-08-06): with the Dollar's
+    Eye Shine toggle ON, the ring build stamps `letter_no_shadow[12] =
+    True` and the rendered glyph carries no cast-shadow halo; with the
+    toggle OFF the Eye is an ordinary letter and keeps its shadow like
+    every other seat."""
+    day, tick = frame_args
+    shine_on = build_skin(Settings(ring="Dollar"))
+    shine_off = build_skin(Settings(ring="Dollar", ring_eye_shine={"Dollar": False}))
+    assert shine_on.ring.letter_no_shadow == {12: True}
+    assert shine_off.ring.letter_no_shadow == {}
+
+    # Render path must not raise either way, and must actually differ
+    # (the shadow-off render omits a real ring of dark pixels).
+    on_image = Compositor(shine_on, AssetCache()).render_offscreen(720.0, 1.0, day, tick)
+    off_image = Compositor(shine_off, AssetCache()).render_offscreen(720.0, 1.0, day, tick)
+    assert on_image.width() == 720 and off_image.width() == 720

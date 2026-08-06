@@ -478,6 +478,7 @@ def _compose_skin(settings: Settings, location_display: str = ""):
     letter_metal = {}
     letter_legend = {}
     letter_zoom = {}
+    letter_no_shadow = {}
     for position, glyph in zip(card["positions"], card["letters"]):
         hour = position % 24                     # cards say 24, hours say 0
         letters[hour] = glyph
@@ -500,6 +501,12 @@ def _compose_skin(settings: Settings, location_display: str = ""):
                 else paths.ART_SUFFIX[settings.art_source]
             )
             letter_zoom[hour] = constants.RING_EYE_SHINE_ENLARGE[source]
+            # SHADOW/SHINE round (owner ruling 2026-08-06): the baked
+            # glory-of-rays master already carries its own light, so the
+            # ring's cast-shadow stamp is skipped for this seat — same
+            # condition as the enlarge factor just above (any resolved
+            # "Eye_shine*" stem, toggle-driven or an explicit custom pick).
+            letter_no_shadow[hour] = True
         letter_art[hour] = dial.RING_LETTER_ART_DIR / filename
         letter_metal[hour] = _letter_metal(position, metal_layout, settings.ring_finish)
         if position in card["legend"]:
@@ -606,6 +613,7 @@ def _compose_skin(settings: Settings, location_display: str = ""):
             letter_metal=letter_metal,
             letter_legend=letter_legend,
             letter_zoom=letter_zoom,
+            letter_no_shadow=letter_no_shadow,
             motto=motto,
             motto_metal=settings.ring_finish,
         ),

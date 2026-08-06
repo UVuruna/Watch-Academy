@@ -66,6 +66,12 @@ monolithic plate and no procedural fallback.
 - `letter_zoom: dict[int, float]` — hour -> height multiplier (absent =
   1.0) for seats whose art pads the glyph with extra rays (e.g. the
   Eye's shine masters)
+- `letter_no_shadow: dict[int, bool]` — hour -> True when that seat's
+  baked-in art already carries its own light and the ring's cast-shadow
+  stamp should be skipped (SHADOW/SHINE round, owner ruling 2026-08-06:
+  the Dollar's Eye with Shine on); absent = False, every ordinary letter
+  keeps its shadow — stamped by `build_skin` alongside `letter_zoom`,
+  same per-hour condition
 - `letter_legend: dict[int, dict]` — hour -> `{name, reading}`, the
   per-letter hover legend (empty for presets that carry none)
 - `motto: tuple[dict, ...]` — the outer motto arc ("Crown Text" in the
