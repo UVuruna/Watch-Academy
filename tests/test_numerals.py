@@ -18,7 +18,14 @@ import os
 from datetime import datetime
 from zoneinfo import ZoneInfo
 
-os.environ.setdefault("QT_QPA_PLATFORM", "offscreen")
+# NO unconditional offscreen default here (2026-08-06): the offscreen
+# QPA plugin exposes ZERO font families on this machine, which silently
+# turned the two default-face checks at the bottom of this file into
+# permanent skips. The `app` fixture asks for the NATIVE platform first
+# and falls back to offscreen when there is no desktop to talk to —
+# every measurement in this module passes identically either way (both
+# platforms rasterize through the same QImage path), so the only thing
+# the native platform changes is that the font checks can actually run.
 
 import astral
 import pytest
@@ -48,7 +55,19 @@ from render.painting import dial_point
 
 @pytest.fixture(scope="module")
 def app():
-    return QApplication.instance() or QApplication([])
+    """Native platform first (real fonts, real DPI), offscreen only when
+    there is no desktop — the same native-first pattern
+    `tests/test_layout_audit.py` uses, and for the same reason: the
+    offscreen plugin measures a different machine than the one the
+    product runs on."""
+    existing = QApplication.instance()
+    if existing is not None:
+        return existing
+    try:
+        return QApplication([])
+    except Exception:
+        os.environ["QT_QPA_PLATFORM"] = "offscreen"
+        return QApplication([])
 
 
 @pytest.fixture(scope="module")
@@ -295,6 +314,32 @@ def test_both_numeral_bands_are_stacked_above_the_ring(app):
 
 # ------------------------------------------------------------------ the fonts
 
+def _require_a_font_database() -> None:
+    """Skip ONLY for the honest reason, and name it (2026-08-06).
+
+    These two tests used to skip saying "<family> is not installed on
+    this machine" — which was FALSE: `C:\\Windows\\Fonts\\bahnschrift.ttf`
+    is right there, and under the native platform Qt lists 115 families
+    including both defaults. The real cause is the OFFSCREEN QPA plugin
+    this module asks for at import: on this machine it exposes ZERO font
+    families, so every family reads as missing and the skip hid a check
+    that simply could not run.
+
+    So: an EMPTY database is an environment fact and skips, naming the
+    platform and how to run the check for real. A NON-empty database
+    that lacks the configured default face is a genuine defect — a stale
+    pick in `config/dial.py`, exactly what the tests below were written
+    to catch — and FAILS."""
+    if not QFontDatabase.families():
+        pytest.skip(
+            "the QPA platform in use exposes no font families at all "
+            f"(QT_QPA_PLATFORM="
+            f"{os.environ.get('QT_QPA_PLATFORM', 'native')!r}) — run this "
+            "module on its own (`python -m pytest tests/test_numerals.py`) "
+            "and the native platform answers with every installed family"
+        )
+
+
 def _installed(family: str) -> bool:
     return family in set(QFontDatabase.families())
 
@@ -303,9 +348,9 @@ def test_the_crown_default_face_draws_every_one_of_the_eleven(app):
     """The crown needs the colon, and the hour band's own default face
     cannot draw one on this install — so the crown's default is picked
     for coverage. If this fails, the pick in config/dial.py is stale."""
+    _require_a_font_database()
     family = dial.NUMERAL_OUTER_FACES[dial.CROWN_FACE_DEFAULT][0]
-    if not _installed(family):
-        pytest.skip(f"{family} is not installed on this machine")
+    assert _installed(family), f"{family} is not installed on this machine"
     assert numeral_fonts.missing_glyphs(
         "outer", dial.CROWN_FACE_DEFAULT, numerals.crown_glyph_alphabet()
     ) == ()
@@ -315,9 +360,9 @@ def test_the_hour_band_default_face_draws_every_digit(app):
     """The hour band asks for digits ONLY, which is why the recovered
     Bernard MT Condensed can still be its default despite the empty
     colon/lowercase outlines recorded in hour_numerals.md §7."""
+    _require_a_font_database()
     family = dial.NUMERAL_OUTER_FACES[dial.NUMERAL_OUTER_FACE_DEFAULT][0]
-    if not _installed(family):
-        pytest.skip(f"{family} is not installed on this machine")
+    assert _installed(family), f"{family} is not installed on this machine"
     assert numeral_fonts.missing_glyphs(
         "outer", dial.NUMERAL_OUTER_FACE_DEFAULT, numerals.hour_labels()
     ) == ()

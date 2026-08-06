@@ -1,6 +1,8 @@
 """Settings persistence: atomic round-trip, corruption handling, BOM
 tolerance (hand-edited files), diameter validation."""
 
+import json
+
 import pytest
 
 from app.settings_store import Settings, SettingsCorruptError, SettingsStore, replace
@@ -783,3 +785,102 @@ def test_quarantine_renames_to_bak(store):
     assert backup.name == "settings.json.bak"
     assert backup.read_text(encoding="utf-8") == "garbage"
     assert not store.path.exists()
+
+
+# --- THE TWO WORLD-MODES' own key (ring_rework.md §1) ------------------------
+
+
+def test_world_mode_defaults_to_geocentric_in_a_file_that_predates_it(store):
+    """THE MIGRATION-SAFE DEFAULT: every watch stored before this round
+    has no world-mode key at all, and must load as the dial it was —
+    Geocentric, bit for bit — never as a corrupt file."""
+    store.path.write_text(
+        '{"schema_version": 1, "window": {"x": 12, "y": 34, "diameter": 360}}',
+        encoding="utf-8",
+    )
+    loaded = store.load()
+    assert loaded.world_mode == "geocentric"
+    assert (loaded.window_x, loaded.window_y, loaded.diameter) == (12, 34, 360)
+
+
+def test_world_mode_round_trips_and_rejects_an_unknown_value(store):
+    store.save(replace(Settings(), world_mode="heliocentric"))
+    assert store.load().world_mode == "heliocentric"
+    assert '"world_mode"' in store.path.read_text(encoding="utf-8")
+    store.path.write_text(
+        '{"schema_version": 1, "window": {"x": 0, "y": 0, "diameter": 360},'
+        ' "world_mode": "ptolemaic"}',
+        encoding="utf-8",
+    )
+    with pytest.raises(SettingsCorruptError):
+        store.load()
+
+
+def test_a_foreign_top_level_mode_key_can_never_become_the_world_mode(store):
+    """THE COLLISION THIS KEY'S NAME EXISTS TO KILL (2026-08-06): the
+    world mode is stored as `world_mode`, never the bare `mode` its
+    first round wrote. A file carrying somebody ELSE's top-level `mode`
+    — a hand-seeded profile, another tool's leftover — must load
+    cleanly and leave the dial Geocentric, no matter what that value
+    says. `mode` is simply not a key this loader reads."""
+    for foreign in ("heliocentric", "dark", "12h", True, 7):
+        store.path.write_text(
+            '{"schema_version": 1,'
+            ' "window": {"x": 0, "y": 0, "diameter": 360},'
+            f' "mode": {json.dumps(foreign)}}}',
+            encoding="utf-8",
+        )
+        loaded = store.load()
+        assert loaded.world_mode == "geocentric"
+    # ...and the app's own key still works in the very same file.
+    store.path.write_text(
+        '{"schema_version": 1, "window": {"x": 0, "y": 0, "diameter": 360},'
+        ' "mode": "heliocentric", "world_mode": "heliocentric"}',
+        encoding="utf-8",
+    )
+    assert store.load().world_mode == "heliocentric"
+
+
+# --- The identity markers (2026-08-06 escalation) ----------------------------
+
+
+def test_a_file_without_the_identity_markers_names_what_it_is_missing(store):
+    """The exact shape that cost a session (a hand-seeded verify
+    profile): a flat `{diameter, location, mode, x, y}` object, valid
+    JSON and no generation of this app's settings file — this app has
+    written `schema_version` + a nested `window` section since
+    0.14.001.
+
+    It is corrupt, deliberately — defaulting the identity markers would
+    turn an unreadable file into a SILENT reset of every stored
+    setting. What it must NOT be is a riddle: the message names the
+    missing keys AND the file's own top-level keys, so the next reader
+    sees at a glance that this is not a settings file rather than
+    "the code now demands a section it never wrote"."""
+    store.path.write_text(
+        json.dumps({
+            "diameter": 540,
+            "location": {"name": "Belgrade"},
+            "mode": "heliocentric",
+            "x": 100,
+            "y": 200,
+        }),
+        encoding="utf-8",
+    )
+    with pytest.raises(SettingsCorruptError) as caught:
+        store.load()
+    message = str(caught.value)
+    assert "not a DOMY Watch settings file" in message
+    assert "'schema_version'" in message and "'window'" in message
+    # its OWN keys, so the reader can see what it really is
+    assert "'diameter'" in message and "'location'" in message
+    # ...and a file the app itself wrote is never touched by this check.
+    store.save(Settings())
+    assert store.load().diameter == Settings().diameter
+
+
+def test_a_json_root_that_is_not_an_object_says_so(store):
+    store.path.write_text("[1, 2, 3]", encoding="utf-8")
+    with pytest.raises(SettingsCorruptError) as caught:
+        store.load()
+    assert "the JSON root is list" in str(caught.value)
