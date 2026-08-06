@@ -380,7 +380,7 @@ NUMERAL_BAND_RIM_FRACTION = 0.0035   # rim width, of the dial radius
 # used directly wherever it exists), and a number OCCLUDES the inner half
 # of the five-minute stroke it stands on exactly as it does in his own
 # numbered plates, which needs no geometry here at all.
-NUMERAL_INNER_RADIUS_FRACTION = 0.8215
+MINUTES_RADIUS_FRACTION = 0.8215
 
 # THE INNER BAND'S COMPOSITION (the Fidelity Ruling): every shipped inner
 # variant is exactly ONE numberless base plate of the owner's plus a set
@@ -432,7 +432,7 @@ NUMERAL_OUTER_FACES = {
     "Impact": ("Impact", ""),
     "Palatino Linotype Bold": ("Palatino Linotype", "Bold"),
 }
-NUMERAL_INNER_FACES = {
+MINUTES_FACES = {
     "Eras Bold ITC": ("Eras Bold ITC", ""),
     "Unispace": ("Unispace", "Bold"),
     "Poppins Black": ("Poppins", "Black"),
@@ -440,7 +440,7 @@ NUMERAL_INNER_FACES = {
     "Segoe UI Black": ("Segoe UI", "Black"),
 }
 NUMERAL_OUTER_FACE_DEFAULT = "Bernard MT Condensed"
-NUMERAL_INNER_FACE_DEFAULT = "Eras Bold ITC"
+MINUTES_FACE_DEFAULT = "Eras Bold ITC"
 # The CROWN's own face is picked for FULL coverage, not inherited from the
 # hour band: the live crown needs the colon (and the h/min cut), which the
 # hour band's default cannot draw on this install — see the verified note
@@ -468,7 +468,7 @@ NUMERAL_LIGHT_DEFAULT = "radial"
 NUMERAL_SIZE_RANGE = (40, 140)
 NUMERAL_OUTER_SIZE_DEFAULT = 124     # measured: cap height 0.0436 of the
                                      # dial diameter on every outer plate
-NUMERAL_INNER_SIZE_DEFAULT = 84     # measured against inner/seconds.png
+MINUTES_SIZE_DEFAULT = 84     # measured against inner/seconds.png
 NUMERAL_BORDER_RANGE = (0.0, 16.0)
 NUMERAL_BORDER_DEFAULT = 4.0         # measured: his odd numerals' white ring
                                      # is 2.4 px mean-thick at 3600 px; this

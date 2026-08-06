@@ -45,10 +45,10 @@ def band_spec(skin, band: str, ctx: RenderContext) -> BandSpec:
     still compose different bands."""
     pixels = max(2, round(2 * ctx.radius * ctx.dpr))
     size = (
-        skin.numeral_outer_size if band == "outer" else skin.numeral_inner_size
+        skin.numeral_outer_size if band == "outer" else skin.minutes_size
     )
     face = (
-        skin.numeral_face if band == "outer" else skin.numeral_inner_face
+        skin.numeral_face if band == "outer" else skin.minutes_face
     )
     tint = (
         skin.ring_tint if band == "outer"

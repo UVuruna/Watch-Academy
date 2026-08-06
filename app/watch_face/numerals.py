@@ -8,11 +8,12 @@ ring or a turning world — and then the bands themselves.
 
 Four groups, in the order the reader meets them on the dial: the OUTER
 band (its face, its numeral size, the width of the band the jewels and
-numbers stand in, and the seating law), the INNER band (its own face and
-size — the ledger settles that nothing else about it is user-changeable:
-it never rotates and it follows the outer band's seating), and the
-RELIEF the outer numerals wear (style, depth, light, darkness, contact
-blur, border) plus the live crown's own face and time format.
+numbers stand in, and the seating law), MINUTES — the inner minute band
+(its own face and size — the ledger settles that nothing else about it
+is user-changeable: it never rotates and it follows the outer band's
+seating), and the RELIEF the outer numerals wear (style, depth, light,
+darkness, contact blur, border) plus the live crown's own face and time
+format.
 
 LIVE-APPLY like every other Watch Face section: each pick calls its
 setter immediately through `setters`, and the window rebuilds this page
@@ -123,15 +124,15 @@ def _mode_group(settings, setters, tr) -> QGroupBox:
 
 
 def _outer_group(settings, setters, tr) -> QGroupBox:
-    group = QGroupBox(tr("Hour ring — the outer band"))
+    group = QGroupBox(tr("Numerals"))
     form = QFormLayout(group)
     _choice_row(
         tr, settings, setters, "numeral_face",
-        tuple(dial.NUMERAL_OUTER_FACES), "Ring face", form,
+        tuple(dial.NUMERAL_OUTER_FACES), "Numerals face", form,
     )
     _number_row(
         tr, settings, setters, "numeral_outer_size",
-        *dial.NUMERAL_SIZE_RANGE, "Numeral size", form,
+        *dial.NUMERAL_SIZE_RANGE, "Numerals size", form,
     )
     _number_row(
         tr, settings, setters, "numeral_outer_ring_size",
@@ -152,15 +153,15 @@ def _outer_group(settings, setters, tr) -> QGroupBox:
 
 
 def _inner_group(settings, setters, tr) -> QGroupBox:
-    group = QGroupBox(tr("Minute ring — the inner band"))
+    group = QGroupBox(tr("Minutes"))
     form = QFormLayout(group)
     _choice_row(
-        tr, settings, setters, "numeral_inner_face",
-        tuple(dial.NUMERAL_INNER_FACES), "Inner face", form,
+        tr, settings, setters, "minutes_face",
+        tuple(dial.MINUTES_FACES), "Minutes face", form,
     )
     _number_row(
-        tr, settings, setters, "numeral_inner_size",
-        *dial.NUMERAL_SIZE_RANGE, "Numeral size", form,
+        tr, settings, setters, "minutes_size",
+        *dial.NUMERAL_SIZE_RANGE, "Minutes size", form,
     )
     note = QLabel(tr(
         "The inner band never rotates, and it follows the hour ring's "

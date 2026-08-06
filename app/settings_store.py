@@ -357,10 +357,15 @@ class Settings:
     # ranges and rosters live in `config.dial`; the render side keys its
     # band cache on them (`render.layers.numerals.band_spec`).
     numeral_outer_size: int = dial.NUMERAL_OUTER_SIZE_DEFAULT
-    numeral_inner_size: int = dial.NUMERAL_INNER_SIZE_DEFAULT
+    # RENAMED from `numeral_inner_size`/`numeral_inner_face` (MINUTES
+    # naming sweep, owner ruling 2026-08-06, "one term for one thing" —
+    # this is the minute band's own engine numerals); `load()` reads a
+    # stored file's old keys as the fallback default when the new keys
+    # are absent (one-release migration, save writes only the new keys).
+    minutes_size: int = dial.MINUTES_SIZE_DEFAULT
     numeral_outer_ring_size: float = dial.NUMERAL_OUTER_RING_SIZE_DEFAULT
     numeral_face: str = dial.NUMERAL_OUTER_FACE_DEFAULT
-    numeral_inner_face: str = dial.NUMERAL_INNER_FACE_DEFAULT
+    minutes_face: str = dial.MINUTES_FACE_DEFAULT
     crown_face: str = dial.CROWN_FACE_DEFAULT
     numeral_seating: str = dial.NUMERAL_SEATING_DEFAULT
     numeral_relief: str = dial.NUMERAL_RELIEF_DEFAULT

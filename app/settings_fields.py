@@ -35,9 +35,16 @@ def load_numerals(raw: dict) -> dict:
             raw, "numeral_outer_size", *dial.NUMERAL_SIZE_RANGE,
             dial.NUMERAL_OUTER_SIZE_DEFAULT,
         )),
-        "numeral_inner_size": int(load_scale(
-            raw, "numeral_inner_size", *dial.NUMERAL_SIZE_RANGE,
-            dial.NUMERAL_INNER_SIZE_DEFAULT,
+        # One-release migration (MINUTES naming sweep, owner ruling
+        # 2026-08-06): the old "numeral_inner_size"/"numeral_inner_face"
+        # keys are read as the fallback default when the new keys are
+        # absent.
+        "minutes_size": int(load_scale(
+            raw, "minutes_size", *dial.NUMERAL_SIZE_RANGE,
+            load_scale(
+                raw, "numeral_inner_size", *dial.NUMERAL_SIZE_RANGE,
+                dial.MINUTES_SIZE_DEFAULT,
+            ),
         )),
         "numeral_outer_ring_size": load_scale(
             raw, "numeral_outer_ring_size",
@@ -48,9 +55,15 @@ def load_numerals(raw: dict) -> dict:
             raw, "numeral_face", tuple(dial.NUMERAL_OUTER_FACES),
             dial.NUMERAL_OUTER_FACE_DEFAULT,
         ),
-        "numeral_inner_face": load_choice(
-            raw, "numeral_inner_face", tuple(dial.NUMERAL_INNER_FACES),
-            dial.NUMERAL_INNER_FACE_DEFAULT,
+        "minutes_face": (
+            load_choice(
+                raw, "minutes_face", tuple(dial.MINUTES_FACES),
+                dial.MINUTES_FACE_DEFAULT,
+            ) if "minutes_face" in raw else
+            load_choice(
+                raw, "numeral_inner_face", tuple(dial.MINUTES_FACES),
+                dial.MINUTES_FACE_DEFAULT,
+            )
         ),
         "crown_face": load_choice(
             raw, "crown_face", tuple(dial.NUMERAL_OUTER_FACES),

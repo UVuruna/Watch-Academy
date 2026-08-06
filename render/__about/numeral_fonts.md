@@ -9,7 +9,7 @@ draw the glyphs the dial asks of it.
 The two rosters name faces the way a designer does — "Bahnschrift Bold",
 "Poppins Black", "Arial Black" — but Qt sees a FAMILY plus a STYLE. This
 module owns that one mapping (`config.dial.NUMERAL_OUTER_FACES` /
-`NUMERAL_INNER_FACES` carry `(family, style)` pairs) so no caller ever
+`MINUTES_FACES` carry `(family, style)` pairs) so no caller ever
 builds a `QFont` from a roster label itself.
 
 ## The coverage proof (why this module exists at all)

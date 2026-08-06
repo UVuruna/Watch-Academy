@@ -3,7 +3,7 @@
 The two rosters of [The Dial Numerals](../research/hour_numerals.md) §7
 name faces the way a designer does ("Bahnschrift Bold", "Arial Black"),
 but Qt sees a FAMILY plus a STYLE. `config.dial.NUMERAL_OUTER_FACES` /
-`NUMERAL_INNER_FACES` hold that mapping and this module is the only
+`MINUTES_FACES` hold that mapping and this module is the only
 place that reads it.
 
 WHY THE COVERAGE PROOF EXISTS (verified failure, 2026-08-06): the two
@@ -37,7 +37,7 @@ def _roster(band: str) -> dict:
     if band == "outer":
         return dial.NUMERAL_OUTER_FACES
     if band == "inner":
-        return dial.NUMERAL_INNER_FACES
+        return dial.MINUTES_FACES
     raise ValueError(f"unknown numeral band {band!r}")
 
 

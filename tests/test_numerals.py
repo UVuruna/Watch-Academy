@@ -634,7 +634,7 @@ def test_the_inner_band_wears_a_white_glow_around_its_ink(app, frame_args):
     it must be white, not black. DOMY reads `seconds`, which composes a
     number into every five-minute seat but the arrow's own."""
     image = _band_image("inner", 1440, app, frame_args, ring="DOMY")
-    radius = 720 * dial.NUMERAL_INNER_RADIUS_FRACTION
+    radius = 720 * dial.MINUTES_RADIUS_FRACTION
     center = dial_point(numerals.minute_angle(15), radius)
     cx = int(image.width() / 2 + center.x())
     cy = int(image.height() / 2 + center.y())
@@ -671,7 +671,7 @@ def test_a_settings_file_without_the_numeral_keys_loads_clean(tmp_path):
     )
     loaded = SettingsStore(path).load()
     assert loaded.numeral_face == dial.NUMERAL_OUTER_FACE_DEFAULT
-    assert loaded.numeral_inner_face == dial.NUMERAL_INNER_FACE_DEFAULT
+    assert loaded.minutes_face == dial.MINUTES_FACE_DEFAULT
     assert loaded.numeral_seating == "arc"
     assert loaded.numeral_relief == "extrude"
     assert loaded.numeral_depth == 3.0
@@ -683,7 +683,7 @@ def test_a_settings_file_without_the_numeral_keys_loads_clean(tmp_path):
     assert loaded.numeral_contact_blur == 2.0
     assert loaded.numeral_border == 4.0
     assert loaded.numeral_outer_size == 124
-    assert loaded.numeral_inner_size == 84
+    assert loaded.minutes_size == 84
     assert loaded.crown_time_format == "hh:mm"
 
 

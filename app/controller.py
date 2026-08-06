@@ -1044,10 +1044,10 @@ def _overlay_display_settings(skin, settings: Settings, display):
         # rides along so the numeral layers can ask
         # `dial.RING_LIVE_CROWN` whether this preset keeps a live time.
         numeral_outer_size=settings.numeral_outer_size,
-        numeral_inner_size=settings.numeral_inner_size,
+        minutes_size=settings.minutes_size,
         numeral_outer_ring_size=settings.numeral_outer_ring_size,
         numeral_face=settings.numeral_face,
-        numeral_inner_face=settings.numeral_inner_face,
+        minutes_face=settings.minutes_face,
         crown_face=settings.crown_face,
         numeral_seating=settings.numeral_seating,
         numeral_relief=settings.numeral_relief,
@@ -3265,9 +3265,9 @@ class WatchController(QObject):
                     lambda v, key=key: self._set_display_choice(key, v)
                 )
                 for key in (
-                    "numeral_outer_size", "numeral_inner_size",
+                    "numeral_outer_size", "minutes_size",
                     "numeral_outer_ring_size", "numeral_face",
-                    "numeral_inner_face", "crown_face", "numeral_seating",
+                    "minutes_face", "crown_face", "numeral_seating",
                     "numeral_relief", "numeral_depth", "numeral_light",
                     "numeral_darkness", "numeral_contact_blur",
                     "numeral_border", "crown_time_format",

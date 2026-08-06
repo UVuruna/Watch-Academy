@@ -5,6 +5,21 @@
 describes — the art glyph plates worn in metal/thematic finish (Latin/Greek
 letters, number plates, templar cross, the Eye, the colon plate).
 
+**MINUTES naming sweep (owner ruling 2026-08-06):** `inner` (as a
+settings key / UI label) → **MINUTES** everywhere in this document and
+in the code it describes — the inner minute band's own engine numerals
+and tick lines (`numeral_inner_size`/`numeral_inner_face` →
+`minutes_size`/`minutes_face`); the ring's own INNER PLATE ART gallery
+(`ring_inner`, `constants.RING_INNERS`, "Inner (minute track)") is a
+separate concept, out of this sweep's scope, and keeps its "inner" name.
+
+**NUMERALS naming sweep verify pass (owner ruling 2026-08-06):** the
+outer band's UI labels ("Ring face" → "Numerals face", "Numeral size" →
+"Numerals size", group title → "Numerals") align to **NUMERALS**
+alongside `ring_numerals`; the settings keys stay `numeral_face`/
+`numeral_outer_size` (already NUMERALS-rooted, no rename needed) and the
+geometry word `numeral_outer_ring_size` ("Outer ring size") is kept.
+
 Every ruling of the 2026-08-06 rework round, SETTLED with the owner in one
 sitting. This ledger is the implementation session's brief: nothing here is
 open, and nothing here is wired into `config/` yet. It extends — never

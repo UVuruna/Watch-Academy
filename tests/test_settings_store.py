@@ -417,6 +417,50 @@ def test_jewel_keys_migrate_from_the_old_letter_names(store):
     assert "jewels_tint" in store.path.read_text(encoding="utf-8")
 
 
+def test_minutes_keys_migrate_from_the_old_inner_names(store):
+    """MINUTES naming sweep (owner ruling 2026-08-06, "one term for one
+    thing"): a settings file saved before the rename carries
+    `numeral_inner_size`/`numeral_inner_face` — `load()` must read them
+    as the fallback default for the new `minutes_size`/`minutes_face`
+    fields instead of silently reverting to the SETTLED defaults (data
+    loss) or raising SettingsCorruptError."""
+    from config import dial
+
+    store.path.write_text(
+        '{"schema_version": 1, "window": {"x": 1, "y": 2, "diameter": 360},'
+        ' "numeral_inner_size": 100, "numeral_inner_face": "Unispace"}',
+        encoding="utf-8",
+    )
+    loaded = store.load()
+    assert loaded.minutes_size == 100
+    assert loaded.minutes_face == "Unispace"
+    # The NEW keys win when both are present (post-migration re-save).
+    store.path.write_text(
+        '{"schema_version": 1, "window": {"x": 1, "y": 2, "diameter": 360},'
+        ' "numeral_inner_size": 100, "minutes_size": 90,'
+        ' "numeral_inner_face": "Unispace", "minutes_face": "Arial Black"}',
+        encoding="utf-8",
+    )
+    both = store.load()
+    assert both.minutes_size == 90
+    assert both.minutes_face == "Arial Black"
+    # A file that never carried either key keeps the ordinary defaults.
+    store.path.write_text(
+        '{"schema_version": 1, "window": {"x": 1, "y": 2, "diameter": 360}}',
+        encoding="utf-8",
+    )
+    fresh = store.load()
+    assert fresh.minutes_size == dial.MINUTES_SIZE_DEFAULT
+    assert fresh.minutes_face == dial.MINUTES_FACE_DEFAULT
+    # save() writes only the new keys — a re-save fully migrates the file.
+    store.save(loaded)
+    saved_text = store.path.read_text(encoding="utf-8")
+    assert "numeral_inner_size" not in saved_text
+    assert "numeral_inner_face" not in saved_text
+    assert '"minutes_size": 100' in saved_text
+    assert '"minutes_face": "Unispace"' in saved_text
+
+
 def test_custom_ring_card_letters_field_migrates_to_jewels(store):
     """JEWELS naming sweep (owner ruling 2026-08-06): a stored
     custom-ring card's old `letters` field is read as the fallback in

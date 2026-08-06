@@ -55,7 +55,7 @@ reads was MEASURED off his plates at their native 3600 px, not chosen:
 | digit cap height 0.0436 of the dial diameter | `NUMERAL_OUTER_SIZE_DEFAULT` |
 | the odd numerals' white rim, 2.4 px mean-thick at 3600 | `NUMERAL_BORDER_DEFAULT` |
 | black reaching 11.1 px outward / 11.3 px inward of a glyph — SYMMETRIC | `NUMERAL_SHADOW_REACH_UNITS` + `NUMERAL_CONTACT_BLUR_DEFAULT` |
-| inner elements: a ring-ground body inside a white rim, under a white glow | `palette.NUMERAL_INNER_INK` / `NUMERAL_INNER_BORDER` |
+| inner elements: a ring-ground body inside a white rim, under a white glow | `palette.MINUTES_INK` / `MINUTES_BORDER` |
 
 Two of those corrected the ledger's own first-pass guesses: size 90 drew a
 visibly thinner band than his, and border 0 left an odd numeral with no

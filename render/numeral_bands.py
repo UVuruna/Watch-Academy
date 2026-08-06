@@ -266,7 +266,7 @@ def _seats(spec: BandSpec) -> tuple[tuple[str, float, QPointF], ...]:
             for hour in numerals.numeral_hours(spec.jewel_hours)
         ]
     else:
-        fraction = dial.NUMERAL_INNER_RADIUS_FRACTION
+        fraction = dial.MINUTES_RADIUS_FRACTION
         pairs = list(numerals.inner_number_seats(spec.inner_variant))
     return tuple(
         (label, angle, dial_point(angle, radius * fraction))
@@ -393,7 +393,7 @@ def _build_inner(spec: BandSpec) -> QImage:
         silhouette = relief.blank_plate(spec.pixels)
         painter = relief.plate_painter(silhouette)
         painter.setPen(Qt.PenStyle.NoPen)
-        painter.setBrush(QColor(palette.NUMERAL_INNER_INK))
+        painter.setBrush(QColor(palette.MINUTES_INK))
         for path in elements:
             painter.drawPath(path)
         painter.end()

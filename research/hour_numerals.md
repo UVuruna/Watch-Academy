@@ -175,7 +175,7 @@ and quiet.
 | Impact | extreme condensation |
 | Palatino Linotype Bold | calligraphic, high contrast |
 
-**Minute ring — inner band**
+**Minutes (the inner minute band)**
 
 | Face | Character |
 |---|---|
@@ -209,7 +209,7 @@ to another machine, those two travel with the installer.
 | **Mode** | choice | `classic` · `solar` | both shipped | **SETTLED** |
 | **Seating** | choice | `arc` · `upright` | both shipped, user picks | **SETTLED** |
 | **Ring face** | choice | the seven above | `Bernard MT Condensed` | **SETTLED** |
-| **Inner face** | choice | the five above | `Eras Bold ITC` | **SETTLED** |
+| **Minutes face** | choice | the five above | `Eras Bold ITC` | **SETTLED** |
 | **Size** | number | 40 – 140 units | `90`, user-adjustable | **SETTLED** |
 | **Border** | number | 0 – 16 units | `0` | **SETTLED** |
 | **Relief style** | choice | `cast` · `extrude` · `emboss` | `extrude` | **SETTLED** |

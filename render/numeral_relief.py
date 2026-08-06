@@ -165,14 +165,14 @@ def draw_inner_ink(
     flat white on wave 3's screen for exactly this reason."""
     painter.save()
     if border_px > 0.0:
-        pen = QPen(QColor(palette.NUMERAL_INNER_BORDER))
+        pen = QPen(QColor(palette.MINUTES_BORDER))
         pen.setWidthF(border_px)
         pen.setJoinStyle(Qt.PenJoinStyle.RoundJoin)
         painter.setPen(pen)
-        painter.setBrush(QColor(palette.NUMERAL_INNER_BORDER))
+        painter.setBrush(QColor(palette.MINUTES_BORDER))
         painter.drawPath(path)
     painter.setPen(Qt.PenStyle.NoPen)
-    painter.setBrush(QColor(palette.NUMERAL_INNER_INK))
+    painter.setBrush(QColor(palette.MINUTES_INK))
     painter.drawPath(path)
     painter.restore()
 

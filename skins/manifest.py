@@ -459,12 +459,12 @@ class SkinDefinition:
     # SETTLED rides the skin the way every other display choice does.
     # `render.layers.numerals.band_spec` turns these into the band cache
     # key; `config.dial` holds the rosters, ranges and SETTLED defaults.
-    #   * `numeral_outer_size` / `numeral_inner_size` — the two bands'
+    #   * `numeral_outer_size` / `minutes_size` — the two bands'
     #     numeral heights, in the ledger's own units (§8), so a setting
     #     survives any change of dial resolution.
     #   * `numeral_outer_ring_size` — the WIDTH of the band the jewels
     #     and numbers stand in, as a multiplier of the measured band.
-    #   * `numeral_face` / `numeral_inner_face` — the two rosters (§7);
+    #   * `numeral_face` / `minutes_face` — the two rosters (§7);
     #     `crown_face` is the LIVE CROWN's own, picked for full glyph
     #     coverage rather than inherited (see config.dial's verified
     #     note: the hour band's default cannot draw a colon here).
@@ -476,10 +476,10 @@ class SkinDefinition:
     #   * `crown_time_format` — `hh:mm` (the standard default) or
     #     `12h 35min`, whose h/min ride a smaller cut of the same face.
     numeral_outer_size: int = dial.NUMERAL_OUTER_SIZE_DEFAULT
-    numeral_inner_size: int = dial.NUMERAL_INNER_SIZE_DEFAULT
+    minutes_size: int = dial.MINUTES_SIZE_DEFAULT
     numeral_outer_ring_size: float = dial.NUMERAL_OUTER_RING_SIZE_DEFAULT
     numeral_face: str = dial.NUMERAL_OUTER_FACE_DEFAULT
-    numeral_inner_face: str = dial.NUMERAL_INNER_FACE_DEFAULT
+    minutes_face: str = dial.MINUTES_FACE_DEFAULT
     crown_face: str = dial.CROWN_FACE_DEFAULT
     numeral_seating: str = dial.NUMERAL_SEATING_DEFAULT
     numeral_relief: str = dial.NUMERAL_RELIEF_DEFAULT
