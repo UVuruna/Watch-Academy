@@ -3113,14 +3113,47 @@ class WatchController(QObject):
     # Phase 6 FINAL cleanup retired Design/Pointer Theme/Slot Theme) -------
 
     @paths.in_display
+    def _reopen_live(self, dialog) -> bool:
+        """Bring an already-open single-instance window back to the
+        front — the shared door for every "open (or raise)" handler
+        below (Rule #5). Answers False when the window is NOT actually
+        there any more, so the caller drops its stale reference and
+        builds a fresh one.
+
+        THE DEAD REFERENCE (owner bug 2026-08-07: "od 6 otvorenih satova
+        CHI neće da mi otvori Watch Face, ostali hoće"). These handlers
+        used to trust `self._<window> is not None` and call `raise_()`
+        alone, which fails in TWO ways that both look identical to the
+        user — a menu item that does nothing, on one watch, forever:
+
+        * a window HIDDEN without `done()` never emits `finished`, so
+          the reference stayed set while nothing was on screen, and
+          `raise_()` on a hidden window shows nothing. Hence `show()`
+          first, unconditionally.
+        * a window whose C++ object is already gone leaves a live Python
+          wrapper behind, and every call on it raises `RuntimeError`
+          inside a Qt slot, where it is swallowed. That family is not
+          hypothetical here — the owner's own `crash.log` carries 640
+          `Internal C++ object (ClockWidget) already deleted`
+          tracebacks from the leaked-filter bug. Hence the except."""
+        if dialog is None:
+            return False
+        try:
+            dialog.show()
+            dialog.raise_()
+            dialog.activateWindow()
+        except RuntimeError:
+            return False
+        return True
+
     def _open_watch_face(self) -> None:
         """Open (or raise) the [Watch Face Window](../watch_face/__about/window.md)
         — NON-MODAL, LIVE-APPLY: a second open request raises the ONE
-        live instance."""
-        if self._watch_face is not None:
-            self._watch_face.raise_()
-            self._watch_face.activateWindow()
+        live instance (`_reopen_live`, which also rescues a watch whose
+        window died behind its reference)."""
+        if self._reopen_live(self._watch_face):
             return
+        self._watch_face = None
         dialog = WatchFaceDialog(
             self._settings, self._watch_face_setters(),
             overlay=self._translation_overlay,
@@ -3524,10 +3557,9 @@ class WatchController(QObject):
         dial stays interactive while it is open; a second open request
         RAISES the ONE live instance (its own Enlarge flow already runs
         non-modal too — see `ObservatoryDialog._open_enlarged`)."""
-        if self._observatory is not None:
-            self._observatory.raise_()
-            self._observatory.activateWindow()
+        if self._reopen_live(self._observatory):
             return
+        self._observatory = None
         if self._simulation is not None:
             now, observer = self._simulation
             cycles = self._sim_cycles
@@ -3570,10 +3602,13 @@ class WatchController(QObject):
         (topic=None) just raises it without disturbing what the user is
         already browsing."""
         if self._encyclopedia is not None:
-            self._encyclopedia.navigate_to(topic, entry)
-            self._encyclopedia.raise_()
-            self._encyclopedia.activateWindow()
-            return
+            try:
+                self._encyclopedia.navigate_to(topic, entry)
+            except RuntimeError:
+                self._encyclopedia = None      # its C++ object is gone
+            if self._reopen_live(self._encyclopedia):
+                return
+            self._encyclopedia = None
         dialog = EncyclopediaDialog(
             self._translation_overlay,
             hidden_unlocked=self._hidden_unlocked,

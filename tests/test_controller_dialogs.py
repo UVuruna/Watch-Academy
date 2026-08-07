@@ -286,3 +286,73 @@ def test_settings_opens_square_at_50pct_height_or_wider(app):
         assert dialog.width() >= min(expected_height, available.width())
     finally:
         dialog.done(0)
+
+
+# ═══════════════════════ THE DEAD REFERENCE ═══════════════════════
+# Owner bug 2026-08-07: "od 6 otvorenih satova CHI neće da mi otvori
+# Watch Face, ostali hoće". A single-instance handler that trusts its
+# own `is not None` and calls `raise_()` alone fails in two ways that
+# look identical to the user — a menu item that does nothing, on one
+# watch, forever. `WatchController._reopen_live` is the shared answer;
+# these are its teeth, one per way of dying.
+
+def test_a_window_hidden_without_done_opens_again(controller):
+    """`finished` never fires for a window that was HIDDEN rather than
+    closed, so the controller's reference stays set — and `raise_()` on
+    a hidden window puts nothing back on screen. The handler must SHOW
+    it again."""
+    controller._open_watch_face()
+    dialog = controller._watch_face
+    assert dialog is not None and dialog.isVisible()
+
+    dialog.hide()                       # no done(), so no `finished`
+    assert controller._watch_face is dialog, "the reference should still be set"
+
+    controller._open_watch_face()
+    assert controller._watch_face is dialog, "it must not stack a duplicate"
+    assert dialog.isVisible(), "the hidden window never came back"
+    dialog.done(0)
+
+
+def test_a_window_whose_c_object_died_is_replaced_not_lost(controller):
+    """The other death: the Qt object is gone while the Python wrapper
+    lives on, so every call on it raises `RuntimeError` inside a Qt slot
+    — where it is swallowed, and the menu goes silent for good. The
+    handler must drop the corpse and build a fresh window."""
+    controller._open_watch_face()
+    dead = controller._watch_face
+    assert dead is not None
+
+    class _Dead:
+        """A wrapper whose C++ object is gone — exactly what PySide6
+        raises after the real object is destroyed."""
+
+        def show(self):
+            raise RuntimeError("Internal C++ object (WatchFaceDialog) already deleted.")
+
+        raise_ = activateWindow = show
+
+    controller._watch_face = _Dead()
+    controller._open_watch_face()
+
+    assert isinstance(controller._watch_face, type(dead)), (
+        "a dead reference must be replaced by a real window, not kept"
+    )
+    assert controller._watch_face.isVisible()
+    controller._watch_face.done(0)
+    dead.done(0)
+
+
+def test_every_single_instance_window_goes_through_one_door(controller):
+    """Rule #5: the Encyclopedia and the Observatory carry the same
+    pattern and the same two deaths, so they share the same door. A new
+    handler that hand-rolls `raise_()` again would drift straight back
+    into this bug."""
+    import inspect
+
+    from app.controller import WatchController
+
+    for name in ("_open_watch_face", "_open_observatory", "_open_encyclopedia_at"):
+        source = inspect.getsource(getattr(WatchController, name))
+        assert "_reopen_live" in source, name
+        assert ".raise_()" not in source, f"{name} still raises by hand"

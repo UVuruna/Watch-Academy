@@ -41,7 +41,15 @@ for the procedure):
    Settings/Time Travel/Report/Shortcuts openers (`_open_watch_face`,
    `_open_encyclopedia_at`, `_open_observatory`, `_open_guide`,
    `_open_settings`, `_open_report`, `_open_shortcuts` — R-37) and their
-   `_watch_face_setters`/`_slot_descriptors` callable bundles.
+   `_watch_face_setters`/`_slot_descriptors` callable bundles. All three
+   non-modal openers go through ONE door, `_reopen_live` (owner bug
+   2026-08-07, "CHI neće da mi otvori Watch Face, ostali hoće"): a
+   handler that only called `raise_()` left a window HIDDEN without
+   `done()` invisible forever — its `finished` never fired, so the
+   reference stayed set — and a window whose C++ object had died raised
+   `RuntimeError` inside a Qt slot, where it is swallowed and the menu
+   item goes permanently silent on that one watch. `_reopen_live` shows
+   first, and answers False for a corpse so the caller builds afresh.
    `_apply_settings_dialog_result` is the ONE apply path an
    accepted `SettingsDialog` takes, however it was reached — the plain
    menu opener (`_open_settings`) and the Watch Face Ring section's
