@@ -91,6 +91,7 @@ from data.translations import (
     TranslationStore, claim_translation, collect_corpus, release_translation,
     translate_texts,
 )
+from render import letter_plates
 from render.assets import shared_cache
 from render.asset_variants import calendar_wheel_icon_file
 from render.compositor import Compositor
@@ -485,10 +486,11 @@ def _compose_skin(settings: Settings, location_display: str = ""):
         # The jewel art is ALWAYS the gold master — silver/bronze are
         # derived from it AT LOAD (owner 2026-07-19,
         # render.asset_recolor.jewel_metal_file), never pre-rendered files.
-        filename = constants.RING_JEWEL_FILES[glyph]
         if eye_shine and glyph == constants.RING_EYE_GLYPH:
-            filename = constants.RING_EYE_SHINE_FILE
-        stem = filename[:-len(".png")]
+            master = dial.LETTER_ART_DIR / constants.RING_EYE_SHINE_FILE
+        else:
+            master = letter_plates.plate_path(glyph)
+        stem = master.stem
         if stem.startswith("Eye_shine"):
             # THE SHINE ENLARGE (owner UV inbox 2026-07-27): the rays
             # pad the triangle, so the shine master draws bigger and
@@ -507,7 +509,7 @@ def _compose_skin(settings: Settings, location_display: str = ""):
             # condition as the enlarge factor just above (any resolved
             # "Eye_shine*" stem, toggle-driven or an explicit custom pick).
             jewel_no_shadow[hour] = True
-        jewel_art[hour] = dial.RING_JEWEL_ART_DIR / filename
+        jewel_art[hour] = master
         jewel_metal[hour] = _jewel_metal(position, metal_layout, settings.ring_finish)
         if position in card["legend"]:
             jewel_legend[hour] = card["legend"][position]
@@ -534,7 +536,7 @@ def _compose_skin(settings: Settings, location_display: str = ""):
     if settings.ring not in constants.RING_OUTER_LOCK:
         crown_text = settings.custom_ring_crown_text.get(settings.ring, "")
         if crown_text and not any(
-            char != " " and char not in constants.RING_JEWEL_FILES
+            char != " " and char not in constants.LETTER_PLATE_FILES
             for char in crown_text
         ):
             orientation = settings.custom_ring_crown_orientation.get(
@@ -573,7 +575,7 @@ def _compose_skin(settings: Settings, location_display: str = ""):
     #
     # SEPARATOR: `_location_crown_text` drops the comma and collapses the
     # gap to ONE SPACE, because the jewel library has no comma plate
-    # (`constants.RING_JEWEL_FILES` — 52 entries, uppercase Latin/Greek,
+    # (`constants.LETTER_PLATE_FILES` — uppercase Latin/Greek,
     # digits, $, &, ✠, the Eye and the colon). "Belgrade, Serbia" reads
     # "BELGRADE SERBIA". That is the product's existing separator
     # practice, not a new invention: it is what the user toggle has drawn
@@ -614,7 +616,7 @@ def _compose_skin(settings: Settings, location_display: str = ""):
         {
             "text": entry["text"],
             "glyphs": tuple(
-                (dial.RING_JEWEL_ART_DIR / constants.RING_JEWEL_FILES[char], angle)
+                (letter_plates.plate_path(char), angle)
                 for char, angle in zip(entry["text"], entry["angles"])
                 if char != " "
             ),
@@ -1073,7 +1075,6 @@ def _overlay_display_settings(skin, settings: Settings, display):
         numeral_outer_ring_size=settings.numeral_outer_ring_size,
         numeral_face=settings.numeral_face,
         minutes_face=settings.minutes_face,
-        crown_face=settings.crown_face,
         numeral_seating=settings.numeral_seating,
         numeral_relief=settings.numeral_relief,
         numeral_depth=settings.numeral_depth,
@@ -3292,7 +3293,7 @@ class WatchController(QObject):
                 for key in (
                     "numeral_outer_size", "minutes_size",
                     "numeral_outer_ring_size", "numeral_face",
-                    "minutes_face", "crown_face", "numeral_seating",
+                    "minutes_face", "numeral_seating",
                     "numeral_relief", "numeral_depth", "numeral_light",
                     "numeral_darkness", "numeral_contact_blur",
                     "numeral_border", "crown_time_format",

@@ -183,7 +183,7 @@ def blank_plate(width: int, height: int | None = None) -> QImage:
     DPR stamp is applied at the very end (`stamp_dpr`), so no geometry
     is ever scaled twice. `height` defaults to `width` (every existing
     caller wants a square tile); the live crown's colon tile
-    (`render.numeral_bands._crown_colon_image`) is the one caller that
+    (`render.numeral_bands._crown_plate_image`) is the one caller that
     is not square — `time.png` is a tall narrow plate, not a glyph
     bounding box."""
     image = QImage(

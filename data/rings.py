@@ -31,7 +31,7 @@ def _validate_crown_text(name: str, raw: list, positions: tuple) -> tuple:
     preset's own ring positions (the crown text's key letters land on the
     SAME hexagram seats the ring's own jewels occupy) and every
     character of `text` must be a space or a letter the shared library
-    (`constants.RING_JEWEL_FILES`) can draw — the crown text reuses that
+    (`constants.LETTER_PLATE_FILES`) can draw — the crown text reuses that
     exact PNG library, never new art. Each entry may also carry
     `clockwise` (MOTO-FIX round, owner correction 2026-07-19; default
     true): true reads the arc sweeping increasing angle (the TOP arc,
@@ -80,7 +80,7 @@ def _validate_crown_text(name: str, raw: list, positions: tuple) -> tuple:
             raise ValueError(f"ring preset {name!r}: a crown text entry needs text")
         unknown = {
             char for char in text
-            if char != " " and char not in constants.RING_JEWEL_FILES
+            if char != " " and char not in constants.LETTER_PLATE_FILES
         }
         if unknown:
             raise ValueError(
@@ -228,7 +228,7 @@ def validate_preset(entry: dict) -> dict:
             f"ring preset {name!r}: {len(jewels)} jewels for "
             f"{len(positions)} positions (outer {outer!r})"
         )
-    unknown = [j for j in jewels if j not in constants.RING_JEWEL_FILES]
+    unknown = [j for j in jewels if j not in constants.LETTER_PLATE_FILES]
     if unknown:
         raise ValueError(f"ring preset {name!r}: unknown jewels {unknown}")
     # A NUMBER may only stand on its own hour (owner rule 2026-07-12:

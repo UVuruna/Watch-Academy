@@ -65,10 +65,6 @@ def load_numerals(raw: dict) -> dict:
                 dial.MINUTES_FACE_DEFAULT,
             )
         ),
-        "crown_face": load_choice(
-            raw, "crown_face", tuple(dial.NUMERAL_OUTER_FACES),
-            dial.CROWN_FACE_DEFAULT,
-        ),
         "numeral_seating": load_choice(
             raw, "numeral_seating", dial.NUMERAL_SEATINGS,
             dial.NUMERAL_SEATING_DEFAULT,

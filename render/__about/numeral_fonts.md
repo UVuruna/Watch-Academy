@@ -31,11 +31,14 @@ whose outlines Qt cannot hand back. `assert_covers()` raises — loudly, at
 settings-apply time and never mid-paint — when a face the user picked
 cannot draw what the band needs.
 
-The consequence is written into `config/dial.py`: the CROWN's own default
-face is **not** the outer band's default, because the outer band needs
-digits only (which Bernard has) while the crown needs the colon and the
-`h`/`min` cut (which Bernard does not). Both defaults are named there with
-this reason beside them.
+**The crown is no longer a caller.** Under THE ONE PLATE LAW (owner
+decree 2026-08-07) the live crown draws the owner's letter plates like
+every other glyph on the ring, so the special crown FACE this module used
+to prove — picked because the hour band's own default cannot draw a colon
+here — is gone with the font. What remains is the two BAND rosters. The
+lesson the crown left behind is written into
+[Letter Plates](letter_plates.md): proving that a FONT can draw a glyph
+proves nothing about whether a PLATE exists for it.
 
 ## Connections
 

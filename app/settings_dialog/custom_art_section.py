@@ -112,7 +112,7 @@ class _CustomArtSectionMixin:
         Numbers section offers at most the position's own number."""
         combo = QComboBox()
         model = QStandardItemModel(combo)
-        for group, glyphs in constants.RING_JEWEL_GROUPS.items():
+        for group, glyphs in constants.LETTER_PLATE_GROUPS.items():
             if group == "Numbers":
                 glyphs = tuple(g for g in glyphs if int(g) == position)
                 if not glyphs:

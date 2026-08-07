@@ -33,13 +33,13 @@ from PySide6.QtGui import QColor, QFontDatabase
 from PySide6.QtWidgets import QApplication
 
 from app.controller import build_skin
-from app.settings_store import Settings, SettingsStore
+from app.settings_store import Settings, SettingsStore, replace
 from config import dial, palette
 from core import numerals
 from core.clock_state import build_day_context, build_tick_state
 from data.moon_phases import MoonPhaseRepository
 from data.seasons import SeasonsRepository
-from render import numeral_bands, numeral_fonts
+from render import letter_plates, numeral_bands, numeral_fonts
 from render.numeral_bands import outer_centreline
 from render.assets import AssetCache
 from render.compositor import Compositor, _build_layers
@@ -348,16 +348,15 @@ def _installed(family: str) -> bool:
     return family in set(QFontDatabase.families())
 
 
-def test_the_crown_default_face_draws_every_one_of_the_eleven(app):
-    """The crown needs the colon, and the hour band's own default face
-    cannot draw one on this install — so the crown's default is picked
-    for coverage. If this fails, the pick in config/dial.py is stale."""
-    _require_a_font_database()
-    family = dial.NUMERAL_OUTER_FACES[dial.CROWN_FACE_DEFAULT][0]
-    assert _installed(family), f"{family} is not installed on this machine"
-    assert numeral_fonts.missing_glyphs(
-        "outer", dial.CROWN_FACE_DEFAULT, numerals.crown_glyph_alphabet()
-    ) == ()
+def test_the_crown_has_no_face_to_pick(app):
+    """THE ONE PLATE LAW (owner decree 2026-08-07): the crown draws the
+    owner's letter plates, so the whole coverage worry that used to pick
+    a special crown FACE is gone — with the setting, the skin field and
+    the Watch Face row that offered it."""
+    from app.settings_store import Settings as _Settings
+
+    assert not hasattr(dial, "CROWN_FACE_DEFAULT")
+    assert not hasattr(_Settings(), "crown_face")
 
 
 def test_the_hour_band_default_face_draws_every_digit(app):
@@ -715,78 +714,107 @@ def test_an_unknown_stored_numeral_choice_is_corrupt_not_silently_default(tmp_pa
 # letter wears — metal finish + THE LETTER SHADOW LAW's stamped halo —
 # never the outer band's parity plate-and-frame.
 
-def test_colon_resolves_through_the_jewel_pipeline(app):
-    """The colon draws NO font glyph at all any more — it is HIS plate,
-    `time.png`, resolved through the exact door every ring letter
-    resolves its finish through (`render.asset_recolor.jewel_metal_
-    file`, the SAME call `RingLayer._draw_ring_glyph` makes for a real
-    letter)."""
+def _crown_spec(metal="gold", shade="classic"):
+    """A crown spec whose plates are the GOLD masters — the hand-built
+    twin of what `render.layers.numerals.crown_spec` assembles for a
+    real watch (THE ONE PLATE LAW: every glyph is a plate, so the spec
+    carries one resolved file per glyph)."""
+    return numeral_bands.CrownSpec(
+        pixels=720, dpr=1.0, height_px=720 * dial.RING_CROWN_TEXT_SIZE,
+        metal=metal, shade=shade,
+        sources=tuple(
+            (glyph, str(letter_plates.plate_path(glyph)))
+            for glyph in numerals.crown_glyph_alphabet() if glyph != " "
+        ),
+    )
+
+
+def test_every_crown_glyph_resolves_through_the_jewel_pipeline(app):
+    """THE ONE PLATE LAW (owner decree 2026-08-07): no glyph of the live
+    crown draws a font outline. Every one of them — the ten digits and
+    HIS colon plate alike — is resolved through the exact door every
+    ring letter resolves its finish through (`render.asset_recolor.
+    jewel_metal_file`, the SAME call `RingLayer._draw_ring_glyph` makes
+    for a real letter)."""
+    from render.layers import numerals as numeral_layers
+
     calls = []
-    original = numeral_bands.jewel_metal_file
+    original = numeral_layers.jewel_metal_file
 
     def spy(path, metal):
         calls.append((path, metal))
         return original(path, metal)
 
-    numeral_bands.jewel_metal_file = spy
+    numeral_layers.jewel_metal_file = spy
     try:
         numeral_bands.clear_cache()
-        spec = numeral_bands.CrownSpec(
-            pixels=720, dpr=1.0, face=dial.CROWN_FACE_DEFAULT,
-            height_px=720 * dial.RING_CROWN_TEXT_SIZE, metal="silver", shade="silver",
+        skin = build_skin(replace(Settings(), ring="The One", ring_finish="silver"))
+        ctx = RenderContext(
+            radius=360.0, dpr=1.0, skin=skin, cache=None, tick=None, day=None,
         )
+        spec = numeral_layers.crown_spec(skin, ctx)
         glyphs = numeral_bands.crown_glyph_set(spec)
     finally:
-        numeral_bands.jewel_metal_file = original
+        numeral_layers.jewel_metal_file = original
         numeral_bands.clear_cache()
-    assert (dial.RING_JEWEL_ART_DIR / "time.png", "silver") in calls
-    assert ":" in glyphs
+    asked = {path for path, _metal in calls}
+    for glyph in numerals.crown_glyph_alphabet():
+        if glyph == " ":
+            continue
+        assert letter_plates.plate_path(glyph) in asked, glyph
+        assert glyph in glyphs
 
 
-def test_the_crown_face_no_longer_needs_to_draw_a_colon(app, monkeypatch):
-    """The colon is a raster plate now (above) — `crown_glyph_set` must
-    not ask the FONT to cover ':' any more, since it never draws one."""
-    seen = {}
-    original = numeral_bands.assert_covers
-
-    def spy(band, face, glyphs):
-        seen["glyphs"] = glyphs
-        return original(band, face, glyphs)
-
-    monkeypatch.setattr(numeral_bands, "assert_covers", spy)
-    numeral_bands.clear_cache()
-    spec = numeral_bands.CrownSpec(
-        pixels=720, dpr=1.0, face=dial.CROWN_FACE_DEFAULT,
-        height_px=720 * dial.RING_CROWN_TEXT_SIZE, metal="gold", shade="classic",
+def test_the_crown_asks_no_font_for_anything(app, monkeypatch):
+    """The tooth for the failure that made the owner shout: the crown
+    used to prove a FONT could draw its glyphs and never proved a PLATE
+    existed, so a missing alphabet was a silent fallback. There is no
+    font coverage check left because there is no font left."""
+    called = []
+    monkeypatch.setattr(
+        numeral_bands, "relief",
+        _FontTrap(numeral_bands.relief, called),
     )
-    numeral_bands.crown_glyph_set(spec)
-    assert ":" not in seen["glyphs"]
-    assert set("0123456789") <= set(seen["glyphs"])
     numeral_bands.clear_cache()
+    try:
+        numeral_bands.crown_glyph_set(_crown_spec())
+    finally:
+        numeral_bands.clear_cache()
+    assert called == [], f"the crown drew a font glyph: {called}"
 
 
-def test_digits_wear_the_crown_metal_body_color_not_band_parity(app):
-    """A digit has no plate of its own, so THE TIME CROWN LOOK gives it
-    the crown's own flat metal BODY tone — never the outer band's white/
-    ring-ground parity fill (`palette.NUMERAL_PARITY_COLORS`)."""
+class _FontTrap:
+    """`numeral_relief` with `glyph_path` booby-trapped — every other
+    attribute passes straight through, so the crown builds normally
+    unless it asks for a FONT OUTLINE."""
+
+    def __init__(self, wrapped, log):
+        self._wrapped, self._log = wrapped, log
+
+    def __getattr__(self, name):
+        if name == "glyph_path":
+            def trap(*args, **kwargs):
+                self._log.append(args[:1])
+                return self._wrapped.glyph_path(*args, **kwargs)
+            return trap
+        return getattr(self._wrapped, name)
+
+
+def test_digits_wear_the_ring_metal_never_band_parity(app):
+    """A crown digit is a recolored PLATE, so it can never read as the
+    outer band's white/ring-ground parity fill
+    (`palette.NUMERAL_PARITY_COLORS`) — the look the owner ruled off the
+    time crown entirely."""
     numeral_bands.clear_cache()
-    spec = numeral_bands.CrownSpec(
-        pixels=720, dpr=1.0, face=dial.CROWN_FACE_DEFAULT,
-        height_px=720 * dial.RING_CROWN_TEXT_SIZE, metal="gold", shade="classic",
-    )
-    digit = numeral_bands.crown_glyph_set(spec)["5"]
+    digit = numeral_bands.crown_glyph_set(_crown_spec())["5"]
     counts = {}
     for y in range(digit.height()):
         for x in range(digit.width()):
             color = digit.pixelColor(x, y)
-            if color.alpha() > 200:
+            if color.alpha() > 200 and color.value() > 40:
                 key = (color.red(), color.green(), color.blue())
                 counts[key] = counts.get(key, 0) + 1
     dominant = max(counts, key=counts.get)
-    expected = numeral_bands._crown_metal_body_color("gold", "classic")
-    assert abs(dominant[0] - expected.red()) <= 6
-    assert abs(dominant[1] - expected.green()) <= 6
-    assert abs(dominant[2] - expected.blue()) <= 6
     for role in ("even", "odd"):
         parity = QColor(palette.NUMERAL_PARITY_COLORS[role]["body"])
         distance = (
@@ -812,10 +840,7 @@ def test_digit_glyph_carries_the_jewel_shadow_stamp(app, monkeypatch):
             if image.pixelColor(x, y).alpha() > 0
         )
 
-    spec = numeral_bands.CrownSpec(
-        pixels=720, dpr=1.0, face=dial.CROWN_FACE_DEFAULT,
-        height_px=720 * dial.RING_CROWN_TEXT_SIZE, metal="gold", shade="classic",
-    )
+    spec = _crown_spec()
     numeral_bands.clear_cache()
     with_shadow = numeral_bands.crown_glyph_set(spec)["5"]
 

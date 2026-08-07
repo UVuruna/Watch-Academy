@@ -12,9 +12,8 @@ Three products, one cache:
 |---|---|---|
 | OUTER band plate — the metal AND the hour numerals standing on it | `outer_band_plate` | its `BandSpec` changes (including `offset_deg`) |
 | INNER band plate — the minute NUMBERS alone, in white border + glow | `inner_band_plate` | its `BandSpec` changes |
-| The ELEVEN crown glyphs — digits 0–9 and the colon, in the crown-text size family | `crown_glyph_set` | its `CrownSpec` changes |
+| The crown's glyph tiles — every one a recolored PLATE, in the crown-text size family | `crown_glyph_set` | its `CrownSpec` changes |
 | Each crown glyph's own INK WIDTH, for the advance law | `crown_glyph_ink` | its `CrownSpec` changes |
-| A font of a given face fitted to a target INK height | `crown_font_for_ink_height` | never (pure per call) |
 
 A `BandSpec`/`CrownSpec` is a frozen dataclass carrying exactly what can
 make two plates differ: the pixel diameter, the face, the size, the band
@@ -90,7 +89,7 @@ year of plates. Beyond the ceiling the oldest inserted plate is dropped.
 
 ## The live crown
 
-`crown_glyph_set` rasterizes the eleven glyphs ONCE. `compose_crown` then
+`crown_glyph_set` rasterizes the crown's plate tiles ONCE. `compose_crown` then
 does the per-minute work: it takes a glyph sequence from
 `core.numerals.crown_sequence`, looks each glyph up in the finished set,
 and returns `(image, angle, rotation)` triples laid out along the crown
@@ -124,14 +123,12 @@ default face a digit therefore drew only 0.717 of the box it was given.
 
 The fix: `CrownSpec.height_px` is the glyph BOX, handed in by
 [the crown layer](../layers/__about/numerals.md) from the SAME expression
-the static arc uses; the colon is scaled to that box exactly as a letter
-plate is; and a digit's font is FITTED by
-`crown_font_for_ink_height`, which probes the face's own ink/em ratio at
-`CROWN_FIT_PROBE_PX` and scales until the ink fills
-`CROWN_PLATE_INK_FRACTION` (0.992 — MEASURED off A/N/O/M/X.png, all 512
-px tall with 508 px of ink). Probed, never tabled, so a roster change
-cannot leave a stale per-face constant behind.
-`CROWN_NUMERAL_SIZE_FRACTION` is retired.
+the static arc uses, and EVERY glyph is scaled to that box exactly as a
+letter plate is — which since THE ONE PLATE LAW is not an analogy: a
+crown digit IS a letter plate. The per-face ink fitting this paragraph
+used to describe (`crown_font_for_ink_height` /
+`CROWN_PLATE_INK_FRACTION` / `CROWN_FIT_PROBE_PX`) went out with the
+font it existed to size, and `CROWN_NUMERAL_SIZE_FRACTION` before it.
 
 **THE CROWN ADVANCE LAW.** The other half of "scattered": a fixed
 angular step gave the colon — 0.22 glyph-heights of ink — exactly the arc
@@ -145,30 +142,37 @@ Root cause: `jewel_metal_file` honestly falls back to the gold master
 until the background recolor drains, and this module BAKES its tiles once
 and caches them — so the fallback froze in place for the life of the
 process, while the font-drawn digits went straight to the real metal's
-body tone through `_crown_metal_body_color`. `CrownSpec.colon_source`
-carries the RESOLVED path into the cache key, so the drain's arrival is a
-new key and the crown rebuilds in the metal the rest of the ring wears.
+body tone. `CrownSpec.sources` carries the RESOLVED path of EVERY glyph
+into the cache key, so the drain's arrival is a new key and the crown
+rebuilds in the metal the rest of the ring wears.
 
-### THE TIME CROWN LOOK (owner correction 2026-08-06)
+### THE ONE PLATE LAW (owner decree 2026-08-07)
 
-The owner's furious correction: the live crown used to build its glyphs
-through the OUTER BAND's own numeral relief/parity machinery
-(`draw_relief` + `draw_body` in [Numeral Relief](numeral_relief.md)) — a
-white/gray plate-and-frame that is not his jewels' look at all. Every
-glyph now goes through THE LETTER pipeline instead:
+    "JEWELS === CROWN TXT (SVE) === CROWN LOCATION === CROWN TIME"
 
-- **The colon is HIS plate.** `time.png` (`config.dial.RING_JEWEL_ART_DIR`)
-  resolves through `render.asset_recolor.jewel_metal_file` — the EXACT
-  door every ring jewel resolves its finish through — scaled to the
-  crown's own glyph height and stamped with the shadow below. No font
-  ever draws it; `assert_covers` no longer asks any face to cover `":"`.
-- **The ten digits (and the `"12h 35min"` h/min cut) have no plate**, so
-  they wear the crown's own metal BODY COLOR
-  (`_crown_metal_body_color`) — the SAME ramp `jewel_metal_file`
-  recolors onto, sampled flat at the recipe's own `body_position`
-  instead of recolored pixel-by-pixel (there is no baked shading on a
-  font glyph to preserve).
-- **Both wear THE LETTER SHADOW LAW's stamped halo** —
+The 2026-08-06 correction took the live crown off the OUTER BAND's
+relief/parity machinery (`draw_relief` + `draw_body` in
+[Numeral Relief](numeral_relief.md)) and gave the COLON his own plate —
+but the ten digits stayed font outlines filled with a flat ramp tone,
+because the library had no digit plates. That is the half the owner saw
+on his own screen the next day: the time above the dial did not wear the
+metal the letters beside it wore. He had shipped `symbols/colon.png`
+precisely so it would not be drawn by a font, and said so five times.
+
+He then shipped `numerals/0-9.png`, and the font path was deleted:
+
+- **Every glyph is HIS plate**, resolved by
+  [Letter Plates](letter_plates.md) and finished through
+  `render.asset_recolor.jewel_metal_file` — the EXACT door every ring
+  jewel resolves its finish through — scaled to the crown's own glyph
+  height and stamped with the shadow below. `_crown_plate_image` is the
+  whole builder; there is no second one.
+- **No font is consulted at all.** `assert_covers` is not called here,
+  `CrownSpec` has no `face`, and `Settings.crown_face` is gone with the
+  Watch Face row that offered it. The `"12h 35min"` cut's lowercase
+  `h`/`m`/`i`/`n` resolve to their UPPERCASE plate at
+  `CROWN_SMALL_CUT_FRACTION` of the box — a plate is a shape, not a case.
+- **Every glyph wears THE LETTER SHADOW LAW's stamped halo** —
   `shadow_sample_count`/`normalized_shadow_alpha`/`_stamp_shadow`, the
   SAME construction `render.layers.ring.RingLayer._draw_ring_glyph`
   stamps live for a real jewel (moved here from `render.layers.ring`
@@ -180,7 +184,14 @@ glyph now goes through THE LETTER pipeline instead:
 (`RingSpec.crown_text_metal` — the SAME `settings.ring_finish` the ring
 jewels wear) and `shade`, so two watches with different active shades
 never collide in the shared `_CROWNS` cache. The 2026-08-07 round
-replaced `size_units` with `height_px` and added `colon_source` (above).
+replaced `size_units` with `height_px`, dropped `face`, and replaced
+`colon_source` with `sources` — the resolved plate of every glyph.
+
+**Why nothing reported the gap.** `numeral_fonts.assert_covers` proved
+the FONT could draw a glyph; nothing proved the PLATE existed, so a
+missing alphabet was not an error but the trigger for a documented
+fallback. `render.letter_plates.plate_path` RAISES instead, and
+`tests/test_letter_plates.py` walks the whole library.
 
 ## Never on the paint path, never on the disk
 

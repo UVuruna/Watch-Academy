@@ -107,10 +107,26 @@ PALETTE_SWATCH_PX = 34               # pointer palette circles (owner:
 TICK_HOVER_INNER_FRACTION = 0.86
 TICK_HOVER_OUTER_FRACTION = 0.945
 
-# The owner's GOLD jewel art (a full latin/greek library for future
-# ring presets), overlaid on the ring by calculation so the tint never
-# touches them; the silver look is derived by desaturation at load.
-RING_JEWEL_ART_DIR = paths.assets_dir() / "instrument" / "ring" / "letters"
+# The owner's GOLD plate library — latin, greek, the ten digits, the
+# typeable symbols and the picked-only emblems — overlaid on the ring
+# by calculation so the tint never touches it; every other finish is
+# derived from the gold master at load. NOT under `ring/` (owner
+# 2026-08-07: "nije mu to mesto jer nisu oni samo za ring") — the ring
+# jewels, all four crown surfaces and, planned, the subdial read the
+# SAME plates. Its glyph table is `constants.LETTER_PLATE_FILES`; the
+# resolver that turns a glyph into a drawable gold master (aliases,
+# composed two-digit numbers) is `render.letter_plates`.
+LETTER_ART_DIR = paths.assets_dir() / "instrument" / "letters"
+# A two-digit hour seat (12, 15, 16, 18, 20, 21) has NO plate of its
+# own any more (owner 2026-08-07: "izbacio sam sve one kompleksne
+# brojeve koje kombinuju 1 ili više osnovnih") — `render.letter_plates`
+# composes it from the digit masters. The gap between the two digits is
+# MEASURED off the owner's own retired composite: `20.png` was 730 px
+# wide and its digits carry 362 + 360 px of ink, so 8 px at the
+# library's 512 px plate height. Bump the VERSION to re-compose every
+# cached number after a change to the composition itself.
+LETTER_COMPOSE_GAP_FRACTION = 8 / 512
+LETTER_COMPOSE_VERSION = 1
 RING_JEWEL_RADIUS_FRACTION = 0.943  # letter center = the middle of the OUTER
                                      # hour band alone (owner spec; measured
                                      # 0.888–0.998 on both ring faces — the
@@ -441,12 +457,10 @@ MINUTES_FACES = {
 }
 NUMERAL_OUTER_FACE_DEFAULT = "Bernard MT Condensed"
 MINUTES_FACE_DEFAULT = "Eras Bold ITC"
-# The CROWN's own face is picked for FULL coverage, not inherited from the
-# hour band: the live crown needs the colon (and the h/min cut), which the
-# hour band's default cannot draw on this install — see the verified note
-# above. `render.numeral_fonts.first_covering_face` proves this pick at
-# settings-apply time and fails loudly rather than substituting silently.
-CROWN_FACE_DEFAULT = "Bahnschrift Bold"
+# The CROWN has NO face (THE ONE PLATE LAW, owner decree 2026-08-07):
+# it draws the owner's letter plates like the jewels and the crown text
+# beside it, so the pick that used to stand here — and the whole
+# coverage worry behind it — went with the font.
 # The size the coverage proof rasterizes/measures at — large enough that a
 # hairline glyph still reports a non-zero outline, small enough to be free.
 NUMERAL_COVERAGE_PROBE_PX = 80
@@ -522,18 +536,11 @@ CROWN_RADIUS_FRACTION = RING_CROWN_TEXT_RADIUS_FRACTION
 # instead) is retired. These two constants are what turn that shared box
 # into a drawn glyph.
 #
-# INK: a jewel plate is its own ink plus 0.8% padding — MEASURED on
-# A/N/O/M/X.png, all 512 px tall with 508 px of ink. A digit has no
-# plate, so its FONT is sized (per face, at render time) until its own
-# path bounding height hits this same fraction of the box; that is what
-# makes a 3 and an N read as one family whatever face is picked.
-CROWN_PLATE_INK_FRACTION = 0.992
-# The reference size the ink/em ratio is PROBED at (`render.numeral_bands.
-# crown_font_for_ink_height`). Deliberately large and deliberately NOT
-# `NUMERAL_COVERAGE_PROBE_PX` (80): at 80 px the outline's own grid
-# fitting skews the ratio by ~2%, which lands a 200 px crown 5 px off
-# its target. A big probe measures the pure outline.
-CROWN_FIT_PROBE_PX = 1024
+# Every glyph is a PLATE scaled to that box by its height, exactly as
+# `RingLayer._draw_ring_glyph` scales a jewel — so a 3 and an N read as
+# one family because they ARE one family. The per-face ink fitting that
+# used to live here (CROWN_PLATE_INK_FRACTION / CROWN_FIT_PROBE_PX) is
+# retired with the font it existed to size.
 # ADVANCE: the crown lays glyphs out by their OWN ink width plus this
 # much tracking (of the glyph box height) — never a fixed angular step,
 # which spaced a 0.22-wide colon exactly as far as a 1.45-wide M and was

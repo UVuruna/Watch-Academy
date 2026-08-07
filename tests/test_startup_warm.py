@@ -151,7 +151,7 @@ def test_the_drain_builds_a_whole_batch_and_leaves_nothing(app, cold_cache):
     """The pooled drain (0.14.704) keeps the serial contract: every
     recorded recipe built exactly once, the ledger left empty, one
     on_ready per landed finish."""
-    jewels_dir = paths.assets_dir() / "instrument" / "ring" / "letters"
+    jewels_dir = paths.assets_dir() / "instrument" / "letters" / "latin"
     letters = [jewels_dir / name for name in ("A.png", "B.png", "C.png", "D.png")]
     for letter in letters:
         assert letter.exists()
@@ -189,7 +189,7 @@ def test_a_finish_switch_after_the_warm_drains_again(app, cold_cache):
     manager._watches = []
     asset_recolor.set_art_stale_notifier(manager.kick_art_warm)
     try:
-        letter = paths.assets_dir() / "instrument" / "ring" / "letters" / "A.png"
+        letter = paths.assets_dir() / "instrument" / "letters" / "latin" / "A.png"
         assert letter.exists(), "the test master must exist"
 
         # The paint under the NEW finish: records the recipe, observes

@@ -29,7 +29,7 @@ from PySide6.QtGui import QColor, QIcon, QImage, QPainter, QPixmap
 
 from config import constants, dial, palette, paths
 from core import angles
-from render import raster_store
+from render import letter_plates, raster_store
 from render.painting import dial_point
 
 # The source render size every thumbnail is produced at — every gallery
@@ -99,7 +99,7 @@ def ring_preset_thumbnail(card: dict) -> QIcon | None:
     sources = [outer_path]
     for jewel in card["jewels"]:
         jewel_path = paths.art_file(
-            dial.RING_JEWEL_ART_DIR / constants.RING_JEWEL_FILES[jewel]
+            letter_plates.plate_path(jewel)
         )
         if jewel_path is not None and jewel_path.exists():
             sources.append(jewel_path)
@@ -135,7 +135,7 @@ def ring_preset_thumbnail(card: dict) -> QIcon | None:
     jewel_height = 2 * radius * dial.RING_JEWEL_ART_SCALE
     for position, jewel in zip(card["positions"], card["jewels"]):
         jewel_path = paths.art_file(
-            dial.RING_JEWEL_ART_DIR / constants.RING_JEWEL_FILES[jewel]
+            letter_plates.plate_path(jewel)
         )
         if jewel_path is None or not jewel_path.exists():
             continue

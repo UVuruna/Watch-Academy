@@ -6,6 +6,7 @@ import pytest
 from app.controller import build_skin
 from app.settings_store import Settings, replace
 from config import continents, defaults, dial, encyclopedia_ui, pantheon, paths
+from render import letter_plates
 from skins.manifest import missing_assets
 
 
@@ -64,7 +65,7 @@ def test_dollar_preset_loads_and_splits_metal():
     assert mason["triangle"] == (12, 20, 4)
     assert set(mason["legend"]) == {12, 16, 20, 24, 4, 8}
 
-    art_dir = dial.RING_JEWEL_ART_DIR
+    art_dir = dial.LETTER_ART_DIR
     # jewel_art is ALWAYS the gold master now (owner 2026-07-19
     # live-render round); jewel_metal carries the active finish per
     # hour — silver/bronze are derived from the gold master at paint
@@ -72,12 +73,12 @@ def test_dollar_preset_loads_and_splits_metal():
     gold_ring = build_skin(replace(Settings(), ring="Dollar")).ring
     # The apex wears the Eye — with the Dollar's own Shine default ON
     # (constants.RING_EYE_SHINE_DEFAULT) the glory-of-rays master.
-    assert gold_ring.jewel_art[12] == art_dir / "Eye_shine.png"
-    assert gold_ring.jewel_art[20] == art_dir / "M.png"
-    assert gold_ring.jewel_art[4] == art_dir / "N.png"
-    assert gold_ring.jewel_art[16] == art_dir / "S.png"
-    assert gold_ring.jewel_art[0] == art_dir / "Omega.png"    # 24h -> hour 0
-    assert gold_ring.jewel_art[8] == art_dir / "A.png"
+    assert gold_ring.jewel_art[12] == art_dir / "emblems/Eye_shine.png"
+    assert gold_ring.jewel_art[20] == art_dir / "latin/M.png"
+    assert gold_ring.jewel_art[4] == art_dir / "latin/N.png"
+    assert gold_ring.jewel_art[16] == art_dir / "latin/S.png"
+    assert gold_ring.jewel_art[0] == art_dir / "greek/Omega.png"    # 24h -> hour 0
+    assert gold_ring.jewel_art[8] == art_dir / "latin/A.png"
     # Trinity (12/20/4 = G, M, N) wears the finish metal (gold, no suffix).
     assert gold_ring.jewel_metal[12] == "gold"
     assert gold_ring.jewel_metal[20] == "gold"
@@ -119,12 +120,12 @@ def test_the_one_composes_octa_omega_and_the_seven_number_plates():
     made for. `data.rings.validate_preset`'s own "a number only fits
     its own hour" rule holds card-wide since every digit here IS the
     position it stands on."""
-    art_dir = dial.RING_JEWEL_ART_DIR
+    art_dir = dial.LETTER_ART_DIR
     ring = build_skin(replace(Settings(), ring="The One")).ring
     assert ring.outer_asset.name == "octa.png"
-    assert ring.jewel_art[0] == art_dir / "Omega.png"     # 24h -> hour 0
+    assert ring.jewel_art[0] == art_dir / "greek/Omega.png"     # 24h -> hour 0
     for hour in (3, 6, 9, 12, 15, 18, 21):
-        assert ring.jewel_art[hour] == art_dir / f"{hour}.png"
+        assert ring.jewel_art[hour] == letter_plates.plate_path(str(hour))
     assert missing_assets(build_skin(replace(Settings(), ring="The One"))) == []
 
 
@@ -186,9 +187,9 @@ def test_templar_preset_loads_its_locked_cross_outer_with_the_cross_glyph():
     ]
     assert templar["crown_text"][0]["reading"]["title"] == "NON NOBIS DOMINE"
 
-    art_dir = dial.RING_JEWEL_ART_DIR
+    art_dir = dial.LETTER_ART_DIR
     skin = build_skin(replace(Settings(), ring="Templar")).ring
-    assert all(path == art_dir / "templar.png" for path in skin.jewel_art.values())
+    assert all(path == art_dir / "symbols/templar.png" for path in skin.jewel_art.values())
     assert missing_assets(build_skin(replace(Settings(), ring="Templar"))) == []
 
 
@@ -241,15 +242,15 @@ def test_dollar_eye_shine_toggle_swaps_the_master():
     the toggle (its rays are baked into the chosen glyph)."""
     from config import constants
 
-    art_dir = dial.RING_JEWEL_ART_DIR
+    art_dir = dial.LETTER_ART_DIR
     assert constants.RING_EYE_SHINE_DEFAULT == {"Dollar": True}
 
     shine_on = build_skin(replace(Settings(), ring="Dollar")).ring
-    assert shine_on.jewel_art[12] == art_dir / "Eye_shine.png"
+    assert shine_on.jewel_art[12] == art_dir / "emblems/Eye_shine.png"
     shine_off = build_skin(replace(
         Settings(), ring="Dollar", ring_eye_shine={"Dollar": False},
     )).ring
-    assert shine_off.jewel_art[12] == art_dir / "Eye.png"
+    assert shine_off.jewel_art[12] == paths.art_file(art_dir / "emblems/Eye.png")
     for state in (shine_on,):
         assert paths.art_file(state.jewel_art[12]).exists()
     assert paths.art_file(shine_off.jewel_art[12]).exists()
@@ -272,7 +273,7 @@ def test_dollar_eye_shine_toggle_swaps_the_master():
         Settings(), ring="MyEye", custom_rings=custom,
         ring_eye_shine={"MyEye": False},
     )).ring
-    assert custom_ring.jewel_art[12] == art_dir / "Eye_shine_gem.png"
+    assert custom_ring.jewel_art[12] == art_dir / "emblems/Eye_shine_gem.png"
 
     # THE SHINE ENLARGE (owner UV inbox 2026-07-27): the shine master
     # draws bigger by the measured per-source factor so the TRIANGLE
@@ -558,7 +559,7 @@ def test_mason_crown_text_arc_loads_and_pins_its_key_jewels():
     # build_skin resolves the crown text onto real assets, one glyph per
     # NON-SPACE character (spaces are dropped — RingLayer's draw loop
     # never has to check for them), wearing the active ring_finish.
-    art_dir = dial.RING_JEWEL_ART_DIR
+    art_dir = dial.LETTER_ART_DIR
     gold_skin = build_skin(replace(Settings(), ring="Dollar")).ring
     assert gold_skin.crown_text_metal == "gold"
     assert len(gold_skin.crown_text) == 2
@@ -566,7 +567,7 @@ def test_mason_crown_text_arc_loads_and_pins_its_key_jewels():
     assert len(annuit_glyphs["glyphs"]) == 13    # "ANNUIT COEPTIS" minus 1 space
     assert len(novus_glyphs["glyphs"]) == 17     # "NOVUS ORDO SECLORUM" minus 2 spaces
     first_asset, first_angle = annuit_glyphs["glyphs"][0]
-    assert first_asset == art_dir / "A.png"
+    assert first_asset == art_dir / "latin/A.png"
     assert first_angle % 360.0 == pytest.approx(300.0)
 
     silver_skin = build_skin(
@@ -588,7 +589,7 @@ def test_crown_text_validation_rejects_bad_cards():
         "jewels": ["G", "S", "M", "Ω", "N", "A"],
     }
     with pytest.raises(ValueError):
-        # "Ž" is not in RING_JEWEL_FILES.
+        # "Ž" is not in LETTER_PLATE_FILES.
         validate_preset({
             **base, "crown_text": [{"text": "ŽANNUIT", "pins": [["Ž", 1, 8]]}],
         })
@@ -770,11 +771,11 @@ def test_jewel_art_follows_the_finish():
     """Owner metal rule (correction 2026-07-10): the trio of one metal
     always forms a TRIANGLE — gold finish = the layout triangle in
     gold + the rest silver; silver finish = the exact inverse."""
-    art_dir = dial.RING_JEWEL_ART_DIR
+    art_dir = dial.LETTER_ART_DIR
     gold = build_skin(Settings()).ring
-    assert gold.jewel_art[12] == art_dir / "M.png"    # triangle 12/20/4 gold
-    assert gold.jewel_art[20] == art_dir / "Y.png"
-    assert gold.jewel_art[4] == art_dir / "D.png"
+    assert gold.jewel_art[12] == art_dir / "latin/M.png"    # triangle 12/20/4 gold
+    assert gold.jewel_art[20] == art_dir / "latin/Y.png"
+    assert gold.jewel_art[4] == art_dir / "latin/D.png"
     assert gold.jewel_metal[12] == "gold"
     assert gold.jewel_metal[0] == "silver"
     silver = build_skin(replace(Settings(), ring_finish="silver")).ring
@@ -782,7 +783,7 @@ def test_jewel_art_follows_the_finish():
     assert silver.jewel_metal[20] == "silver"
     assert silver.jewel_metal[0] == "gold"             # Omega back to gold
     morph = build_skin(replace(Settings(), ring="LOOP")).ring
-    assert morph.jewel_art[16] == art_dir / "Pi.png"   # triangle 8/16/24 gold
+    assert morph.jewel_art[16] == art_dir / "greek/Pi.png"   # triangle 8/16/24 gold
     assert morph.jewel_metal[16] == "gold"
     assert morph.jewel_metal[0] == "gold"
     assert morph.jewel_metal[12] == "silver"
@@ -808,7 +809,7 @@ def test_bronze_finish_and_theme_metals():
 
     QApplication.instance() or QApplication([])
 
-    art_dir = dial.RING_JEWEL_ART_DIR
+    art_dir = dial.LETTER_ART_DIR
     bronze_ring = build_skin(replace(Settings(), ring_finish="bronze")).ring
     assert bronze_ring.jewel_metal[12] == "bronze"   # triangle 12/20/4 bronze
     assert bronze_ring.jewel_metal[4] == "bronze"
@@ -821,10 +822,11 @@ def test_bronze_finish_and_theme_metals():
     # variant` = name + materialize).
     from render.asset_recolor import jewel_metal_variant
 
-    for filename in c.RING_JEWEL_FILES.values():
-        derived = jewel_metal_variant(art_dir / filename, "bronze")
-        assert derived.exists(), filename
-        assert derived != art_dir / filename
+    for glyph in c.LETTER_PLATE_FILES:
+        gold = letter_plates.plate_path(glyph)
+        derived = jewel_metal_variant(gold, "bronze")
+        assert derived.exists(), glyph
+        assert derived != gold
     seal = {
         "name": "SEALB", "outer": "hexa",
         "jewels": ["S", "O", "L", "M", "N", "A"],
@@ -1131,8 +1133,8 @@ def test_live_derived_silver_jewels_read_as_cool_silver():
     # saturation is a ratio over a vanishing maximum, so a deep shadow
     # pixel reads "saturated" at a chroma the eye cannot see. The silver
     # ramp's own peak chroma is ~0.021; gold's is ~0.135.
-    for filename in constants.RING_JEWEL_FILES.values():
-        gold = dial.RING_JEWEL_ART_DIR / filename
+    for glyph in constants.LETTER_PLATE_FILES:
+        filename, gold = glyph, letter_plates.plate_path(glyph)
         derived = jewel_metal_variant(gold, "silver")
         assert derived.exists() and derived != gold, filename
         image = QImage(str(derived))
@@ -1159,7 +1161,7 @@ def test_live_derived_silver_jewels_read_as_cool_silver():
         # Never flat: the glyph keeps a real light-to-dark range.
         assert max(levels) - min(levels) > 20, filename
     omega = QImage(str(jewel_metal_variant(
-        dial.RING_JEWEL_ART_DIR / constants.RING_JEWEL_FILES["Ω"], "silver"
+        letter_plates.plate_path("Ω"), "silver"
     )))
     assert omega.pixelColor(0, 0).alpha() == 0
 
@@ -1187,7 +1189,7 @@ def test_live_derived_bronze_preserves_relief_and_reads_bronze():
     from render.asset_recolor import jewel_metal_variant
 
     QApplication.instance() or QApplication([])
-    gold_path = dial.RING_JEWEL_ART_DIR / constants.RING_JEWEL_FILES["M"]
+    gold_path = letter_plates.plate_path("M")
     gold = QImage(str(gold_path))
     bronze = QImage(str(jewel_metal_variant(gold_path, "bronze")))
     assert bronze.size() == gold.size()
@@ -1303,7 +1305,7 @@ def test_jewel_groups_cover_the_library_exactly():
 
     grouped = [
         glyph
-        for glyphs in constants.RING_JEWEL_GROUPS.values()
+        for glyphs in constants.LETTER_PLATE_GROUPS.values()
         for glyph in glyphs
     ]
     # The ADAPTIVE eye glyph (DOLLAR/EYE round, 2026-07-27) is the ONE
@@ -1311,34 +1313,49 @@ def test_jewel_groups_cover_the_library_exactly():
     # Dollar card's own, resolved by the Settings art source and the
     # Shine toggle; custom rings pick one of the four explicit variants
     # instead (owner: "any of the four").
-    library = set(constants.RING_JEWEL_FILES) - {constants.RING_EYE_GLYPH}
-    assert sorted(grouped) == sorted(library)
+    library = set(constants.LETTER_PLATE_FILES) - {constants.RING_EYE_GLYPH}
+    # The five digits that are NOT a ring seat (0, 1, 2, 5, 7 — no outer
+    # has an empty field at those hours) exist as COMPOSITION MATERIAL
+    # for the two-digit numbers and for the live crown, so the builder
+    # does not offer them on their own: the owner's rule is that a
+    # number makes no sense away from its own hour.
+    material = {
+        digit for digit in "0123456789"
+        if digit not in constants.LETTER_PLATE_GROUPS["Numbers"]
+    }
+    assert material == {"0", "1", "2", "5", "7"}
+    assert sorted(grouped) == sorted(library - material)
     assert len(grouped) == len(set(grouped))
-    assert len(constants.RING_JEWEL_GROUPS["Latin"]) == 26   # the full alphabet
-    for glyph, filename in constants.RING_JEWEL_FILES.items():
+    assert len(constants.LETTER_PLATE_GROUPS["Latin"]) == 26   # the full alphabet
+    assert len(constants.LETTER_PLATE_GROUPS["Greek"]) == 24   # the full alphabet
+    for glyph in constants.LETTER_PLATE_FILES:
         # The eye stems are SOURCED (canonical Eye[_shine].png resolves
-        # to _gem/_gpt on disk) — resolve exactly like the renderer does.
-        gold = paths.art_file(dial.RING_JEWEL_ART_DIR / filename)
-        assert gold.exists(), glyph
+        # to _gem/_gpt on disk) and a two-digit number is COMPOSED —
+        # resolve exactly like the renderer does.
+        assert letter_plates.plate_path(glyph).exists(), glyph
 
 
 def test_three_new_plates_resolve_and_validate_in_crown_text():
-    """TASK 3 (owner drop 2026-08-06): the dollar sign, the ampersand
-    and the colon (':' cannot be a filename, so its master is
-    `time.png`) join the shared letter library in the SYMBOLS group —
-    wiring `RING_JEWEL_FILES` alone makes them legal in a custom
-    ring's crown text too, since `data.rings._validate_crown_text`
-    reads that same table (Rule #5, no separate charset to keep in
-    sync) and `constants.RING_CROWN_TEXT_CHARSET` derives from it."""
+    """TASK 3 (owner drop 2026-08-06), re-pointed at the reorganized
+    library (owner 2026-08-07): the dollar sign, the ampersand and the
+    colon (':' cannot be a filename, so its master is `colon.png`) sit
+    in `symbols/` — wiring `LETTER_PLATE_FILES` alone makes them legal
+    in a custom ring's crown text too, since `data.rings.
+    _validate_crown_text` reads that same table (Rule #5, no separate
+    charset to keep in sync) and `constants.RING_CROWN_TEXT_CHARSET`
+    derives from it."""
     from config import constants
     from data.rings import validate_preset
 
-    for glyph, filename in (("$", "$.png"), ("&", "&.png"), (":", "time.png")):
-        assert constants.RING_JEWEL_FILES[glyph] == filename
-        assert glyph in constants.RING_JEWEL_GROUPS["Symbols"]
+    for glyph, filename in (
+        ("$", "symbols/dollar.png"),
+        ("&", "symbols/ampersan.png"),
+        (":", "symbols/colon.png"),
+    ):
+        assert constants.LETTER_PLATE_FILES[glyph] == (filename,)
+        assert glyph in constants.LETTER_PLATE_GROUPS["Symbols"]
         assert glyph in constants.RING_CROWN_TEXT_CHARSET
-        gold = paths.art_file(dial.RING_JEWEL_ART_DIR / filename)
-        assert gold.exists(), glyph
+        assert (dial.LETTER_ART_DIR / filename).exists(), glyph
 
     card = validate_preset({
         "name": "NEWPLATES", "outer": "bot_cross",

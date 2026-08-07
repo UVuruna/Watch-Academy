@@ -31,6 +31,7 @@ from PySide6.QtGui import (
 
 from config import constants, dial, doctrine, encyclopedia_ui, palette, paths
 from core import angles
+from render import letter_plates
 
 # The nine figures this module draws, in the order the Instrument topic
 # reads them. `app.encyclopedia.tree` imports this tuple rather than
@@ -496,7 +497,7 @@ def _chi(_key: str, size: int) -> QPixmap:
         metal_shades={"thematic": constants.RING_THEMATIC_SHADES["CHI"]}
     )):
         glyph = shared_cache().pixmap_by_height(
-            dial.RING_JEWEL_ART_DIR / constants.RING_JEWEL_FILES["X"],
+            letter_plates.plate_path("X"),
             2 * radius * dial.RING_JEWEL_ART_SCALE, 1.0, metal="thematic",
         )
     theta = angles.ring_position_angle(24)

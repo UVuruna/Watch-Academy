@@ -21,6 +21,7 @@ from PySide6.QtGui import QPainter
 
 from config import dial, paths
 from core import numerals
+from render import letter_plates
 from render.context import Cadence, Layer, RenderContext
 from render.asset_recolor import jewel_metal_file
 from render.numeral_bands import (
@@ -85,7 +86,7 @@ def band_spec(skin, band: str, ctx: RenderContext) -> BandSpec:
 
 
 def crown_spec(skin, ctx: RenderContext) -> CrownSpec:
-    """The live crown's own cache key — the eleven glyphs rebuild only
+    """The live crown's own cache key — its glyphs rebuild only
     when one of these changes.
 
     THE TIME CROWN LOOK (owner correction 2026-08-06, `research/
@@ -108,25 +109,30 @@ def crown_spec(skin, ctx: RenderContext) -> CrownSpec:
     same ring. THE DECOUPLED SCALES (same round): `ring_jewels_scale`
     is deliberately absent — it sizes jewels and nothing else now.
 
+    THE ONE PLATE LAW (owner decree 2026-08-07 — "JEWELS === CROWN TXT
+    (SVE) === CROWN LOCATION === CROWN TIME"): `sources` resolves EVERY
+    glyph the crown can say to its own plate in the owner's letter
+    library, through the SAME `jewel_metal_file` door a ring jewel goes
+    through. No `face` is passed any more — the crown draws no font.
+
     ONE METAL PER CROWN (same round — the colon rendered GOLD while the
-    digits rendered gray): `colon_source` is the file
-    `jewel_metal_file` actually resolved for the colon plate, put in
-    the key so the crown's BAKED tiles cannot outlive the background
-    recolor's gold fallback. See `CrownSpec` for the full root cause.
+    digits rendered gray): the resolved files ride the KEY, so the
+    crown's BAKED tiles cannot outlive the background recolor's gold
+    fallback. See `CrownSpec` for the full root cause.
     """
     metal = skin.ring.crown_text_metal
     return CrownSpec(
         pixels=max(2, round(2 * ctx.radius * ctx.dpr)),
         dpr=ctx.dpr,
-        face=skin.crown_face,
         height_px=(
             2 * ctx.radius * dial.RING_CROWN_TEXT_SIZE
             * skin.crown_text_scale * ctx.dpr
         ),
         metal=metal,
         shade=paths.metal_shade(metal),
-        colon_source=str(
-            jewel_metal_file(dial.RING_JEWEL_ART_DIR / "time.png", metal)
+        sources=tuple(
+            (glyph, str(jewel_metal_file(letter_plates.plate_path(glyph), metal)))
+            for glyph in numerals.crown_glyph_alphabet() if glyph != " "
         ),
     )
 

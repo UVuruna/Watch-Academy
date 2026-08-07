@@ -59,9 +59,9 @@ blit that image. No disk is touched at any point.
 
 `blank_plate(width, height=None)` (Crown Polish round, owner correction
 2026-08-06): `height` defaults to `width` — every band tile is square —
-but the live crown's own colon tile is not (`time.png` is a tall narrow
-plate), so [Numeral Bands](numeral_bands.md)'s `_crown_colon_image` is
-the one caller that passes both.
+but a crown plate is not (`symbols/colon.png` is tall and narrow, a `1`
+is narrow, an `M` is wide), so [Numeral Bands](numeral_bands.md)'s
+`_crown_plate_image` is the one caller that passes both.
 
 ## Connections
 

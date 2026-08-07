@@ -1166,7 +1166,7 @@ RING_TWO_METALS_DEFAULT = {"Dollar": True}
 # of the four") — source and rays baked into the chosen glyph,
 # ignoring both switches.
 RING_EYE_GLYPH = "👁"
-RING_EYE_SHINE_FILE = "Eye_shine.png"
+RING_EYE_SHINE_FILE = "emblems/Eye_shine.png"
 RING_EYE_SHINE_DEFAULT = {"Dollar": True}
 # THE SHINE ENLARGE FACTOR (owner UV inbox 2026-07-27, "slika 2 kada
 # ima SHINE mora da bude veca"; corrected same day — the first
@@ -1185,68 +1185,113 @@ RING_EYE_SHINE_ENLARGE = {"gem": 1.67, "gpt": 2.11}
 # The full jewel library (glyph -> art file) — presets and the custom
 # ring builder choose from these, GOLD masters only; silver and bronze
 # are derived from the gold master at load (owner 2026-07-19,
-# render.asset_recolor.jewel_metal_file — no more pre-rendered files). The
-# library is GROUPED (owner spec 2026-07-11):
-# the builder shows Latin / Greek / Numbers / Symbols sections. Numbers
-# exist ONLY for the ring positions they belong to (owner decision: a
-# number makes no sense away from its own hour) — every empty field
-# across every RING_OUTERS outer EXCEPT 24, which always wears Ω (the
-# NUMBERS bundled preset's own reading, kept for every other outer).
+# render.asset_recolor.jewel_metal_file — no more pre-rendered files).
+#
+# THE ONE PLATE LAW (owner decree 2026-08-07, shouted five times before
+# it was written down): "JEWELS === CROWN TXT (SVE) === CROWN LOCATION
+# === CROWN TIME". Every glyph any of those four surfaces draws is a
+# plate from THIS library, recolored through the metal/thematic ramps —
+# a font never draws a jewel, a crown word, a location or a digit of
+# the live time. The crown's colon has its own plate for exactly this
+# reason (`symbols/colon.png`), and the ten digits joined it the same
+# day: rasterize once at startup, reuse forever.
+#
+# The library moved OUT of `instrument/ring/` the same day (owner:
+# "nije mu to mesto jer nisu oni samo za ring") — it now sits at
+# `assets/instrument/letters/`, grouped by SCRIPT, because the ring,
+# the crown and (planned) the subdial all read from it:
+#   latin/     A-Z
+#   greek/     the ten capitals with a shape of their own
+#   numerals/  0-9 — the SINGLE digits only; a two-digit hour seat
+#              (12, 15, 16, 18, 20, 21) is COMPOSED from two of them at
+#              runtime (`render.letter_plates`), never a plate on disk
+#   symbols/   the typeable non-letters
+#   emblems/   picked-only seat art, never typed into running text
+# A value is therefore a TUPLE of plate paths relative to that root —
+# one entry for a glyph with its own plate, two for a composed number.
 _LATIN_JEWEL_GLYPHS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+_DIGIT_GLYPHS = "0123456789"
+# THE GREEK TWINS (owner ruling 2026-08-07 — "greek koji fale kao što
+# je alpha beta... pišu se isto kao latinski a, b; vidi kako ćeš to da
+# rešiš"): fourteen Greek capitals are drawn EXACTLY like a Latin
+# letter, so they get NO duplicate file — the alias resolves to the
+# Latin master (THE ONE COPY RULE: one plate on disk, two glyph keys;
+# a shortcut file would be a second copy to keep in sync).
+GREEK_LATIN_TWINS = {
+    "Α": "A", "Β": "B", "Ε": "E", "Ζ": "Z", "Η": "H", "Ι": "I",
+    "Κ": "K", "Μ": "M", "Ν": "N", "Ο": "O", "Ρ": "P", "Τ": "T",
+    "Υ": "Y", "Χ": "X",
+}
+# The ten with a shape Latin has not got — glyph -> its own plate stem.
+GREEK_OWN_PLATES = {
+    "Γ": "Gamma", "Δ": "Delta", "Θ": "Theta", "Λ": "Lambda",
+    "Ξ": "Xi", "Π": "Pi", "Σ": "Sigma", "Φ": "Phi", "Ψ": "Psi",
+    "Ω": "Omega",
+}
+_GREEK_ALPHABET = "ΑΒΓΔΕΖΗΘΙΚΛΜΝΞΟΠΡΣΤΥΦΧΨΩ"
+# The hour NUMBERS the ring seats offer (owner decision: a number makes
+# no sense away from its own hour) — every empty field across every
+# RING_OUTERS outer EXCEPT 24, which always wears Ω. The multi-digit
+# ones are composed from the digit plates, so this list costs no art.
 _RING_NUMBERS = (
     "3", "4", "6", "8", "9", "12", "15", "16", "18", "20", "21",
 )
-RING_JEWEL_GROUPS = {
+LETTER_PLATE_GROUPS = {
     "Latin": tuple(_LATIN_JEWEL_GLYPHS),
-    "Greek": ("Ω", "Π", "Φ", "Ψ", "Σ", "Θ"),
+    "Greek": tuple(_GREEK_ALPHABET),
     "Numbers": _RING_NUMBERS,
-    "Symbols": (
-        "✠", "$", "&", ":",
-        "👁 ChatGPT", "👁 ChatGPT ☀", "👁 Gemini", "👁 Gemini ☀",
-    ),
+    "Symbols": ("✠", "$", "&", ":", "@", "!", "?"),
+    "Emblems": ("👁 ChatGPT", "👁 ChatGPT ☀", "👁 Gemini", "👁 Gemini ☀"),
 }
-RING_JEWEL_FILES = {
+LETTER_PLATE_FILES = {
     # The WHOLE library is PNG at 512 px height (owner decision
     # 2026-07-12 — the traced SVGs parsed in seconds; 512 covers every
     # on-dial size with room to spare).
-    **{letter: f"{letter}.png" for letter in _LATIN_JEWEL_GLYPHS},
-    "Ω": "Omega.png",
-    "Π": "Pi.png",
-    "Φ": "Phi.png",
-    "Ψ": "Psi.png",
-    "Σ": "Sigma.png",
-    "Θ": "Theta.png",
-    **{number: f"{number}.png" for number in _RING_NUMBERS},
-    # Symbols (the owner is growing this set for custom rings):
-    "✠": "templar.png",
-    # THREE NEW PLATES (TASK 3, owner drop 2026-08-06): the dollar
-    # sign, the ampersand and the colon (a literal ":" cannot be a
-    # Windows filename, so its master is `time.png`). Legal in custom
-    # crown text automatically — `RING_CROWN_TEXT_CHARSET` below
-    # derives from this table's own single-character keys.
-    "$": "$.png",
-    "&": "&.png",
-    ":": "time.png",
+    **{letter: (f"latin/{letter}.png",) for letter in _LATIN_JEWEL_GLYPHS},
+    **{glyph: (f"greek/{stem}.png",) for glyph, stem in GREEK_OWN_PLATES.items()},
+    **{glyph: (f"latin/{twin}.png",) for glyph, twin in GREEK_LATIN_TWINS.items()},
+    **{digit: (f"numerals/{digit}.png",) for digit in _DIGIT_GLYPHS},
+    # A two-digit hour is its digits, in order — composed on the fly.
+    **{
+        number: tuple(f"numerals/{digit}.png" for digit in number)
+        for number in _RING_NUMBERS if len(number) > 1
+    },
+    # Symbols (the owner is growing this set for custom rings; the
+    # colon is the crown time's own separator plate, made for it).
+    "✠": ("symbols/templar.png",),
+    "$": ("symbols/dollar.png",),
+    "&": ("symbols/ampersan.png",),
+    ":": ("symbols/colon.png",),
+    "@": ("symbols/@.png",),
+    "!": ("symbols/exclamation.png",),
+    "?": ("symbols/question.png",),
     # The Eye of Providence (DOLLAR/EYE round, 2026-07-27): the
     # adaptive glyph (the Dollar's own — source and shine resolved by
     # the switches) plus the four explicit custom-builder variants.
-    "👁": "Eye.png",
-    "👁 ChatGPT": "Eye_gpt.png",
-    "👁 ChatGPT ☀": "Eye_shine_gpt.png",
-    "👁 Gemini": "Eye_gem.png",
-    "👁 Gemini ☀": "Eye_shine_gem.png",
+    # EMBLEMS, not symbols (owner ruling 2026-08-07, "u symbols je i
+    # eye... odluči"): the line is TYPEABLE — ✠ and $ are characters a
+    # crown text can spell, an Eye is seat art you pick, so it can
+    # never leak into `RING_CROWN_TEXT_CHARSET` below.
+    "👁": ("emblems/Eye.png",),
+    "👁 ChatGPT": ("emblems/Eye_gpt.png",),
+    "👁 ChatGPT ☀": ("emblems/Eye_shine_gpt.png",),
+    "👁 Gemini": ("emblems/Eye_gem.png",),
+    "👁 Gemini ☀": ("emblems/Eye_shine_gem.png",),
 }
 # THE CROWN TEXT WHITELIST (RING VERDICTS round, owner decree
 # 2026-08-05): the exact set of characters the crown text renderer can draw
 # one-per-character — a custom ring's crown-text field validates
 # against this set so an unsupported character can never be TYPED at
 # all (replaces the old silent-drop-on-build behaviour). DERIVED, never
-# hand-written: every SINGLE-character key of `RING_JEWEL_FILES` (the
-# multi-character symbol keys — "👁 ChatGPT" and friends — are the
-# custom ring-LETTER builder's own picks, never typed into running
-# text) plus the space that separates words.
+# hand-written: every SINGLE-character key of `LETTER_PLATE_FILES` that
+# is not an emblem (the multi-character keys — "👁 ChatGPT" and
+# friends — are the custom builder's own picks, never typed into
+# running text) plus the space that separates words.
 RING_CROWN_TEXT_CHARSET = frozenset(
-    {letter for letter in RING_JEWEL_FILES if len(letter) == 1} | {" "}
+    {
+        glyph for glyph, plates in LETTER_PLATE_FILES.items()
+        if len(glyph) == 1 and not plates[0].startswith("emblems/")
+    } | {" "}
 )
 
 # ═══════════════════════════ WEEKDAY THEMES ═══════════════════════════

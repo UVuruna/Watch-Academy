@@ -30,7 +30,7 @@ its plate is shared across both phases (ledger §2: "the inner band NEVER
 rotates").
 
 `LiveCrownLayer` is the ONE minute-cadence element of this round. It is
-minute-cadence and nothing more: the eleven glyphs it draws were rasterized
+minute-cadence and nothing more: the plate tiles it draws were rasterized
 at settings-apply time, so its per-tick work is a sequence lookup, an arc
 layout and eleven-at-most `drawImage` calls.
 

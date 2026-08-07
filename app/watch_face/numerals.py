@@ -223,15 +223,10 @@ def _relief_group(settings, setters, tr) -> QGroupBox:
 def _crown_group(settings, setters, tr) -> QGroupBox:
     group = QGroupBox(tr("The live crown"))
     form = QFormLayout(group)
-    face = _choice_row(
-        tr, settings, setters, "crown_face", tuple(dial.NUMERAL_OUTER_FACES),
-        "Crown face", form,
-    )
-    face.setToolTip(tr(
-        "The crown needs the colon, which not every face on this machine "
-        "can draw — so it keeps its own pick rather than following the "
-        "hour ring."
-    ))
+    # NO FACE PICKER (THE ONE PLATE LAW, owner decree 2026-08-07): the
+    # crown draws the owner's letter plates, exactly like the jewels and
+    # the crown text beside it, so there is no font left to pick. The row
+    # that used to stand here chose the face for the font-drawn digits.
     _choice_row(
         tr, settings, setters, "crown_time_format", dial.CROWN_TIME_FORMATS,
         "Time format", form,

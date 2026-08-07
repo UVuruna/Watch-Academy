@@ -36,13 +36,10 @@ from dataclasses import dataclass
 from PySide6.QtCore import QPointF, QRectF, Qt
 from PySide6.QtGui import QColor, QImage, QPainter, QPainterPath
 
-from config import constants, defaults, dial, palette
+from config import dial, palette
 from core import numerals
-from recolor import ramp as recolor_ramp
-from recolor import space as recolor_space
-from recolor.recipe import load as recolor_recipe
 from render import numeral_relief as relief
-from render.asset_recolor import jewel_metal_file, ring_recolored_image
+from render.asset_recolor import ring_recolored_image
 from render.numeral_fonts import assert_covers, numeral_font
 from render.painting import dial_point
 
@@ -53,8 +50,8 @@ from render.painting import dial_point
 # `research/ring_rework.md` §3): the live crown's glyph tiles now bake
 # the SAME shadow stamp the ring's own jewels wear, and this module (not
 # `render.layers.ring`) is the shared home both `RingLayer._draw_ring_glyph`
-# (a live stamp, every STATIC repaint) and `_crown_jewel_glyph_image`/
-# `_crown_colon_image` below (a BAKED stamp, once per settings change) can
+# (a live stamp, every STATIC repaint) and `_crown_plate_image` below
+# (a BAKED stamp, once per settings change) can
 # import without a cycle — `render.layers.ring` already imports FROM this
 # module, never the other way.
 def shadow_sample_count(pixel_radius: float) -> int:
@@ -98,8 +95,8 @@ def _stamp_shadow(painter: QPainter, radius_px: float, draw_copy) -> None:
     position; this function only decides HOW MANY copies and at what
     per-stamp opacity (`shadow_sample_count`/`normalized_shadow_alpha`),
     then walks them around the circle of radius `radius_px`. Shared by
-    the path-based digit stamp and the image-based colon stamp below —
-    the two glyph FAMILIES differ, the stamp law does not (Rule #5)."""
+    the ring's live jewel stamp and the crown's baked plate stamp below —
+    when the stamp runs differs, the stamp law does not (Rule #5)."""
     samples = shadow_sample_count(radius_px)
     painter.save()
     painter.setOpacity(normalized_shadow_alpha(samples))
@@ -144,8 +141,8 @@ class BandSpec:
 
 @dataclass(frozen=True)
 class CrownSpec:
-    """The live crown's own key — the eleven glyphs are rasterized once
-    per change of it.
+    """The live crown's own key — its glyphs are rasterized once per
+    change of it.
 
     THE TIME CROWN LOOK (owner correction 2026-08-06, `research/
     ring_rework.md` §3): the crown no longer carries the outer band's
@@ -166,25 +163,28 @@ class CrownSpec:
     BAND's own numeral size and made the live crown a second, smaller
     size family on the same ring.
 
-    ONE METAL PER CROWN (owner defect 2026-08-07 — the colon rendered
-    GOLD while the digits rendered gray): `colon_source` is the file
-    `jewel_metal_file` ACTUALLY resolved for the colon plate. That is
-    not decoration: the metal variant is derived on a background thread
-    (`render.art_warm`), so before the drain lands `jewel_metal_file`
-    honestly falls back to the GOLD master — and the crown BAKES its
-    tiles once and caches them, which froze that fallback in place
-    forever while the font-drawn digits went straight to the real
-    metal's body tone. With the resolved path in the KEY, the drain's
+    THE ONE PLATE LAW (owner decree 2026-08-07): `sources` is the whole
+    crown — one `(glyph, resolved plate file)` pair per glyph the crown
+    can say, resolved by `render.layers.numerals.crown_spec` through
+    the SAME `jewel_metal_file` door a ring jewel goes through. There is
+    no `face` any more: the crown asks no font for anything.
+
+    ONE METAL PER CROWN (same round — the colon rendered GOLD while the
+    digits rendered gray): the resolved paths are IN the key, not
+    looked up at build time. The metal variant is derived on a
+    background thread (`render.art_warm`), so before the drain lands
+    `jewel_metal_file` honestly falls back to the GOLD master — and the
+    crown BAKES its tiles once and caches them, which would freeze that
+    fallback in place forever. With the paths in the KEY, the drain's
     arrival is a new key and the crown rebuilds in the metal the rest of
     the ring is already wearing."""
 
     pixels: int
     dpr: float
-    face: str
     height_px: float
     metal: str = "gold"
     shade: str = ""
-    colon_source: str = ""
+    sources: tuple[tuple[str, str], ...] = ()
 
 
 _PLATES: dict[BandSpec, QImage] = {}
@@ -434,33 +434,6 @@ def _build_inner(spec: BandSpec) -> QImage:
     )
 
 
-def crown_font_for_ink_height(face: str, target_ink_px: float):
-    """A font of `face` whose DIGITS draw `target_ink_px` of actual ink
-    — ONE CROWN SIZE LAW's own per-face fitting step (owner defect
-    2026-08-07).
-
-    `QFont.setPixelSize` sets the EM box, not the ink, and the ratio
-    between them is a property of the face: MEASURED on this machine,
-    Bahnschrift Bold draws 0.717 of its pixel size, Bernard MT
-    Condensed 0.80, Palatino Linotype Bold 0.685. Sizing the crown by
-    pixel size alone therefore drew a different real height for every
-    face, and for the default face it drew 28% less ink than the letter
-    plates beside it — the second half of why the owner's time crown
-    read "microscopic". So the ratio is PROBED from the face itself
-    rather than tabled (Rule #5: no per-face constants to keep in sync
-    with a roster that changes), at a reference size, and the font is
-    scaled by it. A face whose digits carry no outline at all is
-    already rejected upstream by `assert_covers`, so the ratio is never
-    zero here."""
-    probe = numeral_font("outer", face, dial.CROWN_FIT_PROBE_PX)
-    ink = max(
-        relief.glyph_path(digit, probe).boundingRect().height()
-        for digit in "0123456789"
-    )
-    ratio = ink / dial.CROWN_FIT_PROBE_PX
-    return numeral_font("outer", face, target_ink_px / ratio)
-
-
 def crown_glyph_ink(spec: CrownSpec) -> dict:
     """`glyph -> its own ink WIDTH in device pixels` — what THE CROWN
     ADVANCE LAW (`core.numerals.crown_advance_angles`) lays the arc out
@@ -473,29 +446,24 @@ def crown_glyph_ink(spec: CrownSpec) -> dict:
 
 def crown_glyph_set(spec: CrownSpec) -> dict:
     """The crown's glyphs, rasterized ONCE per settings change into
-    tightly-cropped little images, keyed by glyph — THE TIME CROWN LOOK
-    (owner correction 2026-08-06, `research/ring_rework.md` §3): every
-    glyph now wears the SAME two things a ring jewel wears, never the
-    outer band's parity plate-and-frame.
+    tightly-cropped little images, keyed by glyph.
 
-    The COLON comes from HIS plate — `time.png`, through the exact
-    letter pipeline every ring jewel goes through
-    (`_crown_colon_image`): he built it "precisely for this". The TEN
-    DIGITS (and the `"12h 35min"` format's h/min small cut, drawn from
-    the SAME face at `dial.CROWN_SMALL_CUT_FRACTION` of the digit size —
-    the plate library has no lowercase) have no plate of their own, so
-    they wear the crown's own metal BODY COLOR and THE LETTER SHADOW
-    LAW's stamped halo instead (`_crown_jewel_glyph_image`) — never a
-    numeral relief pass, never a parity fill.
+    THE ONE PLATE LAW (owner decree 2026-08-07 — "JEWELS === CROWN TXT
+    (SVE) === CROWN LOCATION === CROWN TIME"): EVERY glyph comes from
+    HIS plate library, through the exact letter pipeline every ring
+    jewel goes through (`_crown_plate_image`). The colon is
+    `symbols/colon.png`, built "precisely for this"; the ten digits are
+    `numerals/0-9.png`, shipped the day the owner saw them drawn by a
+    font instead. The `"12h 35min"` format's h/min small cut takes the
+    UPPERCASE plate at `dial.CROWN_SMALL_CUT_FRACTION` of the box — the
+    library is caseless, and a plate is a shape.
 
     ONE CROWN SIZE LAW (owner defect 2026-08-07): the box every glyph is
     built into is `spec.height_px` — the static crown arc's own
     `RING_CROWN_TEXT_SIZE` box, so a digit and an N of NON NOBIS DOMINE
-    are one size family. The COLON is scaled to that box exactly as
-    `RingLayer._draw_ring_glyph` scales a letter plate to it
-    (`pixmap_by_height`), and a DIGIT's font is fitted so its own ink
-    fills `CROWN_PLATE_INK_FRACTION` of the box — the fraction MEASURED
-    off the owner's own plates."""
+    are one size family. Every plate is scaled to that box exactly as
+    `RingLayer._draw_ring_glyph` scales a letter plate to it, because
+    they are now the same kind of thing."""
     _build_crown(spec)
     return _CROWNS[spec]["images"]
 
@@ -503,90 +471,28 @@ def crown_glyph_set(spec: CrownSpec) -> dict:
 def _build_crown(spec: CrownSpec) -> None:
     """Rasterize (once) the crown's tiles and record each glyph's own
     ink width — the shared build behind `crown_glyph_set` and
-    `crown_glyph_ink` (Rule #5: one build, two views of it)."""
+    `crown_glyph_ink` (Rule #5: one build, two views of it).
+
+    THE ONE PLATE LAW (owner decree 2026-08-07): EVERY glyph is a plate
+    from the letter library, resolved to its metal finish by
+    `render.layers.numerals.crown_spec` and carried in `spec.sources`.
+    No font is consulted — there is no `assert_covers` call here any
+    more, because the crown asks no face for an outline."""
     if spec in _CROWNS:
         return
     alphabet = numerals.crown_glyph_alphabet()
-    # The colon no longer asks the FONT for anything (it is a raster
-    # plate now) — requiring font coverage for it would reject faces
-    # that only fail to draw a glyph this module never asks them to draw.
-    assert_covers("outer", spec.face, tuple(g for g in alphabet if g != ":"))
+    sources = dict(spec.sources)
     full_px = spec.height_px
     small_px = full_px * dial.CROWN_SMALL_CUT_FRACTION
-    body_color = _crown_metal_body_color(spec.metal, spec.shade)
     images, ink = {}, {}
     for glyph, small in zip(alphabet, numerals.crown_small_cut(alphabet)):
         if glyph == " ":
             continue
         box_px = small_px if small else full_px
-        if glyph == ":":
-            images[glyph], ink[glyph] = _crown_colon_image(spec, box_px)
-        else:
-            font = crown_font_for_ink_height(
-                spec.face, box_px * dial.CROWN_PLATE_INK_FRACTION,
-            )
-            images[glyph], ink[glyph] = _crown_jewel_glyph_image(
-                glyph, font, box_px, body_color, spec.dpr,
-            )
+        images[glyph], ink[glyph] = _crown_plate_image(
+            spec, box_px, sources[glyph],
+        )
     _CROWNS[spec] = {"images": images, "ink": ink}
-
-
-def _crown_metal_body_color(metal: str, shade: str) -> QColor:
-    """The crown glyphs' flat body fill — THE TIME CROWN LOOK's own
-    "crown's metal finish" term. A digit has no drawn master to
-    recolor pixel-by-pixel the way `jewel_metal_file` recolors a real
-    letter plate (there is no shading to preserve): it wears the
-    SAME ramp's own BODY tone instead, sampled at the recipe's own
-    `body_position` — the identical reference point
-    `render.assets.AssetCache._recolored` centers a letter's mask on
-    when the letter IS the source metal. One ramp, one law, two ways of
-    reaching a color depending on whether there is art to recolor."""
-    ramp_name = defaults.METAL_SHADES[metal][shade or constants.METAL_SHADE_DEFAULT[metal]]
-    recipe = recolor_recipe()
-    body_linear = recolor_ramp.body_color(
-        recipe.metal(ramp_name), recipe.tuning.body_position,
-    )
-    body_srgb = recolor_space.linear_to_srgb(body_linear)
-    color = QColor.fromRgbF(
-        *(max(0.0, min(1.0, float(channel))) for channel in body_srgb)
-    )
-    return color
-
-
-def _crown_jewel_glyph_image(
-    glyph: str, font, box_px: float, body_color: QColor, dpr: float,
-) -> tuple[QImage, float]:
-    """One digit (or h/min small-cut letter) on its own little
-    transparent tile, plus its own INK WIDTH in device pixels — THE
-    LETTER SHADOW LAW baked in exactly as
-    `render.layers.ring.RingLayer._draw_ring_glyph` stamps it for a real
-    letter, just built ONCE here instead of every STATIC repaint. No
-    plate exists for a digit, so its BODY is the crown's own flat metal
-    tone (`_crown_metal_body_color`) rather than a recolored master.
-
-    `box_px` is the glyph BOX (ONE CROWN SIZE LAW) — the shadow scales
-    off it, exactly as a letter plate's shadow scales off the height it
-    was blitted at, so a digit and a letter cast the same halo. The
-    returned width is the PATH's, never the tile's: the tile carries
-    shadow padding on both sides and THE CROWN ADVANCE LAW must not
-    space glyphs by their padding."""
-    path = relief.glyph_path(glyph, font)
-    bounds = path.boundingRect()
-    shadow_radius_px = box_px * dial.RING_JEWEL_SHADOW_RADIUS
-    pad = shadow_radius_px + 2.0
-    side = int(math.ceil(max(bounds.width(), bounds.height()) + 2 * pad))
-    tile = relief.blank_plate(max(2, side))
-    painter = relief.plate_painter(tile)
-    painter.setPen(Qt.PenStyle.NoPen)
-    painter.setBrush(QColor(palette.SHADOW_STAMP_TINT))
-    _stamp_shadow(
-        painter, shadow_radius_px,
-        lambda dx, dy: painter.drawPath(path.translated(dx, dy)),
-    )
-    painter.setBrush(body_color)
-    painter.drawPath(path)
-    painter.end()
-    return relief.stamp_dpr(tile, dpr), bounds.width()
 
 
 def _image_silhouette(image: QImage, color: str) -> QImage:
@@ -606,27 +512,33 @@ def _image_silhouette(image: QImage, color: str) -> QImage:
     return silhouette
 
 
-def _crown_colon_image(spec: CrownSpec, box_px: float) -> tuple[QImage, float]:
-    """THE COLON, from HIS plate: `time.png`, resolved through the exact
-    same door every ring jewel resolves its finish through
+def _crown_plate_image(
+    spec: CrownSpec, box_px: float, resolved: str,
+) -> tuple[QImage, float]:
+    """ONE crown glyph, from HIS plate — resolved through the exact same
+    door every ring jewel resolves its finish through
     (`render.asset_recolor.jewel_metal_file`), scaled to the crown's own
-    glyph BOX and finished with THE LETTER SHADOW LAW's stamped halo —
-    never font-drawn (`crown_glyph_set` no longer asks any face for a
-    colon outline at all). Returns the tile and the plate's own ink
-    width for THE CROWN ADVANCE LAW.
+    glyph BOX and finished with THE LETTER SHADOW LAW's stamped halo.
+    Returns the tile and the plate's own ink width for THE CROWN ADVANCE
+    LAW.
 
-    ONE METAL PER CROWN (owner defect 2026-08-07): the path is taken
-    from `spec.colon_source`, which `render.layers.numerals.crown_spec`
-    resolved and put in the CACHE KEY — see `CrownSpec`. Resolving it
-    here instead would rebake the gold fallback into a cache entry that
-    outlives the background recolor, which is exactly the defect
-    (colon gold, digits silver on Templar)."""
-    resolved = spec.colon_source or str(
-        jewel_metal_file(dial.RING_JEWEL_ART_DIR / "time.png", spec.metal)
-    )
+    THE ONE PLATE LAW (owner decree 2026-08-07: "JEWELS === CROWN TXT
+    (SVE) === CROWN LOCATION === CROWN TIME"): this is the WHOLE crown
+    now, not just the colon. The digits used to be font outlines filled
+    with a flat ramp tone, which is why the live time never wore the
+    metal the letters beside it wore. Since the owner shipped
+    `numerals/0-9.png` there is a plate for every glyph the crown can
+    say, and a face is never asked for an outline again.
+
+    ONE METAL PER CROWN (same decree, earlier defect): the path comes
+    from `spec.sources`, which `render.layers.numerals.crown_spec`
+    resolved and put in the CACHE KEY. Resolving it here instead would
+    rebake the background recolor's gold fallback into a cache entry
+    that outlives the drain — exactly the defect that made the colon
+    gold while the digits went gray on Templar."""
     source = QImage(str(resolved))
     if source.isNull():
-        raise ValueError(f"crown colon plate unreadable: {resolved}")
+        raise ValueError(f"crown plate unreadable: {resolved}")
     scaled = source.scaledToHeight(
         max(1, round(box_px)), Qt.TransformationMode.SmoothTransformation,
     )

@@ -366,7 +366,6 @@ class Settings:
     numeral_outer_ring_size: float = dial.NUMERAL_OUTER_RING_SIZE_DEFAULT
     numeral_face: str = dial.NUMERAL_OUTER_FACE_DEFAULT
     minutes_face: str = dial.MINUTES_FACE_DEFAULT
-    crown_face: str = dial.CROWN_FACE_DEFAULT
     numeral_seating: str = dial.NUMERAL_SEATING_DEFAULT
     numeral_relief: str = dial.NUMERAL_RELIEF_DEFAULT
     numeral_depth: float = dial.NUMERAL_DEPTH_DEFAULT

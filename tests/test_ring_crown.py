@@ -40,11 +40,13 @@ def test_crown_text_validator_accepts_every_charset_character(app):
     assert state == QValidator.State.Acceptable
 
 
-@pytest.mark.parametrize("bad", ["hello", "HELLO!", "café", "A,B", "A-B"])
+@pytest.mark.parametrize("bad", ["hello", "HELLO#", "café", "A,B", "A-B"])
 def test_crown_text_validator_rejects_unsupported_characters(app, bad):
-    """Lowercase letters, punctuation and accents are all OUTSIDE the
-    crown-text renderer's drawable set — the validator must refuse them
-    (the field's own keystroke, not merely a build-time drop)."""
+    """Lowercase letters, accents and the punctuation with no plate of
+    its own are all OUTSIDE the crown-text renderer's drawable set — the
+    validator must refuse them (the field's own keystroke, not merely a
+    build-time drop). The library HAS a "!" and a "?" plate since the
+    owner's 2026-08-07 drop, so the rejected sample uses "#"."""
     edit = QLineEdit()
     validator = _crown_text_validator(edit)
     state, _text, _pos = validator.validate(bad, 0)
@@ -58,9 +60,11 @@ def test_crown_text_field_typing_stops_at_the_first_bad_character(app):
     themselves."""
     edit = QLineEdit()
     edit.setValidator(_crown_text_validator(edit))
-    for char in "AB1lo":                 # 'l'/'o' are lowercase, unsupported
+    # The DIGITS became typeable with the owner's 2026-08-07 plate drop
+    # (`numerals/0-9.png`); 'l'/'o' are lowercase and still have none.
+    for char in "AB1lo":
         edit.insert(char)
-    assert edit.text() == "AB"
+    assert edit.text() == "AB1"
 
 
 # --- The LOCATION crown option -----------------------------------------------

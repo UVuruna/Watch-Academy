@@ -23,6 +23,7 @@ from config import constants, defaults, dial
 from core.clock_state import build_day_context, build_tick_state
 from data.moon_phases import MoonPhaseRepository
 from data.rings import ring_presets
+from render import letter_plates
 from data.seasons import SeasonsRepository
 from render.assets import AssetCache
 from render.compositor import Compositor
@@ -76,7 +77,7 @@ def test_ceramic_ramp_reads_visibly_distinct_from_silver():
     from render.assets import AssetCache
 
     QApplication.instance() or QApplication([])
-    letter = dial.RING_JEWEL_ART_DIR / constants.RING_JEWEL_FILES["X"]
+    letter = letter_plates.plate_path("X")
     cache = AssetCache()
     with paths.display(paths.display_context(
         metal_shades={"thematic": "ceramic"}
@@ -116,7 +117,7 @@ def test_chi_crown_text_chars_all_drawable():
     assert texts == ["IXΘYΣ", "IN HOC SIGNO VINCES"]
     for text in texts:
         for char in text:
-            assert char == " " or char in constants.RING_JEWEL_FILES
+            assert char == " " or char in constants.LETTER_PLATE_FILES
 
 
 def test_chi_crown_text_carries_its_own_reading():

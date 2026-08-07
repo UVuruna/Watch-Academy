@@ -548,13 +548,13 @@ def dial_window_margin_fraction(skin) -> float:
     `crown_text_extent` stayed 0.0 for both and the window was sized to
     the plain ring jewels/glow alone while the live glyphs, styled by
     THE TIME CROWN LOOK's own jewel-shadow stamp
-    (`render.numeral_bands._crown_jewel_glyph_image`/
-    `_crown_colon_image`), reach out to `CROWN_RADIUS_FRACTION` plus
+    (`render.numeral_bands._crown_plate_image`), reach out to
+    `CROWN_RADIUS_FRACTION` plus
     their own half-height-and-shadow — genuinely further than the
     unclipped extents this function already knew about. `live_crown_
     extent` is the SAME shape `crown_text_extent` uses (a centre radius
     plus a full glyph height scaled by `(1 + 2·RING_JEWEL_SHADOW_
-    RADIUS)`, the exact reach `_crown_jewel_glyph_image`'s baked shadow
+    RADIUS)`, the exact reach `_crown_plate_image`'s baked shadow
     occupies), anchored at the crown's own `CROWN_RADIUS_FRACTION`
     instead of the static arc's, and 0.0 (another no-op term) for every
     preset `RING_LIVE_CROWN` does not name.

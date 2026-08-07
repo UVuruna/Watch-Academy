@@ -40,7 +40,7 @@ from app.settings_store import Settings, replace
 from config import constants, dial
 from core import numerals
 from data.rings import ring_presets
-from render import numeral_bands
+from render import letter_plates, numeral_bands
 from render.asset_recolor import (
     ensure_variant, jewel_metal_file, jewel_metal_path,
 )
@@ -91,49 +91,45 @@ def test_live_crown_shares_the_static_crown_radius(app):
     assert dial.CROWN_RADIUS_FRACTION == dial.RING_CROWN_TEXT_RADIUS_FRACTION
 
 
-def test_digit_ink_matches_the_jewel_plate_ink(app):
-    """A digit's drawn INK fills the same fraction of the box a jewel
-    plate's ink fills — the per-face fitting step. `setPixelSize` sets
-    the EM box, not the ink, so sizing by pixel size alone drew ~28%
-    less ink than the plates beside it on the default face."""
-    box_px = 200.0
-    font = numeral_bands.crown_font_for_ink_height(
-        dial.CROWN_FACE_DEFAULT, box_px * dial.CROWN_PLATE_INK_FRACTION,
-    )
-    from render import numeral_relief as relief
+def test_every_crown_glyph_is_a_plate_never_a_font(app):
+    """THE ONE PLATE LAW (owner decree 2026-08-07): "JEWELS === CROWN
+    TXT (SVE) === CROWN LOCATION === CROWN TIME". Every glyph the live
+    crown can say resolves to a plate in the owner's letter library —
+    the digits are no longer font outlines filled with a ramp tone, and
+    the fitting machinery that existed only to size that font is gone.
 
-    heights = [
-        relief.glyph_path(digit, font).boundingRect().height()
-        for digit in "0123456789"
-    ]
-    target = box_px * dial.CROWN_PLATE_INK_FRACTION
-    # Within 2% of the target. The fit is solved from the face's own
-    # ratio, probed at CROWN_FIT_PROBE_PX; the residual is the outline's
-    # own grid fitting, which makes the ratio very slightly size
-    # dependent. What matters is the ORDER OF MAGNITUDE this replaced:
-    # the unfitted law drew 0.717 of the box (a 28% shortfall) on the
-    # default face, and a different shortfall on every other face.
-    assert max(heights) == pytest.approx(target, rel=0.02)
-    # THE DEFECT, stated as the property rather than as one face's
-    # number: the UNFITTED law drew `ratio * box` where `ratio` is the
-    # face's own ink/em, and that ratio is a per-face constant nothing
-    # corrected for — 0.717 on Bahnschrift Bold, 0.685 on Palatino
-    # Linotype Bold, 0.80 on Bernard MT Condensed, MEASURED on this
-    # machine. (Under the offscreen platform used in CI no real face
-    # resolves and every ratio is ~1.0, which is why this asserts the
-    # CORRECTION holds rather than asserting one shortfall number.)
-    unfitted = numeral_bands.numeral_font(
-        "outer", dial.CROWN_FACE_DEFAULT, box_px,
-    )
-    unfitted_ink = relief.glyph_path("8", unfitted).boundingRect().height()
-    assert unfitted_ink <= target * 1.02
-    for face in dial.NUMERAL_OUTER_FACES:
-        fitted = numeral_bands.crown_font_for_ink_height(face, target)
-        drawn = max(
-            relief.glyph_path(digit, fitted).boundingRect().height()
-            for digit in "0123456789"
-        )
-        assert drawn == pytest.approx(target, rel=0.03), face
+    This is the tooth for the failure that made the owner shout: a
+    missing plate used to be a documented FALLBACK, so nothing anywhere
+    could report that the crown had no letters of its own."""
+    for glyph in numerals.crown_glyph_alphabet():
+        if glyph == " ":
+            continue
+        master = letter_plates.plate_path(glyph)
+        assert master.exists(), glyph
+    # The retired font machinery really is gone — a leftover would let
+    # the two ways of drawing a digit drift apart again (Rule #6).
+    assert not hasattr(numeral_bands, "crown_font_for_ink_height")
+    assert not hasattr(numeral_bands, "_crown_metal_body_color")
+    assert not hasattr(dial, "CROWN_PLATE_INK_FRACTION")
+    assert not hasattr(dial, "CROWN_FIT_PROBE_PX")
+    assert not hasattr(dial, "CROWN_FACE_DEFAULT")
+
+
+def test_a_digit_and_a_letter_are_drawn_at_one_box(app):
+    """A crown digit and a ring letter are ONE size family because they
+    are one KIND of thing now: both are plates scaled to the crown's own
+    glyph box. Measured on the built tiles — a digit's drawn height is
+    the box (plus the shadow pad both wear)."""
+    spec, _skin, _ctx = _crown_spec(app, ring="The One")
+    numeral_bands.clear_cache()
+    try:
+        glyphs = numeral_bands.crown_glyph_set(spec)
+        pad = 2 * (spec.height_px * dial.RING_JEWEL_SHADOW_RADIUS + 2.0)
+        for digit in "0123456789":
+            drawn = glyphs[digit].height() - pad
+            assert drawn == pytest.approx(spec.height_px, abs=2.0), digit
+    finally:
+        numeral_bands.clear_cache()
 
 
 def test_crown_advance_follows_glyph_width_not_a_fixed_step(app):
@@ -183,60 +179,61 @@ def test_equal_advances_reproduce_the_fixed_step_layout(app):
 
 # -------------------------------------------------- 2. ONE METAL PER CROWN
 
-def test_crown_cache_key_carries_the_resolved_colon_source(app):
+def test_crown_cache_key_carries_every_resolved_plate(app):
     """THE ROOT CAUSE, pinned. `jewel_metal_file` honestly falls back to
     the GOLD master until the background recolor lands. The crown bakes
-    its tiles ONCE, so without the resolved path in the key that
-    fallback was frozen in place — gold colon, silver digits — until the
-    process restarted."""
+    its tiles ONCE, so without the resolved paths in the key that
+    fallback was frozen in place — gold colon, gray digits — until the
+    process restarted. Now EVERY glyph's resolved file rides the key,
+    not just the colon's."""
     import dataclasses
 
     spec, _skin, _ctx = _crown_spec(app, ring="Templar")
-    assert spec.colon_source
-    # It is the file `jewel_metal_file` would hand the ring layer for
-    # this metal — not the gold master by name, because a derived
-    # variant is content-fingerprinted (`raster_store.source_prefix`).
-    assert spec.colon_source == str(
-        jewel_metal_file(dial.RING_JEWEL_ART_DIR / "time.png", spec.metal)
-    )
+    resolved = dict(spec.sources)
+    alphabet = [g for g in numerals.crown_glyph_alphabet() if g != " "]
+    assert sorted(resolved) == sorted(alphabet)
+    for glyph in alphabet:
+        # It is the file `jewel_metal_file` would hand the ring layer for
+        # this metal — not the gold master by name, because a derived
+        # variant is content-fingerprinted (`raster_store.source_prefix`).
+        assert resolved[glyph] == str(
+            jewel_metal_file(letter_plates.plate_path(glyph), spec.metal)
+        )
     # Two different resolutions are two different cache keys, which is
     # the whole fix: when the background drain replaces the gold
     # fallback with the real metal, the crown rebuilds instead of
     # serving its frozen tiles forever.
-    assert dataclasses.replace(spec, colon_source="other.png") != spec
-    assert hash(dataclasses.replace(spec, colon_source="other.png")) != hash(spec)
+    other = dataclasses.replace(spec, sources=(("5", "other.png"),))
+    assert other != spec
+    assert hash(other) != hash(spec)
 
 
 @pytest.mark.parametrize("metal", ["silver", "bronze"])
 def test_colon_and_digits_wear_ONE_metal(app, metal):
     """The pixel proof the owner asked for: the colon plate's body hue
-    and the digits' body hue are the same metal. The derived variant is
-    materialized first (`ensure_variant`) — the real dial reaches this
-    state as soon as the background drain lands, and the cache key
+    and the digits' body hue are the same metal. The derived variants
+    are materialized first (`ensure_variant`) — the real dial reaches
+    this state as soon as the background drain lands, and the cache key
     change above is what lets it."""
     shade = constants.METAL_SHADE_DEFAULT[metal]
-    derived = jewel_metal_path(dial.RING_JEWEL_ART_DIR / "time.png", metal)
-    resolved = ensure_variant(derived)
-    if resolved is None or not resolved.exists():
-        pytest.skip(f"the {metal} colon variant could not be materialized here")
-    spec = numeral_bands.CrownSpec(
-        pixels=720, dpr=1.0, face=dial.CROWN_FACE_DEFAULT,
-        height_px=720 * dial.RING_CROWN_TEXT_SIZE,
-        metal=metal, shade=shade, colon_source=str(resolved),
-    )
+    sources = {}
+    for glyph in (":", "5"):
+        derived = jewel_metal_path(letter_plates.plate_path(glyph), metal)
+        resolved = ensure_variant(derived)
+        if resolved is None or not resolved.exists():
+            pytest.skip(f"the {metal} {glyph!r} variant could not be materialized")
+        sources[glyph] = str(resolved)
+    spec = _spec_with_sources(metal, shade, sources)
     numeral_bands.clear_cache()
     try:
         glyphs = numeral_bands.crown_glyph_set(spec)
         colon_hue = _dominant_hue(glyphs[":"])
         digit_hue = _dominant_hue(glyphs["5"])
-        body = numeral_bands._crown_metal_body_color(metal, shade)
-        # Both bodies read as the SAME metal: their hue-and-saturation
-        # signature matches the ramp's own body tone, so neither is the
-        # gold master standing in for the other.
+        # Both bodies read as the SAME metal, so neither is the gold
+        # master standing in for the other.
         assert _same_metal(colon_hue, digit_hue), (
             f"colon {colon_hue} vs digit {digit_hue} — two metals in one crown"
         )
-        assert _same_metal(digit_hue, (body.hue(), body.saturation()))
     finally:
         numeral_bands.clear_cache()
 
@@ -252,24 +249,39 @@ def test_the_one_metal_proof_catches_the_defect_it_was_written_for(app):
     hue (measured: gold body (201,146,42), bronze (169,112,47)), so a
     bronze crown wearing a gold colon is NOT separable this way; the
     tooth that covers every metal is
-    `test_crown_cache_key_carries_the_resolved_colon_source` above,
-    which fails whatever metal the fallback happened to be."""
+    `test_crown_cache_key_carries_every_resolved_plate` above, which
+    fails whatever metal the fallback happened to be."""
     metal, shade = "silver", constants.METAL_SHADE_DEFAULT["silver"]
+    digit = ensure_variant(jewel_metal_path(letter_plates.plate_path("5"), metal))
+    if digit is None or not digit.exists():
+        pytest.skip("the silver digit variant could not be materialized here")
     numeral_bands.clear_cache()
     try:
-        defective = numeral_bands.CrownSpec(
-            pixels=720, dpr=1.0, face=dial.CROWN_FACE_DEFAULT,
-            height_px=720 * dial.RING_CROWN_TEXT_SIZE,
-            metal=metal, shade=shade,
+        defective = _spec_with_sources(metal, shade, {
             # The GOLD master — `jewel_metal_file`'s honest fallback.
-            colon_source=str(dial.RING_JEWEL_ART_DIR / "time.png"),
-        )
+            ":": str(letter_plates.plate_path(":")),
+            "5": str(digit),
+        })
         glyphs = numeral_bands.crown_glyph_set(defective)
         assert not _same_metal(
             _dominant_hue(glyphs[":"]), _dominant_hue(glyphs["5"])
         ), "the one-metal proof passes the very defect it guards"
     finally:
         numeral_bands.clear_cache()
+
+
+def _spec_with_sources(metal: str, shade: str, overrides: dict):
+    """A hand-built crown spec whose plates are the GOLD masters except
+    where `overrides` names a resolved variant — the two metal proofs
+    need to state exactly which file each glyph is drawn from."""
+    sources = tuple(
+        (glyph, overrides.get(glyph, str(letter_plates.plate_path(glyph))))
+        for glyph in numerals.crown_glyph_alphabet() if glyph != " "
+    )
+    return numeral_bands.CrownSpec(
+        pixels=720, dpr=1.0, height_px=720 * dial.RING_CROWN_TEXT_SIZE,
+        metal=metal, shade=shade, sources=sources,
+    )
 
 
 def _dominant_hue(image) -> tuple:
@@ -321,7 +333,7 @@ def test_the_one_draws_its_bottom_location_arc(app):
     # pipeline — one glyph asset per drawable character.
     assert len(entry["glyphs"]) == len("BELGRADESERBIA")
     for asset, _theta in entry["glyphs"]:
-        assert asset.parent == dial.RING_JEWEL_ART_DIR
+        assert dial.LETTER_ART_DIR in asset.parents
         assert asset.exists(), asset
     # Bottom orientation, like NON NOBIS DOMINE: every seat is in the
     # lower half of the dial, and the run reads counter-clockwise.
@@ -337,7 +349,7 @@ def test_the_location_arc_separator_is_a_space_because_no_comma_plate_exists(app
     COMMA plate, so the comma is dropped and the gap collapses to one
     space — `_location_crown_text`'s existing behavior, reused rather
     than reinvented."""
-    assert "," not in constants.RING_JEWEL_FILES
+    assert "," not in constants.LETTER_PLATE_FILES
     assert "," not in constants.RING_CROWN_TEXT_CHARSET
     assert _location_crown_text("Belgrade, Serbia") == "BELGRADE SERBIA"
 
@@ -490,12 +502,18 @@ def test_crown_metal_is_the_presets_finish_metal(app, ring, finish):
 @pytest.mark.parametrize("ring", BUNDLED)
 def test_crown_and_jewels_share_one_treatment(app, ring):
     """Same TREATMENT, not only the same metal: both families are
-    stamped by `RingLayer._draw_ring_glyph` from the SAME jewel art
-    directory, so no bundled preset can ship a crown drawn by a
-    different machine than its jewels."""
+    stamped by `RingLayer._draw_ring_glyph` from the SAME plate library,
+    so no bundled preset can ship a crown drawn by a different machine
+    than its jewels. A seat wearing a COMPOSED number (12, 15, 16, 18,
+    20, 21) points at the cache instead of the library, so the proof is
+    per-glyph — the asset IS what `letter_plates` resolves for the glyph
+    seated there, which is the same statement without the loophole."""
     skin = build_skin(replace(Settings(), ring=ring))
     for entry in skin.ring.crown_text:
         for asset, _theta in entry["glyphs"]:
-            assert asset.parent == dial.RING_JEWEL_ART_DIR, ring
-    for asset in skin.ring.jewel_art.values():
-        assert asset.parent == dial.RING_JEWEL_ART_DIR, ring
+            assert dial.LETTER_ART_DIR in asset.parents, ring
+    for hour, asset in skin.ring.jewel_art.items():
+        glyph = skin.ring.jewels[hour]
+        if glyph == constants.RING_EYE_GLYPH:
+            continue                     # the Shine toggle picks its own master
+        assert asset == letter_plates.plate_path(glyph), (ring, hour, glyph)

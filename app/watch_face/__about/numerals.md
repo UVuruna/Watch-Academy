@@ -17,7 +17,12 @@ or a world that turns:
 | **Hour ring — the outer band** | ring face (the 7-face roster), numeral size, **outer ring size** (the width of the band the jewels and numbers stand in), seating (`arc` / `upright`) |
 | **Minute ring — the inner band** | inner face (the 5-face roster), numeral size |
 | **Relief** | relief style (`cast` / `extrude` / `emboss`), depth, light (`radial` / `fixed`), darkness, contact blur, border |
-| **The live crown** | crown face, time format (`12:35` / `12h 35min`) |
+| **The live crown** | time format (`12:35` / `12h 35min`) |
+
+The live crown has NO face row (THE ONE PLATE LAW, owner decree
+2026-08-07): it draws the owner's letter plates like the jewels and the
+crown text beside it, so the font pick that used to stand here — and
+`Settings.crown_face` behind it — is gone.
 
 Solar Rotation is deliberately NOT here: it stays its own independent
 switch in the right-click menu and keeps meaning the same thing in both

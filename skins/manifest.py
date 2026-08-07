@@ -464,23 +464,23 @@ class SkinDefinition:
     #     survives any change of dial resolution.
     #   * `numeral_outer_ring_size` — the WIDTH of the band the jewels
     #     and numbers stand in, as a multiplier of the measured band.
-    #   * `numeral_face` / `minutes_face` — the two rosters (§7);
-    #     `crown_face` is the LIVE CROWN's own, picked for full glyph
-    #     coverage rather than inherited (see config.dial's verified
-    #     note: the hour band's default cannot draw a colon here).
+    #   * `numeral_face` / `minutes_face` — the two rosters (§7). The
+    #     LIVE CROWN has no face at all any more (THE ONE PLATE LAW,
+    #     owner decree 2026-08-07): it draws the letter plates, so its
+    #     old `crown_face` pick went with the font it chose.
     #   * `numeral_seating` — `arc` or `upright` (§4); the inner band
     #     follows the outer's pick.
     #   * `numeral_relief` / `numeral_depth` / `numeral_light` /
     #     `numeral_darkness` / `numeral_contact_blur` / `numeral_border`
     #     — the relief and light model (§5, §6) at its SETTLED defaults.
     #   * `crown_time_format` — `hh:mm` (the standard default) or
-    #     `12h 35min`, whose h/min ride a smaller cut of the same face.
+    #     `12h 35min`, whose h/min ride a smaller cut of the same
+    #     plates (`dial.CROWN_SMALL_CUT_FRACTION`).
     numeral_outer_size: int = dial.NUMERAL_OUTER_SIZE_DEFAULT
     minutes_size: int = dial.MINUTES_SIZE_DEFAULT
     numeral_outer_ring_size: float = dial.NUMERAL_OUTER_RING_SIZE_DEFAULT
     numeral_face: str = dial.NUMERAL_OUTER_FACE_DEFAULT
     minutes_face: str = dial.MINUTES_FACE_DEFAULT
-    crown_face: str = dial.CROWN_FACE_DEFAULT
     numeral_seating: str = dial.NUMERAL_SEATING_DEFAULT
     numeral_relief: str = dial.NUMERAL_RELIEF_DEFAULT
     numeral_depth: float = dial.NUMERAL_DEPTH_DEFAULT
