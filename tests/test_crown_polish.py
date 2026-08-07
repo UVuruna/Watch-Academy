@@ -517,3 +517,135 @@ def test_crown_and_jewels_share_one_treatment(app, ring):
         if glyph == constants.RING_EYE_GLYPH:
             continue                     # the Shine toggle picks its own master
         assert asset == letter_plates.plate_path(glyph), (ring, hour, glyph)
+
+
+# ═══════════════════ THE TINT NEVER TOUCHES A PLATE ═══════════════════
+
+def test_the_ring_tint_does_not_colour_the_crown(app):
+    """Owner defect 2026-08-07, from his own screenshot: he tinted the
+    ring PURPLE and got a purple NON NOBIS DOMINE over a still-grey
+    live time — one crown wearing two colours.
+
+    The crown text was the ONE plate on the dial that inherited the
+    band's wash: `crown_text_tint` fell back to `ring_tint`, while the
+    jewels take `jewels_tint` straight and the live crown takes no tint
+    at all. Every plate now answers only to an EXPLICIT pick, which is
+    `config.dial`'s own stated rule for this library — the tint never
+    touches them."""
+    tinted = build_skin(replace(Settings(), ring="Templar", ring_tint="#7B4FBF"))
+
+    drawn = _crown_and_jewel_tints(app, tinted)
+    assert drawn["crown_text"] == drawn["jewels"], (
+        f"crown text drew tint {drawn['crown_text']!r} while the jewels "
+        f"beside it drew {drawn['jewels']!r} — one crown, two colours"
+    )
+    assert drawn["crown_text"] is None, "the band's wash reached a plate"
+
+
+def test_an_explicit_crown_tint_is_still_obeyed(app):
+    """The fix removes the FALLBACK, not the control: a crown-text tint
+    the user actually picked still paints, exactly like `jewels_tint`."""
+    picked = build_skin(replace(
+        Settings(), ring="Templar", ring_tint="#7B4FBF",
+        crown_text_tint="#C0392B",
+    ))
+    assert _crown_and_jewel_tints(app, picked)["crown_text"] == "#C0392B"
+
+
+def _crown_and_jewel_tints(app, skin) -> dict:
+    """The tint each family ACTUALLY hands `_draw_ring_glyph` — spied on
+    the real layer rather than re-derived, so the test cannot agree with
+    a bug by repeating it."""
+    from PySide6.QtGui import QImage, QPainter
+
+    from render.context import RenderContext
+    from render.layers.ring import RingLayer
+
+    seen = {}
+    layer = RingLayer(skin)
+    original = RingLayer._draw_ring_glyph
+
+    def spy(self, painter, ctx, asset, metal, theta, radius_fraction,
+            height, tint=None, opacity=1.0, draw_shadow=True):
+        family = (
+            "crown_text"
+            if radius_fraction == dial.RING_CROWN_TEXT_RADIUS_FRACTION
+            else "jewels"
+        )
+        seen[family] = tint
+
+    image = QImage(720, 720, QImage.Format.Format_ARGB32_Premultiplied)
+    painter = QPainter(image)
+    ctx = RenderContext(
+        radius=360.0, dpr=1.0, skin=skin, cache=None, tick=None, day=None,
+    )
+    RingLayer._draw_ring_glyph = spy
+    try:
+        layer._draw_jewels(painter, ctx)
+        layer._draw_crown_text(painter, ctx)
+    finally:
+        RingLayer._draw_ring_glyph = original
+        painter.end()
+    return seen
+
+
+def test_both_crown_paths_take_the_same_finish(app):
+    """THE ONE KITCHEN. The static arc and the baked live time are two
+    code paths for a CADENCE reason — a minute layer cannot recolor per
+    frame — never a licence to look different. They disagreed twice in
+    one day (the metal, then the tint), so both now read
+    `letter_plates.crown_finish` and nothing else.
+
+    Checked on every bundled preset, because each feeds the same rule a
+    different thematic colour and that is what made one shared bug look
+    like six different behaviours."""
+    from render.layers.numerals import crown_spec
+    from render.context import RenderContext
+
+    for ring in BUNDLED:
+        skin = build_skin(replace(
+            Settings(), ring=ring, ring_tint="#7B4FBF", crown_text_tint="#C0392B",
+        ))
+        finish = letter_plates.crown_finish(skin)
+        ctx = RenderContext(
+            radius=360.0, dpr=1.0, skin=skin, cache=None, tick=None, day=None,
+        )
+        spec = crown_spec(skin, ctx)
+        # The BAKED path's key carries the whole finish...
+        assert (spec.metal, spec.tint, spec.alpha, spec.saturation) == (
+            finish.metal, finish.tint, finish.alpha, finish.saturation
+        ), ring
+        # ...and the LIVE path hands the same values to the stamp.
+        # ("The One" carries no static arc unless a location is supplied,
+        # so there is simply nothing to compare for it here — its own arc
+        # is covered by `test_the_one_draws_its_bottom_location_arc`.)
+        drawn = _crown_and_jewel_tints(app, skin)
+        if "crown_text" in drawn:
+            assert drawn["crown_text"] == finish.tint, ring
+
+
+def test_a_crown_tint_reaches_the_baked_time_too(app):
+    """The half that used to be missing: the live time ignored the tint
+    entirely, so a crown-text colour painted the motto and left the
+    clock above it untouched. The baked tile must wear it."""
+    import dataclasses
+
+    plain = _spec_with_sources("gold", constants.METAL_SHADE_DEFAULT["gold"], {})
+    tinted = dataclasses.replace(plain, tint="#C0392B")
+    assert tinted != plain and hash(tinted) != hash(plain), (
+        "a tint change must be a new cache key, or the baked tiles outlive it"
+    )
+    numeral_bands.clear_cache()
+    try:
+        untinted = _dominant_hue(numeral_bands.crown_glyph_set(plain)["5"])
+        numeral_bands.clear_cache()
+        painted = _dominant_hue(numeral_bands.crown_glyph_set(tinted)["5"])
+    finally:
+        numeral_bands.clear_cache()
+    # The tritone map pulls the gold body toward the picked red: the hue
+    # moves and the chroma climbs. Asserted as MOVEMENT, because the exact
+    # landing point is the recolor recipe's business, not this test's.
+    hue_shift = min(abs(untinted[0] - painted[0]), 360 - abs(untinted[0] - painted[0]))
+    assert hue_shift >= 10, (
+        f"the crown tint never reached the baked time: {untinted} vs {painted}"
+    )

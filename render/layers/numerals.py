@@ -120,7 +120,8 @@ def crown_spec(skin, ctx: RenderContext) -> CrownSpec:
     crown's BAKED tiles cannot outlive the background recolor's gold
     fallback. See `CrownSpec` for the full root cause.
     """
-    metal = skin.ring.crown_text_metal
+    finish = letter_plates.crown_finish(skin)
+    metal = finish.metal
     return CrownSpec(
         pixels=max(2, round(2 * ctx.radius * ctx.dpr)),
         dpr=ctx.dpr,
@@ -130,6 +131,9 @@ def crown_spec(skin, ctx: RenderContext) -> CrownSpec:
         ),
         metal=metal,
         shade=paths.metal_shade(metal),
+        tint=finish.tint,
+        alpha=finish.alpha,
+        saturation=finish.saturation,
         sources=tuple(
             (glyph, str(jewel_metal_file(letter_plates.plate_path(glyph), metal)))
             for glyph in numerals.crown_glyph_alphabet() if glyph != " "

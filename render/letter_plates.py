@@ -20,6 +20,7 @@ as a ring jewel is.
 from __future__ import annotations
 
 from pathlib import Path
+from typing import NamedTuple
 
 import numpy as np
 from PySide6.QtCore import Qt
@@ -27,6 +28,54 @@ from PySide6.QtGui import QImage, QPainter
 
 from config import constants, dial, paths
 from render import raster_store
+
+# ═══════════════════════════════ THE FINISH ══════════════════════════
+
+
+class CrownFinish(NamedTuple):
+    """HOW a crown glyph is finished — the ONE answer, for every surface
+    of the crown and every preset.
+
+    THE ONE KITCHEN (owner defect 2026-08-07: "nemoguće je da se DOMINE
+    oboji u ljubičasto a da se ne oboji... to znači da im je različita
+    kuhinja"). He was right about the split and generous about the axis:
+    it was never per PRESET — no preset name appears anywhere in the
+    drawing code — it was per SURFACE. The static arc
+    (`RingLayer._draw_crown_text`, live per repaint) and the live time
+    (`numeral_bands._crown_plate_image`, baked once per settings change)
+    each resolved their own finish, and they disagreed twice in one day:
+    first on the METAL, then on the TINT, where the arc inherited the
+    band's `ring_tint` wash and the time inherited nothing. On a purple
+    ring that read as a purple motto over a grey clock — and it read
+    DIFFERENTLY on each preset only because each preset feeds the same
+    rule a different thematic colour (a near-black templar_black takes a
+    purple wash visibly, a saturated cross_blue barely at all).
+
+    Both paths now take their metal, tint, alpha and saturation from
+    `crown_finish` and nothing else, so they cannot drift again."""
+
+    metal: str
+    tint: str | None
+    alpha: float
+    saturation: float
+
+
+def crown_finish(skin) -> CrownFinish:
+    """The finish EVERY crown glyph wears — the arc, the location and
+    the live time alike.
+
+    The tint is the user's EXPLICIT `crown_text_tint` or nothing: the
+    band's own `ring_tint` never reaches a plate, which is
+    `config.dial`'s own stated rule for this library ("overlaid on the
+    ring by calculation so the tint never touches them") and the shape
+    the jewels already followed."""
+    return CrownFinish(
+        metal=skin.ring.crown_text_metal,
+        tint=skin.crown_text_tint,
+        alpha=skin.crown_text_alpha,
+        saturation=skin.ring_saturation,
+    )
+
 
 # ══════════════════════════════ RESOLUTION ═══════════════════════════
 

@@ -184,6 +184,9 @@ class CrownSpec:
     height_px: float
     metal: str = "gold"
     shade: str = ""
+    tint: str | None = None
+    alpha: float = 1.0
+    saturation: float = 1.0
     sources: tuple[tuple[str, str], ...] = ()
 
 
@@ -541,6 +544,13 @@ def _crown_plate_image(
     scaled = source.scaledToHeight(
         max(1, round(box_px)), Qt.TransformationMode.SmoothTransformation,
     )
+    # THE ONE KITCHEN (owner defect 2026-08-07): the tint and the ring
+    # saturation are applied HERE, through the same `ring_recolored_image`
+    # the live arc reaches via `AssetCache.pixmap_by_height` — tritone
+    # first, saturation after. Baking the tile is a CADENCE decision (a
+    # minute layer cannot recolor per frame); it was never licence to
+    # wear a different finish, which is exactly what it did.
+    scaled = ring_recolored_image(scaled, spec.tint, spec.saturation)
     shadow_radius_px = box_px * dial.RING_JEWEL_SHADOW_RADIUS
     pad = shadow_radius_px + 2.0
     tile = relief.blank_plate(
@@ -558,6 +568,15 @@ def _crown_plate_image(
     )
     painter.drawImage(QPointF(-half_w, -half_h), scaled)
     painter.end()
+    if spec.alpha != 1.0:
+        # The arc's own `opacity` term, applied to the finished tile so
+        # the glyph and its halo fade together exactly as they do live.
+        faded = relief.blank_plate(tile.width(), tile.height())
+        fade_painter = QPainter(faded)
+        fade_painter.setOpacity(max(0.0, min(1.0, spec.alpha)))
+        fade_painter.drawImage(0, 0, tile)
+        fade_painter.end()
+        tile = faded
     return relief.stamp_dpr(tile, spec.dpr), float(scaled.width())
 
 

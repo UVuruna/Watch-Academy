@@ -29,6 +29,7 @@ from PySide6.QtGui import QPainter
 
 from config import dial, palette
 from core import angles, numerals, world
+from render import letter_plates
 from render.asset_recolor import jewel_metal_file
 from render.context import Cadence, Layer, RenderContext
 from render.layers.numerals import band_spec
@@ -112,9 +113,12 @@ class RingLayer(Layer):
         letters" is one target); the shadow copy skips it — a pure
         black silhouette has no saturation to scale. `tint`/`opacity`
         are per-CALLER (Crown Text round, owner correction 2026-08-05):
-        `_draw_jewels` passes `jewels_tint`/1.0 (unchanged behavior);
-        `_draw_crown_text` resolves its OWN independent `crown_text_tint`/
-        `crown_text_alpha` — the two controls no longer share one recolor.
+        `_draw_jewels` passes `jewels_tint`/1.0 and `_draw_crown_text`
+        passes `crown_text_tint`/`crown_text_alpha` — both are EXPLICIT
+        picks that default to nothing, so the band's own `ring_tint` wash
+        never reaches a plate (owner defect 2026-08-07: the crown text
+        was the one plate that still inherited it, and a purple ring came
+        out with a purple motto over a grey live time).
         `draw_shadow=False` (SHADOW/SHINE round, owner ruling
         2026-08-06) skips the halo stamp entirely — the Dollar's Eye
         with its Shine toggle on already carries its own baked light,
@@ -233,11 +237,11 @@ class RingLayer(Layer):
         to 1.0, so the folded constant is exactly 1.0 and every default
         dial is pixel-identical to the release before this one
         (`tests/test_ring_crown.py::test_crown_default_size_unchanged`).
-        `crown_text_tint` resolves independently of
-        `jewels_tint` — None follows `ring_tint`, the SAME
-        "follow-unless-overridden" shape `hands_tint` uses;
-        `crown_text_alpha` is a plain opacity multiplier passed straight to
-        `_draw_ring_glyph`."""
+        `crown_text_tint` resolves independently of `jewels_tint`, and
+        like it takes an EXPLICIT pick or nothing — it does NOT follow
+        `ring_tint` (see the comment at the resolution below for the
+        defect that removed it); `crown_text_alpha` is a plain opacity
+        multiplier passed straight to `_draw_ring_glyph`."""
         crown_texts = self._skin.ring.crown_text
         if not crown_texts:
             return
@@ -245,12 +249,14 @@ class RingLayer(Layer):
             2 * ctx.radius * dial.RING_CROWN_TEXT_SIZE
             * ctx.skin.crown_text_scale
         )
-        metal = self._skin.ring.crown_text_metal
-        tint = (
-            ctx.skin.crown_text_tint
-            if ctx.skin.crown_text_tint is not None
-            else ctx.skin.ring_tint
-        )
+        # THE ONE KITCHEN (owner defect 2026-08-07): metal, tint, alpha
+        # and saturation all come from `letter_plates.crown_finish` — the
+        # SAME call the baked live time makes — so the arc and the clock
+        # above it cannot wear different finishes. They did twice in one
+        # day: first different metals, then different tints, because the
+        # arc inherited the band's `ring_tint` wash and the time
+        # inherited nothing.
+        finish = letter_plates.crown_finish(ctx.skin)
         for crown_entry in crown_texts:
             glyphs = crown_entry["glyphs"]
             # THE ARC READING LAW (core.world.arc_seats, ledger §1
@@ -266,7 +272,7 @@ class RingLayer(Layer):
             )
             for (gold_asset, _theta), seat in zip(glyphs, seats):
                 self._draw_ring_glyph(
-                    painter, ctx, gold_asset, metal, seat,
+                    painter, ctx, gold_asset, finish.metal, seat,
                     dial.RING_CROWN_TEXT_RADIUS_FRACTION, height,
-                    tint=tint, opacity=ctx.skin.crown_text_alpha,
+                    tint=finish.tint, opacity=finish.alpha,
                 )
