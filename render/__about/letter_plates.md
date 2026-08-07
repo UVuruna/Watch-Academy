@@ -6,16 +6,17 @@ between a character and the owner's plate library at
 
 ## Purpose
 
-**THE ONE PLATE LAW** (owner decree 2026-08-07): *"JEWELS === CROWN TXT
-(SVE) === CROWN LOCATION === CROWN TIME"*. Those four surfaces draw the
-same thing — a plate from the library, recolored through the metal /
-thematic ramps. None of them may draw a glyph from a font.
+**THE ONE PLATE LAW** (owner decree 2026-08-07): every GLYPH the dial
+draws — wherever it stands — is a plate from this library, taken as the
+GOLD master and recolored by the transformer into one of the app's metals
+or thematic colours. One style, one source, one algorithm: never a font,
+never a flat colour of its own.
 
-Before this module the law held for three of the four. The live crown's
-TIME drew its digits with `QFont` and filled them with a flat body colour
-sampled off the metal ramp, because the library had no `0`–`9` plates. The
-owner shipped the ten digits (and `symbols/colon.png` before them,
-explicitly for this), and the font path was deleted.
+Before this module the law held everywhere except one place. The live
+crown's TIME drew its digits with `QFont` and filled them with a flat body
+colour sampled off the metal ramp, because the library had no `0`–`9`
+plates. The owner shipped the ten digits (and `symbols/colon.png` before
+them, explicitly for this), and the font path was deleted.
 
 ## Why the failure was silent (the root cause worth keeping)
 

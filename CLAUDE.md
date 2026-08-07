@@ -48,19 +48,18 @@ project-specific laws and deltas that TIGHTEN the root rules.
   **The full suite takes ~18 minutes** — run a targeted subset while working
   and the full suite before committing. `python -m core --city NAME --at ISO`
   eyeballs any moment; the GUI drive recipe is `.claude/skills/verify/SKILL.md`.
-- **THE ONE PLATE LAW (owner decree 2026-08-07):** *"JEWELS === CROWN
-  TXT (SVE) === CROWN LOCATION === CROWN TIME"* — those four surfaces
-  draw the SAME thing: a plate from `assets/instrument/letters/`
-  (latin / greek / numerals / symbols / emblems), recolored through the
-  metal and thematic ramps. **A font never draws a glyph on the ring or
-  the crown.** The library is NOT under `ring/` — the crown reads it too.
-  One door resolves a glyph to its master: `render.letter_plates`
-  (Greek twins alias onto the Latin plate, two-digit hour numbers are
-  composed from the digit plates). A glyph with no plate RAISES; it is
-  never a quiet fallback — that fallback is exactly how a whole missing
-  digit alphabet shipped as a font-drawn crown while every test passed
-  (`assert_covers` proved the FONT, nothing proved the PLATE). The
-  tooth is `tests/test_letter_plates.py`.
+- **THE ONE PLATE LAW (owner decree 2026-08-07):** every GLYPH the dial
+  draws — wherever it stands — is one of the owner's plates from
+  `assets/instrument/letters/` (latin, greek, numerals, symbols,
+  emblems), taken as the GOLD master and recolored by the transformer
+  into one of this app's metals or thematic colours. One style, one
+  source, one algorithm: never a font, never a flat colour of its own.
+  `render.letter_plates` is the single door (Greek twins alias onto the
+  Latin plate; two-digit numbers are composed from the digit plates),
+  and a glyph with no plate RAISES rather than falling back — the
+  fallback is how a whole missing digit alphabet once shipped as a
+  font-drawn crown with every test green. Tooth:
+  `tests/test_letter_plates.py`.
 - **THE ONE COPY RULE (owner 2026-07-28, extended 2026-08-06):** the
   only things that may differ between two watches are the OBSERVER
   (location/timezone) and the VISUAL picks. Every bundled book and

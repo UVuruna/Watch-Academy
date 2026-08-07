@@ -92,9 +92,9 @@ def test_live_crown_shares_the_static_crown_radius(app):
 
 
 def test_every_crown_glyph_is_a_plate_never_a_font(app):
-    """THE ONE PLATE LAW (owner decree 2026-08-07): "JEWELS === CROWN
-    TXT (SVE) === CROWN LOCATION === CROWN TIME". Every glyph the live
-    crown can say resolves to a plate in the owner's letter library —
+    """THE ONE PLATE LAW (owner decree 2026-08-07): one style for every
+    glyph on the dial. Every glyph the live crown can say resolves to a
+    plate in the owner's library —
     the digits are no longer font outlines filled with a ramp tone, and
     the fitting machinery that existed only to size that font is gone.
 

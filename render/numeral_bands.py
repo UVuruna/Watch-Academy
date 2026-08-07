@@ -448,10 +448,10 @@ def crown_glyph_set(spec: CrownSpec) -> dict:
     """The crown's glyphs, rasterized ONCE per settings change into
     tightly-cropped little images, keyed by glyph.
 
-    THE ONE PLATE LAW (owner decree 2026-08-07 — "JEWELS === CROWN TXT
-    (SVE) === CROWN LOCATION === CROWN TIME"): EVERY glyph comes from
-    HIS plate library, through the exact letter pipeline every ring
-    jewel goes through (`_crown_plate_image`). The colon is
+    THE ONE PLATE LAW (owner decree 2026-08-07): EVERY glyph comes from
+    HIS plate library, through the exact pipeline every ring jewel goes
+    through (`_crown_plate_image`) — one style for every glyph on the
+    dial, gold master in, chosen metal out. The colon is
     `symbols/colon.png`, built "precisely for this"; the ten digits are
     `numerals/0-9.png`, shipped the day the owner saw them drawn by a
     font instead. The `"12h 35min"` format's h/min small cut takes the
@@ -522,8 +522,7 @@ def _crown_plate_image(
     Returns the tile and the plate's own ink width for THE CROWN ADVANCE
     LAW.
 
-    THE ONE PLATE LAW (owner decree 2026-08-07: "JEWELS === CROWN TXT
-    (SVE) === CROWN LOCATION === CROWN TIME"): this is the WHOLE crown
+    THE ONE PLATE LAW (owner decree 2026-08-07): this is the WHOLE crown
     now, not just the colon. The digits used to be font outlines filled
     with a flat ramp tone, which is why the live time never wore the
     metal the letters beside it wore. Since the owner shipped

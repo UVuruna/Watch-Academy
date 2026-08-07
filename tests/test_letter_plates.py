@@ -1,11 +1,10 @@
 """THE ONE PLATE LAW (owner decree 2026-08-07) — the tooth for the
 failure that produced it.
 
-    "JEWELS === CROWN TXT (SVE) === CROWN LOCATION === CROWN TIME"
-
-Those four surfaces draw the SAME thing: a plate from the owner's letter
-library, recolored through the metal / thematic ramps. None of them may
-draw a glyph from a font.
+Every GLYPH the dial draws — wherever it stands — is a plate from the
+owner's library, taken as the GOLD master and recolored by the
+transformer into one of the app's metals or thematic colours. One style,
+one source, one algorithm: never a font, never a flat colour of its own.
 
 WHY THE FAILURE WAS SILENT — the part worth keeping. The crown's digits
 were font outlines because the library had no `0`-`9` plates, and

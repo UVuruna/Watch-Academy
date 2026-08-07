@@ -109,11 +109,11 @@ def crown_spec(skin, ctx: RenderContext) -> CrownSpec:
     same ring. THE DECOUPLED SCALES (same round): `ring_jewels_scale`
     is deliberately absent — it sizes jewels and nothing else now.
 
-    THE ONE PLATE LAW (owner decree 2026-08-07 — "JEWELS === CROWN TXT
-    (SVE) === CROWN LOCATION === CROWN TIME"): `sources` resolves EVERY
-    glyph the crown can say to its own plate in the owner's letter
+    THE ONE PLATE LAW (owner decree 2026-08-07): `sources` resolves
+    EVERY glyph the crown can say to its own plate in the owner's
     library, through the SAME `jewel_metal_file` door a ring jewel goes
-    through. No `face` is passed any more — the crown draws no font.
+    through — one style for every glyph on the dial. No `face` is passed
+    any more, because the crown draws no font.
 
     ONE METAL PER CROWN (same round — the colon rendered GOLD while the
     digits rendered gray): the resolved files ride the KEY, so the

@@ -148,7 +148,9 @@ rebuilds in the metal the rest of the ring wears.
 
 ### THE ONE PLATE LAW (owner decree 2026-08-07)
 
-    "JEWELS === CROWN TXT (SVE) === CROWN LOCATION === CROWN TIME"
+Every glyph the dial draws is a plate from the owner's library, gold
+master in, one of the app's metals or thematic colours out — one style,
+one source, one algorithm.
 
 The 2026-08-06 correction took the live crown off the OUTER BAND's
 relief/parity machinery (`draw_relief` + `draw_body` in
