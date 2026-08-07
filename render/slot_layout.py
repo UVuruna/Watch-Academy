@@ -229,7 +229,14 @@ def sunday_dual_face(skin: SkinDefinition) -> bool:
         and weekday_classic_slot(skin) is not None
         and spec.display_mode != "center_only"
         and spec.dual_asset is not None
-        and paths.art_file(spec.dual_asset).exists()
+        # `existing_art_file`, never `art_file(...).exists()` (owner's
+        # ONE COPY RULE, second pass): this runs on the PAINT path, so
+        # the old form re-stat'ed a file the resolver had just found —
+        # once per frame, on every theme that carries a Sunday dual.
+        # That is why `tests/test_repeat_work.py` measured one stray
+        # `Path.exists()` per repaint on the owner's own settings while
+        # a default profile showed none.
+        and paths.existing_art_file(spec.dual_asset) is not None
     )
 
 

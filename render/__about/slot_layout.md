@@ -46,7 +46,11 @@ duality questions that decide who holds the Sunday and the center seat.
   roster) — the roster is per slot.
 - `sunday_dual_face(skin)` / `center_dual_face(skin)`: whether the
   Servant holds his OWN seat, or the duality lives in one center image
-  — mutually exclusive given a dual asset exists.
+  — mutually exclusive given a dual asset exists. Both run on the PAINT
+  path, so the dual asset is probed with `paths.existing_art_file`, never
+  `art_file(...).exists()` — the latter re-stat'ed a file the resolver
+  had just found, once per frame, on every theme carrying a Sunday dual
+  (owner's ONE COPY RULE, second pass; `tests/test_repeat_work.py`).
 - `servant_holds_the_seat(skin, today)`: whether the Servant wins his
   seat today, by the shared-slot priority rule.
 - `center_seat_body_key(skin, today)`: which body key occupies the
