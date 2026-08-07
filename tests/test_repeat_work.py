@@ -294,3 +294,39 @@ def test_extra_releases_cannot_drive_the_count_negative():
 
     assert repository._tree is not None
     repository.release()
+
+
+# --- the Sunday dual answers the same question, without the extra stat ------
+
+def test_the_sunday_dual_probe_agrees_with_the_form_it_replaced(app):
+    """`sunday_dual_face` used `art_file(...).exists()` — a stat on the
+    PAINT path, on a file the resolver had just found (the very pattern
+    this module exists to remove). It now asks `existing_art_file`,
+    which answers the SAME question without the stat.
+
+    Behaviour-identical, proved rather than asserted: across every
+    weekday theme the app ships, both doors must return the same verdict
+    for the same skin. If they ever diverge, a Servant seat silently
+    appears or vanishes."""
+    from app.controller import build_skin
+    from app.settings_store import Settings, replace
+    from config import constants
+    from render.slot_layout import sunday_dual_face
+
+    checked = 0
+    for theme in constants.WEEKDAY_THEMES:
+        skin = build_skin(replace(
+            Settings(), pointer="octa", weekday_theme=theme,
+        ))
+        spec = skin.weekday_set
+        if spec.dual_asset is None:
+            continue
+        old_form = paths.art_file(spec.dual_asset).exists()
+        new_form = paths.existing_art_file(spec.dual_asset) is not None
+        assert old_form == new_form, theme
+        # The predicate's own verdict follows that answer: with the art
+        # missing there is no Servant face, whatever else the skin says.
+        if not new_form:
+            assert not sunday_dual_face(skin), theme
+        checked += 1
+    assert checked >= 5, "the themes with a dual asset are the point of this"
