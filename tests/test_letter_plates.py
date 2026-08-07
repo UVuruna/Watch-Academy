@@ -1,10 +1,13 @@
 """THE ONE PLATE LAW (owner decree 2026-08-07) — the tooth for the
 failure that produced it.
 
-Every GLYPH the dial draws — wherever it stands — is a plate from the
-owner's library, taken as the GOLD master and recolored by the
-transformer into one of the app's metals or thematic colours. One style,
-one source, one algorithm: never a font, never a flat colour of its own.
+Everything drawn from the owner's plate library — the JEWELS, the whole
+CROWN, the DUALS — is a plate taken as the GOLD master and recolored by
+the transformer into one of the app's metals or thematic colours. One
+style, one source, one algorithm: never a font, never a flat colour of
+its own. (The band NUMERALS and MINUTES are the ring's OTHER half —
+computed, their own rosters, even/odd parity by design. "JEWELS !=
+NUMERALS", owner 2026-08-07.)
 
 WHY THE FAILURE WAS SILENT — the part worth keeping. The crown's digits
 were font outlines because the library had no `0`-`9` plates, and

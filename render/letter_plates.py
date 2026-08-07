@@ -2,12 +2,19 @@
 (`assets/instrument/letters/`) — see
 [Letter Plates](__about/letter_plates.md).
 
-THE ONE PLATE LAW (owner decree 2026-08-07): every GLYPH the dial draws
-— wherever it stands — is a plate from this library, taken as the GOLD
-master and recolored by the transformer into one of the app's metals or
-thematic colours. One style, one source, one algorithm: never a font,
-never a flat colour of its own. This module resolves the glyph; the
-caller recolors and draws it exactly as a ring jewel is.
+THE ONE PLATE LAW (owner decree 2026-08-07): everything drawn from this
+library — the JEWELS, the whole CROWN, the DUALS — is a plate taken as
+the GOLD master and recolored by the transformer into one of the app's
+metals or thematic colours. One style, one source, one algorithm: never
+a font, never a flat colour of its own.
+
+NOT the band NUMERALS or MINUTES (owner 2026-08-07, "JEWELS !=
+NUMERALS"): those are the ring's other half — computed, with their own
+face rosters and the even/odd parity styling that is their DESIGN. See
+the ring vocabulary in the project CLAUDE.md before assuming otherwise.
+
+This module resolves the glyph; the caller recolors and draws it exactly
+as a ring jewel is.
 """
 
 from __future__ import annotations

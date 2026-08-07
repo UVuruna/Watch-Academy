@@ -1187,11 +1187,13 @@ RING_EYE_SHINE_ENLARGE = {"gem": 1.67, "gpt": 2.11}
 # are derived from the gold master at load (owner 2026-07-19,
 # render.asset_recolor.jewel_metal_file — no more pre-rendered files).
 #
-# THE ONE PLATE LAW (owner decree 2026-08-07): every GLYPH the dial
-# draws — wherever it stands — is a plate from THIS library, taken as
-# the GOLD master and recolored by the transformer into one of the
-# app's metals or thematic colours. One style, one source, one
-# algorithm: never a font, never a flat colour of its own. The crown's
+# THE ONE PLATE LAW (owner decree 2026-08-07): everything drawn from
+# THIS library — the JEWELS, the whole CROWN, the DUALS — is a plate
+# taken as the GOLD master and recolored by the transformer into one of
+# the app's metals or thematic colours. One style, one source, one
+# algorithm: never a font, never a flat colour of its own. NOT the band
+# NUMERALS/MINUTES, which are computed and wear their own even/odd
+# parity by design ("JEWELS != NUMERALS", same day). The crown's
 # colon had its own plate for exactly this reason
 # (`symbols/colon.png`); the ten digits joined it the day the owner saw
 # them drawn by a font instead.

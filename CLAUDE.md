@@ -48,18 +48,31 @@ project-specific laws and deltas that TIGHTEN the root rules.
   **The full suite takes ~18 minutes** — run a targeted subset while working
   and the full suite before committing. `python -m core --city NAME --at ISO`
   eyeballs any moment; the GUI drive recipe is `.claude/skills/verify/SKILL.md`.
-- **THE ONE PLATE LAW (owner decree 2026-08-07):** every GLYPH the dial
-  draws — wherever it stands — is one of the owner's plates from
-  `assets/instrument/letters/` (latin, greek, numerals, symbols,
-  emblems), taken as the GOLD master and recolored by the transformer
-  into one of this app's metals or thematic colours. One style, one
-  source, one algorithm: never a font, never a flat colour of its own.
-  `render.letter_plates` is the single door (Greek twins alias onto the
-  Latin plate; two-digit numbers are composed from the digit plates),
-  and a glyph with no plate RAISES rather than falling back — the
-  fallback is how a whole missing digit alphabet once shipped as a
-  font-drawn crown with every test green. Tooth:
-  `tests/test_letter_plates.py`.
+- **THE RING VOCABULARY (owner 2026-08-07 — "JEWELS != NUMERALS", learn
+  it once):** the ring band carries FOUR different things and they are
+  not variations of each other. Never reason about one as though it were
+  another.
+  | Term | What it is | How many | How it is drawn |
+  |------|-----------|----------|-----------------|
+  | **JEWELS** | the letters/glyphs seated on the outer's EMPTY fields | depends on the OUTER mode: full 1, the crosses 4, hexa 6, octa 8 | PLATES |
+  | **NUMERALS** | the hour numbers 1–23 filling every seat no jewel took | the rest of the 24 | COMPUTED, and **even/odd wear two different styles** — even is white on a grey border, odd the reverse (`palette.NUMERAL_PARITY_COLORS`). That alternation is the DESIGN, not a defect |
+  | **MINUTES** | the inner band's five-minute numbers | per inner variant | COMPUTED, its own face roster |
+  | **CROWN** | everything outside the band — its text, the location, the live time | per preset | PLATES |
+- **THE ONE PLATE LAW (owner decree 2026-08-07):** everything drawn from
+  the PLATE library — the jewels, the whole crown, the duals — is one of
+  the owner's plates in `assets/instrument/letters/` (latin, greek,
+  numerals, symbols, emblems), taken as the GOLD master and recolored by
+  the transformer into one of this app's metals or thematic colours. One
+  style, one source, one algorithm: never a font, never a flat colour of
+  its own. (The NUMERALS and MINUTES bands are the other half of the
+  vocabulary above — computed, with their own face rosters, relief and
+  the even/odd parity. They are not exceptions to this law; they are a
+  different thing.) `render.letter_plates` is the single door — Greek
+  twins alias onto the Latin plate, two-digit numbers compose from the
+  digit plates at a uniform INK clearance — and a glyph with no plate
+  RAISES rather than falling back, because that fallback is how a whole
+  missing digit alphabet once shipped as a font-drawn crown with every
+  test green. Tooth: `tests/test_letter_plates.py`.
 - **THE ONE COPY RULE (owner 2026-07-28, extended 2026-08-06):** the
   only things that may differ between two watches are the OBSERVER
   (location/timezone) and the VISUAL picks. Every bundled book and

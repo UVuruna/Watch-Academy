@@ -6,11 +6,20 @@ between a character and the owner's plate library at
 
 ## Purpose
 
-**THE ONE PLATE LAW** (owner decree 2026-08-07): every GLYPH the dial
-draws — wherever it stands — is a plate from this library, taken as the
-GOLD master and recolored by the transformer into one of the app's metals
-or thematic colours. One style, one source, one algorithm: never a font,
-never a flat colour of its own.
+**THE ONE PLATE LAW** (owner decree 2026-08-07): everything drawn from
+this library — the JEWELS, the whole CROWN, the DUALS — is a plate taken
+as the GOLD master and recolored by the transformer into one of the app's
+metals or thematic colours. One style, one source, one algorithm: never a
+font, never a flat colour of its own.
+
+**Not the band NUMERALS or MINUTES.** *"JEWELS != NUMERALS"* (owner
+2026-08-07): the jewels sit on the outer's empty fields and their count
+follows the outer mode (1 / 4 / 6 / 8); the numerals fill every remaining
+hour and wear TWO styles by parity — even white on grey, odd the reverse.
+That alternation is his design, not a violation of this law, and the bands
+keep their own face rosters and relief. The ring vocabulary table in the
+project `CLAUDE.md` is the canon; read it before assuming a band number
+should have been a plate.
 
 Before this module the law held everywhere except one place. The live
 crown's TIME drew its digits with `QFont` and filled them with a flat body
