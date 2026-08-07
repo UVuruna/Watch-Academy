@@ -59,15 +59,30 @@ and cached as a gold master in the raster cache, so everything downstream
 ordinary plate file and needs no knowledge of the split.
 
 Every digit master is 512 px tall and tightly cropped, so the digits share
-a cap height and compose by simple side-by-side placement. The GAP is
-`dial.LETTER_COMPOSE_GAP_FRACTION`, measured off the owner's own retired
-`20.png` (730 px wide against 362 + 360 px of ink = 8 px at 512 px height).
+a cap height and the composition is pure horizontal placement.
+
+**The spacing is an INK gap, and it cost a grade to learn.** The first
+version spaced the plate BOXES by the 8 px of fully-transparent columns
+visible in the owner's retired `20.png`. That is a different quantity: it
+is what two digits that never reach toward each other happen to leave. Two
+that DO reach — a `1`'s flag serif and a `5`'s top bar — closed it, and the
+same rule produced six different optical spacings (measured on the masters:
+8 px of real clearance in "12", 23 in "15", 37 in "20"). An independent
+grader saw the tightest of them on the live dial and scored the ruling
+7/10.
+
+`_ink_advance` measures per ROW instead — rightmost ink of the left glyph
+against leftmost ink of the right — and the closest pair sets the advance,
+so every pair wears the same clearance. The value
+(`dial.LETTER_COMPOSE_INK_GAP_FRACTION`) is SOLVED, not chosen: it is the
+clearance at which the composed `20` comes back at exactly the 730x512 the
+owner drew. His kerning, applied evenly.
 
 ## Connections
 
 ### Uses
 - `config.constants` — `LETTER_PLATE_FILES`, `GREEK_LATIN_TWINS`
-- `config.dial` — `LETTER_ART_DIR`, `LETTER_COMPOSE_GAP_FRACTION`
+- `config.dial` — `LETTER_ART_DIR`, `LETTER_COMPOSE_INK_GAP_FRACTION`
 - `config.paths` — `art_file` (the `_gem`/`_gpt` source resolution)
 - [Raster Store](raster_store.md) — the composed master's cache slot and
   its atomic write

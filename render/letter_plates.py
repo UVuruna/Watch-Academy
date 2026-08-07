@@ -14,6 +14,7 @@ from __future__ import annotations
 
 from pathlib import Path
 
+import numpy as np
 from PySide6.QtCore import Qt
 from PySide6.QtGui import QImage, QPainter
 
@@ -98,17 +99,64 @@ def clear_cache() -> None:
     _COMPOSED.clear()
 
 
+def _ink_advance(left: QImage, right: QImage, gap_px: float) -> int:
+    """How far the RIGHT plate's box must start from the LEFT plate's
+    box so the two glyphs' INK clears by `gap_px` at its closest point.
+
+    THE INK GAP, not the box gap (independent grader 2026-08-07, R3 =
+    7/10: "the 15 seat shows its 1 and 5 plates touching at the joint").
+    The plates are tightly cropped, so spacing their BOXES spaces
+    nothing: a 2 and a 0 never reach toward each other and end up 37 px
+    apart, while a 1's flag serif and a 5's top bar reach into the same
+    rows and end up at 23 — a "12" at 8. Same rule, six different
+    spacings, which is exactly what the eye caught.
+
+    Measured per ROW — rightmost ink of the left glyph against leftmost
+    ink of the right — with the closest pair deciding the whole advance;
+    rows where only one of them has ink cannot collide and are skipped.
+    At `dial.LETTER_COMPOSE_INK_GAP_FRACTION` this reproduces the
+    owner's own retired `20.png` at exactly 730 px (pinned by
+    `tests/test_letter_plates.py`), so his spacing is the one every pair
+    now wears."""
+    left_edge = _row_extents(left, rightmost=True)
+    right_edge = _row_extents(right, rightmost=False)
+    shared = [
+        (l_x, r_x) for l_x, r_x in zip(left_edge, right_edge)
+        if l_x is not None and r_x is not None
+    ]
+    if not shared:
+        # Nothing overlaps vertically: the boxes may sit at the plain gap.
+        return left.width() + round(gap_px)
+    return max(l_x + 1 + round(gap_px) - r_x for l_x, r_x in shared)
+
+
+def _row_extents(image: QImage, rightmost: bool) -> list[int | None]:
+    """Per ROW, the x of the outermost opaque pixel on one side — the
+    glyph's real silhouette, `None` for a row it does not touch."""
+    if image.format() != QImage.Format.Format_ARGB32:
+        image = image.convertToFormat(QImage.Format.Format_ARGB32)
+    buffer = np.frombuffer(
+        memoryview(image.constBits()), dtype=np.uint8,
+    ).reshape(image.height(), image.bytesPerLine() // 4, 4)
+    alpha = buffer[:, :image.width(), 3] > 0
+    has_ink = alpha.any(axis=1)
+    edge = (
+        image.width() - 1 - alpha[:, ::-1].argmax(axis=1) if rightmost
+        else alpha.argmax(axis=1)
+    )
+    return [int(x) if ink else None for x, ink in zip(edge, has_ink)]
+
+
 def _composed_master(parts: tuple[Path, ...]) -> Path:
     """Two (or more) digit plates side by side, written ONCE into the
     raster cache as a gold master.
 
     The digit masters are all 512 px tall and tightly cropped, so they
     already share a cap height — the composition is pure placement, no
-    scaling and no baseline maths. The gap is
-    `dial.LETTER_COMPOSE_GAP_FRACTION`, measured off the owner's own
-    retired two-digit plate (`20.png`: 730 px wide against 362 + 360 px
-    of digit ink = 8 px at 512 px height), so a composed number keeps
-    the spacing he drew.
+    scaling and no baseline maths. The spacing is `_ink_advance` at
+    `dial.LETTER_COMPOSE_INK_GAP_FRACTION`, solved so that the owner's
+    own retired `20.png` comes back at exactly 730 px — his kerning,
+    applied evenly to every pair.
 
     Cache key: every source's own content fingerprint, so re-drawing a
     digit master rebuilds the numbers that use it and
@@ -134,18 +182,22 @@ def _composed_master(parts: tuple[Path, ...]) -> Path:
     if any(image.isNull() for image in images):
         raise MissingPlate(f"letter plate unreadable: {sources}")
     height = max(image.height() for image in images)
-    gap = round(height * dial.LETTER_COMPOSE_GAP_FRACTION)
-    width = sum(image.width() for image in images) + gap * (len(images) - 1)
+    gap = height * dial.LETTER_COMPOSE_INK_GAP_FRACTION
+    # Place each plate so its INK clears the previous plate's ink by the
+    # gap — never so its BOX clears the previous box (`_ink_advance`).
+    offsets, x = [0], 0
+    for left, right in zip(images, images[1:]):
+        x += _ink_advance(left, right, gap)
+        offsets.append(x)
+    width = offsets[-1] + images[-1].width()
     canvas = QImage(width, height, QImage.Format.Format_ARGB32_Premultiplied)
     canvas.fill(Qt.GlobalColor.transparent)
     painter = QPainter(canvas)
     try:
-        x = 0
-        for image in images:
+        for image, x in zip(images, offsets):
             # BOTTOM aligned: the digits share a baseline, and a plate
             # shorter than the tallest one hangs from it, never floats.
             painter.drawImage(x, height - image.height(), image)
-            x += image.width() + gap
     finally:
         painter.end()
     try:

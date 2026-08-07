@@ -32,7 +32,7 @@ Layer: config — pure, no Qt, no wall clock.
   *`). **THE PLATE LIBRARY** (owner reorganization 2026-08-07):
   `LETTER_ART_DIR` moved out of `ring/` — the ring, all four crown
   surfaces and (planned) the subdial read the same plates — and
-  `LETTER_COMPOSE_GAP_FRACTION`/`LETTER_COMPOSE_VERSION` govern the
+  `LETTER_COMPOSE_INK_GAP_FRACTION`/`LETTER_COMPOSE_VERSION` govern the
   two-digit hour numbers `render.letter_plates` composes from the digit
   masters. **THE LIVE CROWN'S OWN SIZE AND ADVANCE** (owner defects
   2026-08-07): `CROWN_TRACKING_FRACTION` (0.56 of the box) is the extra

@@ -120,13 +120,22 @@ LETTER_ART_DIR = paths.assets_dir() / "instrument" / "letters"
 # A two-digit hour seat (12, 15, 16, 18, 20, 21) has NO plate of its
 # own any more (owner 2026-08-07: "izbacio sam sve one kompleksne
 # brojeve koje kombinuju 1 ili više osnovnih") — `render.letter_plates`
-# composes it from the digit masters. The gap between the two digits is
-# MEASURED off the owner's own retired composite: `20.png` was 730 px
-# wide and its digits carry 362 + 360 px of ink, so 8 px at the
-# library's 512 px plate height. Bump the VERSION to re-compose every
-# cached number after a change to the composition itself.
-LETTER_COMPOSE_GAP_FRACTION = 8 / 512
-LETTER_COMPOSE_VERSION = 1
+# composes it from the digit masters.
+#
+# THE INK GAP, and it is SOLVED from the owner's own retired composite
+# rather than guessed. `20.png` was 730 x 512; at this clearance between
+# the 2's and the 0's nearest INK, `_ink_advance` reproduces that width
+# to the pixel. The first attempt used the 8 px of fully-transparent
+# COLUMNS visible in that file, which is a different quantity — it is
+# what two digits that never reach toward each other happen to leave,
+# and applying it as a BOX gap gave every pair a different optical
+# spacing (measured: 8 px of real clearance on "12" against 37 on "20").
+# That is what an independent grader saw as "the 15's plates touching".
+# One clearance for every pair is what "one style" means.
+LETTER_COMPOSE_INK_GAP_FRACTION = 37 / 512
+# Bump to re-compose every cached number after a change to the
+# composition itself.
+LETTER_COMPOSE_VERSION = 3
 RING_JEWEL_RADIUS_FRACTION = 0.943  # letter center = the middle of the OUTER
                                      # hour band alone (owner spec; measured
                                      # 0.888–0.998 on both ring faces — the

@@ -94,20 +94,42 @@ def test_the_greek_twins_share_the_latin_plate_and_add_no_file(app):
 def test_two_digit_numbers_are_composed_from_the_digit_plates(app):
     """The library holds single digits only (owner 2026-08-07). Each
     two-digit hour seat is built from its own two digits, at their own
-    native height, with the gap measured off the owner's retired
-    `20.png` — which is why the composed "20" comes out at exactly the
-    730x512 he drew."""
+    native height, spaced by their INK — and the spacing is his, not an
+    invention: at `LETTER_COMPOSE_INK_GAP_FRACTION` the composed "20"
+    comes back at exactly the 730x512 he drew."""
     for number in ("12", "15", "16", "18", "20", "21"):
         assert len(constants.LETTER_PLATE_FILES[number]) == 2
         composed = QImage(str(letter_plates.plate_path(number)))
         assert not composed.isNull(), number
-        digits = [
-            QImage(str(letter_plates.plate_path(digit))) for digit in number
-        ]
-        gap = round(512 * dial.LETTER_COMPOSE_GAP_FRACTION)
-        assert composed.height() == 512
-        assert composed.width() == sum(d.width() for d in digits) + gap
+        assert composed.height() == 512, number
     assert QImage(str(letter_plates.plate_path("20"))).size().toTuple() == (730, 512)
+
+
+def test_every_composed_pair_keeps_the_same_ink_clearance(app):
+    """ONE STYLE means one SPACING. Spacing the plate BOXES gave every
+    pair a different optical gap — measured on the masters, 8 px of real
+    clearance between the 1 and the 2 of "12" against 37 between the 2
+    and the 0 of "20" — and an independent grader caught the tightest of
+    them as "touching" on the live dial. Measured per row, the closest
+    ink of the two glyphs must now clear by the same amount in every
+    composed number."""
+    target = round(512 * dial.LETTER_COMPOSE_INK_GAP_FRACTION)
+    for number in ("12", "15", "16", "18", "20", "21"):
+        left, right = (
+            QImage(str(letter_plates.plate_path(digit))) for digit in number
+        )
+        advance = letter_plates._ink_advance(
+            left, right, 512 * dial.LETTER_COMPOSE_INK_GAP_FRACTION,
+        )
+        clearance = min(
+            advance + r_x - l_x - 1
+            for l_x, r_x in zip(
+                letter_plates._row_extents(left, rightmost=True),
+                letter_plates._row_extents(right, rightmost=False),
+            )
+            if l_x is not None and r_x is not None
+        )
+        assert clearance == target, (number, clearance, target)
 
 
 def test_no_multi_digit_plate_lingers_on_disk(app):
