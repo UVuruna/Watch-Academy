@@ -18,7 +18,7 @@ Decisions), opened by the Watch Face Ring section's "Custom ring…" button.
   name; the per-position dropdown is GROUPED (owner spec 2026-07-11)
   into Latin (the full A–Z), Greek, Numbers (1–10, 20 — growing) and
   Symbols sections with unselectable headers
-  (`constants.RING_JEWEL_GROUPS`) — a NUMBER only fits its own hour
+  (`constants.LETTER_PLATE_GROUPS`) — a NUMBER only fits its own hour
   (owner rule 2026-07-12), so the Numbers section offers at most the
   position's own number. A "Thematic color" combo (CUSTOM-THEMATIC
   widening, owner 2026-07-27) picks what the card's jewels wear under the
@@ -40,7 +40,7 @@ Decisions), opened by the Watch Face Ring section's "Custom ring…" button.
 
 ### Uses
 - [Config (folder)](../../../config/___config.md) — `constants.RING_OUTERS`/
-  `RING_JEWEL_GROUPS`/`METAL_SHADE_NAMES`/`METAL_SHADE_TITLES`, `defaults`
+  `LETTER_PLATE_GROUPS`/`METAL_SHADE_NAMES`/`METAL_SHADE_TITLES`, `defaults`
   (`defaults.paths.assets_dir()` for the bundled-vs-user hand-pack count)
 - [Rings](../../../data/__about/rings.md) — `ring_presets`, `validate_preset`
   (deferred import in `_add_custom_ring`)

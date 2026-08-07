@@ -638,10 +638,11 @@ computes.
 
 Unchanged, re-confirmed 2026-07-19:
 
-- **Ring letters** (`assets/instrument/ring/letters/*.png` — 38 files — plus
-  `domy.png`, `hexagram.png`, `morph.png` at the ring root) — the
-  owner's own hand-built glyph library, not AI-prompted; no sheet
-  needed, none found, not a gap.
+- **The letter plate library** (`assets/instrument/letters/{latin,greek,
+  numerals,symbols,emblems}/*.png` — reorganized and moved out of
+  `ring/` by the owner 2026-08-07, since the crown reads it too) — his
+  own hand-built glyph library, not AI-prompted; no sheet needed, none
+  found, not a gap. The Eye emblems are the one sourced exception.
 - **Icons** (`assets/instrument/icons/` — ON DISK now, 14 files: light.png,
   dark.svg, eclipse_sun.svg, eclipse_moon.png, compass.png,
   north_pole.png, south_pole.png, plus the ART-INFRA round's per-type

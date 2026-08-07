@@ -42,7 +42,7 @@ checkbox that replaces the crown text with the active location's own
 ## Design Decisions
 - **Whitelist, not a hand list:** the validator's character class is
   built from `constants.RING_CROWN_TEXT_CHARSET` (every SINGLE-
-  character key of `RING_JEWEL_FILES` — the multi-character symbol
+  character key of `LETTER_PLATE_FILES` — the multi-character symbol
   keys are the custom-builder's own jewel picks, never typed running
   text — plus the space), the exact same set
   `app.controller._location_crown_text` filters the Location crown

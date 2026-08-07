@@ -64,7 +64,7 @@ lives in [The DOMY Canon](CANON.md).
   "seconds_cross", The One → "simple_octa",
   `constants.RING_INNER_PRESET_DEFAULT`). The custom crown-text field
   now carries a whitelist `QValidator` (`constants.
-  RING_CROWN_TEXT_CHARSET`, derived from `RING_JEWEL_FILES`) so an
+  RING_CROWN_TEXT_CHARSET`, derived from `LETTER_PLATE_FILES`) so an
   unsupported keystroke is rejected outright, replacing the old
   silent-drop-at-build behaviour. A new LOCATION crown option
   (`Settings.ring_crown_location`, per ring, presets and custom alike)

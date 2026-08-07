@@ -15,7 +15,7 @@ flowchart TB
     C2 -- no --> D[positions = RING_OUTERS.outer.positions]
     D --> E{len jewels == len positions?}
     E -- no --> X3[raise: count mismatch]
-    E -- yes --> F{every jewel in RING_JEWEL_FILES?}
+    E -- yes --> F{every jewel in LETTER_PLATE_FILES?}
     F -- no --> X4[raise: unknown jewels]
     F -- yes --> G{any digit glyph at the wrong hour?}
     G -- yes --> X5[raise]
@@ -35,7 +35,7 @@ Pseudocode (language-neutral):
         positions = RING_OUTERS[outer].positions
         jewels = tuple(str(j) FOR j IN entry.jewels OR entry.letters)
         IF len(jewels) != len(positions) → raise
-        IF any jewel not in RING_JEWEL_FILES → raise
+        IF any jewel not in LETTER_PLATE_FILES → raise
         FOR position, glyph IN zip(positions, jewels):
             IF glyph is a digit AND digit != position → raise   # a number only fits its own hour
         triangle = entry.triangle validated as 3-of-positions, ONLY IF outer == "hexa"
@@ -55,7 +55,7 @@ owner decree 2026-08-05, custom rings only) — never more than one.
 flowchart TB
     A[crown text entry] --> B{text present?}
     B -- no --> X1[raise]
-    B -- yes --> C{every char is a space or in RING_JEWEL_FILES?}
+    B -- yes --> C{every char is a space or in LETTER_PLATE_FILES?}
     C -- no --> X2[raise: unknown jewels]
     C -- yes --> O{orientation field present?}
     O -- yes --> O2{pins or center also present?}
@@ -82,7 +82,7 @@ Pseudocode (language-neutral):
         resolved = []
         FOR EACH entry IN raw_entries:
             text = entry.text; IF empty → raise
-            IF any char (not space) not in RING_JEWEL_FILES → raise
+            IF any char (not space) not in LETTER_PLATE_FILES → raise
             clockwise = entry.clockwise, default true
             IF entry.orientation is not None:
                 IF entry.pins or entry.center present → raise (mutually exclusive)

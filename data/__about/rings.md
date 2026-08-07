@@ -54,7 +54,7 @@ duplicate name raises naming the offending card.
 ### Uses
 - [Config (folder)](../../config/___config.md) —
   `constants.RING_OUTERS`, `constants.RING_OUTER_LOCK`,
-  `constants.RING_JEWEL_FILES`, `constants.METAL_SHADE_NAMES`,
+  `constants.LETTER_PLATE_FILES`, `constants.METAL_SHADE_NAMES`,
   `paths.database_dir()`
 - [Crown Text](../../core/__about/crown_text.md) — `crown_glyph_angles`,
   `centered_word_angles`, `free_arc_angles`, `_occurrence_index` — the

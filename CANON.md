@@ -1413,7 +1413,7 @@ passes over. The Eye ships in FOUR images (ChatGPT / Gemini, each
 with and without the glory of rays): on the Dollar card the SOURCE
 follows the Settings art-source switch and the RAYS follow the ring's
 own per-preset **Shine** toggle; a custom ring may seat any of the
-four explicitly (`assets/instrument/ring/letters/Eye[_shine]_gem/
+four explicitly (`assets/instrument/letters/emblems/Eye[_shine]_gem/
 _gpt.png`).
 
 **The Eye's own reading (PROPOSED, awaiting the owner's word):**

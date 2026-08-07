@@ -49,7 +49,7 @@ dump. Two dispatch-like corners get their own diagram further down.
   Figure rosters               FIGURE_ROSTERS (2: planetary, pantheon)
   Ring outers/inners/jewels  RING_OUTERS (6: bot_cross/top_cross/hexa/
                               cross/full/octa), RING_INNERS (8),
-                              RING_JEWEL_GROUPS (Latin/Greek/Numbers/Symbols)
+                              LETTER_PLATE_GROUPS (Latin/Greek/Numbers/Symbols/Emblems)
   Weekday themes — MASTER LIST
     ├─ WEEKDAY_THEMES          ~38 registered theme keys
     ├─ METAL_THEMES            bronze-plate-capable subset

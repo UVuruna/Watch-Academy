@@ -76,7 +76,7 @@ data has exactly one home.
   `_SHINE_FILE`/`_SHINE_DEFAULT`/`_SHINE_ENLARGE`), `RING_JEWEL_
   GROUPS`/`_FILES` (the full Latin/Greek/Numbers/Symbols jewel
   library), `RING_CROWN_TEXT_CHARSET` (the crown-text whitelist —
-  every single-character `RING_JEWEL_FILES` key plus the space,
+  every single-character non-emblem `LETTER_PLATE_FILES` key plus the space,
   derived, never hand-written; shared by the custom crown-text field's
   `QValidator` and the Location crown's own text filter).
 - **Weekday themes — the master list** — `WEEKDAY_THEMES` (every

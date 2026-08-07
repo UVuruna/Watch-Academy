@@ -270,7 +270,7 @@ arc is not a user pick, so it is declared in
 APPENDED by `_compose_skin` beside the preset's own crown text. The user
 toggle still wins when ticked, so the two never draw together.
 
-**The separator.** `constants.RING_JEWEL_FILES` has no COMMA plate (52
+**The separator.** `constants.LETTER_PLATE_FILES` has no COMMA plate (78
 entries: uppercase Latin/Greek, digits, `$`, `&`, `✠`, the Eye, the
 colon), so `_location_crown_text` drops the comma and collapses the gap
 to ONE SPACE — "Belgrade, Serbia" reads "BELGRADE SERBIA". That is the

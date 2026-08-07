@@ -29,12 +29,15 @@ Layer: config — pure, no Qt, no wall clock.
 - **Moon/Earth rim transit** — `MOON_TRANSIT_OPACITY`.
 - **Ring faces** — `RING_FACE_DIR`, the tint swatch geometry, the ring
   jewel art/shadow/crown-text arc constants (`RING_JEWEL_*`, `RING_CROWN_TEXT_
-  *`). **THE LIVE CROWN'S OWN SIZE AND ADVANCE** (owner defects
-  2026-08-07): `CROWN_PLATE_INK_FRACTION` (0.992 — MEASURED off the jewel
-  plates, which are their ink plus 0.8% padding) is what a fitted digit's
-  ink must fill of its box, probed per face at `CROWN_FIT_PROBE_PX`;
-  `CROWN_TRACKING_FRACTION` (0.56 of the box) is the extra advance each
-  glyph takes beyond its own ink width. Together they retire
+  *`). **THE PLATE LIBRARY** (owner reorganization 2026-08-07):
+  `LETTER_ART_DIR` moved out of `ring/` — the ring, all four crown
+  surfaces and (planned) the subdial read the same plates — and
+  `LETTER_COMPOSE_GAP_FRACTION`/`LETTER_COMPOSE_VERSION` govern the
+  two-digit hour numbers `render.letter_plates` composes from the digit
+  masters. **THE LIVE CROWN'S OWN SIZE AND ADVANCE** (owner defects
+  2026-08-07): `CROWN_TRACKING_FRACTION` (0.56 of the box) is the extra
+  advance each glyph takes beyond its own ink width; with the box itself
+  it retires
   `CROWN_NUMERAL_SIZE_FRACTION`, which sized the live crown off the HOUR
   BAND while the static arc beside it used `RING_CROWN_TEXT_SIZE` — two
   size laws on one ring, and the reason the owner's time crown read
