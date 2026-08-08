@@ -12,6 +12,7 @@ per-instance color is touched.
 from PySide6.QtGui import QColor, QGuiApplication
 from PySide6.QtWidgets import QDialogButtonBox, QWidget
 
+from app.ui_style import uniform_width
 from config import defaults, encyclopedia_ui, palette
 
 _C = palette.THEME_COLORS
@@ -262,7 +263,8 @@ QScrollBar:vertical {{
 }}
 QScrollBar::handle:vertical {{
     background: {_C['surface_3']};
-    border-radius: 5px;
+    /* ALG-6: the 10px-wide bar allows 15% of its shorter side */
+    border-radius: 2px;
     min-height: 24px;
 }}
 QScrollBar::handle:vertical:hover {{
@@ -339,3 +341,7 @@ def style_dialog_buttons(box: QDialogButtonBox) -> None:
     for button in box.buttons():
         if button is not ok:
             button.setObjectName("secondaryButton")
+    # ALG-5 UNIFORM SIBLINGS (Zubi fix round 2026-08-09): 'OK' never
+    # shrinks beside 'Cancel' — the one chokepoint every dialog's
+    # button box already passes through.
+    uniform_width(box.buttons())

@@ -128,6 +128,11 @@ class Card(QFrame):
     def __init__(self, key: str, title: str, about: str, plate: QPixmap,
                  footer: str, accent: str):
         super().__init__()
+        # Scope for _paint's QSS: a bare "QFrame" selector also dresses
+        # every child QLabel (QLabel IS a QFrame), which handed the
+        # card's 14px radius to its own 24px-tall title/about labels —
+        # ALG-6's exact wide-pill violation (Zubi fix round 2026-08-09).
+        self.setObjectName("encyclopediaCard")
         self._key = key
         self._accent = accent
         self._source = plate
@@ -154,7 +159,9 @@ class Card(QFrame):
         self._footer = QLabel(footer)
         self._footer.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self._footer.setStyleSheet(
-            f"color: {accent}; font-weight: bold;"
+            # The whole's canon Rose hue, lightened only as far as ALG-2
+            # needs for TEXT — the border/wash keep the raw accent.
+            f"color: {palette.readable_on_dark(accent)}; font-weight: bold;"
             "background: transparent; border: none;"
         )
         self._footer.setVisible(bool(footer))
@@ -184,7 +191,7 @@ class Card(QFrame):
                  f"{encyclopedia_ui.ENCYCLOPEDIA_CARD_EDGE_ALPHA})"
         )
         self.setStyleSheet(
-            "QFrame {"
+            "QFrame#encyclopediaCard {"
             f"background: qlineargradient(x1:0, y1:0, x2:0, y2:1,"
             f" stop:0 {wash}, stop:1 {palette.THEME_COLORS['surface_0']});"
             f"border: {encyclopedia_ui.ENCYCLOPEDIA_CARD_EDGE_PX}px solid {border};"

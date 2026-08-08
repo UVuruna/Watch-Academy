@@ -26,7 +26,7 @@ from PySide6.QtWidgets import (
 )
 
 from app.theme import apply_theme
-from app.ui_style import style_button
+from app.ui_style import style_button, uniform_width
 from config import constants, defaults, palette, profiling
 from config.ui_text import ui
 
@@ -257,6 +257,7 @@ class ReportDialog(QDialog):
         style_button(close, "neutral", small=True)
         close.clicked.connect(self.accept)
         row.addWidget(close)
+        uniform_width((reset, download, close))
         column.addLayout(row)
 
         apply_theme(self)

@@ -27,9 +27,28 @@ hand-tuned per dialog.
 
 ## Functions
 
+### `tooltip_wrap(text)`
+ALG-3 HOVER GEOMETRY (Zubi fix round 2026-08-09): plain-text Qt
+tooltips never wrap on their own — every tooltip longer than a line
+routes through this hard-wrap (≤ 72 chars per line, paragraph breaks
+kept). Callers: the Watch Face sections' tooltips (ring presets,
+numerals combos, colors groups, opacity crown, themes slots).
+
+### `uniform_width(buttons)`
+ALG-5 UNIFORM SIBLINGS (same round): same-kind controls in one row
+share the widest content's minimum width — 'OK' never shrinks beside
+'Cancel'. Central call: `app.theme.style_dialog_buttons` (every
+QDialogButtonBox); row-level calls in the reader pager, Report,
+TimeTravel and the Observatory chart-pane pair.
+
 ### `style_button(button, role, small=False)`
 Applies the role's gradient QSS to a `QPushButton`/`QToolButton` and
-sets the pointing-hand cursor. `small=True` uses the compact font/padding.
+sets the pointing-hand cursor. `small=True` uses the compact
+font/padding and its own smaller radius
+(`UI_BUTTON_SMALL_RADIUS_PX` — ALG-6: a near-square small button may
+carry only 15% of its shorter side). The role pairs were darkened in
+the same round so bold white text holds ≥ 4.5:1 on every pair's
+lightest stop (`palette.UI_BUTTON_COLORS`).
 
 ### `_qss(role, small)` / `_stops(top, bottom, factor=100)`
 Build the stylesheet string — normal / hover (lighter) / pressed

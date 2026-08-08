@@ -26,6 +26,7 @@ from PySide6.QtWidgets import (
     QVBoxLayout, QWidget,
 )
 
+from app.ui_style import tooltip_wrap
 from config import dial
 
 
@@ -107,13 +108,13 @@ def _mode_group(settings, setters, tr) -> QGroupBox:
         tr, settings, setters, "world_mode", dial.WORLD_MODES, "Mode", form,
         labels=dial.WORLD_MODE_LABELS,
     )
-    mode.setToolTip(tr(
+    mode.setToolTip(tooltip_wrap(tr(
         "Geocentric: the observer stands still and the sun travels — the "
         "pointer turns toward true solar noon and 12 stays on top. "
         "Heliocentric: the sun stands still and the world turns — the hour "
         "band carries solar noon to the top, and the whole dial turns over "
         "at night, 0h on top and noon at the bottom."
-    ))
+    )))
     note = QLabel(tr(
         "The hands and the minute ring always show ordinary zone time — "
         "the mode moves only what is drawn."
@@ -144,11 +145,11 @@ def _outer_group(settings, setters, tr) -> QGroupBox:
         "Seating", form,
         labels={"arc": "Arc — follow the circle", "upright": "Upright"},
     )
-    seating.setToolTip(tr(
+    seating.setToolTip(tooltip_wrap(tr(
         "Arc: a numeral on a square angle stands upright, every other takes "
         "the angle it sits on, and the lower half turns 180° so nothing "
         "reads upside down."
-    ))
+    )))
     return group
 
 
@@ -184,10 +185,10 @@ def _relief_group(settings, setters, tr) -> QGroupBox:
             "emboss": "Emboss — pressed metal",
         },
     )
-    style.setToolTip(tr(
+    style.setToolTip(tooltip_wrap(tr(
         "Cast leaves the gap open; Extrude welds its copies into a side "
         "wall; Emboss adds a lit rim the other way."
-    ))
+    )))
     _number_row(
         tr, settings, setters, "numeral_depth", *dial.NUMERAL_DEPTH_RANGE,
         "Depth", form, decimals=1,
@@ -200,11 +201,11 @@ def _relief_group(settings, setters, tr) -> QGroupBox:
             "fixed": "Fixed — one lamp off the dial",
         },
     )
-    light.setToolTip(tr(
+    light.setToolTip(tooltip_wrap(tr(
         "Radial: every numeral throws its relief straight outward — "
         "(0, +d) at the top, (+d, 0) at the right, (0, −d) at the bottom, "
         "(−d, 0) at the left."
-    ))
+    )))
     _number_row(
         tr, settings, setters, "numeral_darkness",
         *dial.NUMERAL_DARKNESS_RANGE, "Darkness", form, decimals=2,

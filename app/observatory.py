@@ -40,7 +40,7 @@ from PySide6.QtWidgets import (
 )
 
 from app.theme import apply_theme, size_to_screen
-from app.ui_style import style_button
+from app.ui_style import style_button, uniform_width
 from config import constants, defaults, encyclopedia_ui, palette
 from config.ui_text import ui
 from core.deep_time import julian_day_of, real_year
@@ -962,9 +962,13 @@ def _build_info_panel(
     (owner: "sa strane tekst o svakoj ukratko opisano... legenda svaka
     da bude obojana svojom bojom")."""
     panel = QWidget()
+    # Scoped to the panel itself — an unscoped rule cascades to every
+    # child QLabel (the encyclopedia Card's ALG-6 lesson, same round).
+    panel.setObjectName("aboutChartPanel")
     panel.setStyleSheet(
+        "QWidget#aboutChartPanel {"
         f"background: {palette.THEME_COLORS['surface_1']};"
-        f"border-radius: {encyclopedia_ui.THEME_RADIUS_CARD_PX}px;"
+        f"border-radius: {encyclopedia_ui.THEME_RADIUS_CARD_PX}px; }}"
     )
     layout = QVBoxLayout(panel)
     layout.setContentsMargins(12, 12, 12, 12)
@@ -1467,6 +1471,14 @@ class ObservatoryDialog(QDialog):
         enlarge_button = QPushButton(self._tr("Enlarge"))
         style_button(enlarge_button, "neutral", small=True)
         filter_row.addWidget(enlarge_button)
+        # ALG-5: the pair shares the widest label's size — and "Show",
+        # the collapse button's OTHER caption, is measured in too, so
+        # toggling never re-shrinks the button.
+        collapse_button.setMinimumWidth(max(
+            collapse_button.sizeHint().width(),
+            collapse_button.fontMetrics().horizontalAdvance(self._tr("Show")) + 28,
+        ))
+        uniform_width((collapse_button, enlarge_button))
         layout.addLayout(filter_row)
         layout.addWidget(chart, stretch=1)
         caption_label = self._caption(caption) if caption else None
@@ -1573,7 +1585,10 @@ class ObservatoryDialog(QDialog):
             box = QCheckBox(self._tr(key.capitalize()))
             box.setChecked(key in ("light", "dark"))
             box.setStyleSheet(
-                f"color: {palette.OBSERVATORY_SERIES_COLORS[key]};"
+                # The series' CANON chart hue, lightened only as far as
+                # ALG-2 needs for TEXT on the dark surface — the chart
+                # line itself keeps the exact canon color.
+                f"color: {palette.readable_on_dark(palette.OBSERVATORY_SERIES_COLORS[key])};"
                 "font-weight: bold;"
             )
             box.toggled.connect(

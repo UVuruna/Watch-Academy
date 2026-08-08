@@ -242,9 +242,17 @@ UI_BUTTON_RADIUS_PX = 12
 UI_BUTTON_PADDING_PX = (10, 26)         # vertical, horizontal
 UI_BUTTON_SMALL_FONT_PX = 14            # the per-entry look arrows
 UI_BUTTON_SMALL_PADDING_PX = (5, 12)
+# ALG-6 (Zubi fix round 2026-08-09): a SMALL gradient button can be
+# nearly square (the 🡄/🡆 arrows), where the rule allows only 15% of
+# the shorter side — the big readers' 12px stays legal because those
+# buttons are wide pills (AR >= 2, up to half their height).
+UI_BUTTON_SMALL_RADIUS_PX = 5
 THEME_RADIUS_CONTROL_PX = 8      # buttons, inputs, combos
 THEME_RADIUS_CARD_PX = 14        # group-box cards
-THEME_RADIUS_PILL_PX = 999       # nav selection pill, checkbox indicator
+# ALG-6 (same round): 999 was the "fully rounded" hack — on the tall
+# nav LIST the rule reads it against the shorter side (15%), and no
+# real row needs more than this to read as a pill.
+THEME_RADIUS_PILL_PX = 12        # nav selection pill, tab pills
 # ═══════════════════════════ READER IMAGE CEILING & HIDDEN GREETINGS ═══════════════════════════
 # Reader image ceiling (owner imperative 2026-07-14): no article or
 # Guide image may eat the page — anything taller than this fraction of

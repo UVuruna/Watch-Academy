@@ -17,6 +17,7 @@ from PySide6.QtWidgets import (
 
 from app.settings_store import slot_layout_target
 from app.watch_face import theme_tree
+from app.ui_style import tooltip_wrap
 from app.watch_face.widgets import pill
 from app.weekday_theme_grid import build_calendar_mount_grid
 from config import constants, pantheon
@@ -123,9 +124,9 @@ def _slot_picker_row(descriptors, tr, rebuild) -> QHBoxLayout:
         button.setChecked(descriptor.index == _nav.active_slot)
         button.setEnabled(descriptor.enabled_value)
         if not descriptor.enabled_value:
-            button.setToolTip(tr(
+            button.setToolTip(tooltip_wrap(tr(
                 "This Slot is off — Ctrl+N cycles the visible Slots."
-            ))
+            )))
         button.clicked.connect(
             lambda checked=False, i=descriptor.index: _select_slot(i, rebuild)
         )
@@ -141,7 +142,7 @@ def _select_slot(index: int, rebuild) -> None:
 def _names_checkbox(active, tr) -> QCheckBox:
     checkbox = QCheckBox(tr("Names"))
     checkbox.setChecked(active.names_value)
-    checkbox.setToolTip(tr("The day name written on the weekday bodies."))
+    checkbox.setToolTip(tooltip_wrap(tr("The day name written on the weekday bodies.")))
     checkbox.toggled.connect(active.set_names)
     return checkbox
 
@@ -279,11 +280,18 @@ def _rotation_group(settings, setters, tr) -> QGroupBox:
     selected = set(_rotation_selection(
         settings.theme_rotation_group, settings.theme_rotation_themes
     ))
-    metal_row = QHBoxLayout()
+    # REFLOW, not one endless strip (Space & Legibility ladder step 2,
+    # Zubi fix round 2026-08-09): with a whole kinship family selected
+    # this row once asked ~5,600px of width in a 1280px window — every
+    # label squeezed and clipped. A grid wraps label+combo pairs at
+    # three per row; each label keeps its measured width.
+    metal_grid = QGridLayout()
+    metal_grid.setHorizontalSpacing(12)
+    pairs_per_row = 3
+    slot = 0
     for theme in constants.METAL_THEMES:
         if theme not in pantheon.WEEKDAY_THEME_TITLES or theme not in selected:
             continue
-        metal_row.addWidget(QLabel(tr(pantheon.WEEKDAY_THEME_TITLES[theme])))
         combo = QComboBox()
         for metal in constants.theme_metals(theme):
             combo.addItem(tr(metal.capitalize()), metal)
@@ -296,9 +304,14 @@ def _rotation_group(settings, setters, tr) -> QGroupBox:
                 t, c.currentData()
             )
         )
-        metal_row.addWidget(combo)
-    metal_row.addStretch(1)
-    layout.addLayout(metal_row)
+        row, pair = divmod(slot, pairs_per_row)
+        metal_grid.addWidget(
+            QLabel(tr(pantheon.WEEKDAY_THEME_TITLES[theme])), row, pair * 2
+        )
+        metal_grid.addWidget(combo, row, pair * 2 + 1)
+        slot += 1
+    metal_grid.setColumnStretch(pairs_per_row * 2, 1)
+    layout.addLayout(metal_grid)
     row = QHBoxLayout()
     row.addWidget(QLabel(tr("Every")))
     minutes = settings.theme_rotation_minutes

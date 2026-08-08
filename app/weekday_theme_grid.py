@@ -33,7 +33,13 @@ from app.watch_face import thumbs
 from app.watch_face.widgets import tile
 from config import calendar_mounts, defaults, pantheon
 
-_MAX_COLUMNS = 4
+# 5 since the Zubi fix round (2026-08-09, ALG-7 ROW OCCUPANCY): at the
+# window's minimum the 4-column wrap left the gallery band's right half
+# mostly empty while further sections stacked below — the ladder says
+# fill the row before growing the column. Tiles stay left-packed at
+# their own size (the owner's 2026-08-06 decree), only the wrap point
+# moved.
+_MAX_COLUMNS = 5
 
 
 def _tile(label: str, icon_path, selected: bool, on_click) -> QToolButton:

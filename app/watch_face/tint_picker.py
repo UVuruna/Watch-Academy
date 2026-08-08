@@ -32,6 +32,7 @@ def round_swatch(
     chip.setStyleSheet(
         f"background-color: {hue}; border: {border};"
         f"border-radius: {size // 2}px;"
+        "/* radius-ok: circle content */"
     )
 
 

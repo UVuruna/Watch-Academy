@@ -140,7 +140,17 @@ class SettingsDialog(
                 (tr("System"), [self._build_system_group()]),
             ]
             self._nav_list = QListWidget()
-            self._nav_list.setFixedWidth(defaults.SETTINGS_NAV_WIDTH_PX)  # layout-law: exempt - sidebar width by design; the audit's ITEM CUT check verifies every nav item fits
+            # MEASURED width (ITEM CUT, Zubi fix round 2026-08-09 —
+            # same fix as the Watch Face window's sidebar): the longest
+            # "<title>  ▸" row in the CURRENT font plus the theme QSS
+            # item/list chrome, never below the design constant.
+            metrics = self._nav_list.fontMetrics()
+            longest = max(
+                metrics.horizontalAdvance(f"{title}  ▸")
+                for title, _groups in sections
+            )
+            measured_nav = max(defaults.SETTINGS_NAV_WIDTH_PX, longest + 48)
+            self._nav_list.setFixedWidth(measured_nav)  # layout-law: exempt - measured from the longest title just above
             self._stack = QStackedWidget()
             pages = []
             for title, groups in sections:
@@ -175,7 +185,7 @@ class SettingsDialog(
             body = QHBoxLayout()
             body.addWidget(self._nav_list)
             body.addWidget(self._stack, stretch=1)
-            nav_width = defaults.SETTINGS_NAV_WIDTH_PX
+            nav_width = measured_nav
 
         layout = QVBoxLayout(self)
         if isinstance(body, QHBoxLayout):

@@ -53,6 +53,8 @@ from PySide6.QtWidgets import (
     QVBoxLayout, QWidget,
 )
 
+from app.ui_style import tooltip_wrap
+
 
 def build(settings, setters: dict, tr) -> QWidget:
     defaults = setters["opacity_skin_defaults"]()
@@ -169,7 +171,7 @@ def _ring_bodies_group(settings, setters, tr, defaults: dict) -> QGroupBox:
     )
     if not setters["ring_has_crown_text"]():
         crown_slider.setEnabled(False)
-        crown_slider.setToolTip(
+        crown_slider.setToolTip(tooltip_wrap(
             tr("The active ring preset carries no Crown Text (Great Seal inscription).")
-        )
+        ))
     return group

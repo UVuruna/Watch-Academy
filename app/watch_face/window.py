@@ -107,7 +107,19 @@ class WatchFaceDialog(QDialog):
                 widget.setParent(None)
                 widget.deleteLater()
         nav_list = QListWidget()
-        nav_list.setFixedWidth(defaults.SETTINGS_NAV_WIDTH_PX)  # layout-law: exempt - sidebar width by design; the audit's ITEM CUT check verifies every nav item fits
+        # MEASURED width, never a guessed constant (ITEM CUT, Zubi fix
+        # round 2026-08-09: "Themes & Slots" needed 198px while the old
+        # fixed 170 offered 156): the longest section title in the
+        # CURRENT font, plus the item/list chrome the theme QSS adds
+        # (12px item padding + 6px list padding per side, borders).
+        metrics = nav_list.fontMetrics()
+        longest = max(
+            metrics.horizontalAdvance(self._tr(title))
+            for title, _builder in _SECTIONS
+        )
+        nav_width = max(defaults.SETTINGS_NAV_WIDTH_PX, longest + 48)
+        nav_list.setFixedWidth(nav_width)  # layout-law: exempt - measured from the longest title just above
+        self._nav_width = nav_width
         stack = QStackedWidget()
         pages: list[QWidget] = []
         for title, builder in _SECTIONS:
@@ -166,7 +178,7 @@ class WatchFaceDialog(QDialog):
         margins = self._layout.contentsMargins()
         chrome_w = margins.left() + margins.right() + self._body.spacing()
         chrome_h = margins.top() + margins.bottom()
-        width = (defaults.SETTINGS_NAV_WIDTH_PX + column_width
+        width = (self._nav_width + column_width
                  + scrollbar + chrome_w)
         tallest = max(page.minimumSizeHint().height() for page in pages)
         floor_w, floor_h = _SCREEN_FLOOR

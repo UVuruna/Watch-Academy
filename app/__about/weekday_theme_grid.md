@@ -65,6 +65,14 @@ The one labeled/centered/wrapped tile-row builder both galleries share
 (`title=None` → no header/rule).
 
 ## Design Decisions
+- **Five columns since the Zubi fix round (2026-08-09, ALG-7).** The
+  4-column wrap left the gallery band's right half mostly empty at the
+  window's minimum while further sections stacked below — the ladder
+  says fill the row first. Tiles stay left-packed at their own size
+  (the owner's 2026-08-06 decree); only the wrap point moved. The
+  LAST, non-full row of a left-packed gallery is an owner-approved
+  baseline entry (2026-08-09) — ALG-7's own docstring names it the
+  known false positive.
 - **No inner scroll areas (2026-08-08).** The builders used to wrap
   their content in a private `QScrollArea`; at the full `TILE_ICON_PX`
   tile size those nested scrollers clipped every tile row and grew a

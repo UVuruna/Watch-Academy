@@ -17,6 +17,7 @@ from PySide6.QtWidgets import (
 )
 
 from app.watch_face import thumbs
+from app.ui_style import tooltip_wrap
 from app.watch_face.widgets import pack_grid, pill, tile
 from config import constants, dial
 from data.rings import ring_presets
@@ -116,7 +117,7 @@ def _preset_gallery(settings, presets: dict, setters, tr) -> QGridLayout:
         tooltip = tr("Locked outer: {outer}").format(outer=outer_name)
         if card["about"]:
             tooltip += "\n\n" + card["about"]
-        preset_tile.setToolTip(tooltip)
+        preset_tile.setToolTip(tooltip_wrap(tooltip))
         grid.addWidget(preset_tile, row, col)
     return pack_grid(grid, 4)
 
@@ -194,7 +195,7 @@ def _crown_text_group(settings, card: dict, setters, tr) -> QGroupBox:
         edit.setPlaceholderText(tr("Custom crown text"))
         edit.setText(settings.custom_ring_crown_text.get(settings.ring, ""))
         edit.setValidator(_crown_text_validator(edit))
-        edit.setToolTip(_crown_text_tooltip(tr))
+        edit.setToolTip(tooltip_wrap(_crown_text_tooltip(tr)))
         edit.setEnabled(not location_on)
         edit.editingFinished.connect(
             lambda: setters["custom_ring_crown_text"](edit.text())
@@ -212,10 +213,10 @@ def _crown_text_group(settings, card: dict, setters, tr) -> QGroupBox:
         column.addLayout(orient_row)
     location_box = QCheckBox(tr("Location"))
     location_box.setChecked(location_on)
-    location_box.setToolTip(
+    location_box.setToolTip(tooltip_wrap(
         tr("Show the active location (CITY, COUNTRY) as the crown text "
            "instead — follows every location change.")
-    )
+    ))
     location_box.toggled.connect(setters["ring_crown_location"])
     column.addWidget(location_box)
     return group

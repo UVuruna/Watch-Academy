@@ -39,7 +39,7 @@ from PySide6.QtWidgets import (
 
 from app.encyclopedia import tree as topic_tree
 from app.encyclopedia.text import article_text, entry_name, flow_html, image_tooltip
-from app.ui_style import style_button, style_look_chip
+from app.ui_style import style_button, style_look_chip, uniform_width
 from config import constants, defaults, encyclopedia_ui, paths
 from render.asset_recolor import ensure_variant, variant_pending
 from render import cube_preview3d, diagrams
@@ -119,6 +119,7 @@ class ReaderScreen(QWidget):
         self._next = QPushButton(self._tr("Next →"))
         self._next.clicked.connect(lambda: self.step(+1))
         style_button(self._next, "next")
+        uniform_width((self._previous, self._next))
 
         # The LOOK switcher alone now — ⬇ Download moved up into the
         # dialog's one header row (owner 2026-07-29), so this row is a

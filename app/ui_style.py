@@ -15,10 +15,23 @@ the palette and `_readable_text` deriving light/dark text from each
 fill's own luminance.
 """
 
+import textwrap
+
 from PySide6.QtCore import Qt
 from PySide6.QtGui import QColor
 
 from config import encyclopedia_ui, palette
+
+
+def tooltip_wrap(text: str) -> str:
+    """ALG-3 HOVER GEOMETRY (rules/GUI.md -> Zubi v2): a plain-text Qt
+    tooltip never wraps on its own — a 200-char sentence renders as one
+    screen-wide strip. Every tooltip longer than a line routes through
+    here: hard-wrapped at <= 72 chars per line, paragraph breaks kept."""
+    return "\n".join(
+        textwrap.fill(line, width=72) if line.strip() else line
+        for line in text.split("\n")
+    )
 
 
 def _stops(top: str, bottom: str, factor: int = 100) -> str:
@@ -43,11 +56,15 @@ def _qss(role: str, small: bool) -> str:
         encyclopedia_ui.UI_BUTTON_SMALL_PADDING_PX if small
         else encyclopedia_ui.UI_BUTTON_PADDING_PX
     )
+    radius = (
+        encyclopedia_ui.UI_BUTTON_SMALL_RADIUS_PX if small
+        else encyclopedia_ui.UI_BUTTON_RADIUS_PX
+    )
     base = (
         "color: white; font-weight: bold;"
         f"font-size: {font}px;"
         f"padding: {pad_v}px {pad_h}px;"
-        f"border-radius: {encyclopedia_ui.UI_BUTTON_RADIUS_PX}px;"
+        f"border-radius: {radius}px;"
         f"border: 1px solid {palette.UI_BUTTON_EDGE_RGBA};"
     )
     return (
@@ -58,6 +75,19 @@ def _qss(role: str, small: bool) -> str:
         "QPushButton:pressed, QToolButton:pressed {"
         f"background: {_stops(top, bottom, 80)}; }}"
     )
+
+
+def uniform_width(buttons) -> None:
+    """ALG-5 UNIFORM SIBLINGS (rules/GUI.md -> Zubi v2): same-kind
+    controls in one row share their size — the WIDEST content decides
+    and every sibling gets that minimum, so 'OK' never shrinks beside
+    'Cancel' by the accident of its own label length."""
+    buttons = list(buttons)
+    if not buttons:
+        return
+    widest = max(button.sizeHint().width() for button in buttons)
+    for button in buttons:
+        button.setMinimumWidth(widest)
 
 
 def style_button(button, role: str, small: bool = False) -> None:

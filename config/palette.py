@@ -625,13 +625,55 @@ THEME_COLORS = {
     "accent": "#E8B23D",        # gold — the dial's own opacity-slider hue
 }
 
+# Darkened per ALG-2 CONTRAST (Zubi fix round, 2026-08-09): every pair's
+# LIGHTEST stop keeps bold white text at >= 4.5:1 (WCAG), measured by
+# the audit against the rendered pill. The old pairs' light tops
+# (#4FACFE, #FFB75E, #7EDB7B, #CE93D8, #B0BEC5) were the single largest
+# finding class of the first Zubi run — ~97 white-on-light buttons
+# across every dialog. Hue identities (blue/orange/green/violet/slate)
+# are kept; only the lightness moved.
 UI_BUTTON_COLORS = {
-    "home": ("#4FACFE", "#1565C0"),         # blue — the way back
-    "previous": ("#FFB75E", "#E65100"),     # orange
-    "next": ("#7EDB7B", "#2E7D32"),         # green
-    "download": ("#CE93D8", "#6A1B9A"),     # violet — save the entry
-    "neutral": ("#B0BEC5", "#546E7A"),      # the look arrows
+    "home": ("#1565C0", "#0D47A1"),         # blue — the way back
+    "previous": ("#BF360C", "#8C2A08"),     # burnt orange
+    "next": ("#2E7D32", "#1B5E20"),         # green
+    "download": ("#6A1B9A", "#4A148C"),     # violet — save the entry
+    "neutral": ("#546E7A", "#37474F"),      # the look arrows
 }
+
+
+def readable_on_dark(hex_color: str) -> str:
+    """A GUI-TEXT variant of a canon hue: the same hue, lightened just
+    until bold text passes WCAG 4.5:1 on the app's darkest surface
+    (`THEME_COLORS["surface_0"]`). The canon token itself is NEVER
+    edited for a checkbox's sake (the ELEMENTS, the Rose hues and the
+    Observatory series identities are dial/chart canon) — call sites
+    that write TEXT in a canon color route it through here instead
+    (ALG-2 CONTRAST, Zubi fix round 2026-08-09). Already-passing colors
+    return unchanged. Pure math, no Qt (config stays Qt-free)."""
+
+    def _linear(channel: int) -> float:
+        srgb = channel / 255.0
+        return srgb / 12.92 if srgb <= 0.04045 else ((srgb + 0.055) / 1.055) ** 2.4
+
+    def _luminance(rgb: tuple) -> float:
+        r, g, b = (_linear(c) for c in rgb)
+        return 0.2126 * r + 0.7152 * g + 0.0722 * b
+
+    surface = THEME_COLORS["surface_0"].lstrip("#")
+    surface_lum = _luminance(tuple(
+        int(surface[i:i + 2], 16) for i in (0, 2, 4)
+    ))
+    text = hex_color.lstrip("#")
+    rgb = tuple(int(text[i:i + 2], 16) for i in (0, 2, 4))
+    for step in range(21):                       # 0%..100% toward white
+        blend = step / 20.0
+        candidate = tuple(
+            round(c + (255 - c) * blend) for c in rgb
+        )
+        ratio = (_luminance(candidate) + 0.05) / (surface_lum + 0.05)
+        if ratio >= 4.5:
+            return "#{:02X}{:02X}{:02X}".format(*candidate)
+    return "#FFFFFF"
 
 LEGEND_BG = "#2B2B2B"
 

@@ -61,6 +61,7 @@ from PySide6.QtWidgets import (
 )
 
 from app.watch_face import tint_picker
+from app.ui_style import tooltip_wrap
 from app.watch_face.widgets import pill
 from config import constants, dial, palette
 
@@ -144,7 +145,8 @@ def _palette_group(settings, setters, tr) -> QGroupBox:
             style=style.capitalize(),
         )
     )
-    row = QHBoxLayout(group)
+    column = QVBoxLayout(group)
+    row = QHBoxLayout()
 
     def pick(index: int) -> None:
         chosen = QColorDialog.getColor(QColor(hues[index]), None, "Pick a hue")
@@ -157,15 +159,23 @@ def _palette_group(settings, setters, tr) -> QGroupBox:
     for index, hue in enumerate(hues):
         chip = QPushButton()
         tint_picker.round_swatch(chip, hue, dial.PALETTE_SWATCH_PX)
-        chip.setToolTip(f"{tr(arm_labels[index])} — {hue}")
+        chip.setToolTip(tooltip_wrap(f"{tr(arm_labels[index])} — {hue}"))
         chip.clicked.connect(lambda checked, i=index: pick(i))
         row.addWidget(chip)
     row.addStretch(1)
+    # ALG-5 (Zubi fix round 2026-08-09): "Reset to preset" moved OUT of
+    # the swatch row into its own row — a text button is not a sibling
+    # of twelve identical 34px circles, and in one container the rule
+    # rightly demanded they share a size.
     reset = QPushButton(tr("Reset to preset"))
     reset.clicked.connect(
         lambda: setters["palettes"](pointer, style, tuple(preset))
     )
-    row.addWidget(reset)
+    reset_row = QHBoxLayout()
+    reset_row.addWidget(reset)
+    reset_row.addStretch(1)
+    column.addLayout(row)
+    column.addLayout(reset_row)
     return group
 
 
@@ -201,12 +211,12 @@ def _aura_group(settings, setters, tr) -> QGroupBox:
     enabled = not settings.colorful
     group = QGroupBox(tr("Aura coloring (while Colorful is off)"))
     if not enabled:
-        group.setToolTip(
+        group.setToolTip(tooltip_wrap(
             tr(
                 "Turn off “Colorful” (right-click ▸ Visible) "
                 "to color the plain Aura wedges."
             )
-        )
+        ))
     column = QVBoxLayout(group)
     mode_row = QHBoxLayout()
     for mode, title in (
@@ -266,9 +276,9 @@ def _crown_text_group(settings, setters, tr) -> QGroupBox:
     )
     if not setters["ring_has_crown_text"]():
         group.setEnabled(False)
-        group.setToolTip(
+        group.setToolTip(tooltip_wrap(
             tr("The active ring preset carries no Crown Text (Great Seal inscription).")
-        )
+        ))
     return group
 
 

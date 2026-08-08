@@ -39,7 +39,7 @@ from PySide6.QtWidgets import (
 )
 
 from app.theme import apply_theme, size_to_screen
-from app.ui_style import style_button
+from app.ui_style import style_button, uniform_width
 from config import constants, defaults, palette, shortcuts
 from config.ui_text import ui
 from core.deep_time import (
@@ -233,6 +233,7 @@ class TimeTravelDialog(QDialog):
         row.addStretch(1)
         row.addWidget(ok)
         row.addWidget(cancel)
+        uniform_width((now, ok, cancel))
         layout.addRow(row)
 
         self._day.valueChanged.connect(self._refresh)
