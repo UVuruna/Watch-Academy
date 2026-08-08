@@ -99,11 +99,43 @@ def test_rotating_art_file_single_candidate_never_rotates(tmp_path):
 
 
 def test_rotating_art_file_missing_canonical_is_none(tmp_path):
-    """No master at all -> None (the caller keeps its own fallback) —
-    graceful-absent, never a crash."""
+    """A family with NOTHING on disk -> None (the caller keeps its own
+    fallback) — graceful-absent, never a crash."""
     assert pantheon.rotating_art_file(
         tmp_path / "Nothing.png", date(2026, 7, 20)
     ) is None
+
+
+def test_rotating_art_file_master_less_family_still_resolves(tmp_path):
+    """THE 2026-08-08 REGRESSION (owner's iconless "Films" tile): a
+    family whose MASTER is absent but whose `_v2` sibling exists is
+    still a family. An early master-existence guard used to return None
+    here, leaving ten Star Wars seats (shipped as `_v2`-only files)
+    invisible to the dial and every picker while every test stayed
+    green."""
+    only_version = tmp_path / "Luke_v2.png"
+    only_version.write_bytes(b"")
+    for offset in range(3):
+        assert pantheon.rotating_art_file(
+            tmp_path / "Luke.png", date(2026, 7, 20 + offset)
+        ) == only_version
+
+
+def test_roster_member_shipped_as_v2_only_keeps_its_seat(tmp_path):
+    """The seat-roster half of the same 2026-08-08 regression
+    (sw_dyad's Finn and Maz): `_roster_candidates` resolves each member
+    through its version FAMILY, so a `_v2`-only member resolves to its
+    first existing version — in the roster's DECLARED order — instead
+    of silently dropping out of the seat."""
+    from config import paths
+
+    (tmp_path / "Finn_v2_gem.png").write_bytes(b"")
+    (tmp_path / "Phasma_gem.png").write_bytes(b"")
+    with paths.display(paths.display_context(art_source="gemini")):
+        found = pantheon._roster_candidates(tmp_path, ("Finn", "Phasma"))
+    assert found == [
+        tmp_path / "Finn_v2_gem.png", tmp_path / "Phasma_gem.png",
+    ]
 
 
 # --- The Scale badge (the family the convention was generalized from) -----------

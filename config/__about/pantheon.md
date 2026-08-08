@@ -43,7 +43,12 @@ Layer: config — pure, no Qt, no wall clock.
   `rotating_art_file(canonical_path, on_date)` — the ONE chokepoint
   every weekday consumer (and era badges, tetramorph figures, the
   Scale duality topic) calls through to pick a daily/weekly face from a
-  version-sibling pool or a declared seat roster.
+  version-sibling pool or a declared seat roster. Since 2026-08-08 a
+  family whose MASTER file is absent but whose `_v2` siblings exist
+  still resolves (both the version pool and each roster member's own
+  family): an early master-existence guard once left ten Star Wars
+  seats, shipped as `_v2`-only files, invisible to the dial and every
+  picker while the whole suite stayed green.
 - **`scale_variant_file(figure, on_date)`** — the Judas/Lucifer Scale
   badge's own rotation (needs the same rotation primitives, so it
   lives beside them rather than in `encyclopedia_ui.py`).

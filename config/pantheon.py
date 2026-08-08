@@ -256,12 +256,15 @@ def _roster_candidates(directory: Path, stems: tuple[str, ...]) -> list[Path]:
     to the active art source. A member with nothing on disk is skipped
     rather than raising — the seat then simply rotates through fewer
     figures, which is the same graceful-absent contract every other art
-    table here keeps (Rule #1's documented path)."""
+    table here keeps (Rule #1's documented path). Each member is its own
+    version FAMILY, not only its master file: a member shipped as
+    `_v2`-only (sw_dyad's Finn and Maz, 2026-08-08) resolves to its
+    first existing version instead of vanishing from the seat."""
     resolved: list[Path] = []
     for stem in stems:
-        picked = paths.art_file(directory / f"{stem}.png")
-        if picked is not None and picked.exists():
-            resolved.append(picked)
+        family = _rotation_candidates((directory,), (stem,))
+        if family:
+            resolved.append(family[0])
     return resolved
 
 
@@ -283,11 +286,11 @@ def rotating_art_file(canonical_path: Path, on_date: date) -> Path | None:
     emblems, tetramorph figures, every weekday body) — never on the hot
     `art_file` path. This is the ONE chokepoint every weekday consumer
     already calls, which is why the roster hooks in here rather than at
-    four call sites. None when the canonical path resolves to nothing on
-    disk (not even a master)."""
-    resolved = paths.existing_art_file(canonical_path)
-    if resolved is None:
-        return None
+    four call sites. None only when the whole FAMILY has nothing on
+    disk: a family whose master is absent but whose `_v2` siblings
+    exist is still a family — an early master-existence guard here once
+    made ten Star Wars seats (shipped as `_v2`-only files) invisible to
+    the dial and every picker at once (owner screenshots 2026-08-08)."""
     stems = _seat_roster_of(canonical_path)
     if stems is not None:
         theme = canonical_path.parts[-4]

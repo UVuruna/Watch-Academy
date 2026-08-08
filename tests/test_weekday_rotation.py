@@ -86,6 +86,24 @@ def test_bible_dark_dual_judas_rotates():
     assert first.exists() and second.exists()
 
 
+def test_every_registered_body_seat_resolves_to_real_art():
+    """THE TOOTH the 2026-08-08 round left behind: every body seat of
+    every registered weekday theme must resolve to a file that EXISTS,
+    through the same rotation-aware chokepoint the dial and the picker
+    grids read. Ten Star Wars seats sat on disk as `_v2`-only files,
+    invisible everywhere, with the whole suite green — the exact
+    art-on-disk-but-unseen failure THE THEME COMPLETION LAW names. A
+    fixed probe date keeps it golden; existence must hold for ANY date,
+    since every rotation candidate exists by construction."""
+    for theme, files in pantheon.WEEKDAY_THEME_FILES.items():
+        for body in files:
+            canonical = pantheon.weekday_theme_body_art(
+                theme, body, on_date=DAY_A
+            )
+            resolved = paths.art_file(canonical)
+            assert resolved is not None and resolved.exists(), (theme, body)
+
+
 def test_theme_without_alt_is_untouched():
     """A theme whose folder ships NO `alt/`/`_v2` siblings (Greek, the
     theme this round shipped no new art for) must return the SAME file
