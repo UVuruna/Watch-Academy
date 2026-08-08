@@ -178,7 +178,10 @@ def theme_ninth(
         return None
     name, rel = entry
     asset = pantheon.weekday_art(rel)
-    if not paths.art_file(asset).exists():
+    # Cached-existence door (same Sunday-latent stat as slot_layout's
+    # dual probe, fixed the same 2026-08-09 round): no per-tick stat
+    # once the resolution is proven.
+    if paths.existing_art_file(asset) is None:
         return None
     if on_date is not None:
         asset = pantheon.rotating_art_file(asset, on_date) or asset

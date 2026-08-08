@@ -272,7 +272,11 @@ def center_dual_face(skin: SkinDefinition) -> bool:
     spec = skin.weekday_set
     if weekday_classic_slot(skin) is None:
         return False
-    if spec.dual_asset is None or not paths.art_file(spec.dual_asset).exists():
+    # `existing_art_file`, never art_file(...).exists() — the caller's
+    # own stat re-ran EVERY paint tick, but only on SUNDAYS (this
+    # branch is Sunday-gated), which is why the steady-state repaint
+    # tooth first bit on 2026-08-09, a Sunday.
+    if spec.dual_asset is None or paths.existing_art_file(spec.dual_asset) is None:
         return False
     if spec.display_mode == "center_only":
         return True
