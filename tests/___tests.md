@@ -186,6 +186,17 @@ four). It exits **2**, which is what makes a hook BLOCKING.
 - **`deep_fixture.py`** — builds the SMALL Deep Time fixture pack (same
   schema as the real generator, never the 92 MB build) that
   `test_deep_time.py`'s goldens run against.
+- **`layout_checks_qt.py`** — THE SPACE & LEGIBILITY LAW's Zubi v2 check
+  library (rules/GUI.md → Zubi v2), copied verbatim from
+  `rules/templates/layout_checks_qt.py` 2026-08-08: the ALG-1..ALG-9
+  algorithmic teeth (extreme-state matrix, contrast, tooltip geometry, space
+  ceiling, uniform siblings, radius-by-aspect-ratio, row occupancy, live
+  profile, section taxonomy). `test_layout_audit.py` folds these in beside
+  its own reference-set checks (overlap/item-cut); `live_profile_source()`
+  is this project's ONE edit, wired to watch 1's real
+  `%APPDATA%/DOMY Watch/settings.json`. First-run findings, recorded
+  verbatim and NOT fixed per the owner's boundary, live in
+  `.claude/zubi-v2-findings.md` (gitignored `.claude/`, not tracked here).
 
 ## How to run
 

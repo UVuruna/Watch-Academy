@@ -41,6 +41,19 @@ Remote User lesson: offscreen's substitute fonts measured a different
 window than the one the owner photographed), offscreen as the headless
 fallback. Windows are shown with WA_DontShowOnScreen, so a guard run
 never flashes windows across the owner's screen.
+
+Zubi v2 (rules/GUI.md -> Zubi v2, installed 2026-08-08): `layout_checks_qt.py`
+beside this file is the rules/templates/ check library, copied verbatim
+(the ALG-1..ALG-9 algorithmic teeth) - `_audit()` below folds its checks in
+beside the reference-set ones above, ALG-1 (`check_extreme_states`) is driven
+with THIS project's own combined invariants, ALG-7 (`check_row_occupancy`)
+only at the minimum size per the rulebook, and ALG-8 (`live_profile_source`,
+wired to watch 1's real settings.json) runs every window a second time.
+ALG-9 (`check_section_taxonomy`) is fed separately, from SettingsDialog's own
+nav structure, in `test_section_taxonomy` below - it is not part of the
+generic walk (see the check's own docstring). First-run findings are recorded
+verbatim, NOT fixed, in `.claude/zubi-v2-findings.md` per the owner's boundary
+("ne popravljaj postojeće stanje, samo ugrađuj pravila za buduće agente").
 """
 
 from __future__ import annotations
@@ -72,6 +85,15 @@ from PySide6.QtWidgets import (
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 if str(PROJECT_ROOT) not in sys.path:      # standalone report mode (main())
     sys.path.insert(0, str(PROJECT_ROOT))
+TESTS_DIR = Path(__file__).resolve().parent
+if str(TESTS_DIR) not in sys.path:         # layout_checks_qt.py lives here
+    sys.path.insert(0, str(TESTS_DIR))
+
+from layout_checks_qt import (                               # noqa: E402
+    _window_image, active_profile, check_contrast, check_extreme_states,
+    check_outside_window, check_radius, check_row_occupancy,
+    check_section_taxonomy, check_space_ceiling, check_tooltips,
+    check_uniform_siblings, live_profile_copy, live_profile_source)
 
 # px of slack tolerated before a spacer counts as "unused space"
 SLACK_TOLERANCE = 24
@@ -355,12 +377,38 @@ def check_scroll_with_free_space(window: QWidget) -> list[str]:
     return problems
 
 
-def _audit(window: QWidget) -> list[str]:
+def _state_invariants(window: QWidget) -> list[str]:
+    """The geometric checks that must hold in EVERY state - the reference
+    set above (overlap/clipping/elision/item-cut/scroll) plus the Zubi v2
+    ALG-1 invariant (nothing paints outside the window rect). This is what
+    ALG-1's `check_extreme_states` re-runs after every slider/checkbox/combo
+    move, and what the per-state loop below runs at the default position."""
     return (check_overlap(window)
             + check_clipping(window)
             + check_elision(window)
             + check_item_views(window)
-            + check_scroll_with_free_space(window))
+            + check_scroll_with_free_space(window)
+            + check_outside_window(window))
+
+
+def _audit(window: QWidget, image=None, at_minimum: bool = False) -> list[str]:
+    """The reference-set invariants (`_state_invariants`) plus the Zubi v2
+    ALG checks that are not part of the extreme-state matrix itself:
+    ALG-2 contrast, ALG-3 tooltips, ALG-4 space ceiling, ALG-5 uniform
+    siblings, ALG-6 radius, ALG-7 row occupancy (minimum size only, per the
+    rulebook), and ALG-1 (`check_extreme_states`) driven by the invariants
+    above so an extreme state is judged by the SAME rules as the default
+    one - overlap and item-cut included, not just the template's base A/B/C."""
+    problems = (_state_invariants(window)
+                + check_contrast(window, image)
+                + check_tooltips(window)
+                + check_space_ceiling(window)
+                + check_uniform_siblings(window)
+                + check_radius(window))
+    if at_minimum:
+        problems += check_row_occupancy(window, image)
+    problems += check_extreme_states(window, invariants=_state_invariants)
+    return problems
 
 
 # --- the window registry ----------------------------------------------------
@@ -383,7 +431,17 @@ class _AuditSetters(dict):
 
 
 def _audit_settings():
-    from app.settings_store import Settings
+    from app.settings_store import Settings, SettingsStore
+
+    # ALG-8 LIVE PROFILE (rules/GUI.md -> Zubi v2): during the live-profile
+    # pass, active_profile() is a read-only COPY of the owner's real
+    # settings.json (layout_checks_qt.live_profile_source, published by
+    # live_profile_copy()) - SettingsStore takes an explicit path and does
+    # not itself honour an env override, so this is the one place that
+    # reads it. Falls through to the pristine default otherwise.
+    profile = active_profile()
+    if profile is not None:
+        return SettingsStore(profile).load()
 
     # pointer="calendar" is the FULLEST Themes & Slots section: only the
     # Calendar pointer mounts a roster on its wedges, so this state shows
@@ -595,32 +653,38 @@ def _effective_minimum(window: QWidget) -> tuple[int, int]:
     return max(hint.width(), 1), max(hint.height(), 1)
 
 
-def audit_window(name: str, factory, states) -> list[str]:
+def audit_window(name: str, factory, states, profile: str = "") -> list[str]:
     window: QWidget = factory()
     window.setAttribute(Qt.WidgetAttribute.WA_DontShowOnScreen, True)
     window.show()
     QApplication.processEvents()
 
-    problems = [f"[{name}] {p}" for p in check_declared_minimum(window)]
+    tag = f"{name} ({profile})" if profile else name
+    problems = [f"[{tag}] {p}" for p in check_declared_minimum(window)]
     width, height = _effective_minimum(window)
     state_list = states(window) if states else [("", None)]
     for label, activate in state_list:
         if activate is not None:
             activate()
-        full = f"{name} - {label}" if label else name
+        full = f"{tag} - {label}" if label else tag
         for size_label, w, h in (("minimum", width, height),
                                  ("minimum+50%", int(width * 1.5),
                                   int(height * 1.5))):
             _settle(window, w, h)
+            image = _window_image(window)
             problems += [f"[{full} @ {size_label} {w}x{h}] {p}"
-                         for p in _audit(window)]
+                         for p in _audit(window, image,
+                                         at_minimum=(size_label == "minimum"))]
             if size_label == "minimum":
                 # The DESIGN REVIEW shot: the window at the size the
                 # grade has to hold at, written by the audit itself so
                 # the picture can never be of a different build than the
                 # one just measured.
                 SHOT_DIR.mkdir(parents=True, exist_ok=True)
-                window.grab().save(str(SHOT_DIR / _shot_name(full)), "PNG")
+                shot = name if not profile else f"{name}-live"
+                window.grab().save(
+                    str(SHOT_DIR / _shot_name(
+                        f"{shot} - {label}" if label else shot)), "PNG")
 
     if hasattr(window, "done"):
         window.done(0)      # a QDialog: releases held repositories too
@@ -633,12 +697,57 @@ def audit_window(name: str, factory, states) -> list[str]:
                          ids=[w[0] for w in WINDOWS])
 def test_layout_audit(app, name, factory, states):
     problems = audit_window(name, factory, states)
+
+    # ALG-8 LIVE PROFILE (rules/GUI.md -> Zubi v2): the same walk again, on
+    # a read-only copy of watch 1's real settings.json. "That is the
+    # environment, not this change" is not a legal sentence in any proof
+    # file - a failure under the owner's real profile is this session's.
+    source = live_profile_source()
+    if source is not None:
+        if not Path(source).is_file():
+            problems.append(
+                f"[{name}] ALG-8 LIVE PROFILE (rules/GUI.md -> Zubi v2): "
+                f"live_profile_source() points at {source}, which does not "
+                "exist - return None when the owner's profile is absent, or "
+                "fix the path; a silently skipped live pass is the hole "
+                "this rule closes")
+        else:
+            with live_profile_copy():
+                problems += audit_window(name, factory, states,
+                                         profile="live profile")
+
     assert not problems, (
         "THE SPACE & LEGIBILITY LAW (rules/GUI.md) - runtime audit "
         "failed:\n  " + "\n  ".join(problems)
         + "\nLadder: (1) the starving element takes the free space, "
           "(2) reflow into more rows, (3) raise the window minimum, "
           "(4) scroll only when the window is genuinely full."
+          "\nZubi v2 (rules/GUI.md -> Zubi v2): an ALG- finding is measured, "
+          "not felt - the message says what to change."
+    )
+
+
+def test_section_taxonomy(app):
+    """ALG-9 SECTION TAXONOMY (rules/GUI.md -> Zubi v2): fed from
+    SettingsDialog's own nav structure - not part of the generic walk (see
+    check_section_taxonomy's own docstring), so every project wires it from
+    its own nav/stack, exactly as this one does here."""
+    window = make_settings_dialog()
+    window.setAttribute(Qt.WidgetAttribute.WA_DontShowOnScreen, True)
+    _settle(window, *_effective_minimum(window))
+    sections: dict[str, list[str]] = {}
+    for row in range(window._nav_list.count()):
+        window._nav_list.setCurrentRow(row)
+        QApplication.processEvents()
+        title = window._nav_list.item(row).text().strip(" ▸")
+        page = window._stack.currentWidget()
+        sections[title] = [label.text() for label in page.findChildren(QLabel)
+                           if label.text().strip()]
+    window.done(0)
+    problems = check_section_taxonomy(sections)
+    assert not problems, (
+        "ALG-9 SECTION TAXONOMY (rules/GUI.md -> Zubi v2) failed:\n  "
+        + "\n  ".join(problems)
     )
 
 
