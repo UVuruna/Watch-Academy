@@ -716,8 +716,14 @@ _BASELINE_PATH = Path(__file__).resolve().parent / "zubi_baseline.json"
 def _finding_key(problem: str) -> str:
     # Hex colours are sampled from the RENDERED window, so they shift
     # with platform/DPI — normalize them before the digit pass, or a
-    # baseline key forks on every environment change.
-    text = re.sub(r"#[0-9a-fA-F]{3,8}\b", "#HEX", problem)
+    # baseline key forks on every environment change. The "(live
+    # profile)" tag is dropped too: the owner's settings file changes
+    # under his hands, and a finding KIND the default pass already
+    # carries must not re-fail as "new" whenever his profile shifts a
+    # widget by a pixel — a kind absent from the default baseline still
+    # fails the live pass, which is all ALG-8 asks.
+    text = problem.replace(" (live profile)", "")
+    text = re.sub(r"#[0-9a-fA-F]{3,8}\b", "#HEX", text)
     return re.sub(r"\d+", "#", text)
 
 
