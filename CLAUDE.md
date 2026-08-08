@@ -128,6 +128,10 @@ four: `tests/test_config_cohesion.py` (pins Session 36's config split — every
 `config/*.py` at or under the threshold, and no moved name still reachable
 through `defaults`) and `tests/test_theme_completeness.py` (below).
 
+GUI work here is also governed by the Zubi v2 Algorithmic Teeth & Grader v2
+([GUI Rules](../../rules/GUI.md#zubi-v2)) — status: **installed**,
+`tests/layout_checks_qt.py`.
+
 **The RATCHET may only SHRINK.** Adding an entry needs the owner's explicit
 approval in that same session.
 
