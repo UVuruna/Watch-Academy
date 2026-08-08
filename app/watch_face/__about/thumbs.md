@@ -26,6 +26,10 @@ fallback for pointer variants, which carry no preview art of their own
 - `app.watch_face.hands` — `art_thumbnail` for each pack's hours image
 - `app.watch_face.pointer` — `art_thumbnail` for the Earth style tiles,
   `pointer_swatch_icon` for the pointer gallery
+- [Weekday Theme Grid](../../__about/weekday_theme_grid.md) —
+  `art_thumbnail` for every theme/group/mount tile (2026-08-08; those
+  galleries carried raw `QIcon(path)` loads before, against this very
+  file's R-33 rule)
 
 ## Functions
 - `art_thumbnail(source)`: a 256px-source disk-cached `QIcon` of an

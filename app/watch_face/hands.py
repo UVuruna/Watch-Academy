@@ -2,20 +2,17 @@
 tile's hours-hand image LARGE (the image dominates the tile, the name
 sits under it) — the same data `design_window.DesignDialog._hands_tab`
 reads, through `thumbs.art_thumbnail`'s disk-cached source instead of a
-raw `QIcon(path)` load.
+raw `QIcon(path)` load. The icon size is the shared
+`widgets.TILE_ICON_PX` (2026-08-08): this gallery's "image dominates"
+look was promoted to EVERY gallery, so its private size constant moved
+into the tile builder itself.
 """
 
-from PySide6.QtCore import QSize
 from PySide6.QtWidgets import QGridLayout, QWidget
 
 from app.watch_face import thumbs
 from app.watch_face.widgets import pack_grid, tile
 from data.hands import hand_packs
-
-# Deliberately larger than the Ring/Pointer gallery tiles (owner spec:
-# "image dominates, name under it") — still well under
-# `thumbs.THUMB_SOURCE_PX`, so the cached 256px source stays sharp.
-_TILE_ICON_PX = 128
 
 
 def build(settings, setters: dict, tr) -> QWidget:
@@ -27,7 +24,6 @@ def build(settings, setters: dict, tr) -> QWidget:
             tr(name), icon, settings.hands == name,
             lambda n=name: setters["hands"](n),
         )
-        button.setIconSize(QSize(_TILE_ICON_PX, _TILE_ICON_PX))
         row, col = divmod(index, 4)
         grid.addWidget(button, row, col)
     widget = QWidget()

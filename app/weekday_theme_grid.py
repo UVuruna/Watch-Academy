@@ -16,41 +16,45 @@ surfaces in the Watch Face Themes & Slots section, shown only while the
 Calendar pointer is active (`app.watch_face.themes._calendar_mount_group`).
 """
 
-from pathlib import Path
+from datetime import date
 
 from PySide6.QtCore import Qt
-from PySide6.QtGui import QIcon
 from PySide6.QtWidgets import (
     QFrame,
     QGridLayout,
     QHBoxLayout,
     QLabel,
-    QScrollArea,
     QToolButton,
     QVBoxLayout,
     QWidget,
 )
 
-from config import calendar_mounts, defaults, palette, pantheon, paths
+from app.watch_face import thumbs
+from app.watch_face.widgets import tile
+from config import calendar_mounts, defaults, pantheon
 
 _MAX_COLUMNS = 4
 
 
 def _tile(label: str, icon_path, selected: bool, on_click) -> QToolButton:
     """One gallery tile — image over name, an accent border when it is
-    the active choice. The ONE tile builder both galleries use."""
-    button = QToolButton()
-    button.setToolButtonStyle(Qt.ToolButtonStyle.ToolButtonTextUnderIcon)
-    button.setText(label)
-    if icon_path is not None and Path(icon_path).exists():
-        button.setIcon(QIcon(str(icon_path)))
-    if selected:
-        button.setStyleSheet(
-            f"border: 2px solid {palette.THEME_COLORS['accent']};"
-            "border-radius: 8px;"
-        )
-    button.clicked.connect(lambda checked=False: on_click())
-    return button
+    the active choice. The ONE tile builder both galleries use — since
+    2026-08-08 a thin adapter over `app.watch_face.widgets.tile` (Rule
+    #5: one tile look, one icon size, one builder), which also moves
+    the raw `QIcon(path)` load these galleries carried onto
+    `thumbs.art_thumbnail`'s disk-cached 256px source (R-33: every
+    gallery draws its icon from the thumbnail service)."""
+    return tile(label, thumbs.art_thumbnail(icon_path), selected, on_click)
+
+
+def _theme_icon(key: str):
+    """The representative plate for one weekday theme's tile — the
+    theme's own Sun body AS THE DIAL SHOWS IT TODAY (`on_date`, the
+    universal rotation convention). The date-less canonical resolution
+    the grids used before missed every family shipped as `_v2`-only
+    (the Films group tile stood iconless on the owner's 2026-08-08
+    screenshot while sw_jedi's whole cast sat on disk)."""
+    return pantheon.weekday_theme_body_art(key, "sun", on_date=date.today())
 
 
 def _add_section(column: QVBoxLayout, title: str | None, tiles: list) -> None:
@@ -80,15 +84,11 @@ def _add_section(column: QVBoxLayout, title: str | None, tiles: list) -> None:
     column.addLayout(wrap)
 
 
-def _scrollable(content: QWidget) -> QScrollArea:
-    scroll = QScrollArea()
-    scroll.setWidgetResizable(True)
-    scroll.setWidget(content)
-    return scroll
-
-
-def build_weekday_theme_grid(current_theme: str, on_pick, tr) -> QScrollArea:
-    """A scrollable gallery of every weekday theme, Planets flat first
+def build_weekday_theme_grid(current_theme: str, on_pick, tr) -> QWidget:
+    """A gallery of every weekday theme (a plain widget since 2026-08-08
+    — the Watch Face page's own scroll area is the ONE scroller; a
+    nested inner scroll clipped the full-size tiles the moment they grew
+    to `widgets.TILE_ICON_PX`), Planets flat first
     then the kinship groups (`pantheon.WEEKDAY_MENU_TOP` /
     `WEEKDAY_MENU_GROUPS` — the SAME order/grouping the old Weekday
     submenu used). `on_pick(theme_key)` fires on a tile click; the
@@ -101,7 +101,7 @@ def build_weekday_theme_grid(current_theme: str, on_pick, tr) -> QScrollArea:
         _add_section(column, tr(title) if title is not None else None, [
             _tile(
                 tr(pantheon.WEEKDAY_THEME_TITLES[key]),
-                paths.art_file(pantheon.weekday_theme_body_art(key, "sun")),
+                _theme_icon(key),
                 key == current_theme,
                 lambda k=key: on_pick(k),
             )
@@ -112,7 +112,7 @@ def build_weekday_theme_grid(current_theme: str, on_pick, tr) -> QScrollArea:
     for group_title, keys in pantheon.WEEKDAY_MENU_GROUPS:
         add_group(group_title, keys)
     column.addStretch(1)
-    return _scrollable(content)
+    return content
 
 
 # --- Kinship GROUPS — the Watch Face content tree's Level 2/3 -----------
@@ -148,7 +148,7 @@ def weekday_group_keys(group_title: str) -> tuple[str, ...]:
     )
 
 
-def build_weekday_group_grid(current_group: str | None, on_pick, tr) -> QScrollArea:
+def build_weekday_group_grid(current_group: str | None, on_pick, tr) -> QWidget:
     """Level 2 — one tile per kinship group; no per-group art (a group
     is a folder, not a theme), so each tile shows its first member's
     plate as a representative icon."""
@@ -160,18 +160,18 @@ def build_weekday_group_grid(current_group: str | None, on_pick, tr) -> QScrollA
         first_key = weekday_group_keys(title)[0]
         tiles.append(_tile(
             tr(title),
-            paths.art_file(pantheon.weekday_theme_body_art(first_key, "sun")),
+            _theme_icon(first_key),
             title == current_group,
             lambda t=title: on_pick(t),
         ))
     _add_section(column, None, tiles)
     column.addStretch(1)
-    return _scrollable(content)
+    return content
 
 
 def build_weekday_theme_tiles(
     group_title: str, current_theme: str, default_theme: str, on_pick, tr,
-) -> QScrollArea:
+) -> QWidget:
     """Level 3 — one group's own theme tiles. The pointer's documented
     DEFAULT theme (`constants.WATCH_FACE_KINDS_BY_POINTER`, see
     themes.md) carries a "★ " prefix wherever it appears, so the
@@ -186,7 +186,7 @@ def build_weekday_theme_tiles(
                 if key == default_theme
                 else tr(pantheon.WEEKDAY_THEME_TITLES[key])
             ),
-            paths.art_file(pantheon.weekday_theme_body_art(key, "sun")),
+            _theme_icon(key),
             key == current_theme,
             lambda k=key: on_pick(k),
         )
@@ -194,11 +194,12 @@ def build_weekday_theme_tiles(
     ]
     _add_section(column, None, tiles)
     column.addStretch(1)
-    return _scrollable(content)
+    return content
 
 
-def build_calendar_mount_grid(current_mount: str, on_pick, tr) -> QScrollArea:
-    """A scrollable gallery of every roster that may ride the Calendar
+def build_calendar_mount_grid(current_mount: str, on_pick, tr) -> QWidget:
+    """A gallery (plain widget — see `build_weekday_theme_grid` on why
+    the inner scroll died) of every roster that may ride the Calendar
     pointer's twelve wedges (owner decree 2026-07-29 — the choice moved
     here from the Design window's Pointer tab).
 
@@ -216,15 +217,12 @@ def build_calendar_mount_grid(current_mount: str, on_pick, tr) -> QScrollArea:
         tr("None"), None, current_mount == "off", lambda: on_pick("off"),
     )]
     for key, mount in calendar_mounts.CALENDAR_MOUNTS.items():
-        preview = paths.art_file(
-            defaults.ZODIAC_ART_DIR / mount.art_dir / f"{mount.stems[0]}.png"
-        )
         tiles.append(_tile(
             f"{tr(mount.title)} ({mount.seats})",
-            preview if preview.exists() else None,
+            defaults.ZODIAC_ART_DIR / mount.art_dir / f"{mount.stems[0]}.png",
             key == current_mount,
             lambda k=key: on_pick(k),
         ))
     _add_section(column, None, tiles)
     column.addStretch(1)
-    return _scrollable(content)
+    return content

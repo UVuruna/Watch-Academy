@@ -8,8 +8,10 @@ each tile showing the pack's OWN hours-hand image LARGE (the image
 dominates the tile, the name sits under it) — the same data
 `design_window.DesignDialog._hands_tab` reads, through
 `thumbs.art_thumbnail`'s disk-cached 256px source instead of a raw
-`QIcon(path)` load, scaled up to a larger on-tile icon size than the
-other galleries use.
+`QIcon(path)` load. Its "image dominates" icon size was promoted to
+EVERY gallery on 2026-08-08 (`widgets.TILE_ICON_PX`, set inside the
+shared tile builder), so this section no longer carries a private size
+constant.
 
 ## Connections
 

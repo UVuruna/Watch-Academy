@@ -7,7 +7,7 @@
 ```mermaid
 %%{init: {'flowchart': {'subGraphTitleMargin': {'top': 0, 'bottom': 35}}}}%%
 flowchart TB
-    subgraph SCROLL["QScrollArea"]
+    subgraph CONTENT["plain QWidget — the Watch Face page's own scroll area is the ONE scroller"]
         subgraph TOP["Planets (no header)"]
             T1[tile] --- T2[tile] --- T3[tile]
         end
@@ -20,9 +20,11 @@ flowchart TB
     end
 ```
 
-Each tile is image-over-name (`ToolButtonTextUnderIcon`); the tile
+Each tile is image-over-name (`ToolButtonTextUnderIcon`) at the shared
+`widgets.TILE_ICON_PX` icon size, its plate resolved rotation-aware
+(`_theme_icon`) and cached through `thumbs.art_thumbnail`; the tile
 matching `current_theme` carries a 2px accent border. Every section's
-row of tiles wraps at 4 columns and centers as a block.
+row of tiles wraps at 4 columns, packed to the reading edge.
 
 ## Layout — `build_calendar_mount_grid`
 

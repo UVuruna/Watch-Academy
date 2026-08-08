@@ -112,7 +112,11 @@ if _FRAME_FILE.is_file():
         FLOOR_HEIGHT = int(_frame.get("height", FLOOR_HEIGHT))
 
 # The DESIGN REVIEW shots: one per window state, at the declared minimum.
-SHOT_DIR = PROJECT_ROOT / ".claude" / "shots"
+# In a TOPIC subfolder (rules/GUI.md -> "Screenshots live in TOPIC
+# folders", GATE): the audit's own design-review shots are one story —
+# loose files in the shots ROOT block the session's end, and this
+# writer used to recreate them on every full guard run.
+SHOT_DIR = PROJECT_ROOT / ".claude" / "shots" / "layout-audit"
 
 #: The larger size every window is audited at besides its minimum.
 _LARGER = (1400, 900)
