@@ -23,7 +23,7 @@ project-specific laws and deltas that TIGHTEN the root rules.
 - **Product:** transparent frameless 24h desktop clock widget, Windows 11,
   Python 3.13 + PySide6 6.10 + astral 3.2 (+ tzdata). The app is
   **Watch Academy**; **DOMY** is the name of the dial itself. The folder on
-  disk is still `Gadgets/DOMY Watch/` — do NOT rename it. Repo:
+  disk is still `Gadgets/Watch Academy/` — do NOT rename it. Repo:
   `UVuruna/Watch-Academy`.
 - **Dial convention:** degrees CLOCKWISE from TOP; 12:00 noon top, 00:00
   midnight bottom, 18:00 right, 06:00 left; `DIAL_OFFSET_DEG = 180`.
@@ -134,6 +134,17 @@ GUI work here is also governed by the Zubi v2 Algorithmic Teeth & Grader v2
 
 **The RATCHET may only SHRINK.** Adding an entry needs the owner's explicit
 approval in that same session.
+
+**THE ZUBI BASELINE RATCHET (owner approval 2026-08-09):** the runtime
+layout audit (`tests/test_layout_audit.py`, part of the FULL Stop guard)
+fails ONLY on findings whose normalized key is absent from
+`tests/zubi_baseline.json` — the owner-frozen pre-existing backlog
+(`.claude/zubi-v2-findings.md`, install-only boundary of 2026-08-08).
+The baseline obeys the same ratchet law: entries may only be REMOVED as
+findings are fixed; regeneration runs through
+`DOMY_ZUBI_REBASELINE=1 python -m pytest tests/test_layout_audit.py -k test_layout_audit`
+and REFUSES to add keys unless `=force`, which is legal only with the
+owner's explicit in-session approval.
 
 ---
 

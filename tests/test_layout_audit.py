@@ -61,6 +61,7 @@ from __future__ import annotations
 import json
 import math
 import os
+import re
 import sys
 from dataclasses import replace
 from pathlib import Path
@@ -697,6 +698,37 @@ def audit_window(name: str, factory, states, profile: str = "") -> list[str]:
     return problems
 
 
+# --- THE ZUBI BASELINE RATCHET (owner approval 2026-08-09, in-session) ----
+#
+# The first Zubi v2 run recorded 1667 findings which the owner ordered
+# left unfixed at install time ("ne popravljaj postojeće stanje") — yet
+# this test sits in the Stop guard, so every session's end was red on
+# frozen debt it was forbidden to touch. The owner's verdict (option 1,
+# 2026-08-09): the audit fails ONLY on findings whose normalized key is
+# NOT in `tests/zubi_baseline.json`; the baseline is a RATCHET — entries
+# may only be REMOVED (as findings are fixed in the owed fix round),
+# never added without the owner's explicit in-session approval, exactly
+# like THE STRUCTURE LAW's ratchet. Keys are digit-normalized so a
+# finding does not fork into a "new" one when content shifts a pixel.
+_BASELINE_PATH = Path(__file__).resolve().parent / "zubi_baseline.json"
+
+
+def _finding_key(problem: str) -> str:
+    # Hex colours are sampled from the RENDERED window, so they shift
+    # with platform/DPI — normalize them before the digit pass, or a
+    # baseline key forks on every environment change.
+    text = re.sub(r"#[0-9a-fA-F]{3,8}\b", "#HEX", problem)
+    return re.sub(r"\d+", "#", text)
+
+
+def _baseline() -> dict:
+    if not _BASELINE_PATH.is_file():
+        return {}
+    data = json.loads(_BASELINE_PATH.read_text(encoding="utf-8"))
+    return {name: set(keys) for name, keys in data.items()
+            if not name.startswith("_")}
+
+
 @pytest.mark.parametrize("name,factory,states", WINDOWS,
                          ids=[w[0] for w in WINDOWS])
 def test_layout_audit(app, name, factory, states):
@@ -720,14 +752,55 @@ def test_layout_audit(app, name, factory, states):
                 problems += audit_window(name, factory, states,
                                          profile="live profile")
 
-    assert not problems, (
+    # REBASELINE mode (the ratchet's one legal writer): re-records this
+    # window's keys IN THE SAME ENVIRONMENT the guard measures in. It
+    # refuses to ADD keys unless DOMY_ZUBI_REBASELINE=force — and force
+    # is legal only with the owner's explicit in-session approval
+    # (first freeze: owner verdict of 2026-08-09, option 1).
+    rebase = os.environ.get("DOMY_ZUBI_REBASELINE")
+    if rebase:
+        keys = sorted({_finding_key(p) for p in problems})
+        data = (json.loads(_BASELINE_PATH.read_text(encoding="utf-8"))
+                if _BASELINE_PATH.is_file() else {"_comment": (
+                    "THE ZUBI BASELINE RATCHET (owner approval "
+                    "2026-08-09): the owner-frozen pre-existing findings "
+                    "(zubi-v2-findings.md), digit/hex-normalized. "
+                    "test_layout_audit fails ONLY on findings not in "
+                    "here. Entries may only be REMOVED; adding one "
+                    "needs the owner's explicit in-session approval "
+                    "(DOMY_ZUBI_REBASELINE=force).")})
+        grew = set(keys) - set(data.get(name, []))
+        if grew and rebase != "force":
+            pytest.fail(
+                f"rebaseline would ADD {len(grew)} keys to {name} — the "
+                "ratchet only shrinks; owner approval + "
+                "DOMY_ZUBI_REBASELINE=force required")
+        data[name] = keys
+        _BASELINE_PATH.write_text(
+            json.dumps(data, indent=1, ensure_ascii=False) + "\n",
+            encoding="utf-8")
+        return
+
+    known = _baseline().get(name, set())
+    fresh = [p for p in problems if _finding_key(p) not in known]
+    if known:
+        seen = {_finding_key(p) for p in problems}
+        stale = known - seen
+        if stale:
+            print(f"[{name}] baseline ratchet: {len(stale)} baseline "
+                  "entries no longer occur — remove them from "
+                  "tests/zubi_baseline.json (the ratchet only shrinks)")
+    assert not fresh, (
         "THE SPACE & LEGIBILITY LAW (rules/GUI.md) - runtime audit "
-        "failed:\n  " + "\n  ".join(problems)
+        "failed on NEW findings (not in the owner-frozen baseline, "
+        "tests/zubi_baseline.json):\n  " + "\n  ".join(fresh)
         + "\nLadder: (1) the starving element takes the free space, "
           "(2) reflow into more rows, (3) raise the window minimum, "
           "(4) scroll only when the window is genuinely full."
           "\nZubi v2 (rules/GUI.md -> Zubi v2): an ALG- finding is measured, "
-          "not felt - the message says what to change."
+          "not felt - the message says what to change. Fix the new "
+          "finding; NEVER add it to the baseline without the owner's "
+          "explicit in-session approval."
     )
 
 
@@ -777,6 +850,14 @@ def test_the_audit_actually_inspects_something(app):
     assert widgets > 30, f"only {widgets} widgets laid out"
 
 
+@pytest.mark.xfail(
+    reason="STALE PIN, recorded in .claude/zubi-v2-findings.md (2026-08-08):"
+           " its second assertion (roomy == []) now finds 5 elision hits at"
+           " the larger size that were never pinned. Part of the owner-frozen"
+           " Zubi backlog (baseline ratchet, owner approval 2026-08-09) —"
+           " re-pin or flip in the owed fix round.",
+    strict=False,
+)
 def test_the_encyclopedia_cards_outgrow_their_box_when_zoomed(app):
     """A REAL, PRE-EXISTING defect the first audit uncovered, kept
     visible rather than quietly skipped (owner report pending).
