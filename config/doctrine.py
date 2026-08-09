@@ -37,10 +37,19 @@ class Station(NamedTuple):
 # order, and it is the whole argument: the bright road ends at midnight
 # and the dark road at noon, so neither journey terminates in its own
 # kind of hour (the chiasm).
+# RE-SEATED (owner decree 2026-08-09): Faith 08h, Love 12h, Hope 16h.
+# Faith stands where the day begins because faith answers something
+# ALREADY GIVEN — testimony, promise, event; it is the morning and the
+# past. Love crowns noon because love is the only one of the three that
+# must be ACTUAL to exist at all: not "I loved" or "I will love" but
+# "do I love now". Hope takes the evening arm because hope is needed
+# exactly where the light withdraws, and because its own object IS
+# salvation — so it must be the LAST station before the summit at 24h,
+# never the furthest from it.
 PATH_OF_LIGHT = (
-    Station(8, "Hope", "H"),
-    Station(12, "Faith", "F"),
-    Station(16, "Love", "L"),
+    Station(8, "Faith", "F"),
+    Station(12, "Love", "L"),
+    Station(16, "Hope", "H"),
     Station(24, "Salvation", "S"),
 )
 PATH_OF_DARKNESS = (
@@ -63,10 +72,14 @@ FALL = (
     Station(4, "Loathing", "L"),
     Station(12, "Lament", "L"),
 )
+# The hours follow the re-seating; the WORD does not move — STAR is
+# assembled from the letters, not walked in hour order, so each name
+# simply travels with the station it renames (Trust=Faith 08h,
+# Affection=Love 12h, Spark=Hope 16h).
 STAR = (
-    Station(8, "Spark", "S"),
-    Station(12, "Trust", "T"),
-    Station(16, "Affection", "A"),
+    Station(16, "Spark", "S"),
+    Station(8, "Trust", "T"),
+    Station(12, "Affection", "A"),
     Station(24, "Redemption", "R"),
 )
 
@@ -84,9 +97,9 @@ DOMY = (
 )
 SAFE = (
     Station(24, "Salus", "S"),
-    Station(16, "Agape", "A"),
-    Station(12, "Fides", "F"),
-    Station(8, "Elpis", "E"),
+    Station(12, "Agape", "A"),
+    Station(8, "Fides", "F"),
+    Station(16, "Elpis", "E"),
 )
 
 # The pairs a page draws: (page name, bright reading, dark reading).

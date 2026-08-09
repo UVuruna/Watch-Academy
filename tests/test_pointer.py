@@ -1923,7 +1923,9 @@ def test_climate_zones_name_the_events_and_seasons(app):
 
 def test_trio_arm_hover_carries_the_virtue_article(july_wednesday):
     """The Trinity arm hover: theme, third, pair — then the virtue's
-    article (owner request): Faith's speaks of the vertical line."""
+    article (owner request). RE-SEATED 2026-08-09 (the order law: Faith
+    left, Love center, Hope right): the TOP arm is LOVE now, and Love's
+    is the article that speaks of the vertical line."""
     day, tick = july_wednesday
     compositor = Compositor(
         dataclasses.replace(
@@ -1933,8 +1935,8 @@ def test_trio_arm_hover_carries_the_virtue_article(july_wednesday):
         AssetCache(),
     )
     compositor.render_offscreen(360.0, 1.0, day, tick)
-    tip = compositor.tooltip_at(180.0, 72.0, 360.0)       # top arm = Faith
-    assert "Faith" in tip and "08:00 - 16:00" in tip
+    tip = compositor.tooltip_at(180.0, 72.0, 360.0)       # top arm = Love
+    assert "Love" in tip and "08:00 - 16:00" in tip
     assert "Thursday" in tip and "Saturday" in tip
     assert "align='justify'" in tip and "vertical line" in tip
 

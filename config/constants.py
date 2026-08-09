@@ -720,9 +720,22 @@ def watch_face_kinds(pointer: str, pointer_shape: str) -> set:
 # The trio's theological themes per arm angle (SYMBOLISM.md trio canon:
 # Faith vertical toward God, Hope on the dawn side, Love with Venus).
 # Like every pointer, the arm tip is the CENTER of its hue (owner
-# correction 2026-07-10): Faith yellow spans 8h-16h, Love red 16h-24h,
-# Hope blue 0h-8h.
-TRIO_ARM_THEMES = {0.0: "Faith", 120.0: "Love", 240.0: "Hope"}
+# correction 2026-07-10) — and the colours do NOT move, they are nailed
+# to the arms; only the names travel (owner 2026-08-09). The bands now
+# read: Love YELLOW 8h-16h (centered on noon), Hope RED 16h-24h (the
+# light withdrawing), Faith BLUE 0h-8h (the night ending exactly where
+# its own station stands, at 08h).
+#
+# THE ORDER LAW (owner decree 2026-08-09): wherever the three are drawn,
+# by any pointer and in any depiction, the order is FAITH LEFT — LOVE
+# CENTER — HOPE RIGHT, because that is time itself: faith answers what
+# was already given (the past), love is the only one that must be
+# ACTUAL to exist at all (the present), hope reaches what is not yet
+# (the future). Hours 0h-12h are the dial's LEFT half and 12h-24h its
+# RIGHT, so the law reads on any arm count — the light cross seats them
+# 08h/12h/16h, this pointer 04h/12h/20h, and both obey it. A depiction
+# that breaks the order is a defect, not a variant.
+TRIO_ARM_THEMES = {0.0: "Love", 120.0: "Hope", 240.0: "Faith"}
 
 # The GENESIS wheel's offices per arm angle (CUBE.md §Double Trinity,
 # SEALED 2026-07-26): the same three persons who judge on the Court
@@ -1761,10 +1774,16 @@ POINTER_WEEKDAY_SLOTS = {
         (270.0, ("saturn",)),
         (315.0, ("jupiter",)),
     ),
-    # TRIO (owner-approved pairing, 2026-07-10): Faith 12h = Jupiter
-    # (the Priest) + Saturn (faith tried by time); Love 20h = Venus +
-    # Mars (the classic pair); Hope 4h = Moon + Mercury (the dawn
-    # herald). Sunday's Sun sits in the center, like the hexa layout.
+    # TRIO — the planets are bound to the ARMS and never moved; the
+    # names re-seated over them (owner decree 2026-08-09, the order law
+    # above): Love 12h = Jupiter (the open hand) + Saturn (love proved
+    # by time, the only one of the three that outlasts its own object);
+    # Hope 20h = Venus + Mars (longing and the courage to endure — the
+    # irascible pair, and hope is the irascible virtue, straining toward
+    # a good that is difficult); Faith 4h = Moon + Mercury (light that
+    # is RECEIVED and never made, and the herald who carries a message
+    # he did not author — faith answers what was already given).
+    # Sunday's Sun sits in the center, like the hexa layout.
     "trio": (
         (0.0, ("jupiter", "saturn")),
         (120.0, ("venus", "mars")),
