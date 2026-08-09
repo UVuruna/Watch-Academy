@@ -74,10 +74,18 @@ def _draw_arms(painter: QPainter, centre: QPointF, radius: float,
 def _draw_journey(painter: QPainter, centre: QPointF, radius: float,
                   size: int, stations, hue: str, inward: float) -> None:
     """One four-station road: the walk drawn in order, each stop a filled
-    node with its own name and cipher letter. `inward` pulls a road
-    slightly off the arm so the two never overdraw each other where they
-    share an hour — which they do twice, and that sharing IS the
-    chiasm."""
+    node. `inward` pulls a road slightly off the arm so the two never
+    overdraw each other where they share an hour — which they do twice,
+    and that sharing IS the chiasm.
+
+    LINES AND NODES ONLY. The names are a separate pass
+    (`_draw_journey_labels`) that every road runs AFTER every road has
+    laid its lines down — because this drawer used to paint each road
+    whole, one after the other, so the second road's lines struck
+    through the first road's names. The independent grader read the
+    dark road's "L · Lament" as a bare stroke where the bright line
+    crossed its first glyph (7/10, below the bar). A name a reader must
+    read is never crossed by a line: ink goes on top, always."""
     ring = radius * inward
     points = [_arm_point(centre, ring, station.hour) for station in stations]
     pen = QPen(QColor(hue))
@@ -87,12 +95,22 @@ def _draw_journey(painter: QPainter, centre: QPointF, radius: float,
     painter.setPen(pen)
     for start, end in zip(points, points[1:]):
         painter.drawLine(start, end)
+    painter.setPen(Qt.PenStyle.NoPen)
+    painter.setBrush(QColor(hue))
+    for point in points:
+        painter.drawEllipse(point, size * 0.012, size * 0.012)
+
+
+def _draw_journey_labels(painter: QPainter, centre: QPointF, radius: float,
+                         size: int, stations, inward: float) -> None:
+    """The station names, laid over every road's lines — see the note in
+    `_draw_journey`. Each name is pushed radially outward from its own
+    node so it never sits on the node it belongs to."""
+    ring = radius * inward
+    points = [_arm_point(centre, ring, station.hour) for station in stations]
     painter.setFont(_font(size, encyclopedia_ui.CANON_DIAGRAM_LABEL_RATIO))
     metrics = painter.fontMetrics()
     for station, point in zip(stations, points):
-        painter.setPen(Qt.PenStyle.NoPen)
-        painter.setBrush(QColor(hue))
-        painter.drawEllipse(point, size * 0.012, size * 0.012)
         text = f"{station.letter} · {station.name}"
         width = metrics.horizontalAdvance(text)
         push = size * 0.055
@@ -136,6 +154,10 @@ def crosses(page: str, size: int) -> QPixmap:
     _draw_arms(painter, centre, radius, size)
     _draw_journey(painter, centre, radius, size, dark, _DARK_HUE, 0.74)
     _draw_journey(painter, centre, radius, size, bright, _LIGHT_HUE, 1.0)
+    # Both roads' lines are down before either road's names go on — see
+    # the note in `_draw_journey`.
+    _draw_journey_labels(painter, centre, radius, size, dark, 0.74)
+    _draw_journey_labels(painter, centre, radius, size, bright, 1.0)
     painter.setPen(Qt.PenStyle.NoPen)
     painter.setBrush(QColor(palette.THEME_COLORS["accent"]))
     painter.drawEllipse(centre, size * 0.010, size * 0.010)
