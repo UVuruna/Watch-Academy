@@ -296,7 +296,7 @@ def test_dial_moon_stays_half_lit_at_exact_quarter():
     import astral
     from PySide6.QtWidgets import QApplication
 
-    from config import defaults
+    from config import defaults, dial
     from core.clock_state import build_day_context, build_tick_state
     from data.moon_phases import MoonPhaseRepository
     from data.seasons import SeasonsRepository
@@ -324,7 +324,11 @@ def test_dial_moon_stays_half_lit_at_exact_quarter():
     import math
 
     moon_angle = math.radians(quarter.moon_fraction * 360.0)
-    orbit = radius * defaults.DEFAULT_SKIN.year_marker.moon_orbit_fraction
+    marker = defaults.DEFAULT_SKIN.year_marker
+    # THE CLEAR ORBIT LANE (owner verdict 2026-08-09): the DRAWN radius.
+    orbit = radius * dial.earth_moon_orbit_fraction(
+        skin.numeral_outer_ring_size, max(marker.scale, marker.moon_scale),
+    )
     cx = round(radius + orbit * math.sin(moon_angle))
     cy = round(radius - orbit * math.cos(moon_angle))
     marker_size = round(

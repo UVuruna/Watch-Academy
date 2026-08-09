@@ -277,7 +277,13 @@ def test_earth_and_moon_take_the_top_at_night(app):
         night._last_tick = dataclasses.replace(
             tick, moon_fraction=fraction, moon_event=None, eclipse_event=None,
         )
-        spot = dial_point(angle, RADIUS * marker.moon_orbit_fraction)
+        # THE CLEAR ORBIT LANE (owner verdict 2026-08-09): the DRAWN
+        # radius, not the old fixed `moon_orbit_fraction` field.
+        orbit = dial.earth_moon_orbit_fraction(
+            night._skin.numeral_outer_ring_size,
+            max(marker.scale, marker.moon_scale),
+        )
+        spot = dial_point(angle, RADIUS * orbit)
         return night._element_at(spot, RADIUS, 0.0, "sun") == "moon"
 
     assert moon_at(0.5, 0.0)          # FULL moon on top at night
@@ -297,11 +303,16 @@ def test_earth_and_moon_take_the_top_at_night(app):
         tick, season_event=None, eclipse_event=None,
     )
     earth_marker = earth_night._skin.year_marker
+    # THE CLEAR ORBIT LANE (owner verdict 2026-08-09): the DRAWN radius.
+    earth_orbit = dial.earth_moon_orbit_fraction(
+        earth_night._skin.numeral_outer_ring_size,
+        max(earth_marker.scale, earth_marker.moon_scale),
+    )
     for angle, expected in (
         ((tick.year_angle + 180.0) % 360.0, "earth"),
         (tick.year_angle % 360.0, None),
     ):
-        spot = dial_point(angle, RADIUS * earth_marker.orbit_fraction)
+        spot = dial_point(angle, RADIUS * earth_orbit)
         assert earth_night._element_at(spot, RADIUS, 0.0, "sun") == expected
 
 

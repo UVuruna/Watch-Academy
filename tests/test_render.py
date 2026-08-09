@@ -217,9 +217,12 @@ def test_spacebar_moon_marker_opens_the_current_phase(app):
     comp = Compositor(skin, AssetCache())
     comp.render_offscreen(360.0, 1.0, day, tick)
     marker = skin.year_marker
+    # THE CLEAR ORBIT LANE (owner verdict 2026-08-09): the DRAWN radius.
+    orbit = dial.earth_moon_orbit_fraction(
+        skin.numeral_outer_ring_size, max(marker.scale, marker.moon_scale),
+    )
     pos = dial_point(
-        angles.moon_cycle_angle(tick.moon_fraction),
-        180.0 * marker.moon_orbit_fraction,
+        angles.moon_cycle_angle(tick.moon_fraction), 180.0 * orbit,
     )
     target = comp.encyclopedia_target(180.0 + pos.x(), 180.0 + pos.y(), 360.0)
     expected = constants.MOON_PHASE_NAMES.index(phase_name(tick.moon_fraction))
@@ -515,8 +518,11 @@ def test_noon_sector_is_yellowish(frame):
     # At 12:00 in July the top sector (yellow) is in full daylight; sample
     # inside the background at dial angle ~16 deg — inside the (rotated)
     # yellow wedge but OFF the 12h axis, where all three hands stack at
-    # noon sharp.
-    color = frame.pixelColor(210, 75)
+    # noon sharp. THE CLEAR ORBIT LANE (owner verdict 2026-08-09) moved
+    # the Earth marker's own angle — the same year_angle, ~15.4 deg here
+    # — closer to the centre, so the probe radius moved in from 109 px
+    # (now inside the Earth's disc) to 70 px, comfortably clear of it.
+    color = frame.pixelColor(199, 113)
     assert color.alpha() > 200
     assert color.red() > 150 and color.green() > 120
     assert color.blue() < color.red()  # yellow/orange family, not blue

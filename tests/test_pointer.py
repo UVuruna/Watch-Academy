@@ -2224,11 +2224,14 @@ def test_event_glow_is_visible_even_over_the_yellow_wedge(app):
     )
     # Upright + solstice noon: the Earth RELOCATES to the ring band
     # centerline at the dial top (owner rework 2026-07-16). Probe
-    # DIAGONALLY below-right of the relocated marker: inside the halo,
-    # outside the disc, off the noon hand shafts on the vertical.
+    # DIAGONALLY below-left of the relocated marker: inside the halo,
+    # off the noon hand shafts on the vertical — and, THE CLEAR ORBIT
+    # LANE (owner verdict 2026-08-09) having pulled the QUIET Earth's
+    # own disc inward, a good 58 px clear of it too (the original 33 px
+    # offset now sits inside that disc).
     marker_y = 270 - round(270 * dial.GLOW_RING_RADIUS_FRACTION)
-    lit = with_glow.pixelColor(289, marker_y + 33)
-    plain = without.pixelColor(289, marker_y + 33)
+    lit = with_glow.pixelColor(242, marker_y + 17)
+    plain = without.pixelColor(242, marker_y + 17)
     # The GOLDEN core lifts red and green over the background.
     assert lit.red() - plain.red() >= 8 or lit.green() - plain.green() >= 8
 
@@ -2468,18 +2471,27 @@ def test_season_glow_relocates_to_ring_band_and_is_golden(app):
         540.0, 1.0, day, quiet
     )
     # Summer solstice: year_angle 0 -> the top. Relocated to the ring
-    # band centerline; probe 40 px above center (inside the halo, clear
-    # of the ~30 px marker disc).
+    # band centerline; probe inside the halo, clear of the ~30 px marker
+    # disc — and, THE CLEAR ORBIT LANE (owner verdict 2026-08-09) having
+    # pulled the QUIET Earth's own disc inward, a good 58 px clear of it
+    # too (the original 33 px offset now sits inside that disc).
     band_y = 270 - round(270 * dial.GLOW_RING_RADIUS_FRACTION)
-    lit = with_glow.pixelColor(289, band_y + 33)
-    plain = without.pixelColor(289, band_y + 33)
+    lit = with_glow.pixelColor(242, band_y + 17)
+    plain = without.pixelColor(242, band_y + 17)
     dr = lit.red() - plain.red()
     dg = lit.green() - plain.green()
     db = lit.blue() - plain.blue()
     assert dr >= 8 and dg >= 8       # golden: red & green lift
     assert dr - db >= 8              # ... and clearly more than blue
-    # The OLD orbit is now quiet: no glow relocation leaves it behind.
-    old_y = 270 - round(270 * defaults.DEFAULT_SKIN.year_marker.orbit_fraction)
+    # The QUIET orbit (THE CLEAR ORBIT LANE, owner verdict 2026-08-09 —
+    # computed, no longer the fixed `orbit_fraction` field) carries no
+    # glow relocation either.
+    marker = defaults.DEFAULT_SKIN.year_marker
+    quiet_orbit = dial.earth_moon_orbit_fraction(
+        defaults.DEFAULT_SKIN.numeral_outer_ring_size,
+        max(marker.scale, marker.moon_scale),
+    )
+    old_y = 270 - round(270 * quiet_orbit)
     old_lit = with_glow.pixelColor(289, old_y + 33)
     old_plain = without.pixelColor(289, old_y + 33)
     assert abs(old_lit.red() - old_plain.red()) <= 4

@@ -1115,7 +1115,12 @@ def test_earth_weekday_label_joins_the_date(app):
     day, tick = _dt(datetime(2026, 7, 16, 14, 30))     # a Thursday
     size = 720.0                     # the date label draws from 540 up
     marker = defaults.DEFAULT_SKIN.year_marker
-    pos = dial_point(tick.year_angle, 360.0 * marker.orbit_fraction)
+    # THE CLEAR ORBIT LANE (owner verdict 2026-08-09): the DRAWN radius.
+    orbit = dial.earth_moon_orbit_fraction(
+        defaults.DEFAULT_SKIN.numeral_outer_ring_size,
+        max(marker.scale, marker.moon_scale),
+    )
+    pos = dial_point(tick.year_angle, 360.0 * orbit)
     cx, cy = 360 + pos.x(), 360 + pos.y()
     box = 50
 
@@ -1162,7 +1167,12 @@ def test_earth_label_four_modes_render_distinctly(app):
     day, tick = _dt(datetime(2026, 7, 16, 14, 30))     # a Thursday → THU
     size = 720.0
     marker = defaults.DEFAULT_SKIN.year_marker
-    pos = dial_point(tick.year_angle, 360.0 * marker.orbit_fraction)
+    # THE CLEAR ORBIT LANE (owner verdict 2026-08-09): the DRAWN radius.
+    orbit = dial.earth_moon_orbit_fraction(
+        defaults.DEFAULT_SKIN.numeral_outer_ring_size,
+        max(marker.scale, marker.moon_scale),
+    )
+    pos = dial_point(tick.year_angle, 360.0 * orbit)
     cx, cy = 360 + pos.x(), 360 + pos.y()
     box = 55
 
