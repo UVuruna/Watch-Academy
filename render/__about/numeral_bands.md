@@ -4,6 +4,19 @@ Builds the two band plates and the eleven crown glyphs — **once at startup
 and once per settings change**, never per frame — and holds them in the
 process-wide cache THE ONE COPY RULE demands.
 
+## THE INWARD-GROWTH LAW (owner verdict 2026-08-09)
+
+At the measured default the outer band's OUTER edge already stands at
+the rim (0.9998 of the radius) — so "Outer ring size" above 1.0 had
+nowhere outward to go and the clip sliced the band into an octagon on
+the owner's own screenshot. The law that replaced the outward rule:
+the outer edge is PINNED (`outer_band_edges`), the multiplier grows the
+band inward, and the interior world yields by `interior_scale` while
+band-riding members (Earth/Moon markers, jewels) follow the centreline
+by `band_ride_shift`. `ring_size <= 1.0` is a strict no-op — pinned by
+`tests/test_dial_extremes.py` and the rewritten pins in
+`tests/test_numerals.py`.
+
 ## Purpose
 
 Three products, one cache:

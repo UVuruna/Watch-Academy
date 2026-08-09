@@ -34,12 +34,14 @@ from render.asset_recolor import jewel_metal_file
 from render.context import Cadence, Layer, RenderContext
 from render.layers.numerals import band_spec
 from render.numeral_bands import (
+    outer_centreline,
     band_plate, normalized_shadow_alpha, shadow_sample_count,
 )
 from render.painting import dial_point, draw_pixmap_centered
 
 
 class RingLayer(Layer):
+    frame = "rim"
     """The composed ring: his inner base art, the live inner numbers,
     the computed outer band, the preset's own jewels (with per-hour
     metal finish) and the optional crown-text arc."""
@@ -75,9 +77,12 @@ class RingLayer(Layer):
             else ctx.skin.ring_tint
         )
         base = numerals.inner_composition(spec.inner_asset.stem)["base"]
+        # THE INWARD-GROWTH LAW (owner verdict 2026-08-09): the inner
+        # track is interior world — it shrinks with it so its outer
+        # edge keeps abutting the widened band's new inner edge.
         draw_pixmap_centered(
             painter, ctx, dial.RING_INNER_ART_DIR / f"{base}.png",
-            QPointF(0, 0), 2 * ctx.radius,
+            QPointF(0, 0), 2 * ctx.radius * ctx.interior_scale,
             tint=inner_tint, saturation=ctx.skin.ring_saturation,
         )
         self._blit_band(painter, ctx, "inner")
@@ -204,7 +209,10 @@ class RingLayer(Layer):
             # the baked shine already carries its own light.
             self._draw_ring_glyph(
                 painter, ctx, gold_asset, metal, theta,
-                dial.RING_JEWEL_RADIUS_FRACTION,
+                # THE INWARD-GROWTH LAW: the jewels ride the band, so
+                # they sit on its CURRENT centreline, not the measured
+                # default's (identical at ring_size <= 1.0).
+                outer_centreline(ctx.skin.numeral_outer_ring_size),
                 height * self._skin.ring.jewel_zoom.get(hour, 1.0),
                 tint=ctx.skin.jewels_tint,
                 draw_shadow=not self._skin.ring.jewel_no_shadow.get(hour, False),

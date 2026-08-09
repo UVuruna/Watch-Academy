@@ -2,6 +2,14 @@
 
 **Script:** [Context (script)](../context.py) · **Flow:** [diagram](../__flow/context.md)
 
+## THE INWARD-GROWTH LAW's door (2026-08-09)
+
+`Layer.frame` ("interior" | "rim") and `ctx_for_frame` route every
+paint: interior layers receive a pre-scaled radius (they never know the
+band grew), rim layers the full radius plus `ctx.interior_scale` for
+the interior members they draw themselves. One rule, used by both
+compositor paint paths and the hover lift's twin routing.
+
 ## Purpose
 The render protocol — the three types every layer speaks. `Cadence`
 says how often a layer's content changes, `RenderContext` carries

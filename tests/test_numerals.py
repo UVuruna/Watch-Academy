@@ -40,7 +40,7 @@ from core.clock_state import build_day_context, build_tick_state
 from data.moon_phases import MoonPhaseRepository
 from data.seasons import SeasonsRepository
 from render import letter_plates, numeral_bands, numeral_fonts
-from render.numeral_bands import outer_centreline
+from render.numeral_bands import outer_centreline, outer_band_edges, interior_scale
 from render.assets import AssetCache
 from render.compositor import Compositor, _build_layers
 from render.context import Cadence, RenderContext
@@ -584,35 +584,51 @@ def test_a_rotated_outer_band_moves_its_ink_with_the_hours(app, frame_args):
     assert _ink_near(image, 0.0, radius) > 0           # hour 10 took the top
 
 
-def test_outer_ring_size_moves_the_bands_outer_edge_alone():
-    """ring_rework §5's "outer ring size" is the WIDTH of the band the
-    letters and numbers stand in. The inner edge is fixed — it abuts the
-    minute band — so the width multiplier moves the outer edge, and the
-    centreline follows by half the change."""
+def test_outer_ring_size_grows_the_band_inward():
+    """THE INWARD-GROWTH LAW (owner verdict 2026-08-09, superseding the
+    outward rule this test used to pin): at 1.0 the band's outer edge
+    already stands at the measured rim (0.9998 of the radius), so a
+    width multiplier had nowhere outward to go — the owner's own
+    screenshot showed the band sliced into an octagon. The OUTER edge is
+    pinned; the multiplier moves the INNER edge toward the centre, the
+    centreline follows by half the change, and the interior world
+    yields by `interior_scale` so the minute track keeps abutting the
+    band."""
     width = dial.NUMERAL_OUTER_BAND_WIDTH_FRACTION
+    default_inner, default_outer = outer_band_edges(1.0)
     assert outer_centreline(1.0) == pytest.approx(
         dial.NUMERAL_OUTER_RADIUS_FRACTION
     )
-    assert outer_centreline(2.0) == pytest.approx(
-        dial.NUMERAL_OUTER_RADIUS_FRACTION + width / 2.0
-    )
-    assert outer_centreline(0.5) == pytest.approx(
-        dial.NUMERAL_OUTER_RADIUS_FRACTION - width / 4.0
-    )
+    # The rim never moves, at ANY multiplier — the whole point.
+    for ring_size in (0.5, 1.0, 1.5, 2.0):
+        _inner, outer = outer_band_edges(ring_size)
+        assert outer == pytest.approx(default_outer)
+        assert outer <= 1.0 + 1e-9
+    wide_inner, _outer = outer_band_edges(2.0)
+    assert wide_inner == pytest.approx(default_outer - 2.0 * width)
+    assert outer_centreline(2.0) == pytest.approx(default_outer - width)
+    # The interior yields exactly by the inner edge's own ratio…
+    assert interior_scale(2.0) == pytest.approx(wide_inner / default_inner)
+    # …and a THINNER band leaves the interior untouched (the default
+    # renders bit-for-bit unchanged).
+    assert interior_scale(1.0) == 1.0
+    assert interior_scale(0.5) == 1.0
 
 
-def test_a_wider_outer_ring_really_draws_further_out(app, frame_args):
+def test_a_wider_outer_ring_really_draws_further_in(app, frame_args):
     """Hour 13 — The One seats letters on 12/15/18/21/24/3/6/9, so 13 is
-    one of the seats that actually carries a numeral."""
+    one of the seats that actually carries a numeral. Under THE
+    INWARD-GROWTH LAW a wider band's numerals sit INSIDE the default
+    centreline (the band grew toward the centre), and there is ink at
+    the new centreline."""
     _require_a_font_database()
     wide = _band_image(
         "outer", 1440, app, frame_args, numeral_outer_ring_size=1.5,
     )
     angle = numerals.hour_angle(13)
-    far = 720 * outer_centreline(1.5)
-    near = 720 * outer_centreline(1.0)
-    assert _glyph_ink(wide, angle, far) > 0
-    assert _glyph_ink(wide, angle, far) > _glyph_ink(wide, angle, near - 40)
+    new_centre = 720 * outer_centreline(1.5)
+    assert outer_centreline(1.5) < outer_centreline(1.0)
+    assert _glyph_ink(wide, angle, new_centre) > 0
 
 
 def test_an_arrow_seat_carries_no_number(app, frame_args):

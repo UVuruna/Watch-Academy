@@ -10,7 +10,7 @@ counterclockwise-from-3-o'clock only inside the pie/position helpers in
 """
 
 from abc import ABC, abstractmethod
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 from enum import Enum
 
 from PySide6.QtGui import QPainter
@@ -67,10 +67,44 @@ class RenderContext:
                                      # depictions turn on it (owner 2026-08-05)
                                      # and the composite key carries it.
     archetype_lit: int | None = None  # Archetype mode (owner 2026-07-16):
+    interior_scale: float = 1.0      # THE INWARD-GROWTH LAW (owner verdict
+                                     # 2026-08-09): when the hour band grows
+                                     # inward (Outer ring size > 1) the world
+                                     # INSIDE it yields by this factor. An
+                                     # INTERIOR layer never sees it — the
+                                     # compositor hands it a pre-scaled
+                                     # `radius` and 1.0 here; a RIM layer
+                                     # gets the full radius plus this factor
+                                     # for the interior members it draws
+                                     # itself (the ring's minute track).
+
+
+def ctx_for_frame(ctx: "RenderContext", frame: str) -> "RenderContext":
+    """The ONE door THE INWARD-GROWTH LAW walks through (owner verdict
+    2026-08-09): an INTERIOR layer receives a pre-scaled radius and a
+    folded-away factor (it never knows the band grew); a RIM layer
+    receives the full radius with the factor in hand. Used by the
+    compositor's two paint paths AND the hover lift's twin routing —
+    one rule, one definition (Rule #5). At the default band width the
+    factor is 1.0 and this returns `ctx` unchanged, bit for bit."""
+    if frame == "interior" and ctx.interior_scale != 1.0:
+        return replace(
+            ctx,
+            radius=ctx.radius * ctx.interior_scale,
+            interior_scale=1.0,
+        )
+    return ctx
 
 
 class Layer(ABC):
     cadence: Cadence
+    # THE INWARD-GROWTH LAW's frame (owner verdict 2026-08-09): an
+    # "interior" layer lives inside the hour band and yields when the
+    # band grows inward (the compositor scales its radius); a "rim"
+    # layer rides the band itself — the ring plate, the Earth/Moon on
+    # the year wheel, the live crown — and keeps the full radius, with
+    # `ctx.interior_scale` in hand for any interior member it draws.
+    frame: str = "interior"
     # HOVER-VARIABLE layers (owner 2026-07-17, ROADMAP 15f): even though
     # their content is DAILY, their APPEARANCE changes with the hover-
     # enlarge target and the reveal window, so the compositor NEVER bakes

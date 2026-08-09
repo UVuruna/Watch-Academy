@@ -46,7 +46,8 @@ from render.archetype_geometry import (
     archetype_lit_index,
 )
 from render.calendar_mount import chinese_mount_dimmed_index
-from render.context import Cadence, Layer, RenderContext
+from render.context import Cadence, Layer, RenderContext, ctx_for_frame
+from render import numeral_bands
 from render.layers.archetype import ArchetypeCenterLayer, ArchetypeLayer
 from render.layers.background import BackgroundLayer
 from render.layers.center_body import CenterBodyLayer
@@ -844,6 +845,9 @@ class Compositor:
             world_offset=self._world_offset(phase),
             hovered=self._hovered,
             reveal_active=reveal, archetype_lit=archetype_lit,
+            interior_scale=numeral_bands.interior_scale(
+                self._skin.numeral_outer_ring_size
+            ),
         )
         for kind, payload in self._steps:
             if kind == "cache":
@@ -873,7 +877,7 @@ class Compositor:
             painter.save()   # isolate pen/brush/opacity/rotation leaks
             painter.setRenderHints(_RENDER_HINTS)
             painter.translate(size / 2, size / 2)
-            layer.paint(painter, ctx)
+            layer.paint(painter, ctx_for_frame(ctx, layer.frame))
             painter.restore()
 
     @profiling.timed("Hover text")
@@ -2671,8 +2675,18 @@ class Compositor:
         # to share this trigger; it now belongs to the reveal-week
         # double-click instead (see Compositor.hit_omega).
         half = encyclopedia_ui.GREETINGS_JEWEL_HALF_DEG
+        # THE INWARD-GROWTH LAW (owner verdict 2026-08-09): the jewel
+        # band rides the hour band's centreline, so its inner boundary
+        # moves inward with it; the tick reading zone below scales with
+        # the interior world. Both are identity at ring_size <= 1.0.
+        ride = numeral_bands.band_ride_shift(
+            self._skin.numeral_outer_ring_size
+        )
+        interior = numeral_bands.interior_scale(
+            self._skin.numeral_outer_ring_size
+        )
         in_jewel_band = (
-            radius * dial.TICK_HOVER_OUTER_FRACTION
+            radius * (dial.TICK_HOVER_OUTER_FRACTION + ride)
             < distance
             <= radius * encyclopedia_ui.GREETINGS_JEWEL_OUTER_FRACTION
         )
@@ -2706,9 +2720,9 @@ class Compositor:
         if live_crown is not None:
             return live_crown
         if not (
-            radius * dial.TICK_HOVER_INNER_FRACTION
+            radius * dial.TICK_HOVER_INNER_FRACTION * interior
             <= distance
-            <= radius * dial.TICK_HOVER_OUTER_FRACTION
+            <= radius * (dial.TICK_HOVER_OUTER_FRACTION + ride)
         ):
             return None
         minutes = round((((theta - 180.0) % 360.0) / 15.0) * 60) % (24 * 60)
@@ -3620,10 +3634,13 @@ class Compositor:
             world_offset=self._world_offset(self._phase_target()),
             hovered=None,
             reveal_active=False, archetype_lit=None,
+            interior_scale=numeral_bands.interior_scale(
+                self._skin.numeral_outer_ring_size
+            ),
         )
         for layer in layers:
             painter.save()   # isolate pen/brush/opacity/rotation leaks
-            layer.paint(painter, ctx)
+            layer.paint(painter, ctx_for_frame(ctx, layer.frame))
             painter.restore()
         painter.end()
         pixmap.setDevicePixelRatio(dpr)

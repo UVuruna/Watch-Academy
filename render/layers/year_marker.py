@@ -8,6 +8,7 @@ from core import angles
 from core.year_wheel import almanac_marker_angle, almanac_month_index
 from render.asset_variants import moon_lit_region
 from render.calendar_mount import calendar_day_arrow, calendar_wheel
+from render.numeral_bands import band_ride_shift
 from render.context import Cadence, Layer, RenderContext
 from render.daylight import moon_transit_opacity
 from render.eclipse_glow import draw_event_glow, eclipse_render_state, eclipse_state_glow_strength
@@ -33,6 +34,7 @@ def earth_region(latitude: float, longitude: float) -> str:
 
 
 class YearMarkerLayer(Layer):
+    frame = "rim"
     """Date markers along the INSIDE of the dial. Earth rides the year
     wheel (summer solstice at the top); the Moon rides its own cycle (new
     moon at the top, full at the bottom, clockwise) showing the current
@@ -85,7 +87,7 @@ class YearMarkerLayer(Layer):
                 dial.GLOW_RING_RADIUS_FRACTION
                 if glowing
                 else spec.moon_orbit_fraction
-            )
+            ) + band_ride_shift(ctx.skin.numeral_outer_ring_size)
             pos = dial_point(moon_angle, ctx.radius * orbit)
             if glowing:
                 color = (
@@ -162,7 +164,7 @@ class YearMarkerLayer(Layer):
         glowing = ctx.tick.season_event is not None or solar_eclipse is not None
         orbit = (
             dial.GLOW_RING_RADIUS_FRACTION if glowing else spec.orbit_fraction
-        )
+        ) + band_ride_shift(ctx.skin.numeral_outer_ring_size)
         pos = dial_point(year_angle, ctx.radius * orbit)
         size = 2 * ctx.radius * spec.scale * hover_factor(ctx, "earth")
         if glowing:

@@ -2,7 +2,7 @@
 
 from PySide6.QtGui import QPainter
 
-from render.context import Cadence, Layer, RenderContext
+from render.context import ctx_for_frame, Cadence, Layer, RenderContext
 from render.layers.archetype import ArchetypeCenterLayer, ArchetypeLayer
 from render.layers.slot import SlotLayer
 from render.layers.weekday import WeekdayLayer
@@ -32,8 +32,12 @@ class HoverLiftLayer(Layer):
             ArchetypeCenterLayer(skin, lift=True),
         )
 
+    frame = "rim"   # receives the FULL radius; each twin is routed
+                    # through its OWN frame below (the year marker rides
+                    # the rim, the rest live in the interior).
+
     def paint(self, painter: QPainter, ctx: RenderContext) -> None:
         if not ctx.hovered:
             return
         for twin in self._twins:
-            twin.paint(painter, ctx)
+            twin.paint(painter, ctx_for_frame(ctx, twin.frame))

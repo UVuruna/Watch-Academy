@@ -142,6 +142,7 @@ def crown_spec(skin, ctx: RenderContext) -> CrownSpec:
 
 
 class LiveCrownLayer(Layer):
+    frame = "rim"
     """The crown's live time (ring_rework §3).
 
     The One keeps its own civil time; Templar keeps the hour of
