@@ -53,6 +53,7 @@ from render.layers.background import BackgroundLayer
 from render.layers.center_body import CenterBodyLayer
 from render.layers.hand import HandLayer
 from render.layers.hover_lift import HoverLiftLayer
+from render.layers.moon_band import MoonBandLayer
 from render.layers.numerals import LiveCrownLayer
 from render.layers.ring import RingLayer
 from render.layers.slot import SlotLayer
@@ -315,14 +316,22 @@ def _build_layers(skin: SkinDefinition) -> list[Layer]:
         "ring": lambda: RingLayer(skin),
         "weekday_set": lambda: WeekdayLayer(skin),
         "year_marker": lambda: YearMarkerLayer(skin),
+        "moon_band": lambda: MoonBandLayer(skin),
     }
     # Elements switches (owner spec): a switched-off element is simply
     # not built. The YearMarkerLayer gates Earth/Moon internally (one
-    # layer, two markers).
+    # layer, two markers). THE MOON HORIZON BAND (owner verdict
+    # 2026-08-09) is skipped outright unless the Moon is shown AND its
+    # own mode is "horizon" — `MoonBandLayer.paint` re-checks the mode
+    # too (belt and suspenders), but never builds the layer at all here
+    # is the cheaper, and cleaner, no-op.
     skipped = {
         "star": not skin.show_pointer,
         "weekday_set": not skin.show_weekday,
         "year_marker": not (skin.show_earth or skin.show_moon),
+        "moon_band": not (
+            skin.show_moon and skin.year_marker.moon_band_mode == "horizon"
+        ),
     }
     seats = [
         seat for seat in slot_layout(skin).values() if seat != "classic"

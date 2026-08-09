@@ -10,10 +10,15 @@ from datetime import datetime, time
 from zoneinfo import ZoneInfo
 
 import astral.moon
+import pytest
 from astral import LocationInfo
 
+from app.controller import build_skin
+from app.settings_store import Settings, SettingsStore, replace
+from config import constants
 from core import angles
 from core.moon import moon_horizon_arcs
+from render.layers.moon_band import MoonBandLayer
 
 
 def _angle(hour: int, minute: int = 0) -> float:
@@ -104,3 +109,77 @@ def test_golden_belgrade_mockup_day() -> None:
         assert arcs[0].end_deg % 360.0 == expected_end
         assert arcs[1].start_deg == expected_start
         assert arcs[1].end_deg % 360.0 == angles.time_to_dial_angle(time(0, 0))
+
+
+# --- SETTINGS defaults + persistence ----------------------------------------
+
+
+def test_settings_defaults_are_mode_a_silver_thread() -> None:
+    """Owner spec: Mode A ("horizon") + style 2 (silver thread) is THE
+    DEFAULT."""
+    settings = Settings()
+    assert settings.moon_band_mode == "horizon"
+    assert settings.moon_band_style == "silver_thread"
+
+
+def test_settings_round_trip_moon_band(tmp_path) -> None:
+    store = SettingsStore(tmp_path / "settings.json")
+    saved = replace(Settings(), moon_band_mode="dim_only", moon_band_style="glow")
+    store.save(saved)
+    loaded = store.load()
+    assert loaded.moon_band_mode == "dim_only"
+    assert loaded.moon_band_style == "glow"
+
+
+def test_settings_reject_unknown_mode_falls_back_to_default(tmp_path) -> None:
+    """An unrecognized stored value (a hand-edited file, or a retired
+    choice) must fall back to the documented default, never raise."""
+    store = SettingsStore(tmp_path / "settings.json")
+    store.path.write_text(
+        '{"schema_version": 1, "window": {"x": 1, "y": 2, "diameter": 360}, '
+        '"display": {"moon_band_mode": "bogus", "moon_band_style": "bogus"}}',
+        encoding="utf-8",
+    )
+    loaded = store.load()
+    assert loaded.moon_band_mode == constants.MOON_BAND_MODE_DEFAULT
+    assert loaded.moon_band_style == constants.MOON_BAND_STYLE_DEFAULT
+
+
+# --- SKIN wiring + mode/style smoke test ------------------------------------
+
+
+@pytest.mark.parametrize("style", constants.MOON_BAND_STYLES)
+def test_every_style_paints_without_error(style) -> None:
+    """A smoke test for all 4 styles: each one paints a real Skin/
+    RenderContext-shaped scene without raising, both for the ordinary
+    single-arc case and the both-None full-circle case."""
+    from PySide6.QtGui import QImage, QPainter
+
+    from core.moon import MoonArc
+
+    image = QImage(64, 64, QImage.Format.Format_ARGB32)
+    image.fill(0)
+    painter = QPainter(image)
+    painter.translate(32, 32)
+    layer = MoonBandLayer.__new__(MoonBandLayer)
+    dispatch = {
+        "inverted": layer._draw_inverted,
+        "ticks": layer._draw_ticks,
+        "glow": layer._draw_glow,
+    }.get(style, layer._draw_silver_thread)
+    dispatch(painter, 28.0, MoonArc(180.0, 270.0, 225.0))
+    dispatch(painter, 28.0, MoonArc(180.0, 540.0, 0.0, full_circle=True))
+    painter.end()
+
+
+def test_moon_band_mode_gates_the_skin_field() -> None:
+    """`build_skin` overlays `Settings.moon_band_mode`/`_style` onto
+    `skin.year_marker` — the plain pass-through `app.controller.
+    _overlay_display_settings` performs, checked here without
+    constructing a live `WatchController`."""
+    settings = replace(
+        Settings(), moon_band_mode="always_full", moon_band_style="ticks",
+    )
+    skin = build_skin(settings, location_display="Belgrade, Serbia")
+    assert skin.year_marker.moon_band_mode == "always_full"
+    assert skin.year_marker.moon_band_style == "ticks"

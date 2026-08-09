@@ -1,0 +1,196 @@
+"""THE MOON HORIZON BAND layer (owner verdict 2026-08-09) — an arc on
+the dial's inner tick circle showing WHEN the Moon stands above the
+horizon today, in one of four owner-approved visual styles.
+
+Geometry comes entirely from `core.moon.moon_horizon_arcs` (Rule #5,
+never re-derived here); this module only paints it. The band sits on
+the INNER band's own radius (`dial.MINUTES_RADIUS_FRACTION`) — that
+band NEVER rotates with `ctx.world_offset` in any world mode (the
+Fidelity Ruling, `render.layers.numerals`'s own "ledger §2"), so this
+layer does not apply the world offset either; both stay in registration
+with the fixed tick art underneath.
+
+THE TICK-ART HONESTY NOTE: the 360 day ticks themselves are the
+owner's own baked PNG art (`config.dial.RING_INNER_COMPOSITION`'s base
+plate), not individually addressable primitives — there is no per-tick
+recolor hook to reach into. Styles 1/3 ("ticks invert"/"ticks turn
+silver") are therefore approximated as a stroked arc drawn AT the tick
+radius: style 1 uses `QPainter.CompositionMode_Difference` (a true
+RGB invert of whatever art sits under the stroke, so a light-ink result
+over dark ticks is the actual inverted pixels, not a guess); style 3
+draws a plain `MOON_SILVER` stroke slightly wider than the tick
+stroke, reading as "the ticks in this arc turned silver and longer"
+without touching pixels the band cannot individually address.
+"""
+
+from PySide6.QtCore import QPointF, QRectF, Qt
+from PySide6.QtGui import QColor, QPainter, QPainterPath, QPen, QPolygonF
+
+from config import dial, palette
+from core.moon import MoonArc, moon_horizon_arcs
+from render.context import Cadence, Layer, RenderContext
+from render.painting import dial_point, draw_pie
+
+# Radial geometry (fractions of the band radius; small enough on-dial
+# that plain constants read clearly against a lookup table nobody else
+# shares).
+_TICK_STROKE_WIDTH_FRACTION = 0.012
+_SILVER_TICK_WIDTH_FRACTION = 0.020    # slightly longer/thicker (style 3)
+_THREAD_WIDTH_FRACTION = 0.006         # style 2's thin thread
+_THREAD_INSET_FRACTION = 0.035         # just inside the ticks
+_DOT_RADIUS_FRACTION = 0.014
+_DIAMOND_HALF_FRACTION = 0.016
+_INVERT_FILL_ALPHA = 110
+_GLOW_LAYERS = 5
+_GLOW_MAX_WIDTH_FRACTION = 0.10
+_GLOW_MAX_ALPHA = 90       # of 255, at culmination, innermost layer
+
+
+class MoonBandLayer(Layer):
+    """Draws the Moon Horizon Band for the active `moon_band_style`,
+    gated on `moon_band_mode == "horizon"` — the compositor also skips
+    building this layer outright in the other two modes (`_build_layers`'s
+    `skipped` table); this gate is the belt to that suspenders."""
+
+    frame = "interior"
+    cadence = Cadence.DAILY
+
+    def paint(self, painter: QPainter, ctx: RenderContext) -> None:
+        spec = ctx.skin.year_marker
+        if spec.moon_band_mode != "horizon":
+            return
+        arcs = moon_horizon_arcs(ctx.day.moonrise, ctx.day.moonset)
+        radius = ctx.radius * dial.MINUTES_RADIUS_FRACTION
+        style = spec.moon_band_style
+        painter.save()
+        painter.setRenderHint(QPainter.RenderHint.Antialiasing)
+        for arc in arcs:
+            if style == "inverted":
+                self._draw_inverted(painter, radius, arc)
+            elif style == "ticks":
+                self._draw_ticks(painter, radius, arc)
+            elif style == "glow":
+                self._draw_glow(painter, radius, arc)
+            else:
+                self._draw_silver_thread(painter, radius, arc)
+        painter.restore()
+
+    # -- style 1: inverted band -------------------------------------------
+
+    def _draw_inverted(self, painter: QPainter, radius: float, arc: MoonArc) -> None:
+        painter.save()
+        painter.setPen(Qt.PenStyle.NoPen)
+        painter.setBrush(QColor(0, 0, 0, _INVERT_FILL_ALPHA))
+        painter.setCompositionMode(QPainter.CompositionMode.CompositionMode_Multiply)
+        draw_pie(painter, radius, arc.start_deg, arc.end_deg)
+        painter.restore()
+        # The ticks themselves invert to light ink: a real RGB difference
+        # against whatever sits under the stroke (the honesty note above).
+        painter.save()
+        pen = QPen(QColor(255, 255, 255))
+        pen.setWidthF(radius * _TICK_STROKE_WIDTH_FRACTION)
+        painter.setPen(pen)
+        painter.setBrush(Qt.BrushStyle.NoBrush)
+        painter.setCompositionMode(QPainter.CompositionMode.CompositionMode_Difference)
+        self._stroke_arc(painter, radius, arc)
+        painter.restore()
+
+    # -- style 2: silver thread (THE DEFAULT) ------------------------------
+
+    def _draw_silver_thread(self, painter: QPainter, radius: float, arc: MoonArc) -> None:
+        thread_radius = radius * (1.0 - _THREAD_INSET_FRACTION)
+        silver = QColor(palette.MOON_SILVER)
+        pen = QPen(silver)
+        pen.setWidthF(radius * _THREAD_WIDTH_FRACTION)
+        painter.setPen(pen)
+        painter.setBrush(Qt.BrushStyle.NoBrush)
+        self._stroke_arc(painter, thread_radius, arc)
+
+        dot_r = radius * _DOT_RADIUS_FRACTION
+        start_pt = dial_point(arc.start_deg % 360.0, thread_radius)
+        end_pt = dial_point(arc.end_deg % 360.0, thread_radius)
+        # Filled dot at moonrise.
+        painter.setPen(Qt.PenStyle.NoPen)
+        painter.setBrush(silver)
+        painter.drawEllipse(start_pt, dot_r, dot_r)
+        # Hollow dot at moonset.
+        painter.setPen(pen)
+        painter.setBrush(Qt.BrushStyle.NoBrush)
+        painter.drawEllipse(end_pt, dot_r, dot_r)
+        # Diamond at culmination (the arc's own midpoint — see
+        # `core.moon.MoonArc`'s documented approximation).
+        if not arc.full_circle:
+            culm_pt = dial_point(arc.culmination_deg % 360.0, thread_radius)
+            half = radius * _DIAMOND_HALF_FRACTION
+            self._draw_diamond(painter, culm_pt, half, silver)
+
+    # -- style 3: moon ticks ------------------------------------------------
+
+    def _draw_ticks(self, painter: QPainter, radius: float, arc: MoonArc) -> None:
+        pen = QPen(QColor(palette.MOON_SILVER))
+        pen.setWidthF(radius * _SILVER_TICK_WIDTH_FRACTION)
+        painter.setPen(pen)
+        painter.setBrush(Qt.BrushStyle.NoBrush)
+        self._stroke_arc(painter, radius, arc)
+
+    # -- style 4: moon glow ---------------------------------------------------
+
+    def _draw_glow(self, painter: QPainter, radius: float, arc: MoonArc) -> None:
+        painter.save()
+        painter.setPen(Qt.PenStyle.NoPen)
+        base_radius = radius * (1.0 - _THREAD_INSET_FRACTION)
+        for i in range(_GLOW_LAYERS):
+            frac = 1.0 - i / _GLOW_LAYERS         # widest outermost, thin innermost
+            width = radius * _GLOW_MAX_WIDTH_FRACTION * frac
+            alpha = round(_GLOW_MAX_ALPHA * (i + 1) / _GLOW_LAYERS)
+            color = QColor(palette.MOON_SILVER)
+            color.setAlpha(alpha)
+            painter.setBrush(color)
+            outer = base_radius + width / 2.0
+            inner = max(0.0, base_radius - width / 2.0)
+            self._draw_ring_wedge(painter, outer, inner, arc)
+        painter.restore()
+
+    # -- shared drawing helpers -----------------------------------------
+
+    def _stroke_arc(self, painter: QPainter, radius: float, arc: MoonArc) -> None:
+        rect = QRectF(-radius, -radius, 2 * radius, 2 * radius)
+        qt_start = round((90.0 - arc.start_deg) * 16)
+        qt_span = round(-(arc.end_deg - arc.start_deg) * 16)
+        painter.drawArc(rect, qt_start, qt_span)
+
+    def _draw_ring_wedge(
+        self, painter: QPainter, outer_radius: float, inner_radius: float,
+        arc: MoonArc,
+    ) -> None:
+        """A filled donut wedge between two radii, spanning `arc` — the
+        glow style's one layered shape: a pie minus a smaller pie IS the
+        donut wedge, the same clockwise-from-top sweep `draw_pie` uses."""
+        qt_start = (90.0 - arc.start_deg)
+        qt_span = -(arc.end_deg - arc.start_deg)
+        outer_rect = QRectF(-outer_radius, -outer_radius, 2 * outer_radius, 2 * outer_radius)
+        path = QPainterPath()
+        path.moveTo(0, 0)
+        path.arcTo(outer_rect, qt_start, qt_span)
+        path.closeSubpath()
+        if inner_radius > 0:
+            inner_rect = QRectF(-inner_radius, -inner_radius, 2 * inner_radius, 2 * inner_radius)
+            hole = QPainterPath()
+            hole.moveTo(0, 0)
+            hole.arcTo(inner_rect, qt_start, qt_span)
+            hole.closeSubpath()
+            path = path.subtracted(hole)
+        painter.drawPath(path)
+
+    def _draw_diamond(
+        self, painter: QPainter, center: QPointF, half: float, color: QColor,
+    ) -> None:
+        points = QPolygonF([
+            QPointF(center.x(), center.y() - half),
+            QPointF(center.x() + half, center.y()),
+            QPointF(center.x(), center.y() + half),
+            QPointF(center.x() - half, center.y()),
+        ])
+        painter.setPen(Qt.PenStyle.NoPen)
+        painter.setBrush(color)
+        painter.drawPolygon(points)

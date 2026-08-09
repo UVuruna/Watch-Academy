@@ -190,6 +190,17 @@ class YearMarkerSpec:
     # `palette.MARKER_POINTER_FALLBACK_COLOR`).
     pointer_enabled: bool = False
     pointer_color: str = palette.MARKER_POINTER_FALLBACK_COLOR
+    # THE MOON HORIZON BAND (owner verdict 2026-08-09): `moon_band_mode`
+    # picks between the band+dimming default ("horizon"), dimming alone
+    # ("dim_only", today's behavior) and neither ("always_full"); the
+    # dimming these coexist with is `moon_hidden_alpha` above, unchanged
+    # by this switch. `moon_band_style` is read only in "horizon" mode.
+    # `render.layers.moon_band.MoonBandLayer` reads both, straight off
+    # this spec — a plain pass-through, `app.controller._overlay_
+    # display_settings` overlays `Settings.moon_band_mode`/`_style` here
+    # the same way it overlays `moon_hidden_alpha`.
+    moon_band_mode: str = constants.MOON_BAND_MODE_DEFAULT
+    moon_band_style: str = constants.MOON_BAND_STYLE_DEFAULT
 
 
 @dataclass(frozen=True)

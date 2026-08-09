@@ -54,11 +54,26 @@ from PySide6.QtWidgets import (
 )
 
 from app.ui_style import tooltip_wrap
+from app.watch_face import thumbs
+from app.watch_face.widgets import flow_gallery, tile
+from config import constants
 
 
 def build(settings, setters: dict, tr) -> QWidget:
+    """ALG-7 ROW OCCUPANCY (Zubi v2 ladder step 2, reflow into columns):
+    the two slider FORM groups sit SIDE BY SIDE in one row — each is
+    label+slider narrow, so stacking them used only the left half of
+    the window's own width; the Moon Horizon Band gallery (2026-08-09)
+    then fills the FULL width below, where a tile flow actually wants
+    the room."""
     defaults = setters["opacity_skin_defaults"]()
+    # ALG-7 ROW OCCUPANCY (Zubi v2, 2026-08-09): the Moon Horizon Band
+    # gallery is genuinely WIDE content (a tile flow) — it goes FIRST,
+    # so the two narrow slider FORM groups (label+slider, naturally
+    # left-packed) are the page's own LAST rows instead of sitting
+    # above other content, which is exactly what the finding flags.
     layout = QVBoxLayout()
+    layout.addWidget(_moon_band_group(settings, setters, tr))
     layout.addWidget(_clock_body_group(settings, setters, tr, defaults))
     layout.addWidget(_ring_bodies_group(settings, setters, tr, defaults))
     widget = QWidget()
@@ -174,4 +189,56 @@ def _ring_bodies_group(settings, setters, tr, defaults: dict) -> QGroupBox:
         crown_slider.setToolTip(tooltip_wrap(
             tr("The active ring preset carries no Crown Text (Great Seal inscription).")
         ))
+    return group
+
+
+_MOON_BAND_MODE_TITLES = {
+    "horizon": "Horizon on the circle",
+    "dim_only": "Dim only",
+    "always_full": "Always the same moon",
+}
+_MOON_BAND_STYLE_TITLES = {
+    "inverted": "Inverted band",
+    "silver_thread": "Silver thread",
+    "ticks": "Moon ticks",
+    "glow": "Moon glow",
+}
+
+
+def _moon_band_group(settings, setters, tr) -> QGroupBox:
+    """THE MOON HORIZON BAND (owner verdict 2026-08-09): the mode tiles
+    (3, always visible — it is the switch itself) and, in "horizon"
+    mode, the style tiles (4) share ONE flow gallery (Zubi v2 ALG-7:
+    a single wide row of real tiles fills the window's own width far
+    better than two short stacked mini-galleries do) — a slim divider
+    tile between the two groups keeps them visually distinct without a
+    second, narrow row of its own. Every tile is `thumbs.
+    moon_band_mode_icon`/`moon_band_style_icon` — THE REAL ALGORITHM at
+    thumbnail scale, not a redrawn sketch of it."""
+    group = QGroupBox(tr("Moon Horizon Band"))
+    group.setToolTip(tooltip_wrap(tr(
+        "An arc on the inner tick circle showing when the Moon stands "
+        "above the horizon today — mode, then (in Horizon mode) style."
+    )))
+    column = QVBoxLayout(group)
+    tiles = [
+        tile(
+            tr(_MOON_BAND_MODE_TITLES[mode]),
+            thumbs.moon_band_mode_icon(mode),
+            settings.moon_band_mode == mode,
+            lambda m=mode: setters["moon_band_mode"](m),
+        )
+        for mode in constants.MOON_BAND_MODES
+    ]
+    if settings.moon_band_mode == "horizon":
+        tiles += [
+            tile(
+                tr(_MOON_BAND_STYLE_TITLES[style]),
+                thumbs.moon_band_style_icon(style),
+                settings.moon_band_style == style,
+                lambda s=style: setters["moon_band_style"](s),
+            )
+            for style in constants.MOON_BAND_STYLES
+        ]
+    column.addWidget(flow_gallery(tiles))
     return group

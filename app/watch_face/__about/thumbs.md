@@ -49,6 +49,13 @@ fallback for pointer variants, which carry no preview art of their own
 - `umbra_icon(form, contrast)`: the REAL umbra algorithm at thumbnail
   scale (same ladder/spans/conical gradient as BackgroundLayer),
   untinted — the Umbra & Aura galleries' previews (2026-08-09)
+- `moon_band_style_icon(style)` / `moon_band_mode_icon(mode)`: THE
+  MOON HORIZON BAND pickers' previews (owner verdict 2026-08-09) —
+  calls `render.layers.moon_band.MoonBandLayer`'s own `_draw_*` style
+  methods directly against a fixed demo arc (06:00-18:00); the mode
+  icon reuses the "silver_thread" draw for "horizon" and a plain
+  bright/dimmed disc for the two no-band modes, matching what each
+  mode actually changes on the dial
 - `complication_icon(mode)` / `text_style_icon(label)`: honest computed
   SKETCHES for pickers whose dial content is computed text/ticks (the
   recon proved no bounded art door exists for complications)

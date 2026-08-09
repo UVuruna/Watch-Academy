@@ -768,6 +768,18 @@ UMBRA_SECTION_COUNTS = {"fine": 30, "coarse": 24}
 # bright half (128-255), "dark" the dark half (0-127).
 UMBRA_CONTRAST_VARIANTS = ("full", "half", "light", "dark")
 
+# THE MOON HORIZON BAND (owner verdict 2026-08-09): the arc on the
+# inner tick circle showing when the Moon stands above the horizon.
+# "horizon" draws the band AND keeps `moon_hidden_alpha` dimming
+# (they coexist); "dim_only" is today's dimming-only behavior with no
+# band; "always_full" shows neither — the moon marker never dims.
+MOON_BAND_MODES = ("horizon", "dim_only", "always_full")
+MOON_BAND_MODE_DEFAULT = "horizon"
+# The four owner-approved band styles (`render.layers.moon_band`),
+# active only in "horizon" mode. "silver_thread" is THE DEFAULT.
+MOON_BAND_STYLES = ("inverted", "silver_thread", "ticks", "glow")
+MOON_BAND_STYLE_DEFAULT = "silver_thread"
+
 # THE UMBRA COLORING MENU (Watch Face Phase 4, R-22): "follow" reads
 # `ring_tint` — today's behavior, unchanged — "custom" reads its own
 # `umbra_tint` hue instead, through the SAME tritone recolor

@@ -231,6 +231,11 @@ class Settings:
                                         # 2026-07-13: its OWN switch —
                                         # the two slots were linked)
     moon_hidden_alpha: float = 0.5      # Moon marker opacity below the horizon
+    # THE MOON HORIZON BAND (owner verdict 2026-08-09): the 3-mode
+    # switch ("horizon" band+dimming default, "dim_only", "always_full")
+    # and the 4 owner-approved styles, read only in "horizon" mode.
+    moon_band_mode: str = constants.MOON_BAND_MODE_DEFAULT
+    moon_band_style: str = constants.MOON_BAND_STYLE_DEFAULT
     hands: str = "STEEL"                # the hand pack (Design ▸ Hands)
     # Theme rotation (owner spec 2026-07-12; group dropdown
     # 2026-07-14): "none" = the canon, no rotation; a kinship-group
@@ -642,6 +647,14 @@ class SettingsStore:
                 moon_hidden_alpha=load_scale(
                     raw, "moon_hidden_alpha", 0.0, 1.0, 0.5
                 ),
+                moon_band_mode=load_choice(
+                    raw, "moon_band_mode", constants.MOON_BAND_MODES,
+                    constants.MOON_BAND_MODE_DEFAULT,
+                ),
+                moon_band_style=load_choice(
+                    raw, "moon_band_style", constants.MOON_BAND_STYLES,
+                    constants.MOON_BAND_STYLE_DEFAULT,
+                ),
                 hands=(
                     raw["hands"]
                     if isinstance(raw.get("hands"), str) and raw["hands"].strip()
@@ -848,6 +861,8 @@ class SettingsStore:
             "show_weekday_names": settings.show_weekday_names,
             "show_info_slot_names": settings.show_info_slot_names,
             "moon_hidden_alpha": settings.moon_hidden_alpha,
+            "moon_band_mode": settings.moon_band_mode,
+            "moon_band_style": settings.moon_band_style,
             "hands": settings.hands,
             "theme_rotation_group": settings.theme_rotation_group,
             "theme_rotation_minutes": settings.theme_rotation_minutes,

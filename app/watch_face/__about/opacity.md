@@ -24,6 +24,22 @@ IS this element (`skin.ring.crown_text`, `RingLayer._draw_crown_text`); a direct
 row like `umbra_alpha`, greyed out with a tooltip
 (`setters["ring_has_crown_text"]`) on crown-text-less presets.
 
+THE MOON HORIZON BAND (owner verdict 2026-08-09) lives on this page
+too, in its own "Moon Horizon Band" group (FIRST on the page — ALG-7
+ROW OCCUPANCY, Zubi v2: wide tile-flow content leads, the two narrow
+slider forms trail, instead of the reverse, which read as empty rows
+with content still below them): the mode tiles (3 — "horizon" the
+default band+dimming, "dim_only", "always_full") and, in "horizon"
+mode, the style tiles (4 — "silver_thread" the default, "inverted",
+"ticks", "glow") share ONE flow gallery rather than two short stacked
+mini-galleries — a single wide row of real tiles is the ALG-7 fix, not
+a decorative one. The group's own explanatory text is a TOOLTIP, not a
+visible label row (a bare description row above the gallery is itself
+a narrow, right-empty row and re-triggers the same finding). Every
+tile's icon is `thumbs.moon_band_mode_icon`/`moon_band_style_icon` —
+THE REAL ALGORITHM at thumbnail scale (owner order 2026-08-09: every
+picker shows what it picks).
+
 ## Connections
 
 ### Uses
@@ -31,6 +47,9 @@ row like `umbra_alpha`, greyed out with a tooltip
   `setters["opacity_skin_defaults"]()`, a data PROVIDER (not a scalar
   setter, Rule #5) supplying the active skin's own values for every
   None-override slider's "Skin default" reset
+- [Thumbnails](thumbs.md) — `moon_band_mode_icon`, `moon_band_style_icon`
+- [Config (folder)](../../../config/___config.md) — `constants.
+  MOON_BAND_MODES`, `constants.MOON_BAND_STYLES`
 
 ### Used by
 - `app.watch_face.window` — registered as the Opacity section's builder

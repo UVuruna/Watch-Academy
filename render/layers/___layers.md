@@ -25,6 +25,7 @@ live every tick). The geometry, path and drawing helpers every layer shares —
 | `hand.py` | Algorithmic | one class, three instances — hour/minute/second hand rotation and sizing — [about](__about/hand.md) · [flow](__flow/hand.md) |
 | `center_body.py` | Algorithmic | today's body seated at the dial centre, above the hands | [about](__about/center_body.md) · [flow](__flow/center_body.md) |
 | `year_marker.py` | Algorithmic | Earth and Moon markers on the year/lunar wheels, with eclipse glow | [about](__about/year_marker.md) · [flow](__flow/year_marker.md) |
+| `moon_band.py` | Algorithmic | THE MOON HORIZON BAND — moonrise-to-moonset arc on the inner tick circle, four owner-approved styles — [about](__about/moon_band.md) · [flow](__flow/moon_band.md) |
 | `__init__.py` | Trivial | package docstring only — no re-exports (see Design Decisions) |
 
 ## Z-Order
@@ -34,32 +35,36 @@ live every tick). The geometry, path and drawing helpers every layer shares —
 `render/compositor.py`'s `_build_layers()` reads `skin.z_order` and appends
 layers in this order, bottom (painted first) to top (painted last). For the
 **default skin** (`config/defaults.py`'s `DEFAULT_SKIN.z_order = (background,
-star, weekday_set, ring, year_marker, hands)`) the resulting stack is:
+star, weekday_set, ring, moon_band, year_marker, hands)`) the resulting
+stack is:
 
 1. `BackgroundLayer` — cached (STATIC/DAILY segment)
 2. `StarLayer` — cached
 3. `WeekdayLayer` — live, hover-variable (replaced by `ArchetypeLayer` when
    Archetype mode is active — same z slot)
 4. `RingLayer` — cached
-5. `YearMarkerLayer` — live (MINUTE)
-6. `SlotLayer` (angle seats) — only when the skin seats any slot NOT at
+5. `MoonBandLayer` — cached (DAILY); skipped unless `show_moon` and
+   `year_marker.moon_band_mode == "horizon"`
+6. `YearMarkerLayer` — live (MINUTE)
+7. `SlotLayer` (angle seats) — only when the skin seats any slot NOT at
    "center"; draws BELOW the hands
-7. `HandLayer` × the hand pack's own `z_order` (default hour → minute →
+8. `HandLayer` × the hand pack's own `z_order` (default hour → minute →
    second) — the seconds instance is skipped when the skin has no seconds
    asset or `show_seconds` is off
-8. `CenterBodyLayer` — only when `weekday_set` is in `z_order` and
+9. `CenterBodyLayer` — only when `weekday_set` is in `z_order` and
    `show_weekday` is on (replaced by `ArchetypeCenterLayer` in Archetype
    mode) — ABOVE the hands
-9. `SlotLayer` (center seat) — a second instance, only when a slot is seated
-   at "center" — ABOVE the hands, same reason as `CenterBodyLayer`
-10. `HoverLiftLayer` — always last, always present: repaints only the
+10. `SlotLayer` (center seat) — a second instance, only when a slot is seated
+    at "center" — ABOVE the hands, same reason as `CenterBodyLayer`
+11. `HoverLiftLayer` — always last, always present: repaints only the
     hovered element through lift=True twins of `WeekdayLayer`, `SlotLayer`,
     `YearMarkerLayer`, `ArchetypeLayer` and `ArchetypeCenterLayer` — above
     everything, hands included
 
-Steps 1-5 follow `z_order` directly and are skipped whole when the skin
+Steps 1-6 follow `z_order` directly and are skipped whole when the skin
 switches that Element off (`show_pointer`, `show_weekday`,
-`show_earth`/`show_moon` both off). Steps 6-9 are conditional on the skin's
+`show_earth`/`show_moon` both off, or `moon_band_mode` off "horizon").
+Steps 7-10 are conditional on the skin's
 slot layout and Archetype mode, not on `z_order` position — "hands" in
 `z_order` is the trigger that emits both the angle-seated `SlotLayer` and
 every `HandLayer` instance in one place.

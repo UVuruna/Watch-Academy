@@ -83,7 +83,7 @@ def test_opacity_section_builds_a_real_page_not_a_placeholder(app):
     widget = opacity.build(Settings(), _setters(), lambda text: text)
     assert isinstance(widget, QWidget)
     titles = {group.title() for group in widget.findChildren(QGroupBox)}
-    assert titles == {"Clock body", "Bodies on the ring"}
+    assert titles == {"Clock body", "Bodies on the ring", "Moon Horizon Band"}
 
 
 def test_colors_page_builds_with_custom_modes_active(app):
@@ -116,7 +116,7 @@ _COLORS_SETTER_KEYS = (
 _OPACITY_SETTER_KEYS = (
     "star_alpha", "aura_day_alpha", "aura_twilight_alpha", "umbra_alpha",
     "moon_hidden_alpha", "moon_transit_alpha", "ghost_alpha",
-    "opacity_skin_defaults",
+    "opacity_skin_defaults", "moon_band_mode", "moon_band_style",
 )
 
 

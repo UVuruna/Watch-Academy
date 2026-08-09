@@ -22,11 +22,13 @@ not invented art.
 """
 
 import hashlib
+from datetime import date, datetime
+from datetime import time as _dt_time
 from pathlib import Path
 
 from PySide6.QtCore import QPointF, QRectF, Qt
 from PySide6.QtGui import (
-    QBrush, QColor, QConicalGradient, QFont, QIcon, QImage, QPainter,
+    QBrush, QColor, QConicalGradient, QFont, QIcon, QImage, QPainter, QPen,
     QPixmap,
 )
 
@@ -284,6 +286,82 @@ def umbra_icon(form: str, contrast: str) -> QIcon:
                 )
 
     return _computed_icon(f"umbra_{form}_{contrast}", paint)
+
+
+_MOON_BAND_DEMO_RISE = _dt_time(6, 0)
+_MOON_BAND_DEMO_SET = _dt_time(18, 0)
+
+
+def moon_band_style_icon(style: str) -> QIcon:
+    """The Moon Horizon Band style picker's preview — THE REAL
+    ALGORITHM at thumbnail scale (owner order 2026-08-09): calls
+    `render.layers.moon_band.MoonBandLayer`'s own `_draw_*` style
+    methods directly on a bare canvas (they take only a painter, a
+    radius and a `MoonArc` — no full `RenderContext` — so this is the
+    SAME code the dial paints with, not a redrawn sketch of it) against
+    a fixed demo arc (06:00-18:00, a plain daytime-visible span with no
+    None-day branch to illustrate)."""
+    from core.moon import moon_horizon_arcs
+    from render.layers.moon_band import MoonBandLayer
+
+    radius = THUMB_SOURCE_PX * 0.46
+    arc = moon_horizon_arcs(
+        datetime.combine(date(2000, 1, 1), _MOON_BAND_DEMO_RISE),
+        datetime.combine(date(2000, 1, 1), _MOON_BAND_DEMO_SET),
+    )[0]
+    layer = MoonBandLayer.__new__(MoonBandLayer)
+    dispatch = {
+        "inverted": layer._draw_inverted,
+        "ticks": layer._draw_ticks,
+        "glow": layer._draw_glow,
+    }.get(style, layer._draw_silver_thread)
+
+    def paint(painter: QPainter) -> None:
+        pen = QPen(QColor(palette.NUMERAL_RING_GROUND))
+        pen.setWidthF(radius * 0.03)
+        painter.setPen(pen)
+        painter.setBrush(Qt.BrushStyle.NoBrush)
+        painter.drawEllipse(QRectF(-radius, -radius, 2 * radius, 2 * radius))
+        dispatch(painter, radius, arc)
+
+    return _computed_icon(f"moon_band_style_{style}", paint)
+
+
+def moon_band_mode_icon(mode: str) -> QIcon:
+    """The Moon Horizon Band MODE picker's preview: "horizon" shows the
+    same real silver-thread arc `moon_band_style_icon` draws (the band
+    IS the mode's defining feature); "dim_only" shows a dimmed moon
+    disc (today's `moon_hidden_alpha` behavior, no band); "always_full"
+    shows a full-brightness disc, no band — matching what each mode
+    actually changes on the dial."""
+    from core.moon import moon_horizon_arcs
+    from render.layers.moon_band import MoonBandLayer
+
+    radius = THUMB_SOURCE_PX * 0.46
+
+    def paint(painter: QPainter) -> None:
+        pen = QPen(QColor(palette.NUMERAL_RING_GROUND))
+        pen.setWidthF(radius * 0.03)
+        painter.setPen(pen)
+        painter.setBrush(Qt.BrushStyle.NoBrush)
+        painter.drawEllipse(QRectF(-radius, -radius, 2 * radius, 2 * radius))
+        if mode == "horizon":
+            arc = moon_horizon_arcs(
+                datetime.combine(date(2000, 1, 1), _MOON_BAND_DEMO_RISE),
+                datetime.combine(date(2000, 1, 1), _MOON_BAND_DEMO_SET),
+            )[0]
+            layer = MoonBandLayer.__new__(MoonBandLayer)
+            layer._draw_silver_thread(painter, radius, arc)
+            return
+        moon_radius = radius * 0.16
+        color = QColor(palette.MOON_SILVER)
+        if mode == "dim_only":
+            color.setAlphaF(0.5)
+        painter.setPen(Qt.PenStyle.NoPen)
+        painter.setBrush(color)
+        painter.drawEllipse(QPointF(0.0, 0.0), moon_radius, moon_radius)
+
+    return _computed_icon(f"moon_band_mode_{mode}", paint)
 
 
 def complication_icon(mode: str) -> QIcon:

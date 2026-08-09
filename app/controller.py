@@ -970,6 +970,8 @@ def _overlay_display_settings(skin, settings: Settings, display):
         ),
         pointer_enabled=settings.show_marker_pointer,
         pointer_color=pointer_color,
+        moon_band_mode=settings.moon_band_mode,
+        moon_band_style=settings.moon_band_style,
     )
     # A stored "tertiary" wheel only holds where the pointer serves one
     # (trio/hexa/octa — CUBE.md); everywhere else it normalizes to
@@ -3272,6 +3274,12 @@ class WatchController(QObject):
             "earth_label": wrap(self._set_earth_label),
             "show_marker_pointer": wrap(
                 lambda v: self._set_display_choice("show_marker_pointer", v)
+            ),
+            "moon_band_mode": wrap(
+                lambda v: self._set_display_choice("moon_band_mode", v)
+            ),
+            "moon_band_style": wrap(
+                lambda v: self._set_display_choice("moon_band_style", v)
             ),
             "diameter": wrap(self._set_diameter),
             "earth_scale": wrap(
