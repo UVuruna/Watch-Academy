@@ -18,9 +18,10 @@ than the interpolation everywhere, so it serves the WHOLE span.
 
 import math
 from dataclasses import dataclass
-from datetime import date, datetime, timedelta, timezone
+from datetime import date, datetime, time, timedelta, timezone
 
 from config import constants
+from core import angles
 from core.deep_time import delta_t_seconds, julian_day, real_year
 
 
@@ -182,3 +183,105 @@ def phase_name(fraction: float) -> str:
     if fraction < 0.75:
         return "Waning Gibbous"
     return "Waning Crescent"
+
+
+@dataclass(frozen=True)
+class MoonArc:
+    """One above-horizon span on the dial's tick circle, in the ONE
+    shared dial-angle mapping (`core.angles.time_to_dial_angle`):
+    degrees clockwise from the top, UNWRAPPED so `end_deg >= start_deg`
+    (the render side takes `% 360` itself when it draws). `culmination_deg`
+    is the arc's own midpoint — the render layer's silver-thread diamond
+    and the glow's brightness peak both read it.
+
+    THE MIDPOINT CULMINATION RULE (owner spec 2026-08-09, "midpoint of
+    the arc is an acceptable culmination approximation if core has no
+    culmination time"): `core.moon` has no lunar-transit computation —
+    only rise/set — so this is the approximation actually used; a real
+    transit time would replace this field's source, never its shape.
+    """
+
+    start_deg: float
+    end_deg: float
+    culmination_deg: float
+    full_circle: bool = False
+
+
+def moon_horizon_arcs(
+    moonrise: datetime | None, moonset: datetime | None
+) -> tuple[MoonArc, ...]:
+    """The Moon's above-horizon arc(s) for the Moon Horizon Band (owner
+    verdict 2026-08-09), built from the SAME `moonrise`/`moonset` pair
+    `core.clock_state._is_moon_up` already reads, and the SAME dial
+    mapping the hour hand uses (`core.angles.time_to_dial_angle`) — no
+    angle formula is re-derived here.
+
+    THE NONE-DAY RULE (mirrors `_is_moon_up`'s own policy exactly, Rule
+    #5 — one law, not a second fork of it): a day is missing a rise or
+    a set roughly once a synodic month, and BOTH missing only happens
+    at polar latitudes.
+      * both None -> the moon skips both events because it never sets
+        (or never rises) today; `_is_moon_up` treats this as VISIBLE
+        ("dimming a moon someone can see would be the worse lie") and
+        this mirrors that: a single FULL-CIRCLE arc, `full_circle=True`.
+      * rise is None (only sets today) -> already up at local midnight,
+        arc runs from the dial's midnight point (00:00) to the set.
+      * set is None (only rises today) -> stays up past local midnight,
+        arc runs from the rise to the dial's midnight point (24:00,
+        the SAME dial point as 00:00, reached by sweeping forward).
+      * both present, rise before set -> the plain single arc.
+      * both present, rise AFTER set (the moon was already up at
+        midnight, sets, then rises again before the next midnight) ->
+        TWO arcs: midnight-to-set and rise-to-midnight, each with its
+        own midpoint culmination (there is no single "the" midpoint of
+        a span split by the dial's own seam).
+    """
+    midnight = time(0, 0, 0)
+    start_of_day = angles.time_to_dial_angle(midnight)
+    end_of_day = start_of_day + 360.0
+
+    if moonrise is None and moonset is None:
+        return (
+            MoonArc(
+                start_of_day, end_of_day,
+                (start_of_day + 180.0) % 360.0, full_circle=True,
+            ),
+        )
+    if moonrise is None:
+        end = _unwrap(start_of_day, angles.time_to_dial_angle(moonset))
+        return (_arc(start_of_day, end),)
+    if moonset is None:
+        start = angles.time_to_dial_angle(moonrise)
+        end = _unwrap(start, end_of_day)
+        # `end_of_day` is already >= any single-day angle once unwrapped
+        # relative to `start_of_day`; re-anchor to `start` itself so the
+        # sweep never comes up short of a full lap.
+        if end < start:
+            end += 360.0
+        return (_arc(start, end),)
+
+    rise_deg = angles.time_to_dial_angle(moonrise)
+    set_deg = angles.time_to_dial_angle(moonset)
+    if moonrise <= moonset:
+        end = _unwrap(rise_deg, set_deg)
+        return (_arc(rise_deg, end),)
+
+    # Up at midnight, sets, then rises again before the next midnight.
+    first_end = _unwrap(start_of_day, set_deg)
+    second_end = _unwrap(rise_deg, end_of_day)
+    if second_end < rise_deg:
+        second_end += 360.0
+    return (_arc(start_of_day, first_end), _arc(rise_deg, second_end))
+
+
+def _unwrap(start_deg: float, raw_end_deg: float) -> float:
+    """`raw_end_deg` nudged forward by whole laps until it is >=
+    `start_deg` — the arc always sweeps CLOCKWISE (forward in time)."""
+    end = raw_end_deg
+    while end < start_deg:
+        end += 360.0
+    return end
+
+
+def _arc(start_deg: float, end_deg: float) -> "MoonArc":
+    return MoonArc(start_deg, end_deg, (start_deg + end_deg) / 2.0 % 360.0)

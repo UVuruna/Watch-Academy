@@ -19,6 +19,8 @@ mid-phase.
 - [Deep Time](deep_time.md) — `julian_day`, `delta_t_seconds`,
   `real_year` — the proleptic Julian Day, ΔT and the proxy-frame
   un-shift the analytic series needs
+- [Angles](angles.md) — `time_to_dial_angle`, the ONE dial mapping
+  `moon_horizon_arcs` reuses rather than re-deriving
 
 ### Used by
 - [Moon Phases Repository](../../data/__about/moon_phases.md) —
@@ -28,6 +30,8 @@ mid-phase.
 - [Blue Moon](blue_moon.md) — `MoonWindow` as an input type
 - [Watch Controller](../../app/__about/controller.md) — `chinese_name_of_year`
   for the deep-travel correction
+- [Moon Band](../../render/layers/__about/moon_band.md) — `moon_horizon_arcs`,
+  the Moon Horizon Band's whole geometry input
 
 ## Classes
 
@@ -64,7 +68,27 @@ spanning the period of interest plus margins.
   `MOON_PRINCIPAL_WINDOW` of its instant, else an octant name
   (Waxing/Waning Crescent/Gibbous).
 
+### MoonArc
+Frozen: one above-horizon span on the dial's tick circle —
+`start_deg`/`end_deg` (UNWRAPPED, `end_deg >= start_deg`, `% 360` taken
+by the render side), `culmination_deg` (the arc's own midpoint —
+`core.moon` has no lunar-transit computation, so this is the owner-
+approved approximation), `full_circle` (both rise/set missing that
+day).
+
+- `moon_horizon_arcs(moonrise, moonset)`: the Moon Horizon Band's
+  geometry (owner verdict 2026-08-09) — `tuple[MoonArc, ...]`, built
+  from the SAME `(moonrise, moonset)` pair `_is_moon_up` reads. THE
+  NONE-DAY RULE mirrors `_is_moon_up`'s own policy: both missing ->
+  ONE full-circle arc (treated as visible, same "never lie about
+  hiding a visible moon" reasoning); one missing -> the arc runs from/
+  to local midnight; both present but rise AFTER set (up at midnight,
+  sets, rises again) -> TWO arcs, split at the dial's own seam.
+
 ## Design Decisions
 - `illumination` supersedes the older cosine mapping for every LIVE
   reading; `nominal_illumination` is kept only for the hypothetical ring
   hover, which needs the ring's own idealized mapping, not the true sky.
+- `moon_horizon_arcs` reuses `_is_moon_up`'s None-day policy verbatim
+  (Rule #5) rather than writing a second, competing interpretation of a
+  missing rise/set.
