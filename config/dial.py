@@ -80,6 +80,36 @@ MARKER_BORDER_WIDTH = 0.05           # fraction of the marker size
 # on the shared rim — like an eclipse (owner decision; both stay visible).
 MOON_TRANSIT_OPACITY = 0.5
 
+# THE CLEAR ORBIT LANE (owner verdict 2026-08-09: "Earth touches the outer
+# ring" — Earth and Moon must both travel on a circle that touches NEITHER
+# the inner ring's own content (the minute band, its ticks and quarter/octa
+# arrows) NOR the outer hour band). The two markers keep ONE shared orbit
+# radius (the original "rides the same rim" design — so a real transit,
+# the Moon literally crossing the Earth, still exists), pulled inside
+# `MINUTES_RADIUS_FRACTION` — the inner band's own live content, scaled by
+# `interior_scale` exactly like every other interior member so it tracks
+# THE INWARD-GROWTH LAW at every "Outer ring size" setting — by whichever
+# marker's current half-size (its scale slider included) is larger, plus
+# this fixed visible gap. Clearing the minute band clears the outer band
+# for free: `MINUTES_RADIUS_FRACTION` (0.8215) sits inside the outer band's
+# measured inner edge (0.886) by a fixed ratio THE INWARD-GROWTH LAW
+# preserves at every ring size (`outer_band_edges`), so there is no second
+# boundary to solve. Pinned by `tests/test_earth_moon_orbit.py`.
+EARTH_MOON_ORBIT_CLEARANCE_FRACTION = 0.02
+
+
+def earth_moon_orbit_fraction(ring_size: float, half_size: float) -> float:
+    """THE CLEAR ORBIT LANE's radius (owner verdict 2026-08-09) — see the
+    constant above for the reasoning. `half_size` is the LARGER of the
+    Earth/Moon markers' own current half-size (`max(spec.scale,
+    spec.moon_scale)`, both already carrying the user's scale sliders),
+    so the marker that is currently bigger is the one the clearance is
+    measured against and the smaller one rides the same safe rim with
+    room to spare."""
+    minutes_edge = MINUTES_RADIUS_FRACTION * interior_scale(ring_size)
+    return minutes_edge - half_size - EARTH_MOON_ORBIT_CLEARANCE_FRACTION
+
+
 # THE AURA COLORLESS MENU's "follow" option (Watch Face Phase 4, R-23):
 # the brightness fed to `render.painting.tinted_gray` so "follow ring"
 # reads as the tint's OWN near-white end rather than the tint itself —

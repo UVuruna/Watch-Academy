@@ -8,7 +8,6 @@ from core import angles
 from core.year_wheel import almanac_marker_angle, almanac_month_index
 from render.asset_variants import moon_lit_region
 from render.calendar_mount import calendar_day_arrow, calendar_wheel
-from render.numeral_bands import band_ride_shift
 from render.context import Cadence, Layer, RenderContext
 from render.daylight import moon_transit_opacity
 from render.eclipse_glow import draw_event_glow, eclipse_render_state, eclipse_state_glow_strength
@@ -87,8 +86,16 @@ class YearMarkerLayer(Layer):
             orbit = (
                 dial.GLOW_RING_RADIUS_FRACTION
                 if glowing
-                else spec.moon_orbit_fraction
-            ) + band_ride_shift(ctx.skin.numeral_outer_ring_size)
+                # THE CLEAR ORBIT LANE (owner verdict 2026-08-09): the
+                # quiet orbit is computed, not the fixed spec field —
+                # see `config.dial.earth_moon_orbit_fraction`. Earth and
+                # Moon share ONE radius, sized against whichever marker
+                # is currently bigger.
+                else dial.earth_moon_orbit_fraction(
+                    ctx.skin.numeral_outer_ring_size,
+                    max(spec.scale, spec.moon_scale),
+                )
+            )
             pos = dial_point(moon_angle, ctx.radius * orbit)
             if glowing:
                 color = (
@@ -164,8 +171,16 @@ class YearMarkerLayer(Layer):
         )
         glowing = ctx.tick.season_event is not None or solar_eclipse is not None
         orbit = (
-            dial.GLOW_RING_RADIUS_FRACTION if glowing else spec.orbit_fraction
-        ) + band_ride_shift(ctx.skin.numeral_outer_ring_size)
+            dial.GLOW_RING_RADIUS_FRACTION
+            if glowing
+            # THE CLEAR ORBIT LANE (owner verdict 2026-08-09): see the
+            # Moon's own call above — the quiet orbit is computed, not
+            # the fixed spec field.
+            else dial.earth_moon_orbit_fraction(
+                ctx.skin.numeral_outer_ring_size,
+                max(spec.scale, spec.moon_scale),
+            )
+        )
         pos = dial_point(year_angle, ctx.radius * orbit)
         size = 2 * ctx.radius * spec.scale * hover_factor(ctx, "earth")
         if glowing:

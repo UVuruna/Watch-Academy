@@ -158,13 +158,17 @@ class YearMarkerSpec:
     variants: dict[str, Path]          # "europe_day" / "europe_night" / ... -> image
     day_color: str                     # procedural Earth fallbacks
     night_color: str
-    orbit_fraction: float              # Earth orbit, fraction of the dial radius
+    # NOMINAL orbit only (THE CLEAR ORBIT LANE, owner verdict 2026-08-09)
+    # — read solely by `render.daylight.moon_transit_opacity`'s touch-
+    # angle approximation. The DRAWN orbit is computed live by
+    # `config.dial.earth_moon_orbit_fraction`, never this field.
+    orbit_fraction: float
     scale: float                       # Earth size, fraction of the dial diameter
     moon_asset: Path | None            # full-moon disc image (terminator drawn over it)
     moon_lit_color: str                # procedural moon fallback
     moon_dark_color: str
     moon_shadow_alpha: float           # darkness of the unlit part over the image
-    moon_orbit_fraction: float
+    moon_orbit_fraction: float         # same NOMINAL-only retirement as orbit_fraction
     moon_scale: float                  # smaller than the Earth (owner: ~72%)
     moon_hidden_alpha: float = 0.5     # marker opacity while the moon is
                                        # BELOW the horizon (owner spec

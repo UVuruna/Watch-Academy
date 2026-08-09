@@ -22,6 +22,7 @@ either gets duplicated (forbidden) or stays here, which the remnant may
 import downhill from any of them.
 """
 
+import os
 import re
 from datetime import date
 from pathlib import Path
@@ -227,9 +228,21 @@ ART_DRAIN_WORKERS = 4
 # QImage decode/smooth-scale/encode of a multi-MB source holds the GIL
 # for SECONDS per call, so on a mere thread the GUI goes unclickable
 # exactly as long — the owner's "75 sekundi mrtav sat". Child processes
-# have their own GIL; two of them keep the cold build fast without
+# have their own GIL; a pool of them keeps the cold build fast without
 # starving the machine the dial is animating on.
-WORKING_SET_WORKERS = 2
+#
+# DERIVED, not a hardcoded 2 (0.14.845 — the MIGRATE-GUI round): a flat
+# 2 pinned the 71.7 s cold warmup to two cores no matter how many the
+# machine actually has, the same mistake ART_DRAIN_WORKERS's own cap
+# already knew to avoid. `-2` reserves headroom for the GUI thread and
+# the OS while the pool runs; the floor of 2 never regresses below the
+# old constant; the ceiling of 12 matches ART_DRAIN_WORKERS's own cap —
+# beyond that a bigger pool stops buying wall-clock time and only adds
+# per-process overhead and memory (each worker holds a full-image
+# decode/scale buffer). `warm_working_set`/`drain_pending_working` both
+# additionally clamp to `os.cpu_count()`, so this is a ceiling, not a
+# guaranteed worker count, on a smaller machine.
+WORKING_SET_WORKERS = max(2, min((os.cpu_count() or 4) - 2, 12))
 
 # The art-ready repaint DEBOUNCE (0.14.707): the pooled drain lands
 # finishes in tight bursts, and repainting per landed file meant up to
@@ -810,16 +823,25 @@ DEFAULT_SKIN = SkinDefinition(
         },
         day_color=palette.SKIN_EARTH_DAY,
         night_color=palette.SKIN_EARTH_NIGHT,
-        # Owner spec: the Earth's outer edge TOUCHES the ring's inner
-        # edge (0.75 + 0.11 = 0.86 = the disc radius), same size as the
-        # weekday planets.
+        # RETIRED AS A PAINT RADIUS (owner verdict 2026-08-09, THE CLEAR
+        # ORBIT LANE — "Earth touches the outer ring"): this field's old
+        # role, "the Earth's outer edge TOUCHES the ring's inner edge
+        # (0.75 + 0.11 = 0.86 = the disc radius)", was the bug. The
+        # DRAWN orbit is now computed live, every paint, by
+        # `dial.earth_moon_orbit_fraction` (`render.layers.year_marker`)
+        # — clear of both the minute band and the outer hour band at
+        # every dial size and ring preset. This value survives only as
+        # the NOMINAL orbit `render.daylight.moon_transit_opacity` reads
+        # for its touch-angle approximation (a boolean opacity threshold,
+        # not a drawn position — a small drift from the real radius is
+        # harmless there).
         orbit_fraction=0.75,
         scale=0.11,
         moon_asset=pantheon.weekday_art("planets/primary/photo/Moon.png"),
         moon_lit_color=palette.SKIN_MOON_LIT,
         moon_dark_color=palette.SKIN_MOON_DARK,
         moon_shadow_alpha=0.82,
-        moon_orbit_fraction=0.75,       # rides the same rim as the Earth
+        moon_orbit_fraction=0.75,       # same retirement as orbit_fraction above
         moon_scale=0.08,                # ~72% of the Earth marker (owner spec)
     ),
     hands=HandsSpec(
