@@ -3202,6 +3202,13 @@ class WatchController(QObject):
                 lambda v: self._set_display_choice("hide_night_borders", v)
             ),
             "daylight": wrap(lambda v: self._set_display_choice("daylight", v)),
+            # THE UNIFIED NAMES SWITCH (owner review 2026-08-09: the
+            # Names switcher applies to the ARCHETYPE wheel too) — the
+            # stored keys stay separate; the Watch Face checkbox writes
+            # this one alongside the slot's own set_names.
+            "archetype_names": wrap(
+                lambda v: self._set_display_choice("archetype_names", v)
+            ),
             "ring": wrap(self._set_ring),
             "ring_finish": wrap(
                 lambda v: self._set_display_choice("ring_finish", v)

@@ -599,36 +599,59 @@ def test_outer_ring_size_grows_the_band_inward():
     assert outer_centreline(1.0) == pytest.approx(
         dial.NUMERAL_OUTER_RADIUS_FRACTION
     )
-    # The rim never moves, at ANY multiplier — the whole point.
-    for ring_size in (0.5, 1.0, 1.5, 2.0):
+    # GROWTH direction: the rim never moves, the inner edge yields.
+    for ring_size in (1.0, 1.5, 2.0):
         _inner, outer = outer_band_edges(ring_size)
         assert outer == pytest.approx(default_outer)
         assert outer <= 1.0 + 1e-9
     wide_inner, _outer = outer_band_edges(2.0)
     assert wide_inner == pytest.approx(default_outer - 2.0 * width)
     assert outer_centreline(2.0) == pytest.approx(default_outer - width)
+    # SHRINK direction (opus verification F9, 2026-08-09: the first cut
+    # pinned the outer edge unconditionally and DRAGGED a thin band
+    # outward to the rim): below 1.0 the measured band's INNER edge
+    # stays fixed and the outer edge comes inward — every release's own
+    # behavior, restored and pinned.
+    thin_inner, thin_outer = outer_band_edges(0.5)
+    assert thin_inner == pytest.approx(default_inner)
+    assert thin_outer == pytest.approx(default_inner + width * 0.5)
+    assert outer_centreline(0.5) == pytest.approx(
+        dial.NUMERAL_OUTER_RADIUS_FRACTION - width / 4.0
+    )
     # The interior yields exactly by the inner edge's own ratio…
     assert interior_scale(2.0) == pytest.approx(wide_inner / default_inner)
-    # …and a THINNER band leaves the interior untouched (the default
-    # renders bit-for-bit unchanged).
+    # …and a THINNER band leaves the interior untouched.
     assert interior_scale(1.0) == 1.0
     assert interior_scale(0.5) == 1.0
 
 
 def test_a_wider_outer_ring_really_draws_further_in(app, frame_args):
-    """Hour 13 — The One seats letters on 12/15/18/21/24/3/6/9, so 13 is
-    one of the seats that actually carries a numeral. Under THE
-    INWARD-GROWTH LAW a wider band's numerals sit INSIDE the default
-    centreline (the band grew toward the centre), and there is ink at
-    the new centreline."""
-    _require_a_font_database()
+    """Under THE INWARD-GROWTH LAW a wider band's METAL reaches inside
+    the default inner edge (the band grew toward the centre) while its
+    rim stays put. Asserted on the band GROUND, not the glyphs — the
+    offscreen QPA exposes no fonts, and the first cut of this pin
+    silently SKIPPED in the full suite for exactly that reason (opus
+    verification F12, 2026-08-09)."""
     wide = _band_image(
         "outer", 1440, app, frame_args, numeral_outer_ring_size=1.5,
     )
     angle = numerals.hour_angle(13)
-    new_centre = 720 * outer_centreline(1.5)
-    assert outer_centreline(1.5) < outer_centreline(1.0)
-    assert _glyph_ink(wide, angle, new_centre) > 0
+    default_inner, default_outer = outer_band_edges(1.0)
+    new_inner, new_outer = outer_band_edges(1.5)
+    assert new_inner < default_inner
+    assert new_outer == pytest.approx(default_outer)
+    # Metal present midway into the newly-claimed inward strip…
+    probe = 720 * (new_inner + default_inner) / 2.0
+    centre = dial_point(angle, probe)
+    x = int(wide.width() / 2 + centre.x())
+    y = int(wide.height() / 2 + centre.y())
+    assert wide.pixelColor(x, y).alpha() > 0
+    # …and none just inside of the new inner edge.
+    probe = 720 * (new_inner - 0.02)
+    centre = dial_point(angle, probe)
+    x = int(wide.width() / 2 + centre.x())
+    y = int(wide.height() / 2 + centre.y())
+    assert wide.pixelColor(x, y).alpha() == 0
 
 
 def test_an_arrow_seat_carries_no_number(app, frame_args):

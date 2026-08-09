@@ -573,8 +573,12 @@ def dial_window_margin_fraction(skin) -> float:
         dial.GLOW_RING_RADIUS_FRACTION
         + marker * glow.GLOW_RADIUS_SCALE * skin.hover_enlarge
     )
+    # THE INWARD-GROWTH LAW (opus verification finding F10,
+    # 2026-08-09): the jewels ride the band's LIVE centreline, so the
+    # margin measures from it too — the constant under-estimated the
+    # reach whenever the centreline moved.
     jewel_extent = (
-        dial.RING_JEWEL_RADIUS_FRACTION
+        dial.outer_centreline(skin.numeral_outer_ring_size)
         + dial.RING_JEWEL_ART_SCALE * skin.ring_jewels_scale
         * (1.0 + 2.0 * dial.RING_JEWEL_SHADOW_RADIUS)
     )

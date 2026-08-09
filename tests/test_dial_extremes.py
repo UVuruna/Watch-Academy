@@ -149,3 +149,121 @@ def test_default_render_is_untouched_by_the_inward_growth_law(app, moment):
         dial.NUMERAL_OUTER_RADIUS_FRACTION
         - dial.NUMERAL_OUTER_BAND_WIDTH_FRACTION / 2.0
     )
+
+
+# --- THE CROSSED CORNERS (opus verification F9/F11, 2026-08-09) ---------------
+# The first tooth paired every slider's MIN with every OTHER slider's
+# MIN — the combinations that exposed the bottom end (a THIN band with a
+# LARGE numeral size / large jewels) were structurally unreachable, and
+# clipping INSIDE the band plate (whose canvas IS the dial square) never
+# "escapes the window" at all. This half probes the PLATE itself.
+
+import math
+
+from render.layers.numerals import band_spec
+from render.numeral_bands import band_plate
+
+
+def _max_solid_reach(settings: Settings) -> float:
+    """The farthest radius (fraction of R) any SOLID ink (alpha > 200)
+    of the OUTER band's plate reaches. The plate canvas IS the dial
+    square, so "content stays inside the dial circle" is exactly
+    `reach <= 1.0 + eps` — measured RADIALLY, immune to the rim's own
+    tangency pixels that a naive edge-touch test miscounts (the first
+    cut of this tooth flagged the rim arc itself)."""
+    skin = build_skin(settings)
+
+    class _Ctx:
+        radius = 600.0
+        dpr = 1.0
+        world_offset = 0.0
+
+    # A fresh build, not a cache hit: the process-wide plate cache can
+    # hold a same-key plate built by an earlier test module under a
+    # different (monkeypatched/font-warmup) environment.
+    from render import numeral_bands as _nb
+    _nb._PLATES.clear()
+    plate = band_plate(band_spec(skin, "outer", _Ctx))
+    size = plate.width()
+    centre = (size - 1) / 2.0
+    worst = 0.0
+    for y in range(0, size, 2):
+        for x in range(0, size, 2):
+            if plate.pixelColor(x, y).alpha() > 200:
+                reach = math.hypot(x - centre, y - centre) / (size / 2.0)
+                if reach > worst:
+                    worst = reach
+    return worst
+
+
+_CORNERS = {
+    "thin band, max numerals": dict(
+        numeral_outer_ring_size=dial.NUMERAL_OUTER_RING_SIZE_RANGE[0],
+        numeral_outer_size=dial.NUMERAL_SIZE_RANGE[1],
+    ),
+    "wide band, max numerals": dict(
+        numeral_outer_ring_size=dial.NUMERAL_OUTER_RING_SIZE_RANGE[1],
+        numeral_outer_size=dial.NUMERAL_SIZE_RANGE[1],
+    ),
+    "default band, max numerals": dict(
+        numeral_outer_size=dial.NUMERAL_SIZE_RANGE[1],
+    ),
+}
+
+
+def _real_glyphs_available() -> bool:
+    """Whether the numeral face resolves to REAL glyph outlines in this
+    process. After a WatchController lifecycle the process font roster
+    degrades to .notdef tofu boxes (wider than any real digit — the
+    same degradation behind the audit harness's tofu screenshots; the
+    font-leak itself is a recorded next-round finding), and tofu
+    metrics are not the product's metrics."""
+    from render.numeral_relief import glyph_path
+    from render.numeral_fonts import numeral_font
+
+    try:
+        font = numeral_font("outer", Settings().numeral_face, 100.0)
+    except Exception:
+        return False
+    path = glyph_path("8", font)
+    box = path.boundingRect()
+    # A real '8' is clearly taller than wide; a .notdef box is not.
+    return box.height() > box.width() * 1.15
+
+
+@pytest.mark.parametrize("label", sorted(_CORNERS))
+def test_the_band_plate_never_cuts_its_own_ink_at_slider_corners(
+    app, moment, label,
+):
+    settings = replace(Settings(), **_CORNERS[label])
+    reach = _max_solid_reach(settings)
+    # Two-tier bound, NEVER a silent skip (the F12 lesson): with real
+    # glyphs the clamp holds everything to the rim; under a degraded
+    # tofu-font roster the boxes run wider, so the bound loosens but
+    # stays live — the owner's original octagon overflow was ~1.11 R
+    # and still fails either tier.
+    limit = 1.006 if _real_glyphs_available() else 1.02
+    assert reach <= 1.0 + (limit - 1.0), (
+        f"{label}: solid band ink reaches {reach:.4f} R (limit {limit})"
+        " — content leaves the dial circle and the plate canvas cuts "
+        "it (the owner's octagon defect class)"
+    )
+
+
+def test_a_thin_band_with_max_jewels_stays_inside_the_window(app, moment):
+    """Opus F10's exact repro: ring_size at MIN slides nothing outward
+    any more (the two-direction law) and the margin's jewel term reads
+    the LIVE centreline — the combination that once cut a jewel's
+    shadow on a crown-less ring must stay contained."""
+    settings = replace(
+        Settings(),
+        numeral_outer_ring_size=dial.NUMERAL_OUTER_RING_SIZE_RANGE[0],
+        ring_jewels_scale=constants.ELEMENT_SCALE_RANGE[1],
+        earth_scale=constants.ELEMENT_SCALE_RANGE[0],
+        moon_scale=constants.ELEMENT_SCALE_RANGE[0],
+    )
+    margin = _window_margin(settings)
+    escaped = [side - margin for side in _painted_bounds(settings, moment)]
+    assert all(side <= 0 for side in escaped), (
+        f"ink escapes the real window by {escaped} px (L, T, R, B)"
+    )

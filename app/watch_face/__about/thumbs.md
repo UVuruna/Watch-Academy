@@ -46,6 +46,21 @@ fallback for pointer variants, which carry no preview art of their own
   invalidates it.
 - `pointer_swatch_icon(pointer, style)`: the honest pointer-variant
   fallback — a pie of the pointer's active palette wheel's own hues
+- `umbra_icon(form, contrast)`: the REAL umbra algorithm at thumbnail
+  scale (same ladder/spans/conical gradient as BackgroundLayer),
+  untinted — the Umbra & Aura galleries' previews (2026-08-09)
+- `complication_icon(mode)` / `text_style_icon(label)`: honest computed
+  SKETCHES for pickers whose dial content is computed text/ticks (the
+  recon proved no bounded art door exists for complications)
+- `subdial_set_icon(set_name)`: the set's own gold|bronze|silver plates
+  side by side (solo's gold/bronze derived through the dial's own
+  recolor door)
+- `art_source_icon(source, theme)` / `art_source_dual_icon(source,
+  theme)`: the active theme's Sun plate (and its Sunday dual, when on
+  disk) resolved UNDER a specific art source via `paths.display`
+- `shade_hue(metal, shade)` / `metal_swatch_icon(hue)`: a metal shade's
+  representative ramp hue (mid stop of `recolor/presets/metals.json`)
+  as a round swatch — the Metal shades combos' item icons
 
 ## Design Decisions
 - **Asset-honesty fallback (R-33):** pointer variants have no dedicated

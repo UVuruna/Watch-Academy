@@ -386,6 +386,53 @@ NUMERAL_UNIT_FRACTION = 0.040 / 90.0
 # runs 0.8858 -> 0.9998 of the radius on all six, so the centreline is
 # 0.9428 (RING_JEWEL_RADIUS_FRACTION's own 0.943) and the width 0.114.
 NUMERAL_OUTER_RADIUS_FRACTION = RING_JEWEL_RADIUS_FRACTION
+
+
+def outer_band_edges(ring_size: float) -> tuple[float, float]:
+    """THE INWARD-GROWTH LAW's pure geometry (owner verdict 2026-08-09;
+    lives HERE beside its constants so `defaults` can measure the
+    window margin without touching render — the one-way flow law).
+    Above 1.0 the OUTER edge is pinned at the measured rim and the
+    multiplier moves the INNER edge toward the centre; at and below
+    1.0 the measured band's INNER edge stays fixed and the outer edge
+    comes inward — every release's own behavior, kept (the opus
+    verification caught an unconditional pin dragging a THIN band
+    outward to the rim and clipping its numerals)."""
+    width = NUMERAL_OUTER_BAND_WIDTH_FRACTION
+    inner_default = NUMERAL_OUTER_RADIUS_FRACTION - width / 2.0
+    if ring_size <= 1.0:
+        return inner_default, inner_default + width * ring_size
+    outer_edge = inner_default + width
+    return outer_edge - width * ring_size, outer_edge
+
+
+def outer_centreline(ring_size: float) -> float:
+    """The OUTER band's centreline for `ring_size` — the midpoint of
+    `outer_band_edges`, `NUMERAL_OUTER_RADIUS_FRACTION` exactly at
+    1.0."""
+    inner_edge, outer_edge = outer_band_edges(ring_size)
+    return (inner_edge + outer_edge) / 2.0
+
+
+def band_ride_shift(ring_size: float) -> float:
+    """How far a BAND-RIDING member's radius fraction moves with the
+    band's centreline (Earth/Moon markers, the jewel hover disc) —
+    0.0 at `ring_size` <= 1.0."""
+    if ring_size <= 1.0:
+        return 0.0
+    return outer_centreline(ring_size) - outer_centreline(1.0)
+
+
+def interior_scale(ring_size: float) -> float:
+    """How much the world INSIDE the hour band yields when the band
+    grows inward — new inner edge over the default one; 1.0 at and
+    below `ring_size` 1.0 (a thinner band leaves the interior exactly
+    where the measured art expects it)."""
+    if ring_size <= 1.0:
+        return 1.0
+    default_inner, _outer = outer_band_edges(1.0)
+    new_inner, _outer = outer_band_edges(ring_size)
+    return max(0.1, new_inner / default_inner)
 NUMERAL_OUTER_BAND_WIDTH_FRACTION = 0.114
 NUMERAL_OUTER_RING_SIZE_RANGE = (0.5, 2.0)
 NUMERAL_OUTER_RING_SIZE_DEFAULT = 1.0

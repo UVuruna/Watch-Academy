@@ -10,17 +10,21 @@ from PySide6.QtWidgets import (
     QGridLayout, QHBoxLayout, QLabel, QPushButton, QVBoxLayout, QWidget,
 )
 
-from app.watch_face.widgets import pill
+from app.watch_face import thumbs
+from app.watch_face.widgets import flow_gallery, pill, tile
 from app.weekday_theme_grid import (
     build_weekday_group_grid,
     build_weekday_theme_tiles,
     weekday_group_titles,
 )
-from config import constants
+from config import constants, defaults
 from config.registry import pointers
 
-_ZODIAC_STYLES = constants.ZODIAC_SLOT_STYLES + ("text",)
-_CHINESE_STYLES = constants.CHINESE_SLOT_STYLES + ("text",)
+# Order-preserving DEDUPE (owner review round 2026-08-09): the source
+# tuples already end in "text", so the old `+ ("text",)` doubled that
+# button in every style gallery.
+_ZODIAC_STYLES = tuple(dict.fromkeys(constants.ZODIAC_SLOT_STYLES + ("text",)))
+_CHINESE_STYLES = tuple(dict.fromkeys(constants.CHINESE_SLOT_STYLES + ("text",)))
 
 #: The pointer's default weekday theme, asked of THE POINTER REGISTRY
 #: (`config.registry.pointers.default_theme`) rather than assumed.
@@ -169,9 +173,38 @@ def _weekday_branch(active, pointer, pointer_shape, tr, rebuild) -> QWidget:
             default_weekday_theme(pointer, pointer_shape),
             lambda theme: active.set_weekday(theme), tr,
         ))
+    _add_roster_row(layout, active, tr)
     widget = QWidget()
     widget.setLayout(layout)
     return widget
+
+
+def _add_roster_row(layout: QVBoxLayout, active, tr) -> None:
+    """THE ROSTER PICKER, returned (owner review 2026-08-09: "gods nema
+    opciju biranja pantheon ili planetary"). The whole pipeline already
+    existed end-to-end — `constants.FIGURE_ROSTERS`, the per-slot
+    roster settings, `render.slot_layout.slot_view`, and every
+    controller setter takes a `roster=` kwarg — but the control itself
+    died with the classic menu's Planetary/Pantheon pair in the Phase 6
+    consolidation and this tree never re-grew it. Shown only while the
+    ACTIVE theme actually declares a pantheon block
+    (`pantheon.WEEKDAY_PANTHEON`: greek/egypt/norse/slavic today), so
+    it is never a dead pair."""
+    from config import pantheon
+
+    if active.theme_value not in pantheon.WEEKDAY_PANTHEON:
+        return
+    row = QHBoxLayout()
+    row.addWidget(QLabel(tr("Roster")))
+    for roster in constants.FIGURE_ROSTERS:
+        row.addWidget(pill(
+            tr(roster.capitalize()), active.roster_value == roster,
+            lambda r=roster: active.set_weekday(
+                active.theme_value, roster=r,
+            ),
+        ))
+    row.addStretch(1)
+    layout.addLayout(row)
 
 
 def _select_group(group: str, rebuild) -> None:
@@ -185,35 +218,49 @@ def _clear_group(rebuild) -> None:
 
 
 def _complications_branch(active, tr) -> QWidget:
-    grid = QGridLayout()
-    for index, (mode, title) in enumerate(
-        constants.SLOT_COMPLICATION_TITLES.items()
-    ):
-        row, col = divmod(index, 2)
-        grid.addWidget(
-            pill(
-                tr(title), active.mode_value == mode,
-                lambda m=mode: active.set_mode(m),
-            ),
-            row, col,
+    """Tiles with SKETCH previews since the 2026-08-09 round (owner
+    order: every picker shows what it picks; his instruction allows a
+    sketch, and the recon proved complications have no bounded art
+    door — they draw computed text/ticks on the dial)."""
+    return flow_gallery([
+        tile(
+            tr(title),
+            thumbs.complication_icon(mode),
+            active.mode_value == mode,
+            lambda m=mode: active.set_mode(m),
         )
-    widget = QWidget()
-    widget.setLayout(grid)
-    return widget
+        for mode, title in constants.SLOT_COMPLICATION_TITLES.items()
+    ])
+
+
+def _style_icon(family: str, style: str):
+    """One style's preview: the style's OWN representative plate (the
+    art the dial would draw — Aries for the zodiac families, the Dragon
+    for the Chinese one), or the computed name-sketch for the art-less
+    "text" style."""
+    figure = "Dragon" if family == "chinese" else "Aries"
+    if style == "text":
+        return thumbs.text_style_icon(figure)
+    dirs = (
+        constants.CHINESE_STYLE_ART_DIRS if family == "chinese"
+        else constants.ZODIAC_STYLE_ART_DIRS
+    )
+    art_dir = dirs.get(style)
+    if art_dir is None:
+        return thumbs.text_style_icon(figure)
+    return thumbs.art_thumbnail(
+        defaults.ZODIAC_ART_DIR / art_dir / f"{figure}.png"
+    )
 
 
 def _style_branch(active, family: str, styles: tuple[str, ...], tr) -> QWidget:
-    grid = QGridLayout()
-    for index, style in enumerate(styles):
-        row, col = divmod(index, 3)
-        checked = active.mode_value == family and active.style_value == style
-        grid.addWidget(
-            pill(
-                tr(style.capitalize()), checked,
-                lambda s=style: active.set_style_mode(family, s),
-            ),
-            row, col,
+    """Tiles with the style's own art since the 2026-08-09 round."""
+    return flow_gallery([
+        tile(
+            tr(style.capitalize()),
+            _style_icon(family, style),
+            active.mode_value == family and active.style_value == style,
+            lambda s=style: active.set_style_mode(family, s),
         )
-    widget = QWidget()
-    widget.setLayout(grid)
-    return widget
+        for style in styles
+    ])

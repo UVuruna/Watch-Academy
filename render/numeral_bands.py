@@ -34,9 +34,12 @@ import math
 from dataclasses import dataclass
 
 from PySide6.QtCore import QPointF, QRectF, Qt
-from PySide6.QtGui import QColor, QImage, QPainter, QPainterPath
+from PySide6.QtGui import QColor, QImage, QPainter, QPainterPath, QTransform
 
 from config import dial, palette
+from config.dial import (   # noqa: F401 — the law's public home; re-exported
+    band_ride_shift, interior_scale, outer_band_edges, outer_centreline,
+)
 from core import numerals
 from render import numeral_relief as relief
 from render.asset_recolor import ring_recolored_image
@@ -237,60 +240,34 @@ def inner_band_plate(spec: BandSpec) -> QImage:
     return band_plate(spec)
 
 
-def outer_centreline(ring_size: float) -> float:
-    """The OUTER band's centreline as a fraction of the dial radius, for
-    an "Outer ring size" of `ring_size` (ring_rework.md §5 — "the width
-    of the band the LETTERS and NUMBERS stand in").
-
-    THE INWARD-GROWTH LAW (owner verdict 2026-08-09, replacing the
-    outward rule that sliced his band into an octagon): the band's
-    OUTER edge is pinned at the measured rim — at `ring_size` 1.0 it
-    already stands at 0.9998 of the radius, so there was never anywhere
-    outward to go — and the width multiplier moves the INNER edge
-    toward the centre. `ring_size` 1.0 is the measured band and returns
-    `dial.NUMERAL_OUTER_RADIUS_FRACTION` exactly; the interior world
-    yields by `interior_scale` below."""
-    inner_edge, outer_edge = outer_band_edges(ring_size)
-    return (inner_edge + outer_edge) / 2.0
-
-
-def outer_band_edges(ring_size: float) -> tuple[float, float]:
-    """The OUTER band's metal edges — `(inner, outer)` as fractions of
-    the dial radius. MEASURED off the owner's six outer plates, which
-    all carry the same annulus: 0.8858 to 0.9998. The OUTER edge is
-    pinned there (THE INWARD-GROWTH LAW, owner verdict 2026-08-09) and
-    the "Outer ring size" multiplier grows the band inward — a wider
-    band can never again leave the dial circle."""
-    width = dial.NUMERAL_OUTER_BAND_WIDTH_FRACTION
-    outer_edge = dial.NUMERAL_OUTER_RADIUS_FRACTION + width / 2.0
-    return outer_edge - width * ring_size, outer_edge
-
-
-def band_ride_shift(ring_size: float) -> float:
-    """How far a BAND-RIDING member's radius fraction moves when the
-    band's centreline moves inward (THE INWARD-GROWTH LAW): the Earth
-    and Moon markers keep their own deliberate offsets from the
-    centreline — they just ride its movement. Exactly 0.0 at
-    `ring_size` <= 1.0."""
-    if ring_size <= 1.0:
-        return 0.0
-    return outer_centreline(ring_size) - outer_centreline(1.0)
-
-
-def interior_scale(ring_size: float) -> float:
-    """How much the world INSIDE the hour band yields when the band
-    grows inward (THE INWARD-GROWTH LAW, owner verdict 2026-08-09):
-    the interior scales by new-inner-edge over default-inner-edge, so
-    the minute track keeps abutting the band, the ticks keep their
-    band-relative place and nothing pokes into the widened metal.
-    `ring_size` <= 1.0 returns 1.0 — a THINNER band leaves the interior
-    exactly where the measured art expects it (the gap reads as air,
-    and the default stays bit-for-bit unchanged)."""
-    if ring_size <= 1.0:
-        return 1.0
-    default_inner, _outer = outer_band_edges(1.0)
-    new_inner, _outer = outer_band_edges(ring_size)
-    return max(0.1, new_inner / default_inner)
+def _clamped_to_dial(
+    path: QPainterPath, center: QPointF, radius: float,
+    reserve: float = 0.0,
+) -> QPainterPath:
+    """THE DIAL-CIRCLE CLAMP (extremes round, 2026-08-09): a numeral
+    whose SEATED path would leave the dial circle is scaled down about
+    its own seat until it fits — the plate canvas IS the dial square,
+    so anything past 1.0R gets CUT (the owner's octagon defect class),
+    and glyph metrics vary by FONT ENVIRONMENT (the offscreen QPA's
+    substitute faces run wider than the roster faces and clipped at
+    max numeral size where the real fonts did not). Render time
+    changes WHAT, never HOW — a too-big glyph is drawn smaller, never
+    sliced. Identity for every glyph that already fits."""
+    box = path.boundingRect()
+    reach = max(
+        math.hypot(x, y)
+        for x in (box.left(), box.right())
+        for y in (box.top(), box.bottom())
+    )
+    limit = radius * 0.999 - reserve
+    if reach <= limit or reach <= 0.0:
+        return path
+    factor = limit / reach
+    transform = QTransform()
+    transform.translate(center.x(), center.y())
+    transform.scale(factor, factor)
+    transform.translate(-center.x(), -center.y())
+    return transform.map(path)
 
 
 def _annulus(radius: float, inner: float, outer: float) -> QPainterPath:
@@ -355,9 +332,23 @@ def _build_outer(spec: BandSpec) -> QImage:
         (
             label,
             angle,
-            relief.seated_path(
-                label, font, center,
-                numerals.seat_rotation(angle, spec.seating),
+            _clamped_to_dial(
+                relief.seated_path(
+                    label, font, center,
+                    numerals.seat_rotation(angle, spec.seating),
+                ),
+                center, radius,
+                # The relief copies, the halo dilation+blur and the
+                # border all paint BEYOND the base path — reserve the
+                # pipeline's OWN maxima (the halo formula below, its
+                # box blur doubled for the composite's alpha spread,
+                # the full relief throw, the body pen), or the clamp
+                # bounds a path whose ink still leaves the circle.
+                reserve=(
+                    (border_px / 2.0 + dial.NUMERAL_SHADOW_REACH_UNITS * unit)
+                    + 2.0 * spec.contact_blur_units * unit
+                    + depth_px + border_px
+                ),
             ),
         )
         for label, angle, center in _seats(spec)
@@ -434,7 +425,12 @@ def _build_inner(spec: BandSpec) -> QImage:
     carry arrows (`simple`, `simple_octa`) builds an EMPTY plate, which
     is correct: the whole band is then his art, untouched."""
     assert_covers("inner", spec.face, numerals.minute_labels())
-    unit = _unit_px(spec.pixels)
+    # THE INWARD-GROWTH LAW's second pass (opus verification finding
+    # F2, 2026-08-09): the minute glyphs shrink WITH their track — the
+    # seat alone used to scale, so a full-size digit overhung its
+    # shrunken five-minute stroke and slid under the widened band.
+    shrink = interior_scale(spec.ring_size)
+    unit = _unit_px(spec.pixels) * shrink
     font = numeral_font("inner", spec.face, spec.size_units * unit)
     border_px = dial.NUMERAL_GLOW_BORDER_UNITS * unit
     seats = _seats(spec)

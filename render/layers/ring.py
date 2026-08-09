@@ -41,10 +41,11 @@ from render.painting import dial_point, draw_pixmap_centered
 
 
 class RingLayer(Layer):
-    frame = "rim"
     """The composed ring: his inner base art, the live inner numbers,
     the computed outer band, the preset's own jewels (with per-hour
     metal finish) and the optional crown-text arc."""
+
+    frame = "rim"
 
     cadence = Cadence.STATIC
 

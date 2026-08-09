@@ -34,11 +34,12 @@ def earth_region(latitude: float, longitude: float) -> str:
 
 
 class YearMarkerLayer(Layer):
-    frame = "rim"
     """Date markers along the INSIDE of the dial. Earth rides the year
     wheel (summer solstice at the top); the Moon rides its own cycle (new
     moon at the top, full at the bottom, clockwise) showing the current
     illumination. The Elements switches pick which of the two is drawn."""
+
+    frame = "rim"
 
     cadence = Cadence.MINUTE
 
@@ -198,7 +199,9 @@ class YearMarkerLayer(Layer):
             painter.save()
             painter.setPen(Qt.PenStyle.NoPen)
             painter.setBrush(QColor(palette.CALENDAR_ARROW_COLOR))
-            painter.drawPolygon(calendar_day_arrow(year_angle, ctx.radius))
+            painter.drawPolygon(calendar_day_arrow(
+                year_angle, ctx.radius * ctx.interior_scale,
+            ))
             painter.restore()
         variant = (
             f"{ctx.skin.earth_style}_"

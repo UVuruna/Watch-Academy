@@ -18,7 +18,8 @@ from PySide6.QtWidgets import (
 from app.settings_store import slot_layout_target
 from app.watch_face import theme_tree
 from app.ui_style import tooltip_wrap
-from app.watch_face.widgets import pill
+from app.watch_face import thumbs
+from app.watch_face.widgets import flow_gallery, pill, tile
 from app.weekday_theme_grid import build_calendar_mount_grid
 from config import constants, pantheon
 
@@ -88,7 +89,7 @@ def _populate(root, settings, setters, tr, rebuild) -> None:
         # which medal is "active" (all three are grayed) — see
         # themes.md's Design Decisions.
         content_source = active if not full_face else descriptors[0]
-        root.addWidget(_names_checkbox(content_source, tr))
+        root.addWidget(_names_checkbox(content_source, settings, setters, tr))
         root.addWidget(theme_tree.build(
             content_source, full_face, settings.pointer,
             settings.pointer_shape, tr,
@@ -139,11 +140,26 @@ def _select_slot(index: int, rebuild) -> None:
     rebuild()
 
 
-def _names_checkbox(active, tr) -> QCheckBox:
+def _names_checkbox(active, settings, setters, tr) -> QCheckBox:
+    """THE UNIFIED NAMES SWITCH (owner review 2026-08-09): one Names
+    checkbox now speaks for BOTH rosters that can carry a name — the
+    day name on the weekday bodies (the slot's own `set_names`, as
+    before) AND the figure name on the archetype wheel
+    (`archetype_names`, previously reachable only through the classic
+    right-click menu). The two stored keys stay separate — the menu's
+    per-key toggles still work — this switch simply sets both."""
     checkbox = QCheckBox(tr("Names"))
-    checkbox.setChecked(active.names_value)
-    checkbox.setToolTip(tooltip_wrap(tr("The day name written on the weekday bodies.")))
-    checkbox.toggled.connect(active.set_names)
+    checkbox.setChecked(active.names_value or settings.archetype_names)
+
+    def apply(checked: bool) -> None:
+        active.set_names(checked)
+        setters["archetype_names"](checked)
+
+    checkbox.setToolTip(tooltip_wrap(tr(
+        "The day name written on the weekday bodies — and the figure "
+        "name on the archetype wheel, when a pointer archetype is on."
+    )))
+    checkbox.toggled.connect(apply)
     return checkbox
 
 
@@ -175,25 +191,38 @@ def _subdial_plate_group(settings, setters, tr) -> QGroupBox:
 
 
 def _artwork_group(settings, setters, tr) -> QGroupBox:
-    """The ART SOURCE pick (owner 2026-07-14, ported verbatim from
-    `app.settings_dialog.themes_section._build_artwork_group`, Phase 6
-    FINAL cleanup): the Gemini and ChatGPT generations coexist — one
-    combo switches every plate, emblem and badge; files missing in the
-    chosen source fall back to the other. LIVE-APPLY here (the old
-    Settings copy only ever applied it on OK)."""
+    """The ART SOURCE pick (owner 2026-07-14; PREVIEWS since the owner's
+    2026-08-09 review: each source's tile shows the ACTIVE weekday
+    theme's own Sun plate resolved UNDER that source — planetary Sun
+    when the theme has no plate there, the dial's own fallback — and,
+    when the theme carries a SUNDAY DUAL on disk, a second per-source
+    tile shows it). LIVE-APPLY, as before."""
     group = QGroupBox(tr("Artwork"))
-    row = QHBoxLayout(group)
-    combo = QComboBox()
+    column = QVBoxLayout(group)
+    theme = settings.weekday_theme
+    tiles = []
     for source in constants.ART_SOURCES:
-        combo.addItem(constants.ART_SOURCE_TITLES[source], source)
-    index = combo.findData(settings.art_source)
-    if index >= 0:
-        combo.setCurrentIndex(index)
-    combo.currentIndexChanged.connect(
-        lambda _i: setters["art_source"](combo.currentData())
-    )
-    row.addWidget(combo)
-    row.addStretch(1)
+        tiles.append(tile(
+            tr(constants.ART_SOURCE_TITLES[source]),
+            thumbs.art_source_icon(source, theme),
+            settings.art_source == source,
+            lambda src=source: setters["art_source"](src),
+        ))
+    duals = [
+        (source, thumbs.art_source_dual_icon(source, theme))
+        for source in constants.ART_SOURCES
+    ]
+    for source, icon in duals:
+        if icon is not None:
+            tiles.append(tile(
+                tr("{source} — Sunday dual").format(
+                    source=constants.ART_SOURCE_TITLES[source]
+                ),
+                icon,
+                False,
+                lambda src=source: setters["art_source"](src),
+            ))
+    column.addWidget(flow_gallery(tiles))
     return group
 
 
@@ -207,18 +236,16 @@ def _subdial_set_group(settings, setters, tr) -> QGroupBox:
     subdial_set`); the active jewel finish still decides which color
     draws within it."""
     group = QGroupBox(tr("Subdial plate set"))
-    row = QHBoxLayout(group)
-    combo = QComboBox()
-    for name in constants.SUBDIAL_SETS:
-        combo.addItem(tr(constants.SUBDIAL_SET_TITLES[name]), name)
-    index = combo.findData(settings.subdial_set)
-    if index >= 0:
-        combo.setCurrentIndex(index)
-    combo.currentIndexChanged.connect(
-        lambda _i: setters["subdial_set"](combo.currentData())
-    )
-    row.addWidget(combo)
-    row.addStretch(1)
+    column = QVBoxLayout(group)
+    column.addWidget(flow_gallery([
+        tile(
+            tr(constants.SUBDIAL_SET_TITLES[name]),
+            thumbs.subdial_set_icon(name),
+            settings.subdial_set == name,
+            lambda n=name: setters["subdial_set"](n),
+        )
+        for name in constants.SUBDIAL_SETS
+    ]))
     return group
 
 
@@ -299,9 +326,17 @@ def _rotation_group(settings, setters, tr) -> QGroupBox:
             combo.findData(settings.theme_metals.get(theme, "colored"))
         )
         combo.setEnabled(not settings.theme_metal_follow_ring)
+        # KNAP + COLORED (owner review 2026-08-09, slika 5): the combo
+        # hugs its content and wears the SAME fill vocabulary the
+        # Encyclopedia's look chips wear, keyed by the selection.
+        combo.setSizeAdjustPolicy(
+            QComboBox.SizeAdjustPolicy.AdjustToContents
+        )
+        _paint_metal_combo(combo)
         combo.currentIndexChanged.connect(
-            lambda _i, c=combo, t=theme: setters["theme_metal"](
-                t, c.currentData()
+            lambda _i, c=combo, t=theme: (
+                setters["theme_metal"](t, c.currentData()),
+                _paint_metal_combo(c),
             )
         )
         row, pair = divmod(slot, pairs_per_row)
@@ -341,3 +376,30 @@ def _rotation_group(settings, setters, tr) -> QGroupBox:
     follow_ring.toggled.connect(setters["theme_metal_follow_ring"])
     layout.addWidget(follow_ring)
     return group
+
+
+def _paint_metal_combo(combo: QComboBox) -> None:
+    """The rotation metal combo's FILL — the Encyclopedia look-chip
+    vocabulary (`ui_style._LOOK_FILLS` colors, Rule #5: same metals,
+    same hexes) applied to the combo itself so the selection reads at a
+    glance. Text color is derived from the fill's own luminance, never
+    hand-picked (the `readable_on_dark`/`_readable_text` law)."""
+    from app.ui_style import _LOOK_FILLS, _readable_text
+
+    pick = (combo.currentData() or "").capitalize()
+    fill = _LOOK_FILLS.get(pick)
+    if fill is None:
+        combo.setStyleSheet("")
+        return
+    if isinstance(fill, tuple):
+        background = (
+            "qlineargradient(x1:0, y1:0, x2:1, y2:0, "
+            f"stop:0 {fill[0]}, stop:1 {fill[1]})"
+        )
+    else:
+        background = fill
+    combo.setStyleSheet(
+        f"QComboBox {{ background: {background};"
+        f" color: {_readable_text(fill)}; font-weight: 600;"
+        " padding: 3px 10px; }"
+    )

@@ -60,7 +60,7 @@ from PySide6.QtWidgets import (
     QPushButton, QSlider, QVBoxLayout, QWidget,
 )
 
-from app.watch_face import tint_picker
+from app.watch_face import thumbs, tint_picker
 from app.ui_style import tooltip_wrap
 from app.watch_face.widgets import pill
 from config import constants, dial, palette
@@ -298,7 +298,15 @@ def _metal_group(settings, setters, tr) -> QGroupBox:
     for metal in ("gold", "bronze", "silver"):
         combo = QComboBox()
         for shade in constants.METAL_SHADE_NAMES[metal]:
-            combo.addItem(tr(constants.METAL_SHADE_TITLES[shade]), shade)
+            # THE SHADE SWATCH (owner review 2026-08-09, slika 8): every
+            # option shows ITS OWN ramp hue, read from the recolor
+            # preset itself — never a bare name again.
+            hue = thumbs.shade_hue(metal, shade)
+            title = tr(constants.METAL_SHADE_TITLES[shade])
+            if hue is not None:
+                combo.addItem(thumbs.metal_swatch_icon(hue), title, shade)
+            else:
+                combo.addItem(title, shade)
         index = combo.findData(current[metal])
         if index >= 0:
             combo.setCurrentIndex(index)

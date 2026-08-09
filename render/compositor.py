@@ -580,7 +580,7 @@ class Compositor:
         # with the band it stands on (0.0 in Geocentric).
         center = dial_point(
             (180.0 + self._world_offset()) % 360.0,
-            radius * dial.RING_JEWEL_RADIUS_FRACTION,
+            radius * dial.outer_centreline(self._skin.numeral_outer_ring_size),
         )
         hit_radius = radius * dial.OMEGA_HIT_RADIUS_FRACTION
         return math.hypot(
@@ -748,6 +748,18 @@ class Compositor:
             math.degrees(math.atan2(point.x(), -point.y()))
             - self._world_offset()
         ) % 360.0
+
+    def _interior_hit(self, fraction: float) -> float:
+        """A radius FRACTION of the interior world, as the cursor meets it
+        (THE INWARD-GROWTH LAW, opus sweep 2026-08-09): the drawn geometry
+        scales by interior_scale, so every interior hit test multiplies its
+        fraction the same way — one door, never per-site math."""
+        return fraction * dial.interior_scale(self._skin.numeral_outer_ring_size)
+
+    def _band_hit(self, fraction: float) -> float:
+        """A band-riding radius FRACTION (jewels disc, Earth/Moon orbits,
+        greetings band) — rides the centreline shift, 0.0 at default."""
+        return fraction + dial.band_ride_shift(self._skin.numeral_outer_ring_size)
 
     def _phase_target(self) -> float:
         """The phase the CACHED composite is painted at — never the
@@ -1297,8 +1309,8 @@ class Compositor:
         ):
             return None
         distance = math.hypot(point.x(), point.y())
-        star_tip = radius * self._skin.star.radius_fraction
-        if not (radius * 0.08 <= distance <= star_tip):
+        star_tip = radius * self._interior_hit(self._skin.star.radius_fraction)
+        if not (radius * self._interior_hit(0.08) <= distance <= star_tip):
             return None
         theta = math.degrees(math.atan2(point.x(), -point.y())) % 360.0
         arms = constants.POINTER_POINTS[self._skin.pointer]
@@ -1393,8 +1405,8 @@ class Compositor:
         from render.calendar_mount import calendar_wheel
 
         distance = math.hypot(point.x(), point.y())
-        outer = radius * self._skin.background.aura_radius_fraction
-        if not (radius * 0.08 <= distance <= outer):
+        outer = radius * self._interior_hit(self._skin.background.aura_radius_fraction)
+        if not (radius * self._interior_hit(0.08) <= distance <= outer):
             return None
         theta = self._world_theta(point)
         step = constants.CALENDAR_WEDGE_DEG
@@ -1433,9 +1445,9 @@ class Compositor:
         )
         if thirteenth is not None and hit(
             QPointF(0.0, 0.0),
-            radius * weekday.center_scale
+            radius * self._interior_hit(weekday.center_scale)
             if weekday.display_mode == "center_only"
-            else weekday_body_size(self._skin, radius) / 2,
+            else self._interior_hit(weekday_body_size(self._skin, radius) / 2),
         ):
             return "thirteenth"
         classic = None
@@ -1451,14 +1463,16 @@ class Compositor:
                 if seat == "center"
                 else dial_point(
                     seat + slot_seat_rotation(self._skin, rotation),
-                    radius * weekday.orbit_fraction
-                    * slot_seat_orbit(self._skin, seat),
+                    radius * self._interior_hit(
+                        weekday.orbit_fraction * slot_seat_orbit(self._skin, seat)
+                    ),
                 )
             )
             if hit(
                 pos,
-                radius * weekday.diamond_scale
-                * slot_seat_scale(self._skin),
+                radius * self._interior_hit(
+                    weekday.diamond_scale * slot_seat_scale(self._skin)
+                ),
             ):
                 return f"slot:{index}"
         if classic is not None:
@@ -1468,9 +1482,9 @@ class Compositor:
             if servant_holds_the_seat(self._skin, today) and hit(
                 dial_point(
                     servant_seat_angle(self._skin) + rotation,
-                    radius * weekday_body_orbit(self._skin),
+                    radius * self._interior_hit(weekday_body_orbit(self._skin)),
                 ),
-                radius * weekday.diamond_scale * slot_seat_scale(self._skin),
+                radius * self._interior_hit(weekday.diamond_scale * slot_seat_scale(self._skin)),
             ):
                 # The SERVANT face at his own seat — 24h on the
                 # Compass/Seasons, the blue 06h/270° arm on the Rose
@@ -1490,7 +1504,7 @@ class Compositor:
             center = archetypes.center(key)
             if center is not None and hit(
                 QPointF(0.0, 0.0),
-                archetype_figure_size(self._skin, radius) / 2.0,
+                self._interior_hit(archetype_figure_size(self._skin, radius) / 2.0),
             ):
                 return "archetype:center"
         marker = self._skin.year_marker
@@ -1505,10 +1519,10 @@ class Compositor:
         # hit-test the DRAWN position, whichever radius that is.
         eclipse = self._last_tick.eclipse_event
         moon_orbit = (
-            dial.GLOW_RING_RADIUS_FRACTION
+            self._band_hit(dial.GLOW_RING_RADIUS_FRACTION)
             if self._last_tick.moon_event is not None
             or (eclipse is not None and eclipse.kind == "lunar")
-            else marker.moon_orbit_fraction
+            else self._band_hit(marker.moon_orbit_fraction)
         )
         # THE MARKERS RIDE THE WORLD (core.world): both are drawn on the
         # turning dial face, so their hit discs take the same offset the
@@ -1523,10 +1537,10 @@ class Compositor:
         ):
             return "moon"
         earth_orbit = (
-            dial.GLOW_RING_RADIUS_FRACTION
+            self._band_hit(dial.GLOW_RING_RADIUS_FRACTION)
             if self._last_tick.season_event is not None
             or (eclipse is not None and eclipse.kind == "solar")
-            else marker.orbit_fraction
+            else self._band_hit(marker.orbit_fraction)
         )
         if self._skin.show_earth and hit(
             dial_point(self._last_tick.year_angle + offset, radius * earth_orbit),
@@ -1607,9 +1621,9 @@ class Compositor:
             # center-only showcase keeps center_scale — WITHOUT the
             # seat factor this path used to add (the disc overhung the
             # image by 1.5×).
-            radius * weekday.center_scale
+            radius * self._interior_hit(weekday.center_scale)
             if weekday.display_mode == "center_only"
-            else weekday_body_size(self._skin, radius) / 2,
+            else self._interior_hit(weekday_body_size(self._skin, radius) / 2),
         ):
             return center_body
         if weekday.display_mode == "center_only":
@@ -1621,11 +1635,12 @@ class Compositor:
                 continue     # the Servant won his own seat today
             body = visible_occupant(occupants, today)
             slot = dial_point(
-                angle + rotation, radius * weekday_body_orbit(self._skin)
+                angle + rotation,
+                radius * self._interior_hit(weekday_body_orbit(self._skin)),
             )
             if hit(
                 slot,
-                radius * weekday.diamond_scale * slot_seat_scale(self._skin),
+                radius * self._interior_hit(weekday.diamond_scale * slot_seat_scale(self._skin)),
             ):
                 return body
         return None
@@ -2679,16 +2694,10 @@ class Compositor:
         # band rides the hour band's centreline, so its inner boundary
         # moves inward with it; the tick reading zone below scales with
         # the interior world. Both are identity at ring_size <= 1.0.
-        ride = numeral_bands.band_ride_shift(
-            self._skin.numeral_outer_ring_size
-        )
-        interior = numeral_bands.interior_scale(
-            self._skin.numeral_outer_ring_size
-        )
         in_jewel_band = (
-            radius * (dial.TICK_HOVER_OUTER_FRACTION + ride)
+            radius * self._band_hit(dial.TICK_HOVER_OUTER_FRACTION)
             < distance
-            <= radius * encyclopedia_ui.GREETINGS_JEWEL_OUTER_FRACTION
+            <= radius * self._band_hit(encyclopedia_ui.GREETINGS_JEWEL_OUTER_FRACTION)
         )
         if (
             in_jewel_band
@@ -2720,9 +2729,9 @@ class Compositor:
         if live_crown is not None:
             return live_crown
         if not (
-            radius * dial.TICK_HOVER_INNER_FRACTION * interior
+            radius * self._interior_hit(dial.TICK_HOVER_INNER_FRACTION)
             <= distance
-            <= radius * (dial.TICK_HOVER_OUTER_FRACTION + ride)
+            <= radius * self._band_hit(dial.TICK_HOVER_OUTER_FRACTION)
         ):
             return None
         minutes = round((((theta - 180.0) % 360.0) / 15.0) * 60) % (24 * 60)
@@ -3302,8 +3311,8 @@ class Compositor:
         from render.subdial import octa_slot_art
 
         distance = math.hypot(point.x(), point.y())
-        outer = radius * self._skin.background.aura_radius_fraction
-        if not (radius * 0.08 <= distance <= outer):
+        outer = radius * self._interior_hit(self._skin.background.aura_radius_fraction)
+        if not (radius * self._interior_hit(0.08) <= distance <= outer):
             return None
         theta = self._world_theta(point)
         step = constants.CALENDAR_WEDGE_DEG
@@ -3448,7 +3457,7 @@ class Compositor:
         from render.calendar_mount import calendar_mount_angle, calendar_mount_mark_height
         from render.painting import dial_point
 
-        mount_radius = radius * calendar_mounts.CALENDAR_MOUNT_RADIUS_FRACTION
+        mount_radius = radius * self._interior_hit(calendar_mounts.CALENDAR_MOUNT_RADIUS_FRACTION)
         hit_radius = calendar_mount_mark_height(mount, radius) / 2.0
         for index in range(calendar_mounts.CALENDAR_MOUNTS[mount].seats):
             center = dial_point(calendar_mount_angle(mount, index), mount_radius)
@@ -3485,7 +3494,7 @@ class Compositor:
         else:
             in_day = self._day.day_length == "24:00"    # polar day / night
         if in_day:
-            if distance > radius * self._skin.background.aura_radius_fraction:
+            if distance > radius * self._interior_hit(self._skin.background.aura_radius_fraction):
                 return None
             lines = [
                 f"<b>{html.escape(self._tr('Day'))}</b> "
@@ -3504,7 +3513,7 @@ class Compositor:
                     f"{self._label('Dusk')} {sun.dusk:%H:%M}",
                 ]
             return self._period_earth_html("day") + _centered_html(*lines)
-        if distance > radius * self._skin.background.umbra_radius_fraction:
+        if distance > radius * self._interior_hit(self._skin.background.umbra_radius_fraction):
             return None
         night = 24 * 60 - (hours * 60 + minutes)
         lines = [
@@ -3534,7 +3543,7 @@ class Compositor:
 
         sun = self._day.sun
         distance = math.hypot(point.x(), point.y())
-        if distance > radius * self._skin.background.aura_radius_fraction:
+        if distance > radius * self._interior_hit(self._skin.background.aura_radius_fraction):
             return None
         theta = self._world_theta(point)
 

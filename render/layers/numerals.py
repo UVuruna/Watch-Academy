@@ -19,6 +19,8 @@ and at most eleven `drawImage` calls.
 from PySide6.QtCore import QPointF
 from PySide6.QtGui import QPainter
 
+from functools import lru_cache
+
 from config import dial, paths
 from core import numerals
 from render import letter_plates
@@ -85,6 +87,24 @@ def band_spec(skin, band: str, ctx: RenderContext) -> BandSpec:
     )
 
 
+@lru_cache(maxsize=None)
+def _crown_sources(metal: str, shade: str, art_source: str) -> tuple:
+    """The crown alphabet's resolved plate files, ONCE per
+    (metal, shade, art source) — `crown_spec` runs on the MINUTE paint
+    path and each `jewel_metal_file` resolution stats the disk
+    (`raster_store.source_prefix`), so an uncached map cost two stats
+    per live-crown frame and failed the steady-state repaint tooth the
+    moment the owner's live ring became The One (2026-08-09; the same
+    latent-per-profile class as the Sunday dual probe). The letters are
+    bundled instrument art — process-lifetime caching is the ONE COPY
+    RULE's own pattern. `shade`/`art_source` ride the key so a display
+    change never serves a stale map.'"""
+    return tuple(
+        (glyph, str(jewel_metal_file(letter_plates.plate_path(glyph), metal)))
+        for glyph in numerals.crown_glyph_alphabet() if glyph != " "
+    )
+
+
 def crown_spec(skin, ctx: RenderContext) -> CrownSpec:
     """The live crown's own cache key — its glyphs rebuild only
     when one of these changes.
@@ -134,15 +154,13 @@ def crown_spec(skin, ctx: RenderContext) -> CrownSpec:
         tint=finish.tint,
         alpha=finish.alpha,
         saturation=finish.saturation,
-        sources=tuple(
-            (glyph, str(jewel_metal_file(letter_plates.plate_path(glyph), metal)))
-            for glyph in numerals.crown_glyph_alphabet() if glyph != " "
+        sources=_crown_sources(
+            metal, paths.metal_shade(metal), paths.art_source(),
         ),
     )
 
 
 class LiveCrownLayer(Layer):
-    frame = "rim"
     """The crown's live time (ring_rework §3).
 
     The One keeps its own civil time; Templar keeps the hour of
@@ -150,6 +168,8 @@ class LiveCrownLayer(Layer):
     business, and the tick already carries every crown zone's `HH:MM`
     (`core.clock_state.build_tick_state`), so this layer never touches
     a clock or a timezone itself — it reads a string and composes."""
+
+    frame = "rim"
 
     cadence = Cadence.MINUTE
 
