@@ -270,7 +270,12 @@ class _LocationSectionMixin:
             self._results.hide()
             return
         row_height = self._results.sizeHintForRow(0)
-        self._results.setFixedHeight(min(120, rows * row_height + 10))  # layout-law: exempt - live-search dropdown computed from its rows; scrolls only past 120px of results
+        # The frame is the WIDGET's own, not a guessed +10: the themed
+        # QSS gives this list a 7px frame per side, so a single 40px row
+        # needed 54px and the hard-coded arithmetic handed it 50 — four
+        # px of its only row cut off (ALG-1 state matrix, 2026-08-09).
+        frame = 2 * self._results.frameWidth()
+        self._results.setFixedHeight(min(120, rows * row_height + frame))  # layout-law: exempt - live-search dropdown computed from its own rows and frame; scrolls only past 120px of results
         self._results.show()
 
     def _pick_result(self, item: QListWidgetItem) -> None:
@@ -330,6 +335,16 @@ class _LocationSectionMixin:
         # page.
         self._jump_list.setSizePolicy(
             QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Expanding
+        )
+        # Expanding gives it every SPARE pixel; it does not stop the
+        # layout from crushing it when there are none. At the latitude
+        # slider's own extreme the rows above grow and this list was
+        # squeezed to 50px while needing 72 (ALG-1 state matrix, picker
+        # driver 2026-08-09 — a South Pole observer reaches it). Fixed
+        # POLICY, not a fixed number: three of its OWN rows plus frame,
+        # so the floor follows the theme's metrics.
+        self._jump_list.setMinimumHeight(
+            3 * self._jump_list.fontMetrics().height() + 4 * 6
         )
         # R-32: double-click applies the city AS THE LOCATION straight
         # away — the SAME `_apply_city_selection` body a single combo

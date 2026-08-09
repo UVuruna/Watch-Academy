@@ -90,8 +90,9 @@ TESTS_DIR = Path(__file__).resolve().parent
 if str(TESTS_DIR) not in sys.path:         # layout_checks_qt.py lives here
     sys.path.insert(0, str(TESTS_DIR))
 
+from layout_drive_qt import check_extreme_states              # noqa: E402
 from layout_checks_qt import (                               # noqa: E402
-    _window_image, active_profile, check_contrast, check_extreme_states,
+    _fits_its_own_content, _window_image, active_profile, check_contrast,
     check_outside_window, check_radius, check_row_occupancy,
     check_section_taxonomy, check_space_ceiling, check_tooltips,
     check_uniform_siblings, live_profile_copy, live_profile_source)
@@ -130,15 +131,24 @@ def app():
 
 def _make_app() -> QApplication:
     """Native platform first (real fonts, real DPI), offscreen only when
-    there is no desktop to talk to."""
+    there is no desktop to talk to. Either way the audit measures REAL
+    glyphs: in a guard run an earlier module has already flipped the
+    process to offscreen, whose platform font database is EMPTY (the
+    tofu-shot root cause — tests/offscreen_fonts.py), so the machine's
+    fonts are provisioned into it before any window is measured."""
+    from tests.offscreen_fonts import provision
+
     existing = QApplication.instance()
     if existing is not None:
+        provision()
         return existing
     try:
-        return QApplication([])
+        app = QApplication([])
     except Exception:
         os.environ["QT_QPA_PLATFORM"] = "offscreen"
-        return QApplication([])
+        app = QApplication([])
+    provision()
+    return app
 
 
 def _settle(window: QWidget, width: int, height: int) -> None:
@@ -240,6 +250,18 @@ def check_clipping(window: QWidget) -> list[str]:
             continue
         else:
             need = widget.minimumSizeHint()
+            if (need.height() > widget.height()
+                    and widget.minimumHeight() == widget.maximumHeight()
+                    and _fits_its_own_content(widget)):
+                # A deliberately FIXED HEIGHT that still shows all its own
+                # content. Qt hands every item view a generic 72px
+                # minimumSizeHint with nothing to do with what is in it, so
+                # a live-search dropdown sized to its one row read as
+                # clipped while showing that row whole (ALG-1 state matrix,
+                # 2026-08-09). The same state matrix DID find a real 4px
+                # cut behind it, which is why this judges CONTENT rather
+                # than exempting fixed heights outright.
+                need = QSize(need.width(), widget.height())
             layout = widget.layout()
             if layout is not None and layout.hasHeightForWidth():
                 # A container of WRAPPING children has no single minimum

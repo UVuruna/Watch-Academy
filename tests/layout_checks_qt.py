@@ -24,8 +24,8 @@ from PySide6.QtWidgets import (QAbstractScrollArea, QAbstractSlider,
                                QApplication, QCheckBox, QComboBox,
                                QDoubleSpinBox, QGroupBox, QLabel, QLayout,
                                QLineEdit, QPushButton, QRadioButton,
-                               QScrollBar, QSpacerItem, QSpinBox, QToolButton,
-                               QWidget)
+                               QScrollBar, QSpacerItem, QSpinBox, QStyle,
+                               QToolButton, QWidget)
 
 # --- CONFIGURATION (thresholds - a project that must bend one bends it here,
 # with the reason written beside it) ------------------------------------------
@@ -49,6 +49,13 @@ ABSOLUTE_WIDTH, ABSOLUTE_HEIGHT = 2560, 1440
 CONTRAST_MIN = 4.5
 CONTRAST_MIN_LARGE = 3.0
 LARGE_TEXT_PX = 18
+# ALG-2: characters whose glyphs are colour BITMAPS (emoji, pictographs) - the
+# pen never paints them, so a label made ONLY of these has no measurable
+# foreground colour. Variation selectors and ZWJ ride along.
+_EMOJI_ONLY_RE = re.compile(
+    "[\U0001F000-\U0001FAFF"
+    "\u2600-\u27BF\uFE0E\uFE0F\u200D]"
+)
 # ALG-3: a plain-text tooltip longer than this renders as one unwrapped line.
 TOOLTIP_MAX_CHARS = 72
 # ALG-5: how far two same-kind siblings may differ before it reads as ragged.
@@ -56,6 +63,13 @@ SIBLING_TOLERANCE = 2
 # ALG-1: a combo box with more items than this is not a "small enum" - walking
 # 300 fonts would cost minutes and prove nothing new.
 ENUM_STATE_LIMIT = 12
+# ALG-1: checkable buttons DRIVEN per picker group. A tile gallery is this
+# vocabulary's real picker - clicking one rebuilds the section under it, which
+# is where a layout regression appears - but a colour page can hold 238 of
+# them, so the group is sampled. Same bound as ENUM_STATE_LIMIT and for the
+# same reason: past a dozen it is a catalogue, not a choice. NO SILENT CAP -
+# whatever is left undriven is reported as a coverage note.
+PICKER_STATE_LIMIT = 12
 # ALG-1: px a child may leave the window rect by before it counts as outside
 # (rounding in mapTo/frame geometry, not a layout fault).
 GEOMETRY_TOLERANCE = 1
@@ -102,10 +116,36 @@ def check_declared_minimum(window: QWidget) -> list[str]:
                 "the window demands a screen the user does not have. REFLOW "
                 "it (ladder step 2); widening your way out is the bug itself"]
     return []
+def _fits_its_own_content(widget: QWidget) -> bool:
+    """Whether a widget the author gave a FIXED height still shows all of
+    its content.
+
+    Qt hands every item view a GENERIC minimumSizeHint (72px on this build)
+    that has nothing to do with what is in it. A live-search dropdown sized
+    to its own rows - `setFixedHeight(rows * row + frame)` - is therefore
+    reported as clipped while showing every row it has. A fixed height is an
+    author's explicit declaration, so it is judged by CONTENT: measurable for
+    an item view, and trusted otherwise (that declaration is a decision the
+    static reviewer owns, not a runtime measurement)."""
+    view = getattr(widget, "sizeHintForRow", None)
+    count = getattr(widget, "count", None)
+    if view is None or count is None:
+        return True
+    rows = count()
+    if rows <= 0:
+        return True
+    frame = 2 * widget.frameWidth() if hasattr(widget, "frameWidth") else 4
+    return sum(view(row) for row in range(rows)) + frame <= widget.height()
+
+
 def check_clipping(window: QWidget) -> list[str]:
     problems = []
     for widget in walk(window):
         need: QSize = widget.minimumSizeHint()
+        if (need.height() > widget.height()
+                and widget.minimumHeight() == widget.maximumHeight()
+                and _fits_its_own_content(widget)):
+            need = QSize(need.width(), widget.height())
         if need.width() > widget.width() or need.height() > widget.height():
             problems.append(
                 f"CLIPPED {widget.__class__.__name__} "
@@ -424,86 +464,11 @@ def check_outside_window(window: QWidget) -> list[str]:
                 "the layout (a hand-placed child does not reflow), or grow "
                 "the window minimum (ladder step 3)")
     return problems
-def state_invariants(window: QWidget) -> list[str]:
-    """What must hold in EVERY state - the default one and every extreme
-    ALG-1 drives the window through."""
-    return (check_clipping(window)
-            + check_elision(window)
-            + check_scroll_with_free_space(window)
-            + check_outside_window(window))
-def control_states(widget: QWidget):
-    """(kind, values to visit, value to restore, setter) or None.
-
-    QScrollBar is deliberately excluded: it is a subclass of QAbstractSlider
-    but it is VIEW state, not a setting the user configures - driving it to
-    its maximum only scrolls the view the scroll checks are already judging."""
-    if isinstance(widget, QScrollBar):
-        return None
-    if isinstance(widget, (QAbstractSlider, QSpinBox, QDoubleSpinBox)):
-        return ("value",
-                [widget.minimum(), widget.value(), widget.maximum()],
-                widget.value(), widget.setValue)
-    if isinstance(widget, QCheckBox):
-        return ("checked", [False, True], widget.isChecked(),
-                widget.setChecked)
-    if isinstance(widget, QComboBox) and 0 < widget.count() <= ENUM_STATE_LIMIT:
-        return ("item", list(range(widget.count())), widget.currentIndex(),
-                widget.setCurrentIndex)
-    return None
-
-def check_extreme_states(window: QWidget, invariants=None) -> list[str]:
-    """ALG-1 - "tested" without extremes is not tested.
-
-    Every numeric control is visited at minimum / current / maximum, every
-    check box in both states, every small enum through all its items; after
-    each change the window is re-settled (processEvents twice, so a signal
-    handler's own layout work lands) and the invariants are re-run. Original
-    values are restored afterwards, even when a handler raises.
-
-    Only breakage the DEFAULT state does not already show is reported - the
-    baseline belongs to the plain audit, and repeating it once per slider
-    position would bury the new finding."""
-    invariants = state_invariants if invariants is None else invariants
-    baseline = set(invariants(window))
-    problems: list[str] = []
-    seen: set[tuple[str, str]] = set()
-    for widget in list(walk(window)):
-        try:
-            plan = control_states(widget)
-        except RuntimeError:
-            continue
-        if plan is None:
-            continue
-        kind, values, original, apply_value = plan
-        label = (f"{widget.__class__.__name__} "
-                 f"'{widget.objectName() or widget.accessibleName() or '-'}'")
-        try:
-            for value in values:
-                try:
-                    apply_value(value)
-                except (RuntimeError, TypeError):
-                    break
-                settle(window)
-                for problem in invariants(window):
-                    if problem in baseline:
-                        continue
-                    key = (label, problem)
-                    if key in seen:
-                        continue
-                    seen.add(key)
-                    problems.append(
-                        f"ALG-1 EXTREME STATE MATRIX (rules/GUI.md -> Zubi v2) "
-                        f"{label} at {kind}={value}: {problem} - a state the "
-                        "user can reach must satisfy the same rules as the "
-                        "default one; fix the layout for the extreme, or "
-                        "narrow the control's range")
-        finally:
-            try:
-                apply_value(original)
-                settle(window)
-            except (RuntimeError, TypeError):
-                pass
-    return problems
+# The DRIVING half of ALG-1 - `state_invariants`, `control_states`,
+# `picker_group` and `check_extreme_states` - lives in the sibling module
+# `layout_drive_qt.py` (THE STRUCTURE LAW split, 2026-08-09: measuring a
+# window and driving it through its states are two responsibilities).
+# `check_outside_window` above stays here: it MEASURES, the driver calls it.
 
 # --- ALG-2  CONTRAST --------------------------------------------------------
 TEXT_WIDGETS = (QLabel, QPushButton, QCheckBox, QRadioButton, QGroupBox)
@@ -572,12 +537,32 @@ def check_contrast(window: QWidget, image: QImage | None = None) -> list[str]:
         text = widget_text(widget).strip()
         if not text or is_rich_text(text):
             continue
+        if not _EMOJI_ONLY_RE.sub("", text).strip():
+            # A colour-emoji glyph is a BITMAP: the pen never paints it,
+            # so "foreground vs background" is not a measurement that
+            # exists for it (real fonts exposed this on 📅 labels —
+            # the pen colour was being judged against the emoji's own
+            # pixels). Text that still has any pen-drawn character keeps
+            # the full check.
+            continue
         if _ancestors(widget, window) is None:
             continue
         rect = _rect_in_window(widget, window)
         if rect is None:
             continue
         rect = rect.intersected(window.rect())
+        if isinstance(widget, (QCheckBox, QRadioButton)):
+            # Sample where the TEXT is: a checked indicator is a filled
+            # colour block inside the widget rect and can out-vote the
+            # actual background behind the label (real fonts exposed
+            # this on the Observatory legend, where a yellow indicator
+            # made readable yellow-on-dark text read as 1.01:1).
+            indicator = widget.style().pixelMetric(
+                QStyle.PixelMetric.PM_IndicatorWidth, None, widget
+            ) + widget.style().pixelMetric(
+                QStyle.PixelMetric.PM_CheckBoxLabelSpacing, None, widget
+            )
+            rect = rect.adjusted(indicator, 0, 0, 0)
         if isinstance(widget, QGroupBox):
             # Only the title band - the box's body is other widgets' business.
             rect = QRect(rect.left(), rect.top(), rect.width(),
