@@ -33,6 +33,57 @@ times). The watches share one asset tree, one raster cache and one
 - [Watch Manager](watch_manager.md) — owns the background thread and arms it
   once every watch's first frame has painted
 
+## Measured (MIGRATE-GUI Phase 1, owner bar 2026-08-09 — "3 seconds
+cold, everything responsive")
+
+**Method:** a real `python main.py`-shaped launch (real `QApplication`,
+real `AppController`, real assets) run as its own process, pointed at
+an ISOLATED, empty directory via `config.paths.user_dir`'s
+`DOMY_WATCH_USER_DIR_OVERRIDE` dev escape hatch (never the owner's live
+`%APPDATA%\DOMY Watch`) so `settings.json`/`raster_cache` start
+genuinely cold. Three milestones, timestamped from process start: a
+`QTimer.singleShot(0, ...)` armed the instant `AppController.run()`
+returns (its own fire time IS how long the event loop was blocked
+before it could service anything — the exact shape of "window drag/
+right-click dead"); the first watch's `first_painted` signal; and
+(after the fix only) both derived-image ledgers
+(`asset_variants.pending_working()` + `asset_recolor.pending_art()`)
+reading empty, i.e. the dial's own art is fully real, not standing in.
+
+One watch, the shipped DEFAULT skin (`hexa` pointer, `planets` weekday
+theme, `show_weekday=True` — enough oversized working-set art to
+matter: `Saturn`/`Jupiter`/`Sun_Eclipse`/`earth_atmo_europe_night`, all
+≥800px, needed a working copy on this very first paint):
+
+| Milestone | BEFORE (this round's own fix reverted) | AFTER |
+|---|---|---|
+| GUI thread responsive (zero-delay timer fires) | 2.943 s | **0.918 s** |
+| First painted frame | 4.516 s | **1.345 s** |
+| Dial fully dressed (both ledgers empty) | *(no ledger; the old code's first paint already forces every inline build it needs, so "painted" and "dressed" are the same moment)* | 4.216 s |
+
+AFTER clears the owner's 3 s bar on responsiveness and first paint with
+real headroom (0.92 s / 1.35 s), and the dial is fully dressed as real
+pixels — not a placeholder — by 4.2 s, inside the ~5 s progressive-art
+allowance. BEFORE's own numbers, on this modest single-watch DEFAULT
+skin alone, already sit at 2.9 s / 4.5 s — over budget before a single
+customization is added.
+
+**Honest scope note:** this measures ONE watch on the DEFAULT skin, not
+the owner's actual three-watch, richly customized setup his 71.7 s
+`profiling.json` entry ("Working set warmup") and 75–90 s reports came
+from — reproducing that exactly (three watches, his specific weekday
+themes/archetypes, his 3.4 GB / 2,318-file corpus) was out of this
+round's time budget. The mechanism the fix installs — a working-set
+miss is named ONCE in a process-wide ledger and shared by every
+watch/caller through `render.assets.shared_cache`, never rebuilt per
+watch — is architecturally the same fix that already ended the
+N-times-duplicated-work class of bug for the metal-recolor ledger
+(`app/__about/watch_manager.md` → THE ONE COPY RULE), so the SAME
+watches × assets multiplication that made 71.7 s out of one watch's
+slower number is expected to shrink by the same shared-ledger
+mechanism — but that is reasoning from the fix's shape, not a second
+measurement, and is named here as exactly that.
+
 ## Functions
 
 ### `run_warm(hover_sweeps=(), progress=None, on_art_ready=None, should_stop=None)`
