@@ -27,14 +27,18 @@ ring"): the QUIET (non-glowing) orbit radius is no longer the skin's own
 `orbit_fraction`/`moon_orbit_fraction` fields — those are now NOMINAL,
 read only by `moon_transit_opacity`'s touch-angle approximation. The
 DRAWN radius is computed fresh every paint by `config.dial.
-earth_moon_orbit_fraction(ring_size, half_size)`: pulled inside the
-minute band's own live radius (`dial.MINUTES_RADIUS_FRACTION`, scaled by
-`dial.interior_scale` exactly like every other interior member so it
-tracks THE INWARD-GROWTH LAW) by whichever marker is currently the
-bigger of the two (`max(spec.scale, spec.moon_scale)`) plus a fixed
-visible clearance — so the marker's disc never reaches the minute band's
-own content NOR the outer hour band above it, at any dial size or ring
-preset. Earth and Moon still share this ONE radius (the "same rim"
+earth_moon_orbit_fraction(ring_size, half_size)`: pulled inside
+WHICHEVER inner element reaches furthest out — the minute band's own
+live radius (`dial.MINUTES_RADIUS_FRACTION`, scaled by
+`dial.interior_scale`) or THE HEXAGRAM/PENTAGON FLOOR
+(`dial.POLYGON_FILL_MIN_RADIUS_FRACTION`, added in the same
+correction round after an independent grader saw the Moon sit across
+the star/polygon background fill's own boundary line) — by whichever
+marker is currently the bigger of the two (`max(spec.scale,
+spec.moon_scale)`) plus a fixed visible clearance — so the marker's
+disc never reaches the minute band's own content, the star/polygon
+fill's boundary, NOR the outer hour band above it, at any dial size or
+ring preset. Earth and Moon still share this ONE radius (the "same rim"
 design, so a literal transit — the Moon crossing the Earth — still
 exists); `render/compositor.py`'s `_element_at` hit-test computes the
 identical radius so hover/click always matches the drawn position.
@@ -42,6 +46,13 @@ Pinned by `tests/test_earth_moon_orbit.py`. The GLOWING relocation below
 (to the ring band centerline, during a season/eclipse event window) is
 untouched — that overlap is the owner's own approved dramatic effect,
 not the touching bug this law fixes.
+
+THE POSITION POINTER (Settings ▸ Earth, off by default): `_draw_orbit_
+pointer` is called AFTER the body's own pixmap/disc for both markers
+(visual proof correction round 2026-08-09) — the first cut drew it
+BEFORE the body, so only its outward tip's protrusion peeked past the
+sphere's own edge, a sliver an independent grader read as a rendering
+glitch. On top it reads as an intentional marker at a glance.
 
 THE WORLD OFFSET ([World](../../../core/__about/world.md)): both markers are
 drawn ON the turning dial face, so both take `ctx.world_offset`. At night

@@ -5,7 +5,9 @@ seating and the transparent window's own margin computation.
 Layer: config — pure, no Qt, no wall clock.
 """
 
-from config import paths
+import math
+
+from config import constants, paths
 
 
 # --- Window ------------------------------------------------------------------
@@ -97,6 +99,40 @@ MOON_TRANSIT_OPACITY = 0.5
 # boundary to solve. Pinned by `tests/test_earth_moon_orbit.py`.
 EARTH_MOON_ORBIT_CLEARANCE_FRACTION = 0.02
 
+# THE STAR/POLYGON TIP (moved here from `config.defaults`'s DEFAULT_SKIN
+# literal, owner correction round 2026-08-09 — the orbit lane needs to
+# reason about it, and `config.dial` may not import `config.defaults`,
+# the direction the flow already runs): where the pointer's own star or
+# polygon shape's OUTER vertices sit, a fraction of the dial radius —
+# "star tips touch the ring's inner edge too" (`skins.manifest.StarSpec.
+# radius_fraction`'s own docstring). `config.defaults.DEFAULT_SKIN`
+# reads this constant instead of repeating the literal.
+STAR_RADIUS_FRACTION = 0.86
+
+# THE HEXAGRAM/PENTAGON FLOOR (owner correction round 2026-08-09: "the
+# Moon crosses the inner pentagon/hexagram border" — the star diamond
+# fill `render.shapes.star_diamond_path` paints is not a circle: each
+# arm is a kite reaching its own tip at `STAR_RADIUS_FRACTION`, its two
+# outer edges sloping in toward the shared vertex their neighbour kite
+# also touches, `render.shapes.star_inner_radius`'s own value (`tip /
+# (2·cos(half-angle))`). A marker sitting exactly ON one of those
+# sloped edges is what an independent grader saw slice across the Moon.
+# The kite's own APOTHEM — the edge's Cartesian midpoint radius,
+# `tip * cos(half-angle)`, the same measure `render.shapes.
+# polygon_boundary_radius` uses for the curvature-0 polygon edge this
+# kite becomes if the reader ever turns polygon curvature up — is the
+# practical floor: it sits well clear of the tip end the marker's own
+# angular footprint actually reaches (the marker is a few degrees wide,
+# not a full arm's half-angle), while stopping short of the inner
+# vertex's much deeper radius, which would bury the marker inside the
+# NEXT weekday body over. Smallest across every pointer the user can
+# pick (`constants.POINTER_ARM_HALF_ANGLE_DEG`) — the WIDEST arm (the
+# largest half-angle) pulls its apothem in the furthest.
+POLYGON_FILL_MIN_RADIUS_FRACTION = STAR_RADIUS_FRACTION * min(
+    math.cos(math.radians(half_deg))
+    for half_deg in constants.POINTER_ARM_HALF_ANGLE_DEG.values()
+)
+
 
 def earth_moon_orbit_fraction(ring_size: float, half_size: float) -> float:
     """THE CLEAR ORBIT LANE's radius (owner verdict 2026-08-09) — see the
@@ -105,20 +141,31 @@ def earth_moon_orbit_fraction(ring_size: float, half_size: float) -> float:
     spec.moon_scale)`, both already carrying the user's scale sliders),
     so the marker that is currently bigger is the one the clearance is
     measured against and the smaller one rides the same safe rim with
-    room to spare."""
+    room to spare.
+
+    THE HEXAGRAM/PENTAGON FLOOR (owner correction round 2026-08-09):
+    clearing the minute band alone let the Moon cross the star/polygon
+    background fill's own inward-dipping edges — see
+    `POLYGON_FILL_MIN_RADIUS_FRACTION` above — so the lane now clears
+    WHICHEVER inner element reaches furthest out, the minute band or
+    that fill floor."""
     minutes_edge = MINUTES_RADIUS_FRACTION * interior_scale(ring_size)
-    return minutes_edge - half_size - EARTH_MOON_ORBIT_CLEARANCE_FRACTION
+    inner_edge = min(minutes_edge, POLYGON_FILL_MIN_RADIUS_FRACTION)
+    return inner_edge - half_size - EARTH_MOON_ORBIT_CLEARANCE_FRACTION
 
 
 # THE POSITION POINTER (owner feature 2026-08-09, Settings ▸ Earth, off
 # by default): a small triangle straddling each marker's OWN edge at its
 # exact angle — the same triangle language `render.calendar_mount.
 # calendar_day_arrow` uses for the Almanac's day mark — so a small
-# Earth/Moon marker stays easy to find. Drawn UNDER the body itself, so
-# only the outward tip peeks past the body's own edge. The tip's
-# protrusion stays comfortably inside `EARTH_MOON_ORBIT_CLEARANCE_
-# FRACTION`'s own margin (0.02) so the pointer never re-touches the
-# minute band or the outer hour band THE CLEAR ORBIT LANE just cleared.
+# Earth/Moon marker stays easy to find. Drawn OVER the body itself
+# (visual proof correction round 2026-08-09 — the first cut drew it
+# UNDER the body, so only a thin sliver of tip peeked past the sphere's
+# own edge and read as a rendering glitch rather than an intentional
+# marker). The tip's protrusion stays comfortably inside
+# `EARTH_MOON_ORBIT_CLEARANCE_FRACTION`'s own margin (0.02) so the
+# pointer never re-touches the minute band or the outer hour band THE
+# CLEAR ORBIT LANE just cleared.
 #
 # SIZED FOR LEGIBILITY (owner ROUND CORRECTION, visual proof 2026-08-09):
 # the first cut (protrusion 0.012, half-angle 2.5deg, no outline) was

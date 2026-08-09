@@ -29,12 +29,23 @@ Layer: config — pure, no Qt, no wall clock.
 - **Moon/Earth rim transit** — `MOON_TRANSIT_OPACITY`, and THE CLEAR
   ORBIT LANE (owner verdict 2026-08-09): `EARTH_MOON_ORBIT_CLEARANCE_
   FRACTION` + `earth_moon_orbit_fraction(ring_size, half_size)`, the
-  DRAWN Earth/Moon orbit radius — pulled inside `MINUTES_RADIUS_
-  FRACTION` (scaled by `interior_scale`) by whichever marker is
-  currently bigger, plus a fixed gap, so the shared orbit never touches
-  the minute band or the outer hour band. Read by `render.layers.
-  year_marker.YearMarkerLayer` and mirrored by `render.compositor.
-  Compositor._element_at`'s hit-test.
+  DRAWN Earth/Moon orbit radius — pulled inside WHICHEVER inner element
+  reaches furthest out, `MINUTES_RADIUS_FRACTION` (scaled by
+  `interior_scale`) or `POLYGON_FILL_MIN_RADIUS_FRACTION` (below), by
+  whichever marker is currently bigger, plus a fixed gap. Read by
+  `render.layers.year_marker.YearMarkerLayer` and mirrored by
+  `render.compositor.Compositor._element_at`'s hit-test.
+- **THE HEXAGRAM/PENTAGON FLOOR** (owner correction round 2026-08-09 —
+  a marker was seen sitting across the star/polygon background fill's
+  own boundary line): `STAR_RADIUS_FRACTION` (the star/polygon tip,
+  moved here from `config.defaults`'s `DEFAULT_SKIN` literal so the
+  lane can reason about it) and `POLYGON_FILL_MIN_RADIUS_FRACTION` —
+  the smallest apothem (`STAR_RADIUS_FRACTION * cos(half-angle)`)
+  across every pointer's own arm half-angle
+  (`constants.POINTER_ARM_HALF_ANGLE_DEG`), the deepest the fill's
+  outer edge ever dips between two arm tips. THE CLEAR ORBIT LANE
+  clears whichever of this floor or the minute band reaches furthest
+  out.
 - **Ring faces** — `RING_FACE_DIR`, the tint swatch geometry, the ring
   jewel art/shadow/crown-text arc constants (`RING_JEWEL_*`, `RING_CROWN_TEXT_
   *`). **THE PLATE LIBRARY** (owner reorganization 2026-08-07):
@@ -83,7 +94,8 @@ Layer: config — pure, no Qt, no wall clock.
 ## Connections
 
 ### Uses
-- [Config (folder)](../___config.md) — `paths` only
+- [Config (folder)](../___config.md) — `paths`, and `constants.
+  POINTER_ARM_HALF_ANGLE_DEG` for THE HEXAGRAM/PENTAGON FLOOR
 
 ### Used by
 - [Config (folder)](../___config.md) — `defaults.py`'s `DEFAULT_SKIN`

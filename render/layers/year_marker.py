@@ -131,15 +131,15 @@ class YearMarkerLayer(Layer):
                 )
             painter.save()
             painter.setOpacity(painter.opacity() * opacity)
+            self._draw_moon(
+                painter, ctx, pos, 2 * ctx.radius * spec.moon_scale * factor,
+                darken_state=lunar_state,
+            )
             if spec.pointer_enabled:
                 self._draw_orbit_pointer(
                     painter, ctx, moon_angle, orbit, spec.moon_scale * factor,
                     spec.pointer_color,
                 )
-            self._draw_moon(
-                painter, ctx, pos, 2 * ctx.radius * spec.moon_scale * factor,
-                darken_state=lunar_state,
-            )
             painter.restore()
 
     def _draw_earth(self, painter: QPainter, ctx: RenderContext) -> None:
@@ -188,11 +188,6 @@ class YearMarkerLayer(Layer):
         )
         pos = dial_point(year_angle, ctx.radius * orbit)
         size = 2 * ctx.radius * spec.scale * hover_factor(ctx, "earth")
-        if spec.pointer_enabled:
-            self._draw_orbit_pointer(
-                painter, ctx, year_angle, orbit, size / (2 * ctx.radius),
-                spec.pointer_color,
-            )
         if glowing:
             solar_state = (
                 eclipse_render_state(solar_eclipse)
@@ -265,6 +260,17 @@ class YearMarkerLayer(Layer):
             )
             painter.setBrush(QColor(color))
             painter.drawEllipse(pos, size / 2, size / 2)
+        if spec.pointer_enabled:
+            # Drawn LAST (visual proof correction round 2026-08-09): the
+            # first cut painted the pointer UNDER the body, so only its
+            # outward tip's protrusion peeked past the sphere's own
+            # edge — a sliver read as a rendering glitch, not an
+            # intentional marker. On TOP it reads as what it is: a
+            # small triangle pointing at the body's own angle.
+            self._draw_orbit_pointer(
+                painter, ctx, year_angle, orbit, size / (2 * ctx.radius),
+                spec.pointer_color,
+            )
 
     def _draw_earth_label(self, painter: QPainter, ctx: RenderContext, pos: QPointF, size: float) -> None:
         """The Earth marker's text — FOUR exclusive modes (owner
@@ -343,9 +349,12 @@ class YearMarkerLayer(Layer):
         OWN edge at its exact angle — the same triangle language
         `render.calendar_mount.calendar_day_arrow` uses for the
         Almanac's day mark, so a small Earth/Moon marker stays easy to
-        find. Called BEFORE the body's own pixmap/disc (both callers),
-        so only the outward-pointing tip peeks past the body's edge —
-        the base is hidden underneath it. `half_size_fraction` is the
+        find. Called AFTER the body's own pixmap/disc (both callers,
+        visual proof correction round 2026-08-09) — drawing it BEHIND
+        the body left only its outward tip's protrusion peeking past
+        the sphere's own edge, a sliver an independent grader read as a
+        rendering glitch rather than an intentional marker; on top, the
+        whole triangle reads at a glance. `half_size_fraction` is the
         CALLER's own body — Earth's `spec.scale` or the Moon's
         `spec.moon_scale`, each already carrying hover-enlarge — so the
         triangle always matches the body it points at, not the shared

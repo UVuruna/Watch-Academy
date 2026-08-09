@@ -23,13 +23,18 @@ from config import constants, dial
 
 def test_default_orbit_matches_the_hand_derivation():
     """At the default dial (ring_size 1.0, both markers at their base
-    scale) the orbit is `MINUTES_RADIUS_FRACTION - half_size -
+    scale) the orbit is `min(MINUTES_RADIUS_FRACTION,
+    POLYGON_FILL_MIN_RADIUS_FRACTION) - half_size -
     EARTH_MOON_ORBIT_CLEARANCE_FRACTION` — pinned so a future edit to
-    either constant is a deliberate, visible change, not a silent
-    drift back toward the old touching bug."""
+    any of the three constants is a deliberate, visible change, not a
+    silent drift back toward the old touching bug. The star/polygon
+    floor (owner correction round 2026-08-09, the hexagram/pentagon
+    border bug) is the binding one today — it sits inside the minute
+    band's own edge."""
     half_size = 0.11                      # the Earth's own base `scale`
+    assert dial.POLYGON_FILL_MIN_RADIUS_FRACTION < dial.MINUTES_RADIUS_FRACTION
     expected = (
-        dial.MINUTES_RADIUS_FRACTION - half_size
+        dial.POLYGON_FILL_MIN_RADIUS_FRACTION - half_size
         - dial.EARTH_MOON_ORBIT_CLEARANCE_FRACTION
     )
     assert dial.earth_moon_orbit_fraction(1.0, half_size) == pytest.approx(expected)
@@ -92,3 +97,45 @@ def test_the_shared_orbit_never_touches_either_band(ring_size, multiplier):
         f"({orbit:.4f} R) minus the half-size ({half_size:.4f} R) is not "
         "positive — the marker would straddle the dial centre"
     )
+
+
+# --- THE HEXAGRAM/PENTAGON FLOOR (owner correction round 2026-08-09) ----------
+
+
+def test_polygon_fill_floor_is_the_narrowest_arms_apothem():
+    """`POLYGON_FILL_MIN_RADIUS_FRACTION` walks every pointer's own
+    half-angle (`constants.POINTER_ARM_HALF_ANGLE_DEG`) — the narrowest
+    arm (largest half-angle) pulls its apothem, `STAR_RADIUS_FRACTION *
+    cos(half-angle)`, in the furthest, so the floor is the MINIMUM
+    across every pointer the reader can pick, never a magic number."""
+    import math
+
+    expected = min(
+        dial.STAR_RADIUS_FRACTION * math.cos(math.radians(half_deg))
+        for half_deg in constants.POINTER_ARM_HALF_ANGLE_DEG.values()
+    )
+    assert dial.POLYGON_FILL_MIN_RADIUS_FRACTION == pytest.approx(expected)
+
+
+@pytest.mark.parametrize("ring_size", sorted(_RING_SIZES))
+@pytest.mark.parametrize("multiplier", sorted(_SCALE_MULTIPLIERS))
+def test_the_shared_orbit_clears_every_pointers_star_apothem(ring_size, multiplier):
+    """Across every "Outer ring size"/scale-slider extreme AND every
+    pointer's own arm half-angle, the marker's disc stays inside that
+    pointer's star/polygon apothem — the boundary an independent
+    grader saw the Moon sit across (`crop_moon_on.png`, the hexagram/
+    pentagon border bug) — with the same real margin the minute band
+    and outer ring already carry."""
+    half_size = max(multiplier * s for s in _BASE_HALF_SIZES)
+    orbit = dial.earth_moon_orbit_fraction(ring_size, half_size)
+    reach = orbit + half_size
+    for pointer, half_deg in constants.POINTER_ARM_HALF_ANGLE_DEG.items():
+        import math
+
+        apothem = dial.STAR_RADIUS_FRACTION * math.cos(math.radians(half_deg))
+        assert reach <= apothem + 1e-9, (
+            f"ring_size={ring_size} multiplier={multiplier} "
+            f"pointer={pointer}: the marker's disc reaches {reach:.4f} R, "
+            f"that pointer's star apothem is {apothem:.4f} R — the marker "
+            "would sit across its arm boundary line"
+        )

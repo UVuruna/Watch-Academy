@@ -756,6 +756,10 @@ DEFAULT_SKIN = SkinDefinition(
         "star",
         "weekday_set",
         "ring",
+        "moon_band",                    # THE MOON HORIZON BAND (owner
+                                        # verdict 2026-08-09) — on the
+                                        # ring's own inner tick circle,
+                                        # below the Earth/Moon markers
         "year_marker",
         "hands",
     ),                                  # the star's top tip IS the noon pointer
@@ -776,7 +780,7 @@ DEFAULT_SKIN = SkinDefinition(
         twilight_alpha=0.55,
         border_alpha=0.85,              # colored outlines run the full circle
         border_width_fraction=0.008,
-        radius_fraction=0.86,           # star tips touch the ring's inner edge too
+        radius_fraction=dial.STAR_RADIUS_FRACTION,  # star tips touch the ring's inner edge too
     ),
     ring=RingSpec(
         # A composition placeholder only — the controller's build_skin
