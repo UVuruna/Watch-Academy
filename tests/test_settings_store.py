@@ -204,6 +204,7 @@ def test_display_choices_round_trip(store):
         hover_enlarge=1.4,
         show_earth=False,
         show_moon=False,
+        show_marker_pointer=True,
         show_weekday=False,
         show_pointer=False,
         colorful=False,
