@@ -114,9 +114,13 @@ ROUND stained-glass badge medallion, night-window register, photorealistic rende
 - **Self/Others is tied to the One_Love clear-heart doctrine** (the
   razor's edge where love of self and love of others meet without
   tipping into sin): both poles carry the clear uncolored heart, Self in
-  Pride's warm red held before the sin, Others in Hope's cool blue held
-  before self-erasure. Neither pole is a vice — the sin is only the tip
-  past the clear heart.
+  Pride's warm red held before the sin, Others in **Faith's** cool blue
+  held before self-erasure. Neither pole is a vice — the sin is only the
+  tip past the clear heart. (RE-SEATED 2026-08-09: blue at 04h is
+  Faith's arm now, and the swap sharpens the edge instead of blunting
+  it — self-erasure is faith's OWN fall, Humility collapsing into
+  Self-Annihilation, so the arm that holds a love-for-others back from
+  it is exactly the arm faith stands on.)
 - Register is the house night-window family; the circle companions
   follow the badge-1:1 system. Drop root `archetypes/dualities` is a NEW
   data-driven family root in `tests/test_prompt_paths.py`.

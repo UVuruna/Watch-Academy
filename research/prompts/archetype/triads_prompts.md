@@ -16,15 +16,25 @@ their own images, per the new art doctrine (CANON §The abstract triads
 |---|---|---|---|
 | **Time** | the **Present** | the **Future** | the **Past** |
 | **Callings** | the **Judge** | the **Prosecutor** | the **Advocate** |
-| **Theological** | **Faith** | **Love** | **Hope** |
+| **Theological** | **Love** | **Hope** | **Faith** |
 | **Dialectic** | **Synthesis** | **Antithesis** | **Thesis** |
 
 Each concept rides the arm CANON already gives it: the clockwise arrow
 of time (Past 04h → Present 12h → Future 20h); the court (Judge above,
 the Prosecutor who strikes at the future in red, the Advocate who
-defends deeds already done in blue); the theological trio (Faith with
-the Word at the crown, Love-in-deed on the red future-arm, Hope the
-medicine for the blue past-arm, Philippians 3:13); the dialectic
+defends deeds already done in blue); the theological trio, RE-SEATED by
+the owner's ORDER LAW of 2026-08-09 (Faith left/past, Love centre/
+present, Hope right/future) — and the re-seating repairs this trio's
+argument rather than straining it: **Love-in-deed at the crown**,
+because love is the only one of the three that must be ACTUAL to exist
+at all and the present is the only hour that can hold a deed (1 John
+3:18); **Hope on the red future-arm**, where the anchor of the soul was
+always pointing and where *"reaching forth unto those things which are
+before"* (Philippians 3:13) finally lands on the arm it describes,
+answering the Prosecutor who strikes at what is to come; **Faith on the
+blue past-arm** with the Advocate who defends deeds already done,
+because faith is the answer to something already given, and it is what
+turns a past from a prison into a floor to stand on; the dialectic
 (Thesis = what stands / the past 04h, Antithesis = what challenges /
 the future 20h, Synthesis = the judgment above / the present 12h —
 today's verdict is tomorrow's precedent).
@@ -137,42 +147,51 @@ ROUND stained-glass badge medallion, night-window register, photorealistic rende
 
 ---
 
-## Theological — Faith · Love · Hope
+## Theological — Love · Hope · Faith
 
-**Faith** (yellow, 12h) → `assets/archetypes/triads/theological/primary/colored/Faith.png`
+RE-SEATED 2026-08-09 (THE ORDER LAW). The arms, their hours and their
+colours never moved; the three names re-seated over them, so these six
+briefs are written ANEW rather than relabelled — a scene belongs to its
+virtue, not to its arm. The anchor stays with Hope and the unwavering
+flame stays with Faith; what changes is the arm each argues from, and
+each argument got STRONGER for it. **The six existing renders under
+`assets/archetypes/triads/theological/` are STALE and must be
+regenerated from these briefs.**
 
-```
-TALL pointed-arch lancet stained-glass window, night-window register, photorealistic render, isolated background, the window shape IS the lancet, aspect 1:2. Radiant yellow, warm amber and white glass throughout. Center: a single steady flame held in cupped hands at the window's heart, burning upright and unwavering against a vast dark it does not need to see through — *the substance of things hoped for, the evidence of things not seen* (Hebrews 11:1); above it the spoken WORD as a bar of pure light (John 1:1, Faith's own arm). A narrow bridge of light crosses an unseen gulf beneath the hands. Upper left panel: a mustard seed glowing; upper right panel: a lamp on a stand. Border: gothic leadwork in dark gold; three rim roundels — an upright flame at the apex, a mustard seed at one side, a bridge over dark at the other. Palette: radiant yellow, warm amber, white light, dark-gold lead. NO lettering anywhere.
-```
-
-**Faith — circle** → `assets/archetypes/triads/theological/circle/colored/Faith.png`
-
-```
-ROUND stained-glass badge medallion, night-window register, photorealistic render, isolated background, the circular window shape IS the frame. Radiant yellow, amber and white glass. Center: a single steady upright flame held in cupped hands against a vast dark, a bar of pure light above — filling the round frame. Border: gothic leadwork in dark gold, a small upright-flame roundel at the top. Palette: radiant yellow, amber, white light, dark-gold lead. NO lettering anywhere.
-```
-
-**Love** (red, 20h) → `assets/archetypes/triads/theological/primary/colored/Love.png`
+**Love** (yellow, 12h — the crown, the Present, the Judge's arm) → `assets/archetypes/triads/theological/primary/colored/Love.png`
 
 ```
-TALL pointed-arch lancet stained-glass window, night-window register, photorealistic render, isolated background, the window shape IS the lancet, aspect 1:2. Warm rose-red, crimson and molten gold glass throughout, the greatest of the three (1 Corinthians 13:13). Center: two open hands GIVING — a lit heart passed from one to another, warm red light pouring outward from the gift to fill the whole window; love not as feeling but as DEED, given to others now (Love-in-deed, 1 John 3:18, the red future-arm's cure). The light spends itself outward to every edge. Upper left panel: hands breaking bread to share; upper right panel: a cloak laid over cold shoulders. Border: rose-and-thorn leadwork in dark red; three rim roundels — a given heart at the apex, shared bread at one side, a shielding cloak at the other. Palette: rose-red, crimson, molten gold, dark-red lead. NO lettering anywhere.
+TALL pointed-arch lancet stained-glass window, night-window register, photorealistic render, isolated background, the window shape IS the lancet, aspect 1:2. Radiant yellow, warm amber and molten gold glass throughout, full noon light — the greatest of the three (1 Corinthians 13:13). Center: two open hands GIVING at the window's heart, a lit heart passed from one to another, and the sun standing directly above them at its full so that the gift and the noon are one light; warm gold pours outward from the hands to every edge of the window and the source is no smaller for it. Love not as feeling but as DEED, done NOW — *let us not love in word, neither in tongue; but in deed and in truth* (1 John 3:18). Beneath the hands the ground is the plain middle of a working day, not an altar. Upper left panel: hands breaking bread to share; upper right panel: a cloak laid over cold shoulders. Border: gothic leadwork in dark gold; three rim roundels — a given heart at the apex, shared bread at one side, a shielding cloak at the other. Palette: radiant yellow, warm amber, molten gold, white noon light, dark-gold lead. NO lettering anywhere.
 ```
 
 **Love — circle** → `assets/archetypes/triads/theological/circle/colored/Love.png`
 
 ```
-ROUND stained-glass badge medallion, night-window register, photorealistic render, isolated background, the circular window shape IS the frame. Warm rose-red, crimson and gold glass. Center: two open hands giving a lit heart from one to another, warm red light pouring outward from the gift — filling the round frame. Border: rose-and-thorn leadwork in dark red, a small given-heart roundel at the top. Palette: rose-red, crimson, warm gold, dark-red lead. NO lettering anywhere.
+ROUND stained-glass badge medallion, night-window register, photorealistic render, isolated background, the circular window shape IS the frame. Radiant yellow, warm amber and molten gold glass. Center: two open hands giving a lit heart from one to another under a noon sun directly above, gold pouring outward from the gift — filling the round frame. Border: gothic leadwork in dark gold, a small given-heart roundel at the top. Palette: radiant yellow, warm amber, molten gold, white noon light, dark-gold lead. NO lettering anywhere.
 ```
 
-**Hope** (blue, 04h) → `assets/archetypes/triads/theological/primary/colored/Hope.png`
+**Hope** (red, 20h — the Future, the Prosecutor's arm) → `assets/archetypes/triads/theological/primary/colored/Hope.png`
 
 ```
-TALL pointed-arch lancet stained-glass window, night-window register, photorealistic render, isolated background, the window shape IS the lancet, aspect 1:2. Deep midnight-blue, cold silver and a single warm gold seam of glass, calm in the dark. Center: a great ANCHOR (the classic emblem of hope, Hebrews 6:19) held firm and sure at the window's heart, its line taut UPWARD to a break of first gold light at the very top, the dark water below no longer able to pull it down — the medicine for dwelling on the past, *reaching forth unto those things which are before* (Philippians 3:13, the blue past-arm's cure). Upper left panel: a dawn-star holding over dark water; upper right panel: a green shoot in a crack. Border: rope-and-wave leadwork in cold blue; three rim roundels — an anchor at the apex, a dawn-star at one side, a first shoot at the other. Palette: midnight blue, cold silver, one warm gold seam, blue-black lead. NO lettering anywhere.
+TALL pointed-arch lancet stained-glass window, night-window register, photorealistic render, isolated background, the window shape IS the lancet, aspect 1:2. Ember red, deep crimson and one warm gold seam of glass, the light already going. Center: a great ANCHOR (the classic emblem of hope, *an anchor of the soul, both sure and stedfast*, Hebrews 6:19) held firm at the window's heart, but its line runs taut FORWARD and upward, out past the top edge of the window toward a good that cannot be seen from here — the anchor is cast into what has not arrived yet, which is the whole scandal of hope. Behind and below, the last red band of a sun already gone under the horizon; ahead, dark. This is the answer to the Prosecutor who strikes at what is to come: *forgetting those things which are behind, and reaching forth unto those things which are before* (Philippians 3:13). Nothing in the window has arrived. Upper left panel: a steep path rising out of frame; upper right panel: an unlit lamp carried toward the dark. Border: rope-and-thorn leadwork in dark red; three rim roundels — an anchor at the apex, a setting sun at one side, a taut line vanishing over an edge at the other. Palette: ember red, deep crimson, one warm gold seam, evening dark, dark-red lead. NO lettering anywhere.
 ```
 
 **Hope — circle** → `assets/archetypes/triads/theological/circle/colored/Hope.png`
 
 ```
-ROUND stained-glass badge medallion, night-window register, photorealistic render, isolated background, the circular window shape IS the frame. Deep midnight-blue, cold silver and one warm gold seam of glass. Center: a firm anchor held sure, its line taut upward to a break of first gold light, the dark water no longer pulling it down — filling the round frame. Border: rope-and-wave leadwork in cold blue, a small anchor roundel at the top. Palette: midnight blue, cold silver, warm gold seam, blue-black lead. NO lettering anywhere.
+ROUND stained-glass badge medallion, night-window register, photorealistic render, isolated background, the circular window shape IS the frame. Ember red, deep crimson and one warm gold seam of glass. Center: a firm anchor whose line runs taut forward and out past the frame's edge toward something unseen, the last red band of a vanished sun behind it — filling the round frame. Border: rope-and-thorn leadwork in dark red, a small anchor roundel at the top. Palette: ember red, deep crimson, warm gold seam, evening dark, dark-red lead. NO lettering anywhere.
+```
+
+**Faith** (blue, 04h — the Past, the Advocate's arm) → `assets/archetypes/triads/theological/primary/colored/Faith.png`
+
+```
+TALL pointed-arch lancet stained-glass window, night-window register, photorealistic render, isolated background, the window shape IS the lancet, aspect 1:2. Deep midnight-blue, cold silver and a single warm gold seam of glass, steady in the dark. Center: a single flame held in cupped hands at the window's heart, burning UPRIGHT and unwavering against a vast dark it does not need to see through — *the substance of things hoped for, the evidence of things not seen* (Hebrews 11:1) — and it was plainly lit from somewhere outside the window, the gold seam of that older light still running in from the left edge to the hands: nothing here was self-kindled. Beneath the hands a squared foundation stone is set level into dark ground, taking the whole weight. This is the Advocate's arm, which defends deeds already done, and faith is what turns a past from a prison into a floor: it does not dwell there, it STANDS there. Upper left panel: a lamp being lit from another lamp already burning; upper right panel: a sealed letter placed into a hand that did not write it. Border: rope-and-stone leadwork in cold blue; three rim roundels — an upright flame at the apex, a squared foundation stone at one side, a lamp lighting a lamp at the other. Palette: midnight blue, cold silver, one warm gold seam, blue-black lead. NO lettering anywhere.
+```
+
+**Faith — circle** → `assets/archetypes/triads/theological/circle/colored/Faith.png`
+
+```
+ROUND stained-glass badge medallion, night-window register, photorealistic render, isolated background, the circular window shape IS the frame. Deep midnight-blue, cold silver and one warm gold seam of glass. Center: a steady upright flame in cupped hands against a vast dark, lit by a gold seam of older light running in from outside the frame, a squared foundation stone set level beneath — filling the round frame. Border: rope-and-stone leadwork in cold blue, a small foundation-stone roundel at the top. Palette: midnight blue, cold silver, warm gold seam, blue-black lead. NO lettering anywhere.
 ```
 
 ---
