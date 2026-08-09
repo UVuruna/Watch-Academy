@@ -65,7 +65,7 @@ class AssetCache:
         desaturate: bool = False,
         metal: str | None = None,
         saturation: float = 1.0,
-    ) -> QPixmap:
+    ) -> QPixmap | None:
         """The image scaled (aspect preserved) so its logical height is
         `logical_height`, rasterized at device resolution, optionally
         DESATURATED (user hand packs: colored art grays out so the
@@ -79,7 +79,25 @@ class AssetCache:
         caller). Raises ValueError for missing/unreadable assets — a
         broken skin must be visible, never silently blank. (Silver and
         bronze ring jewels are PRE-RENDERED files —
-        setup/make_*_letters.py — not runtime effects.)"""
+        setup/make_*_letters.py — not runtime effects.)
+
+        Returns `None` when the asset falls under a WORKING-SET ceiling
+        (owner bar 2026-08-09, MIGRATE-GUI Phase 1 — "the 75-second dead
+        clock") and its downscaled copy has not landed yet: the paint
+        path used to decode the full-res original inline right here —
+        seconds of GIL-holding Qt work per miss, on the GUI thread,
+        inside `paintEvent`. There is no cheap stand-in to draw instead
+        (unlike a not-yet-recolored jewel, which stands in its gold
+        master), so a miss RECORDS the (path, ceiling) recipe in
+        `render.asset_variants`'s lazy ledger, rings its stale notifier
+        (which kicks a background subprocess build), and returns `None`
+        — the CALLER skips this element for this frame. The shared
+        debounced repaint (`asset_recolor`'s own `art_ready`/
+        `apply_pending_art` mechanism, ridden by both ledgers) shows it
+        the moment the real pixels exist. `render.painting.
+        draw_pixmap_centered` is the one chokepoint that skip-guards
+        this for every art layer; a caller reading the pixmap directly
+        must guard it too."""
         # Deferred (not module-level) on purpose: asset_variants.py
         # imports asset_recolor.py, which imports AssetCache from this
         # very module — a module-level import here would close that
@@ -87,7 +105,9 @@ class AssetCache:
         # because by the time any AssetCache method actually RUNS, all
         # three modules have already finished loading (see this file's
         # own module docstring).
-        from render.asset_variants import scaled_variant_file, working_ceiling
+        from render.asset_variants import (
+            working_ceiling, working_stale_notify, working_variant_path,
+        )
 
         path = art_file(path)
         px_height = max(1, round(logical_height * dpr))
@@ -102,12 +122,33 @@ class AssetCache:
             # The WORKING SET (owner 2026-07-15): a full-res original
             # decodes through its downscaled working copy whenever the
             # requested size fits under the subtree's ceiling — the
-            # warmup pre-builds these, and a cold copy builds here
-            # once. Oversized requests keep the original.
+            # warmup pre-builds these. A COLD copy is never built here
+            # (see the docstring above) — only NAMED and recorded. A
+            # miss caches `None` under `key` (THE ONE COPY RULE, `tests/
+            # test_repeat_work.py`: a steady-state repaint must touch no
+            # files) — otherwise a still-pending element would repeat
+            # this `exists()` stat on every single tick until the
+            # background drain lands it. `Compositor.refresh_composites`
+            # purges exactly these `None` markers (and only these —
+            # every genuinely rasterized pixmap survives) whenever a
+            # background build MIGHT have landed, so the very next
+            # paint after that re-resolves it instead of standing in
+            # blank forever.
             ceiling = working_ceiling(path)
             source = path
             if ceiling is not None and px_height <= ceiling:
-                source = scaled_variant_file(path, ceiling)
+                candidate = working_variant_path(path, ceiling)
+                # UNCHANGED means the source is already at or under the
+                # ceiling (most instrument art, icons) — no working copy
+                # was ever recorded, so the original resolves exactly
+                # like it always has (a missing original still raises
+                # through `_rasterize` below, never a silent skip).
+                if candidate != path:
+                    source = candidate
+                    if not source.exists():
+                        working_stale_notify()
+                        self._pixmaps[key] = None
+                        return None
             pixmap = self._rasterize(source, px_height, dpr)
             if metal is not None:
                 pixmap = QPixmap.fromImage(
@@ -316,6 +357,21 @@ class AssetCache:
         """Drop the sized pixmaps (screen/DPI or skin change) — the SVG
         masters are resolution-independent pixels and stay."""
         self._pixmaps.clear()
+
+    def clear_pending(self) -> None:
+        """Drop only the PENDING markers — a working-set miss cached as
+        `None` (owner bar 2026-08-09, MIGRATE-GUI Phase 1) — every
+        genuinely rasterized pixmap (and its metal/tint/saturation
+        variants) survives untouched, exactly like `flush()` spares the
+        SVG masters. `render.compositor.Compositor.refresh_composites`
+        calls this whenever a background build MIGHT have landed (a
+        working-set copy or a metal recolor — both ride the same
+        debounced repaint), so the very next paint re-resolves a
+        pending element instead of standing in blank forever."""
+        self._pixmaps = {
+            key: value for key, value in self._pixmaps.items()
+            if value is not None
+        }
 
     @classmethod
     def _svg_master(cls, path: Path, px_height: int) -> QImage:

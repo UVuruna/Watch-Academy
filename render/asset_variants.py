@@ -6,17 +6,36 @@ extraction, `research/REFACTOR_PLAN.md` §8). See
 [Asset Variants](asset_variants.md) for the full recipe.
 
 `AssetCache.pixmap_by_height` (`assets.py`) reads `working_ceiling`/
-`scaled_variant_file` back from this module — a genuine two-way edge
-between the two files, since `AssetCache` stays in `assets.py` while
-these helpers moved here. `assets.py` resolves it with a LOCAL import
-inside `pixmap_by_height` instead of a module-level one, so the two
-modules' top-level imports never form a cycle; see that method's own
-comment for why.
+`working_variant_path`/`working_stale_notify` back from this module — a
+genuine two-way edge between the two files, since `AssetCache` stays in
+`assets.py` while these helpers moved here. `assets.py` resolves it
+with a LOCAL import inside `pixmap_by_height` instead of a module-level
+one, so the two modules' top-level imports never form a cycle; see that
+method's own comment for why.
+
+THE LAZY WORKING-SET LEDGER (owner bar 2026-08-09, MIGRATE-GUI Phase 1
+— "the 75-second dead clock"): `_PENDING_WORKING`/`working_variant_path`/
+`pending_working`/`ensure_working_variant`/`drain_pending_working` mirror
+`asset_recolor.py`'s `_PENDING_VARIANTS`/`jewel_metal_path`/`pending_art`/
+`ensure_variant`/`warm_pending_art` SHAPE for a different resource: the
+GUI paint path used to call `scaled_variant_file(path, ceiling)` (default
+`build=True`) on a cache MISS, decoding a multi-MB PNG INSIDE
+`paintEvent`. `AssetCache.pixmap_by_height` now only ever NAMES a
+working-set copy through `working_variant_path` (pure) and returns
+`None` on a miss instead of building or falling back to the full-res
+original; the pixels are built off the GUI thread, by
+`app.warm.run_warm`'s VISIBLE-FIRST phase at startup or
+`app.watch_manager.AppController.kick_working_warm` on demand, both
+through `drain_pending_working` below. `scaled_variant_file` itself is
+UNCHANGED and stays in service for its own callers (hover tooltips,
+Encyclopedia cards/readers) — a distinct, arbitrary-width, build-on-
+first-use cache the ledger does not cover.
 """
 
 import math
 import os
 import sys
+import threading
 from pathlib import Path
 
 from PySide6.QtCore import Qt, QPointF, QRectF
@@ -264,6 +283,135 @@ def working_ceiling(path: Path | None) -> int | None:
     return None
 
 
+# THE LAZY WORKING-SET LEDGER (owner bar 2026-08-09, MIGRATE-GUI Phase 1
+# — "the 75-second dead clock"): the mirror of `asset_recolor.py`'s
+# `_PENDING_VARIANTS` for this OTHER derived-image family. Root cause of
+# the dead window: `AssetCache.pixmap_by_height` used to call
+# `scaled_variant_file(path, ceiling)` (default `build=True`) on a cache
+# MISS — decode + smooth-downscale + PNG-encode a multi-MB source,
+# INSIDE `paintEvent`, on the GUI thread (the same GIL-holding cost
+# `warm_working_set`'s own docstring already measured in seconds). Unlike
+# a metal recolor, there is no cheap stand-in to draw instead — the only
+# "fallback" is the very full-res decode being avoided. So the paint
+# path no longer builds AND no longer falls back to the original: a miss
+# just RECORDS the (source, ceiling) recipe here (pure, no pixel work)
+# and the caller gets back `None` — draw nothing for this element THIS
+# frame, exactly like a not-yet-recolored jewel stands in gold, except
+# here there is nothing honest to stand in, so the compositor skips it
+# and the next repaint (rung by the same background-drain-and-signal
+# mechanism `asset_recolor` already uses) shows it once real pixels
+# exist. `working_variant_path` is the pure recorder; `pending_working`
+# is the drain's worklist; `ensure_working_variant` materializes one
+# recorded entry (any thread — QImage end to end, never QPixmap off the
+# GUI thread, the R1b law); `drain_pending_working` below is the
+# multi-entry, subprocess-backed batch drain both the startup warm
+# (`app.warm.run_warm`, ahead of the alphabetical whole-tree sweep) and
+# the on-demand kick (`app.watch_manager.AppController.kick_working_warm`,
+# installed as this ledger's stale notifier) call.
+_PENDING_WORKING: dict[str, tuple[Path, int]] = {}
+_WORKING_LOCKS: dict[str, threading.Lock] = {}
+_WORKING_LOCKS_GUARD = threading.Lock()
+
+#: Rung by `working_variant_path` the moment a paint records a MISS —
+#: the working-set twin of `asset_recolor._ART_STALE_NOTIFIER`. Must
+#: stay cheap and thread-agnostic: it is called on the GUI thread inside
+#: a paint.
+_WORKING_STALE_NOTIFIER = None
+
+
+def set_working_stale_notifier(notifier) -> None:
+    """Install the callable rung when a paint records a MISSING
+    working-set copy (`None` uninstalls — tests). One process, one
+    notifier, mirroring `asset_recolor.set_art_stale_notifier`."""
+    global _WORKING_STALE_NOTIFIER
+    _WORKING_STALE_NOTIFIER = notifier
+
+
+def working_stale_notify() -> None:
+    """Ring the installed working-set stale notifier, if any —
+    `AssetCache.pixmap_by_height`'s one call site, kept as a plain
+    function (rather than a private module attribute reached from
+    another module) so the paint path never touches this module's
+    globals directly."""
+    if _WORKING_STALE_NOTIFIER is not None:
+        _WORKING_STALE_NOTIFIER()
+
+
+def _working_lock(key: str) -> threading.Lock:
+    with _WORKING_LOCKS_GUARD:
+        lock = _WORKING_LOCKS.get(key)
+        if lock is None:
+            lock = _WORKING_LOCKS[key] = threading.Lock()
+        return lock
+
+
+def working_variant_path(path: Path, ceiling: int) -> Path:
+    """WHERE `path`'s working-set downscale lives, when it needs one at
+    all — a header-only computation (no pixel decode) that also RECORDS
+    the (source, ceiling) recipe in the lazy ledger (the twin of
+    `asset_recolor.jewel_metal_path`/`metal_variant_path`, Rule #5: one
+    ledger SHAPE, two families).
+
+    Returns `path` UNCHANGED, and records nothing, when the source is
+    already at or under `ceiling` — the same "sources at or under the
+    ceiling stay as they are" rule `warm_working_set`'s own tree scan
+    and `scaled_variant_file` both already apply. A caller (`AssetCache.
+    pixmap_by_height`) tells these two cases apart by comparing the
+    return value against `path`: EQUAL means "no working copy needed,
+    resolve the original as always" (a missing original still raises
+    through the normal decode, exactly like every other asset); UNEQUAL
+    means a real recipe was recorded and the cache path may not exist
+    yet. Getting this wrong once already cost a round: treating every
+    asset under a covered subtree as needing a copy — instrument
+    thumbnails and icons included, most of them well under any ceiling —
+    made those permanently 'pending' and silently invisible."""
+    reader = QImageReader(str(path))
+    size = reader.size()
+    if not size.isValid() or size.width() <= ceiling:
+        return path
+    cache = _scaled_cache_path(path, ceiling)
+    _PENDING_WORKING.setdefault(str(cache), (path, ceiling))
+    return cache
+
+
+def pending_working() -> list[Path]:
+    """Every recorded working-set recipe whose file is still missing —
+    in practice the CURRENT skin's own actually-referenced oversized
+    art, because a paint is what records it. `app.warm.run_warm` drains
+    THIS list before the alphabetical whole-tree sweep for exactly that
+    reason (VISIBLE-FIRST warmup, owner bar 2026-08-09)."""
+    return [
+        Path(key) for key in list(_PENDING_WORKING)
+        if not Path(key).exists()
+    ]
+
+
+def ensure_working_variant(path: Path | None) -> Path | None:
+    """Materialize a `working_variant_path`-recorded downscale whose
+    file is still missing — the ONE place `build_scaled_copy`'s
+    decode/downscale/encode pays for a ledger entry (background drain,
+    or an eager caller off the GUI thread; QImage end to end, R1b law).
+    Paths this module never recorded pass through untouched. Returns the
+    SOURCE file when the cache write fails (a cold cache is only slower,
+    never wrong — but say so, Rule #1)."""
+    if path is None:
+        return None
+    key = str(path)
+    recipe = _PENDING_WORKING.get(key)
+    if recipe is None or path.exists():
+        return path
+    with _working_lock(key):
+        if path.exists():
+            return path
+        source, ceiling = recipe
+        try:
+            build_scaled_copy(str(source), key, ceiling)
+        except OSError as error:
+            print(f"working set drain build failed: {error}", file=sys.stderr)
+            return source
+    return path
+
+
 def build_scaled_copy(source: str, cache: str, width: int) -> None:
     """Decode `source`, smooth-downscale to `width` px, atomic-save to
     `cache` — the ONE working-copy build, shared by the inline
@@ -371,6 +519,115 @@ def warm_working_set(progress=None, should_stop=None) -> int:
         progress(
             f"[{perf_counter() - start:.1f}s] working set complete — "
             f"{len(todo)} oversized sources, {built} built cold"
+        )
+    return built
+
+
+@profiling.timed("Working set drain")
+def drain_pending_working(progress=None, on_ready=None, should_stop=None) -> int:
+    """Build every recorded-but-missing working-set copy — the ON-DEMAND
+    twin of `warm_working_set`'s alphabetical whole-tree sweep, drained
+    by `_PENDING_WORKING` instead of a fresh directory scan (the
+    `warm_pending_art`/`pending_art` shape, Rule #5: one drain LOOP, two
+    ledgers). `app.warm.run_warm` calls this FIRST, ahead of
+    `warm_working_set`'s own sweep (VISIBLE-FIRST warmup, owner bar
+    2026-08-09) — the ledger's entries are exactly what the dial's first
+    paint already asked for, so draining them first dresses the
+    on-screen dial before the alphabetically-first subtree that may not
+    even be visible; `app.watch_manager.AppController.kick_working_warm`
+    calls this again, mid-session, whenever a later paint records a NEW
+    miss the startup sweep never saw (a skin switch, a time-travel day
+    that pulls in different archetype art).
+
+    SUBPROCESS pool, exactly like `warm_working_set` and for the same
+    reason its own docstring measured: PySide's QImage decode/smooth-
+    scale/encode holds the GIL for seconds, so even a background THREAD
+    doing this work would starve the GUI thread waiting for its turn at
+    the GIL — invisible to it only from a separate process. Falls back
+    to an in-thread loop if the pool cannot start (Rule #1: degraded and
+    visible, never absent), exactly like `warm_working_set`.
+
+    `on_ready` fires after EACH completed build (`warm_pending_art`'s
+    contract) so the caller's shared debounced repaint dresses the dial
+    piece by piece instead of waiting for the whole batch. Repeats until
+    the ledger stops growing — a paint arriving mid-drain records a
+    fresh miss the previous pass never saw, exactly like the art
+    ledger's own drain loop."""
+    from concurrent.futures import as_completed, ProcessPoolExecutor
+    from time import perf_counter
+
+    start = perf_counter()
+    built = 0
+    attempted: set[str] = set()
+
+    while True:
+        jobs = [
+            path for path in pending_working() if str(path) not in attempted
+        ]
+        if not jobs:
+            break
+        if should_stop is not None and should_stop():
+            return built
+        attempted.update(str(path) for path in jobs)
+        recipes = [
+            (path, *_PENDING_WORKING[str(path)]) for path in jobs
+        ]  # (cache, source, ceiling)
+
+        def land(cache: Path) -> None:
+            nonlocal built
+            built += 1
+            if on_ready is not None:
+                on_ready()
+            if progress is not None and built % 5 == 0:
+                elapsed = perf_counter() - start
+                progress(
+                    f"[{elapsed:.1f}s] working set drain {built}/{len(jobs)}"
+                )
+
+        try:
+            workers = max(1, min(defaults.WORKING_SET_WORKERS, os.cpu_count() or 1))
+            with ProcessPoolExecutor(max_workers=workers) as pool:
+                futures = {
+                    pool.submit(build_scaled_copy, str(source), str(cache), ceiling): cache
+                    for cache, source, ceiling in recipes
+                }
+                for future in as_completed(futures):
+                    if should_stop is not None and should_stop():
+                        for pending in futures:
+                            pending.cancel()
+                        break
+                    cache = futures[future]
+                    try:
+                        future.result()
+                        land(cache)
+                    except OSError as error:
+                        print(
+                            f"working set drain build failed: {error}",
+                            file=sys.stderr,
+                        )
+        except Exception as error:
+            print(
+                f"working set drain pool unavailable ({error}); "
+                "building in-thread",
+                file=sys.stderr,
+            )
+            for cache, source, ceiling in recipes:
+                if should_stop is not None and should_stop():
+                    break
+                if cache.exists():
+                    continue
+                try:
+                    build_scaled_copy(str(source), str(cache), ceiling)
+                    land(cache)
+                except OSError as inner:
+                    print(
+                        f"working set drain build failed: {inner}",
+                        file=sys.stderr,
+                    )
+    if progress is not None and built:
+        progress(
+            f"[{perf_counter() - start:.1f}s] working set drain complete — "
+            f"{built} copies built"
         )
     return built
 
