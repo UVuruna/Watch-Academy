@@ -19,6 +19,27 @@ The four laws pinned here, one test each:
 2. The background drain builds them, and the repaint shows the real metal.
 3. The warm runs ONCE for the process, and only after every dial painted.
 4. Legend off ⇒ the hover sweep does not run at all.
+
+MIGRATE-GUI PHASE 1 (owner bar 2026-08-09) added a SECOND dead window
+the first round never audited: `AssetCache.pixmap_by_height`'s own
+inline WORKING-SET build on a cache miss — decode/downscale/encode a
+multi-MB PNG straight inside `paintEvent`, measured at 71.7 s cold on
+the owner's machine (`profiling.json`, "Working set warmup"). The laws
+pinned in the `WorkingSet` section below mirror the four above for this
+second resource, one test each:
+
+5. A cold paint under a WORKING-SET ceiling runs NO inline build — it
+   records the recipe and returns `None` (never the full-res original).
+6. A source AT OR UNDER its subtree's ceiling is never treated as
+   pending at all (the bug this very round shipped once, mid-session,
+   before this test caught it: an unconditional ledger entry for EVERY
+   asset under a covered subtree, icons and thumbnails included).
+7. The background drain builds the recorded copies and clears the
+   ledger, one `on_ready` per landed file.
+8. `app.warm.run_warm` drains the ledger BEFORE the alphabetical
+   whole-tree sweep (VISIBLE-FIRST warmup).
+9. A miss after the startup warm (a skin switch, on-demand) still
+   drains, exactly like the art ledger's own `kick_art_warm`.
 """
 
 import os
@@ -221,9 +242,18 @@ def test_art_ready_bursts_collapse_into_one_repaint(app):
     from app.controller import WatchController
     from config import defaults
 
+    class FakeCache:
+        pending_clears = 0
+
+        def clear_pending(self):
+            FakeCache.pending_clears += 1
+
     class FakeCompositor:
         refreshes = 0
         flushes = 0
+
+        def __init__(self):
+            self._cache = FakeCache()
 
         def refresh_composites(self):
             FakeCompositor.refreshes += 1
@@ -259,6 +289,9 @@ def test_art_ready_bursts_collapse_into_one_repaint(app):
     assert FakeCompositor.refreshes == 1, "a burst must repaint ONCE"
     assert FakeWidget.updates == 1
     assert FakeCompositor.flushes == 0, "an art repaint must not flush assets"
+    assert FakeCache.pending_clears == 1, (
+        "the pending working-set markers must get exactly one chance too"
+    )
 
 
 def test_the_menu_status_row_mirrors_the_manager(app):
@@ -337,6 +370,207 @@ def test_warm_working_set_builds_cold_copies_in_children(tmp_path, monkeypatch):
     assert copy.width() == 400, "the working copy must be scaled to the ceiling"
     # A second pass is a no-op — the scan itself is the verification.
     assert asset_variants.warm_working_set() == 0
+
+
+# --- THE 75-SECOND DEAD CLOCK (owner bar 2026-08-09, MIGRATE-GUI Phase 1) ---
+#
+# `AssetCache.pixmap_by_height`'s own inline working-set build, never
+# audited by the round above: a cache miss under a WORKING_SET_CEILINGS
+# subtree used to call `scaled_variant_file(path, ceiling)` (default
+# `build=True`) — decode/downscale/encode a multi-MB PNG, INSIDE
+# `paintEvent`, on the GUI thread. Fixed the same shape as the metal
+# ledger above: a miss RECORDS the recipe and returns `None`; the pixels
+# build off the GUI thread and a debounced signal repaints.
+
+@pytest.fixture
+def working_set_tree(tmp_path, monkeypatch):
+    """An isolated assets tree with one oversized PNG under a covered
+    subtree and one UNDERSIZED one under the same subtree — the second
+    file is what pins the "small sources are never pending" law."""
+    from PySide6.QtGui import QColor, QImage
+
+    from config import defaults
+    from render import asset_variants
+
+    tree = tmp_path / "assets" / "weeks"
+    tree.mkdir(parents=True)
+    big = QImage(900, 600, QImage.Format.Format_ARGB32)
+    big.fill(QColor("#8B6914"))
+    assert big.save(str(tree / "big.png"))
+    small = QImage(200, 150, QImage.Format.Format_ARGB32)
+    small.fill(QColor("#2244AA"))
+    assert small.save(str(tree / "small.png"))
+
+    monkeypatch.setattr(paths, "assets_dir", lambda: tmp_path / "assets")
+    monkeypatch.setattr(
+        paths, "settings_path", lambda index=1: tmp_path / "settings.json"
+    )
+    monkeypatch.setattr(defaults, "WORKING_SET_CEILINGS", {"weeks": 400})
+    monkeypatch.setattr(asset_variants, "_PENDING_WORKING", {})
+    return tmp_path, tree
+
+
+def test_cold_working_set_paint_never_builds_inline(app, working_set_tree, monkeypatch):
+    """THE PIN (deliverable 1 and 4 of the MIGRATE-GUI round): a cold
+    paint under a working-set ceiling must never call the decode/
+    downscale/encode builder itself — it records the recipe and stands
+    down, returning `None` rather than the full-res original."""
+    from render import asset_variants
+    from render.assets import AssetCache
+
+    _tmp_path, tree = working_set_tree
+    calls = []
+    monkeypatch.setattr(
+        asset_variants, "build_scaled_copy",
+        lambda *a, **k: calls.append(a) or (_ for _ in ()).throw(
+            AssertionError("the GUI paint path built a working-set copy inline")
+        ),
+    )
+
+    cache = AssetCache()
+    pixmap = cache.pixmap_by_height(tree / "big.png", 300.0, 1.0)
+
+    assert pixmap is None, "a cold miss must stand down, never the full-res original"
+    assert calls == [], "pixmap_by_height must never build inline"
+    pending = asset_variants.pending_working()
+    assert len(pending) == 1
+    assert pending[0].exists() is False
+
+
+def test_working_set_miss_rings_the_stale_notifier(app, working_set_tree, monkeypatch):
+    """The twin of `test_a_finish_switch_after_the_warm_drains_again`'s
+    notifier check, for the working-set ledger: a miss observed during a
+    paint must ring the installed notifier so a background drain gets
+    kicked without waiting for a restart."""
+    from render import asset_variants
+    from render.assets import AssetCache
+
+    _tmp_path, tree = working_set_tree
+    rung = []
+    asset_variants.set_working_stale_notifier(lambda: rung.append(True))
+    try:
+        AssetCache().pixmap_by_height(tree / "big.png", 300.0, 1.0)
+        assert rung == [True]
+    finally:
+        asset_variants.set_working_stale_notifier(None)
+
+
+def test_asset_at_or_under_the_ceiling_is_never_pending(app, working_set_tree):
+    """THE REGRESSION THIS ROUND SHIPPED ONCE, MID-SESSION: treating
+    every asset under a covered subtree as needing a working copy —
+    icons and thumbnails well under any ceiling included — made those
+    permanently 'pending' and silently invisible. A source AT OR UNDER
+    the ceiling must resolve on the very FIRST call, no ledger entry, no
+    background wait."""
+    from render import asset_variants
+    from render.assets import AssetCache
+
+    _tmp_path, tree = working_set_tree
+    assert asset_variants.working_variant_path(tree / "small.png", 400) == (
+        tree / "small.png"
+    )
+
+    pixmap = AssetCache().pixmap_by_height(tree / "small.png", 100.0, 1.0)
+
+    assert pixmap is not None, "an undersized source must never come back None"
+    assert asset_variants.pending_working() == []
+
+
+def test_drain_pending_working_builds_and_clears_the_ledger(app, working_set_tree):
+    """The batch drain (`app.warm.run_warm`'s VISIBLE-FIRST phase and
+    `AppController.kick_working_warm`'s on-demand twin both call this):
+    every recorded recipe built exactly once, the ledger left empty, one
+    `on_ready` per landed copy — `test_the_drain_builds_a_whole_batch_
+    and_leaves_nothing`'s exact shape for the OTHER ledger."""
+    from PySide6.QtGui import QImage
+
+    from render import asset_variants
+
+    _tmp_path, tree = working_set_tree
+    recorded = asset_variants.working_variant_path(tree / "big.png", 400)
+    assert recorded != tree / "big.png"
+    assert asset_variants.pending_working() == [recorded]
+
+    landed = []
+    built = asset_variants.drain_pending_working(on_ready=lambda: landed.append(True))
+
+    assert built == 1
+    assert len(landed) == 1
+    assert asset_variants.pending_working() == []
+    assert recorded.exists()
+    assert QImage(str(recorded)).width() == 400
+
+
+def test_run_warm_drains_the_working_ledger_before_the_bulk_sweep(monkeypatch):
+    """VISIBLE-FIRST warmup (deliverable 2): the ledger IS the active
+    skin's own referenced oversized art (a paint is what records it), so
+    `app.warm.run_warm` must drain it before the alphabetical whole-tree
+    sweep — otherwise a subtree that happens to sort first could hog the
+    cold minutes ahead of what is actually on screen."""
+    import app.warm as warm_module
+
+    order = []
+    monkeypatch.setattr(
+        warm_module, "warm_pending_art",
+        lambda **k: order.append("art") or 0,
+    )
+    monkeypatch.setattr(
+        warm_module, "drain_pending_working",
+        lambda **k: order.append("working_drain") or 0,
+    )
+    monkeypatch.setattr(
+        warm_module, "warm_working_set",
+        lambda **k: order.append("working_sweep") or 0,
+    )
+    monkeypatch.setattr(
+        warm_module, "warm_encyclopedia", lambda **k: order.append("encyclopedia")
+    )
+    monkeypatch.setattr(
+        warm_module, "_collect_cache_garbage", lambda **k: order.append("gc")
+    )
+
+    warm_module.run_warm()
+
+    assert order == [
+        "art", "working_drain", "working_sweep", "encyclopedia", "gc",
+    ]
+
+
+def test_a_working_set_miss_after_the_warm_drains_again(app, working_set_tree):
+    """THE 2026-08-02 BUG's twin for the OTHER ledger: the startup warm
+    is not the only drain. A miss recorded AFTER it finished (a skin
+    switch, a time-travel day pulling in different art) still gets
+    built, through `AppController.kick_working_warm` — no restart."""
+    from app.watch_manager import AppController
+    from render import asset_variants
+    from render.assets import AssetCache
+
+    _tmp_path, tree = working_set_tree
+    manager = AppController.__new__(AppController)
+    manager._quitting = False
+    startup = threading.Thread(target=lambda: None)  # the one startup
+    startup.start()                                   # warm: came, went
+    startup.join()
+    manager._warm_thread = startup
+    manager._working_lock = threading.Lock()
+    manager._working_thread = None
+    manager._working_rerun = False
+    manager._watches = []
+    asset_variants.set_working_stale_notifier(manager.kick_working_warm)
+    try:
+        cache = AssetCache().pixmap_by_height(tree / "big.png", 300.0, 1.0)
+        assert cache is None, "the miss must stand down, not build inline"
+
+        assert manager._working_thread is not None, (
+            "the miss never kicked a drain"
+        )
+        manager._working_thread.join(timeout=120)
+        assert not manager._working_thread.is_alive(), "the drain hung"
+        assert asset_variants.pending_working() == [], (
+            "the kicked drain left work behind"
+        )
+    finally:
+        asset_variants.set_working_stale_notifier(None)
 
 
 def test_legend_off_skips_the_hover_sweep_entirely(app, monkeypatch):

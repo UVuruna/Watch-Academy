@@ -1075,6 +1075,7 @@ def test_planets_art_body_renders_differently_by_metal():
     from PySide6.QtWidgets import QApplication
 
     from config import paths as _paths
+    from render import asset_variants
     from render.assets import AssetCache
 
     QApplication.instance() or QApplication([])
@@ -1084,9 +1085,26 @@ def test_planets_art_body_renders_differently_by_metal():
     )
     assert _paths.art_file(sun).exists()
     cache = AssetCache()
-    bronze = cache.pixmap_by_height(sun, 128, 1.0, metal=None).toImage()
-    gold = cache.pixmap_by_height(sun, 128, 1.0, metal="gold").toImage()
-    silver = cache.pixmap_by_height(sun, 128, 1.0, metal="silver").toImage()
+
+    def resolved(**kwargs):
+        # `sun` sits under a WORKING-SET ceiling (owner bar 2026-08-09):
+        # a cold copy is never built inline any more — a miss returns
+        # None and records the recipe instead. The real dial waits for
+        # the background drain and repaints; a test wants the pixels
+        # NOW, so it drains the one recorded recipe synchronously (the
+        # same builder the drain itself calls) and asks again.
+        pixmap = cache.pixmap_by_height(sun, 128, 1.0, **kwargs)
+        if pixmap is None:
+            assert asset_variants.drain_pending_working() > 0, (
+                "the miss recorded no working-set recipe to drain"
+            )
+            pixmap = cache.pixmap_by_height(sun, 128, 1.0, **kwargs)
+        assert pixmap is not None, "the drained copy still did not resolve"
+        return pixmap
+
+    bronze = resolved(metal=None).toImage()
+    gold = resolved(metal="gold").toImage()
+    silver = resolved(metal="silver").toImage()
     assert bronze.width() == gold.width() == silver.width()
     differing_gold = sum(
         1 for x in range(0, bronze.width(), 4)
@@ -1459,6 +1477,17 @@ def test_working_set_downscales_oversized_dial_art():
     assert copy.name.endswith("_earth_clean_north_pole_day.png")
     # …and a second run rebuilds nothing.
     assert warm_working_set() == 0
+
+
+def test_working_set_workers_scale_with_the_machine():
+    """Owner bar 2026-08-09, MIGRATE-GUI Phase 1: a hardcoded pool of 2
+    pinned the 71.7 s cold warmup to two cores regardless of the
+    machine — DERIVED now, floored at the old constant, capped like
+    `ART_DRAIN_WORKERS`'s own pool."""
+    import os
+
+    assert defaults.WORKING_SET_WORKERS == max(2, min((os.cpu_count() or 4) - 2, 12))
+    assert 2 <= defaults.WORKING_SET_WORKERS <= 12
 
 
 def test_hand_packs_load_and_resolve():
