@@ -131,6 +131,61 @@ def test_settings_round_trip_moon_band(tmp_path) -> None:
     assert loaded.moon_band_style == "glow"
 
 
+def test_ticks_style_has_no_connecting_arc_line() -> None:
+    """Owner correction (2026-08-09, grader round): "ticks" must NOT
+    draw a continuous arc/thread — that reads as "silver_thread" at a
+    glance, which the approved design forbids. Proof: sweep fine
+    angular samples along the SAME radius the arc's own style draws at
+    and measure what fraction is painted — "silver_thread" is a
+    continuous line (~100% painted); "ticks" is discrete segments with
+    real gaps between them (meaningfully under 100%)."""
+    import math as _math
+
+    from core.moon import MoonArc
+    from PySide6.QtCore import Qt
+    from PySide6.QtGui import QImage, QPainter
+
+    arc = MoonArc(180.0, 270.0, 225.0)
+    band_radius = 900.0    # large radius: sub-degree gaps are many px wide here
+
+    def _painted_fraction(method_name: str, sample_radius: float) -> float:
+        canvas = 2000
+        image = QImage(canvas, canvas, QImage.Format.Format_ARGB32)
+        image.fill(Qt.GlobalColor.transparent)
+        painter = QPainter(image)
+        painter.translate(canvas / 2, canvas / 2)
+        layer = MoonBandLayer.__new__(MoonBandLayer)
+        getattr(layer, method_name)(painter, band_radius, arc)
+        painter.end()
+        hits = 0
+        samples = 0
+        # A dense sweep across the arc's own middle third, well clear of
+        # its rise/set ends (dots/diamond on the thread style) and any
+        # rounding at the extreme angles.
+        for i in range(3000):
+            angle = 195.0 + i * (60.0 / 3000.0)
+            rad = _math.radians(angle)
+            x = round(canvas / 2 + sample_radius * _math.sin(rad))
+            y = round(canvas / 2 - sample_radius * _math.cos(rad))
+            if image.pixelColor(x, y).alpha() > 0:
+                hits += 1
+            samples += 1
+        return hits / samples
+
+    thread_fraction = _painted_fraction(
+        "_draw_silver_thread", band_radius * (1.0 - 0.035)
+    )
+    ticks_fraction = _painted_fraction("_draw_ticks", band_radius)
+    assert thread_fraction > 0.9, (
+        f"silver_thread must read as a continuous line (got {thread_fraction:.0%} painted)"
+    )
+    assert ticks_fraction < 0.7, (
+        "ticks style must leave real gaps between discrete segments — no "
+        f"connecting arc/thread line (got {ticks_fraction:.0%} painted, "
+        "too close to a continuous line)"
+    )
+
+
 def test_settings_reject_unknown_mode_falls_back_to_default(tmp_path) -> None:
     """An unrecognized stored value (a hand-edited file, or a retired
     choice) must fall back to the documented default, never raise."""
@@ -153,12 +208,13 @@ def test_every_style_paints_without_error(style) -> None:
     """A smoke test for all 4 styles: each one paints a real Skin/
     RenderContext-shaped scene without raising, both for the ordinary
     single-arc case and the both-None full-circle case."""
+    from PySide6.QtCore import Qt
     from PySide6.QtGui import QImage, QPainter
 
     from core.moon import MoonArc
 
     image = QImage(64, 64, QImage.Format.Format_ARGB32)
-    image.fill(0)
+    image.fill(Qt.GlobalColor.transparent)
     painter = QPainter(image)
     painter.translate(32, 32)
     layer = MoonBandLayer.__new__(MoonBandLayer)

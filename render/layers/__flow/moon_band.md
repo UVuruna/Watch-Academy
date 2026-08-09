@@ -14,6 +14,6 @@ flowchart TB
     E --> F{moon_band_style}
     F -- inverted --> G[draw_pie darker fill\n+ CompositionMode_Difference stroke]
     F -- silver_thread --> H[thread + filled/hollow dots + culmination diamond]
-    F -- ticks --> I[wider MOON_SILVER stroke]
+    F -- ticks --> I[one MOON_SILVER radial segment per degree, no connecting line]
     F -- glow --> J[layered translucent donut wedges]
 ```

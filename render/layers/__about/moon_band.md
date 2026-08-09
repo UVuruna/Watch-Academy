@@ -10,9 +10,12 @@ inner tick circle showing WHEN the Moon stands above the horizon
 today, in one of four owner-approved visual styles — "inverted"
 (darker fill + inverted ticks inside the arc), "silver_thread" (THE
 DEFAULT — a thin `MOON_SILVER` thread, filled dot at moonrise, hollow
-dot at moonset, diamond at culmination), "ticks" (the ticks within the
-arc turn `MOON_SILVER` and slightly longer, nothing else changes) and
-"glow" (layered translucent arcs, brightest near culmination).
+dot at moonset, diamond at culmination), "ticks" (TICKS-ONLY, owner
+correction 2026-08-09: one discrete `MOON_SILVER` radial segment per
+degree, slightly longer than the plate's own ticks, with NOTHING
+connecting them — no arc, no thread, so it reads distinctly from
+"silver_thread" at a glance) and "glow" (layered translucent arcs,
+brightest near culmination).
 
 Geometry comes entirely from `core.moon.moon_horizon_arcs` — never
 re-derived here; one skin field carries the mode (`year_marker.
@@ -31,12 +34,15 @@ registration with the fixed tick art underneath it.
 
 THE TICK-ART HONESTY NOTE: the 360 day ticks are the owner's own baked
 PNG art (`config.dial.RING_INNER_COMPOSITION`'s base plate), not
-individually addressable primitives. Styles "inverted" and "ticks" are
-therefore approximated with a stroked arc drawn AT the tick radius —
-"inverted" uses `QPainter.CompositionMode_Difference` (a true RGB
-invert of whatever sits under the stroke, not a guessed light color);
-"ticks" draws a plain wider `MOON_SILVER` stroke. Neither touches
-individual tick pixels — there is no hook to reach them through.
+individually addressable primitives — there is no hook to recolor them
+in place. "inverted" is approximated with a stroked arc drawn AT the
+tick radius using `QPainter.CompositionMode_Difference` (a true RGB
+invert of whatever sits under the stroke, not a guessed light color).
+"ticks" does NOT approximate with a stroke — a connecting line reads
+as "silver_thread" at a glance, which the owner's correction (2026-08-09)
+forbids — it draws one discrete `MOON_SILVER` radial SEGMENT per
+degree instead, matching the baked art's own 1-per-degree spacing,
+with nothing connecting them.
 
 ## Connections
 

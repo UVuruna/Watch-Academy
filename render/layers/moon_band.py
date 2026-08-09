@@ -13,15 +13,22 @@ with the fixed tick art underneath.
 THE TICK-ART HONESTY NOTE: the 360 day ticks themselves are the
 owner's own baked PNG art (`config.dial.RING_INNER_COMPOSITION`'s base
 plate), not individually addressable primitives — there is no per-tick
-recolor hook to reach into. Styles 1/3 ("ticks invert"/"ticks turn
-silver") are therefore approximated as a stroked arc drawn AT the tick
-radius: style 1 uses `QPainter.CompositionMode_Difference` (a true
-RGB invert of whatever art sits under the stroke, so a light-ink result
-over dark ticks is the actual inverted pixels, not a guess); style 3
-draws a plain `MOON_SILVER` stroke slightly wider than the tick
-stroke, reading as "the ticks in this arc turned silver and longer"
-without touching pixels the band cannot individually address.
+recolor hook to reach into. Style 1 ("inverted") is therefore
+approximated as a stroked arc drawn AT the tick radius using
+`QPainter.CompositionMode_Difference` (a true RGB invert of whatever
+art sits under the stroke, so a light-ink result over dark ticks is
+the actual inverted pixels, not a guess). Style 3 ("ticks") is NOT a
+continuous stroke — the owner's own correction (2026-08-09, grader
+round): a connecting line would make it visually indistinguishable
+from "silver_thread" at a glance, which the approved design forbids.
+It draws one discrete `MOON_SILVER` radial segment PER DEGREE (the
+same 1-per-degree spacing the baked art itself uses — "the 360 day
+ticks"), slightly longer than the plate's own ticks, with NOTHING
+connecting them — the tick marks themselves are the whole style,
+matching the approved design's "no connecting thread/arc line at all".
 """
+
+import math
 
 from PySide6.QtCore import QPointF, QRectF, Qt
 from PySide6.QtGui import QColor, QPainter, QPainterPath, QPen, QPolygonF
@@ -35,7 +42,8 @@ from render.painting import dial_point, draw_pie
 # that plain constants read clearly against a lookup table nobody else
 # shares).
 _TICK_STROKE_WIDTH_FRACTION = 0.012
-_SILVER_TICK_WIDTH_FRACTION = 0.020    # slightly longer/thicker (style 3)
+_SILVER_TICK_SEGMENT_WIDTH_FRACTION = 0.010   # each discrete tick's own line width (style 3)
+_SILVER_TICK_HALF_LENGTH_FRACTION = 0.028     # each tick's half-length, centered on the band radius
 _THREAD_WIDTH_FRACTION = 0.006         # style 2's thin thread
 _THREAD_INSET_FRACTION = 0.035         # just inside the ticks
 _DOT_RADIUS_FRACTION = 0.014
@@ -127,11 +135,24 @@ class MoonBandLayer(Layer):
     # -- style 3: moon ticks ------------------------------------------------
 
     def _draw_ticks(self, painter: QPainter, radius: float, arc: MoonArc) -> None:
+        """TICKS-ONLY (owner correction 2026-08-09): one discrete
+        `MOON_SILVER` radial segment per degree — the SAME 1-per-degree
+        spacing the baked tick art already uses — with NOTHING
+        connecting them. No arc, no thread: the ticks turning silver
+        and slightly longer IS the whole style, so it reads distinctly
+        from "silver_thread" at a glance."""
         pen = QPen(QColor(palette.MOON_SILVER))
-        pen.setWidthF(radius * _SILVER_TICK_WIDTH_FRACTION)
+        pen.setWidthF(radius * _SILVER_TICK_SEGMENT_WIDTH_FRACTION)
+        pen.setCapStyle(Qt.PenCapStyle.FlatCap)
         painter.setPen(pen)
-        painter.setBrush(Qt.BrushStyle.NoBrush)
-        self._stroke_arc(painter, radius, arc)
+        half_len = radius * _SILVER_TICK_HALF_LENGTH_FRACTION
+        first = math.ceil(arc.start_deg)
+        last = math.floor(arc.end_deg)
+        for degree in range(first, last + 1):
+            theta = degree % 360.0
+            inner = dial_point(theta, radius - half_len)
+            outer = dial_point(theta, radius + half_len)
+            painter.drawLine(inner, outer)
 
     # -- style 4: moon glow ---------------------------------------------------
 
