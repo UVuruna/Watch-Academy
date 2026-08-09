@@ -73,3 +73,6 @@ research/recolor_preview/
 !.claude/skills/
 .claude/settings.local.json
 
+
+# Claude Code working folder - never tracked (owner decree 2026-08-09)
+.claude/
