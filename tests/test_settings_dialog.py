@@ -109,7 +109,14 @@ def test_major_cities_stay_quiet_until_the_user_acts(app):
     dialog._country.setCurrentIndex(dialog._country.findText("Italy"))
     assert dialog._results.count() >= 1            # the user acted -> majors
     row = dialog._results.sizeHintForRow(0)
-    assert dialog._results.height() <= dialog._results.count() * row + 10
+    # The box is exactly its own rows plus its OWN frame, never a fixed
+    # area — tightened 2026-08-09 from `<= rows * row + 10`, which pinned
+    # the implementation's guessed padding instead of the rule. The themed
+    # frame is 7px per side, so the old arithmetic cut 4px off the only row
+    # of a one-result search (found by the ALG-1 state matrix).
+    frame = 2 * dialog._results.frameWidth()
+    wanted = min(120, dialog._results.count() * row + frame)
+    assert dialog._results.height() == wanted
     dialog.done(0)
 
 
