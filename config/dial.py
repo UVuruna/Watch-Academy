@@ -110,6 +110,21 @@ def earth_moon_orbit_fraction(ring_size: float, half_size: float) -> float:
     return minutes_edge - half_size - EARTH_MOON_ORBIT_CLEARANCE_FRACTION
 
 
+# THE POSITION POINTER (owner feature 2026-08-09, Settings ▸ Earth, off
+# by default): a small triangle straddling each marker's OWN edge at its
+# exact angle — the same triangle language `render.calendar_mount.
+# calendar_day_arrow` uses for the Almanac's day mark — so a small
+# Earth/Moon marker stays easy to find. Drawn UNDER the body itself, so
+# only the outward tip peeks past the body's own edge. The tip's
+# protrusion stays comfortably inside `EARTH_MOON_ORBIT_CLEARANCE_
+# FRACTION`'s own margin so the pointer never re-touches the minute band
+# or the outer hour band THE CLEAR ORBIT LANE just cleared.
+MARKER_POINTER_PROTRUSION_FRACTION = 0.012   # tip, beyond the body's own edge
+MARKER_POINTER_RECESS_FRACTION = 0.35        # base, INTO the body's own radius
+                                              # (fraction of the body's half-size)
+MARKER_POINTER_HALF_DEG = 2.5                # half-angle of the triangle base
+
+
 # THE AURA COLORLESS MENU's "follow" option (Watch Face Phase 4, R-23):
 # the brightness fed to `render.painting.tinted_gray` so "follow ring"
 # reads as the tint's OWN near-white end rather than the tint itself —

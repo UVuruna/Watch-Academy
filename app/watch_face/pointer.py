@@ -174,4 +174,8 @@ def _earth_group(settings, setters, tr) -> QWidget:
         button.setEnabled(enabled)
         label_row.addWidget(button)
     layout.addLayout(label_row)
+    pointer_checkbox = QCheckBox(tr("Position pointer"))
+    pointer_checkbox.setChecked(settings.show_marker_pointer)
+    pointer_checkbox.toggled.connect(setters["show_marker_pointer"])
+    layout.addWidget(pointer_checkbox)
     return group

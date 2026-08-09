@@ -179,6 +179,12 @@ class Settings:
     third_slot_theme: str = "planets"
     show_third_slot: bool = False
     earth_style: str = "atmo"
+    # THE POSITION POINTER (owner feature 2026-08-09, Settings ▸ Earth,
+    # off by default): a small triangle at the Earth/Moon orbit circle,
+    # at each body's own angle — the two markers can be small and hard
+    # to spot. See `render.layers.year_marker.YearMarkerLayer.
+    # _draw_orbit_pointer`.
+    show_marker_pointer: bool = False
     weekday_theme: str = "planets"
     # The figure ROSTER is PER SLOT (owner 2026-07-15: "1. slot grcki
     # planetary, 2. slot grcki panteon") — picked inside each theme's
@@ -613,6 +619,7 @@ class SettingsStore:
                     raw, "hide_night_borders", False
                 ),
                 earth_label=load_earth_label(raw),
+                show_marker_pointer=load_bool(raw, "show_marker_pointer", False),
                 world_mode=load_choice(
                     raw, "world_mode", dial.WORLD_MODES,
                     dial.WORLD_MODE_DEFAULT,
@@ -819,6 +826,7 @@ class SettingsStore:
             "third_slot_theme": settings.third_slot_theme,
             "show_third_slot": settings.show_third_slot,
             "earth_style": settings.earth_style,
+            "show_marker_pointer": settings.show_marker_pointer,
             "weekday_theme": settings.weekday_theme,
             "subdial_style": settings.subdial_style,
             "subdial_set": settings.subdial_set,

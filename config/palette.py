@@ -575,6 +575,15 @@ SKIN_EARTH_NIGHT = "#20344F"
 # The year-marker Moon: its lit limb and its shadowed one.
 SKIN_MOON_LIT = "#E8E4D8"
 SKIN_MOON_DARK = "#2A2D36"
+# THE POSITION POINTER's fallback (owner feature 2026-08-09, Settings ▸
+# Earth): `app.controller._overlay_display_settings` resolves the
+# pointer to the SAME ramp hue the ring jewels/crown text wear
+# (`app.watch_face.thumbs.shade_hue`, off the active ring finish +
+# shade); this is the honest stand-in for the rare case that lookup
+# fails (a custom ring's thematic name outside every known ramp) — the
+# app's own signature hue, matching `RING_THEMATIC_SHADES`'s own
+# fallback for the same situation.
+MARKER_POINTER_FALLBACK_COLOR = "#666699"    # moon_indigo's own 0.55 stop
 
 
 # ==================================================================

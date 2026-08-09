@@ -179,6 +179,17 @@ class YearMarkerSpec:
     # `dial.MOON_TRANSIT_OPACITY` constant, now a per-skin field an
     # override can replace (`settings.moon_transit_alpha`).
     transit_alpha: float = dial.MOON_TRANSIT_OPACITY
+    # THE POSITION POINTER (owner feature 2026-08-09, Settings ▸ Earth,
+    # off by default): `pointer_enabled` is a plain pass-through of
+    # `Settings.show_marker_pointer`; `pointer_color` is resolved ONCE
+    # per settings change, in `app.controller._overlay_display_settings`
+    # — the SAME ramp hue the ring jewels/crown text wear
+    # (`app.watch_face.thumbs.shade_hue`) — never at paint time (that
+    # accessor lives in `app/`, and `render/` never imports upward from
+    # it; THE PALETTE COLOUR LAW's fallback is
+    # `palette.MARKER_POINTER_FALLBACK_COLOR`).
+    pointer_enabled: bool = False
+    pointer_color: str = palette.MARKER_POINTER_FALLBACK_COLOR
 
 
 @dataclass(frozen=True)

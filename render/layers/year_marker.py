@@ -1,7 +1,7 @@
 """The YEAR MARKER layer — earth, moon and the event bodies."""
 
 from PySide6.QtCore import QPointF, QRectF, Qt
-from PySide6.QtGui import QColor, QFont, QPainter, QPainterPath, QPen
+from PySide6.QtGui import QColor, QFont, QPainter, QPainterPath, QPen, QPolygonF
 
 from config import archetypes, constants, continents as continents_theme, defaults, dial, glow, palette
 from core import angles
@@ -131,6 +131,11 @@ class YearMarkerLayer(Layer):
                 )
             painter.save()
             painter.setOpacity(painter.opacity() * opacity)
+            if spec.pointer_enabled:
+                self._draw_orbit_pointer(
+                    painter, ctx, moon_angle, orbit, spec.moon_scale * factor,
+                    spec.pointer_color,
+                )
             self._draw_moon(
                 painter, ctx, pos, 2 * ctx.radius * spec.moon_scale * factor,
                 darken_state=lunar_state,
@@ -183,6 +188,11 @@ class YearMarkerLayer(Layer):
         )
         pos = dial_point(year_angle, ctx.radius * orbit)
         size = 2 * ctx.radius * spec.scale * hover_factor(ctx, "earth")
+        if spec.pointer_enabled:
+            self._draw_orbit_pointer(
+                painter, ctx, year_angle, orbit, size / (2 * ctx.radius),
+                spec.pointer_color,
+            )
         if glowing:
             solar_state = (
                 eclipse_render_state(solar_eclipse)
@@ -323,6 +333,38 @@ class YearMarkerLayer(Layer):
             painter, QPointF(pos.x(), pos.y() + offset), second_row,
             row_font,
         )
+
+    def _draw_orbit_pointer(
+        self, painter: QPainter, ctx: RenderContext, angle_deg: float,
+        orbit_fraction: float, half_size_fraction: float, color: str,
+    ) -> None:
+        """THE POSITION POINTER (owner feature 2026-08-09, Settings ▸
+        Earth, off by default): a small triangle straddling the body's
+        OWN edge at its exact angle — the same triangle language
+        `render.calendar_mount.calendar_day_arrow` uses for the
+        Almanac's day mark, so a small Earth/Moon marker stays easy to
+        find. Called BEFORE the body's own pixmap/disc (both callers),
+        so only the outward-pointing tip peeks past the body's edge —
+        the base is hidden underneath it. `half_size_fraction` is the
+        CALLER's own body — Earth's `spec.scale` or the Moon's
+        `spec.moon_scale`, each already carrying hover-enlarge — so the
+        triangle always matches the body it points at, not the shared
+        orbit's own (possibly larger) clearance sizing."""
+        edge = orbit_fraction + half_size_fraction
+        tip = ctx.radius * (edge + dial.MARKER_POINTER_PROTRUSION_FRACTION)
+        base = ctx.radius * (
+            edge - half_size_fraction * dial.MARKER_POINTER_RECESS_FRACTION
+        )
+        half = dial.MARKER_POINTER_HALF_DEG
+        painter.save()
+        painter.setPen(Qt.PenStyle.NoPen)
+        painter.setBrush(QColor(color))
+        painter.drawPolygon(QPolygonF([
+            dial_point(angle_deg, tip),
+            dial_point(angle_deg - half, base),
+            dial_point(angle_deg + half, base),
+        ]))
+        painter.restore()
 
     def _draw_moon(
         self, painter: QPainter, ctx: RenderContext, pos: QPointF, size: float,
