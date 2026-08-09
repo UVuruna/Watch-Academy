@@ -225,9 +225,14 @@ _DOUBLE_TRINITY_ENTRIES = (
 _CROSSES_ENTRIES = (
     ("The Two Crosses", None, ("crosses", "The Two Crosses")),
     ("The Path of Light", archetypes.CROSSES_ART_DIR / "Path_of_Light.png"),
-    ("Hope", archetypes.CROSSES_ART_DIR / "Hope.png"),
+    # WALKING order, and it obeys THE ORDER LAW (owner decree
+    # 2026-08-09): Faith 08h, Love 12h, Hope 16h, Salvation 24h. The
+    # reader meets the stations in the order a traveller stands on them,
+    # so a page list left in the retired order would teach the retired
+    # road — see config/doctrine.py PATH_OF_LIGHT.
     ("Faith", archetypes.CROSSES_ART_DIR / "Faith.png"),
     ("Love", archetypes.CROSSES_ART_DIR / "Love.png"),
+    ("Hope", archetypes.CROSSES_ART_DIR / "Hope.png"),
     ("Salvation", archetypes.CROSSES_ART_DIR / "Salvation.png"),
     ("The Path of Darkness",
      archetypes.CROSSES_ART_DIR / "Path_of_Darkness.png"),
