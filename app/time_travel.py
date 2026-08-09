@@ -154,6 +154,20 @@ class TimeTravelDialog(QDialog):
         self._time = QTimeEdit(self)
         self._time.setDisplayFormat("HH:mm")
         self._time.setTime(QTime(initial_moment.hour, initial_moment.minute))
+        # Fixed POLICY, not a fixed number (same law as the arrow
+        # buttons below): the widest time the format can show, from the
+        # widget's OWN font metrics, plus its frame/padding/spin-button
+        # chrome — real fonts measured 1px short of "12:00" and the
+        # size hint alone kept re-shrinking to that shortfall
+        # (real-font audit 2026-08-09).
+        chrome = self._time.sizeHint().width() - (
+            self._time.fontMetrics().horizontalAdvance(
+                self._time.time().toString("HH:mm")
+            )
+        )
+        self._time.setMinimumWidth(
+            self._time.fontMetrics().horizontalAdvance("88:88") + chrome + 4
+        )
         moment_row = QHBoxLayout()
         moment_row.addWidget(self._day)
         moment_row.addWidget(self._month)

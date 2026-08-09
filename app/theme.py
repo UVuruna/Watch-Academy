@@ -98,6 +98,17 @@ QComboBox, QSpinBox, QDoubleSpinBox, QLineEdit {{
 QComboBox:hover, QSpinBox:hover, QDoubleSpinBox:hover, QLineEdit:hover {{
     border: 1px solid {_C['accent']};
 }}
+/* The spin box draws the ONE rounded frame; its inner QLineEdit is a
+   text area, not a second field — without this override the generic
+   QLineEdit rule above gives that 19px-tall child its own border and
+   an 8px radius (ALG-6: a near-square element wearing a pill radius,
+   real-font audit 2026-08-09). */
+QAbstractSpinBox QLineEdit {{
+    background: transparent;
+    border: none;
+    border-radius: 0px;
+    padding: 0px;
+}}
 QComboBox::drop-down {{
     border: none;
     width: 22px;

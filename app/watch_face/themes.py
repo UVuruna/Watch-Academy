@@ -78,8 +78,17 @@ def _populate(root, settings, setters, tr, rebuild) -> None:
     if _nav.active_slot not in {d.index for d in descriptors}:
         _nav.active_slot = descriptors[0].index
     active = next(d for d in descriptors if d.index == _nav.active_slot)
-    root.addLayout(_slot_picker_row(descriptors, tr, rebuild))
-    if not active.enabled_value and not full_face:
+    slot_off = not active.enabled_value and not full_face
+    # The Names switch rides the SLOT ROW's free tail instead of a row
+    # of its own: a lone checkbox left a whole band mostly empty while
+    # the galleries continued below it (ALG-7, real-font audit
+    # 2026-08-09 — reflow before stacking into height).
+    names = None
+    if not slot_off:
+        content_source = active if not full_face else descriptors[0]
+        names = _names_checkbox(content_source, settings, setters, tr)
+    root.addLayout(_slot_picker_row(descriptors, tr, rebuild, names))
+    if slot_off:
         note = QLabel(tr("This Slot is off — Ctrl+N cycles the visible Slots."))
         note.setWordWrap(True)
         root.addWidget(note)
@@ -88,8 +97,6 @@ def _populate(root, settings, setters, tr, rebuild) -> None:
         # the content tree binds to descriptor 1's data regardless of
         # which medal is "active" (all three are grayed) — see
         # themes.md's Design Decisions.
-        content_source = active if not full_face else descriptors[0]
-        root.addWidget(_names_checkbox(content_source, settings, setters, tr))
         root.addWidget(theme_tree.build(
             content_source, full_face, settings.pointer,
             settings.pointer_shape, tr,
@@ -117,7 +124,7 @@ def _face_layout_row(settings, setters, tr) -> QHBoxLayout:
     return row
 
 
-def _slot_picker_row(descriptors, tr, rebuild) -> QHBoxLayout:
+def _slot_picker_row(descriptors, tr, rebuild, names=None) -> QHBoxLayout:
     row = QHBoxLayout()
     for descriptor in descriptors:
         button = QPushButton(f"{_MEDALS[descriptor.index]} {tr(descriptor.title)}")
@@ -132,6 +139,9 @@ def _slot_picker_row(descriptors, tr, rebuild) -> QHBoxLayout:
             lambda checked=False, i=descriptor.index: _select_slot(i, rebuild)
         )
         row.addWidget(button)
+    if names is not None:
+        row.addSpacing(12)
+        row.addWidget(names)
     return row
 
 
