@@ -47,8 +47,9 @@ from app.controller import WatchController
 from app.settings_store import SettingsStore
 from app.warm import run_warm
 from config import pantheon, paths
-from render import archetype_geometry, asset_recolor
+from render import archetype_geometry, asset_recolor, asset_variants
 from render.art_warm import warm_pending_art
+from render.asset_variants import drain_pending_working
 
 
 class AppController:
@@ -71,6 +72,16 @@ class AppController:
         self._art_lock = threading.Lock()
         self._art_thread: threading.Thread | None = None
         self._art_rerun = False
+        # The on-demand WORKING-SET drain (owner bar 2026-08-09,
+        # MIGRATE-GUI Phase 1): the working-set ledger's own twin of the
+        # art drain above, same one-thread-plus-rerun-flag shape — a
+        # paint after the startup warm has finished (a skin switch, a
+        # time-travel day that pulls in different archetype art) can
+        # still record a fresh miss, and this is what builds it without
+        # a restart.
+        self._working_lock = threading.Lock()
+        self._working_thread: threading.Thread | None = None
+        self._working_rerun = False
         # The on-demand HOVER queue (owner bug 2026-08-06), same shape:
         # one worker, a pending list instead of a rerun flag, because a
         # sweep belongs to ONE watch and two different watches both
@@ -90,6 +101,7 @@ class AppController:
         #: thread at menu-open — a single str reference, no lock needed.
         self._warm_status: str | None = None
         asset_recolor.set_art_stale_notifier(self.kick_art_warm)
+        asset_variants.set_working_stale_notifier(self.kick_working_warm)
         self._watches: list[WatchController] = []
         for index in paths.discover_watch_indices():
             self._watches.append(self._build_watch(index))
@@ -312,6 +324,56 @@ class AppController:
                     if not self._art_rerun:
                         return
                     self._art_rerun = False
+        finally:
+            self._warm_status = None
+
+    # --- the on-demand working-set drain --------------------------------------
+
+    def kick_working_warm(self) -> None:
+        """Drain freshly-recorded working-set recipes on a background
+        thread — installed as `render.asset_variants`'s stale notifier,
+        rung the moment a paint records a MISSING downscale (the exact
+        twin of `kick_art_warm` above, for the OTHER derived-image
+        ledger, Rule #5: one drain SHAPE, two resources).
+
+        Same cheap, thread-agnostic, at-most-one-drain-alive contract as
+        `kick_art_warm`, and the same startup guard: before the startup
+        warm has been armed and started, the kick stands down — that
+        first drain belongs to `run_warm`'s own VISIBLE-FIRST phase,
+        right after every dial's first frame."""
+        if self._quitting or self._warm_thread is None:
+            return
+        with self._working_lock:
+            if self._working_thread is not None and self._working_thread.is_alive():
+                self._working_rerun = True
+                return
+            self._working_rerun = False
+            self._working_thread = threading.Thread(
+                target=self._drain_working, daemon=True,
+                name="DOMY working-set drain",
+            )
+            self._working_thread.start()
+
+    def _drain_working(self) -> None:
+        """The kicked drain's body — `_drain_art`'s exact shape, over
+        `drain_pending_working` instead of `warm_pending_art`. Reuses
+        `_emit_art_ready` as the landed-copy callback: a working-set
+        copy landing invalidates the same path caches a recolor landing
+        does and wants the same debounced repaint, so it rides the SAME
+        Qt signal rather than a second one (owner bar 2026-08-09: "ride
+        the same or an equivalent mechanism")."""
+        try:
+            self._warm_status = "building working-set copies…"
+            while True:
+                drain_pending_working(
+                    progress=self._report_progress,
+                    on_ready=self._emit_art_ready,
+                    should_stop=lambda: self._quitting,
+                )
+                with self._working_lock:
+                    if not self._working_rerun:
+                        return
+                    self._working_rerun = False
         finally:
             self._warm_status = None
 

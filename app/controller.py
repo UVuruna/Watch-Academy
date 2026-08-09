@@ -61,6 +61,7 @@ from app.settings_store import (
     slot_layout_target,
 )
 from app.slot_descriptor import SlotDescriptor
+from app.watch_face import thumbs
 from app.time_travel import TimeTravelDialog
 from app.tray import TrayController, logo_icon, window_icon
 from app.widget import ClockWidget
@@ -936,6 +937,22 @@ def _overlay_display_settings(skin, settings: Settings, display):
             scale=marker.scale * settings.earth_scale,
             moon_scale=marker.moon_scale * settings.moon_scale,
         )
+    # THE POSITION POINTER's color (owner feature 2026-08-09, Settings ▸
+    # Earth): resolved ONCE here, never at paint time — `render/` never
+    # imports `app/` (the one-way flow), and `thumbs.shade_hue` is a UI
+    # accessor that reads `recolor/presets/metals.json` from disk, fine
+    # on a settings change, never on a per-tick paint. The SAME metal
+    # the ring's crown text wears (`skin.ring.crown_text_metal`, set by
+    # `_compose_skin` before this overlay runs), at its ACTIVE shade
+    # (`display.shade`, the same accessor `jewel_metal_file` resolves
+    # through) — a custom ring's thematic name outside every known ramp
+    # is the only way this falls back to THE PALETTE COLOUR LAW's own
+    # `palette.MARKER_POINTER_FALLBACK_COLOR`.
+    pointer_metal = skin.ring.crown_text_metal
+    pointer_color = (
+        thumbs.shade_hue(pointer_metal, display.shade(pointer_metal))
+        or palette.MARKER_POINTER_FALLBACK_COLOR
+    )
     marker = dataclasses.replace(
         marker,
         moon_hidden_alpha=settings.moon_hidden_alpha,
@@ -951,6 +968,8 @@ def _overlay_display_settings(skin, settings: Settings, display):
             if settings.moon_transit_alpha is not None
             else marker.transit_alpha
         ),
+        pointer_enabled=settings.show_marker_pointer,
+        pointer_color=pointer_color,
     )
     # A stored "tertiary" wheel only holds where the pointer serves one
     # (trio/hexa/octa — CUBE.md); everywhere else it normalizes to
@@ -1480,7 +1499,18 @@ class WatchController(QObject):
     def _apply_art_now(self) -> None:
         """The debounce window closed: rebuild the composites (assets
         stay — the landed finish resolves under a NEW cache key, so
-        nothing rasterized needs re-decoding) and repaint."""
+        nothing rasterized needs re-decoding) and repaint.
+
+        Also gives the asset cache's PENDING working-set markers (owner
+        bar 2026-08-09, MIGRATE-GUI Phase 1 — `AssetCache.clear_pending`)
+        one more chance to resolve: a working-set miss stood in blank
+        the last frame, and this signal — the SAME debounced repaint a
+        landed metal recolor already rides — is exactly the moment a
+        background build might have landed. Reached through the
+        compositor's own cache rather than a new `Compositor` method:
+        `render/compositor.py` is mid-edit by another session's
+        celestial-geometry round this session must not touch."""
+        self._compositor._cache.clear_pending()
         self._compositor.refresh_composites()
         self._widget.update()
 
@@ -3240,6 +3270,9 @@ class WatchController(QObject):
                 lambda v: self._set_display_choice("earth_style", v)
             ),
             "earth_label": wrap(self._set_earth_label),
+            "show_marker_pointer": wrap(
+                lambda v: self._set_display_choice("show_marker_pointer", v)
+            ),
             "diameter": wrap(self._set_diameter),
             "earth_scale": wrap(
                 lambda v: self._set_display_choice("earth_scale", v)

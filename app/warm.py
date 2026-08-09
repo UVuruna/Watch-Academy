@@ -17,7 +17,18 @@ first, what he might look at last:
 1. **Dial art** (`render.art_warm`) — the jewel recolors the dials are
    currently standing in for with their gold masters. Each one repaints
    the dial the moment it lands.
-2. **Working set** — the downscaled dial copies of oversized sources.
+2. **Working set, VISIBLE-FIRST then the rest** (owner bar 2026-08-09,
+   MIGRATE-GUI Phase 1 — "the 75-second dead clock"): the ledger drain
+   (`render.asset_variants.drain_pending_working`) FIRST, then the
+   alphabetical whole-tree sweep (`warm_working_set`). The ledger holds
+   exactly what the dial's own first paint(s) already asked for and
+   skipped (`render.assets.AssetCache.pixmap_by_height` records a MISS
+   instead of decoding the full-res original inline) — draining THAT
+   first dresses the on-screen dial in a few seconds even stone-cold,
+   instead of waiting on whichever subtree happens to sort first
+   alphabetically. `warm_working_set` then finishes the rest (the
+   trees/hours nothing has asked for yet); files the ledger already
+   built are simply skipped (`cache.exists()`), so nothing doubles.
 3. **Encyclopedia** — every metal variant and decode ceiling a page can
    ask for.
 4. **Hover articles** — LAST of the build phases, and only after the
@@ -37,7 +48,7 @@ See [Warm](warm.md).
 from config import paths
 from render import raster_store
 from render.art_warm import warm_pending_art
-from render.asset_variants import warm_working_set
+from render.asset_variants import drain_pending_working, warm_working_set
 
 from app.encyclopedia_warm import warm_encyclopedia
 
@@ -82,6 +93,15 @@ def run_warm(
     concurrent Python sweeps would do the opposite.
     """
     warm_pending_art(
+        progress=progress, on_ready=on_art_ready, should_stop=should_stop
+    )
+    if should_stop is not None and should_stop():
+        return
+    # VISIBLE-FIRST (owner bar 2026-08-09): the ledger IS the active
+    # skin's own referenced working-set art (recorded by the paint that
+    # skipped it), so it lands — and repaints — before the exhaustive
+    # alphabetical sweep below even starts.
+    drain_pending_working(
         progress=progress, on_ready=on_art_ready, should_stop=should_stop
     )
     if should_stop is not None and should_stop():

@@ -66,7 +66,20 @@ def bundled_skins_dir() -> Path:
 
 
 def user_dir() -> Path:
-    """Per-user writable folder: %APPDATA%/DOMY Watch (not auto-created)."""
+    """Per-user writable folder: %APPDATA%/DOMY Watch (not auto-created).
+
+    DEV OVERRIDE (0.14.845, MIGRATE-GUI cold-start measurement): when
+    `DOMY_WATCH_USER_DIR_OVERRIDE` is set, it wins outright — a real
+    isolated cold-cache launch (settings, raster_cache, everything this
+    module resolves under it) that never touches the owner's live
+    `%APPDATA%\\DOMY Watch`. Unset in every normal run and every test
+    (which override `paths.settings_path`/`paths.assets_dir` directly
+    instead); this exists ONLY so a measurement script can point a real
+    `python main.py` process at a throwaway directory from the outside
+    without editing source."""
+    override = os.environ.get("DOMY_WATCH_USER_DIR_OVERRIDE")
+    if override:
+        return Path(override)
     return Path(os.environ["APPDATA"]) / constants.APP_NAME
 
 
