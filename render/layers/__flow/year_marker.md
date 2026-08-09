@@ -15,7 +15,7 @@ flowchart TB
     subgraph EARTH["_draw_earth"]
         C1[year_angle: almanac wedge or shared season wheel] --> C2{season/solar-eclipse\nevent window active?}
         C2 -- yes --> C3[relocate to ring band, glow: gold/red,\nmuted if not visible]
-        C2 -- no --> C4[normal orbit_fraction radius]
+        C2 -- no --> C4[normal: dial.earth_moon_orbit_fraction ring_size, max half-size]
         C3 --> C5
         C4 --> C5{almanac?}
         C5 -- yes --> C6[draw day arrow]
@@ -30,7 +30,7 @@ flowchart TB
         M1[moon_angle from moon_fraction] --> M2[opacity: transit + below-horizon dim]
         M2 --> M3{event/eclipse window active?}
         M3 -- yes --> M4[relocate to ring band, glow: silver/bronze,\nmuted if not visible]
-        M3 -- no --> M5[normal moon_orbit_fraction radius]
+        M3 -- no --> M5[normal: dial.earth_moon_orbit_fraction ring_size, max half-size]
         M4 --> M6
         M5 --> M6[_draw_moon: image or disc, lit-region mask,\neclipse darken if applicable]
     end
@@ -45,7 +45,7 @@ Pseudocode (language-neutral):
         IF NOT tick.is_moon_up: opacity *= moon_hidden_alpha
         eclipse = tick.eclipse_event IF kind == "lunar" ELSE None
         glowing = tick.moon_event is not None OR eclipse is not None
-        orbit = ring-band radius IF glowing ELSE moon_orbit_fraction
+        orbit = ring-band radius IF glowing ELSE earth_moon_orbit_fraction(ring_size, max(scale, moon_scale))
         pos = dial_point(moon_angle, radius * orbit)
         IF glowing:
             color, strength = eclipse colors/magnitude, or plain moon-glow
@@ -58,7 +58,7 @@ Pseudocode (language-neutral):
                      ELSE tick.year_angle
         eclipse = tick.eclipse_event IF kind == "solar" ELSE None
         glowing = tick.season_event is not None OR eclipse is not None
-        orbit = ring-band radius IF glowing ELSE spec.orbit_fraction
+        orbit = ring-band radius IF glowing ELSE earth_moon_orbit_fraction(ring_size, max(spec.scale, spec.moon_scale))
         pos = dial_point(year_angle, radius * orbit)
         IF glowing: draw_event_glow(pos, size, color, strength)  # gold/red
         IF almanac: draw the day arrow at this tick

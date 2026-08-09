@@ -26,7 +26,15 @@ Layer: config — pure, no Qt, no wall clock.
   the painter-drawn ring/labels used whenever a skin ships no ring art
   (user drop-in skins, validate previews) — the bundled DOMY skin uses
   `ring.png` and never touches these.
-- **Moon/Earth rim transit** — `MOON_TRANSIT_OPACITY`.
+- **Moon/Earth rim transit** — `MOON_TRANSIT_OPACITY`, and THE CLEAR
+  ORBIT LANE (owner verdict 2026-08-09): `EARTH_MOON_ORBIT_CLEARANCE_
+  FRACTION` + `earth_moon_orbit_fraction(ring_size, half_size)`, the
+  DRAWN Earth/Moon orbit radius — pulled inside `MINUTES_RADIUS_
+  FRACTION` (scaled by `interior_scale`) by whichever marker is
+  currently bigger, plus a fixed gap, so the shared orbit never touches
+  the minute band or the outer hour band. Read by `render.layers.
+  year_marker.YearMarkerLayer` and mirrored by `render.compositor.
+  Compositor._element_at`'s hit-test.
 - **Ring faces** — `RING_FACE_DIR`, the tint swatch geometry, the ring
   jewel art/shadow/crown-text arc constants (`RING_JEWEL_*`, `RING_CROWN_TEXT_
   *`). **THE PLATE LIBRARY** (owner reorganization 2026-08-07):

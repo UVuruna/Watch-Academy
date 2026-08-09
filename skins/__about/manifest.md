@@ -110,10 +110,16 @@ switches (`show_earth` / `show_moon`).
   resolves the region LIVE from the day context's own coordinates every
   paint, R-28 fix)
 - `day_color`, `night_color: str` — procedural Earth fallbacks
-- `orbit_fraction`, `scale: float` — Earth orbit / size
+- `orbit_fraction`, `scale: float` — Earth size; `orbit_fraction` is a
+  NOMINAL value only (THE CLEAR ORBIT LANE, owner verdict 2026-08-09) —
+  the DRAWN orbit is computed live by `config.dial.
+  earth_moon_orbit_fraction`, clear of both the minute band and the
+  outer hour band; this field survives only for `render.daylight.
+  moon_transit_opacity`'s touch-angle approximation
 - `moon_asset: Path | None`, `moon_lit_color`, `moon_dark_color: str`
 - `moon_shadow_alpha: float` — darkness of the unlit part over the image
-- `moon_orbit_fraction`, `moon_scale: float` — smaller than the Earth (~72%)
+- `moon_orbit_fraction`, `moon_scale: float` — smaller than the Earth
+  (~72%); `moon_orbit_fraction` carries the same NOMINAL-only retirement
 - `moon_hidden_alpha: float = 0.5` — marker opacity while below the horizon
 
 ### `HandSpec`
