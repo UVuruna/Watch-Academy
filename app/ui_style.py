@@ -15,7 +15,7 @@ the palette and `_readable_text` deriving light/dark text from each
 fill's own luminance.
 """
 
-import textwrap
+import html
 
 from PySide6.QtCore import Qt
 from PySide6.QtGui import QColor
@@ -26,12 +26,18 @@ from config import encyclopedia_ui, palette
 def tooltip_wrap(text: str) -> str:
     """ALG-3 HOVER GEOMETRY (rules/GUI.md -> Zubi v2): a plain-text Qt
     tooltip never wraps on its own — a 200-char sentence renders as one
-    screen-wide strip. Every tooltip longer than a line routes through
-    here: hard-wrapped at <= 72 chars per line, paragraph breaks kept."""
-    return "\n".join(
-        textwrap.fill(line, width=72) if line.strip() else line
-        for line in text.split("\n")
+    screen-wide strip. Qt DOES word-wrap RICH-TEXT tooltips, which is
+    the audit's own prescribed fix — every tooltip longer than a line
+    routes through here: HTML-escaped, blank lines become paragraph
+    breaks, single newlines become <br>. Short tooltips pass through
+    unchanged (nothing to wrap, and plain text keeps its exact look)."""
+    if len(text) <= 72 and "\n" not in text:
+        return text
+    body = "</p><p>".join(
+        paragraph.replace("\n", "<br>")
+        for paragraph in html.escape(text).split("\n\n")
     )
+    return f"<qt><p>{body}</p></qt>"
 
 
 def _stops(top: str, bottom: str, factor: int = 100) -> str:
