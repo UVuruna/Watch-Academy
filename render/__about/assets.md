@@ -28,6 +28,27 @@ once-per-file DOWNSCALED copy instead of the full-resolution original
 (oversized requests keep the original; the ceiling lookup and the
 downscale itself are [Asset Variants](asset_variants.md) functions).
 
+**A cold working-set miss NEVER builds inline** (owner bar 2026-08-09,
+MIGRATE-GUI Phase 1 — "the 75-second dead clock"): this used to call
+`scaled_variant_file(path, ceiling)` with `build=True` right here,
+decoding a multi-MB PNG INSIDE `paintEvent`. Now a miss only NAMES the
+copy (`working_variant_path`, a header-only check — a source already at
+or under its ceiling is returned UNCHANGED and never enters the ledger
+at all), records the recipe, rings the ledger's stale notifier and
+returns `None`; `render.painting.draw_pixmap_centered` is the one
+chokepoint every art layer draws through, and it simply skips the
+element for that frame. The pixels build off the GUI thread
+(`render.asset_variants.drain_pending_working`, called by `app.warm.
+run_warm`'s VISIBLE-FIRST phase and by `app.watch_manager.
+AppController.kick_working_warm` on demand) and land through the SAME
+debounced repaint a metal recolor already rides
+(`app.controller.WatchController.apply_pending_art`/`_apply_art_now`).
+A still-pending element caches `None` under its own key — THE ONE COPY
+RULE (`tests/test_repeat_work.py`) — so a steady-state repaint never
+repeats the `exists()` stat; `clear_pending()` purges exactly those
+`None` markers (never a real rasterized pixmap) whenever a background
+build might have landed, giving the element one more chance to resolve.
+
 **The metal recolor** moved to the standalone, Qt-free `recolor/`
 package (owner verdict "prihvaceno", 2026-07-27) — `_recolored` is a
 thin QImage-in/QImage-out adapter over `recolor.transform.recolor`; see
@@ -58,10 +79,11 @@ and the measured autopsy of the retired kernel it replaced.
 
 ### AssetCache
 - `pixmap_by_height(path, logical_height, dpr, tint=None,
-  desaturate=False, metal=None, saturation=1.0)`: aspect-preserving,
-  device-resolution pixmap with `devicePixelRatio` set; `saturation`
-  (Ring Saturation slider) scales the FINAL pixmap's HSV saturation,
-  applied AFTER `tint`.
+  desaturate=False, metal=None, saturation=1.0) -> QPixmap | None`:
+  aspect-preserving, device-resolution pixmap with `devicePixelRatio`
+  set; `saturation` (Ring Saturation slider) scales the FINAL pixmap's
+  HSV saturation, applied AFTER `tint`. Returns `None` for a pending
+  working-set miss (owner bar 2026-08-09) — every caller must guard it.
 - `_recolored(source, metal, source_metal, mask_mode)`: the ONE metal
   recolor door — resolves the active shade to a ramp name and hands the
   pixels to `recolor.transform.recolor` (mask modes: `"chroma"` for
@@ -70,6 +92,10 @@ and the measured autopsy of the retired kernel it replaced.
 - `_tinted(source, tint)`: the TRITONE gradient-map recolor
   (black→tint→white).
 - `flush()`: drop everything on screen/DPI or skin change.
+- `clear_pending()`: drop only the `None` pending markers (owner bar
+  2026-08-09) — every rasterized pixmap survives; called from
+  `app.controller.WatchController._apply_art_now` whenever a background
+  build might have landed.
 
 ## Design Decisions
 - **Every metal recolor calls the ONE `_recolored` door** (Rule #5) —

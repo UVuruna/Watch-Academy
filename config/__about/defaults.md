@@ -42,6 +42,12 @@ Layer: config — pure, no Qt, no wall clock.
   `SETTINGS_NAV_WIDTH_PX`.
 - **Working-set ceilings** — `WORKING_SET_CEILINGS` (per-asset-subtree
   downscale ceilings), `REVEAL_WEEK_DURATION_S`.
+- **Background warm pool sizes** — `ART_DRAIN_WORKERS`,
+  `WORKING_SET_WORKERS` (owner bar 2026-08-09, MIGRATE-GUI Phase 1:
+  `max(2, min((os.cpu_count() or 4) - 2, 12))` — DERIVED, not the old
+  hardcoded `2` that pinned the cold working-set build to two cores no
+  matter the machine; floor matches the old constant, ceiling mirrors
+  `ART_DRAIN_WORKERS`'s own cap), `ART_REPAINT_DEBOUNCE_MS`.
 - **Time Travel Quick Jumps** — `QUICK_JUMP_POLE_LATITUDE`,
   `GREENWICH_*`, `TIME_TRAVEL_ROW_ICON_PX`/`_ARROW_BUTTON_PX`.
 - **Subdial recolor recipe** — `SUBDIAL_RECOLOR_VALUE_RAMP`/`_SAT_

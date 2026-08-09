@@ -25,11 +25,40 @@ copy does not exist yet (GUI-thread readers), leaving `build=True` to
 the background warm.
 
 **The reverse edge to `assets.py`:** `AssetCache.pixmap_by_height`
-reads `working_ceiling`/`scaled_variant_file` back from THIS module — a
-genuine two-way dependency the split created (this module in turn
-imports [Asset Recolor](asset_recolor.md), which imports `AssetCache`
-from `assets.py`). `assets.py` breaks the resulting 3-file cycle with a
-LOCAL import inside `pixmap_by_height`.
+reads `working_ceiling`/`working_variant_path`/`working_stale_notify`
+back from THIS module — a genuine two-way dependency the split created
+(this module in turn imports [Asset Recolor](asset_recolor.md), which
+imports `AssetCache` from `assets.py`). `assets.py` breaks the
+resulting 3-file cycle with a LOCAL import inside `pixmap_by_height`.
+
+**THE LAZY WORKING-SET LEDGER** (owner bar 2026-08-09, MIGRATE-GUI
+Phase 1 — "the 75-second dead clock"): mirrors `asset_recolor.py`'s
+`_PENDING_VARIANTS`/`jewel_metal_path`/`pending_art`/`ensure_variant`/
+`warm_pending_art` SHAPE for a different resource. Root cause: the GUI
+paint path used to call `scaled_variant_file(path, ceiling)` with
+`build=True` on a cache MISS — a multi-MB decode INSIDE `paintEvent`.
+`working_variant_path(path, ceiling)` now only NAMES a working copy —
+a header-only size check (no decode); a source already at or under the
+ceiling is returned UNCHANGED and never recorded at all (the bug this
+very round shipped once: treating EVERY asset under a covered subtree
+as pending, icons and thumbnails included, made those permanently
+invisible — `tests/test_startup_warm.py::
+test_asset_at_or_under_the_ceiling_is_never_pending` pins the fix).
+`pending_working()` lists every recorded recipe still missing —
+in practice the ACTIVE skin's own referenced oversized art, because a
+paint is what records it. `ensure_working_variant(path)` materializes
+ONE entry (any thread, QImage end to end). `drain_pending_working(
+progress=None, on_ready=None, should_stop=None)` is the multi-entry,
+SUBPROCESS-pool batch drain (same reasoning as `warm_working_set`'s own
+pool: a background THREAD doing this decode still starves the GUI
+thread waiting for the GIL) — called by `app.warm.run_warm`'s
+VISIBLE-FIRST phase (BEFORE the alphabetical whole-tree sweep, since
+the ledger already holds exactly what the dial's first paint asked
+for) and by `app.watch_manager.AppController.kick_working_warm` on
+demand, installed as `set_working_stale_notifier`'s target.
+`scaled_variant_file` itself is UNCHANGED and stays in service for its
+own callers (hover tooltips, Encyclopedia cards/readers) — a distinct
+cache the ledger does not cover.
 
 `moon_lit_region`/`moon_phase_image`/`moon_phase_file` (owner decree
 2026-07-19, "bolje crtati na licu mesta nego 15MB fajlova"): the
@@ -78,8 +107,13 @@ circle).
   should_stop=None)` / `scaled_variant_file(path, width, build=True)` /
   `build_scaled_copy(source, cache, width)`: the working-set family —
   `build_scaled_copy` is the ONE build (plain-string args, no config
-  reads) shared by the inline miss path and the warmup's subprocess
-  workers.
+  reads) shared by every builder (`ensure_working_variant`,
+  `drain_pending_working`'s subprocess workers, `warm_working_set`'s).
+- `working_variant_path(path, ceiling)` / `pending_working()` /
+  `ensure_working_variant(path)` / `drain_pending_working(progress=None,
+  on_ready=None, should_stop=None)` / `set_working_stale_notifier(
+  notifier)` / `working_stale_notify()`: THE LAZY WORKING-SET LEDGER
+  (owner bar 2026-08-09) — see above.
 - `eclipse_solar_type_icon(type_)`: the small per-type solar eclipse
   icon (annular gets a live tritone tint).
 - `calendar_wheel_icon_file(size)`: a COMPUTED 12-wedge wheel glyph, no

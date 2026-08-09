@@ -185,6 +185,19 @@ still constructs and behaves as before that round.
   clamp
 - `_start_simulation(moment, observer, cycles=0)` / `_end_simulation()`:
   freezes/unfreezes the rendered moment for `TIME_TRAVEL_DURATION_S`
+- `apply_pending_art()` / `_apply_art_now()`: the debounced repaint a
+  landed background build rides — a Qt signal (`art_ready`) queued
+  cross-thread onto the GUI thread, restarting a single-shot timer
+  (`ART_REPAINT_DEBOUNCE_MS`) so a burst of landings repaints ONCE, not
+  once per file. `_apply_art_now` also clears the asset cache's PENDING
+  working-set markers (`self._compositor._cache.clear_pending()`, owner
+  bar 2026-08-09, MIGRATE-GUI Phase 1) before rebuilding composites — a
+  working-set miss that stood in blank the previous frame gets one more
+  chance to resolve on exactly the same signal a landed metal recolor
+  already rides. Reached through the compositor's own `_cache` rather
+  than a new `Compositor` method deliberately: `render/compositor.py`
+  is out of this round's scope (owned by a concurrent celestial-geometry
+  round)
 
 ## Module-level functions (skin-building responsibility)
 

@@ -77,6 +77,15 @@ later in the session.
   repaints per built finish. Stands down until the startup warm has
   started — that first drain belongs to `run_warm`, after the first
   frames
+- `kick_working_warm()` / `_drain_working()`: the exact SAME shape as
+  `kick_art_warm`/`_drain_art` above, for the working-set ledger (owner
+  bar 2026-08-09, MIGRATE-GUI Phase 1) — installed as [Asset
+  Variants](../../render/__about/asset_variants.md)'s
+  `set_working_stale_notifier` target, its own lock/thread/rerun flag
+  (`_working_lock`/`_working_thread`/`_working_rerun`), same startup
+  guard, reuses `_emit_art_ready` as its `on_ready` (a landed
+  working-set copy wants the same debounced repaint a landed recolor
+  does, so it rides the SAME Qt signal rather than a second one)
 - `_report_progress(line)` / `_warm_status`: every warm/drain progress
   line goes to the console AND to the live `_warm_status` string each
   watch's menu status row reads at menu-open (0.14.710, the owner's

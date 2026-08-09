@@ -14,7 +14,11 @@ times). The watches share one asset tree, one raster cache and one
 
 ### Uses
 - [Art Warm](../../render/__about/art_warm.md) — phase 1, the jewel recolors
-- [Asset Variants](../../render/__about/asset_variants.md) — phase 2, working-set downscales
+- [Asset Variants](../../render/__about/asset_variants.md) — phase 2,
+  working-set downscales: the ledger drain (`drain_pending_working`,
+  owner bar 2026-08-09 — VISIBLE-FIRST, exactly what the dial's first
+  paint already asked for and skipped) BEFORE the alphabetical
+  whole-tree sweep (`warm_working_set`)
 - [Encyclopedia Warm](encyclopedia_warm.md) — phase 3
 - [Compositor](../../render/__about/compositor.md) — phase 4, through each watch's
   own `hover_sweep()` callable
@@ -32,7 +36,9 @@ times). The watches share one asset tree, one raster cache and one
 ## Functions
 
 ### `run_warm(hover_sweeps=(), progress=None, on_art_ready=None, should_stop=None)`
-Walks the five phases in order, on ONE background thread. `hover_sweeps`
+Walks the SIX phases in order (dial art, working-set ledger drain,
+working-set bulk sweep, Encyclopedia, hover, cache GC), on ONE
+background thread. `hover_sweeps`
 is one callable per watch (each closes over its own compositor/dial
 size) — they run one after another, never in parallel, so N
 concurrent pure-Python sweeps never compete with each other for the GIL.
@@ -60,3 +66,12 @@ of mid-write).
 - **Cache GC runs dead last** — pure disk hygiene must never delay a
   pixel anyone is waiting for, and running after every build phase
   means a freshly-built cache is never the thing being judged stale.
+- **VISIBLE-FIRST working-set order** (owner bar 2026-08-09,
+  MIGRATE-GUI Phase 1): the ledger drain runs before the alphabetical
+  whole-tree sweep because the ledger is not an arbitrary subset — it
+  is EXACTLY what the dial's own first paint(s) asked for and skipped
+  (`render.assets.AssetCache.pixmap_by_height` records a miss instead
+  of decoding inline). Draining that first dresses the on-screen dial
+  in a few seconds even stone-cold; the bulk sweep then finishes
+  whatever nothing has asked for yet, skipping files the ledger already
+  built (`cache.exists()`).
