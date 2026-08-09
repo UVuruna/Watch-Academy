@@ -117,12 +117,23 @@ def earth_moon_orbit_fraction(ring_size: float, half_size: float) -> float:
 # Earth/Moon marker stays easy to find. Drawn UNDER the body itself, so
 # only the outward tip peeks past the body's own edge. The tip's
 # protrusion stays comfortably inside `EARTH_MOON_ORBIT_CLEARANCE_
-# FRACTION`'s own margin so the pointer never re-touches the minute band
-# or the outer hour band THE CLEAR ORBIT LANE just cleared.
-MARKER_POINTER_PROTRUSION_FRACTION = 0.012   # tip, beyond the body's own edge
+# FRACTION`'s own margin (0.02) so the pointer never re-touches the
+# minute band or the outer hour band THE CLEAR ORBIT LANE just cleared.
+#
+# SIZED FOR LEGIBILITY (owner ROUND CORRECTION, visual proof 2026-08-09):
+# the first cut (protrusion 0.012, half-angle 2.5deg, no outline) was
+# geometrically present — the render-diff tooth caught it — but READ AS
+# INVISIBLE on a live screenshot: a same-hued gold pointer over a
+# same-hued gold wedge is exactly the "hard to spot" defect this
+# feature exists to fix. `MARKER_POINTER_OUTLINE_RGBA` (a white
+# `palette.MARKER_BORDER_RGBA` stroke, the SAME outline the Earth
+# marker's own procedural-fallback disc wears) makes the shape read
+# against ANY fill color, not just a lucky one.
+MARKER_POINTER_PROTRUSION_FRACTION = 0.018   # tip, beyond the body's own edge
 MARKER_POINTER_RECESS_FRACTION = 0.35        # base, INTO the body's own radius
                                               # (fraction of the body's half-size)
-MARKER_POINTER_HALF_DEG = 2.5                # half-angle of the triangle base
+MARKER_POINTER_HALF_DEG = 4.0                # half-angle of the triangle base
+MARKER_POINTER_OUTLINE_WIDTH_FRACTION = 0.0025   # stroke width, of the dial radius
 
 
 # THE AURA COLORLESS MENU's "follow" option (Watch Face Phase 4, R-23):

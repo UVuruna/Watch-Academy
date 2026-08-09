@@ -356,14 +356,23 @@ class YearMarkerLayer(Layer):
             edge - half_size_fraction * dial.MARKER_POINTER_RECESS_FRACTION
         )
         half = dial.MARKER_POINTER_HALF_DEG
-        painter.save()
-        painter.setPen(Qt.PenStyle.NoPen)
-        painter.setBrush(QColor(color))
-        painter.drawPolygon(QPolygonF([
+        triangle = QPolygonF([
             dial_point(angle_deg, tip),
             dial_point(angle_deg - half, base),
             dial_point(angle_deg + half, base),
-        ]))
+        ])
+        painter.save()
+        # THE OUTLINE (visual proof correction 2026-08-09): a thin white
+        # stroke — the SAME `palette.MARKER_BORDER_RGBA` the Earth
+        # marker's own procedural-fallback disc wears — so the shape
+        # reads against ANY fill color, not only a lucky one (the first
+        # cut, gold-on-gold over the yellow wedge, was geometrically
+        # present but invisible to the eye).
+        outline = QPen(QColor(*palette.MARKER_BORDER_RGBA))
+        outline.setWidthF(max(1.0, ctx.radius * dial.MARKER_POINTER_OUTLINE_WIDTH_FRACTION))
+        painter.setPen(outline)
+        painter.setBrush(QColor(color))
+        painter.drawPolygon(triangle)
         painter.restore()
 
     def _draw_moon(
