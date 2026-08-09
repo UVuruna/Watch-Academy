@@ -500,6 +500,13 @@ def _chi(_key: str, size: int) -> QPixmap:
             letter_plates.plate_path("X"),
             2 * radius * dial.RING_JEWEL_ART_SCALE, 1.0, metal="thematic",
         )
+    # Letter plates carry no WORKING-SET ceiling (owner bar 2026-08-09),
+    # so `pixmap_by_height` cannot return None here — asserted, not
+    # silently skipped, for the same reason the docstring above already
+    # rules out a deferred stand-in: this figure is cached once at
+    # import time and must show the real pixels or fail loudly, never a
+    # blank glyph nobody notices.
+    assert glyph is not None, "the CHI band's X glyph must resolve eagerly"
     theta = angles.ring_position_angle(24)
     painter.save()
     painter.translate(_on_dial(center, radius * dial.RING_JEWEL_RADIUS_FRACTION, theta))

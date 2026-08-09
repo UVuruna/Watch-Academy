@@ -50,10 +50,22 @@ def draw_pixmap_centered(
     warm bronze pixels change — owner insight 2026-07-12); `saturation`
     scales the FINAL pixmap's HSV saturation (owner 2026-07-18, Session
     21-D — the Ring saturation slider's one recolor spot; 1.0 is a
-    no-op for every OTHER caller, which never passes it)."""
+    no-op for every OTHER caller, which never passes it).
+
+    A `None` pixmap (owner bar 2026-08-09, MIGRATE-GUI Phase 1) means
+    the asset is a working-set MISS still building in the background —
+    this element is simply SKIPPED for this one frame (never a fallback
+    decode of the full-res original, which is the very stall being
+    avoided); the shared debounced repaint redraws it the moment the
+    background build lands. THE chokepoint: every dial art layer (weekday
+    bodies, calendar mounts, archetype figures, the year marker, slot
+    art, ring plates, center body, background) draws through this one
+    function, so guarding here covers all of them at once (Rule #5)."""
     pixmap = ctx.cache.pixmap_by_height(
         asset, height, ctx.dpr, tint, desaturate, metal, saturation
     )
+    if pixmap is None:
+        return
     logical_w = pixmap.width() / ctx.dpr
     painter.drawPixmap(QPointF(pos.x() - logical_w / 2, pos.y() - height / 2), pixmap)
 

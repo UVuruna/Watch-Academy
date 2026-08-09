@@ -149,10 +149,18 @@ class RingLayer(Layer):
         # the metal finish already resolved above (None, the default,
         # leaves it untouched — today's behavior on every release before
         # this one).
+        # letter plates never carry a WORKING-SET ceiling (`assets/
+        # instrument/letters/`) today, so `pixmap_by_height` never
+        # returns None here — guarded anyway (owner bar 2026-08-09):
+        # its contract now genuinely allows a pending miss, and a glyph
+        # that skips one frame is a truer failure mode than an
+        # AttributeError inside paintEvent if that ever changes.
         pixmap = ctx.cache.pixmap_by_height(
             asset, height, ctx.dpr, saturation=ctx.skin.ring_saturation,
             tint=tint,
         )
+        if pixmap is None:
+            return
         logical_w = pixmap.width() / ctx.dpr
         pos = dial_point(theta, ctx.radius * radius_fraction)
         rotation = angles.readable_rotation_deg(theta)
@@ -163,19 +171,20 @@ class RingLayer(Layer):
             shadow = ctx.cache.pixmap_by_height(
                 gold_asset, height, ctx.dpr, tint=palette.SHADOW_STAMP_TINT
             )
-            pixel_radius = shadow_radius * ctx.dpr
-            samples = shadow_sample_count(pixel_radius)
-            stamp_alpha = normalized_shadow_alpha(samples)
-            painter.setOpacity(stamp_alpha * opacity)
-            for k in range(samples):
-                angle = 2.0 * math.pi * k / samples
-                painter.drawPixmap(
-                    QPointF(
-                        -logical_w / 2 + shadow_radius * math.cos(angle),
-                        -height / 2 + shadow_radius * math.sin(angle),
-                    ),
-                    shadow,
-                )
+            if shadow is not None:
+                pixel_radius = shadow_radius * ctx.dpr
+                samples = shadow_sample_count(pixel_radius)
+                stamp_alpha = normalized_shadow_alpha(samples)
+                painter.setOpacity(stamp_alpha * opacity)
+                for k in range(samples):
+                    angle = 2.0 * math.pi * k / samples
+                    painter.drawPixmap(
+                        QPointF(
+                            -logical_w / 2 + shadow_radius * math.cos(angle),
+                            -height / 2 + shadow_radius * math.sin(angle),
+                        ),
+                        shadow,
+                    )
         painter.setOpacity(opacity)
         painter.drawPixmap(QPointF(-logical_w / 2, -height / 2), pixmap)
         painter.restore()

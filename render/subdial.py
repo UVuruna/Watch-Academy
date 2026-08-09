@@ -243,6 +243,14 @@ def draw_small_seconds(
             spec.asset, height, ctx.dpr, tint=palette.SHADOW_STAMP_TINT,
             desaturate=ctx.skin.hands.desaturate,
         )
+        if pixmap is None or silhouette is None:
+            # Hand pack art carries no WORKING-SET ceiling today, so
+            # this never fires in practice — guarded because the
+            # contract now genuinely allows a pending miss (owner bar
+            # 2026-08-09): the mini hand skips one frame instead of
+            # crashing painter.restore() below unbalanced.
+            painter.restore()
+            return
         logical_w = pixmap.width() / ctx.dpr
         pivot_x = logical_w * (
             0.5 if spec.pivot_x_fraction is None else spec.pivot_x_fraction

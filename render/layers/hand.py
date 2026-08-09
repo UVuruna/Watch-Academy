@@ -77,6 +77,12 @@ class HandLayer(Layer):
             desaturate=self._skin.hands.desaturate,
             saturation=ctx.skin.hands_saturation,
         )
+        if pixmap is None:
+            # Hand pack art carries no WORKING-SET ceiling today, so
+            # this never fires in practice — guarded because the
+            # contract now genuinely allows a pending miss (owner bar
+            # 2026-08-09): a hand skipping one frame beats a crash.
+            return
         logical_w = pixmap.width() / ctx.dpr
         pivot_x = logical_w * (
             0.5 if spec.pivot_x_fraction is None else spec.pivot_x_fraction
