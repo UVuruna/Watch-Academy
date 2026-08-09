@@ -255,20 +255,24 @@ def test_calendar_mount_pick_calls_its_setter(app):
     assert ("calendar_mount", ("off",)) in setters.calls
 
 
-def test_artwork_and_subdial_set_combos_exist_and_restore_the_stored_pick(app):
+def test_artwork_and_subdial_set_galleries_mark_the_stored_pick(app):
+    """The 2026-08-09 review turned both combos into PREVIEW tile
+    galleries (owner order: every picker shows what it picks) — the
+    stored pick's tile carries the accent border, exactly like every
+    other gallery's active tile."""
+    from PySide6.QtWidgets import QToolButton
+
+    from config import constants, palette
+
     settings = replace(Settings(), art_source="chatgpt", subdial_set="solo")
     page = themes.build(settings, _RecordingSetters(settings), lambda s: s)
-    combos = page.findChildren(QComboBox)
-    art_combo = next(
-        c for c in combos
-        if any(c.itemData(i) == "chatgpt" for i in range(c.count()))
-    )
-    assert art_combo.currentData() == "chatgpt"
-    subdial_combo = next(
-        c for c in combos
-        if any(c.itemData(i) == "solo" for i in range(c.count()))
-    )
-    assert subdial_combo.currentData() == "solo"
+    tiles = {b.text(): b for b in page.findChildren(QToolButton)}
+    art_tile = tiles[constants.ART_SOURCE_TITLES["chatgpt"]]
+    solo_tile = tiles[constants.SUBDIAL_SET_TITLES["solo"]]
+    accent = palette.THEME_COLORS["accent"]
+    assert accent in art_tile.styleSheet()
+    assert accent in solo_tile.styleSheet()
+    assert accent not in tiles[constants.ART_SOURCE_TITLES["gemini"]].styleSheet()
 
 
 def test_rotation_group_picker_shows_the_custom_grid_only_in_custom_mode(app):
