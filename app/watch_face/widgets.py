@@ -1,14 +1,22 @@
-"""Shared pill/tile builders (see widgets.md) — the functional twin of
-`design_window.DesignDialog._pill`/`_tile`, freed of the class so every
-Watch Face section module can share ONE definition (Rule #5) instead of
-each redefining its own styled button.
+"""Shared pill/tile/gallery builders (see widgets.md) — the functional
+twin of `design_window.DesignDialog._pill`/`_tile`, freed of the class
+so every Watch Face section module can share ONE definition (Rule #5)
+instead of each redefining its own styled button. Since the 2026-08-09
+Zubi round this is also the ONE home of the width-aware gallery flow
+(`FlowLayout`/`FlowContent`/`flow_gallery`) — a fixed column count can
+never satisfy both ALG-7 (fill the row) and the window minimum (no
+horizontal scroll), the owner's own review caught the 3-3-1 wrap the
+fixed grids produced, and one vocabulary means no gallery can fork its
+own wrap again.
 """
 
-from PySide6.QtCore import QSize, Qt
+from PySide6.QtCore import QPoint, QRect, QSize, Qt
 from PySide6.QtGui import QIcon, QPixmap
-from PySide6.QtWidgets import QGridLayout, QPushButton, QToolButton
+from PySide6.QtWidgets import (
+    QLayout, QPushButton, QSizePolicy, QToolButton, QVBoxLayout, QWidget,
+)
 
-from app.ui_style import style_button
+from app.ui_style import style_button, uniform_width
 from config import defaults, palette
 
 # The ONE gallery icon size (owner instruction 2026-08-08: every picker
@@ -21,15 +29,113 @@ from config import defaults, palette
 TILE_ICON_PX = 128
 
 
-def pack_grid(grid: QGridLayout, columns: int) -> QGridLayout:
-    """Left-pack a gallery grid: the trailing stretch column takes the
-    window's surplus, so the tiles keep their own size and a modest gap
-    instead of drifting apart with every extra pixel (the owner's
-    2026-08-06 screenshots — tiles scattered across a 4K window)."""
-    grid.setHorizontalSpacing(defaults.GUIDE_SPACING_PX)
-    grid.setVerticalSpacing(defaults.GUIDE_SPACING_PX)
-    grid.setColumnStretch(columns, 1)
-    return grid
+class FlowLayout(QLayout):
+    """Left-packed, width-aware tile flow (Zubi fix round 2026-08-09):
+    tiles keep their own size and pack to the reading edge (the owner's
+    2026-08-06 decree); the wrap point follows the REAL width, so a
+    narrow window wraps sooner instead of growing a horizontal
+    scrollbar and a wide one fills the row instead of stacking rows
+    (ALG-7). Port of Qt's canonical FlowLayout example, trimmed."""
+
+    def __init__(self, spacing: int | None = None):
+        super().__init__()
+        self._items = []
+        self._gap = defaults.GUIDE_SPACING_PX if spacing is None else spacing
+
+    def addItem(self, item) -> None:              # noqa: N802 — Qt API
+        self._items.append(item)
+
+    def count(self) -> int:
+        return len(self._items)
+
+    def itemAt(self, index):                      # noqa: N802 — Qt API
+        return self._items[index] if 0 <= index < len(self._items) else None
+
+    def takeAt(self, index):                      # noqa: N802 — Qt API
+        return self._items.pop(index) if 0 <= index < len(self._items) else None
+
+    def expandingDirections(self):                # noqa: N802 — Qt API
+        return Qt.Orientation(0)
+
+    def hasHeightForWidth(self) -> bool:          # noqa: N802 — Qt API
+        return True
+
+    def heightForWidth(self, width: int) -> int:  # noqa: N802 — Qt API
+        return self._arrange(QRect(0, 0, width, 0), apply_geometry=False)
+
+    def setGeometry(self, rect: QRect) -> None:   # noqa: N802 — Qt API
+        super().setGeometry(rect)
+        self._arrange(rect, apply_geometry=True)
+
+    def sizeHint(self) -> QSize:                  # noqa: N802 — Qt API
+        return self.minimumSize()
+
+    def minimumSize(self) -> QSize:               # noqa: N802 — Qt API
+        # Stays SHRINKABLE below one full row — one tile is the floor,
+        # or the window minimum inflates past the screen floor.
+        size = QSize()
+        for item in self._items:
+            size = size.expandedTo(item.minimumSize())
+        return size
+
+    def _arrange(self, rect: QRect, apply_geometry: bool) -> int:
+        x, y, row_height = rect.x(), rect.y(), 0
+        for item in self._items:
+            hint = item.sizeHint()
+            if x > rect.x() and x + hint.width() > rect.right() + 1:
+                x = rect.x()
+                y += row_height + self._gap
+                row_height = 0
+            if apply_geometry:
+                item.setGeometry(QRect(QPoint(x, y), hint))
+            x += hint.width() + self._gap
+            row_height = max(row_height, hint.height())
+        return y + row_height - rect.y()
+
+
+class FlowContent(QWidget):
+    """A flow-hosting content widget whose height follows its WIDTH —
+    and which SAYS so: size-policy heightForWidth flag, plus an honest
+    self-published minimum height on every resize, because QScrollArea's
+    widgetResizable path sizes pages from plain minimum hints and never
+    consults heightForWidth (measured on the owner's live profile,
+    where the widgets under a gallery compressed to 10px without it)."""
+
+    def __init__(self):
+        super().__init__()
+        policy = QSizePolicy(
+            QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Preferred
+        )
+        policy.setHeightForWidth(True)
+        self.setSizePolicy(policy)
+
+    def hasHeightForWidth(self) -> bool:          # noqa: N802 — Qt API
+        return True
+
+    def heightForWidth(self, width: int) -> int:  # noqa: N802 — Qt API
+        layout = self.layout()
+        return layout.heightForWidth(width) if layout is not None else -1
+
+    def resizeEvent(self, event) -> None:         # noqa: N802 — Qt override
+        super().resizeEvent(event)
+        layout = self.layout()
+        if layout is not None and layout.hasHeightForWidth():
+            self.setMinimumHeight(layout.heightForWidth(self.width()))
+
+
+def flow_gallery(tiles) -> QWidget:
+    """THE gallery shape: uniform tiles (ALG-5 — the widest label
+    decides for all), flowing by real width, left-packed, inside a
+    FlowContent host. Every tile gallery routes through here so no
+    section can fork back to a fixed column count."""
+    tiles = list(tiles)
+    uniform_width(tiles)
+    content = FlowContent()
+    flow = FlowLayout()
+    for tile_widget in tiles:
+        flow.addWidget(tile_widget)
+    content.setLayout(flow)
+    return content
 
 
 def pill(label: str, checked: bool, on_click) -> QPushButton:
@@ -63,3 +169,36 @@ def tile(label: str, icon: QIcon | None, checked: bool, on_click) -> QToolButton
         )
     button.clicked.connect(lambda checked=False: on_click())
     return button
+
+
+def number_row(
+    tr, settings, setters, key: str, low: float, high: float, title: str,
+    form, decimals: int = 0,
+):
+    """A numeric slider row in the ledger's own UNITS (numerals ledger
+    §8: lengths share the numeral's own units so a setting survives any
+    change of dial resolution). Shared by the Numerals section's relief
+    rows and the Size section's band-size rows (ALG-9 moved the three
+    size sliders there, owner order 2026-08-09) — one row shape, one
+    definition (Rule #5)."""
+    from PySide6.QtWidgets import QHBoxLayout, QLabel, QSlider
+
+    steps = 10 ** decimals
+    value = getattr(settings, key)
+    slider = QSlider(Qt.Orientation.Horizontal)
+    slider.setRange(round(low * steps), round(high * steps))
+    slider.setValue(round(value * steps))
+    label = QLabel(f"{value:.{decimals}f}")
+    slider.valueChanged.connect(
+        lambda v, lab=label: lab.setText(f"{v / steps:.{decimals}f}")
+    )
+    slider.sliderReleased.connect(
+        lambda: setters[key](
+            slider.value() / steps if decimals else slider.value()
+        )
+    )
+    row = QHBoxLayout()
+    row.addWidget(slider)
+    row.addWidget(label)
+    form.addRow(tr(title), row)
+    return slider

@@ -18,126 +18,13 @@ Calendar pointer is active (`app.watch_face.themes._calendar_mount_group`).
 
 from datetime import date
 
-from PySide6.QtCore import QPoint, QRect, QSize, Qt
-from PySide6.QtWidgets import (
-    QFrame,
-    QLabel,
-    QLayout,
-    QSizePolicy,
-    QToolButton,
-    QVBoxLayout,
-    QWidget,
-)
-
-
-class _FlowContent(QWidget):
-    """The gallery page's content widget — its height follows its WIDTH
-    (the FlowLayout wrap below), and it SAYS so through the size-policy
-    heightForWidth flag. Without this the scroll area sized the page
-    from a widthless minimum hint and, on the owner's live profile,
-    compressed the rotation checkboxes under it to 10px tall (CLIPPED,
-    caught by the gate on the second pass of the 2026-08-09 round)."""
-
-    def __init__(self):
-        super().__init__()
-        policy = QSizePolicy(
-            QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Preferred
-        )
-        policy.setHeightForWidth(True)
-        self.setSizePolicy(policy)
-
-    def hasHeightForWidth(self) -> bool:          # noqa: N802 — Qt API
-        return True
-
-    def heightForWidth(self, width: int) -> int:  # noqa: N802 — Qt API
-        layout = self.layout()
-        return layout.heightForWidth(width) if layout is not None else -1
-
-    def resizeEvent(self, event) -> None:         # noqa: N802 — Qt override
-        # QScrollArea's widgetResizable path sizes the page from plain
-        # minimum hints and never consults heightForWidth — measured on
-        # the owner's live profile, where the rotation checkboxes under
-        # this gallery compressed to 10px. Publishing the REAL needed
-        # height at the CURRENT width as the widget's own minimum keeps
-        # the hint honest at every width, with no slack (the value is
-        # exactly what the flow occupies).
-        super().resizeEvent(event)
-        layout = self.layout()
-        if layout is not None and layout.hasHeightForWidth():
-            self.setMinimumHeight(layout.heightForWidth(self.width()))
+from PySide6.QtCore import Qt
+from PySide6.QtWidgets import QFrame, QLabel, QToolButton, QVBoxLayout, QWidget
 
 
 from app.watch_face import thumbs
-from app.watch_face.widgets import tile
+from app.watch_face.widgets import flow_gallery, tile
 from config import calendar_mounts, defaults, pantheon
-
-class FlowLayout(QLayout):
-    """Left-packed, width-aware tile flow (Zubi fix round 2026-08-09,
-    second pass): a FIXED column count cannot satisfy both laws at once
-    — 4 columns left the row's right half empty at 1280px (ALG-7 ROW
-    OCCUPANCY), 5 columns overflowed the ~880px minimum into a
-    horizontal scrollbar that sliced a tile (the independent grader's
-    3/10, exactly ALG-4's banned h-scroll). Tiles keep their own size
-    and pack to the reading edge (the owner's 2026-08-06 decree); only
-    the wrap point follows the REAL width. Port of Qt's canonical
-    FlowLayout example, trimmed to this one use."""
-
-    def __init__(self, spacing: int = 14):
-        super().__init__()
-        self._items = []
-        self._gap = spacing
-
-    def addItem(self, item) -> None:              # noqa: N802 — Qt API
-        self._items.append(item)
-
-    def count(self) -> int:
-        return len(self._items)
-
-    def itemAt(self, index):                      # noqa: N802 — Qt API
-        return self._items[index] if 0 <= index < len(self._items) else None
-
-    def takeAt(self, index):                      # noqa: N802 — Qt API
-        return self._items.pop(index) if 0 <= index < len(self._items) else None
-
-    def expandingDirections(self):                # noqa: N802 — Qt API
-        return Qt.Orientation(0)
-
-    def hasHeightForWidth(self) -> bool:          # noqa: N802 — Qt API
-        return True
-
-    def heightForWidth(self, width: int) -> int:  # noqa: N802 — Qt API
-        return self._arrange(QRect(0, 0, width, 0), apply_geometry=False)
-
-    def setGeometry(self, rect: QRect) -> None:   # noqa: N802 — Qt API
-        super().setGeometry(rect)
-        self._arrange(rect, apply_geometry=True)
-
-    def sizeHint(self) -> QSize:                  # noqa: N802 — Qt API
-        return self.minimumSize()
-
-    def minimumSize(self) -> QSize:               # noqa: N802 — Qt API
-        # The layout must stay SHRINKABLE below one full row — its
-        # minimum is one tile, or the window minimum inflates right
-        # back past the screen floor.
-        size = QSize()
-        for item in self._items:
-            size = size.expandedTo(item.minimumSize())
-        return size
-
-    def _arrange(self, rect: QRect, apply_geometry: bool) -> int:
-        x, y, row_height = rect.x(), rect.y(), 0
-        for item in self._items:
-            hint = item.sizeHint()
-            if x > rect.x() and x + hint.width() > rect.right() + 1:
-                x = rect.x()
-                y += row_height + self._gap
-                row_height = 0
-            if apply_geometry:
-                item.setGeometry(QRect(QPoint(x, y), hint))
-            x += hint.width() + self._gap
-            row_height = max(row_height, hint.height())
-        return y + row_height - rect.y()
-
 
 def _tile(label: str, icon_path, selected: bool, on_click) -> QToolButton:
     """One gallery tile — image over name, an accent border when it is
@@ -172,19 +59,10 @@ def _add_section(column: QVBoxLayout, title: str | None, tiles: list) -> None:
         rule.setFrameShape(QFrame.Shape.HLine)
         rule.setFrameShadow(QFrame.Shadow.Sunken)
         column.addWidget(rule)
-    # ALG-5 UNIFORM SIBLINGS: the grid used to equalize tile widths by
-    # column; the flow hands each tile its own hint, so the widest
-    # label decides for ALL of them explicitly.
-    widest = max((t.sizeHint().width() for t in tiles), default=0)
-    for t in tiles:
-        t.setMinimumWidth(widest)
-    flow = FlowLayout(spacing=14)
-    for tile in tiles:
-        flow.addWidget(tile)
-    # Left-packed since the 2026-08-06 design pass (tiles at their own
-    # size, packed to the reading edge); the FLOW wrap replaced the
-    # fixed column grid in the 2026-08-09 Zubi round — see FlowLayout.
-    column.addLayout(flow)
+    # ONE gallery shape (widgets.flow_gallery): uniform tiles flowing
+    # by real width, left-packed — see widgets.py on why fixed columns
+    # died in the 2026-08-09 Zubi round.
+    column.addWidget(flow_gallery(tiles))
 
 
 def build_weekday_theme_grid(current_theme: str, on_pick, tr) -> QWidget:
@@ -196,7 +74,7 @@ def build_weekday_theme_grid(current_theme: str, on_pick, tr) -> QWidget:
     `WEEKDAY_MENU_GROUPS` — the SAME order/grouping the old Weekday
     submenu used). `on_pick(theme_key)` fires on a tile click; the
     CURRENTLY active theme's tile carries an accent border."""
-    content = _FlowContent()
+    content = QWidget()
     column = QVBoxLayout(content)
     column.setSpacing(12)
 
@@ -255,7 +133,7 @@ def build_weekday_group_grid(current_group: str | None, on_pick, tr) -> QWidget:
     """Level 2 — one tile per kinship group; no per-group art (a group
     is a folder, not a theme), so each tile shows its first member's
     plate as a representative icon."""
-    content = _FlowContent()
+    content = QWidget()
     column = QVBoxLayout(content)
     column.setSpacing(12)
     tiles = []
@@ -279,7 +157,7 @@ def build_weekday_theme_tiles(
     DEFAULT theme (`constants.WATCH_FACE_KINDS_BY_POINTER`, see
     themes.md) carries a "★ " prefix wherever it appears, so the
     default is visible without opening a tooltip."""
-    content = _FlowContent()
+    content = QWidget()
     column = QVBoxLayout(content)
     column.setSpacing(12)
     tiles = [
@@ -313,7 +191,7 @@ def build_calendar_mount_grid(current_mount: str, on_pick, tr) -> QWidget:
     A one — and says how many seats it fills, because the seat count is
     the reader's own question ("does this fill one per wedge or two?").
     "None" leads, the way "off" leads the setting's own value list."""
-    content = _FlowContent()
+    content = QWidget()
     column = QVBoxLayout(content)
     column.setSpacing(12)
     tiles = [_tile(

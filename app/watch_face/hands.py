@@ -8,24 +8,21 @@ look was promoted to EVERY gallery, so its private size constant moved
 into the tile builder itself.
 """
 
-from PySide6.QtWidgets import QGridLayout, QWidget
+from PySide6.QtWidgets import QWidget
 
 from app.watch_face import thumbs
-from app.watch_face.widgets import pack_grid, tile
+from app.watch_face.widgets import flow_gallery, tile
 from data.hands import hand_packs
 
 
 def build(settings, setters: dict, tr) -> QWidget:
-    grid = QGridLayout()
     packs = hand_packs()
-    for index, name in enumerate(sorted(packs)):
-        icon = thumbs.art_thumbnail(packs[name]["files"]["hours"])
-        button = tile(
-            tr(name), icon, settings.hands == name,
+    return flow_gallery([
+        tile(
+            tr(name),
+            thumbs.art_thumbnail(packs[name]["files"]["hours"]),
+            settings.hands == name,
             lambda n=name: setters["hands"](n),
         )
-        row, col = divmod(index, 4)
-        grid.addWidget(button, row, col)
-    widget = QWidget()
-    widget.setLayout(pack_grid(grid, 4))
-    return widget
+        for name in sorted(packs)
+    ])

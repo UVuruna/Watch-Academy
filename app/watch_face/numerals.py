@@ -27,6 +27,7 @@ from PySide6.QtWidgets import (
 )
 
 from app.ui_style import tooltip_wrap
+from app.watch_face.widgets import number_row as _number_row
 from config import dial
 
 
@@ -63,36 +64,6 @@ def _choice_row(
     return combo
 
 
-def _number_row(
-    tr, settings, setters, key: str, low: float, high: float, title: str,
-    form: QFormLayout, decimals: int = 0,
-) -> QSlider:
-    """A numeric row in the ledger's own UNITS (§8: "lengths are in the
-    same units as the numeral's own size, so a setting survives any
-    change of dial resolution"). The slider works in whole steps and the
-    setter converts back, so a 0..16 unit range and a 0..1 darkness use
-    the SAME widget."""
-    steps = 10 ** decimals
-    value = getattr(settings, key)
-    slider = QSlider(Qt.Orientation.Horizontal)
-    slider.setRange(round(low * steps), round(high * steps))
-    slider.setValue(round(value * steps))
-    label = QLabel(f"{value:.{decimals}f}")
-    slider.valueChanged.connect(
-        lambda v, lab=label: lab.setText(f"{v / steps:.{decimals}f}")
-    )
-    slider.sliderReleased.connect(
-        lambda: setters[key](
-            slider.value() / steps if decimals else slider.value()
-        )
-    )
-    row = QHBoxLayout()
-    row.addWidget(slider)
-    row.addWidget(label)
-    form.addRow(tr(title), row)
-    return slider
-
-
 def _mode_group(settings, setters, tr) -> QGroupBox:
     """THE TWO WORLD-MODES (ring_rework.md §1) — the one setting that
     decides whether the hour band below is a fixed ring of markers or a
@@ -125,20 +96,14 @@ def _mode_group(settings, setters, tr) -> QGroupBox:
 
 
 def _outer_group(settings, setters, tr) -> QGroupBox:
+    """FACE and SEATING only — the three band SIZE sliders moved to the
+    Size section (ALG-9 SECTION TAXONOMY, owner order 2026-08-09: when
+    a Size category exists, EVERY size control lives there)."""
     group = QGroupBox(tr("Numerals"))
     form = QFormLayout(group)
     _choice_row(
         tr, settings, setters, "numeral_face",
         tuple(dial.NUMERAL_OUTER_FACES), "Numerals face", form,
-    )
-    _number_row(
-        tr, settings, setters, "numeral_outer_size",
-        *dial.NUMERAL_SIZE_RANGE, "Numerals size", form,
-    )
-    _number_row(
-        tr, settings, setters, "numeral_outer_ring_size",
-        *dial.NUMERAL_OUTER_RING_SIZE_RANGE, "Outer ring size", form,
-        decimals=2,
     )
     seating = _choice_row(
         tr, settings, setters, "numeral_seating", dial.NUMERAL_SEATINGS,
@@ -160,13 +125,9 @@ def _inner_group(settings, setters, tr) -> QGroupBox:
         tr, settings, setters, "minutes_face",
         tuple(dial.MINUTES_FACES), "Minutes face", form,
     )
-    _number_row(
-        tr, settings, setters, "minutes_size",
-        *dial.NUMERAL_SIZE_RANGE, "Minutes size", form,
-    )
     note = QLabel(tr(
         "The inner band never rotates, and it follows the hour ring's "
-        "seating — only its face and size are yours to change."
+        "seating — only its face is picked here."
     ))
     note.setWordWrap(True)
     form.addRow(note)

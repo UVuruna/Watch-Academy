@@ -18,7 +18,7 @@ from PySide6.QtWidgets import (
 
 from app.watch_face import thumbs
 from app.ui_style import tooltip_wrap
-from app.watch_face.widgets import pack_grid, pill, tile
+from app.watch_face.widgets import flow_gallery, pill, tile
 from config import constants, dial
 from data.rings import ring_presets
 
@@ -51,7 +51,7 @@ def _crown_text_tooltip(tr) -> str:
 def build(settings, setters: dict, tr) -> QWidget:
     layout = QVBoxLayout()
     presets = ring_presets(settings.custom_rings)
-    layout.addLayout(_preset_gallery(settings, presets, setters, tr))
+    layout.addWidget(_preset_gallery(settings, presets, setters, tr))
     layout.addWidget(_preset_about(presets, settings.ring, tr))
     layout.addLayout(_finish_row(settings, setters, tr))
     active_card = presets[settings.ring]
@@ -87,7 +87,7 @@ def build(settings, setters: dict, tr) -> QWidget:
     return widget
 
 
-def _preset_gallery(settings, presets: dict, setters, tr) -> QGridLayout:
+def _preset_gallery(settings, presets: dict, setters, tr) -> QWidget:
     """One tile per preset, THUMBNAILED FROM ITS OWN COMPOSED PREVIEW
     (ring_rework §5, owner ruling 2026-08-06: "preset picker: name +
     mini preview + the About" — COMPUTED, never a stored/generated
@@ -100,8 +100,8 @@ def _preset_gallery(settings, presets: dict, setters, tr) -> QGridLayout:
     preset is locked to exactly one outer; only the INNER stays
     user-changeable) AND, when the card carries one, its own About
     text — hovering ANY tile previews it, not only the active one."""
-    grid = QGridLayout()
-    for index, name in enumerate(sorted(presets)):
+    tiles = []
+    for name in sorted(presets):
         card = presets[name]
         outer_name = card["outer"]
         face = constants.RING_OUTERS[outer_name]["file"]
@@ -109,7 +109,6 @@ def _preset_gallery(settings, presets: dict, setters, tr) -> QGridLayout:
             thumbs.ring_preset_thumbnail(card)
             or thumbs.art_thumbnail(dial.RING_OUTER_ART_DIR / face)
         )
-        row, col = divmod(index, 4)
         preset_tile = tile(
             tr(name), icon, settings.ring == name,
             lambda n=name: setters["ring"](n),
@@ -118,8 +117,8 @@ def _preset_gallery(settings, presets: dict, setters, tr) -> QGridLayout:
         if card["about"]:
             tooltip += "\n\n" + card["about"]
         preset_tile.setToolTip(tooltip_wrap(tooltip))
-        grid.addWidget(preset_tile, row, col)
-    return pack_grid(grid, 4)
+        tiles.append(preset_tile)
+    return flow_gallery(tiles)
 
 
 def _preset_about(presets: dict, ring: str, tr) -> QLabel:
@@ -153,21 +152,21 @@ def _inner_group(settings, setters, tr) -> QGroupBox:
     `ring_two_metals`/`ring_eye_shine` (`Settings.ring_inner`,
     `app.controller._resolve_ring_inner`)."""
     group = QGroupBox(tr("Inner (minute track)"))
-    grid = pack_grid(QGridLayout(group), 4)
     default = constants.RING_INNER_PRESET_DEFAULT.get(
         settings.ring, constants.RING_INNER_DEFAULT
     )
     active = settings.ring_inner.get(settings.ring, default)
-    for index, inner in enumerate(constants.RING_INNERS):
-        icon = thumbs.art_thumbnail(dial.RING_INNER_ART_DIR / f"{inner}.png")
-        row, col = divmod(index, 4)
-        grid.addWidget(
-            tile(
-                tr(inner.replace("_", " ").title()), icon, active == inner,
-                lambda i=inner: setters["ring_inner"](i),
-            ),
-            row, col,
+    tiles = [
+        tile(
+            tr(inner.replace("_", " ").title()),
+            thumbs.art_thumbnail(dial.RING_INNER_ART_DIR / f"{inner}.png"),
+            active == inner,
+            lambda i=inner: setters["ring_inner"](i),
         )
+        for inner in constants.RING_INNERS
+    ]
+    column = QVBoxLayout(group)
+    column.addWidget(flow_gallery(tiles))
     return group
 
 

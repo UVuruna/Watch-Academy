@@ -24,11 +24,17 @@ modules instead of one method per subclass.
   icon size, one builder)
 
 ## Functions
-- `pack_grid(grid, columns)`: left-packs a gallery grid — GUIDE_SPACING
-  gaps plus a trailing stretch column that swallows the window's
-  surplus, so tiles keep their own size instead of drifting apart with
-  every extra pixel (the owner's 2026-08-06 screenshots: tiles scattered
-  across a 4K window). Every section gallery routes through it.
+- `FlowLayout` / `FlowContent` / `flow_gallery(tiles)`: THE gallery
+  shape since 2026-08-09 (replacing the fixed-column `pack_grid`, whose
+  wrap could not satisfy both ALG-7 and the window minimum at once):
+  uniform tiles (the widest label decides, ALG-5) flowing by REAL
+  width, left-packed per the owner's 2026-08-06 decree, inside a host
+  that publishes its true height at its current width (QScrollArea
+  never consults heightForWidth on its own).
+- `number_row(tr, settings, setters, key, low, high, title, form,
+  decimals=0)`: the shared numeric slider row (numerals-ledger units) —
+  used by the Numerals relief rows and the Size section's band-size
+  rows (ALG-9 moved the three size sliders there, owner 2026-08-09).
 - `pill(label, checked, on_click)`: a small `QPushButton`, "next" style
   when checked, else "neutral"
 - `tile(label, icon, checked, on_click)`: a `QToolButton` with

@@ -19,7 +19,7 @@ from PySide6.QtWidgets import (
 )
 
 from app.watch_face import thumbs
-from app.watch_face.widgets import pack_grid, pill, tile
+from app.watch_face.widgets import flow_gallery, pill, tile
 from config import constants, continents, dial
 from render.skin_geometry import daylight_active
 
@@ -30,7 +30,7 @@ def build(settings, setters: dict, tr) -> QWidget:
     their own heading — bare rows floating in the column read as
     anonymous buttons."""
     layout = QVBoxLayout()
-    layout.addLayout(_pointer_gallery(settings, setters, tr))
+    layout.addWidget(_pointer_gallery(settings, setters, tr))
     palette_group = QGroupBox(tr("Palette"))
     palette_group.setLayout(_palette_style_row(settings, setters, tr))
     layout.addWidget(palette_group)
@@ -47,26 +47,25 @@ def build(settings, setters: dict, tr) -> QWidget:
     return widget
 
 
-def _pointer_gallery(settings, setters, tr) -> QGridLayout:
-    grid = QGridLayout()
+def _pointer_gallery(settings, setters, tr) -> QWidget:
+    """Width-aware flow since the owner's 2026-08-09 review caught the
+    fixed 3-column wrap leaving the row half empty (his "3-3-2 kad ima
+    prostora za 4-3") — `widgets.flow_gallery`, the one gallery shape."""
     variants = sorted(
         constants.POINTER_DIAL_COUNTS.items(), key=lambda item: item[1]
     )
-    for index, (variant, count) in enumerate(variants):
+    tiles = []
+    for variant, count in variants:
         title = f"{constants.POINTER_DISPLAY_NAMES[variant]} ({count})"
         style = (
             settings.palette_style if variant == settings.pointer else "primary"
         )
         icon = thumbs.pointer_swatch_icon(variant, style)
-        row, col = divmod(index, 3)
-        grid.addWidget(
-            tile(
-                tr(title), icon, settings.pointer == variant,
-                lambda v=variant: setters["pointer"](v),
-            ),
-            row, col,
-        )
-    return pack_grid(grid, 3)
+        tiles.append(tile(
+            tr(title), icon, settings.pointer == variant,
+            lambda v=variant: setters["pointer"](v),
+        ))
+    return flow_gallery(tiles)
 
 
 def _palette_style_row(settings, setters, tr) -> QHBoxLayout:

@@ -21,11 +21,11 @@ than widening every row's shape for one exception.
 
 from PySide6.QtCore import Qt
 from PySide6.QtWidgets import (
-    QFormLayout, QHBoxLayout, QLabel, QPushButton, QSlider, QSpinBox,
-    QVBoxLayout, QWidget,
+    QFormLayout, QGroupBox, QHBoxLayout, QLabel, QPushButton, QSlider,
+    QSpinBox, QVBoxLayout, QWidget,
 )
 
-from app.watch_face.widgets import pill
+from app.watch_face.widgets import number_row, pill
 from config import constants, dial
 
 # (setting key, on-screen label, (low, high) range, default*100)
@@ -43,9 +43,33 @@ def build(settings, setters: dict, tr) -> QWidget:
     layout = QVBoxLayout()
     layout.addLayout(_diameter_row(settings, setters, tr))
     layout.addLayout(_scale_form(settings, setters, tr))
+    layout.addWidget(_numeral_bands_group(settings, setters, tr))
     widget = QWidget()
     widget.setLayout(layout)
     return widget
+
+
+def _numeral_bands_group(settings, setters, tr) -> QGroupBox:
+    """The three numeral-band SIZE sliders, moved here from the
+    Numerals section (ALG-9 SECTION TAXONOMY, owner order 2026-08-09:
+    when a Size category exists, EVERY size control lives in it). The
+    bands' FACES stay in Numerals — a face is content, a size is size."""
+    group = QGroupBox(tr("Numeral bands"))
+    form = QFormLayout(group)
+    number_row(
+        tr, settings, setters, "numeral_outer_size",
+        *dial.NUMERAL_SIZE_RANGE, "Numerals size", form,
+    )
+    number_row(
+        tr, settings, setters, "numeral_outer_ring_size",
+        *dial.NUMERAL_OUTER_RING_SIZE_RANGE, "Outer ring size", form,
+        decimals=2,
+    )
+    number_row(
+        tr, settings, setters, "minutes_size",
+        *dial.NUMERAL_SIZE_RANGE, "Minutes size", form,
+    )
+    return group
 
 
 def _diameter_row(settings, setters, tr) -> QVBoxLayout:

@@ -834,6 +834,32 @@ def test_section_taxonomy(app):
     )
 
 
+def test_section_taxonomy_watch_face(app):
+    """ALG-9 for the WATCH FACE window too (owner order 2026-08-09:
+    "kako su te zubi pustili da numerals size ostane van SIZE
+    kategorije" — the taxonomy tooth was wired only to SettingsDialog,
+    so a size slider living in the Numerals section passed every gate).
+    Same harvest as `test_section_taxonomy`: section title -> the
+    labels its page carries."""
+    window = make_watch_face()
+    window.setAttribute(Qt.WidgetAttribute.WA_DontShowOnScreen, True)
+    _settle(window, *_effective_minimum(window))
+    sections: dict[str, list[str]] = {}
+    for row in range(window._nav_list.count()):
+        window._nav_list.setCurrentRow(row)
+        QApplication.processEvents()
+        title = window._nav_list.item(row).text().strip(" ▸")
+        page = window._stack.currentWidget()
+        sections[title] = [label.text() for label in page.findChildren(QLabel)
+                           if label.text().strip()]
+    window.done(0)
+    problems = check_section_taxonomy(sections)
+    assert not problems, (
+        "ALG-9 SECTION TAXONOMY (rules/GUI.md -> Zubi v2) failed on the "
+        "Watch Face window:\n  " + "\n  ".join(problems)
+    )
+
+
 def test_the_audit_actually_inspects_something(app):
     """A green audit that measured nothing is worse than no audit: pin
     that the walked windows really present text, scroll areas and a

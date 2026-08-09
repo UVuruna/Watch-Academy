@@ -74,13 +74,20 @@ def build_preset_grids(
     generalized here to any titled grouping) — returns the layout plus
     the swatch list, so an OK/Cancel caller can `repaint_selection` after
     a pick without rebuilding the whole group."""
+    # SIDE BY SIDE since the owner's 2026-08-09 review: the titled
+    # groups (Lighter/Darker) used to stack vertically, doubling every
+    # tint control's height for nothing while the right half of the
+    # window stood empty — they now stand as COLUMNS in one row.
     column = QVBoxLayout()
+    row_of_groups = QHBoxLayout()
+    row_of_groups.setSpacing(24)
     swatches: list[tuple[QPushButton, str | None]] = []
     per_row = dial.RING_TINT_SWATCHES_PER_ROW
     for title, presets in groups.items():
+        block = QVBoxLayout()
         label = QLabel(tr(title))
         label.setStyleSheet("font-weight: bold;")
-        column.addWidget(label)
+        block.addWidget(label)
         grid = QGridLayout()
         grid.setHorizontalSpacing(4)
         grid.setVerticalSpacing(4)
@@ -98,8 +105,11 @@ def build_preset_grids(
             )
             swatches.append((chip, hue))
             grid.addWidget(chip, index // per_row, index % per_row)
-        grid.setColumnStretch(per_row, 1)
-        column.addLayout(grid)
+        block.addLayout(grid)
+        block.addStretch(1)
+        row_of_groups.addLayout(block)
+    row_of_groups.addStretch(1)
+    column.addLayout(row_of_groups)
     return column, swatches
 
 
