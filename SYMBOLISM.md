@@ -367,21 +367,79 @@ alongside the seven remedies for the seven sins; Love alone belongs to
 both lists, and that too is canon: *caritas* appears in each). On the
 dial they span three different KINDS of places:
 
-- **Faith — the center** (Sunday, the day of worship): the vertical
-  axis, toward God;
-- **Hope — the dawn arm** (west, 06h): the horizon, toward what comes;
-- **Love — Venus' arm** (Friday evening): among people.
+- **Faith — the left, the morning**: what was already given;
+- **Love — the center, the noon**: what is done now;
+- **Hope — the right, the evening**: what is not yet.
 
-The vertical, the horizon and the human — the trio stretches across
-the whole dial instead of sitting on it. (Faith on Jupiter's yellow
-and Hope on the Moon's blue were weighed for THIS entity canon and
-kept out — the virtues would shadow two cross-cures. The TRIO POINTER
-does that pairing deliberately and that is not a contradiction: its
-three arms stand at the ring letters — Faith 12h with Jupiter and
-Saturn, Love 20h with Venus and Mars, Hope 4h with the Moon and
-Mercury — the pointer reads the virtues onto HOURS, this canon keeps
-them among KINDS of places; each arm's hue third centers on its tip:
-Faith 8h–16h, Love 16h–24h, Hope 0h–8h.)
+**THE ORDER LAW (owner decree 2026-08-09).** Wherever the three are
+drawn — the light cross at 08h/12h/16h, the TRIO pointer at
+04h/12h/20h, any depiction yet to come — the order is **FAITH LEFT,
+LOVE CENTER, HOPE RIGHT**, because that order is time itself. Faith
+answers something already given; love is the only one of the three
+that must be ACTUAL to exist at all — not "I loved" or "I will love"
+but "do I love now"; hope reaches what is not yet. Hours 0h–12h are
+the dial's LEFT half and 12h–24h its RIGHT, so the law reads at any
+arm count. A depiction that breaks the order is a defect, not a
+variant.
+
+### The two palettes
+
+Two systems draw the trio and they do not share a palette — nor should
+they, because they answer different questions. The PRISM's six arms
+carry the Cube's colours (what a character IS); the TRIO's three bands
+carry the virtues' own (what a virtue DOES). So each virtue holds two
+colours, and neither is decoration: each names one half of the virtue,
+and each colour's FALLEN pole names how that half dies.
+
+**FAITH — GREEN on the Prism arm, BLUE on the Trio band.**
+Green is Humility: faith begins by being small enough to receive what
+it did not produce — a testimony, a promise, an event that came first.
+Nobody believes standing over the thing believed. Blue is Composure:
+once faith stands, it is no longer a feeling. Blue does not burn, blue
+LASTS — this is the faith that remains when the feeling that started
+it has gone, and that is why the same colour means fidelity in every
+tongue that has the word. The two falls name faith's two deaths:
+Self-Annihilation (green's) — the believer who does not humble himself
+but erases himself — and Lethargy (blue's), belief that never once
+moves. And the blue band ends at 08h, exactly where Faith's own
+station stands on the cross: the night hands the morning over to it.
+
+**LOVE — YELLOW in both.** The only one of the three whose two systems
+agree, and that agreement is itself the argument. Faith and Hope are
+each split across two colours because both are still under way — one
+receiving, one straining. Love needs no second colour because love is
+already what it will be: faith ends in vision and hope ends in
+fulfilment, but love ends in love. Yellow is Loyalty, the bond that
+outranks the calculation; its fall, Tribalism, names love's one
+disease exactly — loving only one's own, which is the failure the
+command to love the enemy exists to cure. **Love was red for as long
+as it was read as Eros** — desire, blood, the beating of it. It is
+yellow here because this canon reads it as Agape: red is what love
+WANTS, yellow is what love GIVES. The sun does not ask who receives
+its light, and is no poorer for having shone.
+
+**HOPE — ORANGE on the Prism arm, RED on the Trio band.**
+Orange is Vigor: hope's object is *bonum arduum*, the good that is
+difficult — future, possible, and out of reach without strain. Hope is
+the one virtue that is a MUSCLE, and this is why it sits on the arm of
+deed rather than the arm of rest. Red is Dignity: to hope is to refuse
+to consider yourself finished, to hold that you are still worth a
+future. And red is the colour the light leaves behind when it goes —
+the sky at the hour hope is actually needed, because in the morning
+you can SEE the sun and need no hope for it. The two classical sins
+against hope both stand on the axis hope is given: presumption is
+Self-Worship (red's fall) — not "may it be given me" but "it is mine
+by right" — and despair is the collapse into Lethargy at the far end
+of Vigor, the refusal to strain at all.
+
+(The TRIO POINTER reads the virtues onto HOURS while this canon keeps
+them among KINDS of places, and that is not a contradiction: its three
+arms stand at the ring letters — Love 12h with Jupiter and Saturn,
+Hope 20h with Venus and Mars, Faith 04h with the Moon and Mercury. The
+planets never moved and the colours never moved; only the names
+re-seated over them, in the order the law requires. Each arm's hue
+third centers on its tip: Love yellow 8h–16h, Hope red 16h–24h, Faith
+blue 0h–8h.)
 
 <a id="octa-extension"></a>
 

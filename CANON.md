@@ -1205,9 +1205,17 @@ concern resolved 2026-07-17: textual layers, not visual modes).
 | **Judge** | **Prosecutor** | **Advocate** |
 | **God (The One)** | **the Devil** | **Jesus** |
 | **the Child** *(light: green top)* | **the Mother** | **the Father** |
-| **Faith** | **Love** | **Hope** |
+| **Love** | **Hope** | **Faith** |
 | **the PRESENT** | **the FUTURE** | **the PAST** |
 | **the WORD** | **the DEED** | **the THOUGHT** |
+
+**The Theological row re-seated (owner decree 2026-08-09):** the arms
+and their hours/colours never move — only which virtue sits on each
+does. THE ORDER LAW gives the reason: faith answers what was already
+given (the past), love is the only one that must be ACTUAL to exist
+(the present), hope reaches what is not yet (the future) — so Faith
+now rides the blue PAST arm (04h), Love keeps the yellow PRESENT arm
+(12h, unmoved), and Hope now rides the red FUTURE arm (20h).
 
 **The time mapping is the OWNER'S (2026-07-17), flipping the
 agent's first draft — and his arguments won on every axis:**
@@ -1226,16 +1234,28 @@ agent's first draft — and his arguments won on every axis:**
 - **The process agrees:** thoughts mostly dwell on what WAS; the
   FUTURE is built of DEEDS; the WORD is spoken now.
 
-**The cure doctrine (the agent's addition on the owner's flip):**
-each arm's time-fixation is its shadow, and the arm's own VIRTUE is
-the cure — Judas drowned in the past, and HOPE was the medicine he
-refused (*"forgetting those things which are behind, and reaching
-forth unto those things which are before"* — Philippians 3:13, the
-blue arm's prescription); Lucifer was drunk on his own future, and
-LOVE-IN-DEED — given to others, now — was the cure he refused
-(1 John 3:18 stays on the red arm). The WORD remains on God's arm
-(John 1:1). Zoroaster's *humata, hukhta, hvarshta* blesses the
-process row. The time row's full statement — the three truths and
+**The cure doctrine (the agent's addition on the owner's flip;
+re-argued 2026-08-09 for the Theological row's new occupants):** each
+arm's time-fixation is its shadow, and the arm's own VIRTUE is the
+cure. Judas drowned in the past, and the blue arm's virtue is now
+FAITH — not a forward pull but COMPOSURE (THE ORDER LAW: blue does
+not burn, blue lasts — what remains when the feeling that started it
+is gone); a man reliving the past does not need another feeling, he
+needs the steadiness that outlasts feeling, and that is what the blue
+arm now prescribes. Lucifer was drunk on a future he felt entitled
+to, and the red arm's virtue is now HOPE — not the presumption of a
+good already owed but Aquinas's *bonum arduum* (the difficult good),
+reached only by straining toward it, never assumed; presumption is
+Hope's OWN fall (Self-Worship), which is exactly Lucifer's fault, so
+true Hope — the kind that still has to strain — is its cure, not its
+echo. (*"Forgetting those things which are behind, and reaching forth
+unto those things which are before"*, Philippians 3:13, keeps its
+home on the arm whose reading changed, not on the word Hope, which
+has moved to 20h.) The WORD remains on God's arm (John 1:1), and LOVE
+keeps 12h throughout the re-seating — the one virtue THE ORDER LAW
+finds already unmoved, because it alone must be ACTUAL now to exist
+at all (1 John 3:18). Zoroaster's *humata, hukhta, hvarshta* blesses
+the process row. The time row's full statement — the three truths and
 the two travelers — is THE TRAVEL DOCTRINE, sealed 2026-08-05 under
 §The Time reading of the Trinity.
 
@@ -1313,7 +1333,8 @@ new visual modes). Phase 3 adds a parallel ART track, sealed 2026-07-22:
 - **The four abstract trios** ride the Trinity arm geometry (yellow 12h,
   red 20h, blue 04h) and get a lancet + a 1:1 circle companion each:
   **Time** (Present 12h / Future 20h / Past 04h), **Callings** (Judge /
-  Prosecutor / Advocate), **Theological** (Faith / Love / Hope),
+  Prosecutor / Advocate), **Theological** (Love 12h / Hope 20h / Faith
+  04h — re-seated 2026-08-09, arms unmoved, see §The Triads),
   **Dialectic** (Synthesis 12h / Antithesis 20h / Thesis 04h). Each is
   drawn as its ABSTRACTION — a lit threshold for the Present, an empty
   judgment seat for the Judge, an anchor for Hope, a keystone marrying
@@ -1325,8 +1346,12 @@ new visual modes). Phase 3 adds a parallel ART track, sealed 2026-07-22:
   the two halves of the Prism summit `One_Love` pulled apart, each
   keeping the CLEAR-HEART motif (the razor's edge where the two loves
   meet without tipping into sin — Self in Pride's warm red held before
-  the sin, Others in Hope's cool blue held before self-erasure; neither
-  pole is a vice, the sin is only the tip past the clear heart). Sheet:
+  the sin, Others in Faith's cool blue held before self-erasure, and
+  the re-seating of 2026-08-09 sharpened that edge rather than blunting
+  it: self-erasure is faith's OWN fall (Humility collapsing into
+  Self-Annihilation), so the arm that holds a love-for-others back from
+  it is exactly the arm faith stands on; neither pole is a vice, the
+  sin is only the tip past the clear heart). Sheet:
   `research/prompts/archetype/dualities_prompts.md`.
 - **Register and wiring.** All of it is the house night-window
   stained-glass family (the same glass as the Trinity lancets and the
@@ -1470,21 +1495,33 @@ Two Crosses):
   (wretchedness) for **Suffering**. A second cipher layer beside the
   sealed DOLOR–ODIUM–METUS–ΥΒΡΙΣ assembly: the same four letters,
   read seat by seat.
+<!-- lang-ok-begin: Greek etymology quotations beside their English glosses, existing convention throughout this sealed canon -->
 - **LOOP** (born MORPH, renamed once before) is the light cross: letters
-  **Θ L Π Ω**, each initialing its light station — **Θ**(08h)
-  *Tharsos* (θάρσος — courage, the good heart) for **Hope**, **L**(12h)
-  *Latria* (λατρεία — the whole service of worship) and *Loyalty* for
-  **Faith**, **Π**(16h) *Pothos* (πόθος — the longing that moves) for
-  **Love**, **Ω**(24h) *Ōpheleia* (ὠφέλεια — the help that delivers)
-  for **Salvation**. The card's own name reads INFINITY, not a
-  journey: Ω, the letter of every ending, is the letter that bends an
-  ending into O, the circle that never closes off — and Θ's own round
-  eye already wears that same shape. Read the four stations round the
-  wheel — L(12h) → Π(16h) → Ω(24h) → Θ(8h) — and the run does not
-  stop at the last: it returns from Ω's own midnight straight back to
-  Θ's own morning, a LOOP, world without end, exactly as the light
-  cross's own doctrine says: Salvation at midnight does not close the
-  day, it delivers the next Hope at dawn.
+  **Θ L Π Ω**, each initialing its light station. **The LETTERS never
+  move** — a Greek jewel stands at the hour equal to its place in the
+  alphabet (Θ is the 8th, Π the 16th, Ω the 24th and last; L is the one
+  Latin exception, seated at 12h because the card's word requires it).
+  What the 2026-08-09 re-seating moved is which VIRTUE each letter
+  initials, and the letters took the change as though they had been
+  waiting for it — **Θ**(08h) *Themelios* (θεμέλιος — the foundation
+  stone, what is laid before anything can be built on it) for
+  **Faith**; **L**(12h) *Leitourgia* (λειτουργία — the work done for
+  the people, service as deed rather than sentiment) and *Loyalty*
+  (yellow noon's own virtue) for **Love**, which at last gives the
+  ring's single lawless letter its reason: the one seat that breaks the
+  alphabet's arithmetic holds the one virtue that does not end;
+  **Π**(16h) *Prosdokia* (προσδοκία — expectation, the watch kept for
+  what has not arrived) for **Hope**; **Ω**(24h) *Ōpheleia* (ὠφέλεια —
+  the help that delivers) for **Salvation**. The card's own name reads
+  INFINITY, not a journey: Ω, the letter of every ending, is the letter
+  that bends an ending into O, the circle that never closes off — and
+  Θ's own round eye already wears that same shape. Read the four
+  stations round the wheel — Θ(08h) → L(12h) → Π(16h) → Ω(24h) — and
+  the run does not stop at the last: it returns from Ω's own midnight
+  straight back to Θ's own morning, a LOOP, world without end, exactly
+  as the light cross's own doctrine says: Salvation at midnight does
+  not close the day, it delivers the next Faith at dawn.
+<!-- lang-ok-end -->
 - **The station words ring the dial** exactly like the Dollar's Great
   Seal crown texts: one word per station seat, centered on it, outside the
   ring band — FEAR/ANGER/HATE arc under the bottom half and SUFFERING

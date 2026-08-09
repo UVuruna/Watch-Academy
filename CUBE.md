@@ -1240,9 +1240,9 @@ Both crosses together use all six arms and meet on God's axis.
 
 | Station | Arm | Why this arm |
 |---|---|---|
-| **Hope** | 08h green | the seed and the sprout — Alpha's own arm (the Banknote's A, "the beginning"); morning, spring, the smallest living thing; hope rises humbly |
-| **Faith** | 12h yellow | noon, The One's arm, the present — faith is standing upright under the full light (Hebrews 11:1) |
-| **Love** | 16h orange | the vigor arm — love as DEED and courage: the vow made, the table set at evening, the guardian's arm (Michael); *"Greater love hath no man than this"* (John 15:13) |
+| **Faith** | 08h green | morning, the past: faith answers something ALREADY GIVEN — testimony, promise, event — a foundation received rather than a future invented; green is Humility's own hue, and faith begins by being small enough to receive (Hebrews 11:1) |
+| **Love** | 12h yellow | noon, The One's arm, the present: love alone must be ACTUAL to exist — not "I loved" or "I will love" but "do I love now"; yellow is Loyalty's own hue, and Tribalism, Loyalty's one disease, is love's own disease too — loving one's own alone; *"let us not love in word... but in deed and in truth"* (1 John 3:18) |
+| **Hope** | 16h orange | evening, the future: hope is needed exactly where the light withdraws, and hope's own object IS salvation — so it must be the LAST station before the summit at 24h, never the furthest from it; orange is Vigor's own hue — Aquinas names hope's object the *bonum arduum*, the difficult good, reached only by straining toward it |
 | **Salvation** | 24h | midnight — the light's ending in the dark's own hour: the Ages wheel already dresses 24h Death in pure white ("into the light"); *"at midnight Paul and Silas prayed… and all the doors were opened"* (Acts 16:25–26); the empty tomb found *"while it was yet dark"* (John 20:1) |
 
 ### The Path of Darkness — downward cross (20h · 24h · 04h · 12h)
@@ -1267,7 +1267,10 @@ shineth in darkness; and the darkness comprehended it not"* (John
 in secret while we pulled the blanket over fear, wrath and hate —
 and stepped into daylight; salvation is what grew quietly while we
 worked the day in faith, hope and love — and arrived unannounced at
-midnight.
+midnight. One new consequence of the 2026-08-09 re-seating: 12h now
+hosts travelers from both roads at once — the bright road's Love
+stands on the very arm the dark road gives Suffering, love and
+suffering both exposed together before the Judge at noon.
 
 ### Centers — TRUST and its absence (SEALED, replacing Clinging/Surrender)
 
@@ -1285,9 +1288,11 @@ with trust, even adversity ripens into hope."**
 
 ### Inscriptions, mnemonics and ciphers
 
-- Latin rows (SEALED): TIMOR → IRA → ODIUM → DOLOR; SPES → FIDES →
-  CARITAS → SALUS. Greek rows: ΦΟΒΟΣ → ΟΡΓΗ → ΜΙΣΟΣ → ΠΑΘΟΣ;
-  ΕΛΠΙΣ → ΠΙΣΤΙΣ → ΑΓΑΠΗ → ΣΩΤΗΡΙΑ.
+<!-- lang-ok-begin: Greek liturgical mnemonic row quoted verbatim from sealed canon, legend/article material per the House Lettering Rule -->
+- Latin rows (SEALED): TIMOR → IRA → ODIUM → DOLOR; FIDES → CARITAS →
+  SPES → SALUS. Greek rows: ΦΟΒΟΣ → ΟΡΓΗ → ΜΙΣΟΣ → ΠΑΘΟΣ;
+  ΠΙΣΤΙΣ → ΑΓΑΠΗ → ΕΛΠΙΣ → ΣΩΤΗΡΙΑ.
+<!-- lang-ok-end -->
 - English mnemonics (SEALED, owner "da" + legend duty): **FALL**
   (Fear-Anger-Loathing-Lament) and **STAR** (Spark-Trust-Affection-
   Redemption) — the legend MUST explain them: the dark path falls to
@@ -1302,10 +1307,13 @@ with trust, even adversity ripens into hope."**
   road where the two paths part. The watchman bears the night's four
   names because naming the danger IS the watch.
 - **The SAFE cipher (SEALED 2026-07-26, replacing the owner's
-  placeholder MOPH/MORPH):** the light cross read from the summit back down the
-  path — **S**ALUS (Salvation) — **A**GAPE (Love) — **F**IDES
-  (Faith) — **E**LPIS (Hope): the saved one looks back down the road
-  and the word under his feet spells SAFE. Latin+Greek mixed,
+  placeholder MOPH/MORPH; hours re-seated 2026-08-09 without moving
+  the word):** four letters assembled from the light stations' own
+  Latin/Greek names, not walked in hour order — **S**ALUS
+  (Salvation) — **A**GAPE (Love) — **F**IDES (Faith) — **E**LPIS
+  (Hope) — spell SAFE no matter which arm each station stands on:
+  Salvation still crowns the summit at 24h, and Faith (08h), Love
+  (12h) and Hope (16h) now trade arms beneath it. Latin+Greek mixed,
   mirroring DOMY. The pair formula: **DOMY keeps you SAFE** — the
   dark cross in the name of the watch, the bright cross in the word
   of its purpose.
