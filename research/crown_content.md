@@ -309,7 +309,7 @@ in the dark."
 
 **B · LOOP** — "The loop has no end — that is its whole theology.
 Twenty-four hours joined in a ring; Omega, the letter of endings, bent here
-into O, a circle that cannot end; the light cross of Hope, Faith, Love and
+into O, a circle that cannot end; the light cross of Faith, Love, Hope and
 Salvation, whose last station at midnight hands the wheel back to the first
 at dawn. Read the four seats aloud and they say the name: L-Ω-Ω-Π — LOOP,
 the day without end, world without end."

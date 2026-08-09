@@ -297,7 +297,9 @@ def test_dollar_eye_shine_toggle_swaps_the_master():
 def test_cross_words_ring_the_dial():
     """CROSS-WORDS round (owner UV inbox 2026-07-27): DOMY wears its
     dark-cross station words (FEAR ANGER HATE SUFFERING) and LOOP its
-    light-cross station words (HOPE FAITH LOVE SALVATION) as
+    light-cross station words (FAITH LOVE HOPE SALVATION, re-seated by
+    THE ORDER LAW of 2026-08-09 — the seats never moved, only which
+    word stands on each) as
     outside-the-band arc text — one word CENTERED on its station seat
     (`core.crown_text.centered_word_angles`, the crown texts' own letter step),
     clockwise over the top half and counterclockwise under the bottom
@@ -310,8 +312,8 @@ def test_cross_words_ring_the_dial():
     expectations = {
         "DOMY": {"SUFFERING": (12, True), "FEAR": (20, False),
                  "ANGER": (24, False), "HATE": (4, False)},
-        "LOOP": {"HOPE": (8, True), "FAITH": (12, True),
-                  "LOVE": (16, True), "SALVATION": (24, False)},
+        "LOOP": {"FAITH": (8, True), "LOVE": (12, True),
+                  "HOPE": (16, True), "SALVATION": (24, False)},
     }
     presets = ring_presets()
     for ring, words in expectations.items():

@@ -85,8 +85,10 @@ dial itself: the Servant's Humility cures the Ruler's Pride, and the
 Ruler's Justice cures the Servant's Servility — a spine straightened
 by what is right. The center is the one place on the dial that is
 both its own disease and its own medicine. Sunday is also the day of
-**Faith** — with Hope at the dawn arm and Love on Venus, the three
-theological virtues span the whole dial.
+**Love** — the greatest of the three, and the fitting theme for the
+source the other two decompose from; with Faith on the pre-dawn arm and
+Hope on Venus and Mars' evening arm, the three theological virtues span
+the whole dial.
 
 <a id="gold-and-silver"></a>
 

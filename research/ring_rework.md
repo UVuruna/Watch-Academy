@@ -165,7 +165,7 @@ Thematic; custom rings may pick every thematic colour and every metal.
 | | Preset | Outer | Crown text | Ruled |
 |---|---|---|---|---|
 | A | **DOMY** | bot_cross | FEAR / ANGER / HATE / SUFFERING | — |
-| B | **LOOP** (was PILOT) | top_cross | HOPE / FAITH / LOVE / SALVATION | rename ruled; About leads with infinity |
+| B | **LOOP** (was PILOT) | top_cross | FAITH / LOVE / HOPE / SALVATION | rename ruled; About leads with infinity |
 | C | **Dollar** | hexa | ANNUIT COEPTIS / NOVUS ORDO SECLORUM | Eye with SHINE on renders NO shadow — the baked shine replaces it |
 | D | **The One** | octa | top `hh:mm` (live) / bottom City, Country | 6 and 18 obey the seating law's square-angle rule |
 | E | **Templar** | cross | top: hour of Jerusalem (live) / bottom NON NOBIS DOMINE | Jerusalem moves into the About |

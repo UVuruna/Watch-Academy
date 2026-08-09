@@ -207,9 +207,9 @@ def test_the_crosses_carry_the_rows_the_ciphers_and_the_chiasm():
     repo = EncyclopediaRepository()
     overview = repo.entry("crosses", "The Two Crosses")["base"]
     for word in ("TIMOR", "IRA", "ODIUM", "DOLOR",
-                 "SPES", "FIDES", "CARITAS", "SALUS",
+                 "FIDES", "CARITAS", "SPES", "SALUS",
                  "PHOBOS", "ORGE", "MISOS", "PATHOS",
-                 "ELPIS", "PISTIS", "AGAPE", "SOTERIA"):
+                 "PISTIS", "AGAPE", "ELPIS", "SOTERIA"):
         assert word in overview, word
     assert "CHIASM" in overview.upper()
     mnemonics = repo.entry("crosses", "FALL and STAR")["base"]

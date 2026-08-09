@@ -6,7 +6,7 @@
 
 ```mermaid
 flowchart LR
-    A["bright road:\n08h Hope"] --> B["12h Faith"] --> C["16h Love"] --> D["24h Salvation"]
+    A["bright road:\n08h Faith"] --> B["12h Love"] --> C["16h Hope"] --> D["24h Salvation"]
     E["dark road:\n20h Fear"] --> F["24h Anger"] --> G["04h Hate"] --> H["12h Suffering"]
 ```
 
