@@ -41,6 +41,7 @@ its own — this file is the ONLY doc in the folder; no `__about/`, no
 | `test_doc_links.py` | GUARD — see below. |
 | `test_docs_coverage.py` | GUARD — see below. |
 | `test_dual_sunday_wheels.py` | THE DUAL SUNDAY WHEEL MAP: duality is a property of the wheel (center on hexa/trio/Seasons, vertical on Quaternity/Compass, horizontal on Rose/Character), plus the two sealed per-theme flips. |
+| `test_earth_moon_orbit.py` | THE CLEAR ORBIT LANE (owner verdict 2026-08-09): the shared Earth/Moon orbit clears both the minute band's own radius and the outer hour band's measured inner edge, with a real margin, across every "Outer ring size" and marker-scale extreme. |
 | `test_eclipse.py` | Eclipse display: bounded (non-scanning) data lookup, the ±3h core window, red-solar/bronze-lunar render, the absence rule — no Deep Time pack means no eclipse ever renders. |
 | `test_elements.py` | The Elements switches: pointer/weekday/marker/seconds toggles drop exactly their own layers, Colorful-off Aura pixel probe, switched-off elements answer no hovers. |
 | `test_encyclopedia_loading.py` | THE LAZY LOADING LAW: naming a metal variant stays pure, pixels build only in `ensure_variant` (on display or in the background warm) — the fix for a main-thread minutes-long block on every art rename. |
@@ -170,8 +171,8 @@ four). It exits **2**, which is what makes a hook BLOCKING.
   pairs agree with `constants.palette_styles_for`.
 - **`test_app_info.py`** — the pre-M7 `setup/app_info.json` seed: `name`/
   `description` market the app as **Watch Academy** while `exe_name`/
-  `installer_name` stay DOMY-based (`DOMYWatch.exe` /
-  `DOMYWatch_Setup.exe`), since DOMY remains the dial's own on-disk/binary
+  `installer_name` stay DOMY-based (`WatchAcademy.exe` /
+  `WatchAcademy_Setup.exe`), since DOMY remains the dial's own on-disk/binary
   identity.
 
 ## Helper modules (not tests)
