@@ -213,11 +213,15 @@ _CORNERS = {
 
 def _real_glyphs_available() -> bool:
     """Whether the numeral face resolves to REAL glyph outlines in this
-    process. After a WatchController lifecycle the process font roster
-    degrades to .notdef tofu boxes (wider than any real digit — the
-    same degradation behind the audit harness's tofu screenshots; the
-    font-leak itself is a recorded next-round finding), and tofu
-    metrics are not the product's metrics."""
+    process. The offscreen platform's font database is EMPTY on Windows
+    (the tofu root cause — tests/offscreen_fonts.py; the "WatchController
+    degrades the roster" reading of 2026-08-09 was a confound and is
+    CORRECTED there), so under a guard run everything used to probe as
+    .notdef boxes, wider than any real digit. conftest now provisions
+    the machine's fonts into the empty database, and the instrument
+    tooth below fails LOUDLY if that ever stops working — this probe
+    stays as the tier chooser so a half-broken environment still gets a
+    live bound instead of a silent skip."""
     from render.numeral_relief import glyph_path
     from render.numeral_fonts import numeral_font
 
@@ -229,6 +233,26 @@ def _real_glyphs_available() -> bool:
     box = path.boundingRect()
     # A real '8' is clearly taller than wide; a .notdef box is not.
     return box.height() > box.width() * 1.15
+
+
+def test_the_suite_measures_with_real_glyphs(app):
+    """THE INSTRUMENT TOOTH (2026-08-09): the corner teeth below carry
+    a two-tier bound so a font-less environment can never silently skip
+    them — but the REAL tier is the one the product is judged by, and
+    this test is what keeps it engaged. It fails the suite the moment
+    font provisioning stops turning the offscreen platform's empty
+    database into real families, instead of letting every glyph
+    measurement quietly loosen to the tofu tier."""
+    from tests.offscreen_fonts import provision
+
+    assert provision(), (
+        "no real font families are available in this process — "
+        "tests/offscreen_fonts.py could not fill the platform database"
+    )
+    assert _real_glyphs_available(), (
+        "the numeral face still probes as .notdef boxes with a "
+        "populated font database — the tofu root cause has a new shape"
+    )
 
 
 @pytest.mark.parametrize("label", sorted(_CORNERS))
