@@ -101,6 +101,71 @@ def test_pointer_on_changes_the_render_near_the_markers(app, moment):
     assert differing > 0
 
 
+def test_pointer_off_paints_no_pixel_of_the_pointer_colour(app, moment):
+    """THE EVIDENCE GAP (re-grade round 2026-08-09): the earlier proof
+    shot `dial-default-orbit-pointer-off.png` showed markers
+    indistinguishable from the pointer-on render, with no assertion
+    that the toggle actually suppresses the drawn triangle — a stale
+    capture, not a code bug (this test's own render, built the same
+    way, IS clean), but the gap itself was real. This pins render-level
+    proof, not just the config flag `test_off_by_default` already
+    covers: the pointer's own resolved hue must appear SOMEWHERE in the
+    "on" render (proving the triangle really painted, not just some
+    unrelated diff) and NOWHERE in the "off" render of the identical
+    frame."""
+    day, tick = moment
+    skin_off = build_skin(dataclasses.replace(Settings(), diameter=720))
+    assert skin_off.year_marker.pointer_enabled is False
+    off = Compositor(skin_off, AssetCache()).render_offscreen(720.0, 1.0, day, tick)
+    skin_on = build_skin(dataclasses.replace(
+        Settings(), diameter=720, show_marker_pointer=True,
+    ))
+    assert skin_on.year_marker.pointer_enabled is True
+    on = Compositor(skin_on, AssetCache()).render_offscreen(720.0, 1.0, day, tick)
+
+    from PySide6.QtGui import QColor
+
+    pointer_rgb = QColor(skin_on.year_marker.pointer_color).getRgb()[:3]
+
+    def matches_pointer(color):
+        return all(abs(c - p) <= 6 for c, p in zip(color.getRgb()[:3], pointer_rgb))
+
+    # THE POINTER'S OWN COLOUR IS THE RING'S OWN HUE BY DESIGN (Task 3),
+    # so a whole-dial scan collides with the crown text/jewels, which
+    # wear that identical hue — a false positive, not proof of leakage.
+    # The scan is bounded to a ring right at each marker's own edge
+    # (`orbit ± the tip protrusion + a little air`), the ONLY place the
+    # triangle itself can ever land, so a hit there is unambiguous.
+    from config import dial
+    from render.painting import dial_point
+
+    spec = skin_on.year_marker
+    half = 720 / 2.0
+    hits = {"on": 0, "off": 0}
+    for angle_deg, orbit, marker_half in (
+        (tick.year_angle, dial.earth_moon_orbit_fraction(
+            skin_on.numeral_outer_ring_size, max(spec.scale, spec.moon_scale),
+        ), spec.scale),
+    ):
+        edge = orbit + marker_half
+        band = 0.03  # fraction of the dial radius, generous around the tip
+        for r_frac in [edge + k * 0.002 for k in range(-5, int(band * 500) + 1)]:
+            for a in range(-6, 7):
+                pt = dial_point(angle_deg + a, half * r_frac)
+                x, y = int(pt.x() + half), int(pt.y() + half)
+                if 0 <= x < 720 and 0 <= y < 720:
+                    if matches_pointer(on.pixelColor(x, y)):
+                        hits["on"] += 1
+                    if matches_pointer(off.pixelColor(x, y)):
+                        hits["off"] += 1
+    assert hits["on"] > 0, "the pointer's own hue never appears at the marker's edge in the on render"
+    assert hits["off"] == 0, (
+        f"the pointer's own hue appears at the marker's own edge in the "
+        f"OFF render ({hits['off']} samples) — the toggle is not "
+        "suppressing the drawn triangle"
+    )
+
+
 def test_pointer_never_reaches_the_minute_band_or_the_outer_ring(app):
     """The pointer's own tip protrusion stays inside THE CLEAR ORBIT
     LANE's own clearance margin — it never re-opens the gap Task 1
