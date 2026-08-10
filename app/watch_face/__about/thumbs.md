@@ -23,9 +23,13 @@ fallback for pointer variants, which carry no preview art of their own
 ### Used by
 - `app.watch_face.ring` — `ring_preset_thumbnail` for each preset's own
   composed preview (fallback `art_thumbnail` on its bare outer plate)
-- `app.watch_face.hands` — `art_thumbnail` for each pack's hours image
-- `app.watch_face.pointer` — `art_thumbnail` for the Earth style tiles,
-  `pointer_swatch_icon` for the pointer gallery
+- `app.watch_face.bodies` — `art_thumbnail` (hand packs, Earth style
+  tiles), `moon_dark_style_icon`, `moon_transit_style_icon`,
+  `marker_pointer_shape_icon`, `eclipse_solar_style_icon`,
+  `eclipse_lunar_style_icon`, `moon_station_style_icon`,
+  `sun_station_style_icon`, `moon_band_mode_icon`, `moon_band_style_icon`
+- `app.watch_face.pointer` — `pointer_swatch_icon` for the pointer
+  gallery
 - [Weekday Theme Grid](../../__about/weekday_theme_grid.md) —
   `art_thumbnail` for every theme/group/mount tile (2026-08-08; those
   galleries carried raw `QIcon(path)` loads before, against this very
@@ -56,6 +60,30 @@ fallback for pointer variants, which carry no preview art of their own
   icon reuses the "silver_thread" draw for "horizon" and a plain
   bright/dimmed disc for the two no-band modes, matching what each
   mode actually changes on the dial
+- **THE MOVING BODIES' previews (owner verdict 2026-08-10)** — every
+  one calls the SAME render function `render/layers/year_marker.py`
+  paints with, at thumbnail scale:
+  - `moon_dark_style_icon(style)`: `moon_face.draw_moon_disc` at a
+    thin crescent (fraction 0.08 — where the three unlit-half
+    treatments actually separate)
+  - `moon_transit_style_icon(style)`: a bigger Earth disc and a
+    smaller Moon disc (`moon_face.draw_moon_disc`) placed with the
+    SAME `dial.MOON_LANE_SPLIT_FRACTION`/`MOON_SHRINK_PASS_DEPTH`
+    constants `YearMarkerLayer` reads — the layer has no bounded
+    "just the crossing" render door of its own, so only the two
+    bodies' relative placement is reproduced here
+  - `marker_pointer_shape_icon(shape)`: `marker_marks.draw_pointer` at
+    angle 0 over a drawn orbit-lane ring and body disc, for context
+  - `eclipse_solar_style_icon(style)` / `eclipse_lunar_style_icon(style)`:
+    `marker_marks.draw_solar_eclipse` / `moon_face.draw_umbra_sweep` at
+    a fixed demo event (partial, magnitude 0.6); the lunar "halo" style
+    reproduces the same multiply-darken `YearMarkerLayer._draw_moon`
+    applies, and "horizon_shadow" draws the Moon Horizon Band's own
+    silver-thread arc instead of touching the disc, mirroring
+    `moon_band_style_icon`
+  - `moon_station_style_icon(style)` / `sun_station_style_icon(style)`:
+    `marker_marks.draw_station_mark` / `draw_sun_station_mark` at the
+    "youth" station, behind a plain body disc
 - `complication_icon(mode)` / `text_style_icon(label)`: honest computed
   SKETCHES for pickers whose dial content is computed text/ticks (the
   recon proved no bounded art door exists for complications)

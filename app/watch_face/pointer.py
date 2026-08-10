@@ -1,4 +1,4 @@
-"""Pointer section (R-04/R-05/R-06, see pointer.md) — the Watch Face
+"""Pointer section (R-04/R-05, see pointer.md) — the Watch Face
 window's Pointer page: pointer-variant gallery (icon =
 `thumbs.pointer_swatch_icon`'s palette-wheel swatch, the honest fallback
 documented in thumbs.md), the wheel/palette-style pills, the
@@ -7,28 +7,33 @@ the RETIRED `design_window.DesignDialog._pointer_tab` (same conditional
 rules, Rule #5; Phase 6 FINAL cleanup deleted that window outright), plus
 R-05's "Daylight - Night" checkbox (moved here from the also-RETIRED
 `app/settings_dialog/display_section.py`'s Archetype group — same
-`daylight` setting, now with only ONE reader/writer) and R-06's Earth
-group (moved from `design_window.DesignDialog._earth_tab` — sizes do
-NOT live here, see size.py).
+`daylight` setting, now with only ONE reader/writer).
+
+R-06's Earth group (moved here from `design_window.DesignDialog.
+_earth_tab`) MOVED AGAIN, 2026-08-10: the owner ruled on the
+rendering-proposals page that the Moon and the Earth are part of the
+HANDS system — "they are what MOVES and points" — so the whole group,
+plus the position-pointer SHAPE gallery, now lives in `bodies.py`'s
+"Earth" group beside the Hands gallery. This module keeps only the
+pointer VARIANT itself (the star/polygon/aurora/etc. shape the HOUR/
+MINUTE hands ride).
 """
 
 from PySide6.QtCore import Qt
 from PySide6.QtWidgets import (
-    QCheckBox, QGridLayout, QGroupBox, QHBoxLayout, QLabel, QSlider,
-    QVBoxLayout, QWidget,
+    QCheckBox, QGroupBox, QHBoxLayout, QLabel, QSlider, QVBoxLayout, QWidget,
 )
 
 from app.watch_face import thumbs
 from app.watch_face.widgets import flow_gallery, pill, tile
-from config import constants, continents, dial
+from config import constants
 from render.skin_geometry import daylight_active
 
 
 def build(settings, setters: dict, tr) -> QWidget:
     """Named groups since the 2026-08-06 design pass: the gallery, the
-    palette pills, the shape rows and the Earth rows each sit under
-    their own heading — bare rows floating in the column read as
-    anonymous buttons."""
+    palette pills and the shape rows each sit under their own heading —
+    bare rows floating in the column read as anonymous buttons."""
     layout = QVBoxLayout()
     layout.addWidget(_pointer_gallery(settings, setters, tr))
     palette_group = QGroupBox(tr("Palette"))
@@ -41,7 +46,6 @@ def build(settings, setters: dict, tr) -> QWidget:
         _add_night_borders(shape_layout, settings, setters, tr)
         layout.addWidget(shape_group)
     _add_daylight_switch(layout, settings, setters, tr)
-    layout.addWidget(_earth_group(settings, setters, tr))
     widget = QWidget()
     widget.setLayout(layout)
     return widget
@@ -142,40 +146,3 @@ def _add_daylight_switch(layout: QVBoxLayout, settings, setters, tr) -> None:
     checkbox.setEnabled(settings.pointer in constants.DAYLIGHT_SWITCH_POINTERS)
     checkbox.toggled.connect(lambda value: setters["daylight"](value))
     layout.addWidget(checkbox)
-
-
-def _earth_group(settings, setters, tr) -> QWidget:
-    """R-06: moved verbatim from `design_window.DesignDialog.
-    _earth_tab` — sizes do NOT live here (see `size.py`'s Earth/Moon
-    scale sliders)."""
-    group = QGroupBox(tr("Earth"))
-    layout = QVBoxLayout(group)
-    style_row = QHBoxLayout()
-    for style, title in (("clean", "Clean"), ("atmo", "Atmosphere")):
-        icon = thumbs.art_thumbnail(
-            continents.EARTH_ART_DIR / f"earth_{style}_europe_day.png"
-        )
-        style_row.addWidget(tile(
-            tr(title), icon, settings.earth_style == style,
-            lambda s=style: setters["earth_style"](s),
-        ))
-    layout.addLayout(style_row)
-    label_row = QHBoxLayout()
-    enabled = settings.diameter >= dial.FULL_TEXT_MIN_DIAMETER
-    for mode, title in (
-        ("date", "Date"), ("weekday", "Weekday"),
-        ("date_weekday", "Date & Weekday"), ("full", "Full Date"),
-    ):
-        is_active = settings.earth_label == mode
-        button = pill(
-            tr(title), is_active,
-            lambda m=mode, was=is_active: setters["earth_label"](m, not was),
-        )
-        button.setEnabled(enabled)
-        label_row.addWidget(button)
-    layout.addLayout(label_row)
-    pointer_checkbox = QCheckBox(tr("Position pointer"))
-    pointer_checkbox.setChecked(settings.show_marker_pointer)
-    pointer_checkbox.toggled.connect(setters["show_marker_pointer"])
-    layout.addWidget(pointer_checkbox)
-    return group

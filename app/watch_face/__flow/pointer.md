@@ -13,10 +13,8 @@ IF pointer != "aurora":
     🎚️ Curvature slider + 🔘 edge pills (Smooth concave / V-notched)
 ☑️ "Hide night borders" (enabled only if `daylight_active(settings)`)
 ☑️ "Daylight - Night" (R-05; enabled only if pointer IN DAYLIGHT_SWITCH_POINTERS)
-📦 Earth group (R-06):
-  🖼️ Clean / Atmosphere tiles
-  🔘 Date / Weekday / Date & Weekday / Full Date pills (enabled only
-     when diameter >= FULL_TEXT_MIN_DIAMETER)
+
+(R-06's Earth group moved to [Hands & Bodies](../__flow/bodies.md), 2026-08-10)
 
 ## Behaviour (pseudocode)
 

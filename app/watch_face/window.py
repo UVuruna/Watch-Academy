@@ -20,7 +20,7 @@ from PySide6.QtWidgets import (
 
 from app.theme import apply_theme, size_to_screen
 from app.watch_face import (
-    colors, hands, numerals, opacity, pointer, ring, size, themes, umbra_aura,
+    bodies, colors, numerals, opacity, pointer, ring, size, themes, umbra_aura,
 )
 from config import constants, defaults
 from config.ui_text import ui
@@ -38,7 +38,7 @@ _SECTIONS = (
     ("Pointer", pointer.build),
     ("Ring", ring.build),
     ("Numerals", numerals.build),
-    ("Hands", hands.build),
+    ("Hands & Bodies", bodies.build),
     ("Umbra & Aura", umbra_aura.build),
     ("Opacity", opacity.build),
     ("Themes & Slots", themes.build),

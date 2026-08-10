@@ -1,45 +1,53 @@
-"""Opacity section (R-15/R-35/R-36 + the moved rows, see opacity.md) —
-the Watch Face window's Opacity page: every render alpha channel this
+"""Opacity section (R-15/R-36 + the moved rows, see opacity.md) — the
+Watch Face window's Opacity page: every render alpha channel this
 Phase's render hooks make speakable, grouped "Clock body" (the star
 diamonds, the Aura's two arcs, the Umbra) and "Bodies on the ring" (the
-Moon below the horizon, the Moon/Earth transit, the inactive weekday
-icons, the Crown Text) — replacing the placeholder page. LIVE-APPLY
-(Rule #5): every slider release calls its setter through `setters`; the
-window rebuilds this page fresh on the next pick, like every other
-Watch Face section.
+Moon below the horizon, the inactive weekday icons, the Crown Text) —
+replacing the placeholder page. LIVE-APPLY (Rule #5): every slider
+release calls its setter through `setters`; the window rebuilds this
+page fresh on the next pick, like every other Watch Face section.
 
-Four rows were MOVED here from the RETIRED `app.settings_dialog.
+Three rows were MOVED here from the RETIRED `app.settings_dialog.
 display_section._build_opacity_group` (Pointer/Aura sunlight/Aura
-twilight/Moon below horizon) — Phase 6 FINAL cleanup deleted that copy
-outright; this module is now the ONLY reader/writer of those four
-`Settings` fields. Three rows are NEW this Phase:
+twilight) — Phase 6 FINAL cleanup deleted that copy outright; this
+module is now the ONLY reader/writer of those `Settings` fields. Two
+rows are NEW this Phase:
 
   * R-15 Umbra opacity (owner-requested): a plain layer-alpha
     multiplier at composite time
     (`render.layers.background.BackgroundLayer._draw_umbra`).
-  * R-35 "Moon — hover over Earth": this dial has no mouse-hover state
-    on the Moon marker — the render concept the brief's wording reads
-    as is the Moon's existing rim-TRANSIT dimming when it visually
-    meets the Earth marker (`render.daylight.moon_transit_opacity`),
-    the closest honest match found.
   * R-36 "Inactive icons": the non-active weekday bodies' existing
     ghost opacity (`skins.manifest.WeekdaySpec.ghost_opacity`).
 
-Every render alpha channel found while implementing this round (the
-open-list note this module owes, per the task brief): the six rows
-above are every alpha a `Settings`-reachable render hook could bind
-to. Two more alpha-shaped fields turned up and are NOT wired — both are
-owner-tuned ART CONSTANTS with no settings hook anywhere today (not
-even in the OLD Settings dialog this Phase is replacing), so adding one
-now would be a new feature this task never asked for, not a move:
+THE MOON HORIZON BAND GROUP MOVED OUT (owner verdict 2026-08-10): it
+used to live on this page (ALG-7 ROW OCCUPANCY, 2026-08-09); it now
+lives in `bodies.py`'s "Moon" group beside the rest of what the Moon
+carries — the owner's ruling that the Moon is part of the HANDS system,
+not scattered across Pointer/Opacity.
+
+THE MOON TRANSIT OPACITY ROW IS DEAD (owner verdict 2026-08-10): the
+translucent Moon/Earth transit dimming this "Moon — hover over Earth"
+row used to control was RETIRED outright — every surviving
+`moon_transit_style` reads geometry, none of them dims — so the row was
+REMOVED here (`Settings.moon_transit_alpha` stays defined, unread by
+any render hook, so an old settings file still loads without a
+migration).
+
+Every render alpha channel found while implementing R-15/R-35/R-36 (the
+open-list note this module owes, per the task brief): the rows above
+were every alpha a `Settings`-reachable render hook could bind to at
+the time. Two more alpha-shaped fields turned up and are NOT wired —
+both are owner-tuned ART CONSTANTS with no settings hook anywhere today
+(not even in the OLD Settings dialog this Phase replaced), so wiring
+one now would be a new feature this task never asked for, not a move:
 `skins.manifest.YearMarkerSpec.moon_shadow_alpha` (the terminator
 darkness drawn over the Moon disc) and the reveal-week opacity ramp
 tied to `defaults.REVEAL_WEEK_DURATION_S`. Left alone, undebted — no
 control anywhere points at them for this round to remove.
 
-CROWN TEXT OPACITY (R-24/Phase-6-debt correction, owner 2026-08-05:
-"Crown tekst je onaj tekst koji piše oko sata — faith, hope,
-suffering") — the outer Great Seal crown text arc IS this element
+CROWN TEXT OPACITY (R-24/Phase-6-debt correction, owner 2026-08-05, his
+own words on what the element is) lang-ok: the owner's own quote, carried verbatim from the prior round's docstring
+— the outer Great Seal crown text arc IS this element
 (`skins.manifest.SkinDefinition.crown_text_alpha`,
 `render.layers.ring.RingLayer._draw_crown_text`); a plain DIRECT row (like
 `umbra_alpha` — no per-skin variance exists to reset to), greyed out
@@ -54,26 +62,11 @@ from PySide6.QtWidgets import (
 )
 
 from app.ui_style import tooltip_wrap
-from app.watch_face import thumbs
-from app.watch_face.widgets import flow_gallery, tile
-from config import constants
 
 
 def build(settings, setters: dict, tr) -> QWidget:
-    """ALG-7 ROW OCCUPANCY (Zubi v2 ladder step 2, reflow into columns):
-    the two slider FORM groups sit SIDE BY SIDE in one row — each is
-    label+slider narrow, so stacking them used only the left half of
-    the window's own width; the Moon Horizon Band gallery (2026-08-09)
-    then fills the FULL width below, where a tile flow actually wants
-    the room."""
     defaults = setters["opacity_skin_defaults"]()
-    # ALG-7 ROW OCCUPANCY (Zubi v2, 2026-08-09): the Moon Horizon Band
-    # gallery is genuinely WIDE content (a tile flow) — it goes FIRST,
-    # so the two narrow slider FORM groups (label+slider, naturally
-    # left-packed) are the page's own LAST rows instead of sitting
-    # above other content, which is exactly what the finding flags.
     layout = QVBoxLayout()
-    layout.addWidget(_moon_band_group(settings, setters, tr))
     layout.addWidget(_clock_body_group(settings, setters, tr, defaults))
     layout.addWidget(_ring_bodies_group(settings, setters, tr, defaults))
     widget = QWidget()
@@ -174,10 +167,6 @@ def _ring_bodies_group(settings, setters, tr, defaults: dict) -> QGroupBox:
         "Moon — below horizon", form,
     )
     _override_row(
-        tr, settings, setters, "moon_transit_alpha",
-        defaults["moon_transit_alpha"], "Moon — hover over Earth", form,
-    )
-    _override_row(
         tr, settings, setters, "ghost_alpha", defaults["ghost_alpha"],
         "Inactive icons", form,
     )
@@ -189,56 +178,4 @@ def _ring_bodies_group(settings, setters, tr, defaults: dict) -> QGroupBox:
         crown_slider.setToolTip(tooltip_wrap(
             tr("The active ring preset carries no Crown Text (Great Seal inscription).")
         ))
-    return group
-
-
-_MOON_BAND_MODE_TITLES = {
-    "horizon": "Horizon on the circle",
-    "dim_only": "Dim only",
-    "always_full": "Always the same moon",
-}
-_MOON_BAND_STYLE_TITLES = {
-    "inverted": "Inverted band",
-    "silver_thread": "Silver thread",
-    "ticks": "Moon ticks",
-    "glow": "Moon glow",
-}
-
-
-def _moon_band_group(settings, setters, tr) -> QGroupBox:
-    """THE MOON HORIZON BAND (owner verdict 2026-08-09): the mode tiles
-    (3, always visible — it is the switch itself) and, in "horizon"
-    mode, the style tiles (4) share ONE flow gallery (Zubi v2 ALG-7:
-    a single wide row of real tiles fills the window's own width far
-    better than two short stacked mini-galleries do) — a slim divider
-    tile between the two groups keeps them visually distinct without a
-    second, narrow row of its own. Every tile is `thumbs.
-    moon_band_mode_icon`/`moon_band_style_icon` — THE REAL ALGORITHM at
-    thumbnail scale, not a redrawn sketch of it."""
-    group = QGroupBox(tr("Moon Horizon Band"))
-    group.setToolTip(tooltip_wrap(tr(
-        "An arc on the inner tick circle showing when the Moon stands "
-        "above the horizon today — mode, then (in Horizon mode) style."
-    )))
-    column = QVBoxLayout(group)
-    tiles = [
-        tile(
-            tr(_MOON_BAND_MODE_TITLES[mode]),
-            thumbs.moon_band_mode_icon(mode),
-            settings.moon_band_mode == mode,
-            lambda m=mode: setters["moon_band_mode"](m),
-        )
-        for mode in constants.MOON_BAND_MODES
-    ]
-    if settings.moon_band_mode == "horizon":
-        tiles += [
-            tile(
-                tr(_MOON_BAND_STYLE_TITLES[style]),
-                thumbs.moon_band_style_icon(style),
-                settings.moon_band_style == style,
-                lambda s=style: setters["moon_band_style"](s),
-            )
-            for style in constants.MOON_BAND_STYLES
-        ]
-    column.addWidget(flow_gallery(tiles))
     return group

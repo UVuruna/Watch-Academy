@@ -30,17 +30,17 @@ silently dropped.
 | `window.py` | Algorithmic | the `WatchFaceDialog` shell — sidebar + stacked pages, live-apply refresh — [about](__about/window.md) · [flow](__flow/window.md) |
 | `thumbs.py` | Algorithmic | R-33: the disk-cached thumbnail service (ring/hand art + the pointer palette-swatch fallback) — [about](__about/thumbs.md) · [flow](__flow/thumbs.md) |
 | `widgets.py` | Standard | shared pill/tile builders every section imports — [about](__about/widgets.md) |
-| `pointer.py` | Algorithmic | R-04/R-05/R-06: pointer gallery, shape/curvature/edge, night borders, Daylight-Night, Earth — [about](__about/pointer.md) · [flow](__flow/pointer.md) |
+| `pointer.py` | Algorithmic | R-04/R-05: pointer gallery, shape/curvature/edge, night borders, Daylight-Night — [about](__about/pointer.md) · [flow](__flow/pointer.md) |
 | `ring.py` | Algorithmic | R-10/R-13: ring gallery, finish, two-metals/shine, Custom ring… — [about](__about/ring.md) · [flow](__flow/ring.md) |
 | `numerals.py` | Standard | THE MODE (Geocentric/Heliocentric) plus the two live-rendered numeral bands' faces, sizes, seating, relief and the live crown's format — [about](__about/numerals.md) |
-| `hands.py` | Algorithmic | R-14: hand-pack gallery, large hour-hand tiles — [about](__about/hands.md) · [flow](__flow/hands.md) |
+| `bodies.py` | Algorithmic | R-06/R-14 + the Moving Bodies (2026-08-10): hand-pack gallery, Earth, Moon (unlit half, crossing, Horizon Band), Eclipses, Stations — [about](__about/bodies.md) · [flow](__flow/bodies.md) |
 | `umbra_aura.py` | Algorithmic | umbra form + contrast pills — [about](__about/umbra_aura.md) · [flow](__flow/umbra_aura.md) |
 | `size.py` | Algorithmic | diameter + every element scale slider — [about](__about/size.md) · [flow](__flow/size.md) |
 | `themes.py` | Algorithmic | R-17/R-19/R-20: FACE LAYOUT row, SLOT PICKER, subdial plate + rotation — [about](__about/themes.md) · [flow](__flow/themes.md) |
 | `theme_tree.py` | Algorithmic | R-17/R-18: the breadcrumb content decision tree — [about](__about/theme_tree.md) · [flow](__flow/theme_tree.md) |
 | `tint_picker.py` | Standard | shared round-swatch/preset-grid/custom-row builders every color control reuses — [about](__about/tint_picker.md) |
 | `colors.py` | Standard | R-21..R-25: Ring tint, Palette, Umbra/Aura/Hands/Indices color, Metal shades, Saturation — [about](__about/colors.md) |
-| `opacity.py` | Standard | R-15/R-35/R-36 + the moved rows: Clock body + Bodies-on-the-ring opacity sliders — [about](__about/opacity.md) |
+| `opacity.py` | Standard | R-15/R-36 + the moved rows: Clock body + Bodies-on-the-ring opacity sliders — [about](__about/opacity.md) |
 
 ## Layout — the sidebar
 

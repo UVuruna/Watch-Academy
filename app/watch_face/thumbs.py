@@ -28,14 +28,15 @@ from pathlib import Path
 
 from PySide6.QtCore import QPointF, QRectF, Qt
 from PySide6.QtGui import (
-    QBrush, QColor, QConicalGradient, QFont, QIcon, QImage, QPainter, QPen,
-    QPixmap,
+    QBrush, QColor, QConicalGradient, QFont, QIcon, QImage, QPainter,
+    QPainterPath, QPen, QPixmap,
 )
 
-from config import constants, dial, palette, paths
+from config import constants, dial, glow, palette, paths
 from core import angles
-from render import letter_plates, raster_store
+from render import letter_plates, marker_marks, moon_face, raster_store
 from render.daylight import umbra_ladder
+from render.eclipse_glow import draw_event_glow
 from render.painting import dial_point, draw_pie, tinted_gray
 
 # The source render size every thumbnail is produced at — every gallery
@@ -44,7 +45,7 @@ from render.painting import dial_point, draw_pie, tinted_gray
 THUMB_SOURCE_PX = 256
 # Bumped whenever the paint recipe below changes, so a stale pre-bump
 # cache file is never mistaken for the new recipe's output.
-_THUMB_CACHE_VERSION = 1
+_THUMB_CACHE_VERSION = 4
 
 
 def _cache_dir() -> Path:
@@ -225,18 +226,31 @@ def _paint_swatch(hues: tuple) -> QImage:
     return image
 
 
-def _computed_icon(name: str, paint) -> QIcon:
+def _computed_icon(name: str, paint, ground: str | None = None) -> QIcon:
     """The shared skeleton every COMPUTED (sourceless) preview follows
-    (Rule #5, the `pointer_swatch_icon` convention): a transparent
+    (Rule #5, the `pointer_swatch_icon` convention): a
     `THUMB_SOURCE_PX` canvas handed to `paint(painter)`, disk-cached
-    under a computed name (kept, never swept — no 16-hex stamp)."""
+    under a computed name (kept, never swept — no 16-hex stamp).
+
+    `ground` fills the canvas with an opaque colour instead of leaving
+    it transparent. THE DEFECT THAT EARNED IT (visual proof round
+    2026-08-10): a QToolButton that is NOT the selected tile paints a
+    LIGHT background, so any preview drawn for the dial's dark sky —
+    a silver moon, a silver horizon thread, a faint ghost disc — went
+    from unreadable to actively misleading the moment it was not the
+    current pick. Photo-sourced tiles never showed this because their
+    art carries its own opaque ground. A preview of something that only
+    exists against the night must bring the night with it."""
     cache_path = _cache_dir() / f"{name}_v{_THUMB_CACHE_VERSION}.png"
     if cache_path.exists():
         return QIcon(str(cache_path))
     image = QImage(
         THUMB_SOURCE_PX, THUMB_SOURCE_PX, QImage.Format.Format_ARGB32
     )
-    image.fill(Qt.GlobalColor.transparent)
+    if ground is not None:
+        image.fill(QColor(ground))
+    else:
+        image.fill(Qt.GlobalColor.transparent)
     painter = QPainter(image)
     painter.setRenderHint(QPainter.RenderHint.Antialiasing)
     painter.translate(THUMB_SOURCE_PX / 2.0, THUMB_SOURCE_PX / 2.0)
@@ -288,6 +302,12 @@ def umbra_icon(form: str, contrast: str) -> QIcon:
     return _computed_icon(f"umbra_{form}_{contrast}", paint)
 
 
+# How far past the tile the band preview's dial radius is pushed. At 1.0
+# the whole ring fits and the fine styles blur together (see
+# `moon_band_style_icon`); this is the magnification that makes one tick
+# and one bloom readable at the displayed size.
+_BAND_PREVIEW_ZOOM = 1.5
+
 _MOON_BAND_DEMO_RISE = _dt_time(6, 0)
 _MOON_BAND_DEMO_SET = _dt_time(18, 0)
 
@@ -304,7 +324,7 @@ def moon_band_style_icon(style: str) -> QIcon:
     from core.moon import moon_horizon_arcs
     from render.layers.moon_band import MoonBandLayer
 
-    radius = THUMB_SOURCE_PX * 0.46
+    radius = THUMB_SOURCE_PX * _BAND_PREVIEW_ZOOM
     arc = moon_horizon_arcs(
         datetime.combine(date(2000, 1, 1), _MOON_BAND_DEMO_RISE),
         datetime.combine(date(2000, 1, 1), _MOON_BAND_DEMO_SET),
@@ -317,14 +337,28 @@ def moon_band_style_icon(style: str) -> QIcon:
     }.get(style, layer._draw_silver_thread)
 
     def paint(painter: QPainter) -> None:
+        # DRAWN MAGNIFIED, as a SEGMENT of the band rather than the whole
+        # ring. Fitting the entire circle into the tile collapsed two of
+        # the four styles into the same picture — the ticks (one per
+        # degree, matching the baked art) packed into a solid line and
+        # the glow's bloom shrank below a pixel; an independent grader
+        # diffed the two tiles and found them indistinguishable to the
+        # eye, a straight violation of "every tile shows what it picks".
+        # This is the SAME code and the same real geometry, simply seen
+        # closer — what a preview of a fine texture has to do. The dial's
+        # own appearance is untouched.
+        painter.translate(0.0, radius)
         pen = QPen(QColor(palette.NUMERAL_RING_GROUND))
-        pen.setWidthF(radius * 0.03)
+        pen.setWidthF(max(1.0, radius * 0.006))
         painter.setPen(pen)
         painter.setBrush(Qt.BrushStyle.NoBrush)
         painter.drawEllipse(QRectF(-radius, -radius, 2 * radius, 2 * radius))
         dispatch(painter, radius, arc)
 
-    return _computed_icon(f"moon_band_style_{style}", paint)
+    return _computed_icon(
+        f"moon_band_style_{style}", paint,
+        ground=palette.THUMB_NIGHT_GROUND,
+    )
 
 
 def moon_band_mode_icon(mode: str) -> QIcon:
@@ -361,7 +395,294 @@ def moon_band_mode_icon(mode: str) -> QIcon:
         painter.setBrush(color)
         painter.drawEllipse(QPointF(0.0, 0.0), moon_radius, moon_radius)
 
-    return _computed_icon(f"moon_band_mode_{mode}", paint)
+    return _computed_icon(
+        f"moon_band_mode_{mode}", paint,
+        ground=palette.THUMB_NIGHT_GROUND,
+    )
+
+
+def moon_dark_style_icon(style: str) -> QIcon:
+    """THE UNLIT HALF picker's preview (owner verdict 2026-08-10) — THE
+    REAL ALGORITHM at thumbnail scale: `moon_face.draw_moon_disc` at a
+    thin crescent (fraction 0.08 — the styles read almost identically
+    at half-full, the whole point of "opaque"/"cut_ghost"/"cut_rim" is
+    how they treat a near-empty disc)."""
+    radius = THUMB_SOURCE_PX * 0.4
+
+    def paint_face(target: QPainter) -> None:
+        target.setBrush(QColor(palette.SKIN_MOON_LIT))
+        target.drawEllipse(QPointF(0.0, 0.0), radius, radius)
+
+    def paint(painter: QPainter) -> None:
+        moon_face.draw_moon_disc(
+            painter, 0.08, radius, style, paint_face, palette.SKIN_MOON_DARK,
+        )
+
+    return _computed_icon(
+        f"moon_dark_style_{style}", paint,
+        ground=palette.THUMB_NIGHT_GROUND,
+    )
+
+
+def moon_transit_style_icon(style: str) -> QIcon:
+    """THE CROSSING picker's preview: the same lane-split/shrink-pass
+    fractions `render.layers.year_marker.YearMarkerLayer` reads off
+    `config.dial` at a fixed deep-transit position (the two bodies
+    meeting head-on), a bigger Earth disc and a smaller Moon disc drawn
+    with `moon_face.draw_moon_disc` — the real disc paint, only the
+    two bodies' RELATIVE placement is reproduced here since the layer
+    has no bounded "just the crossing" render door of its own."""
+    earth_radius = THUMB_SOURCE_PX * 0.32
+    moon_radius = earth_radius * 0.5
+    touch = earth_radius + moon_radius
+
+    def paint(painter: QPainter) -> None:
+        painter.setPen(Qt.PenStyle.NoPen)
+        painter.setBrush(QColor(palette.SKIN_EARTH_DAY))
+        painter.drawEllipse(QPointF(0.0, 0.0), earth_radius, earth_radius)
+        if style == "lane_split":
+            # The lane eases INWARD but the two discs never overlap —
+            # shown just short of touching distance.
+            moon_x = touch * (1.0 - dial.MOON_LANE_SPLIT_FRACTION * 2)
+            this_moon_radius = moon_radius
+        elif style == "shrink_pass":
+            # Deep inside the Earth's disc, scaled DOWN by the ramp's
+            # own depth constant.
+            moon_x = earth_radius * 0.15
+            this_moon_radius = moon_radius * (1.0 - dial.MOON_SHRINK_PASS_DEPTH)
+        else:
+            if style != "occultation":
+                raise ValueError(f"unknown moon transit style {style!r}")
+            # Fully opaque, in front, with a soft shadow cast on Earth.
+            moon_x = earth_radius * 0.30
+            this_moon_radius = moon_radius
+            shadow = QColor(palette.SKIN_MOON_DARK)
+            shadow.setAlphaF(0.35)
+            painter.setBrush(shadow)
+            painter.drawEllipse(
+                QPointF(moon_x, 0.0), this_moon_radius * 1.25, this_moon_radius * 1.25,
+            )
+
+        def paint_face(target: QPainter) -> None:
+            target.setBrush(QColor(palette.SKIN_MOON_LIT))
+            target.drawEllipse(
+                QPointF(0.0, 0.0), this_moon_radius, this_moon_radius
+            )
+
+        painter.save()
+        painter.translate(moon_x, 0.0)
+        moon_face.draw_moon_disc(
+            painter, 0.8, this_moon_radius, "opaque", paint_face,
+            palette.SKIN_MOON_DARK,
+        )
+        painter.restore()
+
+    return _computed_icon(
+        f"moon_transit_style_{style}", paint,
+        ground=palette.THUMB_NIGHT_GROUND,
+    )
+
+
+def marker_pointer_shape_icon(shape: str) -> QIcon:
+    """THE POSITION POINTER's own preview — `marker_marks.draw_pointer`
+    at angle 0 (straight up in this icon's own frame) plus a thin ring
+    line marking the orbit lane it straddles, so the shape reads in
+    context rather than floating alone."""
+    dial_radius = THUMB_SOURCE_PX * 0.42
+    orbit_fraction = 0.55
+    half_size_fraction = 0.16
+
+    def paint(painter: QPainter) -> None:
+        pen = QPen(QColor(palette.THEME_COLORS["border"]))
+        pen.setWidthF(dial_radius * 0.02)
+        painter.setPen(pen)
+        painter.setBrush(Qt.BrushStyle.NoBrush)
+        orbit_radius = dial_radius * orbit_fraction
+        painter.drawEllipse(
+            QRectF(-orbit_radius, -orbit_radius, 2 * orbit_radius, 2 * orbit_radius)
+        )
+        body_radius = dial_radius * half_size_fraction
+        body_center = dial_point(0.0, orbit_radius)
+        painter.setPen(QPen(QColor(*palette.MARKER_BORDER_RGBA)))
+        painter.setBrush(QColor(palette.SKIN_EARTH_DAY))
+        painter.drawEllipse(body_center, body_radius, body_radius)
+        marker_marks.draw_pointer(
+            painter, shape, 0.0, dial_radius, orbit_fraction,
+            half_size_fraction, palette.GLOW_MOON_COLOR,
+        )
+
+    return _computed_icon(
+        f"marker_pointer_shape_{shape}", paint,
+        ground=palette.THUMB_NIGHT_GROUND,
+    )
+
+
+def eclipse_solar_style_icon(style: str) -> QIcon:
+    """THE SOLAR ECLIPSE picker's preview — a plain Sun disc under
+    `marker_marks.draw_solar_eclipse` at a fixed demo (partial,
+    magnitude 0.6, THE REAL ALGORITHM). "halo" draws nothing onto the
+    body itself (the glow behind IS that style, `render.eclipse_glow.
+    draw_event_glow` — drawn here too so the tile is not a bare Sun)."""
+    radius = THUMB_SOURCE_PX * 0.36
+
+    def paint(painter: QPainter) -> None:
+        draw_event_glow(
+            painter, QPointF(0.0, 0.0), radius,
+            palette.GLOW_ECLIPSE_SOLAR_COLOR, 1.0,
+        )
+        painter.setPen(Qt.PenStyle.NoPen)
+        painter.setBrush(QColor(palette.GLOW_SUN_COLOR))
+        painter.drawEllipse(QPointF(0.0, 0.0), radius, radius)
+        marker_marks.draw_solar_eclipse(
+            painter, style, radius, "solar_partial", 0.6,
+            palette.GLOW_SUN_COLOR,
+        )
+
+    return _computed_icon(
+        f"eclipse_solar_style_{style}", paint,
+        ground=palette.THUMB_NIGHT_GROUND,
+    )
+
+
+def eclipse_lunar_style_icon(style: str) -> QIcon:
+    """THE LUNAR ECLIPSE picker's preview at a fixed demo (partial,
+    magnitude 0.6). "umbra_sweep" calls `moon_face.draw_umbra_sweep`
+    (THE REAL ALGORITHM); "halo" reproduces the SAME multiply-darken
+    `YearMarkerLayer._draw_moon` applies; "horizon_shadow" draws the
+    Moon Horizon Band's own silver-thread arc instead of touching the
+    disc at all — the owner's own placement of that option (2026-08-10)
+    — reusing `MoonBandLayer._draw_silver_thread` exactly like
+    `moon_band_mode_icon` already does."""
+    from datetime import date, datetime
+
+    from core.moon import moon_horizon_arcs
+    from render.layers.moon_band import MoonBandLayer
+
+    radius = THUMB_SOURCE_PX * 0.4
+
+    def paint(painter: QPainter) -> None:
+        if style == "horizon_shadow":
+            pen = QPen(QColor(palette.NUMERAL_RING_GROUND))
+            pen.setWidthF(radius * 0.03)
+            painter.setPen(pen)
+            painter.setBrush(Qt.BrushStyle.NoBrush)
+            painter.drawEllipse(QRectF(-radius, -radius, 2 * radius, 2 * radius))
+            arc = moon_horizon_arcs(
+                datetime.combine(date(2000, 1, 1), _MOON_BAND_DEMO_RISE),
+                datetime.combine(date(2000, 1, 1), _MOON_BAND_DEMO_SET),
+            )[0]
+            layer = MoonBandLayer.__new__(MoonBandLayer)
+            layer._draw_silver_thread(painter, radius, arc)
+            # THE ECLIPSE ITSELF, not merely the band it is written on.
+            # The first cut of this tile drew the bare arc and an
+            # independent grader read it as an empty circle — it
+            # advertised nothing, which is the exact failure the
+            # "every tile shows what it picks" rule exists to prevent.
+            layer.draw_eclipse_segment(
+                painter, radius, angles.time_to_dial_angle(_dt_time(12, 0)),
+            )
+            return
+        if style not in ("umbra_sweep", "halo"):
+            raise ValueError(f"unknown lunar eclipse style {style!r}")
+
+        def paint_face(target: QPainter) -> None:
+            target.setBrush(QColor(palette.SKIN_MOON_LIT))
+            target.drawEllipse(QPointF(0.0, 0.0), radius, radius)
+
+        moon_face.draw_moon_disc(
+            painter, 1.0, radius, "cut_rim", paint_face, palette.SKIN_MOON_DARK,
+        )
+        if style == "umbra_sweep":
+            moon_face.draw_umbra_sweep(painter, radius, "lunar_partial", 0.6)
+            return
+        disc = _full_disc_path(radius)
+        brightness = glow.ECLIPSE_STATE_MOON_BRIGHTNESS["lunar_partial"]
+        value = round(255 * brightness)
+        painter.save()
+        painter.setCompositionMode(
+            QPainter.CompositionMode.CompositionMode_Multiply
+        )
+        painter.fillPath(disc, tinted_gray(value, None))
+        painter.restore()
+
+    return _computed_icon(
+        f"eclipse_lunar_style_{style}", paint,
+        ground=palette.THUMB_NIGHT_GROUND,
+    )
+
+
+def _full_disc_path(radius: float) -> QPainterPath:
+    path = QPainterPath()
+    path.addEllipse(QRectF(-radius, -radius, 2 * radius, 2 * radius))
+    return path
+
+
+def moon_station_style_icon(style: str) -> QIcon:
+    """THE MOON'S FOUR STATIONS picker's preview, at "youth" (the
+    station `_arc_grammar` and the intensity ramp treat most distinctly
+    from the other three) — THE REAL ALGORITHM at thumbnail scale.
+
+    The mark has TWO halves and the tile draws both, in the dial's own
+    order: `draw_station_mark` behind the body, then the disc, then
+    `draw_station_inner_glow` on top. Youth is the station whose inner
+    glow the owner specifically asked for, so a preview that drew only
+    the background half would advertise the one thing this style does
+    not appear to do. The moon disc is drawn at a WAXING quarter so
+    there is a real dark half for the inner glow to sit in — a full
+    disc would hide it exactly the way the dial's first cut did."""
+    body_radius = THUMB_SOURCE_PX * 0.18
+
+    def paint(painter: QPainter) -> None:
+        marker_marks.draw_station_mark(
+            painter, style, "youth", body_radius, palette.GLOW_MOON_COLOR,
+            fraction=0.25,
+        )
+        moon_face.draw_moon_disc(
+            painter, 0.25, body_radius, constants.MOON_DARK_STYLE_DEFAULT,
+            _plain_moon_face(body_radius), palette.SKIN_MOON_DARK,
+        )
+        marker_marks.draw_station_inner_glow(
+            painter, style, "youth", body_radius, palette.GLOW_MOON_COLOR,
+            0.25,
+        )
+
+    return _computed_icon(
+        f"moon_station_style_{style}", paint,
+        ground=palette.THUMB_NIGHT_GROUND,
+    )
+
+
+def _plain_moon_face(radius: float):
+    """A flat lit disc standing in for the moon plate — the `paint_face`
+    callable `render.moon_face.draw_moon_disc` takes, so a preview runs
+    the dial's own code without resolving any art."""
+    def paint_face(target: QPainter) -> None:
+        target.setPen(Qt.PenStyle.NoPen)
+        target.setBrush(QColor(palette.SKIN_MOON_LIT))
+        target.drawEllipse(QPointF(0.0, 0.0), radius, radius)
+
+    return paint_face
+
+
+def sun_station_style_icon(style: str) -> QIcon:
+    """THE SUN'S FOUR STATIONS picker's preview, at "youth"/spring — the
+    same station chosen for the Moon's twin, so the two galleries read
+    as one grammar learned once. `day_fraction=0.6` gives the
+    "day_night_wedge" style room to visibly differ from a 50/50 split."""
+    body_radius = THUMB_SOURCE_PX * 0.18
+
+    def paint(painter: QPainter) -> None:
+        marker_marks.draw_sun_station_mark(
+            painter, style, "youth", body_radius, palette.GLOW_SUN_COLOR, 0.6,
+        )
+        painter.setPen(Qt.PenStyle.NoPen)
+        painter.setBrush(QColor(palette.GLOW_SUN_COLOR))
+        painter.drawEllipse(QPointF(0.0, 0.0), body_radius, body_radius)
+
+    return _computed_icon(
+        f"sun_station_style_{style}", paint,
+        ground=palette.THUMB_NIGHT_GROUND,
+    )
 
 
 def complication_icon(mode: str) -> QIcon:

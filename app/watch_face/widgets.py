@@ -138,8 +138,22 @@ def flow_gallery(tiles) -> QWidget:
     return content
 
 
+def literal(label: str) -> str:
+    """A button label Qt will show EXACTLY as written.
+
+    Qt reads `&` in button text as a mnemonic marker and eats it,
+    underlining the next character instead. So "Date & Weekday" reached
+    the owner's screen as "Date _Weekday" and "Shrink & pass" as
+    "Shrink _pass" — caught on a capture, never by a test, because the
+    stored string was right and only the PAINTED text was wrong. Doubling
+    the ampersand is Qt's own escape. This lives in the tile/pill builder
+    so no gallery can forget it (the same "one chokepoint" fix the icon
+    size got in 2026-08-08)."""
+    return label.replace("&", "&&")
+
+
 def pill(label: str, checked: bool, on_click) -> QPushButton:
-    button = QPushButton(label)
+    button = QPushButton(literal(label))
     style_button(button, "next" if checked else "neutral", small=True)
     button.clicked.connect(lambda checked=False: on_click())
     return button
@@ -155,18 +169,26 @@ def tile(label: str, icon: QIcon | None, checked: bool, on_click) -> QToolButton
     ones — and never invented stand-in art."""
     button = QToolButton()
     button.setToolButtonStyle(Qt.ToolButtonStyle.ToolButtonTextUnderIcon)
-    button.setText(label)
+    button.setText(literal(label))
     if icon is None:
         placeholder = QPixmap(TILE_ICON_PX, TILE_ICON_PX)
         placeholder.fill(Qt.GlobalColor.transparent)
         icon = QIcon(placeholder)
     button.setIcon(icon)
     button.setIconSize(QSize(TILE_ICON_PX, TILE_ICON_PX))
-    if checked:
-        button.setStyleSheet(
-            f"border: 2px solid {palette.THEME_COLORS['accent']};"
-            "border-radius: 8px;"
-        )
+    # THE SELECTION BORDER IS ALWAYS THERE, and only its colour changes.
+    # Adding a 2px border to the checked tile alone made that tile 4px
+    # narrower and shorter INSIDE than its siblings, and the label —
+    # which sits under the icon and is the last thing to get room — had
+    # its bottom row shaved off by the border (caught on a capture,
+    # 2026-08-10; THE SPACE & LEGIBILITY LAW: nothing a user must read
+    # is ever cut). A transparent border in the off state reserves the
+    # same box, so picking a tile changes its colour and nothing else.
+    border = palette.THEME_COLORS["accent"] if checked else "transparent"
+    button.setStyleSheet(
+        f"QToolButton {{ border: 2px solid {border};"
+        "border-radius: 8px; padding: 3px; }"
+    )
     button.clicked.connect(lambda checked=False: on_click())
     return button
 
