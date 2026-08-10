@@ -102,6 +102,11 @@ project-specific laws and deltas that TIGHTEN the root rules.
   [Roadmap](ROADMAP.md); the SESSION ORDER with per-session reading lists
   and model tiers is [Work Plan](WORKPLAN.md) — when the owner names a
   session, run it as written there.
+- **Android arc (owner verdicts 2026-08-11):** the phone edition is
+  **Pocket Watch** — its sealed decisions, the bakery/CONTRACT PACK, the
+  base pack agreement and THE PARITY LAW live in
+  [Android Charter](ANDROID.md); read it before any phone-related work.
+  Phase 1 (the bakery) happens in THIS repo.
 - **Canon:** the seating doctrine — the color–virtue–vice–mood web, the two
   rosters, duals, ninths, pointer archetypes — is [The DOMY Canon](CANON.md);
   read it BEFORE any theme, roster or article work. The philosophical core

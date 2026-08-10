@@ -3,7 +3,8 @@
 The taxative list of everything between today and the GitHub release
 (owner request 2026-07-16). Tasks are RECORDED here, not started —
 each one is its own round. The seating doctrine behind the theme work
-lives in [The DOMY Canon](CANON.md).
+lives in [The DOMY Canon](CANON.md). The phone edition's sealed charter —
+**Pocket Watch** — lives in [Android Charter](ANDROID.md).
 
 ## Table of Contents
 
