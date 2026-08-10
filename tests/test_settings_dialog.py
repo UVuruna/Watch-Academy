@@ -506,13 +506,14 @@ def test_hidden_mode_binds_the_poem_to_seasons_too(app):
     assert poem["name"] == "Četiri pozdrava"
     text = unlocked._reader._article_text(poem["article"])
     assert "Dobar dan" in text and "jutro novo" in text
-    # The CANON's three-line quote, verbatim — not the richer Trinity
-    # reading (verses + Serbian explanation + watchmaker commentary).
-    assert "veru u bolje sutra obasjan" in text
-    assert "u ljubavi da nam proteče" in text
+    # The CANON's three-line quote, verbatim (the owner's own RE-SEAL
+    # of 2026-08-11: day-Love / evening-Hope / night-Peace /
+    # morning-Faith) — not the richer Trinity reading.
+    assert "Ljubavlju obasjan" in text
+    assert "u Nadi da nam proteče" in text
     # The framing is the SHORT ENGLISH house-voice reading of the four
     # faces (day/evening/night/morning), distinct from Trinity's.
-    assert "faith in a better tomorrow" in text
+    assert "lit by love" in text
     assert "peaceful death" in text
     assert "rebirth" in text
     unlocked.show_topic("seasons")

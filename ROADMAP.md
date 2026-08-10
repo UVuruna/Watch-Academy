@@ -357,9 +357,15 @@ lives in [The DOMY Canon](CANON.md). The phone edition's sealed charter —
    verses) and the Seasons topic — its CANONICAL home — reading
    `Database/verses.json`'s `"seasons"` block: the CANON's
    three-line quote verbatim plus a short English framing of the
-   four faces (day = faith in a better tomorrow, evening = life
-   flowing in love, night = the peaceful death, morning = rebirth
-   without the past). Neither entry exists in the topic dict at all
+   four faces (day = the present lit by love, evening = the future
+   flowing in hope, night = the peaceful death, morning = rebirth in
+   faith it will be given again — the owner's own RE-SEAL of
+   2026-08-11; the original 2026-07-16 pairing read faith/love/hope).
+   Widened the same day: on the summer and winter solstice the poem
+   stands in the open without the cipher
+   (`core.continents.date_is_solstice` →
+   `EncyclopediaDialog(verses_in_the_open=...)`). Neither entry
+   exists in the topic dict at all
    while locked (not in the gallery, not reachable by index), and
    `data/translations.py`'s corpus walk never touches `verses.json`
    (no leak into the translation bundle either); the unlock is

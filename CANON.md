@@ -548,19 +548,27 @@ throne. Seven human stages and one bestiary standing outside the
 seven — the same pattern as the Ninths outside the eights. A cross
 of witnesses on the Cross pointer.
 
-**The owner's poem** (2026-07-16) binds HERE — four greetings, four
-phenomena, exactly the four arms; it stays HIDDEN behind the cipher
-and appears in the Encyclopedia when the code is typed:
+**The owner's poem** (2026-07-16; RE-SEALED 2026-08-11 to the
+re-seated virtues, by the owner's own hand) binds HERE — four
+greetings, four phenomena, exactly the four arms; it stays HIDDEN
+behind the cipher and appears in the Encyclopedia when the code is
+typed — EXCEPT on the summer and winter solstice, the poem's own two
+days, when it stands in the open without the cipher:
 
-> *Dobar dan, veru u bolje sutra obasjan*
-> *Dobro veče, u ljubavi da nam proteče*
-> *Za laku noć... I za dobro jutro novo...*
+<!-- lang-ok-begin: the owner's own Serbian poem, quoted verbatim -->
+> *Dobar dan, Ljubavlju obasjan*
+> *Dobro veče, u Nadi da nam proteče*
+> *Za Laku noć... I za Dobro jutro novo...*
+<!-- lang-ok-end -->
 
 Its four faces, as the owner reads them: the day — the PRESENT lit
-by faith in a better tomorrow; the evening — life flowing in love;
-the good night — the peaceful death, full of understanding; the new
-morning — rebirth, happiness WITHOUT the past, which is finished
-and needs no more thought.
+by love, the one virtue that must be actual to exist at all; the
+evening — the future, flowing on in hope; the good night — the
+peaceful death, full of understanding; the new morning — rebirth in
+faith that all of it will be given again, for faith is trust in what
+was already given once. The greetings' circle and the light cross
+now read as one wheel — love at noon, hope at evening, peace on
+Salvation's own midnight, faith at morning.
 
 ### Compass (octa) — the Eight Walks of Life (PROPOSAL — awaiting the owner's verdict)
 
