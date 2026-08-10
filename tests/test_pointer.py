@@ -1252,8 +1252,10 @@ def test_pointer_variants_render(july_wednesday, pointer):
 
 
 def test_trio_centers_the_sun_and_pairs_the_week():
-    """Owner-approved trio pairing: Faith 12h = Jupiter+Saturn, Love 20h
-    = Venus+Mars, Hope 4h = Moon+Mercury; Sunday's Sun in the center."""
+    """Trio pairing (planets pinned to ARMS; virtue names follow THE
+    ORDER LAW re-seating of 2026-08-09): Love 12h = Jupiter+Saturn,
+    Hope 20h = Venus+Mars, Faith 4h = Moon+Mercury; Sunday's Sun in
+    the center."""
     from render.skin_geometry import today_slot_theta
 
     trio_skin = dataclasses.replace(defaults.DEFAULT_SKIN, pointer="trio")
@@ -1276,12 +1278,12 @@ def test_trio_aura_thirds_center_on_the_arms(july_wednesday):
     )
     image = Compositor(skin, AssetCache()).render_offscreen(360.0, 1.0, day, tick)
     at_14h = image.pixelColor(234, 87)          # dial 30 deg, radius 0.6R
-    assert at_14h.red() > at_14h.blue() + 30             # Faith yellow
+    assert at_14h.red() > at_14h.blue() + 30             # Love yellow
     at_18h = image.pixelColor(288, 180)         # dial 90 deg
-    assert at_18h.red() > at_18h.green() + 30            # Love red
+    assert at_18h.red() > at_18h.green() + 30            # Hope red
     assert at_18h.red() > at_18h.blue() + 30
     at_6h = image.pixelColor(72, 180)           # dial 270 deg
-    assert at_6h.blue() > at_6h.red() + 30               # Hope blue
+    assert at_6h.blue() > at_6h.red() + 30               # Faith blue
 
 
 def test_hover_rework_moon_and_earth_formats(july_wednesday):

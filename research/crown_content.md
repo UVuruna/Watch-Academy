@@ -48,19 +48,25 @@ fermented all night stands exposed in full noon light. "Nothing is secret,
 that shall not be made manifest" (Luke 8:17) — the dark path does not end in
 relief, it ends SEEN.
 
-**HOPE** — the light path's first station (LOOP, 8h): the good heart that
-dares the morning before it has any evidence to dare on — Tharsos, courage
-as a seed, not yet a deed. "Be of good cheer" — *tharseite* (John 16:33).
+**FAITH** — the light path's first station (LOOP, 8h): the foundation stone
+laid before anything can be built on it — Themelios, what is RECEIVED at the
+start of the road rather than invented at it. Faith answers something
+already given, which is why it stands where the day begins. "Faith is the
+substance of things hoped for, the evidence of things not seen" (Hebrews
+11:1).
 
-**FAITH** — the light path's second station (LOOP, 12h): not belief that a
-thing is true but service to whom it is owed — Latria, the whole liturgy of
-loyalty held at noon, in full light, where it costs the most. "Faith is the
-substance of things hoped for" (Hebrews 11:1).
+**LOVE** — the light path's second station and the crown of the four (LOOP,
+12h): the work done for others — Leitourgia, service as deed rather than
+sentiment, held at noon in full light where it costs the most. Love is the
+only one of the three that must be ACTUAL to exist at all. "Let us not love
+in word, neither in tongue; but in deed and in truth" (1 John 3:18).
 
-**LOVE** — the light path's third station (LOOP, 16h): the longing that
-moves the hand, Pothos turned into an act — not the feeling but what the
-feeling makes you do by evening. "Greater love hath no man than this" (John
-15:13).
+**HOPE** — the light path's third station (LOOP, 16h): the watch kept for
+what has not arrived — Prosdokia, expectation with its eyes open. It takes
+the hour the light begins to leave, because in the morning you can SEE the
+sun and need no hope for it, and it stands last before the summit because
+the thing it reaches for IS salvation. "Which hope we have as an anchor of
+the soul" (Hebrews 6:19).
 
 **SALVATION** — the light path's fourth and last station (LOOP, 24h): the
 help that delivers, arriving at the identical midnight hour DOMY's Anger
@@ -106,7 +112,7 @@ to, not against wherever he was standing.
 ---
 
 **Section count: 17 crown-text hover entries** (ANNUIT COEPTIS, NOVUS ORDO
-SECLORUM, FEAR, ANGER, HATE, SUFFERING, HOPE, FAITH, LOVE, SALVATION, NON
+SECLORUM, FEAR, ANGER, HATE, SUFFERING, FAITH, LOVE, HOPE, SALVATION, NON
 NOBIS DOMINE, ΙΧΘΥΣ, IN HOC SIGNO VINCES, The One's live-hour crown, The
 One's location line, Templar's live-hour crown — 15 named texts, and the
 brief's "each cross station its own station" is covered by the eight DOMY/

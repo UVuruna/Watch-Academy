@@ -1,16 +1,32 @@
 # Cross Words Prompts — the Eight Words Behind the Station Letters
 
+> **RE-SEATING WARNING (owner decree 2026-08-09) — read before touching any
+> art on this sheet.** The re-seating retired three of the light cross's
+> four words: **Tharsos** (was Hope), **Latria** (was Faith), **Pothos**
+> (was Love). Six PNGs already exist on disk — `Tharsos_gem.png`,
+> `Tharsos_gpt.png`, `Latria_gem.png`, `Latria_gpt.png`, `Pothos_gem.png`,
+> `Pothos_gpt.png`, all in `assets/archetypes/crosses/secondary/colored/`
+> — and they are RETIRED ALONG WITH THEIR WORDS: do not re-wire them under
+> any new name, do not reuse them for Faith, Love or Hope, and do not
+> delete or rename them — they stay on disk as the historical record of
+> the retired round. The three replacement words below — **Themelios**
+> (Faith), **Leitourgia** (Love), **Prosdokia** (Hope) — have NO art yet;
+> generating it from the briefs in this sheet is the owner's own next
+> step, not a consequence of this edit.
+
 The CROSS-WORDS round (owner UV inbox 2026-07-27, CANON.md §The
 Banknote — The Cross Rings): the DOMY and LOOP ring letters each
 INITIAL their own station, and the hover legend names the classical
 WORD that carries the link — Y *Ysteria*, Ω *Orgē*, D *Detestatio*,
-M *Miseria* on the dark cross; Θ *Tharsos*, L *Latria*, Π *Pothos*,
-Ω *Ōpheleia* on the light one. These eight words are the NEW legend
-concepts of that round; this sheet gives each its own image — the
-word as a figure, not the station as a scene.
+M *Miseria* on the dark cross; Θ *Themelios*, L *Leitourgia*, Π
+*Prosdokia*, Ω *Ōpheleia* on the light one — the light three renamed by
+the 2026-08-09 re-seating (see the warning above; the letters did not
+move, only which virtue each initials did). This sheet gives each of
+the eight current words its own image — the word as a figure, not the
+station as a scene.
 
 **This sheet is NOT the stations.** The eight station lancets and
-circles (Fear, Anger, Hate, Suffering; Hope, Faith, Love, Salvation)
+circles (Fear, Anger, Hate, Suffering; Faith, Love, Hope, Salvation)
 live in [Two Crosses Prompts](crosses_prompts.md) and stay there. A
 STATION is where the traveler stands at that hour; a WORD is the
 classical name the ring letter borrows to point at it. One is a scene
@@ -24,9 +40,9 @@ one-image-one-place law).
 | **Orge** | Ω | DOMY | Anger | 24h livid bruise-violet, midnight |
 | **Detestatio** | D | DOMY | Hate | 04h midnight blue, frost |
 | **Miseria** | M | DOMY | Suffering | 12h blackened gold, darkened noon |
-| **Tharsos** | Θ | LOOP | Hope | 08h living green, morning |
-| **Latria** | L | LOOP | Faith | 12h radiant yellow, noon |
-| **Pothos** | Π | LOOP | Love | 16h burning orange, evening |
+| **Themelios** | Θ | LOOP | Faith | 08h living green, morning |
+| **Leitourgia** | L | LOOP | Love | 12h radiant yellow, noon |
+| **Prosdokia** | Π | LOOP | Hope | 16h burning orange, evening |
 | **Opheleia** | Ω | LOOP | Salvation | 24h pure white on midnight blue-black |
 
 **Register & look (the tree law, `assets/___assets.md`):** the
@@ -39,7 +55,7 @@ SOURCE-LESS paths; PromptPainter appends the `_gem`/`_gpt` suffix.
 **Drop path:** `assets/archetypes/crosses/secondary/colored/`. Stems,
 PascalCase, transliterated without diacritics (exactly as the ring
 legend prints them): `Ysteria`, `Orge`, `Detestatio`, `Miseria`,
-`Tharsos`, `Latria`, `Pothos`, `Opheleia`.
+`Themelios`, `Leitourgia`, `Prosdokia`, `Opheleia`.
 
 ---
 
@@ -107,25 +123,25 @@ ROUND stained-glass badge medallion, night-window register, photorealistic rende
 
 ## The Path of Light — four words
 
-**Tharsos — Θ, the word for Hope** →
-`assets/archetypes/crosses/secondary/colored/Tharsos.png`
+**Themelios — Θ, the word for Faith** →
+`assets/archetypes/crosses/secondary/colored/Themelios.png`
 
 ```
-ROUND stained-glass badge medallion, night-window register, photorealistic render, isolated background, the circular window shape IS the frame. ASPECT RATIO exactly 1:1 — a perfect square image. Living green, cool morning gold and clear white glass. Center: GOOD COURAGE personified — a young traveler of classical Greek dress stepping out through a gate at first light, chin lifted, a plain staff in one hand and nothing else carried, the first low sun on the face; the road ahead runs into open country that cannot yet be seen clearly, and the step is already taken. Confidence before evidence — the heart that dares the morning. Border: vine-and-furrow leadwork in deep green, a small rising-sun roundel at the top. Palette: living green, cool morning gold, dew silver, clear white light, green-black lead. NO lettering anywhere.
+ROUND stained-glass badge medallion, night-window register, photorealistic render, isolated background, the circular window shape IS the frame. ASPECT RATIO exactly 1:1 — a perfect square image. Living green, cool morning gold and clear white glass, first light of day. Center: THE FOUNDATION STONE personified — a kneeling figure of classical dress setting a single squared stone block into open ground at first light, both palms pressed flat on its top face, weight fully committed to it, the stone already settled and immovable while nothing has yet been built above it; the low morning sun catches the stone's cut edge. Faith as what is RECEIVED and laid at the start of the road, not invented partway along it. Border: vine-and-furrow leadwork in deep green, a small squared-stone roundel at the top. Palette: living green, cool morning gold, dew silver, clear white light, green-black lead. NO lettering anywhere.
 ```
 
-**Latria — L, the word for Faith** →
-`assets/archetypes/crosses/secondary/colored/Latria.png`
+**Leitourgia — L, the word for Love** →
+`assets/archetypes/crosses/secondary/colored/Leitourgia.png`
 
 ```
-ROUND stained-glass badge medallion, night-window register, photorealistic render, isolated background, the circular window shape IS the frame. ASPECT RATIO exactly 1:1 — a perfect square image. Radiant yellow, warm amber and white glass, full noon light. Center: DIVINE SERVICE personified — a serving figure with sleeves rolled, kneeling at a small stone altar and tending its flame with one hand while the other steadies a plain oil jar, the work practical and unhurried, the face attentive rather than ecstatic; the altar flame stands perfectly upright in the noon light. Worship as labor: not believing THAT, but serving WHOM. Border: gothic leadwork in dark gold, a small oil-jar roundel at the top. Palette: radiant yellow, warm amber, white noon light, dark-gold lead. NO lettering anywhere.
+ROUND stained-glass badge medallion, night-window register, photorealistic render, isolated background, the circular window shape IS the frame. ASPECT RATIO exactly 1:1 — a perfect square image. Radiant yellow, warm amber and molten gold glass, full noon light with no shadow to hide in. Center: SERVICE AS DEED personified — a serving figure with sleeves rolled, kneeling to wash a second, unseen figure's feet with a plain basin and cloth, the work practical and unhurried, the face turned down and entirely on the task rather than on being watched; the noon light falls straight down over the whole scene. Love as the act that costs something in full view — not sentiment kept in private, but the deed done in the open. Border: gothic leadwork in dark gold, a small basin-and-cloth roundel at the top. Palette: radiant yellow, warm amber, molten gold, white noon light, dark-gold lead. NO lettering anywhere.
 ```
 
-**Pothos — Π, the word for Love** →
-`assets/archetypes/crosses/secondary/colored/Pothos.png`
+**Prosdokia — Π, the word for Hope** →
+`assets/archetypes/crosses/secondary/colored/Prosdokia.png`
 
 ```
-ROUND stained-glass badge medallion, night-window register, photorealistic render, isolated background, the circular window shape IS the frame. ASPECT RATIO exactly 1:1 — a perfect square image. Burning orange, warm amber and molten gold glass, evening-lit. Center: LONGING THAT MOVES personified — a winged youth of classical Greek sculpture, one foot already lifted off the ground, whole body leaning toward a single far small light low on the evening horizon, one arm at full reach toward it; the wings are half-open, caught in the first beat, and the gap between the fingertips and the light is the subject of the image. Love as the yearning that sets the body in motion. Border: flame-and-vow leadwork in dark bronze-orange, a small reaching-hand roundel at the top. Palette: burning orange, warm amber, molten gold, evening dark, dark bronze lead. NO lettering anywhere.
+ROUND stained-glass badge medallion, night-window register, photorealistic render, isolated background, the circular window shape IS the frame. ASPECT RATIO exactly 1:1 — a perfect square image. Burning orange, warm amber and deep evening blue glass, the light already leaving. Center: THE OPEN-EYED WATCH personified — a figure standing at a low stone sea-wall in classical dress, both hands resting on a coiled rope beside a small stone anchor, eyes fixed unblinking on the far horizon where the light is going down, the body still and upright rather than straining forward; nothing is yet visible on the horizon — the watch is kept for what has not arrived. Hope as expectation held with open eyes, the anchor of the soul (Hebrews 6:19). Border: rope-and-anchor leadwork in dark bronze-orange, a small anchor roundel at the top. Palette: burning orange, warm amber, deep evening blue, dark bronze lead. NO lettering anywhere.
 ```
 
 **Opheleia — Ω, the word for Salvation** →
@@ -140,8 +156,13 @@ ROUND stained-glass badge medallion, night-window register, photorealistic rende
 ## Status
 
 - New sheet (CROSS-WORDS round, owner UV inbox 2026-07-27 —
-  "napiši promptove za ove nove pojmove iz legende"). **Art: 0/8**;
-  nothing generated on either source.
+  <!-- lang-ok: the owner's own commissioning words, quoted verbatim -->
+  "napiši promptove za ove nove pojmove iz legende"). **Art: 5/8 of the
+  CURRENT words** (the four dark words and Opheleia, each as a _gem/_gpt
+  pair); the three words the 2026-08-09 re-seating introduced —
+  Themelios, Leitourgia, Prosdokia — have no art yet, and the six
+  retired-word PNGs (Tharsos/Latria/Pothos) stay on disk as the record
+  of the retired round (see the warning at the top).
 - The drop root rides the existing `archetypes/crosses` data-driven
   family (`tests/test_prompt_paths.py`) in its **secondary** register
   — a legal register of the sealed tree-law vocabulary; no test

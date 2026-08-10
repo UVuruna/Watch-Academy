@@ -47,7 +47,7 @@ sunburst-gold (Virtue), fissured-obsidian-iron (Sin), sky-disc-silver
 
 Each of the nine intelligences takes over one of the dial's own
 colored arms — the six Prism/hexa arms (Joy, Zeal, Passion, Sorrow,
-Calm, Renewal) plus the three Trinity arms (Faith, Hope, Love) — so
+Calm, Renewal) plus the three Trinity arms (Faith, Love, Hope) — so
 the Encyclopedia topic reads as a ninth reading of the same nine-color
 canon the Moods and Trinity sets already use, not an unrelated import.
 
@@ -61,9 +61,9 @@ canon the Moods and Trinity sets already use, not an unrelated import.
 | 4 | Naturalist ("Nature Smart") | Prism Calm | blue | leaf and paw-print | the pre-dawn watch of the Moon — Calm is "the still, moonlit hour," the patient quiet in which nature is actually observed |
 | 5 | Logical-Mathematical ("Number Smart") | Prism Renewal | green | compass and numerals | Saturn's patient order — Renewal is Saturn's arm, and Saturn is astrology's planet of structure, time and measurement |
 | 6 | Musical ("Sound Smart") | Prism Joy | yellow | lyre | Jupiter's noon bell — Joy is "the day's peak," and Jupiter/Zeus is classically music and celebration's own patron |
-| 7 | Existential ("Life Smart") | Trinity Faith | yellow-gold | open eye over a horizon | the question aimed at noon — Faith is the Trio's vertical axis, the unanswerable question pointed straight up |
-| 8 | Intrapersonal ("Self Smart") | Trinity Hope | blue | a small mirror | the inward lamp before dawn — Hope is the dawn arm turned inward, looking at the self before the world wakes |
-| 9 | Spatial ("Picture Smart") | Trinity Love | red | astrolabe | the seeing heart of the evening — Love's arm is already described as "the seeing heart," and an astrolabe is a visual-spatial instrument that maps the whole sky by eye |
+| 7 | Existential ("Life Smart") | Trinity Love | yellow-gold | open eye over a horizon | the question aimed at noon — Love is the Trio's vertical axis, and love must be ACTUAL to exist at all, exactly the actuality existential thought asks after |
+| 8 | Intrapersonal ("Self Smart") | Trinity Faith | blue | a small mirror | the inward lamp before dawn — Faith is the dawn arm, light that is RECEIVED rather than made, and self-knowledge is that same lamp turned inward |
+| 9 | Spatial ("Picture Smart") | Trinity Hope | red | astrolabe | the seeing heart of the evening — Hope is now the evening arm, the open-eyed watch kept for what comes, and an astrolabe is a visual-spatial instrument built for exactly that watch |
 
 Every prompt: square 1:1, photorealistic, isolated on white background,
 full badge visible with margin, no text/watermark.
@@ -137,36 +137,38 @@ classically music and celebration's own patron.
 Ornate circular badge, vivid allegorical enamel in polished silver-inlaid bronze cameo, engraved technical-diagram field, photorealistic render, perfectly centered, isolated on white background. Center: a golden lyre standing upright with all strings caught mid-vibration, a scatter of musical notes rising from it like sparks into a blazing noon-yellow light. Glossy technical-diagram field of fine compass-arc and protractor-angle construction lines radiating outward from center, tinted sun yellow. Border: polished silver-inlaid bronze ring, a laurel half-wreath resting along the bottom half of the rim only, one small yellow-enamel accent gem set where the two sprigs tie at the base. Colors: bronze dominant, silver inlay, sun yellow.
 ```
 
-### 7. Existential — "Life Smart" (Trinity Faith arm, yellow-gold)
+### 7. Existential — "Life Smart" (Trinity Love arm, yellow-gold)
 
 **Existential — "Life Smart"** → `assets/weeks/inner_wheel/intelligence/primary/colored/Existential.png`
 
-Faith is the Trio's vertical axis, "the question aimed at noon" — the
-unanswerable question pointed straight up is existential thought's own
-shape.
+Love crowns the Trio's vertical axis, "the question aimed at noon" —
+love must be ACTUAL to exist at all, and existential thought asks
+that same question of life itself: what is actually, really here.
 
 ```
 Ornate circular badge, vivid allegorical enamel in polished silver-inlaid bronze cameo, engraved technical-diagram field, photorealistic render, perfectly centered, isolated on white background. Center: a single open eye set low against a bare horizon line, its gaze aimed straight up into a shaft of golden light breaking through parting clouds directly above. Glossy technical-diagram field of fine compass-arc and protractor-angle construction lines radiating outward from center, tinted radiant golden-yellow. Border: polished silver-inlaid bronze ring, a laurel half-wreath resting along the bottom half of the rim only, one small yellow-gold-enamel accent gem set where the two sprigs tie at the base. Colors: bronze dominant, silver inlay, radiant golden-yellow.
 ```
 
-### 8. Intrapersonal — "Self Smart" (Trinity Hope arm, blue)
+### 8. Intrapersonal — "Self Smart" (Trinity Faith arm, blue)
 
 **Intrapersonal — "Self Smart"** → `assets/weeks/inner_wheel/intelligence/primary/colored/Intrapersonal.png`
 
-Hope is "the inward lamp before dawn" — the dawn arm turned inward,
-looking at the self before the world wakes.
+Faith is "the inward lamp before dawn" — the dawn arm, light that is
+RECEIVED rather than made, turned inward to look at the self before
+the world wakes.
 
 ```
 Ornate circular badge, vivid allegorical enamel in polished silver-inlaid bronze cameo, engraved technical-diagram field, photorealistic render, perfectly centered, isolated on white background. Center: a small hand mirror propped upright on a bare stone ledge, reflecting a single lit oil lamp back at itself in the blue hush before sunrise, no other face visible in the glass. Glossy technical-diagram field of fine compass-arc and protractor-angle construction lines radiating outward from center, tinted dawn blue. Border: polished silver-inlaid bronze ring, a laurel half-wreath resting along the bottom half of the rim only, one small blue-enamel accent gem set where the two sprigs tie at the base. Colors: bronze dominant, silver inlay, dawn blue.
 ```
 
-### 9. Spatial — "Picture Smart" (Trinity Love arm, red)
+### 9. Spatial — "Picture Smart" (Trinity Hope arm, red)
 
 **Spatial — "Picture Smart"** → `assets/weeks/inner_wheel/intelligence/primary/colored/Spatial.png`
 
-Love's arm is already read as "the seeing heart of the evening" — an
-astrolabe is a visual-spatial instrument that maps the whole sky by
-eye, the Picture Smart made literal.
+Hope is now "the seeing heart of the evening" — the open-eyed watch
+kept for what comes; an astrolabe is a visual-spatial instrument built
+for exactly that watch, mapping the whole sky by eye, the Picture
+Smart made literal.
 
 ```
 Ornate circular badge, vivid allegorical enamel in polished silver-inlaid bronze cameo, engraved technical-diagram field, photorealistic render, perfectly centered, isolated on white background. Center: a brass astrolabe held up at arm's length, its rete and rule aligned against a red sunset sky, the whole sweep of the darkening horizon captured within its rings. Glossy technical-diagram field of fine compass-arc and protractor-angle construction lines radiating outward from center, tinted sunset red. Border: polished silver-inlaid bronze ring, a laurel half-wreath resting along the bottom half of the rim only, one small red-enamel accent gem set where the two sprigs tie at the base. Colors: bronze dominant, silver inlay, sunset red.

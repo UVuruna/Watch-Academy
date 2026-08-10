@@ -1,4 +1,4 @@
-"""THE COLOUR LAW — every colour in DOMY Watch, and nothing else.
+"""THE COLOUR LAW — every colour in Watch Academy, and nothing else.
 
 **One file, one rule: a colour value exists in exactly one place, here.**
 No hex literal, no RGBA tuple and no colour table lives anywhere else in
@@ -90,9 +90,11 @@ COUNCIL = (
 )
 
 # --- trio — THE TRINITY, three arms, three wheels -------------------
-# PRIMARY: the theological trio (owner spec, FINAL.txt #7) — Faith
-# yellow at 12h, Love red at 20h, Hope blue at 4h, the hexa primary
-# hues at the M, Y, D ring-jewel positions.
+# PRIMARY: the theological trio — Love yellow at 12h, Hope red at 20h,
+# Faith blue at 4h (the FINAL.txt #7 hues, pinned to the ARMS; which
+# virtue NAMES each arm follows THE ORDER LAW re-seating of
+# 2026-08-09), the hexa primary hues at the M, Y, D ring-jewel
+# positions.
 TRINITY = ("#F8E600", "#B60000", "#002FFF")
 # SECONDARY: the FAMILY triangle (CANON, placement APPROVED
 # 2026-07-16) — the same derivation from the hexa SECONDARY primaries
