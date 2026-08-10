@@ -337,6 +337,42 @@ def test_cross_words_ring_the_dial():
         assert missing_assets(skin) == []
 
 
+def test_both_hover_layers_of_the_cross_rings_agree_with_doctrine():
+    """THE REPEAT of 2026-08-10 (the owner hovered LOOP's L and read the
+    retired order): a cross ring has TWO hover surfaces — the arc WORDS
+    (`crown_text[].reading`) and the LETTERS' own `legend` — and the
+    0.14.866 re-seating rewrote only the first, so the preset file
+    contradicted itself with every gate green: nothing tied either
+    surface to `config.doctrine`. This tooth does. On every station
+    seat of both cross rings, BOTH surfaces must open with the virtue
+    doctrine seats on that hour, and the retired light-cross words may
+    never return."""
+    from config import doctrine
+    from data.rings import ring_presets
+
+    presets = ring_presets()
+    for ring, path in (("LOOP", doctrine.PATH_OF_LIGHT),
+                       ("DOMY", doctrine.PATH_OF_DARKNESS)):
+        card = presets[ring]
+        word_reading = {
+            entry["text"]: entry["reading"] for entry in card["crown_text"]
+        }
+        for station in path:
+            # The letter legend argues the virtue doctrine seats there.
+            reading = card["legend"][station.hour]["reading"]
+            assert reading.startswith(station.name), (
+                f"{ring} legend at {station.hour}h opens {reading[:40]!r}, "
+                f"doctrine seats {station.name} there"
+            )
+            # The arc word above the same seat answers as itself.
+            assert word_reading[station.name.upper()]["title"] == \
+                station.name.upper()
+    # The retired light-cross words (pre-2026-08-09 order) never return.
+    book = repr(presets)
+    for retired in ("Tharsos", "Latria", "Pothos"):
+        assert retired not in book, f"retired cross word {retired} is back"
+
+
 def test_crown_text_words_map_to_their_seats():
     """WORD-HOVER round (owner 2026-07-27): every arc word knows the
     SEAT whose legend it answers with — a station word its own station,

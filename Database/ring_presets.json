@@ -72,20 +72,23 @@
       "about": "The loop has no end — that is its whole theology. Twenty-four hours joined in a ring; Omega, the letter of endings, bent here into O, a circle that cannot end; the light cross of Faith, Love, Hope and Salvation, whose last station at midnight hands the wheel back to the first at dawn. Read the four seats aloud and they say the name: L-Ω-Ω-Π — LOOP, the day without end, world without end.",
       "legend": {
         "12": {
-          "name": "L — Latria",
-          "reading": "Faith — the noon station: L for Loyalty, the faithfulness that holds under trial, and for Latria (λατρεία), the whole service of worship — not believing THAT, but serving WHOM. \"Faith is the substance of things hoped for\" (Hebrews 11:1).\n\nDown the spine: Ω — Faith against Salvation: what is served in daylight is delivered at midnight (the chiasm of the Two Crosses).\n\nL is the 12th letter of the modern Latin alphabet, seated exactly on the 12th hour/noon — an ordinal match; PILOT's alphabetical-hour cipher held for this letter even though it broke for the card as a whole (Λ, the Greek equivalent, is the 11th letter, not the 12th)."
+          "name": "L — Leitourgia",
+          "note": "lang-ok: Greek etymology quotation in parentheses beside its English gloss — the sealed legend convention of every reading in this file (CANON.md §The Cross Rings)",
+          "reading": "Love — the noon station and the crown of the four: L for Leitourgia (λειτουργία — the work done for the people), service as deed rather than sentiment, and for Loyalty, yellow noon's own virtue. Love is the only one of the three that must be ACTUAL to exist at all, held in full light where it costs the most. \"Let us not love in word, neither in tongue; but in deed and in truth\" (1 John 3:18).\n\nDown the spine: Ω — Love against Salvation: what is served in daylight is delivered at midnight (the chiasm of the Two Crosses).\n\nL is the 12th letter of the modern Latin alphabet, seated exactly on the 12th hour/noon — an ordinal match (Λ, the Greek equivalent, is the 11th letter, not the 12th): the one seat that breaks the ring's Greek arithmetic now holds the one virtue that does not end."
         },
         "16": {
-          "name": "Π — Pothos",
-          "reading": "Love — the vigor arm's station: Π for Pothos (πόθος — the longing that moves), love as DEED and courage: the vow made, the table set at evening. \"Greater love hath no man than this\" (John 15:13).\n\nAcross the crossbar: Θ — Love against Hope, the deed at evening facing the seed at morning.\n\nΠ is the 16th letter of the Greek alphabet, seated exactly on the 16th hour — an ordinal match."
+          "name": "Π — Prosdokia",
+          "note": "lang-ok: Greek etymology quotation in parentheses beside its English gloss — the sealed legend convention of every reading in this file (CANON.md §The Cross Rings)",
+          "reading": "Hope — the vigor arm's station: Π for Prosdokia (προσδοκία — expectation), the watch kept for what has not arrived, eyes open toward evening. It takes the hour the light begins to leave — in the morning you can SEE the sun and need no hope for it — and it stands last before the summit because the thing it reaches for IS salvation. \"Which hope we have as an anchor of the soul\" (Hebrews 6:19).\n\nAcross the crossbar: Θ — Hope against Faith, the watch still kept at evening facing the stone already laid at morning.\n\nΠ is the 16th letter of the Greek alphabet, seated exactly on the 16th hour — an ordinal match."
         },
         "24": {
           "name": "Ω — Opheleia",
-          "reading": "Salvation — the light's ending in the dark's own hour: Ω for Ōpheleia (ὠφέλεια — the help that delivers) and for Omega itself, completion. \"At midnight Paul and Silas prayed… and all the doors were opened\" (Acts 16:25–26).\n\nUp the spine: L — Salvation against Faith; the light path ends REMADE in the Creator's hands at midnight (2 Corinthians 5:17).\n\nΩ is the 24th and last letter of the Greek alphabet, seated exactly on the 24th hour — the same match DOMY's Ω carries."
+          "reading": "Salvation — the light's ending in the dark's own hour: Ω for Ōpheleia (ὠφέλεια — the help that delivers) and for Omega itself, completion. \"At midnight Paul and Silas prayed… and all the doors were opened\" (Acts 16:25–26).\n\nUp the spine: L — Salvation against Love; the light path ends REMADE in the Creator's hands at midnight (2 Corinthians 5:17).\n\nΩ is the 24th and last letter of the Greek alphabet, seated exactly on the 24th hour — the same match DOMY's Ω carries."
         },
         "8": {
-          "name": "Θ — Tharsos",
-          "reading": "Hope — the light path's first station, on Renewal's green: Θ for Tharsos (θάρσος — courage, the good heart), the confidence that dares the morning; hope rises humbly, the seed and the sprout. \"Be of good cheer\" — θαρσεῖτε (John 16:33).\n\nAcross the crossbar: Π — Hope against Love, the seed at morning facing the deed at evening.\n\nΘ is the 8th letter of the Greek alphabet, seated exactly on the 8th hour — an ordinal match."
+          "name": "Θ — Themelios",
+          "note": "lang-ok: Greek etymology quotation in parentheses beside its English gloss — the sealed legend convention of every reading in this file (CANON.md §The Cross Rings)",
+          "reading": "Faith — the light path's first station, on Renewal's green: Θ for Themelios (θεμέλιος — the foundation stone), what is laid before anything can be built on it. Faith answers something ALREADY GIVEN — testimony, promise, event — which is why it stands where the day begins. \"Faith is the substance of things hoped for, the evidence of things not seen\" (Hebrews 11:1).\n\nAcross the crossbar: Π — Faith against Hope, the stone already laid at morning facing the watch still kept at evening.\n\nΘ is the 8th letter of the Greek alphabet, seated exactly on the 8th hour — an ordinal match."
         }
       },
       "crown_text": [
