@@ -76,16 +76,29 @@ The bakery (Phase 1, work in THIS repo, before any Kotlin) produces the
 
 <a id="base-pack"></a>
 
-## The Base Pack Agreement (owner verdict 2026-08-11)
+## The Base Pack Agreement (owner verdict 2026-08-11, refined the same day)
+
+The boundary, in one line: **the sky is free; philosophy is locked.**
 
 - **The instrument is INDIVISIBLE and never locked:** every plate (the ONE
-  PLATE library), every ring preset (outer x inner), pointer styles, crown,
-  backgrounds, hands, moving bodies. A watch missing one of its own parts
-  is not a product.
-- **Always in the base pack, never locked (owner's list):** the instrument
-  plus the **Planets**, **Months** (the Almanac's month cycle) and
-  **Zodiac** themes.
-- **Everything else is a locked theme.** The lock is L1 (free download).
+  PLATE library), every ring preset (outer x inner), every pointer style
+  with its color wheels and palettes, crown, backgrounds, hands, moving
+  bodies — everything "where we change pointers, colors and all those
+  styles" (owner's words). A watch missing one of its own parts is not a
+  product.
+- **All ASTRONOMICAL phenomena are base content, always:** the turning
+  points (solstices, equinoxes, the seasons), the Moon (phases, tides),
+  the Sun, the eclipses — what the sky itself shows and the dial itself
+  displays, together with their encyclopedia topics.
+- **Always-unlocked THEMES (owner's list):** **Planets**; **Months —
+  Gregorian only** (the twelve Gregorian months with the named full moons;
+  no other calendar's month cycle rides in the base); **Zodiac — BOTH the
+  Western astrology zodiac AND the Chinese zodiac** (each in all its
+  depictions, per "depictions are not themes").
+- **LOCKED: every PHILOSOPHICAL thematic** — the figure casts, the Divine,
+  the Character Cube, religions, creeds, pantheons, the Human Wheel… all of
+  them L1 theme packs (free download). The exact per-theme manifest mapping
+  is Phase 1 work, applying this boundary — never re-litigating it.
 - **The THEME is the unit of locking** — one cast = one pack (its art AND
   its encyclopedia articles), the exact granularity THE THEME COMPLETION
   LAW already enforces.
