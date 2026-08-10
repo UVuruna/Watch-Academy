@@ -28,7 +28,7 @@ def _fmt(event: datetime | None) -> str:
 
 def main() -> None:
     parser = argparse.ArgumentParser(
-        prog="python -m core", description="DOMY Watch computation selftest"
+        prog="python -m core", description="Watch Academy computation selftest"
     )
     parser.add_argument("--city", help="city name from the bundled locations database")
     parser.add_argument("--lat", type=float, help="latitude (with --lng and --tz)")

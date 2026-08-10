@@ -23,7 +23,9 @@ project-specific laws and deltas that TIGHTEN the root rules.
 - **Product:** transparent frameless 24h desktop clock widget, Windows 11,
   Python 3.13 + PySide6 6.10 + astral 3.2 (+ tzdata). The app is
   **Watch Academy**; **DOMY** is the name of the dial itself. The folder on
-  disk is still `Gadgets/Watch Academy/` — do NOT rename it. Repo:
+  disk is still `Gadgets/DOMY Watch/`; the owner approved renaming it to
+  `Gadgets/Watch Academy/` on 2026-08-09, pending a moment when no session
+  or app holds the folder (rules/tools/rename_project.py does it). Repo:
   `UVuruna/Watch-Academy`.
 - **Dial convention:** degrees CLOCKWISE from TOP; 12:00 noon top, 00:00
   midnight bottom, 18:00 right, 06:00 left; `DIAL_OFFSET_DEG = 180`.

@@ -1,6 +1,6 @@
 # Encyclopedia Expansion
 
-A design + copy spec for the full DOMY Watch Encyclopedia. The owner's
+A design + copy spec for the full Watch Academy Encyclopedia. The owner's
 brief: *the Encyclopedia should pull out EVERYTHING interesting about
 this clock — not only the logos but the functionality: how and why it
 is the way it is; why that color order; why the morning is blue and the

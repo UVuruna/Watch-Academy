@@ -22,7 +22,7 @@ python main.py
 ```
 
 A second launch while one instance is already running shows an
-information dialog ("DOMY Watch is already running.") and exits
+information dialog ("Watch Academy is already running.") and exits
 cleanly (return 0) instead of opening a second dial.
 
 ## Connections
@@ -30,8 +30,8 @@ cleanly (return 0) instead of opening a second dial.
 ### Uses
 - `config.constants` — `APP_NAME`, `ORGANIZATION`, `APP_USER_MODEL_ID`,
   `SINGLE_INSTANCE_MUTEX`
-- `config.paths` — `user_dir()`, the crash log's `%APPDATA%/DOMY
-  Watch/` location
+- `config.paths` — `user_dir()`, the crash log's `%APPDATA%/Watch
+  Academy/` location
 - [Native (Win32 helpers)](../app/__about/native.md) — `set_app_user_model_id`
   (own taskbar icon/grouping) and `acquire_single_instance` (named
   mutex check)
@@ -46,7 +46,7 @@ cleanly (return 0) instead of opening a second dial.
 ## Functions
 
 - `_install_crash_logging()` — opens (append mode)
-  `%APPDATA%/DOMY Watch/crash.log` under a timestamped session header
+  `%APPDATA%/Watch Academy/crash.log` under a timestamped session header
   and installs TWO complementary traps: `faulthandler.enable()` for
   native fatal errors (segfaults out of Qt or the ctypes keyboard
   hook — nothing a Python handler can catch) and a `sys.excepthook`

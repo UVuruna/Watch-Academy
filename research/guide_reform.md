@@ -345,7 +345,7 @@ background and save. The mechanics already exist in
 background task, a Win32 driver (`SetProcessDPIAware` +
 `FindWindowW`/`GetWindowRect`/`MoveWindow`/`SetCursorPos`/`mouse_event`/
 `keybd_event` + `CopyFromScreen`), settings read/write at
-`%APPDATA%\DOMY Watch\settings.json` (atomic, 750 ms debounce after a
+`%APPDATA%\Watch Academy\settings.json` (atomic, 750 ms debounce after a
 move), and the ground-truthed gotchas (find the window by PID rather than
 class name; always re-read `GetWindowRect` immediately before capture;
 pixel-sample rather than trust `IsWindowVisible`).

@@ -2,6 +2,6 @@
   "version": "0.14.464",
   "name": "Watch Academy",
   "description": "Watch Academy is a transparent 24-hour analog clock widget for the Windows desktop, built around a single dial named DOMY.",
-  "exe_name": "DOMYWatch.exe",
-  "installer_name": "DOMYWatch_Setup.exe"
+  "exe_name": "WatchAcademy.exe",
+  "installer_name": "WatchAcademy_Setup.exe"
 }

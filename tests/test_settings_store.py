@@ -974,7 +974,7 @@ def test_a_file_without_the_identity_markers_names_what_it_is_missing(store):
     with pytest.raises(SettingsCorruptError) as caught:
         store.load()
     message = str(caught.value)
-    assert "not a DOMY Watch settings file" in message
+    assert "not a Watch Academy settings file" in message
     assert "'schema_version'" in message and "'window'" in message
     # its OWN keys, so the reader can see what it really is
     assert "'diameter'" in message and "'location'" in message

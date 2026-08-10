@@ -356,21 +356,27 @@ Name" section carrying the proposed tagline and the VIGILATE seal;
 the Guide window's `dial_default` slide (the app's closest thing to
 an About screen — no dedicated About dialog exists) now introduces
 Watch Academy and echoes the tagline in English prose. `constants.
-APP_NAME` ("DOMY Watch"), the tray tooltip, every window title, the
-mutex, the AppUserModelID and the `%APPDATA%` folder are UNCHANGED —
-DOMY remains the dial's own name and the app's technical identity,
-exactly as scoped. **CANNOT do yet (infrastructure absent, not a
+APP_NAME` (then still "DOMY Watch"), the tray tooltip, every window
+title, the mutex, the AppUserModelID and the `%APPDATA%` folder were
+left UNCHANGED at the time — DOMY remained the dial's own name and
+the app's technical identity, exactly as scoped for this round
+(superseded 2026-08-10: THE RENAMING moved the whole binary identity
+onto Watch Academy — see ROADMAP.md §M7). **CANNOT do yet
+(infrastructure absent, not a
 renaming-session job):** an actual About dialog (none exists — Guide
 was chosen over it, see `app/guide.md`) and the Rule 23 self-update
 module (no `updates.py`/version source in this project yet) — both
 would be new M6/M7 features, not a rename. Seeded the decision
 instead so neither has to be re-derived later: `setup/app_info.json`
 (new, pre-M7) carries `name`/`description` = Watch Academy while
-`exe_name`/`installer_name` stay DOMY-based, pinned by the new
+`exe_name`/`installer_name` stayed DOMY-based at the time (later
+moved onto Watch Academy by THE RENAMING, 2026-08-10 — see
+ROADMAP.md §M7), pinned by the new
 `tests/test_app_info.py`; ROADMAP.md's M7 section records the
 `update.repo` value for when self-update eventually lands (that value
-was `"UVuruna/DOMY-Watch"` while the repo still bore that name —
-CORRECTED to `"UVuruna/Watch-Academy"` on 2026-07-28). The GitHub
+carried the repo's retired pre-rename address while the repo still
+bore that name — CORRECTED to `"UVuruna/Watch-Academy"` on
+2026-07-28). The GitHub
 repo rename itself was
 **not** executed (owner decree: `gh repo rename` never runs
 automatically) — flagged as an open question below. 978 tests green.
@@ -589,7 +595,7 @@ Enciklopediji."
 **Reads:** `Gadgets/3D Preview/PLAN.md` (the integration contract);
 CUBE.md §The Thirteen Axes; `app/encyclopedia/___encyclopedia.md`;
 `Database/encyclopedia.json` cube families.
-**Delivers:** the DOMY-side half of the contract: an EXPORTER that
+**Delivers:** the Watch Academy side of the contract: an EXPORTER that
 computes the Character-Cube model JSON from DOMY's own canon data
 (the 65 terms, colors, registers — one source of truth, root Rule
 19, never copy-pasted into the gadget); the `preview3d` widget
@@ -645,11 +651,11 @@ snap table feature") at gadget commit `a47d655` (0.0.022):
   at their true cube angles, and (b) ships an actual register/reading
   Switcher. `config/cube.py`'s `AXES` tuple (13 `CubeAxis`, each with
   ternary `coords` + `luminous`/`fallen` names) is already the exact
-  DOMY-side data source the exporter would read once that lands.
+  Watch-Academy-side data source the exporter would read once that lands.
 
 **UNBLOCKED (2026-07-30, this session's own re-audit).** By the
 owner's order the gadget's own agent landed the missing milestones —
-DOMY sessions never touched that repo:
+Watch Academy sessions never touched that repo:
 
 - **M2 — gadget commits `b5190c1`..`2702d43` (0.0.023–0.0.028).** The
   direction grammar (`b5190c1`, "Axis directions — one grammar for
@@ -879,8 +885,8 @@ flowchart LR
   explicitly asks for parallel agents.
 - **The 3D session stays where it is** (Session 28), blocked on the
   gadget's own M2. It is the only task here with an EXTERNAL
-  dependency, and by the owner's decree DOMY sessions never implement
-  the gadget.
+  dependency, and by the owner's decree Watch Academy sessions never
+  implement the gadget.
 
 ---
 
@@ -1053,7 +1059,7 @@ answer is the whole Cube family — *"3 Axis main, 4 Axis diagonal
 models already specified as the gadget's v1 deliverable
 (`Gadgets/3D Preview/PLAN.md` §The Four Owner Models), so nothing new
 is being designed here; what this session adds is the PAGE LIST on
-DOMY's side:
+Watch Academy's side:
 
 | Encyclopedia page | Today | After |
 |---|---|---|
@@ -1158,7 +1164,7 @@ absent. Everything else in the original Session 28 entry stands.
   hours. Watch and learn. Keep the watch."* is PROPOSED).
 - ~~GitHub repo rename?~~ — RESOLVED: the owner renamed the GitHub
   repo himself to **`UVuruna/Watch-Academy`** (found 2026-07-28 — a
-  Session 23 `git push` to the old `UVuruna/DOMY-Watch` remote came
+  Session 23 `git push` to the retired pre-rename remote came
   back "This repository moved. Please use the new location:
   `https://github.com/UVuruna/Watch-Academy.git`"; GitHub's redirect
   still accepts the old URL, but the canonical one is the new name).

@@ -1,4 +1,4 @@
-"""Shared setup and root-finding for the DOMY Watch ephemeris pipeline.
+"""Shared setup and root-finding for the Watch Academy ephemeris pipeline.
 
 Pure computation over the Swiss Ephemeris DE441-derived data files. No app
 code, no Qt. The one job here is: given a MONOTONIC ecliptic-angle function

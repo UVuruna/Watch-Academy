@@ -890,7 +890,7 @@ def live_profile_source() -> Path | None:
     "That is the environment, not this change" is not a legal sentence in any
     proof file: a failure under the owner's real profile is this session's.
 
-    DOMY Watch override (Zubi v2 rollout, 2026-08-08): watch 1's real file,
+    Watch Academy override (Zubi v2 rollout, 2026-08-08): watch 1's real file,
     per config/paths.py; active_profile() is read by _audit_settings()."""
     from config import paths
     path = paths.settings_path(1)

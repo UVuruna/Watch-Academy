@@ -1,5 +1,5 @@
 """Product-defining invariants. These values NEVER change at runtime
-and are not user-tunable — they define what DOMY Watch is.
+and are not user-tunable — they define what Watch Academy is.
 
 The WEEKDAY theme tables here are DERIVED: `config.registry` holds one
 entry per theme and every table below is computed from it in a single
@@ -13,7 +13,14 @@ Win32 API literals live in winapi.py.
 from config import registry
 
 # ═══════════════════════════ APP IDENTITY ═══════════════════════════
-APP_NAME = "DOMY Watch"
+APP_NAME = "Watch Academy"
+# The retired product name, kept ONLY for the one-time migrations that
+# carry an existing install onto the new identity (the %APPDATA% folder
+# in main._migrate_legacy_user_dir, the HKCU Run value in
+# app.native.migrate_legacy_autostart). THE RENAMING (owner decree
+# 2026-08-10): the app is Watch Academy everywhere; DOMY survives only
+# as the dial's own name and its dark-cross ring preset.
+APP_NAME_LEGACY = "DOMY Watch"
 ORGANIZATION = "UVuruna"
 SINGLE_INSTANCE_MUTEX = "WatchAcademy.SingleInstance"
 # Windows taskbar/AppUserModelID identity (owner screenshot 2026-07-20):

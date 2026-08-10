@@ -20,7 +20,7 @@ its own — this file is the ONLY doc in the folder; no `__about/`, no
 | File | What it pins |
 |------|---------------|
 | `test_angles.py` | Dial-angle quadrants (12:00→0°, 18:00→90°, 00:00→180°, 06:00→270°), minute hand, hexagram sign convention (±15°/hour). |
-| `test_app_info.py` | Pre-M7 `setup/app_info.json` seed: product markets as **Watch Academy**, exe/installer stay DOMY-named. |
+| `test_app_info.py` | Pre-M7 `setup/app_info.json` seed: product markets as **Watch Academy** throughout — name, description and the exe/installer names (`WatchAcademy.exe`/`WatchAcademy_Setup.exe`). |
 | `test_archetype.py` | THE ARCHETYPE MODE goldens: seven-archetype grid/figure/center tables, render-level override, hour-space lighting per pointer, Omega reveal, R5-shrunk menu gating. |
 | `test_article_charter.py` | Article Charter rule 4 (no scene description): the exact deleted staging phrases stay dead; standing corpus lint bans depiction verbs while allowing legitimate "stands"/"standing" doctrine. |
 | `test_assets_structure.py` | The `assets/` TAXONOMY MIRROR law: fixed top-level roots, no source-named/`alt/` folders survive, `weeks/<group>/<theme>` matches `WEEK_GROUPS`, every figure image sits at the one legal tree path. |
@@ -172,10 +172,9 @@ four). It exits **2**, which is what makes a hook BLOCKING.
   entries form ONE contiguous run in the table; the table's pointer/style
   pairs agree with `constants.palette_styles_for`.
 - **`test_app_info.py`** — the pre-M7 `setup/app_info.json` seed: `name`/
-  `description` market the app as **Watch Academy** while `exe_name`/
-  `installer_name` stay DOMY-based (`WatchAcademy.exe` /
-  `WatchAcademy_Setup.exe`), since DOMY remains the dial's own on-disk/binary
-  identity.
+  `description` market the app as **Watch Academy**, and `exe_name`/
+  `installer_name` carry the same name (`WatchAcademy.exe` /
+  `WatchAcademy_Setup.exe`) — DOMY remains only the dial's own name.
 
 ## Helper modules (not tests)
 
@@ -197,7 +196,7 @@ four). It exits **2**, which is what makes a hook BLOCKING.
   profile, section taxonomy). `test_layout_audit.py` folds these in beside
   its own reference-set checks (overlap/item-cut); `live_profile_source()`
   is this project's ONE edit, wired to watch 1's real
-  `%APPDATA%/DOMY Watch/settings.json`. First-run findings, recorded
+  `%APPDATA%/Watch Academy/settings.json`. First-run findings, recorded
   verbatim and NOT fixed per the owner's boundary, live in
   `.claude/zubi-v2-findings.md` (gitignored `.claude/`, not tracked here).
 

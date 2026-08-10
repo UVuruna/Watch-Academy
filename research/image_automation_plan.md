@@ -10,15 +10,15 @@ theme's folder. This document is the design proposal.
 ## Verdict on WHERE: a NEW standalone project
 
 **Recommendation: a separate project** (e.g. `Gadgets/PromptPainter`),
-not inside DOMY Watch:
+not inside Watch Academy:
 
 - It is a GENERAL tool — it serves every project's sheets, not just
-  this dial's; DOMY stays the data (the sheets), the tool is the
-  machine that eats them.
+  this dial's; Watch Academy stays the data (the sheets), the tool is
+  the machine that eats them.
 - Different runtime (Node or Python + Playwright, browser plumbing)
-  — nothing DOMY's purity tests or build should ever see.
+  — nothing Watch Academy's purity tests or build should ever see.
 - Per the monorepo rules it gets its own README/PROJECTS.md entry.
-- DOMY only guarantees the SHEET CONTRACT below.
+- Watch Academy only guarantees the SHEET CONTRACT below.
 
 ## Verdict on HOW: CDP attach — no extension, no OCR, no mice
 

@@ -295,7 +295,7 @@ def test_crash_log_records_a_synthetic_exception(tmp_path, monkeypatch):
 
     import main as main_mod
 
-    user_dir = tmp_path / "DOMY Watch"
+    user_dir = tmp_path / "Watch Academy"
     monkeypatch.setattr(main_mod.paths, "user_dir", lambda: user_dir)
     # A known, harmless previous hook so delegation is a no-op.
     monkeypatch.setattr(sys, "excepthook", lambda *a: None)
@@ -318,3 +318,38 @@ def test_crash_log_records_a_synthetic_exception(tmp_path, monkeypatch):
         if main_mod._crash_log is not None:
             main_mod._crash_log.close()
             main_mod._crash_log = None
+
+
+def test_the_renaming_migrates_the_legacy_user_dir(tmp_path, monkeypatch):
+    """THE RENAMING (owner decree 2026-08-10): an existing install's
+    `%APPDATA%/DOMY Watch` folder moves WHOLE onto the Watch Academy
+    name — settings, caches, crash log — before anything reads it;
+    without this every install would silently reset to defaults (the
+    settings-rename-needs-migration rule). An already-present new
+    folder wins and the legacy one is then left untouched forever."""
+    import main as main_mod
+    from config import constants
+
+    monkeypatch.setenv("APPDATA", str(tmp_path))
+    monkeypatch.delenv("WATCH_ACADEMY_USER_DIR_OVERRIDE", raising=False)
+    legacy = tmp_path / constants.APP_NAME_LEGACY
+    legacy.mkdir()
+    (legacy / "settings.json").write_text('{"live": 1}', encoding="utf-8")
+
+    main_mod._migrate_legacy_user_dir()
+
+    current = tmp_path / constants.APP_NAME
+    assert not legacy.exists()
+    assert (current / "settings.json").read_text(
+        encoding="utf-8"
+    ) == '{"live": 1}'
+
+    # New-folder-exists wins: a reappearing legacy folder stays put and
+    # the migrated state is never clobbered.
+    legacy.mkdir()
+    (legacy / "settings.json").write_text('{"stale": 1}', encoding="utf-8")
+    main_mod._migrate_legacy_user_dir()
+    assert legacy.exists()
+    assert (current / "settings.json").read_text(
+        encoding="utf-8"
+    ) == '{"live": 1}'

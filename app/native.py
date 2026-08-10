@@ -78,7 +78,7 @@ def set_app_user_model_id(app_id: str) -> None:
 
 
 _RUN_KEY = r"Software\Microsoft\Windows\CurrentVersion\Run"
-_RUN_VALUE = "DOMY Watch"
+_RUN_VALUE = "Watch Academy"
 
 
 def _autostart_command() -> str:
@@ -124,6 +124,36 @@ def set_autostart(enabled: bool) -> None:
                 winreg.DeleteValue(key, _RUN_VALUE)
             except FileNotFoundError:
                 pass                    # already absent — nothing to remove
+
+
+def migrate_legacy_autostart() -> None:
+    """THE RENAMING (owner decree 2026-08-10): an existing install's
+    HKCU Run entry still sits under the retired name, so the renamed
+    app would read autostart as OFF while the old entry kept launching
+    it — and the first toggle would leave two entries. Carry it over
+    once: recreate under the current name with a freshly computed
+    command (the stored one may point at a moved checkout), then delete
+    the old value. The registry stays the one store; a locked or absent
+    key never stops the app at the door."""
+    import winreg
+
+    from config import constants
+
+    try:
+        with winreg.OpenKey(
+            winreg.HKEY_CURRENT_USER, _RUN_KEY, 0,
+            winreg.KEY_QUERY_VALUE | winreg.KEY_SET_VALUE,
+        ) as key:
+            try:
+                winreg.QueryValueEx(key, constants.APP_NAME_LEGACY)
+            except FileNotFoundError:
+                return
+            winreg.SetValueEx(
+                key, _RUN_VALUE, 0, winreg.REG_SZ, _autostart_command()
+            )
+            winreg.DeleteValue(key, constants.APP_NAME_LEGACY)
+    except OSError:
+        pass
 
 
 def set_click_through(hwnd: int, enabled: bool) -> None:

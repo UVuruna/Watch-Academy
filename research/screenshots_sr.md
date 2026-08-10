@@ -3,7 +3,7 @@ Owner-facing checklist, in Serbian by explicit request (2026-07-14).
 # Spisak screenshotova
 
 Ovo je kompletna, obeležljiva (checkbox) lista svih snimaka ekrana koje
-vlasnik treba da napravi za DOMY Watch — 5 za Encyclopedia poglavlje
+vlasnik treba da napravi za Watch Academy — 5 za Encyclopedia poglavlje
 "The Instrument" i 37 za redizajnirani Guide. Sve se snima na živoj
 aplikaciji (desni klik na numeračnik ili na tray ikonicu otvara isti
 meni), po pravilu na podrazumevanim (baseline) podešavanjima osim gde
@@ -57,7 +57,8 @@ Greek, Norse, Professions, Wolf Pack, Bee Hive, Elephant Herd, Cosmos.
 
 ## Guide (37 kadrova)
 
-- [ ] 54 — 54_menu_top_level.png — Desni klik bilo gde unutar kruga numeračnika; baseline, ne otvarati nijedan podmeni — Ceo meni gornjeg nivoa: Design, 1ˢᵗ Slot, 2ⁿᵈ Slot, Elements, Legend, Solar rotation, Click-through, Settings…, Encyclopedia…, Guide…, Time Travel…, Exit — plus dovoljno numeračnika iza menija da se vidi da je desni klik baš na DOMY Watch.
+<!-- lang-ok: whole file is Serbian by explicit owner request (2026-07-14, see line 1) — owner-facing screenshot checklist, never product UI -->
+- [ ] 54 — 54_menu_top_level.png — Desni klik bilo gde unutar kruga numeračnika; baseline, ne otvarati nijedan podmeni — Ceo meni gornjeg nivoa: Design, 1ˢᵗ Slot, 2ⁿᵈ Slot, Elements, Legend, Solar rotation, Click-through, Settings…, Encyclopedia…, Guide…, Time Travel…, Exit — plus dovoljno numeračnika iza menija da se vidi da je desni klik baš na Watch Academy.
 
 - [ ] 55 — 55_tray_menu.png — Desni klik na tray ikonicu u Windows sistemskoj traci; baseline — Sama tray ikonica plus identičan meni gornjeg nivoa kao na 54, da se vizuelno potvrdi da je isto stablo svuda.
 

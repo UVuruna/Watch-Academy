@@ -4,7 +4,7 @@
 
 ## Purpose
 The only module that reads or writes user runtime state — one plain
-JSON file per watch under `%APPDATA%/DOMY Watch/` (inspectable,
+JSON file per watch under `%APPDATA%/Watch Academy/` (inspectable,
 diffable, survives reinstall). `SettingsStore` itself is watch-agnostic;
 one watch's file-numbering scheme lives in `config.paths`, not here.
 

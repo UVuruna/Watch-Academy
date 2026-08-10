@@ -124,4 +124,4 @@ python main.py
 
 Right-click the dial (or the tray icon) for the menu. Drag with the left
 mouse button. The window position is remembered in
-`%APPDATA%/DOMY Watch/settings.json`.
+`%APPDATA%/Watch Academy/settings.json`.

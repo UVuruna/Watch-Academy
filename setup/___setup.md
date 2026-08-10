@@ -34,9 +34,11 @@ has not landed here yet.
 - **`app_info.json` seeds the M7 naming decision ahead of `build.py`.**
   Session 22 (the Renaming, 2026-07-27) set `name`/`description` to
   **Watch Academy** — the sealed application name (CUBE.md §The Name)
-  — while `exe_name`/`installer_name` stay DOMY-based
-  (`DOMYWatch.exe`/`DOMYWatch_Setup.exe`), matching the folder/mutex/
-  AppUserModelID identity that never changed. `version` is a static
+  — while the binaries then stayed DOMY-based; THE RENAMING (owner
+  decree 2026-08-10) superseded that split and moved the WHOLE binary
+  identity — `exe_name`/`installer_name`
+  (`WatchAcademy.exe`/`WatchAcademy_Setup.exe`), mutex, AppUserModelID,
+  the migrated %APPDATA% folder — onto the same name. `version` is a static
   seed (no single version source wired to runtime code yet — Rule
   #23 does not yet apply here); whoever writes `build.py` bumps it to
   the real release version before packaging. Pinned by

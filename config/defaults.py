@@ -481,7 +481,7 @@ GUIDE_SPACING_PX = 8
 
 # Translation (owner spec: translate-once-then-cache, no accounts, no
 # keys): the keyless Google gtx endpoint; the per-language cache lives
-# beside settings.json in %APPDATA%/DOMY Watch/translations/.
+# beside settings.json in %APPDATA%/Watch Academy/translations/.
 TRANSLATE_ENDPOINT = "https://translate.googleapis.com/translate_a/single"
 TRANSLATE_TIMEOUT_S = 15
 

@@ -271,7 +271,7 @@ see the [appendix](#appendix-reused).
 <tr><td>54</td><td>menu_top_level</td>
 <td>Right-click anywhere inside the dial's circle.</td>
 <td>Baseline. Do not expand any submenu.</td>
-<td>The full top-level menu: Design, Theme, Elements, Legend, Solar rotation, Click-through, Settings…, Time Travel…, Encyclopedia…, Guide…, Exit — plus enough of the dial behind it to show it came from a right-click on DOMY Watch.</td></tr>
+<td>The full top-level menu: Design, Theme, Elements, Legend, Solar rotation, Click-through, Settings…, Time Travel…, Encyclopedia…, Guide…, Exit — plus enough of the dial behind it to show it came from a right-click on Watch Academy.</td></tr>
 
 <tr><td>55</td><td>tray_menu</td>
 <td>Right-click the tray icon in the Windows notification area.</td>

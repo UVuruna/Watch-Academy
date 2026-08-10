@@ -4,7 +4,7 @@
 
 ## Purpose
 
-**Every colour in DOMY Watch lives here, and nothing else does.** One
+**Every colour in Watch Academy lives here, and nothing else does.** One
 file, one rule: a colour value exists in exactly one place. No hex
 literal, no RGBA tuple and no colour table sits anywhere else in the
 program — `tests/test_palette_law.py` fails the build if one appears.

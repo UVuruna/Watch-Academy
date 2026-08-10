@@ -1,4 +1,4 @@
-"""DOMY Watch — Anno Lucis ephemeris pipeline.
+"""Watch Academy — Anno Lucis ephemeris pipeline.
 
 Extracts, over the full Swiss Ephemeris span (-13000..+17000):
   1. every solstice/equinox  (Sun ecliptic longitude crossing 0/90/180/270)
@@ -295,7 +295,7 @@ def build_plot() -> None:
                    label=f"Anno Lucis ≈ {anno:.0f}")
     ax.set_xlabel("Astronomical year (0 = 1 BCE)")
     ax.set_ylabel("Half-year duration deviation (days)")
-    ax.set_title("DOMY Watch — Northern light/dark half-year across the "
+    ax.set_title("Watch Academy — Northern light/dark half-year across the "
                  "DE441 span (−13000…+17000)")
     ax.legend(loc="upper left", fontsize=9)
     ax.grid(True, alpha=0.2)

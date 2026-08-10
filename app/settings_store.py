@@ -1,4 +1,4 @@
-"""User runtime state: %APPDATA%/DOMY Watch/settings.json.
+"""User runtime state: %APPDATA%/Watch Academy/settings.json.
 
 Deliberately plain JSON (inspectable, diffable, survives reinstall) and
 the ONLY module that reads or writes the settings file. Writes are
@@ -423,7 +423,7 @@ class SettingsStore:
             # them, so no stored watch is affected.
             if not isinstance(raw, dict):
                 raise ValueError(
-                    f"not a DOMY Watch settings file: the JSON root is "
+                    f"not a Watch Academy settings file: the JSON root is "
                     f"{type(raw).__name__}, not an object"
                 )
             missing = [
@@ -431,7 +431,7 @@ class SettingsStore:
             ]
             if missing:
                 raise ValueError(
-                    "not a DOMY Watch settings file: no "
+                    "not a Watch Academy settings file: no "
                     + ", ".join(repr(key) for key in missing)
                     + f" (its own top-level keys: {sorted(raw)})"
                 )

@@ -1,4 +1,4 @@
-﻿# Roadmap — What Remains to Ship DOMY Watch
+﻿# Roadmap — What Remains to Ship Watch Academy
 
 The taxative list of everything between today and the GitHub release
 (owner request 2026-07-16). Tasks are RECORDED here, not started —
@@ -102,10 +102,11 @@ lives in [The DOMY Canon](CANON.md).
   toggle and the icon wiring).
 - **Autostart today runs SOURCE** — the HKCU Run entry launches
   `pythonw.exe main.py`; the M7 installer will point it at the EXE.
-- **`dist/DOMYWatch/DOMYWatch.exe` is an ad-hoc PyInstaller test
-  build from 2026-07-08** — stale (predates the roster/slots/Union
-  arcs), unsigned, no icon/version resource, no installer. Not a
-  release artifact.
+- **No build artifact exists yet.** The ad-hoc PyInstaller test build
+  of 2026-07-08 (which still carried the retired name) was stale —
+  predating the roster/slots/Union arcs, unsigned, no icon/version
+  resource, no installer — and was deleted with THE RENAMING
+  (owner decree 2026-08-10).
 - **Fix round E (owner verdicts 2026-07-19, second screenshot batch)
   — DONE:** the Earth hover card's date row drops its bold "Date:"
   label and Anno Lucis pairing (the era block already restates the
@@ -852,7 +853,9 @@ lives in [The DOMY Canon](CANON.md).
       survived the cursor leaving the dial; `_last_hover` is now cleared
       on `leaveEvent` and the hover-bypass path, so SPACE off-target is
       inert (pinned by a test). (C) crash logging landed
-      (`faulthandler` + `sys.excepthook` → `%APPDATA%/DOMY Watch/crash.log`);
+      (`faulthandler` + `sys.excepthook` → the then-`%APPDATA%/DOMY
+      Watch/crash.log`, since renamed to `%APPDATA%/Watch
+      Academy/crash.log`);
       the likeliest crasher (re-entrant modal opens on repeated SPACE) is
       hardened directly with a re-entrancy guard + auto-repeat de-dupe.
    4. **Archetype names — DONE (Session 21-B), REWORKED (Session
@@ -1217,16 +1220,21 @@ Follow the monorepo build conventions (root CLAUDE.md):
    company data comes from the root `company.json`. **Naming
    (Session 22, the Renaming):** `name`/`description` read **Watch
    Academy** — the sealed application name (CUBE.md §The Name);
-   `exe_name`/`installer_name` stay DOMY-based (`DOMYWatch.exe`,
-   `DOMYWatch_Setup.exe`) since DOMY remains the dial's own name and
-   the on-disk/binary identity. A seed file with these values already
-   exists so `build.py` only has to fill in the version at build
-   time; verify it still matches this note before wiring `build.py`.
+   `exe_name`/`installer_name` are `WatchAcademy.exe` and
+   `WatchAcademy_Setup.exe`: THE RENAMING (owner decree 2026-08-10)
+   moved the WHOLE binary identity — exe, mutex, AppUserModelID,
+   %APPDATA% folder (migrated at the door by
+   `main._migrate_legacy_user_dir`) — onto the application name,
+   superseding Session 22's split that had kept the binaries DOMY-based.
+   DOMY survives only as the dial's own name and its ring preset. A
+   seed file with these values already exists so `build.py` only has to
+   fill in the version at build time; verify it still matches this note
+   before wiring `build.py`.
    The Rule 23 self-update module does not exist yet — when it lands,
    `update.repo` is **`"UVuruna/Watch-Academy"`** (CORRECTED
    2026-07-28: the owner renamed the GitHub repo himself, and the
    local `origin` was repointed at the canonical URL the same day —
-   the old `UVuruna/DOMY-Watch` address survives only as GitHub's
+   the repo's retired pre-rename address survives only as GitHub's
    redirect and must never be written into a config again). The seed
    file carries no `update` section yet; the module that reads it
    creates one, with `check: true` beside the repo. User-facing update
@@ -1246,7 +1254,7 @@ Follow the monorepo build conventions (root CLAUDE.md):
      code-signing step so SmartScreen/AV heuristics do not flag the
      `SetWindowsHookEx` usage on first run.
 6. Root registration — README.md + PROJECTS.md entries; logo copy
-   `logos/DOMYWatch.svg` (already present, verify current).
+   `logos/WatchAcademy.svg` (already present, verify current).
 7. Release — smoke the installer on a clean profile, then
    `git tag v{version}` + `gh release create` with
-   `dist/DOMYWatch_Setup.exe` as the artifact.
+   `dist/WatchAcademy_Setup.exe` as the artifact.

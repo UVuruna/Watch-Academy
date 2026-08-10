@@ -54,7 +54,7 @@ their outputs through the render compositor.
 - **Crash forensics:** `main.py` installs permanent crash logging at
   startup — `faulthandler` (native fatal-error dumps) plus a
   `sys.excepthook` (unhandled Python tracebacks), both appending to
-  `%APPDATA%/DOMY Watch/crash.log` under a timestamped session header.
+  `%APPDATA%/Watch Academy/crash.log` under a timestamped session header.
   It only ADDS a trace; the original excepthook still runs.
 - **All window flags are set before the first `show()`** — changing
   them later re-parents and hides the window on Windows.

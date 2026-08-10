@@ -33,8 +33,8 @@ def database_dir() -> Path:
 
 def preview3d_gadget_dir() -> Path | None:
     """The sibling 3D Preview gadget's repo root (WORKPLAN Session 28) —
-    a monorepo-relative guess (`Gadgets/3D Preview` beside `Gadgets/DOMY
-    Watch`), never an absolute path baked in. `None` when it is not
+    a monorepo-relative guess (`Gadgets/3D Preview` beside this
+    gadget's own folder), never an absolute path baked in. `None` when it is not
     there: a checkout without the gadget, a renamed/moved folder, or a
     frozen build (the gadget is a dev-time sibling, never bundled data).
     `render.cube_preview3d` treats `None` as the documented fallback
@@ -66,18 +66,22 @@ def bundled_skins_dir() -> Path:
 
 
 def user_dir() -> Path:
-    """Per-user writable folder: %APPDATA%/DOMY Watch (not auto-created).
+    """Per-user writable folder: %APPDATA%/Watch Academy (not
+    auto-created). THE RENAMING (owner decree 2026-08-10):
+    `main._migrate_legacy_user_dir` renames an existing install's
+    folder from the retired name onto this one at the door, before
+    anything resolved here is first touched.
 
     DEV OVERRIDE (0.14.845, MIGRATE-GUI cold-start measurement): when
-    `DOMY_WATCH_USER_DIR_OVERRIDE` is set, it wins outright — a real
+    `WATCH_ACADEMY_USER_DIR_OVERRIDE` is set, it wins outright — a real
     isolated cold-cache launch (settings, raster_cache, everything this
     module resolves under it) that never touches the owner's live
-    `%APPDATA%\\DOMY Watch`. Unset in every normal run and every test
+    `%APPDATA%\\Watch Academy`. Unset in every normal run and every test
     (which override `paths.settings_path`/`paths.assets_dir` directly
     instead); this exists ONLY so a measurement script can point a real
     `python main.py` process at a throwaway directory from the outside
     without editing source."""
-    override = os.environ.get("DOMY_WATCH_USER_DIR_OVERRIDE")
+    override = os.environ.get("WATCH_ACADEMY_USER_DIR_OVERRIDE")
     if override:
         return Path(override)
     return Path(os.environ["APPDATA"]) / constants.APP_NAME

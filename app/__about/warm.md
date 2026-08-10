@@ -39,7 +39,7 @@ cold, everything responsive")
 **Method:** a real `python main.py`-shaped launch (real `QApplication`,
 real `AppController`, real assets) run as its own process, pointed at
 an ISOLATED, empty directory via `config.paths.user_dir`'s
-`DOMY_WATCH_USER_DIR_OVERRIDE` dev escape hatch (never the owner's live
+`WATCH_ACADEMY_USER_DIR_OVERRIDE` dev escape hatch (never the owner's live
 `%APPDATA%\DOMY Watch`) so `settings.json`/`raster_cache` start
 genuinely cold. Three milestones, timestamped from process start: a
 `QTimer.singleShot(0, ...)` armed the instant `AppController.run()`

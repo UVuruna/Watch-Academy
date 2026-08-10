@@ -29,7 +29,7 @@ def _get(url: str, retries: int = 5, timeout: int = 60) -> bytes:
     last = None
     for attempt in range(1, retries + 1):
         try:
-            req = urllib.request.Request(url, headers={"User-Agent": "domy-ephe/1.0"})
+            req = urllib.request.Request(url, headers={"User-Agent": "watch-academy-ephe/1.0"})
             with urllib.request.urlopen(req, timeout=timeout) as r:
                 return r.read()
         except (urllib.error.URLError, TimeoutError, ConnectionError) as e:

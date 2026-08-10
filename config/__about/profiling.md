@@ -47,7 +47,7 @@ instead).
 ## Design Decisions
 
 Persistence is one JSON file beside settings
-(`%APPDATA%/DOMY Watch/profiling.json`) holding only the aggregates —
+(`%APPDATA%/Watch Academy/profiling.json`) holding only the aggregates —
 the recent-durations deques are session memory, so the file stays tiny
 no matter how long the app lives. Times are stored in integer
 nanoseconds; the Report picks readable units at display time.

@@ -18,5 +18,5 @@ def test_app_info_names_watch_academy_but_keeps_domy_binaries():
 
     # DOMY remains the dial's own name — the disk/binary identity is
     # untouched by the marketing rename (repo, folder, mutex, exe).
-    assert info["exe_name"] == "DOMYWatch.exe"
-    assert info["installer_name"] == "DOMYWatch_Setup.exe"
+    assert info["exe_name"] == "WatchAcademy.exe"
+    assert info["installer_name"] == "WatchAcademy_Setup.exe"

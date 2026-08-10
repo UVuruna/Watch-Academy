@@ -30,7 +30,7 @@ Layer: config — pure, no Qt, no wall clock.
 - `deep_time_path()` — the optional Deep Time data pack.
 
 ### Per-user state
-- `user_dir()` — `%APPDATA%/DOMY Watch`.
+- `user_dir()` — `%APPDATA%/Watch Academy`.
 - `settings_path(watch_index=1)` — watch 1 keeps `settings.json`, watch
   N (2+) gets `settings.<N>.json`.
 - `discover_watch_indices()` — every watch whose settings file already

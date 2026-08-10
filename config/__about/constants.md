@@ -4,7 +4,7 @@
 
 ## Purpose
 
-Product-defining invariants — the values that define what DOMY Watch IS
+Product-defining invariants — the values that define what Watch Academy IS
 and never change at runtime.
 
 **The WEEKDAY theme tables here are DERIVED** (2026-08-05):

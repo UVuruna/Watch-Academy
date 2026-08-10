@@ -1,4 +1,4 @@
-"""DOMY Watch — Ephemeris Phase II: the ECLIPSE CATALOG.
+"""Watch Academy — Ephemeris Phase II: the ECLIPSE CATALOG.
 
 Extends the Anno Lucis pipeline (extract.py) with every SOLAR and LUNAR
 eclipse across the full Swiss Ephemeris span (-13000..+17000), using the
