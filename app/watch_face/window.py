@@ -12,7 +12,7 @@ FINAL cleanup then DELETED the old windows/dialog groups outright —
 this window is now the ONLY place any of that content lives.
 """
 
-from PySide6.QtCore import QSize, Qt
+from PySide6.QtCore import QSize, Qt, QTimer
 from PySide6.QtWidgets import (
     QDialog, QFrame, QHBoxLayout, QLabel, QListWidget, QScrollArea,
     QStackedWidget, QStyle, QVBoxLayout, QWidget,
@@ -93,6 +93,34 @@ class WatchFaceDialog(QDialog):
         self._setters = setters
         self._build()
 
+    def _capture_scrolls(self) -> list[tuple[int, int]]:
+        """The scroll offset of every page, so a live-pick rebuild can put
+        each one back exactly where it stood (owner decree 2026-08-10: a
+        pick may change the WATCH and nothing else — never the section,
+        never the scroll, never the focused side of the window)."""
+        if self._stack is None:
+            return []
+        offsets: list[tuple[int, int]] = []
+        for index in range(self._stack.count()):
+            page_scroll = self._stack.widget(index)
+            if isinstance(page_scroll, QScrollArea):
+                offsets.append((page_scroll.horizontalScrollBar().value(),
+                                page_scroll.verticalScrollBar().value()))
+            else:
+                offsets.append((0, 0))
+        return offsets
+
+    def _restore_scrolls(self, offsets: list[tuple[int, int]]) -> None:
+        if self._stack is None:
+            return
+        for index, (horizontal, vertical) in enumerate(offsets):
+            if index >= self._stack.count():
+                break
+            page_scroll = self._stack.widget(index)
+            if isinstance(page_scroll, QScrollArea):
+                page_scroll.horizontalScrollBar().setValue(horizontal)
+                page_scroll.verticalScrollBar().setValue(vertical)
+
     def _build(self) -> None:
         # KEEP THE SELECTED ROW across live-pick rebuilds — the SAME fix
         # `design_window.DesignDialog._build` carries for its
@@ -100,6 +128,7 @@ class WatchFaceDialog(QDialog):
         # `refresh()`, which rebuilds this sidebar+stack pair from
         # scratch, and a fresh `QListWidget` always opens at row 0.
         previous = self._nav_list.currentRow() if self._nav_list is not None else 0
+        scrolls = self._capture_scrolls()
         while self._body.count():
             item = self._body.takeAt(0)
             widget = item.widget()
@@ -143,7 +172,14 @@ class WatchFaceDialog(QDialog):
             page_scroll.setWidget(holder)
             stack.addWidget(page_scroll)
         nav_list.currentRowChanged.connect(stack.setCurrentIndex)
-        nav_list.setCurrentRow(max(0, min(previous, nav_list.count() - 1)))
+        row = max(0, min(previous, nav_list.count() - 1))
+        nav_list.setCurrentRow(row)
+        stack.setCurrentIndex(row)
+        # The sidebar must NEVER steal the caret from the pick the user
+        # just made (owner decree 2026-08-10 — "odvede me na levu
+        # stranu"): the list is reachable by mouse and by Tab, but a
+        # rebuilt list never grabs focus on its own.
+        nav_list.setFocusPolicy(Qt.FocusPolicy.TabFocus)
         self._body.addWidget(nav_list)
         self._body.addWidget(stack, stretch=1)
         self._nav_list = nav_list
@@ -164,6 +200,12 @@ class WatchFaceDialog(QDialog):
         for page in pages:
             page.setMaximumWidth(column_width)
         self._declare_minimum(pages, column_width)
+        # TWICE, and that is not belt-and-braces: a scrollbar's range is
+        # still 0 until the layout has run, so the immediate call clamps
+        # to the top on a page whose geometry is not settled yet. The
+        # queued call lands after that layout pass, with the real range.
+        self._restore_scrolls(scrolls)
+        QTimer.singleShot(0, lambda: self._restore_scrolls(scrolls))
 
     def _declare_minimum(self, pages: list[QWidget], column_width: int) -> None:
         """The DECLARED minimum, computed from measured content (THE

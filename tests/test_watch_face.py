@@ -9,6 +9,7 @@ the split into `app/watch_face/`).
 from collections import defaultdict
 
 import pytest
+from PySide6.QtCore import Qt
 from PySide6.QtWidgets import QApplication, QListWidget, QToolButton
 
 from app.settings_store import Settings
@@ -135,6 +136,40 @@ def test_refresh_keeps_the_selected_sidebar_row(app):
     rebuilt = dialog._nav_list                 # the REBUILT widget, not the corpse
     assert isinstance(rebuilt, QListWidget)
     assert rebuilt.currentRow() == 5
+    dialog.deleteLater()
+
+
+def test_refresh_keeps_the_scroll_offset_of_every_page(app):
+    """THE NO-MOVEMENT DECREE (owner 2026-08-10, third report): a pick
+    changes the WATCH and nothing else. The live-apply rebuild used to
+    drop every page back to its top, so a pick made halfway down a long
+    section threw the owner's place away."""
+    dialog = _dialog()
+    dialog.show()                              # ranges are 0 until laid out
+    app.processEvents()
+    dialog._nav_list.setCurrentRow(6)          # Themes & Slots — a long page
+    page_scroll = dialog._stack.currentWidget()
+    bar = page_scroll.verticalScrollBar()
+    app.processEvents()
+    if bar.maximum() == 0:                     # a screen too tall to scroll
+        dialog.deleteLater()
+        pytest.skip("the section fits without scrolling on this screen")
+    bar.setValue(bar.maximum() // 2)
+    parked = bar.value()
+    dialog.refresh(Settings(), _setters())
+    app.processEvents()                        # the queued second restore
+    assert dialog._stack.currentWidget().verticalScrollBar().value() == parked
+    dialog.deleteLater()
+
+
+def test_refresh_never_hands_focus_to_the_sidebar(app):
+    """"Odvede me na levu stranu" — a rebuilt `QListWidget` with the
+    default StrongFocus grabbed the caret away from the control the
+    owner had just clicked."""
+    dialog = _dialog()
+    dialog.refresh(Settings(), _setters())
+    assert dialog._nav_list.focusPolicy() == Qt.FocusPolicy.TabFocus
+    assert not dialog._nav_list.hasFocus()
     dialog.deleteLater()
 
 
