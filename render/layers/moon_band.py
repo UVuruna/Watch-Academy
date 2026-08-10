@@ -33,7 +33,8 @@ import math
 from PySide6.QtCore import QPointF, QRectF, Qt
 from PySide6.QtGui import QColor, QPainter, QPainterPath, QPen, QPolygonF
 
-from config import dial, palette
+from config import constants, dial, palette
+from core import angles
 from core.moon import MoonArc, moon_horizon_arcs
 from render.context import Cadence, Layer, RenderContext
 from render.painting import dial_point, draw_pie
@@ -52,6 +53,8 @@ _INVERT_FILL_ALPHA = 110
 _GLOW_LAYERS = 5
 _GLOW_MAX_WIDTH_FRACTION = 0.10
 _GLOW_MAX_ALPHA = 90       # of 255, at culmination, innermost layer
+_ECLIPSE_SEGMENT_WIDTH_FRACTION = 0.075   # the copper band segment's thickness
+_ECLIPSE_SEGMENT_EDGE_FRACTION = 0.30     # its turquoise end caps, of that width
 
 
 class MoonBandLayer(Layer):
@@ -81,6 +84,63 @@ class MoonBandLayer(Layer):
                 self._draw_glow(painter, radius, arc)
             else:
                 self._draw_silver_thread(painter, radius, arc)
+        if spec.eclipse_lunar_style == "horizon_shadow":
+            # THE DAY'S eclipses, not the tick's active one: this layer's
+            # cadence is DAILY and `ctx.tick` is None while a cached
+            # daily pass composites (`render.context`'s own note). That
+            # is not a limitation here but the correct source — the band
+            # draws the whole day, so it must mark an eclipse that has
+            # not started yet and one that is already over, which is
+            # exactly what showing DURATION means. Reading `ctx.tick`
+            # cost three failing tests and a hard abort before this was
+            # understood; the mistake is recorded so the next reader
+            # does not repeat it.
+            for event in ctx.day.eclipses:
+                if event.kind != "lunar":
+                    continue
+                self.draw_eclipse_segment(
+                    painter, radius,
+                    angles.time_to_dial_angle(event.instant),
+                )
+        painter.restore()
+
+    def draw_eclipse_segment(
+        self, painter: QPainter, radius: float, centre_deg: float,
+    ) -> None:
+        """THE ECLIPSE ON THE BAND (owner placement 2026-08-10): a copper
+        segment straddling the band at the eclipse's own hour, so the
+        band says WHEN it happens and roughly how long it runs —
+        duration is the one thing no halo and no darkened disc can show.
+
+        It is drawn on the band whatever the band's own style is: the
+        style decides how the above-horizon arc looks, this is a
+        separate mark laid over it. The span comes from
+        `constants.ECLIPSE_BAND_DURATION_H`, a documented approximation
+        — the catalog stores only the instant of greatest eclipse (see
+        that constant's own note), so a segment that claimed exact
+        contact times would be inventing them."""
+        half = constants.ECLIPSE_BAND_DURATION_H / 24.0 * 360.0 / 2.0
+        width = radius * _ECLIPSE_SEGMENT_WIDTH_FRACTION
+        rect = QRectF(-radius, -radius, 2 * radius, 2 * radius)
+        pen = QPen(QColor(palette.ECLIPSE_TOTAL_MOON_TINT))
+        pen.setWidthF(width)
+        pen.setCapStyle(Qt.PenCapStyle.FlatCap)
+        painter.save()
+        painter.setBrush(Qt.BrushStyle.NoBrush)
+        painter.setPen(pen)
+        painter.drawArc(
+            rect, round((90.0 - (centre_deg - half)) * 16), round(-2 * half * 16)
+        )
+        # The turquoise rim at each end — the SAME ozone colour the disc
+        # treatments wear, so one eclipse reads as one event wherever it
+        # is drawn.
+        edge = QPen(QColor(palette.ECLIPSE_LUNAR_FRINGE_COLOR))
+        edge.setWidthF(width * _ECLIPSE_SEGMENT_EDGE_FRACTION)
+        painter.setPen(edge)
+        for end in (centre_deg - half, centre_deg + half):
+            inner = dial_point(end % 360.0, radius - width / 2.0)
+            outer = dial_point(end % 360.0, radius + width / 2.0)
+            painter.drawLine(inner, outer)
         painter.restore()
 
     # -- style 1: inverted band -------------------------------------------

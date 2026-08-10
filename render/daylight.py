@@ -14,6 +14,26 @@ from core.sun import DaylightRegime, SunDay
 from render.skin_geometry import daylight_active
 from skins.manifest import SkinDefinition
 
+def moon_transit_nearness(spec, year_angle: float, moon_angle: float) -> float:
+    """How deeply the Moon has entered the Earth's seat on the shared
+    orbit lane: 0.0 while the discs are clear of each other, rising
+    smoothly to 1.0 when they are concentric.
+
+    THE ONE MEASURE all three transit styles read (owner verdict
+    2026-08-10, `constants.MOON_TRANSIT_STYLES`) — "lane_split" eases
+    the Moon inward by it, "shrink_pass" scales the Moon down by it,
+    "occultation" uses it only to know that a crossing is happening.
+    It reuses the SAME touch angle `moon_transit_opacity` computes, so
+    the styles and the retired dimming agree on where a crossing
+    begins, and a re-tuned marker size moves both together."""
+    delta = abs(year_angle - moon_angle) % 360.0
+    delta = min(delta, 360.0 - delta)
+    touch_deg = math.degrees((spec.scale + spec.moon_scale) / spec.orbit_fraction)
+    if delta >= touch_deg:
+        return 0.0
+    return 1.0 - delta / touch_deg
+
+
 def moon_transit_opacity(spec, year_angle: float, moon_angle: float) -> float:
     """Opacity of the Moon marker while the Earth is also shown: when the
     smaller Moon meets the Earth on the shared rim (their discs would

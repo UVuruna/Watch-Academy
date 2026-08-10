@@ -75,6 +75,39 @@ with the day's own moonrise/moonset, never per-tick).
   one method per style, each taking only `(painter, radius, arc)` — no
   `RenderContext` — so the SAME methods double as the Watch Face
   preview tiles' real-algorithm renderer.
+- `draw_eclipse_segment(painter, radius, centre_deg)`: THE ECLIPSE ON
+  THE BAND (owner placement 2026-08-10 — he moved that option off the
+  dial circle and onto the line that shows when the Moon stands above
+  the horizon). A copper segment with turquoise end caps, straddling
+  the band at the eclipse's own hour, drawn whatever the band's own
+  style is: the style says how the above-horizon arc looks, this is a
+  separate mark laid over it. It runs only while
+  `eclipse_lunar_style == "horizon_shadow"`, and it is the ONLY thing
+  that style draws — the Moon's disc is deliberately left untouched,
+  because the point of the option is DURATION, which no halo and no
+  darkened disc can show.
+
+  THE HONEST APPROXIMATION: the catalog stores only the instant of
+  greatest eclipse, never contact times, so the segment's width is the
+  fixed `constants.ECLIPSE_BAND_DURATION_H` (3 h, a typical umbral
+  span). The mark is exact about WHEN the eclipse peaks and only
+  indicative about how long it runs; a catalog that one day carries
+  contact times is what replaces that constant.
+
+  IT READS `ctx.day.eclipses`, NEVER `ctx.tick`. This layer's cadence is
+  DAILY, so `ctx.tick` is None while a cached daily pass composites
+  (see [Context](../../__about/context.md)) — the first cut reached for
+  the tick's active eclipse and took down three unrelated tests with a
+  hard abort. The day's own list is also the RIGHT source: the band
+  draws the whole day, so it must mark an eclipse that has not started
+  yet and one already over, which is what showing duration means.
+
+  A DEFECT THIS CLOSES, recorded because it nearly shipped: the style
+  was wired through settings, spec and picker, and the Moon's disc was
+  correctly left alone — but nothing drew on the band, so choosing it
+  turned the eclipse's own mark off entirely. Every gate was green.
+  What caught it was an independent grader opening the picker tile and
+  reporting it as an empty circle.
 
 ## Design Decisions
 - The band sits on `dial.MINUTES_RADIUS_FRACTION` (the inner tick

@@ -47,12 +47,16 @@ Pinned by `tests/test_earth_moon_orbit.py`. The GLOWING relocation below
 untouched — that overlap is the owner's own approved dramatic effect,
 not the touching bug this law fixes.
 
-THE POSITION POINTER (Settings ▸ Earth, off by default): `_draw_orbit_
-pointer` is called AFTER the body's own pixmap/disc for both markers
-(visual proof correction round 2026-08-09) — the first cut drew it
-BEFORE the body, so only its outward tip's protrusion peeked past the
-sphere's own edge, a sliver an independent grader read as a rendering
-glitch. On top it reads as an intentional marker at a glance.
+THE POSITION POINTER (off by default) is drawn AFTER the body's own
+pixmap/disc for both markers (visual proof correction round 2026-08-09)
+— the first cut drew it BEFORE the body, so only its outward tip's
+protrusion peeked past the sphere's own edge, a sliver an independent
+grader read as a rendering glitch. On top it reads as an intentional
+marker at a glance. The shape itself moved to
+[`marker_marks.draw_pointer`](../../__about/marker_marks.md) on
+2026-08-10, when the owner approved a chevron and a seated gem beside
+the triangle; the geometry did not change, and every shape still rides
+the body's own dial angle rather than a fixed screen "up".
 
 THE WORLD OFFSET ([World](../../../core/__about/world.md)): both markers are
 drawn ON the turning dial face, so both take `ctx.world_offset`. At night
@@ -104,10 +108,38 @@ layer, and their lift twin lives in `HoverLiftLayer`.
   region/day-night art variant (`earth_region()` below), clips to the
   marker disc, and draws the FOUR exclusive label modes
   (`_draw_earth_label`: weekday / date / date+weekday / full date+year).
-- `_draw_moon()`: draws the moon image or a procedural disc, masks the
-  unlit region via the lit/terminator path (`moon_lit_region`), and — during
-  a lunar eclipse — multiplies the WHOLE disc by a neutral (or copper, for
-  totality) gray to darken it without a translucent color wash.
+- `_draw_moon()`: hands the face to
+  [`render.moon_face`](../../__about/moon_face.md), which owns the three
+  owner-approved treatments of the unlit half and decides whether the
+  face is clipped first (the cut styles) or covered after (the opaque
+  one). A lunar eclipse then takes one of three routes: "umbra_sweep"
+  draws Earth's shadow as a real curved edge across the disc,
+  "halo" keeps the older whole-disc multiply by a neutral (or copper, at
+  totality) gray, and "horizon_shadow" leaves the disc alone because the
+  event is written on the Moon Horizon Band instead.
+- `_day_fraction(day_length)`: the day's share of 24 h, parsed off the
+  SAME "HH:MM" string the octa's bottom arm displays — the Sun's
+  day/night wedge station is a picture of that number, so the two
+  cannot disagree.
+
+THE MOVING BODIES (owner verdict 2026-08-10). Everything about HOW the
+two markers are drawn is now a user menu, picked in Watch Face ▸ Hands &
+Bodies and carried on the spec: the unlit half, the crossing, the
+pointer's shape, both eclipse treatments and both bodies' four life
+stations. This layer only dispatches — the drawing lives in
+[`moon_face`](../../__about/moon_face.md) and
+[`marker_marks`](../../__about/marker_marks.md).
+
+THE FOUR STATIONS take the halo's place at a principal instant: new moon
+is birth, first quarter youth, full moon the zenith of maturity, last
+quarter age, and the Sun's four turning points are the same arc across
+the year. An eclipse outranks a station — when both fall on one tick the
+eclipse's own treatment is what shows.
+
+THE CROSSING no longer dims anything. The translucent pass was retired
+with the owner's cross on the proposals page; the three survivors read
+`moon_transit_nearness` and either split the lane, shrink the Moon, or
+let it occult the Earth outright.
 
 ### earth_region (module function)
 `earth_region(latitude, longitude) -> str` — the Earth marker's art region:

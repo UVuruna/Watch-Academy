@@ -37,9 +37,17 @@ lit day.
 - `umbra_ladder(shades, contrast)`: shade values (lightest first) for
   the gray brightness wheel — endpoint-inclusive at full contrast,
   bin-centered at reduced contrast.
-- `moon_transit_opacity(spec, year_angle, moon_angle)`: reduced opacity
-  for the Moon marker while it visually overlaps the Earth marker on
-  the shared rim.
+- `moon_transit_nearness(spec, year_angle, moon_angle)`: how deeply the
+  Moon has entered the Earth's seat on the shared lane — 0.0 clear,
+  rising to 1.0 concentric. THE ONE MEASURE all three of the owner's
+  2026-08-10 crossing styles read, so a re-tuned marker size moves
+  every style together.
+- `moon_transit_opacity(spec, year_angle, moon_angle)`: the RETIRED
+  translucent pass's opacity. The owner crossed that behaviour out on
+  the proposals page (two bodies bleeding through each other were never
+  legible), so no layer calls this any more; it is kept because it owns
+  the touch-angle derivation `moon_transit_nearness` reuses and because
+  its golden test still pins that derivation.
 
 ## Design Decisions
 - **Every regime handles a missing boundary by collapsing the band to

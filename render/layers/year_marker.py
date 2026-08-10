@@ -1,19 +1,30 @@
 """The YEAR MARKER layer — earth, moon and the event bodies."""
 
 from PySide6.QtCore import QPointF, QRectF, Qt
-from PySide6.QtGui import QColor, QFont, QPainter, QPainterPath, QPen, QPolygonF
+from PySide6.QtGui import QColor, QFont, QPainter, QPainterPath, QPen
 
 from config import archetypes, constants, continents as continents_theme, defaults, dial, glow, palette
 from core import angles
 from core.year_wheel import almanac_marker_angle, almanac_month_index
-from render.asset_variants import moon_lit_region
+from render import marker_marks, moon_face
 from render.calendar_mount import calendar_day_arrow, calendar_wheel
 from render.context import Cadence, Layer, RenderContext
-from render.daylight import moon_transit_opacity
+from render.daylight import moon_transit_nearness
 from render.eclipse_glow import draw_event_glow, eclipse_render_state, eclipse_state_glow_strength
 from render.painting import dial_point, draw_outlined_text, draw_pixmap_centered, tinted_gray
 from render.skin_geometry import hover_factor
 from render.subdial import display_year
+
+
+def _day_fraction(day_length: str) -> float:
+    """The day's share of the 24 hours, read off the SAME "HH:MM"
+    `ClockTick.day_length` the octa's bottom arm already displays
+    (`core.sun.day_length_hm`) rather than recomputed — the Sun's
+    "day_night_wedge" station is a picture OF that number, so the two
+    must never be able to disagree. A polar day/night writes "24:00"
+    or "00:00" there and the wedge lawfully fills or empties."""
+    hours, _, minutes = day_length.partition(":")
+    return (int(hours) + int(minutes) / 60.0) / 24.0
 
 
 def earth_region(latitude: float, longitude: float) -> str:
@@ -57,11 +68,17 @@ class YearMarkerLayer(Layer):
             seat = angles.moon_cycle_angle(ctx.tick.moon_fraction)
             moon_angle = (seat + ctx.world_offset) % 360.0
             # The rim transit only exists while the Earth is also shown.
-            opacity = (
-                moon_transit_opacity(spec, ctx.tick.year_angle, seat)
+            # THE CROSSING (owner verdict 2026-08-10): the translucent
+            # pass is RETIRED — he crossed it out on the proposals page,
+            # and it was never legible anyway (two bodies bleeding
+            # through each other). All three surviving styles read ONE
+            # measure, `moon_transit_nearness`, and none of them dims.
+            nearness = (
+                moon_transit_nearness(spec, ctx.tick.year_angle, seat)
                 if ctx.skin.show_earth
-                else 1.0
+                else 0.0
             )
+            opacity = 1.0
             if not ctx.tick.is_moon_up:
                 # Below the horizon the marker DIMS (owner spec
                 # 2026-07-12; the Settings ▸ Opacity slider).
@@ -82,6 +99,7 @@ class YearMarkerLayer(Layer):
                 if lunar_eclipse is not None
                 else None
             )
+            station = marker_marks.station_of_moon_event(ctx.tick.moon_event)
             glowing = ctx.tick.moon_event is not None or lunar_state is not None
             orbit = (
                 dial.GLOW_RING_RADIUS_FRACTION
@@ -96,8 +114,25 @@ class YearMarkerLayer(Layer):
                     max(spec.scale, spec.moon_scale),
                 )
             )
+            # LANE SPLIT / SHRINK AND PASS: the crossing never overlaps
+            # (the two accepted alternatives to occultation). The lane
+            # eases INWARD — the outward direction is the ring band's
+            # own lane and belongs to the numerals.
+            if spec.moon_transit_style == "lane_split":
+                orbit -= nearness * dial.MOON_LANE_SPLIT_FRACTION
+            elif spec.moon_transit_style == "shrink_pass":
+                factor *= 1.0 - nearness * dial.MOON_SHRINK_PASS_DEPTH
             pos = dial_point(moon_angle, ctx.radius * orbit)
-            if glowing:
+            if station is not None and lunar_state is None:
+                # THE FOUR STATIONS take the halo's place at a principal
+                # instant: birth, youth, the zenith of maturity, age.
+                marker_marks.draw_station_mark(
+                    painter, spec.moon_station_style, station,
+                    ctx.radius * spec.moon_scale * factor,
+                    palette.GLOW_MOON_COLOR, ctx.tick.moon_fraction,
+                    origin=pos,
+                )
+            elif glowing:
                 color = (
                     palette.GLOW_ECLIPSE_LUNAR_COLOR
                     if lunar_state is not None
@@ -134,10 +169,24 @@ class YearMarkerLayer(Layer):
             self._draw_moon(
                 painter, ctx, pos, 2 * ctx.radius * spec.moon_scale * factor,
                 darken_state=lunar_state,
+                lunar_magnitude=(
+                    lunar_eclipse.magnitude if lunar_eclipse is not None
+                    else None
+                ),
             )
+            if station is not None and lunar_state is None:
+                # The station's FOREGROUND half — light inside the dark
+                # part, which only reads if it is drawn after the disc.
+                marker_marks.draw_station_inner_glow(
+                    painter, spec.moon_station_style, station,
+                    ctx.radius * spec.moon_scale * factor,
+                    palette.GLOW_MOON_COLOR, ctx.tick.moon_fraction,
+                    origin=pos,
+                )
             if spec.pointer_enabled:
-                self._draw_orbit_pointer(
-                    painter, ctx, moon_angle, orbit, spec.moon_scale * factor,
+                marker_marks.draw_pointer(
+                    painter, spec.marker_pointer_shape, moon_angle,
+                    ctx.radius, orbit, spec.moon_scale * factor,
                     spec.pointer_color,
                 )
             painter.restore()
@@ -188,12 +237,22 @@ class YearMarkerLayer(Layer):
         )
         pos = dial_point(year_angle, ctx.radius * orbit)
         size = 2 * ctx.radius * spec.scale * hover_factor(ctx, "earth")
-        if glowing:
-            solar_state = (
-                eclipse_render_state(solar_eclipse)
-                if solar_eclipse is not None
-                else None
+        solar_state = (
+            eclipse_render_state(solar_eclipse)
+            if solar_eclipse is not None
+            else None
+        )
+        station = marker_marks.station_of_season_event(ctx.tick.season_event)
+        if station is not None and solar_state is None:
+            # THE FOUR STATIONS of the year take the halo's place at a
+            # turning point — the same grammar the Moon wears, so the
+            # language is learned once and read on two clocks.
+            marker_marks.draw_sun_station_mark(
+                painter, spec.sun_station_style, station, size / 2,
+                palette.GLOW_SUN_COLOR, _day_fraction(ctx.day.day_length),
+                origin=pos,
             )
+        elif glowing:
             if solar_state is None:
                 color = palette.GLOW_SUN_COLOR
                 strength = 1.0
@@ -242,6 +301,16 @@ class YearMarkerLayer(Layer):
             painter.setClipPath(clip)
             draw_pixmap_centered(painter, ctx, asset, pos, size)
             painter.restore()
+            if solar_state is not None:
+                # THE ECLIPSE'S OWN GEOMETRY, over the swapped art: the
+                # occulting disc ("bite") or the ring gauge
+                # ("magnitude_arc"). "halo" adds nothing here — the glow
+                # already drawn behind the marker IS that style.
+                marker_marks.draw_solar_eclipse(
+                    painter, spec.eclipse_solar_style, size / 2,
+                    solar_state, solar_eclipse.magnitude,
+                    palette.GLOW_SUN_COLOR, origin=pos,
+                )
             if (
                 2 * ctx.radius >= dial.FULL_TEXT_MIN_DIAMETER
                 and ctx.skin.earth_label != "off"
@@ -267,8 +336,9 @@ class YearMarkerLayer(Layer):
             # edge — a sliver read as a rendering glitch, not an
             # intentional marker. On TOP it reads as what it is: a
             # small triangle pointing at the body's own angle.
-            self._draw_orbit_pointer(
-                painter, ctx, year_angle, orbit, size / (2 * ctx.radius),
+            marker_marks.draw_pointer(
+                painter, spec.marker_pointer_shape, year_angle,
+                ctx.radius, orbit, size / (2 * ctx.radius),
                 spec.pointer_color,
             )
 
@@ -340,61 +410,23 @@ class YearMarkerLayer(Layer):
             row_font,
         )
 
-    def _draw_orbit_pointer(
-        self, painter: QPainter, ctx: RenderContext, angle_deg: float,
-        orbit_fraction: float, half_size_fraction: float, color: str,
-    ) -> None:
-        """THE POSITION POINTER (owner feature 2026-08-09, Settings ▸
-        Earth, off by default): a small triangle straddling the body's
-        OWN edge at its exact angle — the same triangle language
-        `render.calendar_mount.calendar_day_arrow` uses for the
-        Almanac's day mark, so a small Earth/Moon marker stays easy to
-        find. Called AFTER the body's own pixmap/disc (both callers,
-        visual proof correction round 2026-08-09) — drawing it BEHIND
-        the body left only its outward tip's protrusion peeking past
-        the sphere's own edge, a sliver an independent grader read as a
-        rendering glitch rather than an intentional marker; on top, the
-        whole triangle reads at a glance. `half_size_fraction` is the
-        CALLER's own body — Earth's `spec.scale` or the Moon's
-        `spec.moon_scale`, each already carrying hover-enlarge — so the
-        triangle always matches the body it points at, not the shared
-        orbit's own (possibly larger) clearance sizing."""
-        edge = orbit_fraction + half_size_fraction
-        tip = ctx.radius * (edge + dial.MARKER_POINTER_PROTRUSION_FRACTION)
-        base = ctx.radius * (
-            edge - half_size_fraction * dial.MARKER_POINTER_RECESS_FRACTION
-        )
-        half = dial.MARKER_POINTER_HALF_DEG
-        triangle = QPolygonF([
-            dial_point(angle_deg, tip),
-            dial_point(angle_deg - half, base),
-            dial_point(angle_deg + half, base),
-        ])
-        painter.save()
-        # THE OUTLINE (visual proof correction 2026-08-09): a thin white
-        # stroke — the SAME `palette.MARKER_BORDER_RGBA` the Earth
-        # marker's own procedural-fallback disc wears — so the shape
-        # reads against ANY fill color, not only a lucky one (the first
-        # cut, gold-on-gold over the yellow wedge, was geometrically
-        # present but invisible to the eye).
-        outline = QPen(QColor(*palette.MARKER_BORDER_RGBA))
-        outline.setWidthF(max(1.0, ctx.radius * dial.MARKER_POINTER_OUTLINE_WIDTH_FRACTION))
-        painter.setPen(outline)
-        painter.setBrush(QColor(color))
-        painter.drawPolygon(triangle)
-        painter.restore()
-
     def _draw_moon(
         self, painter: QPainter, ctx: RenderContext, pos: QPointF, size: float,
-        darken_state: str | None = None,
+        darken_state: str | None = None, lunar_magnitude: float | None = None,
     ) -> None:
-        """Moon image (or procedural disc) with the unlit part shadowed:
-        the lit region is the half-disc on the lit side combined with the
-        terminator half-ellipse (semi-axis a = R*|cos 2pi*f|) — union when
-        gibbous, difference when crescent; everything else is darkened.
+        """The Moon marker: the face in the chosen unlit-half treatment
+        (`render.moon_face`, owner verdict 2026-08-10), plus whatever a
+        lunar eclipse adds on top.
+
+        The terminator geometry is unchanged and still lives in
+        `asset_variants.moon_lit_region`; what changed is that the
+        shadow is no longer a translucent wash over a full disc — see
+        `render/__about/moon_face.md` for why that treatment was
+        retired rather than kept as a menu entry.
 
         `darken_state` (a LUNAR eclipse render STATE, fix round C
-        2026-07-19 — `render.eclipse_glow.eclipse_render_state`) is a TRUE
+        2026-07-19 — `render.eclipse_glow.eclipse_render_state`) reaches
+        the disc only in the "halo" eclipse style, where it is a TRUE
         brightness reduction of the WHOLE disc — lit and unlit halves
         alike, since totality dims the full face — via
         `QPainter.CompositionMode_Multiply` against an OPAQUE gray whose
@@ -404,7 +436,12 @@ class YearMarkerLayer(Layer):
         the owner's fix for the old translucent bronze wash
         (`SourceOver` at a magnitude-scaled alpha), which let a bright
         moon bleed through and read as "still shining, just tinted".
-        Fully opaque, TYPE-driven only — magnitude never reaches here."""
+        Fully opaque, TYPE-driven only — magnitude never reaches THAT
+        path. The "umbra_sweep" style takes `lunar_magnitude` instead
+        and draws the shadow's real edge; "horizon_shadow" leaves the
+        disc alone entirely, because the event is written on the Moon
+        Horizon Band where it can show DURATION (the owner's own
+        placement of that option, 2026-08-10)."""
         spec = self._skin.year_marker
         fraction = ctx.tick.moon_fraction
         radius = size / 2
@@ -416,23 +453,39 @@ class YearMarkerLayer(Layer):
             painter.rotate(180.0)
         painter.setPen(Qt.PenStyle.NoPen)
 
-        if spec.moon_asset is not None:
-            draw_pixmap_centered(painter, ctx, spec.moon_asset, QPointF(0, 0), size)
-        else:
-            painter.setBrush(QColor(spec.moon_dark_color))
-            painter.drawEllipse(QPointF(0, 0), radius, radius)
+        def paint_face(target: QPainter) -> None:
+            """The FULL-moon face — the plate when the skin ships one,
+            a flat lit disc when it does not. `moon_face.draw_moon_disc`
+            decides whether this is clipped first (the cut styles) or
+            covered after (the opaque style), which is why the old
+            asset/procedural branch pair collapsed into one path."""
+            if spec.moon_asset is not None:
+                draw_pixmap_centered(
+                    target, ctx, spec.moon_asset, QPointF(0, 0), size
+                )
+                return
+            target.setBrush(QColor(spec.moon_lit_color))
+            target.drawEllipse(QPointF(0, 0), radius, radius)
 
-        lit = moon_lit_region(fraction, radius)
-
-        if spec.moon_asset is not None:
-            disc = QPainterPath()
-            disc.addEllipse(QRectF(-radius, -radius, size, size))
-            shadow = QColor(spec.moon_dark_color)
-            shadow.setAlphaF(spec.moon_shadow_alpha)
-            painter.fillPath(disc.subtracted(lit), shadow)
-        else:
-            painter.fillPath(lit, QColor(spec.moon_lit_color))
-        if darken_state is not None:
+        moon_face.draw_moon_disc(
+            painter, fraction, radius, spec.moon_dark_style,
+            paint_face, spec.moon_dark_color,
+        )
+        if (
+            darken_state is not None
+            and spec.eclipse_lunar_style == "umbra_sweep"
+        ):
+            # THE UMBRA SWEEP takes the whole eclipse treatment: Earth's
+            # shadow as a real curved edge crossing the face, so the
+            # magnitude is geometry. The uniform multiply below is the
+            # "halo" style's own darkening and must NOT also run, or the
+            # face would be dimmed twice.
+            moon_face.draw_umbra_sweep(
+                painter, radius, darken_state, lunar_magnitude
+            )
+            painter.restore()
+            return
+        if darken_state is not None and spec.eclipse_lunar_style == "halo":
             disc = QPainterPath()
             disc.addEllipse(QRectF(-radius, -radius, size, size))
             brightness = glow.ECLIPSE_STATE_MOON_BRIGHTNESS[darken_state]

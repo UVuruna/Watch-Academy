@@ -43,7 +43,9 @@ from PySide6.QtGui import (
     QColor, QImage, QImageReader, QPainter, QPainterPath, QPen, QPixmap,
 )
 
-from config import defaults, dial, palette, pantheon, paths, profiling, shortcuts
+from config import (
+    constants, defaults, dial, palette, pantheon, paths, profiling, shortcuts,
+)
 from config.paths import art_file
 from render import raster_store
 from render.asset_recolor import _recolored_plate, tinted_pixmap
@@ -137,19 +139,36 @@ def moon_lit_region(fraction: float, radius: float) -> QPainterPath:
     return half.united(terminator) if gibbous else half.subtracted(terminator)
 
 
-def moon_phase_image(fraction: float, size: int, master: Path | None = None) -> QImage:
-    """The full-moon master art shadowed by `moon_lit_region` for the
-    given illuminated FRACTION — the pure render the Encyclopedia's
-    Moon pages now call live instead of shipping eight pre-baked
-    plates (owner decree 2026-07-19: "bolje crtati na licu mesta nego
-    15MB fajlova"). Mirrors `_draw_moon`'s two branches exactly: with
-    a master (the shipped default) only the UNLIT half darkens under
-    the shadow color/alpha; without one (a missing/placeholder asset)
-    a plain dark disc gets the LIT half painted bright instead — the
-    same graceful fallback the dial itself falls back to. QImage end
-    to end (the R1b threading law) — the background Encyclopedia warm
-    renders the eight phase plates off the GUI thread, where QPixmap
-    is forbidden."""
+def moon_phase_image(
+    fraction: float, size: int, master: Path | None = None,
+    style: str | None = None,
+) -> QImage:
+    """The full-moon master art treated by the CURRENT unlit-half style
+    for the given illuminated FRACTION — the pure render the
+    Encyclopedia's Moon pages call live instead of shipping eight
+    pre-baked plates (owner decree 2026-07-19: better to draw on the
+    spot than ship 15 MB of files).
+
+    It draws through `render.moon_face.draw_moon_disc`, the SAME
+    function the dial uses, so the book and the instrument can never
+    disagree about what a crescent looks like. That mattered
+    immediately: when the owner retired the translucent wash on
+    2026-08-10 this renderer still carried its own copy of it, and the
+    Encyclopedia would have gone on printing the retired treatment
+    beside a dial that no longer drew it. `style` defaults to
+    `constants.MOON_DARK_STYLE_DEFAULT` because these images are cached
+    by (phase, size) on disk and shared process-wide — they are not
+    per-watch, so they follow the shipped default rather than one
+    window's pick.
+
+    QImage end to end (the R1b threading law) — the background
+    Encyclopedia warm renders the eight phase plates off the GUI
+    thread, where QPixmap is forbidden."""
+    # Imported here, not at module scope: `render.moon_face` imports
+    # `moon_lit_region` from THIS module, so a top-level import would
+    # close the cycle.
+    from render.moon_face import draw_moon_disc
+
     marker = defaults.DEFAULT_SKIN.year_marker
     resolved = art_file(
         master if master is not None
@@ -163,26 +182,30 @@ def moon_phase_image(fraction: float, size: int, master: Path | None = None) -> 
     painter.translate(size / 2.0, size / 2.0)
     painter.setPen(Qt.PenStyle.NoPen)
     radius = size / 2.0
-    lit = moon_lit_region(fraction, radius)
-    disc = QPainterPath()
-    disc.addEllipse(QRectF(-radius, -radius, size, size))
     has_asset = resolved is not None and resolved.exists()
-    if has_asset:
-        art = QImage(str(resolved)).scaled(
-            size, size,
-            Qt.AspectRatioMode.KeepAspectRatio,
-            Qt.TransformationMode.SmoothTransformation,
-        )
-        painter.drawImage(
-            QPointF(-art.width() / 2.0, -art.height() / 2.0), art
-        )
-        shadow = QColor(marker.moon_dark_color)
-        shadow.setAlphaF(marker.moon_shadow_alpha)
-        painter.fillPath(disc.subtracted(lit), shadow)
-    else:
-        painter.setBrush(QColor(marker.moon_dark_color))
-        painter.drawEllipse(QPointF(0, 0), radius, radius)
-        painter.fillPath(lit, QColor(marker.moon_lit_color))
+
+    def paint_face(target: QPainter) -> None:
+        """The FULL-moon face: the master art when it resolves, a flat
+        lit disc when it does not — the same graceful degradation the
+        dial itself falls back to."""
+        if has_asset:
+            art = QImage(str(resolved)).scaled(
+                size, size,
+                Qt.AspectRatioMode.KeepAspectRatio,
+                Qt.TransformationMode.SmoothTransformation,
+            )
+            target.drawImage(
+                QPointF(-art.width() / 2.0, -art.height() / 2.0), art
+            )
+            return
+        target.setBrush(QColor(marker.moon_lit_color))
+        target.drawEllipse(QPointF(0, 0), radius, radius)
+
+    draw_moon_disc(
+        painter, fraction, radius,
+        style if style is not None else constants.MOON_DARK_STYLE_DEFAULT,
+        paint_face, marker.moon_dark_color,
+    )
     painter.end()
     return image
 
