@@ -117,9 +117,17 @@ class WatchFaceDialog(QDialog):
             if index >= self._stack.count():
                 break
             page_scroll = self._stack.widget(index)
-            if isinstance(page_scroll, QScrollArea):
-                page_scroll.horizontalScrollBar().setValue(horizontal)
-                page_scroll.verticalScrollBar().setValue(vertical)
+            if not isinstance(page_scroll, QScrollArea):
+                continue
+            # ONLY a bar that has somewhere to go (proof shot 2026-08-10):
+            # writing a value into an empty scrollbar MAKES IT APPEAR —
+            # the rebuild grew a horizontal bar with range 0 under the
+            # page, which is precisely the "a scrollbar while the window
+            # still holds unused space" the layout law forbids.
+            for bar, value in ((page_scroll.horizontalScrollBar(), horizontal),
+                               (page_scroll.verticalScrollBar(), vertical)):
+                if bar.maximum() > 0:
+                    bar.setValue(value)
 
     def _build(self) -> None:
         # KEEP THE SELECTED ROW across live-pick rebuilds — the SAME fix
@@ -170,6 +178,15 @@ class WatchFaceDialog(QDialog):
             page_scroll.setWidgetResizable(True)
             page_scroll.setFrameShape(QFrame.Shape.NoFrame)
             page_scroll.setWidget(holder)
+            # NEVER a horizontal bar (measured 2026-08-10: a QScrollArea
+            # rebuilt inside an ALREADY VISIBLE window shows an empty one
+            # — range 0, nothing to scroll — which is exactly the bar the
+            # layout law forbids). It is not needed by construction: the
+            # pages are capped to `column_width` and the declared minimum
+            # guarantees a viewport that wide.
+            page_scroll.setHorizontalScrollBarPolicy(
+                Qt.ScrollBarPolicy.ScrollBarAlwaysOff
+            )
             stack.addWidget(page_scroll)
         nav_list.currentRowChanged.connect(stack.setCurrentIndex)
         row = max(0, min(previous, nav_list.count() - 1))
