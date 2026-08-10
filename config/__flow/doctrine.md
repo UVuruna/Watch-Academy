@@ -6,13 +6,13 @@
 
 ```
 📁 doctrine.py
-  PATH_OF_LIGHT     08h Hope -> 12h Faith -> 16h Love -> 24h Salvation
+  PATH_OF_LIGHT     08h Faith -> 12h Love -> 16h Hope -> 24h Salvation
   PATH_OF_DARKNESS  20h Fear -> 24h Anger -> 04h Hate  -> 12h Suffering
 
-  STAR (bright mnemonic)   08h Spark -> 12h Trust -> 16h Affection -> 24h Redemption
+  STAR (bright mnemonic, assembled)   16h Spark -> 08h Trust -> 12h Affection -> 24h Redemption
   FALL (dark mnemonic)     20h Fear  -> 24h Anger  -> 04h Loathing -> 12h Lament
 
-  SAFE (bright cipher, assembled)   24h Salus -> 16h Agape -> 12h Fides -> 08h Elpis
+  SAFE (bright cipher, assembled)   24h Salus -> 12h Agape -> 08h Fides -> 16h Elpis
   DOMY (dark cipher, assembled)     12h Dolor -> 04h Odium -> 20h Metus -> 24h Hybris
 
   CROSS_PAGES: page name -> (bright reading, dark reading)
