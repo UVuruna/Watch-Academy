@@ -68,6 +68,21 @@ def date_has_turning_point(
     return any(instant.date() == on_date for instant, _name in season_events)
 
 
+def date_is_solstice(
+    on_date: date, season_events: tuple[tuple[datetime, str], ...]
+) -> bool:
+    """THE POEM'S OWN DAYS (owner decree 2026-08-11): the Four
+    Greetings step out from behind the hidden cipher ONLY on the summer
+    and winter solstice — never the equinoxes — so this is
+    `date_has_turning_point` narrowed to the two anchor events whose
+    name says Solstice. Same UTC-date convention, same pre-built
+    `DayContext.season_events` list, no astronomy recomputed."""
+    return any(
+        "Solstice" in name and instant.date() == on_date
+        for instant, name in season_events
+    )
+
+
 def date_has_principal_phase(
     on_date: date, moon_events: tuple[tuple[datetime, str], ...]
 ) -> bool:

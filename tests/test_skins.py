@@ -1811,3 +1811,22 @@ def test_ring_tint_flows_to_the_skin_and_the_umbra():
     assert pixel.red() > pixel.blue() + 60               # midtone takes the tint
     # Whites/blacks staying untouched is pinned by the tritone unit
     # test above — this test guards the skin -> Umbra plumbing.
+
+
+def test_the_poem_stays_out_of_the_ring_legends():
+    """THE POEM'S OWN DAYS (owner decree 2026-08-11): Templar keeps its
+    watch themes but NOT the poem, and The One's static legends carry no
+    poem quotes either - the greetings return only as the gated
+    supplement (cipher or solstice; phase-2 compositor wiring). Banned:
+    any "poem" attribution, the greeting-cycle vocabulary, and the poem
+    reading-phrases that used to ride these legends."""
+    from data.rings import ring_presets
+
+    presets = ring_presets()
+    banned = ("the poem", "greeting", "life flowing in love",
+              "peaceful death")
+    for ring in ("The One", "Templar"):
+        for hour, entry in presets[ring]["legend"].items():
+            low = entry["reading"].lower()
+            for phrase in banned:
+                assert phrase not in low, (ring, hour, phrase)

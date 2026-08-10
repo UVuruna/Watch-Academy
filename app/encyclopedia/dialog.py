@@ -58,6 +58,7 @@ class EncyclopediaDialog(QDialog):
         self,
         translations: dict | None = None,
         hidden_unlocked: bool = False,
+        verses_in_the_open: bool = False,
         initial_topic: str | None = None,
         initial_entry: int = 0,
         stay_on_top: bool = False,
@@ -95,7 +96,11 @@ class EncyclopediaDialog(QDialog):
         # controller reads it from the SAME live tick the dial paints
         # with, never a second sunrise/sunset computation here.
         self._topics = topic_tree.topics(travel_date, self._overlay, is_daylight)
-        if hidden_unlocked:
+        # THE POEM'S OWN DAYS (owner decree 2026-08-11): the Four
+        # Greetings live behind the cipher, EXCEPT on the two solstices,
+        # when they step into the open — `verses_in_the_open` is the
+        # controller's displayed-day solstice reading (travel included).
+        if hidden_unlocked or verses_in_the_open:
             self._unlock_verses()
         self._zoom = _session_zoom
 

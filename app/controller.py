@@ -68,6 +68,7 @@ from app.widget import ClockWidget
 from config import archetypes, constants, defaults, dial, palette, pantheon, paths, profiling, shortcuts
 from config.ui_text import ui
 from core.clock_state import build_day_context, build_tick_state
+from core.continents import date_is_solstice
 from core.deep_time import (
     canonical_proxy,
     julian_day_of,
@@ -3679,6 +3680,12 @@ class WatchController(QObject):
         dialog = EncyclopediaDialog(
             self._translation_overlay,
             hidden_unlocked=self._hidden_unlocked,
+            # THE POEM'S OWN DAYS (owner decree 2026-08-11): on the two
+            # solstices the Four Greetings stand in the open — the
+            # DISPLAYED day's own reading (a running Time Travel
+            # simulation counts), from the same season anchors every
+            # turning-point badge already reads.
+            verses_in_the_open=self._verses_in_the_open(),
             initial_topic=topic,
             initial_entry=entry,
             # FIX ROUND A (owner verdict 2026-07-19): see the
@@ -3844,6 +3851,18 @@ class WatchController(QObject):
             latitude=dialog.latitude(), longitude=dialog.longitude()
         )
         self._start_simulation(moment, observer, dialog.cycles())
+
+    def _verses_in_the_open(self) -> bool:
+        """THE POEM'S OWN DAYS (owner decree 2026-08-11): True when the
+        DISPLAYED day (the traveled day while a simulation runs, else
+        today) is a summer or winter solstice — the only days the Four
+        Greetings show without the cipher. Reads the day context's own
+        season anchors; no day built yet means no poem, never a crash."""
+        if self._day is None:
+            return False
+        return date_is_solstice(
+            self._effective_travel_date(), self._day.season_events
+        )
 
     def _effective_travel_date(self) -> date:
         """The date driving the poles' Quick Jump light/dark glyph

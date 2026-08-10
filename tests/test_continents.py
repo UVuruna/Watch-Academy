@@ -289,3 +289,33 @@ def test_body_articles_resolve_with_faces():
     assert enc.week_duality("continents")["title"] == "The Two Poles"
     assert "2017" in enc.entry("ninths", "Zealandia")["base"]     # recognition year
     assert "supercontinent" in enc.entry("ninths", "Pangea")["base"].lower()
+
+
+def test_date_is_solstice_opens_only_the_two_solstices():
+    """THE POEM'S OWN DAYS (owner decree 2026-08-11): the Four
+    Greetings leave the cipher only on the SOLSTICES - the filter takes
+    the anchor events whose name says Solstice and refuses the
+    equinoxes and every ordinary day. Golden dates come from the
+    bundled 2026 anchors, named exactly the way build_day_context
+    names them (constants.ZONE_SEASON_EVENT_NAMES)."""
+    from config import constants
+    from data.seasons import SeasonsRepository
+
+    anchors = SeasonsRepository().year_anchors(2026)
+    names = constants.ZONE_SEASON_EVENT_NAMES["north"]
+    season_events = tuple(
+        (instant, names[round(angle) % 360])
+        for instant, angle in zip(anchors.instants, anchors.angles)
+    )
+    solstice_days = {
+        instant.date() for instant, name in season_events if "Solstice" in name
+    }
+    equinox_days = {
+        instant.date() for instant, name in season_events if "Equinox" in name
+    }
+    assert len(solstice_days) >= 2 and len(equinox_days) >= 2
+    for day in solstice_days:
+        assert continents.date_is_solstice(day, season_events)
+    for day in equinox_days:
+        assert not continents.date_is_solstice(day, season_events)
+    assert not continents.date_is_solstice(date(2026, 7, 11), season_events)
