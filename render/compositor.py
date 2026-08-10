@@ -421,7 +421,9 @@ _ENC_SEASON_ORDER = (
     "Wet_Season", "Dry_Season", "Meteorological",
 )
 _ENC_SUN_ORDER = ("Summer_Solstice", "Winter_Solstice", "Equinox")
-_ENC_TRIO_ORDER = ("Faith", "Hope", "Love")
+# THE ORDER LAW (owner decree 2026-08-09): Faith — Love — Hope in
+# every display; mirrors the trinity topic's own entry order.
+_ENC_TRIO_ORDER = ("Faith", "Love", "Hope")
 
 # The ECLIPSE chapter order per body (fix round F, owner order
 # 2026-07-19) — the Spacebar jump indexes an active eclipse's TYPE

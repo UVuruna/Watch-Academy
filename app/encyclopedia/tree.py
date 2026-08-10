@@ -498,7 +498,10 @@ def _build_topics(
                 "name": virtue,
                 "article": ("trio", virtue),
             }
-            for virtue in ("Faith", "Hope", "Love")
+            # THE ORDER LAW (owner decree 2026-08-09): Faith — Love —
+            # Hope, in every display; the Spacebar jump mirrors this
+            # order in render.compositor._ENC_TRIO_ORDER.
+            for virtue in ("Faith", "Love", "Hope")
         ],
     }
     # THE TRIADS (wired 2026-08-05 — the round that closed the staging

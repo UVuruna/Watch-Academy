@@ -531,3 +531,19 @@ def test_every_dual_page_shares_the_one_generic_plate(topics):
         pantheon.THEME_OWN_DUALITY_PLATE.clear()
     assert claimed.name == "Duality.png"
     assert claimed.parent.parent.parent.name == "greek"
+
+
+# --- THE ORDER LAW on the Trinity topic (owner decree 2026-08-09) -----------
+
+def test_trinity_topic_lists_faith_love_hope_and_the_jump_mirrors_it(topics):
+    """THE ORDER LAW: Faith - Love - Hope, in EVERY display - including
+    the Encyclopedia's own Trinity topic, which listed Faith, Hope, Love
+    until 2026-08-10 (caught in the owner's semantic re-verification).
+    The Spacebar jump indexes the hovered trio arm's virtue through
+    render.compositor._ENC_TRIO_ORDER, so the two orders must stay one
+    order or the jump opens the wrong page."""
+    from render.compositor import _ENC_TRIO_ORDER
+
+    names = tuple(entry["name"] for entry in topics["trinity"]["entries"])
+    assert names == ("Faith", "Love", "Hope")
+    assert _ENC_TRIO_ORDER == names
