@@ -2,7 +2,10 @@
 off by default): a small triangle at the Earth/Moon orbit circle, at
 each body's own angle, colored with the SAME ramp hue the ring
 jewels/crown text wear. See `render.layers.year_marker.YearMarkerLayer.
-_draw_orbit_pointer` and `app.controller._overlay_display_settings`.
+marker_marks.draw_pointer` and `app.controller._overlay_display_settings`.
+(The drawing moved out of `YearMarkerLayer._draw_orbit_pointer` on
+2026-08-10 when the owner approved two more shapes beside the triangle;
+the geometry is unchanged, so these teeth kept biting through the move.)
 """
 
 import dataclasses

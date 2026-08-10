@@ -83,7 +83,7 @@ def test_opacity_section_builds_a_real_page_not_a_placeholder(app):
     widget = opacity.build(Settings(), _setters(), lambda text: text)
     assert isinstance(widget, QWidget)
     titles = {group.title() for group in widget.findChildren(QGroupBox)}
-    assert titles == {"Clock body", "Bodies on the ring", "Moon Horizon Band"}
+    assert titles == {"Clock body", "Bodies on the ring"}
 
 
 def test_colors_page_builds_with_custom_modes_active(app):

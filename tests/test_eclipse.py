@@ -531,7 +531,18 @@ def _lunar_moon_pixel(app, type_: str, magnitude: float):
     """Renders a lunar eclipse of the given TYPE and samples the Moon
     marker's own pixel at its relocated (ring-band) center — the moon's
     OWN art occludes the glow halo directly under it, so this reads only
-    the darkened disc, never the bronze glow bleeding through."""
+    the darkened disc, never the bronze glow bleeding through.
+
+    PINNED TO THE "halo" STYLE (2026-08-10). The whole-disc multiply
+    these tests measure is one of three lunar treatments the owner
+    approved that day, and no longer the default — "umbra_sweep" now
+    ships instead, drawing Earth's shadow as a real curved edge so the
+    magnitude becomes visible geometry. The multiply is still a shipped
+    option and its behaviour (the near-black ceiling, the blood-moon
+    copper, the brightness ladder, the deliberate independence from
+    magnitude) is still law, so these teeth name the style they measure
+    rather than riding whatever the default happens to be. The new
+    default has its own tooth in `tests/test_moving_bodies.py`."""
     tz = ZoneInfo("Europe/Belgrade")
     now = datetime(2026, 3, 3, 12, 0, tzinfo=tz)
     day = _belgrade_day(now)
@@ -549,7 +560,13 @@ def _lunar_moon_pixel(app, type_: str, magnitude: float):
             type=type_, magnitude=magnitude,
         ),
     )
-    skin = dataclasses.replace(defaults.DEFAULT_SKIN, solar_rotation=False)
+    skin = dataclasses.replace(
+        defaults.DEFAULT_SKIN,
+        solar_rotation=False,
+        year_marker=dataclasses.replace(
+            defaults.DEFAULT_SKIN.year_marker, eclipse_lunar_style="halo",
+        ),
+    )
     image = Compositor(skin, AssetCache()).render_offscreen(540.0, 1.0, day, eclipsed)
     radius = 270.0
     moon_angle = math.radians(quiet.moon_fraction * 360.0)

@@ -242,10 +242,26 @@ def _mean_lightness(image, x_range, y_step=5):
     return total / n
 
 
-def test_moon_phase_image_new_and_full_are_dark_and_lit():
+def test_moon_phase_image_new_is_an_empty_ring_and_full_is_a_filled_disc():
     """The pure QImage render (owner 2026-07-19, replacing the retired
-    `assets/moon/` plates): New Moon reads much darker than Full Moon
-    over the whole disc."""
+    `assets/moon/` plates), RE-PINNED 2026-08-10 to the treatment the
+    owner chose that day.
+
+    This tooth used to say "New Moon reads much darker than Full Moon
+    over the whole disc", which was true only while the unlit half was
+    a translucent wash painted over a full disc. He retired that
+    treatment — at a thin crescent it left the marker reading as a
+    whole round body with a bright edge — and chose "cut with a rim":
+    the lit region alone, under a permanent silver hairline. So a new
+    moon is no longer a dark disc at all. It is a HOLLOW RING, and the
+    old assertion measured the mean lightness of the only thing still
+    painted, the bright rim, which is why it flipped.
+
+    The law that survives the change, and the reason he accepted the
+    rim over a plain cut: at new moon the disc's INTERIOR is empty
+    while the body's outline is still there, so the Moon never
+    vanishes from the page. At full moon the interior is filled and
+    bright."""
     import os
 
     os.environ.setdefault("QT_QPA_PLATFORM", "offscreen")
@@ -257,9 +273,27 @@ def test_moon_phase_image_new_and_full_are_dark_and_lit():
     size = 200
     new = moon_phase_image(0.0, size)
     full = moon_phase_image(0.5, size)
-    assert _mean_lightness(new, range(0, size, 5)) < (
-        _mean_lightness(full, range(0, size, 5)) - 30
+    centre = size // 2
+    # A box well inside the disc, clear of the rim stroke.
+    inner = range(centre - 40, centre + 40, 5)
+
+    def painted(image, span):
+        return sum(
+            1 for x in span for y in span if image.pixelColor(x, y).alpha() > 0
+        )
+
+    assert painted(new, inner) == 0, (
+        "new moon must be hollow — the cut leaves nothing inside the rim"
     )
+    assert painted(full, inner) == len(list(inner)) ** 2, (
+        "full moon must be a solid lit disc"
+    )
+    # The rim is what keeps the body findable at new moon.
+    assert painted(new, range(0, size, 2)) > 0, (
+        "the silver rim must still be drawn — that is why the owner chose "
+        "'cut with a rim' over a plain cut"
+    )
+    assert _mean_lightness(full, range(0, size, 5)) > 60
 
 
 def test_moon_phase_image_quarter_is_half_lit_not_fully_dark():

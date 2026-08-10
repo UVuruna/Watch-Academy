@@ -114,8 +114,8 @@ def test_window_builds_with_all_nine_sidebar_entries(app):
     assert dialog._nav_list.count() == 9
     titles = [dialog._nav_list.item(i).text() for i in range(9)]
     assert titles == [
-        "Pointer", "Ring", "Numerals", "Hands", "Umbra & Aura", "Opacity",
-        "Themes & Slots", "Colors", "Size",
+        "Pointer", "Ring", "Numerals", "Hands & Bodies", "Umbra & Aura",
+        "Opacity", "Themes & Slots", "Colors", "Size",
     ]
     assert dialog._stack.count() == 9
     dialog.deleteLater()

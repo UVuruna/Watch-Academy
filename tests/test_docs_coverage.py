@@ -87,7 +87,7 @@ FLOW_REQUIRED = frozenset({
     "app/theme.py",
     "app/time_travel.py",
     "app/warm.py",
-    "app/watch_face/hands.py",
+    "app/watch_face/bodies.py",
     "app/watch_face/pointer.py",
     "app/watch_face/ring.py",
     "app/watch_face/size.py",
