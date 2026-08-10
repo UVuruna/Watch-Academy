@@ -78,11 +78,12 @@ class YearMarkerLayer(Layer):
                 if ctx.skin.show_earth
                 else 0.0
             )
-            opacity = 1.0
-            if not ctx.tick.is_moon_up:
-                # Below the horizon the marker DIMS (owner spec
-                # 2026-07-12; the Settings ▸ Opacity slider).
-                opacity *= spec.moon_hidden_alpha
+            # NO OPACITY ON THE MOON (owner correction 2026-08-11,
+            # "mesec opet ima OPACITY!!!" — this retires the 2026-07-12
+            # below-horizon dimming): the Moon Horizon Band is what says
+            # whether the Moon is up now; the disc itself is always
+            # painted solid. `moon_hidden_alpha` stays a stored field so
+            # old settings files load, but nothing reads it here.
             factor = hover_factor(ctx, "moon")
             # During its ±6 h event window the Moon RELOCATES radially to
             # the ring band centerline (owner 2026-07-16), keeping its
@@ -104,14 +105,11 @@ class YearMarkerLayer(Layer):
             orbit = (
                 dial.GLOW_RING_RADIUS_FRACTION
                 if glowing
-                # THE CLEAR ORBIT LANE (owner verdict 2026-08-09): the
-                # quiet orbit is computed, not the fixed spec field —
-                # see `config.dial.earth_moon_orbit_fraction`. Earth and
-                # Moon share ONE radius, sized against whichever marker
-                # is currently bigger.
+                # THE LINE AND THE BODIES (owner corrections
+                # 2026-08-10/11): per-body tangent to the tick-root
+                # line — see `config.dial.earth_moon_orbit_fraction`.
                 else dial.earth_moon_orbit_fraction(
-                    ctx.skin.numeral_outer_ring_size,
-                    max(spec.scale, spec.moon_scale),
+                    ctx.skin.numeral_outer_ring_size, spec.moon_scale,
                 )
             )
             # LANE SPLIT / SHRINK AND PASS: the crossing never overlaps
@@ -165,7 +163,15 @@ class YearMarkerLayer(Layer):
                     ),
                 )
             painter.save()
-            painter.setOpacity(painter.opacity() * opacity)
+            if spec.pointer_enabled:
+                # BEHIND the body (owner correction 2026-08-11, "IZA NE
+                # ISPRED" — z under): drawn before the disc, so only the
+                # tip's peek and the flanks show.
+                marker_marks.draw_pointer(
+                    painter, spec.marker_pointer_shape, moon_angle,
+                    ctx.radius, orbit, spec.moon_scale * factor,
+                    spec.pointer_color,
+                )
             self._draw_moon(
                 painter, ctx, pos, 2 * ctx.radius * spec.moon_scale * factor,
                 darken_state=lunar_state,
@@ -182,12 +188,6 @@ class YearMarkerLayer(Layer):
                     ctx.radius * spec.moon_scale * factor,
                     palette.GLOW_MOON_COLOR, ctx.tick.moon_fraction,
                     origin=pos,
-                )
-            if spec.pointer_enabled:
-                marker_marks.draw_pointer(
-                    painter, spec.marker_pointer_shape, moon_angle,
-                    ctx.radius, orbit, spec.moon_scale * factor,
-                    spec.pointer_color,
                 )
             painter.restore()
 
@@ -227,12 +227,11 @@ class YearMarkerLayer(Layer):
         orbit = (
             dial.GLOW_RING_RADIUS_FRACTION
             if glowing
-            # THE CLEAR ORBIT LANE (owner verdict 2026-08-09): see the
-            # Moon's own call above — the quiet orbit is computed, not
-            # the fixed spec field.
+            # THE LINE AND THE BODIES (owner corrections 2026-08-10/11):
+            # per-body tangent to the tick-root line — see the Moon's
+            # own call above.
             else dial.earth_moon_orbit_fraction(
-                ctx.skin.numeral_outer_ring_size,
-                max(spec.scale, spec.moon_scale),
+                ctx.skin.numeral_outer_ring_size, spec.scale,
             )
         )
         pos = dial_point(year_angle, ctx.radius * orbit)
@@ -282,6 +281,17 @@ class YearMarkerLayer(Layer):
                 year_angle, ctx.radius * ctx.interior_scale,
             ))
             painter.restore()
+        if spec.pointer_enabled:
+            # BEHIND the body (owner correction 2026-08-11, "IZA NE
+            # ISPRED ZEMLJE, Z INDEX MANJI" — his SECOND time saying it;
+            # the 2026-08-09 round moved it on top and that was wrong):
+            # drawn before the art, so only the tip's peek past the edge
+            # and the flanks beside the curve show.
+            marker_marks.draw_pointer(
+                painter, spec.marker_pointer_shape, year_angle,
+                ctx.radius, orbit, size / (2 * ctx.radius),
+                spec.pointer_color,
+            )
         variant = (
             f"{ctx.skin.earth_style}_"
             f"{earth_region(ctx.day.latitude, ctx.day.longitude)}_"
@@ -329,18 +339,6 @@ class YearMarkerLayer(Layer):
             )
             painter.setBrush(QColor(color))
             painter.drawEllipse(pos, size / 2, size / 2)
-        if spec.pointer_enabled:
-            # Drawn LAST (visual proof correction round 2026-08-09): the
-            # first cut painted the pointer UNDER the body, so only its
-            # outward tip's protrusion peeked past the sphere's own
-            # edge — a sliver read as a rendering glitch, not an
-            # intentional marker. On TOP it reads as what it is: a
-            # small triangle pointing at the body's own angle.
-            marker_marks.draw_pointer(
-                painter, spec.marker_pointer_shape, year_angle,
-                ctx.radius, orbit, size / (2 * ctx.radius),
-                spec.pointer_color,
-            )
 
     def _draw_earth_label(self, painter: QPainter, ctx: RenderContext, pos: QPointF, size: float) -> None:
         """The Earth marker's text — FOUR exclusive modes (owner

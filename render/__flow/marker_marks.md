@@ -6,13 +6,13 @@
 
 ```mermaid
 flowchart TD
-    A["edge = orbit_fraction + half_size_fraction\n(the body's OWN outer edge on the dial)"] --> B["tip  = radius * (edge + PROTRUSION)"]
-    A --> C["base = radius * (edge - half_size * RECESS)"]
+    A["edge = orbit_fraction + half_size_fraction\n(the body's OWN outer edge, on the little pointers' tip line)"] --> B["tip = edge scaled out to the tick ROOTS\n(the thread line — measured plate ratio)"]
+    A --> C["base = edge - half_size * LENGTH_RATIO\n(hidden under the disc — drawn BEFORE the body)"]
     B --> D{shape}
     C --> D
     D -- triangle --> E["polygon: dial_point#40;a, tip#41;, dial_point#40;a±HALF_DEG, base#41;"]
     D -- chevron --> F["two strokes from dial_point#40;a±HALF_DEG, base#41;\nmeeting at dial_point#40;a, tip#41;"]
-    D -- gem --> G["diamond centred on the RING line at dial_point#40;a, tip#41;\n+ a hairline down to the body"]
+    D -- gem --> G["radially elongated diamond, tip on the thread line\n#40;longer than wide, behind the body, no hairline#41;"]
     E --> H["white MARKER_BORDER outline, then the theme fill"]
     F --> H
     G --> H

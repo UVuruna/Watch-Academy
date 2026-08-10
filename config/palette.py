@@ -56,6 +56,25 @@ MOON_GRAY_VIOLET = "#666699"
 # one value).
 MOON_SILVER = "#C9CDD4"
 
+# THE MOON BAND'S GRAY TICKS (owner correction 2026-08-10, the four-styles
+# screenshot round): the "ticks" style repaints the inner ring's own 360
+# day steps in a plain GRAY — his words, "the gray lines that show the
+# 360 steps on the clock in the INNER RING" — never the white/silver
+# strokes the first cut shipped.
+MOON_BAND_TICK_GRAY = "#9EA3AA"
+
+# The band line's dark UNDER-STROKE: the silver thread rides the tick
+# tips now (owner correction 2026-08-10), which on a LIGHT inner plate
+# is silver-on-white — invisible. A slate edge under the silver makes
+# the line read on any plate, the same two-tone trick the outlined
+# dial text already uses.
+MOON_BAND_LINE_EDGE = "#3A3E46"
+
+# THE OPAQUE MOON SHADOW (owner correction 2026-08-10): a BLACK disc
+# UNDER the moon — "onda stavi crni disk ispod meseca" — fully opaque,
+# never an alpha-thinned gray wash.
+MOON_SHADOW_BLACK = "#000000"
+
 
 # ════════════════════════════════════════════════════════════════════
 # 2. THE POINTER WHEELS

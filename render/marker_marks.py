@@ -101,24 +101,35 @@ def draw_pointer(
     painter: QPainter, shape: str, angle_deg: float, dial_radius: float,
     orbit_fraction: float, half_size_fraction: float, color: str,
 ) -> None:
-    """One of `constants.MARKER_POINTER_SHAPES` straddling the body's
-    own edge at its own dial angle.
+    """One of `constants.MARKER_POINTER_SHAPES` BEHIND the body (owner
+    correction 2026-08-11, "IZA NE ISPRED ZEMLJE" — the caller draws
+    this BEFORE the body's own disc): its outward tip flush with the
+    body's outer edge (the tick-root line the body touches), its base
+    hidden under the disc, so only the flanks show beside the curve.
 
     `orbit_fraction` and `half_size_fraction` are the CALLER's own
-    numbers — the shared orbit lane and the body's half-size, each
-    already carrying hover-enlarge — so the mark always matches the
-    body it points at rather than the lane's own clearance sizing.
-    Every shape wears the white `MARKER_BORDER_RGBA` outline the Earth's
-    procedural disc wears, so it reads against ANY fill colour: the
-    first cut of the triangle was gold-on-gold over a yellow wedge,
-    geometrically present and invisible to the eye.
+    numbers — this body's own orbit and half-size, each already
+    carrying hover-enlarge — and every dimension here is PROPORTIONAL
+    to that half-size (the fixed-size first cut read enormous next to
+    a small-scaled body). Every shape wears the white
+    `MARKER_BORDER_RGBA` outline the Earth's procedural disc wears, so
+    it reads against ANY fill colour.
     """
     edge = orbit_fraction + half_size_fraction
-    tip = dial_radius * (edge + dial.MARKER_POINTER_PROTRUSION_FRACTION)
-    base = dial_radius * (
-        edge - half_size_fraction * dial.MARKER_POINTER_RECESS_FRACTION
+    half_size = dial_radius * half_size_fraction
+    # THE BRIDGE OVER THE TICK ZONE (owner corrections 2026-08-10/11):
+    # the body's edge rides the little pointers' TIP line, and the
+    # arrow — drawn BEHIND the body — spans the tick zone from under
+    # the disc out to the thread line at the tick roots, so the visible
+    # part is exactly the zone between the two lines. The roots/tips
+    # ratio is the measured plate geometry, never a free protrusion.
+    tip = dial_radius * edge * (
+        dial.RING_INNER_TICK_OUTER_FRACTION / dial.RING_INNER_TICK_INNER_FRACTION
     )
-    half = dial.MARKER_POINTER_HALF_DEG
+    depth = half_size * dial.MARKER_POINTER_LENGTH_RATIO
+    half_width = half_size * dial.MARKER_POINTER_WIDTH_RATIO
+    base = dial_radius * edge - depth
+    half_deg = math.degrees(half_width / max(1.0, base))
     outline = QPen(QColor(*palette.MARKER_BORDER_RGBA))
     outline.setWidthF(
         max(1.0, dial_radius * dial.MARKER_POINTER_OUTLINE_WIDTH_FRACTION)
@@ -129,48 +140,48 @@ def draw_pointer(
         painter.setBrush(QColor(color))
         painter.drawPolygon(QPolygonF([
             dial_point(angle_deg, tip),
-            dial_point(angle_deg - half, base),
-            dial_point(angle_deg + half, base),
+            dial_point(angle_deg - half_deg, base),
+            dial_point(angle_deg + half_deg, base),
         ]))
     elif shape == "chevron":
-        # An open V OUTSIDE the body: it never covers the face, which
-        # is what the triangle does to a small Moon.
-        stroke = QPen()
-        stroke.setCapStyle(Qt.PenCapStyle.RoundCap)
-        stroke.setJoinStyle(Qt.PenJoinStyle.RoundJoin)
+        # THE SAME DESIGN AS THE TRIANGLE, LINE ONLY (owner correction
+        # 2026-08-10: the open-V first cut was far too wide and looked
+        # nothing like the triangle beside it). Identical vertices, no
+        # fill — a colour stroke over a thin white understroke so the
+        # outline reads against any wedge.
         path = QPainterPath()
-        path.moveTo(dial_point(angle_deg - half * 1.5, tip))
-        path.lineTo(dial_point(
-            angle_deg, tip + dial_radius
-            * dial.MARKER_POINTER_PROTRUSION_FRACTION * 1.6
-        ))
-        path.lineTo(dial_point(angle_deg + half * 1.5, tip))
+        path.moveTo(dial_point(angle_deg, tip))
+        path.lineTo(dial_point(angle_deg - half_deg, base))
+        path.lineTo(dial_point(angle_deg + half_deg, base))
+        path.closeSubpath()
+        stroke = QPen()
+        stroke.setJoinStyle(Qt.PenJoinStyle.RoundJoin)
+        painter.setBrush(Qt.BrushStyle.NoBrush)
         for pen_color, width in (
-            (QColor(*palette.MARKER_BORDER_RGBA), outline.widthF() * 4.0),
-            (QColor(color), outline.widthF() * 2.0),
+            (QColor(*palette.MARKER_BORDER_RGBA), outline.widthF() * 3.0),
+            (QColor(color), outline.widthF() * 1.8),
         ):
             stroke.setColor(pen_color)
             stroke.setWidthF(width)
             painter.setPen(stroke)
-            painter.setBrush(Qt.BrushStyle.NoBrush)
             painter.drawPath(path)
     elif shape == "gem":
-        # A faceted diamond seated ON the ring line, joined to the body
-        # by a hairline — the ring's own vocabulary, the same language
-        # the Moon Horizon Band's culmination diamond already speaks.
-        seat = tip + dial_radius * dial.MARKER_POINTER_PROTRUSION_FRACTION * 2.2
-        hair = QPen(QColor(*palette.MARKER_BORDER_RGBA))
-        hair.setWidthF(outline.widthF())
-        painter.setPen(hair)
-        painter.drawLine(dial_point(angle_deg, base), dial_point(angle_deg, seat))
-        reach = dial_radius * dial.MARKER_POINTER_PROTRUSION_FRACTION * 1.5
+        # A faceted diamond — LONGER than wide, long axis on the
+        # radius, outer vertex flush with the body's edge, NO hairline
+        # (owner corrections 2026-08-10/11: the first cut was squat AND
+        # tiny AND roped to the body; all three are gone).
+        reach = half_size * dial.MARKER_GEM_LENGTH_RATIO
+        seat = tip - reach
+        half_width_deg = math.degrees(
+            reach * dial.MARKER_GEM_WIDTH_RATIO / max(1.0, seat)
+        )
         painter.setPen(outline)
         painter.setBrush(QColor(color))
         painter.drawPolygon(QPolygonF([
-            dial_point(angle_deg, seat + reach),
-            dial_point(angle_deg + half, seat),
+            dial_point(angle_deg, tip),
+            dial_point(angle_deg + half_width_deg, seat),
             dial_point(angle_deg, seat - reach),
-            dial_point(angle_deg - half, seat),
+            dial_point(angle_deg - half_width_deg, seat),
         ]))
     else:
         painter.restore()

@@ -1529,19 +1529,23 @@ class Compositor:
         # the SAME relocation `YearMarkerLayer.paint` applies fixes it:
         # hit-test the DRAWN position, whichever radius that is.
         eclipse = self._last_tick.eclipse_event
-        # THE CLEAR ORBIT LANE (owner verdict 2026-08-09): the quiet hit
-        # radius mirrors the DRAWN one exactly — `dial.
-        # earth_moon_orbit_fraction`, the same call `YearMarkerLayer`
+        # THE LINE AND THE BODIES (owner correction 2026-08-10): the
+        # quiet hit radius mirrors the DRAWN one exactly — `dial.
+        # earth_moon_orbit_fraction` PER BODY (each body's own disc is
+        # tangent to the tick-tip line, so the two orbits differ by
+        # their half-size difference), the same calls `YearMarkerLayer`
         # makes — never the old fixed `orbit_fraction` field.
-        quiet_marker_orbit = dial.earth_moon_orbit_fraction(
-            self._skin.numeral_outer_ring_size,
-            max(marker.scale, marker.moon_scale),
+        quiet_moon_orbit = dial.earth_moon_orbit_fraction(
+            self._skin.numeral_outer_ring_size, marker.moon_scale,
+        )
+        quiet_earth_orbit = dial.earth_moon_orbit_fraction(
+            self._skin.numeral_outer_ring_size, marker.scale,
         )
         moon_orbit = (
             self._band_hit(dial.GLOW_RING_RADIUS_FRACTION)
             if self._last_tick.moon_event is not None
             or (eclipse is not None and eclipse.kind == "lunar")
-            else quiet_marker_orbit
+            else quiet_moon_orbit
         )
         # THE MARKERS RIDE THE WORLD (core.world): both are drawn on the
         # turning dial face, so their hit discs take the same offset the
@@ -1559,7 +1563,7 @@ class Compositor:
             self._band_hit(dial.GLOW_RING_RADIUS_FRACTION)
             if self._last_tick.season_event is not None
             or (eclipse is not None and eclipse.kind == "solar")
-            else quiet_marker_orbit
+            else quiet_earth_orbit
         )
         if self._skin.show_earth and hit(
             dial_point(self._last_tick.year_angle + offset, radius * earth_orbit),

@@ -25,6 +25,20 @@ The shipped code was already radial — the mockup was the thing that was
 wrong — and `tests/test_marker_pointer.py` pins it for all three shapes
 so the drawing and the drawings of the drawing cannot drift again.
 
+## The 2026-08-10 screenshot corrections
+The owner's four-styles screenshot round re-cut two of the three
+shapes: the CHEVRON is now the SAME triangle geometry drawn as LINE
+only (the open-V first cut was far too wide and looked unrelated to
+the triangle beside it), and the GEM is a diamond LONGER than wide,
+its long axis on the radius (`dial.MARKER_GEM_LENGTH_RATIO` /
+`MARKER_GEM_WIDTH_RATIO` — the first cut shipped the proportion
+inverted) with NO hairline joining it to the body (nobody asked for a
+line out of the Earth). All three are PROPORTIONAL to the body's own
+half-size, drawn BEHIND the body ("IZA NE ISPRED ZEMLJE"), bridging
+the tick zone: base hidden under the disc, tip on the thread line at
+the tick roots (`dial.earth_moon_orbit_fraction`'s tangent fit puts
+the body's edge on the little pointers' tip line).
+
 ## The stations
 New moon is birth, first quarter youth, full moon the zenith of
 maturity, last quarter age; winter solstice, spring equinox, summer
@@ -48,7 +62,7 @@ numbers are `constants.MOON_STATION_GLOW`.
   shadow agree about where the dark half is
 - [Config (folder)](../../config/___config.md) — `constants` (the
   rosters, the glow ramp, the station lookups), `dial` (the pointer's
-  protrusion/recess geometry), `palette` (`INSTRUMENT_SEASON_COLORS`,
+  proportional length/width ratios and the tick-line measurements), `palette` (`INSTRUMENT_SEASON_COLORS`,
   the marker border, the glow colours)
 
 ### Used by

@@ -3,29 +3,37 @@ the dial's inner tick circle showing WHEN the Moon stands above the
 horizon today, in one of four owner-approved visual styles.
 
 Geometry comes entirely from `core.moon.moon_horizon_arcs` (Rule #5,
-never re-derived here); this module only paints it. The band sits on
-the INNER band's own radius (`dial.MINUTES_RADIUS_FRACTION`) — that
-band NEVER rotates with `ctx.world_offset` in any world mode (the
-Fidelity Ruling, `render.layers.numerals`'s own "ledger §2"), so this
-layer does not apply the world offset either; both stay in registration
-with the fixed tick art underneath.
+never re-derived here); this module only paints it. That band NEVER
+rotates with `ctx.world_offset` in any world mode (the Fidelity
+Ruling, `render.layers.numerals`'s own "ledger §2"), so this layer
+does not apply the world offset either; it stays in registration with
+the fixed tick art underneath.
 
-THE TICK-ART HONESTY NOTE: the 360 day ticks themselves are the
-owner's own baked PNG art (`config.dial.RING_INNER_COMPOSITION`'s base
-plate), not individually addressable primitives — there is no per-tick
-recolor hook to reach into. Style 1 ("inverted") is therefore
-approximated as a stroked arc drawn AT the tick radius using
-`QPainter.CompositionMode_Difference` (a true RGB invert of whatever
-art sits under the stroke, so a light-ink result over dark ticks is
-the actual inverted pixels, not a guess). Style 3 ("ticks") is NOT a
-continuous stroke — the owner's own correction (2026-08-09, grader
-round): a connecting line would make it visually indistinguishable
-from "silver_thread" at a glance, which the approved design forbids.
-It draws one discrete `MOON_SILVER` radial segment PER DEGREE (the
-same 1-per-degree spacing the baked art itself uses — "the 360 day
-ticks"), slightly longer than the plate's own ticks, with NOTHING
-connecting them — the tick marks themselves are the whole style,
-matching the approved design's "no connecting thread/arc line at all".
+THE LINE RIDES THE TICK ROOTS (owner corrections 2026-08-10/11, the
+two screenshot rounds — this re-cut's whole reason): every style's
+line sits at `dial.RING_INNER_TICK_OUTER_FRACTION`, the measured
+radius of the 360 little pointers' outer roots — "the end of the
+inner circle, where the pointer arrow, the big strokes and the
+numerals stop" — and the little pointers hang INWARD from it with
+their free tips at `RING_INNER_TICK_INNER_FRACTION`. The Earth/Moon
+orbit is tangent to the TIPS line from inside
+(`dial.earth_moon_orbit_fraction`), and the position-pointer arrow
+bridges the tick zone between the two lines, behind its body.
+
+Per style, all four re-cut to his screenshot corrections of 2026-08-10:
+- "inverted" fills ONLY the belt from the line out to the hour band
+  (the ticks' own zone — "where the pointers are"), never the whole
+  interior, using `CompositionMode_Difference` (a true RGB invert of
+  the baked tick art — the honesty note: the ticks are the owner's own
+  PNG plate, there is no per-tick recolor hook to reach into).
+- "silver_thread" keeps its dots but the culmination diamond is LONGER
+  than wide (radially seated), never the squat square of the first cut.
+- "ticks" draws one discrete GRAY segment per degree spanning exactly
+  the plate's own tick zone (`palette.MOON_BAND_TICK_GRAY` — his
+  words: "the gray lines that show the 360 steps in the INNER RING"),
+  with NOTHING connecting them (his 2026-08-09 correction, kept).
+- "glow" is stroked soft-capped arcs — the first cut's stacked filled
+  wedges read as a pixelated smear with chopped-off ends.
 """
 
 import math
@@ -37,22 +45,35 @@ from config import constants, dial, palette
 from core import angles
 from core.moon import MoonArc, moon_horizon_arcs
 from render.context import Cadence, Layer, RenderContext
-from render.painting import dial_point, draw_pie
+from render.painting import dial_point
 
-# Radial geometry (fractions of the band radius; small enough on-dial
-# that plain constants read clearly against a lookup table nobody else
-# shares).
-_TICK_STROKE_WIDTH_FRACTION = 0.012
-_SILVER_TICK_SEGMENT_WIDTH_FRACTION = 0.010   # each discrete tick's own line width (style 3)
-_SILVER_TICK_HALF_LENGTH_FRACTION = 0.028     # each tick's half-length, centered on the band radius
+# Radial geometry (fractions of the LINE radius — the tick ROOTS, the
+# end of the inner circle; owner correction 2026-08-11). The little
+# pointers hang INWARD from the line; their tips' radius is not a free
+# choice but the measured plate geometry, so it derives from the two
+# `config.dial` measurements and never drifts from the art.
+_TICK_ZONE_INNER_RATIO = (
+    dial.RING_INNER_TICK_INNER_FRACTION / dial.RING_INNER_TICK_OUTER_FRACTION
+)
+# THE SPARED SEATS (owner correction 2026-08-11, slika 1/2: the invert
+# and the gray ticks touch ONLY the background aura/umbra and the 360
+# little points — never the big strokes, the arrows or the numbers):
+# every 6th degree carries the plate's own big minute stroke, and the
+# five-minute seats (every 30 degrees) carry a number or an arrow, so
+# those degrees — with a one-degree shoulder around the seats — are
+# skipped by both styles.
+def _seat_spared(degree: int) -> bool:
+    if degree % 6 == 0:
+        return True
+    return min(degree % 30, 30 - degree % 30) <= 1
+_GRAY_TICK_SEGMENT_WIDTH_FRACTION = 0.010  # each discrete tick's own line width (style 3)
 _THREAD_WIDTH_FRACTION = 0.006         # style 2's thin thread
-_THREAD_INSET_FRACTION = 0.035         # just inside the ticks
 _DOT_RADIUS_FRACTION = 0.014
-_DIAMOND_HALF_FRACTION = 0.016
-_INVERT_FILL_ALPHA = 110
-_GLOW_LAYERS = 5
-_GLOW_MAX_WIDTH_FRACTION = 0.10
-_GLOW_MAX_ALPHA = 90       # of 255, at culmination, innermost layer
+_DIAMOND_HALF_LENGTH_FRACTION = 0.022  # culmination diamond, radial half-LENGTH
+_DIAMOND_WIDTH_RATIO = 0.45            # its tangential half-width, OF that length
+_GLOW_LAYERS = 8
+_GLOW_MAX_WIDTH_FRACTION = 0.08
+_GLOW_MAX_ALPHA = 88       # of 255, innermost layer
 _ECLIPSE_SEGMENT_WIDTH_FRACTION = 0.075   # the copper band segment's thickness
 _ECLIPSE_SEGMENT_EDGE_FRACTION = 0.30     # its turquoise end caps, of that width
 
@@ -71,7 +92,12 @@ class MoonBandLayer(Layer):
         if spec.moon_band_mode != "horizon":
             return
         arcs = moon_horizon_arcs(ctx.day.moonrise, ctx.day.moonset)
-        radius = ctx.radius * dial.MINUTES_RADIUS_FRACTION
+        # THE LINE at the tick ROOTS — the end of the inner circle,
+        # where the hexagram vertex, the big strokes and the numerals
+        # all stop (owner correction 2026-08-11; his 2026-08-10 "top of
+        # the pointers" meant this outer end, not the inward tips the
+        # first re-cut used).
+        radius = ctx.radius * dial.RING_INNER_TICK_OUTER_FRACTION
         style = spec.moon_band_style
         painter.save()
         painter.setRenderHint(QPainter.RenderHint.Antialiasing)
@@ -146,39 +172,52 @@ class MoonBandLayer(Layer):
     # -- style 1: inverted band -------------------------------------------
 
     def _draw_inverted(self, painter: QPainter, radius: float, arc: MoonArc) -> None:
-        painter.save()
-        painter.setPen(Qt.PenStyle.NoPen)
-        painter.setBrush(QColor(0, 0, 0, _INVERT_FILL_ALPHA))
-        painter.setCompositionMode(QPainter.CompositionMode.CompositionMode_Multiply)
-        draw_pie(painter, radius, arc.start_deg, arc.end_deg)
-        painter.restore()
-        # The ticks themselves invert to light ink: a real RGB difference
-        # against whatever sits under the stroke (the honesty note above).
+        """THE INVERTED BELT (owner corrections 2026-08-10/11): only
+        the little pointers' zone inside the line, and inside it ONLY
+        the background and the little points themselves — one Difference
+        wedge per non-spared degree, so the big strokes, the arrows and
+        the numbers are never inverted (slika 1's exact complaint: the
+        first re-cut ran the invert across everything in the belt).
+        A true RGB Difference against the baked art (the honesty note
+        in the module docstring), plus the line itself."""
+        inner = radius * _TICK_ZONE_INNER_RATIO
         painter.save()
         pen = QPen(QColor(255, 255, 255))
-        pen.setWidthF(radius * _TICK_STROKE_WIDTH_FRACTION)
+        # One near-degree-wide radial segment per spared-degree — a
+        # thick Difference stroke, never a centre-anchored pie wedge (a
+        # 1-degree pie-minus-pie path degenerates and leaks rays to the
+        # dial centre; the segment is the honest shape of one step).
+        pen.setWidthF(radius * math.radians(1.0) * 0.85)
+        pen.setCapStyle(Qt.PenCapStyle.FlatCap)
         painter.setPen(pen)
         painter.setBrush(Qt.BrushStyle.NoBrush)
         painter.setCompositionMode(QPainter.CompositionMode.CompositionMode_Difference)
-        self._stroke_arc(painter, radius, arc)
+        first = math.ceil(arc.start_deg)
+        last = math.floor(arc.end_deg)
+        for degree in range(first, last + 1):
+            if _seat_spared(degree % 360):
+                continue
+            theta = degree % 360.0
+            painter.drawLine(
+                dial_point(theta, inner), dial_point(theta, radius)
+            )
         painter.restore()
+        self._stroke_thread(painter, radius, arc)
 
     # -- style 2: silver thread (THE DEFAULT) ------------------------------
 
     def _draw_silver_thread(self, painter: QPainter, radius: float, arc: MoonArc) -> None:
-        thread_radius = radius * (1.0 - _THREAD_INSET_FRACTION)
         silver = QColor(palette.MOON_SILVER)
-        pen = QPen(silver)
-        pen.setWidthF(radius * _THREAD_WIDTH_FRACTION)
-        painter.setPen(pen)
-        painter.setBrush(Qt.BrushStyle.NoBrush)
-        self._stroke_arc(painter, thread_radius, arc)
+        pen = self._line_pen(radius)
+        self._stroke_thread(painter, radius, arc)
 
         dot_r = radius * _DOT_RADIUS_FRACTION
-        start_pt = dial_point(arc.start_deg % 360.0, thread_radius)
-        end_pt = dial_point(arc.end_deg % 360.0, thread_radius)
-        # Filled dot at moonrise.
-        painter.setPen(Qt.PenStyle.NoPen)
+        start_pt = dial_point(arc.start_deg % 360.0, radius)
+        end_pt = dial_point(arc.end_deg % 360.0, radius)
+        edge = QPen(QColor(palette.MOON_BAND_LINE_EDGE))
+        edge.setWidthF(pen.widthF() * 0.8)
+        # Filled dot at moonrise, edged so it reads on a light plate too.
+        painter.setPen(edge)
         painter.setBrush(silver)
         painter.drawEllipse(start_pt, dot_r, dot_r)
         # Hollow dot at moonset.
@@ -186,53 +225,100 @@ class MoonBandLayer(Layer):
         painter.setBrush(Qt.BrushStyle.NoBrush)
         painter.drawEllipse(end_pt, dot_r, dot_r)
         # Diamond at culmination (the arc's own midpoint — see
-        # `core.moon.MoonArc`'s documented approximation).
+        # `core.moon.MoonArc`'s documented approximation), seated
+        # RADIALLY: longer than wide (owner correction 2026-08-10 —
+        # the first cut shipped the proportion inverted).
         if not arc.full_circle:
-            culm_pt = dial_point(arc.culmination_deg % 360.0, thread_radius)
-            half = radius * _DIAMOND_HALF_FRACTION
-            self._draw_diamond(painter, culm_pt, half, silver)
+            self._draw_diamond(
+                painter, arc.culmination_deg % 360.0, radius,
+                radius * _DIAMOND_HALF_LENGTH_FRACTION, silver,
+            )
 
     # -- style 3: moon ticks ------------------------------------------------
 
     def _draw_ticks(self, painter: QPainter, radius: float, arc: MoonArc) -> None:
-        """TICKS-ONLY (owner correction 2026-08-09): one discrete
-        `MOON_SILVER` radial segment per degree — the SAME 1-per-degree
-        spacing the baked tick art already uses — with NOTHING
-        connecting them. No arc, no thread: the ticks turning silver
-        and slightly longer IS the whole style, so it reads distinctly
-        from "silver_thread" at a glance."""
-        pen = QPen(QColor(palette.MOON_SILVER))
-        pen.setWidthF(radius * _SILVER_TICK_SEGMENT_WIDTH_FRACTION)
+        """GRAY TICKS ON THE PLATE'S OWN STEPS (owner corrections
+        2026-08-09 and 2026-08-10): one discrete GRAY radial segment
+        per degree — the SAME 1-per-degree spacing the baked tick art
+        uses, spanning exactly the plate's own measured tick zone, so
+        the style reads as the clock's own 360 steps lighting up in
+        gray, not as loose white lines crossing the band. NOTHING
+        connects them (the 2026-08-09 correction, kept): no arc, no
+        thread."""
+        pen = QPen(QColor(palette.MOON_BAND_TICK_GRAY))
+        pen.setWidthF(radius * _GRAY_TICK_SEGMENT_WIDTH_FRACTION)
         pen.setCapStyle(Qt.PenCapStyle.FlatCap)
         painter.setPen(pen)
-        half_len = radius * _SILVER_TICK_HALF_LENGTH_FRACTION
+        inner_radius = radius * _TICK_ZONE_INNER_RATIO
         first = math.ceil(arc.start_deg)
         last = math.floor(arc.end_deg)
         for degree in range(first, last + 1):
+            if _seat_spared(degree % 360):
+                # The seats keep the plate's own strokes/numbers/arrows
+                # (owner correction 2026-08-11, slika 2) — this style
+                # only re-dresses the little points themselves.
+                continue
             theta = degree % 360.0
-            inner = dial_point(theta, radius - half_len)
-            outer = dial_point(theta, radius + half_len)
-            painter.drawLine(inner, outer)
+            painter.drawLine(
+                dial_point(theta, inner_radius), dial_point(theta, radius)
+            )
 
     # -- style 4: moon glow ---------------------------------------------------
 
     def _draw_glow(self, painter: QPainter, radius: float, arc: MoonArc) -> None:
+        """Soft-capped STROKED arcs (owner correction 2026-08-10: the
+        first cut's stacked filled wedges read as a pixelated smear
+        with chopped-off flat ends). Concentric round-capped strokes of
+        tapering width build the bloom; the round caps ARE the soft
+        ends, and each layer's span retreats by its own cap radius so
+        the ends taper instead of stacking into a wall."""
         painter.save()
-        painter.setPen(Qt.PenStyle.NoPen)
-        base_radius = radius * (1.0 - _THREAD_INSET_FRACTION)
+        painter.setBrush(Qt.BrushStyle.NoBrush)
+        span = arc.end_deg - arc.start_deg
         for i in range(_GLOW_LAYERS):
             frac = 1.0 - i / _GLOW_LAYERS         # widest outermost, thin innermost
             width = radius * _GLOW_MAX_WIDTH_FRACTION * frac
             alpha = round(_GLOW_MAX_ALPHA * (i + 1) / _GLOW_LAYERS)
             color = QColor(palette.MOON_SILVER)
             color.setAlpha(alpha)
-            painter.setBrush(color)
-            outer = base_radius + width / 2.0
-            inner = max(0.0, base_radius - width / 2.0)
-            self._draw_ring_wedge(painter, outer, inner, arc)
+            pen = QPen(color)
+            pen.setWidthF(width)
+            pen.setCapStyle(Qt.PenCapStyle.RoundCap)
+            painter.setPen(pen)
+            # The cap's own angular radius at this width — the retreat
+            # that tapers the ends. A full circle never retreats.
+            inset_deg = (
+                0.0 if arc.full_circle
+                else math.degrees(width / (2.0 * radius))
+            )
+            inset_deg = min(inset_deg, span / 2.0)
+            self._stroke_arc(
+                painter, radius,
+                MoonArc(
+                    arc.start_deg + inset_deg, arc.end_deg - inset_deg,
+                    arc.culmination_deg, full_circle=arc.full_circle,
+                ),
+            )
         painter.restore()
 
     # -- shared drawing helpers -----------------------------------------
+
+    def _line_pen(self, radius: float) -> QPen:
+        pen = QPen(QColor(palette.MOON_SILVER))
+        pen.setWidthF(radius * _THREAD_WIDTH_FRACTION)
+        return pen
+
+    def _stroke_thread(self, painter: QPainter, radius: float, arc: MoonArc) -> None:
+        """THE LINE itself, two-tone: a slate under-stroke below the
+        silver so it reads on a light inner plate as well as a dark one
+        (`palette.MOON_BAND_LINE_EDGE`'s own note)."""
+        painter.setBrush(Qt.BrushStyle.NoBrush)
+        under = QPen(QColor(palette.MOON_BAND_LINE_EDGE))
+        under.setWidthF(radius * _THREAD_WIDTH_FRACTION * 2.4)
+        painter.setPen(under)
+        self._stroke_arc(painter, radius, arc)
+        painter.setPen(self._line_pen(radius))
+        self._stroke_arc(painter, radius, arc)
 
     def _stroke_arc(self, painter: QPainter, radius: float, arc: MoonArc) -> None:
         rect = QRectF(-radius, -radius, 2 * radius, 2 * radius)
@@ -264,14 +350,26 @@ class MoonBandLayer(Layer):
         painter.drawPath(path)
 
     def _draw_diamond(
-        self, painter: QPainter, center: QPointF, half: float, color: QColor,
+        self, painter: QPainter, angle_deg: float, radius: float,
+        half_length: float, color: QColor,
     ) -> None:
+        """The culmination diamond, seated RADIALLY on the line at its
+        own dial angle: its long axis points along the radius and its
+        width is `_DIAMOND_WIDTH_RATIO` of the length — longer than
+        wide by construction (owner correction 2026-08-10)."""
+        theta = math.radians(angle_deg)
+        radial = QPointF(math.sin(theta), -math.cos(theta))
+        tangent = QPointF(-radial.y(), radial.x())
+        center = dial_point(angle_deg, radius)
+        half_width = half_length * _DIAMOND_WIDTH_RATIO
         points = QPolygonF([
-            QPointF(center.x(), center.y() - half),
-            QPointF(center.x() + half, center.y()),
-            QPointF(center.x(), center.y() + half),
-            QPointF(center.x() - half, center.y()),
+            center + radial * half_length,
+            center + tangent * half_width,
+            center - radial * half_length,
+            center - tangent * half_width,
         ])
-        painter.setPen(Qt.PenStyle.NoPen)
+        edge = QPen(QColor(palette.MOON_BAND_LINE_EDGE))
+        edge.setWidthF(radius * _THREAD_WIDTH_FRACTION * 0.8)
+        painter.setPen(edge)
         painter.setBrush(color)
         painter.drawPolygon(points)

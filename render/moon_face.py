@@ -26,12 +26,12 @@ from PySide6.QtGui import QColor, QPainter, QPainterPath, QPen
 from config import glow, palette
 from render.asset_variants import moon_lit_region
 
-# Shadow strengths, as fractions of full opacity. "opaque" is the
-# owner's cheapest accepted variant — one constant away from the
-# retired 0.82 wash, and already enough for a crescent to read as a
-# shape rather than a highlight. "ghost" is the barely-there disc the
-# cut sits over, present only so a new moon stays findable.
-_OPAQUE_ALPHA = 0.97
+# "ghost" is the barely-there disc the cut sits over, present only so
+# a new moon stays findable. ("opaque" carries NO alpha constant any
+# more — owner correction 2026-08-10: an alpha-thinned shadow read as
+# a "wretched translucent gray" on the dial's coloured wedges; the
+# style is now a fully opaque BLACK disc under the lit region,
+# `palette.MOON_SHADOW_BLACK`.)
 _GHOST_ALPHA = 0.55
 
 # The permanent hairline "cut_rim" draws around the TRUE disc, so the
@@ -78,10 +78,21 @@ def draw_moon_disc(
     a silent fallback is how a whole missing treatment ships green.
     """
     if style == "opaque":
+        # THE BLACK DISC UNDER THE MOON (owner correction 2026-08-10):
+        # the full disc is laid down first as opaque black — so the
+        # body's true size always reads and NOTHING of the desktop or
+        # the dial's wedges bleeds through the shadow — and the lit
+        # region is painted over it. The first cut washed `dark_color`
+        # at 0.97 alpha OVER the face instead, which the owner rightly
+        # called a translucent gray, identical to the design he had
+        # already rejected.
+        disc = QPainterPath()
+        disc.addEllipse(QRectF(-radius, -radius, 2 * radius, 2 * radius))
+        painter.fillPath(disc, QColor(palette.MOON_SHADOW_BLACK))
+        painter.save()
+        painter.setClipPath(moon_lit_region(fraction, radius))
         paint_face(painter)
-        shadow = QColor(dark_color)
-        shadow.setAlphaF(_OPAQUE_ALPHA)
-        painter.fillPath(dark_region(fraction, radius), shadow)
+        painter.restore()
         return
     if style not in ("cut_rim", "cut_ghost"):
         raise ValueError(f"unknown moon dark style {style!r}")

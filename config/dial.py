@@ -82,22 +82,31 @@ MARKER_BORDER_WIDTH = 0.05           # fraction of the marker size
 # on the shared rim — like an eclipse (owner decision; both stay visible).
 MOON_TRANSIT_OPACITY = 0.5
 
-# THE CLEAR ORBIT LANE (owner verdict 2026-08-09: "Earth touches the outer
-# ring" — Earth and Moon must both travel on a circle that touches NEITHER
-# the inner ring's own content (the minute band, its ticks and quarter/octa
-# arrows) NOR the outer hour band). The two markers keep ONE shared orbit
-# radius (the original "rides the same rim" design — so a real transit,
-# the Moon literally crossing the Earth, still exists), pulled inside
-# `MINUTES_RADIUS_FRACTION` — the inner band's own live content, scaled by
-# `interior_scale` exactly like every other interior member so it tracks
-# THE INWARD-GROWTH LAW at every "Outer ring size" setting — by whichever
-# marker's current half-size (its scale slider included) is larger, plus
-# this fixed visible gap. Clearing the minute band clears the outer band
-# for free: `MINUTES_RADIUS_FRACTION` (0.8215) sits inside the outer band's
-# measured inner edge (0.886) by a fixed ratio THE INWARD-GROWTH LAW
-# preserves at every ring size (`outer_band_edges`), so there is no second
-# boundary to solve. Pinned by `tests/test_earth_moon_orbit.py`.
-EARTH_MOON_ORBIT_CLEARANCE_FRACTION = 0.02
+# THE 360 DAY TICKS' OWN RADIAL HOME, measured on the owner's inner base
+# plates (radial alpha sweep of `simple.png`, angles between the 6-degree
+# strokes): the one-per-degree tick segments run 0.854 -> 0.889 of the
+# plate radius, their free TIPS pointing INWARD at 0.854. These are the
+# "mini pointers" of the owner's correction below — every band line and
+# marker arrow reasons from these two numbers, never from a re-guess.
+RING_INNER_TICK_INNER_FRACTION = 0.854   # the tick TIPS (facing the centre)
+RING_INNER_TICK_OUTER_FRACTION = 0.889   # their roots, at the hour band
+
+# THE LINE AND THE BODIES (owner corrections 2026-08-10 and 2026-08-11
+# — the second round decoded the first: "the top of the pointers" is
+# the little ticks' OUTER ROOT, the end of the inner circle where the
+# hexagram vertex, the big strokes and the numerals all stop — NOT
+# their inward-facing tips, which the first cut used and he rejected;
+# this SUPERSEDES the 2026-08-09 "clear orbit lane" clearance): the
+# Moon Horizon Band's thread/glow LINE rides
+# `RING_INNER_TICK_OUTER_FRACTION` (the tick roots), the 360 little
+# pointers hang INWARD from it with their free tips at
+# `RING_INNER_TICK_INNER_FRACTION` — and EACH of the Earth and the
+# Moon rides so its OWN disc touches the LITTLE POINTERS' line (the
+# tips) from inside, per-body tangent, both touching. The
+# position-pointer arrow sits BEHIND its body ("IZA NE ISPRED
+# ZEMLJE"), bridging the tick zone: base hidden under the disc, tip on
+# the thread line at the roots. Pinned by
+# `tests/test_earth_moon_orbit.py`.
 
 # THE STAR/POLYGON TIP (moved here from `config.defaults`'s DEFAULT_SKIN
 # literal, owner correction round 2026-08-09 — the orbit lane needs to
@@ -109,49 +118,17 @@ EARTH_MOON_ORBIT_CLEARANCE_FRACTION = 0.02
 # reads this constant instead of repeating the literal.
 STAR_RADIUS_FRACTION = 0.86
 
-# THE HEXAGRAM/PENTAGON FLOOR (owner correction round 2026-08-09: "the
-# Moon crosses the inner pentagon/hexagram border" — the star diamond
-# fill `render.shapes.star_diamond_path` paints is not a circle: each
-# arm is a kite reaching its own tip at `STAR_RADIUS_FRACTION`, its two
-# outer edges sloping in toward the shared vertex their neighbour kite
-# also touches, `render.shapes.star_inner_radius`'s own value (`tip /
-# (2·cos(half-angle))`). A marker sitting exactly ON one of those
-# sloped edges is what an independent grader saw slice across the Moon.
-# The kite's own APOTHEM — the edge's Cartesian midpoint radius,
-# `tip * cos(half-angle)`, the same measure `render.shapes.
-# polygon_boundary_radius` uses for the curvature-0 polygon edge this
-# kite becomes if the reader ever turns polygon curvature up — is the
-# practical floor: it sits well clear of the tip end the marker's own
-# angular footprint actually reaches (the marker is a few degrees wide,
-# not a full arm's half-angle), while stopping short of the inner
-# vertex's much deeper radius, which would bury the marker inside the
-# NEXT weekday body over. Smallest across every pointer the user can
-# pick (`constants.POINTER_ARM_HALF_ANGLE_DEG`) — the WIDEST arm (the
-# largest half-angle) pulls its apothem in the furthest.
-POLYGON_FILL_MIN_RADIUS_FRACTION = STAR_RADIUS_FRACTION * min(
-    math.cos(math.radians(half_deg))
-    for half_deg in constants.POINTER_ARM_HALF_ANGLE_DEG.values()
-)
-
-
 def earth_moon_orbit_fraction(ring_size: float, half_size: float) -> float:
-    """THE CLEAR ORBIT LANE's radius (owner verdict 2026-08-09) — see the
-    constant above for the reasoning. `half_size` is the LARGER of the
-    Earth/Moon markers' own current half-size (`max(spec.scale,
-    spec.moon_scale)`, both already carrying the user's scale sliders),
-    so the marker that is currently bigger is the one the clearance is
-    measured against and the smaller one rides the same safe rim with
-    room to spare.
-
-    THE HEXAGRAM/PENTAGON FLOOR (owner correction round 2026-08-09):
-    clearing the minute band alone let the Moon cross the star/polygon
-    background fill's own inward-dipping edges — see
-    `POLYGON_FILL_MIN_RADIUS_FRACTION` above — so the lane now clears
-    WHICHEVER inner element reaches furthest out, the minute band or
-    that fill floor."""
-    minutes_edge = MINUTES_RADIUS_FRACTION * interior_scale(ring_size)
-    inner_edge = min(minutes_edge, POLYGON_FILL_MIN_RADIUS_FRACTION)
-    return inner_edge - half_size - EARTH_MOON_ORBIT_CLEARANCE_FRACTION
+    """One marker's orbit radius — TANGENT TO THE LITTLE POINTERS' LINE
+    (owner corrections 2026-08-10/11, see THE LINE AND THE BODIES
+    above; this retired the 2026-08-09 clearance lane and its
+    hexagram-apothem floor). `half_size` is THIS body's own current
+    half-size (its scale slider included) — each body is tangent to
+    the tick-tip line itself, so the Earth and the Moon ride slightly
+    different radii and BOTH touch. The position-pointer arrow bridges
+    the tick zone from here to the thread line at the tick roots."""
+    line_edge = RING_INNER_TICK_INNER_FRACTION * interior_scale(ring_size)
+    return line_edge - half_size
 
 
 # THE POSITION POINTER (owner feature 2026-08-09, Settings ▸ Earth, off
@@ -162,25 +139,23 @@ def earth_moon_orbit_fraction(ring_size: float, half_size: float) -> float:
 # (visual proof correction round 2026-08-09 — the first cut drew it
 # UNDER the body, so only a thin sliver of tip peeked past the sphere's
 # own edge and read as a rendering glitch rather than an intentional
-# marker). The tip's protrusion stays comfortably inside
-# `EARTH_MOON_ORBIT_CLEARANCE_FRACTION`'s own margin (0.02) so the
-# pointer never re-touches the minute band or the outer hour band THE
-# CLEAR ORBIT LANE just cleared.
-#
-# SIZED FOR LEGIBILITY (owner ROUND CORRECTION, visual proof 2026-08-09):
-# the first cut (protrusion 0.012, half-angle 2.5deg, no outline) was
-# geometrically present — the render-diff tooth caught it — but READ AS
-# INVISIBLE on a live screenshot: a same-hued gold pointer over a
-# same-hued gold wedge is exactly the "hard to spot" defect this
-# feature exists to fix. `MARKER_POINTER_OUTLINE_RGBA` (a white
-# `palette.MARKER_BORDER_RGBA` stroke, the SAME outline the Earth
-# marker's own procedural-fallback disc wears) makes the shape read
-# against ANY fill color, not just a lucky one.
-MARKER_POINTER_PROTRUSION_FRACTION = 0.018   # tip, beyond the body's own edge
-MARKER_POINTER_RECESS_FRACTION = 0.35        # base, INTO the body's own radius
-                                              # (fraction of the body's half-size)
-MARKER_POINTER_HALF_DEG = 4.0                # half-angle of the triangle base
+# marker). BEHIND THE BODY, TIP ON THE LINE (owner corrections
+# 2026-08-10/11 — "IZA NE ISPRED ZEMLJE, Z INDEX MANJI": the arrow is
+# drawn BEFORE the body, its outward tip flush with the tick-root line
+# the body itself touches, so only its flanks show beside the disc's
+# curve; and every dimension is PROPORTIONAL to the body's own
+# half-size — the fixed-size first cut looked enormous next to a
+# small-scaled body, his "strelice i trougao preveliki". The gem is
+# the opposite correction: "DIJAMANT PREMALI" — proportional now too,
+# still longer than wide with NO hairline to the body.
+# `MARKER_POINTER_OUTLINE_RGBA` (the white `palette.MARKER_BORDER_RGBA`
+# stroke, the SAME outline the Earth's procedural disc wears) stays —
+# it is what makes the shape read against any wedge.
+MARKER_POINTER_LENGTH_RATIO = 0.80    # triangle depth, of the body's half-size
+MARKER_POINTER_WIDTH_RATIO = 0.45     # its tangential half-width, of the half-size
 MARKER_POINTER_OUTLINE_WIDTH_FRACTION = 0.0025   # stroke width, of the dial radius
+MARKER_GEM_LENGTH_RATIO = 0.55        # gem HALF-length, of the body's half-size
+MARKER_GEM_WIDTH_RATIO = 0.45         # its tangential half-width, OF that length
 
 # THE CROSSING (owner verdict 2026-08-10, `constants.MOON_TRANSIT_STYLES`)
 # — how far each non-overlapping style moves the Moon while it meets the

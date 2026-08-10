@@ -22,41 +22,43 @@ coordinates on every call (R-28 fix, 2026-08) — nothing about the region is
 baked into the skin, so a Quick Jump/Time Travel/Greenwich simulation moves
 the Earth marker's face exactly like an ordinary location change does.
 
-THE CLEAR ORBIT LANE (owner verdict 2026-08-09, "Earth touches the outer
-ring"): the QUIET (non-glowing) orbit radius is no longer the skin's own
-`orbit_fraction`/`moon_orbit_fraction` fields — those are now NOMINAL,
-read only by `moon_transit_opacity`'s touch-angle approximation. The
-DRAWN radius is computed fresh every paint by `config.dial.
-earth_moon_orbit_fraction(ring_size, half_size)`: pulled inside
-WHICHEVER inner element reaches furthest out — the minute band's own
-live radius (`dial.MINUTES_RADIUS_FRACTION`, scaled by
-`dial.interior_scale`) or THE HEXAGRAM/PENTAGON FLOOR
-(`dial.POLYGON_FILL_MIN_RADIUS_FRACTION`, added in the same
-correction round after an independent grader saw the Moon sit across
-the star/polygon background fill's own boundary line) — by whichever
-marker is currently the bigger of the two (`max(spec.scale,
-spec.moon_scale)`) plus a fixed visible clearance — so the marker's
-disc never reaches the minute band's own content, the star/polygon
-fill's boundary, NOR the outer hour band above it, at any dial size or
-ring preset. Earth and Moon still share this ONE radius (the "same rim"
-design, so a literal transit — the Moon crossing the Earth — still
-exists); `render/compositor.py`'s `_element_at` hit-test computes the
-identical radius so hover/click always matches the drawn position.
-Pinned by `tests/test_earth_moon_orbit.py`. The GLOWING relocation below
-(to the ring band centerline, during a season/eclipse event window) is
-untouched — that overlap is the owner's own approved dramatic effect,
-not the touching bug this law fixes.
+THE LINE AND THE BODIES (owner correction 2026-08-10, the four-styles
+screenshot round — SUPERSEDES the 2026-08-09 "clear orbit lane"
+clearance and its hexagram-apothem floor): the QUIET (non-glowing)
+orbit radius is computed fresh every paint by `config.dial.
+earth_moon_orbit_fraction(ring_size, half_size)`, now a PER-BODY
+TANGENT fit — `dial.RING_INNER_TICK_INNER_FRACTION` (the measured
+radius of the 360 little pointers' inward-facing tips) scaled by
+`dial.interior_scale`, minus THIS body's own half-size — so BOTH
+bodies always touch the little pointers' line, each on its own
+radius. The Moon Horizon Band's thread rides the tick ROOTS
+(`RING_INNER_TICK_OUTER_FRACTION`), outside the bodies. The
+skin's own `orbit_fraction`/`moon_orbit_fraction` fields stay NOMINAL,
+read only by `moon_transit_opacity`'s touch-angle approximation.
+A literal transit — the Moon crossing the Earth — still exists (the
+two radii differ only by the bodies' half-size difference);
+`render/compositor.py`'s `_element_at` hit-test computes the identical
+radius so hover/click always matches the drawn position. Pinned by
+`tests/test_earth_moon_orbit.py`. The GLOWING relocation below (to the
+ring band centerline, during a season/eclipse event window) is
+untouched — that overlap is the owner's own approved dramatic effect.
+The position pointer is drawn BEHIND the body (owner correction
+2026-08-11, "IZA NE ISPRED ZEMLJE" — his second time saying it), its
+dimensions proportional to the body's own half-size, bridging the
+tick zone: base hidden under the disc, tip on the thread line at the
+tick roots (`tests/test_marker_pointer.py`). The 2026-07-12
+below-horizon Moon dimming is RETIRED (owner 2026-08-11, "mesec opet
+ima OPACITY!!!") — the band says whether the Moon is up; the disc is
+always solid; `moon_hidden_alpha` stays stored but unread.
 
-THE POSITION POINTER (off by default) is drawn AFTER the body's own
-pixmap/disc for both markers (visual proof correction round 2026-08-09)
-— the first cut drew it BEFORE the body, so only its outward tip's
-protrusion peeked past the sphere's own edge, a sliver an independent
-grader read as a rendering glitch. On top it reads as an intentional
-marker at a glance. The shape itself moved to
-[`marker_marks.draw_pointer`](../../__about/marker_marks.md) on
-2026-08-10, when the owner approved a chevron and a seated gem beside
-the triangle; the geometry did not change, and every shape still rides
-the body's own dial angle rather than a fixed screen "up".
+THE POSITION POINTER (off by default) lives in
+[`marker_marks.draw_pointer`](../../__about/marker_marks.md) since
+2026-08-10, when the owner approved a chevron and a gem beside the
+triangle; every shape rides the body's own dial angle rather than a
+fixed screen "up". Its z has flipped twice: the 2026-08-09 grader round
+moved it ON TOP of the body, and the owner's 2026-08-11 screenshot
+round reversed that as wrong — it is BEHIND the body now (see THE LINE
+AND THE BODIES above), which is what he had asked for the first time.
 
 THE WORLD OFFSET ([World](../../../core/__about/world.md)): both markers are
 drawn ON the turning dial face, so both take `ctx.world_offset`. At night

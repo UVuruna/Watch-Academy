@@ -11,7 +11,7 @@ flowchart TD
     C --> D["stroke the TRUE disc in MOON_SILVER\n(a new moon is a hollow ring, never nothing)"]
     B -- cut_ghost --> E["fill the disc with dark_color @ GHOST_ALPHA"]
     E --> F[clip to lit -> paint_face -> restore]
-    B -- opaque --> G[paint_face over the whole disc]
+    B -- opaque --> G[opaque BLACK disc under, lit region painted over]
     G --> H["fill disc MINUS lit with dark_color @ OPAQUE_ALPHA"]
 ```
 

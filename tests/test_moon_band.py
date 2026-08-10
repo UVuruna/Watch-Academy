@@ -172,10 +172,11 @@ def test_ticks_style_has_no_connecting_arc_line() -> None:
             samples += 1
         return hits / samples
 
-    thread_fraction = _painted_fraction(
-        "_draw_silver_thread", band_radius * (1.0 - 0.035)
-    )
-    ticks_fraction = _painted_fraction("_draw_ticks", band_radius)
+    # The thread rides the line radius itself (owner corrections
+    # 2026-08-10/11 — no inset); the gray ticks hang INWARD from it, so
+    # they are sampled in the middle of their own measured zone.
+    thread_fraction = _painted_fraction("_draw_silver_thread", band_radius)
+    ticks_fraction = _painted_fraction("_draw_ticks", band_radius * 0.98)
     assert thread_fraction > 0.9, (
         f"silver_thread must read as a continuous line (got {thread_fraction:.0%} painted)"
     )

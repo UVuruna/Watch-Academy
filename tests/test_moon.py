@@ -359,9 +359,11 @@ def test_dial_moon_stays_half_lit_at_exact_quarter():
 
     moon_angle = math.radians(quarter.moon_fraction * 360.0)
     marker = defaults.DEFAULT_SKIN.year_marker
-    # THE CLEAR ORBIT LANE (owner verdict 2026-08-09): the DRAWN radius.
+    # THE LINE AND THE BODIES (owner corrections 2026-08-10/11): the
+    # DRAWN radius is per-BODY — the Moon's own tangent fit, its own
+    # half-size, never the shared max() of the retired clearance lane.
     orbit = radius * dial.earth_moon_orbit_fraction(
-        skin.numeral_outer_ring_size, max(marker.scale, marker.moon_scale),
+        skin.numeral_outer_ring_size, marker.moon_scale,
     )
     cx = round(radius + orbit * math.sin(moon_angle))
     cy = round(radius - orbit * math.cos(moon_angle))

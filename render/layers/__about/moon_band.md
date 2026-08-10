@@ -7,21 +7,22 @@
 
 THE MOON HORIZON BAND (owner verdict 2026-08-09): an arc on the dial's
 inner tick circle showing WHEN the Moon stands above the horizon
-today, in one of four owner-approved visual styles — "inverted"
-(darker fill + inverted ticks inside the arc), "silver_thread" (THE
-DEFAULT — a thin `MOON_SILVER` thread, filled dot at moonrise, hollow
-dot at moonset, diamond at culmination), "ticks" (TICKS-ONLY, owner
-correction 2026-08-09: one discrete `MOON_SILVER` radial segment per
-degree, slightly longer than the plate's own ticks, with NOTHING
-connecting them — no arc, no thread, so it reads distinctly from
-"silver_thread" at a glance) and "glow" (layered translucent arcs,
-brightest near culmination).
+today, in one of four owner-approved visual styles — "inverted" (the
+BELT from the line out to the hour band inverted, owner correction
+2026-08-10 — never the whole interior), "silver_thread" (THE DEFAULT —
+a thin `MOON_SILVER` thread on the tick roots, filled dot at moonrise,
+hollow dot at moonset, radially-seated diamond at culmination),
+"ticks" (one discrete GRAY radial segment per degree spanning exactly
+the plate's own tick zone, with NOTHING connecting them — no arc, no
+thread) and "glow" (round-capped stroked arcs, a smooth bloom with
+tapered ends).
 
 Geometry comes entirely from `core.moon.moon_horizon_arcs` — never
 re-derived here; one skin field carries the mode (`year_marker.
 moon_band_mode`, gating whether this layer draws AT ALL — "horizon"
-draws it, "dim_only"/"always_full" draw nothing, `moon_hidden_alpha`
-dimming keeps working independently of this switch) and one carries
+draws it, "dim_only"/"always_full" draw nothing; the old
+`moon_hidden_alpha` below-horizon dimming is RETIRED per the owner's
+2026-08-11 correction — the disc is always solid) and one carries
 the style (`year_marker.moon_band_style`, read only in "horizon"
 mode).
 
@@ -35,14 +36,14 @@ registration with the fixed tick art underneath it.
 THE TICK-ART HONESTY NOTE: the 360 day ticks are the owner's own baked
 PNG art (`config.dial.RING_INNER_COMPOSITION`'s base plate), not
 individually addressable primitives — there is no hook to recolor them
-in place. "inverted" is approximated with a stroked arc drawn AT the
-tick radius using `QPainter.CompositionMode_Difference` (a true RGB
-invert of whatever sits under the stroke, not a guessed light color).
-"ticks" does NOT approximate with a stroke — a connecting line reads
-as "silver_thread" at a glance, which the owner's correction (2026-08-09)
-forbids — it draws one discrete `MOON_SILVER` radial SEGMENT per
-degree instead, matching the baked art's own 1-per-degree spacing,
-with nothing connecting them.
+in place. "inverted" therefore fills the ticks' own measured belt
+(`dial.RING_INNER_TICK_INNER_FRACTION` → `RING_INNER_TICK_OUTER_
+FRACTION`) with `QPainter.CompositionMode_Difference` (a true RGB
+invert of the art under it, not a guessed light color). "ticks" does
+NOT approximate with a stroke — a connecting line reads as
+"silver_thread" at a glance, which the owner's correction (2026-08-09)
+forbids — it draws one discrete `MOON_BAND_TICK_GRAY` radial SEGMENT
+per degree over the plate's own steps, with nothing connecting them.
 
 ## Connections
 
@@ -50,9 +51,9 @@ with nothing connecting them.
 - [Moon (core)](../../../core/__about/moon.md) — `MoonArc`,
   `moon_horizon_arcs` — the layer's whole geometry input
 - [Config (folder)](../../../config/___config.md) —
-  `dial.MINUTES_RADIUS_FRACTION`; `palette.MOON_SILVER`
+  `dial.RING_INNER_TICK_INNER_FRACTION`/`RING_INNER_TICK_OUTER_FRACTION`; `palette.MOON_SILVER`, `MOON_BAND_TICK_GRAY`, `MOON_BAND_LINE_EDGE`
 - [Render Context](../../__about/context.md) — `Cadence`, `Layer`, `RenderContext`
-- [Painting](../../__about/painting.md) — `dial_point`, `draw_pie`
+- [Painting](../../__about/painting.md) — `dial_point`
 
 ### Used by
 - [Compositor](../../__about/compositor.md) — built between `"ring"` and
@@ -110,8 +111,21 @@ with the day's own moonrise/moonset, never per-tick).
   reporting it as an empty circle.
 
 ## Design Decisions
-- The band sits on `dial.MINUTES_RADIUS_FRACTION` (the inner tick
-  band's own live radius), never a second guessed radius.
+- The line sits on `dial.RING_INNER_TICK_OUTER_FRACTION` — the
+  measured radius of the 360 little pointers' outer ROOTS, the end of
+  the inner circle (owner corrections 2026-08-10/11) — and the little
+  pointers hang inward from it. The Earth/Moon orbit is tangent to
+  their TIP line (`RING_INNER_TICK_INNER_FRACTION`) per body, and the
+  position-pointer arrow bridges the tick zone between the two lines,
+  drawn behind its body.
+- The four styles after the same correction rounds: "inverted" and
+  "ticks" touch ONLY the background and the little points — one
+  segment per degree, SPARING every 6th degree (the big strokes) and
+  the five-minute seats (numbers/arrows), per his slika 1/2;
+  "glow" is round-capped stroked arcs (no filled-wedge banding, no
+  flat chopped ends); the thread/dots/diamond wear a slate under-edge
+  (`palette.MOON_BAND_LINE_EDGE`) so they read on light plates, and
+  the culmination diamond is radially seated, longer than wide.
 - Culmination is the arc's own midpoint (`core.moon.MoonArc`'s
   documented owner-approved approximation — no lunar-transit
   computation exists in `core.moon`).

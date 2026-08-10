@@ -15,6 +15,15 @@ bright edge — his complaint that a 5 %-lit Moon "does not look like it
 is on the horizon". That treatment is RETIRED, not kept as a menu
 entry: it was the defect the round was opened to fix.
 
+THE BLACK DISC (owner correction 2026-08-10, the screenshot round the
+day after): the first cut of "opaque" painted the face and then washed
+the dark region with `dark_color` at 0.97 alpha — on the dial's
+coloured wedges that read as exactly the translucent gray he had
+already rejected. "Opaque" now lays a fully opaque BLACK disc
+(`palette.MOON_SHADOW_BLACK`) under the whole body first and paints
+the lit region over it, so nothing bleeds through the shadow and the
+body's true size always reads.
+
 The terminator GEOMETRY is not re-derived here. It comes from
 [`asset_variants.moon_lit_region`](asset_variants.md) exactly as
 before — the half-disc on the lit side combined with the terminator

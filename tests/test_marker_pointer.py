@@ -169,13 +169,28 @@ def test_pointer_off_paints_no_pixel_of_the_pointer_colour(app, moment):
     )
 
 
-def test_pointer_never_reaches_the_minute_band_or_the_outer_ring(app):
-    """The pointer's own tip protrusion stays inside THE CLEAR ORBIT
-    LANE's own clearance margin — it never re-opens the gap Task 1
-    closed."""
-    from config import dial
+def test_pointer_is_proportional_and_behind_the_body(app):
+    """THE ARROW IS BEHIND THE BODY (owner correction 2026-08-11, "IZA
+    NE ISPRED ZEMLJE, Z INDEX MANJI"): the render source draws the
+    pointer BEFORE the body's own disc, and its dimensions come from
+    the body's own half-size, never a fixed dial-radius size."""
+    import inspect
 
-    assert (
-        dial.MARKER_POINTER_PROTRUSION_FRACTION
-        < dial.EARTH_MOON_ORBIT_CLEARANCE_FRACTION
+    from render.layers import year_marker as ym
+
+    source = inspect.getsource(ym.YearMarkerLayer)
+    moon_paint = source[: source.index("_draw_moon(")]
+    assert "draw_pointer" in moon_paint, (
+        "the Moon's pointer must be drawn BEFORE the Moon's own disc"
+    )
+    earth_source = inspect.getsource(ym.YearMarkerLayer._draw_earth)
+    assert earth_source.count("draw_pointer") == 1, (
+        "exactly ONE Earth pointer draw — a leftover top-of-body call "
+        "is how the 2026-08-11 'IZA NE ISPRED' correction shipped wrong"
+    )
+    assert earth_source.index("draw_pointer") < earth_source.index("variant = ("), (
+        "the Earth's pointer must be drawn BEFORE the Earth's own art"
+    )
+    assert source.count("draw_pointer") - earth_source.count("draw_pointer") == 1, (
+        "exactly ONE Moon pointer draw, before the disc"
     )

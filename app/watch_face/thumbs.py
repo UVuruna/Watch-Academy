@@ -45,7 +45,7 @@ from render.painting import dial_point, draw_pie, tinted_gray
 THUMB_SOURCE_PX = 256
 # Bumped whenever the paint recipe below changes, so a stale pre-bump
 # cache file is never mistaken for the new recipe's output.
-_THUMB_CACHE_VERSION = 4
+_THUMB_CACHE_VERSION = 6
 
 
 def _cache_dir() -> Path:
