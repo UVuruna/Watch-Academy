@@ -16,8 +16,9 @@ from zoneinfo import ZoneInfo
 
 from app.settings_fields import (
     _HEX_COLOR, MERGED_MOUNTS, RETIRED_SLOTS, load_alpha, load_bool, load_choice,
-    load_earth_label, load_hex, load_numerals, load_palettes,
-    load_rotation_group, load_scale, migrate_palette_key, save_numerals,
+    load_earth_label, load_hex, load_moving_bodies, load_numerals, load_palettes,
+    load_rotation_group, load_scale, migrate_palette_key, normalized_jump_city,
+    save_moving_bodies, save_numerals,
 )
 from app.settings_ring import fold_ring_name, load_named_dict, normalized_ring_card
 from config import calendar_mounts, constants, defaults, dial, pantheon
@@ -236,6 +237,17 @@ class Settings:
     # and the 4 owner-approved styles, read only in "horizon" mode.
     moon_band_mode: str = constants.MOON_BAND_MODE_DEFAULT
     moon_band_style: str = constants.MOON_BAND_STYLE_DEFAULT
+    # THE MOVING BODIES (owner verdict 2026-08-10) — the eight menus of
+    # `constants`' section of that name, all picked in Watch Face ▸
+    # Hands & Bodies beside the hand pack, because the Moon and the
+    # Earth belong to the hands system.
+    moon_dark_style: str = constants.MOON_DARK_STYLE_DEFAULT
+    moon_transit_style: str = constants.MOON_TRANSIT_STYLE_DEFAULT
+    marker_pointer_shape: str = constants.MARKER_POINTER_SHAPE_DEFAULT
+    eclipse_solar_style: str = constants.ECLIPSE_SOLAR_STYLE_DEFAULT
+    eclipse_lunar_style: str = constants.ECLIPSE_LUNAR_STYLE_DEFAULT
+    moon_station_style: str = constants.MOON_STATION_STYLE_DEFAULT
+    sun_station_style: str = constants.SUN_STATION_STYLE_DEFAULT
     hands: str = "STEEL"                # the hand pack (Design ▸ Hands)
     # Theme rotation (owner spec 2026-07-12; group dropdown
     # 2026-07-14): "none" = the canon, no rotation; a kinship-group
@@ -455,7 +467,7 @@ class SettingsStore:
                 for entry in raw.get("custom_rings", ())
             )
             jump_cities = tuple(
-                _normalized_jump_city(entry)
+                normalized_jump_city(entry)
                 for entry in raw.get("jump_cities", ())
             )
             by_fold = {
@@ -655,6 +667,7 @@ class SettingsStore:
                     raw, "moon_band_style", constants.MOON_BAND_STYLES,
                     constants.MOON_BAND_STYLE_DEFAULT,
                 ),
+                **load_moving_bodies(raw),
                 hands=(
                     raw["hands"]
                     if isinstance(raw.get("hands"), str) and raw["hands"].strip()
@@ -863,6 +876,7 @@ class SettingsStore:
             "moon_hidden_alpha": settings.moon_hidden_alpha,
             "moon_band_mode": settings.moon_band_mode,
             "moon_band_style": settings.moon_band_style,
+            **save_moving_bodies(settings),
             "hands": settings.hands,
             "theme_rotation_group": settings.theme_rotation_group,
             "theme_rotation_minutes": settings.theme_rotation_minutes,
@@ -922,34 +936,6 @@ class SettingsStore:
         backup = self._path.with_suffix(".json.bak")
         os.replace(self._path, backup)
         return backup
-
-
-def _normalized_jump_city(entry: dict) -> dict:
-    """One Quick Jump city (Session 16), validated field by field — a
-    hand-edited coordinate or timezone must fail HERE, not inside a
-    jump (Rule #1)."""
-    name = str(entry["name"]).strip()
-    if not name:
-        raise ValueError("jump city with an empty name")
-    latitude = float(entry["latitude"])
-    longitude = float(entry["longitude"])
-    if not constants.LATITUDE_RANGE[0] <= latitude <= constants.LATITUDE_RANGE[1]:
-        raise ValueError(f"jump city {name!r}: latitude {latitude} out of range")
-    if not constants.LONGITUDE_RANGE[0] <= longitude <= constants.LONGITUDE_RANGE[1]:
-        raise ValueError(f"jump city {name!r}: longitude {longitude} out of range")
-    timezone = str(entry["timezone"])
-    try:
-        ZoneInfo(timezone)
-    except Exception as exc:
-        raise ValueError(
-            f"jump city {name!r}: timezone {timezone!r} unknown: {exc}"
-        ) from exc
-    return {
-        "name": name,
-        "latitude": latitude,
-        "longitude": longitude,
-        "timezone": timezone,
-    }
 
 
 def rotation_themes(settings: "Settings") -> tuple[str, ...]:

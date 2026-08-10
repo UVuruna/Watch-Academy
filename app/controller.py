@@ -972,6 +972,15 @@ def _overlay_display_settings(skin, settings: Settings, display):
         pointer_color=pointer_color,
         moon_band_mode=settings.moon_band_mode,
         moon_band_style=settings.moon_band_style,
+        # THE MOVING BODIES (owner verdict 2026-08-10): eight menus, one
+        # roster — `constants.MOVING_BODY_MENUS` names every one, and
+        # the spec carries a field of the SAME name for each, so this
+        # overlay never needs a line per menu and can never drift from
+        # what storage loads.
+        **{
+            name: getattr(settings, name)
+            for name in constants.MOVING_BODY_MENUS
+        },
     )
     # A stored "tertiary" wheel only holds where the pointer serves one
     # (trio/hexa/octa — CUBE.md); everywhere else it normalizes to
@@ -3281,6 +3290,16 @@ class WatchController(QObject):
             "moon_band_style": wrap(
                 lambda v: self._set_display_choice("moon_band_style", v)
             ),
+            # THE MOVING BODIES' eight menus, registered from the same
+            # roster the storage and the overlay walk — each is a plain
+            # display choice, so a hand-written entry per menu would be
+            # seven chances to typo one name (Rule #5).
+            **{
+                name: wrap(
+                    lambda v, key=name: self._set_display_choice(key, v)
+                )
+                for name in constants.MOVING_BODY_MENUS
+            },
             "diameter": wrap(self._set_diameter),
             "earth_scale": wrap(
                 lambda v: self._set_display_choice("earth_scale", v)

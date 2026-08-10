@@ -182,6 +182,18 @@ MARKER_POINTER_RECESS_FRACTION = 0.35        # base, INTO the body's own radius
 MARKER_POINTER_HALF_DEG = 4.0                # half-angle of the triangle base
 MARKER_POINTER_OUTLINE_WIDTH_FRACTION = 0.0025   # stroke width, of the dial radius
 
+# THE CROSSING (owner verdict 2026-08-10, `constants.MOON_TRANSIT_STYLES`)
+# — how far each non-overlapping style moves the Moon while it meets the
+# Earth on the shared lane, scaled by `render.daylight.
+# moon_transit_nearness` (0 clear, 1 concentric). "lane_split" eases the
+# Moon INWARD by this fraction of the dial radius: inward, because the
+# outward direction is the ring band's own lane and belongs to the
+# numerals. "shrink_pass" instead takes this fraction off the Moon's
+# size at the deepest point — enough that it reads as "in front and
+# further", not so much that it becomes a dot.
+MOON_LANE_SPLIT_FRACTION = 0.085
+MOON_SHRINK_PASS_DEPTH = 0.35
+
 
 # THE AURA COLORLESS MENU's "follow" option (Watch Face Phase 4, R-23):
 # the brightness fed to `render.painting.tinted_gray` so "follow ring"

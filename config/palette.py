@@ -498,6 +498,39 @@ ECLIPSE_LUNAR_FRINGE_COLOR = "#40E0D0"
 # for a color cast to read honestly).
 ECLIPSE_TOTAL_MOON_TINT = "#8B2E12"
 
+# THE UMBRA SWEEP (owner verdict 2026-08-10, `render.moon_face`): the
+# lunar treatment that draws Earth's shadow as a real curved edge across
+# the face instead of dimming the whole disc uniformly. The umbra body
+# wears the blood-moon copper above at `ECLIPSE_UMBRA_ALPHA` — high
+# enough to read as shadow, low enough that the maria stay visible
+# through it, which is what makes the edge look like it is CROSSING the
+# face rather than sitting on it. A penumbral eclipse gets no copper at
+# all (real ones are barely visible), only this neutral wash.
+ECLIPSE_UMBRA_ALPHA = 0.88
+ECLIPSE_PENUMBRAL_WASH = "#18161A"
+ECLIPSE_PENUMBRAL_ALPHA = 0.45
+
+# THE OCCULTING BODY (owner verdict 2026-08-10, `render.marker_marks`'s
+# "bite" solar style): the Moon's own silhouette laid across the Sun.
+# Near-black rather than pure black — a hard #000 on the dial's own dark
+# ground would lose its edge entirely at the limb.
+ECLIPSE_OCCULTER_COLOR = "#07090E"
+
+# The UNFILLED half of any ring gauge the markers wear — the night part
+# of the Sun's day/night wedge and the uncovered part of the eclipse
+# magnitude arc. One value, because they are the same idea drawn twice:
+# "this much of the ring is not yet taken".
+NIGHT_WEDGE_GROUND = "#282E3C"
+
+# THE PREVIEW TILE'S OWN NIGHT (visual proof round 2026-08-10): the
+# opaque ground a COMPUTED picker preview paints under itself. A tile
+# that is not the current pick draws a LIGHT button background, and a
+# preview of something that only exists against the dial's dark sky — a
+# silver moon, the horizon thread, a faint ghost disc — reads as a grey
+# smudge or vanishes outright on it. Slightly lighter than the dial's
+# own ground so the tile still reads as a card rather than a hole.
+THUMB_NIGHT_GROUND = "#161A22"
+
 INSTRUMENT_TWILIGHT_COLORS = {
     "day": "#7FA8D9",
     "civil": "#4A6FA5",

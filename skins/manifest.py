@@ -201,6 +201,25 @@ class YearMarkerSpec:
     # the same way it overlays `moon_hidden_alpha`.
     moon_band_mode: str = constants.MOON_BAND_MODE_DEFAULT
     moon_band_style: str = constants.MOON_BAND_STYLE_DEFAULT
+    # THE MOVING BODIES (owner verdict 2026-08-10, `config.constants`'s
+    # section of the same name): eight menus for how the Moon and the
+    # Earth are DRAWN, all of them plain pass-throughs of the matching
+    # `Settings` field via `app.controller._overlay_display_settings`,
+    # exactly like the two band fields above. The render side reads them
+    # off this spec and nothing else — `render.moon_face`,
+    # `render.marker_pointer`, `render.eclipse_marks` and
+    # `render.station_marks` each own one menu's drawing.
+    moon_dark_style: str = constants.MOON_DARK_STYLE_DEFAULT
+    moon_transit_style: str = constants.MOON_TRANSIT_STYLE_DEFAULT
+    # NOT named `pointer_shape`: `Settings.pointer_shape` is the
+    # ARCHETYPE pointer's own shape (the Pointer section's pills), a
+    # different thing entirely, and one overlay walking a shared roster
+    # would have silently crossed the two.
+    marker_pointer_shape: str = constants.MARKER_POINTER_SHAPE_DEFAULT
+    eclipse_solar_style: str = constants.ECLIPSE_SOLAR_STYLE_DEFAULT
+    eclipse_lunar_style: str = constants.ECLIPSE_LUNAR_STYLE_DEFAULT
+    moon_station_style: str = constants.MOON_STATION_STYLE_DEFAULT
+    sun_station_style: str = constants.SUN_STATION_STYLE_DEFAULT
 
 
 @dataclass(frozen=True)

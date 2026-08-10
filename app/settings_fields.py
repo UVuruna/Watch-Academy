@@ -16,6 +16,7 @@ never silently defaulted).
 """
 
 import re
+from zoneinfo import ZoneInfo
 
 from config import constants, dial, pantheon
 
@@ -105,6 +106,63 @@ def save_numerals(settings) -> dict:
     loaded and then silently not saved."""
     return {
         key: getattr(settings, key) for key in load_numerals({})
+    }
+
+
+def load_moving_bodies(raw: dict) -> dict:
+    """THE MOVING BODIES' eight menus (owner verdict 2026-08-10) as
+    `Settings` kwargs, read straight off `constants.MOVING_BODY_MENUS`
+    — the ONE roster the controller and the Watch Face section also
+    read. Written as a roster walk rather than one hand-copied
+    `load_choice` block per menu: the seven blocks it replaces pushed
+    `settings_store` over THE STRUCTURE LAW's threshold, and a menu
+    added to the roster now reaches storage with no edit here at all."""
+    return {
+        name: load_choice(raw, name, choices, default)
+        for name, (choices, default) in constants.MOVING_BODY_MENUS.items()
+    }
+
+
+def save_moving_bodies(settings) -> dict:
+    """The same eight menus on the way OUT — the mirror of
+    `load_moving_bodies`, walking the same roster so a stored file can
+    never carry a menu the loader does not read back."""
+    return {
+        name: getattr(settings, name) for name in constants.MOVING_BODY_MENUS
+    }
+
+
+def normalized_jump_city(entry: dict) -> dict:
+    """One Quick Jump city (Session 16), validated field by field — a
+    hand-edited coordinate or timezone must fail HERE, not inside a
+    jump (Rule #1).
+
+    Lives with the other per-field validators rather than in the store
+    (moved 2026-08-10 under THE STRUCTURE LAW, which is exactly this
+    module's own reason for existing): it takes a raw parsed fragment
+    and answers with a validated value, and it knows nothing about the
+    settings file."""
+    name = str(entry["name"]).strip()
+    if not name:
+        raise ValueError("jump city with an empty name")
+    latitude = float(entry["latitude"])
+    longitude = float(entry["longitude"])
+    if not constants.LATITUDE_RANGE[0] <= latitude <= constants.LATITUDE_RANGE[1]:
+        raise ValueError(f"jump city {name!r}: latitude {latitude} out of range")
+    if not constants.LONGITUDE_RANGE[0] <= longitude <= constants.LONGITUDE_RANGE[1]:
+        raise ValueError(f"jump city {name!r}: longitude {longitude} out of range")
+    timezone = str(entry["timezone"])
+    try:
+        ZoneInfo(timezone)
+    except Exception as exc:
+        raise ValueError(
+            f"jump city {name!r}: timezone {timezone!r} unknown: {exc}"
+        ) from exc
+    return {
+        "name": name,
+        "latitude": latitude,
+        "longitude": longitude,
+        "timezone": timezone,
     }
 
 
