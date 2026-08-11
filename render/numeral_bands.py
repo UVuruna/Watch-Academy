@@ -436,7 +436,13 @@ def _build_inner(spec: BandSpec) -> QImage:
     seats = _seats(spec)
     elements = [
         relief.seated_path(
-            label, font, center, numerals.seat_rotation(angle, spec.seating),
+            label, font, center, numerals.seat_rotation(
+                angle, spec.seating,
+                # THE MINUTE SQUARES FLOW (owner correction 2026-08-11):
+                # 15 turns with the lower half it opens, 45 with the
+                # upper — only on this band, never the hour band.
+                flow_squares=True,
+            ),
         )
         for label, angle, center in seats
     ]

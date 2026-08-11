@@ -135,9 +135,19 @@ class MoonBandLayer(Layer):
             for event in ctx.day.eclipses:
                 if event.kind != "lunar":
                     continue
+                # ONLY THE DISPLAYED DAY'S OWN ECLIPSE (owner bug
+                # 2026-08-11, slika 3: the copper segment stood on the
+                # band on a plain day — `day.eclipses` carries the
+                # NEAREST catalog events, months away included, and the
+                # first cut drew a segment for every one of them. The
+                # band shows TODAY; an eclipse that is not today's has
+                # no seat on it).
+                local_instant = event.instant.astimezone(ctx.day.tzinfo)
+                if local_instant.date() != ctx.day.local_date:
+                    continue
                 self.draw_eclipse_segment(
                     painter, radius,
-                    angles.time_to_dial_angle(event.instant),
+                    angles.time_to_dial_angle(local_instant),
                 )
         painter.restore()
 

@@ -76,7 +76,9 @@ def minute_angle(minute: int) -> float:
     return fold_angle(minute * dial.NUMERAL_MINUTE_STEP_DEG)
 
 
-def seat_rotation(deg: float, seating: str = "arc") -> float:
+def seat_rotation(
+    deg: float, seating: str = "arc", flow_squares: bool = False,
+) -> float:
     """THE SEATING LAW (ledger §4), written exactly as the ledger writes
     it.
 
@@ -85,11 +87,19 @@ def seat_rotation(deg: float, seating: str = "arc") -> float:
     the lower half turns a further 180 deg so nothing ever reads upside
     down. `upright` — 0 everywhere.
 
-    With the ring square-on this stands 12, 18, 0 and 6 up. The moment
-    the ring turns, those four ride the arc like everyone else and
-    whichever numerals have landed on the square angles stand up in
-    their place — which is the whole reason the band is computed rather
-    than drawn.
+    `flow_squares` (owner correction 2026-08-11, the MINUTE band's own
+    delta — "15 and 45 no longer render like that"): the SIDE squares
+    stop standing upright and FLOW with the half they open clockwise —
+    the +90 seat (minute 15) turns with the lower-half numerals that
+    follow it (20, 25, ...), the -90 seat (minute 45) with the
+    upper-half ones (50, 55, ...). Top and bottom stay upright. The
+    OUTER hour band never sets this — its squares keep the ledger law.
+
+    With the ring square-on the plain law stands 12, 18, 0 and 6 up.
+    The moment the ring turns, those four ride the arc like everyone
+    else and whichever numerals have landed on the square angles stand
+    up in their place — which is the whole reason the band is computed
+    rather than drawn.
 
     The returned value is NOT re-folded: `rot(170) == 350` and
     `rot(-170) == 10` are the same physical rotation, and the raw form
@@ -99,6 +109,12 @@ def seat_rotation(deg: float, seating: str = "arc") -> float:
     if seating != "arc":
         raise ValueError(f"unknown numeral seating {seating!r}")
     folded = fold_angle(deg)
+    if flow_squares:
+        if folded == 0.0 or abs(folded) == 180.0:
+            return 0.0
+        if folded >= 90.0:
+            return folded + 180.0
+        return folded
     if folded % 90.0 == 0.0:
         return 0.0
     if abs(folded) > 90.0:

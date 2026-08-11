@@ -385,3 +385,92 @@ def test_the_horizon_shadow_style_marks_the_band_and_reads_the_day_not_the_tick(
             if abs(pixel.red() - copper.red()) < 40 and pixel.red() > pixel.blue():
                 hits += 1
     assert hits > 0, "the horizon-shadow style painted nothing at all"
+
+
+def test_the_band_marks_only_the_displayed_days_own_eclipse():
+    """THE DAY GATE (owner bug 2026-08-11, slika 3: the copper segment
+    stood on the band on a plain day, long after time travel returned
+    to the present). `day.eclipses` carries the NEAREST catalog events
+    — months away included — and the first cut drew a segment for
+    every lunar one. The band shows TODAY: an eclipse whose local date
+    is not the displayed day paints NOTHING, and one on the displayed
+    day paints at its LOCAL hour angle (the first cut also fed the UTC
+    instant to the dial mapping)."""
+    import dataclasses
+    import os
+
+    os.environ.setdefault("QT_QPA_PLATFORM", "offscreen")
+    from datetime import datetime, timezone
+    from zoneinfo import ZoneInfo
+
+    import astral
+    from PySide6.QtGui import QImage, QPainter
+    from PySide6.QtWidgets import QApplication
+
+    from core.clock_state import EclipseEvent, build_day_context
+    from data.moon_phases import MoonPhaseRepository
+    from data.seasons import SeasonsRepository
+    from render.assets import AssetCache
+    from render.context import RenderContext
+    from render.layers.moon_band import MoonBandLayer
+    from app.controller import build_skin
+    from app.settings_store import Settings
+
+    QApplication.instance() or QApplication([])
+    tz = ZoneInfo("Europe/Belgrade")
+    now = datetime(2026, 8, 11, 12, 0, tzinfo=tz)
+    observer = astral.Observer(latitude=44.8, longitude=20.5)
+    far_eclipse = EclipseEvent(
+        kind="lunar", instant=datetime(2026, 8, 28, 4, 12, tzinfo=timezone.utc),
+        type="partial", magnitude=0.93, lat=None, lon=None,
+        visible=True, distance_km=None,
+    )
+    day = build_day_context(
+        now, observer, SeasonsRepository().year_anchors(2026),
+        MoonPhaseRepository().moon_window(2026), eclipses=(far_eclipse,),
+    )
+    skin = build_skin(dataclasses.replace(
+        Settings(), eclipse_lunar_style="horizon_shadow",
+        moon_band_mode="horizon", moon_band_style="silver_thread",
+    ))
+
+    def painted(day_ctx):
+        size = 720
+        image = QImage(size, size, QImage.Format.Format_ARGB32_Premultiplied)
+        image.fill(0)
+        painter = QPainter(image)
+        painter.translate(size / 2.0, size / 2.0)
+        layer = MoonBandLayer(skin)
+        ctx = RenderContext(
+            skin=skin, day=day_ctx, tick=None, radius=size / 2.0,
+            cache=AssetCache(), dpr=1.0,
+        )
+        layer.paint(painter, ctx)
+        painter.end()
+        from config import palette
+        from PySide6.QtGui import QColor
+        copper = QColor(palette.ECLIPSE_TOTAL_MOON_TINT)
+        hits = 0
+        for x in range(0, size, 2):
+            for y in range(0, size, 2):
+                pixel = image.pixelColor(x, y)
+                if pixel.alpha() == 0:
+                    continue
+                if abs(pixel.red() - copper.red()) < 40 and pixel.red() > pixel.blue():
+                    hits += 1
+        return hits
+
+    assert painted(day) == 0, (
+        "a lunar eclipse 17 days away still paints its copper segment on "
+        "today's band — the day gate is not holding"
+    )
+    same_day = dataclasses.replace(
+        day,
+        eclipses=(dataclasses.replace(
+            far_eclipse,
+            instant=datetime(2026, 8, 11, 10, 12, tzinfo=timezone.utc),
+        ),),
+    )
+    assert painted(same_day) > 0, (
+        "the displayed day's own eclipse must still mark the band"
+    )
