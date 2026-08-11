@@ -9,7 +9,7 @@ mechanism, two positions, never a second flash class.
 """
 
 from PySide6.QtCore import QPropertyAnimation, Qt, QTimer
-from PySide6.QtGui import QGuiApplication, QIcon
+from PySide6.QtGui import QGuiApplication, QIcon, QPixmap
 from PySide6.QtWidgets import (
     QGraphicsOpacityEffect,
     QHBoxLayout,
@@ -89,16 +89,26 @@ class FastTravelFlash(QWidget):
             self._icon_label.setStyleSheet(
                 f"font-size: {shortcuts.FAST_TRAVEL_FLASH_ICON_PX}px;"
             )
-        font_px = (
-            shortcuts.LOCATION_FLASH_FONT_PX
-            if big
-            else shortcuts.FAST_TRAVEL_FLASH_FONT_PX
-        )
-        self._text_label.setStyleSheet(
-            f"color: {palette.FAST_TRAVEL_FLASH_TEXT_COLOR};"
-            f"font-weight: 600; font-size: {font_px}px;"
-        )
-        self._text_label.setText(text)
+        if big:
+            font_px = shortcuts.LOCATION_FLASH_FONT_PX
+            self._text_label.setStyleSheet(
+                f"color: {palette.FAST_TRAVEL_FLASH_TEXT_COLOR};"
+                f"font-weight: 600; font-size: {font_px}px;"
+            )
+            self._text_label.setPixmap(QPixmap())
+            self._text_label.setText(text)
+        else:
+            # THE ONE PLATE LAW reaches this text (owner correction
+            # 2026-08-11: the SAME letter plates the jewels and the
+            # crown text wear, never a white font — white vanishes on
+            # a white desktop; the gold metal reads on any background).
+            from render.letter_plates import plate_text_pixmap
+
+            self._text_label.setText("")
+            self._text_label.setPixmap(plate_text_pixmap(
+                text, shortcuts.FAST_TRAVEL_FLASH_FONT_PX,
+                dpr=self.devicePixelRatioF() or 1.0,
+            ))
         self.adjustSize()
         if big:
             self._position_centered(dial_widget)

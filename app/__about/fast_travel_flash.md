@@ -60,6 +60,15 @@ the dial to KEEP holding keyboard focus for the next press.
 - `_position_centered(dial_widget)`: R-30 — dead center of the dial's
   own `frameGeometry()`.
 
+## The plate text (owner correction 2026-08-11)
+
+The SMALL flash's text is rendered by `render.letter_plates.
+plate_text_pixmap` — the SAME gold letter plates the jewels and the
+crown text wear — never a white font (invisible over a white
+desktop). The controller composes "CATEGORY : OPTION" over the colon
+plate because the plate library owns no parenthesis. The `big=True`
+location flash keeps its large font (its own dark overlay carries it).
+
 ## Design Decisions
 - **Built from scratch rather than adapting `LegendPopup`** (Rule #5
   considered): the two overlays share only the window-flag recipe —

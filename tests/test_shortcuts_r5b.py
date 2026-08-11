@@ -279,8 +279,10 @@ def test_fast_travel_flash_carries_the_active_theme_icon_and_option_text(
     icon_path, emoji, text = calls[0]
     theme = shortcuts.FAST_TRAVEL_THEMES[1]
     assert emoji == theme["emoji"]
-    # "Category (Option)" (owner spec 2026-08-11).
-    assert text == f"{theme['title']} ({theme['options'][0]['title']})"
+    # Category then option over the COLON plate (owner corrections
+    # 2026-08-11: plate letters, and the plate library owns no
+    # parenthesis today).
+    assert text == f"{theme['title']} : {theme['options'][0]['title']}"
 
 
 # --- FAST TRAVEL: the jump-step math (golden) --------------------------------
@@ -618,7 +620,10 @@ def test_flash_restarts_cleanly_on_a_rapid_second_call(app, monkeypatch):
         flash._hold_timer.timeout.emit()   # start fading
         flash.flash(dial, None, "🌙", "Full")   # a second press mid-fade
         assert flash._opacity.opacity() == 1.0
-        assert flash._text_label.text() == "Full"
+        # The small flash wears LETTER PLATES now (owner correction
+        # 2026-08-11) — the restart shows as a fresh non-empty pixmap.
+        pixmap = flash._text_label.pixmap()
+        assert pixmap is not None and not pixmap.isNull()
     finally:
         flash.close()
         dial.close()
@@ -792,3 +797,22 @@ def test_every_fast_travel_stem_resolves_to_a_jump_branch(controller):
                 ._SUN_MOON_JUMP_PATTERN.match(kind) is not None
             )
             assert recognized, f"unhandled jump stem {option['jump_stem']}"
+
+
+def test_the_flash_text_wears_the_letter_plates(app, monkeypatch):
+    """THE ONE PLATE LAW reaches the flash (owner correction
+    2026-08-11: the jewels'/crown's plates, never a white font)."""
+    from app import fast_travel_flash as flash_mod
+
+    monkeypatch.setattr(flash_mod.native, "assert_topmost", lambda hwnd: None)
+    dial = _make_dial_stub(app)
+    flash = FastTravelFlash()
+    try:
+        flash.flash(dial, None, "☀️", "Solar Eclipse : Any")
+        assert flash._text_label.text() == ""       # no font text at all
+        pixmap = flash._text_label.pixmap()
+        assert pixmap is not None and not pixmap.isNull()
+        assert pixmap.width() > pixmap.height()      # a real glyph run
+    finally:
+        flash.close()
+        dial.close()

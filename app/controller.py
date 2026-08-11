@@ -2114,11 +2114,16 @@ class WatchController(QObject):
             icon_path = (
                 defaults.icon_path(icon_key) if icon_key is not None else None
             )
-        # "Category (Option)" (owner spec 2026-08-11: "text treba da
-        # bude glavna tema naziv i selektovana opcija u zagradi").
+        # Category then option (owner spec 2026-08-11), composed for
+        # THE LETTER PLATES the flash now wears (his same-day
+        # correction: the jewels'/crown's plates, never a white font).
+        # The plate library has NO parenthesis today, so the pair joins
+        # over the COLON plate — the one typeable separator it owns; a
+        # parenthesised form needs two new plates in
+        # assets/instrument/letters/symbols/ first.
         self._fast_travel_flash.flash(
             self._widget, icon_path, theme["emoji"],
-            f"{self._ui(theme['title'])} ({self._ui(option['title'])})",
+            f"{self._ui(theme['title'])} : {self._ui(option['title'])}",
         )
 
     # Every `_compute_jump` kind that LANDS somewhere new (R-30) — the

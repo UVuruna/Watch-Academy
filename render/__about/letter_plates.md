@@ -87,6 +87,16 @@ so every pair wears the same clearance. The value
 clearance at which the composed `20` comes back at exactly the 730x512 the
 owner drew. His kerning, applied evenly.
 
+## Plate text for UI chrome
+
+`plate_text_pixmap(text, height_px, metal="gold", dpr=1.0)` (owner
+correction 2026-08-11): a one-line run of plates for UI chrome — THE
+ONE PLATE LAW reaching the Fast Travel flash, whose white font
+vanished on a white desktop. Uppercased, spaces advance without ink,
+ink-advance spacing between glyphs, `MissingPlate` on an unsupported
+glyph (the library owns no parenthesis today — callers compose with
+the colon plate instead).
+
 ## Connections
 
 ### Uses

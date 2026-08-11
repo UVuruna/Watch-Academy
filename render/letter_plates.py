@@ -265,3 +265,77 @@ def _composed_master(parts: tuple[Path, ...]) -> Path:
         raise MissingPlate(f"could not write composed plate {cache}")
     _COMPOSED[parts] = cache
     return cache
+
+
+# ═══════════════════════════ PLATE TEXT ══════════════════════════════
+
+
+def plate_text_pixmap(
+    text: str, height_px: int, metal: str = "gold", dpr: float = 1.0,
+):
+    """A one-line run of LETTER PLATES for UI chrome — THE ONE PLATE
+    LAW reaching the Fast Travel flash (owner correction 2026-08-11:
+    "tekst koristi isti kao jewels i crown text a ne ovaj beli FONT" —
+    a white font vanishes on a white desktop; the metal plates read on
+    any background).
+
+    Uppercased (a plate is a shape, not a case), spaces advance without
+    ink, every other glyph resolves through `plate_path` and wears the
+    `metal` finish — and an unsupported glyph RAISES `MissingPlate`
+    like every other caller of this library (the parenthesis has no
+    plate today; callers compose with the colon instead). Returns a
+    QPixmap carrying `dpr`."""
+    from PySide6.QtGui import QPixmap
+
+    from render.asset_recolor import jewel_metal_file
+
+    device_h = max(1, round(height_px * dpr))
+    images: list[QImage | None] = []
+    for glyph in text.upper():
+        if glyph == " ":
+            images.append(None)
+            continue
+        source = QImage(str(jewel_metal_file(plate_path(glyph), metal)))
+        if source.isNull():
+            raise MissingPlate(f"letter plate unreadable for {glyph!r}")
+        images.append(
+            source.scaledToHeight(
+                device_h, Qt.TransformationMode.SmoothTransformation
+            )
+        )
+    gap = device_h * dial.LETTER_COMPOSE_INK_GAP_FRACTION
+    space_advance = round(device_h * 0.45)
+    offsets: list[int | None] = []
+    previous: QImage | None = None
+    previous_offset = 0
+    cursor = 0
+    for image in images:
+        if image is None:
+            # A space advances past the previous plate's full box.
+            if previous is not None:
+                cursor = previous_offset + previous.width()
+            cursor += space_advance
+            offsets.append(None)
+            previous = None
+            continue
+        if previous is not None:
+            cursor = previous_offset + _ink_advance(previous, image, gap)
+        offsets.append(cursor)
+        previous = image
+        previous_offset = cursor
+    width = max(
+        (off + img.width() for off, img in zip(offsets, images) if img is not None),
+        default=1,
+    )
+    canvas = QImage(width, device_h, QImage.Format.Format_ARGB32_Premultiplied)
+    canvas.fill(Qt.GlobalColor.transparent)
+    painter = QPainter(canvas)
+    try:
+        for image, off in zip(images, offsets):
+            if image is not None and off is not None:
+                painter.drawImage(off, device_h - image.height(), image)
+    finally:
+        painter.end()
+    pixmap = QPixmap.fromImage(canvas)
+    pixmap.setDevicePixelRatio(dpr)
+    return pixmap
