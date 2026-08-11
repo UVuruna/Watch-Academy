@@ -153,3 +153,378 @@ Run started:  2026-07-29 19:35:05  (0/60 pending)
 Images: 0
 Run finished: 2026-07-29 19:35:05  (all pending items done)
 
+====================================================================
+Star Wars — the Three-Set Weekday Theme (Gemini/ChatGPT)  [Gemini]
+Run started:  2026-08-11 14:08:54  (38/60 pending)
+--------------------------------------------------------------------
+2026-08-11 14:09:54  assets/weeks/films/sw_jedi/primary/colored/Chewbacca.png gen   35.0s  ours   22.6s   1024x1024 -> 946x944    1.5 MB  [REMOVE BG: done, CROP: done]
+2026-08-11 14:11:34  assets/weeks/films/sw_jedi/primary/bronze/Luke.png gen   35.8s  ours   20.7s  1024x1024 -> 1024x1019    1.8 MB  [REMOVE BG: done, CROP: done]
+2026-08-11 14:12:45  assets/weeks/films/sw_jedi/primary/colored/Luke.png REFUSED — Gemini: prompt refused [safety] (matched 'may go against my guidelines'): Gemini said
+
+Your request may go against my gu
+2026-08-11 14:12:45  assets/weeks/films/sw_jedi/primary/colored/Luke.png WHY (site's answer) — Gemini said
+
+I declined the request due to the description of the central figure: "young Luke... sandy-blond hair and simple tan robes, a glowing blue lightsaber held upright, twin suns glowing on the horizon behind him." These specific elements, especially when combined, explicitly describe the copyrighted character Luke Skywalker from the Star Wars franchise. Model policies prohibit generating s
+2026-08-11 14:14:40  assets/weeks/films/sw_jedi/primary/bronze/Vader.png REFUSED — Gemini: prompt refused [safety] (matched 'may go against my guidelines'): Gemini said
+
+I can help with all sorts of thin
+2026-08-11 14:14:40  assets/weeks/films/sw_jedi/primary/bronze/Vader.png WHY (site's answer) — Gemini said
+
+I declined your request due to the inclusion of copyrighted characters. Specifically, the mention of "Luke" and "Vader," combined with the detailed descriptions of their distinct visual likenesses (young face and black mask), conflicts with my policy against generating images containing intellectual property.
+2026-08-11 14:16:04  assets/weeks/films/sw_jedi/primary/colored/Vader.png REFUSED — Gemini: the response answered with TEXT but no image (settled 6s), and the text matches no known marker — loud skip, nev
+2026-08-11 14:16:04  assets/weeks/films/sw_jedi/primary/colored/Vader.png WHY (site's answer) — Gemini said
+
+The specific element in your request that conflicts with my policy is the description of the central figures: "Luke's young face" and "Vader's black mask and its single red optic."
+
+These phrases identify and describe highly specific, recognizable copyrighted characters and likenesses, which falls under my restriction on generating intellectual property.
+
+To rework your request, you w
+2026-08-11 14:16:34  assets/weeks/films/sw_jedi/primary/bronze/Yoda.png REFUSED — no image — Gemini: the response answered with TEXT but no image (settled 6s), and the text matches no known marker — lou
+2026-08-11 14:18:16  assets/weeks/films/sw_jedi/primary/colored/Yoda.png REFUSED — Gemini: prompt refused [safety] (matched 'can't help with this particular request'): Gemini said
+
+I'm sorry, it appears 
+2026-08-11 14:18:16  assets/weeks/films/sw_jedi/primary/colored/Yoda.png WHY (site's answer) — Gemini said
+
+I declined the request because the central element, "Yoda... seated in meditation... tangled Dagobah vines," describes a copyrighted character and a specific fictional location from the Star Wars franchise. My policy prohibits generating recognizable intellectual property.
+2026-08-11 14:19:47  assets/weeks/films/sw_sith/primary/colored/Tarkin.png REFUSED — Gemini: prompt refused [safety] (matched 'can't help with this particular request'): Gemini said
+
+I'm sorry, it appears 
+2026-08-11 14:19:47  assets/weeks/films/sw_sith/primary/colored/Tarkin.png WHY (site's answer) — Gemini said
+
+I declined to generate the image because it contained references to specific, recognizable copyrighted characters and locations from the Star Wars franchise.
+
+The elements that conflicted with the policy are:
+
+"Tarkin in full color"
+
+"the Death Star's curved horizon"
+
+These phrases describe proprietary intellectual property, and my safety and content guidelines prohibit generating ima
+2026-08-11 14:21:23  assets/weeks/films/sw_sith/primary/colored/Grievous.png REFUSED — Gemini: prompt refused [safety] (matched 'cannot generate'): Gemini said
+
+I cannot generate an image based on your reque
+2026-08-11 14:21:23  assets/weeks/films/sw_sith/primary/colored/Grievous.png WHY (site's answer) — Gemini said
+
+The specific elements in your request that conflict with my policy are the character name "Grievous" and the reference to "captured lightsaber hilts." These are recognizable aspects of copyrighted intellectual property, and my safety standards restrict the generation of such content.
+2026-08-11 14:22:55  assets/weeks/films/sw_sith/primary/bronze/Jabba.png REFUSED — Gemini: prompt refused [safety] (matched 'can't generate'): Gemini said
+
+I can't generate an image of Jabba the Hutt.
+2026-08-11 14:22:55  assets/weeks/films/sw_sith/primary/bronze/Jabba.png WHY (site's answer) — Gemini said
+
+The specific element in that request which conflicts with policy is the requirement to depict the copyrighted character "Jabba the Hutt".
+2026-08-11 14:23:59  assets/weeks/films/sw_sith/primary/bronze/Maul.png REFUSED — Gemini: prompt refused [safety] (matched 'cannot generate'): Gemini said
+
+I cannot generate an image based on this reque
+2026-08-11 14:23:59  assets/weeks/films/sw_sith/primary/bronze/Maul.png WHY (site's answer) — Gemini said
+
+I declined your request due to the explicit inclusion of copyrighted characters and intellectual property from the Star Wars franchise.
+
+Specifically, the names "Maul" and "Obi-Wan", combined with the detailed visual descriptions of their unique likenesses ("horned red-and-black face," "mismatched cybernetic legs"), specific equipment ("twin-bladed lightsaber"), and franchise-specific
+2026-08-11 14:25:30  assets/weeks/films/sw_sith/primary/bronze/Boba_Fett.png REFUSED — Gemini: prompt refused [safety] (matched 'can't help with this particular request'): Gemini said
+
+I'm sorry, it appears 
+2026-08-11 14:25:30  assets/weeks/films/sw_sith/primary/bronze/Boba_Fett.png WHY (site's answer) — Gemini said
+
+I declined your request due to the use of copyrighted characters and intellectual property from the Star Wars franchise.
+
+Specifically, the names and descriptions for "Boba Fett", "Mandalorian armor", "tracking fob", and franchise-specific border elements like "Imperial cog frame" and "aurebesh-flavored tick ornament" conflict with the policy against generating recognized intellectual
+2026-08-11 14:27:09  assets/weeks/films/sw_sith/primary/colored/Boba_Fett.png REFUSED — Gemini: prompt refused [safety] (matched 'may go against my guidelines'): Gemini said
+
+Your request may go against my gu
+2026-08-11 14:27:09  assets/weeks/films/sw_sith/primary/colored/Boba_Fett.png WHY (site's answer) — Gemini said
+
+I declined your request due to the explicit inclusion of a copyrighted character and related intellectual property. Specifically, naming "Boba Fett" and describing his distinct "Mandalorian armor" conflicts with the policy against generating images containing recognized fictional characters.
+2026-08-11 14:28:49  assets/weeks/films/sw_sith/primary/bronze/Palpatine.png REFUSED — Gemini: prompt refused [safety] (matched 'go against my guidelines'): Gemini said
+
+I can help with many kinds of request
+2026-08-11 14:28:49  assets/weeks/films/sw_sith/primary/bronze/Palpatine.png WHY (site's answer) — Gemini said
+
+I declined your request due to the use of copyrighted characters and intellectual property from the Star Wars franchise.
+
+Specifically, naming "Emperor Palpatine" and referencing the "Imperial cog frame" and "aurebesh-flavored" ornamentation conflicts with the policy against generating recognized intellectual property.
+
+To rework this request, you would need to replace these specific 
+2026-08-11 14:29:40  assets/weeks/films/sw_sith/primary/bronze/Anakin.png REFUSED — no image — Gemini: the response answered with TEXT but no image (settled 6s), and the text matches no known marker — lou
+2026-08-11 14:31:41  assets/weeks/films/sw_sith/primary/colored/Anakin.png REFUSED — Gemini: prompt refused [safety] (matched 'may go against my guidelines'): Gemini said
+
+I can help with all sorts of thin
+2026-08-11 14:31:41  assets/weeks/films/sw_sith/primary/colored/Anakin.png WHY (site's answer) — Gemini said
+
+I declined your request because it included specific references to copyrighted characters. Specifically, naming "Anakin" and "Vader", along with the detailed description of their iconic visual attributes ("Jedi robes" dissolving into "Vader's black armor and red optic"), conflicts with my policy against generating images containing recognizable intellectual property.
+2026-08-11 14:33:00  assets/weeks/films/sw_dyad/primary/bronze/Finn.png REFUSED — Gemini: prompt refused [safety] (matched 'may go against my guidelines'): Gemini said
+
+Your request may go against my gu
+2026-08-11 14:33:00  assets/weeks/films/sw_dyad/primary/bronze/Finn.png WHY (site's answer) — Gemini said
+
+I declined the request because it explicitly names and describes "Finn" and includes numerous highly specific, trademarked elements of the Star Wars franchise, such as "stormtrooper white," a "blaster," and "aurebesh-flavored tick ornament." My policy prohibits generating images that include recognizable, copyrighted characters or specific likenesses of fictional people/properties wit
+2026-08-11 14:34:33  assets/weeks/films/sw_dyad/primary/colored/Finn.png REFUSED — Gemini: prompt refused [safety] (matched 'may go against my guidelines'): Gemini said
+
+Your request may go against my gu
+2026-08-11 14:34:33  assets/weeks/films/sw_dyad/primary/colored/Finn.png WHY (site's answer) — Gemini said
+
+The specific element of this request that conflicts with policy is the request to depict "Finn" combined with the specific visual details describing his likeness from the Star Wars franchise (e.g., "half in white trooper plate and half in a stolen brown jacket").
+
+This combination explicitly describes the copyrighted character Finn (FN-2187). Model policies restrict the generation of 
+2026-08-11 14:36:07  assets/weeks/films/sw_dyad/primary/bronze/Phasma.png REFUSED — Gemini: prompt refused [safety] (matched 'cannot generate'): Gemini said
+
+I cannot generate an image based on your reque
+2026-08-11 14:36:07  assets/weeks/films/sw_dyad/primary/bronze/Phasma.png WHY (site's answer) — Gemini said
+
+I declined your request due to the explicit inclusion of copyrighted characters and intellectual property from the Star Wars franchise. Specifically, naming "Captain Phasma" and "Finn", combined with the detailed descriptions of her distinct "chrome-plated command armor" and "aurebesh-flavored" ornamentation, conflicts with the policy against generating recognized intellectual propert
+2026-08-11 14:37:24  assets/weeks/films/sw_dyad/primary/colored/Phasma.png REFUSED — Gemini: prompt refused [safety] (matched 'may go against my guidelines'): Gemini said
+
+Your request may go against my gu
+2026-08-11 14:37:24  assets/weeks/films/sw_dyad/primary/colored/Phasma.png WHY (site's answer) — Gemini said
+
+The specific element of that request that conflicts with policy is the name "Phasma" combined with the distinct visual details describing her copyrighted character design ("gleaming chrome-plated armor and a flowing silver cape"). This constitutes a request for recognizable intellectual property that model standards do not permit.
+2026-08-11 14:38:28  assets/weeks/films/sw_dyad/primary/bronze/Maz.png REFUSED — Gemini: prompt refused [safety] (matched 'cannot generate'): Gemini said
+
+I cannot generate an image based on your reque
+2026-08-11 14:38:28  assets/weeks/films/sw_dyad/primary/bronze/Maz.png WHY (site's answer) — Gemini said
+
+The request was declined due to the requirement to depict recognizable intellectual property. Specifically, the request explicitly named and described the copyrighted character "Maz Kanata," including her specific appearance ("oversized goggled eyes", "small wrinkled hand"), and referenced trademarked items and settings associated with the Star Wars franchise, such as "Maz Kanata perc
+2026-08-11 14:39:50  assets/weeks/films/sw_dyad/primary/colored/Maz.png gen   27.1s  ours   17.1s   1024x1024 -> 970x968    1.7 MB  [REMOVE BG: done, CROP: done]
+2026-08-11 14:41:12  assets/weeks/films/sw_dyad/primary/bronze/DJ.png gen   31.1s  ours   34.1s   1024x1024 -> 982x981    1.9 MB  [REMOVE BG: done, CROP: done]
+2026-08-11 14:42:04  assets/weeks/films/sw_dyad/primary/colored/DJ.png gen   28.5s  ours   21.6s   1024x1024 -> 929x927    1.2 MB  [REMOVE BG: done, CROP: done]
+2026-08-11 14:42:50  assets/weeks/films/sw_dyad/primary/bronze/Leia.png gen   25.6s  ours   17.7s  1024x1024 -> 1000x999    1.7 MB  [REMOVE BG: done, CROP: done]
+2026-08-11 14:44:26  assets/weeks/films/sw_dyad/primary/colored/Leia.png gen   27.1s  ours   22.0s   1024x1024 -> 917x964    1.4 MB  [REMOVE BG: done, CROP: done]
+2026-08-11 14:45:50  assets/weeks/films/sw_dyad/primary/bronze/Han.png REFUSED — Gemini: prompt refused [safety] (matched 'can't help with this particular request'): Gemini said
+
+I'm sorry, it appears 
+2026-08-11 14:45:50  assets/weeks/films/sw_dyad/primary/bronze/Han.png WHY (site's answer) — Gemini said
+
+I declined your request due to the presence of copyrighted characters and terminology. Specifically, naming "Han Solo" and including descriptions that recreate a recognizable scene involving trademarked property ("masked figure," "aurebesh-flavored") conflicts with the policy against generating images containing recognized intellectual property.
+
+To rework this, you would need to desc
+2026-08-11 14:47:00  assets/weeks/films/sw_dyad/primary/colored/Han.png gen   29.3s  ours   24.5s   1024x1024 -> 920x920    1.1 MB  [REMOVE BG: done, CROP: done]
+2026-08-11 14:47:56  assets/weeks/films/sw_dyad/primary/bronze/Hux.png gen   31.7s  ours   22.2s   1024x1024 -> 988x987    1.5 MB  [REMOVE BG: done, CROP: done]
+2026-08-11 14:48:41  assets/weeks/films/sw_dyad/primary/colored/Hux.png gen   21.2s  ours   20.5s   1024x1024 -> 994x989    1.3 MB  [REMOVE BG: done, CROP: done]
+2026-08-11 14:49:46  assets/weeks/films/sw_dyad/primary/bronze/Rey.png REFUSED — Gemini: prompt refused [safety] (matched 'can't generate'): Gemini said
+
+I can't generate an image of Rey.
+2026-08-11 14:49:46  assets/weeks/films/sw_dyad/primary/bronze/Rey.png WHY (site's answer) — Gemini said
+
+I declined your request because it included specific elements from a copyrighted media franchise. Specifically, the request to depict "Rey," a "lightsaber," and proprietary terms like "aurebesh" conflicts with my policy regarding copyrighted characters and intellectual property.
+
+To rework this request, you should describe a generic, non-proprietary figure and setting that captures th
+2026-08-11 14:51:10  assets/weeks/films/sw_dyad/primary/colored/Rey.png REFUSED — Gemini: prompt refused [safety] (matched 'may go against my guidelines'): Gemini said
+
+Your request may go against my gu
+2026-08-11 14:51:10  assets/weeks/films/sw_dyad/primary/colored/Rey.png WHY (site's answer) — Gemini said
+
+I declined your request due to the explicit inclusion of a copyrighted character and related trademarked elements. Specifically, naming "Rey" and describing her utilizing a "lightsaber" conflicts with the policy against generating images containing recognized intellectual property from commercial franchises.
+2026-08-11 14:53:02  assets/weeks/films/sw_dyad/primary/bronze/Kylo.png REFUSED — Gemini: prompt refused [safety] (matched 'go against my guidelines'): Gemini said
+
+I can help with many kinds of request
+2026-08-11 14:53:02  assets/weeks/films/sw_dyad/primary/bronze/Kylo.png WHY (site's answer) — Gemini said
+
+I declined your request because it included specific elements from a copyrighted franchise. Specifically, the mention of "Kylo Ren" and the description of his distinct "unstable crossguard lightsaber" conflict with my safety standards regarding the depiction of recognizable fictional characters and intellectual property.
+2026-08-11 14:54:29  assets/weeks/films/sw_dyad/primary/colored/Kylo.png REFUSED — Gemini: prompt refused [safety] (matched 'cannot generate'): Gemini said
+
+I cannot generate an image based on copyrighte
+2026-08-11 14:54:29  assets/weeks/films/sw_dyad/primary/colored/Kylo.png WHY (site's answer) — Gemini said
+
+The request was declined because it asked for the depiction of a copyrighted character, Kylo Ren (referenced as Kylo), including his trademarked unstable red crossguard blade and distinctive cracked chrome-black helm.
+
+Reworking the request to describe a generic "dark knight" or "armored warrior" with different, non-proprietary weaponry and armor would resolve this conflict.
+2026-08-11 14:56:11  assets/weeks/films/sw_dyad/primary/bronze/Ghosts.png gen   53.8s  ours   20.2s  1024x1024 -> 1009x1008    1.4 MB  [REMOVE BG: done, CROP: done]
+2026-08-11 14:57:49  assets/weeks/films/sw_dyad/primary/colored/Ghosts.png gen   30.5s  ours   32.2s   1024x1024 -> 998x997    1.6 MB  [REMOVE BG: done, CROP: done]
+2026-08-11 14:58:44  assets/weeks/films/sw_dyad/primary/bronze/Exegol.png gen   27.4s  ours   25.2s  1024x1024 -> 1003x1000    1.5 MB  [REMOVE BG: done, CROP: done]
+2026-08-11 15:00:17  assets/weeks/films/sw_dyad/primary/colored/Exegol.png REFUSED — Gemini: prompt refused [safety] (matched 'can't help with this particular request'): Gemini said
+
+I'm sorry, it appears 
+2026-08-11 15:00:17  assets/weeks/films/sw_dyad/primary/colored/Exegol.png WHY (site's answer) — Gemini said
+
+I declined your request due to the inclusion of elements protected by copyright. Specifically, the mention of "Exegol" and the depiction of a fleet of "Star Destroyers" conflict with the policy against generating recognizable intellectual property from popular franchises.
+--------------------------------------------------------------------
+Refused: 25 image(s) — rework those prompts in the sheet (or intervene manually) and rerun
+Images: 13  |  average generation (AI): 31s/image  |  average our time (save+bgfix+pause): 23s/image
+Total AI + our time: 11m 45s  (wall clock: 51m 23s)
+Run finished: 2026-08-11 15:00:17  (all pending items done)
+
+====================================================================
+Star Wars — the Three-Set Weekday Theme (Gemini/ChatGPT)  [Gemini]
+Run started:  2026-08-11 16:43:15  (25/60 pending)
+--------------------------------------------------------------------
+2026-08-11 16:45:02  assets/weeks/films/sw_jedi/primary/colored/Luke.png REFUSED — Gemini: prompt refused [safety] (matched 'may go against my guidelines'): Gemini said
+
+I can help with all sorts of thin
+2026-08-11 16:45:02  assets/weeks/films/sw_jedi/primary/colored/Luke.png WHY (site's answer) — Gemini said
+
+The specific elements that conflict with the policy are the request for "young Luke," the prop "lightsaber," and the term "kyber-blue." In combination, these elements describe a specific copyrighted character likeness.
+2026-08-11 16:46:42  assets/weeks/films/sw_jedi/primary/bronze/Vader.png REFUSED — Gemini: prompt refused [safety] (matched 'cannot generate'): Gemini said
+
+I cannot generate this image. You have request
+2026-08-11 16:46:42  assets/weeks/films/sw_jedi/primary/bronze/Vader.png WHY (site's answer) — Gemini said
+
+The specific elements in your request that conflict with the policy are "Luke's own young face" and "Vader's black mask."
+
+Generating the likenesses of specific copyrighted fictional characters is not permitted.
+2026-08-11 16:48:40  assets/weeks/films/sw_jedi/primary/colored/Vader.png gen   36.4s  ours   14.6s   1024x1024 -> 908x913    1.1 MB  [REMOVE BG: done, CROP: done]
+2026-08-11 16:50:22  assets/weeks/films/sw_jedi/primary/bronze/Yoda.png REFUSED — Gemini: prompt refused [safety] (matched 'may go against my guidelines'): Gemini said
+
+I can help with all sorts of thin
+2026-08-11 16:50:22  assets/weeks/films/sw_jedi/primary/bronze/Yoda.png WHY (site's answer) — Gemini said
+
+The specific elements in your request that conflict with the policy are the character name "Yoda", the location "Dagobah", the term "Jedi", and the specific character likeness description (e.g., the nine-hundred-year-old exiled master).
+
+Generating images of specific, copyrighted fictional characters and proprietary elements from established franchises is not permitted. To rework this
+2026-08-11 16:52:31  assets/weeks/films/sw_jedi/primary/colored/Yoda.png REFUSED — Gemini: prompt refused [safety] (matched 'may go against my guidelines'): Gemini said
+
+I can help with all sorts of thin
+2026-08-11 16:52:31  assets/weeks/films/sw_jedi/primary/colored/Yoda.png WHY (site's answer) — Gemini said
+
+The specific elements in the request that conflict with the policy are the character name "Yoda" and the location "Dagobah". References to copyrighted fictional characters and specific proprietary settings are not permitted.
+2026-08-11 16:54:56  assets/weeks/films/sw_sith/primary/colored/Tarkin.png REFUSED — Gemini: prompt refused [safety] (matched 'may go against my guidelines'): Gemini said
+
+Your request may go against my gu
+2026-08-11 16:54:56  assets/weeks/films/sw_sith/primary/colored/Tarkin.png WHY (site's answer) — Gemini said
+
+The specific elements in your request that conflict with our policy are the copyrighted character name 'Tarkin' and the proprietary location 'Death Star', as well as the detailed description that creates the copyrighted likeness of the character.
+2026-08-11 16:56:25  assets/weeks/films/sw_sith/primary/colored/Grievous.png REFUSED — Gemini: prompt refused [safety] (matched 'go against my guidelines'): Gemini said
+
+I can help with many kinds of request
+2026-08-11 16:56:25  assets/weeks/films/sw_sith/primary/colored/Grievous.png WHY (site's answer) — Gemini said
+
+The specific elements in your request that conflict with our policy are the copyrighted character name 'Grievous' and the description 'captured lightsaber hilts'. Generating images of specific copyrighted fictional characters and proprietary items from established franchises is not permitted.
+2026-08-11 16:58:56  assets/weeks/films/sw_sith/primary/bronze/Jabba.png REFUSED — Gemini: prompt refused [safety] (matched 'may go against my guidelines'): Gemini said
+
+I can help with all sorts of thin
+2026-08-11 16:58:56  assets/weeks/films/sw_sith/primary/bronze/Jabba.png WHY (site's answer) — Gemini said
+
+The specific elements within your request that conflict with the policy are the copyrighted character name "Jabba the Hutt" and the proprietary term "Imperial cog". Generating images of specific copyrighted fictional characters and proprietary elements from established franchises is not permitted.
+2026-08-11 17:00:35  assets/weeks/films/sw_sith/primary/bronze/Maul.png gen   32.9s  ours   19.1s   1024x1024 -> 936x938    1.5 MB  [REMOVE BG: done, CROP: done]
+2026-08-11 17:02:26  assets/weeks/films/sw_sith/primary/bronze/Boba_Fett.png gen   31.8s  ours   15.1s   1024x1024 -> 955x952    1.4 MB  [REMOVE BG: done, CROP: done]
+2026-08-11 17:04:16  assets/weeks/films/sw_sith/primary/colored/Boba_Fett.png REFUSED — Gemini: prompt refused [safety] (matched 'may go against my guidelines'): Gemini said
+
+I can help with all sorts of thin
+2026-08-11 17:04:16  assets/weeks/films/sw_sith/primary/colored/Boba_Fett.png WHY (site's answer) — Gemini said
+
+The conflict is the use of the copyrighted character name 'Boba Fett' and the description that creates his specific likeness ('scarred green-and-grey Mandalorian armor').
+2026-08-11 17:06:37  assets/weeks/films/sw_sith/primary/bronze/Palpatine.png REFUSED — Gemini: prompt refused [safety] (matched 'may go against my guidelines'): Gemini said
+
+I can help with all sorts of thin
+2026-08-11 17:06:37  assets/weeks/films/sw_sith/primary/bronze/Palpatine.png WHY (site's answer) — Gemini said
+
+The specific elements in your request that conflict with the policy are "Emperor Palpatine," the "Imperial cog," and the "aurebesh-flavored tick ornament." Generating images of specific copyrighted fictional characters and proprietary elements from established franchises is not permitted.
+2026-08-11 17:08:45  assets/weeks/films/sw_sith/primary/bronze/Anakin.png REFUSED — Gemini: prompt refused [safety] (matched 'may go against my guidelines'): Gemini said
+
+I can help with all sorts of thin
+2026-08-11 17:08:45  assets/weeks/films/sw_sith/primary/bronze/Anakin.png WHY (site's answer) — Gemini said
+
+The specific elements in the previous request that conflict with policy are "Palpatine's own seat," "young Anakin," "Vader's black armored bulk," and "Imperial cog." Generating images that depict the names, likenesses, or proprietary symbols of specific, copyrighted fictional characters is not permitted.
+--------------------------------------------------------------------
+Refused: 10 image(s) — rework those prompts in the sheet (or intervene manually) and rerun
+Images: 3  |  average generation (AI): 34s/image  |  average our time (save+bgfix+pause): 16s/image
+Total AI + our time: 2m 30s  (wall clock: 27m 01s)
+Run finished: 2026-08-11 17:10:16  (aborted: DriverError)
+
+====================================================================
+Star Wars — the Three-Set Weekday Theme (Gemini/ChatGPT)  [Gemini]
+Run started:  2026-08-11 19:46:52  (22/60 pending)
+--------------------------------------------------------------------
+2026-08-11 19:47:09  assets/weeks/films/sw_jedi/primary/colored/Luke.png REFUSED — no image — Gemini: the response answered with TEXT but no image (settled 6s), and the text matches no known marker — lou
+2026-08-11 19:48:34  assets/weeks/films/sw_jedi/primary/bronze/Vader.png REFUSED — Gemini: prompt refused [safety] (matched 'cannot generate'): Gemini said
+
+I cannot generate this image. You have request
+2026-08-11 19:48:34  assets/weeks/films/sw_jedi/primary/bronze/Vader.png WHY (site's answer) — Gemini said
+
+The specific elements in your request that conflict with our policy are the explicit mentions of copyrighted fictional characters and proprietary terms: "Luke," "Vader," and "Jedi."
+
+Even with the allegorical framing, the prompt requests the specific likeness of these protected figures ("Luke's... face," "Vader's black mask"). Removing these specific names and terms would resolve the 
+2026-08-11 19:49:04  assets/weeks/films/sw_jedi/primary/bronze/Yoda.png REFUSED — no image — Gemini: the response answered with TEXT but no image (settled 6s), and the text matches no known marker — lou
+2026-08-11 19:50:32  assets/weeks/films/sw_jedi/primary/colored/Yoda.png REFUSED — Gemini: our sent prompt is NO LONGER the newest user turn — the site dropped the message after the confirmed send (notic
+2026-08-11 19:50:32  assets/weeks/films/sw_jedi/primary/colored/Yoda.png WHY (site's answer) — Gemini said
+
+The specific elements in your request that conflict with the policy are the character name "Yoda" and the location name "Dagobah." These are trademarked and copyrighted elements from a specific media franchise, and generating images based on them is not permitted.
+2026-08-11 19:51:09  assets/weeks/films/sw_sith/primary/colored/Tarkin.png REFUSED — no image — Gemini: the response answered with TEXT but no image (settled 6s), and the text matches no known marker — lou
+2026-08-11 19:52:50  assets/weeks/films/sw_sith/primary/colored/Grievous.png REFUSED — Gemini: prompt refused [safety] (matched 'may go against my guidelines'): Gemini said
+
+Your request may go against my gu
+2026-08-11 19:52:50  assets/weeks/films/sw_sith/primary/colored/Grievous.png WHY (site's answer) — Gemini said
+
+The specific elements in your request that conflict with the policy are the copyrighted character name "Grievous" and the item "lightsaber hilts."
+2026-08-11 19:54:19  assets/weeks/films/sw_sith/primary/bronze/Jabba.png REFUSED — Gemini: the response answered with TEXT but no image (settled 6s), and the text matches no known marker — loud skip, nev
+2026-08-11 19:54:19  assets/weeks/films/sw_sith/primary/bronze/Jabba.png WHY (site's answer) — Gemini said
+
+The specific elements in your request that conflict with our policy are the copyrighted character name "Jabba the Hutt," the detailed description that creates his specific likeness, the "Imperial cog" symbol, and the mention of "aurebesh."
+
+While your preface attempted to reframe this as a symbolic allegory, the main body of your prompt specifically requested a "photorealistic render"
+2026-08-11 19:56:17  assets/weeks/films/sw_sith/primary/colored/Boba_Fett.png REFUSED — Gemini: prompt refused [safety] (matched 'can't help with this particular request'): Gemini said
+
+I'm sorry, it appears 
+2026-08-11 19:56:17  assets/weeks/films/sw_sith/primary/colored/Boba_Fett.png WHY (site's answer) — Gemini said
+
+The request was declined because it asks for a specific, copyrighted character, "Boba Fett," and details his likeness, such as the "scarred green-and-grey Mandalorian armor" and "visored helm." Generating images of protected characters and their distinct likenesses is against policy.
+
+To rework the request, you can describe a generic armored bounty hunter without using proper names, f
+2026-08-11 19:58:04  assets/weeks/films/sw_sith/primary/bronze/Palpatine.png REFUSED — Gemini: prompt refused [safety] (matched 'can't help with this particular request'): Gemini said
+
+I'm sorry, it appears 
+2026-08-11 19:58:04  assets/weeks/films/sw_sith/primary/bronze/Palpatine.png WHY (site's answer) — Gemini said
+
+The specific elements in your request that conflict with the policy are "Emperor Palpatine," the "Imperial cog," and the "aurebesh-flavored tick ornament." Generating images of specific copyrighted fictional characters and proprietary elements from established franchises is not permitted.
+2026-08-11 19:59:44  assets/weeks/films/sw_sith/primary/bronze/Anakin.png REFUSED — Gemini: prompt refused [safety] (matched 'go against my guidelines'): Gemini said
+
+I can help with many kinds of request
+2026-08-11 19:59:44  assets/weeks/films/sw_sith/primary/bronze/Anakin.png WHY (site's answer) — Gemini said
+
+The prompt requests the likeness of specific, copyrighted characters and franchise-specific imagery. The specific elements that conflict with policy are: "Palpatine's own seat," "young Anakin," "Jedi," "Vader's black armored bulk," and "Imperial cog."
+2026-08-11 20:00:59  assets/weeks/films/sw_sith/primary/colored/Anakin.png gen   24.4s  ours   30.2s   1024x1024 -> 932x931    1.1 MB  [REMOVE BG: done, CROP: done]
+2026-08-11 20:01:59  assets/weeks/films/sw_dyad/primary/bronze/Finn.png REFUSED — Gemini: prompt refused [safety] (matched 'can't help with this particular request'): Gemini said
+
+I'm sorry, it appears 
+2026-08-11 20:01:59  assets/weeks/films/sw_dyad/primary/bronze/Finn.png WHY (site's answer) — Gemini said
+
+I'm having a hard time fulfilling your request. Can I help you with something else instead?
+2026-08-11 20:03:33  assets/weeks/films/sw_dyad/primary/colored/Finn.png REFUSED — Gemini: prompt refused [safety] (matched 'can't help with this particular request'): Gemini said
+
+I'm sorry, it appears 
+2026-08-11 20:03:33  assets/weeks/films/sw_dyad/primary/colored/Finn.png WHY (site's answer) — Gemini said
+
+The conflict in your request is the specific character identification. The name "Finn," combined with the highly detailed description "half in white trooper plate and half in a stolen brown jacket," directly references a copyrighted character and his narrative from a popular franchise. Generating such specific likenesses without authorization is against policy.
+2026-08-11 20:05:17  assets/weeks/films/sw_dyad/primary/bronze/Phasma.png REFUSED — Gemini: prompt refused [safety] (matched 'may go against my guidelines'): Gemini said
+
+I can help with all sorts of thin
+2026-08-11 20:05:17  assets/weeks/films/sw_dyad/primary/bronze/Phasma.png WHY (site's answer) — Gemini said
+
+The request was declined due to the specific character identification. The names "Captain Phasma" and "Finn," in conjunction with the description "immaculate in chrome-plated command armor" and "long silver cape," directly reference copyrighted characters.
+2026-08-11 20:07:15  assets/weeks/films/sw_dyad/primary/colored/Phasma.png gen   25.2s  ours   27.7s   1024x1024 -> 918x916    1.4 MB  [REMOVE BG: done, CROP: done]
+2026-08-11 20:08:09  assets/weeks/films/sw_dyad/primary/bronze/Maz.png gen   26.9s  ours   22.3s   1024x1024 -> 952x954    1.7 MB  [REMOVE BG: done, CROP: done]
+2026-08-11 20:09:43  assets/weeks/films/sw_dyad/primary/bronze/Han.png REFUSED — Gemini: prompt refused [safety] (matched 'may go against my guidelines'): Gemini said
+
+Your request may go against my gu
+2026-08-11 20:09:43  assets/weeks/films/sw_dyad/primary/bronze/Han.png WHY (site's answer) — Gemini said
+
+The specific elements conflicting with the policy are the copyrighted character name 'Han Solo' and the fictional language reference 'aurebesh'.
+2026-08-11 20:11:10  assets/weeks/films/sw_dyad/primary/bronze/Rey.png REFUSED — Gemini: the response answered with TEXT but no image (settled 6s), and the text matches no known marker — loud skip, nev
+2026-08-11 20:11:10  assets/weeks/films/sw_dyad/primary/bronze/Rey.png WHY (site's answer) — Gemini said
+
+The request was declined because it asks for a specific, copyrighted fictional character, "Rey," holding a "lightsaber" within a setting featuring "twin suns." Additionally, the request mentions the fictional script "aurebesh." These specific elements from the Star Wars franchise cannot be generated without proper authorization. To rework the prompt, you should replace these specific 
+2026-08-11 20:12:37  assets/weeks/films/sw_dyad/primary/colored/Rey.png REFUSED — Gemini: prompt refused [safety] (matched 'cannot generate'): Gemini said
+
+I cannot generate an image based on your reque
+2026-08-11 20:12:37  assets/weeks/films/sw_dyad/primary/colored/Rey.png WHY (site's answer) — Gemini said
+
+The specific elements in your request that conflict with the policy are the copyrighted character name "Rey" and the trademarked item "lightsaber."
+2026-08-11 20:14:39  assets/weeks/films/sw_dyad/primary/bronze/Kylo.png REFUSED — Gemini: prompt refused [safety] (matched 'may go against my guidelines'): Gemini said
+
+Your request may go against my gu
+2026-08-11 20:14:39  assets/weeks/films/sw_dyad/primary/bronze/Kylo.png WHY (site's answer) — Gemini said
+
+The request was declined because it asks for specific, copyrighted fictional characters ("Kylo Ren," "Rey") and a trademarked item ("unstable crossguard lightsaber"). Generating images of protected characters and their distinct likenesses or signature items is against policy.
+2026-08-11 20:16:23  assets/weeks/films/sw_dyad/primary/colored/Kylo.png REFUSED — Gemini: prompt refused [safety] (matched 'can't help with this particular request'): Gemini said
+
+I'm sorry, it appears 
+2026-08-11 20:16:23  assets/weeks/films/sw_dyad/primary/colored/Kylo.png WHY (site's answer) — Gemini said
+
+The specific element in your request that conflicts with the policy is the depiction of the character "Kylo," defined by his highly specific and unique attributes like the "crackling unstable red crossguard blade" and "cracked chrome-black helm." This combination directly references copyrighted intellectual property.
+
+To rework your prompt, you must replace the copyrighted character n
+2026-08-11 20:17:16  assets/weeks/films/sw_dyad/primary/colored/Exegol.png gen   20.6s  ours    0.7s   1024x1024 -> 896x920    1.2 MB  [REMOVE BG: done, CROP: done]
+--------------------------------------------------------------------
+Refused: 18 image(s) — rework those prompts in the sheet (or intervene manually) and rerun
+Images: 4  |  average generation (AI): 24s/image  |  average our time (save+bgfix+pause): 20s/image
+Total AI + our time: 2m 58s  (wall clock: 30m 24s)
+Run finished: 2026-08-11 20:17:16  (all pending items done)
+

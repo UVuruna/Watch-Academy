@@ -33,3 +33,198 @@ Run started:  2026-07-29 19:41:20  (0/60 pending)
 Images: 0
 Run finished: 2026-07-29 19:41:20  (all pending items done)
 
+====================================================================
+Star Wars — Descriptive Variants (Copyright-Safe Wording)  [ChatGPT]
+Run started:  2026-08-11 14:18:14  (54/60 pending)
+--------------------------------------------------------------------
+2026-08-11 14:22:07  assets/weeks/films/sw_jedi/primary/bronze/Han_v2.png REFUSED — ChatGPT: prompt refused [copyright] (matched 'third-party content'): We’re so sorry, but the image we created may violat
+2026-08-11 14:22:07  assets/weeks/films/sw_jedi/primary/bronze/Han_v2.png WHY (site's answer) — Najverovatniji problem je kombinacija ovih elemenata, koja zajedno veoma direktno priziva Han Solo + Millennium Falcon iz Star Warsa:
+
+“rakish scoundrel-smuggler”
+
+“hand-blaster holstered”
+
+“counting a small stack of credits”
+
+“battered saucer-shaped freighter ship”
+
+naročito scena uz open hatch broda i lukavi krijumčarski stav
+
+Nijedan od tih elemenata sam za sebe nije problem. Problem je što ih 
+2026-08-11 14:24:11  assets/weeks/films/sw_jedi/primary/colored/Han_v2.png REFUSED — prompt vanished; re-send failed — ChatGPT: our sent prompt is NO LONGER the newest user turn — the site dropped the mess
+2026-08-11 14:26:53  assets/weeks/films/sw_jedi/primary/bronze/Qui_Gon_v2.png gen  107.7s  ours   18.3s  1024x1536 -> 1024x1097    2.3 MB  [REMOVE BG: nothing, CROP: done]
+2026-08-11 14:28:43  assets/weeks/films/sw_jedi/primary/bronze/Padme_v2.png REFUSED — prompt vanished; re-send failed — ChatGPT: our sent prompt is NO LONGER the newest user turn — the site dropped the mess
+2026-08-11 14:31:18  assets/weeks/films/sw_jedi/primary/colored/Padme_v2.png REFUSED — prompt vanished; re-send failed — ChatGPT: our sent prompt is NO LONGER the newest user turn — the site dropped the mess
+2026-08-11 14:35:03  assets/weeks/films/sw_jedi/primary/bronze/Chewbacca_v2.png REFUSED — prompt vanished; re-send failed — ChatGPT: our sent prompt is NO LONGER the newest user turn — the site dropped the mess
+2026-08-11 14:37:09  assets/weeks/films/sw_jedi/primary/colored/Chewbacca_v2.png REFUSED — prompt vanished; re-send failed — ChatGPT: our sent prompt is NO LONGER the newest user turn — the site dropped the mess
+2026-08-11 14:50:24  assets/weeks/films/sw_jedi/primary/bronze/Luke_v2.png REFUSED — ChatGPT: prompt refused [copyright] (matched 'third-party content'): We’re so sorry, but the image we created may violat
+2026-08-11 14:50:24  assets/weeks/films/sw_jedi/primary/bronze/Luke_v2.png WHY (site's answer) — Najverovatnije nije problem nijedan pojedinačni tehnički zahtev, već vrlo specifična kombinacija detalja koja praktično identifikuje Luke Skywalker-a iz Star Warsa:
+
+“young farm-raised hero”
+
+“inherited blue energy blade”
+
+“twin suns glowing softly on the horizon”
+
+uz simple robes
+
+Posebno je “farm-raised hero + inherited blue energy blade + twin suns” gotovo direktan identifikator tog konkretnog 
+--------------------------------------------------------------------
+Refused: 7 image(s) — rework those prompts in the sheet (or intervene manually) and rerun
+Images: 1  |  average generation (AI): 1m 48s/image  |  average our time (save+bgfix+pause): 18s/image
+Total AI + our time: 2m 06s  (wall clock: 34m 18s)
+Run finished: 2026-08-11 14:52:32  (aborted: SelectorRot)
+
+====================================================================
+Star Wars — Descriptive Variants (Copyright-Safe Wording)  [ChatGPT]
+Run started:  2026-08-11 16:42:20  (53/60 pending)
+--------------------------------------------------------------------
+2026-08-11 16:44:56  assets/weeks/films/sw_jedi/primary/bronze/Han_v2.png gen  126.4s  ours   13.3s  1024x1536 -> 1024x1150    2.3 MB  [REMOVE BG: nothing, CROP: done]
+2026-08-11 16:47:14  assets/weeks/films/sw_jedi/primary/colored/Han_v2.png REFUSED — prompt vanished; re-send failed — ChatGPT: prompt refused [copyright] (matched 'third-party content'): We’re so sorry, b
+2026-08-11 16:49:34  assets/weeks/films/sw_jedi/primary/bronze/Padme_v2.png REFUSED — prompt vanished; re-send failed — ChatGPT: our sent prompt is NO LONGER the newest user turn — the site dropped the mess
+2026-08-11 16:51:47  assets/weeks/films/sw_jedi/primary/colored/Padme_v2.png REFUSED — prompt vanished; re-send failed — ChatGPT: our sent prompt is NO LONGER the newest user turn — the site dropped the mess
+2026-08-11 16:53:57  assets/weeks/films/sw_jedi/primary/bronze/Chewbacca_v2.png REFUSED — prompt vanished; re-send failed — ChatGPT: our sent prompt is NO LONGER the newest user turn — the site dropped the mess
+2026-08-11 16:56:18  assets/weeks/films/sw_jedi/primary/colored/Chewbacca_v2.png REFUSED — prompt vanished; re-send failed — ChatGPT: our sent prompt is NO LONGER the newest user turn — the site dropped the mess
+2026-08-11 16:58:43  assets/weeks/films/sw_jedi/primary/bronze/Luke_v2.png REFUSED — prompt vanished; re-send failed — ChatGPT: our sent prompt is NO LONGER the newest user turn — the site dropped the mess
+2026-08-11 17:00:57  assets/weeks/films/sw_jedi/primary/colored/Luke_v2.png REFUSED — prompt vanished; re-send failed — ChatGPT: our sent prompt is NO LONGER the newest user turn — the site dropped the mess
+2026-08-11 17:03:22  assets/weeks/films/sw_jedi/primary/bronze/Vader_v2.png REFUSED — prompt vanished; re-send failed — ChatGPT: our sent prompt is NO LONGER the newest user turn — the site dropped the mess
+2026-08-11 17:05:29  assets/weeks/films/sw_jedi/primary/bronze/Yoda_v2.png REFUSED — prompt vanished; re-send failed — ChatGPT: our sent prompt is NO LONGER the newest user turn — the site dropped the mess
+2026-08-11 17:07:53  assets/weeks/films/sw_jedi/primary/colored/Yoda_v2.png REFUSED — prompt vanished; re-send failed — ChatGPT: our sent prompt is NO LONGER the newest user turn — the site dropped the mess
+2026-08-11 17:09:59  assets/weeks/films/sw_sith/primary/bronze/Tarkin_v2.png REFUSED — prompt vanished; re-send failed — ChatGPT: our sent prompt is NO LONGER the newest user turn — the site dropped the mess
+2026-08-11 17:14:08  assets/weeks/films/sw_sith/primary/colored/Tarkin_v2.png REFUSED — ChatGPT: our sent prompt is NO LONGER the newest user turn — the site dropped the message after the confirmed send (noti
+2026-08-11 17:14:08  assets/weeks/films/sw_sith/primary/colored/Tarkin_v2.png WHY (site's answer) — The likely conflict is the combination of character-and-setting cues that point too closely to a specific Star Wars character/franchise depiction — especially:
+
+“the governor … a gaunt pale face and silver-grey regime uniform”
+
+“standing rigid at a viewport”
+
+“the battle station’s curved horizon glowing pale behind him”
+
+Together, those details read very strongly as a recognizable Grand Moff Tarki
+2026-08-11 17:16:10  assets/weeks/films/sw_sith/primary/bronze/Grievous_v2.png REFUSED — prompt vanished; re-send failed — ChatGPT: our sent prompt is NO LONGER the newest user turn — the site dropped the mess
+2026-08-11 17:20:02  assets/weeks/films/sw_sith/primary/colored/Grievous_v2.png REFUSED — prompt vanished; re-send failed — ChatGPT: our sent prompt is NO LONGER the newest user turn — the site dropped the mess
+2026-08-11 17:22:24  assets/weeks/films/sw_sith/primary/bronze/Jabba_v2.png REFUSED — prompt vanished; re-send failed — ChatGPT: our sent prompt is NO LONGER the newest user turn — the site dropped the mess
+2026-08-11 17:25:17  assets/weeks/films/sw_sith/primary/colored/Jabba_v2.png gen  120.5s  ours   13.8s  1536x1024 -> 1117x1024    2.2 MB  [REMOVE BG: nothing, CROP: done]
+2026-08-11 17:27:06  assets/weeks/films/sw_sith/primary/bronze/Dooku_v2.png REFUSED — prompt vanished; re-send failed — ChatGPT: our sent prompt is NO LONGER the newest user turn — the site dropped the mess
+2026-08-11 17:29:17  assets/weeks/films/sw_sith/primary/colored/Dooku_v2.png REFUSED — prompt vanished; re-send failed — ChatGPT: our sent prompt is NO LONGER the newest user turn — the site dropped the mess
+2026-08-11 17:31:31  assets/weeks/films/sw_sith/primary/bronze/Maul_v2.png REFUSED — prompt vanished; re-send failed — ChatGPT: our sent prompt is NO LONGER the newest user turn — the site dropped the mess
+2026-08-11 17:33:46  assets/weeks/films/sw_sith/primary/colored/Maul_v2.png REFUSED — prompt vanished; re-send failed — ChatGPT: our sent prompt is NO LONGER the newest user turn — the site dropped the mess
+2026-08-11 17:36:05  assets/weeks/films/sw_sith/primary/bronze/BobaFett_v2.png REFUSED — prompt vanished; re-send failed — ChatGPT: prompt refused [copyright] (matched 'third-party content'): We’re so sorry, b
+2026-08-11 17:38:31  assets/weeks/films/sw_sith/primary/colored/BobaFett_v2.png REFUSED — prompt vanished; re-send failed — ChatGPT: our sent prompt is NO LONGER the newest user turn — the site dropped the mess
+2026-08-11 17:40:57  assets/weeks/films/sw_sith/primary/bronze/Palpatine_v2.png REFUSED — prompt vanished; re-send failed — ChatGPT: our sent prompt is NO LONGER the newest user turn — the site dropped the mess
+2026-08-11 17:43:41  assets/weeks/films/sw_sith/primary/colored/Palpatine_v2.png gen   20.5s  ours   13.9s  1536x1024 -> 1091x1017    1.9 MB  [REMOVE BG: nothing, CROP: done]
+2026-08-11 17:45:28  assets/weeks/films/sw_sith/primary/bronze/Anakin_v2.png REFUSED — prompt vanished; re-send failed — ChatGPT: prompt refused [copyright] (matched 'third-party content'): We’re so sorry, b
+2026-08-11 17:49:44  assets/weeks/films/sw_sith/primary/colored/Anakin_v2.png gen   97.3s  ours   29.6s              1254x1254    2.8 MB  [REMOVE BG: nothing, CROP: nothing]
+2026-08-11 17:51:55  assets/weeks/films/sw_sith/primary/bronze/Plagueis_v2.png gen  105.2s  ours   23.8s  1024x1536 -> 1024x1181    2.2 MB  [REMOVE BG: nothing, CROP: done]
+2026-08-11 17:55:43  assets/weeks/films/sw_sith/primary/colored/Plagueis_v2.png gen  105.7s  ours   18.5s  1024x1536 -> 1023x1368    2.2 MB  [REMOVE BG: nothing, CROP: done]
+2026-08-11 17:58:09  assets/weeks/films/sw_dyad/primary/bronze/Rose_v2.png gen  106.9s  ours   36.3s  1536x1024 -> 1037x1024    2.0 MB  [REMOVE BG: nothing, CROP: done]
+2026-08-11 18:02:05  assets/weeks/films/sw_dyad/primary/colored/Rose_v2.png gen   94.4s  ours   15.1s              1254x1254    3.2 MB  [REMOVE BG: nothing, CROP: nothing]
+2026-08-11 18:04:53  assets/weeks/films/sw_dyad/primary/bronze/Finn_v2.png REFUSED — ChatGPT: our sent prompt is NO LONGER the newest user turn — the site dropped the message after the confirmed send (noti
+2026-08-11 18:04:53  assets/weeks/films/sw_dyad/primary/bronze/Finn_v2.png WHY (site's answer) — The likely trigger is the very specific character setup:
+
+“a defecting armored foot-soldier … half in white plate armor and half already stripped down to a stolen jacket … a smear of another soldier’s blood …”
+
+That combination strongly maps onto Finn (FN-2187) from Star Wars: The Force Awakens—especially the white trooper armor, defection, borrowed/stolen jacket, blaster, and blood-marked armor. 
+2026-08-11 18:06:58  assets/weeks/films/sw_dyad/primary/colored/Finn_v2.png REFUSED — prompt vanished; re-send failed — ChatGPT: our sent prompt is NO LONGER the newest user turn — the site dropped the mess
+2026-08-11 18:11:15  assets/weeks/films/sw_dyad/primary/bronze/Phasma_v2.png gen  103.9s  ours   36.3s  1536x1024 -> 993x1010    1.8 MB  [REMOVE BG: nothing, CROP: done]
+2026-08-11 18:13:21  assets/weeks/films/sw_dyad/primary/colored/Phasma_v2.png gen  107.9s  ours   16.5s  1024x1536 -> 1024x1135    2.2 MB  [REMOVE BG: nothing, CROP: done]
+2026-08-11 18:15:10  assets/weeks/films/sw_dyad/primary/bronze/Maz_v2.png REFUSED — prompt vanished; re-send failed — ChatGPT: our sent prompt is NO LONGER the newest user turn — the site dropped the mess
+2026-08-11 18:19:29  assets/weeks/films/sw_dyad/primary/colored/Maz_v2.png gen   91.4s  ours   31.4s  1254x1254 -> 1254x1238    2.8 MB  [REMOVE BG: nothing, CROP: done]
+2026-08-11 18:21:50  assets/weeks/films/sw_dyad/primary/bronze/DJ_v2.png gen  104.7s  ours   35.3s  1536x1024 -> 1072x1019    2.1 MB  [REMOVE BG: nothing, CROP: done]
+2026-08-11 18:25:38  assets/weeks/films/sw_dyad/primary/colored/DJ_v2.png gen   93.9s  ours   29.9s  1254x1254 -> 1254x1244    2.7 MB  [REMOVE BG: nothing, CROP: done]
+2026-08-11 18:27:44  assets/weeks/films/sw_dyad/primary/bronze/Leia_v2.png gen  109.6s  ours   13.8s  1024x1536 -> 1024x1101    2.1 MB  [REMOVE BG: nothing, CROP: done]
+2026-08-11 18:31:49  assets/weeks/films/sw_dyad/primary/colored/Leia_v2.png gen  105.6s  ours   35.9s  1024x1536 -> 1024x1278    2.3 MB  [REMOVE BG: nothing, CROP: done]
+2026-08-11 18:42:53  assets/weeks/films/sw_dyad/primary/bronze/Han_v2.png REFUSED — ChatGPT: our sent prompt is NO LONGER the newest user turn — the site dropped the message after the confirmed send (noti
+2026-08-11 18:42:53  assets/weeks/films/sw_dyad/primary/bronze/Han_v2.png WHY (site's answer) — The problem was the very specific combination of story details, not the bronze-medallion style, transparency, Venus symbols, or photorealism.
+
+In particular, this passage strongly identifies a specific Star Wars scene involving Han Solo and Kylo Ren:
+
+“an older scoundrel-smuggler … onto a narrow exposed bridge … a masked figure waiting at the far end — a father closing the distance to his own son 
+2026-08-11 18:52:06  assets/weeks/films/sw_dyad/primary/colored/Han_v2.png REFUSED — prompt vanished; re-send failed — ChatGPT: no result for OUR turn after 420s (hard timeout)
+--------------------------------------------------------------------
+Refused: 28 image(s) — rework those prompts in the sheet (or intervene manually) and rerun
+Images: 15  |  average generation (AI): 1m 40s/image  |  average our time (save+bgfix+pause): 24s/image
+Total AI + our time: 30m 58s  (wall clock: 133m 34s)
+Run finished: 2026-08-11 18:55:54  (image generation failed (site's own error))
+
+====================================================================
+Star Wars — Descriptive Variants (Copyright-Safe Wording)  [ChatGPT]
+Run started:  2026-08-11 19:42:13  (38/60 pending)
+--------------------------------------------------------------------
+2026-08-11 19:42:31  assets/weeks/films/sw_jedi/primary/colored/Han_v2.png REFUSED — prompt vanished; re-send failed — ChatGPT: our sent prompt is NO LONGER the newest user turn — the site dropped the mess
+2026-08-11 19:45:24  assets/weeks/films/sw_jedi/primary/bronze/Padme_v2.png gen  107.1s  ours   28.9s  1254x1254 -> 1254x1246    3.0 MB  [REMOVE BG: nothing, CROP: done]
+2026-08-11 19:47:51  assets/weeks/films/sw_jedi/primary/colored/Padme_v2.png REFUSED — prompt vanished; re-send failed — ChatGPT: our sent prompt is NO LONGER the newest user turn — the site dropped the mess
+2026-08-11 19:50:20  assets/weeks/films/sw_jedi/primary/bronze/Chewbacca_v2.png REFUSED — prompt vanished; re-send failed — ChatGPT: prompt refused [copyright] (matched 'third-party content'): We’re so sorry, b
+2026-08-11 19:52:39  assets/weeks/films/sw_jedi/primary/colored/Chewbacca_v2.png REFUSED — prompt vanished; re-send failed — ChatGPT: our sent prompt is NO LONGER the newest user turn — the site dropped the mess
+2026-08-11 19:56:07  assets/weeks/films/sw_jedi/primary/bronze/Luke_v2.png REFUSED — prompt vanished; re-send failed — ChatGPT: our sent prompt is NO LONGER the newest user turn — the site dropped the mess
+2026-08-11 19:58:41  assets/weeks/films/sw_jedi/primary/colored/Luke_v2.png REFUSED — prompt vanished; re-send failed — ChatGPT: our sent prompt is NO LONGER the newest user turn — the site dropped the mess
+2026-08-11 20:03:56  assets/weeks/films/sw_jedi/primary/bronze/Vader_v2.png REFUSED — prompt vanished; re-send failed — ChatGPT: prompt refused [copyright] (matched 'third-party content'): We’re so sorry, b
+2026-08-11 20:14:55  assets/weeks/films/sw_jedi/primary/bronze/Yoda_v2.png REFUSED — ChatGPT: prompt refused [copyright] (matched 'third-party content'): We’re so sorry, but the image we created may violat
+2026-08-11 20:14:55  assets/weeks/films/sw_jedi/primary/bronze/Yoda_v2.png WHY (site's answer) — The conflict is the very specific combination of character-identifying traits, which collectively points strongly to Yoda, even though the name is never used.
+
+The strongest triggers are: “tiny, ancient green-skinned sage with large pointed ears,” “remote swamp,” “small hut,” “nine hundred years,” “three-fingered hand,” and “walking stick.” Any one of those might be generic, but together they desc
+2026-08-11 20:16:06  assets/weeks/films/sw_jedi/primary/colored/Yoda_v2.png REFUSED — prompt vanished; re-send failed — ChatGPT: our sent prompt is NO LONGER the newest user turn — the site dropped the mess
+2026-08-11 20:18:07  assets/weeks/films/sw_sith/primary/bronze/Tarkin_v2.png REFUSED — prompt vanished; re-send failed — ChatGPT: our sent prompt is NO LONGER the newest user turn — the site dropped the mess
+2026-08-11 20:21:11  assets/weeks/films/sw_sith/primary/colored/Tarkin_v2.png REFUSED — prompt vanished; re-send failed — ChatGPT: our sent prompt is NO LONGER the newest user turn — the site dropped the mess
+2026-08-11 20:22:53  assets/weeks/films/sw_sith/primary/bronze/Grievous_v2.png REFUSED — prompt vanished; re-send failed — ChatGPT: our sent prompt is NO LONGER the newest user turn — the site dropped the mess
+2026-08-11 20:27:05  assets/weeks/films/sw_sith/primary/colored/Grievous_v2.png gen  121.8s  ours   12.9s  1536x1024 -> 1108x1024    2.0 MB  [REMOVE BG: nothing, CROP: done]
+2026-08-11 20:31:03  assets/weeks/films/sw_sith/primary/bronze/Jabba_v2.png REFUSED — ChatGPT: our sent prompt is NO LONGER the newest user turn — the site dropped the message after the confirmed send (noti
+2026-08-11 20:31:03  assets/weeks/films/sw_sith/primary/bronze/Jabba_v2.png WHY (site's answer) — From the text you quoted, there isn’t a clear policy-violating element. The bronze medallion, crime theme, stolen wealth/contraband, Mercury glyph, transparency, and photorealistic rendering are all fine.
+
+The likely trigger was the combined character description:
+
+“massive, slug-bodied crime lord sprawled across his own dais … small clawed hand … half-lidded eyes”
+
+That combination very strongly 
+2026-08-11 20:35:40  assets/weeks/films/sw_sith/primary/bronze/Dooku_v2.png REFUSED — ChatGPT: our sent prompt is NO LONGER the newest user turn — the site dropped the message after the confirmed send (noti
+2026-08-11 20:35:40  assets/weeks/films/sw_sith/primary/bronze/Dooku_v2.png WHY (site's answer) — The likely conflict was the character-likeness description, specifically this combination:
+
+“silver-haired aristocrat-warrior”
+
+“dark cape”
+
+“curved-hilt energy blade”
+
+“former pupil” / “teacher’s gift with the cost hidden inside it”
+
+Taken together, that strongly points to a specific recognizable franchise character archetype—most likely something very close to Count Dooku / Darth Tyranus. If the
+2026-08-11 20:38:20  assets/weeks/films/sw_sith/primary/colored/Dooku_v2.png REFUSED — prompt vanished; re-send failed — ChatGPT: our sent prompt is NO LONGER the newest user turn — the site dropped the mess
+2026-08-11 20:42:45  assets/weeks/films/sw_sith/primary/bronze/Maul_v2.png gen   94.0s  ours   14.0s  1254x1254 -> 1254x1247    3.1 MB  [REMOVE BG: nothing, CROP: done]
+2026-08-11 20:45:06  assets/weeks/films/sw_sith/primary/colored/Maul_v2.png gen  104.7s  ours   33.9s  1024x1536 -> 1024x1145    2.2 MB  [REMOVE BG: nothing, CROP: done]
+2026-08-11 20:48:33  assets/weeks/films/sw_sith/primary/bronze/BobaFett_v2.png REFUSED — prompt vanished; re-send failed — ChatGPT: prompt refused [copyright] (matched 'third-party content'): We’re so sorry, b
+2026-08-11 20:59:27  assets/weeks/films/sw_sith/primary/colored/BobaFett_v2.png REFUSED — ChatGPT: prompt refused [copyright] (matched 'third-party content'): We’re so sorry, but the image we created may violat
+2026-08-11 20:59:27  assets/weeks/films/sw_sith/primary/colored/BobaFett_v2.png WHY (site's answer) — The most likely trigger is the combination of “bounty hunter” + scarred green-and-grey armor + unreadable visored helmet + tracking device. Taken together, those details strongly evoke a specific copyrighted Star Wars bounty-hunter character—especially Boba Fett—rather than only a generic archetype.
+
+The Saturn glyph, cog border, transparent background, colors, photorealistic finish, and no-reflec
+2026-08-11 21:03:53  assets/weeks/films/sw_sith/primary/bronze/Palpatine_v2.png gen  101.0s  ours   21.9s  1536x1024 -> 996x1006    1.8 MB  [REMOVE BG: nothing, CROP: done]
+2026-08-11 21:15:00  assets/weeks/films/sw_sith/primary/bronze/Anakin_v2.png REFUSED — ChatGPT: our sent prompt is NO LONGER the newest user turn — the site dropped the message after the confirmed send (noti
+2026-08-11 21:15:00  assets/weeks/films/sw_sith/primary/bronze/Anakin_v2.png WHY (site's answer) — The most likely policy-triggering element is the very specific character transformation/literal visual cue in this phrase:
+
+“a young warrior-sage's robed silhouette … dissolving mid-frame into a towering black-armored bulk”
+
+That strongly reads as a specific copyrighted character progression rather than a generic archetype.
+
+A secondary contributing cue is:
+
+“the SAME throne silhouette as the enth
+2026-08-11 21:17:21  assets/weeks/films/sw_dyad/primary/bronze/Finn_v2.png REFUSED — prompt vanished; re-send failed — ChatGPT: our sent prompt is NO LONGER the newest user turn — the site dropped the mess
+2026-08-11 21:21:39  assets/weeks/films/sw_dyad/primary/colored/Finn_v2.png gen  102.1s  ours   16.4s  1536x1024 -> 1032x1024    2.0 MB  [REMOVE BG: nothing, CROP: done]
+2026-08-11 21:23:49  assets/weeks/films/sw_dyad/primary/bronze/Maz_v2.png gen  108.2s  ours   17.3s  1536x1024 -> 1007x1008    2.0 MB  [REMOVE BG: nothing, CROP: done]
+2026-08-11 21:25:47  assets/weeks/films/sw_dyad/primary/bronze/Han_v2.png REFUSED — prompt vanished; re-send failed — ChatGPT: our sent prompt is NO LONGER the newest user turn — the site dropped the mess
+2026-08-11 21:29:30  assets/weeks/films/sw_dyad/primary/colored/Han_v2.png gen   96.3s  ours   25.4s  1536x1024 -> 1024x1014    1.8 MB  [REMOVE BG: nothing, CROP: done]
+2026-08-11 21:33:16  assets/weeks/films/sw_dyad/primary/bronze/Hux_v2.png gen   88.3s  ours   26.5s  1254x1254 -> 1254x1250    2.8 MB  [REMOVE BG: nothing, CROP: done]
+2026-08-11 21:35:46  assets/weeks/films/sw_dyad/primary/colored/Hux_v2.png gen  123.8s  ours   19.9s  1024x1536 -> 1024x1102    2.0 MB  [REMOVE BG: nothing, CROP: done]
+2026-08-11 21:37:52  assets/weeks/films/sw_dyad/primary/bronze/Rey_v2.png REFUSED — prompt vanished; re-send failed — ChatGPT: our sent prompt is NO LONGER the newest user turn — the site dropped the mess
+2026-08-11 21:40:37  assets/weeks/films/sw_dyad/primary/colored/Rey_v2.png REFUSED — prompt vanished; re-send failed — ChatGPT: our sent prompt is NO LONGER the newest user turn — the site dropped the mess
+2026-08-11 21:46:04  assets/weeks/films/sw_dyad/primary/bronze/Kylo_v2.png REFUSED — prompt vanished; re-send failed — ChatGPT: prompt refused [copyright] (matched 'third-party content'): We’re so sorry, b
+2026-08-11 21:50:04  assets/weeks/films/sw_dyad/primary/colored/Kylo_v2.png gen   88.0s  ours   19.5s  1254x1254 -> 1250x1253    2.8 MB  [REMOVE BG: nothing, CROP: done]
+2026-08-11 21:51:39  assets/weeks/films/sw_dyad/primary/bronze/Ghosts_v2.png REFUSED — prompt vanished; re-send failed — ChatGPT: our sent prompt is NO LONGER the newest user turn — the site dropped the mess
+2026-08-11 21:55:20  assets/weeks/films/sw_dyad/primary/colored/Ghosts_v2.png REFUSED — prompt vanished; re-send failed — ChatGPT: our sent prompt is NO LONGER the newest user turn — the site dropped the mess
+2026-08-11 22:00:43  assets/weeks/films/sw_dyad/primary/bronze/Exegol_v2.png gen   86.8s  ours   24.8s  1254x1254 -> 1254x1249    2.9 MB  [REMOVE BG: nothing, CROP: done]
+2026-08-11 22:02:37  assets/weeks/films/sw_dyad/primary/colored/Exegol_v2.png gen  107.6s  ours    0.8s  1024x1536 -> 1024x1283    2.5 MB  [REMOVE BG: nothing, CROP: done]
+--------------------------------------------------------------------
+Refused: 25 image(s) — rework those prompts in the sheet (or intervene manually) and rerun
+Images: 13  |  average generation (AI): 1m 42s/image  |  average our time (save+bgfix+pause): 20s/image
+Total AI + our time: 26m 32s  (wall clock: 140m 24s)
+Run finished: 2026-08-11 22:02:37  (all pending items done)
+

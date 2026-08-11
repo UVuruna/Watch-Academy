@@ -44,7 +44,7 @@ Canon](CUBE.md#the-name).
 ## Structure
 
 ```
-📁 DOMY Watch/            ← folder name kept; the app is Watch Academy
+📁 WatchAcademy/          ← the app is Watch Academy; DOMY is the dial
   🐍 main.py            ← entry point
   📁 config/            ← all constants and tunables
   📁 core/              ← pure astronomy/angle computation
@@ -98,7 +98,7 @@ diagram plus language-neutral pseudocode).
   (gitignored on disk; the folder doc travels with the repo)
 - [Research (folder)](research/___research.md) — image-generation
   prompt sheets live here; see [How to Write a Prompt
-  Sheet](../PromptPainter/instructions.md) before authoring a new one
+  Sheet](../../Gadgets/PromptPainter/instructions.md) before authoring a new one
 - [Roster — the Master Systematics](ROSTER.md) — every theme, every
   figure, its seat, per-source art coverage (generated:
   `python research/build_roster.py`)

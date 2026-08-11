@@ -133,3 +133,83 @@ Images: 14  |  average generation (AI): 16s/image  |  average our time (save+bgf
 Total AI + our time: 5m 57s  (wall clock: 7m 12s)
 Run finished: 2026-07-29 19:35:04  (all pending items done)
 
+====================================================================
+Star Wars — Descriptive Variants (Copyright-Safe Wording)  [Gemini]
+Run started:  2026-08-11 14:04:05  (3/60 pending)
+--------------------------------------------------------------------
+2026-08-11 14:05:36  assets/weeks/films/sw_jedi/primary/bronze/Chewbacca_v2.png REFUSED — Gemini: prompt refused [safety] (matched 'may go against my guidelines'): Gemini said
+
+Your request may go against my gu
+2026-08-11 14:05:36  assets/weeks/films/sw_jedi/primary/bronze/Chewbacca_v2.png WHY (site's answer) — Gemini said
+
+The specific element that likely triggered the policy block is the implicit request for a copyrighted character.
+
+While you didn't use his name, the combination of details in your prompt strongly describes Chewbacca from the Star Wars franchise. The system's intellectual property (IP) filters recognized the following combination of traits:
+
+"towering, shaggy brown-furred beast-warrior
+2026-08-11 14:07:01  assets/weeks/films/sw_sith/primary/bronze/BobaFett_v2.png REFUSED — Gemini: prompt refused [safety] (matched 'go against my guidelines'): Gemini said
+
+I can help with many kinds of request
+2026-08-11 14:07:01  assets/weeks/films/sw_sith/primary/bronze/BobaFett_v2.png WHY (site's answer) — Gemini said
+
+I declined the request due to the combination of elements describing the central figure: "masked bounty hunter standing motionless in scarred clan-forged armor" and "visored helm." These specific descriptors, in combination, too closely resemble existing copyrighted characters and established intellectual property (specifically from the Star Wars franchise).
+2026-08-11 14:08:54  assets/weeks/films/sw_sith/primary/colored/BobaFett_v2.png REFUSED — Gemini: prompt refused [safety] (matched 'may go against my guidelines'): Gemini said
+
+I can help with all sorts of thin
+2026-08-11 14:08:54  assets/weeks/films/sw_sith/primary/colored/BobaFett_v2.png WHY (site's answer) — Gemini said
+
+The combination of specific physical details—specifically "scarred green-and-grey clan-forged armor" and the "visored helm"—too closely describes a copyrighted character (Boba Fett from Star Wars) to be generated.
+--------------------------------------------------------------------
+Refused: 3 image(s) — rework those prompts in the sheet (or intervene manually) and rerun
+Images: 0
+Run finished: 2026-08-11 14:08:54  (all pending items done)
+
+====================================================================
+Star Wars — Descriptive Variants (Copyright-Safe Wording)  [Gemini]
+Run started:  2026-08-11 16:38:06  (3/60 pending)
+--------------------------------------------------------------------
+2026-08-11 16:39:47  assets/weeks/films/sw_jedi/primary/bronze/Chewbacca_v2.png REFUSED — Gemini: prompt refused [safety] (matched 'go against my guidelines'): Gemini said
+
+I can help with many kinds of request
+2026-08-11 16:39:47  assets/weeks/films/sw_jedi/primary/bronze/Chewbacca_v2.png WHY (site's answer) — Gemini said
+
+The combination of "towering, shaggy brown-furred beast-warrior," "freighter's own workbench," and "heavy crossbow-style ranged weapon" too closely resembles a specific copyrighted character. Reworking these elements to be more generic or distinct may resolve the issue.
+2026-08-11 16:41:05  assets/weeks/films/sw_sith/primary/bronze/BobaFett_v2.png REFUSED — prompt vanished; re-send failed — Gemini: prompt refused [safety] (matched 'go against my guidelines'): Gemini said
+
+I c
+2026-08-11 16:43:15  assets/weeks/films/sw_sith/primary/colored/BobaFett_v2.png REFUSED — Gemini: prompt refused [safety] (matched 'may go against my guidelines'): Gemini said
+
+Your request may go against my gu
+2026-08-11 16:43:15  assets/weeks/films/sw_sith/primary/colored/BobaFett_v2.png WHY (site's answer) — Gemini said
+
+The detailed character likeness description, specifically: "the bounty hunter in full color, scarred green-and-grey clan-forged armor... his visored helm unreadable," too closely resembles a specific, well-known character likeness.
+--------------------------------------------------------------------
+Refused: 3 image(s) — rework those prompts in the sheet (or intervene manually) and rerun
+Images: 0
+Run finished: 2026-08-11 16:43:15  (all pending items done)
+
+====================================================================
+Star Wars — Descriptive Variants (Copyright-Safe Wording)  [Gemini]
+Run started:  2026-08-11 19:42:14  (3/60 pending)
+--------------------------------------------------------------------
+2026-08-11 19:43:34  assets/weeks/films/sw_jedi/primary/bronze/Chewbacca_v2.png REFUSED — Gemini: prompt refused [safety] (matched 'may go against my guidelines'): Gemini said
+
+Your request may go against my gu
+2026-08-11 19:43:34  assets/weeks/films/sw_jedi/primary/bronze/Chewbacca_v2.png WHY (site's answer) — Gemini said
+
+The combination of elements in the description "towering, shaggy brown-furred beast-warrior," "freighter's own workbench," and "heavy crossbow-style ranged weapon" too closely describes the likeness and specific characteristics of a copyrighted fictional character (Chewbacca from Star Wars).
+2026-08-11 19:45:27  assets/weeks/films/sw_sith/primary/bronze/BobaFett_v2.png REFUSED — Gemini: prompt refused [safety] (matched 'may go against my guidelines'): Gemini said
+
+Your request may go against my gu
+2026-08-11 19:45:27  assets/weeks/films/sw_sith/primary/bronze/BobaFett_v2.png WHY (site's answer) — Gemini said
+
+The combination of elements in your description, specifically "masked bounty hunter," "scarred clan-forged armor," "tracking device," and "visored helm," is too specific and too closely describes the likeness and characteristics of a copyrighted fictional character (specifically, The Mandalorian or Boba Fett). Generating images that create such likenesses without explicit authorizatio
+2026-08-11 19:46:52  assets/weeks/films/sw_sith/primary/colored/BobaFett_v2.png REFUSED — Gemini: the response answered with TEXT but no image (settled 6s), and the text matches no known marker — loud skip, nev
+2026-08-11 19:46:52  assets/weeks/films/sw_sith/primary/colored/BobaFett_v2.png WHY (site's answer) — Gemini said
+
+The descriptive text for the central figure too closely resembles a copyrighted character likeness. Specifically, the combination of a "bounty hunter" in "scarred green-and-grey clan-forged armor" with a "visored helm" creates this conflict.
+--------------------------------------------------------------------
+Refused: 3 image(s) — rework those prompts in the sheet (or intervene manually) and rerun
+Images: 0
+Run finished: 2026-08-11 19:46:52  (all pending items done)
+

@@ -47,3 +47,34 @@ Run started:  2026-07-29 19:29:43  (0/8 pending)
 Images: 0
 Run finished: 2026-07-29 19:29:43  (all pending items done)
 
+====================================================================
+Cross Words Prompts — the Eight Words Behind the Station Letters  [ChatGPT]
+Run started:  2026-08-11 14:04:59  (3/8 pending)
+--------------------------------------------------------------------
+2026-08-11 14:07:16  assets/archetypes/crosses/secondary/colored/Themelios.png gen  112.8s  ours   20.8s  1536x1024 -> 1007x1016    2.1 MB  [REMOVE BG: nothing, CROP: done]
+2026-08-11 14:09:51  assets/archetypes/crosses/secondary/colored/Leitourgia.png gen  126.1s  ours   14.8s  1536x1024 -> 1020x1016    2.0 MB  [REMOVE BG: nothing, CROP: done]
+2026-08-11 14:10:11  assets/archetypes/crosses/secondary/colored/Prosdokia.png REFUSED — prompt vanished; re-send failed — ChatGPT: our sent prompt is NO LONGER the newest user turn — the site dropped the mess
+--------------------------------------------------------------------
+Refused: 1 image(s) — rework those prompts in the sheet (or intervene manually) and rerun
+Images: 2  |  average generation (AI): 1m 59s/image  |  average our time (save+bgfix+pause): 18s/image
+Total AI + our time: 4m 35s  (wall clock: 5m 12s)
+Run finished: 2026-08-11 14:10:11  (all pending items done)
+
+====================================================================
+Cross Words Prompts — the Eight Words Behind the Station Letters  [ChatGPT]
+Run started:  2026-08-11 16:38:06  (1/8 pending)
+--------------------------------------------------------------------
+2026-08-11 16:39:53  assets/archetypes/crosses/secondary/colored/Prosdokia.png gen  103.7s  ours    0.6s  1254x1254 -> 1254x1247    2.8 MB  [REMOVE BG: nothing, CROP: done]
+--------------------------------------------------------------------
+Images: 1  |  average generation (AI): 1m 44s/image  |  average our time (save+bgfix+pause): 1s/image
+Total AI + our time: 1m 44s  (wall clock: 1m 46s)
+Run finished: 2026-08-11 16:39:53  (all pending items done)
+
+====================================================================
+Cross Words Prompts — the Eight Words Behind the Station Letters  [ChatGPT]
+Run started:  2026-08-11 19:42:13  (0/8 pending)
+--------------------------------------------------------------------
+--------------------------------------------------------------------
+Images: 0
+Run finished: 2026-08-11 19:42:13  (all pending items done)
+

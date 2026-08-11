@@ -36,3 +36,29 @@ Images: 4  |  average generation (AI): 1m 00s/image  |  average our time (save+b
 Total AI + our time: 4m 25s  (wall clock: 4m 57s)
 Run finished: 2026-07-29 19:41:18  (all pending items done)
 
+====================================================================
+Sins Prompts — the Twelve Sins and the Frozen Heart (System B)  [ChatGPT]
+Run started:  2026-08-11 14:16:49  (1/13 pending)
+--------------------------------------------------------------------
+2026-08-11 14:18:13  assets/calendars/sins/primary/colored/Hypocrisy.png gen   82.2s  ours    0.1s              1254x1254    3.4 MB  [REMOVE BG: nothing, CROP: nothing]
+--------------------------------------------------------------------
+Images: 1  |  average generation (AI): 1m 22s/image  |  average our time (save+bgfix+pause): 0s/image
+Total AI + our time: 1m 22s  (wall clock: 1m 24s)
+Run finished: 2026-08-11 14:18:13  (all pending items done)
+
+====================================================================
+Sins Prompts — the Twelve Sins and the Frozen Heart (System B)  [ChatGPT]
+Run started:  2026-08-11 16:42:20  (0/13 pending)
+--------------------------------------------------------------------
+--------------------------------------------------------------------
+Images: 0
+Run finished: 2026-08-11 16:42:20  (all pending items done)
+
+====================================================================
+Sins Prompts — the Twelve Sins and the Frozen Heart (System B)  [ChatGPT]
+Run started:  2026-08-11 19:42:13  (0/13 pending)
+--------------------------------------------------------------------
+--------------------------------------------------------------------
+Images: 0
+Run finished: 2026-08-11 19:42:13  (all pending items done)
+

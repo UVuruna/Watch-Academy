@@ -120,3 +120,45 @@ Run started:  2026-07-29 19:41:20  (0/60 pending)
 Images: 0
 Run finished: 2026-07-29 19:41:20  (all pending items done)
 
+====================================================================
+Star Wars — the Three-Set Weekday Theme (Gemini/ChatGPT)  [ChatGPT]
+Run started:  2026-08-11 22:02:40  (42/60 pending)
+--------------------------------------------------------------------
+2026-08-11 22:12:00  assets/weeks/films/sw_jedi/primary/bronze/Chewbacca.png REFUSED — ChatGPT: the response answered with TEXT but no image (settled 6s), and the text matches no known marker — loud skip, ne
+2026-08-11 22:12:00  assets/weeks/films/sw_jedi/primary/bronze/Chewbacca.png WHY (site's answer) — The main conflict was the request for a recognizable copyrighted character and franchise-specific setting/elements, especially:
+
+“Chewbacca” — a specific Star Wars character.
+
+“the Falcon’s own workbench” — explicitly the Millennium Falcon.
+
+“Jedi temple-pillar frame” and “aurebesh-flavored” ornament — additional strongly identifiable Star Wars design language.
+
+“bowcaster” further reinforces the 
+2026-08-11 22:15:56  assets/weeks/films/sw_jedi/primary/colored/Chewbacca.png REFUSED — prompt vanished; re-send failed — ChatGPT: our sent prompt is NO LONGER the newest user turn — the site dropped the mess
+2026-08-11 22:19:06  assets/weeks/films/sw_jedi/primary/bronze/Luke.png REFUSED — prompt vanished; re-send failed — ChatGPT: our sent prompt is NO LONGER the newest user turn — the site dropped the mess
+2026-08-11 22:22:26  assets/weeks/films/sw_jedi/primary/colored/Luke.png REFUSED — prompt vanished; re-send failed — ChatGPT: our sent prompt is NO LONGER the newest user turn — the site dropped the mess
+2026-08-11 22:25:26  assets/weeks/films/sw_jedi/primary/bronze/Vader.png REFUSED — prompt vanished; re-send failed — ChatGPT: our sent prompt is NO LONGER the newest user turn — the site dropped the mess
+2026-08-11 22:28:53  assets/weeks/films/sw_jedi/primary/colored/Vader.png REFUSED — prompt vanished; re-send failed — ChatGPT: our sent prompt is NO LONGER the newest user turn — the site dropped the mess
+2026-08-11 22:30:46  assets/weeks/films/sw_jedi/primary/bronze/Yoda.png REFUSED — prompt vanished; re-send failed — ChatGPT: our sent prompt is NO LONGER the newest user turn — the site dropped the mess
+2026-08-11 22:32:27  assets/weeks/films/sw_jedi/primary/colored/Yoda.png REFUSED — prompt vanished; re-send failed — ChatGPT: our sent prompt is NO LONGER the newest user turn — the site dropped the mess
+2026-08-11 22:33:37  assets/weeks/films/sw_sith/primary/bronze/Jabba.png REFUSED — prompt vanished; re-send failed — ChatGPT: our sent prompt is NO LONGER the newest user turn — the site dropped the mess
+2026-08-11 22:45:20  assets/weeks/films/sw_sith/primary/colored/Maul.png REFUSED — ChatGPT: our sent prompt is NO LONGER the newest user turn — the site dropped the message after the confirmed send (noti
+2026-08-11 22:45:20  assets/weeks/films/sw_sith/primary/colored/Maul.png WHY (site's answer) — The main issue was the request for recognizable third-party copyrighted characters, especially:
+
+“Maul” — the exact named character.
+
+“Obi-Wan” — another exact named character, even as a small hologram.
+
+The combination “red-and-black tattooed skin + small horns + cybernetic legs” strongly reconstructs Maul’s distinctive appearance.
+
+“photorealistic render” increases the likelihood of a close reco
+2026-08-11 22:47:36  assets/weeks/films/sw_sith/primary/bronze/Boba_Fett.png REFUSED — prompt vanished; re-send failed — ChatGPT: our sent prompt is NO LONGER the newest user turn — the site dropped the mess
+2026-08-11 22:51:01  assets/weeks/films/sw_sith/primary/colored/Boba_Fett.png REFUSED — prompt vanished; re-send failed — ChatGPT: our sent prompt is NO LONGER the newest user turn — the site dropped the mess
+2026-08-11 22:53:49  assets/weeks/films/sw_sith/primary/bronze/Palpatine.png REFUSED — prompt vanished; re-send failed — ChatGPT: our sent prompt is NO LONGER the newest user turn — the site dropped the mess
+2026-08-11 22:56:34  assets/weeks/films/sw_sith/primary/colored/Palpatine.png REFUSED — prompt vanished; re-send failed — ChatGPT: our sent prompt is NO LONGER the newest user turn — the site dropped the mess
+2026-08-11 22:58:30  assets/weeks/films/sw_sith/primary/bronze/Anakin.png REFUSED — prompt vanished; re-send failed — ChatGPT: our sent prompt is NO LONGER the newest user turn — the site dropped the mess
+--------------------------------------------------------------------
+Refused: 15 image(s) — rework those prompts in the sheet (or intervene manually) and rerun
+Images: 0
+Run finished: 2026-08-11 22:59:07  (quota / rate limit — stopped)
+

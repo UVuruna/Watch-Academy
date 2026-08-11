@@ -50,3 +50,19 @@ Run started:  2026-07-29 19:35:05  (0/35 pending)
 Images: 0
 Run finished: 2026-07-29 19:35:05  (all pending items done)
 
+====================================================================
+Greek Gods — the Complete Prompt Sheet (bronze + colored, Planetary + Pantheon)  [Gemini]
+Run started:  2026-08-11 15:24:56  (0/35 pending)
+--------------------------------------------------------------------
+--------------------------------------------------------------------
+Images: 0
+Run finished: 2026-08-11 15:24:56  (all pending items done)
+
+====================================================================
+Greek Gods — the Complete Prompt Sheet (bronze + colored, Planetary + Pantheon)  [Gemini]
+Run started:  2026-08-11 20:39:03  (0/35 pending)
+--------------------------------------------------------------------
+--------------------------------------------------------------------
+Images: 0
+Run finished: 2026-08-11 20:39:03  (all pending items done)
+

@@ -31,3 +31,31 @@ Run started:  2026-07-29 19:27:51  (0/8 pending)
 Images: 0
 Run finished: 2026-07-29 19:27:51  (all pending items done)
 
+====================================================================
+Cross Words Prompts — the Eight Words Behind the Station Letters  [Gemini]
+Run started:  2026-08-11 14:01:49  (3/8 pending)
+--------------------------------------------------------------------
+2026-08-11 14:02:39  assets/archetypes/crosses/secondary/colored/Themelios.png gen   26.0s  ours   22.6s   1024x1024 -> 980x978    1.4 MB  [REMOVE BG: done, CROP: done]
+2026-08-11 14:03:30  assets/archetypes/crosses/secondary/colored/Leitourgia.png gen   29.3s  ours   19.2s  1024x1024 -> 1016x1017    1.7 MB  [REMOVE BG: done, CROP: done]
+2026-08-11 14:04:04  assets/archetypes/crosses/secondary/colored/Prosdokia.png gen   30.8s  ours    0.6s   1024x1024 -> 946x945    1.4 MB  [REMOVE BG: done, CROP: done]
+--------------------------------------------------------------------
+Images: 3  |  average generation (AI): 29s/image  |  average our time (save+bgfix+pause): 14s/image
+Total AI + our time: 2m 08s  (wall clock: 2m 15s)
+Run finished: 2026-08-11 14:04:04  (all pending items done)
+
+====================================================================
+Cross Words Prompts — the Eight Words Behind the Station Letters  [Gemini]
+Run started:  2026-08-11 16:38:06  (0/8 pending)
+--------------------------------------------------------------------
+--------------------------------------------------------------------
+Images: 0
+Run finished: 2026-08-11 16:38:06  (all pending items done)
+
+====================================================================
+Cross Words Prompts — the Eight Words Behind the Station Letters  [Gemini]
+Run started:  2026-08-11 19:42:14  (0/8 pending)
+--------------------------------------------------------------------
+--------------------------------------------------------------------
+Images: 0
+Run finished: 2026-08-11 19:42:14  (all pending items done)
+

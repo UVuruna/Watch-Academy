@@ -9,7 +9,7 @@ folder is exclusively the PEOPLE who fill those seats — three registers
 (luminous + fallen).
 
 Not part of the app runtime — owner-facing prompt sheets and their matching
-article sets, read by [PromptPainter](../../../PromptPainter/instructions.md)
+article sets, read by [PromptPainter](../../../../Gadgets/PromptPainter/instructions.md)
 and by the article-merge pipeline respectively.
 
 ## Files

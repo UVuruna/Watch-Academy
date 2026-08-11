@@ -17,3 +17,22 @@ Run started:  2026-07-29 19:35:05  (0/2 pending)
 Images: 0
 Run finished: 2026-07-29 19:35:05  (all pending items done)
 
+====================================================================
+Continents — the two Ninths  [Gemini]
+Run started:  2026-08-11 15:23:18  (2/2 pending)
+--------------------------------------------------------------------
+2026-08-11 15:24:26  assets/celestial/earth/zealandia.png         gen   37.3s  ours   28.7s    1024x559 -> 556x553    410 KB  [REMOVE BG: done, CROP: done]
+2026-08-11 15:24:55  assets/celestial/earth/pangea.png            gen   26.1s  ours    0.6s   1024x1024 -> 964x963    1.3 MB  [REMOVE BG: done, CROP: done]
+--------------------------------------------------------------------
+Images: 2  |  average generation (AI): 32s/image  |  average our time (save+bgfix+pause): 15s/image
+Total AI + our time: 1m 33s  (wall clock: 1m 37s)
+Run finished: 2026-08-11 15:24:55  (all pending items done)
+
+====================================================================
+Continents — the two Ninths  [Gemini]
+Run started:  2026-08-11 20:39:03  (0/2 pending)
+--------------------------------------------------------------------
+--------------------------------------------------------------------
+Images: 0
+Run finished: 2026-08-11 20:39:03  (all pending items done)
+

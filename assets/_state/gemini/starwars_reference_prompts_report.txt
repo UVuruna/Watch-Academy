@@ -22,3 +22,133 @@ Run started:  2026-07-29 19:35:05  (0/56 pending)
 Images: 0
 Run finished: 2026-07-29 19:35:05  (all pending items done)
 
+====================================================================
+Star Wars — Reference-Image Variants (attach the figure, prompt the badge)  [Gemini]
+Run started:  2026-08-11 15:00:19  (56/56 pending)
+--------------------------------------------------------------------
+2026-08-11 15:00:19  assets/weeks/films/sw_jedi/primary/bronze/Obi_Wan_v3.png REFUSED — input image missing: sw_reference/ObiWan.png
+2026-08-11 15:00:54  assets/weeks/films/sw_jedi/primary/colored/Obi_Wan_v3.png REFUSED — input image missing: sw_reference/ObiWan.png
+2026-08-11 15:01:10  assets/weeks/films/sw_jedi/primary/bronze/Leia_v3.png REFUSED — input image missing: sw_reference/Leia.png
+2026-08-11 15:01:42  assets/weeks/films/sw_jedi/primary/colored/Leia_v3.png REFUSED — input image missing: sw_reference/Leia.png
+2026-08-11 15:01:56  assets/weeks/films/sw_jedi/primary/bronze/Han_v3.png REFUSED — input image missing: sw_reference/Han.png
+2026-08-11 15:02:31  assets/weeks/films/sw_jedi/primary/colored/Han_v3.png REFUSED — input image missing: sw_reference/Han.png
+2026-08-11 15:02:53  assets/weeks/films/sw_jedi/primary/bronze/Qui_Gon_v3.png REFUSED — input image missing: sw_reference/QuiGon.png
+2026-08-11 15:03:22  assets/weeks/films/sw_jedi/primary/colored/Qui_Gon_v3.png REFUSED — input image missing: sw_reference/QuiGon.png
+2026-08-11 15:03:39  assets/weeks/films/sw_jedi/primary/bronze/Padme_v3.png REFUSED — input image missing: sw_reference/Padme.png
+2026-08-11 15:04:14  assets/weeks/films/sw_jedi/primary/colored/Padme_v3.png REFUSED — input image missing: sw_reference/Padme.png
+2026-08-11 15:04:47  assets/weeks/films/sw_jedi/primary/bronze/Chewbacca_v3.png REFUSED — input image missing: sw_reference/Chewbacca.png
+2026-08-11 15:05:02  assets/weeks/films/sw_jedi/primary/colored/Chewbacca_v3.png REFUSED — input image missing: sw_reference/Chewbacca.png
+2026-08-11 15:05:35  assets/weeks/films/sw_jedi/primary/bronze/Luke_v3.png REFUSED — input image missing: sw_reference/Luke.png
+2026-08-11 15:06:04  assets/weeks/films/sw_jedi/primary/colored/Luke_v3.png REFUSED — input image missing: sw_reference/Luke.png
+2026-08-11 15:06:36  assets/weeks/films/sw_jedi/primary/bronze/Vader_v3.png REFUSED — input image missing: sw_reference/Vader.png, sw_reference/Luke.png
+2026-08-11 15:07:10  assets/weeks/films/sw_jedi/primary/colored/Vader_v3.png REFUSED — input image missing: sw_reference/Vader.png, sw_reference/Luke.png
+2026-08-11 15:07:38  assets/weeks/films/sw_jedi/primary/bronze/Yoda_v3.png REFUSED — input image missing: sw_reference/Yoda.png
+2026-08-11 15:08:01  assets/weeks/films/sw_jedi/primary/colored/Yoda_v3.png REFUSED — input image missing: sw_reference/Yoda.png
+2026-08-11 15:08:26  assets/weeks/films/sw_sith/primary/bronze/Tarkin_v3.png REFUSED — input image missing: sw_reference/Tarkin.png
+2026-08-11 15:08:51  assets/weeks/films/sw_sith/primary/colored/Tarkin_v3.png REFUSED — input image missing: sw_reference/Tarkin.png
+2026-08-11 15:09:21  assets/weeks/films/sw_sith/primary/bronze/Grievous_v3.png REFUSED — input image missing: sw_reference/Grievous.png
+2026-08-11 15:09:53  assets/weeks/films/sw_sith/primary/colored/Grievous_v3.png REFUSED — input image missing: sw_reference/Grievous.png
+2026-08-11 15:10:24  assets/weeks/films/sw_sith/primary/bronze/Jabba_v3.png REFUSED — input image missing: sw_reference/Jabba.png
+2026-08-11 15:10:39  assets/weeks/films/sw_sith/primary/colored/Jabba_v3.png REFUSED — input image missing: sw_reference/Jabba.png
+2026-08-11 15:11:14  assets/weeks/films/sw_sith/primary/bronze/Dooku_v3.png REFUSED — input image missing: sw_reference/Dooku.png
+2026-08-11 15:11:40  assets/weeks/films/sw_sith/primary/colored/Dooku_v3.png REFUSED — input image missing: sw_reference/Dooku.png
+2026-08-11 15:12:15  assets/weeks/films/sw_sith/primary/bronze/Maul_v3.png REFUSED — input image missing: sw_reference/Maul.png
+2026-08-11 15:12:35  assets/weeks/films/sw_sith/primary/colored/Maul_v3.png REFUSED — input image missing: sw_reference/Maul.png
+2026-08-11 15:12:53  assets/weeks/films/sw_sith/primary/bronze/BobaFett_v3.png REFUSED — input image missing: sw_reference/BobaFett.png
+2026-08-11 15:13:25  assets/weeks/films/sw_sith/primary/colored/BobaFett_v3.png REFUSED — input image missing: sw_reference/BobaFett.png
+2026-08-11 15:13:56  assets/weeks/films/sw_sith/primary/bronze/Palpatine_v3.png REFUSED — input image missing: sw_reference/Palpatine.png
+2026-08-11 15:14:10  assets/weeks/films/sw_sith/primary/colored/Palpatine_v3.png REFUSED — input image missing: sw_reference/Palpatine.png
+2026-08-11 15:14:27  assets/weeks/films/sw_sith/primary/bronze/Anakin_v3.png REFUSED — input image missing: sw_reference/Anakin.png
+2026-08-11 15:14:50  assets/weeks/films/sw_sith/primary/colored/Anakin_v3.png REFUSED — input image missing: sw_reference/Anakin.png
+2026-08-11 15:15:10  assets/weeks/films/sw_sith/primary/bronze/Plagueis_v3.png REFUSED — input image missing: sw_reference/Plagueis.png
+2026-08-11 15:15:28  assets/weeks/films/sw_sith/primary/colored/Plagueis_v3.png REFUSED — input image missing: sw_reference/Plagueis.png
+2026-08-11 15:15:42  assets/weeks/films/sw_dyad/primary/bronze/Rose_v3.png REFUSED — input image missing: sw_reference/Rose.png
+2026-08-11 15:15:57  assets/weeks/films/sw_dyad/primary/colored/Rose_v3.png REFUSED — input image missing: sw_reference/Rose.png
+2026-08-11 15:16:24  assets/weeks/films/sw_dyad/primary/bronze/Finn_v3.png REFUSED — input image missing: sw_reference/Finn.png
+2026-08-11 15:16:48  assets/weeks/films/sw_dyad/primary/colored/Finn_v3.png REFUSED — input image missing: sw_reference/Finn.png
+2026-08-11 15:17:04  assets/weeks/films/sw_dyad/primary/bronze/Phasma_v3.png REFUSED — input image missing: sw_reference/Phasma.png
+2026-08-11 15:17:23  assets/weeks/films/sw_dyad/primary/colored/Phasma_v3.png REFUSED — input image missing: sw_reference/Phasma.png
+2026-08-11 15:17:53  assets/weeks/films/sw_dyad/primary/bronze/Maz_v3.png REFUSED — input image missing: sw_reference/Maz.png
+2026-08-11 15:18:18  assets/weeks/films/sw_dyad/primary/colored/Maz_v3.png REFUSED — input image missing: sw_reference/Maz.png
+2026-08-11 15:18:43  assets/weeks/films/sw_dyad/primary/bronze/DJ_v3.png REFUSED — input image missing: sw_reference/DJ.png
+2026-08-11 15:19:15  assets/weeks/films/sw_dyad/primary/colored/DJ_v3.png REFUSED — input image missing: sw_reference/DJ.png
+2026-08-11 15:19:43  assets/weeks/films/sw_dyad/primary/bronze/Leia_v3.png REFUSED — input image missing: sw_reference/Leia.png
+2026-08-11 15:20:16  assets/weeks/films/sw_dyad/primary/colored/Leia_v3.png REFUSED — input image missing: sw_reference/Leia.png
+2026-08-11 15:20:30  assets/weeks/films/sw_dyad/primary/bronze/Han_v3.png REFUSED — input image missing: sw_reference/Han.png
+2026-08-11 15:21:04  assets/weeks/films/sw_dyad/primary/colored/Han_v3.png REFUSED — input image missing: sw_reference/Han.png
+2026-08-11 15:21:26  assets/weeks/films/sw_dyad/primary/bronze/Hux_v3.png REFUSED — input image missing: sw_reference/Hux.png
+2026-08-11 15:22:02  assets/weeks/films/sw_dyad/primary/colored/Hux_v3.png REFUSED — input image missing: sw_reference/Hux.png
+2026-08-11 15:22:20  assets/weeks/films/sw_dyad/primary/bronze/Rey_v3.png REFUSED — input image missing: sw_reference/Rey.png
+2026-08-11 15:22:42  assets/weeks/films/sw_dyad/primary/colored/Rey_v3.png REFUSED — input image missing: sw_reference/Rey.png
+2026-08-11 15:23:00  assets/weeks/films/sw_dyad/primary/bronze/Kylo_v3.png REFUSED — input image missing: sw_reference/Kylo.png
+2026-08-11 15:23:18  assets/weeks/films/sw_dyad/primary/colored/Kylo_v3.png REFUSED — input image missing: sw_reference/Kylo.png
+--------------------------------------------------------------------
+Refused: 56 image(s) — rework those prompts in the sheet (or intervene manually) and rerun
+Images: 0
+Run finished: 2026-08-11 15:23:18  (all pending items done)
+
+====================================================================
+Star Wars — Reference-Image Variants (attach the figure, prompt the badge)  [Gemini]
+Run started:  2026-08-11 20:17:19  (56/56 pending)
+--------------------------------------------------------------------
+2026-08-11 20:17:19  assets/weeks/films/sw_jedi/primary/bronze/Obi_Wan_v3.png REFUSED — input image missing: sw_reference/ObiWan.png
+2026-08-11 20:17:55  assets/weeks/films/sw_jedi/primary/colored/Obi_Wan_v3.png REFUSED — input image missing: sw_reference/ObiWan.png
+2026-08-11 20:18:09  assets/weeks/films/sw_jedi/primary/bronze/Leia_v3.png REFUSED — input image missing: sw_reference/Leia.png
+2026-08-11 20:18:29  assets/weeks/films/sw_jedi/primary/colored/Leia_v3.png REFUSED — input image missing: sw_reference/Leia.png
+2026-08-11 20:19:01  assets/weeks/films/sw_jedi/primary/bronze/Han_v3.png REFUSED — input image missing: sw_reference/Han.png
+2026-08-11 20:19:26  assets/weeks/films/sw_jedi/primary/colored/Han_v3.png REFUSED — input image missing: sw_reference/Han.png
+2026-08-11 20:19:48  assets/weeks/films/sw_jedi/primary/bronze/Qui_Gon_v3.png REFUSED — input image missing: sw_reference/QuiGon.png
+2026-08-11 20:20:19  assets/weeks/films/sw_jedi/primary/colored/Qui_Gon_v3.png REFUSED — input image missing: sw_reference/QuiGon.png
+2026-08-11 20:20:55  assets/weeks/films/sw_jedi/primary/bronze/Padme_v3.png REFUSED — input image missing: sw_reference/Padme.png
+2026-08-11 20:21:12  assets/weeks/films/sw_jedi/primary/colored/Padme_v3.png REFUSED — input image missing: sw_reference/Padme.png
+2026-08-11 20:21:32  assets/weeks/films/sw_jedi/primary/bronze/Chewbacca_v3.png REFUSED — input image missing: sw_reference/Chewbacca.png
+2026-08-11 20:21:46  assets/weeks/films/sw_jedi/primary/colored/Chewbacca_v3.png REFUSED — input image missing: sw_reference/Chewbacca.png
+2026-08-11 20:22:13  assets/weeks/films/sw_jedi/primary/bronze/Luke_v3.png REFUSED — input image missing: sw_reference/Luke.png
+2026-08-11 20:22:45  assets/weeks/films/sw_jedi/primary/colored/Luke_v3.png REFUSED — input image missing: sw_reference/Luke.png
+2026-08-11 20:23:18  assets/weeks/films/sw_jedi/primary/bronze/Vader_v3.png REFUSED — input image missing: sw_reference/Vader.png, sw_reference/Luke.png
+2026-08-11 20:23:35  assets/weeks/films/sw_jedi/primary/colored/Vader_v3.png REFUSED — input image missing: sw_reference/Vader.png, sw_reference/Luke.png
+2026-08-11 20:23:47  assets/weeks/films/sw_jedi/primary/bronze/Yoda_v3.png REFUSED — input image missing: sw_reference/Yoda.png
+2026-08-11 20:24:18  assets/weeks/films/sw_jedi/primary/colored/Yoda_v3.png REFUSED — input image missing: sw_reference/Yoda.png
+2026-08-11 20:24:31  assets/weeks/films/sw_sith/primary/bronze/Tarkin_v3.png REFUSED — input image missing: sw_reference/Tarkin.png
+2026-08-11 20:25:01  assets/weeks/films/sw_sith/primary/colored/Tarkin_v3.png REFUSED — input image missing: sw_reference/Tarkin.png
+2026-08-11 20:25:22  assets/weeks/films/sw_sith/primary/bronze/Grievous_v3.png REFUSED — input image missing: sw_reference/Grievous.png
+2026-08-11 20:25:49  assets/weeks/films/sw_sith/primary/colored/Grievous_v3.png REFUSED — input image missing: sw_reference/Grievous.png
+2026-08-11 20:26:20  assets/weeks/films/sw_sith/primary/bronze/Jabba_v3.png REFUSED — input image missing: sw_reference/Jabba.png
+2026-08-11 20:26:54  assets/weeks/films/sw_sith/primary/colored/Jabba_v3.png REFUSED — input image missing: sw_reference/Jabba.png
+2026-08-11 20:27:07  assets/weeks/films/sw_sith/primary/bronze/Dooku_v3.png REFUSED — input image missing: sw_reference/Dooku.png
+2026-08-11 20:27:36  assets/weeks/films/sw_sith/primary/colored/Dooku_v3.png REFUSED — input image missing: sw_reference/Dooku.png
+2026-08-11 20:27:53  assets/weeks/films/sw_sith/primary/bronze/Maul_v3.png REFUSED — input image missing: sw_reference/Maul.png
+2026-08-11 20:28:18  assets/weeks/films/sw_sith/primary/colored/Maul_v3.png REFUSED — input image missing: sw_reference/Maul.png
+2026-08-11 20:28:32  assets/weeks/films/sw_sith/primary/bronze/BobaFett_v3.png REFUSED — input image missing: sw_reference/BobaFett.png
+2026-08-11 20:28:52  assets/weeks/films/sw_sith/primary/colored/BobaFett_v3.png REFUSED — input image missing: sw_reference/BobaFett.png
+2026-08-11 20:29:15  assets/weeks/films/sw_sith/primary/bronze/Palpatine_v3.png REFUSED — input image missing: sw_reference/Palpatine.png
+2026-08-11 20:29:29  assets/weeks/films/sw_sith/primary/colored/Palpatine_v3.png REFUSED — input image missing: sw_reference/Palpatine.png
+2026-08-11 20:29:46  assets/weeks/films/sw_sith/primary/bronze/Anakin_v3.png REFUSED — input image missing: sw_reference/Anakin.png
+2026-08-11 20:30:16  assets/weeks/films/sw_sith/primary/colored/Anakin_v3.png REFUSED — input image missing: sw_reference/Anakin.png
+2026-08-11 20:30:43  assets/weeks/films/sw_sith/primary/bronze/Plagueis_v3.png REFUSED — input image missing: sw_reference/Plagueis.png
+2026-08-11 20:31:13  assets/weeks/films/sw_sith/primary/colored/Plagueis_v3.png REFUSED — input image missing: sw_reference/Plagueis.png
+2026-08-11 20:31:29  assets/weeks/films/sw_dyad/primary/bronze/Rose_v3.png REFUSED — input image missing: sw_reference/Rose.png
+2026-08-11 20:32:01  assets/weeks/films/sw_dyad/primary/colored/Rose_v3.png REFUSED — input image missing: sw_reference/Rose.png
+2026-08-11 20:32:15  assets/weeks/films/sw_dyad/primary/bronze/Finn_v3.png REFUSED — input image missing: sw_reference/Finn.png
+2026-08-11 20:32:44  assets/weeks/films/sw_dyad/primary/colored/Finn_v3.png REFUSED — input image missing: sw_reference/Finn.png
+2026-08-11 20:33:13  assets/weeks/films/sw_dyad/primary/bronze/Phasma_v3.png REFUSED — input image missing: sw_reference/Phasma.png
+2026-08-11 20:33:37  assets/weeks/films/sw_dyad/primary/colored/Phasma_v3.png REFUSED — input image missing: sw_reference/Phasma.png
+2026-08-11 20:34:09  assets/weeks/films/sw_dyad/primary/bronze/Maz_v3.png REFUSED — input image missing: sw_reference/Maz.png
+2026-08-11 20:34:27  assets/weeks/films/sw_dyad/primary/colored/Maz_v3.png REFUSED — input image missing: sw_reference/Maz.png
+2026-08-11 20:34:50  assets/weeks/films/sw_dyad/primary/bronze/DJ_v3.png REFUSED — input image missing: sw_reference/DJ.png
+2026-08-11 20:35:17  assets/weeks/films/sw_dyad/primary/colored/DJ_v3.png REFUSED — input image missing: sw_reference/DJ.png
+2026-08-11 20:35:43  assets/weeks/films/sw_dyad/primary/bronze/Leia_v3.png REFUSED — input image missing: sw_reference/Leia.png
+2026-08-11 20:36:02  assets/weeks/films/sw_dyad/primary/colored/Leia_v3.png REFUSED — input image missing: sw_reference/Leia.png
+2026-08-11 20:36:26  assets/weeks/films/sw_dyad/primary/bronze/Han_v3.png REFUSED — input image missing: sw_reference/Han.png
+2026-08-11 20:36:40  assets/weeks/films/sw_dyad/primary/colored/Han_v3.png REFUSED — input image missing: sw_reference/Han.png
+2026-08-11 20:37:13  assets/weeks/films/sw_dyad/primary/bronze/Hux_v3.png REFUSED — input image missing: sw_reference/Hux.png
+2026-08-11 20:37:27  assets/weeks/films/sw_dyad/primary/colored/Hux_v3.png REFUSED — input image missing: sw_reference/Hux.png
+2026-08-11 20:37:44  assets/weeks/films/sw_dyad/primary/bronze/Rey_v3.png REFUSED — input image missing: sw_reference/Rey.png
+2026-08-11 20:37:57  assets/weeks/films/sw_dyad/primary/colored/Rey_v3.png REFUSED — input image missing: sw_reference/Rey.png
+2026-08-11 20:38:30  assets/weeks/films/sw_dyad/primary/bronze/Kylo_v3.png REFUSED — input image missing: sw_reference/Kylo.png
+2026-08-11 20:39:03  assets/weeks/films/sw_dyad/primary/colored/Kylo_v3.png REFUSED — input image missing: sw_reference/Kylo.png
+--------------------------------------------------------------------
+Refused: 56 image(s) — rework those prompts in the sheet (or intervene manually) and rerun
+Images: 0
+Run finished: 2026-08-11 20:39:03  (all pending items done)
+

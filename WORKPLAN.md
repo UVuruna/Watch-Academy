@@ -1179,10 +1179,14 @@ absent. Everything else in the original Session 28 entry stands.
   repo field at all — the seed holds name/description/exe/installer
   only — so nothing was wrong there to fix; the `update` section is
   created by the module that reads it, at M7. The one deliberately
-  UNCHANGED item is the disk folder name: "DOMY Watch" stays (CUBE.md's
-  scope note allows it — a separate call from the GitHub identity). No
-  LIVE address carries the old name any more — it survives only in
-  these historical notes, which say so explicitly.
+  UNCHANGED item at the time was the disk folder name: "DOMY Watch"
+  stayed (CUBE.md's scope note allowed it — a separate call from the
+  GitHub identity). That last holdout fell on 2026-08-11: the folder is
+  now `Applications/WatchAcademy/`, moved out of `Gadgets/` and joined
+  into one word by the owner's order. No LIVE address carries the old
+  name any more — it survives only in these historical notes and in
+  `APP_NAME_LEGACY`, the `%APPDATA%\DOMY Watch` id the settings
+  migration still has to read, which say so explicitly.
 - ~~The Character wheel's OPEN combo figures~~ — SEALED 2026-07-27 by
   Session 21 under the owner's delegation ("ti pečatiš"): Alfred
   Pennyworth / Severus Snape (Devotion), Charles Xavier (Patronage),

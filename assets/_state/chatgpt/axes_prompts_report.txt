@@ -30,3 +30,30 @@ Images: 1  |  average generation (AI): 49s/image  |  average our time (save+bgfi
 Total AI + our time: 57s  (wall clock: 1m 50s)
 Run finished: 2026-07-29 19:29:41  (all pending items done)
 
+====================================================================
+The Thirteen Axes — the Sacred Plates  [ChatGPT]
+Run started:  2026-08-11 14:01:47  (2/9 pending)
+--------------------------------------------------------------------
+2026-08-11 14:03:13  assets/archetypes/sacred/primary/colored/Sacred_Axis.png gen   68.0s  ours   15.4s   887x1774 -> 851x1771    2.4 MB  [REMOVE BG: done, CROP: done]
+2026-08-11 14:04:58  assets/archetypes/sacred/circle/colored/Sacred_Axis.png gen  103.1s  ours    0.6s  1254x1254 -> 1254x1249    3.0 MB  [REMOVE BG: nothing, CROP: done]
+--------------------------------------------------------------------
+Images: 2  |  average generation (AI): 1m 26s/image  |  average our time (save+bgfix+pause): 8s/image
+Total AI + our time: 3m 07s  (wall clock: 3m 11s)
+Run finished: 2026-08-11 14:04:58  (all pending items done)
+
+====================================================================
+The Thirteen Axes — the Sacred Plates  [ChatGPT]
+Run started:  2026-08-11 16:38:06  (0/9 pending)
+--------------------------------------------------------------------
+--------------------------------------------------------------------
+Images: 0
+Run finished: 2026-08-11 16:38:06  (all pending items done)
+
+====================================================================
+The Thirteen Axes — the Sacred Plates  [ChatGPT]
+Run started:  2026-08-11 19:42:13  (0/9 pending)
+--------------------------------------------------------------------
+--------------------------------------------------------------------
+Images: 0
+Run finished: 2026-08-11 19:42:13  (all pending items done)
+

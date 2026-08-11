@@ -3,7 +3,7 @@
 Expanded 2026-08-06 (owner order, after the Watch Face rework shipped a
 window whose sections overflow even a 4K screen): the registry now holds
 EVERY top-level window of the project, the checks are the reference set
-from Remote User's audit (OVERLAP and ITEM CUT included — sizes can all
+from Vibe Coder's audit (OVERLAP and ITEM CUT included — sizes can all
 be green while two cells are painted over each other), and every window
 is screenshotted at its minimum for the DESIGN REVIEW gate
 (`.claude/shots/`, graded >= 8/10 in `.claude/layout-proof.md`).
@@ -37,7 +37,7 @@ Windows NOT in the registry, and why:
     milliseconds during a jump; nothing on it is read.
 
 The platform: native when a desktop exists (real fonts, real DPI — the
-Remote User lesson: offscreen's substitute fonts measured a different
+Vibe Coder lesson: offscreen's substitute fonts measured a different
 window than the one the owner photographed), offscreen as the headless
 fallback. Windows are shown with WA_DontShowOnScreen, so a guard run
 never flashes windows across the owner's screen.
@@ -161,7 +161,7 @@ def _settle(window: QWidget, width: int, height: int) -> None:
     QApplication.processEvents()
 
 
-# --- the checks (reference set — Remote User's audit) -----------------------
+# --- the checks (reference set — Vibe Coder's audit) -----------------------
 
 
 def _walk(window: QWidget):

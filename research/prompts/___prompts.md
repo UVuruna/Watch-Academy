@@ -12,7 +12,7 @@ everything the doctrine retired. Check the root
 
 ## Before writing a NEW sheet
 
-Read [How to Write a Prompt Sheet](../../../PromptPainter/instructions.md)
+Read [How to Write a Prompt Sheet](../../../../Gadgets/PromptPainter/instructions.md)
 first — PromptPainter's own sheet contract, owned and enforced by its
 parser (`painter/sheet_parser.py`), also behind the GUI's own
 **Instructions** button. Every image needs a
