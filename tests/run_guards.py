@@ -35,6 +35,10 @@ FAST_GUARDS = (
 FULL_GUARDS = FAST_GUARDS + (
     "test_docs_coverage.py",
     "test_doc_links.py",
+    # THE OLD NAME NEVER COMES BACK (2026-08-12). Every spelling of "DOMY
+    # Watch" across every shipped text file, allowed only line by line with
+    # a stated reason. DOMY alone is the DIAL and is never a hit.
+    "test_old_name.py",
     # NO ART SITS UNSEEN over the whole assets/ tree (owner ruling
     # 2026-08-05). It walks the tree and imports config, so it runs at
     # the session's END rather than after every edit.
