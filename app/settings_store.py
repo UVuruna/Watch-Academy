@@ -186,6 +186,12 @@ class Settings:
     # to spot. See `render.layers.year_marker.YearMarkerLayer.
     # _draw_orbit_pointer`.
     show_marker_pointer: bool = False
+    # THE CROSSING SWITCHES (owner ballot verdict 2026-08-11): three
+    # independent toggles, ALL ON by default — his own words: all three
+    # is the default, so the user sees they are switches.
+    transit_shadow: bool = True
+    transit_shrink: bool = True
+    transit_rim: bool = True
     weekday_theme: str = "planets"
     # The figure ROSTER is PER SLOT (owner 2026-07-15: "1. slot grcki
     # planetary, 2. slot grcki panteon") — picked inside each theme's
@@ -637,6 +643,9 @@ class SettingsStore:
                 ),
                 earth_label=load_earth_label(raw),
                 show_marker_pointer=load_bool(raw, "show_marker_pointer", False),
+                transit_shadow=load_bool(raw, "transit_shadow", True),
+                transit_shrink=load_bool(raw, "transit_shrink", True),
+                transit_rim=load_bool(raw, "transit_rim", True),
                 world_mode=load_choice(
                     raw, "world_mode", dial.WORLD_MODES,
                     dial.WORLD_MODE_DEFAULT,
@@ -853,6 +862,9 @@ class SettingsStore:
             "show_third_slot": settings.show_third_slot,
             "earth_style": settings.earth_style,
             "show_marker_pointer": settings.show_marker_pointer,
+            "transit_shadow": settings.transit_shadow,
+            "transit_shrink": settings.transit_shrink,
+            "transit_rim": settings.transit_rim,
             "weekday_theme": settings.weekday_theme,
             "subdial_style": settings.subdial_style,
             "subdial_set": settings.subdial_set,

@@ -1,5 +1,7 @@
 """The YEAR MARKER layer — earth, moon and the event bodies."""
 
+import math
+
 from PySide6.QtCore import QPointF, QRectF, Qt
 from PySide6.QtGui import QColor, QFont, QPainter, QPainterPath, QPen
 
@@ -112,40 +114,45 @@ class YearMarkerLayer(Layer):
                     ctx.skin.numeral_outer_ring_size, spec.moon_scale,
                 )
             )
-            # LANE SPLIT / SHRINK AND PASS: the crossing never overlaps
-            # (the two accepted alternatives to occultation). The lane
-            # eases INWARD — the outward direction is the ring band's
-            # own lane and belongs to the numerals.
-            if spec.moon_transit_style == "lane_split":
-                # HALF ON, HALF OFF (owner correction 2026-08-11: the
-                # split "does not go far enough" — at a full transit the
-                # Moon's CENTRE must sit on the Earth's rim, half the
-                # disc catching the Earth and half outside). Computed
-                # from the two bodies' own tangent orbits, never a fixed
-                # fraction: easing inward by twice the Earth's half-size
-                # minus the Moon's puts the centre exactly on the rim.
-                orbit -= nearness * (2 * spec.scale - spec.moon_scale)
-            elif spec.moon_transit_style == "shrink_pass":
+            # THE CROSSING SWITCHES (owner ballot verdict 2026-08-11):
+            # three independent toggles replacing the one-of styles —
+            # shrink, ride-the-rim and cast-shadow compose freely, all
+            # three on by default; with none on, the plain Moon simply
+            # passes over.
+            if spec.transit_shrink:
                 factor *= 1.0 - nearness * dial.MOON_SHRINK_PASS_DEPTH
             pos = dial_point(moon_angle, ctx.radius * orbit)
-            if (
-                spec.moon_transit_style == "occultation"
-                and nearness > 0.0
-                and ctx.skin.show_earth
-            ):
+            earth_pos = None
+            if nearness > 0.0 and ctx.skin.show_earth:
+                earth_pos = dial_point(
+                    (ctx.tick.year_angle + ctx.world_offset) % 360.0,
+                    ctx.radius * dial.earth_moon_orbit_fraction(
+                        ctx.skin.numeral_outer_ring_size, spec.scale,
+                    ),
+                )
+            if spec.transit_rim and earth_pos is not None:
+                # RIDE THE RIM: the Moon's centre never enters the
+                # Earth's disc — inside the rim it is projected back
+                # onto the rim circle, so it slides around the edge.
+                earth_half = ctx.radius * spec.scale * hover_factor(ctx, "earth")
+                dx = pos.x() - earth_pos.x()
+                dy = pos.y() - earth_pos.y()
+                dist = math.hypot(dx, dy)
+                if 0.0 < dist < earth_half:
+                    pos = QPointF(
+                        earth_pos.x() + dx / dist * earth_half,
+                        earth_pos.y() + dy / dist * earth_half,
+                    )
+            if spec.transit_shadow and earth_pos is not None:
                 # THE CAST SHADOW (owner correction 2026-08-11: "the one
                 # that casts a shadow casts none at all") — a soft dark
                 # disc clipped to the EARTH's own disc, under the Moon's
                 # position, deepening as the crossing closes. Drawn
                 # before the Moon so the shadow reads as falling ON the
-                # Earth, never as a tint on the Moon itself.
-                earth_orbit = dial.earth_moon_orbit_fraction(
-                    ctx.skin.numeral_outer_ring_size, spec.scale,
-                )
-                earth_pos = dial_point(
-                    (ctx.tick.year_angle + ctx.world_offset) % 360.0,
-                    ctx.radius * earth_orbit,
-                )
+                # Earth, never as a tint on the Moon itself. Composes
+                # with the other two switches for free: a shrunk Moon
+                # casts a smaller shadow (`factor` below), a rim-riding
+                # one casts it near the Earth's edge (`pos` above).
                 earth_half = ctx.radius * spec.scale * hover_factor(ctx, "earth")
                 shadow_clip = QPainterPath()
                 shadow_clip.addEllipse(earth_pos, earth_half, earth_half)

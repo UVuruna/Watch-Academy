@@ -970,6 +970,9 @@ def _overlay_display_settings(skin, settings: Settings, display):
             else marker.transit_alpha
         ),
         pointer_enabled=settings.show_marker_pointer,
+        transit_shadow=settings.transit_shadow,
+        transit_shrink=settings.transit_shrink,
+        transit_rim=settings.transit_rim,
         pointer_color=pointer_color,
         moon_band_mode=settings.moon_band_mode,
         moon_band_style=settings.moon_band_style,
@@ -3282,6 +3285,15 @@ class WatchController(QObject):
                 lambda v: self._set_display_choice("earth_style", v)
             ),
             "earth_label": wrap(self._set_earth_label),
+            "transit_shadow": wrap(
+                lambda v: self._set_display_choice("transit_shadow", v)
+            ),
+            "transit_shrink": wrap(
+                lambda v: self._set_display_choice("transit_shrink", v)
+            ),
+            "transit_rim": wrap(
+                lambda v: self._set_display_choice("transit_rim", v)
+            ),
             "show_marker_pointer": wrap(
                 lambda v: self._set_display_choice("show_marker_pointer", v)
             ),

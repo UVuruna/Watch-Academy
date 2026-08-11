@@ -211,6 +211,11 @@ class YearMarkerSpec:
     # `render.station_marks` each own one menu's drawing.
     moon_dark_style: str = constants.MOON_DARK_STYLE_DEFAULT
     moon_transit_style: str = constants.MOON_TRANSIT_STYLE_DEFAULT
+    # THE CROSSING SWITCHES (owner ballot verdict 2026-08-11) — these
+    # three supersede `moon_transit_style` (kept stored for old files):
+    transit_shadow: bool = True
+    transit_shrink: bool = True
+    transit_rim: bool = True
     # NOT named `pointer_shape`: `Settings.pointer_shape` is the
     # ARCHETYPE pointer's own shape (the Pointer section's pills), a
     # different thing entirely, and one overlay walking a shared roster

@@ -240,6 +240,40 @@ def inner_band_plate(spec: BandSpec) -> QImage:
     return band_plate(spec)
 
 
+def inner_number_clear_regions(spec: BandSpec) -> QPainterPath:
+    """THE NUMBER'S OWN RECTANGLE (owner correction 2026-08-11, the
+    '15' screenshot: the plate's big five-minute stroke showed BETWEEN
+    the digits — "nothing renders inside the imagined rectangle of the
+    numeral", the same principle the bodies' pointer already obeys
+    against the body's circle). One padded, seat-rotated rectangle per
+    minute numeral, in LOGICAL dial-centred coordinates —
+    `render.layers.ring.RingLayer` clips the base-plate blit with the
+    complement, so the owner's art is masked there instead of drawn
+    over. Empty for a variant whose seats all carry arrows."""
+    shrink = interior_scale(spec.ring_size)
+    unit = _unit_px(spec.pixels) * shrink
+    font = numeral_font("inner", spec.face, spec.size_units * unit)
+    pad = unit * dial.NUMERAL_GLOW_BORDER_UNITS * 2.0
+    scale = 1.0 / spec.dpr
+    region = QPainterPath()
+    for label, angle, center in _seats(spec):
+        local = relief.glyph_path(label, font).boundingRect()
+        local = local.adjusted(-pad, -pad, pad, pad)
+        # `_seats` centres are DIAL-CENTRED device px (the plate
+        # painter's own origin) — only the DPR separates them from the
+        # layer's logical space.
+        transform = QTransform()
+        transform.scale(scale, scale)
+        transform.translate(center.x(), center.y())
+        transform.rotate(numerals.seat_rotation(
+            angle, spec.seating, flow_squares=True,
+        ))
+        rect_path = QPainterPath()
+        rect_path.addRect(local)
+        region.addPath(transform.map(rect_path))
+    return region
+
+
 def _clamped_to_dial(
     path: QPainterPath, center: QPointF, radius: float,
     reserve: float = 0.0,

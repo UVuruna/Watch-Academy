@@ -203,20 +203,24 @@ def _moon_group(settings, setters, tr) -> QGroupBox:
     _labeled_gallery(
         column, tr, "How the unlit half of the Moon is drawn.", dark_tiles
     )
-    transit_tiles = [
-        tile(
-            tr(_MOON_TRANSIT_TITLES[style]),
-            thumbs.moon_transit_style_icon(style),
-            settings.moon_transit_style == style,
-            lambda s=style: setters["moon_transit_style"](s),
-        )
-        for style in constants.MOON_TRANSIT_STYLES
-    ]
-    _labeled_gallery(
-        column, tr,
-        "What happens when the Moon meets the Earth on the shared orbit.",
-        transit_tiles,
-    )
+    # THE CROSSING SWITCHES (owner ballot verdict 2026-08-11): three
+    # independent toggles, all on by default — never a one-of gallery;
+    # with none ticked the plain Moon simply passes over the Earth.
+    column.addWidget(QLabel(tr(
+        "What happens when the Moon meets the Earth (any mix; none = a plain pass)."
+    )))
+    transit_row = QHBoxLayout()
+    for field, title in (
+        ("transit_shadow", "Cast a shadow"),
+        ("transit_shrink", "Shrink"),
+        ("transit_rim", "Ride the rim"),
+    ):
+        box = QCheckBox(tr(title))
+        box.setChecked(getattr(settings, field))
+        box.toggled.connect(setters[field])
+        transit_row.addWidget(box)
+    transit_row.addStretch(1)
+    column.addLayout(transit_row)
     mode_tiles = [
         tile(
             tr(_MOON_BAND_MODE_TITLES[mode]), thumbs.moon_band_mode_icon(mode),

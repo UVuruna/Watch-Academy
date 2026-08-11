@@ -24,8 +24,8 @@ from (`config.dial.RING_INNER_COMPOSITION`).
 import math
 from pathlib import Path
 
-from PySide6.QtCore import QPointF
-from PySide6.QtGui import QPainter
+from PySide6.QtCore import QPointF, QRectF
+from PySide6.QtGui import QPainterPath, QPainter
 
 from config import dial, palette
 from core import angles, numerals, world
@@ -35,7 +35,7 @@ from render.context import Cadence, Layer, RenderContext
 from render.layers.numerals import band_spec
 from render.numeral_bands import (
     outer_centreline,
-    band_plate, normalized_shadow_alpha, shadow_sample_count,
+    band_plate, inner_number_clear_regions, normalized_shadow_alpha, shadow_sample_count,
 )
 from render.painting import dial_point, draw_pixmap_centered
 
@@ -81,11 +81,23 @@ class RingLayer(Layer):
         # THE INWARD-GROWTH LAW (owner verdict 2026-08-09): the inner
         # track is interior world — it shrinks with it so its outer
         # edge keeps abutting the widened band's new inner edge.
+        # THE NUMBER'S OWN RECTANGLE (owner correction 2026-08-11):
+        # the base art is MASKED inside every minute numeral's padded
+        # rectangle — the big five-minute stroke showed between the
+        # digits of "15"; nothing of the plate may render there.
+        clear = inner_number_clear_regions(band_spec(self._skin, "inner", ctx))
+        painter.save()
+        if not clear.isEmpty():
+            span = ctx.radius * 1.05
+            keep = QPainterPath()
+            keep.addRect(QRectF(-span, -span, 2 * span, 2 * span))
+            painter.setClipPath(keep.subtracted(clear))
         draw_pixmap_centered(
             painter, ctx, dial.RING_INNER_ART_DIR / f"{base}.png",
             QPointF(0, 0), 2 * ctx.radius * ctx.interior_scale,
             tint=inner_tint, saturation=ctx.skin.ring_saturation,
         )
+        painter.restore()
         self._blit_band(painter, ctx, "inner")
         self._blit_band(painter, ctx, "outer")
 
