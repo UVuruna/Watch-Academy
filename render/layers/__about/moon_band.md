@@ -118,15 +118,20 @@ with the day's own moonrise/moonset, never per-tick).
   the SAME line per body, and the position-pointer arrow bridges from
   there across the band to the small ticks' tips, drawn behind its
   body and clipped out of the body's own circle.
-- THE SPLIT ACROSS THE RING (owner z decree, same round): the line/
-  glow/thread parts paint in `MoonBandLayer` BELOW the ring; the
-  per-degree tick redress of "inverted"/"ticks" paints in
-  `MoonBandTicksLayer` ABOVE the ring — those two styles REPLACE the
-  360 points' own style, seats/strokes/numbers spared.
+- THE SPLIT ACROSS THE RING (owner z decree, repeat correction
+  2026-08-11): the line/glow/thread parts paint in `MoonBandLayer`
+  BELOW the ring; the per-degree tick redress of "inverted"/"ticks"
+  paints INSIDE the ring layer (`RingLayer._draw_band_redress`,
+  between the base plate and the band plates/jewels) — those two
+  styles REPLACE the 360 points' own style, and every other ring
+  element outranks them. The former `MoonBandTicksLayer` (a whole
+  layer above the ring) is retired: it inverted the jewels and the
+  big pointers with the belt.
 - The four styles after the same correction rounds: "inverted" and
   "ticks" touch ONLY the background and the little points — one
-  segment per degree, SPARING every 6th degree (the big strokes) and
-  the five-minute seats (numbers/arrows), per his slika 1/2;
+  segment per degree, SPARING a one-degree shoulder around every
+  FIFTEENTH degree (the big strokes stand every 15 deg on the
+  MEASURED plate, not every 6th as first assumed — his slika 6/7);
   "glow" is round-capped stroked arcs (no filled-wedge banding, no
   flat chopped ends); the thread/dots/diamond wear a slate under-edge
   (`palette.MOON_BAND_LINE_EDGE`) so they read on light plates, and

@@ -60,15 +60,17 @@ _TICK_ROOTS_FROM_LINE_RATIO = (
 )
 # THE SPARED SEATS (owner correction 2026-08-11, slika 1/2: the invert
 # and the gray ticks touch ONLY the background aura/umbra and the 360
-# little points — never the big strokes, the arrows or the numbers):
-# every 6th degree carries the plate's own big minute stroke, and the
-# five-minute seats (every 30 degrees) carry a number or an arrow, so
-# those degrees — with a one-degree shoulder around the seats — are
-# skipped by both styles.
+# little points — never the big strokes, the arrows or the numbers).
+# MEASURED, not assumed (owner slika 6/7 repeat, 2026-08-11): the first
+# cut spared every 6th degree, but pixel-sampling the plate itself
+# (`simple_point.png`, opaque runs at 0.80 of plate radius) shows the
+# BIG strokes stand every FIFTEEN degrees (24 of them, ~1 deg wide with
+# their white border), so segments kept landing straight on the big
+# pointers at 15, 45, 75... A one-degree shoulder around every 15-degree
+# seat clears the stroke and its border while the 360 hairlines at all
+# other integer degrees stay dressable.
 def _seat_spared(degree: int) -> bool:
-    if degree % 6 == 0:
-        return True
-    return min(degree % 30, 30 - degree % 30) <= 1
+    return min(degree % 15, 15 - degree % 15) <= 1
 _GRAY_TICK_SEGMENT_WIDTH_FRACTION = 0.010  # each discrete tick's own line width (style 3)
 _THREAD_WIDTH_FRACTION = 0.006         # style 2's thin thread
 _DOT_RADIUS_FRACTION = 0.014
@@ -110,9 +112,10 @@ class MoonBandLayer(Layer):
             # only the parts that live OUTSIDE the plate — the line,
             # the glow, the thread's dots/diamond. The per-degree tick
             # redress of "inverted"/"ticks" must touch the plate's own
-            # 360 points, so it paints in `MoonBandTicksLayer` ABOVE
-            # the ring instead — it REPLACES the ticks' style at those
-            # places, which is his own definition of those two styles.
+            # 360 points, so it paints INSIDE the ring layer instead
+            # (`RingLayer._draw_band_redress`, between base plate and
+            # content) — it REPLACES the ticks' style at those places,
+            # which is his own definition of those two styles.
             if style == "inverted":
                 self._stroke_thread(painter, radius, arc)
             elif style == "ticks":
@@ -228,8 +231,8 @@ class MoonBandLayer(Layer):
     def _draw_inverted(self, painter: QPainter, radius: float, arc: MoonArc) -> None:
         """The preview/one-canvas path: both halves of the style — the
         thread and the invert segments — on one painter. The dial
-        splits them across the ring (`paint` above / `MoonBandTicksLayer`
-        below this class)."""
+        splits them across the ring (`paint` above /
+        `RingLayer._draw_band_redress`)."""
         self._draw_invert_segments(painter, radius, arc)
         self._stroke_thread(painter, radius, arc)
 
@@ -405,31 +408,9 @@ class MoonBandLayer(Layer):
         painter.drawPolygon(points)
 
 
-class MoonBandTicksLayer(Layer):
-    """The band's UPPER half (owner z decree + slika 2, 2026-08-11):
-    the per-degree tick redress of the "inverted" and "ticks" styles.
-    It REPLACES the 360 points' own style at those places, so it must
-    paint ABOVE the ring plate — while everything else of the band
-    (the line, the glow, the dots) stays below the ring in
-    `MoonBandLayer`. Seats, big strokes and numbers are spared by
-    `_seat_spared`, so nothing of the ring's content is ever covered."""
-
-    frame = "interior"
-    cadence = Cadence.DAILY
-
-    def paint(self, painter: QPainter, ctx: RenderContext) -> None:
-        spec = ctx.skin.year_marker
-        if spec.moon_band_mode != "horizon":
-            return
-        if spec.moon_band_style not in ("inverted", "ticks"):
-            return
-        radius = ctx.radius * dial.RING_INNER_CONTENT_INNER_FRACTION
-        painter.save()
-        painter.setRenderHint(QPainter.RenderHint.Antialiasing)
-        band = MoonBandLayer.__new__(MoonBandLayer)
-        for arc in moon_horizon_arcs(ctx.day.moonrise, ctx.day.moonset):
-            if spec.moon_band_style == "inverted":
-                band._draw_invert_segments(painter, radius, arc)
-            else:
-                band._draw_ticks(painter, radius, arc)
-        painter.restore()
+# The former MoonBandTicksLayer is RETIRED (owner repeat correction
+# 2026-08-11, slika 5-7): a whole layer above the ring inverted the
+# jewels and the big pointers with it. The per-degree redress paints in
+# `render.layers.ring.RingLayer._draw_band_redress` now — between the
+# base plate and every ring element — calling `_draw_invert_segments`/
+# `_draw_ticks` above (Rule #5, one drawing, one home).

@@ -762,10 +762,13 @@ DEFAULT_SKIN = SkinDefinition(
                                         # phase/daylight circles third —
                                         # nothing may overwrite a ring
                                         # pointer)
-        "ring",
-        "moon_band_ticks",              # the band styles that re-dress
-                                        # the 360 points themselves —
-                                        # above the plate, seats spared
+        "ring",                         # the redress styles that re-dress
+                                        # the 360 points paint INSIDE the
+                                        # ring layer, between the base
+                                        # plate and its content (owner
+                                        # repeat correction 2026-08-11:
+                                        # jewels and big pointers always
+                                        # outrank the invert/ticks)
         "year_marker",
         "hands",
     ),                                  # the star's top tip IS the noon pointer

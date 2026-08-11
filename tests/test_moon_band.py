@@ -240,3 +240,49 @@ def test_moon_band_mode_gates_the_skin_field() -> None:
     skin = build_skin(settings, location_display="Belgrade, Serbia")
     assert skin.year_marker.moon_band_mode == "always_full"
     assert skin.year_marker.moon_band_style == "ticks"
+
+
+def test_redress_paints_inside_the_ring_below_every_ring_element() -> None:
+    """THE Z SEAT OF THE BAND REDRESS (owner repeat correction
+    2026-08-11, slika 5-7: "OPET INVERT IMA VECI Z INDEX OD JEWELS"):
+    the per-degree invert/ticks redress paints INSIDE `RingLayer`,
+    after the base-plate blit and BEFORE the band plates — and the
+    jewels/crown draw after the bands in `paint` — so every ring
+    element outranks the redress by construction. The retired
+    above-the-ring layer must never come back."""
+    import inspect
+
+    from render.layers import ring as ring_module
+    from render.layers.ring import RingLayer
+
+    bands_src = inspect.getsource(RingLayer._draw_bands)
+    redress_at = bands_src.index("_draw_band_redress")
+    assert redress_at > bands_src.index("draw_pixmap_centered"), (
+        "the redress must paint AFTER the base plate"
+    )
+    assert redress_at < bands_src.index('_blit_band(painter, ctx, "inner")'), (
+        "the redress must paint BEFORE the band plates"
+    )
+    paint_src = inspect.getsource(RingLayer.paint)
+    assert paint_src.index("_draw_bands") < paint_src.index("_draw_jewels"), (
+        "jewels must draw above the bands (and so above the redress)"
+    )
+    assert not hasattr(
+        __import__("render.layers.moon_band", fromlist=["x"]),
+        "MoonBandTicksLayer",
+    ), "the above-the-ring ticks layer is retired for good"
+
+
+def test_spared_seats_follow_the_measured_fifteen_degree_strokes() -> None:
+    """THE MEASURED PLATE (owner slika 6/7, 2026-08-11): the big
+    strokes stand every FIFTEEN degrees on the plate (pixel-measured),
+    so the redress spares a one-degree shoulder around every 15th
+    degree and dresses everything else."""
+    from render.layers.moon_band import _seat_spared
+
+    for seat in range(0, 360, 15):
+        for shoulder in (-1, 0, 1):
+            assert _seat_spared((seat + shoulder) % 360)
+    assert not _seat_spared(3)
+    assert not _seat_spared(7)
+    assert not _seat_spared(22)

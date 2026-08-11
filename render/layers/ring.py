@@ -43,16 +43,66 @@ from render.painting import dial_point, draw_pixmap_centered
 class RingLayer(Layer):
     """The composed ring: his inner base art, the live inner numbers,
     the computed outer band, the preset's own jewels (with per-hour
-    metal finish) and the optional crown-text arc."""
+    metal finish) and the optional crown-text arc.
+
+    THE Z SEAT OF THE BAND REDRESS (owner repeat correction 2026-08-11,
+    slika 5 — "OPET INVERT IMA VECI Z INDEX OD JEWELS"): the Moon
+    Horizon Band's per-degree redress ("inverted"/"ticks") re-dresses
+    the 360 little points, which live IN the base plate — so its only
+    honest z seat is INSIDE this layer, between the base blit and
+    everything above it (band plates, numerals, jewels, crown). The
+    previous cut gave it its own layer ABOVE the whole ring, which made
+    the belt visible by trading one z violation for another: the ring
+    was one monolithic layer, so "above the plate, below the content"
+    had no seat to live in until this split."""
 
     frame = "rim"
 
     cadence = Cadence.STATIC
 
+    def __init__(self, skin, lift: bool = False):
+        super().__init__(skin, lift)
+        if self._band_redress_active():
+            # The redress depends on today's moonrise/moonset arcs, so
+            # the whole composed ring rebuilds daily in that mode —
+            # still baked once per day, never per frame.
+            self.cadence = Cadence.DAILY
+
+    def _band_redress_active(self) -> bool:
+        spec = self._skin.year_marker
+        return (
+            self._skin.show_moon
+            and spec.moon_band_mode == "horizon"
+            and spec.moon_band_style in ("inverted", "ticks")
+        )
+
     def paint(self, painter: QPainter, ctx: RenderContext) -> None:
         self._draw_bands(painter, ctx)
         self._draw_jewels(painter, ctx)
         self._draw_crown_text(painter, ctx)
+
+    def _draw_band_redress(self, painter: QPainter, ctx: RenderContext) -> None:
+        """The per-degree invert/gray segments, painted OVER the base
+        plate and UNDER every other ring element — big pointers, arrows,
+        numerals and jewels all outrank it (the owner's z decree). The
+        drawing itself stays in `render.layers.moon_band` (Rule #5)."""
+        from render.layers.moon_band import MoonBandLayer
+        from core.moon import moon_horizon_arcs
+
+        spec = self._skin.year_marker
+        radius = (
+            ctx.radius * ctx.interior_scale
+            * dial.RING_INNER_CONTENT_INNER_FRACTION
+        )
+        painter.save()
+        painter.setRenderHint(QPainter.RenderHint.Antialiasing)
+        band = MoonBandLayer.__new__(MoonBandLayer)
+        for arc in moon_horizon_arcs(ctx.day.moonrise, ctx.day.moonset):
+            if spec.moon_band_style == "inverted":
+                band._draw_invert_segments(painter, radius, arc)
+            else:
+                band._draw_ticks(painter, radius, arc)
+        painter.restore()
 
     def _draw_bands(self, painter: QPainter, ctx: RenderContext) -> None:
         """The two bands, inner first so the outer band's own edge sits
@@ -98,6 +148,8 @@ class RingLayer(Layer):
             tint=inner_tint, saturation=ctx.skin.ring_saturation,
         )
         painter.restore()
+        if self._band_redress_active():
+            self._draw_band_redress(painter, ctx)
         self._blit_band(painter, ctx, "inner")
         self._blit_band(painter, ctx, "outer")
 

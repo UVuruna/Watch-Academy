@@ -53,7 +53,7 @@ from render.layers.background import BackgroundLayer
 from render.layers.center_body import CenterBodyLayer
 from render.layers.hand import HandLayer
 from render.layers.hover_lift import HoverLiftLayer
-from render.layers.moon_band import MoonBandLayer, MoonBandTicksLayer
+from render.layers.moon_band import MoonBandLayer
 from render.layers.numerals import LiveCrownLayer
 from render.layers.ring import RingLayer
 from render.layers.slot import SlotLayer
@@ -317,7 +317,10 @@ def _build_layers(skin: SkinDefinition) -> list[Layer]:
         "weekday_set": lambda: WeekdayLayer(skin),
         "year_marker": lambda: YearMarkerLayer(skin),
         "moon_band": lambda: MoonBandLayer(skin),
-        "moon_band_ticks": lambda: MoonBandTicksLayer(skin),
+        # "moon_band_ticks" is retired from the z vocabulary (owner
+        # repeat correction 2026-08-11): the redress paints inside
+        # RingLayer now. A stale name in a stored z_order is skipped.
+        "moon_band_ticks": lambda: None,
     }
     # Elements switches (owner spec): a switched-off element is simply
     # not built. The YearMarkerLayer gates Earth/Moon internally (one
@@ -333,11 +336,7 @@ def _build_layers(skin: SkinDefinition) -> list[Layer]:
         "moon_band": not (
             skin.show_moon and skin.year_marker.moon_band_mode == "horizon"
         ),
-        "moon_band_ticks": not (
-            skin.show_moon
-            and skin.year_marker.moon_band_mode == "horizon"
-            and skin.year_marker.moon_band_style in ("inverted", "ticks")
-        ),
+        "moon_band_ticks": True,        # retired — see the factory note
     }
     seats = [
         seat for seat in slot_layout(skin).values() if seat != "classic"
