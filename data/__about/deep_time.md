@@ -50,9 +50,12 @@ key).
   bracketing `astro_year`, from the `sun_events` table.
 - `moon_window(astro_year)`: the year ± neighbors' principal phases as
   `(proxy instant, cycle fraction)`.
-- `eclipse_after(jd_ut, kind)` / `eclipse_before(jd_ut, kind)`: the
-  nearest catalog eclipse strictly after/before a Julian Day, or `None`
-  at the catalog edge.
+- `eclipse_after(jd_ut, kind, type_=None)` / `eclipse_before(jd_ut, kind, type_=None)`:
+  the nearest catalog eclipse strictly after/before a Julian Day, or
+  `None` at the catalog edge. `type_` narrows to one catalog type
+  (owner selector spec 2026-08-11 — total/annular/partial/hybrid for
+  solar, total/partial/penumbral for lunar); `None` keeps every type,
+  unchanged from before the filter.
 - `eclipses_near(now, cycles)`: up to 4 `EclipseEvent`s — the nearest
   solar/lunar eclipse before AND after `now`, via two indexed
   `eclipse_before`/`eclipse_after` lookups per kind, never a table

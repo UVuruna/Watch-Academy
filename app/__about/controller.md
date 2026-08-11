@@ -180,11 +180,29 @@ still constructs and behaves as before that round.
   Report, Exit
 - `_compute_jump(base_moment, base_observer, base_cycles, kind, city)`:
   the pure jump arithmetic (places, turning points, calendar unit
-  jumps, the optional phase filter) shared by every travel entry point;
-  returns the landed `(moment, observer, cycles)` or `None` on an edge
-  clamp
+  jumps, the typed eclipse jumps, the hour/minute/second jumps, the
+  optional phase filter) shared by every travel entry point; returns
+  the landed `(moment, observer, cycles)` or `None` on an edge clamp.
+  Eclipse kinds match `_ECLIPSE_JUMP_PATTERN` (owner selector spec
+  2026-08-11) — `next`/`prev`, `solar`/`lunar`, and an OPTIONAL catalog
+  type suffix (`total`/`annular`/`partial`/`hybrid`/`penumbral`) fed
+  straight to `data.deep_time.eclipse_after`/`eclipse_before`'s `type_`
+  filter. Hour/minute/second kinds match the separate `_TIME_JUMPS`
+  table — a plain timedelta on the base moment, returned WITHOUT the
+  minute-flooring tail the calendar-unit branch applies (flooring a
+  one-second step would erase it)
 - `_start_simulation(moment, observer, cycles=0)` / `_end_simulation()`:
-  freezes/unfreezes the rendered moment for `TIME_TRAVEL_DURATION_S`
+  renders the landed `(moment, observer)` for `TIME_TRAVEL_DURATION_S`
+  and returns to the present after — but the rendered moment is not
+  FROZEN for that span (owner spec 2026-08-11, THE POEM'S OWN DAYS
+  round): `_start_simulation` anchors `_sim_started = monotonic()`, and
+  `_simulated_moment()` adds the real elapsed seconds back onto the
+  landed moment on every read, so a traveled dial shows a running
+  transition (day into night, an eclipse closing) instead of a frozen
+  frame. Every reader of "what time is it while traveling" —
+  `_on_tick`, `_active_simulation_or_now`, `_open_observatory`,
+  `_effective_travel_date`, `_effective_is_daylight` — goes through
+  `_simulated_moment()` rather than the stored tuple directly
 - `apply_pending_art()` / `_apply_art_now()`: the debounced repaint a
   landed background build rides — a Qt signal (`art_ready`) queued
   cross-thread onto the GUI thread, restarting a single-shot timer

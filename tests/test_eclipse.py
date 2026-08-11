@@ -1140,3 +1140,20 @@ def test_the_bite_is_the_moon_algorithms_bright_crescent(app):
     assert 0.15 < quarter < 0.40            # thick crescent at 25% visible
     assert 0.40 < half < 0.65               # half the face at 50% visible
     assert quarter < half
+
+
+def test_eclipse_jump_type_filter_narrows_the_catalog(deep):
+    """THE TYPED ECLIPSE JUMPS (owner selector spec 2026-08-11): the
+    optional type filter narrows eclipse_after/before to one catalog
+    type; None keeps every type, byte-identical to before the filter."""
+    from core.deep_time import julian_day
+
+    jd = julian_day(-4500, 1, 1, 0.0)
+    any_solar = deep.eclipse_after(jd, "solar")
+    assert any_solar is not None
+    hybrid = deep.eclipse_after(jd, "solar", "hybrid")
+    assert hybrid is not None and hybrid.type == "hybrid"
+    total_lunar = deep.eclipse_after(jd, "lunar", "total")
+    assert total_lunar is not None and total_lunar.type == "total"
+    # An impossible type for the kind simply finds nothing at the edge.
+    assert deep.eclipse_after(jd, "solar", "penumbral") is None

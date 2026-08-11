@@ -18,9 +18,16 @@ Layer: config — pure, no Qt, no wall clock.
   shortcut column. `shortcut_display(action_id)` — the "Ctrl+R"
   human-readable label; `_SHORTCUT_MODIFIER_DISPLAY`/
   `_SHORTCUT_KEY_DISPLAY_OVERRIDES` are its private lookup tables.
-- **Fast Travel** — `FAST_TRAVEL_THEMES` (the Sun/Moon/Calendar jump
-  options, each with an `options` sub-tuple naming `jump_stem`s that
-  feed the shared `_compute_jump` machinery).
+- **Fast Travel** — `FAST_TRAVEL_THEMES`, SIX categories (owner
+  selector spec 2026-08-11): Solar Eclipse (Any/Total/Annular/Partial/
+  Hybrid), Lunar Eclipse (Any/Total/Partial/Penumbral), Sun Turning
+  Points (Any/Solstices/Equinoxes), Moon Stations (Any/Full/New/
+  Quarters), Date (Day/Month/Year/Century/Millennium — id stays
+  `"calendar"` for the computed wheel icon) and Time (Hour/Minute/
+  Second — id `"clock"`, emoji fallback), each with an `options`
+  sub-tuple naming `jump_stem`s that feed the shared `_compute_jump`
+  machinery. This retires the old absurdity of a solar eclipse living
+  as an option under Moon phases.
 - **Fast Travel FLASH** — the transient overlay's geometry/timing
   constants (`FAST_TRAVEL_FLASH_*`), the Calendar's own computed-icon
   geometry (`CALENDAR_ICON_WEDGE_COUNT`/`_RING_WIDTH_FRACTION`), and

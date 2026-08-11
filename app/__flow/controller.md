@@ -78,15 +78,22 @@ flowchart TB
     D -- yes --> E["real coordinates, real local clock"]
     D -- no --> F{kind is a calendar unit (day/month/year/century/millennium)?}
     F -- yes --> G["shift_calendar(moment, unit)"]
+    F -- yes --> G["shift_calendar(moment, unit)"]
+    F -- no --> F2{kind matches\n_ECLIPSE_JUMP_PATTERN?\n(next/prev, solar/lunar,\noptional TYPE suffix)}
+    F2 -- yes --> G2["deep.eclipse_after/before(jd, kind, type_)\ntype_ narrows to one catalog type\n(owner selector spec 2026-08-11)"]
+    F2 -- no --> F3{kind in _TIME_JUMPS?\n(hour/minute/second)}
+    F3 -- yes --> G3["base_moment + sign * timedelta(unit)\nNO minute-flooring — returned early"]
     C --> H
     E --> H
     G --> H{landing found?}
+    G2 --> H
     H -- no --> I[(None — edge clamp, no-op)]
     H -- yes --> J["deep-travel events rebased into the
     caller's proxy frame via julian_day_of"]
     J --> K["re-canonicalize into the 400-year proxy
     (canonical_proxy) before returning"]
     K --> L[("(moment, observer, cycles)")]
+    G3 --> L
 ```
 
 Three callers wrap this pure function: `_apply_jump` (keyboard
@@ -96,6 +103,26 @@ live simulation AND returns the landing for the dialog to mirror onto
 its own fields), and the Time Travel dialog's own OK button (via
 `TimeTravelDialog.moment()`/`.cycles()`, which the controller reads
 directly rather than through `_compute_jump`).
+
+## The flowing simulated moment (owner spec 2026-08-11)
+
+```mermaid
+flowchart LR
+    A["_start_simulation(moment, observer)"] --> B["self._simulation = (moment, observer)
+    self._sim_started = monotonic()"]
+    B --> C["_simulated_moment()
+    = moment + (monotonic() - _sim_started)"]
+    C --> D["_on_tick / _active_simulation_or_now /
+    _open_observatory / _effective_travel_date /
+    _effective_is_daylight all read THIS,
+    never the stored tuple directly"]
+```
+
+The landed moment is not a frozen frame for the rest of
+`TIME_TRAVEL_DURATION_S` — every second of real wall-clock time that
+passes advances the displayed moment by the same second, so a
+traveled dial keeps running (day into night, an eclipse closing)
+instead of holding still.
 
 ## Responsibility map (see `__about/controller.md` for the split this owes)
 

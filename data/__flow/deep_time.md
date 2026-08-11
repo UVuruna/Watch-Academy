@@ -51,4 +51,7 @@ Pseudocode (language-neutral):
 
 `eclipse_before`/`eclipse_after` are each a single indexed
 `ORDER BY jd_ut ... LIMIT 1` query — the only database I/O the eclipse
-display costs per day-context rebuild.
+display costs per day-context rebuild. Both take an optional `type_`
+(owner selector spec 2026-08-11): `_eclipse` appends `AND type = ?` to
+the query and the extra bound parameter only when `type_` is not
+`None`, otherwise every catalog type still matches.

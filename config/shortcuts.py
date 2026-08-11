@@ -220,41 +220,92 @@ def shortcut_display(action_id: str) -> str:
 # yet (Calendar — nothing "calendar-ish" has landed in assets/icons/)
 # falls back to its own documented `emoji` (Rule #1, the SAME
 # graceful-absent contract `icon_path()` already guarantees).
+# THE SIX CATEGORIES (owner spec 2026-08-11, verbatim list: sun
+# eclipse / moon eclipse / turning points sun / turning points moon /
+# date / day(hour,min,sec) — with "osmisli bolje nazive"): each
+# eclipse category offers ANY plus every catalog type IN TURN ("sve
+# verzije ili svaka redom"), which also retires the old absurdity of
+# a solar eclipse living as an option under Moon phases ("kako bre
+# eklipsa sunca da dobija termin po mesecu"). The flash text is
+# "Category (Option)" — `WatchController._flash_fast_travel`.
 FAST_TRAVEL_THEMES = (
     {
-        "id": "sun", "title": "Sun", "icon_key": "eclipse_sun", "emoji": "☀️",
+        "id": "solar_eclipse", "title": "Solar Eclipse",
+        "icon_key": "eclipse_sun", "emoji": "🌑",
         "options": (
-            {"id": "any", "title": "Any turning point", "jump_stem": "sun"},
+            {"id": "any", "title": "Any", "jump_stem": "solar_eclipse"},
+            {"id": "total", "title": "Total", "jump_stem": "solar_eclipse_total"},
             {
-                "id": "solstice", "title": "Solstices only",
+                "id": "annular", "title": "Annular",
+                "jump_stem": "solar_eclipse_annular",
+            },
+            {
+                "id": "partial", "title": "Partial",
+                "jump_stem": "solar_eclipse_partial",
+            },
+            {
+                "id": "hybrid", "title": "Hybrid",
+                "jump_stem": "solar_eclipse_hybrid",
+            },
+        ),
+    },
+    {
+        "id": "lunar_eclipse", "title": "Lunar Eclipse",
+        "icon_key": "eclipse_moon", "emoji": "🌘",
+        "options": (
+            {"id": "any", "title": "Any", "jump_stem": "lunar_eclipse"},
+            {"id": "total", "title": "Total", "jump_stem": "lunar_eclipse_total"},
+            {
+                "id": "partial", "title": "Partial",
+                "jump_stem": "lunar_eclipse_partial",
+            },
+            {
+                "id": "penumbral", "title": "Penumbral",
+                "jump_stem": "lunar_eclipse_penumbral",
+            },
+        ),
+    },
+    {
+        "id": "sun", "title": "Sun Turning Points",
+        "icon_key": "light", "emoji": "☀️",
+        "options": (
+            {"id": "any", "title": "Any", "jump_stem": "sun"},
+            {
+                "id": "solstice", "title": "Solstices",
                 "jump_stem": "sun_solstice",
             },
             {
-                "id": "equinox", "title": "Equinoxes only",
+                "id": "equinox", "title": "Equinoxes",
                 "jump_stem": "sun_equinox",
             },
         ),
     },
     {
-        "id": "moon", "title": "Moon", "icon_key": "eclipse_moon", "emoji": "🌙",
+        "id": "moon", "title": "Moon Stations",
+        "icon_key": None, "emoji": "🌙",
         "options": (
+            {"id": "any", "title": "Any", "jump_stem": "moon"},
             {"id": "full", "title": "Full", "jump_stem": "moon_full"},
             {"id": "new", "title": "New", "jump_stem": "moon_new"},
             {"id": "quarter", "title": "Quarters", "jump_stem": "moon_quarter"},
-            # The lunar catalog specifically (paired thematically with
-            # the Moon; the Sun theme carries no eclipse option of its
-            # own) — the SAME kind `_ECLIPSE_JUMPS` already serves.
-            {"id": "eclipse", "title": "Eclipse", "jump_stem": "lunar_eclipse"},
         ),
     },
     {
-        "id": "calendar", "title": "Calendar", "icon_key": None, "emoji": "📅",
+        "id": "calendar", "title": "Date", "icon_key": None, "emoji": "📅",
         "options": (
             {"id": "day", "title": "Day", "jump_stem": "day"},
             {"id": "month", "title": "Month", "jump_stem": "month"},
             {"id": "year", "title": "Year", "jump_stem": "year"},
             {"id": "century", "title": "Century", "jump_stem": "century"},
             {"id": "millennium", "title": "Millennium", "jump_stem": "millennium"},
+        ),
+    },
+    {
+        "id": "clock", "title": "Time", "icon_key": None, "emoji": "🕐",
+        "options": (
+            {"id": "hour", "title": "Hour", "jump_stem": "hour"},
+            {"id": "minute", "title": "Minute", "jump_stem": "minute"},
+            {"id": "second", "title": "Second", "jump_stem": "second"},
         ),
     },
 )

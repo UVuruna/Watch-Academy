@@ -1283,6 +1283,13 @@ class WatchController(QObject):
         # the moment in the 400-year PROXY frame; _sim_cycles is its cycle
         # count (0 = the ordinary frame).
         self._simulation_ends: float = 0.0
+        # TIME FLOWS THROUGH THE TRAVEL WINDOW (owner spec 2026-08-11:
+        # after any jump the clock KEEPS RUNNING through the travel
+        # minute — "sometimes we want to watch how a transition
+        # unfolds, e.g. day into night"): the stored simulation moment
+        # is the ANCHOR; every read advances it by the real seconds
+        # since the jump landed (`_simulated_moment`).
+        self._sim_started: float = 0.0
         self._sim_cycles: int = 0
         self._widget.set_renderer(self._compositor)
         seconds_hand = (
@@ -1686,7 +1693,8 @@ class WatchController(QObject):
             self._sim_cycles = 0
             self._day = None                # force the rebuild back to the present
         if self._simulation is not None:
-            now, observer = self._simulation
+            now = self._simulated_moment()
+            observer = self._simulation[1]
             cycles = self._sim_cycles
         else:
             now = datetime.now(self._tz)
@@ -2106,8 +2114,11 @@ class WatchController(QObject):
             icon_path = (
                 defaults.icon_path(icon_key) if icon_key is not None else None
             )
+        # "Category (Option)" (owner spec 2026-08-11: "text treba da
+        # bude glavna tema naziv i selektovana opcija u zagradi").
         self._fast_travel_flash.flash(
-            self._widget, icon_path, theme["emoji"], self._ui(option["title"])
+            self._widget, icon_path, theme["emoji"],
+            f"{self._ui(theme['title'])} ({self._ui(option['title'])})",
         )
 
     # Every `_compute_jump` kind that LANDS somewhere new (R-30) — the
@@ -3589,7 +3600,8 @@ class WatchController(QObject):
             return
         self._observatory = None
         if self._simulation is not None:
-            now, observer = self._simulation
+            now = self._simulated_moment()
+            observer = self._simulation[1]
             cycles = self._sim_cycles
         else:
             now = datetime.now(self._tz)
@@ -3747,6 +3759,15 @@ class WatchController(QObject):
             return min(first, deep_first), max(last, deep_last)
         return first, last
 
+    def _simulated_moment(self) -> datetime:
+        """The travel window's FLOWING clock (owner spec 2026-08-11):
+        the landed moment plus the real seconds since the jump — so a
+        traveled dial shows a running transition (day into night, an
+        eclipse closing) instead of a frozen frame. Callers must have
+        checked `self._simulation is not None`."""
+        moment, _observer = self._simulation
+        return moment + timedelta(seconds=monotonic() - self._sim_started)
+
     def _active_simulation_or_now(self) -> tuple[datetime, astral.Observer, int]:
         """The (moment, observer, cycles) every LIVE travel path chains
         from (owner spec, R5b round: "each jump starts from the active
@@ -3758,8 +3779,10 @@ class WatchController(QObject):
         the SAME rule this round factored out of that seeding (Rule #5:
         one source for "what does 'right now' mean while travelling")."""
         if self._simulation is not None:
-            moment, observer = self._simulation
-            return moment, observer, self._sim_cycles
+            return (
+                self._simulated_moment(), self._simulation[1],
+                self._sim_cycles,
+            )
         return datetime.now(self._tz), self._observer, 0
 
     def _apply_jump(
@@ -3830,8 +3853,7 @@ class WatchController(QObject):
         DISPLAYED moment — the Time Travel traveled date while a
         simulation runs, else today's wall-clock date."""
         if self._simulation is not None:
-            moment, _observer = self._simulation
-            return moment.date()
+            return self._simulated_moment().date()
         return date.today()
 
     def _effective_is_daylight(self) -> bool:
@@ -3846,7 +3868,7 @@ class WatchController(QObject):
         if self._day is None:
             return True
         now = (
-            self._simulation[0] if self._simulation is not None
+            self._simulated_moment() if self._simulation is not None
             else datetime.now(self._tz)
         )
         return build_tick_state(now, self._day).is_daylight
@@ -3903,6 +3925,9 @@ class WatchController(QObject):
         self._simulation = (moment, observer)
         self._sim_cycles = cycles
         self._simulation_ends = monotonic() + shortcuts.TIME_TRAVEL_DURATION_S
+        # The travel minute FLOWS from the landed instant (owner spec
+        # 2026-08-11) — anchor the wall clock here.
+        self._sim_started = monotonic()
         self._day = None                    # rebuild with the simulated situation
         self._on_tick(clock_jumped=False)
 
@@ -3914,9 +3939,20 @@ class WatchController(QObject):
         "next_century": ("century", 1), "prev_century": ("century", -1),
         "next_millennium": ("millennium", 1), "prev_millennium": ("millennium", -1),
     }
-    _ECLIPSE_JUMPS = {
-        "next_solar_eclipse": ("solar", 1), "prev_solar_eclipse": ("solar", -1),
-        "next_lunar_eclipse": ("lunar", 1), "prev_lunar_eclipse": ("lunar", -1),
+    # THE TYPED ECLIPSE JUMPS (owner selector spec 2026-08-11, "sve
+    # verzije ili svaka redom"): the bare kinds stay ("any"), and every
+    # catalog TYPE gets its own kind — total/annular/partial/hybrid for
+    # solar, total/partial/penumbral for lunar — one regex, one branch.
+    _ECLIPSE_JUMP_PATTERN = re.compile(
+        r"^(next|prev)_(solar|lunar)_eclipse"
+        r"(?:_(total|annular|partial|hybrid|penumbral))?$"
+    )
+    # THE TIME-UNIT JUMPS (owner spec 2026-08-11, category "Time"):
+    # hour/minute/second steps — plain timedeltas on the flowing moment.
+    _TIME_JUMPS = {
+        "next_hour": ("hour", 1), "prev_hour": ("hour", -1),
+        "next_minute": ("minute", 1), "prev_minute": ("minute", -1),
+        "next_second": ("second", 1), "prev_second": ("second", -1),
     }
 
     def _compute_jump(
@@ -4000,20 +4036,23 @@ class WatchController(QObject):
                     break
             else:
                 return None             # clamp: already at the coverage edge
-        elif kind in self._ECLIPSE_JUMPS:
-            # The eclipse navigation (owner 2026-07-16, ROADMAP 12/14a)
-            # — fed by the Deep Time pack; the caller grays its entry
-            # without it, this guard is the belt to that suspender.
+        elif eclipse_match := self._ECLIPSE_JUMP_PATTERN.match(kind):
+            # The eclipse navigation (owner 2026-07-16, ROADMAP 12/14a;
+            # typed per the 2026-08-11 selector spec) — fed by the Deep
+            # Time pack; the caller grays its entry without it, this
+            # guard is the belt to that suspender.
             if self._deep is None:
                 return None
-            eclipse_kind, direction = self._ECLIPSE_JUMPS[kind]
+            direction_word, eclipse_kind, eclipse_type = eclipse_match.groups()
             jd = julian_day_of(base_moment, base_cycles)
-            if direction > 0:
+            if direction_word == "next":
                 # The same one-minute guard as the event jumps: the
                 # landed minute-floored moment must not re-pick itself.
-                event = self._deep.eclipse_after(jd + 1.0 / 1440.0, eclipse_kind)
+                event = self._deep.eclipse_after(
+                    jd + 1.0 / 1440.0, eclipse_kind, eclipse_type,
+                )
             else:
-                event = self._deep.eclipse_before(jd, eclipse_kind)
+                event = self._deep.eclipse_before(jd, eclipse_kind, eclipse_type)
             if event is None or not first <= event.year <= last:
                 return None             # clamp: catalog edge
             proxy, cycles = canonical_proxy(
@@ -4024,6 +4063,21 @@ class WatchController(QObject):
             moment = proxy.replace(tzinfo=timezone.utc).astimezone(
                 base_moment.tzinfo
             )
+        elif kind in self._TIME_JUMPS:
+            # Hour / Minute / Second (owner spec 2026-08-11): a plain
+            # timedelta on the base moment. Returned WITHOUT the
+            # minute-flooring tail — flooring a one-second step would
+            # erase it — and the seconds keep flowing either way.
+            unit, sign = self._TIME_JUMPS[kind]
+            step = {
+                "hour": timedelta(hours=1),
+                "minute": timedelta(minutes=1),
+                "second": timedelta(seconds=1),
+            }[unit]
+            moment = base_moment + sign * step
+            if not first <= real_year(moment.year, cycles) <= last:
+                return None
+            return moment.replace(microsecond=0), observer, cycles
         elif kind in self._UNIT_JUMPS:
             # Year · Month · Day and Century · Millennium (owner slika
             # 12): calendar arithmetic on the REAL astronomical date —

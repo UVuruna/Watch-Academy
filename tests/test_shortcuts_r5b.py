@@ -12,7 +12,7 @@ import os
 
 os.environ.setdefault("QT_QPA_PLATFORM", "offscreen")
 
-from datetime import datetime
+from datetime import datetime, timedelta
 
 import pytest
 from PySide6.QtCore import QEvent, Qt
@@ -222,23 +222,26 @@ def test_fast_travel_theme_cycles_in_order_and_wraps(controller):
 
 
 def test_fast_travel_option_cycles_within_theme_and_remembers_per_theme(controller):
-    assert controller._fast_travel_theme_index == 0   # "sun"
-    assert controller._fast_travel_option_index("sun") == 0
+    first = shortcuts.FAST_TRAVEL_THEMES[0]["id"]      # "solar_eclipse"
+    second = shortcuts.FAST_TRAVEL_THEMES[1]["id"]     # "lunar_eclipse"
+    assert controller._fast_travel_theme_index == 0
+    assert controller._fast_travel_option_index(first) == 0
     controller._on_shortcut("fast_travel_option")
-    assert controller._fast_travel_option_index("sun") == 1
-    controller._on_shortcut("fast_travel_theme")       # -> "moon"
-    assert controller._fast_travel_option_index("moon") == 0
+    assert controller._fast_travel_option_index(first) == 1
+    controller._on_shortcut("fast_travel_theme")
+    assert controller._fast_travel_option_index(second) == 0
     controller._on_shortcut("fast_travel_option")
-    assert controller._fast_travel_option_index("moon") == 1
-    # sun's own cursor survives untouched while moon's advances
-    assert controller._fast_travel_option_index("sun") == 1
+    assert controller._fast_travel_option_index(second) == 1
+    # the first theme's own cursor survives untouched
+    assert controller._fast_travel_option_index(first) == 1
 
 
 def test_fast_travel_option_wraps_within_its_own_theme(controller):
-    sun_options = shortcuts.FAST_TRAVEL_THEMES[0]["options"]
-    for expected in range(1, len(sun_options) + 1):
+    theme = shortcuts.FAST_TRAVEL_THEMES[0]
+    options = theme["options"]
+    for expected in range(1, len(options) + 1):
         controller._on_shortcut("fast_travel_option")
-        assert controller._fast_travel_option_index("sun") == expected % len(sun_options)
+        assert controller._fast_travel_option_index(theme["id"]) == expected % len(options)
 
 
 def test_fast_travel_theme_and_option_change_each_trigger_one_flash(controller, monkeypatch):
@@ -272,10 +275,12 @@ def test_fast_travel_flash_carries_the_active_theme_icon_and_option_text(
         controller._fast_travel_flash, "flash",
         lambda dial, icon_path, emoji, text: calls.append((icon_path, emoji, text)),
     )
-    controller._on_shortcut("fast_travel_theme")   # -> "moon"
+    controller._on_shortcut("fast_travel_theme")   # -> "lunar_eclipse"
     icon_path, emoji, text = calls[0]
-    assert emoji == "🌙"
-    assert text == "Full"                          # moon's own first option
+    theme = shortcuts.FAST_TRAVEL_THEMES[1]
+    assert emoji == theme["emoji"]
+    # "Category (Option)" (owner spec 2026-08-11).
+    assert text == f"{theme['title']} ({theme['options'][0]['title']})"
 
 
 # --- FAST TRAVEL: the jump-step math (golden) --------------------------------
@@ -741,3 +746,49 @@ def test_shortcuts_menu_entry_opens_the_window(controller, monkeypatch):
     )
     controller._open_shortcuts()
     assert opened == [1]
+
+
+# --- R8 (owner selector spec 2026-08-11) -------------------------------------
+
+
+def test_time_flows_through_the_travel_window(controller):
+    """TIME KEEPS FLOWING after a jump (owner: "sad se ne zaustavlja
+    nego nastavi da tece" — so a transition can be watched inside the
+    travel minute).
+    lang-ok: quoting the owner's own decree verbatim."""
+    known = datetime(2026, 6, 20, 12, 0, tzinfo=controller._tz)
+    controller._start_simulation(known, controller._observer, 0)
+    controller._sim_started -= 5.0        # pretend 5 real seconds passed
+    moment, _observer, _cycles = controller._active_simulation_or_now()
+    elapsed = (moment - known).total_seconds()
+    assert 4.5 <= elapsed <= 7.0, "the traveled clock must keep running"
+
+
+def test_time_unit_jumps_step_hours_minutes_and_uncut_seconds(controller):
+    base = datetime(2026, 6, 20, 12, 0, 30, tzinfo=controller._tz)
+    observer = controller._observer
+    hour = controller._compute_jump(base, observer, 0, "next_hour")
+    assert hour[0] - base == timedelta(hours=1)
+    minute = controller._compute_jump(base, observer, 0, "prev_minute")
+    assert base - minute[0] == timedelta(minutes=1)
+    # A one-second step must NOT be floored away by the minute-flooring
+    # tail every other jump uses.
+    second = controller._compute_jump(base, observer, 0, "next_second")
+    assert second[0] - base == timedelta(seconds=1)
+    assert second[0].second == 31
+
+
+def test_every_fast_travel_stem_resolves_to_a_jump_branch(controller):
+    """No selector option may point at a kind `_compute_jump` does not
+    speak — the silent no-op would read as a broken shortcut."""
+    for theme in shortcuts.FAST_TRAVEL_THEMES:
+        for option in theme["options"]:
+            kind = f"next_{option['jump_stem']}"
+            recognized = (
+                controller._ECLIPSE_JUMP_PATTERN.match(kind) is not None
+                or kind in controller._TIME_JUMPS
+                or kind in controller._UNIT_JUMPS
+                or __import__("app.controller", fromlist=["x"])
+                ._SUN_MOON_JUMP_PATTERN.match(kind) is not None
+            )
+            assert recognized, f"unhandled jump stem {option['jump_stem']}"

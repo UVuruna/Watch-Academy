@@ -179,27 +179,42 @@ class DeepTimeRepository:
 
     # --- The eclipse catalog --------------------------------------------------
 
-    def eclipse_after(self, jd_ut: float, kind: str) -> DeepEclipse | None:
+    def eclipse_after(
+        self, jd_ut: float, kind: str, type_: str | None = None,
+    ) -> DeepEclipse | None:
         """The nearest catalog eclipse strictly AFTER a Julian Day —
-        None at the catalog edge (the Quick Jump then stays put)."""
-        return self._eclipse(jd_ut, kind, "jd_ut > ? ORDER BY jd_ut ASC")
+        None at the catalog edge (the Quick Jump then stays put).
+        `type_` narrows to one catalog type (owner selector spec
+        2026-08-11, "sve verzije ili svaka redom": total/annular/
+        partial/hybrid for solar, total/partial/penumbral for lunar);
+        None keeps every type, unchanged from before the filter."""
+        return self._eclipse(jd_ut, kind, "jd_ut > ?", "ASC", type_)
 
-    def eclipse_before(self, jd_ut: float, kind: str) -> DeepEclipse | None:
+    def eclipse_before(
+        self, jd_ut: float, kind: str, type_: str | None = None,
+    ) -> DeepEclipse | None:
         """The nearest catalog eclipse strictly BEFORE a Julian Day."""
-        return self._eclipse(jd_ut, kind, "jd_ut < ? ORDER BY jd_ut DESC")
+        return self._eclipse(jd_ut, kind, "jd_ut < ?", "DESC", type_)
 
-    def _eclipse(self, jd_ut: float, kind: str, clause: str) -> DeepEclipse | None:
+    def _eclipse(
+        self, jd_ut: float, kind: str, clause: str, order: str,
+        type_: str | None = None,
+    ) -> DeepEclipse | None:
+        type_clause = "" if type_ is None else " AND type = ?"
+        params = (jd_ut,) if type_ is None else (jd_ut, type_)
         if kind == "solar":
             row = self._con.execute(
                 f"SELECT jd_ut, year, month, day, sod, type, magnitude, "
-                f"lat, lon FROM solar_eclipses WHERE {clause} LIMIT 1",
-                (jd_ut,),
+                f"lat, lon FROM solar_eclipses WHERE {clause}{type_clause} "
+                f"ORDER BY jd_ut {order} LIMIT 1",
+                params,
             ).fetchone()
         elif kind == "lunar":
             row = self._con.execute(
                 f"SELECT jd_ut, year, month, day, sod, type, magnitude, "
-                f"NULL, NULL FROM lunar_eclipses WHERE {clause} LIMIT 1",
-                (jd_ut,),
+                f"NULL, NULL FROM lunar_eclipses WHERE {clause}{type_clause} "
+                f"ORDER BY jd_ut {order} LIMIT 1",
+                params,
             ).fetchone()
         else:
             raise ValueError(f"unknown eclipse kind: {kind!r}")
