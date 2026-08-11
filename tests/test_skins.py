@@ -47,14 +47,14 @@ def test_ring_preset_cards_load_and_validate():
         )
 
 
-def test_dollar_preset_loads_and_splits_metal():
+def test_dollar_preset_loads_single_metal():
     """The Dollar bundled preset (ROADMAP 15b, CANON.md §The Banknote;
     renamed from Mason and crowned with the Eye in the DOLLAR/EYE
     round, owner decree 2026-07-27): 👁(12) S(16) M(20) Ω(24) N(4) A(8)
-    on the seal layout, splitting the metal into the Trinity triangle
-    (12/20/4) wearing the chosen finish and the Union triangle
-    (16/24/8) wearing its counter-metal — NOT the single finish on all
-    six, because this preset carries its own `triangle` override."""
+    on the seal layout. TWO METALS RETIRED (owner decree 2026-08-11):
+    the former Trinity/Union split is gone — every one of the six
+    seats wears the single chosen finish, even though the card still
+    carries its own `triangle` override for the legacy schema."""
     from data.rings import ring_presets
 
     presets = ring_presets()
@@ -79,14 +79,13 @@ def test_dollar_preset_loads_and_splits_metal():
     assert gold_ring.jewel_art[16] == art_dir / "latin/S.png"
     assert gold_ring.jewel_art[0] == art_dir / "greek/Omega.png"    # 24h -> hour 0
     assert gold_ring.jewel_art[8] == art_dir / "latin/A.png"
-    # Trinity (12/20/4 = G, M, N) wears the finish metal (gold, no suffix).
+    # TWO METALS RETIRED: every seat wears the one finish metal (gold).
     assert gold_ring.jewel_metal[12] == "gold"
     assert gold_ring.jewel_metal[20] == "gold"
     assert gold_ring.jewel_metal[4] == "gold"
-    # Union (16/24/8 = S, Ω, A) wears the counter-metal (silver here).
-    assert gold_ring.jewel_metal[16] == "silver"
-    assert gold_ring.jewel_metal[0] == "silver"                # 24h -> hour 0
-    assert gold_ring.jewel_metal[8] == "silver"
+    assert gold_ring.jewel_metal[16] == "gold"
+    assert gold_ring.jewel_metal[0] == "gold"                  # 24h -> hour 0
+    assert gold_ring.jewel_metal[8] == "gold"
 
     silver_ring = build_skin(
         replace(Settings(), ring="Dollar", ring_finish="silver")
@@ -94,9 +93,9 @@ def test_dollar_preset_loads_and_splits_metal():
     assert silver_ring.jewel_metal[12] == "silver"
     assert silver_ring.jewel_metal[20] == "silver"
     assert silver_ring.jewel_metal[4] == "silver"
-    assert silver_ring.jewel_metal[16] == "gold"
-    assert silver_ring.jewel_metal[0] == "gold"
-    assert silver_ring.jewel_metal[8] == "gold"
+    assert silver_ring.jewel_metal[16] == "silver"
+    assert silver_ring.jewel_metal[0] == "silver"
+    assert silver_ring.jewel_metal[8] == "silver"
 
     assert missing_assets(build_skin(replace(Settings(), ring="Dollar"))) == []
     assert missing_assets(
@@ -193,44 +192,17 @@ def test_templar_preset_loads_its_locked_cross_outer_with_the_cross_glyph():
     assert missing_assets(build_skin(replace(Settings(), ring="Templar"))) == []
 
 
-def test_ring_two_metals_toggle_switches_the_split(monkeypatch):
-    """TASK 3 (MASON/ICONS round); NARROWED by THE COMPOSITIONAL RING
-    MODEL (owner decree 2026-08-05): only Dollar (the sole preset on
-    the "hexa" outer) still carries a `triangle` override — Templar and
-    The One sit on the triangle-less cross/octa outers and never had
-    the toggle. The stored choice wins first, else the
-    documented per-preset default (Dollar True — "default matching
-    today's look")."""
-    from config import constants
-
-    # Default, no stored choice at all: Dollar splits.
-    mason = build_skin(replace(Settings(), ring="Dollar")).ring
-    assert mason.jewel_metal[12] == "gold" and mason.jewel_metal[16] == "silver"
-
-    # An explicit stored choice inverts the default.
-    mason_off = build_skin(replace(
-        Settings(), ring="Dollar", ring_two_metals={"Dollar": False},
-    )).ring
-    assert all(metal == "gold" for metal in mason_off.jewel_metal.values())
-
-    # Templar/The One carry no triangle at all any more — a stray
-    # stored key for them is simply inert (nothing to split).
-    templar = build_skin(replace(
-        Settings(), ring="Templar", ring_two_metals={"Templar": True},
-    )).ring
-    assert all(metal == "gold" for metal in templar.jewel_metal.values())
-    one = build_skin(replace(
-        Settings(), ring="The One", ring_two_metals={"The One": True},
-    )).ring
-    assert all(metal == "gold" for metal in one.jewel_metal.values())
-
-    # DOMY (bot_cross) still carries its own outer-level default triangle.
-    domy = build_skin(replace(
-        Settings(), ring="DOMY", ring_two_metals={"DOMY": True},
-    )).ring
-    assert domy.jewel_metal[12] == "gold" and domy.jewel_metal[0] == "silver"
-
-    assert constants.RING_TWO_METALS_DEFAULT == {"Dollar": True}
+def test_ring_jewels_are_always_single_metal():
+    """TWO METALS RETIRED (owner decree 2026-08-11): every ring's
+    resolved skin now wears exactly ONE finish across every jewel —
+    the split table (`triangle`) is always empty, and no stored
+    settings dict can bring it back, whichever preset or outer it
+    carries a `triangle` override for (Dollar's hexa, DOMY/LOOP's
+    bot_cross/top_cross)."""
+    for ring, finish in (("Dollar", "gold"), ("DOMY", "gold"), ("LOOP", "silver")):
+        skin = build_skin(replace(Settings(), ring=ring, ring_finish=finish)).ring
+        assert skin.jewel_metal, "expected at least one seated jewel"
+        assert all(metal == finish for metal in skin.jewel_metal.values())
 
 
 def test_dollar_eye_shine_toggle_swaps_the_master():
@@ -402,26 +374,6 @@ def test_crown_text_words_map_to_their_seats():
     )
 
 
-def test_two_metals_toggle_now_covers_the_cross_rings():
-    """ENLARGE/THEMATIC round (owner 2026-07-27, "hoću da Two Metals
-    opcija bude i za DOMY tj LOOP"): the flame/chalice presets are
-    eligible too — default ON (today's 3+1 look), stored OFF dresses
-    every letter in the ONE finish."""
-    domy_off = build_skin(replace(
-        Settings(), ring_two_metals={"DOMY": False},
-    )).ring
-    assert all(m == "gold" for m in domy_off.jewel_metal.values())
-    loop_off = build_skin(replace(
-        Settings(), ring="LOOP", ring_finish="silver",
-        ring_two_metals={"LOOP": False},
-    )).ring
-    assert all(m == "silver" for m in loop_off.jewel_metal.values())
-    # Default stays the split look.
-    domy_on = build_skin(Settings()).ring
-    assert domy_on.jewel_metal[12] == "gold"
-    assert domy_on.jewel_metal[0] == "silver"
-
-
 def test_thematic_finish_wears_the_preset_color():
     """ENLARGE/THEMATIC round (owner 2026-07-27): the 4th ring finish —
     the letters wear the ACTIVE preset's own theme color through the
@@ -431,8 +383,10 @@ def test_thematic_finish_wears_the_preset_color():
     from config import constants, paths
 
     thematic = build_skin(replace(Settings(), ring_finish="thematic"))
-    assert thematic.ring.jewel_metal[12] == "thematic"   # the triangle
-    assert thematic.ring.jewel_metal[0] == "silver"      # the accent
+    # TWO METALS RETIRED (owner decree 2026-08-11): every seat, not
+    # only the former triangle, wears the thematic color now.
+    assert thematic.ring.jewel_metal[12] == "thematic"
+    assert thematic.ring.jewel_metal[0] == "thematic"
     assert thematic.ring.crown_text_metal == "thematic"
     assert thematic.ring_finish == "gold"                 # containment
     # The shade rides THIS skin (owner bug 2026-07-28) — never a process
@@ -448,10 +402,9 @@ def test_thematic_finish_wears_the_preset_color():
     assert paths.metal_shade("thematic") == paths.DEFAULT_DISPLAY.shade(
         "thematic"
     )                                    # nothing leaked to the process
-    # Two metals OFF + thematic = every letter in the theme color.
-    flat = build_skin(replace(
-        Settings(), ring_finish="thematic", ring_two_metals={"DOMY": False},
-    )).ring
+    # TWO METALS RETIRED (owner decree 2026-08-11): thematic finish
+    # always dresses every letter in the theme color now.
+    flat = build_skin(replace(Settings(), ring_finish="thematic")).ring
     assert all(m == "thematic" for m in flat.jewel_metal.values())
     # The full preset->shade table is pinned.
     assert constants.RING_THEMATIC_SHADES == {
@@ -806,36 +759,36 @@ def test_default_config_assets_all_exist():
 
 
 def test_jewel_art_follows_the_finish():
-    """Owner metal rule (correction 2026-07-10): the trio of one metal
-    always forms a TRIANGLE — gold finish = the layout triangle in
-    gold + the rest silver; silver finish = the exact inverse."""
+    """Owner metal rule (correction 2026-07-10), NARROWED by TWO METALS
+    RETIRED (owner decree 2026-08-11): every jewel wears the ONE chosen
+    finish now — the former triangle/accent split is gone."""
     art_dir = dial.LETTER_ART_DIR
     gold = build_skin(Settings()).ring
     assert gold.jewel_art[12] == art_dir / "latin/M.png"    # triangle 12/20/4 gold
     assert gold.jewel_art[20] == art_dir / "latin/Y.png"
     assert gold.jewel_art[4] == art_dir / "latin/D.png"
     assert gold.jewel_metal[12] == "gold"
-    assert gold.jewel_metal[0] == "silver"
+    assert gold.jewel_metal[0] == "gold"
     silver = build_skin(replace(Settings(), ring_finish="silver")).ring
-    assert silver.jewel_metal[12] == "silver"          # the triangle inverts
+    assert silver.jewel_metal[12] == "silver"
     assert silver.jewel_metal[20] == "silver"
-    assert silver.jewel_metal[0] == "gold"             # Omega back to gold
+    assert silver.jewel_metal[0] == "silver"
     morph = build_skin(replace(Settings(), ring="LOOP")).ring
     assert morph.jewel_art[16] == art_dir / "greek/Pi.png"   # triangle 8/16/24 gold
     assert morph.jewel_metal[16] == "gold"
     assert morph.jewel_metal[0] == "gold"
-    assert morph.jewel_metal[12] == "silver"
+    assert morph.jewel_metal[12] == "gold"
     morph_silver = build_skin(
         replace(Settings(), ring="LOOP", ring_finish="silver")
     ).ring
-    assert morph_silver.jewel_metal[12] == "gold"
+    assert morph_silver.jewel_metal[12] == "silver"
     assert morph_silver.jewel_metal[0] == "silver"
 
 
 def test_bronze_finish_and_theme_metals():
-    """Owner 2026-07-12: (1) BRONZE ring finish — the triangle wears
-    bronze, the accent letter silver, the Seal all six bronze, and the
-    live-derived bronze pixmap resolves for every glyph (owner
+    """Owner 2026-07-12: (1) BRONZE ring finish — TWO METALS RETIRED
+    (owner decree 2026-08-11) means every seat wears bronze now, and
+    the live-derived bronze pixmap resolves for every glyph (owner
     2026-07-19 live-render round: no more pre-rendered files); (2) the
     bronze-plate weekday themes wear the chosen METAL as a render tint
     — gold/silver tritone, bronze = the art as drawn; follow-the-ring
@@ -849,9 +802,9 @@ def test_bronze_finish_and_theme_metals():
 
     art_dir = dial.LETTER_ART_DIR
     bronze_ring = build_skin(replace(Settings(), ring_finish="bronze")).ring
-    assert bronze_ring.jewel_metal[12] == "bronze"   # triangle 12/20/4 bronze
+    assert bronze_ring.jewel_metal[12] == "bronze"
     assert bronze_ring.jewel_metal[4] == "bronze"
-    assert bronze_ring.jewel_metal[0] == "silver"     # accent stays silver
+    assert bronze_ring.jewel_metal[0] == "bronze"     # TWO METALS RETIRED: no accent
     assert missing_assets(build_skin(replace(Settings(), ring_finish="bronze"))) == []
     from config import constants as c
     # The EAGER door: the dial itself now draws the gold master until the

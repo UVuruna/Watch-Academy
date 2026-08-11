@@ -26,7 +26,7 @@ for the procedure):
 1. **Skin building from settings** — the module-level `build_skin`/
    `_compose_skin`/`apply_display_settings`/`display_for`/
    `_overlay_display_settings` functions and their small pure helpers
-   (`_jewel_metal`, `_ring_two_metals`, `_ring_eye_shine`, `_theme_metal`,
+   (`_jewel_metal`, `_ring_eye_shine`, `_theme_metal`,
    `_resolve_hands`, `_themed_weekday_set`,
    `_pantheon_weekday_set`, `_classic_slot_theme`) — turning a `Settings`
    into a `SkinDefinition`. Pure, testable, no `QObject` involved.
@@ -255,7 +255,7 @@ deliberately UNTRANSLATED (a name, not chrome). The tray hover tooltip
 always passes `True`; the menu TITLE row passes `watch_count() >= 2`.
 
 ### Small pure helpers
-`_jewel_metal`, `_ring_two_metals`, `_ring_eye_shine`, `_theme_metal`,
+`_jewel_metal`, `_ring_eye_shine`, `_theme_metal`,
 `_location_flash_text` (R-30, the flash's own "CITY, COUNTRY" formatter),
 `_location_crown_text` (RING VERDICTS round, owner decree 2026-08-05 —
 uppercases and filters `_location_flash_text`'s own output down to
@@ -267,8 +267,8 @@ can draw), `_resolve_hands`, `_next_rotation_theme`,
 the skin-building responsibility.
 
 **THE LOCATION CROWN (RING VERDICTS round, owner decree 2026-08-05):**
-a per-ring toggle (`Settings.ring_crown_location`, keyed by ring name
-like `ring_two_metals`) that REPLACES whatever crown text the active
+a per-ring toggle (`Settings.ring_crown_location`, keyed by ring name)
+that REPLACES whatever crown text the active
 ring carries — a bundled preset's own crown text or a custom ring's typed
 text — with the active location's "CITY, COUNTRY", available for
 presets and custom rings alike (`_compose_skin`). `WatchController`

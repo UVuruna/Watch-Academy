@@ -47,11 +47,11 @@ def fold_ring_name(raw_name: str, by_fold: dict) -> str | None:
 
 
 def load_named_dict(raw: dict, key: str, by_fold: dict, valid) -> dict:
-    """One stored per-ring-name dict (`ring_two_metals`, `ring_eye_shine`,
-    `ring_inner`, the crown-text fields), loaded with the shared lenient
-    policy: a value failing `valid(value)` or a name resolving to
-    nothing loaded is silently dropped rather than corrupting the whole
-    file over one stale entry (Rule #5, one loader for all five)."""
+    """One stored per-ring-name dict (`ring_eye_shine`, `ring_inner`,
+    the crown-text fields), loaded with the shared lenient policy: a
+    value failing `valid(value)` or a name resolving to nothing loaded
+    is silently dropped rather than corrupting the whole file over one
+    stale entry (Rule #5, one loader for all)."""
     result = {}
     for raw_name, value in dict(raw.get(key, {})).items():
         if not valid(value):

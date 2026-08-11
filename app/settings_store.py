@@ -59,37 +59,27 @@ class Settings:
     # The user's custom ring cards ({name, positions, letters}) — merged
     # with Database/ring_presets.json by data/rings.py.
     custom_rings: tuple = ()
-    # THE METAL-SPLIT OPTION (TASK 3, MASON/ICONS round, owner verdicts
-    # 2026-07-19, third batch): per-preset choice between the 3-3
-    # two-metal split and one finish on all six, for every seal preset
-    # that carries its own `triangle` override (Mason/Omega/Templar
-    # today) — keyed by preset name, like `theme_metals` below. A
-    # preset absent here falls back to `constants.RING_TWO_METALS_DEFAULT`
-    # (`app.controller._ring_two_metals` resolves both).
-    ring_two_metals: dict = field(default_factory=dict)
     # THE EYE'S SHINE (DOLLAR/EYE round, owner decree 2026-07-27):
     # per-preset choice between the Eye of Providence with the glory
     # of rays and the plain eye, for every preset seating the adaptive
-    # eye glyph (the Dollar today) — keyed by preset name, exactly
-    # like `ring_two_metals` above; absent presets fall back to
-    # `constants.RING_EYE_SHINE_DEFAULT`
+    # eye glyph (the Dollar today) — keyed by preset name; absent
+    # presets fall back to `constants.RING_EYE_SHINE_DEFAULT`
     # (`app.controller._ring_eye_shine` resolves both).
     ring_eye_shine: dict = field(default_factory=dict)
     # COMPOSITIONAL RING MODEL (owner decree 2026-08-05): the active
-    # preset's inner-band pick, keyed by preset name like
-    # `ring_two_metals` (`app.controller._resolve_ring_inner`). Crown
-    # text for CUSTOM rings: free-typed inscription + orientation
-    # ("top"/"bottom"), keyed by ring name — bundled presets' motto
-    # text lives in Database/ring_presets.json instead.
+    # preset's inner-band pick, keyed by preset name
+    # (`app.controller._resolve_ring_inner`). Crown text for CUSTOM
+    # rings: free-typed inscription + orientation ("top"/"bottom"),
+    # keyed by ring name — bundled presets' motto text lives in
+    # Database/ring_presets.json instead.
     ring_inner: dict = field(default_factory=dict)
     custom_ring_crown_text: dict = field(default_factory=dict)
     custom_ring_crown_orientation: dict = field(default_factory=dict)
     # THE LOCATION CROWN (RING VERDICTS round, owner decree 2026-08-05):
     # per-ring choice to replace the crown text (a preset's own motto or
     # a custom ring's typed text) with the ACTIVE location ("CITY,
-    # COUNTRY") — keyed by ring name exactly like `ring_two_metals`,
-    # available for bundled presets AND custom rings alike
-    # (`app.controller._compose_skin`).
+    # COUNTRY") — keyed by ring name, available for bundled presets AND
+    # custom rings alike (`app.controller._compose_skin`).
     ring_crown_location: dict = field(default_factory=dict)
     # Install defaults per the owner's 2026-07-12 list: hexa primary,
     # gradient-dark Umbra, atmosphere Earth, STEEL hands, 720 dial.
@@ -483,14 +473,16 @@ class SettingsStore:
             ring = fold_ring_name(ring_value, by_fold)
             if ring is None:
                 raise ValueError(f"ring {ring_value!r} unknown")
-            # THE METAL-SPLIT OPTION (TASK 3): per-preset dict, same
-            # lenient policy `theme_metals` already uses below — a
-            # non-bool value or a name that resolves to nothing loaded
-            # (a stale bundled rename, a deleted custom ring) is simply
-            # dropped rather than corrupting the whole file over one
-            # stale entry.
+            # Per-preset dict, same lenient policy `theme_metals`
+            # already uses below — a non-bool value or a name that
+            # resolves to nothing loaded (a stale bundled rename, a
+            # deleted custom ring) is simply dropped rather than
+            # corrupting the whole file over one stale entry. A
+            # leftover `ring_two_metals` key from an old settings file
+            # (TWO METALS retired, owner decree 2026-08-11) is simply
+            # never read — `load_named_dict` only reads keys it is
+            # told to.
             is_bool = lambda v: isinstance(v, bool)
-            ring_two_metals = load_named_dict(raw, "ring_two_metals", by_fold, is_bool)
             ring_eye_shine = load_named_dict(raw, "ring_eye_shine", by_fold, is_bool)
             ring_inner = load_named_dict(
                 raw, "ring_inner", by_fold, constants.RING_INNERS.__contains__
@@ -717,7 +709,6 @@ class SettingsStore:
                 timezone=timezone,
                 ring=ring,
                 custom_rings=custom_rings,
-                ring_two_metals=ring_two_metals,
                 ring_eye_shine=ring_eye_shine,
                 ring_inner=ring_inner,
                 custom_ring_crown_text=custom_ring_crown_text,
@@ -826,7 +817,6 @@ class SettingsStore:
             "ring_tint": settings.ring_tint,
             "ring_finish": settings.ring_finish,
             "custom_rings": [dict(card) for card in settings.custom_rings],
-            "ring_two_metals": dict(settings.ring_two_metals),
             "ring_eye_shine": dict(settings.ring_eye_shine),
             "ring_inner": dict(settings.ring_inner),
             "custom_ring_crown_text": dict(settings.custom_ring_crown_text),

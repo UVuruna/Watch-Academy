@@ -8,7 +8,6 @@
    icon = `thumbs.art_thumbnail(RING_OUTER_ART_DIR / RING_OUTERS[outer]["file"])`,
    tooltip = "Locked outer: {outer}"
 🔘 finish pills (gold / silver / bronze / thematic)
-☑️ "Two metals" — only when the active card's outer carries a triangle
 ☑️ "Shine" — only when the active card seats the adaptive Eye glyph
 📦 Inner gallery — one tile per `RING_INNERS` entry, icon =
    `thumbs.art_thumbnail(RING_INNER_ART_DIR / f"{inner}.png")`

@@ -31,7 +31,7 @@ silently dropped.
 | `thumbs.py` | Algorithmic | R-33: the disk-cached thumbnail service (ring/hand art + the pointer palette-swatch fallback) — [about](__about/thumbs.md) · [flow](__flow/thumbs.md) |
 | `widgets.py` | Standard | shared pill/tile builders every section imports — [about](__about/widgets.md) |
 | `pointer.py` | Algorithmic | R-04/R-05: pointer gallery, shape/curvature/edge, night borders, Daylight-Night — [about](__about/pointer.md) · [flow](__flow/pointer.md) |
-| `ring.py` | Algorithmic | R-10/R-13: ring gallery, finish, two-metals/shine, Custom ring… — [about](__about/ring.md) · [flow](__flow/ring.md) |
+| `ring.py` | Algorithmic | R-10/R-13: ring gallery, finish, shine, Custom ring… — [about](__about/ring.md) · [flow](__flow/ring.md) |
 | `numerals.py` | Standard | THE MODE (Geocentric/Heliocentric) plus the two live-rendered numeral bands' faces, sizes, seating, relief and the live crown's format — [about](__about/numerals.md) |
 | `bodies.py` | Algorithmic | R-06/R-14 + the Moving Bodies (2026-08-10): hand-pack gallery, Earth, Moon (unlit half, crossing, Horizon Band), Eclipses, Stations — [about](__about/bodies.md) · [flow](__flow/bodies.md) |
 | `umbra_aura.py` | Algorithmic | umbra form + contrast pills — [about](__about/umbra_aura.md) · [flow](__flow/umbra_aura.md) |

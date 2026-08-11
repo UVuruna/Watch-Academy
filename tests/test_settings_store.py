@@ -212,7 +212,6 @@ def test_display_choices_round_trip(store):
         show_octa_slot=False,
         language="sr-Latn",
         ring="LOOP",
-        ring_two_metals={"Dollar": False, "The One": True},
         ring_eye_shine={"Dollar": False},
         theme_metals={"greek": "gold", "norse": "silver"},
         theme_metal_follow_ring=True,
@@ -483,27 +482,17 @@ def test_custom_ring_card_letters_field_migrates_to_jewels(store):
     assert validate_preset(both_card)["jewels"] == ("W", "X", "Y", "Z")
 
 
-def test_ring_two_metals_round_trips_and_drops_stale_entries(store):
-    """TASK 3 (MASON/ICONS round): the per-preset "Two metals" choice
-    round-trips keyed by preset name; a non-bool value or a name that
-    resolves to nothing loaded is silently dropped on load — the SAME
-    lenient policy `theme_metals` already uses, rather than corrupting
-    the whole file over one stale entry."""
-    saved = replace(
-        Settings(), ring_two_metals={"Dollar": False, "The One": True},
-    )
-    store.save(saved)
-    assert store.load() == saved
+def test_stale_ring_two_metals_key_is_silently_ignored_on_load(store):
+    """TWO METALS RETIRED (owner decree 2026-08-11): a settings file
+    written by an older build still carries a `ring_two_metals` key —
+    the loader must not choke on it, since it simply never reads that
+    key any more (unknown keys in the raw JSON are never validated)."""
+    store.save(Settings())
     raw = store.path.read_text(encoding="utf-8").replace(
-        '"Dollar": false', '"Dollar": false, "MASON G": true, "Ghost": true'
-    ).replace('"The One": true', '"The One": "yes"')
+        "{", '{"ring_two_metals": {"Dollar": false, "Ghost": true}, ', 1
+    )
     store.path.write_text(raw, encoding="utf-8")
-    lenient = store.load()
-    # "MASON G" folds onto "Dollar" (rename migration) but "Dollar" was
-    # already written first, so the raw dict's OWN later key wins —
-    # both resolve to the same True; the unknown "Ghost" name and the
-    # non-bool "yes" value are both dropped.
-    assert lenient.ring_two_metals == {"Dollar": True}
+    assert store.load() == Settings()
 
 
 def test_custom_ring_thematic_pick_round_trips(store):

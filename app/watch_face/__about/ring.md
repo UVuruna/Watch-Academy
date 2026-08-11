@@ -8,8 +8,9 @@ COMPOSITIONAL RING MODEL (owner decree 2026-08-05): preset gallery
 (thumbnail tiles of each preset's own COMPUTED preview — the outer
 plate with its jewels stamped at their seats, ring_rework §5, owner
 ruling 2026-08-06 — tooltip stating the locked outer AND the card's own
-About text), the finish pills, the Two-metals/Shine checkboxes
-(unchanged), an INNER gallery (eight tiles — user-changeable
+About text), the finish pills, the Shine checkbox (unchanged; TWO
+METALS retired — owner decree 2026-08-11), an INNER gallery (eight
+tiles — user-changeable
 independent of the locked outer), a word-wrapped label showing the
 ACTIVE preset's own About (THE SPACE & LEGIBILITY LAW — never only a
 tooltip) and a Crown Text group (read-only preset text, or a custom
@@ -33,7 +34,7 @@ checkbox that replaces the crown text with the active location's own
 - [Config (folder)](../../../config/___config.md) — `RING_OUTERS`,
   `RING_OUTER_LOCK`, `RING_INNERS`, `RING_INNER_PRESET_DEFAULT`,
   `RING_INNER_DEFAULT`, `RING_FINISHES`, `RING_EYE_GLYPH`,
-  `RING_TWO_METALS_DEFAULT`, `RING_EYE_SHINE_DEFAULT`,
+  `RING_EYE_SHINE_DEFAULT`,
   `RING_CROWN_TEXT_CHARSET`
 
 ### Used by

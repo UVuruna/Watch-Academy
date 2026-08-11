@@ -452,13 +452,6 @@ def test_every_bundled_preset_is_registered(app):
     assert sorted(ring_presets({})) == sorted(BUNDLED)
 
 
-def _accent_metal(finish: str) -> str:
-    """The ONE documented accent a preset's own triangle split may wear
-    beside its finish (`app.controller._jewel_metal`) — restated here so
-    the law is checked against the rule, not against the code."""
-    return "gold" if finish == "silver" else "silver"
-
-
 @pytest.mark.parametrize("ring", BUNDLED)
 @pytest.mark.parametrize("finish", ["gold", "silver", "bronze"])
 def test_crown_metal_is_the_presets_finish_metal(app, ring, finish):
@@ -467,13 +460,10 @@ def test_crown_metal_is_the_presets_finish_metal(app, ring, finish):
     and, at most, its ONE documented accent. No third metal, and no
     preset pinning its crown away from the family its jewels are in.
 
-    FINDING (2026-08-07): the Dollar is the one preset whose split is
-    3+3 rather than 3+1 — the banknote's own Trinity/Union reading of
-    the hexagram (CANON.md §The Banknote), a settled ruling this round
-    does not reopen. It still satisfies the law as stated: BOTH its
-    groups are the finish and its accent, and the crown is the finish.
-    That is why the law is written as "one family", not "a strict
-    majority" — a majority test would have condemned a ruled design."""
+    TWO METALS RETIRED (owner decree 2026-08-11): the Dollar's former
+    3+3 Trinity/Union split (CANON.md §The Banknote) is gone along with
+    every other preset's split — every bundled preset now wears
+    strictly ONE metal across crown and jewels alike."""
     skin = build_skin(replace(Settings(), ring=ring, ring_finish=finish))
     crown_metal = skin.ring.crown_text_metal
     assert crown_metal == finish, ring
@@ -481,22 +471,14 @@ def test_crown_metal_is_the_presets_finish_metal(app, ring, finish):
         skin.ring.jewel_metal.get(hour, "gold") for hour in skin.ring.jewels
     ]
     assert metals, ring
-    family = {finish, _accent_metal(finish)}
-    assert set(metals) <= family, (
-        f"{ring}: jewels wear {sorted(set(metals))}, outside the preset's "
-        f"own family {sorted(family)} — per-preset metal drift"
+    assert set(metals) == {finish}, (
+        f"{ring}: jewels wear {sorted(set(metals))}, not the single "
+        f"finish {finish!r} — TWO METALS retired, no split may remain"
     )
     assert crown_metal in metals, (
         f"{ring}: the crown wears {crown_metal} but NO jewel does — the "
         f"crown and the jewels must be one family"
     )
-    # Only a preset with its own ruled triangle split may carry two
-    # metals at all; every other bundled preset is strictly one.
-    if len(set(metals)) > 1:
-        assert ring in ("DOMY", "LOOP", "Dollar"), (
-            f"{ring} split its jewels into two metals without a ruled "
-            f"triangle — the representative-presets law forbids it"
-        )
 
 
 @pytest.mark.parametrize("ring", BUNDLED)

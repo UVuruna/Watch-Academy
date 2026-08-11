@@ -15,7 +15,6 @@ Settings (frozen dataclass)
   Ring
     ring, ring_tint, ring_finish
     custom_rings                 tuple of {name, positions, jewels, thematic?}
-    ring_two_metals              {preset_name: bool}
     ring_eye_shine               {preset_name: bool}
   Pointer / Wheel
     pointer, umbra_form, umbra_contrast

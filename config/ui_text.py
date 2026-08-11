@@ -47,12 +47,10 @@ UI_STRINGS: tuple[str, ...] = (
     "Weekday names", "Archetype names",
     "The day name written on the weekday bodies.",
     "The archetype figures' names.",
-    # "Two metals" (TASK 3, MASON/ICONS round) never joined the corpus
-    # when the menu toggle was added — closed here alongside the Design
-    # window's own copy of it (R5 MENU REWORK, Rule #5, one table).
     # "Shine" (DOLLAR/EYE round, owner decree 2026-07-27): the Eye of
     # Providence's per-preset rays toggle on the Design ▸ Ring tab.
-    "Two metals", "Shine",
+    # ("Two metals" retired — owner decree 2026-08-11.)
+    "Shine",
     # THE POINTERS REWORK phase 3 (owner sheet UV/Pointers.png,
     # 2026-07-29): the Design ▸ Pointer tab's new SHAPE/CURVATURE/EDGE/
     # NIGHT BORDERS rows. "Star" already ships above (the opacity

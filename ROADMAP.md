@@ -269,13 +269,10 @@ lives in [The DOMY Canon](CANON.md). The phone edition's sealed charter —
   "Mason", "NUMBERS" → "Omega" (`app.settings_store` migrates a stored
   old name), plus a new bundled **Templar** preset (the seal layout, all
   six positions wearing the templar-cross glyph, no crown text, no legend).
-  (3) **THE METAL-SPLIT OPTION** — Mason/Omega/Templar (every seal
-  preset carrying its own `triangle` override) now offer a per-preset
-  "Two metals" toggle in the Ring menu (`Settings.ring_two_metals`,
-  `app.controller._ring_two_metals`, `constants.
-  RING_TWO_METALS_DEFAULT` — Mason on, Omega/Templar off, matching the
-  pre-round look) switching between the 3-3 split and one finish on all
-  six. (4) **OWNER ICONS WIRED** — the four owner-approved icons
+  (3) **THE METAL-SPLIT OPTION** (RETIRED, owner decree 2026-08-11 —
+  every ring now wears a single metal; the per-preset "Two metals"
+  toggle and its settings/constants are gone). (4) **OWNER ICONS
+  WIRED** — the four owner-approved icons
   (`assets/icons/light.png`/`dark.svg`/`eclipse_sun.svg`/
   `eclipse_moon.png`, copied from his `UV/icons/` staging) replace the
   Quick Jump pole rows' interim ⚪/⚫ emoji (documented emoji fallback

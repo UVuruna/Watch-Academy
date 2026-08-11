@@ -2,11 +2,12 @@
 (owner decree 2026-08-05): a preset gallery (thumbnail tiles of the
 LOCKED outer — the tooltip states the lock), an INNER gallery (eight
 tiles, applies to the active preset — user-changeable independent of
-the outer's lock), the jewels-finish pills, the Two-metals/Shine
-checkboxes (unchanged, R-10/TASK 3/DOLLAR-EYE) and R-13's "Custom
-ring…" button, which opens the custom-ring flow's outer/jewel/crown
-builder in the Settings dialog rather than duplicating its inline
-widgets (see ring.md's Design Decisions).
+the outer's lock), the jewels-finish pills, the Shine checkbox
+(unchanged, R-10/TASK 3/DOLLAR-EYE) and R-13's "Custom ring…" button,
+which opens the custom-ring flow's outer/jewel/crown builder in the
+Settings dialog rather than duplicating its inline widgets (see
+ring.md's Design Decisions). TWO METALS retired (owner decree
+2026-08-11) — every jewel roster is single-metal now.
 """
 
 from PySide6.QtCore import Qt, QRegularExpression
@@ -55,21 +56,6 @@ def build(settings, setters: dict, tr) -> QWidget:
     layout.addWidget(_preset_about(presets, settings.ring, tr))
     layout.addLayout(_finish_row(settings, setters, tr))
     active_card = presets[settings.ring]
-    outer = constants.RING_OUTERS[active_card["outer"]]
-    if active_card["triangle"] is not None or outer["triangle"]:
-        # Same resolution `app.controller._ring_two_metals` uses: the
-        # stored per-preset choice, else the owner's documented default,
-        # else the outer's own nature.
-        two_metals = settings.ring_two_metals.get(
-            settings.ring,
-            constants.RING_TWO_METALS_DEFAULT.get(
-                settings.ring, bool(outer["triangle"])
-            ),
-        )
-        checkbox = QCheckBox(tr("Two metals"))
-        checkbox.setChecked(two_metals)
-        checkbox.toggled.connect(setters["ring_two_metals"])
-        layout.addWidget(checkbox)
     if constants.RING_EYE_GLYPH in active_card["jewels"]:
         shine = settings.ring_eye_shine.get(
             settings.ring,
@@ -149,7 +135,7 @@ def _inner_group(settings, setters, tr) -> QGroupBox:
     """THE INNER GALLERY (owner decree 2026-08-05): eight tiles, one per
     `constants.RING_INNERS` variant — applies to the ACTIVE preset (or
     the active custom ring), stored per-preset-name exactly like
-    `ring_two_metals`/`ring_eye_shine` (`Settings.ring_inner`,
+    `ring_eye_shine` (`Settings.ring_inner`,
     `app.controller._resolve_ring_inner`)."""
     group = QGroupBox(tr("Inner (minute track)"))
     default = constants.RING_INNER_PRESET_DEFAULT.get(

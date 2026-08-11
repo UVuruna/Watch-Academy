@@ -106,46 +106,14 @@ def _jewel_metal(position: int, outer_metal: dict, finish: str) -> str:
     TRIANGLE and the remaining letter wears the ACCENT metal (gold ->
     3 gold + 1 silver; silver -> 3 silver + 1 gold; bronze -> 3 bronze
     + 1 silver); "hexa" wears the ONE finish metal on all six — UNLESS
-    the ring preset overrides the triangle (ROADMAP 15b, Dollar:
-    CANON.md §The Banknote reads the hexagram as TWO triangles, the
-    Trinity 12/20/4 and the Union 16/24/8 — `_compose_skin` passes the
-    preset's own `triangle` here when it carries one AND the owner's
-    per-preset "Two metals" toggle is on (TASK 3, MASON/ICONS round,
-    `_ring_two_metals`), so the Trinity vertices wear the finish metal
-    and the Union vertices the accent, the same rule as the 4-position
-    outers applied to a 3+3 split; DOMY/LOOP's own bot_cross/top_cross
-    triangle, and any eligible preset with the toggle off, keep the
-    plain one-metal reading)."""
+    the ring preset overrides the triangle (ROADMAP 15b — TWO METALS
+    RETIRED, owner decree 2026-08-11: every ring now wears the plain
+    one-metal reading; `outer_metal["triangle"]` is never populated by
+    a resolved skin any more, so this branch is dead in practice and
+    kept only as the shared 4-position rule's general form)."""
     if not outer_metal["triangle"] or position in outer_metal["triangle"]:
         return finish
     return "gold" if finish == "silver" else "silver"
-
-
-def _ring_two_metals(settings: Settings, card: dict) -> bool:
-    """Whether the ACTIVE preset splits its jewels into two metal
-    groups or wears one finish on all of them (TASK 3, MASON/ICONS
-    round; WIDENED in the ENLARGE/THEMATIC round, owner 2026-07-27:
-    "hoću da Two Metals opcija bude i za DOMY tj LOOP"). Eligible now:
-    every preset with its OWN `triangle` override (Dollar today, the
-    only preset on the "hexa" outer) AND every preset whose OUTER
-    carries a triangle by default (bot_cross/top_cross — DOMY, LOOP,
-    custom rings on either outer), whose 3+1 split used to be
-    unconditional. Every other outer (cross/full/octa, and a
-    triangle-less hexa custom card) stays ineligible (always False —
-    nothing to split; this is also why Templar/The One lost the toggle
-    when they moved off "hexa" onto cross/full, owner decree
-    2026-08-05). The user's stored per-preset choice
-    (`Settings.ring_two_metals`) wins; absent, the owner's documented
-    per-preset default (`constants.RING_TWO_METALS_DEFAULT` — Dollar
-    True), else the outer's own nature: bot_cross/top_cross default ON
-    (today's look), hexa default OFF."""
-    outer = constants.RING_OUTERS[card["outer"]]
-    if card["triangle"] is None and not outer["triangle"]:
-        return False
-    default = constants.RING_TWO_METALS_DEFAULT.get(
-        card["name"], bool(outer["triangle"])
-    )
-    return settings.ring_two_metals.get(card["name"], default)
 
 
 def _ring_eye_shine(settings: Settings, card: dict) -> bool:
@@ -154,8 +122,7 @@ def _ring_eye_shine(settings: Settings, card: dict) -> bool:
     seating the ADAPTIVE eye glyph (`constants.RING_EYE_GLYPH`, the
     Dollar today) are eligible; a custom ring with one of the four
     EXPLICIT eye variants has its rays baked into the chosen glyph and
-    always reads False here. Same resolution shape as
-    `_ring_two_metals`: the user's stored per-preset choice
+    always reads False here. The user's stored per-preset choice
     (`Settings.ring_eye_shine`) wins; absent, the owner's documented
     per-preset default (`constants.RING_EYE_SHINE_DEFAULT`, Dollar
     True — the banknote's own eye radiates)."""
@@ -463,15 +430,9 @@ def _location_crown_text(text: str) -> str:
 def _compose_skin(settings: Settings, location_display: str = ""):
     card = ring_presets(settings.custom_rings)[settings.ring]
     outer = constants.RING_OUTERS[card["outer"]]
-    # A preset may override the "hexa" outer's own (empty) triangle —
-    # ROADMAP 15b, Dollar's Trinity/Union metal split — but only when
-    # the owner's per-preset "Two metals" toggle is actually on
-    # (TASK 3, MASON/ICONS round) — see `_jewel_metal`'s and
-    # `_ring_two_metals`'s docstrings.
-    two_metals = _ring_two_metals(settings, card)
-    metal_layout = {
-        "triangle": (card["triangle"] or outer["triangle"]) if two_metals else ()
-    }
+    # TWO METALS RETIRED (owner decree 2026-08-11): every ring wears
+    # the plain one-metal reading now — see `_jewel_metal`'s docstring.
+    metal_layout = {"triangle": ()}
     # The Eye's SHINE (DOLLAR/EYE round, owner decree 2026-07-27): the
     # adaptive eye glyph swaps its whole stem for the glory-of-rays
     # master when the per-preset toggle is on — see `_ring_eye_shine`.
@@ -556,8 +517,8 @@ def _compose_skin(settings: Settings, location_display: str = ""):
     # when the per-ring toggle is on, the ACTIVE location REPLACES
     # whatever crown text the ring carries (a preset's own crown text or a
     # custom ring's typed text) — available for bundled presets AND
-    # custom rings alike, since it is keyed by ring name exactly like
-    # `ring_two_metals`. `location_display` is the "CITY, COUNTRY" text
+    # custom rings alike, since it is keyed by ring name.
+    # `location_display` is the "CITY, COUNTRY" text
     # `WatchController._active_location_display` already resolves
     # through `_location_flash_text` (R-30's own formatter — reused,
     # never duplicated); an empty/unfiltered result (no controller
@@ -2454,26 +2415,15 @@ class WatchController(QObject):
         self._settings = replace(self._settings, ring=ring)
         self._install_skin(build_skin(self._settings, self._active_location_display))
         self._flush_position()
-        # The "Two metals" toggle's own eligibility/checked state
-        # depends on the ACTIVE preset (TASK 3) — re-gate in place, the
-        # same stay-open pattern every other menu re-sync uses.
+        # A ring switch may change eligibility for other per-preset
+        # toggles — re-gate in place, the same stay-open pattern every
+        # other menu re-sync uses.
         self._refresh_menu_gating()
-
-    def _set_ring_two_metals(self, checked: bool) -> None:
-        """TASK 3 (MASON/ICONS round): the active preset's own metal-
-        split choice, stored keyed by preset name
-        (`Settings.ring_two_metals`, like `theme_metals`)."""
-        metals = dict(self._settings.ring_two_metals)
-        metals[self._settings.ring] = checked
-        self._settings = replace(self._settings, ring_two_metals=metals)
-        self._install_skin(build_skin(self._settings, self._active_location_display))
-        self._flush_position()
 
     def _set_ring_eye_shine(self, checked: bool) -> None:
         """DOLLAR/EYE round (owner decree 2026-07-27): the active
         preset's own Eye-of-Providence rays choice, stored keyed by
-        preset name (`Settings.ring_eye_shine`, exactly like
-        `ring_two_metals` above)."""
+        preset name (`Settings.ring_eye_shine`)."""
         shine = dict(self._settings.ring_eye_shine)
         shine[self._settings.ring] = checked
         self._settings = replace(self._settings, ring_eye_shine=shine)
@@ -2483,8 +2433,7 @@ class WatchController(QObject):
     def _set_ring_inner(self, inner: str) -> None:
         """THE COMPOSITIONAL RING MODEL (owner decree 2026-08-05): the
         active preset's own inner-band choice, stored keyed by preset
-        name (`Settings.ring_inner`, exactly like `ring_two_metals`
-        above) — the outer stays locked (bundled) or fixed at creation
+        name (`Settings.ring_inner`) — the outer stays locked (bundled) or fixed at creation
         (custom), only the inner is ever swapped in place."""
         inner_choices = dict(self._settings.ring_inner)
         inner_choices[self._settings.ring] = inner
@@ -2521,7 +2470,7 @@ class WatchController(QObject):
     def _set_ring_crown_location(self, checked: bool) -> None:
         """THE LOCATION CROWN (RING VERDICTS round, owner decree
         2026-08-05): the active ring's own choice, stored keyed by ring
-        name exactly like `ring_two_metals` — available for a bundled
+        name — available for a bundled
         preset (replacing its own crown text) or a custom ring (replacing
         its typed crown text) alike."""
         choices = dict(self._settings.ring_crown_location)
@@ -3258,7 +3207,6 @@ class WatchController(QObject):
             "ring_finish": wrap(
                 lambda v: self._set_display_choice("ring_finish", v)
             ),
-            "ring_two_metals": wrap(self._set_ring_two_metals),
             "ring_eye_shine": wrap(self._set_ring_eye_shine),
             "ring_inner": wrap(self._set_ring_inner),
             "custom_ring_crown_text": wrap(self._set_custom_ring_crown_text),

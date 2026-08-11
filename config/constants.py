@@ -1328,7 +1328,7 @@ RING_INNERS = (
 # "seconds_cross" (numbers + the cross-marker overlay, matching its
 # own outer); The One reads "simple_octa" (ticks + the octa marker,
 # matching its own new octa outer). Still user-changeable in
-# Settings ▸ Ring like `RING_TWO_METALS_DEFAULT`/`RING_EYE_SHINE_DEFAULT`.
+# Settings ▸ Ring like `RING_EYE_SHINE_DEFAULT`.
 RING_INNER_PRESET_DEFAULT = {
     "DOMY": "seconds", "LOOP": "seconds", "Dollar": "seconds",
     "Templar": "seconds_cross", "The One": "simple_octa",
@@ -1339,27 +1339,17 @@ RING_INNER_PRESET_DEFAULT = {
     "CHI": "simple",
 }
 RING_INNER_DEFAULT = "simple"       # every custom ring's own fallback
-# THE METAL-SPLIT OPTION (TASK 3, MASON/ICONS round, owner verdicts
-# 2026-07-19, third batch): for every seal preset that carries its own
-# `triangle` override (Mason/Omega/Templar today — `data.rings.
-# validate_preset`'s optional card field) the owner can choose EITHER
-# the 3-3 two-metal split OR one finish on all six
-# (`app.controller._ring_two_metals`, `Settings.ring_two_metals`). This
-# is the per-preset DEFAULT when the user has never touched the toggle
-# for that preset — Mason keeps its pre-Task-3 split look, every other
-# eligible preset starts single-metal (documented owner spec: "default
-# matching today's look"). A preset absent here (or one with no
-# `triangle` at all) simply defaults to False — ineligible presets
-# never read this table.
-RING_TWO_METALS_DEFAULT = {"Dollar": True}
+# TWO METALS RETIRED (owner decree 2026-08-11): the per-preset 3-3
+# metal split toggle (TASK 3, MASON/ICONS round) and its
+# `RING_TWO_METALS_DEFAULT` table are gone — every ring now wears the
+# plain one-metal reading.
 # THE EYE AT THE APEX (DOLLAR/EYE round, owner decree 2026-07-27): the
 # Dollar preset's 12h seat wears the EYE OF PROVIDENCE instead of the
 # letter G (CANON.md §The Banknote, CUBE.md §The Banknote Seal). "👁"
 # is the ADAPTIVE glyph — its canonical Eye.png resolves to
 # Eye_gem/Eye_gpt per the Settings art source (config.paths.art_file),
 # and the per-preset "Shine" toggle (Settings.ring_eye_shine,
-# app.controller._ring_eye_shine — same resolution shape as the
-# two-metals toggle above) swaps the whole stem for the glory-of-rays
+# app.controller._ring_eye_shine) swaps the whole stem for the glory-of-rays
 # master Eye_shine.png. The four EXPLICIT variants in the letter
 # library below are the CUSTOM ring builder's own picks (owner: "any
 # of the four") — source and rays baked into the chosen glyph,
