@@ -74,21 +74,28 @@ Angles run **clockwise from the top**. In mode 1 an hour sits at
 `deg(h) = (h − 12) × 15`; in mode 2 the solar offset is added to that and
 the result folded into (−180°, 180°].
 
-**`arc`** — a numeral standing on a **square angle** (0°, 90°, 180°, 270°)
-stands upright. Every other numeral takes the angle it sits on, and the
-lower half turns a further 180° so nothing ever reads upside down.
+**`arc`** (owner amendment 2026-08-11, THE FLOWING SIDES) — only **TOP**
+(0°) and **BOTTOM** (180°) stand upright. The two SIDE squares (90°,
+270°/−90°) no longer stand upright of their own right — they FLOW with
+whichever half they open clockwise: the +90° seat turns with the lower
+half that follows it (the extra 180° flip), the −90° seat turns with the
+upper half that follows it (no flip). Every non-square numeral takes the
+angle it sits on, and the lower half turns a further 180° so nothing ever
+reads upside down — on BOTH signs of the fold.
 
 ```
-rot(deg) = 0                if deg mod 90 == 0        the square angles
-         = deg + 180        if |deg| > 90             the lower half
-         = deg              otherwise                 the upper half
+rot(deg) = 0                if deg == 0 or |deg| == 180     top / bottom only
+         = deg + 180        if |deg| > 90 or deg == 90      lower half, incl. the +90 seat
+         = deg              otherwise                       upper half, incl. the -90 seat
 ```
 
 **`upright`** — `rot = 0` everywhere.
 
-With the ring square-on this puts 12, 18, 0 and 6 upright. The moment the
-ring turns, those four ride the arc like everyone else, and whichever
-numerals have landed on the square angles stand up in their place.
+With the ring square-on this puts only 12 and 0 upright; 18 (at +90) turns
+with the lower half and 6 (at −90) rides the upper half unflipped — the
+former "all four square angles stand upright" rule is gone. The moment the
+ring turns, every numeral (12/18/0/6 included) rides the arc like anyone
+else, seated by the angle it lands on.
 
 Labels are written bare: `0, 1, 2 … 23`. No leading zero. The minute band
 labels every fifth minute: `0, 5, 10 … 55`.

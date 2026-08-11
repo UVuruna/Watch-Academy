@@ -244,18 +244,37 @@ def inner_number_clear_regions(spec: BandSpec) -> QPainterPath:
     """THE NUMBER'S OWN RECTANGLE (owner correction 2026-08-11, the
     '15' screenshot: the plate's big five-minute stroke showed BETWEEN
     the digits — "nothing renders inside the imagined rectangle of the
-    numeral", the same principle the bodies' pointer already obeys
-    against the body's circle). One padded, seat-rotated rectangle per
-    minute numeral, in LOGICAL dial-centred coordinates —
-    `render.layers.ring.RingLayer` clips the base-plate blit with the
-    complement, so the owner's art is masked there instead of drawn
-    over. Empty for a variant whose seats all carry arrows."""
+    numeral"). One padded, seat-rotated rectangle per minute numeral,
+    in LOGICAL dial-centred coordinates — `render.layers.ring.RingLayer`
+    clips the base-plate blit with the complement, so the owner's art
+    is masked there instead of drawn over. Empty for a variant whose
+    seats all carry arrows.
+
+    TWO BOUNDS on the cut (owner same-day corrections, slika 1 and 8):
+
+    1. **The 360 hairlines are the cutting limit** ("oni ne smeju biti
+       iseceni"): the whole region is capped INSIDE the hairline tips'
+       circle (`dial.RING_INNER_TICK_INNER_FRACTION`), so a padded or
+       rotated rectangle can never reach into the little points.
+    2. **No shortened big stroke** ("ovaj skraceni tick treba da ne
+       prikazuje... ali da prikazuje ova 2 360 ticka levo i desno"):
+       the cap alone would leave the seat's own big stroke as a cut
+       stub floating above the numeral, so a NARROW radial wedge at
+       the seat's exact angle removes that stroke WHOLE — from below
+       the content line to past the tick roots — while its two
+       neighbouring hairlines (a full degree away, outside the
+       wedge's ±0.7 deg) stay visible."""
     shrink = interior_scale(spec.ring_size)
     unit = _unit_px(spec.pixels) * shrink
     font = numeral_font("inner", spec.face, spec.size_units * unit)
     pad = unit * dial.NUMERAL_GLOW_BORDER_UNITS * 2.0
     scale = 1.0 / spec.dpr
+    half_px = spec.pixels / 2.0
     region = QPainterPath()
+    # WINDING fill: the seat wedge OVERLAPS the numeral's rectangle,
+    # and the default odd-even rule would cancel the overlap into a
+    # hole — the stroke's middle would render through the mask.
+    region.setFillRule(Qt.FillRule.WindingFill)
     for label, angle, center in _seats(spec):
         local = relief.glyph_path(label, font).boundingRect()
         local = local.adjusted(-pad, -pad, pad, pad)
@@ -265,12 +284,35 @@ def inner_number_clear_regions(spec: BandSpec) -> QPainterPath:
         transform = QTransform()
         transform.scale(scale, scale)
         transform.translate(center.x(), center.y())
-        transform.rotate(numerals.seat_rotation(
-            angle, spec.seating, flow_squares=True,
-        ))
+        transform.rotate(numerals.seat_rotation(angle, spec.seating))
         rect_path = QPainterPath()
         rect_path.addRect(local)
         region.addPath(transform.map(rect_path))
+    if region.isEmpty():
+        return region
+    # Bound 1: cap the whole region inside the hairline tips' circle.
+    limit = half_px * shrink * dial.RING_INNER_TICK_INNER_FRACTION * 0.995
+    disc = QPainterPath()
+    disc.addEllipse(QPointF(0.0, 0.0), limit, limit)
+    to_logical = QTransform()
+    to_logical.scale(scale, scale)
+    region = region.intersected(to_logical.map(disc))
+    # Bound 2: the seat's own big stroke goes WHOLE — one narrow wedge
+    # per number seat, sparing the hairlines one degree to either side.
+    r0 = half_px * shrink * dial.RING_INNER_CONTENT_INNER_FRACTION * 0.99
+    r1 = half_px * shrink * dial.RING_INNER_TICK_OUTER_FRACTION * 1.02
+    for _label, angle, _center in _seats(spec):
+        wedge = QPainterPath()
+        wedge.moveTo(dial_point(angle - 0.7, r0))
+        wedge.lineTo(dial_point(angle - 0.7, r1))
+        wedge.lineTo(dial_point(angle + 0.7, r1))
+        wedge.lineTo(dial_point(angle + 0.7, r0))
+        wedge.closeSubpath()
+        # `united`, never `addPath`: the wedge overlaps the numeral's
+        # rectangle, and BOTH fill rules can cancel an overlap of
+        # subpaths (odd-even always, winding when the windings oppose) —
+        # the union is overlap-proof by construction.
+        region = region.united(to_logical.map(wedge))
     return region
 
 
@@ -470,13 +512,10 @@ def _build_inner(spec: BandSpec) -> QImage:
     seats = _seats(spec)
     elements = [
         relief.seated_path(
-            label, font, center, numerals.seat_rotation(
-                angle, spec.seating,
-                # THE MINUTE SQUARES FLOW (owner correction 2026-08-11):
-                # 15 turns with the lower half it opens, 45 with the
-                # upper — only on this band, never the hour band.
-                flow_squares=True,
-            ),
+            label, font, center,
+            # THE FLOWING SIDES (owner amendment 2026-08-11) are the
+            # seating law itself now — both bands, no per-band flag.
+            numerals.seat_rotation(angle, spec.seating),
         )
         for label, angle, center in seats
     ]

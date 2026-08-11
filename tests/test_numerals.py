@@ -80,18 +80,32 @@ def frame_args():
 # ------------------------------------------------------------ the seating law
 
 def test_seat_rotation_reproduces_the_ledger_piecewise():
-    """hour_numerals.md §4: a numeral on a SQUARE angle stands upright,
-    every other takes its own angle, and the lower half turns a further
-    180 deg so nothing reads upside down."""
+    """hour_numerals.md §4 as amended 2026-08-11 (THE FLOWING SIDES):
+    only TOP and BOTTOM stand upright, every other numeral takes its
+    own angle, the lower half — on BOTH signs of the fold — turns a
+    further 180 deg, and the side squares FLOW with the half they open
+    clockwise (+90 with the lower, -90 with the upper)."""
     assert numerals.seat_rotation(0.0) == 0.0
-    assert numerals.seat_rotation(90.0) == 0.0
     assert numerals.seat_rotation(180.0) == 0.0
-    assert numerals.seat_rotation(-90.0) == 0.0
+    assert numerals.seat_rotation(90.0) == 270.0         # flows with the lower half
+    assert numerals.seat_rotation(-90.0) == -90.0        # flows with the upper half
     assert numerals.seat_rotation(45.0) == 45.0
     assert numerals.seat_rotation(-45.0) == -45.0
     assert numerals.seat_rotation(135.0) == 315.0        # the lower half
-    assert numerals.seat_rotation(-135.0) == 45.0
+    assert numerals.seat_rotation(-135.0) == 45.0        # the lower-LEFT quadrant
     assert numerals.seat_rotation(179.0) == 359.0
+
+
+def test_lower_left_quadrant_never_reads_upside_down():
+    """THE THIRD-QUADRANT REGRESSION (owner screenshot 2026-08-11: 35
+    and 40 shipped upside down): a `folded >= 90` cut caught the lower
+    half only on POSITIVE angles. Every lower-half seat on either sign
+    must flip."""
+    for deg in range(91, 180):
+        for sign in (1.0, -1.0):
+            rot = numerals.fold_angle(numerals.seat_rotation(sign * deg))
+            # The physical rotation must land in the readable half.
+            assert abs(rot) < 90.0, f"seat {sign * deg} reads upside down"
 
 
 def test_upright_seating_never_turns_anything():
@@ -99,26 +113,29 @@ def test_upright_seating_never_turns_anything():
         assert numerals.seat_rotation(degree, "upright") == 0.0
 
 
-def test_square_on_ring_stands_twelve_eighteen_zero_and_six_up():
-    """With the band square-on (offset 0) exactly 12, 18, 0 and 6 are
-    upright — the ledger's own worked example."""
+def test_square_on_ring_stands_only_twelve_and_zero_up():
+    """With the band square-on (offset 0) only 12 (top) and 0 (bottom)
+    are upright — 6 and 18 FLOW with their halves like 45 and 15 (owner
+    amendment 2026-08-11, the ledger's reworked example)."""
     upright = [
         hour for hour in range(24)
         if numerals.seat_rotation(numerals.hour_angle(hour)) == 0.0
     ]
-    assert upright == [0, 6, 12, 18]
+    assert upright == [0, 12]
 
 
 def test_a_rotated_band_stands_whoever_landed_on_a_square_angle():
     """THE POINT OF THE WHOLE ENGINE (§1/§4): turn the band and the
     four upright numerals CHANGE — a seat belongs to the angle it lands
     on, never to the hour it carries. At +15 deg the band has moved one
-    whole hour, so 11/17/23/5 take the square angles."""
+    whole hour, so 11 and 23 take the top and bottom seats (the side
+    seats flow with their halves and stand nobody up — THE FLOWING
+    SIDES amendment)."""
     upright = [
         hour for hour in range(24)
         if numerals.seat_rotation(numerals.hour_angle(hour, 15.0)) == 0.0
     ]
-    assert upright == [5, 11, 17, 23]
+    assert upright == [11, 23]
     # And a NON-integer rotation leaves nobody upright at all.
     assert not [
         hour for hour in range(24)
@@ -944,3 +961,4 @@ def test_the_ones_live_crown_stays_inside_the_window_at_default_size(
         for x in range(window // 4, 3 * window // 4)
     )
     assert top_band, "the live crown's top arc never reached near the edge"
+

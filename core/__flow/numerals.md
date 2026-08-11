@@ -10,11 +10,11 @@ flowchart TD
     A --> B["deg = fold((h-12)*15 + offset)"]
     B --> C{seating}
     C -->|upright| D["rot = 0"]
-    C -->|arc| E{"deg mod 90 == 0 ?"}
-    E -->|yes| D
-    E -->|no| F{"abs(deg) > 90 ?"}
-    F -->|yes| G["rot = deg + 180 (lower half)"]
-    F -->|no| H["rot = deg (upper half)"]
+    C -->|arc| E{"deg == 0 or abs(deg) == 180 ?"}
+    E -->|yes, top/bottom| D
+    E -->|no| F{"abs(deg) > 90 or deg == 90 ?"}
+    F -->|yes| G["rot = deg + 180 (lower half, incl. the +90 side)"]
+    F -->|no| H["rot = deg (upper half, incl. the -90 side)"]
     B --> I{light}
     I -->|radial| J["(dx, dy) = depth * (sin deg, cos deg)"]
     I -->|fixed| K["(dx, dy) = typed offset"]
@@ -38,11 +38,11 @@ fold(deg):                       # into (-180, 180]
 hour_angle(h, offset):           return fold((h - 12) * 15 + offset)
 minute_angle(m):                 return m * 6            # never rotates
 
-seat_rotation(deg, seating):
+seat_rotation(deg, seating):             # owner amendment 2026-08-11, THE FLOWING SIDES
     if seating == "upright":     return 0
-    if deg mod 90 == 0:          return 0                # the square angles
-    if abs(deg) > 90:            return deg + 180        # the lower half
-    return deg                                           # the upper half
+    if deg == 0 or abs(deg) == 180:   return 0            # top / bottom only
+    if abs(deg) > 90 or deg == 90:    return deg + 180    # lower half, incl. the +90 side
+    return deg                                           # upper half, incl. the -90 side
 
 numeral_hours(letter_hours):     # THE COMPOSITION LAW
     seated = {h mod 24 for h in letter_hours}   # cards say 24, hours say 0

@@ -39,8 +39,12 @@ the project's dial convention (`DIAL_OFFSET_DEG = 180`).
   [Crown Text](crown_text.md) glyph angle is built from.
 - `readable_rotation_deg(theta)`: the glyph rotation that keeps ring-band
   letters upright all the way around — the lower half (90-270 deg) flips
-  180 deg so text never reads upside down, and a glyph standing on one of
-  the four SQUARE angles (0/90/180/270) stands upright.
+  180 deg so text never reads upside down. Only the TOP and BOTTOM seats
+  (0/180 deg) stand upright of their own right; the SIDE squares (90/270
+  deg) FLOW with the half they open clockwise instead (owner amendment
+  2026-08-11, THE FLOWING SIDES) — the +90 seat turns with the lower half,
+  the −90 seat rides the upper half unflipped. The former "all four square
+  angles stand upright" rule is gone.
   **ONE SEATING LAW** (owner defect 2026-08-07): this used to be a second,
   forked copy of the law [Numerals](numerals.md)' `seat_rotation` already
   wrote, and the fork differed on exactly those square angles — so The

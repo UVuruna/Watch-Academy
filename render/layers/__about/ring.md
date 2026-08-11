@@ -81,12 +81,14 @@ so it rebuilds only on a skin/size/DPI change. Not `hover_variable`.
   a multi-sample dark halo from the gold master, rotates the glyph so it
   reads upright through the lower half of the ring
   (`angles.readable_rotation_deg` — since 2026-08-07 THE ONE SEATING LAW,
-  an alias of `core.numerals.seat_rotation`, so a jewel standing on one of
-  the four SQUARE angles stands UPRIGHT exactly like the numeral beside it;
-  before that these were two forks of one law and The One's 18 and 6 lay
-  sideways. Templar's crosses at 90/270 are symmetric, so this is
-  invisible there; LOOP's Π at 16h is not on a square angle and does not
-  move);
+  an alias of `core.numerals.seat_rotation`, so a jewel seats exactly like
+  the numeral beside it; before that these were two forks of one law and
+  The One's 18 and 6 lay sideways. Amended by the owner 2026-08-11, THE
+  FLOWING SIDES: only TOP and BOTTOM (0/180) stand upright — the SIDE
+  squares (90/270) FLOW with the half they open clockwise instead of
+  standing upright on their own. Templar's crosses at 90/270 are
+  symmetric, so this is invisible there; LOOP's Π at 16h is not on a
+  square angle and does not move);
   `tint`/`opacity` are per-caller (`_draw_jewels` passes
   `jewels_tint`/1.0, `_draw_crown_text` its own `crown_text_tint`/`crown_text_alpha`).
   `draw_shadow=False` (SHADOW/SHINE round, owner ruling 2026-08-06) skips

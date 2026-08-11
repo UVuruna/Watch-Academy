@@ -16,15 +16,18 @@ longer owns a law of its own. It delegates to `core.numerals.seat_rotation`
 be forks that disagreed on exactly the four SQUARE angles, so The One's 18
 (right) and 6 (left) jewels lay sideways beside upright numerals.
 
+Amended by the owner 2026-08-11, THE FLOWING SIDES: only TOP (0) and
+BOTTOM (180) stand upright of their own right; the SIDE squares (90/270)
+FLOW with the half they open clockwise instead of standing upright
+themselves.
+
 ```mermaid
 flowchart TB
-    A[theta: dial angle of a glyph] --> B{"theta MOD 90 == 0?<br/>(the four square angles)"}
+    A[theta: dial angle of a glyph] --> B{"theta == 0 or abs(theta) == 180?<br/>(top / bottom only)"}
     B -- yes --> C["return 0 — stands UPRIGHT"]
-    B -- no --> D{"90 < theta < 270?"}
-    D -- yes, bottom half --> E[return theta - 180]
-    D -- no, top half --> F{theta <= 90?}
-    F -- yes --> G[return theta]
-    F -- no --> H[return theta - 360]
+    B -- no --> D{"abs(theta) > 90 or theta == 90?<br/>(lower half, incl. the +90 side)"}
+    D -- yes --> E[return theta + 180]
+    D -- no, upper half incl. -90 --> F[return theta]
 ```
 
 Pseudocode (language-neutral):
@@ -39,11 +42,10 @@ Pseudocode (language-neutral):
     FUNCTION readable_rotation_deg(theta):        # THE ONE SEATING LAW
         RETURN fold(seat_rotation(theta, "arc"))  # core.numerals
 
-    # which is, written out:
-    #   IF theta MOD 90 == 0:   RETURN 0          # the four square angles
-    #   IF 90 < theta < 270:    RETURN theta - 180  # lower half, flipped
-    #   IF theta <= 90:         RETURN theta
-    #   ELSE:                   RETURN theta - 360
+    # which is, written out (owner amendment 2026-08-11, THE FLOWING SIDES):
+    #   IF theta == 0 or ABS(theta) == 180:     RETURN 0   # top / bottom only
+    #   IF ABS(theta) > 90 OR theta == 90:      RETURN theta + 180  # lower half, incl. +90 side
+    #   ELSE:                                   RETURN theta        # upper half, incl. -90 side
 
     FUNCTION star_rotation_deg(solar_noon):
         secs = solar_noon.hour*3600 + solar_noon.minute*60 + solar_noon.second

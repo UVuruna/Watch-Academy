@@ -57,11 +57,16 @@ pixels; nothing here knows that pixels exist.
 
 ## The laws it implements
 
-**Seating** (ledger §4) — angles run clockwise from the top, folded into
-(−180°, 180°]. A numeral standing on a SQUARE angle (0/90/180/270) stands
-upright; every other numeral takes the angle it sits on, and the lower half
-turns a further 180° so nothing reads upside down. `upright` seating is
-`rot = 0` everywhere.
+**Seating** (ledger §4, amended by the owner 2026-08-11 — THE FLOWING
+SIDES) — angles run clockwise from the top, folded into (−180°, 180°].
+Only the TOP and BOTTOM seats (0/180) stand upright; the SIDE squares
+(±90) no longer stand upright of their own right — they FLOW with the
+half they open clockwise: the +90 seat turns with the lower half (the
+extra 180° flip), the −90 seat turns with the upper half (no flip). Every
+other numeral takes the angle it sits on, and the lower half turns a
+further 180° on BOTH signs of the fold so nothing reads upside down.
+`upright` seating is `rot = 0` everywhere. The former `flow_squares`
+parameter is gone — this is now the only rule.
 
 **Light** (ledger §6) — `radial` puts one lamp at the dial centre, so every
 numeral throws its shadow straight outward:
