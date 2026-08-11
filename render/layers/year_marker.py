@@ -1,6 +1,5 @@
 """The YEAR MARKER layer — earth, moon and the event bodies."""
 
-import math
 
 from PySide6.QtCore import QPointF, QRectF, Qt
 from PySide6.QtGui import QColor, QFont, QPainter, QPainterPath, QPen
@@ -121,6 +120,16 @@ class YearMarkerLayer(Layer):
             # passes over.
             if spec.transit_shrink:
                 factor *= 1.0 - nearness * dial.MOON_SHRINK_PASS_DEPTH
+            if spec.transit_rim and not glowing:
+                # RIDE THE RIM (owner correction 2026-08-11: this is the
+                # ORIGINAL lane-split motion, restored — the projection
+                # cut of 0.14.913 pinned the Moon to one spot instead of
+                # letting it travel): inside touching distance the Moon
+                # eases smoothly onto an inner lane by the SAME nearness
+                # measure, so as the cycle angle keeps moving the Moon
+                # traces a circle AROUND the Earth's disc and rejoins
+                # the shared lane on the far side.
+                orbit -= nearness * dial.MOON_LANE_SPLIT_FRACTION
             pos = dial_point(moon_angle, ctx.radius * orbit)
             earth_pos = None
             if nearness > 0.0 and ctx.skin.show_earth:
@@ -130,19 +139,6 @@ class YearMarkerLayer(Layer):
                         ctx.skin.numeral_outer_ring_size, spec.scale,
                     ),
                 )
-            if spec.transit_rim and earth_pos is not None:
-                # RIDE THE RIM: the Moon's centre never enters the
-                # Earth's disc — inside the rim it is projected back
-                # onto the rim circle, so it slides around the edge.
-                earth_half = ctx.radius * spec.scale * hover_factor(ctx, "earth")
-                dx = pos.x() - earth_pos.x()
-                dy = pos.y() - earth_pos.y()
-                dist = math.hypot(dx, dy)
-                if 0.0 < dist < earth_half:
-                    pos = QPointF(
-                        earth_pos.x() + dx / dist * earth_half,
-                        earth_pos.y() + dy / dist * earth_half,
-                    )
             if spec.transit_shadow and earth_pos is not None:
                 # THE CAST SHADOW (owner correction 2026-08-11: "the one
                 # that casts a shadow casts none at all") — a soft dark
