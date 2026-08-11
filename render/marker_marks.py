@@ -117,14 +117,15 @@ def draw_pointer(
     """
     edge = orbit_fraction + half_size_fraction
     half_size = dial_radius * half_size_fraction
-    # THE BRIDGE OVER THE TICK ZONE (owner corrections 2026-08-10/11):
-    # the body's edge rides the little pointers' TIP line, and the
-    # arrow — drawn BEHIND the body — spans the tick zone from under
-    # the disc out to the thread line at the tick roots, so the visible
-    # part is exactly the zone between the two lines. The roots/tips
-    # ratio is the measured plate geometry, never a free protrusion.
+    # THE BRIDGE TO THE SMALL TICKS (owner third round 2026-08-11): the
+    # body's edge rides THE LAST LINE outside the band, and the arrow —
+    # drawn BEHIND the body — extends from under the disc across the
+    # band's numeral zone so its tip touches the 360 small pointers'
+    # own tips, "showing the exact point". The tips/last-line ratio is
+    # the measured plate geometry, never a free protrusion.
     tip = dial_radius * edge * (
-        dial.RING_INNER_TICK_OUTER_FRACTION / dial.RING_INNER_TICK_INNER_FRACTION
+        dial.RING_INNER_TICK_INNER_FRACTION
+        / dial.RING_INNER_CONTENT_INNER_FRACTION
     )
     depth = half_size * dial.MARKER_POINTER_LENGTH_RATIO
     half_width = half_size * dial.MARKER_POINTER_WIDTH_RATIO
@@ -135,6 +136,17 @@ def draw_pointer(
         max(1.0, dial_radius * dial.MARKER_POINTER_OUTLINE_WIDTH_FRACTION)
     )
     painter.save()
+    # NOTHING RENDERS INSIDE THE BODY'S OWN CIRCLE (owner correction
+    # 2026-08-11, the hollow-crescent screenshot: the shape behind a
+    # nearly-empty Moon showed THROUGH the disc and read as an ugly
+    # oversized triangle). The disc region is clipped out, so an opaque
+    # Earth and a hollow Moon both show only the bridge outside the rim.
+    body_center = dial_point(angle_deg, dial_radius * orbit_fraction)
+    keep = QPainterPath()
+    keep.addRect(QRectF(-dial_radius, -dial_radius, 2 * dial_radius, 2 * dial_radius))
+    disc = QPainterPath()
+    disc.addEllipse(body_center, half_size, half_size)
+    painter.setClipPath(keep.subtracted(disc))
     if shape == "triangle":
         painter.setPen(outline)
         painter.setBrush(QColor(color))

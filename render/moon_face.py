@@ -113,6 +113,18 @@ def draw_moon_disc(
         painter.setPen(pen)
         painter.setBrush(Qt.BrushStyle.NoBrush)
         painter.drawEllipse(QPointF(0.0, 0.0), radius, radius)
+        # THE SECOND, INNER LINE (owner correction 2026-08-11): beside
+        # the white outer circle, a line marking HOW FAR the lit part
+        # reaches — the terminator's own curve — so a 2-3% crescent
+        # reads as a crescent instead of an almost-invisible sliver.
+        # Stroking the lit region's whole boundary draws the limb arc
+        # (over the rim, invisible) and the terminator curve (the new
+        # inner line) in one honest path — the geometry stays
+        # `moon_lit_region`'s, never a re-guess.
+        inner = QPen(_with_alpha(palette.MOON_SILVER, _RIM_ALPHA))
+        inner.setWidthF(max(1.0, radius * _RIM_WIDTH_FRACTION * 0.7))
+        painter.setPen(inner)
+        painter.drawPath(moon_lit_region(fraction, radius))
         painter.restore()
 
 

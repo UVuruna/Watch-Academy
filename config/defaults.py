@@ -755,11 +755,17 @@ DEFAULT_SKIN = SkinDefinition(
         "background",
         "star",
         "weekday_set",
+        "moon_band",                    # THE MOON HORIZON BAND — BELOW
+                                        # the ring (owner z-order decree
+                                        # 2026-08-11: hands+bodies on
+                                        # top, ring elements second, the
+                                        # phase/daylight circles third —
+                                        # nothing may overwrite a ring
+                                        # pointer)
         "ring",
-        "moon_band",                    # THE MOON HORIZON BAND (owner
-                                        # verdict 2026-08-09) — on the
-                                        # ring's own inner tick circle,
-                                        # below the Earth/Moon markers
+        "moon_band_ticks",              # the band styles that re-dress
+                                        # the 360 points themselves —
+                                        # above the plate, seats spared
         "year_marker",
         "hands",
     ),                                  # the star's top tip IS the noon pointer

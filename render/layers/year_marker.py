@@ -117,10 +117,47 @@ class YearMarkerLayer(Layer):
             # eases INWARD — the outward direction is the ring band's
             # own lane and belongs to the numerals.
             if spec.moon_transit_style == "lane_split":
-                orbit -= nearness * dial.MOON_LANE_SPLIT_FRACTION
+                # HALF ON, HALF OFF (owner correction 2026-08-11: the
+                # split "does not go far enough" — at a full transit the
+                # Moon's CENTRE must sit on the Earth's rim, half the
+                # disc catching the Earth and half outside). Computed
+                # from the two bodies' own tangent orbits, never a fixed
+                # fraction: easing inward by twice the Earth's half-size
+                # minus the Moon's puts the centre exactly on the rim.
+                orbit -= nearness * (2 * spec.scale - spec.moon_scale)
             elif spec.moon_transit_style == "shrink_pass":
                 factor *= 1.0 - nearness * dial.MOON_SHRINK_PASS_DEPTH
             pos = dial_point(moon_angle, ctx.radius * orbit)
+            if (
+                spec.moon_transit_style == "occultation"
+                and nearness > 0.0
+                and ctx.skin.show_earth
+            ):
+                # THE CAST SHADOW (owner correction 2026-08-11: "the one
+                # that casts a shadow casts none at all") — a soft dark
+                # disc clipped to the EARTH's own disc, under the Moon's
+                # position, deepening as the crossing closes. Drawn
+                # before the Moon so the shadow reads as falling ON the
+                # Earth, never as a tint on the Moon itself.
+                earth_orbit = dial.earth_moon_orbit_fraction(
+                    ctx.skin.numeral_outer_ring_size, spec.scale,
+                )
+                earth_pos = dial_point(
+                    (ctx.tick.year_angle + ctx.world_offset) % 360.0,
+                    ctx.radius * earth_orbit,
+                )
+                earth_half = ctx.radius * spec.scale * hover_factor(ctx, "earth")
+                shadow_clip = QPainterPath()
+                shadow_clip.addEllipse(earth_pos, earth_half, earth_half)
+                shadow = QColor(palette.MOON_SHADOW_BLACK)
+                shadow.setAlphaF(0.55 * nearness)
+                painter.save()
+                painter.setClipPath(shadow_clip)
+                painter.setPen(Qt.PenStyle.NoPen)
+                painter.setBrush(shadow)
+                shadow_r = ctx.radius * spec.moon_scale * factor * 1.15
+                painter.drawEllipse(pos, shadow_r, shadow_r)
+                painter.restore()
             if station is not None and lunar_state is None:
                 # THE FOUR STATIONS take the halo's place at a principal
                 # instant: birth, youth, the zenith of maturity, age.

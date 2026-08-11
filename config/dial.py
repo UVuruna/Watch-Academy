@@ -90,6 +90,15 @@ MOON_TRANSIT_OPACITY = 0.5
 # marker arrow reasons from these two numbers, never from a re-guess.
 RING_INNER_TICK_INNER_FRACTION = 0.854   # the tick TIPS (facing the centre)
 RING_INNER_TICK_OUTER_FRACTION = 0.889   # their roots, at the hour band
+# The DEEPEST inner-ring content: the five-minute strokes/arrows run
+# 0.798 -> 0.888 of the radius (measured on the plates; the same number
+# `render.numeral_bands._build_inner`'s occlusion note records) and the
+# minute NUMBERS stand over their inner half — so 0.798 is THE LAST
+# LINE that cuts NO inner-ring element (owner correction 2026-08-11,
+# third round: every band line and both bodies follow the final line
+# that slices no inner-ring element — not the tick tips, not the hour
+# band edge, both of which earlier re-cuts wrongly used).
+RING_INNER_CONTENT_INNER_FRACTION = 0.798
 
 # THE LINE AND THE BODIES (owner corrections 2026-08-10 and 2026-08-11
 # — the second round decoded the first: "the top of the pointers" is
@@ -124,10 +133,12 @@ def earth_moon_orbit_fraction(ring_size: float, half_size: float) -> float:
     above; this retired the 2026-08-09 clearance lane and its
     hexagram-apothem floor). `half_size` is THIS body's own current
     half-size (its scale slider included) — each body is tangent to
-    the tick-tip line itself, so the Earth and the Moon ride slightly
-    different radii and BOTH touch. The position-pointer arrow bridges
-    the tick zone from here to the thread line at the tick roots."""
-    line_edge = RING_INNER_TICK_INNER_FRACTION * interior_scale(ring_size)
+    THE LAST LINE (`RING_INNER_CONTENT_INNER_FRACTION`, owner third
+    round 2026-08-11: the body must never slice ANY inner-ring element,
+    so it stays outside the band entirely), and the Earth and the Moon
+    ride slightly different radii so BOTH touch. The position-pointer
+    arrow bridges from here across the band to the small ticks' tips."""
+    line_edge = RING_INNER_CONTENT_INNER_FRACTION * interior_scale(ring_size)
     return line_edge - half_size
 
 

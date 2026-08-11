@@ -9,16 +9,16 @@ Ruling, `render.layers.numerals`'s own "ledger §2"), so this layer
 does not apply the world offset either; it stays in registration with
 the fixed tick art underneath.
 
-THE LINE RIDES THE TICK ROOTS (owner corrections 2026-08-10/11, the
-two screenshot rounds — this re-cut's whole reason): every style's
-line sits at `dial.RING_INNER_TICK_OUTER_FRACTION`, the measured
-radius of the 360 little pointers' outer roots — "the end of the
-inner circle, where the pointer arrow, the big strokes and the
-numerals stop" — and the little pointers hang INWARD from it with
-their free tips at `RING_INNER_TICK_INNER_FRACTION`. The Earth/Moon
-orbit is tangent to the TIPS line from inside
-(`dial.earth_moon_orbit_fraction`), and the position-pointer arrow
-bridges the tick zone between the two lines, behind its body.
+THE LAST LINE (owner third round, 2026-08-11 — his explicit words
+after two wrong re-cuts): every style's line follows the INNER side
+of the INNER ring — `dial.RING_INNER_CONTENT_INNER_FRACTION`, the
+measured radius where the five-minute strokes/arrows/numbers stop, so
+the line slices NO inner-ring element. The Earth/Moon orbit is
+tangent to the SAME line from inside (`dial.earth_moon_orbit_
+fraction`), the position-pointer arrow bridges from there across the
+band to the small ticks' tips, and this whole layer sits BELOW the
+ring in the z-order (his z decree: hands+bodies, then ring elements,
+then these circles).
 
 Per style, all four re-cut to his screenshot corrections of 2026-08-10:
 - "inverted" fills ONLY the belt from the line out to the hour band
@@ -52,8 +52,11 @@ from render.painting import dial_point
 # pointers hang INWARD from the line; their tips' radius is not a free
 # choice but the measured plate geometry, so it derives from the two
 # `config.dial` measurements and never drifts from the art.
-_TICK_ZONE_INNER_RATIO = (
-    dial.RING_INNER_TICK_INNER_FRACTION / dial.RING_INNER_TICK_OUTER_FRACTION
+_TICKS_FROM_LINE_RATIO = (
+    dial.RING_INNER_TICK_INNER_FRACTION / dial.RING_INNER_CONTENT_INNER_FRACTION
+)
+_TICK_ROOTS_FROM_LINE_RATIO = (
+    dial.RING_INNER_TICK_OUTER_FRACTION / dial.RING_INNER_CONTENT_INNER_FRACTION
 )
 # THE SPARED SEATS (owner correction 2026-08-11, slika 1/2: the invert
 # and the gray ticks touch ONLY the background aura/umbra and the 360
@@ -92,20 +95,28 @@ class MoonBandLayer(Layer):
         if spec.moon_band_mode != "horizon":
             return
         arcs = moon_horizon_arcs(ctx.day.moonrise, ctx.day.moonset)
-        # THE LINE at the tick ROOTS — the end of the inner circle,
-        # where the hexagram vertex, the big strokes and the numerals
-        # all stop (owner correction 2026-08-11; his 2026-08-10 "top of
-        # the pointers" meant this outer end, not the inward tips the
-        # first re-cut used).
-        radius = ctx.radius * dial.RING_INNER_TICK_OUTER_FRACTION
+        # THE LAST LINE (owner third round 2026-08-11, finally explicit:
+        # every band line follows the INNER side of the INNER ring —
+        # the last line that slices no inner-ring element, where the
+        # five-minute strokes/arrows/numbers stop). Two earlier re-cuts
+        # used the tick tips and then the hour-band edge; both wrong.
+        radius = ctx.radius * dial.RING_INNER_CONTENT_INNER_FRACTION
         style = spec.moon_band_style
         painter.save()
         painter.setRenderHint(QPainter.RenderHint.Antialiasing)
         for arc in arcs:
+            # THE SPLIT ACROSS THE RING (owner z decree + slika 2,
+            # 2026-08-11): this layer sits BELOW the ring, so it paints
+            # only the parts that live OUTSIDE the plate — the line,
+            # the glow, the thread's dots/diamond. The per-degree tick
+            # redress of "inverted"/"ticks" must touch the plate's own
+            # 360 points, so it paints in `MoonBandTicksLayer` ABOVE
+            # the ring instead — it REPLACES the ticks' style at those
+            # places, which is his own definition of those two styles.
             if style == "inverted":
-                self._draw_inverted(painter, radius, arc)
+                self._stroke_thread(painter, radius, arc)
             elif style == "ticks":
-                self._draw_ticks(painter, radius, arc)
+                pass                     # segments only — upper layer
             elif style == "glow":
                 self._draw_glow(painter, radius, arc)
             else:
@@ -171,7 +182,7 @@ class MoonBandLayer(Layer):
 
     # -- style 1: inverted band -------------------------------------------
 
-    def _draw_inverted(self, painter: QPainter, radius: float, arc: MoonArc) -> None:
+    def _draw_invert_segments(self, painter: QPainter, radius: float, arc: MoonArc) -> None:
         """THE INVERTED BELT (owner corrections 2026-08-10/11): only
         the little pointers' zone inside the line, and inside it ONLY
         the background and the little points themselves — one Difference
@@ -180,7 +191,8 @@ class MoonBandLayer(Layer):
         first re-cut ran the invert across everything in the belt).
         A true RGB Difference against the baked art (the honesty note
         in the module docstring), plus the line itself."""
-        inner = radius * _TICK_ZONE_INNER_RATIO
+        tick_inner = radius * _TICKS_FROM_LINE_RATIO
+        tick_outer = radius * _TICK_ROOTS_FROM_LINE_RATIO
         painter.save()
         pen = QPen(QColor(255, 255, 255))
         # One near-degree-wide radial segment per spared-degree — a
@@ -199,9 +211,16 @@ class MoonBandLayer(Layer):
                 continue
             theta = degree % 360.0
             painter.drawLine(
-                dial_point(theta, inner), dial_point(theta, radius)
+                dial_point(theta, tick_inner), dial_point(theta, tick_outer)
             )
         painter.restore()
+
+    def _draw_inverted(self, painter: QPainter, radius: float, arc: MoonArc) -> None:
+        """The preview/one-canvas path: both halves of the style — the
+        thread and the invert segments — on one painter. The dial
+        splits them across the ring (`paint` above / `MoonBandTicksLayer`
+        below this class)."""
+        self._draw_invert_segments(painter, radius, arc)
         self._stroke_thread(painter, radius, arc)
 
     # -- style 2: silver thread (THE DEFAULT) ------------------------------
@@ -249,7 +268,8 @@ class MoonBandLayer(Layer):
         pen.setWidthF(radius * _GRAY_TICK_SEGMENT_WIDTH_FRACTION)
         pen.setCapStyle(Qt.PenCapStyle.FlatCap)
         painter.setPen(pen)
-        inner_radius = radius * _TICK_ZONE_INNER_RATIO
+        tick_inner = radius * _TICKS_FROM_LINE_RATIO
+        tick_outer = radius * _TICK_ROOTS_FROM_LINE_RATIO
         first = math.ceil(arc.start_deg)
         last = math.floor(arc.end_deg)
         for degree in range(first, last + 1):
@@ -260,7 +280,7 @@ class MoonBandLayer(Layer):
                 continue
             theta = degree % 360.0
             painter.drawLine(
-                dial_point(theta, inner_radius), dial_point(theta, radius)
+                dial_point(theta, tick_inner), dial_point(theta, tick_outer)
             )
 
     # -- style 4: moon glow ---------------------------------------------------
@@ -373,3 +393,33 @@ class MoonBandLayer(Layer):
         painter.setPen(edge)
         painter.setBrush(color)
         painter.drawPolygon(points)
+
+
+class MoonBandTicksLayer(Layer):
+    """The band's UPPER half (owner z decree + slika 2, 2026-08-11):
+    the per-degree tick redress of the "inverted" and "ticks" styles.
+    It REPLACES the 360 points' own style at those places, so it must
+    paint ABOVE the ring plate — while everything else of the band
+    (the line, the glow, the dots) stays below the ring in
+    `MoonBandLayer`. Seats, big strokes and numbers are spared by
+    `_seat_spared`, so nothing of the ring's content is ever covered."""
+
+    frame = "interior"
+    cadence = Cadence.DAILY
+
+    def paint(self, painter: QPainter, ctx: RenderContext) -> None:
+        spec = ctx.skin.year_marker
+        if spec.moon_band_mode != "horizon":
+            return
+        if spec.moon_band_style not in ("inverted", "ticks"):
+            return
+        radius = ctx.radius * dial.RING_INNER_CONTENT_INNER_FRACTION
+        painter.save()
+        painter.setRenderHint(QPainter.RenderHint.Antialiasing)
+        band = MoonBandLayer.__new__(MoonBandLayer)
+        for arc in moon_horizon_arcs(ctx.day.moonrise, ctx.day.moonset):
+            if spec.moon_band_style == "inverted":
+                band._draw_invert_segments(painter, radius, arc)
+            else:
+                band._draw_ticks(painter, radius, arc)
+        painter.restore()

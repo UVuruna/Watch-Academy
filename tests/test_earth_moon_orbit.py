@@ -52,7 +52,10 @@ def test_every_marker_touches_the_line_exactly(ring_size, multiplier):
     `interior_scale` like every other interior member (THE
     INWARD-GROWTH LAW) — per-body tangent, so BOTH bodies touch, not
     just the bigger one."""
-    line = dial.RING_INNER_TICK_INNER_FRACTION * dial.interior_scale(ring_size)
+    # THE LAST LINE (owner third round 2026-08-11): the inner side of
+    # the inner ring — where the five-minute strokes/arrows/numbers
+    # stop — so the body slices NO inner-ring element.
+    line = dial.RING_INNER_CONTENT_INNER_FRACTION * dial.interior_scale(ring_size)
     for base in _BASE_HALF_SIZES:
         half_size = multiplier * base
         orbit = dial.earth_moon_orbit_fraction(ring_size, half_size)

@@ -27,12 +27,13 @@ screenshot round — SUPERSEDES the 2026-08-09 "clear orbit lane"
 clearance and its hexagram-apothem floor): the QUIET (non-glowing)
 orbit radius is computed fresh every paint by `config.dial.
 earth_moon_orbit_fraction(ring_size, half_size)`, now a PER-BODY
-TANGENT fit — `dial.RING_INNER_TICK_INNER_FRACTION` (the measured
-radius of the 360 little pointers' inward-facing tips) scaled by
-`dial.interior_scale`, minus THIS body's own half-size — so BOTH
-bodies always touch the little pointers' line, each on its own
-radius. The Moon Horizon Band's thread rides the tick ROOTS
-(`RING_INNER_TICK_OUTER_FRACTION`), outside the bodies. The
+TANGENT fit — `dial.RING_INNER_CONTENT_INNER_FRACTION` (THE LAST
+LINE: the inner side of the inner ring, where the five-minute
+strokes/arrows/numbers stop, owner third round 2026-08-11 — so the
+body never slices any inner-ring element) scaled by
+`dial.interior_scale`, minus THIS body's own half-size — BOTH bodies
+touch that line, each on its own radius, and the Moon Horizon Band's
+thread rides the SAME line behind them. The
 skin's own `orbit_fraction`/`moon_orbit_fraction` fields stay NOMINAL,
 read only by `moon_transit_opacity`'s touch-angle approximation.
 A literal transit — the Moon crossing the Earth — still exists (the

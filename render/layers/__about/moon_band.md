@@ -111,13 +111,18 @@ with the day's own moonrise/moonset, never per-tick).
   reporting it as an empty circle.
 
 ## Design Decisions
-- The line sits on `dial.RING_INNER_TICK_OUTER_FRACTION` — the
-  measured radius of the 360 little pointers' outer ROOTS, the end of
-  the inner circle (owner corrections 2026-08-10/11) — and the little
-  pointers hang inward from it. The Earth/Moon orbit is tangent to
-  their TIP line (`RING_INNER_TICK_INNER_FRACTION`) per body, and the
-  position-pointer arrow bridges the tick zone between the two lines,
-  drawn behind its body.
+- THE LAST LINE (owner third round 2026-08-11): every band line sits
+  on `dial.RING_INNER_CONTENT_INNER_FRACTION` — the inner side of the
+  inner ring, where the five-minute strokes/arrows/numbers stop — so
+  it slices NO inner-ring element. The Earth/Moon orbit is tangent to
+  the SAME line per body, and the position-pointer arrow bridges from
+  there across the band to the small ticks' tips, drawn behind its
+  body and clipped out of the body's own circle.
+- THE SPLIT ACROSS THE RING (owner z decree, same round): the line/
+  glow/thread parts paint in `MoonBandLayer` BELOW the ring; the
+  per-degree tick redress of "inverted"/"ticks" paints in
+  `MoonBandTicksLayer` ABOVE the ring — those two styles REPLACE the
+  360 points' own style, seats/strokes/numbers spared.
 - The four styles after the same correction rounds: "inverted" and
   "ticks" touch ONLY the background and the little points — one
   segment per degree, SPARING every 6th degree (the big strokes) and
