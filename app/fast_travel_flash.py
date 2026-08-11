@@ -98,15 +98,25 @@ class FastTravelFlash(QWidget):
             self._text_label.setPixmap(QPixmap())
             self._text_label.setText(text)
         else:
-            # THE ONE PLATE LAW reaches this text (owner correction
+            # THE ONE PLATE LAW reaches this text (owner corrections
             # 2026-08-11: the SAME letter plates the jewels and the
-            # crown text wear, never a white font — white vanishes on
-            # a white desktop; the gold metal reads on any background).
-            from render.letter_plates import plate_text_pixmap
+            # crown text wear, never a white font — and his "moze jos
+            # bolje" refinement: the CATEGORY in gold at full height,
+            # the OPTION in silver a step smaller, the two-metal
+            # accent the jewels already speak; the colon plate joins
+            # them because the library owns no parenthesis).
+            # lang-ok: quoting the owner's own two words verbatim.
+            from render.letter_plates import plate_text_segments_pixmap
 
+            category, _, option = text.partition(" : ")
+            segments = (
+                ((category, "gold", 1.0), (f": {option}", "silver", 0.82))
+                if option
+                else ((text, "gold", 1.0),)
+            )
             self._text_label.setText("")
-            self._text_label.setPixmap(plate_text_pixmap(
-                text, shortcuts.FAST_TRAVEL_FLASH_FONT_PX,
+            self._text_label.setPixmap(plate_text_segments_pixmap(
+                segments, shortcuts.FAST_TRAVEL_FLASH_FONT_PX,
                 dpr=self.devicePixelRatioF() or 1.0,
             ))
         self.adjustSize()

@@ -270,6 +270,51 @@ def _composed_master(parts: tuple[Path, ...]) -> Path:
 # ═══════════════════════════ PLATE TEXT ══════════════════════════════
 
 
+def plate_text_segments_pixmap(
+    segments: tuple[tuple[str, str, float], ...], height_px: int,
+    dpr: float = 1.0,
+):
+    """A one-line run of plate SEGMENTS — `(text, metal, scale)` each —
+    sharing one baseline (owner refinement 2026-08-11, "moze jos
+    bolje": the flash's category wears GOLD at full height and its
+    option SILVER a step smaller, the same two-metal accent the jewels
+    and the crown's small cut already speak). Composes each segment
+    through `plate_text_pixmap` and butts them with a space-width gap.
+    lang-ok: quoting the owner's own two words verbatim."""
+    from PySide6.QtGui import QPixmap
+
+    # Each part is composed at DEVICE resolution with a neutral dpr so
+    # the canvas below stacks raw pixels; the final pixmap carries the
+    # real dpr once, at the end.
+    parts = [
+        plate_text_pixmap(
+            text, max(1, round(height_px * scale * dpr)), metal, 1.0,
+        )
+        for text, metal, scale in segments
+        if text
+    ]
+    if not parts:
+        raise MissingPlate("a plate text needs at least one glyph")
+    if len(parts) == 1:
+        return parts[0]
+    device_h = max(part.height() for part in parts)
+    gap = round(height_px * dpr * 0.45)
+    width = sum(part.width() for part in parts) + gap * (len(parts) - 1)
+    canvas = QImage(width, device_h, QImage.Format.Format_ARGB32_Premultiplied)
+    canvas.fill(Qt.GlobalColor.transparent)
+    painter = QPainter(canvas)
+    try:
+        x = 0
+        for part in parts:
+            painter.drawPixmap(x, device_h - part.height(), part)
+            x += part.width() + gap
+    finally:
+        painter.end()
+    pixmap = QPixmap.fromImage(canvas)
+    pixmap.setDevicePixelRatio(dpr)
+    return pixmap
+
+
 def plate_text_pixmap(
     text: str, height_px: int, metal: str = "gold", dpr: float = 1.0,
 ):
