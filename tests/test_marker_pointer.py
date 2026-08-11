@@ -194,3 +194,73 @@ def test_pointer_is_proportional_and_behind_the_body(app):
     assert source.count("draw_pointer") - earth_source.count("draw_pointer") == 1, (
         "exactly ONE Moon pointer draw, before the disc"
     )
+
+
+def test_the_arrow_flips_inward_when_the_body_rides_the_ring(app):
+    """THE FLIPPED ARROW (owner correction 2026-08-11, slika 4/5:
+    "obrni strelicu... jer je sada na RINGU"): a body relocated onto
+    the ring band sits OUTSIDE the 360 tips' circle, so the arrow
+    points INWARD at the marked point — nothing of it may paint
+    outside the body's own outer edge."""
+    import math as _math
+
+    from PySide6.QtCore import Qt
+    from PySide6.QtGui import QImage, QPainter
+
+    from render import marker_marks
+
+    image = QImage(400, 400, QImage.Format.Format_ARGB32)
+    image.fill(Qt.GlobalColor.transparent)
+    painter = QPainter(image)
+    painter.translate(200, 200)
+    # Body on the ring (orbit 0.95 of a 180 px dial radius), marked
+    # point well inside at 100 px.
+    marker_marks.draw_pointer(
+        painter, "triangle", 0.0, 180.0, 0.95, 0.06, "#CC3333",
+        tip_radius=100.0,
+    )
+    painter.end()
+
+    def painted(radius_px):
+        x = 200
+        y = 200 - round(radius_px)
+        return image.pixelColor(x, y).alpha() > 32
+
+    assert painted(105), "the inward arrow must reach its marked point"
+    body_inner = 180.0 * (0.95 - 0.06)
+    assert painted(body_inner - 3), "the flanks must emerge at the body edge"
+    body_outer = 180.0 * (0.95 + 0.06)
+    for r in range(int(body_outer) + 4, 190):
+        assert not image.pixelColor(200, 200 - r).alpha() > 32, (
+            f"an inward arrow painted OUTSIDE the body at {r}px"
+        )
+
+
+def test_the_gem_lives_whole_between_the_body_and_the_marked_point(app):
+    """THE WHOLE DIAMOND (owner correction 2026-08-11, slika 2/3): one
+    vertex on the body's edge, the other on the marked point, nothing
+    hidden under the disc — and height >= width by law."""
+    from PySide6.QtCore import Qt
+    from PySide6.QtGui import QImage, QPainter
+
+    from config import dial
+    from render import marker_marks
+
+    assert dial.MARKER_GEM_WIDTH_RATIO < 1.0
+    image = QImage(400, 400, QImage.Format.Format_ARGB32)
+    image.fill(Qt.GlobalColor.transparent)
+    painter = QPainter(image)
+    painter.translate(200, 200)
+    marker_marks.draw_pointer(
+        painter, "gem", 0.0, 180.0, 0.50, 0.08, "#CC9933",
+        tip_radius=140.0,
+    )
+    painter.end()
+    body_edge = 180.0 * (0.50 + 0.08)
+    mid = (body_edge + 140.0) / 2.0
+    assert image.pixelColor(200, 200 - round(mid)).alpha() > 32, (
+        "the gem's middle must sit between the body edge and the point"
+    )
+    # Nothing under the disc: inside the body's own circle stays clean.
+    inside = 180.0 * 0.50
+    assert image.pixelColor(200, 200 - round(inside)).alpha() <= 32

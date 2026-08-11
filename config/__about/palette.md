@@ -32,7 +32,7 @@ Nine sections, fixed. A new colour joins the section it belongs to;
 | 1 | THE NAMED HUES | hues the canon names (`MOON_GRAY_VIOLET`, `MOON_SILVER`), referenced by the rest |
 | 2 | THE POINTER WHEELS | one block per pointer — ALL its wheels together |
 | 3 | THE RING | `RING_TINT_GROUPS` |
-| 4 | THE DIAL | labels, markers, calendar pointer, glows, eclipses, instrument bands |
+| 4 | THE DIAL | labels, markers, calendar pointer, glows, eclipses, instrument bands, `SEAT_TICK_SLATE` (the masked-numeral stand-in tick, owner correction 2026-08-11) |
 | 5 | THE SUBDIAL AND THE SLOTS | roundel borders, small-seconds ticks, plate shadows, recolor targets |
 | 6 | THE DEFAULT SKIN's OWN HUES | the ring face, the seven planet bodies, Earth day/night, the Moon's limbs |
 | 7 | THE TRAY AND THE FAST-TRAVEL FLASH | the per-watch tint wheel, the flash chip |

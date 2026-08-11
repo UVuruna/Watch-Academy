@@ -78,5 +78,6 @@ def test_the_pointer_stays_behind_the_body_with_a_bounded_tip_peek():
     reach visibly into the hour band."""
     assert 0.0 < dial.MARKER_POINTER_LENGTH_RATIO < 1.0
     assert 0.0 < dial.MARKER_POINTER_WIDTH_RATIO < 1.0
-    assert 0.0 < dial.MARKER_GEM_LENGTH_RATIO < 1.0
+    # THE WHOLE DIAMOND (owner correction 2026-08-11): height >= width
+    # by law — the ratio is width OF height and must stay below 1.
     assert 0.0 < dial.MARKER_GEM_WIDTH_RATIO < 1.0

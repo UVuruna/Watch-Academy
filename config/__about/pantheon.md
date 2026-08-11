@@ -74,7 +74,12 @@ Layer: config — pure, no Qt, no wall clock.
 - [App (folder)](../../app/___app.md) — the Encyclopedia package, the
   Pointer/Slot Theme pickers, `controller.py`, `settings_store.py`
 - [Config (folder)](../___config.md) — `defaults.py`'s `DEFAULT_SKIN`
-  and `ECLIPSE_SOLAR_ART` read `weekday_art()` downhill
+  (`weekday_set.bodies`, `year_marker.moon_asset`) reads `weekday_art()`
+  downhill. `ECLIPSE_SOLAR_ART` no longer does (owner correction
+  2026-08-11): it is now a plain path literal to the owner's own
+  `sun_eclipse.png` icon, never the Planets theme's Eclipsed-Sun
+  weekday dual — `defaults.py` still imports this module regardless,
+  for the `DEFAULT_SKIN` tables above.
 
 ## Functions
 

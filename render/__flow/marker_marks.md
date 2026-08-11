@@ -6,14 +6,16 @@
 
 ```mermaid
 flowchart TD
-    A["edge = orbit_fraction + half_size_fraction\n(the body's OWN outer edge, on the little pointers' tip line)"] --> B["tip = edge scaled out to the tick ROOTS\n(the thread line — measured plate ratio)"]
-    A --> C["base = edge - half_size * LENGTH_RATIO\n(hidden under the disc — drawn BEFORE the body)"]
-    B --> D{shape}
-    C --> D
+    T["tip_radius param\n(None: measured plate ratio; the 360 tips' own radius when the body rode onto the ring band)"] --> N{"dial_radius * orbit_fraction > tip?"}
+    N -- yes, body OUTSIDE the tips' circle --> INW["inward: arrow FLIPS to point IN\nedge = orbit_fraction - half_size_fraction"]
+    N -- no, body INSIDE (ordinary orbit) --> OUTW["outward: arrow points OUT, as before\nedge = orbit_fraction + half_size_fraction"]
+    INW --> C["base = edge*radius + depth\n(hidden under the disc — drawn BEFORE the body)"]
+    OUTW --> C
+    C --> D{shape}
     D -- triangle --> E["polygon: dial_point#40;a, tip#41;, dial_point#40;a±HALF_DEG, base#41;"]
     D -- chevron --> F["two strokes from dial_point#40;a±HALF_DEG, base#41;\nmeeting at dial_point#40;a, tip#41;"]
-    D -- gem --> G["radially elongated diamond, tip on the thread line\n#40;longer than wide, behind the body, no hairline#41;"]
-    E --> H["white MARKER_BORDER outline, then the theme fill"]
+    D -- gem --> G["diamond spanning body_edge..tip\n#40;the WHOLE gem between the two circles, height >= width#41;"]
+    E --> H["clip out the body's own disc, then\nwhite MARKER_BORDER outline, then the theme fill"]
     F --> H
     G --> H
 ```
@@ -47,10 +49,13 @@ halo in `palette.INSTRUMENT_SEASON_COLORS[season]`, and
         IF style == "magnitude_arc":
             draw the body, then a ring gauge filled clockwise to magnitude
             RETURN
-        # "bite" — the magnitude becomes geometry
-        IF state == "solar_total":
-            corona rays + a black disc                     # not a bright Sun at all
+        # "bite" (owner correction 2026-08-11) — drawn AS SEEN, on top
+        # of config.defaults.ECLIPSE_SOLAR_ART (the owner's own icon)
+        IF state == "solar_total" AND covered >= 1.0:
+            RETURN                              # the icon alone is the look
+        IF state == "solar_annular":
+            draw the ring of fire around the black disc
         ELSE:
-            paint_face, then clip to the disc and lay a dark occulting
-            circle offset by (1 - magnitude) — a bite when partial, a
-            concentric ring of fire when annular
+            visible = 1 - covered
+            phase = acos(1 - 2*visible) / (2*pi)      # invert moon_lit_region's own mapping
+            draw moon_lit_region(phase, radius) as a bright crescent  # the SAME terminator the Moon's phases use

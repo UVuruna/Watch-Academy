@@ -41,13 +41,16 @@ Layer: config — pure, no Qt, no wall clock.
 Three eclipse-icon names stayed in [Defaults](defaults.md) instead:
 `ECLIPSE_SOLAR_ART`, `ECLIPSE_LUNAR_TYPE_ICON` (+ its reader
 `eclipse_lunar_type_icon()`) and `ECLIPSE_SOLAR_TYPE_ICON_SOURCE`.
-Each needs a name from a DIFFERENT new module —
-`ECLIPSE_SOLAR_ART = pantheon.weekday_art(...)`, the two icon tables
-key off `ICON_DIR` (the shared UI-icon-chrome root, itself used by
-many non-eclipse icon categories) — and the fixed import DAG forbids
-one new module importing another. Rather than duplicate `weekday_art`
-or `ICON_DIR`, the three names stay in `defaults.py`, which alone may
-import both `pantheon.py` and hold `ICON_DIR` itself.
+The two icon tables key off `ICON_DIR` (the shared UI-icon-chrome root,
+itself used by many non-eclipse icon categories), and the fixed import
+DAG forbids one new module importing another, so they stay in
+`defaults.py` rather than duplicating `ICON_DIR`.
+`ECLIPSE_SOLAR_ART` itself (owner correction 2026-08-11) is now a
+plain path literal to the owner's own `sun_eclipse.png` icon, not a
+`pantheon.weekday_art(...)` call — it no longer NEEDS `pantheon.py` at
+all — but it stays in `defaults.py` too, beside its two eclipse-icon
+neighbours; `defaults.py` still imports `pantheon` regardless, for
+`DEFAULT_SKIN`'s own weekday-body art.
 
 ## Connections
 

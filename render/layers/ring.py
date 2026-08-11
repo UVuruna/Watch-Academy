@@ -24,8 +24,8 @@ from (`config.dial.RING_INNER_COMPOSITION`).
 import math
 from pathlib import Path
 
-from PySide6.QtCore import QPointF, QRectF
-from PySide6.QtGui import QPainterPath, QPainter
+from PySide6.QtCore import QPointF, QRectF, Qt
+from PySide6.QtGui import QColor, QPainterPath, QPainter, QPen
 
 from config import dial, palette
 from core import angles, numerals, world
@@ -35,7 +35,8 @@ from render.context import Cadence, Layer, RenderContext
 from render.layers.numerals import band_spec
 from render.numeral_bands import (
     outer_centreline,
-    band_plate, inner_number_clear_regions, normalized_shadow_alpha, shadow_sample_count,
+    band_plate, inner_number_clear_regions, inner_number_seat_angles,
+    normalized_shadow_alpha, shadow_sample_count,
 )
 from render.painting import dial_point, draw_pixmap_centered
 
@@ -150,8 +151,41 @@ class RingLayer(Layer):
         painter.restore()
         if self._band_redress_active():
             self._draw_band_redress(painter, ctx)
+        self._draw_seat_ticks(painter, ctx)
         self._blit_band(painter, ctx, "inner")
         self._blit_band(painter, ctx, "outer")
+
+    def _draw_seat_ticks(self, painter: QPainter, ctx: RenderContext) -> None:
+        """THE SEAT TICK (owner correction 2026-08-11, slika 1): where a
+        minute numeral's own big stroke is masked away, a SMALL tick
+        stands in — hairline-sized, in the 360 points' own measured
+        zone, wearing the big pointers' WHITE border ("to treba da mu
+        bude STIL"). Drawn above the redress (it is a pointer-class
+        element) and below the band plates."""
+        spec = band_spec(self._skin, "inner", ctx)
+        angles_deg = inner_number_seat_angles(spec)
+        if not angles_deg:
+            return
+        interior = ctx.radius * ctx.interior_scale
+        inner_r = interior * dial.RING_INNER_TICK_INNER_FRACTION
+        outer_r = interior * dial.RING_INNER_TICK_OUTER_FRACTION
+        width = max(1.0, interior * dial.SEAT_TICK_WIDTH_FRACTION)
+        painter.save()
+        painter.setRenderHint(QPainter.RenderHint.Antialiasing)
+        border = QPen(QColor(*palette.MARKER_BORDER_RGBA))
+        border.setWidthF(width * dial.SEAT_TICK_BORDER_RATIO)
+        border.setCapStyle(Qt.PenCapStyle.RoundCap)
+        body = QPen(QColor(palette.SEAT_TICK_SLATE))
+        body.setWidthF(width)
+        body.setCapStyle(Qt.PenCapStyle.RoundCap)
+        for angle in angles_deg:
+            start = dial_point(angle % 360.0, inner_r)
+            end = dial_point(angle % 360.0, outer_r)
+            painter.setPen(border)
+            painter.drawLine(start, end)
+            painter.setPen(body)
+            painter.drawLine(start, end)
+        painter.restore()
 
     def _blit_band(
         self, painter: QPainter, ctx: RenderContext, band: str,

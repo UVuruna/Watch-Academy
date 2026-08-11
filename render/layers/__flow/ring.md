@@ -7,7 +7,7 @@
 ```mermaid
 %%{init: {'flowchart': {'subGraphTitleMargin': {'top': 0, 'bottom': 35}}}}%%
 flowchart TB
-    A[paint] --> B[_draw_bands: inner then outer, each own tint]
+    A[paint] --> B["_draw_bands: base art -> band redress (if active) -> seat ticks -> inner numbers -> outer band"]
     B --> D[_draw_jewels] --> E[_draw_crown_text] --> Z1[return]
     subgraph GLYPH["_draw_ring_glyph(asset, metal, theta, radius_fraction, height, draw_shadow)"]
         J[resolve metal finish file] --> L[translate to dial_point, rotate readable_rotation_deg]

@@ -29,15 +29,32 @@ so the drawing and the drawings of the drawing cannot drift again.
 The owner's four-styles screenshot round re-cut two of the three
 shapes: the CHEVRON is now the SAME triangle geometry drawn as LINE
 only (the open-V first cut was far too wide and looked unrelated to
-the triangle beside it), and the GEM is a diamond LONGER than wide,
-its long axis on the radius (`dial.MARKER_GEM_LENGTH_RATIO` /
-`MARKER_GEM_WIDTH_RATIO` — the first cut shipped the proportion
-inverted) with NO hairline joining it to the body (nobody asked for a
-line out of the Earth). All three are PROPORTIONAL to the body's own
+the triangle beside it). All three are PROPORTIONAL to the body's own
 half-size, drawn BEHIND the body ("IZA NE ISPRED ZEMLJE"), bridging
 the tick zone: base hidden under the disc, tip on the thread line at
 the tick roots (`dial.earth_moon_orbit_fraction`'s tangent fit puts
 the body's edge on the little pointers' tip line).
+
+## The direction follows the body (owner correction 2026-08-11)
+`draw_pointer` takes an optional `tip_radius` — the marked point's own
+radius, the 360 small pointers' tips. A body on its ordinary orbit
+sits INSIDE that circle, so the arrow points OUTWARD, as before; a
+body relocated onto the ring band (its event window) sits OUTSIDE it,
+so the arrow FLIPS and points INWARD at the same marked point instead.
+`tip_radius=None` reproduces the ordinary outward case from the
+measured plate ratio, unchanged. The owner's own words for the flip:
+"obrni strelicu... jer je sada na RINGU" (slika 4/5).
+
+## The gem, rewritten (owner correction 2026-08-11)
+The GEM shape no longer hides part of itself under the disc: one
+vertex sits on the body's own edge, the other on the marked point, and
+the WHOLE diamond lives in the gap between the body's circle and the
+360 tips' circle (slika 2/3 — parts under the disc used to make it
+read like the triangle beside it). Its width is a fraction of its own
+height (`dial.MARKER_GEM_WIDTH_RATIO`, always < 1) so height is never
+less than width — "ako je ista vrednost moze blago veca visina".
+`MARKER_GEM_LENGTH_RATIO` is retired; the gem's length is now simply
+the gap itself.
 
 ## The stations
 New moon is birth, first quarter youth, full moon the zenith of
@@ -71,8 +88,21 @@ numbers are `constants.MOON_STATION_GLOW`.
 - [Watch Face (folder)](../../app/___app.md) — `thumbs` builds each
   picker's preview from the same functions
 
+## The eclipse "bite", repainted as seen (owner correction 2026-08-11)
+A black offset-occulter circle over the already-black eclipse art was
+invisible ("ne moze crni isecak na crnoj eklipsi") — the base art
+under the bite is now `config.defaults.ECLIPSE_SOLAR_ART`, the owner's
+own icon (a black disc in rays), and the bite paints only the VISIBLE
+remainder: a bright crescent shaped by the SAME terminator construction
+the Moon's own phases use (`render.asset_variants.moon_lit_region`),
+the cycle-fraction inverted (via `acos`) so the crescent's AREA matches
+the Sun's visible share. Totality adds nothing — the icon alone is the
+look; annular draws the ring of fire around the black disc; a partial
+phase draws the crescent over it. The old procedural corona-spikes
+block is gone with the two-circle bite it drew.
+
 ## Functions
-- `draw_pointer(painter, shape, angle_deg, radius, edge_fraction, half_size_fraction, color)`
+- `draw_pointer(painter, shape, angle_deg, dial_radius, orbit_fraction, half_size_fraction, color, tip_radius=None)`
 - `draw_station_mark(painter, style, station, radius, color)` — the
   Moon's grammar; `draw_sun_station_mark(...)` is its solar twin, which
   adds the seasonal halo and the day/night wedge.

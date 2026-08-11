@@ -26,6 +26,14 @@ Layer: config — pure, no Qt, no wall clock.
   the painter-drawn ring/labels used whenever a skin ships no ring art
   (user drop-in skins, validate previews) — the bundled DOMY skin uses
   `ring.png` and never touches these.
+- **THE SEAT TICK** (owner correction 2026-08-11, slika 1): where a
+  minute numeral's own big stroke is masked away, a small tick stands
+  in its place — `SEAT_TICK_WIDTH_FRACTION` (hairline-sized, a
+  fraction of the interior radius) and `SEAT_TICK_BORDER_RATIO` (the
+  white-border stroke's width, as a multiple of the tick width). The
+  body colour is `palette.SEAT_TICK_SLATE`; drawn by
+  `render.layers.ring.RingLayer._draw_seat_ticks` from the angles
+  `render.numeral_bands.inner_number_seat_angles` reports.
 - **Moon/Earth rim transit** — `MOON_TRANSIT_OPACITY`, and THE CLEAR
   ORBIT LANE (owner verdict 2026-08-09): `EARTH_MOON_ORBIT_CLEARANCE_
   FRACTION` + `earth_moon_orbit_fraction(ring_size, half_size)`, the

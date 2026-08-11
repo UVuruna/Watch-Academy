@@ -51,13 +51,15 @@ from skins.manifest import (
 )
 
 # ═══════════════════════════ COORDINATOR VALUES ═══════════════════════════
-# ECLIPSE_SOLAR_ART lives here, not in glow.py: its value is
-# `pantheon.weekday_art(...)`, and a new module may never import
-# another new module (the fixed DAG) -- this is the one place
-# that may import pantheon.py downhill.
-ECLIPSE_SOLAR_ART = pantheon.weekday_art(
-    "planets/primary/photo/Sun_Eclipse.png"
-)                                            # source-mapped by paths.art_file
+# THE ECLIPSE WEARS THE OWNER'S OWN ICON (owner correction 2026-08-11:
+# "nemoj da koristis eklipsu koju predstavlja nedelja... slike sa
+# kojima predstavljamo eklipsu su one koje smo mi pravili"): the marker
+# art at a solar eclipse is his `assets/instrument/icons/sun_eclipse.png`
+# — the black disc in rays — never the Planets theme's Eclipsed-Sun
+# weekday dual, which belongs to the Sunday mechanic alone.
+ECLIPSE_SOLAR_ART = (
+    paths.assets_dir() / "instrument" / "icons" / "sun_eclipse.png"
+)
 
 # --- Location (until the picker arrives in M6) --------------------------------
 # Owner-approved preset; values taken verbatim from world_locations.json.

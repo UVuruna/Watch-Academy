@@ -208,6 +208,17 @@ missing alphabet was not an error but the trigger for a documented
 fallback. `render.letter_plates.plate_path` RAISES instead, and
 `tests/test_letter_plates.py` walks the whole library.
 
+## The seat tick's own angles (owner correction 2026-08-11)
+
+`inner_number_seat_angles(spec)` is `inner_number_clear_regions`'s own
+twin: the dial angle of every composed minute NUMBER on the inner band
+— the same seats whose big stroke the clear region masks away — so
+`render.layers.ring.RingLayer._draw_seat_ticks` knows exactly where to
+stand a small white-bordered tick in the gap the mask leaves (slika 1).
+Both functions read the SAME `_seats(spec)` list; the clear-region
+function turns each seat into a padded rectangle, this one just reports
+the seat's own angle.
+
 ## Never on the paint path, never on the disk
 
 Every function here allocates and rasterizes. All of them are called from

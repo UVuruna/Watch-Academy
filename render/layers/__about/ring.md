@@ -47,7 +47,8 @@ so it rebuilds only on a skin/size/DPI change. Not `hover_variable`.
 ### Uses
 - [Asset Recolor](../../__about/asset_recolor.md) — `jewel_metal_file` (gold master →
   silver/bronze finish, disk-cached)
-- [Numeral Bands](../../__about/numeral_bands.md) — the two computed band plates
+- [Numeral Bands](../../__about/numeral_bands.md) — the two computed band
+  plates, `inner_number_seat_angles` for the seat ticks
 - [Numeral Layers](numerals.md) — `band_spec`, the shared cache key
 - [Numerals](../../../core/__about/numerals.md) — `inner_composition`, the
   numberless base each variant composes from
@@ -66,7 +67,9 @@ so it rebuilds only on a skin/size/DPI change. Not `hover_variable`.
   `_draw_jewels()` and `_draw_crown_text()` on top — there is no
   disk-presence gate and no procedural fallback any more.
 - `_draw_bands()` (THE FIDELITY RULING, owner correction 2026-08-06):
-  blits the inner variant's NUMBERLESS base art, then the COMPUTED inner
+  blits the inner variant's NUMBERLESS base art, then (when the Moon
+  Horizon Band's per-degree redress is active) the band redress, then
+  the SEAT TICKS (`_draw_seat_ticks`, below), then the COMPUTED inner
   number plate, then the COMPUTED outer band — in that order, so the
   letters `paint()` stamps next have the metal under them and nothing
   over them. `RingSpec.outer_asset` is no longer drawn (it still names
@@ -74,6 +77,16 @@ so it rebuilds only on a skin/size/DPI change. Not `hover_variable`.
   samples); `ring_tint_inner` follows `ring_tint` when `None`, and both
   computed plates answer the tint/saturation sliders through their own
   `BandSpec` ([Numeral Layers](numerals.md)).
+- `_draw_seat_ticks()` (owner correction 2026-08-11, slika 1): where a
+  minute numeral's own big stroke is masked away
+  (`numeral_bands.inner_number_clear_regions`), a small tick stands in
+  — one line per angle from `numeral_bands.inner_number_seat_angles`,
+  hairline-sized (`dial.SEAT_TICK_WIDTH_FRACTION`), the body in
+  `palette.SEAT_TICK_SLATE` (measured off the plate's own tick colour)
+  under the same white `MARKER_BORDER_RGBA` border the big pointers
+  wear (`dial.SEAT_TICK_BORDER_RATIO`), drawn between the tick tips and
+  roots (`dial.RING_INNER_TICK_INNER_FRACTION` /
+  `_OUTER_FRACTION`) — the 360 hairlines' own measured zone.
 - `_blit_band()`: the shared blit for both computed plates (Rule #5) —
   one `drawImage` of a plate built at most once per settings change.
 - `_draw_ring_glyph()`: the ONE stamp shared by both the ring's six letters

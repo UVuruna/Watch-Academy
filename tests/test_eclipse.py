@@ -374,7 +374,13 @@ def test_solar_eclipse_swaps_the_earth_art(app):
     x = round(radius + orbit * math.sin(theta))
     y = round(radius - orbit * math.cos(theta))
     assert before.pixelColor(x, y) != after.pixelColor(x, y)
-    assert defaults.ECLIPSE_SOLAR_ART.name == "Sun_Eclipse.png"
+    # THE OWNER'S OWN ECLIPSE ICON (correction 2026-08-11): the swap
+    # art is `assets/instrument/icons/sun_eclipse.png` — never the
+    # Planets theme's Eclipsed-Sun weekday dual ("nemoj da koristis
+    # eklipsu koju predstavlja nedelja").
+    assert defaults.ECLIPSE_SOLAR_ART.name == "sun_eclipse.png"
+    assert defaults.ECLIPSE_SOLAR_ART.parent.name == "icons"
+    assert defaults.ECLIPSE_SOLAR_ART.exists()
 
 
 def test_solar_eclipse_hit_test_rides_the_relocated_marker(app):
@@ -1095,3 +1101,42 @@ def test_hover_sweep_never_leaks_escaped_markup(app):
             f"escaped markup leaked into a hover tooltip: {leak.group(0)!r} "
             f"in {text!r}"
         )
+
+
+def test_the_bite_is_the_moon_algorithms_bright_crescent(app):
+    """THE BITE AS IT IS SEEN (owner correction 2026-08-11, slika 4:
+    "ne moze crni isecak na crnoj eklipsi... imamo algoritam"): the
+    partial phase paints the VISIBLE remainder as a bright crescent
+    from the ONE terminator construction the Moon uses — its area
+    tracks the uncovered share, and totality adds nothing (the owner's
+    icon is the whole look)."""
+    import math as _math
+
+    from PySide6.QtCore import Qt
+    from PySide6.QtGui import QImage, QPainter
+
+    from render import marker_marks
+
+    def bright_area(magnitude):
+        image = QImage(240, 240, QImage.Format.Format_ARGB32)
+        image.fill(Qt.GlobalColor.black)
+        painter = QPainter(image)
+        painter.translate(120, 120)
+        marker_marks.draw_solar_eclipse(
+            painter, "bite", 100.0, "solar_partial", magnitude, "#FFD34D",
+        )
+        painter.end()
+        lit = sum(
+            1
+            for x in range(240)
+            for y in range(240)
+            if image.pixelColor(x, y).red() > 128
+        )
+        return lit / (_math.pi * 100.0 * 100.0)
+
+    assert bright_area(1.0) < 0.02          # totality: nothing added
+    quarter = bright_area(0.75)
+    half = bright_area(0.5)
+    assert 0.15 < quarter < 0.40            # thick crescent at 25% visible
+    assert 0.40 < half < 0.65               # half the face at 50% visible
+    assert quarter < half

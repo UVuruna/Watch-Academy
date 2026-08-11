@@ -165,8 +165,22 @@ def earth_moon_orbit_fraction(ring_size: float, half_size: float) -> float:
 MARKER_POINTER_LENGTH_RATIO = 0.80    # triangle depth, of the body's half-size
 MARKER_POINTER_WIDTH_RATIO = 0.45     # its tangential half-width, of the half-size
 MARKER_POINTER_OUTLINE_WIDTH_FRACTION = 0.0025   # stroke width, of the dial radius
-MARKER_GEM_LENGTH_RATIO = 0.55        # gem HALF-length, of the body's half-size
-MARKER_GEM_WIDTH_RATIO = 0.45         # its tangential half-width, OF that length
+# THE WHOLE DIAMOND (owner correction 2026-08-11, slika 2/3): the gem
+# spans EXACTLY the gap between the body's edge and the marked point on
+# the 360 circle — nothing of it hides under the disc — and its width
+# is this ratio of that height: height >= width by law ("visina >=
+# sirina; ako je ista vrednost moze blago veca visina").
+MARKER_GEM_WIDTH_RATIO = 0.85         # gem width, of its own height
+
+# THE SEAT TICK (owner correction 2026-08-11, slika 1: "pointer na
+# mestu seconds" — where the numeral's own big stroke is masked away, a
+# SMALL tick stands in the 360 hairlines' own measured zone, hairline-
+# sized but wearing the WHITE border of the big/arrow pointers — "to
+# treba da mu bude STIL"). Width as a fraction of the interior radius
+# (~the measured 0.45 deg of one hairline at the belt); the border
+# stroke is that width times the ratio.
+SEAT_TICK_WIDTH_FRACTION = 0.0068
+SEAT_TICK_BORDER_RATIO = 1.9
 
 # THE CROSSING (owner verdict 2026-08-10, `constants.MOON_TRANSIT_STYLES`)
 # — how far each non-overlapping style moves the Moon while it meets the

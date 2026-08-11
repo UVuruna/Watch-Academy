@@ -27,9 +27,19 @@ Layer: config — pure, no Qt, no wall clock.
 
 ## Contents
 
-- **Cross-DAG remnants** — `ECLIPSE_SOLAR_ART` (needs `pantheon.
-  weekday_art`), `ECLIPSE_LUNAR_TYPE_ICON`/`eclipse_lunar_type_icon()`/
-  `ECLIPSE_SOLAR_TYPE_ICON_SOURCE` (need `ICON_DIR`, defined here).
+- **`ECLIPSE_SOLAR_ART`** (owner correction 2026-08-11 — "nemoj da
+  koristis eklipsu koju predstavlja nedelja... slike sa kojima
+  predstavljamo eklipsu su one koje smo mi pravili"): the marker art at
+  a solar eclipse is now `assets/instrument/icons/sun_eclipse.png`, the
+  owner's OWN icon, a plain path literal — never the Planets theme's
+  Eclipsed-Sun weekday dual, which belongs to the Sunday mechanic
+  alone. No longer a cross-DAG remnant needing `pantheon.weekday_art`
+  for this name; `pantheon` stays imported here regardless, for the
+  `DEFAULT_SKIN.weekday_set.bodies`/`moon_asset` tables further down,
+  which do still call `pantheon.weekday_art`.
+- **Cross-DAG remnants** — `ECLIPSE_LUNAR_TYPE_ICON`/
+  `eclipse_lunar_type_icon()`/`ECLIPSE_SOLAR_TYPE_ICON_SOURCE` (need
+  `ICON_DIR`, defined here).
 - **Location** — `DEFAULT_CITY` (Belgrade, until the picker arrives).
 - **Tick scheduling** — `TICK_EPSILON_MS`, `CLOCK_JUMP_THRESHOLD_S`,
   `CLICK_THROUGH_HOVER_POLL_MS`, `HOVER_BYPASS_MODIFIER`.

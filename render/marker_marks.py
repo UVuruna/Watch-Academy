@@ -20,6 +20,7 @@ from PySide6.QtGui import (
 )
 
 from config import constants, dial, glow, palette
+from render.asset_variants import moon_lit_region
 from render.eclipse_glow import draw_event_glow
 from render.moon_face import dark_region
 from render.painting import dial_point
@@ -53,13 +54,11 @@ _INNER_GLOW_ALPHA = 0.62
 _WEDGE_RADIUS = 1.15
 _WEDGE_WIDTH_FRACTION = 0.20
 
-# The solar eclipse's own geometry.
-_BITE_TRAVEL = 2.0          # magnitude 0 walks the occulter clear of the limb
-_BITE_RISE = 0.4
-_ANNULAR_SHRINK = 0.86      # the occulter is SMALLER than the Sun — the ring of fire
-_CORONA_SPIKE_MIN = 1.02
-_CORONA_SPIKE_MAX = 1.22
-_CORONA_SPIKES = 24
+# The solar eclipse's own geometry. (The occulter-circle travel and
+# the procedural corona spikes are RETIRED — owner correction
+# 2026-08-11: the bite is the Moon algorithm's bright crescent over
+# his own icon, which carries its rays itself.)
+_ANNULAR_SHRINK = 0.86      # the ring of fire's inner edge, of the disc
 _GAUGE_RADIUS = 1.18
 _GAUGE_WIDTH_FRACTION = 0.14
 
@@ -70,7 +69,6 @@ _OUTERMOST_MARK = max(
     1.0 + _MARK_GAP + _CORONA_LENGTH + _MARK_WIDTH_FRACTION / 2,
     _WEDGE_RADIUS + _WEDGE_WIDTH_FRACTION / 2,
     _GAUGE_RADIUS + _GAUGE_WIDTH_FRACTION / 2,
-    _CORONA_SPIKE_MAX,
 )
 assert _OUTERMOST_MARK <= _MARK_REACH_LIMIT, (
     f"a marker mark reaches {_OUTERMOST_MARK:.3f} of the body radius, past "
@@ -100,12 +98,22 @@ def station_of_season_event(name: str | None) -> str | None:
 def draw_pointer(
     painter: QPainter, shape: str, angle_deg: float, dial_radius: float,
     orbit_fraction: float, half_size_fraction: float, color: str,
+    tip_radius: float | None = None,
 ) -> None:
     """One of `constants.MARKER_POINTER_SHAPES` BEHIND the body (owner
     correction 2026-08-11, "IZA NE ISPRED ZEMLJE" — the caller draws
-    this BEFORE the body's own disc): its outward tip flush with the
-    body's outer edge (the tick-root line the body touches), its base
-    hidden under the disc, so only the flanks show beside the curve.
+    this BEFORE the body's own disc): its tip on the marked point, its
+    base hidden under the disc, so only the flanks show beside the
+    curve.
+
+    THE DIRECTION FOLLOWS THE BODY (owner correction 2026-08-11, slika
+    4/5: "obrni strelicu... jer je sada na RINGU"): `tip_radius` is the
+    marked point's own radius — the 360 small pointers' tips. A body on
+    its ordinary orbit sits INSIDE that circle, so the arrow points
+    OUTWARD; a body relocated onto the ring band (its event window)
+    sits OUTSIDE it, so the arrow FLIPS and points INWARD at the same
+    marked point. When `tip_radius` is None the measured plate ratio
+    reproduces the ordinary outward case exactly.
 
     `orbit_fraction` and `half_size_fraction` are the CALLER's own
     numbers — this body's own orbit and half-size, each already
@@ -115,21 +123,27 @@ def draw_pointer(
     `MARKER_BORDER_RGBA` outline the Earth's procedural disc wears, so
     it reads against ANY fill colour.
     """
-    edge = orbit_fraction + half_size_fraction
     half_size = dial_radius * half_size_fraction
-    # THE BRIDGE TO THE SMALL TICKS (owner third round 2026-08-11): the
-    # body's edge rides THE LAST LINE outside the band, and the arrow —
-    # drawn BEHIND the body — extends from under the disc across the
-    # band's numeral zone so its tip touches the 360 small pointers'
-    # own tips, "showing the exact point". The tips/last-line ratio is
-    # the measured plate geometry, never a free protrusion.
-    tip = dial_radius * edge * (
-        dial.RING_INNER_TICK_INNER_FRACTION
-        / dial.RING_INNER_CONTENT_INNER_FRACTION
+    if tip_radius is None:
+        # THE BRIDGE TO THE SMALL TICKS (owner third round 2026-08-11):
+        # the tips/last-line ratio is the measured plate geometry,
+        # never a free protrusion.
+        tip = dial_radius * (orbit_fraction + half_size_fraction) * (
+            dial.RING_INNER_TICK_INNER_FRACTION
+            / dial.RING_INNER_CONTENT_INNER_FRACTION
+        )
+    else:
+        tip = tip_radius
+    inward = dial_radius * orbit_fraction > tip
+    # The body edge the arrow emerges from: the side FACING the marked
+    # point, so the base always hides under the disc.
+    edge = (
+        orbit_fraction - half_size_fraction if inward
+        else orbit_fraction + half_size_fraction
     )
     depth = half_size * dial.MARKER_POINTER_LENGTH_RATIO
     half_width = half_size * dial.MARKER_POINTER_WIDTH_RATIO
-    base = dial_radius * edge - depth
+    base = dial_radius * edge + (depth if inward else -depth)
     half_deg = math.degrees(half_width / max(1.0, base))
     outline = QPen(QColor(*palette.MARKER_BORDER_RGBA))
     outline.setWidthF(
@@ -178,22 +192,26 @@ def draw_pointer(
             painter.setPen(stroke)
             painter.drawPath(path)
     elif shape == "gem":
-        # A faceted diamond — LONGER than wide, long axis on the
-        # radius, outer vertex flush with the body's edge, NO hairline
-        # (owner corrections 2026-08-10/11: the first cut was squat AND
-        # tiny AND roped to the body; all three are gone).
-        reach = half_size * dial.MARKER_GEM_LENGTH_RATIO
-        seat = tip - reach
+        # THE WHOLE DIAMOND SHOWS (owner correction 2026-08-11, slika
+        # 2/3: parts under the disc made it read like the triangle):
+        # one vertex touches the body's own edge, the other stands on
+        # the marked point — the ENTIRE gem lives between the body's
+        # circle and the 360 circle. Its long axis is the radius and
+        # height >= width by law (`dial.MARKER_GEM_WIDTH_RATIO` < 1,
+        # "ako je ista vrednost moze blago veca visina").
+        body_edge = dial_radius * edge
+        height = abs(body_edge - tip)
+        mid = (body_edge + tip) / 2.0
         half_width_deg = math.degrees(
-            reach * dial.MARKER_GEM_WIDTH_RATIO / max(1.0, seat)
+            height * dial.MARKER_GEM_WIDTH_RATIO / 2.0 / max(1.0, mid)
         )
         painter.setPen(outline)
         painter.setBrush(QColor(color))
         painter.drawPolygon(QPolygonF([
             dial_point(angle_deg, tip),
-            dial_point(angle_deg + half_width_deg, seat),
-            dial_point(angle_deg, seat - reach),
-            dial_point(angle_deg - half_width_deg, seat),
+            dial_point(angle_deg + half_width_deg, mid),
+            dial_point(angle_deg, body_edge),
+            dial_point(angle_deg - half_width_deg, mid),
         ]))
     else:
         painter.restore()
@@ -474,39 +492,36 @@ def _solar_eclipse_body(
         return
     if style != "bite":
         raise ValueError(f"unknown solar eclipse style {style!r}")
-    if state == "solar_total":
-        # Totality is not a bright Sun at all: a black disc ringed by
-        # corona. Nothing about a dimmed golden ball says that.
-        painter.save()
-        pen = QPen(QColor(palette.GLOW_SUN_COLOR))
-        pen.setWidthF(max(1.0, radius * 0.08))
-        painter.setPen(pen)
-        for index in range(_CORONA_SPIKES):
-            theta = index / _CORONA_SPIKES * 2 * math.pi
-            reach = radius * (
-                _CORONA_SPIKE_MIN
-                + (_CORONA_SPIKE_MAX - _CORONA_SPIKE_MIN)
-                * abs(math.sin(index * 2.1))
-            )
-            painter.drawLine(
-                QPointF(math.cos(theta) * radius * 1.05,
-                        math.sin(theta) * radius * 1.05),
-                QPointF(math.cos(theta) * reach, math.sin(theta) * reach),
-            )
-        painter.setPen(QPen(QColor(color), max(1.0, radius * 0.10)))
-        painter.setBrush(QColor(palette.ECLIPSE_OCCULTER_COLOR))
-        painter.drawEllipse(QPointF(0.0, 0.0), radius, radius)
-        painter.restore()
+    # THE BITE IS DRAWN AS IT IS SEEN (owner correction 2026-08-11,
+    # slika 4: a black occulting circle over the already-black eclipse
+    # art was invisible — "ne moze crni isecak na crnoj eklipsi... vec
+    # znamo kako se pokazuje, crta isjecak na mjesecu imamo algoritam"):
+    # the VISIBLE remainder of the Sun is painted as a bright crescent
+    # whose shape comes from the ONE terminator construction the Moon's
+    # own phases use (`render.asset_variants.moon_lit_region`) — never
+    # two circles laid beside each other. The base art under this is
+    # the owner's own eclipse icon (a black disc in rays), so:
+    #  - totality leaves the icon whole (nothing visible to add);
+    #  - annular paints the ring of fire around the black disc;
+    #  - a partial phase paints the bright visible crescent over it.
+    if state == "solar_total" and covered >= 1.0:
         return
-    travel = (1.0 - covered) * _BITE_TRAVEL * radius
-    occulter = radius * (_ANNULAR_SHRINK if state == "solar_annular" else 1.0)
     painter.save()
-    disc = QPainterPath()
-    disc.addEllipse(QRectF(-radius, -radius, 2 * radius, 2 * radius))
-    painter.setClipPath(disc)
-    painter.setPen(Qt.PenStyle.NoPen)
-    painter.setBrush(QColor(palette.ECLIPSE_OCCULTER_COLOR))
-    painter.drawEllipse(
-        QPointF(travel, -travel * _BITE_RISE), occulter, occulter
-    )
+    if state == "solar_annular":
+        ring = QPen(QColor(palette.GLOW_ECLIPSE_SOLAR_ANNULAR_COLOR))
+        ring.setWidthF(max(1.0, radius * (1.0 - _ANNULAR_SHRINK)))
+        painter.setPen(ring)
+        painter.setBrush(Qt.BrushStyle.NoBrush)
+        edge_r = radius * (1.0 + _ANNULAR_SHRINK) / 2.0
+        painter.drawEllipse(QPointF(0.0, 0.0), edge_r, edge_r)
+    else:
+        visible = max(0.0, min(1.0, 1.0 - covered))
+        # `moon_lit_region` takes the CYCLE fraction (0 new, 0.5 full),
+        # whose nominal illumination is (1 - cos 2*pi*f) / 2 — inverted
+        # here so the bright region's AREA matches the visible share of
+        # the Sun. visible=1 lands exactly on the full disc (f=0.5).
+        phase = math.acos(1.0 - 2.0 * visible) / (2.0 * math.pi)
+        painter.setPen(Qt.PenStyle.NoPen)
+        painter.setBrush(QColor(palette.GLOW_SUN_COLOR))
+        painter.drawPath(moon_lit_region(phase, radius))
     painter.restore()

@@ -240,6 +240,14 @@ def inner_band_plate(spec: BandSpec) -> QImage:
     return band_plate(spec)
 
 
+def inner_number_seat_angles(spec: BandSpec) -> tuple[float, ...]:
+    """The dial angle of every composed minute NUMBER on the inner band
+    — the seats whose big stroke the clear region masks away, and where
+    `render.layers.ring` therefore stands the small white-bordered SEAT
+    TICK (owner correction 2026-08-11, slika 1)."""
+    return tuple(angle for _label, angle, _center in _seats(spec))
+
+
 def inner_number_clear_regions(spec: BandSpec) -> QPainterPath:
     """THE NUMBER'S OWN RECTANGLE (owner correction 2026-08-11, the
     '15' screenshot: the plate's big five-minute stroke showed BETWEEN

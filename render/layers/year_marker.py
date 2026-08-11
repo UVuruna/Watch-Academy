@@ -211,6 +211,14 @@ class YearMarkerLayer(Layer):
                     painter, spec.marker_pointer_shape, moon_angle,
                     ctx.radius, orbit, spec.moon_scale * factor,
                     spec.pointer_color,
+                    # THE MARKED POINT (owner correction 2026-08-11,
+                    # slika 4/5): the 360 tips' own radius — a Moon
+                    # relocated onto the ring band sits OUTSIDE it, so
+                    # the arrow flips inward at the same point.
+                    tip_radius=(
+                        ctx.radius * ctx.interior_scale
+                        * dial.RING_INNER_TICK_INNER_FRACTION
+                    ),
                 )
             self._draw_moon(
                 painter, ctx, pos, 2 * ctx.radius * spec.moon_scale * factor,
@@ -331,6 +339,13 @@ class YearMarkerLayer(Layer):
                 painter, spec.marker_pointer_shape, year_angle,
                 ctx.radius, orbit, size / (2 * ctx.radius),
                 spec.pointer_color,
+                # Same marked point as the Moon's call — an Earth in its
+                # event window rides the ring band and the arrow flips
+                # inward (owner correction 2026-08-11, slika 4/5).
+                tip_radius=(
+                    ctx.radius * ctx.interior_scale
+                    * dial.RING_INNER_TICK_INNER_FRACTION
+                ),
             )
         variant = (
             f"{ctx.skin.earth_style}_"

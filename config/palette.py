@@ -70,6 +70,13 @@ MOON_BAND_TICK_GRAY = "#9EA3AA"
 # dial text already uses.
 MOON_BAND_LINE_EDGE = "#3A3E46"
 
+# THE SEAT TICK'S SLATE (owner correction 2026-08-11, slika 1): the
+# small stand-in tick at a masked minute-numeral seat wears the
+# plate's own tick body colour — MEASURED off `simple_point.png`
+# (101,106,112 at both the hairlines and the big strokes' bodies) —
+# under the white border of the big pointers.
+SEAT_TICK_SLATE = "#656A70"
+
 # THE OPAQUE MOON SHADOW (owner correction 2026-08-10): a BLACK disc
 # UNDER the moon — "onda stavi crni disk ispod meseca" — fully opaque,
 # never an alpha-thinned gray wash.

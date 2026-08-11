@@ -6,7 +6,9 @@
 
 ```
 📁 defaults.py  (812 lines, the Session-36 remnant)
-  Cross-DAG remnants        ECLIPSE_SOLAR_ART, ECLIPSE_LUNAR_TYPE_ICON,
+  Coordinator value          ECLIPSE_SOLAR_ART (owner's OWN icon path,
+                              2026-08-11 — no longer the Planets weekday dual)
+  Cross-DAG remnants        ECLIPSE_LUNAR_TYPE_ICON,
                              ECLIPSE_SOLAR_TYPE_ICON_SOURCE
   Location                  DEFAULT_CITY
   Tick scheduling           TICK_EPSILON_MS, CLOCK_JUMP_THRESHOLD_S,
