@@ -81,3 +81,4 @@ desktop/research/recolor_preview/
 
 # Claude Code working folder - never tracked (owner decree 2026-08-09)
 .claude/
+/tests/run_guards.py
