@@ -1,10 +1,13 @@
 # The Theme Registry — Discussion Brief
 
-**STATUS: OPEN PROBLEM — brainstorm with the owner FIRST (owner decree
-2026-08-01).** Nothing here is implemented. This file is the agenda for a
-dedicated session that designs the registry WITH the owner before any code
-changes; per [Plan Rules](../../rules/PLAN.md) → Present Before Building, that
-session starts by echoing this brief back and filling its open questions.
+**STATUS: IMPLEMENTED — this brief is historical.** The registry the owner
+ordered exists as the `config/registry/` package (`week.py` — the WEEK kind,
+all 35 themes; `pointers.py`; `sentinel.py`; docs in `___registry.md`), the
+`PATCHING_RATCHET` entry for `config/pantheon.py` is gone (the ratchet is
+empty), and `constants.WEEKDAY_THEMES` reads the registry. The owner's
+availability verdict of 2026-08-12 (base pack vs L1 locks) lives in the
+registry as well — see [Android Charter](ANDROID.md) → The Base Pack
+Agreement. The text below is kept as the original agenda for the record.
 
 ---
 

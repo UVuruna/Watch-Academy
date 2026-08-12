@@ -38,7 +38,7 @@ decided and is not reopened.
 | Question | Verdict |
 |----------|---------|
 | Technology | **Kotlin, native Android.** No KMP, no Flutter, no embedded Python. |
-| Home | **New project with its own repo** (monorepo constitution), consuming the exported pack from this repo. |
+| Home | ~~New project with its own repo~~ **SUPERSEDED by the owner's ballot verdict of 2026-08-12: ONE repo, three top-level folders — `desktop/` (all existing Python), `android/` (the Kotlin project), `shared/` (assets, Database, config tables, texts, golden vectors).** The bakery and the CONTRACT PACK survive unchanged — the pack is still baked from `shared/` and the phone still consumes the baked pack, never the raw tree. The migration is a dedicated session and MUST NOT start before the two in-flight sessions finish (performance round; eclipse-mechanism round) — the owner's explicit condition. |
 | Widgets | **W1 dial-only + W2 dial-with-command-strip + W3 info bar.** Live Wallpaper NOT chosen. |
 | W1 scope (owner's words) | The dial-only widget renders the COMPLETE watch face — jewels, pointer style, ring style (outer x inner), crown text, numerals, minutes, moving bodies — with per-instance settings. The widget IS the watch, never a reduced version. |
 | Time travel | **Buttons on the widget strip + full mode in the app.** Offset ≠ 0 shows a visible TRAVEL badge on the widget; tapping the dial opens the app's Time Travel screen at the traveled moment. |
@@ -65,7 +65,13 @@ The bakery (Phase 1, work in THIS repo, before any Kotlin) produces the
   2026-07-07, mockup day 20.6.2025, equinox exactness…). The port of an
   algorithm is DONE when its vectors are green — no other criterion.
 - **Config tables exported to JSON** — themes, rosters, ring presets,
-  palette, encyclopedia tree. Tables are never re-typed in Kotlin.
+  palette, encyclopedia tree, the availability table. Tables are never
+  re-typed in Kotlin. (Owner instruction 2026-08-12, with the one-repo
+  verdict: everything BOTH platforms read lives in a language both
+  speak — JSON for tables and texts, SQLite for the big databases,
+  WebP for baked art. The Python registry stays the AUTHORING source
+  with its laws and teeth; the bakery exports it into `shared/` — one
+  source, generated artifacts, never two hand-maintained copies.)
 - **Baked art** — phone-resolution downscale + WebP, recolored HERE by the
   existing transformer (the phone never recolors), packed PER THEME with a
   manifest. Measured 2026-08-10: `assets/` is 3,552 MB in 2,678 files —
@@ -95,6 +101,13 @@ The boundary, in one line: **the sky is free; philosophy is locked.**
   no other calendar's month cycle rides in the base); **Zodiac — BOTH the
   Western astrology zodiac AND the Chinese zodiac** (each in all its
   depictions, per "depictions are not themes").
+- **The per-theme manifest — SEALED (owner's ballot verdict 2026-08-12):**
+  the WEEK themes unlocked in the base are exactly **planets (with the
+  planet-signs and planets-art looks), cosmos, continents, profession,
+  corporate, virtues, sins, moods**; every other registered theme is an
+  L1 pack. On desktop, entering the old secret unlocks everything at
+  once. The registry's availability table
+  (`config/registry/availability.py`) is the single source of truth.
 - **LOCKED: every PHILOSOPHICAL thematic** — the figure casts, the Divine,
   the Character Cube, religions, creeds, pantheons, the Human Wheel… all of
   them L1 theme packs (free download). The exact per-theme manifest mapping
