@@ -48,6 +48,8 @@ from render.layers.year_marker import (
     eclipse_body_angle,
     eclipse_body_orbit,
     eclipse_body_scale,
+    moon_marker_angle,
+    moon_marker_orbit,
 )
 from render.painting import dial_point
 from tests.deep_fixture import build_fixture_pack
@@ -255,9 +257,9 @@ def test_eclipse_visibility_lunar_moon_altitude_ground_truthed(app):
 
 
 def test_eclipse_invisible_hover_names_the_reason(app):
-    """The hover line appends the reason (owner spec, round numbers, the
-    km threshold never printed): "below the horizon" for a horizon miss,
-    "path {d} km away" for a solar distance miss."""
+    """The card's Visibility row names the reason (owner spec, round
+    numbers, the km threshold never printed): "below the horizon" for a
+    horizon miss, "path {d} km away" for a solar distance miss."""
     tz = ZoneInfo("Europe/Belgrade")
     instant = datetime(2026, 8, 12, 17, 46, tzinfo=timezone.utc)
     local_now = instant.astimezone(tz)
@@ -273,11 +275,15 @@ def test_eclipse_invisible_hover_names_the_reason(app):
         kind="lunar", instant=instant, type="total", magnitude=1.2,
         visible=False,
     )
-    far_line = compositor._eclipse_hover_line(far_event)
-    horizon_line = compositor._eclipse_hover_line(horizon_event)
+    far_line = compositor._eclipse_visibility_text(far_event)
+    horizon_line = compositor._eclipse_visibility_text(horizon_event)
     assert "16123 km away" in far_line
     assert "below the horizon" in horizon_line
     assert str(constants.ECLIPSE_SOLAR_VISIBILITY_KM) not in far_line
+    # A visible one says so rather than falling silent.
+    assert "Visible" in compositor._eclipse_visibility_text(
+        dataclasses.replace(far_event, visible=True)
+    )
 
 
 def test_absent_pack_never_populates_eclipses():
@@ -428,35 +434,53 @@ def test_solar_eclipse_stands_apart_from_the_earth(app):
     assert defaults.ECLIPSE_SOLAR_ART.exists()
 
 
-def test_solar_eclipse_hit_test_rides_the_relocated_marker(app):
-    """The MARKER-PRIORITY note (Session 21-C): the eclipse window shares
-    the season/moon relocation, so the Earth still hit-tests at its
-    RING-BAND position with no new hit-test path needed."""
+def test_the_eclipse_body_answers_the_cursor_not_the_earth(app):
+    """THE HOVER FOLLOWS THE DRAWN BODY (owner correction 2026-08-12: the
+    hover must show the eclipse's info, not the Earth's).
+
+    This test replaces one that pinned the OPPOSITE — the retired costume
+    era, where a solar eclipse relocated the Earth marker to the ring band
+    and the hit test copied that relocation by hand. Since the costume
+    went, the marker stays on its ordinary circle: cursor over the eclipse
+    body must answer "eclipse", and cursor over the Earth must answer
+    "earth" AT ITS CIRCLE, not at the band."""
+    from PySide6.QtCore import QPointF
+
     tz = ZoneInfo("Europe/Belgrade")
     now = datetime(2026, 3, 1, 12, 0, tzinfo=tz)
     day = _belgrade_day(now)
     plain = build_tick_state(now, day)
+    event = EclipseEvent(
+        kind="solar", instant=now.replace(hour=17).astimezone(timezone.utc),
+        type="total", magnitude=1.02,
+    )
     eclipsed = dataclasses.replace(
-        plain,
-        eclipse_event=EclipseEvent(
-            kind="solar", instant=now.astimezone(timezone.utc),
-            type="total", magnitude=1.02,
-        ),
+        plain, eclipse_event=event, eclipse_body_event=event,
     )
     skin = dataclasses.replace(defaults.DEFAULT_SKIN, solar_rotation=False)
     comp = Compositor(skin, AssetCache())
     comp.render_offscreen(540.0, 1.0, day, eclipsed)
     radius = 270.0
-    theta = math.radians(plain.year_angle)
-    orbit = radius * dial.GLOW_RING_RADIUS_FRACTION
-    from PySide6.QtCore import QPointF
+    today = constants.WEEKDAY_BODIES[day.weekday_index]
 
-    x = radius + orbit * math.sin(theta)
-    y = radius - orbit * math.cos(theta)
-    point = QPointF(x - radius, y - radius)
-    assert comp._element_at(
-        point, radius, comp._rotation(), constants.WEEKDAY_BODIES[day.weekday_index],
-    ) == "earth"
+    def element_at(x: float, y: float) -> str | None:
+        return comp._element_at(
+            QPointF(x - radius, y - radius), radius, comp._rotation(), today,
+        )
+
+    x, y, _half = _eclipse_body_probe(skin, day, eclipsed)
+    assert element_at(x, y) == "eclipse"
+    # The Earth answers at the circle it is DRAWN on...
+    earth = dial_point(
+        plain.year_angle,
+        radius * dial.earth_moon_orbit_fraction(
+            skin.numeral_outer_ring_size, skin.year_marker.scale,
+        ),
+    )
+    assert element_at(radius + earth.x(), radius + earth.y()) == "earth"
+    # ...and no longer at the ring band the costume used to move it to.
+    band = dial_point(plain.year_angle, radius * dial.GLOW_RING_RADIUS_FRACTION)
+    assert element_at(radius + band.x(), radius + band.y()) != "earth"
 
 
 # --- Render: lunar (Moon marker darkened + bronze glow) ------------------------
@@ -499,32 +523,55 @@ def test_lunar_eclipse_is_a_body_apart_from_the_moon(app):
     assert before.pixelColor(x, y) != after.pixelColor(x, y)
 
 
-def test_lunar_eclipse_hit_test_rides_the_relocated_marker(app):
+def test_the_hover_follows_the_moon_off_the_ring_when_it_yields(app):
+    """THE OWNER'S SECOND REPORT, 2026-08-12: "the hover does not seem to
+    follow the Moon's relocation off the ring when it overlaps with the
+    eclipse". It did not — the hit test carried its own hand-written copy
+    of the marker geometry, so the collision rule this round added moved
+    the DRAWN Moon and left the TARGET on the band.
+
+    The collision case, exactly as the render shows it: the eclipse takes
+    the ring band, the Moon steps back to the ordinary circle — and the
+    cursor must find each of them where it is drawn."""
+    from PySide6.QtCore import QPointF
+
     tz = ZoneInfo("Europe/Belgrade")
-    now = datetime(2026, 3, 3, 12, 0, tzinfo=tz)
+    now = datetime(2026, 3, 3, 9, 30, tzinfo=tz)
     day = _belgrade_day(now)
-    plain = build_tick_state(now, day)
+    tick = build_tick_state(now, day)
+    assert tick.moon_event == "Full Moon"          # the Moon is band-bound
+    event = EclipseEvent(
+        kind="lunar", instant=now.replace(hour=0, minute=10).astimezone(timezone.utc),
+        type="total", magnitude=1.30,
+    )
     eclipsed = dataclasses.replace(
-        plain,
-        eclipse_event=EclipseEvent(
-            kind="lunar", instant=now.astimezone(timezone.utc),
-            type="total", magnitude=1.15,
-        ),
+        tick, eclipse_event=event, eclipse_body_event=event,
     )
     skin = dataclasses.replace(defaults.DEFAULT_SKIN, solar_rotation=False)
     comp = Compositor(skin, AssetCache())
     comp.render_offscreen(540.0, 1.0, day, eclipsed)
     radius = 270.0
-    moon_angle = math.radians(plain.moon_fraction * 360.0)
-    orbit = radius * dial.GLOW_RING_RADIUS_FRACTION
-    from PySide6.QtCore import QPointF
+    today = constants.WEEKDAY_BODIES[day.weekday_index]
 
-    x = radius + orbit * math.sin(moon_angle)
-    y = radius - orbit * math.cos(moon_angle)
-    point = QPointF(x - radius, y - radius)
-    assert comp._element_at(
-        point, radius, comp._rotation(), constants.WEEKDAY_BODIES[day.weekday_index],
+    def element_at(point) -> str | None:
+        return comp._element_at(
+            QPointF(point.x(), point.y()), radius, comp._rotation(), today,
+        )
+
+    ctx = _eclipse_ctx(skin, day, eclipsed)
+    # The Moon has indeed left the band...
+    assert moon_marker_orbit(ctx) != dial.GLOW_RING_RADIUS_FRACTION
+    # ...and the cursor finds it there, on the circle it is drawn on.
+    assert element_at(
+        dial_point(moon_marker_angle(ctx), radius * moon_marker_orbit(ctx))
     ) == "moon"
+    # The band it left now answers with the body that took it.
+    assert element_at(
+        dial_point(
+            eclipse_body_angle(ctx, event),
+            radius * dial.GLOW_RING_RADIUS_FRACTION,
+        )
+    ) == "eclipse"
 
 
 # --- The type -> state table (fix round C, owner decree 2026-07-19) -----------
@@ -734,46 +781,54 @@ def test_solar_total_and_annular_glow_are_full_strength_regardless_of_magnitude(
 # --- Hover text NAMES the eclipse -----------------------------------------------
 
 
-def test_earth_hover_names_the_solar_eclipse(app):
+def test_the_eclipse_card_is_its_own_and_the_markers_say_nothing(app):
+    """THE ECLIPSE'S OWN CARD (owner correction 2026-08-12: "the hover
+    should show info about the eclipse, not the same as the earth
+    hover"). The card names the type, the depth and the local instant —
+    and the Earth's and the Moon's cards are back to speaking only the
+    date and the phase, which is all their markers show that day."""
     tz = ZoneInfo("Europe/Belgrade")
     now = datetime(2026, 8, 12, 12, 0, tzinfo=tz)
     day = _belgrade_day(now)
     plain = build_tick_state(now, day)
+    event = EclipseEvent(
+        kind="solar",
+        instant=datetime(2026, 8, 12, 17, 45, 59, tzinfo=timezone.utc),
+        type="total", magnitude=1.0395,
+    )
     eclipsed = dataclasses.replace(
-        plain,
-        eclipse_event=EclipseEvent(
-            kind="solar",
-            instant=datetime(2026, 8, 12, 17, 45, 59, tzinfo=timezone.utc),
-            type="total", magnitude=1.0395,
-        ),
+        plain, eclipse_event=event, eclipse_body_event=event,
     )
     comp = Compositor(defaults.DEFAULT_SKIN, AssetCache())
     comp.render_offscreen(360.0, 1.0, day, eclipsed)
-    earth = comp._earth_text()
-    assert "Solar Eclipse" in earth
-    assert "Total" in earth
-    assert "1.04" in earth or "1.0395"[:4] in earth
-    assert "19:45" in earth or "17:45" in earth   # local (CEST) vs UT
+    card = comp._eclipse_text()
+    assert "Total Solar Eclipse" in card          # the chapter's own title
+    assert "Magnitude" in card and "1.04" in card
+    assert "19:45" in card or "17:45" in card     # local (CEST) vs UT
+    assert "Visibility" in card
+    # The markers keep their own subjects, and only their own.
+    assert "Eclipse" not in comp._earth_text()
+    assert "Eclipse" not in comp._moon_text()
 
 
-def test_moon_hover_names_the_lunar_eclipse(app):
+def test_the_lunar_eclipse_card_speaks_its_own_chapter(app):
     tz = ZoneInfo("Europe/Belgrade")
     now = datetime(2026, 3, 3, 12, 0, tzinfo=tz)
     day = _belgrade_day(now)
     plain = build_tick_state(now, day)
+    event = EclipseEvent(
+        kind="lunar", instant=now.astimezone(timezone.utc),
+        type="total", magnitude=1.15,
+    )
     eclipsed = dataclasses.replace(
-        plain,
-        eclipse_event=EclipseEvent(
-            kind="lunar", instant=now.astimezone(timezone.utc),
-            type="total", magnitude=1.15,
-        ),
+        plain, eclipse_event=event, eclipse_body_event=event,
     )
     comp = Compositor(defaults.DEFAULT_SKIN, AssetCache())
     comp.render_offscreen(360.0, 1.0, day, eclipsed)
-    moon = comp._moon_text()
-    assert "Lunar Eclipse" in moon
-    assert "Total" in moon
-    assert "1.15" in moon
+    card = comp._eclipse_text()
+    assert "Total Lunar Eclipse" in card
+    assert "1.15" in card
+    assert "Eclipse" not in comp._moon_text()
 
 
 # --- THE ECLIPSES ENCYCLOPEDIA (fix round F, owner order 2026-07-19) -----------
@@ -783,10 +838,14 @@ def test_moon_hover_names_the_lunar_eclipse(app):
 
 
 def _eclipse_marker_probe(kind, type_, magnitude=1.05):
-    """Render an eclipse window and return (compositor, x, y, size) at the
-    relocated marker's ring-band position — the SAME geometry the
-    hit-test goldens above use, so the Spacebar target is read at the
-    exact drawn spot."""
+    """Render an eclipse window and return (compositor, x, y, size) at THE
+    ECLIPSE BODY's own drawn seat — read from `render.layers.year_marker`,
+    the functions the dial paints and the hit test answers with, so the
+    Spacebar target is taken at the exact spot the reader points at.
+
+    Until 2026-08-12 this probed the Earth/Moon marker at the ring band,
+    because the eclipse was a costume those markers wore. It is a body of
+    its own now, and so is its page."""
     tz = ZoneInfo("Europe/Belgrade")
     now = (
         datetime(2026, 3, 3, 12, 0, tzinfo=tz) if kind == "lunar"
@@ -794,25 +853,19 @@ def _eclipse_marker_probe(kind, type_, magnitude=1.05):
     )
     day = _belgrade_day(now)
     plain = build_tick_state(now, day)
+    event = EclipseEvent(
+        kind=kind, instant=now.replace(hour=17).astimezone(timezone.utc),
+        type=type_, magnitude=magnitude,
+    )
     eclipsed = dataclasses.replace(
         plain, season_event=None, moon_event=None,
-        eclipse_event=EclipseEvent(
-            kind=kind, instant=now.astimezone(timezone.utc),
-            type=type_, magnitude=magnitude,
-        ),
+        eclipse_event=event, eclipse_body_event=event,
     )
     skin = dataclasses.replace(defaults.DEFAULT_SKIN, solar_rotation=False)
     comp = Compositor(skin, AssetCache())
     comp.render_offscreen(540.0, 1.0, day, eclipsed)
-    radius = 270.0
-    orbit = radius * dial.GLOW_RING_RADIUS_FRACTION
-    theta = math.radians(
-        plain.year_angle if kind == "solar"
-        else plain.moon_fraction * 360.0
-    )
-    x = radius + orbit * math.sin(theta)
-    y = radius - orbit * math.cos(theta)
-    return comp, x, y, 540.0
+    x, y, _half = _eclipse_body_probe(skin, day, eclipsed)
+    return comp, float(x), float(y), 540.0
 
 
 @pytest.mark.parametrize("kind,type_,topic,index", [
@@ -825,11 +878,10 @@ def _eclipse_marker_probe(kind, type_, magnitude=1.05):
     ("lunar", "penumbral", "eclipse_lunar", 3),
 ])
 def test_space_jump_opens_the_active_eclipse_chapter(app, kind, type_, topic, index):
-    """TASK 4 golden: while an eclipse window is active, Space over the
-    Earth (solar) / Moon (lunar) marker opens the Encyclopedia at THAT
-    category's chapter — every one of the seven categories, indexed by
-    the active type; hybrid keeps its OWN chapter (index 4), not
-    solar_total's."""
+    """TASK 4 golden, re-seated on THE THIRD BODY (owner 2026-08-12):
+    Space over the ECLIPSE opens the Encyclopedia at THAT category's
+    chapter — every one of the seven categories, indexed by the active
+    type; hybrid keeps its OWN chapter (index 4), not solar_total's."""
     comp, x, y, size = _eclipse_marker_probe(kind, type_)
     assert comp.encyclopedia_target(x, y, size) == (topic, index)
 
@@ -900,11 +952,11 @@ def test_eclipse_emblem_maps_every_category_and_is_graceful(app):
 
 
 def test_eclipse_hover_card_shows_emblem_when_art_present(app, tmp_path, monkeypatch):
-    """TASK 3 wiring: when the category emblem art DOES exist, the badge
-    appears on BOTH cards — the Earth card for a solar eclipse and the
-    Moon card for a lunar one — beside the eclipse line (owner slika 7).
-    A real (tiny) PNG under a monkeypatched eclipse dir proves the slot
-    is wired, not just the graceful-absent path."""
+    """TASK 3 wiring, re-seated on the eclipse's OWN card (owner
+    2026-08-12): when the category emblem art DOES exist, the badge
+    crowns that card — solar and lunar alike (owner slika 7). A real
+    (tiny) PNG under a monkeypatched eclipse dir proves the slot is
+    wired, not just the graceful-absent path."""
     from PySide6.QtGui import QImage
 
     monkeypatch.setattr(glow, "ECLIPSE_ART_DIR", tmp_path)
@@ -914,37 +966,39 @@ def test_eclipse_hover_card_shows_emblem_when_art_present(app, tmp_path, monkeyp
         assert swatch.save(str(tmp_path / stem))
 
     tz = ZoneInfo("Europe/Belgrade")
-    # Solar — the Earth card.
+    # Solar.
     solar_now = datetime(2026, 8, 12, 12, 0, tzinfo=tz)
     solar_day = _belgrade_day(solar_now)
+    solar_event = EclipseEvent(
+        kind="solar",
+        instant=datetime(2026, 8, 12, 17, 45, 59, tzinfo=timezone.utc),
+        type="total", magnitude=1.04,
+    )
     solar_tick = dataclasses.replace(
         build_tick_state(solar_now, solar_day),
-        eclipse_event=EclipseEvent(
-            kind="solar",
-            instant=datetime(2026, 8, 12, 17, 45, 59, tzinfo=timezone.utc),
-            type="total", magnitude=1.04,
-        ),
+        eclipse_event=solar_event, eclipse_body_event=solar_event,
     )
     comp = Compositor(defaults.DEFAULT_SKIN, AssetCache())
     comp.render_offscreen(360.0, 1.0, solar_day, solar_tick)
-    earth = comp._earth_text()
-    assert "Solar Eclipse" in earth
-    assert tmp_path.joinpath("Solar_Total.png").as_uri() in earth
+    card = comp._eclipse_text()
+    assert "Solar Eclipse" in card
+    assert tmp_path.joinpath("Solar_Total.png").as_uri() in card
 
-    # Lunar — the Moon card.
+    # Lunar.
     lunar_now = datetime(2026, 3, 3, 12, 0, tzinfo=tz)
     lunar_day = _belgrade_day(lunar_now)
+    lunar_event = EclipseEvent(
+        kind="lunar", instant=lunar_now.astimezone(timezone.utc),
+        type="total", magnitude=1.15,
+    )
     lunar_tick = dataclasses.replace(
         build_tick_state(lunar_now, lunar_day),
-        eclipse_event=EclipseEvent(
-            kind="lunar", instant=lunar_now.astimezone(timezone.utc),
-            type="total", magnitude=1.15,
-        ),
+        eclipse_event=lunar_event, eclipse_body_event=lunar_event,
     )
     comp.render_offscreen(360.0, 1.0, lunar_day, lunar_tick)
-    moon = comp._moon_text()
-    assert "Lunar Eclipse" in moon
-    assert tmp_path.joinpath("Lunar_Total.png").as_uri() in moon
+    card = comp._eclipse_text()
+    assert "Lunar Eclipse" in card
+    assert tmp_path.joinpath("Lunar_Total.png").as_uri() in card
 
 
 # --- THE PER-TYPE ECLIPSE ICONS (ART-INFRA round, owner 2026-07-20/21) --------
@@ -1010,8 +1064,8 @@ def test_eclipse_solar_annular_icon_is_tinted_toward_the_ring_of_fire_color(app)
 
 
 def test_eclipse_hover_line_carries_the_lunar_type_icon(app):
-    """Wiring: the Moon hover card's eclipse line embeds the type
-    icon's own URI inline, ahead of the "Lunar Eclipse" title."""
+    """Wiring: the eclipse card's Type row embeds the type icon's own
+    URI inline, ahead of the type name it labels."""
     tz = ZoneInfo("Europe/Belgrade")
     now = datetime(2026, 3, 3, 12, 0, tzinfo=tz)
     day = _belgrade_day(now)
@@ -1020,41 +1074,43 @@ def test_eclipse_hover_line_carries_the_lunar_type_icon(app):
         ("partial", "moon_eclipse_gold.png"),
         ("penumbral", "moon_eclipse_blue.png"),
     ):
+        event = EclipseEvent(
+            kind="lunar", instant=now.astimezone(timezone.utc),
+            type=type_, magnitude=1.0,
+        )
         tick = dataclasses.replace(
             build_tick_state(now, day),
-            eclipse_event=EclipseEvent(
-                kind="lunar", instant=now.astimezone(timezone.utc),
-                type=type_, magnitude=1.0,
-            ),
+            eclipse_event=event, eclipse_body_event=event,
         )
         comp = Compositor(defaults.DEFAULT_SKIN, AssetCache())
         comp.render_offscreen(360.0, 1.0, day, tick)
-        moon = comp._moon_text()
-        assert stem in moon, (type_, moon)
-        # It rides BEFORE the "Lunar Eclipse" title, not after.
-        assert moon.index(stem) < moon.index("Lunar Eclipse")
+        card = comp._eclipse_text()
+        assert stem in card, (type_, card)
+        # It rides BEFORE the Type row it belongs to, not after.
+        assert card.index(stem) < card.index("Type")
 
 
 def test_eclipse_hover_line_carries_the_solar_type_icon(app):
-    """Same wiring, Earth/solar side — annular resolves through the
-    tinted cache file, still embedded inline."""
+    """Same wiring, solar side — annular resolves through the tinted
+    cache file, still embedded inline."""
     from render.asset_variants import eclipse_solar_type_icon
 
     tz = ZoneInfo("Europe/Belgrade")
     now = datetime(2026, 8, 12, 12, 0, tzinfo=tz)
     day = _belgrade_day(now)
     for type_ in ("total", "annular", "partial"):
+        event = EclipseEvent(
+            kind="solar",
+            instant=datetime(2026, 8, 12, 17, 45, 59, tzinfo=timezone.utc),
+            type=type_, magnitude=1.0,
+        )
         tick = dataclasses.replace(
             build_tick_state(now, day),
-            eclipse_event=EclipseEvent(
-                kind="solar",
-                instant=datetime(2026, 8, 12, 17, 45, 59, tzinfo=timezone.utc),
-                type=type_, magnitude=1.0,
-            ),
+            eclipse_event=event, eclipse_body_event=event,
         )
         comp = Compositor(defaults.DEFAULT_SKIN, AssetCache())
         comp.render_offscreen(360.0, 1.0, day, tick)
-        earth = comp._earth_text()
+        earth = comp._eclipse_text()
         expected = eclipse_solar_type_icon(type_)
         # `scaled_variant_file` may downscale to a differently-STAMPED
         # cache file, but its name always ends in the source's own
@@ -1122,39 +1178,47 @@ def test_hover_sweep_never_leaks_escaped_markup(app):
     plain_texts = _sweep_tooltip_texts(comp, size)
     assert plain_texts, "the plain-day sweep found no hovers at all"
 
-    # The solar eclipse window (Earth marker names it).
-    solar_now = datetime(2026, 8, 12, 12, 0, tzinfo=tz)
-    solar_day = _belgrade_day(solar_now)
-    solar_plain_tick = build_tick_state(solar_now, solar_day)
-    solar_tick = dataclasses.replace(
-        solar_plain_tick,
-        eclipse_event=EclipseEvent(
+    # The eclipse windows. The coarse grid may pass beside a body this
+    # small, so each sweep is joined by ONE deliberate probe at the
+    # eclipse's own drawn seat — the card is what this guard is here for.
+    def eclipse_sweep(now, event):
+        day = _belgrade_day(now)
+        tick = dataclasses.replace(
+            build_tick_state(now, day),
+            eclipse_event=event, eclipse_body_event=event,
+        )
+        comp.render_offscreen(size, 1.0, day, tick)
+        texts = _sweep_tooltip_texts(comp, size)
+        x, y, _half = _eclipse_body_probe(
+            defaults.DEFAULT_SKIN, day, tick, radius=size / 2,
+        )
+        seat = comp._tooltip_at(float(x), float(y), size)
+        if seat is not None:
+            texts.append(seat)
+        return texts
+
+    solar_texts = eclipse_sweep(
+        datetime(2026, 8, 12, 12, 0, tzinfo=tz),
+        EclipseEvent(
             kind="solar",
             instant=datetime(2026, 8, 12, 17, 45, 59, tzinfo=timezone.utc),
             type="total", magnitude=1.0395,
         ),
     )
-    comp.render_offscreen(size, 1.0, solar_day, solar_tick)
-    solar_texts = _sweep_tooltip_texts(comp, size)
     assert any("Solar Eclipse" in t for t in solar_texts), (
-        "the solar-eclipse sweep never reached the Earth marker hover"
+        "the solar-eclipse sweep never reached the eclipse body's card"
     )
 
-    # The lunar eclipse window (Moon marker names it).
     lunar_now = datetime(2026, 3, 3, 12, 0, tzinfo=tz)
-    lunar_day = _belgrade_day(lunar_now)
-    lunar_plain_tick = build_tick_state(lunar_now, lunar_day)
-    lunar_tick = dataclasses.replace(
-        lunar_plain_tick,
-        eclipse_event=EclipseEvent(
-            kind="lunar", instant=lunar_now.astimezone(timezone.utc),
+    lunar_texts = eclipse_sweep(
+        lunar_now,
+        EclipseEvent(
+            kind="lunar", instant=lunar_now.replace(hour=17).astimezone(timezone.utc),
             type="total", magnitude=1.15,
         ),
     )
-    comp.render_offscreen(size, 1.0, lunar_day, lunar_tick)
-    lunar_texts = _sweep_tooltip_texts(comp, size)
     assert any("Lunar Eclipse" in t for t in lunar_texts), (
-        "the lunar-eclipse sweep never reached the Moon marker hover"
+        "the lunar-eclipse sweep never reached the eclipse body's card"
     )
 
     for text in plain_texts + solar_texts + lunar_texts:

@@ -222,6 +222,74 @@ def earth_marker_angle(ctx: RenderContext) -> float:
     return (base + ctx.world_offset) % 360.0
 
 
+def moon_marker_angle(ctx: RenderContext) -> float:
+    """The Moon marker's own dial angle, world offset included — the twin
+    of `earth_marker_angle`, and for the same reason."""
+    return (
+        angles.moon_cycle_angle(ctx.tick.moon_fraction) + ctx.world_offset
+    ) % 360.0
+
+
+def _moon_transit_nearness_now(ctx: RenderContext) -> float:
+    """How close the Moon is to crossing the Earth's disc right now, 0..1
+    — the ONE measure all three crossing switches read. Zero with the
+    Earth switched off: there is nothing to cross."""
+    if not ctx.skin.show_earth:
+        return 0.0
+    return moon_transit_nearness(
+        ctx.skin.year_marker,
+        ctx.tick.year_angle,
+        angles.moon_cycle_angle(ctx.tick.moon_fraction),
+    )
+
+
+def moon_marker_scale(ctx: RenderContext) -> float:
+    """The Moon marker's DRAWN half-size as a fraction of the dial radius
+    — its own scale, the hover enlargement and the transit shrink, in the
+    order the painting applies them."""
+    spec = ctx.skin.year_marker
+    factor = hover_factor(ctx, "moon")
+    if spec.transit_shrink:
+        factor *= 1.0 - _moon_transit_nearness_now(ctx) * dial.MOON_SHRINK_PASS_DEPTH
+    return spec.moon_scale * factor
+
+
+def moon_marker_orbit(ctx: RenderContext) -> float:
+    """The Moon marker's DRAWN orbit radius: the ring band during its own
+    event window, the ordinary circle otherwise — eased inward while it
+    rides the rim past the Earth, and given up to an eclipse that this
+    very marker pushed onto the band (`marker_yields_band`)."""
+    spec = ctx.skin.year_marker
+    glowing = ctx.tick.moon_event is not None
+    if glowing and not marker_yields_band(ctx, "moon"):
+        return dial.GLOW_RING_RADIUS_FRACTION
+    orbit = dial.earth_moon_orbit_fraction(
+        ctx.skin.numeral_outer_ring_size, spec.moon_scale,
+    )
+    if spec.transit_rim and not glowing:
+        orbit -= _moon_transit_nearness_now(ctx) * dial.MOON_LANE_SPLIT_FRACTION
+    return orbit
+
+
+def earth_marker_scale(ctx: RenderContext) -> float:
+    """The Earth marker's DRAWN half-size, hover enlargement included."""
+    return ctx.skin.year_marker.scale * hover_factor(ctx, "earth")
+
+
+def earth_marker_orbit(ctx: RenderContext) -> float:
+    """The Earth marker's DRAWN orbit radius — the ring band while a
+    season event glows, the ordinary circle otherwise, and the circle
+    again when an eclipse has taken the band from it."""
+    if (
+        ctx.tick.season_event is not None
+        and not marker_yields_band(ctx, "earth")
+    ):
+        return dial.GLOW_RING_RADIUS_FRACTION
+    return dial.earth_moon_orbit_fraction(
+        ctx.skin.numeral_outer_ring_size, ctx.skin.year_marker.scale,
+    )
+
+
 def almanac_wheel_active(ctx: RenderContext) -> bool:
     return (
         ctx.skin.pointer == "calendar"
@@ -267,26 +335,30 @@ class YearMarkerLayer(Layer):
             # (ledger §1). The transit test below keeps the RAW angles —
             # both markers take the same offset, so their separation is
             # unchanged and adding it twice would only invite drift.
-            seat = angles.moon_cycle_angle(ctx.tick.moon_fraction)
-            moon_angle = (seat + ctx.world_offset) % 360.0
+            moon_angle = moon_marker_angle(ctx)
             # The rim transit only exists while the Earth is also shown.
             # THE CROSSING (owner verdict 2026-08-10): the translucent
             # pass is RETIRED — he crossed it out on the proposals page,
             # and it was never legible anyway (two bodies bleeding
             # through each other). All three surviving styles read ONE
             # measure, `moon_transit_nearness`, and none of them dims.
-            nearness = (
-                moon_transit_nearness(spec, ctx.tick.year_angle, seat)
-                if ctx.skin.show_earth
-                else 0.0
-            )
+            nearness = _moon_transit_nearness_now(ctx)
             # NO OPACITY ON THE MOON (owner correction 2026-08-11,
             # "mesec opet ima OPACITY!!!" — this retires the 2026-07-12
             # below-horizon dimming): the Moon Horizon Band is what says
             # whether the Moon is up now; the disc itself is always
             # painted solid. `moon_hidden_alpha` stays a stored field so
             # old settings files load, but nothing reads it here.
-            factor = hover_factor(ctx, "moon")
+            # ONE SEAT, TWO READERS (owner question 2026-08-12: "how is
+            # the hover not simply every time the cursor crosses that
+            # element's own dimensions — what imaginary space is it
+            # following?"). It followed a SECOND, hand-written copy of
+            # this geometry living in the hit test, and every time the
+            # paint moved a marker the copy stayed where it was. So the
+            # seat, the lane and the size are module functions now, and
+            # `Compositor._element_at` calls these very ones: what is
+            # drawn IS what answers the cursor, by construction.
+            factor = moon_marker_scale(ctx) / spec.moon_scale
             # During its ±6 h event window the Moon RELOCATES radially to
             # the ring band centerline (owner 2026-07-16), keeping its
             # cycle angle, so the SILVER halo straddles the ring.
@@ -309,33 +381,14 @@ class YearMarkerLayer(Layer):
             # the Moon "is shown on the ordinary circle as on any other
             # day, only now with the graphic of the new or full moon".
             # lang-ok: the owner's own sentence, quoted as the rule.
-            orbit = (
-                dial.GLOW_RING_RADIUS_FRACTION
-                if glowing and not marker_yields_band(ctx, "moon")
-                # THE LINE AND THE BODIES (owner corrections
-                # 2026-08-10/11): per-body tangent to the tick-root
-                # line — see `config.dial.earth_moon_orbit_fraction`.
-                else dial.earth_moon_orbit_fraction(
-                    ctx.skin.numeral_outer_ring_size, spec.moon_scale,
-                )
-            )
+            #
             # THE CROSSING SWITCHES (owner ballot verdict 2026-08-11):
             # three independent toggles replacing the one-of styles —
             # shrink, ride-the-rim and cast-shadow compose freely, all
             # three on by default; with none on, the plain Moon simply
-            # passes over.
-            if spec.transit_shrink:
-                factor *= 1.0 - nearness * dial.MOON_SHRINK_PASS_DEPTH
-            if spec.transit_rim and not glowing:
-                # RIDE THE RIM (owner correction 2026-08-11: this is the
-                # ORIGINAL lane-split motion, restored — the projection
-                # cut of 0.14.913 pinned the Moon to one spot instead of
-                # letting it travel): inside touching distance the Moon
-                # eases smoothly onto an inner lane by the SAME nearness
-                # measure, so as the cycle angle keeps moving the Moon
-                # traces a circle AROUND the Earth's disc and rejoins
-                # the shared lane on the far side.
-                orbit -= nearness * dial.MOON_LANE_SPLIT_FRACTION
+            # passes over. The first two live in `moon_marker_scale` and
+            # `moon_marker_orbit` above; the shadow is drawn below.
+            orbit = moon_marker_orbit(ctx)
             pos = dial_point(moon_angle, ctx.radius * orbit)
             earth_pos = None
             if nearness > 0.0 and ctx.skin.show_earth:
@@ -532,19 +585,13 @@ class YearMarkerLayer(Layer):
         glowing = ctx.tick.season_event is not None
         # THE EARTH YIELDS THE BAND on the same rule as the Moon above
         # (owner 2026-08-12): a solstice halo gives way to an eclipse
-        # that has been pushed onto the ring by this marker.
-        orbit = (
-            dial.GLOW_RING_RADIUS_FRACTION
-            if glowing and not marker_yields_band(ctx, "earth")
-            # THE LINE AND THE BODIES (owner corrections 2026-08-10/11):
-            # per-body tangent to the tick-root line — see the Moon's
-            # own call above.
-            else dial.earth_moon_orbit_fraction(
-                ctx.skin.numeral_outer_ring_size, spec.scale,
-            )
-        )
+        # that has been pushed onto the ring by this marker. Both the
+        # lane and the size are `earth_marker_orbit`/`earth_marker_scale`
+        # so the hit test can read the SAME numbers — see the note in the
+        # Moon block above.
+        orbit = earth_marker_orbit(ctx)
         pos = dial_point(year_angle, ctx.radius * orbit)
-        size = 2 * ctx.radius * spec.scale * hover_factor(ctx, "earth")
+        size = 2 * ctx.radius * earth_marker_scale(ctx)
         station = marker_marks.station_of_season_event(ctx.tick.season_event)
         if station is not None:
             # THE FOUR STATIONS of the year take the halo's place at a

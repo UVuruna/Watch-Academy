@@ -59,7 +59,19 @@ from render.layers.ring import RingLayer
 from render.layers.slot import SlotLayer
 from render.layers.star import StarLayer
 from render.layers.weekday import WeekdayLayer
-from render.layers.year_marker import YearMarkerLayer, earth_region
+from render.layers.year_marker import (
+    YearMarkerLayer,
+    earth_marker_angle,
+    earth_marker_orbit,
+    earth_marker_scale,
+    earth_region,
+    eclipse_body_angle,
+    eclipse_body_orbit,
+    eclipse_body_scale,
+    moon_marker_angle,
+    moon_marker_orbit,
+    moon_marker_scale,
+)
 from render.ninths import (
     active_thirteenth,
     center_face,
@@ -777,6 +789,31 @@ class Compositor:
         fraction the same way — one door, never per-site math."""
         return fraction * dial.interior_scale(self._skin.numeral_outer_ring_size)
 
+    def _marker_ctx(self, radius: float) -> RenderContext:
+        """The context the HIT TEST reads marker geometry through — built
+        exactly as `paint` builds the drawing one, so `year_marker`'s seat
+        functions return the same numbers for the cursor as for the brush
+        (ONE SEAT, TWO READERS — see `_element_at`).
+
+        `hovered` rides along deliberately: a hovered body is DRAWN larger,
+        so its target is larger too — which is what makes the enlargement
+        stable instead of a body that grows out from under the cursor."""
+        return RenderContext(
+            skin=self._skin, day=self._day, tick=self._last_tick,
+            daylight=(
+                self._last_tick.is_daylight
+                if self._last_tick is not None else True
+            ),
+            radius=radius, cache=self._cache, dpr=1.0,
+            rotation=self._rotation(),
+            world_offset=self._world_offset(),
+            hovered=self._hovered,
+            reveal_active=False, archetype_lit=None,
+            interior_scale=numeral_bands.interior_scale(
+                self._skin.numeral_outer_ring_size
+            ),
+        )
+
     def _band_hit(self, fraction: float) -> float:
         """A band-riding radius FRACTION (jewels disc, Earth/Moon orbits,
         greetings band) — rides the centreline shift, 0.0 at default."""
@@ -1035,6 +1072,10 @@ class Compositor:
                         roster=self._skin.info_slot_roster,
                     )
                 return self._weekday_tooltip(body, active=body == today)
+            if element == "eclipse":
+                # THE THIRD BODY SPEAKS FOR ITSELF (owner correction
+                # 2026-08-12) — never the Earth's card again.
+                return self._eclipse_text()
             if element == "moon":
                 return self._moon_text()
             if element == "earth":
@@ -1197,23 +1238,21 @@ class Compositor:
             # itself is already gated on it), never a crash.
             key = self._active_thirteenth()
             return _ENC_THIRTEENTH_TARGET.get(key) if key is not None else None
+        if element == "eclipse":
+            # THE ECLIPSE'S OWN JUMP (owner order 2026-08-12): Space over
+            # the third body opens ITS chapter. It used to hang off the
+            # Earth/Moon markers, which is exactly the confusion the owner
+            # named — the marker's own page is its own again below.
+            eclipse = self._last_tick.eclipse_body_event
+            return (
+                None if eclipse is None
+                else self._eclipse_encyclopedia_target(eclipse)
+            )
         if element == "moon":
-            # During a LUNAR eclipse window the Moon marker's Spacebar
-            # jump opens the active category's chapter instead of the
-            # phase page (fix round F, owner slika: Space over the
-            # eclipsing Moon lands on THAT chapter).
-            eclipse = self._last_tick.eclipse_event
-            if eclipse is not None and eclipse.kind == "lunar":
-                return self._eclipse_encyclopedia_target(eclipse)
             return "moon", constants.MOON_PHASE_NAMES.index(
                 phase_name(self._last_tick.moon_fraction)
             )
         if element == "earth":
-            # During a SOLAR eclipse window the Earth marker opens the
-            # active category's chapter instead of the season page.
-            eclipse = self._last_tick.eclipse_event
-            if eclipse is not None and eclipse.kind == "solar":
-                return self._eclipse_encyclopedia_target(eclipse)
             return "seasons", self._season_topic_index()
         if element == "archetype:center":
             # THE CENTRE'S OWN TARGET (One Soul round 2026-07-27): a
@@ -1528,56 +1567,37 @@ class Compositor:
                 self._interior_hit(archetype_figure_size(self._skin, radius) / 2.0),
             ):
                 return "archetype:center"
-        marker = self._skin.year_marker
-        # THE MARKERS OUTRANK THE RING (owner Session 21-C bug, slika
-        # 3): during a GLOW window `YearMarkerLayer` RELOCATES the Moon/
-        # Earth marker radially to the ring band centerline
-        # (`GLOW_RING_RADIUS_FRACTION`, same as the drawn glow) — this
-        # hit-test used to check only the marker's NORMAL orbit
-        # position, so a relocated marker missed its own hit circle and
-        # fell through to the ring TICK band underneath it. Mirroring
-        # the SAME relocation `YearMarkerLayer.paint` applies fixes it:
-        # hit-test the DRAWN position, whichever radius that is.
-        eclipse = self._last_tick.eclipse_event
-        # THE LINE AND THE BODIES (owner correction 2026-08-10): the
-        # quiet hit radius mirrors the DRAWN one exactly — `dial.
-        # earth_moon_orbit_fraction` PER BODY (each body's own disc is
-        # tangent to the tick-tip line, so the two orbits differ by
-        # their half-size difference), the same calls `YearMarkerLayer`
-        # makes — never the old fixed `orbit_fraction` field.
-        quiet_moon_orbit = dial.earth_moon_orbit_fraction(
-            self._skin.numeral_outer_ring_size, marker.moon_scale,
-        )
-        quiet_earth_orbit = dial.earth_moon_orbit_fraction(
-            self._skin.numeral_outer_ring_size, marker.scale,
-        )
-        moon_orbit = (
-            self._band_hit(dial.GLOW_RING_RADIUS_FRACTION)
-            if self._last_tick.moon_event is not None
-            or (eclipse is not None and eclipse.kind == "lunar")
-            else quiet_moon_orbit
-        )
-        # THE MARKERS RIDE THE WORLD (core.world): both are drawn on the
-        # turning dial face, so their hit discs take the same offset the
-        # paint does — 0.0 in Geocentric.
-        offset = self._world_offset()
+        # ONE SEAT, TWO READERS (owner question 2026-08-12: "how is the
+        # hover not simply every time the cursor crosses that element's
+        # own dimensions — what imaginary space is it following?"). It
+        # was following one: this hit test used to RE-DERIVE where the
+        # markers stand, so every relocation the painting learned had to
+        # be copied here by hand, and each one that was not — the Moon's
+        # rim-riding lane split, the transit shrink, and this round's
+        # yielding of the band to an eclipse — left the cursor answering
+        # at a seat nothing was drawn at any more. The copy is gone: the
+        # three calls below are the SAME functions `YearMarkerLayer.paint`
+        # draws with, so the target IS the drawn body, by construction.
+        ctx = self._marker_ctx(radius)
+        # THE THIRD BODY answers first, exactly as it is drawn last —
+        # over both markers on the day it belongs to.
+        body_event = self._last_tick.eclipse_body_event
+        if self._skin.show_eclipse and body_event is not None:
+            scale = eclipse_body_scale(ctx, body_event.kind == "solar")
+            angle = eclipse_body_angle(ctx, body_event)
+            if hit(
+                dial_point(angle, radius * eclipse_body_orbit(ctx, angle, scale)),
+                radius * scale,
+            ):
+                return "eclipse"
         if self._skin.show_moon and hit(
-            dial_point(
-                angles.moon_cycle_angle(self._last_tick.moon_fraction) + offset,
-                radius * moon_orbit,
-            ),
-            radius * marker.moon_scale,
+            dial_point(moon_marker_angle(ctx), radius * moon_marker_orbit(ctx)),
+            radius * moon_marker_scale(ctx),
         ):
             return "moon"
-        earth_orbit = (
-            self._band_hit(dial.GLOW_RING_RADIUS_FRACTION)
-            if self._last_tick.season_event is not None
-            or (eclipse is not None and eclipse.kind == "solar")
-            else quiet_earth_orbit
-        )
         if self._skin.show_earth and hit(
-            dial_point(self._last_tick.year_angle + offset, radius * earth_orbit),
-            radius * marker.scale,
+            dial_point(earth_marker_angle(ctx), radius * earth_marker_orbit(ctx)),
+            radius * earth_marker_scale(ctx),
         ):
             return "earth"
         if archetype_active(self._skin):
@@ -3069,16 +3089,12 @@ class Compositor:
             lines.append(f"{self._label('Moonrise')} {day.moonrise:%H:%M}")
         elif day.moonset is not None:
             lines.append(f"{self._label('Moonset')} {day.moonset:%H:%M}")
-        eclipse = tick.eclipse_event
-        eclipse_badge = ""
-        if eclipse is not None and eclipse.kind == "lunar":
-            lines.insert(0, self._eclipse_hover_line(eclipse))
-            # The category emblem rides ABOVE the eclipse line (owner
-            # slika 7; graceful-absent until the art lands), following
-            # the card's badge pattern.
-            eclipse_badge = _hover_badge(self._eclipse_emblem(eclipse))
+        # NO ECLIPSE LINE HERE ANY MORE (owner correction 2026-08-12):
+        # the eclipse is its own body with its own card (`_eclipse_text`),
+        # so this one speaks the PHASE — which is all the Moon marker
+        # shows on an eclipse day, exactly as on any other.
         cycle_day = tick.moon_fraction * constants.SYNODIC_MONTH_DAYS
-        return title + eclipse_badge + _centered_html(
+        return title + _centered_html(
             "",
             *lines,
             "",
@@ -3169,54 +3185,97 @@ class Compositor:
         small = scaled_variant_file(icon, 2 * px)
         return f"<img src='{small.as_uri()}' width='{px}' align='middle'/> "
 
-    def _eclipse_hover_line(self, eclipse) -> str:
-        """The eclipse hover line (ROADMAP 15h item 11, owner spec:
-        NAME the eclipse): type + magnitude + local instant, plain
-        (non-bold) like the season-event line it stands beside/replaces
-        on the Earth/Moon hover.
+    def _eclipse_visibility_text(self, eclipse) -> str:
+        """What the observer can actually make of this eclipse: "Visible
+        from here", or the REASON it is not (fix round E, 2026-07-19).
 
-        `self._ord()` already returns safe HTML (a raw `<sup>` suffix in
-        English). It MUST NOT be escaped again — escaping the composed
-        line (owner bug 2026-07-18, Session 21-D: the superscript leak)
-        turned `<sup>` into the literal text `&lt;sup&gt;...`. Every
-        free-form/translated piece is escaped on its OWN before joining;
-        the ordinal rides in raw."""
-        instant = eclipse.instant.astimezone(self._day.tzinfo)
-        title = html.escape(self._tr(
-            "Solar Eclipse" if eclipse.kind == "solar" else "Lunar Eclipse"
-        ))
-        kind = html.escape(self._tr(eclipse.type.capitalize()))
-        mag_label = html.escape(self._tr("mag."))
-        mag = f"{eclipse.magnitude:.2f}" if eclipse.magnitude is not None else "?"
-        line = (
-            f"{self._eclipse_type_icon_tag(eclipse)}{title} "
-            f"({kind}, {mag_label} {mag}) — "
-            f"{self._ord(instant.day)} {html.escape(self._month(instant))} "
-            f"{instant:%H:%M}"
-        )
-        # VISIBILITY REASON (owner verdict "može", fix round E,
-        # 2026-07-19): the event is real (the marker still shows it,
-        # muted) — name WHY the observer cannot actually see it. A
-        # SOLAR eclipse failing the distance gate names the distance;
-        # everything else (any lunar miss, or a solar sun-down miss)
-        # reads "below the horizon" — the only other gate either kind
-        # can fail. Round numbers; the km threshold itself is never
-        # printed (owner spec: config, not UI text).
-        if not eclipse.visible:
-            if (
-                eclipse.kind == "solar"
-                and eclipse.distance_km is not None
-                and eclipse.distance_km > constants.ECLIPSE_SOLAR_VISIBILITY_KM
-            ):
-                reason = html.escape(
-                    self._tr("path {km} km away").format(
-                        km=round(eclipse.distance_km)
-                    )
+        The event is real either way — the body still stands on the dial,
+        muted — so the card never simply omits it. A SOLAR eclipse failing
+        the distance gate names the distance; everything else (any lunar
+        miss, or a solar sun-down miss) reads "below the horizon", the
+        only other gate either kind can fail. Round numbers; the km
+        threshold itself is never printed (owner spec: config, not UI
+        text)."""
+        if eclipse.visible:
+            return html.escape(self._tr("Visible from here"))
+        if (
+            eclipse.kind == "solar"
+            and eclipse.distance_km is not None
+            and eclipse.distance_km > constants.ECLIPSE_SOLAR_VISIBILITY_KM
+        ):
+            return html.escape(
+                self._tr("path {km} km away").format(
+                    km=round(eclipse.distance_km)
                 )
-            else:
-                reason = html.escape(self._tr("below the horizon"))
-            line += f" — {reason}"
-        return line
+            )
+        return html.escape(self._tr("below the horizon"))
+
+    def _eclipse_text(self) -> str:
+        """THE ECLIPSE'S OWN CARD (owner correction 2026-08-12: "the hover
+        should show info about the eclipse, not the same as the earth
+        hover").
+
+        Until this round the eclipse had no hover of its own for the same
+        reason it had no body of its own: it was a costume, so it spoke
+        through the Earth's or the Moon's card — one extra line under a
+        date or a phase the reader had not asked about. Now the third body
+        answers for itself: its own emblem, its own title, and the four
+        things an eclipse actually is — which type, how deep, when it
+        peaks here, and whether this observer can see it — closed by the
+        chapter's own thesis (THE HOVER TEASER LAW; Space opens the rest).
+
+        `self._ord()` returns safe HTML (a raw `<sup>` in English) and
+        MUST NOT be escaped again — escaping a composed line (owner bug
+        2026-07-18, Session 21-D) once printed the literal `&lt;sup&gt;`.
+        Every free-form piece is escaped on its own before joining."""
+        eclipse = self._last_tick.eclipse_body_event
+        if eclipse is None:                      # hover raced the minute
+            return ""
+        instant = eclipse.instant.astimezone(self._day.tzinfo)
+        article = self._eclipse_article(eclipse)
+        title = (
+            article["title"] if article is not None
+            else ("Solar Eclipse" if eclipse.kind == "solar" else "Lunar Eclipse")
+        )
+        mag = (
+            f"{eclipse.magnitude:.2f}" if eclipse.magnitude is not None
+            else html.escape(self._tr("unknown"))
+        )
+        card = (
+            _hover_badge(self._eclipse_emblem(eclipse))
+            + _hover_title(html.escape(self._tr(title)))
+            + _centered_html(
+                "",
+                f"{self._eclipse_type_icon_tag(eclipse)}"
+                f"{self._label('Type')} "
+                f"{html.escape(self._tr(eclipse.type.capitalize()))}",
+                f"{self._label('Magnitude')} {mag}",
+                # THE HOUR IS THE SEAT (owner order 2026-08-12, A1): the
+                # instant printed here is the very number the body's dial
+                # angle is computed from, so the card explains where the
+                # reader is looking.
+                f"{self._label('Greatest eclipse')} "
+                f"{self._ord(instant.day)} {html.escape(self._month(instant))} "
+                f"{instant:%H:%M}",
+                f"{self._label('Visibility')} "
+                f"{self._eclipse_visibility_text(eclipse)}",
+                "",
+            )
+        )
+        if article is not None:
+            card += _article_body_html(_teaser(article["base"]), self._tr)
+        return card
+
+    def _eclipse_article(self, eclipse) -> dict | None:
+        """The eclipse chapter this body belongs to — "Solar_Total",
+        "Lunar_Penumbral" and the rest of the catalog's own vocabulary.
+        None (never a crash) for a type no chapter was written for: the
+        card then keeps its data rows and simply says less."""
+        name = f"{eclipse.kind.capitalize()}_{eclipse.type.capitalize()}"
+        try:
+            return self._encyclopedia.entry("eclipse", name)
+        except KeyError:
+            return None
 
     def _label(self, text: str) -> str:
         """A BOLD hover label with its colon (owner formatting round
@@ -3287,16 +3346,12 @@ class Compositor:
         else:
             season_art = defaults.SEASON_ART_DIR / f"{self._current_season_key()}.png"
 
-        eclipse = self._last_tick.eclipse_event
+        # NO ECLIPSE LINE HERE ANY MORE (owner correction 2026-08-12):
+        # this card is the DATE's, and the eclipse now has a body and a
+        # card of its own (`_eclipse_text`) — the season event keeps the
+        # row it always had.
         tail = []
-        eclipse_badge = ""
-        if eclipse is not None and eclipse.kind == "solar":
-            tail.append(self._eclipse_hover_line(eclipse))
-            # The category emblem (owner slika 7) rides with the eclipse
-            # block, below the era/season imagery, following the card's
-            # badge pattern (graceful-absent until the art lands).
-            eclipse_badge = _hover_badge(self._eclipse_emblem(eclipse))
-        elif season_event is not None:
+        if season_event is not None:
             tail.append(html.escape(self._tr(season_event)))
         tail.append(f"{self._label('Season')} {self._season_row()}")
         tail.append(
@@ -3306,9 +3361,7 @@ class Compositor:
             f"{html.escape(self._month(day.zodiac_start))} - "
             f"{self._ord(last.day)} {html.escape(self._month(last))})"
         )
-        season_block = (
-            _hover_badge(season_art) + eclipse_badge + _centered_html(*tail)
-        )
+        season_block = _hover_badge(season_art) + _centered_html(*tail)
 
         return date_block + era_block + season_block
 

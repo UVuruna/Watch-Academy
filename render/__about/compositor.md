@@ -133,3 +133,17 @@ violated in the code, not papered over here).
 - **Hit-testing and painting read the SAME geometry functions**, never
   a parallel hand-measured copy — a hover disc and a hover-enlarged
   drawn element can therefore never drift apart.
+  **This line was written before it was true of the markers** (owner
+  report 2026-08-12: "the hover does not follow the Moon's relocation
+  off the ring", and the question behind it — "what imaginary space is
+  the hover following?"). `_element_at` RE-DERIVED where the Earth and
+  the Moon stand, so every relocation the painting learned had to be
+  copied here by hand, and the ones that were not — the Moon's
+  rim-riding lane split, the transit shrink, the yielding of the band to
+  an eclipse — left the cursor answering at a seat nothing was drawn at.
+  The copy is gone: `_marker_ctx` builds the same `RenderContext` the
+  paint pass builds and the hit test calls
+  `moon_marker_angle`/`_orbit`/`_scale`, `earth_marker_*` and
+  `eclipse_body_*` from `render.layers.year_marker` — the very functions
+  the brush uses. Anything that moves a marker from now on moves its
+  target with it, without a second edit.

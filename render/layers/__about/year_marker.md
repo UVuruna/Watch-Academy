@@ -45,7 +45,24 @@ therefore measured against the markers' ORDINARY circle, and when it fires
 the marker gives the band up: the eclipse takes the ring, the marker takes
 the circle with its own new-/full-moon face — the owner's sentence,
 one-directional, never negotiated. The eclipse STYLES themselves are unchanged; they
-paint on the new body. The module also exports a standalone helper,
+paint on the new body.
+
+ONE SEAT, TWO READERS (owner report + question 2026-08-12: "the hover does
+not seem to follow the Moon's relocation off the ring when it overlaps the
+eclipse", and "how is the hover not simply every time the cursor crosses
+that element's own dimensions — what imaginary space is it following?"). It
+was following one: `Compositor._element_at` carried its own hand-written
+copy of this file's geometry, so each relocation the paint learned had to be
+copied there too, and the ones that were not — the Moon's rim-riding lane
+split, the transit shrink, and the band-yielding above — left the cursor
+answering at a seat nothing was drawn at. The copy is retired. The seats,
+lanes and sizes of both markers are module functions now — `moon_marker_angle`,
+`moon_marker_orbit`, `moon_marker_scale`, `earth_marker_angle`,
+`earth_marker_orbit`, `earth_marker_scale` — the layer paints with them and
+the hit test answers with them, so what is drawn IS what the cursor finds,
+by construction rather than by two edits staying in step.
+
+The module also exports a standalone helper,
 `earth_region(latitude, longitude)`, imported directly by
 `render/compositor.py` for hover/tooltip text — not only used internally by
 the layer. It resolves the continent LIVE from the day context's own
