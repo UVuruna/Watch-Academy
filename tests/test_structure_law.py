@@ -18,7 +18,16 @@ from pathlib import Path
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
 MAX_LINES = 1000
-EXCLUDED_DIR_NAMES = {".venv", "venv", "node_modules", "__pycache__", ".git"}
+# "worktrees" (2026-08-12): `.claude/worktrees/<agent-id>/` holds a git
+# WORKTREE — a second checkout of this same repository that an isolated
+# agent run left behind. Its files are copies of files this guard already
+# measures at their real paths, so scanning them measures the same source
+# twice and reports a RATCHETED file (app/controller.py) as a brand-new
+# violation under a path no ratchet key can match. This narrows WHERE the
+# law looks, never WHAT it forbids.
+EXCLUDED_DIR_NAMES = {
+    ".venv", "venv", "node_modules", "__pycache__", ".git", "worktrees",
+}
 
 # THE RATCHET — may only SHRINK (THE STRUCTURE LAW, clause 3). Adding an
 # entry requires the owner's explicit approval in that same session.
