@@ -395,6 +395,9 @@ class SkinDefinition:
     # dial element; what always stays is the day/twilight indication:
     show_earth: bool = True            # the orbiting Earth date marker
     show_moon: bool = True             # the orbiting Moon phase marker
+    show_eclipse: bool = True          # the eclipse body at its own HOUR
+                                       # (owner verdict 2026-08-12, C1:
+                                       # independent of the two above)
     show_weekday: bool = True          # the weekday bodies (slots + center)
     show_pointer: bool = True          # the star diamonds (Aura colors stay)
     colorful: bool = True              # False -> the Aura wears plain white

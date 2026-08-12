@@ -1777,6 +1777,16 @@ MOON_GLOW_WINDOW_H = 6.0
 # ±3h window, same shape as the season/moon windows above but its own
 # constant (the owner's spec is explicitly ±3h, not the moon's ±6h).
 ECLIPSE_GLOW_WINDOW_H = 3.0
+# THE ECLIPSE BODY's own, WIDER window (owner ballot verdict 2026-08-12,
+# option B2 with his written correction "+-12h"): the eclipse now stands
+# on the dial as a THIRD celestial body at the hour it happens
+# (`render.layers.year_marker.YearMarkerLayer._draw_eclipse_body`), and a
+# body that only appeared three hours before its own instant would keep
+# the dial silent for most of the day that carries the eclipse. Twelve
+# hours is his number, and it is the SEASON window's number too — half a
+# day either side, so an eclipse is on the dial for the whole span in
+# which its own date is the current one.
+ECLIPSE_BODY_WINDOW_H = 12.0
 
 # Eclipse VISIBILITY (owner verdict "može", fix round E, 2026-07-19):
 # a SOLAR eclipse is visible to the observer only within this great-

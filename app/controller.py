@@ -95,7 +95,7 @@ from data.translations import (
 )
 from render import letter_plates
 from render.assets import shared_cache
-from render.asset_variants import calendar_wheel_icon_file
+from render.asset_variants import calendar_sheet_icon_file, clock_face_icon_file
 from render.compositor import Compositor
 from skins.manifest import HandSpec, HandsSpec, missing_assets
 
@@ -1001,6 +1001,7 @@ def _overlay_display_settings(skin, settings: Settings, display):
         third_era=settings.third_era,
         show_earth=settings.show_earth,
         show_moon=settings.show_moon,
+        show_eclipse=settings.show_eclipse,
         show_weekday=settings.show_weekday,
         show_pointer=settings.show_pointer,
         colorful=settings.colorful,
@@ -2101,14 +2102,23 @@ class WatchController(QObject):
         THIS watch's own dial (owner spec: "per-watch — the focused
         watch flashes its own" — trivially true here since a shortcut
         only ever reaches the FOCUSED widget's `_on_shortcut` to begin
-        with). Calendar carries no `icon_key` (Sun/Moon keep their
-        eclipse glyphs, untouched this round) — its icon is COMPUTED
-        instead (`render.asset_variants.calendar_wheel_icon_file`, Rule #19),
-        killing the plain 📅 fallback the owner asked to retire."""
+        with).
+
+        THE OWNER'S OWN SIX (his order 2026-08-12): four categories name a
+        file of his in `defaults.ICON_FILES` (`sun_eclipse.png`,
+        `moon_eclipse_red.png`, `sun.svg`, `moon.svg`); Date and Time own
+        no file and name a COMPUTED drawing through `computed_icon`
+        instead (Rule #19) — the calendar sheet and the 24 h clock face,
+        which retire the 📅 and 🕐 emoji fallbacks. A theme declaring
+        neither still falls back to its own emoji, exactly as before."""
         theme = self._fast_travel_theme()
         option = theme["options"][self._fast_travel_option_index(theme["id"])]
-        if theme["id"] == "calendar":
-            icon_path = calendar_wheel_icon_file(shortcuts.FAST_TRAVEL_FLASH_ICON_PX)
+        computed = {
+            "calendar_sheet": calendar_sheet_icon_file,
+            "clock_face": clock_face_icon_file,
+        }.get(theme.get("computed_icon"))
+        if computed is not None:
+            icon_path = computed(shortcuts.FAST_TRAVEL_FLASH_ICON_PX)
         else:
             icon_key = theme["icon_key"]
             icon_path = (
@@ -2927,6 +2937,11 @@ class WatchController(QObject):
             (
                 "show_moon", tr("Moon"),
                 tr("The Moon marker riding its cycle and showing the phase."),
+            ),
+            (
+                "show_eclipse", tr("Eclipse"),
+                tr("The eclipse body: a solar or lunar eclipse standing at "
+                   "the hour it happens, apart from the Earth and the Moon."),
             ),
             (
                 "show_seconds", tr("Seconds"),

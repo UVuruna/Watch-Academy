@@ -83,7 +83,16 @@ minute), `is_daylight`, `is_moon_up`, `time_hm` ("14:34"),
 `season_event`/`moon_event` (`str | None`, active within their glow
 windows), `ascendant_sign` (default `""`), `eclipse_event`
 (`EclipseEvent | None`, default `None` — always `None` without the Deep
-Time pack).
+Time pack) and `eclipse_body_event` (the SAME event found through the
+wider `ECLIPSE_BODY_WINDOW_H`, ±12 h — owner order 2026-08-12).
+
+TWO ECLIPSE FIELDS, TWO QUESTIONS. `eclipse_event` says "an eclipse is
+happening right now" (±3 h) and still drives the hover card and the Moon
+Horizon Band's copper segment; `eclipse_body_event` says "today carries
+an eclipse, and here is when" (±12 h) and seats the dial's third
+celestial body (`render.layers.year_marker`). The narrow window is a
+strict subset of the wide one, so the two can never disagree about WHICH
+event is active — pinned by `tests/test_eclipse.py`.
 
 ## Functions
 - `build_day_context(now_local, observer, year_anchors, moon_window, eclipses=())`

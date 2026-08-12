@@ -163,6 +163,16 @@ class TickState:
     eclipse_event: EclipseEvent | None = None  # active catalog eclipse
                                     # within ITS ±3h window, else None —
                                     # always None without the Deep Time pack
+    # THE ECLIPSE BODY (owner ballot verdict 2026-08-12, A1 + B2 "+-12h"):
+    # the SAME event, found through the wider `ECLIPSE_BODY_WINDOW_H`, for
+    # the third celestial body the dial now seats at the eclipse's own
+    # HOUR. Two fields rather than one because the two windows answer two
+    # different questions: `eclipse_event` says "an eclipse is happening
+    # right now" (it still drives the hover card and the band segment),
+    # this one says "today carries an eclipse, and here is when". The
+    # narrow window is a strict subset of the wide one, so the two can
+    # never disagree about WHICH event is active.
+    eclipse_body_event: EclipseEvent | None = None
 
 
 def build_day_context(
@@ -278,6 +288,9 @@ def build_tick_state(now_local: datetime, day: DayContext) -> TickState:
         ),
         eclipse_event=_active_eclipse(
             now_local, day, constants.ECLIPSE_GLOW_WINDOW_H
+        ),
+        eclipse_body_event=_active_eclipse(
+            now_local, day, constants.ECLIPSE_BODY_WINDOW_H
         ),
     )
 

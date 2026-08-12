@@ -5,16 +5,47 @@
 
 ## Purpose
 
-Paints the date markers along the inside of the dial: the Earth (riding the
+Paints the moving bodies along the inside of the dial: the Earth (riding the
 year wheel, summer solstice at the top — or the Calendar's own almanac
-month wedges) and the Moon (riding its own cycle, new moon at the top, full
-at the bottom, clockwise, showing the current illumination). The Elements
-switches (`show_earth`/`show_moon`) pick which of the two draws. During a
-±12h (Earth) or ±6h (Moon) event window — a season turning point, a solar
-or lunar eclipse — the marker RELOCATES radially onto the ring band
-centerline and grows a colored glow (golden/silver normally, red/bronze for
-an eclipse, muted silver when the eclipse is real but not visible from the
-active location). The module also exports a standalone helper,
+month wedges), the Moon (riding its own cycle, new moon at the top, full
+at the bottom, clockwise, showing the current illumination) and — since
+the owner's order of 2026-08-12 — THE ECLIPSE, a third body of its own.
+The Elements switches (`show_earth`/`show_moon`/`show_eclipse`) pick which
+of the three draw, and the eclipse's switch is independent of the other two.
+During a ±12h (Earth) or ±6h (Moon) event window — a season turning point,
+a principal moon phase — the marker RELOCATES radially onto the ring band
+centerline and grows a colored glow (golden for the Sun's stations, silver
+for the Moon's).
+
+**THE ECLIPSE IS NO LONGER A COSTUME** (owner order 2026-08-12, ballot
+A1/B2/C1/D1/E1/F1). Until that round a solar eclipse was drawn ON the Earth
+marker and a lunar eclipse ON the Moon marker, which seated the event at the
+Earth's DATE angle or the Moon's PHASE angle — never at the hour it
+happens — and made a solar eclipse vanish whenever the Earth was switched
+off. Now `_draw_eclipse_body` seats it at `angles.time_to_dial_angle` of its
+own greatest-eclipse instant in local time, on the bodies' own orbit lane,
+for `constants.ECLIPSE_BODY_WINDOW_H` (±12 h) around that instant; the Earth
+and the Moon keep their own seats, art and faces on an eclipse day exactly
+as on any other. The three module-level helpers `eclipse_body_angle`,
+`eclipse_body_scale` and `eclipse_body_orbit` are the seating law in one
+place, so the layer and its teeth read the same numbers. `eclipse_body_orbit`
+also carries THE ESCAPE: a solar eclipse happens at new moon (seat: the top)
+and a lunar one at full moon (seat: the bottom), so when the eclipse would
+TOUCH a drawn marker — measured between centres, `dial.ECLIPSE_BODY_CLEARANCE`,
+not by the exact hour — the ECLIPSE leaves for the ring band and the marker
+keeps the ordinary circle.
+
+The escape has a SECOND half, `marker_yields_band`, and it is not optional:
+a marker inside its own event window is itself relocated to the ring band —
+and a full Moon is band-bound for six hours around precisely the instant a
+lunar eclipse happens. A first cut measured the markers where they currently
+STOOD, so the eclipse escaped from on top of the Moon to on top of the Moon;
+the render showed it, `tests/test_eclipse.py` now holds it. The collision is
+therefore measured against the markers' ORDINARY circle, and when it fires
+the marker gives the band up: the eclipse takes the ring, the marker takes
+the circle with its own new-/full-moon face — the owner's sentence,
+one-directional, never negotiated. The eclipse STYLES themselves are unchanged; they
+paint on the new body. The module also exports a standalone helper,
 `earth_region(latitude, longitude)`, imported directly by
 `render/compositor.py` for hover/tooltip text — not only used internally by
 the layer. It resolves the continent LIVE from the day context's own
@@ -94,8 +125,12 @@ layer, and their lift twin lives in `HoverLiftLayer`.
 
 ### Used by
 - [Compositor](../../__about/compositor.md) — fifth layer in the default `z_order`
-  (skipped when both `show_earth` and `show_moon` are off); also imports
-  the module-level `earth_region()` function directly for hover text
+  (skipped only when `show_earth`, `show_moon` AND `show_eclipse` are all
+  off — the eclipse body is independent of the two markers, so two
+  switches are no longer enough to retire the layer); also imports the
+  module-level `earth_region()` function directly for hover text
+- [Eclipse Plates](../../__about/eclipse_plates.md) — the Encyclopedia's
+  own pictures of these same styles, drawn through the same painters
 - [Hover Lift Layer](hover_lift.md) — a `lift=True` twin repaints whichever
   of "earth"/"moon" is hovered, above the hands
 
@@ -103,11 +138,14 @@ layer, and their lift twin lives in `HoverLiftLayer`.
 
 ### YearMarkerLayer
 `cadence = Cadence.MINUTE`.
-- `paint()`: draws the Earth then the Moon, each gated independently by its
-  own Elements switch and `Layer._gate`.
+- `paint()`: draws the Earth, then the Moon, then the ECLIPSE body — each
+  gated independently by its own Elements switch and `Layer._gate`. The
+  eclipse is drawn LAST so it stands above both markers on the day it
+  belongs to.
 - `_draw_earth()`: resolves the year-wheel angle (almanac month wedge under
   the Calendar pointer, the shared six-anchor season wheel otherwise),
-  relocates + glows during a season/solar-eclipse window, picks the
+  relocates + glows during a season window (an eclipse no longer touches
+  this marker at all), picks the
   region/day-night art variant (`earth_region()` below), clips to the
   marker disc, and draws the FOUR exclusive label modes
   (`_draw_earth_label`: weekday / date / date+weekday / full date+year).
@@ -115,11 +153,20 @@ layer, and their lift twin lives in `HoverLiftLayer`.
   [`render.moon_face`](../../__about/moon_face.md), which owns the three
   owner-approved treatments of the unlit half and decides whether the
   face is clipped first (the cut styles) or covered after (the opaque
-  one). A lunar eclipse then takes one of three routes: "umbra_sweep"
+  one). Its `darken_state`/`lunar_magnitude` arguments are now passed
+  ONLY by `_draw_eclipse_body` — the Moon marker itself never darkens.
+  A lunar eclipse takes one of three routes there: "umbra_sweep"
   draws Earth's shadow as a real curved edge across the disc,
   "halo" keeps the older whole-disc multiply by a neutral (or copper, at
   totality) gray, and "horizon_shadow" leaves the disc alone because the
   event is written on the Moon Horizon Band instead.
+- `_draw_eclipse_body()`: the third body — seat, glow, pointer and the
+  chosen style, solar art drawn WHOLE (no disc clip: `sun_eclipse.png` is
+  a black disc in rays on transparency, and clipping would cut the rays
+  off), lunar handed to `_draw_moon` with the eclipse state.
+- `_eclipse_glow_paint()`: the body's halo colour and strength — red,
+  amber for annular, blood-moon bronze for lunar, and the muted silver at
+  half strength when the event is real but not visible from here.
 - `_day_fraction(day_length)`: the day's share of 24 h, parsed off the
   SAME "HH:MM" string the octa's bottom arm displays — the Sun's
   day/night wedge station is a picture of that number, so the two

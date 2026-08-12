@@ -69,12 +69,24 @@ def test_weekday_off_drops_the_bodies_and_the_center():
 
 
 def test_markers_off_drop_the_year_marker_layer():
+    # THREE bodies now, not two (owner order 2026-08-12): the eclipse
+    # has its own switch and its own seat, so hiding both markers is no
+    # longer enough to retire the layer.
     layers = _build_layers(
         dataclasses.replace(
-            defaults.DEFAULT_SKIN, show_earth=False, show_moon=False
+            defaults.DEFAULT_SKIN, show_earth=False, show_moon=False,
+            show_eclipse=False,
         )
     )
     assert not any(isinstance(layer, YearMarkerLayer) for layer in layers)
+    layers = _build_layers(
+        dataclasses.replace(
+            defaults.DEFAULT_SKIN, show_earth=False, show_moon=False,
+        )
+    )
+    assert any(isinstance(layer, YearMarkerLayer) for layer in layers), (
+        "the eclipse body alone must keep the layer alive"
+    )
     # One marker still on keeps the layer (it gates internally).
     layers = _build_layers(
         dataclasses.replace(defaults.DEFAULT_SKIN, show_earth=False)

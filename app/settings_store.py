@@ -217,6 +217,11 @@ class Settings:
     # element; the day/twilight indication itself always stays.
     show_earth: bool = True
     show_moon: bool = True
+    # THE ECLIPSE BODY's OWN switch (owner ballot verdict 2026-08-12,
+    # option C1 — independent, its own switch): the eclipse is a third
+    # celestial body now, not a costume on the Earth or the Moon, so
+    # hiding either of those markers must not take the eclipse with it.
+    show_eclipse: bool = True
     show_weekday: bool = True
     show_pointer: bool = True
     colorful: bool = True               # off -> white Aura instead of hues
@@ -646,6 +651,7 @@ class SettingsStore:
                 legend=load_bool(raw, "legend", True),
                 show_earth=load_bool(raw, "show_earth", True),
                 show_moon=load_bool(raw, "show_moon", True),
+                show_eclipse=load_bool(raw, "show_eclipse", True),
                 show_weekday=load_bool(raw, "show_weekday", True),
                 show_pointer=load_bool(raw, "show_pointer", True),
                 colorful=load_bool(raw, "colorful", True),
@@ -868,6 +874,7 @@ class SettingsStore:
             "legend": settings.legend,
             "show_earth": settings.show_earth,
             "show_moon": settings.show_moon,
+            "show_eclipse": settings.show_eclipse,
             "show_weekday": settings.show_weekday,
             "show_pointer": settings.show_pointer,
             "colorful": settings.colorful,

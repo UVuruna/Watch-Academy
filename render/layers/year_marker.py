@@ -1,4 +1,37 @@
-"""The YEAR MARKER layer — earth, moon and the event bodies."""
+"""The YEAR MARKER layer — earth, moon, THE ECLIPSE and the event bodies.
+
+THE THIRD BODY (owner order 2026-08-12, ballot options A1/B2/C1/D1/E1/F1
+— and his first sentence of that day, which this layer had failed to
+obey: "solarna eklipsa treba da se prikaze odvojeno od EARTH, na mestu na
+kruznici u koliko sati se dogadja"). lang-ok: the owner's own sentence,
+quoted so the rule cannot be re-derived wrongly a second time.
+
+Until this round an eclipse had no body of its own: a solar eclipse was a
+COSTUME the Earth marker wore and a lunar eclipse a costume the Moon
+marker wore, so the eclipse stood at the Earth's YEAR angle (the date) or
+the Moon's CYCLE angle (the phase) — never at the hour it happens — and
+hiding the Earth hid the eclipse with it. Now:
+
+- the eclipse is a THIRD celestial body, seated at
+  `angles.time_to_dial_angle` of its own greatest-eclipse instant in
+  local time, on the same orbit lane the Earth and the Moon ride;
+- the Earth keeps its own art at its own seat, and the Moon keeps its
+  phase at its own seat, on the eclipse day like on any other (D1);
+- the body stands for `constants.ECLIPSE_BODY_WINDOW_H` (±12 h) around
+  that instant (B2 as he corrected it), through its OWN switch,
+  `skin.show_eclipse` (C1);
+- when it would overlap a marker — the new moon at the top for a solar
+  eclipse, the full moon at the bottom for a lunar one — the ECLIPSE
+  moves out to the ring band and the marker keeps the ordinary circle
+  (E1 + F1, `dial.ECLIPSE_BODY_CLEARANCE`).
+
+The eclipse STYLES did not change: `eclipse_solar_style` and
+`eclipse_lunar_style` draw exactly what they drew before, on the new body
+instead of on a marker. `horizon_shadow` is unchanged in both senses —
+it already wrote at the true hour, on the Moon Horizon Band.
+"""
+
+import math
 
 
 from PySide6.QtCore import QPointF, QRectF, Qt
@@ -12,7 +45,10 @@ from render.calendar_mount import calendar_day_arrow, calendar_wheel
 from render.context import Cadence, Layer, RenderContext
 from render.daylight import moon_transit_nearness
 from render.eclipse_glow import draw_event_glow, eclipse_render_state, eclipse_state_glow_strength
-from render.painting import dial_point, draw_outlined_text, draw_pixmap_centered, tinted_gray
+from render.painting import (
+    dial_point, draw_name_label, draw_outlined_text, draw_pixmap_centered,
+    tinted_gray,
+)
 from render.skin_geometry import hover_factor
 from render.subdial import display_year
 
@@ -26,6 +62,171 @@ def _day_fraction(day_length: str) -> float:
     or "00:00" there and the wedge lawfully fills or empties."""
     hours, _, minutes = day_length.partition(":")
     return (int(hours) + int(minutes) / 60.0) / 24.0
+
+
+def eclipse_body_angle(ctx: RenderContext, event) -> float:
+    """The eclipse body's dial angle: the HOUR of greatest eclipse in the
+    watch's own local time, plus the world offset every body on the
+    turning face takes (owner order 2026-08-12).
+
+    Module-level and pure so the dial and its teeth read the SAME number
+    — a test that recomputed this would be pinning its own arithmetic
+    rather than the app's."""
+    local_instant = event.instant.astimezone(ctx.day.tzinfo)
+    return (
+        angles.time_to_dial_angle(local_instant) + ctx.world_offset
+    ) % 360.0
+
+
+def eclipse_body_scale(ctx: RenderContext, solar: bool) -> float:
+    """The eclipse body's half-size as a fraction of the dial radius: the
+    EARTH's for a solar eclipse, the MOON's for a lunar one, hover
+    included — so the third body never reads as a fourth kind of object,
+    only as the one whose event it is."""
+    spec = ctx.skin.year_marker
+    base = spec.scale if solar else spec.moon_scale
+    return base * hover_factor(ctx, "eclipse")
+
+
+def eclipse_body_orbit(ctx: RenderContext, angle: float, scale: float) -> float:
+    """The eclipse body's orbit radius — the bodies' own lane, or THE
+    RING BAND when it would touch a marker there (owner rule 2026-08-12,
+    E1 + F1).
+
+    His rule, in his own words: a solar eclipse happens at new moon,
+    whose seat is the TOP, and a lunar eclipse at full moon, whose seat
+    is the BOTTOM, so the two fight for one spot whenever the event's
+    hour matches that seat. Then "the ECLIPSE goes on the OUTER RING and
+    the moon is shown on the ordinary circle as on any other day, only
+    now with the graphic that represents the new or full moon".
+    lang-ok: the owner's own sentence, the rule this function is.
+
+    So the escape is one-directional and never negotiated: the eclipse
+    takes the band, the marker takes the circle — `marker_yields_band`
+    is the other half, and it is why the collision is measured against
+    the markers' LANE seats rather than wherever they happen to be
+    standing. A first cut measured their CURRENT radius instead and the
+    render showed why that is wrong: a full Moon is itself relocated to
+    the band for six hours around the instant a lunar eclipse happens,
+    so the eclipse escaped from on top of the Moon to on top of the
+    Moon.
+
+    F1 is what "the same spot" means — TOUCHING DISTANCE, measured
+    between centres in dial units, never an angular threshold (the same
+    angle means a different distance on a different lane). A hidden
+    marker is no obstacle: with the Moon switched off there is nothing
+    to escape from and the body stays on the lane where it belongs."""
+    lane = dial.earth_moon_orbit_fraction(
+        ctx.skin.numeral_outer_ring_size, scale,
+    )
+    if _lane_seat_is_clear(ctx, angle, scale, lane):
+        return lane
+    return dial.GLOW_RING_RADIUS_FRACTION
+
+
+def marker_yields_band(ctx: RenderContext, element: str) -> bool:
+    """True when THIS marker must give the ring band up to the eclipse
+    and stand on the ordinary circle instead — the second half of the
+    owner's rule above.
+
+    It fires only while an eclipse body is actually on the dial AND that
+    body has been pushed to the band by this very marker. Without an
+    eclipse, or with one that sits happily on the lane, a marker keeps
+    its own event relocation exactly as before: this round changed where
+    an ECLIPSE stands, never where a solstice or a full moon does."""
+    event = ctx.tick.eclipse_body_event if ctx.tick is not None else None
+    if event is None or not ctx.skin.show_eclipse:
+        return False
+    scale = eclipse_body_scale(ctx, event.kind == "solar")
+    angle = eclipse_body_angle(ctx, event)
+    lane = dial.earth_moon_orbit_fraction(
+        ctx.skin.numeral_outer_ring_size, scale,
+    )
+    return not _seat_is_clear(ctx, angle, scale, lane, _marker_seat(ctx, element))
+
+
+def _marker_seat(
+    ctx: RenderContext, element: str,
+) -> tuple[float, float] | None:
+    """(angle, half-size) of one marker at its ORDINARY circle, or None
+    when it is switched off — a hidden marker is nothing to avoid."""
+    spec = ctx.skin.year_marker
+    if element == "earth":
+        if not ctx.skin.show_earth:
+            return None
+        return earth_marker_angle(ctx), spec.scale
+    if not ctx.skin.show_moon:
+        return None
+    return (
+        (angles.moon_cycle_angle(ctx.tick.moon_fraction)
+         + ctx.world_offset) % 360.0,
+        spec.moon_scale,
+    )
+
+
+def _lane_seat_is_clear(
+    ctx: RenderContext, angle: float, scale: float, lane: float,
+) -> bool:
+    return all(
+        _seat_is_clear(ctx, angle, scale, lane, _marker_seat(ctx, element))
+        for element in ("earth", "moon")
+    )
+
+
+def _seat_is_clear(
+    ctx: RenderContext, angle: float, scale: float, orbit: float,
+    seat: tuple[float, float] | None,
+) -> bool:
+    """True when a body of half-size `scale` at (`angle`, `orbit`) keeps
+    `dial.ECLIPSE_BODY_CLEARANCE` from `seat`, which stands on its own
+    ordinary circle. Measured between CENTRES in dial units — never as
+    an angular threshold, because the same angle means a different
+    distance on a different lane."""
+    if seat is None:
+        return True
+    seat_angle, seat_scale = seat
+    centre = dial_point(angle, ctx.radius * orbit)
+    other = dial_point(
+        seat_angle,
+        ctx.radius * dial.earth_moon_orbit_fraction(
+            ctx.skin.numeral_outer_ring_size, seat_scale,
+        ),
+    )
+    gap = math.hypot(centre.x() - other.x(), centre.y() - other.y())
+    reach = ctx.radius * (scale + seat_scale) * dial.ECLIPSE_BODY_CLEARANCE
+    return gap >= reach
+
+
+def earth_marker_angle(ctx: RenderContext) -> float:
+    """The Earth marker's own dial angle, world offset included.
+
+    Its OWN function because two callers need the same number and may
+    never drift: the marker itself, and the eclipse body's collision test
+    above — an Earth on the Almanac wheel stands somewhere else entirely,
+    and a test that used the plain year angle there would let the eclipse
+    sit on top of it.
+
+    The Calendar's ALMANAC wheel carries its OWN real-calendar year
+    mapping (owner 2026-07-16): the Earth marker rides the month wedges
+    (one tick ≈ one day) instead of the shared six-anchor season wheel —
+    every OTHER pointer, the Zodiac wheel included, keeps the shared
+    wheel. THE WORLD OFFSET (core.world): the year wheel is drawn ON the
+    turning dial face, so the Earth rides it — the summer solstice stands
+    at the top by day and the WINTER solstice takes the top at night
+    (ledger §1). 0.0 in Geocentric."""
+    base = (
+        almanac_marker_angle(ctx.day.local_date)
+        if almanac_wheel_active(ctx)
+        else ctx.tick.year_angle
+    )
+    return (base + ctx.world_offset) % 360.0
+
+
+def almanac_wheel_active(ctx: RenderContext) -> bool:
+    return (
+        ctx.skin.pointer == "calendar"
+        and calendar_wheel(ctx.skin) == "almanac"
+    )
 
 
 def earth_region(latitude: float, longitude: float) -> str:
@@ -88,24 +289,29 @@ class YearMarkerLayer(Layer):
             factor = hover_factor(ctx, "moon")
             # During its ±6 h event window the Moon RELOCATES radially to
             # the ring band centerline (owner 2026-07-16), keeping its
-            # cycle angle, so the SILVER halo straddles the ring. A LUNAR
-            # eclipse (ROADMAP 15h item 11) rides the SAME relocation with
-            # the blood-moon BRONZE glow instead, scaled by its magnitude,
-            # and darkens the disc.
-            eclipse = ctx.tick.eclipse_event
-            lunar_eclipse = (
-                eclipse if eclipse is not None and eclipse.kind == "lunar" else None
-            )
-            lunar_state = (
-                eclipse_render_state(lunar_eclipse)
-                if lunar_eclipse is not None
-                else None
-            )
+            # cycle angle, so the SILVER halo straddles the ring.
+            #
+            # THE COSTUME IS GONE (owner order 2026-08-12, D1): a lunar
+            # eclipse no longer darkens THIS disc and no longer paints it
+            # bronze. The Moon keeps its phase here on an eclipse day
+            # exactly as on any other day — his words, "mesec je svejedno
+            # na kruznici, da li je pun ili prazan" — and the eclipse is
+            # drawn as its own body at its own hour by
+            # `_draw_eclipse_body` below.
+            # lang-ok: the owner's own sentence, quoted as the rule.
             station = marker_marks.station_of_moon_event(ctx.tick.moon_event)
-            glowing = ctx.tick.moon_event is not None or lunar_state is not None
+            glowing = ctx.tick.moon_event is not None
+            # THE MOON YIELDS THE BAND (owner rule 2026-08-12): during
+            # its own event window the Moon relocates to the ring band
+            # as always — EXCEPT when an eclipse has been pushed out
+            # there by this very Moon, and his sentence says which of
+            # the two the ring belongs to then: the eclipse takes it and
+            # the Moon "is shown on the ordinary circle as on any other
+            # day, only now with the graphic of the new or full moon".
+            # lang-ok: the owner's own sentence, quoted as the rule.
             orbit = (
                 dial.GLOW_RING_RADIUS_FRACTION
-                if glowing
+                if glowing and not marker_yields_band(ctx, "moon")
                 # THE LINE AND THE BODIES (owner corrections
                 # 2026-08-10/11): per-body tangent to the tick-root
                 # line — see `config.dial.earth_moon_orbit_fraction`.
@@ -161,7 +367,7 @@ class YearMarkerLayer(Layer):
                 shadow_r = ctx.radius * spec.moon_scale * factor * 1.15
                 painter.drawEllipse(pos, shadow_r, shadow_r)
                 painter.restore()
-            if station is not None and lunar_state is None:
+            if station is not None:
                 # THE FOUR STATIONS take the halo's place at a principal
                 # instant: birth, youth, the zenith of maturity, age.
                 marker_marks.draw_station_mark(
@@ -171,36 +377,12 @@ class YearMarkerLayer(Layer):
                     origin=pos,
                 )
             elif glowing:
-                color = (
-                    palette.GLOW_ECLIPSE_LUNAR_COLOR
-                    if lunar_state is not None
-                    else palette.GLOW_MOON_COLOR
-                )
-                strength = (
-                    eclipse_state_glow_strength(lunar_state, lunar_eclipse.magnitude)
-                    if lunar_state is not None
-                    else 1.0
-                )
-                # INVISIBLE-FROM-HERE muting (owner verdict "može", fix
-                # round E, 2026-07-19): the event is real (the disc
-                # darkening/art swap below stay untouched) but the
-                # observer cannot actually see it — mute the glow to a
-                # desaturated silver at half strength instead.
-                if lunar_state is not None and not lunar_eclipse.visible:
-                    color = palette.GLOW_ECLIPSE_INVISIBLE_COLOR
-                    strength *= glow.ECLIPSE_INVISIBLE_STRENGTH_FACTOR
                 draw_event_glow(
                     painter,
                     pos,
                     ctx.radius * spec.moon_scale * factor,
-                    color,
-                    strength,
-                    fringe_color=(
-                        palette.ECLIPSE_LUNAR_FRINGE_COLOR
-                        if lunar_state is not None
-                        and glow.ECLIPSE_STATE_FRINGE[lunar_state]
-                        else None
-                    ),
+                    palette.GLOW_MOON_COLOR,
+                    1.0,
                 )
             painter.save()
             if spec.pointer_enabled:
@@ -222,13 +404,8 @@ class YearMarkerLayer(Layer):
                 )
             self._draw_moon(
                 painter, ctx, pos, 2 * ctx.radius * spec.moon_scale * factor,
-                darken_state=lunar_state,
-                lunar_magnitude=(
-                    lunar_eclipse.magnitude if lunar_eclipse is not None
-                    else None
-                ),
             )
-            if station is not None and lunar_state is None:
+            if station is not None:
                 # The station's FOREGROUND half — light inside the dark
                 # part, which only reads if it is drawn after the disc.
                 marker_marks.draw_station_inner_glow(
@@ -238,43 +415,127 @@ class YearMarkerLayer(Layer):
                     origin=pos,
                 )
             painter.restore()
+        # THE THIRD BODY, drawn LAST so it stands above both markers on
+        # the day it belongs to (owner order 2026-08-12).
+        if ctx.skin.show_eclipse and self._gate(ctx, "eclipse"):
+            self._draw_eclipse_body(painter, ctx)
+
+    # -- the eclipse body ----------------------------------------------
+
+    def _draw_eclipse_body(self, painter: QPainter, ctx: RenderContext) -> None:
+        """The eclipse as a body of its own, at the HOUR of greatest
+        eclipse (owner order 2026-08-12, ballot A1/B2/C1/D1/E1/F1).
+
+        Nothing about HOW an eclipse looks changed this round: the solar
+        styles (`eclipse_solar_style`) and the lunar ones
+        (`eclipse_lunar_style`) draw exactly what they drew on the
+        markers. What changed is WHERE — `angles.time_to_dial_angle` of
+        the event's own local instant, the same reading the hour hand
+        gives — and that it no longer borrows another body's seat.
+
+        `horizon_shadow` is deliberately absent here: that style writes
+        the eclipse on the Moon Horizon Band, where it can show DURATION
+        (his own placement, 2026-08-10), so the band keeps drawing it and
+        this body shows the plain face beside it rather than a second,
+        contradicting picture of the same event."""
+        event = ctx.tick.eclipse_body_event
+        if event is None:
+            return
+        spec = self._skin.year_marker
+        state = eclipse_render_state(event)
+        solar = event.kind == "solar"
+        scale = eclipse_body_scale(ctx, solar)
+        angle = eclipse_body_angle(ctx, event)
+        orbit = eclipse_body_orbit(ctx, angle, scale)
+        pos = dial_point(angle, ctx.radius * orbit)
+        size = 2 * ctx.radius * scale
+        color, strength = self._eclipse_glow_paint(event, state, solar)
+        draw_event_glow(
+            painter, pos, size / 2, color, strength,
+            fringe_color=(
+                palette.ECLIPSE_LUNAR_FRINGE_COLOR
+                if not solar and glow.ECLIPSE_STATE_FRINGE[state]
+                else None
+            ),
+        )
+        if spec.pointer_enabled:
+            # The SAME pointer grammar both markers wear, behind the body
+            # (owner correction 2026-08-11: under, never on top).
+            marker_marks.draw_pointer(
+                painter, spec.marker_pointer_shape, angle,
+                ctx.radius, orbit, scale, spec.pointer_color,
+                tip_radius=(
+                    ctx.radius * ctx.interior_scale
+                    * dial.RING_INNER_TICK_INNER_FRACTION
+                ),
+            )
+        if solar:
+            # THE OWNER'S OWN ECLIPSE ART, drawn WHOLE (his correction
+            # 2026-08-11: the eclipse wears the icon we made). No disc
+            # clip here, unlike the Earth marker: that clip exists
+            # because the Earth renders ship on an opaque space square,
+            # while `sun_eclipse.png` is a black disc IN RAYS on
+            # transparency — clipping it to the disc would cut the rays
+            # off, which is most of what makes it read as an eclipse.
+            draw_pixmap_centered(
+                painter, ctx, defaults.ECLIPSE_SOLAR_ART, pos, size
+            )
+            marker_marks.draw_solar_eclipse(
+                painter, spec.eclipse_solar_style, size / 2,
+                state, event.magnitude, palette.GLOW_SUN_COLOR, origin=pos,
+            )
+            return
+        self._draw_moon(
+            painter, ctx, pos, size,
+            darken_state=state, lunar_magnitude=event.magnitude,
+        )
+
+    def _eclipse_glow_paint(
+        self, event, state: str, solar: bool,
+    ) -> tuple[str, float]:
+        """The eclipse body's halo colour and strength — the SAME rules
+        the markers used to apply, moved here with the body: red for a
+        solar eclipse and amber for an annular one, blood-moon bronze for
+        a lunar one, each at its state's own strength.
+
+        INVISIBLE-FROM-HERE muting (owner verdict, fix round E,
+        2026-07-19) survives unchanged: the event is real, so the body
+        and its geometry stay, but the observer cannot actually see it —
+        the halo mutes to a desaturated silver at half strength."""
+        if solar:
+            color = (
+                palette.GLOW_ECLIPSE_SOLAR_ANNULAR_COLOR
+                if state == "solar_annular"
+                else palette.GLOW_ECLIPSE_SOLAR_COLOR
+            )
+        else:
+            color = palette.GLOW_ECLIPSE_LUNAR_COLOR
+        strength = eclipse_state_glow_strength(state, event.magnitude)
+        if not event.visible:
+            color = palette.GLOW_ECLIPSE_INVISIBLE_COLOR
+            strength *= glow.ECLIPSE_INVISIBLE_STRENGTH_FACTOR
+        return color, strength
 
     def _draw_earth(self, painter: QPainter, ctx: RenderContext) -> None:
         spec = self._skin.year_marker
-        # The Calendar's ALMANAC wheel carries its OWN real-calendar year
-        # mapping (owner 2026-07-16): the Earth marker rides the month
-        # wedges (one tick ≈ one day) instead of the shared six-anchor
-        # season wheel — every OTHER pointer, the Zodiac wheel included,
-        # keeps the shared wheel.
-        almanac = (
-            ctx.skin.pointer == "calendar"
-            and calendar_wheel(ctx.skin) == "almanac"
-        )
-        # THE WORLD OFFSET (core.world): the year wheel is drawn ON the
-        # turning dial face, so the Earth rides it — the summer solstice
-        # stands at the top by day and the WINTER solstice takes the top
-        # at night (ledger §1). 0.0 in Geocentric.
-        year_angle = (
-            (
-                almanac_marker_angle(ctx.day.local_date)
-                if almanac
-                else ctx.tick.year_angle
-            ) + ctx.world_offset
-        ) % 360.0
+        almanac = almanac_wheel_active(ctx)
+        year_angle = earth_marker_angle(ctx)
         # During its ±12 h event window the Earth RELOCATES radially to the
         # ring band centerline (owner 2026-07-16), keeping its year-wheel
-        # angle, so the GOLDEN halo straddles the ring. A SOLAR eclipse
-        # (ROADMAP 15h item 11) rides the SAME relocation with the RED
-        # glow instead, scaled by its magnitude, and swaps the Earth's
-        # art to the Planets theme's Eclipsed-Sun dual.
-        eclipse = ctx.tick.eclipse_event
-        solar_eclipse = (
-            eclipse if eclipse is not None and eclipse.kind == "solar" else None
-        )
-        glowing = ctx.tick.season_event is not None or solar_eclipse is not None
+        # angle, so the GOLDEN halo straddles the ring.
+        #
+        # THE COSTUME IS GONE (owner order 2026-08-12, A1): a solar
+        # eclipse no longer relocates this marker, no longer paints it
+        # red and no longer swaps its art. The Earth shows the date on an
+        # eclipse day exactly as on any other; the eclipse is its own
+        # body at its own hour (`_draw_eclipse_body`).
+        glowing = ctx.tick.season_event is not None
+        # THE EARTH YIELDS THE BAND on the same rule as the Moon above
+        # (owner 2026-08-12): a solstice halo gives way to an eclipse
+        # that has been pushed onto the ring by this marker.
         orbit = (
             dial.GLOW_RING_RADIUS_FRACTION
-            if glowing
+            if glowing and not marker_yields_band(ctx, "earth")
             # THE LINE AND THE BODIES (owner corrections 2026-08-10/11):
             # per-body tangent to the tick-root line — see the Moon's
             # own call above.
@@ -284,13 +545,8 @@ class YearMarkerLayer(Layer):
         )
         pos = dial_point(year_angle, ctx.radius * orbit)
         size = 2 * ctx.radius * spec.scale * hover_factor(ctx, "earth")
-        solar_state = (
-            eclipse_render_state(solar_eclipse)
-            if solar_eclipse is not None
-            else None
-        )
         station = marker_marks.station_of_season_event(ctx.tick.season_event)
-        if station is not None and solar_state is None:
+        if station is not None:
             # THE FOUR STATIONS of the year take the halo's place at a
             # turning point — the same grammar the Moon wears, so the
             # language is learned once and read on two clocks.
@@ -300,24 +556,9 @@ class YearMarkerLayer(Layer):
                 origin=pos,
             )
         elif glowing:
-            if solar_state is None:
-                color = palette.GLOW_SUN_COLOR
-                strength = 1.0
-            else:
-                color = (
-                    palette.GLOW_ECLIPSE_SOLAR_ANNULAR_COLOR
-                    if solar_state == "solar_annular"
-                    else palette.GLOW_ECLIPSE_SOLAR_COLOR
-                )
-                strength = eclipse_state_glow_strength(
-                    solar_state, solar_eclipse.magnitude
-                )
-                # INVISIBLE-FROM-HERE muting (owner verdict "može", fix
-                # round E, 2026-07-19) — same rule as the lunar marker.
-                if not solar_eclipse.visible:
-                    color = palette.GLOW_ECLIPSE_INVISIBLE_COLOR
-                    strength *= glow.ECLIPSE_INVISIBLE_STRENGTH_FACTOR
-            draw_event_glow(painter, pos, size / 2, color, strength)
+            draw_event_glow(
+                painter, pos, size / 2, palette.GLOW_SUN_COLOR, 1.0
+            )
         if almanac:
             # The day-ARROW at the marker's exact tick (owner 2026-07-16):
             # a small procedural triangle pointing from inside the dial
@@ -352,11 +593,7 @@ class YearMarkerLayer(Layer):
             f"{earth_region(ctx.day.latitude, ctx.day.longitude)}_"
             f"{'day' if ctx.tick.is_daylight else 'night'}"
         )
-        asset = (
-            defaults.ECLIPSE_SOLAR_ART
-            if solar_eclipse is not None
-            else spec.variants.get(variant)
-        )
+        asset = spec.variants.get(variant)
         if asset is not None:
             # The Earth renders ship on an opaque space background — clip
             # to the marker disc so only the globe shows.
@@ -366,16 +603,6 @@ class YearMarkerLayer(Layer):
             painter.setClipPath(clip)
             draw_pixmap_centered(painter, ctx, asset, pos, size)
             painter.restore()
-            if solar_state is not None:
-                # THE ECLIPSE'S OWN GEOMETRY, over the swapped art: the
-                # occulting disc ("bite") or the ring gauge
-                # ("magnitude_arc"). "halo" adds nothing here — the glow
-                # already drawn behind the marker IS that style.
-                marker_marks.draw_solar_eclipse(
-                    painter, spec.eclipse_solar_style, size / 2,
-                    solar_state, solar_eclipse.magnitude,
-                    palette.GLOW_SUN_COLOR, origin=pos,
-                )
             if (
                 2 * ctx.radius >= dial.FULL_TEXT_MIN_DIAMETER
                 and ctx.skin.earth_label != "off"
@@ -410,30 +637,29 @@ class YearMarkerLayer(Layer):
         mode — far from the present the marker must say WHEN; "full"
         mode already shows the year, so a deep travel is a no-op
         difference there."""
-        bold_font = QFont()
-        bold_font.setBold(True)
+        # THE PLATES, WITH THE RING'S HALO (owner order 2026-08-12) —
+        # this marker is the case he named: the LOOP theme's blue date
+        # over the blue Earth, where the old white-font-with-black-outline
+        # left one hairline holding the glyph apart from a same-value
+        # field. Every row below now goes through `draw_name_label`, the
+        # ONE on-dial label door, which composes from the plate library
+        # and stamps the jewels' own dense halo around it.
         deep_travel = ctx.day.deep_cycles != 0
         today = constants.WEEKDAY_BODIES[ctx.day.weekday_index]
         mode = ctx.skin.earth_label
+        date_px = max(
+            dial.BODY_LABEL_MIN_PX, round(size * dial.EARTH_DATE_TEXT_SIZE)
+        )
         if mode == "weekday":
             # Weekday ALONE — a single centered row (owner: "FRI" must work
-            # without the date). Uses the date font size (it is the only
-            # row, so it gets the full label size).
-            bold_font.setPixelSize(
-                max(
-                    dial.BODY_LABEL_MIN_PX,
-                    round(size * dial.EARTH_DATE_TEXT_SIZE),
-                )
-            )
-            draw_outlined_text(
-                painter, pos, constants.WEEKDAY_LABELS[today], bold_font
+            # without the date). Uses the date size (it is the only row,
+            # so it gets the full label size).
+            draw_name_label(
+                painter, constants.WEEKDAY_LABELS[today], pos, date_px, ctx=ctx,
             )
             return
         # "date", "date_weekday" and "full" all lead with the date row.
         text = f"{ctx.day.local_date.day} {ctx.day.local_date:%b}"
-        bold_font.setPixelSize(
-            max(dial.BODY_LABEL_MIN_PX, round(size * dial.EARTH_DATE_TEXT_SIZE))
-        )
         if mode == "full":
             second_row = display_year(ctx)
         elif mode == "date_weekday":
@@ -444,23 +670,20 @@ class YearMarkerLayer(Layer):
         else:
             second_row = None
         if second_row is None:
-            draw_outlined_text(painter, pos, text, bold_font)
+            draw_name_label(painter, text, pos, date_px, ctx=ctx)
             return
         offset = size * archetypes.ARCHETYPE_EARTH_DAY_OFFSET
-        draw_outlined_text(
-            painter, QPointF(pos.x(), pos.y() - offset), text, bold_font
+        draw_name_label(
+            painter, text, QPointF(pos.x(), pos.y() - offset), date_px,
+            ctx=ctx,
         )
-        row_font = QFont()
-        row_font.setPixelSize(
+        draw_name_label(
+            painter, second_row, QPointF(pos.x(), pos.y() + offset),
             max(
                 dial.BODY_LABEL_MIN_PX,
                 round(size * archetypes.ARCHETYPE_EARTH_DAY_TEXT_SIZE),
-            )
-        )
-        row_font.setBold(True)
-        draw_outlined_text(
-            painter, QPointF(pos.x(), pos.y() + offset), second_row,
-            row_font,
+            ),
+            ctx=ctx,
         )
 
     def _draw_moon(

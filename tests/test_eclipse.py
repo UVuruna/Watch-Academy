@@ -1,10 +1,13 @@
-"""Eclipse display (ROADMAP 15h item 11, owner 2026-07-18): the data
-path (DeepTimeRepository.eclipses_near, bounded/indexed, never a table
-scan), the core window (EclipseEvent, ±3h, TickState.eclipse_event),
-the render (RED solar glow + Earth art swap, BRONZE lunar glow +
-darkening, magnitude-scaled strength) and the ABSENCE rule: without the
-Deep Time pack no eclipse ever renders — the app behaves exactly as
-before this round."""
+"""Eclipse display (ROADMAP 15h item 11, owner 2026-07-18; THE THIRD
+BODY, owner order 2026-08-12): the data path
+(DeepTimeRepository.eclipses_near, bounded/indexed, never a table scan),
+the core windows (EclipseEvent — ±3h into `TickState.eclipse_event` for
+"happening now", ±12h into `eclipse_body_event` for the body's own
+stand), the render (RED solar glow and the owner's eclipse art, BRONZE
+lunar glow and darkening, magnitude-scaled strength — all of it on the
+ECLIPSE'S OWN BODY at the hour it happens, never on the Earth or the
+Moon marker) and the ABSENCE rule: without the Deep Time pack no eclipse
+ever renders — the app behaves exactly as before this round."""
 
 import dataclasses
 import math
@@ -21,6 +24,7 @@ import pytest
 from PySide6.QtWidgets import QApplication
 
 from config import constants, defaults, dial, encyclopedia_ui, glow, palette
+from core import angles
 from core.clock_state import (
     EclipseEvent,
     build_day_context,
@@ -32,11 +36,20 @@ from data.moon_phases import MoonPhaseRepository
 from data.seasons import SeasonsRepository
 from render.assets import AssetCache
 from render.compositor import Compositor
+from render.context import RenderContext
 from render.eclipse_glow import (
     eclipse_glow_strength,
     eclipse_render_state,
     eclipse_state_glow_strength,
 )
+from render.layers.year_marker import (
+    marker_yields_band,
+    earth_marker_angle,
+    eclipse_body_angle,
+    eclipse_body_orbit,
+    eclipse_body_scale,
+)
+from render.painting import dial_point
 from tests.deep_fixture import build_fixture_pack
 
 REAL_PACK = Path(__file__).resolve().parents[1] / "Database" / "deep_time.sqlite"
@@ -314,70 +327,102 @@ def test_eclipse_glow_strength_mapping():
     assert eclipse_glow_strength(None) == glow.ECLIPSE_GLOW_STRENGTH_MAX
 
 
-# --- Render: solar (Earth marker RED glow + art swap) -------------------------
+# --- Render: THE ECLIPSE BODY (owner order 2026-08-12) ------------------------
+# These tests were rewritten wholesale this round. They used to pin the
+# COSTUME — a solar eclipse turning the Earth marker red and swapping its
+# art at the Earth's own seat — and that law is retired: the owner ruled
+# the eclipse must stand apart from the Earth, at the hour it happens
+# (ballot A1). What survives unchanged is every colour, strength and
+# geometry rule; only the body they are painted on is new.
+
+
+def _eclipse_body_probe(skin, day, tick, radius: float = 270.0):
+    """Where the eclipse body is drawn, in image pixels, plus its own
+    half-size — read off the SAME functions the dial paints with
+    (`render.layers.year_marker`), never recomputed here. A test that
+    re-derived the seat would be pinning its own arithmetic; this way the
+    collision escape (E1/F1) is exercised by the test too."""
+    ctx = RenderContext(
+        skin=skin, day=day, tick=tick, radius=radius,
+        cache=AssetCache(), dpr=1.0,
+    )
+    event = tick.eclipse_body_event
+    scale = eclipse_body_scale(ctx, event.kind == "solar")
+    angle = eclipse_body_angle(ctx, event)
+    point = dial_point(angle, radius * eclipse_body_orbit(ctx, angle, scale))
+    return round(radius + point.x()), round(radius + point.y()), radius * scale
 
 
 def test_solar_eclipse_glow_is_red_not_gold(app):
-    """A/B against the plain season glow (gold): the SAME relocated
-    marker position must read noticeably MORE red-dominant with the
-    eclipse active — pinning that the color override actually took."""
+    """A/B at the eclipse BODY's own seat: with the eclipse active that
+    spot must read markedly more red-dominant than the untouched dial
+    reads there — pinning that the red override took, on the new body."""
     tz = ZoneInfo("Europe/Belgrade")
     solstice_noon = datetime(2026, 6, 21, 12, 0, tzinfo=tz)
     day = _belgrade_day(solstice_noon)
     plain_glow = build_tick_state(solstice_noon, day)
     assert plain_glow.season_event == "Summer Solstice"
     quiet = dataclasses.replace(plain_glow, season_event=None, moon_event=None)
+    # 17:00 local — a seat far from both markers, so the body stays on
+    # the orbit lane and this measures the glow, not the escape.
+    instant = datetime(2026, 6, 21, 17, 0, tzinfo=tz).astimezone(timezone.utc)
+    event = EclipseEvent(
+        kind="solar", instant=instant, type="total", magnitude=1.05,
+    )
     eclipsed = dataclasses.replace(
-        quiet,
-        eclipse_event=EclipseEvent(
-            kind="solar", instant=solstice_noon.astimezone(timezone.utc),
-            type="total", magnitude=1.05,
-        ),
+        quiet, eclipse_event=event, eclipse_body_event=event,
     )
     skin = dataclasses.replace(defaults.DEFAULT_SKIN, solar_rotation=False)
-    gold = Compositor(skin, AssetCache()).render_offscreen(540.0, 1.0, day, plain_glow)
+    plain = Compositor(skin, AssetCache()).render_offscreen(540.0, 1.0, day, quiet)
     red = Compositor(skin, AssetCache()).render_offscreen(540.0, 1.0, day, eclipsed)
-    marker_y = 270 - round(270 * dial.GLOW_RING_RADIUS_FRACTION)
-    probe = (289, marker_y + 33)
-    gold_px = gold.pixelColor(*probe)
+    x, y, half = _eclipse_body_probe(skin, day, eclipsed)
+    probe = (x, y - round(half * 1.25))       # inside the halo, past the disc
+    plain_px = plain.pixelColor(*probe)
     red_px = red.pixelColor(*probe)
-    # The eclipse RED glow must dominate red over green far more than the
-    # golden glow does at the same spot.
-    assert (red_px.red() - red_px.green()) > (gold_px.red() - gold_px.green()) + 15
+    assert (red_px.red() - red_px.green()) > (
+        plain_px.red() - plain_px.green()
+    ) + 15
 
 
-def test_solar_eclipse_swaps_the_earth_art(app):
-    """The Earth marker's rendered pixmap differs during a solar eclipse
-    (the Planets Eclipsed-Sun dual, source-mapped) versus a plain day —
-    same position, different art, so the marker disc itself changes."""
+def test_solar_eclipse_stands_apart_from_the_earth(app):
+    """THE THIRD BODY (owner order 2026-08-12, his first sentence of that
+    day): the eclipse is drawn at the HOUR it happens, and the Earth
+    marker is left completely alone — same pixels at the Earth's own seat
+    with and without the eclipse, different pixels at the eclipse's."""
     tz = ZoneInfo("Europe/Belgrade")
     now = datetime(2026, 3, 1, 12, 0, tzinfo=tz)     # no season/moon window
     day = _belgrade_day(now)
     plain = build_tick_state(now, day)
     assert plain.season_event is None and plain.eclipse_event is None
+    instant = datetime(2026, 3, 1, 17, 0, tzinfo=tz).astimezone(timezone.utc)
+    event = EclipseEvent(
+        kind="solar", instant=instant, type="total", magnitude=1.02,
+    )
     eclipsed = dataclasses.replace(
-        plain,
-        eclipse_event=EclipseEvent(
-            kind="solar", instant=now.astimezone(timezone.utc),
-            type="total", magnitude=1.02,
-        ),
+        plain, eclipse_event=event, eclipse_body_event=event,
     )
     skin = dataclasses.replace(defaults.DEFAULT_SKIN, solar_rotation=False)
     before = Compositor(skin, AssetCache()).render_offscreen(540.0, 1.0, day, plain)
     after = Compositor(skin, AssetCache()).render_offscreen(540.0, 1.0, day, eclipsed)
-    # The Earth marker relocates to the ring band during the eclipse —
-    # sample its NEW drawn position (year_angle unchanged, radius swaps).
-    year_angle = plain.year_angle
     radius = 270.0
-    orbit = radius * dial.GLOW_RING_RADIUS_FRACTION
-    theta = math.radians(year_angle)
-    x = round(radius + orbit * math.sin(theta))
-    y = round(radius - orbit * math.cos(theta))
+    # 1. The Earth keeps its seat, its lane AND its art.
+    earth_point = dial_point(
+        plain.year_angle,
+        radius * dial.earth_moon_orbit_fraction(
+            skin.numeral_outer_ring_size, skin.year_marker.scale,
+        ),
+    )
+    ex, ey = round(radius + earth_point.x()), round(radius + earth_point.y())
+    assert before.pixelColor(ex, ey) == after.pixelColor(ex, ey)
+    # 2. The eclipse body appears at its OWN hour seat.
+    x, y, _half = _eclipse_body_probe(skin, day, eclipsed)
     assert before.pixelColor(x, y) != after.pixelColor(x, y)
-    # THE OWNER'S OWN ECLIPSE ICON (correction 2026-08-11): the swap
+    # 3. That seat is the hour hand's own reading of the instant, not the
+    #    Earth's date angle — the whole point of the round.
+    assert round(angles.time_to_dial_angle(instant.astimezone(tz))) == 75
+    # THE OWNER'S OWN ECLIPSE ICON (correction 2026-08-11): the body's
     # art is `assets/instrument/icons/sun_eclipse.png` — never the
-    # Planets theme's Eclipsed-Sun weekday dual ("nemoj da koristis
-    # eklipsu koju predstavlja nedelja").
+    # Planets theme's Eclipsed-Sun weekday dual.
     assert defaults.ECLIPSE_SOLAR_ART.name == "sun_eclipse.png"
     assert defaults.ECLIPSE_SOLAR_ART.parent.name == "icons"
     assert defaults.ECLIPSE_SOLAR_ART.exists()
@@ -417,30 +462,40 @@ def test_solar_eclipse_hit_test_rides_the_relocated_marker(app):
 # --- Render: lunar (Moon marker darkened + bronze glow) ------------------------
 
 
-def test_lunar_eclipse_glow_is_bronze_and_moon_is_darkened(app):
-    """A/B: the eclipsed Moon renders visibly different from the plain
-    full moon at the SAME cycle position — the bronze overlay changes
-    the disc, and the halo differs from the silver moon-event glow."""
+def test_lunar_eclipse_is_a_body_apart_from_the_moon(app):
+    """THE TWO MARKS (owner order 2026-08-12, ballot D1, his words: the
+    Moon stays on the circle whether it is full or new). An eclipsed Moon
+    appears as its OWN body at the eclipse's hour — and the Moon marker
+    at its cycle seat is left pixel-for-pixel alone, so phase and eclipse
+    are two readings instead of one blurred picture."""
     tz = ZoneInfo("Europe/Belgrade")
     now = datetime(2026, 3, 3, 12, 0, tzinfo=tz)      # arbitrary, no window
     day = _belgrade_day(now)
     plain = build_tick_state(now, day)
     quiet = dataclasses.replace(plain, season_event=None, moon_event=None)
+    event = EclipseEvent(
+        kind="lunar", instant=now.replace(hour=17).astimezone(timezone.utc),
+        type="total", magnitude=1.15,
+    )
     eclipsed = dataclasses.replace(
-        quiet,
-        eclipse_event=EclipseEvent(
-            kind="lunar", instant=now.astimezone(timezone.utc),
-            type="total", magnitude=1.15,
-        ),
+        quiet, eclipse_event=event, eclipse_body_event=event,
     )
     skin = dataclasses.replace(defaults.DEFAULT_SKIN, solar_rotation=False)
     before = Compositor(skin, AssetCache()).render_offscreen(540.0, 1.0, day, quiet)
     after = Compositor(skin, AssetCache()).render_offscreen(540.0, 1.0, day, eclipsed)
     radius = 270.0
-    moon_angle = math.radians(quiet.moon_fraction * 360.0)
-    orbit = radius * dial.GLOW_RING_RADIUS_FRACTION
-    x = round(radius + orbit * math.sin(moon_angle))
-    y = round(radius - orbit * math.cos(moon_angle))
+    # 1. The Moon marker keeps its own seat, its own lane and its face.
+    moon_point = dial_point(
+        angles.moon_cycle_angle(quiet.moon_fraction),
+        radius * dial.earth_moon_orbit_fraction(
+            skin.numeral_outer_ring_size, skin.year_marker.moon_scale,
+        ),
+    )
+    mx = round(radius + moon_point.x())
+    my = round(radius + moon_point.y())
+    assert before.pixelColor(mx, my) == after.pixelColor(mx, my)
+    # 2. The eclipse stands on its own, at the hour it happens.
+    x, y, _half = _eclipse_body_probe(skin, day, eclipsed)
     assert before.pixelColor(x, y) != after.pixelColor(x, y)
 
 
@@ -559,12 +614,18 @@ def _lunar_moon_pixel(app, type_: str, magnitude: float):
     quiet = dataclasses.replace(
         plain, season_event=None, moon_event=None, is_moon_up=True,
     )
+    # THE ECLIPSE'S OWN HOUR, deliberately NOT the rendered moment: at
+    # 12:00 the body would sit at the top of the dial, exactly under the
+    # hour hand, and the probe would measure the HAND instead of the
+    # disc. 17:00 seats it at 75° — clear of both hands and of both
+    # markers, so what is sampled is the eclipse and nothing else.
+    event = EclipseEvent(
+        kind="lunar",
+        instant=now.replace(hour=17).astimezone(timezone.utc),
+        type=type_, magnitude=magnitude,
+    )
     eclipsed = dataclasses.replace(
-        quiet,
-        eclipse_event=EclipseEvent(
-            kind="lunar", instant=now.astimezone(timezone.utc),
-            type=type_, magnitude=magnitude,
-        ),
+        quiet, eclipse_event=event, eclipse_body_event=event,
     )
     skin = dataclasses.replace(
         defaults.DEFAULT_SKIN,
@@ -574,11 +635,10 @@ def _lunar_moon_pixel(app, type_: str, magnitude: float):
         ),
     )
     image = Compositor(skin, AssetCache()).render_offscreen(540.0, 1.0, day, eclipsed)
-    radius = 270.0
-    moon_angle = math.radians(quiet.moon_fraction * 360.0)
-    orbit = radius * dial.GLOW_RING_RADIUS_FRACTION
-    x = round(radius + orbit * math.sin(moon_angle))
-    y = round(radius - orbit * math.cos(moon_angle))
+    # THE BODY'S OWN SEAT (owner order 2026-08-12): the darkened disc is
+    # the ECLIPSE's, standing at the hour of greatest eclipse — the Moon
+    # marker itself keeps its phase seat and is no longer touched.
+    x, y, _half = _eclipse_body_probe(skin, day, eclipsed)
     return image.pixelColor(x, y)
 
 
@@ -639,17 +699,19 @@ def _solar_glow_pixel(app, type_: str, magnitude: float):
     day = _belgrade_day(solstice_noon)
     plain_glow = build_tick_state(solstice_noon, day)
     quiet = dataclasses.replace(plain_glow, season_event=None, moon_event=None)
+    # 17:00 local: a seat clear of both markers, so the two types are
+    # compared at the same spot on the same lane.
+    instant = datetime(2026, 6, 21, 17, 0, tzinfo=tz).astimezone(timezone.utc)
+    event = EclipseEvent(
+        kind="solar", instant=instant, type=type_, magnitude=magnitude,
+    )
     eclipsed = dataclasses.replace(
-        quiet,
-        eclipse_event=EclipseEvent(
-            kind="solar", instant=solstice_noon.astimezone(timezone.utc),
-            type=type_, magnitude=magnitude,
-        ),
+        quiet, eclipse_event=event, eclipse_body_event=event,
     )
     skin = dataclasses.replace(defaults.DEFAULT_SKIN, solar_rotation=False)
     image = Compositor(skin, AssetCache()).render_offscreen(540.0, 1.0, day, eclipsed)
-    marker_y = 270 - round(270 * dial.GLOW_RING_RADIUS_FRACTION)
-    return image.pixelColor(289, marker_y + 33)
+    x, y, half = _eclipse_body_probe(skin, day, eclipsed)
+    return image.pixelColor(x, y - round(half * 1.25))
 
 
 def test_solar_annular_glow_hue_differs_from_total(app):
@@ -1157,3 +1219,197 @@ def test_eclipse_jump_type_filter_narrows_the_catalog(deep):
     assert total_lunar is not None and total_lunar.type == "total"
     # An impossible type for the kind simply finds nothing at the edge.
     assert deep.eclipse_after(jd, "solar", "penumbral") is None
+
+
+# --- THE THIRD BODY: the owner's own rules of 2026-08-12 ----------------------
+# One test per sentence of his order, so a future round cannot quietly
+# undo one of them. His sentences, in his order: the eclipse is shown
+# apart from the Earth, at the hour it happens (A1, covered above); it
+# stands for +-12 h (B2); it has its own switch (C1); the Moon keeps the
+# ordinary circle with its own new-/full-moon face (D1); and when the two
+# would overlap, the ECLIPSE goes out to the ring (E1 + F1).
+
+
+def _eclipse_ctx(skin, day, tick, radius: float = 270.0) -> RenderContext:
+    return RenderContext(
+        skin=skin, day=day, tick=tick, radius=radius,
+        cache=AssetCache(), dpr=1.0,
+    )
+
+
+def test_eclipse_body_window_is_twelve_hours(app):
+    """B2 as the owner corrected it in writing ("+-12h"): the body's own
+    window is twice the ±6 h the ballot offered, and strictly WIDER than
+    the ±3 h "happening now" window that still drives the hover card —
+    so `eclipse_event` can never be set while `eclipse_body_event` is
+    not, which would leave a costume with nobody wearing it."""
+    assert constants.ECLIPSE_BODY_WINDOW_H == 12.0
+    assert constants.ECLIPSE_BODY_WINDOW_H > constants.ECLIPSE_GLOW_WINDOW_H
+    tz = ZoneInfo("Europe/Belgrade")
+    instant = datetime(2026, 3, 3, 12, 0, tzinfo=tz)
+    event = EclipseEvent(
+        kind="lunar", instant=instant.astimezone(timezone.utc),
+        type="total", magnitude=1.15,
+    )
+    for hours, body, now_flag in (
+        (0.0, True, True),      # at the instant: both windows hold
+        (6.0, True, False),     # six hours out: the body stands, the card is quiet
+        (11.5, True, False),    # still inside his twelve
+        (12.5, False, False),   # past it: nothing
+    ):
+        moment = instant + timedelta(hours=hours)
+        day = dataclasses.replace(
+            _belgrade_day(moment), eclipses=(event,),
+        )
+        tick = build_tick_state(moment, day)
+        assert (tick.eclipse_body_event is not None) is body, hours
+        assert (tick.eclipse_event is not None) is now_flag, hours
+
+
+def test_eclipse_body_has_its_own_switch(app):
+    """C1: independent of both markers. With the Earth and the Moon
+    switched OFF the eclipse still stands (the old costume would have
+    vanished with its carrier — the hole this round closed); with
+    `show_eclipse` off it is gone even though both markers are on."""
+    tz = ZoneInfo("Europe/Belgrade")
+    now = datetime(2026, 3, 3, 12, 0, tzinfo=tz)
+    day = _belgrade_day(now)
+    plain = build_tick_state(now, day)
+    quiet = dataclasses.replace(plain, season_event=None, moon_event=None)
+    event = EclipseEvent(
+        kind="solar", instant=now.replace(hour=17).astimezone(timezone.utc),
+        type="total", magnitude=1.02,
+    )
+    eclipsed = dataclasses.replace(
+        quiet, eclipse_event=event, eclipse_body_event=event,
+    )
+    bare = dataclasses.replace(
+        defaults.DEFAULT_SKIN, solar_rotation=False,
+        show_earth=False, show_moon=False,
+    )
+    empty = Compositor(bare, AssetCache()).render_offscreen(540.0, 1.0, day, quiet)
+    alone = Compositor(bare, AssetCache()).render_offscreen(540.0, 1.0, day, eclipsed)
+    x, y, _half = _eclipse_body_probe(bare, day, eclipsed)
+    assert empty.pixelColor(x, y) != alone.pixelColor(x, y)
+    off = dataclasses.replace(bare, show_eclipse=False)
+    hidden = Compositor(off, AssetCache()).render_offscreen(540.0, 1.0, day, eclipsed)
+    assert hidden.pixelColor(x, y) == empty.pixelColor(x, y)
+
+
+def test_eclipse_escapes_to_the_ring_when_it_would_cover_the_moon(app):
+    """E1 + F1, and the owner's own worked example: a solar eclipse at
+    12:00 lands exactly where the new moon is drawn. Then the ECLIPSE
+    leaves for the ring band and the Moon keeps the ordinary circle."""
+    tz = ZoneInfo("Europe/Belgrade")
+    now = datetime(2026, 3, 3, 12, 0, tzinfo=tz)
+    day = _belgrade_day(now)
+    tick = build_tick_state(now, day)
+    skin = dataclasses.replace(defaults.DEFAULT_SKIN, solar_rotation=False)
+    ctx = _eclipse_ctx(skin, day, tick)
+    scale = eclipse_body_scale(ctx, solar=True)
+    lane = dial.earth_moon_orbit_fraction(skin.numeral_outer_ring_size, scale)
+    # The Moon's own seat, whatever the cycle says today, is the angle
+    # the eclipse must be pushed off.
+    moon_seat = angles.moon_cycle_angle(tick.moon_fraction)
+    assert eclipse_body_orbit(ctx, moon_seat, scale) == (
+        dial.GLOW_RING_RADIUS_FRACTION
+    )
+    # The angle furthest from BOTH markers has nothing in the way, so
+    # the body keeps the bodies' own lane there. Chosen by measurement
+    # rather than by a guessed quarter-turn: the Earth's date seat moves
+    # through the year, and a fixed offset would sooner or later land on
+    # it and make this test lie about which rule it is proving.
+    seats = (moon_seat, earth_marker_angle(ctx))
+    clear = max(
+        range(360),
+        key=lambda a: min(abs(((a - s + 180.0) % 360.0) - 180.0) for s in seats),
+    )
+    assert eclipse_body_orbit(ctx, float(clear), scale) == pytest.approx(lane)
+    # F1 is TOUCHING DISTANCE, not the exact hour: a few minutes off the
+    # seat still overlaps, and still escapes.
+    near = (moon_seat + 1.5) % 360.0
+    assert eclipse_body_orbit(ctx, near, scale) == (
+        dial.GLOW_RING_RADIUS_FRACTION
+    )
+    # With the Moon hidden there is nothing to escape from.
+    moonless = _eclipse_ctx(
+        dataclasses.replace(skin, show_moon=False, show_earth=False), day, tick,
+    )
+    assert eclipse_body_orbit(moonless, moon_seat, scale) == pytest.approx(lane)
+
+
+def test_eclipse_body_seat_is_the_hour_not_the_date(app):
+    """A1 in one line — the sentence the previous round failed to obey.
+    The body's angle is the hour hand's own reading of the eclipse
+    instant, and it MOVES when the instant moves, while the Earth's date
+    angle and the Moon's phase angle stay exactly where they were."""
+    tz = ZoneInfo("Europe/Belgrade")
+    now = datetime(2026, 3, 3, 9, 0, tzinfo=tz)
+    day = _belgrade_day(now)
+    tick = build_tick_state(now, day)
+    skin = dataclasses.replace(defaults.DEFAULT_SKIN, solar_rotation=False)
+    ctx = _eclipse_ctx(skin, day, tick)
+    for hour, expected in ((12, 0.0), (18, 90.0), (0, 180.0), (6, 270.0)):
+        event = EclipseEvent(
+            kind="solar", instant=now.replace(hour=hour).astimezone(timezone.utc),
+            type="total", magnitude=1.02,
+        )
+        assert eclipse_body_angle(ctx, event) == pytest.approx(expected)
+
+
+def test_the_marker_yields_the_ring_to_the_eclipse(app):
+    """The SECOND half of the owner's collision rule, in his own words:
+    the eclipse goes on the outer ring AND the moon is shown on the
+    ordinary circle as on any other day, with its own full-/new-moon
+    graphic. A first cut only did the first half and measured the
+    markers where they currently stood — so a FULL MOON, which is itself
+    relocated to the ring band for six hours around exactly the instant a
+    lunar eclipse happens, was still sitting where the eclipse escaped
+    to. The render showed it; this test now holds it."""
+    tz = ZoneInfo("Europe/Belgrade")
+    now = datetime(2026, 3, 3, 9, 30, tzinfo=tz)
+    day = _belgrade_day(now)
+    tick = build_tick_state(now, day)
+    assert tick.moon_event == "Full Moon"        # the Moon is band-bound
+    skin = dataclasses.replace(defaults.DEFAULT_SKIN, solar_rotation=False)
+    # An eclipse at the Moon's own seat: 00:10, the bottom of the dial.
+    event = EclipseEvent(
+        kind="lunar", instant=now.replace(hour=0, minute=10).astimezone(timezone.utc),
+        type="total", magnitude=1.30,
+    )
+    eclipsed = dataclasses.replace(
+        tick, eclipse_event=event, eclipse_body_event=event,
+    )
+    ctx = _eclipse_ctx(skin, day, eclipsed)
+    scale = eclipse_body_scale(ctx, solar=False)
+    angle = eclipse_body_angle(ctx, event)
+    # 1. The eclipse takes the ring band.
+    assert eclipse_body_orbit(ctx, angle, scale) == (
+        dial.GLOW_RING_RADIUS_FRACTION
+    )
+    # 2. ... and the Moon gives it up, back to the ordinary circle.
+    assert marker_yields_band(ctx, "moon") is True
+    # 3. The Earth, far away on the year wheel, keeps its own behaviour.
+    assert marker_yields_band(ctx, "earth") is False
+    # 4. With no eclipse on the dial nothing yields anything.
+    quiet_ctx = _eclipse_ctx(skin, day, tick)
+    assert marker_yields_band(quiet_ctx, "moon") is False
+    # 5. Drawn: the two stand at measurably different radii now.
+    image = Compositor(skin, AssetCache()).render_offscreen(760.0, 1.0, day, eclipsed)
+    radius = 380.0
+    eclipse_point = dial_point(angle, radius * dial.GLOW_RING_RADIUS_FRACTION)
+    moon_point = dial_point(
+        angles.moon_cycle_angle(tick.moon_fraction),
+        radius * dial.earth_moon_orbit_fraction(
+            skin.numeral_outer_ring_size, skin.year_marker.moon_scale,
+        ),
+    )
+    separation = math.hypot(
+        eclipse_point.x() - moon_point.x(), eclipse_point.y() - moon_point.y()
+    )
+    assert separation > radius * (
+        scale + skin.year_marker.moon_scale
+    ), "the two must not overlap once the rule has fired"
+    assert image.pixelColor(
+        round(radius + eclipse_point.x()), round(radius + eclipse_point.y())
+    ).alpha() > 0

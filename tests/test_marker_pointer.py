@@ -191,7 +191,18 @@ def test_pointer_is_proportional_and_behind_the_body(app):
     assert earth_source.index("draw_pointer") < earth_source.index("variant = ("), (
         "the Earth's pointer must be drawn BEFORE the Earth's own art"
     )
-    assert source.count("draw_pointer") - earth_source.count("draw_pointer") == 1, (
+    # THREE bodies since 2026-08-12: the eclipse body wears the same
+    # pointer grammar, drawn behind it like the other two, so the class
+    # holds three calls — Earth, Moon, eclipse.
+    eclipse_source = inspect.getsource(ym.YearMarkerLayer._draw_eclipse_body)
+    assert eclipse_source.count("draw_pointer") == 1, (
+        "exactly ONE eclipse pointer draw, behind the body"
+    )
+    assert (
+        source.count("draw_pointer")
+        - earth_source.count("draw_pointer")
+        - eclipse_source.count("draw_pointer")
+    ) == 1, (
         "exactly ONE Moon pointer draw, before the disc"
     )
 

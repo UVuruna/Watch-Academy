@@ -332,7 +332,12 @@ def _build_layers(skin: SkinDefinition) -> list[Layer]:
     skipped = {
         "star": not skin.show_pointer,
         "weekday_set": not skin.show_weekday,
-        "year_marker": not (skin.show_earth or skin.show_moon),
+        # THREE bodies now, not two (owner verdict 2026-08-12, C1): the
+        # eclipse body has its own switch and its own seat, so the layer
+        # must still be built when both markers are hidden.
+        "year_marker": not (
+            skin.show_earth or skin.show_moon or skin.show_eclipse
+        ),
         "moon_band": not (
             skin.show_moon and skin.year_marker.moon_band_mode == "horizon"
         ),

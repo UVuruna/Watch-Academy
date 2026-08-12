@@ -282,6 +282,33 @@ RING_JEWEL_SHADOW_SAMPLES = 8       # offsets around the circle — the
 # DPI change, like the rest of this STATIC layer — never per frame).
 RING_JEWEL_SHADOW_MAX_GAP_PX = 1.0
 
+# THE ON-DIAL LABEL's BORDER — not a halo (owner correction 2026-08-12,
+# after a first cut shipped him a wide soft one):
+# lang-ok: the owner's own correction, quoted so it cannot be re-derived
+# wrongly a second time.
+#   "zato sam ti rekao da napravis GLOW ili shadow beli i crni i radice
+#    svuda ali tu ne mislim onaj razbacani glow vec vise kao BORDER
+#    kratka distanca jak intenzitet ... necu veliki halo koji prekriva
+#    ceo ROUNDEL ili bilo sta oko cega pise ... NEGO VISE KAO BORDER
+#    kretak radijus par px i intenzitet 100%"
+#
+# Two contours, both at FULL opacity, both a couple of DEVICE pixels
+# wide: a dark keyline hugging the ink, a light one immediately outside
+# it. That is what makes it work on any ground without knowing the
+# ground — on a pale body the dark line reads, on a near-black one the
+# light line does, and on a mid tone both do. A single-colour cushion
+# cannot do that, which is why the first cut failed on SATURDAY /
+# TUESDAY / MONDAY / WEDNESDAY over the dim bodies.
+#
+# DEVICE pixels, not a fraction of the letter height: a border is a
+# border at every dial size, and a fraction is exactly how the first cut
+# grew into something that covered the roundel it sat on. Scaled by the
+# device pixel ratio only, so it is the same apparent thickness on a
+# 4K panel as on a 1080p one.
+LABEL_BORDER_DARK_PX = 1.5      # the keyline hugging the ink
+LABEL_BORDER_LIGHT_PX = 3.0     # the OUTER edge of the light contour, so
+                                 # the light band is the difference (1.5 px)
+
 # The outer GREAT SEAL CROWN TEXT ARC (TASK 1, owner "može radi" 2026-07-19,
 # CANON.md §The Banknote; corrected MOTO-FIX round, owner correction
 # 2026-07-19, the dollar's Great Seal reference image): curved text
@@ -462,6 +489,23 @@ UMBRA_CONTRAST_SPANS = {
 }
 
 GLOW_RING_RADIUS_FRACTION = RING_JEWEL_RADIUS_FRACTION  # ring band centerline
+
+# THE ECLIPSE BODY's ESCAPE (owner ballot verdict 2026-08-12, options E1
+# + F1, and his written rule of the same day): the eclipse body rides the
+# bodies' own orbit lane at the HOUR it happens — but a solar eclipse
+# happens at new moon, whose seat is the TOP, and a lunar eclipse at full
+# moon, whose seat is the BOTTOM, so the eclipse and the Moon can land on
+# the same spot. When they do, the ECLIPSE leaves for the ring band
+# (GLOW_RING_RADIUS_FRACTION above) and the Moon keeps the ordinary
+# circle with its own new-/full-moon face — his rule, verbatim.
+#
+# F1 is what "the same spot" means: not the exact hour but TOUCHING
+# DISTANCE — the escape fires whenever the two discs would overlap, since
+# an eclipse at 12:07 covers the new moon exactly as badly as one at
+# 12:00. This factor is the margin on that touch: 1.0 would let them
+# graze, so the discs must clear each other by a tenth of their combined
+# size before the eclipse is allowed to stay on the lane.
+ECLIPSE_BODY_CLEARANCE = 1.10
 
 
 # --- The dial NUMERALS (research/hour_numerals.md) ---------------------------------
