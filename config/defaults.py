@@ -128,9 +128,13 @@ ICON_DIR = paths.assets_dir() / "instrument" / "icons"
 ICON_FILES = {
     "light": ICON_DIR / "light.png",           # Quick Jump pole row: polar DAY
     "dark": ICON_DIR / "dark.svg",              # Quick Jump pole row: polar NIGHT
-    "eclipse_sun": ICON_DIR / "eclipse_sun.svg",    # Quick Jump Sun's own eclipse entries
+    # Quick Jump's Sun eclipse entries — and, since the owner's
+    # correction of 2026-08-12, the Fast Travel picker's solar-eclipse
+    # row too: this glyph carries many more rays than `sun_eclipse.png`,
+    # so at menu size it no longer reads as the Moon row beside it.
+    "eclipse_sun": ICON_DIR / "eclipse_sun.svg",
     "eclipse_moon": ICON_DIR / "eclipse_moon.png",  # Quick Jump Moon's own eclipse entries
-    # THE OWNER'S OWN FOUR (his order 2026-08-12, for the Ctrl+[ / Ctrl+]
+    # THE OWNER'S OWN (his order 2026-08-12, for the Ctrl+[ / Ctrl+]
     # Fast Travel picker — `config.shortcuts.FAST_TRAVEL_THEMES`). They
     # sit BESIDE the two Quick Jump glyphs above rather than replacing
     # them: that menu is a different spot with a different look, and this
@@ -141,7 +145,6 @@ ICON_FILES = {
     # unused rather than being wired to a second meaning nobody asked for.
     "sun": ICON_DIR / "sun.svg",
     "moon": ICON_DIR / "moon.svg",
-    "sun_eclipse": ICON_DIR / "sun_eclipse.png",
     "moon_eclipse_red": ICON_DIR / "moon_eclipse_red.png",
     # R5 MENU REWORK (Time Travel mini-window rows, item 3A): the
     # owner's dedicated per-row icons — a tinted compass rose per pole

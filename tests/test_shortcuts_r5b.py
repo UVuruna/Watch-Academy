@@ -816,3 +816,92 @@ def test_the_flash_text_wears_the_letter_plates(app, monkeypatch):
     finally:
         flash.close()
         dial.close()
+
+
+# --- THE OWNER'S CORRECTIONS OF 2026-08-12 ------------------------------------
+
+
+def test_the_location_flash_stands_where_the_picker_does(app, monkeypatch):
+    """ONE FLASH, ONE PLACE (owner order 2026-08-12): a LOCATION change
+    used to be a different-looking flash — big white font letters across
+    the MIDDLE of the dial. His correction put it where the Ctrl+[
+    switcher already stands, in the theme's letter plates, with a logo
+    beside it. So a location flash must now be indistinguishable in
+    PLACEMENT and MEDIUM from a picker flash."""
+    from app import fast_travel_flash as flash_mod
+
+    monkeypatch.setattr(flash_mod.native, "assert_topmost", lambda hwnd: None)
+    dial = _make_dial_stub(app)
+    flash = FastTravelFlash()
+    try:
+        flash.flash(dial, None, "", "Belgrade, Serbia")
+        dial_geo = dial.frameGeometry()
+        # Above the dial, never across its middle.
+        assert flash.geometry().bottom() <= dial_geo.top()
+        assert not flash.geometry().contains(dial_geo.center())
+        # Plates, never a font.
+        assert flash._text_label.text() == ""
+        pixmap = flash._text_label.pixmap()
+        assert pixmap is not None and not pixmap.isNull()
+        # The centered look is gone entirely — not merely unused.
+        assert not hasattr(flash, "_position_centered")
+        assert not hasattr(shortcuts, "LOCATION_FLASH_FONT_PX")
+    finally:
+        flash.close()
+        dial.close()
+
+
+def test_a_place_name_with_no_plate_falls_back_loudly_instead_of_raising(
+    app, monkeypatch, capsys,
+):
+    """THE LORD'S DAY PRECEDENT: the letter library owns no accented
+    masters, and a location carries whatever the world calls itself. A
+    keystroke may not die on that — the flash falls back to the styled
+    font for that ONE text and names the character on stderr."""
+    from app import fast_travel_flash as flash_mod
+
+    monkeypatch.setattr(flash_mod.native, "assert_topmost", lambda hwnd: None)
+    dial = _make_dial_stub(app)
+    flash = FastTravelFlash()
+    try:
+        flash.flash(dial, None, "", "Z\u00fcrich, Europe")
+        assert flash.isVisible()
+        assert flash._text_label.text() == "Z\u00fcrich, Europe"
+        assert "falls back to the font" in capsys.readouterr().err
+    finally:
+        flash.close()
+        dial.close()
+
+
+def test_the_poles_and_greenwich_carry_their_own_logos():
+    """The owner named the art himself: his two compass roses for the
+    poles, and for Greenwich the same plain one Time Travel's own rows
+    use. Each must resolve to a real file, not an emoji fallback."""
+    from app.controller import WatchController
+
+    for kind, key in WatchController._LOCATION_FLASH_ICONS.items():
+        path = defaults.icon_path(key)
+        assert path is not None and path.exists(), kind
+    assert WatchController._LOCATION_FLASH_ICONS["north_pole"] == "north_pole"
+    assert WatchController._LOCATION_FLASH_ICONS["south_pole"] == "south_pole"
+    assert WatchController._LOCATION_FLASH_ICONS["greenwich"] == "compass"
+
+
+def test_ctrl_home_flashes_the_home_location_like_every_other_jump(controller):
+    """Owner order 2026-08-12: "Ctrl+Home should write the location just
+    like Ctrl+arrow or Ctrl+0 for Greenwich". Every OTHER way of moving
+    the observer flashed where it landed; the way BACK was the one silent
+    path, so the return had to be inferred from the dial alone."""
+    flashed = []
+    controller._fast_travel_flash = type(
+        "_FakeFlash", (), {
+            "flash": lambda self, widget, icon, emoji, text: flashed.append(text),
+            "close": lambda self: None,     # the fixture's own teardown
+        },
+    )()
+    controller._jump_to_place("greenwich")
+    assert flashed and "Greenwich" in flashed[-1]
+    flashed.clear()
+    controller._end_simulation()
+    assert flashed, "Ctrl+Home said nothing"
+    assert controller._settings.city_name in flashed[-1]

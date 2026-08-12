@@ -11,7 +11,19 @@ hexa/trio center-duality wheels, or today's body in `center_only` mode.
 During the reveal-week window the ghost center Sun also rises here, opaque,
 on every day — that IS the z-order lift the reveal promises. On an actual
 Sunday the SOLAR clock (not the wall clock) may swap the face to the
-Servant or, where the theme names one, the Ninth (`center_dual_face`). THE
+Servant or, where the theme names one, the Ninth (`center_dual_face`).
+
+THE BADGE NAMES THE DAY (owner correction 2026-08-12: "on a badge it ALWAYS
+says the name of the DAY, unless it is an ARCHETYPE"). That swap used to
+change the LABEL with the picture, so a Sunday roundel at night read
+"Lucifer" or the theme's Ninth instead of SUNDAY — the badge stopped saying
+the one thing a weekday badge is for. The weekday RING already obeyed the
+rule (its two-seat Sunday draws the swapped plate image-only and leaves the
+label to the day); this seat did not, and now goes through the same
+`draw_body_label` door with `today`. The face is still the picture, and the
+hover card still names both persons.
+
+THE
 BLUE MOON LAW (owner-sealed 2026-07-22) is checked FIRST, independent of
 everything else: when the Calendar pointer's own mode is showing a 13th
 month/animal today, that plate draws here instead — the Calendar pointer
@@ -38,8 +50,8 @@ anything.
 - [Skin Geometry](../../__about/skin_geometry.md) — `center_duality`, `hover_factor`
 - [Slot Layout](../../__about/slot_layout.md) — `center_dual_face`, `weekday_body_size`,
   `weekday_classic_slot`
-- [Weekday Body](../../__about/weekday_body.md) — `draw_weekday_body`,
-  `weekday_label_set_px`
+- [Weekday Body](../../__about/weekday_body.md) — `draw_body_label`,
+  `draw_weekday_body`, `weekday_label_set_px`
 
 ### Used by
 - [Compositor](../../__about/compositor.md) — appended right after the hand layers when

@@ -49,7 +49,12 @@ Layer: config — pure, no Qt, no wall clock.
   SETUP_ASSET`, `WINDOW_ICON_SIZES_PX`.
 - **UI icon chrome** — `ICON_DIR`, `ICON_FILES`, `icon_path(name)` (the
   shared graceful-absent resolver every UI-glyph consumer calls),
-  `SETTINGS_NAV_WIDTH_PX`.
+  `SETTINGS_NAV_WIDTH_PX`. The Fast Travel picker's solar-eclipse row
+  reads `eclipse_sun` (owner correction 2026-08-12: the many-rayed SVG,
+  because the plain black disc of `sun_eclipse.png` read as the Moon row
+  beside it at menu size — that PNG stays the DIAL's own body art via
+  `ECLIPSE_SOLAR_ART`, a different spot at a different size, which is
+  exactly what this table's one-file-many-spots rule allows).
 - **Working-set ceilings** — `WORKING_SET_CEILINGS` (per-asset-subtree
   downscale ceilings), `REVEAL_WEEK_DURATION_S`.
 - **Background warm pool sizes** — `ART_DRAIN_WORKERS`,

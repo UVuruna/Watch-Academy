@@ -2,11 +2,15 @@
 spec sealed 2026-07-21): icon + option text, popping above the dial on
 every Ctrl+[ / Ctrl+] theme/option change and fading out on its own.
 
-R-30 (2026-08) reuses this SAME overlay for a LOCATION change (`big=
-True`): large, centered "CITY, COUNTRY" text across the middle of the
-dial instead of the small icon+text popup above/below it — one
-mechanism, two positions, never a second flash class.
+R-30 (2026-08) reuses this SAME overlay for a LOCATION change, and the
+owner's order of 2026-08-12 finished the merge: a location no longer
+gets a big white font across the MIDDLE of the dial, but the same plate
+letters at the same place above it, with its own logo beside — the poles
+their compass roses, Greenwich the plain one Time Travel already uses.
+One mechanism, ONE position, one look.
 """
+
+import sys
 
 from PySide6.QtCore import QPropertyAnimation, Qt, QTimer
 from PySide6.QtGui import QGuiApplication, QIcon, QPixmap
@@ -63,17 +67,28 @@ class FastTravelFlash(QWidget):
 
     def flash(
         self, dial_widget: QWidget, icon_path, emoji: str, text: str,
-        *, big: bool = False,
     ) -> None:
         """Show `text` beside `icon_path` (graceful-absent to `emoji` —
         Rule #1) positioned ABOVE `dial_widget`'s current geometry,
         falling BELOW it when the dial hugs the screen top, then holds
         before fading. A flash already in flight restarts cleanly.
 
-        `big=True` (R-30, a LOCATION change) instead centers the flash
-        across the MIDDLE of the dial in large letters — no icon (an
-        empty `icon_path`/`emoji` hides that label entirely) — the
-        SAME widget/timers/fade, just a different size and position."""
+        ONE FLASH, ONE PLACE (owner order 2026-08-12): a LOCATION change
+        used to take a second look entirely — big white font letters
+        across the MIDDLE of the dial, no icon. His correction: "that
+        FLASH which writes North Pole, Greenwich and so on when the
+        location changes should be written ABOVE, where this switcher
+        with Ctrl+[ is, and in the theme's letters with a logo beside
+        it". lang-ok: the owner's own sentence, the rule this is. So
+        `big` is gone with `_position_centered` and the font path: every
+        flash this widget shows is now plates, an icon and one position.
+
+        The two-metal accent survives the merge: whatever separates the
+        two halves — the Fast Travel picker's " : " or a location's
+        "CITY, COUNTRY" — the first half wears GOLD at full height and
+        the second SILVER a step smaller. Only the picker DRAWS its
+        separator (the colon plate); a comma has no plate and needs
+        none, since the metal change already says "second half"."""
         self._fade.stop()
         self._hold_timer.stop()
         self._opacity.setOpacity(1.0)
@@ -81,7 +96,20 @@ class FastTravelFlash(QWidget):
         self._icon_label.setVisible(has_icon)
         if icon_path is not None:
             size = shortcuts.FAST_TRAVEL_FLASH_ICON_PX
-            self._icon_label.setPixmap(QIcon(str(icon_path)).pixmap(size, size))
+            # RASTERIZE BIG, THEN SHRINK (owner correction 2026-08-12,
+            # the reason he asked for `eclipse_sun.svg` at all: its many
+            # RAYS are what tell the solar row from the lunar one). Asked
+            # for 28 px directly, Qt rasterizes the vector at 28 px and
+            # every ray falls below one pixel — the glyph collapses into
+            # a plain disc, which is the very confusion he reported. Four
+            # times over and smoothly scaled down keeps them.
+            self._icon_label.setPixmap(
+                QIcon(str(icon_path)).pixmap(4 * size, 4 * size).scaled(
+                    size, size,
+                    Qt.AspectRatioMode.KeepAspectRatio,
+                    Qt.TransformationMode.SmoothTransformation,
+                )
+            )
             self._icon_label.setText("")
         elif emoji:
             self._icon_label.setPixmap(QIcon().pixmap(0, 0))
@@ -89,41 +117,9 @@ class FastTravelFlash(QWidget):
             self._icon_label.setStyleSheet(
                 f"font-size: {shortcuts.FAST_TRAVEL_FLASH_ICON_PX}px;"
             )
-        if big:
-            font_px = shortcuts.LOCATION_FLASH_FONT_PX
-            self._text_label.setStyleSheet(
-                f"color: {palette.FAST_TRAVEL_FLASH_TEXT_COLOR};"
-                f"font-weight: 600; font-size: {font_px}px;"
-            )
-            self._text_label.setPixmap(QPixmap())
-            self._text_label.setText(text)
-        else:
-            # THE ONE PLATE LAW reaches this text (owner corrections
-            # 2026-08-11: the SAME letter plates the jewels and the
-            # crown text wear, never a white font — and his "moze jos
-            # bolje" refinement: the CATEGORY in gold at full height,
-            # the OPTION in silver a step smaller, the two-metal
-            # accent the jewels already speak; the colon plate joins
-            # them because the library owns no parenthesis).
-            # lang-ok: quoting the owner's own two words verbatim.
-            from render.letter_plates import plate_text_segments_pixmap
-
-            category, _, option = text.partition(" : ")
-            segments = (
-                ((category, "gold", 1.0), (f": {option}", "silver", 0.82))
-                if option
-                else ((text, "gold", 1.0),)
-            )
-            self._text_label.setText("")
-            self._text_label.setPixmap(plate_text_segments_pixmap(
-                segments, shortcuts.FAST_TRAVEL_FLASH_FONT_PX,
-                dpr=self.devicePixelRatioF() or 1.0,
-            ))
+        self._set_plate_text(text)
         self.adjustSize()
-        if big:
-            self._position_centered(dial_widget)
-        else:
-            self._position_above_or_below(dial_widget)
+        self._position_above_or_below(dial_widget)
         self.show()
         native.assert_topmost(int(self.winId()))
         hold_ms = max(
@@ -134,6 +130,56 @@ class FastTravelFlash(QWidget):
             ),
         )
         self._hold_timer.start(hold_ms)
+
+    def _set_plate_text(self, text: str) -> None:
+        """THE ONE PLATE LAW reaches this text (owner corrections
+        2026-08-11: the SAME letter plates the jewels and the crown text
+        wear, never a white font — a white font vanishes on a white
+        desktop). The CATEGORY/CITY wears gold at full height, the
+        OPTION/COUNTRY silver a step smaller.
+
+        THE LORD'S DAY PRECEDENT: a glyph with no plate does not kill a
+        keystroke here. The picker's own titles are plate-safe by
+        construction, but a location carries whatever the world calls
+        itself, and the library owns no accented masters today.
+        # lang-ok: place names quoted as data, not product text.
+        ("Nis", "Zurich" and their real spellings are the cases meant.)
+        Rather than raise on a legitimate place name, the flash falls
+        back to the styled font FOR THAT ONE TEXT and names the offending
+        character on stderr, exactly as the weekday labels do for the
+        apostrophe. The fallback is loud and per-string, never a silent
+        standing font path."""
+        from render.letter_plates import MissingPlate, plate_text_segments_pixmap
+
+        for separator in (" : ", ", "):
+            head, found, tail = text.partition(separator)
+            if found:
+                segments = (
+                    (head, "gold", 1.0),
+                    # The picker DRAWS its colon; a comma has no plate
+                    # and needs none — the metal change is the seam.
+                    (f": {tail}" if separator == " : " else tail, "silver", 0.82),
+                )
+                break
+        else:
+            segments = ((text, "gold", 1.0),)
+        try:
+            pixmap = plate_text_segments_pixmap(
+                segments, shortcuts.FAST_TRAVEL_FLASH_FONT_PX,
+                dpr=self.devicePixelRatioF() or 1.0,
+            )
+        except MissingPlate as missing:
+            print(f"flash text falls back to the font: {missing}", file=sys.stderr)
+            self._text_label.setPixmap(QPixmap())
+            self._text_label.setStyleSheet(
+                f"color: {palette.FAST_TRAVEL_FLASH_TEXT_COLOR};"
+                f"font-weight: 600; "
+                f"font-size: {shortcuts.FAST_TRAVEL_FLASH_FONT_PX}px;"
+            )
+            self._text_label.setText(text)
+            return
+        self._text_label.setText("")
+        self._text_label.setPixmap(pixmap)
 
     def _position_above_or_below(self, dial_widget: QWidget) -> None:
         dial_geo = dial_widget.frameGeometry()
@@ -148,11 +194,3 @@ class FastTravelFlash(QWidget):
             y = above_y
         self.move(max(avail.left(), min(x, avail.right() - self.width())), y)
 
-    def _position_centered(self, dial_widget: QWidget) -> None:
-        """R-30: dead center of the dial itself (a location change is
-        the dial's own new identity, not a corner note)."""
-        dial_geo = dial_widget.frameGeometry()
-        center = dial_geo.center()
-        self.move(
-            center.x() - self.width() // 2, center.y() - self.height() // 2
-        )

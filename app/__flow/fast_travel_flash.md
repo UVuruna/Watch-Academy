@@ -14,23 +14,27 @@ flowchart LR
 ```
 
 Positioned centered above the dial's current on-screen rectangle, or
-below it when the dial sits at the top edge of its screen — OR (R-30,
-`big=True`) dead centered ON the dial itself, in larger letters, with
-the icon label hidden.
+below it when the dial sits at the top edge of its screen. ONE position
+for every flash since the owner's order of 2026-08-12 — a LOCATION change
+used to take a second look (big font letters centered ON the dial, no
+icon) and now wears the same plates in the same place, with its own logo.
 
 ## Algorithm — `flash()` lifecycle
 
 ```mermaid
 %%{init: {'flowchart': {'subGraphTitleMargin': {'top': 0, 'bottom': 35}}}}%%
 flowchart TB
-    A["flash(dial, icon, emoji, text, big=False)"] --> B["stop any running fade + hold timer
+    A["flash(dial, icon, emoji, text)"] --> B["stop any running fade + hold timer
     opacity <- 1.0"]
-    B --> C[set icon/text, font size, adjustSize]
-    C --> D{big?}
-    D -- "no" --> D1["_position_above_or_below(dial)"]
-    D -- "yes" --> D2["_position_centered(dial)"]
+    B --> C["icon: rasterize at 4x, smooth-scale down
+    (the rays die at 1x)"]
+    C --> C2["_set_plate_text(text) — gold head, silver tail"]
+    C2 --> C3{"every glyph has a plate?"}
+    C3 -- "no" --> C4["styled font for THIS text
+    + the character named on stderr"]
+    C3 -- "yes" --> D1["_position_above_or_below(dial)"]
+    C4 --> D1
     D1 --> E["show(); native.assert_topmost"]
-    D2 --> E
     E --> F["hold_timer.start(DURATION_S*1000 - FADE_MS)"]
     F --> G((hold timer fires))
     G --> H["fade.start() — opacity 1.0 to 0.0 over FADE_MS"]

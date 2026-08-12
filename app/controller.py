@@ -2142,21 +2142,43 @@ class WatchController(QObject):
     # stay silent exactly like before this round.
     _LOCATION_JUMP_KINDS = frozenset({"north_pole", "south_pole", "greenwich", "city"})
 
-    def _flash_location(self, name: str, path: tuple = (), timezone: str = "") -> None:
-        """R-30/R-31: a large, centered "CITY, COUNTRY" flash across the
-        dial's own middle on every LOCATION change — the Settings
-        dialog's preset pick (`_apply_settings_dialog_result`) and
+    # THE LOCATION'S OWN LOGO (owner order 2026-08-12): the poles wear
+    # his two compass roses and Greenwich the plain one Time Travel's
+    # own rows already use. An ordinary city names none — there is no
+    # per-city art and inventing one would be worse than the clean text
+    # the flash shows instead (Rule #1, graceful-absent).
+    _LOCATION_FLASH_ICONS = {
+        "north_pole": "north_pole",
+        "south_pole": "south_pole",
+        "greenwich": "compass",
+    }
+
+    def _flash_location(
+        self, name: str, path: tuple = (), timezone: str = "",
+        icon_key: str | None = None,
+    ) -> None:
+        """R-30/R-31: the "CITY, COUNTRY" flash on every LOCATION change
+        — the Settings dialog's preset pick (`_apply_settings_dialog_result`),
         every `_compute_jump` landing named in `_LOCATION_JUMP_KINDS`
-        (`_apply_jump`/`_dialog_jump`: Quick Jump cycling, Greenwich,
-        the poles, Time Travel's own Quick Jump rows) — the SAME
-        overlay `_flash_fast_travel` uses, `big=True`. The SAME `name`
-        also becomes `_active_location_name` (R-31), so the tray
-        tooltip/menu TITLE follow it too — one location change, one
-        call, both symptoms fixed together."""
+        (`_apply_jump`/`_dialog_jump`: Quick Jump cycling, Greenwich, the
+        poles, Time Travel's own Quick Jump rows) and Ctrl+Home's return
+        to the home city.
+
+        ONE FLASH, ONE PLACE (owner order 2026-08-12): this used to be a
+        different-looking flash — big white font letters across the
+        middle of the dial. It is now the SAME overlay in the SAME spot
+        above the dial as the Ctrl+[ picker, wearing the same letter
+        plates, with the place's own logo beside it
+        (`_LOCATION_FLASH_ICONS`).
+
+        The SAME `name` also becomes `_active_location_name` (R-31), so
+        the tray tooltip/menu TITLE follows it too — one location change,
+        one call, both symptoms fixed together."""
         display_text = _location_flash_text(name, path, timezone)
-        self._fast_travel_flash.flash(
-            self._widget, None, "", display_text, big=True,
+        icon_path = (
+            defaults.icon_path(icon_key) if icon_key is not None else None
         )
+        self._fast_travel_flash.flash(self._widget, icon_path, "", display_text)
         self._active_location_name = name
         # THE LOCATION CROWN (RING VERDICTS round, owner decree
         # 2026-08-05): the SAME resolved text, kept alongside the name
@@ -2182,11 +2204,20 @@ class WatchController(QObject):
         if kind not in self._LOCATION_JUMP_KINDS:
             return
         if kind == "north_pole":
-            self._flash_location(self._ui("North Pole"))
+            self._flash_location(
+                self._ui("North Pole"),
+                icon_key=self._LOCATION_FLASH_ICONS["north_pole"],
+            )
         elif kind == "south_pole":
-            self._flash_location(self._ui("South Pole"))
+            self._flash_location(
+                self._ui("South Pole"),
+                icon_key=self._LOCATION_FLASH_ICONS["south_pole"],
+            )
         elif kind == "greenwich":
-            self._flash_location("Greenwich", (), defaults.GREENWICH_TIMEZONE)
+            self._flash_location(
+                "Greenwich", (), defaults.GREENWICH_TIMEZONE,
+                icon_key=self._LOCATION_FLASH_ICONS["greenwich"],
+            )
         else:                               # "city" — the user's own place
             self._flash_location(city["name"], (), city["timezone"])
 
@@ -3904,20 +3935,19 @@ class WatchController(QObject):
         self._simulation = None
         self._sim_cycles = 0
         self._day = None
-        if self._active_location_name != self._settings.city_name:
-            self._active_location_name = self._settings.city_name
-            # THE LOCATION CROWN (RING VERDICTS round): restore the home
-            # city's own display text too, and rebuild the skin so a
-            # Location-crown ring follows the return exactly like the
-            # tray title does.
-            self._active_location_display = _location_flash_text(
-                self._settings.city_name, self._settings.city_path,
-                self._settings.timezone,
-            )
-            self._refresh_watch_title()
-            self._install_skin(
-                build_skin(self._settings, self._active_location_display)
-            )
+        # HOME NAMES ITSELF TOO (owner order 2026-08-12: "Ctrl+Home
+        # should write the location just like Ctrl+arrow or Ctrl+0 for
+        # Greenwich"). Every OTHER way of changing the observer flashed
+        # where it landed; the way BACK was the one silent one, so the
+        # reader was left to infer the return from the dial alone.
+        # `_flash_location` is the same single door those paths use — it
+        # restores `_active_location_name`, the Location crown's display
+        # text, the tray title and the skin in one call, which is exactly
+        # what this method used to open-code.
+        self._flash_location(
+            self._settings.city_name, self._settings.city_path,
+            self._settings.timezone,
+        )
         self._on_tick(clock_jumped=False)
 
     def _start_simulation(self, moment: datetime, observer, cycles: int = 0) -> None:

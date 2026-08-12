@@ -10,7 +10,9 @@ from render.ninths import active_thirteenth, center_face, ninth_alt_active, them
 from render.painting import draw_name_label, draw_pixmap_centered, name_label_px
 from render.skin_geometry import center_duality, hover_factor
 from render.slot_layout import center_dual_face, weekday_body_size, weekday_classic_slot
-from render.weekday_body import draw_weekday_body, weekday_label_set_px
+from render.weekday_body import (
+    draw_body_label, draw_weekday_body, weekday_label_set_px,
+)
 
 
 class CenterBodyLayer(Layer):
@@ -111,12 +113,8 @@ class CenterBodyLayer(Layer):
                         pantheon.rotating_art_file(asset, ctx.day.local_date)
                         or asset
                     )
-                    name = (
-                        spec.dual_names
-                        or pantheon.WEEKDAY_DUAL_NAMES[ctx.skin.weekday_theme]
-                    )[1]
                 else:
-                    name, asset = ninth
+                    _ninth_name, asset = ninth
                 painter.save()
                 painter.setOpacity(1.0)
                 draw_pixmap_centered(
@@ -124,12 +122,21 @@ class CenterBodyLayer(Layer):
                     metal=spec.metal,
                 )
                 if names_on:
-                    draw_name_label(
-                        painter, name, QPointF(0, 0),
-                        name_label_px(
-                            name, center_size * dial.NAME_LABEL_WIDTH_FRACTION
-                        ),
-                        ctx=ctx,
+                    # THE BADGE NAMES THE DAY (owner correction
+                    # 2026-08-12: "on a badge it ALWAYS says the name of
+                    # the DAY, unless it is an ARCHETYPE"). This seat used
+                    # to label itself with the FACE it had swapped to — so
+                    # at solar midnight a Sunday roundel read "Lucifer" or
+                    # the theme's Ninth instead of SUNDAY, and the reader
+                    # lost the one thing a weekday badge is for. The
+                    # weekday RING already obeyed this (its two-seat
+                    # Sunday draws the swapped plate image-only and leaves
+                    # the label to the day); the centre seat did not. The
+                    # face is still readable — it is the picture, and the
+                    # hover card names both persons.
+                    draw_body_label(
+                        painter, ctx, today, QPointF(0, 0), center_size,
+                        label_px,
                     )
                 painter.restore()
                 return

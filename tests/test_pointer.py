@@ -2804,7 +2804,10 @@ def test_every_fast_travel_category_resolves_a_real_icon(app):
     )
 
     expected_files = {
-        "solar_eclipse": "sun_eclipse.png",
+        # THE RAYS TELL THEM APART (owner correction 2026-08-12): the
+        # many-rayed `eclipse_sun.svg`, never the plain black disc of
+        # `sun_eclipse.png`, which read as the Moon row beside it.
+        "solar_eclipse": "eclipse_sun.svg",
         "lunar_eclipse": "moon_eclipse_red.png",
         "sun": "sun.svg",
         "moon": "moon.svg",
@@ -3017,3 +3020,66 @@ def test_hover_warm_sweep_speaks_through_the_real_dispatch(app, july_wednesday, 
     assert spoken > 24                    # the sweep reached real articles
     assert comp.warm_hover_articles(360.0) == spoken  # warm re-run, same coverage
     assert comp.warm_hover_articles(360.0, should_stop=lambda: True) <= 1
+
+
+def test_the_sunday_badge_names_the_day_even_when_its_face_swaps(app):
+    """THE BADGE NAMES THE DAY (owner correction 2026-08-12: "on a badge
+    it ALWAYS says the name of the DAY, unless it is an ARCHETYPE").
+
+    On a Sunday NIGHT the centre seat swaps its picture to the Servant
+    (or, in a solar window, the Ninth) — and it used to swap the LABEL
+    with it, so the roundel read "Lucifer" or the theme's Ninth instead
+    of SUNDAY and the badge stopped saying the one thing a weekday badge
+    is for. The weekday RING already obeyed this rule; the centre did
+    not. The face is still the picture, and the hover names both persons."""
+    city = defaults.DEFAULT_CITY
+    tz = ZoneInfo(city["timezone"])
+    now = datetime(2026, 7, 19, 23, 0, tzinfo=tz)        # a Sunday, night
+    observer = astral.Observer(
+        latitude=city["latitude"], longitude=city["longitude"]
+    )
+    day = build_day_context(
+        now, observer,
+        SeasonsRepository().year_anchors(now.year),
+        MoonPhaseRepository().moon_window(now.year),
+    )
+    tick = build_tick_state(now, day)
+    assert not tick.is_daylight                          # the face swaps
+    from app.controller import apply_display_settings
+    from app.settings_store import Settings, replace
+    from render.slot_layout import center_dual_face as _center_dual_face
+
+    skin = apply_display_settings(
+        defaults.DEFAULT_SKIN,
+        replace(
+            Settings(), pointer="hexa", weekday_theme="wolf",
+            solar_rotation=False, show_weekday_names=True,
+        ),
+    )
+    assert _center_dual_face(skin)                       # the face can swap
+    image = Compositor(skin, AssetCache()).render_offscreen(600.0, 1.0, day, tick)
+    assert not image.isNull()
+
+    # The label the centre seat asks for, captured at the one door it
+    # draws through — the offscreen platform reports no font families
+    # here, so the TEXT is what can be proved, not its pixels.
+    from render.layers import center_body as center_body_mod
+
+    asked = []
+    original = center_body_mod.draw_body_label
+    center_body_mod.draw_body_label = (
+        lambda painter, ctx, body, pos, size, label_px=None: asked.append(body)
+    )
+    named = []
+    original_name = center_body_mod.draw_name_label
+    center_body_mod.draw_name_label = (
+        lambda painter, text, pos, px, ctx=None: named.append(text)
+    )
+    try:
+        Compositor(skin, AssetCache()).render_offscreen(600.0, 1.0, day, tick)
+    finally:
+        center_body_mod.draw_body_label = original
+        center_body_mod.draw_name_label = original_name
+    assert asked, "the centre seat drew no label at all"
+    assert set(asked) == {"sun"}, asked          # SUNDAY, whichever face
+    assert not named, named                      # never a face's own name

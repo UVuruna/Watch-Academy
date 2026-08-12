@@ -9,10 +9,13 @@ the active option's text, popping in at full opacity and fading out on
 its own — the only feedback the theme/option pickers give, since they
 carry no menu or dialog of their own.
 
-R-30 (2026-08) reuses the SAME overlay, `flash(..., big=True)`, for a
-LOCATION change: large "CITY, COUNTRY" text with no icon, centered
-across the dial's own middle instead of the small popup above/below it
-— one mechanism, two positions/sizes, never a second flash class.
+R-30 (2026-08) reuses the SAME overlay for a LOCATION change, and the
+owner's order of 2026-08-12 finished that merge. A location used to be a
+different-looking flash — large white FONT letters with no icon, centered
+across the dial's own middle. His correction: it belongs ABOVE, where the
+Ctrl+[ switcher already stands, in the theme's letter plates, with its own
+logo beside it. So there is ONE mechanism, ONE position, ONE look now:
+`big`, `_position_centered` and `LOCATION_FLASH_FONT_PX` are all retired.
 
 ## Connections
 
@@ -26,11 +29,15 @@ across the dial's own middle instead of the small popup above/below it
 ### Used by
 - [Watch Controller](controller.md) — one instance per watch (per-watch:
   the focused watch flashes its own), triggered from
-  `_cycle_fast_travel_theme()` / `_cycle_fast_travel_option()` (small,
-  above/below) and, R-30, `_flash_location()` (big, centered) — called
-  from `_apply_settings_dialog_result()` (a Settings preset pick),
-  `_apply_jump()`/`_dialog_jump()` via `_flash_jump_location()` (Quick
-  Jump cycling, Greenwich, the poles, Time Travel's own Quick Jump rows)
+  `_cycle_fast_travel_theme()` / `_cycle_fast_travel_option()` and
+  `_flash_location()` — called from `_apply_settings_dialog_result()` (a
+  Settings preset pick), `_apply_jump()`/`_dialog_jump()` via
+  `_flash_jump_location()` (Quick Jump cycling, Greenwich, the poles,
+  Time Travel's own Quick Jump rows) and `_end_simulation()` (Ctrl+Home's
+  return home, owner order 2026-08-12 — the one path that used to be
+  silent). The location's own logo comes from
+  `WatchController._LOCATION_FLASH_ICONS`: his two compass roses for the
+  poles, the plain one for Greenwich, none for an ordinary city
 
 ## Classes
 
@@ -42,7 +49,7 @@ on every show) — necessary here because every Fast Travel shortcut needs
 the dial to KEEP holding keyboard focus for the next press.
 
 #### Methods
-- `flash(dial_widget, icon_path, emoji, text, *, big=False)`: shows
+- `flash(dial_widget, icon_path, emoji, text)`: shows
   `text` beside `icon_path` (falling back to `emoji`, Rule #1 — hiding
   the icon label entirely when BOTH are empty/falsy) positioned above
   `dial_widget`'s current geometry (falling BELOW it when the dial
@@ -50,24 +57,34 @@ the dial to KEEP holding keyboard focus for the next press.
   `FAST_TRAVEL_FLASH_DURATION_S − FAST_TRAVEL_FLASH_FADE_MS`, then
   fades via a `QGraphicsOpacityEffect` + `QPropertyAnimation`, hiding on
   finish. A flash already in flight restarts cleanly — the latest press
-  always wins with a fresh full-opacity display. `big=True` (R-30)
-  swaps `FAST_TRAVEL_FLASH_FONT_PX` for the larger
-  `LOCATION_FLASH_FONT_PX` and `_position_above_or_below` for
-  `_position_centered`.
+  always wins with a fresh full-opacity display. The icon is rasterized
+  at FOUR times the target size and smoothly scaled down — asked for 28 px
+  directly, Qt renders `eclipse_sun.svg`'s rays below one pixel and the
+  glyph collapses into a plain disc, which is the very confusion the owner
+  reported (2026-08-12).
+- `_set_plate_text(text)`: the two-metal plate run, splitting on either
+  separator — the picker's " : " or a location's "CITY, COUNTRY". Only the
+  picker DRAWS its separator (the colon plate); a comma has no plate and
+  needs none, the metal change being the seam.
 - `_position_above_or_below(dial_widget)`: reads the dial's own
   `screen().availableGeometry()` to decide above/below and clamp
   horizontally
-- `_position_centered(dial_widget)`: R-30 — dead center of the dial's
-  own `frameGeometry()`.
 
 ## The plate text (owner correction 2026-08-11)
 
-The SMALL flash's text is rendered by `render.letter_plates.
-plate_text_pixmap` — the SAME gold letter plates the jewels and the
-crown text wear — never a white font (invisible over a white
-desktop). The controller composes "CATEGORY : OPTION" over the colon
-plate because the plate library owns no parenthesis. The `big=True`
-location flash keeps its large font (its own dark overlay carries it).
+EVERY flash's text is rendered by `render.letter_plates.
+plate_text_segments_pixmap` — the SAME gold/silver letter plates the
+jewels and the crown text wear — never a white font (invisible over a
+white desktop). The controller composes "CATEGORY : OPTION" over the colon
+plate because the plate library owns no parenthesis.
+
+THE LORD'S DAY PRECEDENT: a glyph with no plate does not kill a keystroke
+here. The picker's titles are plate-safe by construction, but a location
+carries whatever the world calls itself and the library owns no accented
+masters today — so a `MissingPlate` falls back to the styled font FOR THAT
+ONE TEXT and names the offending character on stderr, exactly as the
+weekday labels do for the apostrophe. Loud and per-string, never a silent
+standing font path.
 
 ## Design Decisions
 - **Built from scratch rather than adapting `LegendPopup`** (Rule #5

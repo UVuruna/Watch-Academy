@@ -244,7 +244,14 @@ def shortcut_display(action_id: str) -> str:
 FAST_TRAVEL_THEMES = (
     {
         "id": "solar_eclipse", "title": "Solar Eclipse",
-        "icon_key": "sun_eclipse", "emoji": "🌑",
+        # THE RAYS TELL THEM APART (owner correction 2026-08-12): in the
+        # picker the plain `sun_eclipse.png` — a black disc with a thin
+        # corona — reads almost exactly like the Moon entry beside it at
+        # menu size. `eclipse_sun.svg` carries far more rays, so the two
+        # rows are distinguishable at a glance. The dial's own body keeps
+        # `defaults.ECLIPSE_SOLAR_ART`, which is a different spot at a
+        # different size (`ICON_FILES`' own rule).
+        "icon_key": "eclipse_sun", "emoji": "🌑",
         "options": (
             {"id": "any", "title": "Any", "jump_stem": "solar_eclipse"},
             {"id": "total", "title": "Total", "jump_stem": "solar_eclipse_total"},
@@ -329,10 +336,12 @@ FAST_TRAVEL_THEMES = (
 # The small transient overlay ([Fast Travel Flash](../app/fast_travel_flash.md))
 # flashed above the dial on every Ctrl+[ / Ctrl+] theme/option change —
 # icon + option text, auto-fading, falling BELOW the dial instead when
-# the dial hugs the screen top. R-30 (2026-08) reuses the SAME overlay,
-# `big=True`, for a LOCATION change (Settings preset pick, Quick Jump,
-# Time Travel city change): large centered "CITY, COUNTRY" text across
-# the middle of the dial instead of the small icon+text popup above it.
+# the dial hugs the screen top. R-30 (2026-08) reuses the SAME overlay
+# for a LOCATION change (Settings preset pick, Quick Jump, Time Travel
+# city change, Ctrl+Home's return) — and the owner's order of 2026-08-12
+# finished that merge: a location wears the same plates at the same
+# place, with its own logo beside, so there is ONE size and ONE position
+# here now. `LOCATION_FLASH_FONT_PX` retired with the centered look.
 FAST_TRAVEL_FLASH_DURATION_S = 1.2   # total time on screen (hold + fade)
 FAST_TRAVEL_FLASH_FADE_MS = 250      # the trailing fade-out's own span
 FAST_TRAVEL_FLASH_GAP_PX = 12        # gap between the flash and the dial edge
@@ -340,7 +349,6 @@ FAST_TRAVEL_FLASH_ICON_PX = 28
 FAST_TRAVEL_FLASH_FONT_PX = 15
 FAST_TRAVEL_FLASH_PADDING_PX = 10
 FAST_TRAVEL_FLASH_RADIUS_PX = 10
-LOCATION_FLASH_FONT_PX = 32           # R-30: large letters, dial-center flash
 
 # THE TWO COMPUTED ICONS (ECLIPSE ICON WIRING round, owner 2026-07-20/
 # 21 — "ADD a computed calendar icon... so the emoji fallback dies";
