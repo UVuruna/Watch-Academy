@@ -17,6 +17,7 @@ here; nothing here imports from them.
 |------|------|----------|
 | `__init__.py` | Trivial | package docstring only |
 | `archetypes.py` | Algorithmic | THE ARCHETYPE MODE — the (pointer, wheel) → figure grid, the eleven archetypes' figure/center tables — [about](__about/archetypes.md) · [flow](__flow/archetypes.md) |
+| `bakery.py` | Algorithmic | BAKE-TIME POLICY — the art bake's WebP quality and the letter bake's eager finish roster; read at setup, never at runtime — [about](__about/bakery.md) |
 | `calendar_mounts.py` | Algorithmic | the Calendar pointer's wedge geometry and THE CALENDAR MOUNT REGISTRY (every roster that may ride the twelve wedges) — [about](__about/calendar_mounts.md) · [flow](__flow/calendar_mounts.md) |
 | `constants.py` | Algorithmic | product-defining invariants — dial identity, eras, pointer/wheel tables, the weekday-theme master list, THE BLUE MOON/AXLE LAW — [about](__about/constants.md) · [flow](__flow/constants.md) |
 | `continents.py` | Algorithmic | THE CONTINENTS theme's region roster and day/night Earth-face resolvers — [about](__about/continents.md) · [flow](__flow/continents.md) |

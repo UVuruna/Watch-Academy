@@ -41,14 +41,22 @@ from render import raster_store
 #: Bumped whenever a record's SHAPE or the fingerprint recipe changes.
 #: A stale index is DISCARDED, never migrated — one slow launch is
 #: cheap, a subtly-wrong migration is not.
-INDEX_VERSION = 1
+INDEX_VERSION = 2      # 2: `.webp` entered INDEXED_SUFFIXES (the bakery)
 
 #: Suffixes worth indexing: everything that can seed a cache entry —
 #: this set IS the cache GC's source roster (it used to live in
 #: `app.warm` as `_GC_SOURCE_SUFFIXES`, walked separately) — and
 #: nothing else, since the tree also holds .md/.json that no derived
 #: image is ever keyed by.
-INDEXED_SUFFIXES = frozenset({".png", ".svg", ".jpg", ".jpeg"})
+#: `.webp` joined the set when THE ART BAKERY re-encoded the shipped
+#: tree (owner decree 2026-08-12). Without it the index would have gone
+#: BLIND to almost every file it exists to describe — the working-set
+#: sweep it serves would have found nothing to consider, and the cache
+#: GC would have treated every baked plate as a source that no longer
+#: exists. INDEX_VERSION is bumped with it: an index written by the old
+#: build knows nothing about the WebP files, and a stale-but-plausible
+#: index is exactly what this version field is for.
+INDEXED_SUFFIXES = frozenset({".png", ".webp", ".svg", ".jpg", ".jpeg"})
 
 #: Re-read pool width. Both halves of a re-read release the GIL (the
 #: fingerprint's two `read`s, Qt's header decode), so these are real

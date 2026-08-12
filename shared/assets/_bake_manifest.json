@@ -8049,247 +8049,247 @@
     "celestial/earth/earth_atmo_africa_day.png": {
       "sha256": "539bbeba3296c9422e98c86614213c83791307d3611975966e16486163f0795d",
       "output": "celestial/earth/earth_atmo_africa_day.webp",
-      "width": 800,
-      "height": 800,
-      "bytes": 148474
+      "width": 1992,
+      "height": 1992,
+      "bytes": 623168
     },
     "celestial/earth/earth_atmo_africa_night.png": {
       "sha256": "93d6833ce44ecbef3d31d2be682656bbd334943a1e2957825c4c9c517ac8c90f",
       "output": "celestial/earth/earth_atmo_africa_night.webp",
-      "width": 800,
-      "height": 800,
-      "bytes": 67110
+      "width": 1992,
+      "height": 1992,
+      "bytes": 227952
     },
     "celestial/earth/earth_atmo_asia_day.png": {
       "sha256": "c317ec3dda449ba9124690d65439148307069b17c003e205c304cef5d5a1aeeb",
       "output": "celestial/earth/earth_atmo_asia_day.webp",
-      "width": 800,
-      "height": 800,
-      "bytes": 149828
+      "width": 1992,
+      "height": 1992,
+      "bytes": 678918
     },
     "celestial/earth/earth_atmo_asia_night.png": {
       "sha256": "f87264cd32c20192f1396d630da623bbafed7da1ac402e550fe3d2ad664748fc",
       "output": "celestial/earth/earth_atmo_asia_night.webp",
-      "width": 800,
-      "height": 800,
-      "bytes": 86160
+      "width": 1992,
+      "height": 1992,
+      "bytes": 303550
     },
     "celestial/earth/earth_atmo_europe_day.png": {
       "sha256": "6693c26f8f6945d93984f49d1c164e0d9752a9f5eea9fae750a2a90ea3233a8d",
       "output": "celestial/earth/earth_atmo_europe_day.webp",
-      "width": 800,
-      "height": 800,
-      "bytes": 151592
+      "width": 1993,
+      "height": 1993,
+      "bytes": 693418
     },
     "celestial/earth/earth_atmo_europe_night.png": {
       "sha256": "35bc0dbce5c0a95bffa9cc4738e61f4d20408ce331e018237312599ca7bc4f03",
       "output": "celestial/earth/earth_atmo_europe_night.webp",
-      "width": 800,
-      "height": 800,
-      "bytes": 103380
+      "width": 1992,
+      "height": 1992,
+      "bytes": 381810
     },
     "celestial/earth/earth_atmo_north_america_day.png": {
       "sha256": "7e079126f07bf974e8835d69b655159885936b0b02e9cac024e84d3e0bfcffc6",
       "output": "celestial/earth/earth_atmo_north_america_day.webp",
-      "width": 800,
-      "height": 800,
-      "bytes": 125626
+      "width": 1993,
+      "height": 1993,
+      "bytes": 591234
     },
     "celestial/earth/earth_atmo_north_america_night.png": {
       "sha256": "f1d0a3c97f0cc7733943ad78adfe7dcc343f10057cf3dcb5b7eb3b0c735fc4bd",
       "output": "celestial/earth/earth_atmo_north_america_night.webp",
-      "width": 800,
-      "height": 800,
-      "bytes": 86872
+      "width": 1992,
+      "height": 1992,
+      "bytes": 313768
     },
     "celestial/earth/earth_atmo_north_pole_day.png": {
       "sha256": "6f1e9547b841931c820ec4eebef0285e1c6dca85cc41498144091ed104ee728d",
       "output": "celestial/earth/earth_atmo_north_pole_day.webp",
-      "width": 797,
-      "height": 800,
-      "bytes": 122096
+      "width": 1896,
+      "height": 1902,
+      "bytes": 520270
     },
     "celestial/earth/earth_atmo_north_pole_night.png": {
       "sha256": "6772d35dd72f7da730c7faf28c7090adcd18b25a71614978f2d399a105c8ce43",
       "output": "celestial/earth/earth_atmo_north_pole_night.webp",
-      "width": 798,
-      "height": 800,
-      "bytes": 91158
+      "width": 1895,
+      "height": 1899,
+      "bytes": 326112
     },
     "celestial/earth/earth_atmo_oceania_day.png": {
       "sha256": "c60d443a9673655d6d79df12a210ddf113ffcf46e57fd8f0513445c8efe3e6a5",
       "output": "celestial/earth/earth_atmo_oceania_day.webp",
-      "width": 800,
-      "height": 800,
-      "bytes": 128098
+      "width": 1993,
+      "height": 1993,
+      "bytes": 567672
     },
     "celestial/earth/earth_atmo_oceania_night.png": {
       "sha256": "3726bdb90fabca482a282105beede36917b4430e9c1206544aa88710825711d7",
       "output": "celestial/earth/earth_atmo_oceania_night.webp",
-      "width": 800,
-      "height": 800,
-      "bytes": 43010
+      "width": 1992,
+      "height": 1992,
+      "bytes": 129914
     },
     "celestial/earth/earth_atmo_south_america_day.png": {
       "sha256": "304f789f0d8ecda97b9eeac76809083e6fef87f96f749eab21f9498faf634afa",
       "output": "celestial/earth/earth_atmo_south_america_day.webp",
-      "width": 800,
-      "height": 800,
-      "bytes": 123578
+      "width": 1993,
+      "height": 1993,
+      "bytes": 568290
     },
     "celestial/earth/earth_atmo_south_america_night.png": {
       "sha256": "71c00dfb6a4db375755dc500f7d7958fd6c2ee76cbfe7ec4d6d0b9b310701f5a",
       "output": "celestial/earth/earth_atmo_south_america_night.webp",
-      "width": 800,
-      "height": 800,
-      "bytes": 62730
+      "width": 1992,
+      "height": 1992,
+      "bytes": 213866
     },
     "celestial/earth/earth_atmo_south_pole_day.png": {
       "sha256": "02d2d6800088c25f45cd9f767ea9e8666d0e79074b50247e00c32748d85258f6",
       "output": "celestial/earth/earth_atmo_south_pole_day.webp",
-      "width": 798,
-      "height": 800,
-      "bytes": 84504
+      "width": 1879,
+      "height": 1884,
+      "bytes": 348938
     },
     "celestial/earth/earth_atmo_south_pole_night.png": {
       "sha256": "cfb33e2cbef5e745d63b28827059eae69e18b5141b7d452a176cbc5a5e4be25c",
       "output": "celestial/earth/earth_atmo_south_pole_night.webp",
-      "width": 800,
-      "height": 800,
-      "bytes": 42358
+      "width": 1886,
+      "height": 1886,
+      "bytes": 120536
     },
     "celestial/earth/earth_clean_africa_day.png": {
       "sha256": "cf7bd997a4fb91c7acdaee40ca23e3b13c7ad2e489d4f7526dc8d82fb8c9bda2",
       "output": "celestial/earth/earth_clean_africa_day.webp",
-      "width": 800,
-      "height": 800,
-      "bytes": 139332
+      "width": 1992,
+      "height": 1991,
+      "bytes": 575418
     },
     "celestial/earth/earth_clean_africa_night.png": {
       "sha256": "8b5d9e20bd81ee3eb697867ce978bf157d92d2358b0b8965c8ab2a0482b71cff",
       "output": "celestial/earth/earth_clean_africa_night.webp",
-      "width": 800,
-      "height": 800,
-      "bytes": 53292
+      "width": 1992,
+      "height": 1992,
+      "bytes": 196816
     },
     "celestial/earth/earth_clean_asia_day.png": {
       "sha256": "16f52ab70d6b85c4e02724a3f39947a386505aeace2e26bfd5ec9ef391abd551",
       "output": "celestial/earth/earth_clean_asia_day.webp",
-      "width": 800,
-      "height": 800,
-      "bytes": 145938
+      "width": 1992,
+      "height": 1992,
+      "bytes": 673858
     },
     "celestial/earth/earth_clean_asia_night.png": {
       "sha256": "75ec3da2b471c784998eecd0c1e45259b1a3010fbaf6714b75d38a84c7aa3a1d",
       "output": "celestial/earth/earth_clean_asia_night.webp",
-      "width": 800,
-      "height": 800,
-      "bytes": 71468
+      "width": 1992,
+      "height": 1992,
+      "bytes": 265602
     },
     "celestial/earth/earth_clean_europe_day.png": {
       "sha256": "4fc2499f254db4016267b55c8e658d8effce16c353179d465f091671d737da72",
       "output": "celestial/earth/earth_clean_europe_day.webp",
-      "width": 800,
-      "height": 800,
-      "bytes": 148626
+      "width": 1993,
+      "height": 1993,
+      "bytes": 681480
     },
     "celestial/earth/earth_clean_europe_night.png": {
       "sha256": "79b29e30812f6675152eccbbc6b726c455f2caddc7292d066c62c2ce6181f74b",
       "output": "celestial/earth/earth_clean_europe_night.webp",
-      "width": 800,
-      "height": 800,
-      "bytes": 92680
+      "width": 1992,
+      "height": 1992,
+      "bytes": 344394
     },
     "celestial/earth/earth_clean_north_america_day.png": {
       "sha256": "36570f927c6a190bac60fb6c06610809ccb521a107203fd4114f94e2bc293e0e",
       "output": "celestial/earth/earth_clean_north_america_day.webp",
-      "width": 800,
-      "height": 800,
-      "bytes": 124924
+      "width": 1993,
+      "height": 1993,
+      "bytes": 552128
     },
     "celestial/earth/earth_clean_north_america_night.png": {
       "sha256": "ff287a49971911facf10612f67fcbf1e7ace8b5e2d0d0673b94a5003e5db0233",
       "output": "celestial/earth/earth_clean_north_america_night.webp",
-      "width": 800,
-      "height": 800,
-      "bytes": 71996
+      "width": 1992,
+      "height": 1992,
+      "bytes": 273582
     },
     "celestial/earth/earth_clean_north_pole_day.png": {
       "sha256": "6bde0664dad70ef626443d258c8ab18225eae1dbbd182df81478f769cbb1a971",
       "output": "celestial/earth/earth_clean_north_pole_day.webp",
-      "width": 800,
-      "height": 800,
-      "bytes": 121080
+      "width": 1887,
+      "height": 1887,
+      "bytes": 482884
     },
     "celestial/earth/earth_clean_north_pole_night.png": {
       "sha256": "2e0a9503283598eb1b5afb92c52876f726787d4873dcf4f46ced664c017bad27",
       "output": "celestial/earth/earth_clean_north_pole_night.webp",
-      "width": 800,
-      "height": 800,
-      "bytes": 74180
+      "width": 1879,
+      "height": 1878,
+      "bytes": 289838
     },
     "celestial/earth/earth_clean_oceania_day.png": {
       "sha256": "caf56e332e133efd63ec0937ffee3daed0be56d35e866a582c5f885a1bdb31fc",
       "output": "celestial/earth/earth_clean_oceania_day.webp",
-      "width": 800,
-      "height": 800,
-      "bytes": 123898
+      "width": 1993,
+      "height": 1993,
+      "bytes": 542628
     },
     "celestial/earth/earth_clean_oceania_night.png": {
       "sha256": "32c992775c0d3deec1f8056dd1e413a801c82779e67a6219f3301b6c2967cca4",
       "output": "celestial/earth/earth_clean_oceania_night.webp",
-      "width": 800,
-      "height": 800,
-      "bytes": 26122
+      "width": 1992,
+      "height": 1992,
+      "bytes": 76096
     },
     "celestial/earth/earth_clean_south_america_day.png": {
       "sha256": "5d1eea79d05f347036c1af9b72f487eff19356cfe897a4e2ef77a38ce55029c5",
       "output": "celestial/earth/earth_clean_south_america_day.webp",
-      "width": 800,
-      "height": 800,
-      "bytes": 117806
+      "width": 1992,
+      "height": 1991,
+      "bytes": 527248
     },
     "celestial/earth/earth_clean_south_america_night.png": {
       "sha256": "c3fa4fb24649d011c1227f716f3ffc029bb089d425aed658f76fd0f9e6d65d8f",
       "output": "celestial/earth/earth_clean_south_america_night.webp",
-      "width": 800,
-      "height": 800,
-      "bytes": 47890
+      "width": 1992,
+      "height": 1992,
+      "bytes": 170332
     },
     "celestial/earth/earth_clean_south_pole_day.png": {
       "sha256": "b3cc59b633e8e271364427dad248ddfc66c60a16730e70c6c8e5975a3173e8d8",
       "output": "celestial/earth/earth_clean_south_pole_day.webp",
-      "width": 800,
-      "height": 800,
-      "bytes": 82796
+      "width": 1878,
+      "height": 1878,
+      "bytes": 335554
     },
     "celestial/earth/earth_clean_south_pole_night.png": {
       "sha256": "0f738968973a6a56bd500bf154ac8448d46f331c60fec90f5f3eb1cba5e0a553",
       "output": "celestial/earth/earth_clean_south_pole_night.webp",
-      "width": 800,
-      "height": 800,
-      "bytes": 21496
+      "width": 1873,
+      "height": 1873,
+      "bytes": 69334
     },
     "celestial/earth/pangaea.png": {
       "sha256": "4badd521486cc2ae312f51bca9a68dba5e11da3cd0ac7d38554ce60a6d7c3acd",
       "output": "celestial/earth/pangaea.webp",
-      "width": 799,
-      "height": 800,
-      "bytes": 146410
+      "width": 919,
+      "height": 920,
+      "bytes": 179608
     },
     "celestial/earth/pangea.png": {
       "sha256": "625d1547569898baa385f64e11d5eb34d1b01e1090dd0df630ce8a9e329571cc",
       "output": "celestial/earth/pangea.webp",
-      "width": 800,
-      "height": 799,
-      "bytes": 145312
+      "width": 964,
+      "height": 963,
+      "bytes": 188752
     },
     "celestial/earth/world.png": {
       "sha256": "44fe6e88b2a2f7c58ca2124eed902dd0f3aaa1562f729a2d729ecdb1e3b0712e",
       "output": "celestial/earth/world.webp",
-      "width": 800,
-      "height": 406,
-      "bytes": 58006
+      "width": 3698,
+      "height": 1876,
+      "bytes": 742066
     },
     "celestial/earth/zealandia.png": {
       "sha256": "ea357ae9f22edf099dd1c6bd49504cfbb5abf8fbcb0f4d7e05e32156a99f2fb1",

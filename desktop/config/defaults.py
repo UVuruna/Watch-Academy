@@ -242,17 +242,6 @@ WORKING_SET_CEILINGS = {
     "celestial/eclipse": 1200,
 }
 
-# THE ART BAKERY's WebP quality for the lossy areas (owner decree
-# 2026-08-12). Measured on a 30-plate sample of the real tree, against
-# the full-resolution PNG masters: q85 -> 9.9%, q90 -> 11.8%,
-# q95 -> 14.9%, q100 (still lossy) -> 18.8%, and WebP LOSSLESS -> 39.7%.
-# 90 is the knee: everything below it starts trading visible edge
-# quality on the plates' hard alpha borders for single-digit megabytes,
-# and everything above it pays steeply for a difference the dial draws
-# at 800 px. Lossless was rejected outright — 1.6 GB is not a saving.
-# `instrument/letters` is NOT covered by this and never will be: those
-# are the transformer's gold masters (see the bakery's docs).
-ART_BAKE_QUALITY = 90
 
 # ═══════════════════════════ BACKGROUND WARM ═══════════════════════════
 # The art-ledger drain's thread pool CAP (0.14.704, the slow-render
@@ -779,36 +768,6 @@ METAL_MASK_JEWEL = "alpha"
 
 METAL_SWAP_VERSION = 6      # cache tag — bump on recolor math changes
 
-# WHICH FINISHES ARE BAKED EAGERLY, and which wait to be asked for
-# (owner decree 2026-08-12, on the 302 MB letter bake). His ruling:
-# render only what is actually used — the three real metals with all
-# their shades, plus the thematic colours the shipped rings and themes
-# use — and leave the rest of the transformer's ramps (copper, brass,
-# rose gold, steel, pewter, iron, and the thematic aliases of ramps the
-# real metals already bake) to be derived the first time a user builds
-# a custom ring that wants one. Nothing is lost by waiting: a miss here
-# is the ordinary runtime path that existed before any bake did, and
-# `render.art_warm` drains it in the background.
-#
-# 17 of the 34 pairs — half the files. The dropped thematic entries are
-# NOT missing colours: `thematic/gold`, `thematic/silver`,
-# `thematic/bronze*` and the gold_* aliases are the SAME ramps the
-# metals above already bake, duplicated only because the runtime key
-# carries the pair. The bake pays for that duplication once; it need
-# not pay for it eagerly.
-EAGER_BAKED_SHADES = {
-    "gold": ("dark_amber", "amber", "classic", "pale", "champagne"),
-    "bronze": ("dark_bronze", "bronze", "light_bronze"),
-    "silver": ("gunmetal", "silver", "platinum"),
-    "thematic": (
-        "cross_red",        # red
-        "cross_blue",       # blue
-        "dollar_green",     # green
-        "moon_indigo",      # the indigo/violet default
-        "templar_black",    # the Templar set
-        "ceramic",          # ceramic white
-    ),
-}
 
 # Badges never bronze-swap: bronze IS the art as drawn (membership only;
 # the recolor recipe itself lives in the presets).

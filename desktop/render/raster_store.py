@@ -91,9 +91,20 @@ def atomic_save(image, path: Path) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     partial = path.with_name(path.name + ".part")
     encoding = path.suffix.lstrip(".").upper() or "PNG"
-    quality = 100 if encoding == "WEBP" else -1
+    # The QUALITY argument is passed ONLY for WebP, and deliberately:
+    # this function's contract is "any Qt image object whose `.save(str)`
+    # returns a success bool", and the test doubles that stand in for one
+    # accept the documented two arguments. Widening the call
+    # unconditionally broke them — correctly, because it would also break
+    # any other stand-in. WebP needs quality=100 (Qt's spelling of
+    # lossless) or the letter bake would quietly ship lossy glyphs.
     try:
-        if not image.save(str(partial), encoding, quality):
+        saved = (
+            image.save(str(partial), encoding, 100)
+            if encoding == "WEBP"
+            else image.save(str(partial), encoding)
+        )
+        if not saved:
             raise OSError(f"image encode returned False for {path}")
         os.replace(partial, path)
     except OSError:

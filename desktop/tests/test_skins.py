@@ -1408,8 +1408,16 @@ def test_earth_pole_regions_full_res_and_latitude_override():
         ):
             for phase in ("day", "night"):
                 key = f"{style}_{region}_{phase}"
-                path = defaults.DEFAULT_SKIN.year_marker.variants[key]
-                assert path.exists(), key
+                # Through the door: the variants table names the
+                # canonical `.png`, and THE ART BAKERY (2026-08-12)
+                # ships `.webp`. `celestial/earth` is a
+                # FULL_RESOLUTION_SUBTREE in that bakery precisely so
+                # the width assertion below keeps holding — the first
+                # bake shrank these to 800 and this test is what said so.
+                path = paths.art_file(
+                    defaults.DEFAULT_SKIN.year_marker.variants[key]
+                )
+                assert path is not None and path.exists(), key
                 size = QImageReader(str(path)).size()
                 assert size.width() >= 1500, (key, size.width())
     # The latitude override: poles beyond the knob, continents inside.
@@ -1465,7 +1473,12 @@ def test_working_set_downscales_oversized_dial_art():
         assets / "celestial" / "earth" / "earth_clean_north_pole_day.png", 800
     )
     assert copy is not None and copy.exists()
-    assert copy.name.endswith("_earth_clean_north_pole_day.png")
+    # Stem, not full filename: the source is `.webp` since THE ART
+    # BAKERY (2026-08-12), and the cache copy inherits its extension.
+    # The earth faces are still 1992 px — they are a
+    # FULL_RESOLUTION_SUBTREE — so there is still something to downscale.
+    assert copy.stem.endswith("_earth_clean_north_pole_day")
+    assert paths.is_art_file(copy)
     # …and a second run rebuilds nothing.
     assert warm_working_set() == 0
 

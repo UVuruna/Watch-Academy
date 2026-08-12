@@ -1302,7 +1302,7 @@ def test_era_terms_topic():
     for entry in era[:6]:
         assert entry["images"]
         resolved = _paths.art_file(entry["images"][0])
-        assert resolved is None or resolved.suffix == ".png"
+        assert resolved is None or _paths.is_art_file(resolved), resolved   # .webp since THE ART BAKERY, 2026-08-12
     # Eras of the World: no plate of its own — instead it strings the
     # calendar-system emblems the essay compares (six from owner
     # fix-round B, 2026-07-19; Maya added the MAYA round, owner
@@ -1315,7 +1315,7 @@ def test_era_terms_topic():
     assert len(era[6]["images"]) == 10
     for image in era[6]["images"]:
         resolved = _paths.art_file(image)
-        assert resolved is None or resolved.suffix == ".png"
+        assert resolved is None or _paths.is_art_file(resolved), resolved   # .webp since THE ART BAKERY, 2026-08-12
     # The Great Oscillations was an ESSAY with no emblem of its own (fix
     # round F). The SESSION 27 COVERAGE LAW (owner 2026-07-28, "svaki
     # clanak mora sliku") gave it a plate NAME — and the coverage round
@@ -1438,7 +1438,7 @@ def test_eclipse_topics():
         for entry in block:
             assert len(entry["images"]) == 1
             resolved = _paths.art_file(entry["images"][0])
-            assert resolved is None or resolved.suffix == ".png"
+            assert resolved is None or _paths.is_art_file(resolved), resolved   # .webp since THE ART BAKERY, 2026-08-12
 
     # The merged card rides The Sky (SESSION 27; reseated from the old
     # Celestial Engine into `sky` by SESSION 35, 2026-07-29) — the two

@@ -27,7 +27,7 @@ from time import perf_counter
 
 from PySide6.QtGui import QGuiApplication
 
-from config import constants, defaults, paths
+from config import bakery, constants, defaults, paths
 from render import letter_bake
 
 
@@ -42,7 +42,7 @@ def _plates() -> list[Path]:
 
 def _finishes() -> list[tuple[str, str]]:
     """The (metal, shade) pairs baked EAGERLY —
-    `defaults.EAGER_BAKED_SHADES`, not the full `METAL_SHADES` matrix.
+    `bakery.EAGER_BAKED_SHADES`, not the full `METAL_SHADES` matrix.
 
     Owner decree 2026-08-12, on the bake being too heavy: render what is
     actually used — the three real metals with all their shades plus the
@@ -62,7 +62,7 @@ def _finishes() -> list[tuple[str, str]]:
     typo in the roster must fail the bake loudly, not silently bake 16
     finishes and leave one colour deriving forever."""
     pairs: list[tuple[str, str]] = []
-    for metal, shades in defaults.EAGER_BAKED_SHADES.items():
+    for metal, shades in bakery.EAGER_BAKED_SHADES.items():
         known = defaults.METAL_SHADES[metal]
         for shade in shades:
             if shade not in known:

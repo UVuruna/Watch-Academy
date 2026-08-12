@@ -30,7 +30,7 @@ from time import perf_counter
 
 from PIL import Image
 
-from config import defaults, paths
+from config import bakery, defaults, paths
 
 
 MANIFEST_NAME = "_bake_manifest.json"
@@ -43,6 +43,20 @@ MANIFEST_NAME = "_bake_manifest.json"
 # finishes of every glyph, everywhere the program draws text. They are
 # palette PNGs of a few tens of KB; there is nothing to win.
 VERBATIM_SUBTREES = ("instrument/letters",)
+
+# Subtrees that are RE-ENCODED but never RESIZED (ceiling 0 below).
+#
+# `celestial/earth` is here on the owner's decree of 2026-07-15, the
+# Globe originals round: "every earth face is his full-resolution
+# original", pinned at >= 1500 px by
+# `tests/test_skins.py::test_earth_pole_regions_full_res_and_latitude_override`.
+# The area DOES carry a runtime `WORKING_SET_CEILINGS` entry of 800, and
+# that is not a contradiction: the working set makes a small copy to
+# DRAW from and leaves the original alone. The bakery replaces the file
+# itself, so obeying that ceiling here destroyed the original — which is
+# exactly what the first bake of this round did, and exactly what that
+# test caught. Compression still applies; only the resize is skipped.
+FULL_RESOLUTION_SUBTREES = ("celestial/earth",)
 
 # What the bakery considers art. Anything else under `masters/` (SVG
 # logos, a stray .txt, a JSON sidecar) is copied through untouched —
@@ -58,12 +72,23 @@ def _rel(path: Path, root: Path) -> str:
 
 
 def _ceiling_for(relative: str) -> int | None:
-    """The pixel ceiling of the area a master belongs to, or None when
-    it belongs to no ceiling'd area (then it is copied verbatim).
+    """The pixel ceiling of the area a master belongs to.
+
+    Three answers, and they are three different instructions:
+
+    * **an int > 0** — re-encode, capped at this many pixels on the long
+      edge;
+    * **0** — re-encode at FULL resolution (`FULL_RESOLUTION_SUBTREES`);
+    * **None** — copy through untouched (verbatim, or not an image).
 
     The LONGEST matching prefix wins, so a future `weeks/something` with
     its own entry could override the `weeks` default without this
     function learning anything."""
+    if any(
+        relative == subtree or relative.startswith(subtree + "/")
+        for subtree in FULL_RESOLUTION_SUBTREES
+    ):
+        return 0
     best: tuple[int, int] | None = None
     for subtree, ceiling in defaults.WORKING_SET_CEILINGS.items():
         if relative == subtree or relative.startswith(subtree + "/"):
@@ -129,7 +154,10 @@ def bake_one(
     with Image.open(source) as image:
         image = image.convert("RGBA")
         width, height = image.size
-        if max(width, height) > ceiling:
+        # `ceiling == 0` means re-encode at full resolution — never
+        # resize. Testing the ceiling first also keeps a 0 from being
+        # read as a limit and scaling the image to nothing.
+        if ceiling and max(width, height) > ceiling:
             scale = ceiling / max(width, height)
             image = image.resize(
                 (max(1, round(width * scale)), max(1, round(height * scale))),
@@ -207,7 +235,7 @@ def bake(force: bool = False, dry_run: bool = False) -> int:
         f"masters: {masters}\n"
         f"assets:  {assets}\n"
         f"{len(jobs)} to bake, {skipped} unchanged, "
-        f"quality q{defaults.ART_BAKE_QUALITY}"
+        f"quality q{bakery.ART_BAKE_QUALITY}"
     )
     if dry_run:
         for source, destination, ceiling, _ in jobs[:40]:
@@ -230,7 +258,7 @@ def bake(force: bool = False, dry_run: bool = False) -> int:
                 str(source),
                 str(destination),
                 ceiling,
-                defaults.ART_BAKE_QUALITY,
+                bakery.ART_BAKE_QUALITY,
             ): (source, destination, digest)
             for source, destination, ceiling, digest in jobs
         }
@@ -264,7 +292,7 @@ def bake(force: bool = False, dry_run: bool = False) -> int:
     manifest_path.write_text(
         json.dumps(
             {
-                "quality": defaults.ART_BAKE_QUALITY,
+                "quality": bakery.ART_BAKE_QUALITY,
                 "ceilings": defaults.WORKING_SET_CEILINGS,
                 "files": dict(sorted(records.items())),
             },

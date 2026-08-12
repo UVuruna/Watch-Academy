@@ -27,7 +27,7 @@ from pathlib import Path
 
 import pytest
 
-from config import defaults, paths
+from config import bakery, defaults, paths
 from render import asset_index, asset_variants, letter_bake, raster_store
 
 
@@ -263,7 +263,7 @@ def test_every_letter_plate_ships_every_eager_finish():
     nobody is told about is how this round's own bug happened.
 
     EAGER, not every, since the art-bakery round of the same day: the
-    owner halved the matrix to `defaults.EAGER_BAKED_SHADES` because
+    owner halved the matrix to `bakery.EAGER_BAKED_SHADES` because
     most of what it dropped was duplicate ramps and the rest belongs to
     custom rings nobody has built yet. The roster is read from the
     config table rather than restated here, so this tooth follows the
@@ -274,7 +274,7 @@ def test_every_letter_plate_ships_every_eager_finish():
     assert plates, "the plate library is empty"
     finishes = [
         (metal, shade)
-        for metal, shades in defaults.EAGER_BAKED_SHADES.items()
+        for metal, shades in bakery.EAGER_BAKED_SHADES.items()
         for shade in shades
     ]
     missing = [
@@ -295,7 +295,7 @@ def test_the_eager_roster_names_only_real_shades():
     bake sixteen finishes instead of seventeen and leave one colour
     deriving live forever, which is the silent-slowness failure the
     whole bake exists to end."""
-    for metal, shades in defaults.EAGER_BAKED_SHADES.items():
+    for metal, shades in bakery.EAGER_BAKED_SHADES.items():
         assert metal in defaults.METAL_SHADES, metal
         for shade in shades:
             assert shade in defaults.METAL_SHADES[metal], f"{metal}/{shade}"

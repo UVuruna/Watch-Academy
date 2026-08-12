@@ -118,9 +118,18 @@ def _rotation_candidates_in(
     # ONE directory walk, not one PER STEM (owner bug 2026-08-06): this
     # runs for every weekday body and every seated slot on every tick,
     # and the `iterdir()` used to sit INSIDE the stem loop.
+    # Any shipped art extension, not `.png` alone (THE ART BAKERY,
+    # 2026-08-12). This was the seventh and most expensive blind site of
+    # that round: on a baked tree the old filter matched NOTHING, so the
+    # rotation POOL came back empty and every rotating family — every
+    # weekday body, the ninths, the duals, the era and eclipse topics —
+    # silently fell back to its own missing-art path. The version core
+    # is read off the stem, so nothing else here cares what the file was
+    # encoded as, and `existing_art_file` below still rebuilds the
+    # canonical `.png` name and lets the one door resolve it.
     entries = [
         entry for entry in directory.iterdir()
-        if entry.suffix.lower() == ".png"
+        if paths.is_art_file(entry)
     ]
     candidates: list[Path] = []
     seen_names: set[str] = set()

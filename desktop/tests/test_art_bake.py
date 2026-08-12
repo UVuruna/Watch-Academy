@@ -24,7 +24,7 @@ from pathlib import Path
 import pytest
 from PIL import Image
 
-from config import defaults, paths
+from config import bakery, defaults, paths
 from setup import make_art_bake
 
 
@@ -47,7 +47,12 @@ def test_the_bakery_has_no_ceilings_of_its_own():
         ("weeks/faith/bible/primary/colored/Perun_gem.png", 800),
         ("archetypes/crosses/primary/colored/Distrust_gpt.png", 1200),
         ("calendars/zodiac/chinese/primary/colored/Tiger_gem.png", 1200),
-        ("celestial/earth/world.png", 800),
+        # 0, not 800: re-encoded but never resized — the owner's Globe
+        # decree of 2026-07-15. The FIRST bake of the bakery round DID
+        # shrink these to 800 and `test_skins.py::
+        # test_earth_pole_regions_full_res_and_latitude_override` caught
+        # it, which is why this row is spelled out rather than inferred.
+        ("celestial/earth/world.png", 0),
         ("celestial/era/Starry_Autumn_gem.png", 1200),
         ("celestial/eclipse/Solar_Total.png", 1200),
         ("instrument/hands/classic/hours.png", None),
@@ -56,6 +61,18 @@ def test_the_bakery_has_no_ceilings_of_its_own():
 )
 def test_each_area_gets_its_own_ceiling(relative, expected):
     assert make_art_bake._ceiling_for(relative) == expected
+
+
+def test_a_full_resolution_area_is_encoded_but_never_resized(tmp_path):
+    """The regression this round shipped once and had to take back: a
+    ceiling of 0 must compress and leave every pixel where it is."""
+    source = _master(tmp_path, size=(1992, 1992))
+    target = tmp_path / "globe.webp"
+    width, height, size = make_art_bake.bake_one(
+        str(source), str(target), 0, bakery.ART_BAKE_QUALITY
+    )
+    assert (width, height) == (1992, 1992), "a full-resolution area was resized"
+    assert size < source.stat().st_size, "it was not compressed either"
 
 
 def test_the_letter_plates_are_exempt():
@@ -78,7 +95,7 @@ def test_a_bake_downscales_to_the_ceiling_and_writes_webp(tmp_path):
     source = _master(tmp_path)
     target = tmp_path / "out.webp"
     width, height, size = make_art_bake.bake_one(
-        str(source), str(target), 800, defaults.ART_BAKE_QUALITY
+        str(source), str(target), 800, bakery.ART_BAKE_QUALITY
     )
     assert (width, height) == (800, 800)
     assert target.exists() and size == target.stat().st_size
@@ -90,7 +107,7 @@ def test_a_bake_downscales_to_the_ceiling_and_writes_webp(tmp_path):
 def test_a_master_under_its_ceiling_is_not_upscaled(tmp_path):
     source = _master(tmp_path, size=(300, 300))
     width, height, _ = make_art_bake.bake_one(
-        str(source), str(tmp_path / "out.webp"), 800, defaults.ART_BAKE_QUALITY
+        str(source), str(tmp_path / "out.webp"), 800, bakery.ART_BAKE_QUALITY
     )
     assert (width, height) == (300, 300)
 
@@ -99,7 +116,7 @@ def test_a_ceilingless_file_is_copied_byte_for_byte(tmp_path):
     source = _master(tmp_path, size=(120, 120))
     target = tmp_path / "copy.png"
     make_art_bake.bake_one(
-        str(source), str(target), None, defaults.ART_BAKE_QUALITY
+        str(source), str(target), None, bakery.ART_BAKE_QUALITY
     )
     assert target.read_bytes() == source.read_bytes()
 
@@ -190,6 +207,13 @@ def test_no_shipped_art_exceeds_its_ceiling():
     for subtree, ceiling in defaults.WORKING_SET_CEILINGS.items():
         root = assets / subtree
         if not root.is_dir():
+            continue
+        # A FULL_RESOLUTION area keeps its runtime ceiling (the working
+        # set still makes a small copy to draw from) while the SHIPPED
+        # file stays full size on the owner's decree. Read from the
+        # bakery's own list rather than restated here, so the two can
+        # never disagree about which areas those are.
+        if make_art_bake._ceiling_for(subtree) == 0:
             continue
         for path in root.rglob("*"):
             if path.suffix.lower() not in (".png", ".webp", ".jpg", ".jpeg"):
