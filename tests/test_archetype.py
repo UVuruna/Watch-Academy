@@ -463,15 +463,22 @@ def test_long_name_still_shrinks_to_fit(app):
 
 def test_draw_name_label_draws_exactly_one_line(app, monkeypatch):
     """Owner verdict 2026-07-18: the two-line wrap is GONE — every name,
-    long or short, draws as exactly ONE outlined line at the given
-    pixel size (no more measuring/splitting inside the draw call)."""
+    long or short, draws as exactly ONE line at the given pixel size (no
+    measuring/splitting inside the draw call).
+
+    The MECHANISM changed on 2026-08-12 (0.14.960): the line is composed
+    from the owner's letter PLATES with a two-colour border, not drawn as
+    an outlined font. The PROPERTY this pins — one call, one name, the
+    caller's size, that centre — is exactly what it always was, so this
+    test follows the door instead of being deleted with it."""
+    import render.glyph_shadow as glyph_shadow_mod
     import render.painting as painting_mod
 
     calls = []
     monkeypatch.setattr(
-        painting_mod, "draw_outlined_text",
-        lambda painter, pos, text, font:
-            calls.append((text, pos.y(), font.pixelSize())),
+        glyph_shadow_mod, "draw_bordered_plate_text",
+        lambda painter, center, text, height_px, *a, **kw:
+            calls.append((text, center.y(), round(height_px))),
     )
     image = QImage(200, 200, QImage.Format.Format_ARGB32_Premultiplied)
     painter = QPainter(image)
@@ -757,7 +764,10 @@ def test_archetype_center_follows_its_own_art_type(app, monkeypatch, tmp_path):
         )
         monkeypatch.setattr(
             archetype_layer_mod, "draw_name_label",
-            lambda painter, name, pos, target_width:
+            # `*a, **kw` since 0.14.960: the label door also takes the
+            # metal/dpr/ctx the plate border needs. This test measures
+            # the SIZE, so it must not care what else is passed.
+            lambda painter, name, pos, target_width, *a, **kw:
                 captured.append(target_width),
         )
         image = QImage(400, 400, QImage.Format.Format_ARGB32_Premultiplied)
@@ -1294,7 +1304,8 @@ def test_archetype_names_gates_the_render(app, monkeypatch):
         monkeypatch.setattr(mod, "draw_pixmap_centered", lambda *a, **kw: None)
         monkeypatch.setattr(
             mod, "draw_name_label",
-            lambda painter, name, pos, label_px: calls.append(name),
+            lambda painter, name, pos, label_px, *a, **kw:
+                calls.append(name),
         )
     day, tick = _dt(datetime(2026, 7, 16, 12, 0))
 

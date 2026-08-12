@@ -129,6 +129,7 @@ class CenterBodyLayer(Layer):
                         name_label_px(
                             name, center_size * dial.NAME_LABEL_WIDTH_FRACTION
                         ),
+                        ctx=ctx,
                     )
                 painter.restore()
                 return
@@ -171,5 +172,6 @@ class CenterBodyLayer(Layer):
                 name_label_px(
                     name, center_size * dial.NAME_LABEL_WIDTH_FRACTION
                 ),
+                ctx=ctx,
             )
         painter.restore()

@@ -147,7 +147,7 @@ def draw_archetype_figure(
     if ready:
         draw_pixmap_centered(painter, ctx, fig["file"], pos, height)
     if named or not ready:
-        draw_name_label(painter, fig["name"], pos, label_px)
+        draw_name_label(painter, fig["name"], pos, label_px, ctx=ctx)
     painter.restore()
 
 

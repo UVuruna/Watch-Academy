@@ -217,5 +217,8 @@ def _draw_calendar_mount(
         if art is not None:
             draw_pixmap_centered(painter, ctx, art, pos, mark_height)
         else:
-            draw_name_label(painter, name, pos, name_label_px(name, mark_height))
+            draw_name_label(
+                painter, name, pos,
+                name_label_px(name, mark_height), ctx=ctx,
+            )
         painter.restore()

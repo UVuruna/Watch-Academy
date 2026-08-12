@@ -75,7 +75,7 @@ def draw_body_label(
         label_px if label_px is not None
         else name_label_px(label, size * dial.NAME_LABEL_WIDTH_FRACTION)
     )
-    draw_name_label(painter, label, pos, px)
+    draw_name_label(painter, label, pos, px, ctx=ctx)
 
 
 def draw_weekday_body(

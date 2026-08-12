@@ -7,6 +7,7 @@ counterclockwise-from-3-o'clock convention.
 """
 
 import math
+import sys
 from functools import lru_cache
 from pathlib import Path
 
@@ -133,18 +134,90 @@ def name_label_px(name: str, target_width: float) -> int:
     )
 
 
+#: Glyphs already reported as plateless — one line per process, not one
+#: per paint (this runs inside `paintEvent`, sixty times a minute).
+_REPORTED_MISSING: set[str] = set()
+
+
+def label_finish(ctx) -> tuple[str, float]:
+    """`(metal, dpr)` for an on-dial label — the CROWN's own finish
+    (`letter_plates.crown_finish`), because a label is a plate glyph on
+    this dial and there is exactly one answer to "which metal does a
+    plate glyph wear here" (Rule #5).
+
+    This is what makes the owner's LOOP case the case it is: LOOP's
+    thematic shade is `cross_blue`, so on that ring the date really does
+    come out BLUE over a blue Earth — which is why he asked for the halo
+    rather than for a different colour. The halo is the fix; the colour
+    stays the instrument's."""
+    from render import letter_plates
+
+    return letter_plates.crown_finish(ctx.skin).metal, ctx.dpr
+
+
 def draw_name_label(
     painter: QPainter, name: str, pos: QPointF, label_px: float,
+    metal: str = "gold", dpr: float = 1.0, ctx=None,
 ) -> None:
-    """ONE on-dial name-label draw shared by the weekday bodies and the
-    archetype figures (Rule #5, ROADMAP 15h item 4): draws `name` as a
-    SINGLE outlined line at `label_px` (owner REVOKED the two-line wrap
-    2026-07-18 — every name is one line again). `label_px` is decided
-    by the CALLER, never measured here: the SET-UNIFORM law (owner
-    verdict 2026-07-18) says every name sharing a ring (a dial's
-    weekday bodies, an archetype layout's figures) wears the size of
-    the SMALLEST fitted member of its set — computed ONCE per paint via
-    `name_label_px` over the whole set, not per label."""
+    """ONE on-dial name-label draw shared by the weekday bodies, the
+    archetype figures, the calendar mount and the centre pass (Rule #5,
+    ROADMAP 15h item 4): draws `name` as a SINGLE line at `label_px`
+    (owner REVOKED the two-line wrap 2026-07-18 — every name is one line
+    again). `label_px` is decided by the CALLER, never measured here: the
+    SET-UNIFORM law (owner verdict 2026-07-18) says every name sharing a
+    ring wears the size of the SMALLEST fitted member of its set —
+    computed ONCE per paint via `name_label_px` over the whole set.
+
+    THE PLATES, WITH THE RING'S HALO (owner order 2026-08-12). This used
+    to be a white font with a black outline, and that is legible only
+    while the art underneath is neither white nor black — his own case
+    was the LOOP theme's blue date over the blue Earth, where one
+    hairline was all that held the glyph apart from a same-value field.
+    It now composes from the owner's plate library and wears the SAME
+    stamped halo the ring's jewels and the crown wear
+    (`render.glyph_shadow`), which reads as a dark cushion from every
+    direction at once. Third arrival of the 2026-08-11 correction
+    ("tekst koristi isti kao jewels i crown text a ne ovaj beli FONT"),
+    after the crown and the Fast Travel flash — the dial's own labels
+    were the last white font on the instrument.
+    lang-ok: the owner's own correction, quoted.
+
+    FALLBACK, and why it is not a hole in THE ONE PLATE LAW: the law's
+    "a plateless glyph RAISES" governs the library DOOR, and
+    `letter_plates.plate_text_pixmap` still obeys it exactly. A PAINT
+    LAYER may not die — an exception escaping `paintEvent` with a live
+    `QPainter` is the 2026-07-31 crash class (a cascade of
+    `QBackingStore::endPaint` errors and a permanently broken window).
+    So one plateless character makes THAT ONE label fall back to the old
+    font and NAMES the character on stderr, once per process. Degraded
+    and visible (Rule #1), never silent: the library covers A-Z and 0-9,
+    so a fallback means punctuation, and `setup/check_label_plates.py`
+    reports which names it hits."""
+    from render import glyph_shadow, letter_plates
+
+    if ctx is not None:
+        metal, dpr = label_finish(ctx)
+    try:
+        glyph_shadow.draw_bordered_plate_text(
+            painter, pos, name, label_px, metal, dpr,
+        )
+        return
+    except letter_plates.MissingPlate as error:
+        culprit = "".join(
+            sorted(
+                {
+                    ch for ch in name.upper()
+                    if ch != " " and not letter_plates.has_plate(ch)
+                }
+            )
+        )
+        if culprit not in _REPORTED_MISSING:
+            _REPORTED_MISSING.add(culprit)
+            print(
+                f"label falls back to the font: {name!r} needs a plate for "
+                f"{culprit!r} ({error}) — see setup/check_label_plates.py",
+                file=sys.stderr,
+            )
     font = QFont()
     font.setBold(True)
     font.setPixelSize(round(label_px))

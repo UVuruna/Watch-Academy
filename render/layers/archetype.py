@@ -145,5 +145,7 @@ class ArchetypeCenterLayer(Layer):
                 archetype_label_set_px(ctx, key, arm_width)
                 * hover_factor(ctx, "archetype:center")
             )
-            draw_name_label(painter, center["name"], QPointF(0, 0), label_px)
+            draw_name_label(
+                painter, center["name"], QPointF(0, 0), label_px, ctx=ctx,
+            )
         painter.restore()
