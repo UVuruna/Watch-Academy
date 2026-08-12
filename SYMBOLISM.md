@@ -4,7 +4,7 @@ The complete symbolic cosmology of the dial — how the days of the week,
 celestial bodies, gods, religions, colors, hours, virtues and vices
 weave into one story. This document is the CANON; the machine-readable
 companion `Database/symbolism.json`
-([Database (folder)](Database/___database.md)) carries the short
+([Database (folder)](shared/Database/___database.md)) carries the short
 per-entity blurbs (legacy — the diamond hover now speaks the zodiac
 sign articles) AND the full `articles` set — one encyclopedic article
 per entity per theme (10 sets × 7 = 70), each weaving the entity with

@@ -43,34 +43,42 @@ Canon](CUBE.md#the-name).
 
 ## Structure
 
+THE THREE-FOLDER MIGRATION (owner ballot verdict 2026-08-12): one repo,
+three top-level folders — `desktop/` (all existing Python), `shared/`
+(the truth both platforms consume), `android/` (the future Kotlin phone
+edition, [Pocket Watch](android/README.md)).
+
 ```
-📁 WatchAcademy/          ← the app is Watch Academy; DOMY is the dial
-  🐍 main.py            ← entry point
-  📁 config/            ← all constants and tunables
-  📁 core/              ← pure astronomy/angle computation
-  📁 data/              ← repositories over Database/*.json
-  📁 skins/             ← typed render configuration (unit dataclasses)
-  📁 render/            ← QPainter layers and compositor (M3)
-  📁 app/               ← Qt shell: window, tray, settings
-  📁 assets/            ← shared art: ring faces, hands, earth, weekday themes, zodiac
-  📁 Database/          ← bundled astronomical/location data
-  📁 tests/             ← pytest golden-value suite
-  📁 design/            ← mockups and reference images (not bundled)
-  📁 illustrator/       ← vector sources for skin assets (not bundled)
-  📁 research/          ← one-off analysis scripts and oversized data (not bundled)
+📁 WatchAcademy/            ← repo root; the app is Watch Academy, DOMY is the dial
+  📁 desktop/               ← the Python desktop app in full
+    🐍 main.py              ← entry point
+    📁 config/              ← all constants and tunables
+    📁 core/                ← pure astronomy/angle computation
+    📁 data/                ← repositories over ../shared/Database/*.json
+    📁 skins/               ← typed render configuration (unit dataclasses)
+    📁 render/               ← QPainter layers and compositor (M3)
+    📁 app/                 ← Qt shell: window, tray, settings
+    📁 tests/               ← pytest golden-value suite
+    📁 design/              ← mockups and reference images (not bundled)
+    📁 illustrator/         ← vector sources for skin assets (not bundled)
+    📁 research/            ← one-off analysis scripts and oversized data (not bundled)
+  📁 shared/                ← the truth BOTH platforms consume — the bakery's source
+    📁 assets/               ← ring faces, hands, earth, weekday themes, zodiac
+    📁 Database/             ← bundled astronomical/location data
+  📁 android/               ← Pocket Watch, the Kotlin phone edition (not yet founded)
 ```
 
 ## Documentation
 
 Every `.md` in this project is reachable from here by following links —
-enforced by `tests/test_doc_links.py`. Each code folder carries a
+enforced by `desktop/tests/test_doc_links.py`. Each code folder carries a
 `___folder.md` entry point, an `__about/` folder (what each file does) and,
 where a file holds a real algorithm, a `__flow/` folder (its logic drawn as a
 diagram plus language-neutral pseudocode).
 
 - [Agent Guidance](CLAUDE.md) — how Claude Code works in this project;
   inherits the monorepo constitution
-- [Main (Entry Point)](__about/main.md) — what `main.py` does at startup
+- [Main (Entry Point)](desktop/__about/main.md) — what `main.py` does at startup
 - [Work Plan](WORKPLAN.md) — the ORDER of the closing sessions:
   what to tell each fresh agent, what it reads, what it delivers,
   and which model tier the job deserves
@@ -81,27 +89,33 @@ diagram plus language-neutral pseudocode).
   pointer archetypes — read before any theme/roster work
 - [DOMY Symbolism](SYMBOLISM.md) — the dial's symbolic cosmology (days,
   gods, religions, colors, virtues and vices)
-- [Config (folder)](config/___config.md)
-- [Core (folder)](core/___core.md)
-- [Data (folder)](data/___data.md)
-- [Recolor (folder)](recolor/___recolor.md) — the metal transformer: one
+- [Config (folder)](desktop/config/___config.md)
+- [Core (folder)](desktop/core/___core.md)
+- [Data (folder)](desktop/data/___data.md)
+- [Recolor (folder)](desktop/recolor/___recolor.md) — the metal transformer: one
   drawn master becomes any metal, live, from rules
-- [Skins (folder)](skins/___skins.md)
-- [Render (folder)](render/___render.md)
-- [App (folder)](app/___app.md)
-- [Assets (folder)](assets/___assets.md)
-- [Database (folder)](Database/___database.md)
-- [Tests (folder)](tests/___tests.md)
-- [Setup (folder)](setup/___setup.md)
-- [Design (folder)](design/___design.md)
-- [Illustrator (folder)](illustrator/___illustrator.md) — vector sources
+- [Skins (folder)](desktop/skins/___skins.md)
+- [Render (folder)](desktop/render/___render.md)
+- [App (folder)](desktop/app/___app.md)
+- [Assets (folder)](shared/assets/___assets.md)
+- [Database (folder)](shared/Database/___database.md)
+- [Tests (folder)](desktop/tests/___tests.md)
+- [Setup (folder)](desktop/setup/___setup.md)
+- [Design (folder)](desktop/design/___design.md)
+- [Illustrator (folder)](desktop/illustrator/___illustrator.md) — vector sources
   (gitignored on disk; the folder doc travels with the repo)
-- [Research (folder)](research/___research.md) — image-generation
+- [Research (folder)](desktop/research/___research.md) — image-generation
   prompt sheets live here; see [How to Write a Prompt
   Sheet](../../Gadgets/PromptPainter/instructions.md) before authoring a new one
 - [Roster — the Master Systematics](ROSTER.md) — every theme, every
   figure, its seat, per-source art coverage (generated:
-  `python research/build_roster.py`)
+  `python desktop/research/build_roster.py`)
+- [Android Charter](ANDROID.md) — the sealed decisions for the phone
+  edition ([Pocket Watch](android/README.md)) and Phase 1 (the bakery)
+  in this repo
+- [Apply The Three-Folder Migration](RESTRUCTURE-APPLY.md) — the exact
+  steps to bring this move onto the real tree once its two in-flight
+  sessions finish
 
 ### Structural plans (history, still referenced)
 
@@ -118,6 +132,7 @@ diagram plus language-neutral pseudocode).
 ## Running from source
 
 ```bash
+cd desktop
 pip install -r requirements.txt
 python main.py
 ```

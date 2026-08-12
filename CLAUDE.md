@@ -34,22 +34,29 @@ project-specific laws and deltas that TIGHTEN the root rules.
   `(noon_secs − 43200)/240` deg, positive = clockwise (west-in-zone/DST).
   Weekday diamond slots ROTATE WITH the hexagram.
 - **Year wheel:** piecewise-linear between the six season anchors from
-  `Database/seasons_utc.json` — every season spans exactly 90° even though
-  real durations differ (owner spec); equinoxes exactly at 90°/270°.
+  `shared/Database/seasons_utc.json` — every season spans exactly 90° even
+  though real durations differ (owner spec); equinoxes exactly at 90°/270°.
 - **Architecture:** one-way flow `config → core (pure, no Qt, no wall clock)
   → data → skins → render → app`; purity is enforced by
-  `tests/test_purity.py` (AST-based, covers `core`, `data`, `recolor`).
+  `desktop/tests/test_purity.py` (AST-based, covers `core`, `data`, `recolor`).
 - **Render structure (since 0.14.688):** `render/context.py` is the layer
   protocol, the geometry/painting modules beside it are the shared
   vocabulary, `render/layers/` holds one module per paint layer, and
   `render/compositor.py` stacks them. `render/layers.py` no longer exists —
   never import from it.
-- **Verification:** `python -m pytest tests` (golden values: Belgrade DST
-  −4.17°→+10.76°, Tromsø regimes, exact equinoxes, moon 0.7400 on
-  2026-07-07, mockup day 20.6.2025 sunrise 04:52/sunset 20:27/noon 12:39).
-  **The full suite takes ~18 minutes** — run a targeted subset while working
-  and the full suite before committing. `python -m core --city NAME --at ISO`
-  eyeballs any moment; the GUI drive recipe is `.claude/skills/verify/SKILL.md`.
+- **THE THREE-FOLDER MIGRATION (owner ballot verdict 2026-08-12):** one
+  repo, three top-level folders — `desktop/` (all existing Python),
+  `shared/` (assets/ + Database/, the truth both platforms consume),
+  `android/` (the future Kotlin phone edition). Every command below runs
+  from `desktop/` (`cd desktop` first) unless stated otherwise; every
+  `assets/`/`Database/` path is `shared/assets/`/`shared/Database/`.
+- **Verification:** `python -m pytest tests` from inside `desktop/` (golden
+  values: Belgrade DST −4.17°→+10.76°, Tromsø regimes, exact equinoxes,
+  moon 0.7400 on 2026-07-07, mockup day 20.6.2025 sunrise 04:52/sunset
+  20:27/noon 12:39). **The full suite takes ~18 minutes** — run a targeted
+  subset while working and the full suite before committing.
+  `python -m core --city NAME --at ISO` (from `desktop/`) eyeballs any
+  moment; the GUI drive recipe is `.claude/skills/verify/SKILL.md`.
 - **THE RING VOCABULARY (owner 2026-08-07 — "JEWELS != NUMERALS", learn
   it once):** the ring band carries FOUR different things and they are
   not variations of each other. Never reason about one as though it were
@@ -62,7 +69,7 @@ project-specific laws and deltas that TIGHTEN the root rules.
   | **CROWN** | everything outside the band — its text, the location, the live time | per preset | PLATES |
 - **THE ONE PLATE LAW (owner decree 2026-08-07):** everything drawn from
   the PLATE library — the jewels, the whole crown, the duals — is one of
-  the owner's plates in `assets/instrument/letters/` (latin, greek,
+  the owner's plates in `shared/assets/instrument/letters/` (latin, greek,
   numerals, symbols, emblems), taken as the GOLD master and recolored by
   the transformer into one of this app's metals or thematic colours. One
   style, one source, one algorithm: never a font, never a flat colour of
@@ -119,39 +126,43 @@ project-specific laws and deltas that TIGHTEN the root rules.
 ## Enforcement Installed Here
 
 The four guard tests of [Code Rules](../../rules/CODE.md) → Enforcement live
-in `tests/`, wired into `.claude/settings.json` hooks
-(`PostToolUse` → `python tests/run_guards.py --fast`,
-`Stop` → `python tests/run_guards.py`; exit 2 blocks):
+in `desktop/tests/`, wired into `.claude/settings.json` hooks (`.claude/`
+stays at the TRUE repo root per THE THREE-FOLDER MIGRATION, above; its hook
+commands run relative to the repo root, hence the `desktop/` prefix)
+(`PostToolUse` → `python desktop/tests/run_guards.py --fast`,
+`Stop` → `python desktop/tests/run_guards.py`; exit 2 blocks):
 
 | Guard | Fails on |
 |-------|----------|
-| `tests/test_structure_law.py` | any `.py` over ~1,000 lines outside the RATCHET |
-| `tests/test_config_sections.py` | post-definition patching, duplicate dict keys, or a definition above the first section banner, in any `config/*.py` |
-| `tests/test_docs_coverage.py` | a source file missing the docs its tier requires, a legacy beside-script doc, or an orphan doc |
-| `tests/test_doc_links.py` | a broken relative `.md` link, or a doc unreachable from `README.md` |
+| `desktop/tests/test_structure_law.py` | any `.py` over ~1,000 lines outside the RATCHET |
+| `desktop/tests/test_config_sections.py` | post-definition patching, duplicate dict keys, or a definition above the first section banner, in any `config/*.py` |
+| `desktop/tests/test_docs_coverage.py` | a source file missing the docs its tier requires, a legacy beside-script doc, or an orphan doc |
+| `desktop/tests/test_doc_links.py` | a broken relative `.md` link, or a doc unreachable from `README.md` |
 
 Two project-specific guards sit beside them and are NOT part of the standard
-four: `tests/test_config_cohesion.py` (pins Session 36's config split — every
-`config/*.py` at or under the threshold, and no moved name still reachable
-through `defaults`) and `tests/test_theme_completeness.py` (below).
+four: `desktop/tests/test_config_cohesion.py` (pins Session 36's config
+split — every `config/*.py` at or under the threshold, and no moved name
+still reachable through `defaults`) and
+`desktop/tests/test_theme_completeness.py` (below).
 
 GUI work here is also governed by the Zubi v2 Algorithmic Teeth & Grader v2
 ([GUI Rules](../../rules/GUI.md#zubi-v2)) — status: **installed**,
-`tests/layout_checks_qt.py`.
+`desktop/tests/layout_checks_qt.py`.
 
 **The RATCHET may only SHRINK.** Adding an entry needs the owner's explicit
 approval in that same session.
 
 **THE ZUBI BASELINE RATCHET (owner approval 2026-08-09):** the runtime
-layout audit (`tests/test_layout_audit.py`, part of the FULL Stop guard)
-fails ONLY on findings whose normalized key is absent from
-`tests/zubi_baseline.json` — the owner-frozen pre-existing backlog
+layout audit (`desktop/tests/test_layout_audit.py`, part of the FULL Stop
+guard) fails ONLY on findings whose normalized key is absent from
+`desktop/tests/zubi_baseline.json` — the owner-frozen pre-existing backlog
 (`.claude/zubi-v2-findings.md`, install-only boundary of 2026-08-08).
 The baseline obeys the same ratchet law: entries may only be REMOVED as
 findings are fixed; regeneration runs through
-`DOMY_ZUBI_REBASELINE=1 python -m pytest tests/test_layout_audit.py -k test_layout_audit`
-and REFUSES to add keys unless `=force`, which is legal only with the
-owner's explicit in-session approval.
+`DOMY_ZUBI_REBASELINE=1 python -m pytest desktop/tests/test_layout_audit.py -k test_layout_audit`
+(from the repo root; or drop the `desktop/` prefix when run from inside
+`desktop/`) and REFUSES to add keys unless `=force`, which is legal only
+with the owner's explicit in-session approval.
 
 ---
 
@@ -167,7 +178,7 @@ correctly placed on disk**, and not one of them was visible anywhere in the
 program. They were never registered in `constants.WEEKDAY_THEMES`, so the
 dial's picker did not know they existed, and they had no Encyclopedia topic.
 The prompt-sheet round that produced them wrote "two wiring rounds left for
-later" into [Prompt Coverage](research/prompts/COVERAGE.md) and moved on.
+later" into [Prompt Coverage](desktop/research/prompts/COVERAGE.md) and moved on.
 Later never came, and nothing in the suite could say so.
 
 **Approving a theme commits FOUR deliverables, and they ship TOGETHER:**
@@ -180,13 +191,14 @@ Later never came, and nothing in the suite could say so.
 4. **The Encyclopedia seat** — a card in a whole, reachable from Home.
 
 **A round that ships only the sheet MUST, in the same commit, record its own
-debt in the STAGING LEDGER** ([Theme Staging](research/theme_staging.md)):
+debt in the STAGING LEDGER** ([Theme Staging](desktop/research/theme_staging.md)):
 which cast, what art exists, what it still owes, which session owes it.
 Deferring is allowed; deferring SILENTLY is not.
 
-**Enforced, not merely written** (`tests/test_theme_completeness.py`): no
-registered theme may be textless, and no theme folder under `assets/weeks/`
-may exist without being either registered or listed in the staging ledger. A
+**Enforced, not merely written** (`desktop/tests/test_theme_completeness.py`):
+no registered theme may be textless, and no theme folder under
+`shared/assets/weeks/` may exist without being either registered or listed
+in the staging ledger. A
 future round that generates art and walks away fails the suite in the same
 session that did it.
 
