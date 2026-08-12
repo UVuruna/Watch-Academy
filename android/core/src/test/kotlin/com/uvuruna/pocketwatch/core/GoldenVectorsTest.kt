@@ -142,8 +142,16 @@ class GoldenVectorsTest {
         assertTrue(
             fromTop <= limit,
             "year_marker_deg: ACTUAL $marker is $fromTop deg from the dial top, " +
-                "tolerance $limit (pack expected " +
-                "${expected.getDouble("year_marker_deg_near_top_at_14_34_utc")})",
+                "tolerance $limit",
+        )
+        // The pack also states the exact reading, so the port is held to it
+        // and not merely to "somewhere near the top" — the interpolation
+        // must agree with the desktop's, not just land in the neighbourhood.
+        assertClose(
+            "year_marker_deg_near_top_at_14_34_utc",
+            marker,
+            expected.getDouble("year_marker_deg_near_top_at_14_34_utc"),
+            1e-6,
         )
     }
 
