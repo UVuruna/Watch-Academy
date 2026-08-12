@@ -1,0 +1,349 @@
+# Two Crosses Prompts — the Path of Light and the Path of Darkness
+
+The two four-station journeys of [The Cube Canon](../../../../CUBE.md)
+§The Two Crosses (SEALED narrative canon): an upward cross and a
+downward cross drawn on the hexagram's arms, sharing the vertical and
+meeting on God's own axis.
+
+**Stations are not seats.** A seat is what an arm IS — the Prism's
+Hatred stays at 24h, its Fear at 04h. A station is where a TRAVELLER
+stands at that hour of the journey; the arm hosts the station as an inn
+hosts a walker. This is why the dark path's **Fear** stands on 20h while
+the Prism seats Fear on 04h, and why its **Hate** stands on 04h while
+the Prism seats Hatred on 24h. Nothing here contradicts the Prism, and no
+future round should "correct" it.
+
+### The Path of Light — upward cross (08h · 12h · 16h · 24h)
+
+| # | Station | Arm | Colour | The argument (CUBE, verbatim in substance) |
+|---|---|---|---|---|
+| 1 | **Faith** | 08h | green | morning, the past: faith answers something ALREADY GIVEN — testimony, promise, event — a foundation received rather than a future invented; green is Humility's own hue, and faith begins by being small enough to receive (Hebrews 11:1) |
+| 2 | **Love** | 12h | yellow | noon, The One's arm, the present: love alone must be ACTUAL to exist — not "I loved" or "I will love" but "do I love now"; yellow is Loyalty's own hue, and Tribalism, Loyalty's one disease, is love's own disease too — loving one's own alone (1 John 3:18) |
+| 3 | **Hope** | 16h | orange | evening, the future: hope is needed exactly where the light withdraws, and hope's own object IS salvation — so it must be the LAST station before the summit, never the furthest from it; orange is Vigor's own hue, Aquinas's *bonum arduum*, the difficult good reached only by straining |
+| 4 | **Salvation** | 24h | pure white | midnight, the light's ending in the dark's own hour — the Ages wheel already dresses 24h Death in pure white, "into the light" (Acts 16:25–26; John 20:1) |
+
+### The Path of Darkness — downward cross (20h · 24h · 04h · 12h)
+
+| # | Station | Arm | Colour | The argument |
+|---|---|---|---|---|
+| 1 | **Fear** | 20h | red | dusk, and red is the FUTURE's arm — fear is the dark reading of what comes; the blood-red west, the predator hour (Job 3:25) |
+| 2 | **Anger** | 24h | moon-gray purple | midnight, the LIVID hour — *lividus* is Latin for bruise-purple AND for rage; Ephesians 4:26 BROKEN, the sun went down upon the wrath and midnight found it awake |
+| 3 | **Hate** | 04h | blue | before dawn — anger COOLED into cold hate, cold-blooded, frozen, decided; blue is the PAST's arm, the grudge is the past refusing to pass (1 John 2:11) |
+| 4 | **Suffering** | 12h | blackened gold | noon — what fermented in the dark stands naked in full light (Luke 8:17); the Passion itself DARKENED noon (Matthew 27:45) |
+
+**The chiasm:** the light path ends at MIDNIGHT, the dark path ends at
+NOON. 12h is God-as-JUDGE — the dark road ends EXPOSED before the Judge
+at noon; 24h is God-as-CREATOR — the bright road ends REMADE in the
+Creator's hands at midnight. Every road terminates on God's axis. Master
+verse of the pair: *"the light shineth in darkness; and the darkness
+comprehended it not"* (John 1:5).
+
+**The centres:** the hinge of both paths is **TRUST**. Light centre
+**TRUST**, subtitle *Adversity with Trust*; dark centre **DISTRUST**,
+subtitle *Love without Trust*. The canonical formula, for the legend, not
+for the glass: *"Without trust, even love decays into fear; with trust,
+even adversity ripens into hope."*
+
+**Register:** the house night-window stained-glass family. Each station
+is a **TALL pointed-arch lancet** (aspect 1:2) plus a **1:1 circle
+companion** (see [Badge 1:1 Prompts](../badge/badge_1to1_prompts.md));
+the two cross emblems and the two centres are **round rosettes** (1:1).
+
+**Register & look (the tree law, `assets/___assets.md`):** every image
+lands at `assets/archetypes/<family>/<register>/<look>/<Figure>[_vN]_<src>.png`
+— lancets, emblems and centres in the **primary** register's **colored**
+look, the round station companions in the **circle** register's
+**colored** look. Sheets state canonical SOURCE-LESS paths; PromptPainter
+appends the `_gem`/`_gpt` suffix.
+
+**Drop paths:** `assets/archetypes/crosses/primary/colored/` and
+`assets/archetypes/crosses/circle/colored/`. Stems, PascalCase, no
+`_alt`: `Path_of_Light`, `Path_of_Darkness`, `Trust`, `Distrust`,
+`Hope`, `Faith`, `Love`, `Salvation`, `Fear`, `Anger`, `Hate`,
+`Suffering`.
+
+---
+
+## THE HOUSE LETTERING RULE — read before generating
+
+<!-- lang-ok-begin: Greek liturgical mnemonic row quoted verbatim from sealed canon, legend/article material per the House Lettering Rule -->
+**NO lettering inside any image.** The Latin rows (TIMOR → IRA → ODIUM →
+DOLOR; FIDES → CARITAS → SPES → SALUS), the Greek rows (ΦΟΒΟΣ → ΟΡΓΗ →
+ΜΙΣΟΣ → ΠΑΘΟΣ; ΠΙΣΤΙΣ → ΑΓΑΠΗ → ΕΛΠΙΣ → ΣΩΤΗΡΙΑ), the **FALL** and
+<!-- lang-ok-end -->
+**STAR** mnemonics and the **DOMY** / **SAFE** ciphers are LEGEND and
+ARTICLE material — the legend is under a standing duty to explain them
+(CUBE, owner "da"). They are never painted into the glass. The one
+documented lettering exception in this whole project remains
+[Theme Title Prompts](../titles/theme_title_prompts.md), where the
+wordmark IS the plate.
+
+**PENDING OWNER — an inscribed variant (NOT approved; nothing is written
+for it).** If the owner ever wants the ciphers visible in the art, the
+honest form would be a second artwork per emblem carrying its four
+station words as a ring of Latin/Greek capitals around the rim — the
+FALL/DOMY reading on the dark emblem, STAR/SAFE on the bright one.
+Deliberately given NO drop path and NO prompt block here, so nothing can
+be generated by accident and the default stays letterless. Say the word
+and it gets written as its own pair of entries.
+
+---
+
+## Rule #19 derivation check (written, root `CLAUDE.md` Rule #19)
+
+**IRREDUCIBLE — generated (20 files):** eight STATION scenes that exist
+nowhere else in this project as images (each argued from its own arm, its
+own hour and its own verse), their eight round companions, the two path
+EMBLEMS, and the two CENTRES. Twenty new compositions; no master
+elsewhere transforms into any of them.
+
+**COMPUTED — never generated:**
+
+- **The cross figures themselves, wherever the DIAL draws them.** Four
+  arms at fixed hexagram angles in fixed palette colours is geometry —
+  if a later round overlays a path on the wheel, it is drawn, not
+  loaded. What is generated below are the two Encyclopedia EMBLEMS: the
+  whole argument of a path condensed into one rosette, which no stroke
+  of geometry produces.
+- **The mirror.** The dark cross is not the bright cross flipped: they
+  fan opposite ways *and* carry different stations, verses and colours.
+  But nothing in the pair is a rotation or reflection of a file — no
+  emblem is derived from the other by transform.
+- **The rows and ciphers** — Latin, Greek, FALL/STAR, DOMY/SAFE — are
+  TEXT. Twelve more images of words is exactly the enumeration Rule #19
+  forbids.
+- **Tints, metals, lit/ghost opacity, the Diamond/Cube toggle** —
+  palette and transform maths on the same files.
+- **The Rose of the Twenty-Four gets NO sheet**: three identical octa
+  stars at −15°/0°/+15°, computed geometry, a ring preset, never art.
+  (Repeated in every sheet of this wave on purpose.)
+
+**REUSE — one real candidate, PENDING OWNER.** Faith / Hope / Love
+already exist as art twice over: the Trinity badge trio
+(`archetypes/trinity/badges/colored/{Faith,Hope,Love}.png`, real on both
+sources) and the abstract Theological triad
+(`archetypes/triads/theological/primary/colored/{Faith,Hope,Love}.png`,
+sheeted, 0 generated). Checked one by one against the arms, per the
+2026-08-09 re-seating (TRIO pointer: Faith 04h blue, Love 12h yellow,
+Hope 20h red):
+
+- **Faith** — the Triads seat it on BLUE 04h (Composure: blue does not
+  burn, blue lasts — what remains when the feeling that started it is
+  gone); this path stations it on GREEN 08h (Humility: faith begins by
+  being small enough to receive, Hebrews 11:1). Different arm, different
+  colour, different argument → **NEW art, written below.**
+- **Hope** — the Triads seat it on RED 20h (Dignity, the colour the
+  light leaves behind when it goes); this path stations it on ORANGE
+  16h (Vigor, Aquinas's *bonum arduum*, the difficult good). Different
+  arm, different colour, different argument → **NEW art, written
+  below.**
+- **Love** — the Triads seat it on YELLOW 12h and this path ALSO
+  stations it on YELLOW 12h — the one virtue whose two systems agree,
+  per the Order Law (faith and hope are still under way while love is
+  already what it will be, so both readings land it at noon). Same arm,
+  same colour: this ONE could genuinely share a file with
+  `archetypes/triads/theological/primary/colored/Love.png`. Against it
+  stands the one-image-one-place law (owner 2026-07-19) — the same
+  coincidence Faith faced under the old seating, and the owner already
+  ruled it there: **SEALED 2026-07-26 ("pravi nove slobodno") — a
+  coincidence of arm never earns a shared file**. That precedent binds
+  here too: the station gets its OWN new window; the REUSE marker is
+  lifted and the two Love entries load ticked like the rest.
+
+That the Theological triad and the bright path disagree about Faith's
+and Hope's arms — and now, since the 2026-08-09 re-seating, agree on
+Love's — is not an error in either canon: a seat is what an arm IS, a
+station is where a walker stands (CUBE's own distinction, stated at the
+top of this sheet). It is recorded here so no later round tries to
+reconcile the disagreement by repainting one, or treats the new
+agreement on Love as license to merge the files.
+
+---
+
+## The two cross emblems
+
+**The Path of Light — the emblem** →
+`assets/archetypes/crosses/primary/colored/Path_of_Light.png`
+
+```
+ROUND rose window — a circular stained-glass rosette, night-window register, photorealistic render, isolated background. ASPECT RATIO exactly 1:1 — a perfect square image. Center: a single upward-FORKING CROSS filling the rosette — three arms rising from one junction (one straight up, one up-left, one up-right, each 60 degrees apart) and one long straight stem descending from the junction to the bottom of the window, so the whole figure reads as a great letter Y with a long stem, a fork in a road seen from above. Each arm is glazed in its own colour and ends in a small emblem set into the glass: the up-left arm LIVING GREEN ending in a sprouting seed; the straight up arm RADIANT GOLD ending in a steady upright flame; the up-right arm BURNING ORANGE ending in two open hands giving; the long descending stem going PURE WHITE toward the bottom and ending in an open empty doorway full of white light. At the junction where the three arms meet the stem, a small clear pane of uncolored glass with plain white daylight passing through it. The background glass between the arms is soft dark cloudglass, dawn-tinged. Rim: gothic stone tracery in dark iron. Palette: living green, radiant gold, burning orange, pure white, dark cloudglass, black-iron lead. NO lettering anywhere.
+```
+
+**The Path of Darkness — the emblem** →
+`assets/archetypes/crosses/primary/colored/Path_of_Darkness.png`
+
+```
+ROUND rose window — a circular stained-glass rosette, night-window register, photorealistic render, isolated background. ASPECT RATIO exactly 1:1 — a perfect square image. Center: a single downward-FORKING CROSS filling the rosette — three arms descending from one junction (one straight down, one down-left, one down-right, each 60 degrees apart) and one long straight stem rising from the junction to the top of the window, an inverted letter Y, the same fork in the road taken the other way. Each arm is glazed in its own colour and ends in a small emblem set into the glass: the down-right arm EMBER RED ending in a low blood-red sun on a horizon; the straight down arm MUTED MOON-GRAY VIOLET (a cold dusty bruise-violet, never royal purple) ending in a clenched fist; the down-left arm MIDNIGHT BLUE ending in a frozen closed hand; the long rising stem going BLACKENED GOLD toward the top and ending in a sun at noon that is dark, an eclipse-black disc in a gold sky. At the junction where the three arms meet the stem, a small pane of clouded, smoked glass that no light passes through. The background glass between the arms is heavy black-blue cloudglass. Rim: gothic stone tracery in dark iron. Palette: ember red, moon-gray bruise violet, midnight blue, blackened gold, smoked glass, black-iron lead. NO lettering anywhere.
+```
+
+---
+
+## The two centres
+
+**TRUST — the light centre** →
+`assets/archetypes/crosses/primary/colored/Trust.png`
+
+```
+ROUND rose window — a circular stained-glass rosette, night-window register, photorealistic render, isolated background. ASPECT RATIO exactly 1:1 — a perfect square image. Center: an open hand laid palm-up and completely still on the surface of dark water, not gripping anything and not sinking — the whole weight of the image resting on something it does not control; from the point where the hand touches the water a warm gold light spreads outward in rings to the rim, and in the outermost ring the dark water has become green shoots. Above the hand, hard weather: slanting rain and a bent branch, unmistakably adversity, and none of it disturbing the hand. Rings of soft cloudglass between. Rim: gothic stone tracery in dark iron; three small rim roundels — an open palm at the top, a green shoot at one side, a steady anchor at the other. Palette: warm gold light, living green, deep blue water, white light, black-iron lead. NO lettering anywhere.
+```
+
+**DISTRUST — the dark centre** →
+`assets/archetypes/crosses/primary/colored/Distrust.png`
+
+```
+ROUND rose window — a circular stained-glass rosette, night-window register, photorealistic render, isolated background. ASPECT RATIO exactly 1:1 — a perfect square image. Center: a hand CLOSED into a hard fist around a small warm light, squeezing it — the light leaking out between the fingers in thin dying rays while the fist keeps tightening; this is love that cannot let go, and the harder it holds the less light there is. From the fist, cold red-violet rings spread outward to the rim and darken as they go, the outermost ring gone entirely black. Around the fist, the same weather as its bright twin — slanting rain, a bent branch — but here everything is braced and clenched against it. Rings of heavy smoked cloudglass between. Rim: gothic stone tracery in dark iron; three small rim roundels — a clenched fist at the top, a guttering flame at one side, a snapped chain at the other. Palette: ember red, moon-gray bruise violet, midnight blue-black, one dying warm light, black-iron lead. NO lettering anywhere.
+```
+
+---
+
+## The Path of Light — four stations
+
+**RE-SEATED 2026-08-09 — READ THIS BEFORE GENERATING.** The stations
+moved (Faith 08h, Love 12h, Hope 16h) and the scenes did NOT simply
+travel with the hours: a scene belongs to its VIRTUE, not to its arm,
+so the sprout that argued for hope at dawn could not become faith by
+being relabelled. All three bright-station briefs below are written
+anew — each virtue keeps its own argument and receives its new arm's
+colour and hour. **The three existing renders (Hope, Faith, Love —
+station and circle, six files) are therefore STALE and must be
+regenerated from these briefs; Salvation is untouched.**
+
+**Faith — station 1 (green, 08h)** →
+`assets/archetypes/crosses/primary/colored/Faith.png`
+
+```
+TALL pointed-arch lancet stained-glass window, night-window register, photorealistic render, isolated background, the window shape IS the lancet. ASPECT RATIO exactly 1:2 — a tall portrait image, twice as tall as wide; the whole image is one window. Living green, cool morning gold and clear white glass, everything early and unfinished. Center: at the very base of the window a single squared FOUNDATION STONE has just been set level into dark ground, dew still on it, the building it belongs to neither begun nor shown — and above it a pair of open hands, cupped and empty, receiving the first low light of a spring morning that is plainly coming from OUTSIDE the window, travelling from the left, already on its way before the hands were there. The hands do not reach for the light and do not shade it: they are simply open under it. Nothing is held, nothing is owned, nothing is grown. Upper left panel: a lamp being lit from another lamp that was already burning; upper right panel: a sealed letter placed into a hand that did not write it. Border: vine-and-furrow leadwork in deep green; three rim roundels — an open cupped hand at the apex, a squared foundation stone at one side, a low morning sun at the other. Palette: living green, cool morning gold, dew silver, clear white light, green-black lead. NO lettering anywhere.
+```
+
+**Faith — circle** →
+`assets/archetypes/crosses/circle/colored/Faith.png`
+
+```
+ROUND stained-glass badge medallion, night-window register, photorealistic render, isolated background, the circular window shape IS the frame. ASPECT RATIO exactly 1:1 — a perfect square image. Living green, cool morning gold and clear white glass. Center: a pair of open cupped hands, empty, receiving the first low morning light from outside the frame, a squared foundation stone set level in dark ground beneath them — filling the round frame. Border: vine-and-furrow leadwork in deep green, a small foundation-stone roundel at the top. Palette: living green, cool morning gold, dew silver, white light, green-black lead. NO lettering anywhere.
+```
+
+**Love — station 2 (yellow, 12h)** →
+`assets/archetypes/crosses/primary/colored/Love.png`
+
+```
+TALL pointed-arch lancet stained-glass window, night-window register, photorealistic render, isolated background, the window shape IS the lancet. ASPECT RATIO exactly 1:2 — a tall portrait image, twice as tall as wide; the whole image is one window. Radiant yellow, warm amber and white glass throughout, full noon light. Center: a long table SET for others at the exact middle of the window in the full flood of noon — bread broken and laid out, cups filled, every place ready and the setter still standing, not seated, hands open and empty, nothing kept back for himself. Above, the sun at noon in clear glass pouring straight down onto the table; and a thin band of the same gold shows that light LEAVING the table again toward both edges of the window, given onward — the sun is no smaller for it. Love as DEED and as gift, done now and in the plain middle of the working day rather than saved for a darker hour. Upper left panel: two hands breaking bread; upper right panel: a cloak laid over cold shoulders. Border: gothic leadwork in dark gold; three rim roundels — a set table at the apex, broken bread at one side, a noon sun at the other. Palette: radiant yellow, warm amber, molten gold, white noon light, dark-gold lead. NO lettering anywhere.
+```
+
+**Love — circle** → `assets/archetypes/crosses/circle/colored/Love.png`
+
+```
+ROUND stained-glass badge medallion, night-window register, photorealistic render, isolated background, the circular window shape IS the frame. ASPECT RATIO exactly 1:1 — a perfect square image. Radiant yellow, warm amber and molten gold glass. Center: a table set for others in full noon light with broken bread and filled cups, the setter standing with open empty hands, the noon sun straight above — filling the round frame. Border: gothic leadwork in dark gold, a small set-table roundel at the top. Palette: radiant yellow, warm amber, molten gold, white noon light, dark-gold lead. NO lettering anywhere.
+```
+
+**Hope — station 3 (orange, 16h)** →
+`assets/archetypes/crosses/primary/colored/Hope.png`
+
+```
+TALL pointed-arch lancet stained-glass window, night-window register, photorealistic render, isolated background, the window shape IS the lancet. ASPECT RATIO exactly 1:2 — a tall portrait image, twice as tall as wide; the whole image is one window. Burning orange, ember red and molten gold glass, the light plainly going. Center: a single figure part-way up a STEEP rising path at the middle of the window, leaning into the climb with one hand raised and REACHING — not shielding the eyes, reaching — toward a sun already half below a far horizon; the way ahead is visibly hard and visibly unfinished, and the summit is above the top of the window where it cannot be seen. At the figure's belt hangs a heavy iron ANCHOR on a short chain, carried and not yet cast. The deepest red is the last thin band at the very rim, where the light has most nearly left. Nothing has arrived; everything is still ahead, and that is the entire subject. Upper left panel: an anchor sunk deep in dark water, its chain taut upward; upper right panel: an unlit lamp being carried toward the dark. Border: flame-and-vow leadwork in dark bronze-orange; three rim roundels — an anchor at the apex, a steep path at one side, a setting sun at the other. Palette: burning orange, ember red, molten gold, evening dark, dark bronze lead. NO lettering anywhere.
+```
+
+**Hope — circle** → `assets/archetypes/crosses/circle/colored/Hope.png`
+
+```
+ROUND stained-glass badge medallion, night-window register, photorealistic render, isolated background, the circular window shape IS the frame. ASPECT RATIO exactly 1:1 — a perfect square image. Burning orange, ember red and molten gold glass. Center: a figure leaning into a steep rising path, one hand reaching toward a sun already half below the horizon, a heavy iron anchor on a short chain at the belt — filling the round frame. Border: flame-and-vow leadwork in dark bronze-orange, a small anchor roundel at the top. Palette: burning orange, ember red, molten gold, evening dark, dark bronze lead. NO lettering anywhere.
+```
+
+**Salvation — station 4 (pure white, 24h)** →
+`assets/archetypes/crosses/primary/colored/Salvation.png`
+
+```
+TALL pointed-arch lancet stained-glass window, night-window register, photorealistic render, isolated background, the window shape IS the lancet. ASPECT RATIO exactly 1:2 — a tall portrait image, twice as tall as wide; the whole image is one window. PURE WHITE and clear uncolored glass carry the image, set against midnight blue-black at the edges — white is the colour of this station, arriving in the dark's own hour. Center: a heavy prison door standing WIDE OPEN at the base of the window with its chain fallen slack on the threshold and nobody forcing it, and beyond the doorway a corridor of plain white light rising the full height of the window into a night sky; further in, a stone tomb mouth open on the same white, the grave-cloths folded and left. The surrounding darkness is untouched — the light does not fight it, it simply stands open in it. Upper left panel: a chain fallen slack; upper right panel: folded grave-cloths. Border: gothic leadwork in dark iron with fine silver seams; three rim roundels — an open door at the apex, a slack chain at one side, a midnight star at the other. Palette: pure white light, clear uncolored glass, midnight blue-black, silver seams, dark-iron lead. NO lettering anywhere.
+```
+
+**Salvation — circle** →
+`assets/archetypes/crosses/circle/colored/Salvation.png`
+
+```
+ROUND stained-glass badge medallion, night-window register, photorealistic render, isolated background, the circular window shape IS the frame. ASPECT RATIO exactly 1:1 — a perfect square image. Pure white and clear uncolored glass against midnight blue-black. Center: a heavy prison door standing wide open with its chain fallen slack, a corridor of plain white light beyond it rising into a night sky — filling the round frame. Border: gothic leadwork in dark iron with silver seams, a small open-door roundel at the top. Palette: pure white light, clear glass, midnight blue-black, dark-iron lead. NO lettering anywhere.
+```
+
+---
+
+## The Path of Darkness — four stations
+
+**Fear — station 1 (red, 20h)** →
+`assets/archetypes/crosses/primary/colored/Fear.png`
+
+```
+TALL pointed-arch lancet stained-glass window, night-window register, photorealistic render, isolated background, the window shape IS the lancet. ASPECT RATIO exactly 1:2 — a tall portrait image, twice as tall as wide; the whole image is one window. Blood-red, dark bronze and black glass, the light coming low and level from one side as at dusk. Center: a figure at the window's base stopped mid-step, turned toward a blood-red sun sitting on a western horizon, its long shadow thrown backward across the whole lower window — and in the darkening land ahead of it the shapes are ambiguous: branches that could be antlers, a hollow that could be a mouth, the predator hour where nothing is yet certain and everything might be. Nothing has happened. The whole window is what has NOT happened yet. Upper left panel: a low red sun on a bare horizon; upper right panel: two watching points of light in dark undergrowth. Border: thorn-and-dusk leadwork in dark bronze-red; three rim roundels — a setting red sun at the apex, a long thrown shadow at one side, watching eyes at the other. Palette: blood red, dark bronze, black glass, dark bronze-red lead. NO lettering anywhere.
+```
+
+**Fear — circle** → `assets/archetypes/crosses/circle/colored/Fear.png`
+
+```
+ROUND stained-glass badge medallion, night-window register, photorealistic render, isolated background, the circular window shape IS the frame. ASPECT RATIO exactly 1:1 — a perfect square image. Blood-red, dark bronze and black glass. Center: a figure stopped mid-step against a blood-red sun on a western horizon, its long shadow thrown back, ambiguous shapes in the darkening land ahead — filling the round frame. Border: thorn-and-dusk leadwork in dark bronze-red, a small setting-sun roundel at the top. Palette: blood red, dark bronze, black glass, dark bronze-red lead. NO lettering anywhere.
+```
+
+**Anger — station 2 (moon-gray purple, 24h)** →
+`assets/archetypes/crosses/primary/colored/Anger.png`
+
+```
+TALL pointed-arch lancet stained-glass window, night-window register, photorealistic render, isolated background, the window shape IS the lancet. ASPECT RATIO exactly 1:2 — a tall portrait image, twice as tall as wide; the whole image is one window. LIVID glass throughout — bruise-coloured, a cold dusty gray-violet going to swollen purple-black, the exact colour of a bruise under moonlight and NEVER royal or magenta purple — with iron gray and one hot red seam. Center: a figure sitting bolt upright and wide awake at the window's middle in the dead of night, a clenched fist on each knee, veins livid at the temple, everything about the body swollen and rigid and going nowhere; behind it, high in the window, a sun has fully SET below a hard horizon line and the darkness above it is total — the wrath the day should have taken with it, still burning at midnight. Under the figure, one thin seam of hot red runs through the violet like a crack that has not yet opened. Upper left panel: a sun gone fully below a hard horizon; upper right panel: a clenched fist with livid knuckles. Border: knotted-iron leadwork in bruised violet; three rim roundels — a clenched fist at the apex, a set sun at one side, a cracked seam of red at the other. Palette: livid bruise violet, moon-gray violet, iron gray, one hot red seam, black-iron lead. NO lettering anywhere.
+```
+
+**Anger — circle** → `assets/archetypes/crosses/circle/colored/Anger.png`
+
+```
+ROUND stained-glass badge medallion, night-window register, photorealistic render, isolated background, the circular window shape IS the frame. ASPECT RATIO exactly 1:1 — a perfect square image. Livid bruise-violet and iron-gray glass — a cold dusty gray-violet going to swollen purple-black, never royal purple — with one hot red seam. Center: a figure sitting bolt upright and wide awake at midnight, fists clenched on the knees, a sun fully set behind it — filling the round frame. Border: knotted-iron leadwork in bruised violet, a small clenched-fist roundel at the top. Palette: livid bruise violet, iron gray, one hot red seam, black-iron lead. NO lettering anywhere.
+```
+
+**Hate — station 3 (blue, 04h)** →
+`assets/archetypes/crosses/primary/colored/Hate.png`
+
+```
+TALL pointed-arch lancet stained-glass window, night-window register, photorealistic render, isolated background, the window shape IS the lancet. ASPECT RATIO exactly 1:2 — a tall portrait image, twice as tall as wide; the whole image is one window. Midnight blue, iron gray and frost-white glass, everything COLD — the heat of the previous hour entirely gone. Center: a figure standing perfectly still in the last hour before dawn, decided; what was a fist is now an open, relaxed, frozen hand, and the breath in the freezing air is the only thing moving. The ground under it is not earth but ICE, and locked visibly inside the ice, preserved and unchanged, is the old injury — a broken cup, a torn cloth — kept, not healed: the past refusing to pass. No fire anywhere in the window. Upper left panel: an old wound sealed in clear ice; upper right panel: a cockerel silhouette against a sky not yet light. Border: frost-and-chain leadwork in cold blue; three rim roundels — a frozen open hand at the apex, an object locked in ice at one side, a dark pre-dawn sky at the other. Palette: midnight blue, iron gray, frost white, blue-black lead. NO lettering anywhere.
+```
+
+**Hate — circle** → `assets/archetypes/crosses/circle/colored/Hate.png`
+
+```
+ROUND stained-glass badge medallion, night-window register, photorealistic render, isolated background, the circular window shape IS the frame. ASPECT RATIO exactly 1:1 — a perfect square image. Midnight blue, iron gray and frost-white glass, everything cold. Center: an open frozen hand above ice with an old broken keepsake locked visibly inside it, preserved and unhealed — filling the round frame. Border: frost-and-chain leadwork in cold blue, a small object-in-ice roundel at the top. Palette: midnight blue, iron gray, frost white, blue-black lead. NO lettering anywhere.
+```
+
+**Suffering — station 4 (blackened gold, 12h)** →
+`assets/archetypes/crosses/primary/colored/Suffering.png`
+
+```
+TALL pointed-arch lancet stained-glass window, night-window register, photorealistic render, isolated background, the window shape IS the lancet. ASPECT RATIO exactly 1:2 — a tall portrait image, twice as tall as wide; the whole image is one window. BLACKENED GOLD glass — a noon-gold sky that has gone dark, ash-grey and smoke-brown over amber, with the gold still visible underneath as if the light had been covered rather than removed. Center: a figure standing exposed at the exact middle of the window with nothing left to stand behind — every covering fallen away and lying around the feet like a dropped blanket — while overhead, at the very top of the window, the sun at noon has gone DARK: a black disc in a gold-brown sky, the daylight failing at the hour it should be strongest. What grew in secret is now fully visible in the open, and no shadow anywhere is deep enough to put it back. Upper left panel: a dark disc where the noon sun should be; upper right panel: a dropped blanket in a bare room. Border: ash-and-thorn leadwork in blackened gold; three rim roundels — a darkened noon sun at the apex, a dropped covering at one side, an open bare palm at the other. Palette: blackened gold, ash gray, smoke brown, buried amber, black-iron lead. NO lettering anywhere.
+```
+
+**Suffering — circle** →
+`assets/archetypes/crosses/circle/colored/Suffering.png`
+
+```
+ROUND stained-glass badge medallion, night-window register, photorealistic render, isolated background, the circular window shape IS the frame. ASPECT RATIO exactly 1:1 — a perfect square image. Blackened gold, ash-gray and smoke-brown glass with amber buried underneath. Center: a figure standing exposed under a noon sun gone dark, a black disc in a gold-brown sky, every covering fallen at the feet — filling the round frame. Border: ash-and-thorn leadwork in blackened gold, a small darkened-sun roundel at the top. Palette: blackened gold, ash gray, smoke brown, buried amber, black-iron lead. NO lettering anywhere.
+```
+
+---
+
+## Status
+
+- New sheet (WORKPLAN Session 19, the Cube prompt-sheet wave, CUBE.md
+  §The Two Crosses, SEALED narrative canon). **Art: 0/20** — 2 path
+  emblems + 2 centres + 8 station lancets + 8 station circles; nothing
+  generated on either source.
+- **NO lettering in any image** (house rule). FALL / STAR / DOMY / SAFE,
+  the Latin and Greek rows and the TRUST formula are legend and article
+  duty. The inscribed variant is a PENDING OWNER option with no path and
+  no prompt, deliberately.
+- **The Love REUSE question — SEALED: NEW art** (owner 2026-07-26,
+  "pravi nove slobodno"); the one-image-one-place law holds even where
+  the arm coincides, and both Love entries load ticked. Since the
+  2026-08-09 re-seating (TRIO: Faith 04h, Love 12h, Hope 20h), Faith
+  and Hope are no longer reuse candidates either — this path stations
+  them on green 08h and orange 16h against the Triads' blue 04h and
+  red 20h.
+- Station ≠ seat: the dark path's Fear (20h) and Hate (04h) deliberately
+  do not sit on the Prism's Fear (04h) and Hatred (24h) seats. Recorded
+  so nobody "fixes" it later.
+- Drop root `archetypes/crosses` is a NEW data-driven family root in
+  `tests/test_prompt_paths.py`. These are Encyclopedia/legend plates, not
+  a pointer archetype — they take no `config.archetypes` wheel slot; the
+  Cube Encyclopedia wave (WORKPLAN Session 21) is where they land.
+- Verify with `python main.py "research/prompts/archetype/crosses_prompts.md" --dry-run`
+  from `Gadgets/PromptPainter/` (20 images expected, all ticked).

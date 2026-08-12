@@ -84,9 +84,9 @@ lives in [The DOMY Canon](CANON.md). The phone edition's sealed charter —
   and the switcher keeps the reader's place across a change; the Cube's
   42-page run became four cards; the Guide became a card and its own
   window retired. The 2,766-line `app/encyclopedia.py` split into the
-  nine-module [Encyclopedia (subfolder)](app/encyclopedia/___encyclopedia.md)
+  nine-module [Encyclopedia (subfolder)](desktop/app/encyclopedia/___encyclopedia.md)
   package, and the tree itself lives in ONE table,
-  [Encyclopedia Tree](config/__about/encyclopedia_tree.md). Twenty laws pinned in
+  [Encyclopedia Tree](desktop/config/__about/encyclopedia_tree.md). Twenty laws pinned in
   `tests/test_encyclopedia_tree.py` — the no-X-scroll law among them,
   which had regressed twice before.
 - **M1 shell ✓ M2 computation core ✓ M3 living dial ✓** — and the
@@ -118,8 +118,8 @@ lives in [The DOMY Canon](CANON.md). The phone edition's sealed charter —
   markers gain observer-relative VISIBILITY (muted silver glow + a
   named hover reason when not actually visible from here); the TOTAL
   lunar disc darkens to a copper tint instead of neutral gray. See
-  [Clock State](core/__about/clock_state.md), [Layers](render/layers/___layers.md),
-  [Compositor](render/__about/compositor.md) and [Watch Controller](app/__about/controller.md)
+  [Clock State](desktop/core/__about/clock_state.md), [Layers](desktop/render/layers/___layers.md),
+  [Compositor](desktop/render/__about/compositor.md) and [Watch Controller](desktop/app/__about/controller.md)
   for the details.
 - **Fix round F — THE ECLIPSES ENCYCLOPEDIA (owner order 2026-07-19,
   "posebno za mesec i sunce") — DONE:** a whole encyclopedia theme on
@@ -129,7 +129,7 @@ lives in [The DOMY Canon](CANON.md). The phone edition's sealed charter —
   (solar total/annular/partial/hybrid, lunar total/partial/penumbral —
   nine chapters, every one describing its exact sealed state-table
   representation). A new prompt sheet
-  [Eclipse Prompts](research/prompts/eclipse/eclipse_prompts.md) carries
+  [Eclipse Prompts](desktop/research/prompts/eclipse/eclipse_prompts.md) carries
   the seven category emblems (`assets/eclipse/<Stem>.png`,
   `ECLIPSE_ART_DIR`, graceful-absent); the same emblem shows on the
   Earth/Moon HOVER CARD during an eclipse window (owner slika 7,
@@ -141,9 +141,9 @@ lives in [The DOMY Canon](CANON.md). The phone edition's sealed charter —
   Observatory envelope, the honest ice-age line — the +28,000 minimum
   at ~±1.1 d, never "an ice age starts then" — Milutin Milankovitch
   named). Translation corpus keys wired for everything (English
-  content). See [Encyclopedia](app/encyclopedia/___encyclopedia.md),
-  [Encyclopedia Repository](data/__about/encyclopedia.md) and
-  [Compositor](render/__about/compositor.md). 11 new tests, 488 green.
+  content). See [Encyclopedia](desktop/app/encyclopedia/___encyclopedia.md),
+  [Encyclopedia Repository](desktop/data/__about/encyclopedia.md) and
+  [Compositor](desktop/render/__about/compositor.md). 11 new tests, 488 green.
 - **Fix round G (owner verdicts 2026-07-19, slika 8 + addendum) —
   DONE:** the Observatory's last three asks. (1) ADAPTIVE AXIS TICKS —
   the x/y tick pitch now adapts to the CURRENT view on every chart via a
@@ -164,7 +164,7 @@ lives in [The DOMY Canon](CANON.md). The phone edition's sealed charter —
   and back out for free; adds an extended legend (every series' color
   chip + current value) and an info strip (title + whatever caption the
   chart already has — the Laskar doctrine line survives). 12 new tests,
-  500 green. See [Observatory](app/__about/observatory.md).
+  500 green. See [Observatory](desktop/app/__about/observatory.md).
 
 - **THE ONE-IMAGE-ONE-PLACE LAW (owner 2026-07-19):** an image serves
   exactly ONE place; where a scene appears again it is RETOLD in a new
@@ -192,7 +192,7 @@ lives in [The DOMY Canon](CANON.md). The phone edition's sealed charter —
   consumer, never on the hot `art_file` path. Two new adopters this
   round: the era/age rose windows (`assets/era/<source>/new/` renamed
   to `alt/`) and the Tetramorph figures (see 15a3/15h below); doc'd in
-  full in [Assets (folder)](assets/___assets.md). Structure lock:
+  full in [Assets (folder)](shared/assets/___assets.md). Structure lock:
   `tests/test_assets_structure.py` `test_alt_folders_mirror_their_
   parent_names` — `alt/` is legal anywhere, but every file inside one
   must mirror a same-named canonical sibling.
@@ -206,7 +206,7 @@ lives in [The DOMY Canon](CANON.md). The phone edition's sealed charter —
   recipe (silver = achromatic value, gold/bronze = that value tinted).
   20 generated files deleted the same round (11 Gemini + 8 ChatGPT
   variants + 1 stray duplicate) — see
-  [Subdial Prompts](research/prompts/instrument/subdial_circle_prompts.md).
+  [Subdial Prompts](desktop/research/prompts/instrument/subdial_circle_prompts.md).
 - **THE MOTO ROUND (owner "може radi" 2026-07-19) — DONE:** two
   features on the Mason ring. (1) THE OUTER CROWN TEXT ARC — ANNUIT
   COEPTIS and NOVUS ORDO SECLORUM render as curved text just outside
@@ -224,8 +224,8 @@ lives in [The DOMY Canon](CANON.md). The phone edition's sealed charter —
   THREE AXES across the center (N↔S the Nazarene against Satan, A↔M
   the Angel against the Master, G↔Ω God against the End) — sealed into
   CANON.md §The Banknote verbatim. See [The DOMY Canon](CANON.md),
-  [Ring Presets](data/__about/rings.md), [Layers](render/layers/___layers.md) and
-  [Crown Text](core/__about/crown_text.md). 13 new tests, 513 green.
+  [Ring Presets](desktop/data/__about/rings.md), [Layers](desktop/render/layers/___layers.md) and
+  [Crown Text](desktop/core/__about/crown_text.md). 13 new tests, 513 green.
 - **THE MOON PAGES round (owner 2026-07-16 writers' queue #8b) —
   DONE (2026-07-19).** The bulk had already landed in session 14
   (commit `fd52ffd`): the `moon` topic's EIGHT house-voice phase
@@ -239,7 +239,7 @@ lives in [The DOMY Canon](CANON.md). The phone edition's sealed charter —
   existing end-to-end geometry test, and the Full Moon `[[The Story]]`
   gained the two spec-named anchors it still lacked — Endymion (the
   Selene myth) and the Paschal full Moon (the moon that still fixes
-  Easter). ROADMAP 8b marked done. See [Encyclopedia](app/encyclopedia/___encyclopedia.md).
+  Easter). ROADMAP 8b marked done. See [Encyclopedia](desktop/app/encyclopedia/___encyclopedia.md).
   1 new test, 515 green.
 - **Session 7 verification (2026-07-19) — DONE-ALREADY, no code
   changes.** WORKPLAN Session 7 ("the poem Easter egg") and owner
@@ -278,9 +278,9 @@ lives in [The DOMY Canon](CANON.md). The phone edition's sealed charter —
   Quick Jump pole rows' interim ⚪/⚫ emoji (documented emoji fallback
   when a file is absent) and wire onto the Sun/Moon submenus' own
   eclipse entries only — UI CHROME, not ART, so the one-image-one-place
-  law does not apply to them. See [Crown Text](core/__about/crown_text.md), [Ring
-  Presets](data/__about/rings.md), [Watch Controller](app/__about/controller.md) and
-  [Config (folder)](config/___config.md). 6 new tests, 521 green.
+  law does not apply to them. See [Crown Text](desktop/core/__about/crown_text.md), [Ring
+  Presets](desktop/data/__about/rings.md), [Watch Controller](desktop/app/__about/controller.md) and
+  [Config (folder)](desktop/config/___config.md). 6 new tests, 521 green.
 
 <a id="owner-queue"></a>
 
@@ -404,7 +404,7 @@ lives in [The DOMY Canon](CANON.md). The phone edition's sealed charter —
    Quarters — not a ninth page (chosen so the tide physics stays fused
    to the exact geometry that causes it, and the topic's page count
    stays the eight the Spacebar jump indexes; see
-   [Encyclopedia](app/encyclopedia/___encyclopedia.md)). Each page's image is the LIVE
+   [Encyclopedia](desktop/app/encyclopedia/___encyclopedia.md)). Each page's image is the LIVE
    `render.assets.moon_phase_file(index/8, name)` render at its
    canonical fraction (0.0, 0.125 … 0.875), disk-cached — no pre-baked
    plates. The Moon-marker Spacebar jump opens the CURRENT phase's page
@@ -576,7 +576,7 @@ lives in [The DOMY Canon](CANON.md). The phone edition's sealed charter —
    DONE (Session 17, 2026-07-18); EXTENDED (Fix round D, owner verdicts
    2026-07-19); EXTENDED AGAIN (Fix round G, owner verdicts 2026-07-19,
    slika 8 + addendum — adaptive ticks, per-chart resize, Enlarge; see
-   the "Where We Stand" entry above and [Observatory](app/__about/observatory.md)
+   the "Where We Stand" entry above and [Observatory](desktop/app/__about/observatory.md)
    for the details).** A right-click sibling of the Encyclopedia
    (🔭 Observatory… beside 🏛️ Encyclopedia…) of dark, QPainter-drawn
    interactive CHARTS over the long data: the season-duration
@@ -602,7 +602,7 @@ lives in [The DOMY Canon](CANON.md). The phone edition's sealed charter —
    fixed per-series canon colors (season cross-wheel hues; light/dark
    gold vs slate; Laskar gold/silver/teal), a deduped legend, a
    crosshair readout, the filter row above. See
-   [Observatory](app/__about/observatory.md).
+   [Observatory](desktop/app/__about/observatory.md).
 15a2. **The year line doctrine (owner 2026-07-17).** Everywhere a
    year shows, BOTH forms show: the official year and the Anno
    Lucis year ("2026 · 6105. Anno Lucis"). Settings govern the
@@ -627,7 +627,7 @@ lives in [The DOMY Canon](CANON.md). The phone edition's sealed charter —
    walks the displayed date's Julian Day Number through the
    baktun/katun/tun/uinal/kin radix chain, golden-tested against 21
    Dec 2012 = 13.0.0.0.0 and 1 Jan 2000 = 12.19.6.15.2 (see
-   [Deep Time](core/__about/deep_time.md)).
+   [Deep Time](desktop/core/__about/deep_time.md)).
 15a3. **Era terms in the Encyclopedia + their LOGOS — DONE
    (2026-07-18, ERA TERMS round).** "Age of Light", "Age of Darkness"
    and the four STARRY SEASONS (spring/summer/autumn/winter of the
@@ -637,7 +637,7 @@ lives in [The DOMY Canon](CANON.md). The phone edition's sealed charter —
    `Database/encyclopedia.json` (`data/encyclopedia.py` `era(key)`),
    wired as a new "era" topic in `app/encyclopedia.py`'s "The Clock"
    gallery group. A new PROMPT SHEET
-   [Era Prompts](research/prompts/era/era_prompts.md) carries one
+   [Era Prompts](desktop/research/prompts/era/era_prompts.md) carries one
    rose-window emblem per era and per starry season (house
    night-window register, `assets/era/<Name>.png`) — not yet
    generated. The "Eras of the World" article (new
@@ -681,12 +681,12 @@ lives in [The DOMY Canon](CANON.md). The phone edition's sealed charter —
    `render.compositor._ring_letter_legend_tooltip` in the SAME letter
    band the 12h Four Greetings already use, minus the hidden-mode gate
    (documentation, not an Easter egg) — see
-   [Compositor](render/__about/compositor.md). ENCYCLOPEDIA lore for the ring
+   [Compositor](desktop/render/__about/compositor.md). ENCYCLOPEDIA lore for the ring
    presets' own symbolism (DOMY traces the INVERTED cross, MORPH the
    upright cross, the seal the hexagram — CANON §The Banknote closes
    it) grows the EXISTING `instrument/ring_jewels` article (Rule #5,
    no new topic) with two `[[Subhead]]` sections — see
-   [Encyclopedia](app/encyclopedia/___encyclopedia.md). 4 new tests
+   [Encyclopedia](desktop/app/encyclopedia/___encyclopedia.md). 4 new tests
    (`tests/test_skins.py`, `tests/test_pointer.py`,
    `tests/test_settings_dialog.py`), 433 green.
 15c. **THE PUNCH LIST (owner 2026-07-17, with screenshots) — Session
@@ -807,7 +807,7 @@ lives in [The DOMY Canon](CANON.md). The phone edition's sealed charter —
    **Session 21-E reworked this into the FOUR-mode `earth_label` enum**
    (Date / Weekday / Date & Weekday / Full Date — Date & Weekday is the
    OLD combined "Full Date" meaning, renamed now that a true Full Date
-   — date over the YEAR — exists; see [Layers](render/layers/___layers.md));
+   — date over the YEAR — exists; see [Layers](desktop/render/layers/___layers.md));
    the tetramorph files moved to the config path
    (`archetype/<source>/tetramorph/<Creature>.png`) with the sheet
    corrected and the missing Throne + Seal center prompts written.
@@ -827,7 +827,7 @@ lives in [The DOMY Canon](CANON.md). The phone edition's sealed charter —
       "▸"), each opening its panel on a `QStackedWidget` to the right;
       related groups SHARE one title exactly per the owner's example —
       Palette + Clock tint = one "Colors" section (seven sections total,
-      layout map in [Settings Dialog](app/settings_dialog/___settings_dialog.md)). Every
+      layout map in [Settings Dialog](desktop/app/settings_dialog/___settings_dialog.md)). Every
       existing control kept, `result_settings()` untouched, each panel
       keeps its own scroll cap. The tray-menu SIZE slider (item 12 below)
       covers "if he means the MENU too."
@@ -850,7 +850,7 @@ lives in [The DOMY Canon](CANON.md). The phone edition's sealed charter —
       (C) occasional CRASH on SPACE, not reproducible — add crash
       logging (faulthandler to a user-dir file) so the next one
       leaves a trace.
-      → **Session 21-A:** (A) the [Legend Popup](app/__about/legend_popup.md)
+      → **Session 21-A:** (A) the [Legend Popup](desktop/app/__about/legend_popup.md)
       now carries `WindowStaysOnTopHint` AND re-asserts native topmost on
       every show (`SWP_NOACTIVATE`) — owner real-machine check needed.
       (B) FIXED — the SPACE fallthrough was a STALE `_last_hover` that
@@ -1252,7 +1252,7 @@ Follow the monorepo build conventions (root CLAUDE.md):
    elevation) replacing the dev pythonw entry.
    - **Defender exclusion (Session 21):** the app now installs a
      low-level keyboard hook (`SetWindowsHookEx(WH_KEYBOARD_LL)` — the
-     SPACE-without-focus feature, see [Native](app/__about/native.md)). Per
+     SPACE-without-focus feature, see [Native](desktop/app/__about/native.md)). Per
      the root CLAUDE.md build conventions, apps using low-level system
      hooks add a Defender exclusion in the installer; pair it with the
      code-signing step so SmartScreen/AV heuristics do not flag the

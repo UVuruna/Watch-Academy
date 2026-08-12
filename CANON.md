@@ -441,7 +441,7 @@ caption) it is the triple; the gallery card, being a label, says One
 Soul. Every prism-light arm's Spacebar jump lands on its pillar page,
 and the Union's centre jump lands on the Union — the first archetype
 CENTRE on this dial with a page to open. Documentation:
-[Encyclopedia (subfolder)](app/encyclopedia/___encyclopedia.md).
+[Encyclopedia (subfolder)](desktop/app/encyclopedia/___encyclopedia.md).
 
 The relationship-pillars theme IS prism-shaped, and the pattern
 seats it here: paint carries heaven's six persons, light carries
@@ -1606,8 +1606,8 @@ iznutra na 12"), completing the reading this section already named. The
 first round's "MASON reads twice" design (both crown texts' own O and own S
 sharing the identical seat, drawn at two concentric radii) is retired.
 Implementation and the full per-letter angle table:
-[Ring Presets](data/__about/rings.md), [Layers](render/layers/___layers.md),
-[Crown Text](core/__about/crown_text.md).
+[Ring Presets](desktop/data/__about/rings.md), [Layers](desktop/render/layers/___layers.md),
+[Crown Text](desktop/core/__about/crown_text.md).
 
 **THE THREE OPPOSITIONS (MOTO round, owner "može" 2026-07-19, sealed
 verbatim):** the six letters also read as THREE AXES across the
