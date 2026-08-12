@@ -35,7 +35,7 @@ def test_the_bakery_has_no_ceilings_of_its_own():
     enough" drift apart without either side being wrong."""
     source = Path(make_art_bake.__file__).read_text("utf-8")
     assert "WORKING_SET_CEILINGS" in source
-    for ceiling in {512, 1200}:
+    for ceiling in {512}:
         assert f"= {ceiling}" not in source, (
             "the bakery restated a ceiling instead of reading the table"
         )
@@ -45,16 +45,16 @@ def test_the_bakery_has_no_ceilings_of_its_own():
     "relative, expected",
     [
         ("weeks/faith/bible/primary/colored/Perun_gem.png", 512),
-        ("archetypes/crosses/primary/colored/Distrust_gpt.png", 1200),
-        ("calendars/zodiac/chinese/primary/colored/Tiger_gem.png", 1200),
+        ("archetypes/crosses/primary/colored/Distrust_gpt.png", 512),
+        ("calendars/zodiac/chinese/primary/colored/Tiger_gem.png", 512),
         # 0, not 800: re-encoded but never resized — the owner's Globe
         # decree of 2026-07-15. The FIRST bake of the bakery round DID
         # shrink these to 800 and `test_skins.py::
         # test_earth_pole_regions_full_res_and_latitude_override` caught
         # it, which is why this row is spelled out rather than inferred.
         ("celestial/earth/world.png", 0),
-        ("celestial/era/Starry_Autumn_gem.png", 1200),
-        ("celestial/eclipse/Solar_Total.png", 1200),
+        ("celestial/era/Starry_Autumn_gem.png", 512),
+        ("celestial/eclipse/Solar_Total.png", 512),
         ("instrument/hands/classic/hours.png", None),
         ("logo.svg", None),
     ],

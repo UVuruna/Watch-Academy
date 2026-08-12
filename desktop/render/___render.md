@@ -57,6 +57,7 @@ hover-invariant groups, and answers every hit-test/tooltip question.
 | `glyph_shadow.py` | Algorithmic | the ring's soft halo and the labels' hard two-colour border, in one home — [about](__about/glyph_shadow.md) · [flow](__flow/glyph_shadow.md) |
 | `letter_bake.py` | Algorithmic | reads the pre-baked letter finishes from `assets/_baked/letters` — [about](__about/letter_bake.md) · [flow](__flow/letter_bake.md) |
 | `raster_store.py` | Standard | atomic disk writes for every derived image — [about](__about/raster_store.md) |
+| `upscale.py` | Algorithmic | THE ON-THE-SPOT UPSCALER — stepped enlargement plus unsharp when the dial asks for more pixels than we ship, disk-cached — [about](__about/upscale.md) · [flow](__flow/upscale.md) |
 | `instrument_diagrams.py` | Algorithmic | the clock explaining itself, 8 computed pages — [about](__about/instrument_diagrams.md) · [flow](__flow/instrument_diagrams.md) |
 | `canon_diagrams.py` | Algorithmic | the doctrine's journeys and tables, computed — [about](__about/canon_diagrams.md) · [flow](__flow/canon_diagrams.md) |
 | `cube_diagrams.py` | Algorithmic | the Character Cube's isometric compositions — [about](__about/cube_diagrams.md) · [flow](__flow/cube_diagrams.md) |

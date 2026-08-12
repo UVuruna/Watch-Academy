@@ -429,6 +429,25 @@ class AssetCache:
             source = QPixmap(str(path))
             if source.isNull():
                 raise ValueError(f"cannot load image asset: {path}")
+            if px_height > source.height():
+                # THE ON-THE-SPOT UPSCALER (owner decree 2026-08-13).
+                # Every working-set ceiling is 512 now, so a request
+                # above the shipped size is no longer impossible — it is
+                # what an abnormally large dial with an enlarged element
+                # asks for. Qt's own SmoothTransformation is bilinear and
+                # visibly soft over one big leap; `render.upscale` steps
+                # up in halvings and sharpens, and remembers the answer
+                # on disk. Deferred import for the same cycle reason as
+                # `asset_variants` above. `None` = nothing to do or
+                # something went wrong, and the plain scale below is the
+                # documented fallback.
+                from render import upscale
+
+                enlarged = upscale.upscaled_image(path, px_height)
+                if enlarged is not None:
+                    pixmap = QPixmap.fromImage(enlarged)
+                    pixmap.setDevicePixelRatio(dpr)
+                    return pixmap
             pixmap = source.scaledToHeight(
                 px_height, Qt.TransformationMode.SmoothTransformation
             )

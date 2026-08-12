@@ -65,14 +65,20 @@ its own ceilings would be the second source of truth that
 
 | Area | Ceiling | Encoding | Why |
 |------|---------|----------|-----|
-| `weeks` | 800 px | WebP, lossy | the weekday bodies — the biggest tree by far |
-| `archetypes` | 1200 px | WebP, lossy | slot seats, drawn at the 150% pointer factor |
-| `calendars` | 1200 px | WebP, lossy | as above |
-| `celestial/earth` | 800 px | WebP, lossy | the globe faces |
-| `celestial/seasons` | 1200 px | WebP, lossy | season plates |
-| `celestial/era`, `celestial/eclipse` | 1200 px | WebP, lossy | era and eclipse plates |
+| `weeks`, `archetypes`, `calendars`, `celestial/seasons`, `celestial/era`, `celestial/eclipse` | **512 px** | WebP, lossy | every drawn area, one number |
+| `celestial/earth` | **full resolution** | WebP, lossy | the owner's Globe decree of 2026-07-15 — see `FULL_RESOLUTION_SUBTREES` |
 | `instrument/letters` | — | **PNG, untouched** | see below |
 | everything else | — | **copied verbatim** | hands, guide, logos, skins |
+
+**One ceiling, 512, for everything the dial draws** (owner decrees of
+2026-08-13). He first lowered the 800 to 512; shown that the 1200 seats
+are visibly softer at their worst case, he ruled that such a dial is a
+situation nobody will ever use — and that anyone who insists on one
+should simply get the upscaling done on the spot. That is
+[Upscale](../../render/__about/upscale.md): a request above the shipped
+size is served by a real stepped-and-sharpened upscaler, cached on that
+machine, instead of by shipping pixels every ordinary user carries and
+nobody sees.
 
 **`instrument/letters` is deliberately exempt.** Those plates are the
 GOLD MASTERS of THE ONE PLATE LAW: the transformer reads them and runs

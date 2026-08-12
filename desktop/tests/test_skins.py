@@ -1469,7 +1469,7 @@ def test_working_set_downscales_oversized_dial_art():
         assets / "celestial" / "earth" / "earth_clean_europe_day.png"
     ) == 512
     assert working_ceiling(assets / "weeks" / "x.png") == 512
-    assert working_ceiling(assets / "calendars" / "x.png") == 1200
+    assert working_ceiling(assets / "calendars" / "x.png") == 512
     assert working_ceiling(assets / "instrument" / "guide" / "x.png") is None
     assert working_ceiling(Path("C:/elsewhere/x.png")) is None
     warm_working_set()

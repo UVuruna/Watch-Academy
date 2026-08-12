@@ -245,18 +245,22 @@ SETTINGS_NAV_WIDTH_PX = 170
 # upscale at the extreme of extremes and a 1:1 read everywhere a person
 # actually looks.
 #
-# The 1200 seats were NOT changed with them. He named 800, and 512 there
-# would be a 2.3x upscale — visibly softer on that same sheet (the
-# tiger's whiskers, the Judge's robe folds). That is his call to make
-# with his own eyes, not one to infer from a sentence about 800.
+# THEN EVERYTHING, on his follow-up ruling of the same day: he was shown
+# that 512 is visibly softer for the 1200 SEATS at their worst case, and
+# answered that this is a situation nobody will ever use — and that if
+# somebody does insist on so abnormally large a dial, the UPSCALING
+# should simply be done on the spot. So the whole table is 512 and
+# `render.upscale` is that on-the-spot answer: a request above the
+# shipped size is served by a real upscaler, disk-cached, instead of by
+# shipping pixels every ordinary user carries and nobody sees.
 WORKING_SET_CEILINGS = {
     "celestial/earth": 512,
     "weeks": 512,
-    "calendars": 1200,
-    "archetypes": 1200,
-    "celestial/seasons": 1200,
-    "celestial/era": 1200,
-    "celestial/eclipse": 1200,
+    "calendars": 512,
+    "archetypes": 512,
+    "celestial/seasons": 512,
+    "celestial/era": 512,
+    "celestial/eclipse": 512,
 }
 
 
