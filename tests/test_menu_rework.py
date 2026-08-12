@@ -474,7 +474,15 @@ def test_location_jump_flashes_and_moves_the_tray_title(controller):
     assert controller._active_location_name != home_name
     assert "Tokyo" in controller._tray._icon.toolTip()
     assert "Tokyo" in controller._title_label.text()
-    assert controller._fast_travel_flash._text_label.text() == "Tokyo, Asia"
+    # ONE FLASH, ONE PLACE (owner order 2026-08-12): the location flash
+    # wears the LETTER PLATES now, like the Ctrl+[ picker beside it — so
+    # the text lives in a pixmap and the label's own string is empty. The
+    # resolved wording is `_active_location_display`, the same value the
+    # Location crown reads.
+    assert controller._active_location_display == "Tokyo, Asia"
+    assert controller._fast_travel_flash._text_label.text() == ""
+    plate = controller._fast_travel_flash._text_label.pixmap()
+    assert plate is not None and not plate.isNull()
     # A non-location jump (a plain day step) leaves the location alone.
     dialog._on_jump("next_day")
     assert controller._active_location_name == "Tokyo"
@@ -502,7 +510,10 @@ def test_settings_location_change_flashes_and_updates_the_title(controller, monk
     controller._apply_settings_dialog_result(dialog)
     assert controller._active_location_name == "Oslo"
     assert "Oslo" in controller._tray._icon.toolTip()
-    assert controller._fast_travel_flash._text_label.text() == "Oslo, Norway"
+    assert controller._active_location_display == "Oslo, Norway"
+    assert controller._fast_travel_flash._text_label.text() == ""      # plates
+    plate = controller._fast_travel_flash._text_label.pixmap()
+    assert plate is not None and not plate.isNull()
     dialog.deleteLater()
 
 
