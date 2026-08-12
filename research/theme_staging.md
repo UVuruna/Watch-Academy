@@ -193,7 +193,25 @@ without wiring it fails the guard again, which is the point.
 
 | Folder | Plates | Ruled | Owes |
 |--------|--------|-------|------|
-| — | — | *the table is EMPTY since 2026-08-05 — kept so the guard's contract stays visible* | — |
+| `archetypes/character/archetypal/colored` | 9 | owner's art drop, 2026-08-12 — landed on disk, no config table resolves it yet | the wiring round: a reader for the COLORED look of the Character Cube's three eras |
+| `archetypes/character/historical/colored` | 16 | as above | as above |
+| `archetypes/character/modern/colored` | 12 | as above | as above |
+| `archetypes/edges/archetypal/colored` | 14 | as above, the Cube's EDGES | the wiring round: a reader for the COLORED edge plates |
+| `archetypes/edges/historical/colored` | 15 | as above | as above |
+| `archetypes/edges/modern/colored` | 16 | as above | as above |
+| `archetypes/vertices/archetypal/colored` | 8 | as above, the Cube's VERTICES | the wiring round: a reader for the COLORED vertex plates |
+| `archetypes/vertices/historical/colored` | 15 | as above | as above |
+| `archetypes/vertices/modern/colored` | 10 | as above | as above |
+
+**The nine `colored` rows above opened 2026-08-12**, during the startup-
+performance round — NOT by that round's work, which touched no art: the
+guard found them the moment it next ran in full. 115 plates of the
+owner's own Character-Cube drop (character / edges / vertices × the
+three eras) sit beside their already-wired non-colored siblings with no
+config table naming them. Recorded here rather than wired on the spot
+because choosing which look a Cube seat draws is a CANON decision
+([The Cube Canon](../CUBE.md)), not a performance round's call. They
+leave this table the day a reader resolves them.
 
 **The banknote row left this table 2026-08-05, last of all** — the
 five offices' intaglio plates now string above the Banknote Axes
