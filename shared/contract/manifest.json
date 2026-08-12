@@ -1,0 +1,36 @@
+{
+  "created_at": "2026-08-12T20:13:58+02:00",
+  "files": {
+    "golden_vectors.json": {
+      "sha256": "cb8f4641a41ffefdf6fad6d4f8dd75b39b6efd44fbb19226264917cbdf7529d1"
+    },
+    "tables/availability.json": {
+      "sha256": "a1b0728a4ba059d790bb40d0c6ac08bd767525a876c22f7e0b2c3ee489e4e0e9"
+    },
+    "tables/encyclopedia_tree.json": {
+      "sha256": "bdc529dc55feacd9ea7335459b9a4f64ce6e845b948b6c6ff88441dc009a922d"
+    },
+    "tables/palette_numeral_parity.json": {
+      "sha256": "947cdddb3e5546a604beba399f51b0f9b3cfba44373da3bd363b583e79be00dc"
+    },
+    "tables/pointers.json": {
+      "sha256": "67e39b44622159d3c6ed255d261c05837e8dce8778c1fc97c775498bdb591c61"
+    },
+    "tables/ring_presets.json": {
+      "sha256": "49a55054ee8d52749ebb88e88f3bd3c8f6d4bda30441c21f9079f549e7ca6051"
+    },
+    "tables/week_themes.json": {
+      "sha256": "716b9199b3c8ff5ec40473752bf2a488cfb806cb0c0cf5e1430594e06836bde6"
+    }
+  },
+  "pack_version": "1",
+  "vector_groups": [
+    "belgrade_dst",
+    "equinoxes",
+    "hand_angles",
+    "hexagram_rotation",
+    "mockup_day",
+    "moon_illumination",
+    "tromso_regimes"
+  ]
+}

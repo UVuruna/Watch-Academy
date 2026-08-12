@@ -147,7 +147,8 @@ Three mechanisms, with their enforcement classes declared:
    session owes it) — the exact mirror of the theme staging ledger, proven
    on the 429 invisible images. Deferring is allowed; deferring SILENTLY is
    not. A session that touched shared layers or shipped platform features
-   cannot end without an up-to-date ledger.
+   cannot end without an up-to-date ledger. The ledger itself is
+   [PARITY.md](PARITY.md), born with the first CONTRACT PACK export.
 
 Conduct rules that follow:
 
@@ -196,7 +197,7 @@ work in THIS repo; 2+ live in the Pocket Watch repo.
 | # | Phase | Size | Status |
 |---|-------|------|--------|
 | 0 | Verdicts (two ballots) | — | **DONE 2026-08-11** |
-| 1 | THE CONTRACT: golden-vector export, config→JSON export, the bakery (per-theme downscale+WebP+recolor, manifest), first pack + THE PARITY LAW's teeth on both sides | M | open |
+| 1 | THE CONTRACT: golden-vector export, config→JSON export, the bakery (per-theme downscale+WebP+recolor, manifest), first pack + THE PARITY LAW's teeth on both sides | M | **partial** — `shared/contract/` first pack shipped: 7 golden-vector groups (31 vectors) + 6 registry tables + manifest, generator `desktop/setup/make_contract_pack.py`, guard `desktop/tests/test_contract_pack.py`. Still owed: the per-theme art bake (WebP downscale+recolor) and its manifest, and the phone-repo half of the parity teeth (does not exist yet) — tracked in [PARITY.md](PARITY.md) |
 | 2 | `:core` port — all math in pure Kotlin; done when every vector is green | M | open |
 | 3 | `:render` port — FEASIBILITY PROBE: first complete DOMY bitmap at phone resolution, compared against the desktop render of the same moment | L | open |
 | 4 | Widget MVP — dial-only, minute tick, transparent, city+theme at placement | M | open |

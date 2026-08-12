@@ -14,6 +14,7 @@ has not landed here yet.
 | `make_deep_time.py` | Algorithmic | builds the gitignored full-span `Database/deep_time.sqlite` from the research events database — [about](__about/make_deep_time.md) · [flow](__flow/make_deep_time.md) |
 | `make_observatory.py` | Algorithmic | builds the three committed, decimated Observatory chart bundles — [about](__about/make_observatory.md) · [flow](__flow/make_observatory.md) |
 | `make_letter_bake.py` | Algorithmic | bakes the whole plate library into every metal/thematic finish under `assets/_baked/letters` — [about](__about/make_letter_bake.md) · [flow](__flow/make_letter_bake.md) |
+| `make_contract_pack.py` | Algorithmic | THE BAKERY (ANDROID.md Phase 1) — builds `shared/contract/`: golden test vectors for the Kotlin `:core` port plus JSON exports of the registry tables — [about](__about/make_contract_pack.md) · [flow](__flow/make_contract_pack.md) |
 | `app_info.json` | — | installer metadata seed (name/description/version/exe names) — plain config, not a code file |
 
 ## Connections
@@ -21,14 +22,22 @@ has not landed here yet.
 ### Uses
 - [Research Ephemeris (subfolder)](../research/ephemeris/___ephemeris.md)
   — the events database and companion JSON files both generators read
+- `core`, `data`, `config.registry` — `make_contract_pack.py` imports
+  the real desktop packages to compute its golden vectors and re-export
+  its tables (see its own [about](__about/make_contract_pack.md))
 
 ### Used by
-- Nobody at runtime — both scripts are one-time (rerunnable) tools the
-  owner runs manually from the command line. Their outputs are read by
+- Nobody at runtime — all three scripts are one-time (rerunnable) tools
+  the owner runs manually from the command line. `make_deep_time.py`/
+  `make_observatory.py`'s outputs are read by
   [Deep Time Repository](../data/__about/deep_time.md) and
   [Observatory Data](../data/__about/observatory.md); see
   [Database (folder)](../../shared/Database/___database.md) for what each
-  generated file contains
+  generated file contains. `make_contract_pack.py`'s output
+  (`shared/contract/`) is read by
+  [Contract Pack Guard](../tests/___tests.md) (`test_contract_pack.py`)
+  and, from Phase 2 on, the Kotlin `:core` port — see the repo-root
+  [ANDROID.md](../../ANDROID.md) and [PARITY.md](../../PARITY.md).
 
 ## Design Decisions
 

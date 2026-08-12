@@ -183,6 +183,7 @@ FLOW_REQUIRED = frozenset({
     "research/pascalcase_stems.py",
     "research/rewrite_sheet_paths.py",
     "research/seating_preview.py",
+    "setup/make_contract_pack.py",
     "setup/make_deep_time.py",
     "setup/make_observatory.py",
     "skins/manifest.py",

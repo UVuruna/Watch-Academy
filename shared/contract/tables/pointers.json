@@ -1,0 +1,100 @@
+{
+  "bootstrap_week_theme": "planets",
+  "kinds": [
+    "week",
+    "dozen",
+    "cube",
+    "wheel"
+  ],
+  "pointers": {
+    "aurora": {
+      "carries": {
+        "polygon": [],
+        "star": []
+      },
+      "seats": 7
+    },
+    "calendar": {
+      "carries": {
+        "polygon": [
+          "dozen",
+          "cube"
+        ],
+        "star": [
+          "dozen",
+          "cube"
+        ]
+      },
+      "seats": 12
+    },
+    "cross": {
+      "carries": {
+        "polygon": [
+          "week",
+          "wheel"
+        ],
+        "star": [
+          "week",
+          "wheel"
+        ]
+      },
+      "seats": 4
+    },
+    "hexa": {
+      "carries": {
+        "polygon": [
+          "week",
+          "wheel"
+        ],
+        "star": [
+          "week",
+          "wheel"
+        ]
+      },
+      "seats": 6
+    },
+    "octa": {
+      "carries": {
+        "polygon": [
+          "week",
+          "wheel"
+        ],
+        "star": [
+          "week",
+          "wheel"
+        ]
+      },
+      "seats": 8
+    },
+    "rose": {
+      "carries": {
+        "polygon": [
+          "cube"
+        ],
+        "star": [
+          "week",
+          "cube",
+          "wheel"
+        ]
+      },
+      "seats": 24
+    },
+    "trio": {
+      "carries": {
+        "polygon": [
+          "week",
+          "wheel"
+        ],
+        "star": [
+          "week",
+          "wheel"
+        ]
+      },
+      "seats": 3
+    }
+  },
+  "shapes": [
+    "star",
+    "polygon"
+  ]
+}

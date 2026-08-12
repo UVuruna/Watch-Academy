@@ -29,6 +29,7 @@ its own — this file is the ONLY doc in the folder; no `__about/`, no
 | `test_clock_state.py` | Composition through the real repositories for Belgrade 2026-07-07 12:00 CEST: DST-aware cache key, weekday→Mars, hexagram tilt, hands, `is_daylight`, year angle. |
 | `test_config_cohesion.py` | GUARD — see below. |
 | `test_config_sections.py` | GUARD — see below. |
+| `test_contract_pack.py` | GUARD — see below. THE PARITY LAW (ANDROID.md §parity): `shared/contract/`'s manifest hashes match the files on disk, every table export equals regenerating it in-memory from the same registry, and the golden vectors match the Belgrade DST / moon / mockup-day / equinox goldens pinned elsewhere in this suite. |
 | `test_continents.py` | Continents theme: six-continent + polar-dual + Zealandia/Pangea-Ninth registration, Ninth easter-egg golden dates, Encyclopedia topic, live day/night body art. |
 | `test_controller_dialogs.py` | Encyclopedia/Guide/Observatory open non-modal, a second open RAISES the live instance instead of stacking, a themed SPACE jump navigates it, `quit()` closes every open dialog, per-dialog opening sizes. |
 | `test_cube_encyclopedia.py` | Cube ENCYCLOPEDIA wave: three new families complete and Charter-obedient, the 24-field union table, Two Crosses, each wheel figure's `enc` index, sealed theme name, Charter-rework regression pin. |
@@ -135,6 +136,17 @@ four). It exits **2**, which is what makes a hook BLOCKING.
   `shortcuts`, `pantheon`, `calendar_mounts`, `encyclopedia_ui`, `glow`,
   `continents`) may still resolve as `defaults.<name>` (Rule #6, no
   re-export shims).
+- **`test_contract_pack.py`** — THE PARITY LAW's guard (ANDROID.md
+  §parity, project delta over the standard four). `shared/contract/`
+  must exist with a `manifest.json` whose per-file sha256 hashes match
+  the files on disk; every `tables/*.json` export must equal calling
+  the SAME builder `setup/make_contract_pack.py` uses, in memory, right
+  now — a registry edit with no re-export goes RED; and
+  `golden_vectors.json`'s Belgrade DST, moon-illumination, mockup-day
+  and equinox groups must match the same numbers `test_sun.py`/
+  `test_moon.py`/`test_year_wheel.py` independently pin. No astronomy
+  sweep of its own — reads only the pack already on disk plus the
+  generator's own table builders.
 - **`test_purity.py`** — `core/`, `data/` and `recolor/` must import no
   PySide6 and must read no wall clock (`datetime.now`/`.today`,
   `time.time`); `core/__main__.py` is exempt from the wall-clock check

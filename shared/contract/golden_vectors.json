@@ -1,0 +1,478 @@
+{
+  "groups": {
+    "belgrade_dst": [
+      {
+        "expected": {
+          "regime": "normal",
+          "star_rotation_deg": -4.166666666666667
+        },
+        "inputs": {
+          "date": "2026-03-28",
+          "latitude": 44.82,
+          "longitude": 20.46,
+          "timezone": "Europe/Belgrade"
+        },
+        "name": "belgrade_star_rotation_2026-03-28",
+        "tolerance": {
+          "star_rotation_deg": 0.1
+        }
+      },
+      {
+        "expected": {
+          "regime": "normal",
+          "star_rotation_deg": 10.758333333333333
+        },
+        "inputs": {
+          "date": "2026-03-29",
+          "latitude": 44.82,
+          "longitude": 20.46,
+          "timezone": "Europe/Belgrade"
+        },
+        "name": "belgrade_star_rotation_2026-03-29",
+        "tolerance": {
+          "star_rotation_deg": 0.1
+        }
+      }
+    ],
+    "equinoxes": [
+      {
+        "expected": {
+          "year_marker_deg": 180.0
+        },
+        "inputs": {
+          "instant_utc": "2025-12-21T15:03:05+00:00"
+        },
+        "name": "year_wheel_prev_winter_solstice_2026",
+        "tolerance": {
+          "year_marker_deg": 1e-09
+        }
+      },
+      {
+        "expected": {
+          "year_marker_deg": 270.0
+        },
+        "inputs": {
+          "instant_utc": "2026-03-20T14:45:57+00:00"
+        },
+        "name": "year_wheel_spring_equinox_2026",
+        "tolerance": {
+          "year_marker_deg": 1e-09
+        }
+      },
+      {
+        "expected": {
+          "year_marker_deg": 0.0
+        },
+        "inputs": {
+          "instant_utc": "2026-06-21T08:24:30+00:00"
+        },
+        "name": "year_wheel_summer_solstice_2026",
+        "tolerance": {
+          "year_marker_deg": 1e-09
+        }
+      },
+      {
+        "expected": {
+          "year_marker_deg": 90.0
+        },
+        "inputs": {
+          "instant_utc": "2026-09-23T00:05:13+00:00"
+        },
+        "name": "year_wheel_autumn_equinox_2026",
+        "tolerance": {
+          "year_marker_deg": 1e-09
+        }
+      },
+      {
+        "expected": {
+          "year_marker_deg": 180.0
+        },
+        "inputs": {
+          "instant_utc": "2026-12-21T20:50:14+00:00"
+        },
+        "name": "year_wheel_winter_solstice_2026",
+        "tolerance": {
+          "year_marker_deg": 1e-09
+        }
+      },
+      {
+        "expected": {
+          "year_marker_deg": 270.0
+        },
+        "inputs": {
+          "instant_utc": "2027-03-20T20:24:41+00:00"
+        },
+        "name": "year_wheel_next_spring_equinox_2026",
+        "tolerance": {
+          "year_marker_deg": 1e-09
+        }
+      }
+    ],
+    "hand_angles": [
+      {
+        "expected": {
+          "hour_hand_dial_angle_deg": 180.0,
+          "minute_hand_angle_deg": 0.0
+        },
+        "inputs": {
+          "time": "00:00:00"
+        },
+        "name": "hand_angles_000000",
+        "tolerance": {
+          "hour_hand_dial_angle_deg": 1e-09,
+          "minute_hand_angle_deg": 1e-09
+        }
+      },
+      {
+        "expected": {
+          "hour_hand_dial_angle_deg": 213.75,
+          "minute_hand_angle_deg": 90.0
+        },
+        "inputs": {
+          "time": "02:15:00"
+        },
+        "name": "hand_angles_021500",
+        "tolerance": {
+          "hour_hand_dial_angle_deg": 1e-09,
+          "minute_hand_angle_deg": 1e-09
+        }
+      },
+      {
+        "expected": {
+          "hour_hand_dial_angle_deg": 247.5,
+          "minute_hand_angle_deg": 180.0
+        },
+        "inputs": {
+          "time": "04:30:00"
+        },
+        "name": "hand_angles_043000",
+        "tolerance": {
+          "hour_hand_dial_angle_deg": 1e-09,
+          "minute_hand_angle_deg": 1e-09
+        }
+      },
+      {
+        "expected": {
+          "hour_hand_dial_angle_deg": 270.0,
+          "minute_hand_angle_deg": 0.0
+        },
+        "inputs": {
+          "time": "06:00:00"
+        },
+        "name": "hand_angles_060000",
+        "tolerance": {
+          "hour_hand_dial_angle_deg": 1e-09,
+          "minute_hand_angle_deg": 1e-09
+        }
+      },
+      {
+        "expected": {
+          "hour_hand_dial_angle_deg": 311.25,
+          "minute_hand_angle_deg": 270.0
+        },
+        "inputs": {
+          "time": "08:45:00"
+        },
+        "name": "hand_angles_084500",
+        "tolerance": {
+          "hour_hand_dial_angle_deg": 1e-09,
+          "minute_hand_angle_deg": 1e-09
+        }
+      },
+      {
+        "expected": {
+          "hour_hand_dial_angle_deg": 330.0,
+          "minute_hand_angle_deg": 0.0
+        },
+        "inputs": {
+          "time": "10:00:00"
+        },
+        "name": "hand_angles_100000",
+        "tolerance": {
+          "hour_hand_dial_angle_deg": 1e-09,
+          "minute_hand_angle_deg": 1e-09
+        }
+      },
+      {
+        "expected": {
+          "hour_hand_dial_angle_deg": 0.0,
+          "minute_hand_angle_deg": 0.0
+        },
+        "inputs": {
+          "time": "12:00:00"
+        },
+        "name": "hand_angles_120000",
+        "tolerance": {
+          "hour_hand_dial_angle_deg": 1e-09,
+          "minute_hand_angle_deg": 1e-09
+        }
+      },
+      {
+        "expected": {
+          "hour_hand_dial_angle_deg": 37.5,
+          "minute_hand_angle_deg": 180.0
+        },
+        "inputs": {
+          "time": "14:30:00"
+        },
+        "name": "hand_angles_143000",
+        "tolerance": {
+          "hour_hand_dial_angle_deg": 1e-09,
+          "minute_hand_angle_deg": 1e-09
+        }
+      },
+      {
+        "expected": {
+          "hour_hand_dial_angle_deg": 60.0,
+          "minute_hand_angle_deg": 0.0
+        },
+        "inputs": {
+          "time": "16:00:00"
+        },
+        "name": "hand_angles_160000",
+        "tolerance": {
+          "hour_hand_dial_angle_deg": 1e-09,
+          "minute_hand_angle_deg": 1e-09
+        }
+      },
+      {
+        "expected": {
+          "hour_hand_dial_angle_deg": 90.0,
+          "minute_hand_angle_deg": 0.0
+        },
+        "inputs": {
+          "time": "18:00:00"
+        },
+        "name": "hand_angles_180000",
+        "tolerance": {
+          "hour_hand_dial_angle_deg": 1e-09,
+          "minute_hand_angle_deg": 1e-09
+        }
+      },
+      {
+        "expected": {
+          "hour_hand_dial_angle_deg": 123.75,
+          "minute_hand_angle_deg": 90.0
+        },
+        "inputs": {
+          "time": "20:15:00"
+        },
+        "name": "hand_angles_201500",
+        "tolerance": {
+          "hour_hand_dial_angle_deg": 1e-09,
+          "minute_hand_angle_deg": 1e-09
+        }
+      },
+      {
+        "expected": {
+          "hour_hand_dial_angle_deg": 135.0,
+          "minute_hand_angle_deg": 0.0
+        },
+        "inputs": {
+          "time": "21:00:00"
+        },
+        "name": "hand_angles_210000",
+        "tolerance": {
+          "hour_hand_dial_angle_deg": 1e-09,
+          "minute_hand_angle_deg": 1e-09
+        }
+      }
+    ],
+    "hexagram_rotation": [
+      {
+        "expected": {
+          "star_rotation_deg": -15.0
+        },
+        "inputs": {
+          "solar_noon_local_time": "11:00:00"
+        },
+        "name": "hexagram_rotation_110000",
+        "tolerance": {
+          "star_rotation_deg": 1e-09
+        }
+      },
+      {
+        "expected": {
+          "star_rotation_deg": 0.0
+        },
+        "inputs": {
+          "solar_noon_local_time": "12:00:00"
+        },
+        "name": "hexagram_rotation_120000",
+        "tolerance": {
+          "star_rotation_deg": 1e-09
+        }
+      },
+      {
+        "expected": {
+          "star_rotation_deg": 15.0
+        },
+        "inputs": {
+          "solar_noon_local_time": "13:00:00"
+        },
+        "name": "hexagram_rotation_130000",
+        "tolerance": {
+          "star_rotation_deg": 1e-09
+        }
+      },
+      {
+        "expected": {
+          "star_rotation_deg": -7.5
+        },
+        "inputs": {
+          "solar_noon_local_time": "11:30:00"
+        },
+        "name": "hexagram_rotation_113000",
+        "tolerance": {
+          "star_rotation_deg": 1e-09
+        }
+      },
+      {
+        "expected": {
+          "star_rotation_deg": 11.25
+        },
+        "inputs": {
+          "solar_noon_local_time": "12:45:00"
+        },
+        "name": "hexagram_rotation_124500",
+        "tolerance": {
+          "star_rotation_deg": 1e-09
+        }
+      }
+    ],
+    "mockup_day": [
+      {
+        "expected": {
+          "noon": "12:39",
+          "sunrise": "04:52",
+          "sunset": "20:27",
+          "year_marker_deg_near_top_at_14_34_utc": 359.50918364889026
+        },
+        "inputs": {
+          "date": "2025-06-20",
+          "latitude": 44.82,
+          "longitude": 20.46,
+          "timezone": "Europe/Belgrade"
+        },
+        "name": "mockup_day_belgrade_2025_06_20",
+        "tolerance": {
+          "clock_minutes": 1,
+          "year_marker_deg_from_0_or_360": 2.0
+        }
+      }
+    ],
+    "moon_illumination": [
+      {
+        "expected": {
+          "analytic_illumination": 0.533222276006023,
+          "phase_fraction": 0.7400262104147645
+        },
+        "inputs": {
+          "instant_utc": "2026-07-07T12:00:00+00:00"
+        },
+        "name": "moon_phase_fraction_2026_07_07",
+        "tolerance": {
+          "analytic_illumination": 0.006,
+          "phase_fraction": 0.01
+        }
+      }
+    ],
+    "tromso_regimes": [
+      {
+        "expected": {
+          "dawn": "08:56",
+          "dusk": "14:51",
+          "noon": "11:53",
+          "regime": "twilight_only",
+          "star_rotation_deg": -1.65,
+          "sunrise": null,
+          "sunset": null
+        },
+        "inputs": {
+          "date": "2026-01-15",
+          "latitude": 69.6489,
+          "longitude": 18.9551,
+          "timezone": "Europe/Oslo"
+        },
+        "name": "tromso_twilight_only_january",
+        "tolerance": {
+          "clock_minutes": 0,
+          "star_rotation_deg": 0.1
+        }
+      },
+      {
+        "expected": {
+          "dawn": null,
+          "dusk": null,
+          "noon": "12:40",
+          "regime": "white_nights",
+          "star_rotation_deg": 10.15,
+          "sunrise": "02:26",
+          "sunset": "23:00"
+        },
+        "inputs": {
+          "date": "2026-05-10",
+          "latitude": 69.6489,
+          "longitude": 18.9551,
+          "timezone": "Europe/Oslo"
+        },
+        "name": "tromso_white_nights_may",
+        "tolerance": {
+          "clock_minutes": 0,
+          "star_rotation_deg": 0.1
+        }
+      },
+      {
+        "expected": {
+          "dawn": null,
+          "dusk": null,
+          "noon": "12:41",
+          "regime": "polar_day",
+          "star_rotation_deg": 10.270833333333334,
+          "sunrise": null,
+          "sunset": null
+        },
+        "inputs": {
+          "date": "2026-05-25",
+          "latitude": 69.6489,
+          "longitude": 18.9551,
+          "timezone": "Europe/Oslo"
+        },
+        "name": "tromso_polar_day_late_may",
+        "tolerance": {
+          "clock_minutes": 0,
+          "star_rotation_deg": 0.1
+        }
+      },
+      {
+        "expected": {
+          "dawn": null,
+          "dusk": null,
+          "noon": "11:55",
+          "regime": "polar_night",
+          "star_rotation_deg": -1.1708333333333334,
+          "sunrise": null,
+          "sunset": null
+        },
+        "inputs": {
+          "date": "2026-12-21",
+          "latitude": 78.2232,
+          "longitude": 15.6267,
+          "timezone": "Europe/Oslo"
+        },
+        "name": "longyearbyen_polar_night",
+        "tolerance": {
+          "clock_minutes": 0,
+          "star_rotation_deg": 0.1
+        }
+      }
+    ]
+  },
+  "meta": {
+    "dial_offset_deg": 180.0,
+    "hexagram_formula": "(noon_secs - 43200) / 240",
+    "seconds_per_day": 86400,
+    "seconds_per_hour": 3600,
+    "what": "Golden test vectors for the future Kotlin :core port (ANDROID.md Phase 1). Every value is computed by calling the real desktop core, never typed by hand. A group is DONE on the Kotlin side when its vectors are green."
+  }
+}

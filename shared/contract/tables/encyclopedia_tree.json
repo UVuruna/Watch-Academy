@@ -1,0 +1,355 @@
+{
+  "cube_topics": [
+    [
+      "cube_doctrine",
+      "The Doctrine",
+      0,
+      6
+    ],
+    [
+      "cube_axes",
+      "The Thirteen Axes",
+      6,
+      29
+    ],
+    [
+      "cube_figures",
+      "The Eight Figures",
+      29,
+      40
+    ],
+    [
+      "cube_projections",
+      "The Projections",
+      40,
+      42
+    ]
+  ],
+  "theme_to_whole": {
+    "age_of_heroes": "gods",
+    "alchemy": "living",
+    "astrology": "cosmos",
+    "bee": "living",
+    "bible": "faith",
+    "celestial_court": "cosmos",
+    "chinese": "cosmos",
+    "continents": "cosmos",
+    "corporate": "worlds",
+    "cosmos": "cosmos",
+    "creeds": "faith",
+    "crosses": "cube",
+    "cube_axes": "cube",
+    "cube_doctrine": "cube",
+    "cube_figures": "cube",
+    "cube_projections": "cube",
+    "cyberpunk": "worlds",
+    "double_trinity": "cube",
+    "dualities": "faith",
+    "duality": "faith",
+    "eclipses": "sky",
+    "egypt": "gods",
+    "elephant": "living",
+    "era": "instrument",
+    "greek": "gods",
+    "guide": "instrument",
+    "instrument": "instrument",
+    "intelligences": "inner",
+    "japan": "living",
+    "months": "instrument",
+    "moods": "inner",
+    "moon": "sky",
+    "norse": "gods",
+    "one_soul": "cube",
+    "planets": "cosmos",
+    "profession": "worlds",
+    "seasons": "sky",
+    "sins": "inner",
+    "slavic": "gods",
+    "starwars": "worlds",
+    "sun": "sky",
+    "triads": "faith",
+    "trinity": "faith",
+    "virtues": "inner",
+    "week": "instrument",
+    "wolf": "living",
+    "wow": "worlds"
+  },
+  "topic_aliases": {
+    "bible": [
+      "bible",
+      0
+    ],
+    "bible2": [
+      "bible",
+      1
+    ],
+    "bible_dark": [
+      "bible",
+      2
+    ],
+    "cp_corpo": [
+      "cyberpunk",
+      2
+    ],
+    "cp_gangs": [
+      "cyberpunk",
+      0
+    ],
+    "cp_street": [
+      "cyberpunk",
+      1
+    ],
+    "eclipse_lunar": [
+      "eclipses",
+      1
+    ],
+    "eclipse_solar": [
+      "eclipses",
+      0
+    ],
+    "planet_signs": [
+      "planets",
+      0
+    ],
+    "religion": [
+      "creeds",
+      0
+    ],
+    "religion_alt": [
+      "creeds",
+      1
+    ],
+    "sw_dyad": [
+      "starwars",
+      2
+    ],
+    "sw_jedi": [
+      "starwars",
+      0
+    ],
+    "sw_sith": [
+      "starwars",
+      1
+    ],
+    "wow_alliance": [
+      "wow",
+      0
+    ],
+    "wow_evil": [
+      "wow",
+      2
+    ],
+    "wow_horde": [
+      "wow",
+      1
+    ]
+  },
+  "variant_sources": {
+    "bible": {
+      "title": "Bible",
+      "variants": [
+        [
+          "Bible",
+          "bible"
+        ],
+        [
+          "Bible II",
+          "bible2"
+        ],
+        [
+          "Bible Dark",
+          "bible_dark"
+        ]
+      ]
+    },
+    "creeds": {
+      "title": "Creeds",
+      "variants": [
+        [
+          "Creeds",
+          "religion"
+        ],
+        [
+          "Ancient religions",
+          "religion_alt"
+        ]
+      ]
+    },
+    "cyberpunk": {
+      "title": "Cyberpunk 2077",
+      "variants": [
+        [
+          "Gangs",
+          "cp_gangs"
+        ],
+        [
+          "Street",
+          "cp_street"
+        ],
+        [
+          "Power",
+          "cp_corpo"
+        ]
+      ]
+    },
+    "eclipses": {
+      "title": "Eclipses",
+      "variants": [
+        [
+          "Solar",
+          "eclipse_solar"
+        ],
+        [
+          "Lunar",
+          "eclipse_lunar"
+        ]
+      ]
+    },
+    "starwars": {
+      "title": "Star Wars",
+      "variants": [
+        [
+          "Jedi",
+          "sw_jedi"
+        ],
+        [
+          "Sith",
+          "sw_sith"
+        ],
+        [
+          "Dyad",
+          "sw_dyad"
+        ]
+      ]
+    },
+    "wow": {
+      "title": "World of Warcraft",
+      "variants": [
+        [
+          "Alliance",
+          "wow_alliance"
+        ],
+        [
+          "Horde",
+          "wow_horde"
+        ],
+        [
+          "Evil",
+          "wow_evil"
+        ]
+      ]
+    }
+  },
+  "wholes": [
+    {
+      "accent": "#FCEE21",
+      "key": "instrument",
+      "themes": [
+        "week",
+        "instrument",
+        "era",
+        "months",
+        "guide"
+      ],
+      "title": "The Instrument"
+    },
+    {
+      "accent": "#C9CDD4",
+      "key": "sky",
+      "themes": [
+        "sun",
+        "moon",
+        "seasons",
+        "eclipses"
+      ],
+      "title": "The Sky"
+    },
+    {
+      "accent": "#29ABE2",
+      "key": "cosmos",
+      "themes": [
+        "planets",
+        "cosmos",
+        "continents",
+        "astrology",
+        "chinese",
+        "celestial_court"
+      ],
+      "title": "The Cosmos"
+    },
+    {
+      "accent": "#666699",
+      "key": "gods",
+      "themes": [
+        "greek",
+        "norse",
+        "egypt",
+        "slavic",
+        "age_of_heroes"
+      ],
+      "title": "The Gods"
+    },
+    {
+      "accent": "#FF7BAC",
+      "key": "faith",
+      "themes": [
+        "bible",
+        "creeds",
+        "trinity",
+        "triads",
+        "duality",
+        "dualities"
+      ],
+      "title": "The Faith"
+    },
+    {
+      "accent": "#0078DC",
+      "key": "cube",
+      "themes": [
+        "cube_doctrine",
+        "cube_axes",
+        "cube_figures",
+        "cube_projections",
+        "double_trinity",
+        "crosses",
+        "one_soul"
+      ],
+      "title": "The Character Cube"
+    },
+    {
+      "accent": "#F03232",
+      "key": "inner",
+      "themes": [
+        "virtues",
+        "sins",
+        "moods",
+        "intelligences"
+      ],
+      "title": "The Inner Wheel"
+    },
+    {
+      "accent": "#39B54A",
+      "key": "living",
+      "themes": [
+        "wolf",
+        "bee",
+        "elephant",
+        "alchemy",
+        "japan"
+      ],
+      "title": "The Living World"
+    },
+    {
+      "accent": "#F7931E",
+      "key": "worlds",
+      "themes": [
+        "profession",
+        "corporate",
+        "wow",
+        "cyberpunk",
+        "starwars"
+      ],
+      "title": "The Worlds"
+    }
+  ]
+}

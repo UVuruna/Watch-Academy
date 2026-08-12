@@ -1,0 +1,2185 @@
+{
+  "menu": [
+    {
+      "group": "Ancient Gods",
+      "themes": [
+        "egypt",
+        "greek",
+        "norse",
+        "slavic",
+        "age_of_heroes",
+        "celestial_court"
+      ]
+    },
+    {
+      "group": "Society",
+      "themes": [
+        "profession",
+        "corporate",
+        "religion",
+        "religion_alt"
+      ]
+    },
+    {
+      "group": "Scripture",
+      "themes": [
+        "bible",
+        "bible2",
+        "bible_dark"
+      ]
+    },
+    {
+      "group": "Gaming",
+      "themes": [
+        "wow_alliance",
+        "wow_horde",
+        "wow_evil",
+        "cp_gangs",
+        "cp_street",
+        "cp_corpo"
+      ]
+    },
+    {
+      "group": "Films",
+      "themes": [
+        "sw_jedi",
+        "sw_sith",
+        "sw_dyad"
+      ]
+    },
+    {
+      "group": "Animals",
+      "themes": [
+        "wolf",
+        "elephant",
+        "bee"
+      ]
+    },
+    {
+      "group": "The Inner Wheel",
+      "themes": [
+        "virtues",
+        "sins",
+        "moods"
+      ]
+    },
+    {
+      "group": "Arcana",
+      "themes": [
+        "alchemy",
+        "japan",
+        "cosmos",
+        "continents"
+      ]
+    }
+  ],
+  "menu_top": [
+    "planets"
+  ],
+  "week": {
+    "age_of_heroes": {
+      "art": "age_of_heroes/primary/bronze",
+      "articles": "age_of_heroes",
+      "blurbs": "age_of_heroes",
+      "metals": [
+        "gold",
+        "bronze",
+        "silver",
+        "colored"
+      ],
+      "ninth": {
+        "name": "Pegasus",
+        "plate": "age_of_heroes/primary/bronze/Pegasus.png"
+      },
+      "seats": {
+        "friday": {
+          "body": "venus",
+          "name": "Sirens",
+          "stem": "Sirens"
+        },
+        "monday": {
+          "body": "moon",
+          "name": "Medusa",
+          "stem": "Medusa"
+        },
+        "saturday": {
+          "body": "saturn",
+          "name": "Hydra",
+          "stem": "Hydra"
+        },
+        "thursday": {
+          "body": "jupiter",
+          "name": "Erymanthian Boar",
+          "stem": "Erymanthian_Boar"
+        },
+        "tuesday": {
+          "body": "mars",
+          "name": "Minotaur",
+          "stem": "Minotaur"
+        },
+        "wednesday": {
+          "body": "mercury",
+          "name": "Sphinx",
+          "stem": "Sphinx"
+        }
+      },
+      "sunday": {
+        "name": "Nemean Lion · Cerberus",
+        "ruler": "Nemean Lion",
+        "servant": "Cerberus",
+        "servant_plate": "age_of_heroes/primary/bronze/Cerberus",
+        "stem": "Nemean_Lion"
+      },
+      "title": "Greek Monsters"
+    },
+    "alchemy": {
+      "art": "alchemy/primary/colored",
+      "articles": "alchemy",
+      "blurbs": "alchemy",
+      "ninth": {
+        "name": "The Philosopher's Stone",
+        "plate": "alchemy/primary/colored/Stone.png"
+      },
+      "seats": {
+        "friday": {
+          "body": "venus",
+          "name": "Copper",
+          "stem": "Copper"
+        },
+        "monday": {
+          "body": "moon",
+          "name": "Silver",
+          "stem": "Silver"
+        },
+        "saturday": {
+          "body": "saturn",
+          "name": "Lead",
+          "stem": "Lead"
+        },
+        "thursday": {
+          "body": "jupiter",
+          "name": "Tin",
+          "stem": "Tin"
+        },
+        "tuesday": {
+          "body": "mars",
+          "name": "Iron",
+          "stem": "Iron"
+        },
+        "wednesday": {
+          "body": "mercury",
+          "name": "Quicksilver",
+          "stem": "Mercury"
+        }
+      },
+      "sunday": {
+        "name": "Gold",
+        "ruler": "Gold",
+        "servant": "Raw Ore",
+        "servant_plate": "alchemy/primary/colored/Ore",
+        "stem": "Gold"
+      },
+      "title": "Alchemy"
+    },
+    "bee": {
+      "art": "bee/primary/bronze",
+      "articles": "bee",
+      "blurbs": "day",
+      "metals": [
+        "gold",
+        "bronze",
+        "silver",
+        "colored"
+      ],
+      "ninth": {
+        "name": "The Swarm",
+        "plate": "bee/primary/bronze/Swarm.png"
+      },
+      "seats": {
+        "friday": {
+          "body": "venus",
+          "name": "Drone",
+          "stem": "Drone"
+        },
+        "monday": {
+          "body": "moon",
+          "name": "Nurse",
+          "stem": "Nurse"
+        },
+        "saturday": {
+          "body": "saturn",
+          "name": "Forager",
+          "stem": "Forager"
+        },
+        "thursday": {
+          "body": "jupiter",
+          "name": "Builder",
+          "stem": "Builder"
+        },
+        "tuesday": {
+          "body": "mars",
+          "name": "Guard",
+          "stem": "Guard"
+        },
+        "wednesday": {
+          "body": "mercury",
+          "name": "Scout",
+          "stem": "Scout"
+        }
+      },
+      "sunday": {
+        "name": "Queen · Cleaner",
+        "ruler": "Queen",
+        "servant": "Cleaner",
+        "servant_plate": "bee/primary/bronze/Cleaner",
+        "stem": "Queen"
+      },
+      "title": "Bee Hive"
+    },
+    "bible": {
+      "art": "bible/primary/colored",
+      "articles": "bible",
+      "blurbs": "day",
+      "ninth": {
+        "name": "The Holy Trinity",
+        "plate": "bible/primary/colored/Holy_Trinity.png"
+      },
+      "seats": {
+        "friday": {
+          "body": "venus",
+          "name": "Adam & Eve",
+          "stem": "Adam_And_Eve"
+        },
+        "monday": {
+          "body": "moon",
+          "name": "Mary",
+          "stem": "Mary"
+        },
+        "saturday": {
+          "body": "saturn",
+          "name": "Joseph",
+          "stem": "Joseph"
+        },
+        "thursday": {
+          "body": "jupiter",
+          "name": "Solomon",
+          "stem": "Solomon"
+        },
+        "tuesday": {
+          "body": "mars",
+          "name": "David",
+          "stem": "David"
+        },
+        "wednesday": {
+          "body": "mercury",
+          "name": "Moses",
+          "stem": "Moses"
+        }
+      },
+      "sunday": {
+        "name": "Ancient of Days · Son",
+        "ruler": "Ancient of Days",
+        "servant": "Son",
+        "servant_plate": "bible/primary/colored/Son_Servant",
+        "stem": "Ancient_Of_Days"
+      },
+      "title": "Bible"
+    },
+    "bible2": {
+      "art": "bible/secondary/colored",
+      "articles": "bible2",
+      "blurbs": "day",
+      "ninth": {
+        "name": "Melchizedek",
+        "plate": "bible/secondary/colored/Melchizedek.png"
+      },
+      "seats": {
+        "friday": {
+          "body": "venus",
+          "name": "Ruth",
+          "stem": "Ruth"
+        },
+        "monday": {
+          "body": "moon",
+          "name": "Jonah",
+          "stem": "Jonah"
+        },
+        "saturday": {
+          "body": "saturn",
+          "name": "Job",
+          "stem": "Job"
+        },
+        "thursday": {
+          "body": "jupiter",
+          "name": "Noah",
+          "stem": "Noah"
+        },
+        "tuesday": {
+          "body": "mars",
+          "name": "Samson",
+          "stem": "Samson"
+        },
+        "wednesday": {
+          "body": "mercury",
+          "name": "Jacob",
+          "stem": "Jacob"
+        }
+      },
+      "sunday": {
+        "name": "Abraham · Isaac",
+        "ruler": "Abraham",
+        "servant": "Isaac",
+        "servant_plate": "bible/secondary/colored/Isaac",
+        "stem": "Abraham"
+      },
+      "title": "Bible II",
+      "title_plate": [
+        "secondary",
+        "colored"
+      ]
+    },
+    "bible_dark": {
+      "art": "bible/dark/colored",
+      "articles": "bible_dark",
+      "blurbs": "day",
+      "ninth": {
+        "name": "The Ninth Circle",
+        "plate": "bible/dark/colored/Ninth_Circle.png"
+      },
+      "seats": {
+        "friday": {
+          "body": "venus",
+          "name": "Delilah",
+          "stem": "Delilah"
+        },
+        "monday": {
+          "body": "moon",
+          "name": "Lilith",
+          "stem": "Lilith"
+        },
+        "saturday": {
+          "body": "saturn",
+          "name": "Cain",
+          "stem": "Cain"
+        },
+        "thursday": {
+          "body": "jupiter",
+          "name": "Herod",
+          "stem": "Herod"
+        },
+        "tuesday": {
+          "body": "mars",
+          "name": "Goliath",
+          "stem": "Goliath"
+        },
+        "wednesday": {
+          "body": "mercury",
+          "name": "The Serpent",
+          "stem": "Serpent"
+        }
+      },
+      "sunday": {
+        "name": "Lucifer · Judas",
+        "ruler": "Lucifer",
+        "servant": "Judas",
+        "servant_plate": "bible/dark/colored/Judas",
+        "stem": "Lucifer"
+      },
+      "title": "Bible Dark",
+      "title_plate": [
+        "dark",
+        "colored"
+      ]
+    },
+    "celestial_court": {
+      "art": "celestial_court/primary/bronze",
+      "articles": "celestial_court",
+      "blurbs": "celestial_court",
+      "metals": [
+        "gold",
+        "bronze",
+        "silver",
+        "colored"
+      ],
+      "ninth": {
+        "name": "Buddha",
+        "plate": "celestial_court/primary/bronze/Buddha.png"
+      },
+      "seats": {
+        "friday": {
+          "body": "venus",
+          "name": "Zhinü",
+          "stem": "Zhinu"
+        },
+        "monday": {
+          "body": "moon",
+          "name": "Chang'e",
+          "stem": "ChangE"
+        },
+        "saturday": {
+          "body": "saturn",
+          "name": "Shennong",
+          "stem": "Shennong"
+        },
+        "thursday": {
+          "body": "jupiter",
+          "name": "Zhu Bajie",
+          "stem": "Zhu_Bajie"
+        },
+        "tuesday": {
+          "body": "mars",
+          "name": "Erlang Shen",
+          "stem": "Erlang_Shen"
+        },
+        "wednesday": {
+          "body": "mercury",
+          "name": "Guan Yu",
+          "stem": "Guan_Yu"
+        }
+      },
+      "sunday": {
+        "name": "Sun Wukong · Six-Eared Macaque",
+        "ruler": "Sun Wukong",
+        "servant": "The Six-Eared Macaque",
+        "servant_plate": "celestial_court/primary/bronze/Six_Eared_Macaque",
+        "stem": "Sun_Wukong"
+      },
+      "title": "Chinese Mythology"
+    },
+    "continents": {
+      "art": "../earth",
+      "articles": "continents",
+      "blurbs": "day",
+      "ninth": {
+        "alt": "Pangea",
+        "alt_plate": "../earth/pangea.png",
+        "mechanism": "easter_egg",
+        "name": "Zealandia",
+        "plate": "../earth/zealandia.png"
+      },
+      "seats": {
+        "friday": {
+          "body": "venus",
+          "name": "South America",
+          "stem": "<computed>"
+        },
+        "monday": {
+          "body": "moon",
+          "name": "Oceania",
+          "stem": "<computed>"
+        },
+        "saturday": {
+          "body": "saturn",
+          "name": "North America",
+          "stem": "<computed>"
+        },
+        "thursday": {
+          "body": "jupiter",
+          "name": "Africa",
+          "stem": "<computed>"
+        },
+        "tuesday": {
+          "body": "mars",
+          "name": "Europe",
+          "stem": "<computed>"
+        },
+        "wednesday": {
+          "body": "mercury",
+          "name": "Asia",
+          "stem": "<computed>"
+        }
+      },
+      "sunday": {
+        "name": "Antarctica",
+        "ruler": "Antarctica",
+        "servant": "Arctic",
+        "servant_plate": "<computed>",
+        "stem": "<computed>"
+      },
+      "title": "Continents"
+    },
+    "corporate": {
+      "art": "corporate/primary/bronze",
+      "articles": "corporate",
+      "blurbs": "corporate",
+      "metals": [
+        "gold",
+        "bronze",
+        "silver",
+        "colored"
+      ],
+      "ninth": {
+        "name": "The Founder",
+        "plate": "corporate/primary/bronze/Founder.png"
+      },
+      "seats": {
+        "friday": {
+          "body": "venus",
+          "name": "CDO",
+          "stem": "CDO"
+        },
+        "monday": {
+          "body": "moon",
+          "name": "CHRO",
+          "stem": "CHRO"
+        },
+        "saturday": {
+          "body": "saturn",
+          "name": "CTO",
+          "stem": "CTO"
+        },
+        "thursday": {
+          "body": "jupiter",
+          "name": "CMO",
+          "stem": "CMO"
+        },
+        "tuesday": {
+          "body": "mars",
+          "name": "COO",
+          "stem": "COO"
+        },
+        "wednesday": {
+          "body": "mercury",
+          "name": "CFO",
+          "stem": "CFO"
+        }
+      },
+      "sunday": {
+        "name": "CEO · Chairman",
+        "ruler": "CEO",
+        "servant": "Chairman of the Board",
+        "servant_plate": "corporate/primary/bronze/Chairman",
+        "stem": "CEO"
+      },
+      "title": "The Corporation"
+    },
+    "cosmos": {
+      "art": "cosmos/primary/bronze",
+      "articles": "cosmos",
+      "blurbs": "day",
+      "metals": [
+        "gold",
+        "bronze",
+        "silver",
+        "colored"
+      ],
+      "ninth": {
+        "name": "The Big Bang",
+        "plate": "cosmos/primary/bronze/Big_Bang.png"
+      },
+      "seats": {
+        "friday": {
+          "body": "venus",
+          "name": "Binary Stars",
+          "stem": "Binary_Stars"
+        },
+        "monday": {
+          "body": "moon",
+          "name": "Nebula",
+          "stem": "Nebula"
+        },
+        "saturday": {
+          "body": "saturn",
+          "name": "Comet",
+          "stem": "Comet"
+        },
+        "thursday": {
+          "body": "jupiter",
+          "name": "Galaxy",
+          "stem": "Galaxy"
+        },
+        "tuesday": {
+          "body": "mars",
+          "name": "Supernova",
+          "stem": "Supernova"
+        },
+        "wednesday": {
+          "body": "mercury",
+          "name": "Pulsar",
+          "stem": "Pulsar"
+        }
+      },
+      "sunday": {
+        "name": "Sun · Black Hole",
+        "ruler": "Sun",
+        "servant": "Black Hole",
+        "servant_plate": "cosmos/primary/bronze/Black_Hole",
+        "stem": "Sun"
+      },
+      "title": "Cosmos"
+    },
+    "cp_corpo": {
+      "art": "cp_corpo/primary/bronze",
+      "articles": "cp_corpo",
+      "blurbs": "cp_corpo",
+      "metals": [
+        "gold",
+        "bronze",
+        "silver",
+        "colored"
+      ],
+      "ninth": {
+        "mechanism": "term_weekly",
+        "name": "Alt Cunningham",
+        "plate": "cp_corpo/primary/bronze/Alt_Cunningham.png",
+        "rotates": [
+          "Alt_Cunningham",
+          "Rache_Bartmoss"
+        ]
+      },
+      "seats": {
+        "friday": {
+          "body": "venus",
+          "name": "Evelyn Parker",
+          "stem": "Evelyn"
+        },
+        "monday": {
+          "body": "moon",
+          "name": "Songbird",
+          "stem": "Songbird"
+        },
+        "saturday": {
+          "body": "saturn",
+          "name": "Takemura",
+          "stem": "Takemura"
+        },
+        "thursday": {
+          "body": "jupiter",
+          "name": "Solomon Reed",
+          "stem": "Solomon"
+        },
+        "tuesday": {
+          "body": "mars",
+          "name": "Adam Smasher",
+          "stem": "Adam_Smasher"
+        },
+        "wednesday": {
+          "body": "mercury",
+          "name": "Dexter DeShawn",
+          "stem": "Dexter"
+        }
+      },
+      "sunday": {
+        "name": "Saburo Arasaka · Yorinobu",
+        "rotates": [
+          "Saburo_Arasaka",
+          "Rosalind_Myers"
+        ],
+        "ruler": "Saburo Arasaka",
+        "servant": "Yorinobu",
+        "servant_plate": "cp_corpo/primary/bronze/Yorinobu",
+        "servant_rotates": [
+          "Yorinobu",
+          "Kurt_Hansen"
+        ],
+        "stem": "Saburo_Arasaka"
+      },
+      "title": "Cyberpunk Power"
+    },
+    "cp_gangs": {
+      "art": "cp_gangs/primary/bronze",
+      "articles": "cp_gangs",
+      "blurbs": "cp_gangs",
+      "metals": [
+        "gold",
+        "bronze",
+        "silver",
+        "colored"
+      ],
+      "ninth": {
+        "name": "NetWatch",
+        "plate": "cp_gangs/primary/bronze/Netwatch.png"
+      },
+      "seats": {
+        "friday": {
+          "body": "venus",
+          "name": "Valentinos",
+          "stem": "Valentinos"
+        },
+        "monday": {
+          "body": "moon",
+          "name": "Aldecaldos · Mox",
+          "rotates": [
+            "Aldecaldos",
+            "Mox"
+          ],
+          "stem": "Aldecaldos"
+        },
+        "saturday": {
+          "body": "saturn",
+          "name": "Animals · Scavengers",
+          "rotates": [
+            "Animals",
+            "Scavengers"
+          ],
+          "stem": "Animals"
+        },
+        "thursday": {
+          "body": "jupiter",
+          "name": "Tyger Claws",
+          "stem": "Tyger_Claws"
+        },
+        "tuesday": {
+          "body": "mars",
+          "name": "Maelstrom · Barghest · Wraiths",
+          "rotates": [
+            "Maelstrom",
+            "Barghest",
+            "Wraiths"
+          ],
+          "stem": "Maelstrom"
+        },
+        "wednesday": {
+          "body": "mercury",
+          "name": "Voodoo Boys · 6th Street",
+          "rotates": [
+            "Voodoo_Boys",
+            "6th_Street"
+          ],
+          "stem": "Voodoo_Boys"
+        }
+      },
+      "sunday": {
+        "name": "Arasaka · Militech",
+        "ruler": "Arasaka",
+        "servant": "Militech",
+        "servant_plate": "cp_gangs/primary/bronze/Militech",
+        "stem": "Arasaka"
+      },
+      "title": "Cyberpunk Gangs"
+    },
+    "cp_street": {
+      "art": "cp_street/primary/bronze",
+      "articles": "cp_street",
+      "blurbs": "cp_street",
+      "metals": [
+        "gold",
+        "bronze",
+        "silver",
+        "colored"
+      ],
+      "ninth": {
+        "name": "V",
+        "plate": "cp_street/primary/bronze/V.png"
+      },
+      "seats": {
+        "friday": {
+          "body": "venus",
+          "name": "Kerry · Lizzy Wizzy",
+          "rotates": [
+            "Kerry",
+            "Lizzy_Wizzy"
+          ],
+          "stem": "Kerry"
+        },
+        "monday": {
+          "body": "moon",
+          "name": "Viktor Vektor",
+          "stem": "Viktor"
+        },
+        "saturday": {
+          "body": "saturn",
+          "name": "Judy",
+          "stem": "Judy"
+        },
+        "thursday": {
+          "body": "jupiter",
+          "name": "Misty",
+          "stem": "Misty"
+        },
+        "tuesday": {
+          "body": "mars",
+          "name": "Jackie · Panam · River",
+          "rotates": [
+            "Jackie",
+            "Panam",
+            "River"
+          ],
+          "stem": "Jackie"
+        },
+        "wednesday": {
+          "body": "mercury",
+          "name": "Wakako · Padre",
+          "rotates": [
+            "Wakako",
+            "Padre"
+          ],
+          "stem": "Wakako"
+        }
+      },
+      "sunday": {
+        "name": "Johnny Silverhand · Rogue",
+        "ruler": "Johnny Silverhand",
+        "servant": "Rogue",
+        "servant_plate": "cp_street/primary/bronze/Rogue",
+        "stem": "Johnny"
+      },
+      "title": "Cyberpunk Street"
+    },
+    "egypt": {
+      "art": "egypt/primary/bronze",
+      "articles": "egypt",
+      "blurbs": "egypt",
+      "ninth": {
+        "name": "The Pharaoh",
+        "plate": "egypt/pantheon/bronze/Pharaoh.png"
+      },
+      "pantheon": {
+        "articles": "egypt_pantheon",
+        "dual": [
+          "egypt/primary/bronze/Afu_Ra"
+        ],
+        "dual_names": [
+          "Ra",
+          "Afu-Ra"
+        ],
+        "seats": {
+          "friday": [
+            [
+              "egypt/pantheon/bronze/Bastet"
+            ],
+            "Bastet"
+          ],
+          "monday": [
+            [
+              "egypt/pantheon/bronze/Isis"
+            ],
+            "Isis"
+          ],
+          "saturday": [
+            [
+              "egypt/primary/bronze/Osiris"
+            ],
+            "Osiris"
+          ],
+          "sunday": [
+            [
+              "egypt/primary/bronze/Ra"
+            ],
+            "Ra"
+          ],
+          "thursday": [
+            [
+              "egypt/pantheon/bronze/Anubis"
+            ],
+            "Anubis"
+          ],
+          "tuesday": [
+            [
+              "egypt/pantheon/bronze/Horus"
+            ],
+            "Horus"
+          ],
+          "wednesday": [
+            [
+              "egypt/primary/bronze/Thoth"
+            ],
+            "Thoth"
+          ]
+        }
+      },
+      "seats": {
+        "friday": {
+          "body": "venus",
+          "name": "Hathor",
+          "stem": "Hathor"
+        },
+        "monday": {
+          "body": "moon",
+          "name": "Khonsu",
+          "stem": "Khonsu"
+        },
+        "saturday": {
+          "body": "saturn",
+          "name": "Osiris",
+          "stem": "Osiris"
+        },
+        "thursday": {
+          "body": "jupiter",
+          "name": "Amun",
+          "stem": "Amun"
+        },
+        "tuesday": {
+          "body": "mars",
+          "name": "Montu",
+          "stem": "Montu"
+        },
+        "wednesday": {
+          "body": "mercury",
+          "name": "Thoth",
+          "stem": "Thoth"
+        }
+      },
+      "sunday": {
+        "name": "Ra",
+        "ruler": "Ra",
+        "servant": "Afu-Ra",
+        "servant_plate": "egypt/primary/bronze/Afu_Ra",
+        "stem": "Ra"
+      },
+      "title": "Egyptian gods"
+    },
+    "elephant": {
+      "art": "elephant/primary/bronze",
+      "articles": "elephant",
+      "blurbs": "day",
+      "metals": [
+        "gold",
+        "bronze",
+        "silver",
+        "colored"
+      ],
+      "ninth": {
+        "name": "The Graveyard",
+        "plate": "elephant/primary/bronze/Graveyard.png"
+      },
+      "seats": {
+        "friday": {
+          "body": "venus",
+          "name": "Reunion",
+          "stem": "Reunion"
+        },
+        "monday": {
+          "body": "moon",
+          "name": "Allomother",
+          "stem": "Allomother"
+        },
+        "saturday": {
+          "body": "saturn",
+          "name": "Elder",
+          "stem": "Elder"
+        },
+        "thursday": {
+          "body": "jupiter",
+          "name": "Mentor",
+          "stem": "Mentor"
+        },
+        "tuesday": {
+          "body": "mars",
+          "name": "Musth",
+          "stem": "Musth"
+        },
+        "wednesday": {
+          "body": "mercury",
+          "name": "Caller",
+          "stem": "Caller"
+        }
+      },
+      "sunday": {
+        "name": "Matriarch · Memory",
+        "ruler": "Matriarch",
+        "servant": "Memory",
+        "servant_plate": "elephant/primary/bronze/Memory",
+        "stem": "Matriarch"
+      },
+      "title": "Elephant Herd"
+    },
+    "greek": {
+      "art": "greek/primary/bronze",
+      "articles": "greek",
+      "blurbs": "greek",
+      "metals": [
+        "gold",
+        "bronze",
+        "silver",
+        "colored"
+      ],
+      "ninth": {
+        "name": "Gaia",
+        "plate": "greek/pantheon/bronze/Gaia.png"
+      },
+      "pantheon": {
+        "articles": "greek_pantheon",
+        "dual": [
+          "greek/pantheon/bronze/Hades"
+        ],
+        "dual_names": [
+          "Zeus",
+          "Hades"
+        ],
+        "seats": {
+          "friday": [
+            [
+              "greek/pantheon/bronze/Hera"
+            ],
+            "Hera (Ἥρα)"
+          ],
+          "monday": [
+            [
+              "greek/pantheon/bronze/Poseidon"
+            ],
+            "Poseidon (Ποσειδῶν)"
+          ],
+          "saturday": [
+            [
+              "greek/pantheon/bronze/Demeter"
+            ],
+            "Demeter (Δημήτηρ)"
+          ],
+          "sunday": [
+            [
+              "greek/pantheon/bronze/Zeus",
+              "greek/primary/bronze/Zeus"
+            ],
+            "Zeus (Ζεύς)"
+          ],
+          "thursday": [
+            [
+              "greek/pantheon/bronze/Apollo"
+            ],
+            "Apollo (Ἀπόλλων)"
+          ],
+          "tuesday": [
+            [
+              "greek/pantheon/bronze/Artemis"
+            ],
+            "Artemis (Ἄρτεμις)"
+          ],
+          "wednesday": [
+            [
+              "greek/pantheon/bronze/Athena"
+            ],
+            "Athena (Ἀθηνᾶ)"
+          ]
+        }
+      },
+      "seats": {
+        "friday": {
+          "body": "venus",
+          "name": "Aphrodite (Ἀφροδίτη)",
+          "stem": "Aphrodite"
+        },
+        "monday": {
+          "body": "moon",
+          "name": "Selene (Σελήνη)",
+          "stem": "Selene"
+        },
+        "saturday": {
+          "body": "saturn",
+          "name": "Cronus (Κρόνος)",
+          "stem": "Cronus"
+        },
+        "thursday": {
+          "body": "jupiter",
+          "name": "Zeus (Ζεύς)",
+          "stem": "Zeus"
+        },
+        "tuesday": {
+          "body": "mars",
+          "name": "Ares (Ἄρης)",
+          "stem": "Ares"
+        },
+        "wednesday": {
+          "body": "mercury",
+          "name": "Hermes (Ἑρμῆς)",
+          "stem": "Hermes"
+        }
+      },
+      "sunday": {
+        "name": "Helios (Ἥλιος)",
+        "ruler": "Helios",
+        "servant": "Phaethon",
+        "servant_plate": "greek/primary/bronze/Phaethon",
+        "stem": "Helios"
+      },
+      "title": "Greek gods"
+    },
+    "japan": {
+      "art": "japan/primary/colored",
+      "articles": "japan",
+      "blurbs": "japan",
+      "seats": {
+        "friday": {
+          "body": "venus",
+          "name": "Kin'yōbi (金曜日)",
+          "stem": "Kinyobi"
+        },
+        "monday": {
+          "body": "moon",
+          "name": "Getsuyōbi (月曜日)",
+          "stem": "Getsuyobi"
+        },
+        "saturday": {
+          "body": "saturn",
+          "name": "Doyōbi (土曜日)",
+          "stem": "Doyobi"
+        },
+        "thursday": {
+          "body": "jupiter",
+          "name": "Mokuyōbi (木曜日)",
+          "stem": "Mokuyobi"
+        },
+        "tuesday": {
+          "body": "mars",
+          "name": "Kayōbi (火曜日)",
+          "stem": "Kayobi"
+        },
+        "wednesday": {
+          "body": "mercury",
+          "name": "Suiyōbi (水曜日)",
+          "stem": "Suiyobi"
+        }
+      },
+      "sunday": {
+        "name": "Nichiyōbi (日曜日)",
+        "ruler": "Amaterasu",
+        "servant": "Ama-no-Iwato",
+        "servant_plate": "japan/primary/colored/Ama_No_Iwato",
+        "stem": "Nichiyobi"
+      },
+      "title": "Japanese week"
+    },
+    "moods": {
+      "art": "../emblem/mood/primary/colored",
+      "articles": "moods",
+      "blurbs": "day",
+      "seats": {
+        "friday": {
+          "body": "venus",
+          "name": "Passion",
+          "stem": "Passion"
+        },
+        "monday": {
+          "body": "moon",
+          "name": "Calm",
+          "stem": "Calm"
+        },
+        "saturday": {
+          "body": "saturn",
+          "name": "Renewal",
+          "stem": "Renewal"
+        },
+        "thursday": {
+          "body": "jupiter",
+          "name": "Joy",
+          "stem": "Joy"
+        },
+        "tuesday": {
+          "body": "mars",
+          "name": "Zeal",
+          "stem": "Zeal"
+        },
+        "wednesday": {
+          "body": "mercury",
+          "name": "Sorrow",
+          "stem": "Sorrow"
+        }
+      },
+      "sunday": {
+        "name": "Glory · Awe",
+        "ruler": "Glory",
+        "servant": "Awe",
+        "servant_plate": "../emblem/mood/primary/colored/Awe",
+        "stem": "Glory"
+      },
+      "title": "Moods"
+    },
+    "norse": {
+      "art": "norse/primary/bronze",
+      "articles": "norse",
+      "blurbs": "norse",
+      "metals": [
+        "gold",
+        "bronze",
+        "silver",
+        "colored"
+      ],
+      "ninth": {
+        "name": "Yggdrasil",
+        "plate": "norse/pantheon/bronze/Yggdrasil.png"
+      },
+      "pantheon": {
+        "articles": "norse_pantheon",
+        "dual": [
+          "norse/primary/bronze/Odin"
+        ],
+        "dual_names": [
+          "Odin",
+          "The Wanderer"
+        ],
+        "seats": {
+          "friday": [
+            [
+              "norse/pantheon/bronze/Frigg"
+            ],
+            "Frigg"
+          ],
+          "monday": [
+            [
+              "norse/pantheon/bronze/Hel"
+            ],
+            "Hel"
+          ],
+          "saturday": [
+            [
+              "norse/pantheon/bronze/Freyr"
+            ],
+            "Freyr"
+          ],
+          "sunday": [
+            [
+              "norse/pantheon/bronze/Odin"
+            ],
+            "Odin (Óðinn)"
+          ],
+          "thursday": [
+            [
+              "norse/primary/bronze/Tyr"
+            ],
+            "Tyr (Týr)"
+          ],
+          "tuesday": [
+            [
+              "norse/primary/bronze/Thor"
+            ],
+            "Thor (Þórr)"
+          ],
+          "wednesday": [
+            [
+              "norse/primary/bronze/Loki"
+            ],
+            "Loki"
+          ]
+        }
+      },
+      "seats": {
+        "friday": {
+          "body": "venus",
+          "name": "Freya (Freyja)",
+          "stem": "Freya"
+        },
+        "monday": {
+          "body": "moon",
+          "name": "Máni",
+          "stem": "Mani"
+        },
+        "saturday": {
+          "body": "saturn",
+          "name": "Loki",
+          "stem": "Loki"
+        },
+        "thursday": {
+          "body": "jupiter",
+          "name": "Thor (Þórr)",
+          "stem": "Thor"
+        },
+        "tuesday": {
+          "body": "mars",
+          "name": "Tyr (Týr)",
+          "stem": "Tyr"
+        },
+        "wednesday": {
+          "body": "mercury",
+          "name": "Odin (Óðinn)",
+          "stem": "Odin"
+        }
+      },
+      "sunday": {
+        "name": "Sól",
+        "ruler": "Sól",
+        "servant": "Skoll",
+        "servant_plate": "norse/primary/bronze/Skoll",
+        "stem": "Sol"
+      },
+      "title": "Norse gods"
+    },
+    "planet_signs": {
+      "art": "planets/primary/sign",
+      "articles": "planets",
+      "blurbs": "day",
+      "seats": {
+        "friday": {
+          "body": "venus",
+          "name": "Venus",
+          "stem": "Venus"
+        },
+        "monday": {
+          "body": "moon",
+          "name": "Moon",
+          "stem": "Moon"
+        },
+        "saturday": {
+          "body": "saturn",
+          "name": "Saturn",
+          "stem": "Saturn"
+        },
+        "thursday": {
+          "body": "jupiter",
+          "name": "Jupiter",
+          "stem": "Jupiter"
+        },
+        "tuesday": {
+          "body": "mars",
+          "name": "Mars",
+          "stem": "Mars"
+        },
+        "wednesday": {
+          "body": "mercury",
+          "name": "Mercury",
+          "stem": "Mercury"
+        }
+      },
+      "sunday": {
+        "name": "Sun",
+        "ruler": "Sun",
+        "servant": "Eclipsed Sun",
+        "servant_plate": "planets/primary/sign/Sun_Eclipse",
+        "stem": "Sun"
+      },
+      "title": "Planet signs",
+      "title_plate": [
+        "primary",
+        "sign"
+      ]
+    },
+    "planets": {
+      "art": null,
+      "articles": "planets",
+      "blurbs": "day",
+      "seats": {
+        "friday": {
+          "body": "venus",
+          "name": null,
+          "stem": null
+        },
+        "monday": {
+          "body": "moon",
+          "name": null,
+          "stem": null
+        },
+        "saturday": {
+          "body": "saturn",
+          "name": null,
+          "stem": null
+        },
+        "thursday": {
+          "body": "jupiter",
+          "name": null,
+          "stem": null
+        },
+        "tuesday": {
+          "body": "mars",
+          "name": null,
+          "stem": null
+        },
+        "wednesday": {
+          "body": "mercury",
+          "name": null,
+          "stem": null
+        }
+      },
+      "sunday": {
+        "name": null,
+        "ruler": "Sun",
+        "servant": "Eclipsed Sun",
+        "servant_plate": "planets/primary/photo/Sun_Eclipse",
+        "stem": null
+      },
+      "title": "Planets",
+      "title_plate": [
+        "primary",
+        "photo"
+      ]
+    },
+    "planets_art": {
+      "art": "planets/primary/art",
+      "articles": "planets",
+      "blurbs": "day",
+      "metals": [
+        "gold",
+        "bronze",
+        "silver"
+      ],
+      "seats": {
+        "friday": {
+          "body": "venus",
+          "name": "Venus",
+          "stem": "Venus"
+        },
+        "monday": {
+          "body": "moon",
+          "name": "Moon",
+          "stem": "Moon"
+        },
+        "saturday": {
+          "body": "saturn",
+          "name": "Saturn",
+          "stem": "Saturn"
+        },
+        "thursday": {
+          "body": "jupiter",
+          "name": "Jupiter",
+          "stem": "Jupiter"
+        },
+        "tuesday": {
+          "body": "mars",
+          "name": "Mars",
+          "stem": "Mars"
+        },
+        "wednesday": {
+          "body": "mercury",
+          "name": "Mercury",
+          "stem": "Mercury"
+        }
+      },
+      "sunday": {
+        "name": "Sun",
+        "ruler": "Sun",
+        "servant": "Eclipsed Sun",
+        "servant_plate": "planets/primary/art/Sun_Eclipse",
+        "stem": "Sun"
+      },
+      "title": null,
+      "title_plate": [
+        "primary",
+        "art"
+      ]
+    },
+    "profession": {
+      "art": "profession/primary/bronze",
+      "articles": "profession",
+      "blurbs": "profession",
+      "metals": [
+        "gold",
+        "bronze",
+        "silver",
+        "colored"
+      ],
+      "ninth": {
+        "name": "The Polymath",
+        "plate": "profession/primary/bronze/Polymath.png"
+      },
+      "seats": {
+        "friday": {
+          "body": "venus",
+          "name": "Artist",
+          "stem": "Artist"
+        },
+        "monday": {
+          "body": "moon",
+          "name": "Physician",
+          "stem": "Physician"
+        },
+        "saturday": {
+          "body": "saturn",
+          "name": "Farmer",
+          "stem": "Farmer"
+        },
+        "thursday": {
+          "body": "jupiter",
+          "name": "Priest",
+          "stem": "Priest"
+        },
+        "tuesday": {
+          "body": "mars",
+          "name": "Soldier",
+          "stem": "Soldier"
+        },
+        "wednesday": {
+          "body": "mercury",
+          "name": "Merchant",
+          "stem": "Merchant"
+        }
+      },
+      "sunday": {
+        "name": "Ruler · Servant",
+        "ruler": "Ruler",
+        "servant": "Servant",
+        "servant_plate": "profession/primary/bronze/Servant_Dual",
+        "stem": "Ruler"
+      },
+      "title": "Professions"
+    },
+    "religion": {
+      "art": "creeds/primary/colored",
+      "articles": "religion",
+      "blurbs": "religion",
+      "ninth": {
+        "name": "Freemasonry",
+        "plate": "creeds/primary/colored/Freemasonry.png"
+      },
+      "seats": {
+        "friday": {
+          "body": "venus",
+          "name": "Sikhism",
+          "stem": "Sikhism"
+        },
+        "monday": {
+          "body": "moon",
+          "name": "Islam",
+          "stem": "Islam"
+        },
+        "saturday": {
+          "body": "saturn",
+          "name": "Judaism",
+          "stem": "Judaism"
+        },
+        "thursday": {
+          "body": "jupiter",
+          "name": "Hinduism",
+          "stem": "Hinduism"
+        },
+        "tuesday": {
+          "body": "mars",
+          "name": "Buddhism",
+          "stem": "Buddhism"
+        },
+        "wednesday": {
+          "body": "mercury",
+          "name": "Taoism",
+          "stem": "Taoism"
+        }
+      },
+      "sunday": {
+        "name": "Christianity",
+        "ruler": "Christianity",
+        "servant": "Satanism",
+        "servant_plate": "creeds/primary/colored/Satanism",
+        "stem": "Christianity"
+      },
+      "title": "Creeds"
+    },
+    "religion_alt": {
+      "art": "creeds/secondary/colored",
+      "articles": "religion_alt",
+      "blurbs": "religion_alt",
+      "ninth": {
+        "name": "The Unknown God",
+        "plate": "creeds/secondary/colored/Unknown_God.png"
+      },
+      "seats": {
+        "friday": {
+          "body": "venus",
+          "name": "Babylon",
+          "stem": "Babylon"
+        },
+        "monday": {
+          "body": "moon",
+          "name": "Druidism",
+          "stem": "Druidism"
+        },
+        "saturday": {
+          "body": "saturn",
+          "name": "Voodoo",
+          "stem": "Voodoo"
+        },
+        "thursday": {
+          "body": "jupiter",
+          "name": "Eleusinian Mysteries",
+          "stem": "Eleusis"
+        },
+        "tuesday": {
+          "body": "mars",
+          "name": "Zoroastrianism",
+          "stem": "Zoroastrianism"
+        },
+        "wednesday": {
+          "body": "mercury",
+          "name": "Shamanism",
+          "stem": "Shamanism"
+        }
+      },
+      "sunday": {
+        "name": "Mithraism",
+        "ruler": "Mithraism",
+        "servant": "Corax",
+        "servant_plate": "creeds/secondary/colored/Corax",
+        "stem": "Mithraism"
+      },
+      "title": "Ancient religions",
+      "title_plate": [
+        "secondary",
+        "colored"
+      ]
+    },
+    "sins": {
+      "art": "../emblem/sin/primary/colored",
+      "articles": "sins",
+      "blurbs": "day",
+      "seats": {
+        "friday": {
+          "body": "venus",
+          "name": "Jealousy",
+          "stem": "Jealousy"
+        },
+        "monday": {
+          "body": "moon",
+          "name": "Fear",
+          "stem": "Fear"
+        },
+        "saturday": {
+          "body": "saturn",
+          "name": "Envy",
+          "stem": "Envy"
+        },
+        "thursday": {
+          "body": "jupiter",
+          "name": "Excess",
+          "stem": "Excess"
+        },
+        "tuesday": {
+          "body": "mars",
+          "name": "Wrath",
+          "stem": "Wrath"
+        },
+        "wednesday": {
+          "body": "mercury",
+          "name": "Greed",
+          "stem": "Greed"
+        }
+      },
+      "sunday": {
+        "name": "Pride · Servility",
+        "ruler": "Pride",
+        "servant": "Servility",
+        "servant_plate": "../emblem/sin/primary/colored/Servility",
+        "stem": "Pride"
+      },
+      "title": "Sins"
+    },
+    "slavic": {
+      "art": "slavic/primary/bronze",
+      "articles": "slavic",
+      "blurbs": "slavic",
+      "ninth": {
+        "name": "Triglav",
+        "plate": "slavic/primary/bronze/Triglav.png"
+      },
+      "pantheon": {
+        "articles": "slavic_pantheon",
+        "dual": [
+          "slavic/primary/bronze/Veles"
+        ],
+        "dual_names": [
+          "Perun",
+          "Veles"
+        ],
+        "seats": {
+          "friday": [
+            [
+              "slavic/pantheon/bronze/Lada"
+            ],
+            "Lada"
+          ],
+          "monday": [
+            [
+              "slavic/primary/bronze/Mokos"
+            ],
+            "Mokoš"
+          ],
+          "saturday": [
+            [
+              "slavic/primary/bronze/Morana"
+            ],
+            "Morana"
+          ],
+          "sunday": [
+            [
+              "slavic/primary/bronze/Perun"
+            ],
+            "Perun"
+          ],
+          "thursday": [
+            [
+              "slavic/primary/bronze/Dazbog"
+            ],
+            "Dažbog"
+          ],
+          "tuesday": [
+            [
+              "slavic/primary/bronze/Svetovid"
+            ],
+            "Svetovid"
+          ],
+          "wednesday": [
+            [
+              "slavic/pantheon/bronze/Svarog"
+            ],
+            "Svarog"
+          ]
+        }
+      },
+      "seats": {
+        "friday": {
+          "body": "venus",
+          "name": "Mokoš",
+          "stem": "Mokos"
+        },
+        "monday": {
+          "body": "moon",
+          "name": "Hors",
+          "stem": "Hors"
+        },
+        "saturday": {
+          "body": "saturn",
+          "name": "Morana",
+          "stem": "Morana"
+        },
+        "thursday": {
+          "body": "jupiter",
+          "name": "Perun",
+          "stem": "Perun"
+        },
+        "tuesday": {
+          "body": "mars",
+          "name": "Svetovid",
+          "stem": "Svetovid"
+        },
+        "wednesday": {
+          "body": "mercury",
+          "name": "Veles",
+          "stem": "Veles"
+        }
+      },
+      "sunday": {
+        "name": "Dažbog",
+        "ruler": "Young Dažbog",
+        "servant": "Old Dažbog",
+        "servant_plate": "slavic/primary/bronze/Dazbog_Old",
+        "stem": "Dazbog"
+      },
+      "title": "Slavic gods"
+    },
+    "sw_dyad": {
+      "art": "sw_dyad/primary/bronze",
+      "articles": "sw_dyad",
+      "blurbs": "sw_dyad",
+      "metals": [
+        "gold",
+        "bronze",
+        "silver",
+        "colored"
+      ],
+      "ninth": {
+        "alt": "Exegol",
+        "alt_plate": "sw_dyad/primary/bronze/Exegol.png",
+        "mechanism": "daynight",
+        "name": "The Ghosts",
+        "plate": "sw_dyad/primary/bronze/Ghosts.png"
+      },
+      "seats": {
+        "friday": {
+          "body": "venus",
+          "name": "Old Han",
+          "stem": "Han"
+        },
+        "monday": {
+          "body": "moon",
+          "name": "Rose Tico",
+          "stem": "Rose"
+        },
+        "saturday": {
+          "body": "saturn",
+          "name": "General Hux",
+          "stem": "Hux"
+        },
+        "thursday": {
+          "body": "jupiter",
+          "name": "Old Leia",
+          "stem": "Leia"
+        },
+        "tuesday": {
+          "body": "mars",
+          "name": "Finn · Phasma",
+          "rotates": [
+            "Finn",
+            "Phasma"
+          ],
+          "stem": "Finn"
+        },
+        "wednesday": {
+          "body": "mercury",
+          "name": "Maz Kanata · DJ",
+          "rotates": [
+            "Maz",
+            "DJ"
+          ],
+          "stem": "Maz"
+        }
+      },
+      "sunday": {
+        "name": "Rey · Kylo Ren",
+        "ruler": "Rey",
+        "servant": "Kylo Ren",
+        "servant_plate": "sw_dyad/primary/bronze/Kylo",
+        "stem": "Rey"
+      },
+      "title": "Star Wars Dyad"
+    },
+    "sw_jedi": {
+      "art": "sw_jedi/primary/bronze",
+      "articles": "sw_jedi",
+      "blurbs": "sw_jedi",
+      "metals": [
+        "gold",
+        "bronze",
+        "silver",
+        "colored"
+      ],
+      "ninth": {
+        "name": "Yoda",
+        "plate": "sw_jedi/primary/bronze/Yoda.png"
+      },
+      "seats": {
+        "friday": {
+          "body": "venus",
+          "name": "Padmé Amidala",
+          "stem": "Padme"
+        },
+        "monday": {
+          "body": "moon",
+          "name": "Obi-Wan Kenobi",
+          "stem": "Obi_Wan"
+        },
+        "saturday": {
+          "body": "saturn",
+          "name": "Chewbacca",
+          "stem": "Chewbacca"
+        },
+        "thursday": {
+          "body": "jupiter",
+          "name": "Qui-Gon Jinn",
+          "stem": "Qui_Gon"
+        },
+        "tuesday": {
+          "body": "mars",
+          "name": "General Leia Organa",
+          "stem": "Leia"
+        },
+        "wednesday": {
+          "body": "mercury",
+          "name": "Han Solo",
+          "stem": "Han"
+        }
+      },
+      "sunday": {
+        "name": "Young Luke · Vader",
+        "ruler": "Young Luke",
+        "servant": "Vader, the Father",
+        "servant_plate": "sw_jedi/primary/bronze/Vader",
+        "stem": "Luke"
+      },
+      "title": "Star Wars Jedi"
+    },
+    "sw_sith": {
+      "art": "sw_sith/primary/bronze",
+      "articles": "sw_sith",
+      "blurbs": "sw_sith",
+      "metals": [
+        "gold",
+        "bronze",
+        "silver",
+        "colored"
+      ],
+      "ninth": {
+        "name": "Darth Plagueis",
+        "plate": "sw_sith/primary/bronze/Plagueis.png"
+      },
+      "seats": {
+        "friday": {
+          "body": "venus",
+          "name": "Maul",
+          "stem": "Maul"
+        },
+        "monday": {
+          "body": "moon",
+          "name": "Grand Moff Tarkin",
+          "stem": "Tarkin"
+        },
+        "saturday": {
+          "body": "saturn",
+          "name": "Boba Fett",
+          "stem": "Boba_Fett"
+        },
+        "thursday": {
+          "body": "jupiter",
+          "name": "Count Dooku",
+          "stem": "Dooku"
+        },
+        "tuesday": {
+          "body": "mars",
+          "name": "General Grievous",
+          "stem": "Grievous"
+        },
+        "wednesday": {
+          "body": "mercury",
+          "name": "Jabba the Hutt",
+          "stem": "Jabba"
+        }
+      },
+      "sunday": {
+        "name": "Palpatine · Anakin",
+        "ruler": "Palpatine",
+        "servant": "Anakin",
+        "servant_plate": "sw_sith/primary/bronze/Anakin",
+        "stem": "Palpatine"
+      },
+      "title": "Star Wars Sith"
+    },
+    "virtues": {
+      "art": "../emblem/virtue/primary/colored",
+      "articles": "virtues",
+      "blurbs": "day",
+      "seats": {
+        "friday": {
+          "body": "venus",
+          "name": "Love",
+          "stem": "Love"
+        },
+        "monday": {
+          "body": "moon",
+          "name": "Serenity",
+          "stem": "Serenity"
+        },
+        "saturday": {
+          "body": "saturn",
+          "name": "Patience",
+          "stem": "Patience"
+        },
+        "thursday": {
+          "body": "jupiter",
+          "name": "Generosity",
+          "stem": "Generosity"
+        },
+        "tuesday": {
+          "body": "mars",
+          "name": "Courage",
+          "stem": "Courage"
+        },
+        "wednesday": {
+          "body": "mercury",
+          "name": "Wisdom",
+          "stem": "Wisdom"
+        }
+      },
+      "sunday": {
+        "name": "Justice · Humility",
+        "ruler": "Justice",
+        "servant": "Humility",
+        "servant_plate": "../emblem/virtue/primary/colored/Humility",
+        "stem": "Justice"
+      },
+      "title": "Virtues"
+    },
+    "wolf": {
+      "art": "wolf/primary/bronze",
+      "articles": "wolf",
+      "blurbs": "day",
+      "metals": [
+        "gold",
+        "bronze",
+        "silver",
+        "colored"
+      ],
+      "ninth": {
+        "name": "Sigma",
+        "plate": "wolf/primary/bronze/Sigma.png"
+      },
+      "seats": {
+        "friday": {
+          "body": "venus",
+          "name": "Mate",
+          "stem": "Mate"
+        },
+        "monday": {
+          "body": "moon",
+          "name": "Luna",
+          "stem": "Luna"
+        },
+        "saturday": {
+          "body": "saturn",
+          "name": "Elder",
+          "stem": "Elder"
+        },
+        "thursday": {
+          "body": "jupiter",
+          "name": "Beta",
+          "stem": "Beta"
+        },
+        "tuesday": {
+          "body": "mars",
+          "name": "Hunter (Gamma)",
+          "stem": "Hunter"
+        },
+        "wednesday": {
+          "body": "mercury",
+          "name": "Scout (Delta)",
+          "stem": "Scout"
+        }
+      },
+      "sunday": {
+        "name": "Leader (Alpha) · Omega",
+        "ruler": "Alpha",
+        "servant": "Omega",
+        "servant_plate": "wolf/primary/bronze/Omega",
+        "stem": "Alpha"
+      },
+      "title": "Wolf Pack"
+    },
+    "wow_alliance": {
+      "art": "wow_alliance/primary/bronze",
+      "articles": "wow_alliance",
+      "blurbs": "wow_alliance",
+      "metals": [
+        "gold",
+        "bronze",
+        "silver",
+        "colored"
+      ],
+      "ninth": {
+        "name": "Turalyon",
+        "plate": "wow_alliance/primary/bronze/Turalyon.png"
+      },
+      "seats": {
+        "friday": {
+          "body": "venus",
+          "name": "Jaina",
+          "stem": "Jaina"
+        },
+        "monday": {
+          "body": "moon",
+          "name": "Anduin",
+          "stem": "Anduin"
+        },
+        "saturday": {
+          "body": "saturn",
+          "name": "Malfurion",
+          "stem": "Malfurion"
+        },
+        "thursday": {
+          "body": "jupiter",
+          "name": "Uther the Lightbringer",
+          "stem": "Uther"
+        },
+        "tuesday": {
+          "body": "mars",
+          "name": "Muradin Bronzebeard",
+          "stem": "Muradin"
+        },
+        "wednesday": {
+          "body": "mercury",
+          "name": "Khadgar",
+          "stem": "Khadgar"
+        }
+      },
+      "sunday": {
+        "name": "Varian Wrynn · Genn Greymane",
+        "ruler": "Varian Wrynn",
+        "servant": "Genn Greymane",
+        "servant_plate": "wow_alliance/primary/bronze/Genn",
+        "stem": "Varian"
+      },
+      "title": "Warcraft Alliance"
+    },
+    "wow_evil": {
+      "art": "wow_evil/primary/bronze",
+      "articles": "wow_evil",
+      "blurbs": "wow_evil",
+      "metals": [
+        "gold",
+        "bronze",
+        "silver",
+        "colored"
+      ],
+      "ninth": {
+        "name": "Medivh",
+        "plate": "wow_evil/primary/bronze/Medivh.png"
+      },
+      "seats": {
+        "friday": {
+          "body": "venus",
+          "name": "Sylvanas",
+          "stem": "Sylvanas"
+        },
+        "monday": {
+          "body": "moon",
+          "name": "Kel'Thuzad",
+          "stem": "Kel_Thuzad"
+        },
+        "saturday": {
+          "body": "saturn",
+          "name": "Deathwing",
+          "stem": "Deathwing"
+        },
+        "thursday": {
+          "body": "jupiter",
+          "name": "Kil'jaeden the Deceiver",
+          "stem": "Kiljaeden"
+        },
+        "tuesday": {
+          "body": "mars",
+          "name": "Mannoroth",
+          "stem": "Mannoroth"
+        },
+        "wednesday": {
+          "body": "mercury",
+          "name": "Gul'dan",
+          "stem": "Guldan"
+        }
+      },
+      "sunday": {
+        "name": "Arthas · Illidan",
+        "ruler": "Arthas, the Lich King",
+        "servant": "Illidan Stormrage",
+        "servant_plate": "wow_evil/primary/bronze/Illidan",
+        "stem": "Arthas"
+      },
+      "title": "Warcraft Evil"
+    },
+    "wow_horde": {
+      "art": "wow_horde/primary/bronze",
+      "articles": "wow_horde",
+      "blurbs": "wow_horde",
+      "metals": [
+        "gold",
+        "bronze",
+        "silver",
+        "colored"
+      ],
+      "ninth": {
+        "name": "Rexxar",
+        "plate": "wow_horde/primary/bronze/Rexxar.png"
+      },
+      "seats": {
+        "friday": {
+          "body": "venus",
+          "name": "Draka",
+          "stem": "Draka"
+        },
+        "monday": {
+          "body": "moon",
+          "name": "Baine",
+          "stem": "Baine"
+        },
+        "saturday": {
+          "body": "saturn",
+          "name": "Cairne",
+          "stem": "Cairne"
+        },
+        "thursday": {
+          "body": "jupiter",
+          "name": "Vol'jin",
+          "stem": "Voljin"
+        },
+        "tuesday": {
+          "body": "mars",
+          "name": "Grommash Hellscream",
+          "stem": "Grommash"
+        },
+        "wednesday": {
+          "body": "mercury",
+          "name": "Gallywix",
+          "stem": "Gallywix"
+        }
+      },
+      "sunday": {
+        "name": "Thrall · Garrosh",
+        "ruler": "Thrall",
+        "servant": "Garrosh Hellscream",
+        "servant_plate": "wow_horde/primary/bronze/Garrosh",
+        "stem": "Thrall"
+      },
+      "title": "Warcraft Horde"
+    }
+  }
+}

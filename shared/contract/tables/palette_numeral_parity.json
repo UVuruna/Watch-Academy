@@ -1,0 +1,10 @@
+{
+  "even": {
+    "body": "#FFFFFF",
+    "border": "#656A70"
+  },
+  "odd": {
+    "body": "#656A70",
+    "border": "#FFFFFF"
+  }
+}
