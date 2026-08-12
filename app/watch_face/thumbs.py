@@ -176,7 +176,7 @@ def pointer_swatch_icon(pointer: str, style: str) -> QIcon:
     `THUMB_SOURCE_PX` and disk-cached under a COMPUTED name — there is
     no source file to fingerprint, so the cache name carries no stamp
     prefix, the SAME "computed icon" convention
-    `render.asset_variants.calendar_wheel_icon_file` already uses (kept,
+    `render.asset_variants.calendar_sheet_icon_file` already uses (kept,
     never swept, by `raster_store.collect_garbage`'s own carve-out for
     names whose first field is not a 16-hex stamp)."""
     style = palette.effective_palette_style(pointer, style)

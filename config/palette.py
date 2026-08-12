@@ -459,7 +459,12 @@ MARKER_BORDER_RGBA = (255, 255, 255, 200)
 
 CALENDAR_ARROW_COLOR = "#FFD235"     # gold, matching the ring jewels/ticks
 
-CALENDAR_ICON_WEDGE_COLORS = ("#A67C00", "#FFBF00")
+# The app's own gold ramp, two sampled steps, worn by the two COMPUTED
+# Fast Travel icons (the calendar sheet and the 24 h clock face). Named
+# for the RAMP, not for a shape: it stopped being a wedge colour when the
+# owner replaced the 12-wedge wheel with a real calendar sheet
+# (2026-08-12, ballot I1) and the same two steps kept doing the work.
+CALENDAR_ICON_GOLD_COLORS = ("#A67C00", "#FFBF00")
 
 CALENDAR_ICON_RING_COLOR = "#1A1A1A"
 
@@ -475,6 +480,24 @@ BRONZE_JEWEL_TINT = "#CD7F32"
 # design choice here but the definition of a cast shadow — it is named
 # so the shadow pass owns no literal of its own.
 SHADOW_STAMP_TINT = "#000000"
+
+# The HALO's light counterpart, for a DARK glyph on a DARK ground
+# (0.14.960, found by rendering the owner's own LOOP case): the ring's
+# black halo separates a glyph from its background only while the GLYPH
+# is the lighter of the two. LOOP's thematic shade is a dark blue, so on
+# the dim bodies — the Moon in the blue sector, Mercury in the black one
+# — a black halo around dark blue ink on a dark ground made the label
+# LESS readable than the white-with-black-outline font it replaced.
+# `render.glyph_shadow` picks between the two by the composed glyph's own
+# mean luminance, so the cushion is always the opposite of the ink. Not
+# pure white: a hard white halo reads as a glow rather than a shadow, and
+# the owner asked for a shadow.
+SHADOW_STAMP_TINT_LIGHT = "#E8E8E8"
+# Mean luminance (0-255, over the glyph's opaque pixels) below which the
+# light halo is used instead of the black one. Mid-grey: the choice is
+# "which of the two contrasts my ink more", and the midpoint is where
+# that answer flips.
+SHADOW_STAMP_LIGHT_THRESHOLD = 118
 
 GLOW_SUN_COLOR = "#FFCC33"           # golden — distinct from the yellow arms
 

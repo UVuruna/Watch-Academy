@@ -130,6 +130,19 @@ ICON_FILES = {
     "dark": ICON_DIR / "dark.svg",              # Quick Jump pole row: polar NIGHT
     "eclipse_sun": ICON_DIR / "eclipse_sun.svg",    # Quick Jump Sun's own eclipse entries
     "eclipse_moon": ICON_DIR / "eclipse_moon.png",  # Quick Jump Moon's own eclipse entries
+    # THE OWNER'S OWN FOUR (his order 2026-08-12, for the Ctrl+[ / Ctrl+]
+    # Fast Travel picker — `config.shortcuts.FAST_TRAVEL_THEMES`). They
+    # sit BESIDE the two Quick Jump glyphs above rather than replacing
+    # them: that menu is a different spot with a different look, and this
+    # table's own rule is that one file may answer more than one spot,
+    # never that one spot must borrow another's file. The lunar one is
+    # RED always (his ballot verdict G1) — the blood-moon tone the dial
+    # itself paints at totality; `moon_eclipse_blue.png` stays on disk
+    # unused rather than being wired to a second meaning nobody asked for.
+    "sun": ICON_DIR / "sun.svg",
+    "moon": ICON_DIR / "moon.svg",
+    "sun_eclipse": ICON_DIR / "sun_eclipse.png",
+    "moon_eclipse_red": ICON_DIR / "moon_eclipse_red.png",
     # R5 MENU REWORK (Time Travel mini-window rows, item 3A): the
     # owner's dedicated per-row icons — a tinted compass rose per pole
     # (navy = North, red = South) and a plain one for Greenwich (the

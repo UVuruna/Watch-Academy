@@ -129,7 +129,10 @@ SHORTCUTS = (
     # flag never blocks the match).
     (
         "fast_travel_theme", "Key_BracketLeft", ("ControlModifier",),
-        "Cycle the Fast Travel theme (Sun / Moon / Calendar)",
+        # The six categories of the owner's 2026-08-11 list — the old
+        # three-name parenthesis outlived its own table by a round.
+        "Cycle the Fast Travel category (eclipses, turning points, "
+        "date, time)",
     ),
     (
         "fast_travel_option", "Key_BracketRight", ("ControlModifier",),
@@ -228,10 +231,20 @@ def shortcut_display(action_id: str) -> str:
 # a solar eclipse living as an option under Moon phases ("kako bre
 # eklipsa sunca da dobija termin po mesecu"). The flash text is
 # "Category (Option)" — `WatchController._flash_fast_travel`.
+# THE OWNER'S OWN SIX ICONS (his order 2026-08-12, verbatim list): the
+# picker wears HIS art, not the app's generic chrome — `sun_eclipse.png`
+# and `moon_eclipse_red.png` for the two eclipse categories (RED always:
+# his ballot verdict G1, the blood-moon tone the dial itself paints at
+# totality), `sun.svg` and `moon.svg` for the two turning-point
+# categories. Date and Time own no file and are COMPUTED instead (Rule
+# #19, never commission art for a plain glyph): `computed_icon` names the
+# drawing, resolved by `WatchController._flash_fast_travel` through
+# `render.asset_variants`. Their old 📅/🕐 emoji stay as the documented
+# absent-file fallback and nothing else.
 FAST_TRAVEL_THEMES = (
     {
         "id": "solar_eclipse", "title": "Solar Eclipse",
-        "icon_key": "eclipse_sun", "emoji": "🌑",
+        "icon_key": "sun_eclipse", "emoji": "🌑",
         "options": (
             {"id": "any", "title": "Any", "jump_stem": "solar_eclipse"},
             {"id": "total", "title": "Total", "jump_stem": "solar_eclipse_total"},
@@ -251,7 +264,7 @@ FAST_TRAVEL_THEMES = (
     },
     {
         "id": "lunar_eclipse", "title": "Lunar Eclipse",
-        "icon_key": "eclipse_moon", "emoji": "🌘",
+        "icon_key": "moon_eclipse_red", "emoji": "🌘",
         "options": (
             {"id": "any", "title": "Any", "jump_stem": "lunar_eclipse"},
             {"id": "total", "title": "Total", "jump_stem": "lunar_eclipse_total"},
@@ -267,7 +280,7 @@ FAST_TRAVEL_THEMES = (
     },
     {
         "id": "sun", "title": "Sun Turning Points",
-        "icon_key": "light", "emoji": "☀️",
+        "icon_key": "sun", "emoji": "☀️",
         "options": (
             {"id": "any", "title": "Any", "jump_stem": "sun"},
             {
@@ -282,7 +295,7 @@ FAST_TRAVEL_THEMES = (
     },
     {
         "id": "moon", "title": "Moon Stations",
-        "icon_key": None, "emoji": "🌙",
+        "icon_key": "moon", "emoji": "🌙",
         "options": (
             {"id": "any", "title": "Any", "jump_stem": "moon"},
             {"id": "full", "title": "Full", "jump_stem": "moon_full"},
@@ -291,7 +304,8 @@ FAST_TRAVEL_THEMES = (
         ),
     },
     {
-        "id": "calendar", "title": "Date", "icon_key": None, "emoji": "📅",
+        "id": "calendar", "title": "Date", "icon_key": None,
+        "computed_icon": "calendar_sheet", "emoji": "📅",
         "options": (
             {"id": "day", "title": "Day", "jump_stem": "day"},
             {"id": "month", "title": "Month", "jump_stem": "month"},
@@ -301,7 +315,8 @@ FAST_TRAVEL_THEMES = (
         ),
     },
     {
-        "id": "clock", "title": "Time", "icon_key": None, "emoji": "🕐",
+        "id": "clock", "title": "Time", "icon_key": None,
+        "computed_icon": "clock_face", "emoji": "🕐",
         "options": (
             {"id": "hour", "title": "Hour", "jump_stem": "hour"},
             {"id": "minute", "title": "Minute", "jump_stem": "minute"},
@@ -327,18 +342,45 @@ FAST_TRAVEL_FLASH_PADDING_PX = 10
 FAST_TRAVEL_FLASH_RADIUS_PX = 10
 LOCATION_FLASH_FONT_PX = 32           # R-30: large letters, dial-center flash
 
-# THE CALENDAR WHEEL ICON (ECLIPSE ICON WIRING round, owner 2026-07-20/
-# 21 — "ADD a computed calendar icon... so the 📅 fallback dies"): the
-# Calendar Fast Travel theme is the one FAST_TRAVEL_THEMES entry with
-# no dedicated art file (Sun/Moon keep their eclipse glyphs, untouched
-# this round) — Rule #19, COMPUTE rather than commission a 12th art
-# file for a plain wheel mark. `render.asset_variants.calendar_wheel_icon_file`
-# draws it: 12 alternating wedges in the app's own gold ramp (the SAME
-# two sampled steps the ADAPTIVE GOLD/BRONZE round reads off
-# `UV/DESIGN/gold pallete.png` — Rule #5, one palette, reused) with a
-# thin dark ring for contrast against the flash's own dark background.
-CALENDAR_ICON_WEDGE_COUNT = 12
+# THE TWO COMPUTED ICONS (ECLIPSE ICON WIRING round, owner 2026-07-20/
+# 21 — "ADD a computed calendar icon... so the emoji fallback dies";
+# extended 2026-08-12 to the clock face, his ballot options I1+H1).
+# Date and Time are the two FAST_TRAVEL_THEMES entries with no art
+# file of their own — Rule #19, COMPUTE rather than commission art
+# for a plain glyph. `render.asset_variants.calendar_sheet_icon_file`
+# and `clock_face_icon_file` draw them, both in the app's own gold
+# ramp (the SAME two sampled steps the ADAPTIVE GOLD/BRONZE round
+# reads off `UV/DESIGN/gold pallete.png` — Rule #5, one palette,
+# reused) with a thin dark ink for contrast against the flash's own
+# dark background.
 CALENDAR_ICON_RING_WIDTH_FRACTION = 0.06   # of the icon radius
+# THE CALENDAR SHEET (owner ballot verdict 2026-08-12, option I1 — the
+# 12-wedge wheel is RETIRED, Rule #6: "it reads as an abstract pie, not
+# as a date"). A real sheet instead: a bound page with a darker header
+# band, a grid of day cells and ONE cell lit in the bright gold step, so
+# the glyph says "a day inside a month" at 28 px. All fractions are of
+# the icon's own size, so the drawing scales with whatever the flash asks
+# for.
+CALENDAR_SHEET_MARGIN_FRACTION = 0.10       # blank edge around the page
+CALENDAR_SHEET_HEADER_FRACTION = 0.26       # header band, of the page height
+CALENDAR_SHEET_RING_COUNT = 2               # binding rings above the header
+CALENDAR_SHEET_COLUMNS = 4                  # day cells across
+CALENDAR_SHEET_ROWS = 3                     # rows of day cells
+CALENDAR_SHEET_LIT_CELL = (2, 1)            # (column, row) of today's cell
+# THE 24 h CLOCK FACE (owner ballot verdict 2026-08-12, option H1): there
+# is no clock file in assets/instrument/icons/, so the Time category's
+# glyph is COMPUTED like the calendar's (Rule #19). It is deliberately a
+# TWENTY-FOUR hour face with the hand up at noon — this watch's own
+# convention (DIAL_OFFSET_DEG, 12:00 top / 00:00 bottom), never a generic
+# 12 h clip-art clock that would teach the wrong dial.
+CLOCK_ICON_RIM_WIDTH_FRACTION = 0.09        # of the icon radius
+CLOCK_ICON_TICK_COUNT = 24                  # one per hour of THIS dial
+CLOCK_ICON_MAJOR_EVERY = 6                  # 12/18/00/06 stand out
+CLOCK_ICON_TICK_LENGTH_FRACTION = 0.16      # minor tick, of the radius
+CLOCK_ICON_MAJOR_LENGTH_FRACTION = 0.26
+CLOCK_ICON_HAND_LENGTH_FRACTION = 0.56      # hour hand, of the radius
+CLOCK_ICON_HAND_WIDTH_FRACTION = 0.11
+CLOCK_ICON_HAND_ANGLE_DEG = 0.0             # noon: straight up, the top
 
 
 # Time Travel (scenario tester in the menu): the dial renders the entered

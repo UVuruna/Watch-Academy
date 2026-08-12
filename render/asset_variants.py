@@ -756,50 +756,163 @@ def eclipse_solar_type_icon(type_: str) -> Path | None:
     return cache
 
 
-def calendar_wheel_icon_file(size: int) -> Path:
-    """A COMPUTED 12-wedge wheel glyph at `size` px (Rule #19 — no new
-    art file) for the Fast Travel Flash's Calendar theme, replacing the
-    plain 📅 emoji fallback (owner ask, ECLIPSE ICON WIRING round
-    2026-07-20/21): 12 alternating wedges in `defaults.
-    CALENDAR_ICON_WEDGE_COLORS` (the app's own gold ramp) with a thin
-    dark ring for contrast against the flash's dark background. Disk-
-    cached by SIZE alone — the drawing has no other input, so a given
-    size paints exactly once per install. There is no source master to
-    fall back to on a write failure (unlike every other cache function
-    here), so a failed save raises rather than silently returning an
-    uncached path (Rule #1)."""
-    cache = (
+def _computed_icon_cache(name: str, size: int) -> Path:
+    """Where a COMPUTED Fast Travel icon is cached, keyed by name and
+    SIZE alone — these drawings take no other input, so a given size
+    paints exactly once per install."""
+    return (
         paths.settings_path().parent / "raster_cache"
-        / f"calendar_wheel_icon_{size}.png"
+        / f"{name}_icon_{size}.png"
     )
-    if cache.exists():
-        return cache
+
+
+def _save_computed_icon(image: QImage, cache: Path, what: str) -> Path:
+    """There is no source master to fall back to for a computed glyph
+    (unlike every other cache function here), so a failed save RAISES
+    rather than silently returning an uncached path (Rule #1)."""
+    try:
+        raster_store.atomic_save(image, cache)
+    except OSError as error:
+        print(f"{what} icon cache write failed: {error}", file=sys.stderr)
+        raise
+    return cache
+
+
+def _blank_icon(size: int) -> tuple[QImage, QPainter]:
     image = QImage(size, size, QImage.Format.Format_ARGB32_Premultiplied)
     image.fill(Qt.GlobalColor.transparent)
     painter = QPainter(image)
     painter.setRenderHint(QPainter.RenderHint.Antialiasing)
-    ring_width = max(1.0, size * shortcuts.CALENDAR_ICON_RING_WIDTH_FRACTION)
-    radius = size / 2.0 - ring_width
-    rect = QRectF(
-        size / 2.0 - radius, size / 2.0 - radius, 2.0 * radius, 2.0 * radius
-    )
-    wedges = shortcuts.CALENDAR_ICON_WEDGE_COUNT
-    colors = [QColor(c) for c in palette.CALENDAR_ICON_WEDGE_COLORS]
-    span_deg = 360.0 / wedges
+    return image, painter
+
+
+def calendar_sheet_icon_file(size: int) -> Path:
+    """A COMPUTED calendar SHEET at `size` px for the Fast Travel Flash's
+    Date category (owner ballot verdict 2026-08-12, option I1).
+
+    It REPLACES the 12-wedge wheel that stood here since 2026-07-21 —
+    his words on the ballot: that wheel "reads as an abstract pie rather
+    than a date". A bound page instead: two binding rings, a darker
+    header band, a grid of day cells and one cell lit, in the app's own
+    gold ramp (`palette.CALENDAR_ICON_GOLD_COLORS`) so it stays in the
+    same family as everything else in the flash. Rule #19 — computed, not
+    commissioned; Rule #6 — the wheel is gone, not kept alongside."""
+    cache = _computed_icon_cache("calendar_sheet", size)
+    if cache.exists():
+        return cache
+    image, painter = _blank_icon(size)
+    dark, bright = (QColor(c) for c in palette.CALENDAR_ICON_GOLD_COLORS)
+    ink = QColor(palette.CALENDAR_ICON_RING_COLOR)
+    margin = size * shortcuts.CALENDAR_SHEET_MARGIN_FRACTION
+    page = QRectF(margin, margin, size - 2 * margin, size - 2 * margin)
+    radius = size * 0.08
     painter.setPen(Qt.PenStyle.NoPen)
-    for index in range(wedges):
-        painter.setBrush(colors[index % len(colors)])
-        # QPainter angles are in 1/16ths of a degree, counterclockwise
-        # from 3 o'clock — the exact sweep direction/units are cosmetic
-        # here (a symmetric wheel reads identically either way).
-        painter.drawPie(rect, round(index * span_deg * 16), round(span_deg * 16))
-    painter.setPen(QPen(QColor(palette.CALENDAR_ICON_RING_COLOR), ring_width))
+    painter.setBrush(bright)
+    painter.drawRoundedRect(page, radius, radius)
+    header_height = page.height() * shortcuts.CALENDAR_SHEET_HEADER_FRACTION
+    painter.setBrush(dark)
+    painter.drawRoundedRect(
+        QRectF(page.left(), page.top(), page.width(), header_height),
+        radius, radius,
+    )
+    # Square off the header's lower corners so it reads as a band across
+    # the page rather than a second rounded card floating on it.
+    painter.drawRect(QRectF(
+        page.left(), page.top() + header_height / 2,
+        page.width(), header_height / 2,
+    ))
+    # The binding rings stand ABOVE the page edge, which is what makes a
+    # rectangle read as a calendar rather than as a card.
+    ring_width = max(1.0, size * shortcuts.CALENDAR_ICON_RING_WIDTH_FRACTION)
+    painter.setPen(QPen(ink, ring_width))
     painter.setBrush(Qt.BrushStyle.NoBrush)
-    painter.drawEllipse(rect)
+    rings = shortcuts.CALENDAR_SHEET_RING_COUNT
+    for index in range(rings):
+        x = page.left() + page.width() * (index + 1) / (rings + 1)
+        painter.drawLine(
+            QPointF(x, margin * 0.35), QPointF(x, page.top() + header_height * 0.45)
+        )
+    # The day grid, with today's cell lit in the bright step against the
+    # dark ink the other cells are drawn in.
+    columns = shortcuts.CALENDAR_SHEET_COLUMNS
+    rows = shortcuts.CALENDAR_SHEET_ROWS
+    body_top = page.top() + header_height
+    body_height = page.height() - header_height
+    cell_w = page.width() / (columns + 1)
+    cell_h = body_height / (rows + 1)
+    painter.setPen(Qt.PenStyle.NoPen)
+    lit_column, lit_row = shortcuts.CALENDAR_SHEET_LIT_CELL
+    for row in range(rows):
+        for column in range(columns):
+            x = page.left() + cell_w * (column + 0.75)
+            y = body_top + cell_h * (row + 0.6)
+            cell = QRectF(x, y, cell_w * 0.62, cell_h * 0.58)
+            if (column, row) == (lit_column, lit_row):
+                painter.setBrush(dark)
+                painter.drawRect(cell.adjusted(
+                    -cell_w * 0.10, -cell_h * 0.10,
+                    cell_w * 0.10, cell_h * 0.10,
+                ))
+                continue
+            painter.setBrush(ink)
+            painter.drawRect(cell)
     painter.end()
-    try:
-        raster_store.atomic_save(image, cache)
-    except OSError as error:
-        print(f"calendar wheel icon cache write failed: {error}", file=sys.stderr)
-        raise
-    return cache
+    return _save_computed_icon(image, cache, "calendar sheet")
+
+
+def clock_face_icon_file(size: int) -> Path:
+    """A COMPUTED 24-HOUR clock face at `size` px for the Fast Travel
+    Flash's Time category (owner ballot verdict 2026-08-12, option H1).
+
+    No clock file exists in `assets/instrument/icons/`, so "the clock SVG
+    as until now" had nothing to point at — the spot showed a bare 🕐
+    emoji. This draws one in the app's own gold ramp, and draws it as
+    THIS watch's dial: twenty-four ticks, the majors at 12/18/00/06, and
+    the hand standing at noon — the top, per `DIAL_OFFSET_DEG`. A generic
+    twelve-hour clip-art clock would have taught the wrong dial in the
+    one place the app announces what a step of TIME means."""
+    cache = _computed_icon_cache("clock_face", size)
+    if cache.exists():
+        return cache
+    image, painter = _blank_icon(size)
+    dark, bright = (QColor(c) for c in palette.CALENDAR_ICON_GOLD_COLORS)
+    ink = QColor(palette.CALENDAR_ICON_RING_COLOR)
+    rim = max(1.0, size * shortcuts.CLOCK_ICON_RIM_WIDTH_FRACTION)
+    centre = QPointF(size / 2.0, size / 2.0)
+    radius = size / 2.0 - rim / 2.0
+    painter.setPen(Qt.PenStyle.NoPen)
+    painter.setBrush(bright)
+    painter.drawEllipse(centre, radius, radius)
+    painter.setPen(QPen(ink, rim))
+    painter.setBrush(Qt.BrushStyle.NoBrush)
+    painter.drawEllipse(centre, radius, radius)
+    ticks = shortcuts.CLOCK_ICON_TICK_COUNT
+    for index in range(ticks):
+        major = index % shortcuts.CLOCK_ICON_MAJOR_EVERY == 0
+        length = radius * (
+            shortcuts.CLOCK_ICON_MAJOR_LENGTH_FRACTION if major
+            else shortcuts.CLOCK_ICON_TICK_LENGTH_FRACTION
+        )
+        theta = math.radians(index * 360.0 / ticks)
+        outer = QPointF(
+            centre.x() + math.sin(theta) * (radius - rim * 0.6),
+            centre.y() - math.cos(theta) * (radius - rim * 0.6),
+        )
+        inner = QPointF(
+            centre.x() + math.sin(theta) * (radius - rim * 0.6 - length),
+            centre.y() - math.cos(theta) * (radius - rim * 0.6 - length),
+        )
+        painter.setPen(QPen(dark, rim * (0.9 if major else 0.5)))
+        painter.drawLine(inner, outer)
+    hand = radius * shortcuts.CLOCK_ICON_HAND_LENGTH_FRACTION
+    theta = math.radians(shortcuts.CLOCK_ICON_HAND_ANGLE_DEG)
+    painter.setPen(QPen(
+        ink, max(1.0, size * shortcuts.CLOCK_ICON_HAND_WIDTH_FRACTION),
+        Qt.PenStyle.SolidLine, Qt.PenCapStyle.RoundCap,
+    ))
+    painter.drawLine(centre, QPointF(
+        centre.x() + math.sin(theta) * hand,
+        centre.y() - math.cos(theta) * hand,
+    ))
+    painter.end()
+    return _save_computed_icon(image, cache, "clock face")

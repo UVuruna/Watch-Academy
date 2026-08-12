@@ -2751,46 +2751,86 @@ def test_ui_icon_table_and_pole_icon_name(tmp_path, monkeypatch):
     assert defaults.icon_path("light") is None
 
 
-def test_calendar_wheel_icon_is_computed_not_shipped(app):
-    """ECLIPSE ICON WIRING round (owner 2026-07-20/21): the Fast Travel
-    Calendar theme's icon is COMPUTED (Rule #19 — a 12-wedge wheel, no
-    new art file), killing the plain 📅 fallback. A valid, disk-cached,
-    non-uniform (the alternating wedges actually differ) image at the
-    requested size; the SAME size resolves to the SAME cached file on a
-    second call (paint once, reuse forever)."""
+def test_computed_fast_travel_icons_are_drawn_not_shipped(app):
+    """The two COMPUTED Fast Travel glyphs (owner 2026-07-20/21, reworked
+    to his ballot verdicts I1+H1 on 2026-08-12): the Date category wears
+    a drawn calendar SHEET and the Time category a drawn 24 h CLOCK FACE
+    — no new art files, no emoji fallback. Each is a valid, disk-cached,
+    non-uniform image at the requested size, and the SAME size resolves
+    to the SAME cached file on a second call (paint once, reuse
+    forever)."""
     from PySide6.QtGui import QImage
 
-    from render.asset_variants import calendar_wheel_icon_file
+    from render.asset_variants import (
+        calendar_sheet_icon_file,
+        clock_face_icon_file,
+    )
 
     size = 28
-    first = calendar_wheel_icon_file(size)
-    second = calendar_wheel_icon_file(size)
-    assert first == second
-    assert first.exists()
-    image = QImage(str(first))
-    assert image.width() == size and image.height() == size
-    center = image.pixelColor(size // 2, size // 2)
-    assert center.alpha() > 0                    # the disc covers the center
-    corner = image.pixelColor(0, 0)
-    assert corner.alpha() == 0                    # outside the disc stays clear
-    # At least two distinct wedge colors show up along a ring inside
-    # the disc (the alternation is real, not a flat fill).
-    radius = size / 2.0
-    seen = set()
-    for step in range(shortcuts.CALENDAR_ICON_WEDGE_COUNT * 2):
-        angle = math.radians(step * 360.0 / (shortcuts.CALENDAR_ICON_WEDGE_COUNT * 2))
-        x = round(radius + (radius * 0.6) * math.cos(angle))
-        y = round(radius + (radius * 0.6) * math.sin(angle))
-        seen.add(image.pixelColor(x, y).name())
-    assert len(seen) >= 2
+    for draw in (calendar_sheet_icon_file, clock_face_icon_file):
+        first = draw(size)
+        assert first == draw(size)          # cached by size alone
+        assert first.exists()
+        image = QImage(str(first))
+        assert image.width() == size and image.height() == size
+        center = image.pixelColor(size // 2, size // 2)
+        assert center.alpha() > 0            # the glyph covers the middle
+        # More than one colour inside the glyph: the sheet's header and
+        # lit cell, the face's ticks and hand. A flat fill would mean the
+        # drawing silently degenerated.
+        seen = {
+            image.pixelColor(x, y).name()
+            for y in range(2, size - 2, 2)
+            for x in range(2, size - 2, 2)
+            if image.pixelColor(x, y).alpha() > 0
+        }
+        assert len(seen) >= 2
+    # The clock is THIS watch's dial, not a generic twelve-hour clock:
+    # twenty-four ticks with the majors on 12/18/00/06.
+    assert shortcuts.CLOCK_ICON_TICK_COUNT == 24
+    assert shortcuts.CLOCK_ICON_MAJOR_EVERY == 6
+    # ... and its hand stands at noon, which on this dial is the TOP.
+    assert shortcuts.CLOCK_ICON_HAND_ANGLE_DEG == 0.0
 
 
-def test_calendar_fast_travel_flash_never_falls_back_to_the_emoji(app, monkeypatch):
-    """Wiring: `_flash_fast_travel` resolves a REAL icon path for the
-    Calendar theme now — the emoji is still passed through as the
-    documented fallback text (`FastTravelFlash.flash`'s own contract)
-    but `icon_path` itself must never be None for Calendar."""
-    from render.asset_variants import calendar_wheel_icon_file
+def test_every_fast_travel_category_resolves_a_real_icon(app):
+    """THE OWNER'S OWN SIX (his order 2026-08-12): every category in the
+    picker resolves to a real image — four to a file of his in
+    `ICON_FILES`, two to a computed drawing — so the Ctrl+[ / Ctrl+]
+    flash never shows a bare emoji on a complete install."""
+    from render.asset_variants import (
+        calendar_sheet_icon_file,
+        clock_face_icon_file,
+    )
+
+    expected_files = {
+        "solar_eclipse": "sun_eclipse.png",
+        "lunar_eclipse": "moon_eclipse_red.png",
+        "sun": "sun.svg",
+        "moon": "moon.svg",
+    }
+    computed = {"calendar": calendar_sheet_icon_file, "clock": clock_face_icon_file}
+    for theme in shortcuts.FAST_TRAVEL_THEMES:
+        if theme["id"] in expected_files:
+            path = defaults.icon_path(theme["icon_key"])
+            assert path is not None, theme["id"]
+            assert path.name == expected_files[theme["id"]]
+            assert path.exists()
+            continue
+        draw = computed[theme["id"]]
+        assert theme["computed_icon"] in ("calendar_sheet", "clock_face")
+        assert draw(shortcuts.FAST_TRAVEL_FLASH_ICON_PX).exists()
+
+
+def test_computed_fast_travel_flash_never_falls_back_to_the_emoji(app, monkeypatch):
+    """Wiring: `_flash_fast_travel` resolves a REAL icon path for both
+    COMPUTED categories now — the emoji is still passed through as the
+    documented fallback text (`FastTravelFlash.flash`'s own contract) but
+    `icon_path` itself must never be None for Date or Time."""
+    from render.asset_variants import (
+        calendar_sheet_icon_file,
+        clock_face_icon_file,
+    )
 
     captured = {}
 
@@ -2799,30 +2839,37 @@ def test_calendar_fast_travel_flash_never_falls_back_to_the_emoji(app, monkeypat
             captured["icon_path"] = icon_path
             captured["emoji"] = emoji
 
-    class _Fake:
-        _fast_travel_flash = _FakeFlash()
-        _widget = None
-        _fast_travel_theme_index = 0
-        _fast_travel_option_indices = {}
+    def _run(theme_id):
+        class _Fake:
+            _fast_travel_flash = _FakeFlash()
+            _widget = None
+            _fast_travel_theme_index = 0
+            _fast_travel_option_indices = {}
 
-        def _fast_travel_theme(self):
-            return next(
-                t for t in shortcuts.FAST_TRAVEL_THEMES if t["id"] == "calendar"
-            )
+            def _fast_travel_theme(self):
+                return next(
+                    t for t in shortcuts.FAST_TRAVEL_THEMES if t["id"] == theme_id
+                )
 
-        def _fast_travel_option_index(self, theme_id):
-            return 0
+            def _fast_travel_option_index(self, theme_id_):
+                return 0
 
-        def _ui(self, text):
-            return text
+            def _ui(self, text):
+                return text
 
-    from app.controller import WatchController
+        from app.controller import WatchController
 
-    WatchController._flash_fast_travel(_Fake())
-    assert captured["icon_path"] == calendar_wheel_icon_file(
+        WatchController._flash_fast_travel(_Fake())
+
+    _run("calendar")
+    assert captured["icon_path"] == calendar_sheet_icon_file(
         shortcuts.FAST_TRAVEL_FLASH_ICON_PX
     )
     assert captured["emoji"] == "📅"
+    _run("clock")
+    assert captured["icon_path"] == clock_face_icon_file(
+        shortcuts.FAST_TRAVEL_FLASH_ICON_PX
+    )
 
 
 def test_widget_z_mode_swaps_the_window_flags(app):

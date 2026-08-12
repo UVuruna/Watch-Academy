@@ -129,10 +129,18 @@ circle).
   (owner bar 2026-08-09) — see above.
 - `eclipse_solar_type_icon(type_)`: the small per-type solar eclipse
   icon (annular gets a live tritone tint).
-- `calendar_wheel_icon_file(size)`: a COMPUTED 12-wedge wheel glyph, no
-  new art file (root Rule #19).
+- `calendar_sheet_icon_file(size)`: a COMPUTED calendar SHEET — bound
+  page, header band, day grid, one cell lit — for the Fast Travel Date
+  category (root Rule #19, no new art file). It REPLACED the 12-wedge
+  wheel on the owner's ballot verdict I1 (2026-08-12): the wheel "reads
+  as an abstract pie rather than a date".
+- `clock_face_icon_file(size)`: a COMPUTED 24-HOUR clock face for the
+  Time category (his ballot verdict H1) — twenty-four ticks, majors on
+  12/18/00/06, hand at noon/top. Deliberately THIS watch's dial, never a
+  generic twelve-hour clock: no clock file exists in
+  `assets/instrument/icons/`, so the spot showed a bare emoji before.
 
 ## Design Decisions
-- **`calendar_wheel_icon_file` raises on a write failure** instead of
-  falling back to an original — unlike every other cache function here,
-  it has no source master to fall back to (Rule #1).
+- **The computed icons raise on a write failure** instead of falling
+  back to an original — unlike every other cache function here, they
+  have no source master to fall back to (Rule #1).
