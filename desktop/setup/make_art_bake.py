@@ -50,7 +50,8 @@ VERBATIM_SUBTREES = ("instrument/letters",)
 # Globe originals round: "every earth face is his full-resolution
 # original", pinned at >= 1500 px by
 # `tests/test_skins.py::test_earth_pole_regions_full_res_and_latitude_override`.
-# The area DOES carry a runtime `WORKING_SET_CEILINGS` entry of 800, and
+# The area DOES carry a runtime `WORKING_SET_CEILINGS` entry (512 since
+# his ceiling decree of 2026-08-13, 800 before it), and
 # that is not a contradiction: the working set makes a small copy to
 # DRAW from and leaves the original alone. The bakery replaces the file
 # itself, so obeying that ceiling here destroyed the original — which is
@@ -202,6 +203,15 @@ def _plan(
             not force
             and record is not None
             and record.get("sha256") == digest
+            # The CEILING is part of the skip test, not only the source
+            # hash (owner's 800 -> 512 decree, 2026-08-13, found this).
+            # Lower a ceiling and every master is still byte-identical,
+            # so a hash-only check would skip the whole tree and report
+            # "0 to bake" — the change would appear to have been applied
+            # and would in fact have done nothing. A silent no-op is the
+            # worst answer a setup script can give.
+            and record.get("ceiling") == ceiling
+            and record.get("quality") == bakery.ART_BAKE_QUALITY
             and destination.exists()
             and destination.stat().st_size == record.get("bytes")
         ):
@@ -259,11 +269,11 @@ def bake(force: bool = False, dry_run: bool = False) -> int:
                 str(destination),
                 ceiling,
                 bakery.ART_BAKE_QUALITY,
-            ): (source, destination, digest)
+            ): (source, destination, digest, ceiling)
             for source, destination, ceiling, digest in jobs
         }
         for index, future in enumerate(futures, start=1):
-            source, destination, digest = futures[future]
+            source, destination, digest, ceiling = futures[future]
             relative = _rel(source, masters)
             try:
                 width, height, size = future.result()
@@ -276,6 +286,11 @@ def bake(force: bool = False, dry_run: bool = False) -> int:
             records[relative] = {
                 "sha256": digest,
                 "output": _rel(destination, assets),
+                # Recorded so the next run can tell a re-bake is needed
+                # when the CEILING or the QUALITY changed while the
+                # master did not — see the skip test in `_plan`.
+                "ceiling": ceiling,
+                "quality": bakery.ART_BAKE_QUALITY,
                 "width": width,
                 "height": height,
                 "bytes": size,

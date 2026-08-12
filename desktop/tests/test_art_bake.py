@@ -35,7 +35,7 @@ def test_the_bakery_has_no_ceilings_of_its_own():
     enough" drift apart without either side being wrong."""
     source = Path(make_art_bake.__file__).read_text("utf-8")
     assert "WORKING_SET_CEILINGS" in source
-    for ceiling in {800, 1200}:
+    for ceiling in {512, 1200}:
         assert f"= {ceiling}" not in source, (
             "the bakery restated a ceiling instead of reading the table"
         )
@@ -44,7 +44,7 @@ def test_the_bakery_has_no_ceilings_of_its_own():
 @pytest.mark.parametrize(
     "relative, expected",
     [
-        ("weeks/faith/bible/primary/colored/Perun_gem.png", 800),
+        ("weeks/faith/bible/primary/colored/Perun_gem.png", 512),
         ("archetypes/crosses/primary/colored/Distrust_gpt.png", 1200),
         ("calendars/zodiac/chinese/primary/colored/Tiger_gem.png", 1200),
         # 0, not 800: re-encoded but never resized — the owner's Globe
@@ -95,9 +95,9 @@ def test_a_bake_downscales_to_the_ceiling_and_writes_webp(tmp_path):
     source = _master(tmp_path)
     target = tmp_path / "out.webp"
     width, height, size = make_art_bake.bake_one(
-        str(source), str(target), 800, bakery.ART_BAKE_QUALITY
+        str(source), str(target), 512, bakery.ART_BAKE_QUALITY
     )
-    assert (width, height) == (800, 800)
+    assert (width, height) == (512, 512)
     assert target.exists() and size == target.stat().st_size
     assert size < source.stat().st_size
     with Image.open(target) as baked:
@@ -135,7 +135,7 @@ def test_an_unchanged_master_is_not_rebaked(tmp_path, monkeypatch):
     manifest = json.loads(
         (assets / make_art_bake.MANIFEST_NAME).read_text("utf-8")
     )
-    assert manifest["files"]["weeks/A_gem.png"]["width"] == 800
+    assert manifest["files"]["weeks/A_gem.png"]["width"] == 512
 
     assert make_art_bake.bake() == 0, "an unchanged master was baked twice"
     assert make_art_bake.bake(force=True) == 1

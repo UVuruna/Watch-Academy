@@ -1460,10 +1460,15 @@ def test_working_set_downscales_oversized_dial_art():
     )
 
     assets = paths.assets_dir()
+    # 512 since the owner's ceiling decree of 2026-08-13 (was 800): he
+    # ruled that 512 is plenty even at the largest 1,440 px dial, and
+    # `.claude/shots/ceiling-512/worst_case_ab.png` showed him a body
+    # drawn at the 800 px worst case from a 512 source before it changed.
+    # The 1200 seats deliberately did NOT move with them.
     assert working_ceiling(
         assets / "celestial" / "earth" / "earth_clean_europe_day.png"
-    ) == 800
-    assert working_ceiling(assets / "weeks" / "x.png") == 800
+    ) == 512
+    assert working_ceiling(assets / "weeks" / "x.png") == 512
     assert working_ceiling(assets / "calendars" / "x.png") == 1200
     assert working_ceiling(assets / "instrument" / "guide" / "x.png") is None
     assert working_ceiling(Path("C:/elsewhere/x.png")) is None

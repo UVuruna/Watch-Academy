@@ -232,9 +232,26 @@ SETTINGS_NAV_WIDTH_PX = 170
 # `celestial/eclipse` joined it in that round: they were always drawn
 # under the 1200 px seat ceiling, they were simply never listed, so the
 # runtime carried their full-resolution plates for nothing.
+#
+# 800 -> 512 (owner decree 2026-08-13). His ruling, in translation: if
+# we ever said an image must be at least 800 px, change it to 512 —
+# that is plenty even at the largest 1,440 px dial, for anything we
+# actually display.
+#
+# Shown to him first, at the WORST case rather than at rest:
+# `.claude/shots/ceiling-512/worst_case_ab.png` draws a body at 800 px
+# from a 512 source beside the same body from an 800 source. It holds —
+# the masters in this tree are mostly 780-940 px, so 512 is a 1.6x
+# upscale at the extreme of extremes and a 1:1 read everywhere a person
+# actually looks.
+#
+# The 1200 seats were NOT changed with them. He named 800, and 512 there
+# would be a 2.3x upscale — visibly softer on that same sheet (the
+# tiger's whiskers, the Judge's robe folds). That is his call to make
+# with his own eyes, not one to infer from a sentence about 800.
 WORKING_SET_CEILINGS = {
-    "celestial/earth": 800,
-    "weeks": 800,
+    "celestial/earth": 512,
+    "weeks": 512,
     "calendars": 1200,
     "archetypes": 1200,
     "celestial/seasons": 1200,
