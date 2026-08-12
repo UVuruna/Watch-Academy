@@ -498,9 +498,11 @@ def warm_working_set(progress=None, should_stop=None) -> int:
         (source, ceiling)
         for subtree, ceiling in defaults.WORKING_SET_CEILINGS.items()
         for source, width in asset_index.widths_under(subtree)
-        # PNG only, exactly as the old `rglob("*.png")` did — the index
-        # also carries jpg/svg, which this family has never downscaled.
-        if width > ceiling and source.suffix.lower() == ".png"
+        # Raster art only — the index also carries jpg/svg, which this
+        # family has never downscaled. `.webp` joined `.png` when THE
+        # ART BAKERY re-encoded the shipped tree (2026-08-12); on a
+        # baked tree this list is simply empty, which is the point.
+        if width > ceiling and paths.is_art_file(source)
     ]
     cold = [
         (source, _scaled_cache_path(source, ceiling), ceiling)

@@ -50,6 +50,29 @@ project-specific laws and deltas that TIGHTEN the root rules.
   `android/` (the future Kotlin phone edition). Every command below runs
   from `desktop/` (`cd desktop` first) unless stated otherwise; every
   `assets/`/`Database/` path is `shared/assets/`/`shared/Database/`.
+- **THE ART BAKERY (owner decree 2026-08-12) — there are now FOUR
+  top-level folders, and the fourth is not in git.** `masters/` is the
+  owner's gitignored inbox: every research prompt writes its
+  full-resolution output there and nothing else ever reads it except
+  `desktop/setup/make_art_bake.py`, which downscales to the area's
+  `WORKING_SET_CEILINGS` entry and re-encodes to WebP q90 into
+  `shared/assets/` — the small, committed tree BOTH platforms read.
+  Consequences to hold in mind, all of them load-bearing:
+  **(a)** never edit art under `shared/assets/`; edit the master and
+  re-run `python -m setup.make_art_bake` (incremental, keyed by the
+  master's sha256 in `shared/assets/_bake_manifest.json`).
+  **(b)** the shipped art is `.webp`; every config table still names the
+  canonical `.png` and `paths.art_file` does the translation — it is the
+  single door, do not add a second.
+  **(c)** never write `rglob("*.png")` over the assets tree — use
+  `paths.art_files_under` / `paths.is_art_file`, because a `*.png` glob
+  now matches NOTHING in the baked areas and would pass a guard in
+  silence.
+  **(d)** `_baked/letters/` is lossless WebP of the EAGER roster only
+  (`defaults.EAGER_BAKED_SHADES`, 17 of the 34 pairs); the rest derive
+  at runtime as they always could.
+  **(e)** a clone without `masters/` is a complete, working program —
+  that is the whole point.
 - **Verification:** `python -m pytest tests` from inside `desktop/` (golden
   values: Belgrade DST −4.17°→+10.76°, Tromsø regimes, exact equinoxes,
   moon 0.7400 on 2026-07-07, mockup day 20.6.2025 sunrise 04:52/sunset

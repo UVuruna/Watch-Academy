@@ -35,6 +35,13 @@ from config import paths, taxonomy
 _ALLOWED_ROOTS = set(taxonomy.CATEGORIES) | {
     "_state",              # the PromptPainter per-source run ledger (meta)
     "_baked",              # DERIVED art, shipped: setup/make_letter_bake.py
+    "_bake_manifest.json",  # THE ART BAKERY's provenance record
+                            # (setup/make_art_bake.py): per shipped file,
+                            # the sha256 of the MASTER it came from. It
+                            # lives HERE, beside what it describes, and
+                            # not with the masters — the masters are
+                            # gitignored, so this is the only place the
+                            # repo can keep that record at all.
     "logo.svg", "logo-setup.svg",   # build-pipeline contract (unchanged)
     "___assets.md",
 }
@@ -62,7 +69,12 @@ _SUFFIXED_AREAS = (
 
 
 def _iter_png(root: Path):
-    return (p for p in root.rglob("*.png") if p.is_file())
+    """Every shipped art file — `.webp` since THE ART BAKERY re-encoded
+    the tree (2026-08-12), `.png` wherever no bake exists. Routed
+    through `paths.art_files_under` rather than a local glob so this
+    guard cannot go blind the next time the format moves; the name
+    stays for the call sites."""
+    return paths.art_files_under(root)
 
 
 # THE TREE LAW's vocabulary (owner-approved 2026-07-26). A LOOK folder

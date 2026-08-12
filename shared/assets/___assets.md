@@ -3,6 +3,32 @@
 Bundled visual content — ALL of it shared app content (there are no
 skin folders: DOMY and MORPH are ring preset names, nothing more).
 
+> **THIS TREE IS BAKED OUTPUT (owner decree 2026-08-12 — THE ART
+> BAKERY).** Nothing under the figure categories is edited here. The
+> full-resolution originals live in the repo-root `masters/` folder,
+> which is GITIGNORED and is where every research prompt writes;
+> `desktop/setup/make_art_bake.py` downscales each area to its
+> `defaults.WORKING_SET_CEILINGS` entry, re-encodes to **WebP q90**, and
+> writes here. 3.8 GB of masters become roughly half a gigabyte of
+> shipped art, and both platforms read these exact bytes — Qt and
+> Compose decode WebP natively.
+>
+> Three things follow, and every one of them has teeth:
+>
+> - **The shipped files are `.webp`.** Every config table still names
+>   the canonical `.png`; `paths.art_file` translates, and it is the
+>   single door. A mixed tree is legal forever, so a hand-made PNG the
+>   owner drops in still resolves.
+> - **Never `rglob("*.png")` over this tree.** In the baked areas that
+>   glob now matches NOTHING, which would make a guard pass in silence —
+>   the blind-guard failure THE THEME COMPLETION LAW exists to prevent.
+>   Use `paths.art_files_under` / `paths.is_art_file`.
+> - **`_bake_manifest.json`** records each shipped file's MASTER sha256,
+>   dimensions and size. It is the only provenance the repo can keep,
+>   because the masters are not in it.
+>
+> Details: [Make Art Bake](../../desktop/setup/__about/make_art_bake.md).
+
 > **RESTRUCTURED 2026-07-22 (RESTRUCTURE.md — the one hierarchy).** The
 > tree below the banner still describes the pre-restructure layout and is
 > pending a full rewrite (a Phase-2/docs follow-up). The CURRENT layout

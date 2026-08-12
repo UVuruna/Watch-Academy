@@ -41,22 +41,37 @@ def _plates() -> list[Path]:
 
 
 def _finishes() -> list[tuple[str, str]]:
-    """Every (metal, shade) pair the transformer offers — the three
-    real metals with all their shades, plus the THEMATIC pseudo-metal
-    whose shades are the five ring theme colours and every remaining
-    ramp (copper, brass, rose_gold, steel, pewter, iron...).
+    """The (metal, shade) pairs baked EAGERLY —
+    `defaults.EAGER_BAKED_SHADES`, not the full `METAL_SHADES` matrix.
 
-    Pairs are NOT collapsed onto their ramps even though several share
-    one (gold/classic and thematic/gold are both the `gold` ramp): the
-    runtime key carries the pair, not the ramp, and teaching this
-    script the ramp table is exactly the kind of second source of truth
-    the bake's naming design exists to avoid. The cost is a few MB of
-    duplicate pixels."""
-    return [
-        (metal, shade)
-        for metal, shades in defaults.METAL_SHADES.items()
-        for shade in shades
-    ]
+    Owner decree 2026-08-12, on the bake being too heavy: render what is
+    actually used — the three real metals with all their shades plus the
+    thematic colours the shipped rings and themes use — and let a custom
+    ring's exotic ramp derive the first time somebody asks for it. That
+    is half the files, and the half that is dropped is largely duplicate
+    pixels: `thematic/gold` and `gold/classic` are the same ramp, kept
+    apart only because the runtime key carries the pair.
+
+    A dropped pair is not a missing feature. A miss here is exactly the
+    runtime path that existed before any bake did — `jewel_metal_path`
+    records the recipe, `render.art_warm` builds it in the background,
+    and the dial shows the gold master meanwhile. Slower once, never
+    wrong.
+
+    Each shade is validated against `METAL_SHADES` on the way out: a
+    typo in the roster must fail the bake loudly, not silently bake 16
+    finishes and leave one colour deriving forever."""
+    pairs: list[tuple[str, str]] = []
+    for metal, shades in defaults.EAGER_BAKED_SHADES.items():
+        known = defaults.METAL_SHADES[metal]
+        for shade in shades:
+            if shade not in known:
+                raise KeyError(
+                    f"EAGER_BAKED_SHADES names {metal}/{shade}, which is "
+                    f"not a shade of {metal} in METAL_SHADES"
+                )
+            pairs.append((metal, shade))
+    return pairs
 
 
 def bake(force: bool = False) -> int:
@@ -98,7 +113,10 @@ def bake(force: bool = False) -> int:
             f"built {built}, skipped {skipped}"
         )
     letter_bake.refresh()
-    size = sum(f.stat().st_size for f in destination.glob("*.png"))
+    # `*` and not `*.png`: the bake is lossless WebP since 2026-08-12,
+    # and a glob left behind reported "0 MB" for 969 real files — a
+    # report that lies quietly is worse than no report.
+    size = sum(f.stat().st_size for f in destination.glob("*") if f.is_file())
     print(
         f"\nDONE in {perf_counter() - start:.1f}s — {built} built, "
         f"{skipped} already present, {letter_bake.baked_count()} files, "

@@ -76,6 +76,18 @@ The bakery (Phase 1, work in THIS repo, before any Kotlin) produces the
   existing transformer (the phone never recolors), packed PER THEME with a
   manifest. Measured 2026-08-10: `assets/` is 3,552 MB in 2,678 files —
   baking is not an optimization, it is the only way a phone app exists.
+
+  **HALF OF THIS SHIPPED EARLY** (art-bakery round, 2026-08-12): the
+  desktop needed the same downscale for its own reasons, so
+  `desktop/setup/make_art_bake.py` now bakes the gitignored `masters/`
+  inbox into `shared/assets/` — every area at its `WORKING_SET_CEILINGS`
+  ceiling, WebP q90, with `_bake_manifest.json` recording each file's
+  master hash. The phone therefore already has WebP art it can read
+  byte-for-byte, and the ONE COPY RULE is satisfied by construction:
+  there is one bakery, not a desktop one and a phone one. What is still
+  owed to the phone is the packaging — per-THEME packs rather than one
+  flat tree, a handset-sized ceiling if 800/1200 px proves generous, and
+  the recolor pass. Tracked in [PARITY.md](PARITY.md), rows 1 and 3.
 - **Databases as-is** — `Database/` JSON + SQLite travel byte-for-byte
   (67.9 MB, of which deep_time.sqlite 56.6 MB stays on-demand).
 - **A manifest** — pack version + per-content hashes + the vector set.

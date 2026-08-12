@@ -223,8 +223,11 @@ def _ledgered_dirs() -> set[str]:
 
 def _art_dirs() -> list[Path]:
     return [
+        # `.webp` since THE ART BAKERY (2026-08-12) — a `*.png` glob
+        # here would have found no directory at all in the baked areas
+        # and passed this whole guard in silence.
         d for d in sorted(_ASSETS.rglob("*"))
-        if d.is_dir() and any(d.glob("*.png"))
+        if d.is_dir() and any(paths.is_art_file(f) for f in d.glob("*"))
     ]
 
 

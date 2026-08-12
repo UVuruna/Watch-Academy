@@ -78,6 +78,22 @@ def bundled_skins_dir() -> Path:
     return assets_dir() / "skins"
 
 
+def masters_dir() -> Path | None:
+    """THE ART MASTERS inbox (owner decree 2026-08-12) — the gitignored
+    `<repo>/masters/` folder every research prompt writes its
+    full-resolution output into, and the ONLY source
+    `setup/make_art_bake.py` reads.
+
+    `None` in a frozen build and in any checkout that does not have it:
+    masters never ship, and a clone without them is a perfectly working
+    program — that is the entire point of baking the shipped tree here.
+    Only the bakery calls this; nothing at runtime may."""
+    if getattr(sys, "frozen", False):
+        return None
+    candidate = Path(__file__).resolve().parents[2] / "masters"
+    return candidate if candidate.is_dir() else None
+
+
 def user_dir() -> Path:
     """Per-user writable folder: %APPDATA%/Watch Academy (not
     auto-created). THE RENAMING (owner decree 2026-08-10):
@@ -255,6 +271,33 @@ def metal_shade(metal: str) -> str:
 # tree and ONTO the filename — `<Figure>[_vN]_<src>.png`, source last.
 ART_SUFFIX = {"gemini": "gem", "chatgpt": "gpt"}
 
+# The file EXTENSIONS `art_file` probes, in priority order (THE ART
+# BAKERY, owner decree 2026-08-12). Every art table in `config/` names
+# the canonical `.png`; the bakery ships `.webp`, so the baked file wins
+# wherever it exists and the PNG answers wherever it does not. Both Qt
+# and Compose decode WebP natively, which is why one extension buys the
+# whole saving without a line of reader code on either platform.
+ART_EXTENSIONS = (".webp", ".png")
+
+
+def is_art_file(path: Path) -> bool:
+    """Whether `path` is one of the raster art files this program ships
+    — the ONE predicate for it (Rule #5).
+
+    It exists because of a near-miss in the bakery round: half a dozen
+    guards asked `rglob("*.png")` over the assets tree, and the moment
+    the bakery re-encoded that tree as WebP those guards would have
+    matched NOTHING and passed in silence — the exact blind-guard
+    failure THE THEME COMPLETION LAW was written after. A guard that
+    stops seeing must stop passing."""
+    return path.suffix.lower() in ART_EXTENSIONS
+
+
+def art_files_under(root: Path):
+    """Every shipped art file under `root`, whatever it was encoded as.
+    The replacement for `rglob("*.png")` — see `is_art_file`."""
+    return (p for p in root.rglob("*") if p.is_file() and is_art_file(p))
+
 #: Resolved art paths, POSITIVE RESULTS ONLY (owner bug 2026-08-06).
 #:
 #: `art_file` runs on every single image draw — `AssetCache.pixmap_by_
@@ -297,10 +340,23 @@ def art_file(path: Path | None) -> Path | None:
     tree is now source-free): the active source first, the other source
     as cross-source fallback (partial ChatGPT coverage; owner 2026-07-14),
     then the suffix-less name (owner hand-made art carries no suffix).
-    A path already carrying a `_gem`/`_gpt` suffix, and any non-PNG
-    (SVG logos, JSON), pass through untouched. When nothing is on disk
-    the canonical path returns unchanged — the caller keeps its own
-    missing-art fallback (documented, Rule #1: never a silent lie)."""
+    Any non-PNG (SVG logos, JSON) passes through untouched. When nothing
+    is on disk the canonical path returns unchanged — the caller keeps
+    its own missing-art fallback (documented, Rule #1: never a silent
+    lie).
+
+    THE ART BAKERY (owner decree 2026-08-12,
+    [Make Art Bake](../setup/__about/make_art_bake.md)): the shipped tree
+    is now BAKED — downscaled and re-encoded as `.webp` — while every
+    art table in `config/` still names the canonical `.png`. The
+    translation lives here and ONLY here, as one more extension on the
+    probe this function already ran: for each candidate stem `.webp`
+    wins, `.png` answers where no bake exists. A mixed tree is therefore
+    legal forever, so the migration needs no flag day and a PNG the
+    owner drops in by hand keeps working. A path already carrying a
+    `_gem`/`_gpt` source suffix no longer returns early — it must still
+    reach the extension probe, or every already-suffixed table entry
+    would go on asking for a `.png` the bakery replaced."""
     if path is None:
         return None
     # Lexical normalization first: a few call sites still reach across
@@ -310,26 +366,25 @@ def art_file(path: Path | None) -> Path | None:
     if path.suffix.lower() != ".png":
         return path
     stem = path.stem
-    if stem.endswith(("_gem", "_gpt")):
-        return path
-    parent, ext = path.parent, path.suffix
+    parent = path.parent
     source = art_source()
     key = (str(path), source)
     resolved = _ART_FILE_CACHE.get(key)
     if resolved is not None:
         return resolved
-    active = ART_SUFFIX[source]
-    ordered = [active] + [s for s in ART_SUFFIX.values() if s != active]
-    for suffix in ordered:
-        candidate = parent / f"{stem}_{suffix}{ext}"
-        if candidate.exists():
-            _ART_FILE_CACHE[key] = candidate
-            _ART_FILE_FOUND.add(str(candidate))
-            return candidate
-    if path.exists():
-        _ART_FILE_CACHE[key] = path
-        _ART_FILE_FOUND.add(str(path))
-        return path
+    if stem.endswith(("_gem", "_gpt")):
+        stems = [stem]
+    else:
+        active = ART_SUFFIX[source]
+        ordered = [active] + [s for s in ART_SUFFIX.values() if s != active]
+        stems = [f"{stem}_{suffix}" for suffix in ordered] + [stem]
+    for candidate_stem in stems:
+        for ext in ART_EXTENSIONS:
+            candidate = parent / f"{candidate_stem}{ext}"
+            if candidate.exists():
+                _ART_FILE_CACHE[key] = candidate
+                _ART_FILE_FOUND.add(str(candidate))
+                return candidate
     # Nothing on disk: return the canonical path UNCACHED so the art can
     # still be noticed the moment it lands (see `_ART_FILE_CACHE`).
     return path

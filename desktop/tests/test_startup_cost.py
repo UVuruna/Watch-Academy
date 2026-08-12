@@ -21,6 +21,7 @@ told about. Cold, that count is the file count. Warm, it must be ZERO.
 
 import json
 import os
+import re
 import tempfile
 from pathlib import Path
 
@@ -188,14 +189,14 @@ def test_the_working_set_sweep_still_finds_every_oversized_source(
     expected = {
         source
         for subtree, ceiling in defaults.WORKING_SET_CEILINGS.items()
-        for source in (paths.assets_dir() / subtree).rglob("*.png")
+        for source in paths.art_files_under(paths.assets_dir() / subtree)
         if (size := QImageReader(str(source)).size()).isValid()
         and size.width() > ceiling
     }
     served = {
         source
         for subtree, ceiling in defaults.WORKING_SET_CEILINGS.items()
-        for source in (paths.assets_dir() / subtree).rglob("*.png")
+        for source in paths.art_files_under(paths.assets_dir() / subtree)
         if (known := asset_index.image_size(source)) is not None
         and known[0] > ceiling
     }
@@ -253,20 +254,27 @@ def test_the_fingerprint_recipe_and_the_index_agree(isolated_user_dir):
 # ═══════════════════════════ THE LETTER BAKE ═══════════════════════════
 
 
-def test_every_letter_plate_ships_every_finish():
-    """Owner order 2026-08-12: all the letters, in all the colours, at
-    setup. This fails when a plate is added or re-drawn and
+def test_every_letter_plate_ships_every_eager_finish():
+    """Owner order 2026-08-12: all the letters, in the colours actually
+    used, at setup. This fails when a plate is added or re-drawn and
     `python -m setup.make_letter_bake` was not re-run — the program
     stays CORRECT either way (a miss derives live), but the promise
     that a launch computes nothing is broken, and a broken promise
-    nobody is told about is how this round's own bug happened."""
+    nobody is told about is how this round's own bug happened.
+
+    EAGER, not every, since the art-bakery round of the same day: the
+    owner halved the matrix to `defaults.EAGER_BAKED_SHADES` because
+    most of what it dropped was duplicate ramps and the rest belongs to
+    custom rings nobody has built yet. The roster is read from the
+    config table rather than restated here, so this tooth follows the
+    decree instead of having to be remembered alongside it."""
     from render.asset_recolor import letter_cache_name
 
     plates = sorted((paths.assets_dir() / "instrument" / "letters").rglob("*.png"))
     assert plates, "the plate library is empty"
     finishes = [
         (metal, shade)
-        for metal, shades in defaults.METAL_SHADES.items()
+        for metal, shades in defaults.EAGER_BAKED_SHADES.items()
         for shade in shades
     ]
     missing = [
@@ -280,6 +288,17 @@ def test_every_letter_plate_ships_every_finish():
         "are not baked — run `python -m setup.make_letter_bake`. "
         f"First: {missing[:5]}"
     )
+
+
+def test_the_eager_roster_names_only_real_shades():
+    """A typo in `EAGER_BAKED_SHADES` would not fail loudly — it would
+    bake sixteen finishes instead of seventeen and leave one colour
+    deriving live forever, which is the silent-slowness failure the
+    whole bake exists to end."""
+    for metal, shades in defaults.EAGER_BAKED_SHADES.items():
+        assert metal in defaults.METAL_SHADES, metal
+        for shade in shades:
+            assert shade in defaults.METAL_SHADES[metal], f"{metal}/{shade}"
 
 
 def test_a_baked_hit_records_no_recipe(isolated_user_dir):
@@ -316,10 +335,18 @@ def test_a_stale_bake_cannot_paint_a_wrong_letter(isolated_user_dir):
     current = asset_recolor.letter_cache_name(plate, "gold", "classic")
     assert letter_bake.baked_file(current) is not None
 
-    bumped = current.replace(
-        f"_v{defaults.METAL_SWAP_VERSION}.png",
-        f"_v{defaults.METAL_SWAP_VERSION + 1}.png",
+    # Bump the version WITHOUT naming the extension. Spelling it out
+    # (`_v6.png` -> `_v7.png`) silently stopped bumping anything the day
+    # the bake became WebP: `str.replace` found no match, the name went
+    # through unchanged, and the assertion below then claimed the CURRENT
+    # file was missing. A test that can quietly stop testing is worse
+    # than no test — the version now moves by regex, on the version.
+    bumped = re.sub(
+        rf"_v{defaults.METAL_SWAP_VERSION}(\.\w+)$",
+        rf"_v{defaults.METAL_SWAP_VERSION + 1}\1",
+        current,
     )
+    assert bumped != current, "the version bump matched nothing"
     assert letter_bake.baked_file(bumped) is None, (
         "a bumped METAL_SWAP_VERSION still hit the old bake — the "
         "recolor math would change and the dial would not notice"

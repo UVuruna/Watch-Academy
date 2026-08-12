@@ -77,11 +77,23 @@ def atomic_save(image, path: Path) -> None:
     Raises `OSError` on an encode or rename failure, with the partial
     file removed first — callers keep their documented "a cold cache is
     only slower, never wrong" master-path fallbacks.
+
+    THE FORMAT COMES FROM THE EXTENSION (owner decree 2026-08-12, the
+    art-bakery round). It used to be a hardcoded `"PNG"`, which quietly
+    made the name a lie the moment `letter_cache_name` started asking
+    for `.webp` — a PNG payload under a WebP name, decoded by content
+    and therefore never noticed. WebP is saved at quality 100, which in
+    Qt's handler means LOSSLESS: these are the final drawn pixels of
+    every glyph the program paints, so a lossy encode here would not
+    soften one image, it would soften all text everywhere. Lossless
+    WebP still halves the bake against PNG.
     """
     path.parent.mkdir(parents=True, exist_ok=True)
     partial = path.with_name(path.name + ".part")
+    encoding = path.suffix.lstrip(".").upper() or "PNG"
+    quality = 100 if encoding == "WEBP" else -1
     try:
-        if not image.save(str(partial), "PNG"):
+        if not image.save(str(partial), encoding, quality):
             raise OSError(f"image encode returned False for {path}")
         os.replace(partial, path)
     except OSError:

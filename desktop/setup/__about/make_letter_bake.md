@@ -28,22 +28,42 @@ script; nothing about the format changes.
 | | |
 |---|---|
 | plates | **57** — `assets/instrument/letters/` : latin 26, greek 10, numerals 10, symbols 7, emblems 4 |
-| finishes | **34** — every `(metal, shade)` pair in `defaults.METAL_SHADES` |
-| files | **1,938** |
+| finishes | **17** — every `(metal, shade)` pair in `defaults.EAGER_BAKED_SHADES` |
+| files | **969**, lossless WebP |
 
-The finishes are gold (5 shades), bronze (3), silver (3) and the
-THEMATIC pseudo-metal (23: the five ring theme colours plus every
-remaining transformer ramp — copper, brass, rose gold, steel, pewter,
-iron and the metal ramps by their own names).
+The eager finishes are gold (5 shades), bronze (3), silver (3) and six
+thematic colours: `cross_red`, `cross_blue`, `dollar_green`,
+`moon_indigo`, `templar_black`, `ceramic`.
 
-Several pairs share one ramp — `gold/classic` and `thematic/gold` are
-both the `gold` ramp, and their pixels are identical. They are baked
-TWICE anyway, and deliberately: the runtime cache key carries the
-`(metal, shade)` pair, not the ramp, so collapsing them here would
-require this script to know the ramp table — a second source of truth,
-which is the one thing the bake's naming design exists to avoid. The
-duplication costs a few MB and buys the guarantee that what is written
-is exactly what is asked for.
+## What is NOT baked, and why that is safe
+
+The first version of this script baked all **34** pairs of
+`METAL_SHADES` into 1,938 PNGs — 302 MB, committed. The owner's ruling
+of 2026-08-12 halved both numbers: bake what is actually used, and let
+a custom ring's exotic ramp (copper, brass, rose gold, steel, pewter,
+iron) derive the first time somebody asks for one.
+
+Two facts make that free rather than a compromise:
+
+- **Most of the dropped pairs are duplicate pixels.**
+  `thematic/gold` and `gold/classic` are the same ramp; so are
+  `thematic/silver`, `thematic/bronze*` and the four `gold_*` thematic
+  aliases. They exist as separate keys only because the runtime cache
+  key carries the `(metal, shade)` pair rather than the ramp — and that
+  design stays, because teaching this script the ramp table would be
+  exactly the second source of truth the naming design exists to avoid.
+  The bake simply stops paying for the duplication *eagerly*.
+- **A miss is the ordinary path, not a failure.** `jewel_metal_path`
+  records the recipe, `render.art_warm` builds it on the background
+  thread, and the dial draws the gold master meanwhile — precisely the
+  behaviour that existed before any bake did. Slower once, never wrong.
+
+**Lossless WebP, not PNG** (same decree): identical pixels, roughly
+half the bytes. Lossless and not the art bakery's q90, because these
+are the final drawn glyphs of every word the program says — the art
+bakery's plates get shrunk to 800 px by the dial, these do not.
+`raster_store.atomic_save` takes the encoding from the extension, which
+`letter_cache_name` owns.
 
 ## Connections
 

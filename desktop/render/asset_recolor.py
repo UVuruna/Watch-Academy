@@ -34,10 +34,17 @@ def letter_cache_name(master: Path, metal: str, shade: str) -> str:
     cache), the metal, the active shade and `defaults.
     METAL_SWAP_VERSION`. That last pair is why the bake needs no
     manifest of its own: re-draw a plate or bump the recolor math, and
-    the shipped file simply stops being the file anyone asks for."""
+    the shipped file simply stops being the file anyone asks for.
+
+    LOSSLESS WEBP since the art-bakery round (owner decree 2026-08-12,
+    on the whole bake being too heavy): the same pixels, about half the
+    bytes, and `raster_store.atomic_save` now takes the encoding from
+    this extension. Lossless, not q90 like the art bakery — these are
+    the final drawn glyphs of every word the program says, not a plate
+    the dial shrinks to 800 px."""
     return (
         f"{raster_store.source_prefix(master)}_letter_{metal}_{shade}"
-        f"_v{defaults.METAL_SWAP_VERSION}.png"
+        f"_v{defaults.METAL_SWAP_VERSION}.webp"
     )
 
 

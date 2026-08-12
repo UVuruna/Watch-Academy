@@ -8,8 +8,9 @@
 flowchart TB
     A[python -m setup.make_letter_bake] --> B[QGuiApplication — QImage needs one]
     B --> C[plates = every png under assets/instrument/letters/]
-    C --> D[finishes = every metal,shade pair in METAL_SHADES]
+    C --> D[finishes = every metal,shade pair in EAGER_BAKED_SHADES]
     D --> E[FOR EACH plate x finish]
+    D -.->|dropped: the exotic ramps, derived on first ask| X[render.art_warm at runtime]
     E --> F[name = letter_cache_name plate, metal, shade]
     F --> G{assets/_baked/letters/name exists?}
     G -- yes, and no --force --> H[skip]
@@ -25,7 +26,7 @@ Pseudocode:
     FUNCTION bake(force):
         destination = letter_bake.bake_dir()          # assets/_baked/letters/
         FOR EACH master IN sorted(letters_root.rglob("*.png")):     # 57
-            FOR EACH (metal, shade) IN METAL_SHADES pairs:          # 34
+            FOR EACH (metal, shade) IN EAGER_BAKED_SHADES pairs:    # 17
                 name   = letter_cache_name(master, metal, shade)
                 target = destination / name
                 IF target.exists() AND NOT force:

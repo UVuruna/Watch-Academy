@@ -191,7 +191,7 @@ def test_every_weekday_label_and_figure_stem_composes_from_plates():
 
     labels = set(constants.WEEKDAY_LABELS.values())
     labels |= set(constants.WEEKDAY_FULL_NAMES.values())
-    for source in paths.assets_dir().rglob("*.png"):
+    for source in paths.art_files_under(paths.assets_dir()):
         if "_baked" in source.parts or "_state" in source.parts:
             continue
         stem = re.sub(r"_v\d+$", "", re.sub(r"_(gem|gpt)$", "", source.stem))

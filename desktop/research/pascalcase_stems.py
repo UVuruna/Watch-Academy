@@ -19,7 +19,12 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 # THE THREE-FOLDER MIGRATION (2026-08-12): assets/ lives one level up from
 # the desktop Python root, under shared/.
-ASSETS = ROOT.parent / "shared" / "assets"
+# THE ART BAKERY (owner decree 2026-08-12): the figure art this script
+# renames now lives in the gitignored `masters/` inbox, not in the
+# shipped tree — renaming a BAKED file would only make the bake and its
+# master disagree until the next run. Rename the master; the bakery
+# carries the new name across.
+ASSETS = ROOT.parent / "masters"
 AREAS = ("weeks", "calendars", "archetypes")
 _SOURCES = {"gem", "gpt"}
 _VERSION = re.compile(r"v\d+$")
