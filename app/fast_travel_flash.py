@@ -96,15 +96,13 @@ class FastTravelFlash(QWidget):
         self._icon_label.setVisible(has_icon)
         if icon_path is not None:
             size = shortcuts.FAST_TRAVEL_FLASH_ICON_PX
-            # RASTERIZE BIG, THEN SHRINK (owner correction 2026-08-12,
-            # the reason he asked for `eclipse_sun.svg` at all: its many
-            # RAYS are what tell the solar row from the lunar one). Asked
-            # for 28 px directly, Qt rasterizes the vector at 28 px and
-            # every ray falls below one pixel — the glyph collapses into
-            # a plain disc, which is the very confusion he reported. Four
-            # times over and smoothly scaled down keeps them.
+            # RASTERIZE BIG, THEN SHRINK — see
+            # `FAST_TRAVEL_FLASH_ICON_SUPERSAMPLE`. The caller hands a
+            # COMPUTED icon already drawn at that multiple, so both kinds
+            # of source arrive here oversized and leave the same way.
+            over = shortcuts.FAST_TRAVEL_FLASH_ICON_SUPERSAMPLE
             self._icon_label.setPixmap(
-                QIcon(str(icon_path)).pixmap(4 * size, 4 * size).scaled(
+                QIcon(str(icon_path)).pixmap(over * size, over * size).scaled(
                     size, size,
                     Qt.AspectRatioMode.KeepAspectRatio,
                     Qt.TransformationMode.SmoothTransformation,

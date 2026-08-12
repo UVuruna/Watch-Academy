@@ -29,8 +29,14 @@ Layer: config — pure, no Qt, no wall clock.
   machinery. This retires the old absurdity of a solar eclipse living
   as an option under Moon phases.
 - **Fast Travel FLASH** — the transient overlay's geometry/timing
-  constants (`FAST_TRAVEL_FLASH_*`), the Calendar's own computed-icon
-  geometry (`CALENDAR_ICON_WEDGE_COUNT`/`_RING_WIDTH_FRACTION`), and
+  constants (`FAST_TRAVEL_FLASH_*`, including
+  `FAST_TRAVEL_FLASH_ICON_SUPERSAMPLE` — every icon is produced at that
+  multiple of its final size and shrunk, because Qt rasterizing a vector
+  at 28 px simply loses anything thinner than a pixel), the geometry of
+  the THREE computed glyphs (`CALENDAR_SHEET_*`, `CLOCK_ICON_*`,
+  `ECLIPSE_ICON_*` — the solar-eclipse row joined them on the owner's
+  verdict of 2026-08-12, after two of his art files each read as the Moon
+  row beside them at menu size), and
   `TIME_TRAVEL_DURATION_S`/`DEEP_TIME_YEAR_RANGE` (Time Travel dialog
   values, not strictly Fast Travel ones, but too small to justify a
   seventh destination module).

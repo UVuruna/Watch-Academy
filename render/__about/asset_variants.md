@@ -139,6 +139,22 @@ circle).
   12/18/00/06, hand at noon/top. Deliberately THIS watch's dial, never a
   generic twelve-hour clock: no clock file exists in
   `assets/instrument/icons/`, so the spot showed a bare emoji before.
+- `eclipse_sun_icon_file(size)`: a COMPUTED solar-eclipse glyph for the
+  Solar Eclipse category (owner correction + verdict 2026-08-12) — eight
+  long and eight short TAPERED rays around a bright corona and a black
+  disc. That row held ART twice and both files failed the same way,
+  because both are drawings meant to be seen LARGE: `sun_eclipse.png` is
+  a black disc with a hairline corona, which at 28 px is the Moon row
+  beside it, and `eclipse_sun.svg` was picked for its many rays, which
+  are hairlines that fall below one pixel (rendered at 28, 36 and 44 px
+  and looked at — still barely there at 44). FEW AND THICK is what
+  survives a downscale. The DIAL's own eclipse body is untouched and
+  still wears `defaults.ECLIPSE_SOLAR_ART`.
+
+  All three computed glyphs are drawn at
+  `shortcuts.FAST_TRAVEL_FLASH_ICON_SUPERSAMPLE` times their final size,
+  because the flash shrinks from there — a glyph drawn at the final size
+  would be upscaled by `QIcon.pixmap` only to be scaled back down.
 
 ## Design Decisions
 - **The computed icons raise on a write failure** instead of falling

@@ -58,10 +58,11 @@ the dial to KEEP holding keyboard focus for the next press.
   fades via a `QGraphicsOpacityEffect` + `QPropertyAnimation`, hiding on
   finish. A flash already in flight restarts cleanly — the latest press
   always wins with a fresh full-opacity display. The icon is rasterized
-  at FOUR times the target size and smoothly scaled down — asked for 28 px
-  directly, Qt renders `eclipse_sun.svg`'s rays below one pixel and the
-  glyph collapses into a plain disc, which is the very confusion the owner
-  reported (2026-08-12).
+  at `FAST_TRAVEL_FLASH_ICON_SUPERSAMPLE` times the target size and
+  smoothly scaled down — asked for 28 px directly, Qt renders a vector's
+  fine detail below one pixel and the glyph collapses (owner report
+  2026-08-12). The COMPUTED glyphs are drawn that big to begin with, so
+  both kinds of source arrive here oversized and leave the same way.
 - `_set_plate_text(text)`: the two-metal plate run, splitting on either
   separator — the picker's " : " or a location's "CITY, COUNTRY". Only the
   picker DRAWS its separator (the colon plate); a comma has no plate and

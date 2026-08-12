@@ -2795,24 +2795,31 @@ def test_computed_fast_travel_icons_are_drawn_not_shipped(app):
 
 def test_every_fast_travel_category_resolves_a_real_icon(app):
     """THE OWNER'S OWN SIX (his order 2026-08-12): every category in the
-    picker resolves to a real image — four to a file of his in
-    `ICON_FILES`, two to a computed drawing — so the Ctrl+[ / Ctrl+]
-    flash never shows a bare emoji on a complete install."""
+    picker resolves to a real image — three to a file of his in
+    `ICON_FILES`, three to a computed drawing — so the Ctrl+[ / Ctrl+]
+    flash never shows a bare emoji on a complete install.
+
+    The solar-eclipse row MOVED to the computed side on his verdict of
+    the same day. Two of his art files were tried there and both are
+    drawings meant to be seen large: `sun_eclipse.png` reads as the Moon
+    row beside it at 28 px, and `eclipse_sun.svg`'s many rays are
+    hairlines that die below one pixel. His dial keeps that art."""
     from render.asset_variants import (
         calendar_sheet_icon_file,
         clock_face_icon_file,
+        eclipse_sun_icon_file,
     )
 
     expected_files = {
-        # THE RAYS TELL THEM APART (owner correction 2026-08-12): the
-        # many-rayed `eclipse_sun.svg`, never the plain black disc of
-        # `sun_eclipse.png`, which read as the Moon row beside it.
-        "solar_eclipse": "eclipse_sun.svg",
         "lunar_eclipse": "moon_eclipse_red.png",
         "sun": "sun.svg",
         "moon": "moon.svg",
     }
-    computed = {"calendar": calendar_sheet_icon_file, "clock": clock_face_icon_file}
+    computed = {
+        "calendar": calendar_sheet_icon_file,
+        "clock": clock_face_icon_file,
+        "solar_eclipse": eclipse_sun_icon_file,
+    }
     for theme in shortcuts.FAST_TRAVEL_THEMES:
         if theme["id"] in expected_files:
             path = defaults.icon_path(theme["icon_key"])
@@ -2821,18 +2828,22 @@ def test_every_fast_travel_category_resolves_a_real_icon(app):
             assert path.exists()
             continue
         draw = computed[theme["id"]]
-        assert theme["computed_icon"] in ("calendar_sheet", "clock_face")
+        assert theme["computed_icon"] in (
+            "calendar_sheet", "clock_face", "eclipse_sun",
+        )
         assert draw(shortcuts.FAST_TRAVEL_FLASH_ICON_PX).exists()
 
 
 def test_computed_fast_travel_flash_never_falls_back_to_the_emoji(app, monkeypatch):
-    """Wiring: `_flash_fast_travel` resolves a REAL icon path for both
-    COMPUTED categories now — the emoji is still passed through as the
+    """Wiring: `_flash_fast_travel` resolves a REAL icon path for all
+    THREE computed categories — the emoji is still passed through as the
     documented fallback text (`FastTravelFlash.flash`'s own contract) but
-    `icon_path` itself must never be None for Date or Time."""
+    `icon_path` itself must never be None for Date, Time or the solar
+    eclipse (owner verdict 2026-08-12, which moved that row here)."""
     from render.asset_variants import (
         calendar_sheet_icon_file,
         clock_face_icon_file,
+        eclipse_sun_icon_file,
     )
 
     captured = {}
@@ -2864,15 +2875,21 @@ def test_computed_fast_travel_flash_never_falls_back_to_the_emoji(app, monkeypat
 
         WatchController._flash_fast_travel(_Fake())
 
-    _run("calendar")
-    assert captured["icon_path"] == calendar_sheet_icon_file(
-        shortcuts.FAST_TRAVEL_FLASH_ICON_PX
+    # DRAWN OVERSIZED (owner correction 2026-08-12): a computed glyph is
+    # produced at the SUPERSAMPLE multiple the flash shrinks from, never
+    # at the final size only to be upscaled and scaled back down.
+    drawn_px = (
+        shortcuts.FAST_TRAVEL_FLASH_ICON_SUPERSAMPLE
+        * shortcuts.FAST_TRAVEL_FLASH_ICON_PX
     )
+    _run("calendar")
+    assert captured["icon_path"] == calendar_sheet_icon_file(drawn_px)
     assert captured["emoji"] == "📅"
     _run("clock")
-    assert captured["icon_path"] == clock_face_icon_file(
-        shortcuts.FAST_TRAVEL_FLASH_ICON_PX
-    )
+    assert captured["icon_path"] == clock_face_icon_file(drawn_px)
+    _run("solar_eclipse")
+    assert captured["icon_path"] == eclipse_sun_icon_file(drawn_px)
+    assert captured["icon_path"].exists()
 
 
 def test_widget_z_mode_swaps_the_window_flags(app):

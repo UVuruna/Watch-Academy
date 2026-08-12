@@ -95,7 +95,9 @@ from data.translations import (
 )
 from render import letter_plates
 from render.assets import shared_cache
-from render.asset_variants import calendar_sheet_icon_file, clock_face_icon_file
+from render.asset_variants import (
+    calendar_sheet_icon_file, clock_face_icon_file, eclipse_sun_icon_file,
+)
 from render.compositor import Compositor
 from skins.manifest import HandSpec, HandsSpec, missing_assets
 
@@ -2116,9 +2118,16 @@ class WatchController(QObject):
         computed = {
             "calendar_sheet": calendar_sheet_icon_file,
             "clock_face": clock_face_icon_file,
+            "eclipse_sun": eclipse_sun_icon_file,
         }.get(theme.get("computed_icon"))
         if computed is not None:
-            icon_path = computed(shortcuts.FAST_TRAVEL_FLASH_ICON_PX)
+            # Drawn at the SUPERSAMPLE multiple the flash shrinks from,
+            # so a computed glyph is never upscaled from its final size
+            # only to be scaled back down (owner correction 2026-08-12).
+            icon_path = computed(
+                shortcuts.FAST_TRAVEL_FLASH_ICON_SUPERSAMPLE
+                * shortcuts.FAST_TRAVEL_FLASH_ICON_PX
+            )
         else:
             icon_key = theme["icon_key"]
             icon_path = (

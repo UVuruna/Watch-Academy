@@ -50,11 +50,15 @@ Layer: config — pure, no Qt, no wall clock.
 - **UI icon chrome** — `ICON_DIR`, `ICON_FILES`, `icon_path(name)` (the
   shared graceful-absent resolver every UI-glyph consumer calls),
   `SETTINGS_NAV_WIDTH_PX`. The Fast Travel picker's solar-eclipse row
-  reads `eclipse_sun` (owner correction 2026-08-12: the many-rayed SVG,
-  because the plain black disc of `sun_eclipse.png` read as the Moon row
-  beside it at menu size — that PNG stays the DIAL's own body art via
-  `ECLIPSE_SOLAR_ART`, a different spot at a different size, which is
-  exactly what this table's one-file-many-spots rule allows).
+  names NO file here: it holds a COMPUTED glyph
+  (`render.asset_variants.eclipse_sun_icon_file`) after the owner's
+  correction and verdict of 2026-08-12. Both candidates from this table
+  failed the same way at menu size — `sun_eclipse.png` reads as the Moon
+  row beside it, and `eclipse_sun.svg`'s many rays are hairlines that die
+  below one pixel. `eclipse_sun` stays here for its ORIGINAL consumer,
+  Quick Jump's own eclipse rows, and `ECLIPSE_SOLAR_ART` still gives the
+  DIAL his art — a different spot at a different size, which is exactly
+  what this table's one-file-many-spots rule is for.
 - **Working-set ceilings** — `WORKING_SET_CEILINGS` (per-asset-subtree
   downscale ceilings), `REVEAL_WEEK_DURATION_S`.
 - **Background warm pool sizes** — `ART_DRAIN_WORKERS`,

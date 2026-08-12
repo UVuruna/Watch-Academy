@@ -244,14 +244,16 @@ def shortcut_display(action_id: str) -> str:
 FAST_TRAVEL_THEMES = (
     {
         "id": "solar_eclipse", "title": "Solar Eclipse",
-        # THE RAYS TELL THEM APART (owner correction 2026-08-12): in the
-        # picker the plain `sun_eclipse.png` — a black disc with a thin
-        # corona — reads almost exactly like the Moon entry beside it at
-        # menu size. `eclipse_sun.svg` carries far more rays, so the two
-        # rows are distinguishable at a glance. The dial's own body keeps
-        # `defaults.ECLIPSE_SOLAR_ART`, which is a different spot at a
-        # different size (`ICON_FILES`' own rule).
-        "icon_key": "eclipse_sun", "emoji": "🌑",
+        # THE RAYS TELL THEM APART (owner correction 2026-08-12, and his
+        # verdict the same day). Two of his art files were tried in this
+        # spot and both are drawings meant to be seen LARGE: at menu size
+        # `sun_eclipse.png` is the Moon row beside it, and
+        # `eclipse_sun.svg`'s many rays are hairlines that die below one
+        # pixel. So this row is COMPUTED, like Date and Time — see
+        # `ECLIPSE_ICON_*` below. The DIAL's own body still wears his
+        # `defaults.ECLIPSE_SOLAR_ART`, a different spot at a different
+        # size, where those fine rays read exactly as intended.
+        "icon_key": None, "computed_icon": "eclipse_sun", "emoji": "🌑",
         "options": (
             {"id": "any", "title": "Any", "jump_stem": "solar_eclipse"},
             {"id": "total", "title": "Total", "jump_stem": "solar_eclipse_total"},
@@ -349,6 +351,15 @@ FAST_TRAVEL_FLASH_ICON_PX = 28
 FAST_TRAVEL_FLASH_FONT_PX = 15
 FAST_TRAVEL_FLASH_PADDING_PX = 10
 FAST_TRAVEL_FLASH_RADIUS_PX = 10
+# RASTERIZE BIG, THEN SHRINK (owner correction 2026-08-12). Asked for
+# 28 px directly, Qt rasterizes a vector at 28 px and anything thinner
+# than a pixel — an eclipse glyph's rays, a compass rose's points —
+# simply is not there. Every flash icon is therefore produced at this
+# multiple of its final size and smoothly scaled down: the SVGs by
+# `QIcon.pixmap`, the COMPUTED drawings by being drawn that big in the
+# first place (`render.asset_variants`, which is why the controller
+# passes the product rather than the final size).
+FAST_TRAVEL_FLASH_ICON_SUPERSAMPLE = 4
 
 # THE TWO COMPUTED ICONS (ECLIPSE ICON WIRING round, owner 2026-07-20/
 # 21 — "ADD a computed calendar icon... so the emoji fallback dies";
@@ -389,6 +400,25 @@ CLOCK_ICON_MAJOR_LENGTH_FRACTION = 0.26
 CLOCK_ICON_HAND_LENGTH_FRACTION = 0.56      # hour hand, of the radius
 CLOCK_ICON_HAND_WIDTH_FRACTION = 0.11
 CLOCK_ICON_HAND_ANGLE_DEG = 0.0             # noon: straight up, the top
+# THE SOLAR ECLIPSE GLYPH (owner correction 2026-08-12 and his verdict
+# the same day, "make that version for the menu or make a PNG and shrink
+# it, whichever comes out better"). The picker first read `sun_eclipse.
+# png`, which at menu size is a black disc with a hairline corona — the
+# Moon row beside it. `eclipse_sun.svg` was the next try, chosen for its
+# many RAYS: rendered and looked at, its rays are pale hairlines that die
+# below one pixel at 28 px and are still barely there at 44 px, so the
+# glyph collapsed into the very disc he objected to. So this one is
+# COMPUTED like the calendar and the clock (Rule #19), and computed for
+# the SIZE IT IS SEEN AT: FEW, THICK, TAPERED rays that survive the
+# downscale, a bright corona hugging a black disc. The dial's own body
+# keeps his `ECLIPSE_SOLAR_ART` — a different spot at a different size,
+# where his art's fine rays read exactly as they should.
+ECLIPSE_ICON_DISC_FRACTION = 0.26        # black disc radius, of the icon size
+ECLIPSE_ICON_CORONA_WIDTH_FRACTION = 0.05   # the ring hugging that disc
+ECLIPSE_ICON_RAY_PAIRS = 8               # 8 long + 8 short, alternating
+ECLIPSE_ICON_RAY_TIP_FRACTION = 0.49     # long ray tip, of the icon size
+ECLIPSE_ICON_SHORT_RAY_TIP_FRACTION = 0.40
+ECLIPSE_ICON_RAY_BASE_FRACTION = 0.085   # ray width at its base, of the size
 
 
 # Time Travel (scenario tester in the menu): the dial renders the entered

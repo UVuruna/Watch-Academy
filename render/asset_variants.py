@@ -916,3 +916,75 @@ def clock_face_icon_file(size: int) -> Path:
     ))
     painter.end()
     return _save_computed_icon(image, cache, "clock face")
+
+
+def eclipse_sun_icon_file(size: int) -> Path:
+    """A COMPUTED solar-eclipse glyph at `size` px for the Fast Travel
+    Flash's Solar Eclipse category (owner correction 2026-08-12, and his
+    verdict the same day: "make that version for the menu, or make a PNG
+    and shrink it, whichever comes out better").
+
+    Two art files were tried in that spot and both failed for the same
+    reason — they are drawings meant to be seen large. `sun_eclipse.png`
+    is a black disc with a hairline corona, which at menu size is the Moon
+    row beside it; `eclipse_sun.svg` was chosen for its many RAYS, and its
+    rays are pale hairlines that fall below one pixel at 28 px (rendered
+    at 28, 36 and 44 px and looked at — still barely there at 44).
+
+    So this glyph is drawn for the size it is SEEN at: eight long and
+    eight short TAPERED rays, thick at the base, in the app's own gold
+    ramp; a bright corona hugging a black disc. Few and thick is what
+    survives a downscale — many and thin is what averages into the very
+    disc he objected to. The DIAL's own eclipse body is untouched and
+    still wears his `defaults.ECLIPSE_SOLAR_ART`: a different spot at a
+    different size, where those fine rays read exactly as intended."""
+    cache = _computed_icon_cache("eclipse_sun", size)
+    if cache.exists():
+        return cache
+    image, painter = _blank_icon(size)
+    dark, bright = (QColor(c) for c in palette.CALENDAR_ICON_GOLD_COLORS)
+    ink = QColor(palette.CALENDAR_ICON_RING_COLOR)
+    centre = QPointF(size / 2.0, size / 2.0)
+    disc = size * shortcuts.ECLIPSE_ICON_DISC_FRACTION
+    corona = max(1.0, size * shortcuts.ECLIPSE_ICON_CORONA_WIDTH_FRACTION)
+    base = size * shortcuts.ECLIPSE_ICON_RAY_BASE_FRACTION
+    pairs = shortcuts.ECLIPSE_ICON_RAY_PAIRS
+    painter.setPen(Qt.PenStyle.NoPen)
+    # The rays first, so the corona and the disc cover their roots — a ray
+    # that reached the centre would fill the eclipse in.
+    for index in range(2 * pairs):
+        long_ray = index % 2 == 0
+        tip = size * (
+            shortcuts.ECLIPSE_ICON_RAY_TIP_FRACTION if long_ray
+            else shortcuts.ECLIPSE_ICON_SHORT_RAY_TIP_FRACTION
+        )
+        theta = index * math.pi / pairs
+        half = (base if long_ray else base * 0.7) / 2.0
+        # A triangle from a flat base at the corona to a point at the tip.
+        radial = QPointF(math.sin(theta), -math.cos(theta))
+        across = QPointF(radial.y(), -radial.x())
+        root = disc + corona * 0.5
+        path = QPainterPath()
+        path.moveTo(
+            centre.x() + radial.x() * root + across.x() * half,
+            centre.y() + radial.y() * root + across.y() * half,
+        )
+        path.lineTo(
+            centre.x() + radial.x() * tip, centre.y() + radial.y() * tip
+        )
+        path.lineTo(
+            centre.x() + radial.x() * root - across.x() * half,
+            centre.y() + radial.y() * root - across.y() * half,
+        )
+        path.closeSubpath()
+        painter.setBrush(bright if long_ray else dark)
+        painter.drawPath(path)
+    # The corona, then the eclipsed disc inside it.
+    painter.setBrush(Qt.BrushStyle.NoBrush)
+    painter.setPen(QPen(bright, corona))
+    painter.drawEllipse(centre, disc + corona / 2.0, disc + corona / 2.0)
+    painter.setPen(Qt.PenStyle.NoPen)
+    painter.setBrush(ink)
+    painter.drawEllipse(centre, disc, disc)
+    painter.end()
+    return _save_computed_icon(image, cache, "solar eclipse")
