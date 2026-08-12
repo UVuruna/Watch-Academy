@@ -48,6 +48,24 @@ _FINGERPRINT_TAIL = 4 * 1024
 _FINGERPRINTS: dict[str, tuple[int, int, str]] = {}
 _FINGERPRINTS_LOCK = threading.Lock()
 
+# The PERSISTENT memo, injected (0.14.950, the owner's 91.6-second
+# launch): `render.asset_index` keeps every asset's fingerprint on disk
+# keyed by (size, mtime_ns), so a file unchanged since the last launch
+# is never opened again. It is injected rather than imported because
+# this module is deliberately dependency-light — the working-set
+# subprocess workers import it and must not drag Qt or config in with
+# it. Absent (workers, tests, a fresh process before the warm thread
+# attaches it), everything below behaves exactly as it always did.
+_EXTERNAL_FINGERPRINT = None
+
+
+def attach_fingerprint_source(getter) -> None:
+    """Install the persistent fingerprint lookup (None uninstalls —
+    tests). It is consulted FIRST and may answer `None` to mean "not
+    mine", which falls through to the in-process memo below."""
+    global _EXTERNAL_FINGERPRINT
+    _EXTERNAL_FINGERPRINT = getter
+
 
 def atomic_save(image, path: Path) -> None:
     """Save `image` (any Qt image object whose `.save(str)` returns a
@@ -71,11 +89,36 @@ def atomic_save(image, path: Path) -> None:
         raise
 
 
+def compute_fingerprint(path: Path) -> str:
+    """THE RECIPE, unmemoized: sha1 over (size, first 64 KiB, last 4
+    KiB), 12 hex. Always opens the file. Split out (0.14.950) so
+    `render.asset_index` can call the algorithm while owning the memo
+    — Rule #5, one recipe, and the persistent store is not this
+    module's business."""
+    stat = path.stat()
+    digest = hashlib.sha1(str(stat.st_size).encode("ascii"))
+    with open(path, "rb") as handle:
+        digest.update(handle.read(_FINGERPRINT_HEAD))
+        if stat.st_size > _FINGERPRINT_HEAD + _FINGERPRINT_TAIL:
+            handle.seek(-_FINGERPRINT_TAIL, os.SEEK_END)
+            digest.update(handle.read(_FINGERPRINT_TAIL))
+    return digest.hexdigest()[:12]
+
+
 def fingerprint(path: Path) -> str:
-    """A 12-hex CONTENT key for a source file — sha1 over (size, first
-    64 KiB, last 4 KiB), memoized by (size, mtime_ns) so the steady
+    """A 12-hex CONTENT key for a source file, memoized so the steady
     state costs one `stat`. Survives what mtime keys never did: git
-    checkouts, art re-saves with identical bytes, backup restores."""
+    checkouts, art re-saves with identical bytes, backup restores.
+
+    THREE tiers, cheapest first (0.14.950): the attached PERSISTENT
+    index (`render.asset_index`, survives the process — this is what
+    ended the owner's 91.6-second launch), then this module's own
+    in-process memo, then `compute_fingerprint` which actually opens
+    the file."""
+    if _EXTERNAL_FINGERPRINT is not None:
+        stored = _EXTERNAL_FINGERPRINT(path)
+        if stored is not None:
+            return stored
     stat = path.stat()
     key = str(path)
     with _FINGERPRINTS_LOCK:
@@ -86,13 +129,7 @@ def fingerprint(path: Path) -> str:
         and cached[1] == stat.st_mtime_ns
     ):
         return cached[2]
-    digest = hashlib.sha1(str(stat.st_size).encode("ascii"))
-    with open(path, "rb") as handle:
-        digest.update(handle.read(_FINGERPRINT_HEAD))
-        if stat.st_size > _FINGERPRINT_HEAD + _FINGERPRINT_TAIL:
-            handle.seek(-_FINGERPRINT_TAIL, os.SEEK_END)
-            digest.update(handle.read(_FINGERPRINT_TAIL))
-    value = digest.hexdigest()[:12]
+    value = compute_fingerprint(path)
     with _FINGERPRINTS_LOCK:
         _FINGERPRINTS[key] = (stat.st_size, stat.st_mtime_ns, value)
     return value

@@ -82,6 +82,12 @@ circle).
 - [Raster Store](raster_store.md) — every disk write is atomic
   (owner crash 2026-07-31: a half-written cache PNG must never be
   visible to a reader)
+- [Asset Index](asset_index.md) — `widths_under`, which IS
+  `warm_working_set`'s roster since 0.14.950. That sweep used to
+  `rglob` five subtrees and open every PNG in them (2,511 files, 3.76
+  GB) with `QImageReader` to read one integer per file, on every
+  launch — the owner's `[91.6s] working set complete — 961 oversized
+  sources, 0 built cold`
 - [Config (folder)](../../config/___config.md) — `paths`, `defaults`,
   `profiling`
 
@@ -104,7 +110,14 @@ circle).
 - `subdial_plate_file(finish, tint=None)`: the active subdial set's
   plate, resolved/recolored/tinted as needed.
 - `working_ceiling(path)` / `warm_working_set(progress=None,
-  should_stop=None)` / `scaled_variant_file(path, width, build=True)` /
+  should_stop=None)` — its roster comes from
+  [Asset Index](asset_index.md)'s `widths_under`, so it opens NOTHING
+  to decide what is oversized; only the genuinely cold BUILDS cost
+  anything, in their subprocess pool. `tests/test_startup_cost.py`
+  asserts both halves of that: zero header reads, and the same
+  oversized set the old open-every-file loop selected — speed that
+  changed the answer would be worthless.
+- `scaled_variant_file(path, width, build=True)` /
   `build_scaled_copy(source, cache, width)`: the working-set family —
   `build_scaled_copy` is the ONE build (plain-string args, no config
   reads) shared by every builder (`ensure_working_variant`,

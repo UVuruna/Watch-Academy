@@ -35,6 +35,11 @@ shares, so the naming and the garbage collector can never drift apart.
   write, `_recolored_plate`'s subdial write
 - [Asset Variants](asset_variants.md) — the working-set downscales, the
   moon-phase plates, the eclipse icon tint, the calendar wheel icon
+- [Asset Index](asset_index.md) — calls `compute_fingerprint` (the
+  recipe) and INSTALLS itself through `attach_fingerprint_source` (the
+  memo). The arrow points one way on purpose: this module must not
+  import that one, or the working-set subprocess workers would start
+  paying for Qt and `config` to import it.
 
 ## Functions
 - `atomic_save(image, path)`: save any Qt image object (`QImage` /
@@ -43,11 +48,22 @@ shares, so the naming and the garbage collector can never drift apart.
   atomically. Raises `OSError` when the encode or the rename fails
   (after removing the partial file) — callers keep their existing
   "cold cache is only slower, never wrong" fallbacks.
-- `fingerprint(path)`: a 12-hex content key — sha1 over (size, first
-  64 KiB, last 4 KiB), memoized by (size, mtime_ns) so the steady state
-  costs one `stat`. Documented limit: a same-size edit leaving both
-  sampled windows byte-identical keeps the old name — no compressed
-  raster format produced by an editor does that in practice.
+- `compute_fingerprint(path)`: THE RECIPE, unmemoized — sha1 over
+  (size, first 64 KiB, last 4 KiB), 12 hex. Always opens the file.
+  Split out in 0.14.950 so [Asset Index](asset_index.md) can own the
+  persistent memo without this module owning a JSON store (Rule #5 —
+  one recipe, whoever remembers it).
+- `fingerprint(path)`: the memoized content key. THREE tiers, cheapest
+  first: the attached persistent index (survives the process — this is
+  what ended the owner's 91.6-second launch), then this module's own
+  in-process memo keyed by (size, mtime_ns), then `compute_fingerprint`.
+  Documented limit: a same-size edit leaving both sampled windows
+  byte-identical keeps the old name — no compressed raster format
+  produced by an editor does that in practice.
+- `attach_fingerprint_source(getter)`: install the persistent lookup
+  (`None` uninstalls — tests). Consulted first; it may answer `None`
+  for "not mine", which falls through to the tiers above. Injected
+  rather than imported so this module stays standard-library-only.
 - `source_prefix(path)`: the leading `<16-hex path stamp>_<12-hex
   fingerprint>` pair every cache name derived from `path` starts with;
   a missing source yields the graceful-absent `_0`.

@@ -45,16 +45,14 @@ first, what he might look at last:
 See [Warm](warm.md).
 """
 
+from pathlib import Path
+
 from config import paths
-from render import raster_store
+from render import asset_index, raster_store
 from render.art_warm import warm_pending_art
 from render.asset_variants import drain_pending_working, warm_working_set
 
 from app.encyclopedia_warm import warm_encyclopedia
-
-#: Source suffixes that can seed a cache entry — the GC walk validates
-#: every stamped cache name against these files' current fingerprints.
-_GC_SOURCE_SUFFIXES = {".png", ".svg", ".jpg", ".jpeg"}
 
 
 def _collect_cache_garbage(progress=None, should_stop=None) -> None:
@@ -65,12 +63,20 @@ def _collect_cache_garbage(progress=None, should_stop=None) -> None:
     from time import perf_counter
 
     start = perf_counter()
+    # THE INDEX, not a second walk (0.14.950): this used to rglob the
+    # whole tree and call `source_prefix` — i.e. OPEN and sample 64 KiB
+    # of — every png/svg/jpg in 3.76 GB, on every launch, purely to
+    # decide which cache files were corpses. Phase 0 already knows every
+    # one of those fingerprints, so `source_prefix` below answers from
+    # the index (`raster_store`'s attached hook) without a single open.
+    # The prefix is still built by `source_prefix` itself, from the same
+    # `assets_dir()/rel` path string the cache writer used — the naming
+    # and the collector can never drift apart (Rule #5).
     valid: set[str] = set()
-    for source in paths.assets_dir().rglob("*"):
+    for path in asset_index.fingerprints_by_path():
         if should_stop is not None and should_stop():
             return
-        if source.suffix.lower() in _GC_SOURCE_SUFFIXES and source.is_file():
-            valid.add(raster_store.source_prefix(source))
+        valid.add(raster_store.source_prefix(Path(path)))
     removed, freed = raster_store.collect_garbage(
         paths.settings_path().parent / "raster_cache", valid,
         progress=progress,
@@ -92,6 +98,17 @@ def run_warm(
     parallel — the point is to stay out of the GUI thread's way, and N
     concurrent Python sweeps would do the opposite.
     """
+    # PHASE 0 — the asset index (0.14.950, the owner's 91.6-second
+    # launch). It runs FIRST because every phase after it is a customer:
+    # the working-set sweep reads widths from it, the Encyclopedia's
+    # hundreds of `source_prefix` calls read fingerprints from it, and
+    # the cache GC reads the whole roster from it. One `scandir` walk
+    # (~0.015 s on the 3.76 GB tree) replaces three full-tree passes
+    # that opened every file, every launch, to re-learn what had not
+    # changed. See [Asset Index](../render/__about/asset_index.md).
+    asset_index.refresh(should_stop=should_stop, progress=progress)
+    if should_stop is not None and should_stop():
+        return
     warm_pending_art(
         progress=progress, on_ready=on_art_ready, should_stop=should_stop
     )

@@ -472,13 +472,36 @@ def warm_working_set(progress=None, should_stop=None) -> int:
     from concurrent.futures import as_completed, ProcessPoolExecutor
     from time import perf_counter
 
+    from render import asset_index
+
     start = perf_counter()
-    todo: list[tuple[Path, int]] = []
-    for subtree, ceiling in defaults.WORKING_SET_CEILINGS.items():
-        for source in sorted((paths.assets_dir() / subtree).rglob("*.png")):
-            size = QImageReader(str(source)).size()
-            if size.isValid() and size.width() > ceiling:
-                todo.append((source, ceiling))
+    # SELF-SUFFICIENT, deliberately (regression caught by
+    # `tests/test_startup_warm.py` before this shipped): the first draft
+    # read the roster and trusted someone else — `app.warm` phase 0 — to
+    # have filled it, so a caller that had not refreshed got a sweep
+    # that silently built NOTHING and reported success. That is the same
+    # class of failure as the bug this whole round is about. A refresh is
+    # idempotent and costs ~0.16 s warm, so this pass pays it rather
+    # than assume it.
+    asset_index.refresh(should_stop=should_stop)
+    if should_stop is not None and should_stop():
+        return 0
+    # THE INDEX IS THE ROSTER (0.14.950, the owner's 91.6-second launch).
+    # This used to `rglob` five subtrees and open EVERY png in them —
+    # 2,511 files, 3.76 GB — with `QImageReader`, to read one integer it
+    # had already read on every previous launch. Cold, on an ordinary
+    # HDD, that is the owner's 91.6 seconds, in which his own log proves
+    # ZERO images were built. `app.warm` phase 0 has already walked the
+    # tree once (~0.015 s, `os.scandir`), so the widths are simply
+    # known; a genuinely new or changed file was opened there, once.
+    todo: list[tuple[Path, int]] = [
+        (source, ceiling)
+        for subtree, ceiling in defaults.WORKING_SET_CEILINGS.items()
+        for source, width in asset_index.widths_under(subtree)
+        # PNG only, exactly as the old `rglob("*.png")` did — the index
+        # also carries jpg/svg, which this family has never downscaled.
+        if width > ceiling and source.suffix.lower() == ".png"
+    ]
     cold = [
         (source, _scaled_cache_path(source, ceiling), ceiling)
         for source, ceiling in todo
