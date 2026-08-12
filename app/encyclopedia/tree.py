@@ -28,6 +28,7 @@ from datetime import date
 
 from config import archetypes, calendar_mounts, constants, defaults, glow, pantheon
 from config import encyclopedia_tree as tree
+from render import eclipse_plates
 from render.asset_recolor import metal_variant_path
 from render.asset_variants import moon_phase_file
 from render.instrument_diagrams import INSTRUMENT_FIGURES
@@ -59,6 +60,29 @@ from app.encyclopedia.pages import (
     _WEEK_EMBLEMS,
     _WEEK_ORDER,
 )
+
+def _eclipse_display_looks(key: str) -> dict:
+    """`{"looks": ...}` for one eclipse chapter, or `{}` for a page that
+    has no single (kind, type) to draw — the two per-body OVERVIEWS.
+
+    Returns a dict so the caller can splat it: an entry with no looks
+    must carry NO `looks` key at all, since the reader treats an empty
+    tuple and an absent key differently (`entry.get("looks") or ...`).
+
+    Unlike `_metal_looks`, which only NAMES its cache files, this paints
+    a missing plate on the spot. It is allowed to: the whole set is 21
+    small procedural drawings painted once per install, where a metal
+    variant is a full-size recolor of a large plate — and a named-but-
+    unbuilt path would be dropped by the reader's own existence check
+    and leave the chapter silently pictureless, which is precisely the
+    failure this feature exists to prevent."""
+    body, _, category = key.partition("_")
+    kind = body.lower()
+    type_ = category.lower()
+    if type_ not in eclipse_plates.TYPES.get(kind, ()):
+        return {}
+    return {"looks": eclipse_plates.looks_for(kind, type_)}
+
 
 def _build_topics(
     travel_date: date | None = None, is_daylight: bool = True,
@@ -726,6 +750,15 @@ def _build_topics(
     # category chapter per kind. Every category chapter wears its own
     # emblem; the overview strings its body's emblems as a strip
     # (isinstance tuple), graceful-absent until the art lands.
+    # THE LOOK SLIDER SHOWS THE DISPLAYS (owner order 2026-08-12): every
+    # category chapter also carries `looks` — one drawn plate per way
+    # the dial can display that eclipse — so the arrows that page
+    # Colored/Bronze/Gold/Silver elsewhere page bite / magnitude arc /
+    # halo here. The pictures are the DIAL's own drawing
+    # (`render.eclipse_plates`, Rule #5), never an illustration that
+    # could drift from it. The per-body OVERVIEW keeps its emblem strip
+    # and gets no slider: it is about the phenomenon, not about one
+    # category's rendering.
     for topic_key, title, icon_stem, entry_specs in _ECLIPSE_TOPICS:
         topics[topic_key] = {
             "title": title,
@@ -737,6 +770,7 @@ def _build_topics(
                         if isinstance(art, tuple)
                         else (glow.ECLIPSE_ART_DIR / art,)
                     ),
+                    **_eclipse_display_looks(key),
                     "name": ("eclipse_title", key),
                     "article": ("eclipse", key),
                 }

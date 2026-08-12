@@ -45,6 +45,7 @@ hover-invariant groups, and answers every hit-test/tooltip question.
 | `ninths.py` | Algorithmic | the Ninth and thirteenth plate resolution, the center face — [about](__about/ninths.md) · [flow](__flow/ninths.md) |
 | `weekday_body.py` | Algorithmic | one weekday body + its set-uniform label — [about](__about/weekday_body.md) · [flow](__flow/weekday_body.md) |
 | `eclipse_glow.py` | Algorithmic | eclipse render state, glow strength, the radial halo — [about](__about/eclipse_glow.md) · [flow](__flow/eclipse_glow.md) |
+| `eclipse_plates.py` | Standard | one drawn plate per (kind, type, style) for the Encyclopedia's look slider, painted by the DIAL's own functions — [about](__about/eclipse_plates.md) |
 | `moon_face.py` | Algorithmic | the Moon's own disc — the unlit half's three treatments, the umbra sweep — [about](__about/moon_face.md) · [flow](__flow/moon_face.md) |
 | `marker_marks.py` | Algorithmic | what a marker wears — pointer shapes, the four life stations, the solar eclipse's geometry — [about](__about/marker_marks.md) · [flow](__flow/marker_marks.md) |
 | `compositor.py` | Algorithmic | Z-ordered stack, cached compositing, hit-testing, the tooltip HTML bank — GOD-FILE, ratcheted — [about](__about/compositor.md) · [flow](__flow/compositor.md) |
