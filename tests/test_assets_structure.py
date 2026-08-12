@@ -34,9 +34,17 @@ from config import paths, taxonomy
 # Top-level entries allowed directly under assets/.
 _ALLOWED_ROOTS = set(taxonomy.CATEGORIES) | {
     "_state",              # the PromptPainter per-source run ledger (meta)
+    "_baked",              # DERIVED art, shipped: setup/make_letter_bake.py
     "logo.svg", "logo-setup.svg",   # build-pipeline contract (unchanged)
     "___assets.md",
 }
+# Both underscore roots are DERIVED, not art, which is why the TREE LAW,
+# the source-suffix rule and the figure-naming rules (all scoped to the
+# art areas below) never reach them: a `_state` file is a run ledger, and
+# a `_baked` file is named by `render.asset_recolor.letter_cache_name` —
+# a content-fingerprint key, deliberately unreadable so that a stale bake
+# cannot match what the program asks for. Neither carries a register, a
+# look or an art source.
 
 # Categories whose art shipped from an AI source — every PNG under them
 # must carry the source suffix. The instrument furniture and the Earth

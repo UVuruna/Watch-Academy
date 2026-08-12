@@ -40,6 +40,22 @@ second resource, one test each:
    whole-tree sweep (VISIBLE-FIRST warmup).
 9. A miss after the startup warm (a skin switch, on-demand) still
    drains, exactly like the art ledger's own `kick_art_warm`.
+
+THE SHIPPED BAKE (owner order 2026-08-12) puts a third state in front
+of both roads: the letter finishes are pre-rendered at setup into
+`assets/_baked/letters` (`setup/make_letter_bake.py`), so a launch that
+finds them neither recolors nor defers. Laws 1-4 still govern every
+finish the bake does not cover — a plate added since the last bake, a
+re-drawn one, a bumped `METAL_SWAP_VERSION` — so the `cold_cache`
+fixture points the bake at an empty folder and keeps testing that road
+exactly as before. The bake's own road gets:
+
+10. With the real bake in place, a stone-cold first paint defers NOTHING
+    (`test_a_shipped_bake_defers_nothing_at_all`) — the test that stops
+    a bake nobody reads from passing this file unnoticed.
+
+Per-launch cost of the startup passes is pinned separately, by open
+COUNT rather than by seconds, in `tests/test_startup_cost.py`.
 """
 
 import os
@@ -60,7 +76,7 @@ from config import paths
 from core.clock_state import build_day_context, build_tick_state
 from data.moon_phases import MoonPhaseRepository
 from data.seasons import SeasonsRepository
-from render import asset_recolor
+from render import asset_recolor, letter_bake
 from render.art_warm import warm_pending_art
 from render.asset_recolor import pending_art
 from render.assets import AssetCache
@@ -74,16 +90,68 @@ def app():
 
 @pytest.fixture
 def cold_cache(tmp_path, monkeypatch):
-    """A raster cache with nothing in it, and an EMPTY ledger — the state
-    every launch after an art wave or a version bump finds itself in
-    (the cache key carries the source mtime, the shade and
-    METAL_SWAP_VERSION, so any of the three moving empties it)."""
+    """A raster cache with nothing in it, an EMPTY ledger, and NO SHIPPED
+    BAKE — the state every launch after an art wave or a version bump
+    finds itself in (the cache key carries the source fingerprint, the
+    shade and METAL_SWAP_VERSION, so any of the three moving empties the
+    cache AND stops the bake matching).
+
+    The bake is pointed at an empty folder on purpose, not to dodge it:
+    the gold-master-then-drain contract the tests below pin is what
+    governs every finish the bake does NOT cover — a plate added since
+    the last `python -m setup.make_letter_bake`, a re-drawn one, a
+    bumped recolor version. That road must keep working, so it keeps
+    being tested. The baked fast path in front of it is pinned
+    separately in `tests/test_startup_cost.py`, and by
+    `test_a_shipped_bake_defers_nothing_at_all` below."""
     monkeypatch.setattr(
         paths, "settings_path", lambda index=1: tmp_path / "settings.json"
     )
     monkeypatch.setattr(asset_recolor.paths, "settings_path", paths.settings_path)
     monkeypatch.setattr(asset_recolor, "_PENDING_VARIANTS", {})
-    return tmp_path
+    empty = tmp_path / "no_bake"
+    empty.mkdir()
+    monkeypatch.setattr(letter_bake, "bake_dir", lambda: empty)
+    letter_bake.refresh()
+    yield tmp_path
+    letter_bake.refresh()
+
+
+def test_a_shipped_bake_defers_nothing_at_all(app, tmp_path, monkeypatch):
+    """LAW 10 (owner order 2026-08-12: the letters ship pre-rendered).
+    With the real bake in place, a stone-cold first paint neither
+    recolors NOR defers — the two roads the laws above pin are both
+    skipped, because the pixels already shipped.
+
+    This is the test that would have caught the bake silently doing
+    nothing: `cold_cache` disables it, so without this every test in
+    this file would pass on a bake that was never read."""
+    monkeypatch.setattr(
+        paths, "settings_path", lambda index=1: tmp_path / "settings.json"
+    )
+    monkeypatch.setattr(asset_recolor.paths, "settings_path", paths.settings_path)
+    monkeypatch.setattr(asset_recolor, "_PENDING_VARIANTS", {})
+    letter_bake.refresh()
+
+    calls = []
+    original = AssetCache._recolored
+    monkeypatch.setattr(
+        AssetCache, "_recolored",
+        staticmethod(lambda *a, **k: (calls.append(a[1]), original(*a, **k))[1]),
+    )
+    compositor, day, tick = _dial(
+        build_skin(replace(Settings(), ring="DOMY", ring_finish="thematic"))
+    )
+    image = compositor.render_offscreen(360.0, 1.0, day, tick)
+
+    assert not image.isNull()
+    assert calls == [], f"a baked launch still recolored: {calls}"
+    assert pending_art() == [], (
+        "a baked launch DEFERRED work: "
+        f"{[p.name for p in pending_art()][:5]} — every one of those is a "
+        "numpy recolor the shipped bake was supposed to have removed. "
+        "Run `python -m setup.make_letter_bake`."
+    )
 
 
 def _dial(skin):
