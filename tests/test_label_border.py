@@ -208,3 +208,54 @@ def test_every_weekday_label_and_figure_stem_composes_from_plates():
         f"{len(plateless)} dial label(s) cannot be plate-composed and "
         f"would fall back to the font: {plateless[:8]}"
     )
+
+
+def test_a_label_composed_from_gold_standins_is_not_served_after_the_metal_lands(
+    tmp_path, monkeypatch,
+):
+    """THE 2026-08-02 CLASS OF DEFECT, caught by this round's own
+    render-equality proof rather than by a user.
+
+    `jewel_metal_file` returns the GOLD MASTER when a finish is not on
+    disk yet — its documented, visible stand-in. The label cache was
+    first keyed only by (text, size, metal, dpr), so on a cold cache it
+    froze whatever the first paint saw: the labels were composed from
+    gold masters and STAYED gold, because the background drain landing
+    the real metal changes no part of that key. Measured as 1,549
+    differing pixels between a baked dial and a live-recolored one at
+    1200px; zero after the fix.
+
+    The fix is structural — the resolved FILES are in the key, so a
+    stale composition cannot be found, let alone served. This test
+    proves the key moves when the file does."""
+    from render import asset_recolor, letter_bake
+    from config import paths
+
+    monkeypatch.setattr(
+        paths, "settings_path", lambda index=1: tmp_path / "settings.json"
+    )
+    monkeypatch.setattr(asset_recolor.paths, "settings_path", paths.settings_path)
+    monkeypatch.setattr(asset_recolor, "_PENDING_VARIANTS", {})
+    empty = tmp_path / "no_bake"
+    empty.mkdir()
+    monkeypatch.setattr(letter_bake, "bake_dir", lambda: empty)
+    letter_bake.refresh()
+    glyph_shadow.clear_cache()
+
+    # COLD: every finish is missing, so the label composes from masters.
+    cold = glyph_shadow.bordered_plate_text("MONDAY", 34, "silver", 1.0)
+    assert asset_recolor.pending_art(), (
+        "nothing was deferred — this test needs a genuinely cold cache "
+        "to have anything to prove"
+    )
+
+    # The drain lands the real metal, exactly as the warm thread does.
+    from render.art_warm import warm_pending_art
+    assert warm_pending_art() > 0
+
+    warm = glyph_shadow.bordered_plate_text("MONDAY", 34, "silver", 1.0)
+    assert warm is not cold, (
+        "the cache served the GOLD-MASTER composition after the real "
+        "silver had landed — the dial would stay gold until restart, "
+        "which is the defect the stale notifier was created for"
+    )

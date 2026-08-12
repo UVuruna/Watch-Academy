@@ -64,10 +64,13 @@ from render import numeral_relief as relief
 # the other: the cap-height share of a typical bold em box.
 PLATE_INK_HEIGHT_FRACTION = 0.72
 
-#: Composed labels, keyed by (text, ink height, metal, dpr). These
-#: repaint with the dial and composing one walks a plate per character
-#: through `jewel_metal_file`, so the walk happens once per distinct
-#: label per process.
+#: Composed labels, keyed by (text, ink height, metal, dpr) AND THE
+#: RESOLVED SOURCE FILES. These repaint with the dial and composing one
+#: walks a plate per character through `jewel_metal_file`, so the walk
+#: happens once per distinct label per process — but the resolved files
+#: are part of the key on purpose: see `bordered_plate_text`, where a
+#: key without them froze gold-master stand-ins onto a cold-cache dial
+#: for the life of the process.
 _LABELS: dict[tuple, object] = {}
 _LABELS_LOCK = threading.Lock()
 
@@ -223,9 +226,29 @@ def bordered_plate_text(
     from PySide6.QtGui import QPixmap
 
     from render import letter_plates
+    from render.asset_recolor import jewel_metal_file
 
     ink_px = max(1, round(height_px * PLATE_INK_HEIGHT_FRACTION * dpr))
-    key = (text, ink_px, metal, round(dpr, 3))
+    # THE KEY CARRIES WHAT THE PIXELS WERE MADE FROM (bug found by this
+    # round's own render-equality proof, and it is the 2026-08-02 class
+    # of defect: "the dial stayed gold until the next process restart").
+    #
+    # `jewel_metal_file` returns the GOLD MASTER when a finish is not on
+    # disk yet — that is its documented, visible stand-in. A cache keyed
+    # only by (text, size, metal, dpr) therefore froze whatever the first
+    # paint happened to see: on a cold cache the labels were composed
+    # from gold masters and STAYED gold, because the background drain
+    # landing the real metal changes no part of that key.
+    #
+    # Naming the resolved files IN the key fixes it structurally instead
+    # of with another invalidation hook: when the real finish lands, the
+    # resolved path changes, so the key changes, so the label recomposes.
+    # A stale composition cannot be served because it cannot be found.
+    sources = tuple(
+        str(jewel_metal_file(letter_plates.plate_path(glyph), metal))
+        for glyph in text.upper() if glyph != " "
+    )
+    key = (text, ink_px, metal, round(dpr, 3), sources)
     with _LABELS_LOCK:
         cached = _LABELS.get(key)
     if cached is not None:
