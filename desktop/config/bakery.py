@@ -26,7 +26,7 @@ able to disagree. One table, two readers (`setup/__about/make_art_bake.md`).
 # climbs steeply for a difference the dial draws at 800 px. Lossless was
 # rejected outright — 1.6 GB is not a saving.
 #
-# Graded, not assumed: `.claude/shots/art_bake_q90_ab.png` puts master
+# Graded, not assumed: `.claude/shots/art-bake-q90/master_vs_baked_ab.png` puts master
 # against bake at drawing size and at 3x, and shows no blocking, no
 # banding and no ringing on the alpha edges.
 #
