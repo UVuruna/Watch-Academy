@@ -35,7 +35,6 @@ hover-invariant groups, and answers every hit-test/tooltip question.
 | `numeral_relief.py` | Standard | one numeral painted: body, border and real page-space relief — [about](__about/numeral_relief.md) |
 | `numeral_bands.py` | Standard | the two band plates + the crown glyph set, built once and cached process-wide — [about](__about/numeral_bands.md) |
 | `letter_plates.py` | Standard | glyph -> the owner's gold plate; the Greek twins and the composed two-digit numbers — [about](__about/letter_plates.md) |
-| `glyph_shadow.py` | Standard | THE LETTER SHADOW LAW's home — the stamped halo and the plate-composed label that wears it — [about](__about/glyph_shadow.md) · [flow](__flow/glyph_shadow.md) |
 | `skin_geometry.py` | Algorithmic | every "what does this skin say" query — palettes, arms, duality, daylight — [about](__about/skin_geometry.md) · [flow](__flow/skin_geometry.md) |
 | `shapes.py` | Algorithmic | star/polygon/arm path geometry — [about](__about/shapes.md) · [flow](__flow/shapes.md) |
 | `slot_layout.py` | Algorithmic | the slot position matrix and seat geometry — [about](__about/slot_layout.md) · [flow](__flow/slot_layout.md) |
