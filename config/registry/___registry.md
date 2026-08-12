@@ -23,6 +23,7 @@ Layer: config — pure. `week.py` imports NOTHING, which is what lets
 | `sentinel.py` | Standard | `COMPUTED` — the one value the registry refuses to freeze — [about](__about/sentinel.md) |
 | `pointers.py` | Algorithmic | THE POINTER REGISTRY — the permission matrix: what each pointer may carry, per shape — [about](__about/pointers.md) |
 | `week.py` | Algorithmic | THE WEEK REGISTRY, the 6+3 kind: all 35 theme entries, whole — [about](__about/week.md) · [flow](__flow/week.md) |
+| `availability.py` | Standard | THE AVAILABILITY FIELD — base vs. locked, per WEEK theme — [about](__about/availability.md) |
 
 ## Connections
 

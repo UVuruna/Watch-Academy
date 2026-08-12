@@ -38,6 +38,7 @@ sentinel, which is what lets
 `constants` and `pantheon` both derive from it without a cycle.
 """
 
+from config.registry.availability import AVAILABILITY, BASE_THEME_KEYS, LOCKED_THEME_KEYS
 from config.registry.sentinel import COMPUTED
 from config.registry.week import MENU, MENU_TOP, WEEK
 
@@ -268,6 +269,24 @@ def kinds_of(theme: str) -> tuple[str, ...]:
     of hidden. A caller that holds a bare key and needs certainty must
     say which kind it means."""
     return tuple(kind for kind in KINDS if theme in themes_of(kind))
+
+
+def base_theme_keys() -> frozenset[str]:
+    """Every WEEK key unlocked in the base pack — the owner's sealed
+    ballot list (2026-08-12), read live from `availability.py`."""
+    return BASE_THEME_KEYS
+
+
+def is_theme_unlocked(theme: str, all_unlocked: bool = False) -> bool:
+    """Whether `theme` may be entered right now. `all_unlocked` is the
+    caller's own HIDDEN_MODE_SECRET state (`app.controller.Controller.
+    _hidden_unlocked`) — this module never reads or stores that flag
+    itself, it only answers the question once the caller supplies it.
+    A key outside `AVAILABILITY` (a non-week kind, or "nonesuch") is
+    never base, so it reads as locked rather than raising."""
+    if all_unlocked:
+        return True
+    return AVAILABILITY.get(theme) == "base"
 
 
 def kind_of(theme: str) -> str | None:
