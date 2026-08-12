@@ -49,9 +49,15 @@ _ALLOWED_ROOTS = set(taxonomy.CATEGORIES) | {
 # Categories whose art shipped from an AI source — every PNG under them
 # must carry the source suffix. The instrument furniture and the Earth
 # marker faces are owner hand-made (no suffix).
+#
+# `celestial/eclipse` LEFT this list by owner decree 2026-08-12: he
+# accepted the pairs and ordered them held as VERSION ONE (bare stem,
+# the Gemini render) and `_v2` (the ChatGPT render) until he picks one
+# per kind — "ostavi ih kao verzija jedan i V2 a ja ću posle da
+# pogledam". The bare stem is what the program resolves; `_v2` waits.
 _SUFFIXED_AREAS = (
     "weeks", "calendars", "archetypes",
-    "celestial/era", "celestial/eclipse", "celestial/seasons",
+    "celestial/era", "celestial/seasons",
 )
 
 
