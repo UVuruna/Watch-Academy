@@ -13,6 +13,7 @@ has not landed here yet.
 |------|------|----------|
 | `make_deep_time.py` | Algorithmic | builds the gitignored full-span `Database/deep_time.sqlite` from the research events database — [about](__about/make_deep_time.md) · [flow](__flow/make_deep_time.md) |
 | `make_observatory.py` | Algorithmic | builds the three committed, decimated Observatory chart bundles — [about](__about/make_observatory.md) · [flow](__flow/make_observatory.md) |
+| `make_letter_bake.py` | Algorithmic | bakes the whole plate library into every metal/thematic finish under `assets/_baked/letters` — [about](__about/make_letter_bake.md) · [flow](__flow/make_letter_bake.md) |
 | `app_info.json` | — | installer metadata seed (name/description/version/exe names) — plain config, not a code file |
 
 ## Connections

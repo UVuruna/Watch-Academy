@@ -19,8 +19,44 @@ from PySide6.QtGui import QColor, QImage, QPixmap
 
 from config import defaults, palette, paths, profiling
 from config.paths import art_file
-from render import raster_store
+from render import letter_bake, raster_store
 from render.assets import AssetCache
+
+
+def letter_cache_name(master: Path, metal: str, shade: str) -> str:
+    """THE name a letter finish is filed under — the ONE naming
+    function for this family (Rule #5), shared by the runtime cache
+    (`jewel_metal_path`), the shipped bake (`render.letter_bake`) and
+    the baker that writes it (`setup/make_letter_bake.py`).
+
+    It embeds the master's CONTENT fingerprint (`raster_store.
+    source_prefix`, 0.14.708 — so a git checkout no longer orphans the
+    cache), the metal, the active shade and `defaults.
+    METAL_SWAP_VERSION`. That last pair is why the bake needs no
+    manifest of its own: re-draw a plate or bump the recolor math, and
+    the shipped file simply stops being the file anyone asks for."""
+    return (
+        f"{raster_store.source_prefix(master)}_letter_{metal}_{shade}"
+        f"_v{defaults.METAL_SWAP_VERSION}.png"
+    )
+
+
+def bake_letter_finish(
+    master: Path, metal: str, shade: str, destination: Path
+) -> None:
+    """Derive one letter finish for an EXPLICIT (metal, shade) and write
+    it — the SETUP baker's door (`setup/make_letter_bake.py`), and the
+    only caller that names a shade instead of reading it from a watch's
+    display context.
+
+    The same kernel `ensure_variant` runs, with the same arguments the
+    ledger records for this family (gold master, alpha mask): one
+    algorithm, whether the pixels are made at setup or at runtime."""
+    swapped = AssetCache._recolored(
+        QImage(str(master)), metal,
+        defaults.METAL_SOURCE_JEWEL, defaults.METAL_MASK_JEWEL, shade,
+    )
+    raster_store.atomic_save(swapped, destination)
 
 
 def jewel_metal_path(path: Path, metal: str) -> Path:
@@ -48,11 +84,22 @@ def jewel_metal_path(path: Path, metal: str) -> Path:
     if path is None or not path.exists():
         return path
     shade = paths.metal_shade(metal)
-    cache = (
-        paths.settings_path().parent / "raster_cache"
-        / f"{raster_store.source_prefix(path)}_letter_{metal}_{shade}"
-        f"_v{defaults.METAL_SWAP_VERSION}.png"
-    )
+    name = letter_cache_name(path, metal, shade)
+    cache = paths.settings_path().parent / "raster_cache" / name
+    # THE SHIPPED BAKE FIRST (0.14.950, owner order 2026-08-12: the
+    # letters are pre-rendered at setup, "a ne da ga renderujemo svaki
+    # put pri pokretanju aplikacije").  <-- lang-ok: the owner's own
+    # instruction, quoted.  A hit RETURNS HERE, without recording a
+    # recipe: a recorded recipe is one the warm thread rebuilds, which
+    # is exactly the work the bake exists to remove. It also means the
+    # dial's FIRST paint is the real metal — no gold stand-in, no
+    # repaint. Keyed by the same name the runtime cache uses, so a
+    # re-drawn plate or a bumped METAL_SWAP_VERSION simply misses here
+    # and the finish derives live, as it always did.
+    if not cache.exists():
+        baked = letter_bake.baked_file(name)
+        if baked is not None:
+            return baked
     _PENDING_VARIANTS.setdefault(
         str(cache),
         (path, metal, defaults.METAL_SOURCE_JEWEL,

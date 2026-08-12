@@ -52,6 +52,8 @@ hover-invariant groups, and answers every hit-test/tooltip question.
 | `asset_recolor.py` | Algorithmic | disk-cached metal finishes, the lazy variant ledger — [about](__about/asset_recolor.md) · [flow](__flow/asset_recolor.md) |
 | `asset_variants.py` | Algorithmic | moon render, subdial plate resolver, computed icons — [about](__about/asset_variants.md) · [flow](__flow/asset_variants.md) |
 | `art_warm.py` | Algorithmic | drains the metal-recolor ledger off the GUI thread — [about](__about/art_warm.md) · [flow](__flow/art_warm.md) |
+| `asset_index.py` | Algorithmic | persistent stat-walk manifest — no launch reopens a file it already knows — [about](__about/asset_index.md) · [flow](__flow/asset_index.md) |
+| `letter_bake.py` | Algorithmic | reads the pre-baked letter finishes from `assets/_baked/letters` — [about](__about/letter_bake.md) · [flow](__flow/letter_bake.md) |
 | `raster_store.py` | Standard | atomic disk writes for every derived image — [about](__about/raster_store.md) |
 | `instrument_diagrams.py` | Algorithmic | the clock explaining itself, 8 computed pages — [about](__about/instrument_diagrams.md) · [flow](__flow/instrument_diagrams.md) |
 | `canon_diagrams.py` | Algorithmic | the doctrine's journeys and tables, computed — [about](__about/canon_diagrams.md) · [flow](__flow/canon_diagrams.md) |
