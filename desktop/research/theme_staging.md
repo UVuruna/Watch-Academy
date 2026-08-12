@@ -210,7 +210,7 @@ owner's own Character-Cube drop (character / edges / vertices × the
 three eras) sit beside their already-wired non-colored siblings with no
 config table naming them. Recorded here rather than wired on the spot
 because choosing which look a Cube seat draws is a CANON decision
-([The Cube Canon](../CUBE.md)), not a performance round's call. They
+([The Cube Canon](../../CUBE.md)), not a performance round's call. They
 leave this table the day a reader resolves them.
 
 **The banknote row left this table 2026-08-05, last of all** — the
