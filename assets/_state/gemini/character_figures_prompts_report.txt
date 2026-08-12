@@ -1,0 +1,91 @@
+====================================================================
+Character Figure Plates — the Legacy Wheel's Forty-Eight Seats, Three Sets  [Gemini]
+Run started:  2026-08-11 15:24:56  (40/40 pending)
+--------------------------------------------------------------------
+2026-08-11 15:26:14  assets/archetypes/character/archetypal/colored/Penelope.png gen   58.0s  ours   17.5s   1024x1024 -> 910x910    1.3 MB  [REMOVE BG: done, CROP: done]
+2026-08-11 15:27:02  assets/archetypes/character/historical/colored/Ernest_Shackleton.png gen   25.7s  ours   20.1s   1024x1024 -> 976x976    1.8 MB  [REMOVE BG: done, CROP: done]
+2026-08-11 15:28:26  assets/archetypes/character/modern/colored/Samwise_Gamgee.png gen   65.3s  ours   17.1s   1024x1024 -> 964x965    1.4 MB  [REMOVE BG: done, CROP: done]
+2026-08-11 15:30:00  assets/archetypes/character/historical/colored/Pope_Alexander_VI.png gen   75.0s  ours   16.7s  1024x1024 -> 1007x1007    1.5 MB  [REMOVE BG: done, CROP: done]
+2026-08-11 15:30:32  assets/archetypes/character/modern/colored/Bellatrix_Lestrange.png REFUSED — no image — Gemini: the response answered with TEXT but no image (settled 6s), and the text matches no known marker — lou
+2026-08-11 15:31:50  assets/archetypes/character/archetypal/colored/Boaz.png gen   27.5s  ours   18.1s   1024x1024 -> 929x926    1.6 MB  [REMOVE BG: done, CROP: done]
+2026-08-11 15:32:37  assets/archetypes/character/historical/colored/Lorenzo_De_Medici.png gen   29.7s  ours   15.1s   1024x1024 -> 948x946    1.4 MB  [REMOVE BG: done, CROP: done]
+2026-08-11 15:33:30  assets/archetypes/character/modern/colored/Charles_Xavier.png gen   29.7s  ours   21.7s   1024x1024 -> 988x985    1.6 MB  [REMOVE BG: done, CROP: done]
+2026-08-11 15:34:17  assets/archetypes/character/archetypal/colored/King_Lear.png gen   23.2s  ours   21.2s  1024x1024 -> 1024x1019    1.6 MB  [REMOVE BG: done, CROP: done]
+2026-08-11 15:35:21  assets/archetypes/character/historical/colored/Nicolae_Ceausescu.png gen   33.0s  ours   29.6s   1024x1024 -> 966x963    1.5 MB  [REMOVE BG: done, CROP: done]
+2026-08-11 15:36:18  assets/archetypes/character/modern/colored/Denethor_II.png gen   31.4s  ours   24.1s   1024x1024 -> 970x966    1.4 MB  [REMOVE BG: done, CROP: done]
+2026-08-11 15:37:18  assets/archetypes/character/archetypal/colored/King_Arthur.png gen   31.5s  ours   26.1s   1024x1024 -> 920x918    1.1 MB  [REMOVE BG: done, CROP: done]
+2026-08-11 15:38:11  assets/archetypes/character/historical/colored/Nelson_Mandela.png gen   29.4s  ours   21.7s   1024x1024 -> 974x976    1.5 MB  [REMOVE BG: done, CROP: done]
+2026-08-11 15:39:03  assets/archetypes/character/modern/colored/TChalla.png gen   31.0s  ours   19.2s  1024x1024 -> 1004x1001    1.6 MB  [REMOVE BG: done, CROP: done]
+2026-08-11 15:39:51  assets/archetypes/character/historical/colored/Salvador_Dali.png gen   28.3s  ours   18.1s   1024x1024 -> 945x939    1.3 MB  [REMOVE BG: done, CROP: done]
+2026-08-11 15:40:50  assets/archetypes/character/modern/colored/Lord_Voldemort.png gen   30.0s  ours   27.6s   1024x1024 -> 916x916    1.1 MB  [REMOVE BG: done, CROP: done]
+2026-08-11 15:41:40  assets/archetypes/character/archetypal/colored/Elijah.png gen   31.9s  ours   15.6s  1024x1024 -> 1020x1021    1.5 MB  [REMOVE BG: done, CROP: done]
+2026-08-11 15:42:30  assets/archetypes/character/historical/colored/Martin_Luther.png gen   16.3s  ours   32.1s   1024x1024 -> 982x975    1.4 MB  [REMOVE BG: done, CROP: done]
+2026-08-11 15:43:23  assets/archetypes/character/modern/colored/Steve_Rogers.png gen   32.4s  ours   18.0s   1024x1024 -> 950x955    1.3 MB  [REMOVE BG: done, CROP: done]
+2026-08-11 15:44:16  assets/archetypes/character/archetypal/colored/Creon.png gen   35.7s  ours   15.6s  1024x1024 -> 1023x1022    1.5 MB  [REMOVE BG: done, CROP: done]
+2026-08-11 15:45:28  assets/archetypes/character/historical/colored/Joseph_Stalin.png gen   37.5s  ours   32.5s   1024x1024 -> 942x940    1.2 MB  [REMOVE BG: done, CROP: done]
+2026-08-11 15:46:23  assets/archetypes/character/modern/colored/Dolores_Umbridge.png REFUSED — no image — Gemini: the response answered with TEXT but no image (settled 6s), and the text matches no known marker — lou
+2026-08-11 15:47:52  assets/archetypes/character/historical/colored/Socrates.png gen   37.7s  ours   29.6s  1024x1024 -> 1002x1002    1.6 MB  [REMOVE BG: done, CROP: done]
+2026-08-11 15:49:18  assets/archetypes/character/modern/colored/Batman.png gen   53.2s  ours   31.6s   1024x1024 -> 956x956    1.4 MB  [REMOVE BG: done, CROP: done]
+2026-08-11 15:50:20  assets/archetypes/character/archetypal/colored/Inspector_Javert.png gen   33.3s  ours   26.5s   1024x1024 -> 951x950    1.3 MB  [REMOVE BG: done, CROP: done]
+2026-08-11 15:51:31  assets/archetypes/character/historical/colored/Maximilien_Robespierre.png gen   35.0s  ours   33.6s  1024x1024 -> 1004x1000    1.5 MB  [REMOVE BG: done, CROP: done]
+2026-08-11 15:52:43  assets/archetypes/character/modern/colored/Judge_Dredd.png gen   36.8s  ours   32.6s  1024x1024 -> 1014x1010    1.3 MB  [REMOVE BG: done, CROP: done]
+2026-08-11 15:53:43  assets/archetypes/character/archetypal/colored/John_The_Baptist.png gen   40.5s  ours   18.1s  1024x1024 -> 1012x1009    1.6 MB  [REMOVE BG: done, CROP: done]
+2026-08-11 15:54:42  assets/archetypes/character/historical/colored/Thomas_More.png gen   37.3s  ours   19.1s  1024x1024 -> 1013x1008    1.6 MB  [REMOVE BG: done, CROP: done]
+2026-08-11 15:55:39  assets/archetypes/character/archetypal/colored/Father_Ferapont.png gen   37.0s  ours   18.1s  1024x1024 -> 1008x1006    1.7 MB  [REMOVE BG: done, CROP: done]
+2026-08-11 15:56:45  assets/archetypes/character/historical/colored/Simone_Weil.png gen   43.2s  ours   20.6s   1024x1024 -> 974x972    1.4 MB  [REMOVE BG: done, CROP: done]
+2026-08-11 15:58:36  assets/archetypes/character/modern/colored/Silas.png gen   48.6s  ours   23.1s   1024x1024 -> 988x990    1.4 MB  [REMOVE BG: done, CROP: done]
+2026-08-11 15:59:40  assets/archetypes/character/historical/colored/Mahatma_Gandhi.png gen   36.0s  ours   26.0s   1024x1024 -> 909x906    1.3 MB  [REMOVE BG: done, CROP: done]
+2026-08-11 16:00:40  assets/archetypes/character/modern/colored/Superman.png REFUSED — Gemini: the response answered with TEXT but no image (settled 6s), and the text matches no known marker — loud skip, nev
+2026-08-11 16:00:40  assets/archetypes/character/modern/colored/Superman.png WHY (site's answer) — Gemini said
+
+The specific element of the request that conflicts with safety policy is the depiction of a "small girl... who has come there to jump." My standards prohibit generating images that portray or encourage self-harm and suicide.
+2026-08-11 16:01:55  assets/archetypes/character/historical/colored/Franz_Kafka.png gen   33.9s  ours   26.1s  1024x1024 -> 1012x1011    1.4 MB  [REMOVE BG: done, CROP: done]
+2026-08-11 16:03:23  assets/archetypes/character/modern/colored/Darth_Vader.png REFUSED — Gemini: prompt refused [safety] (matched 'can't help with this particular request'): Gemini said
+
+I'm sorry, it appears 
+2026-08-11 16:03:23  assets/archetypes/character/modern/colored/Darth_Vader.png WHY (site's answer) — Gemini said
+
+The request was declined due to the specific description of the characters and their interactions within the requested scene. The prompt describes a "young man" being physically guided and "handed over" to a "hooded old ruler" on a throne in a dark setting, alongside a complex psychological narrative about the young man refusing recovery and feeling he is "past recovery." This combina
+2026-08-11 16:04:49  assets/archetypes/character/historical/colored/Janusz_Korczak.png gen   44.9s  ours   22.2s  1024x1024 -> 1018x1012    1.6 MB  [REMOVE BG: done, CROP: done]
+2026-08-11 16:05:55  assets/archetypes/character/modern/colored/Alfred_Pennyworth.png gen   42.6s  ours   20.6s   1024x1024 -> 990x991    1.5 MB  [REMOVE BG: done, CROP: done]
+2026-08-11 16:06:45  assets/archetypes/character/historical/colored/Marcus_Antonius.png gen   32.3s  ours   17.1s   1024x1024 -> 952x950    1.2 MB  [REMOVE BG: done, CROP: done]
+2026-08-11 16:07:22  assets/archetypes/character/modern/colored/Severus_Snape.png gen   34.1s  ours    0.5s   1024x1024 -> 914x912    1.1 MB  [REMOVE BG: done, CROP: done]
+--------------------------------------------------------------------
+Refused: 4 image(s) — rework those prompts in the sheet (or intervene manually) and rerun
+Images: 36  |  average generation (AI): 37s/image  |  average our time (save+bgfix+pause): 22s/image
+Total AI + our time: 35m 22s  (wall clock: 42m 26s)
+Run finished: 2026-08-11 16:07:22  (all pending items done)
+
+====================================================================
+Character Figure Plates — the Legacy Wheel's Forty-Eight Seats, Three Sets  [Gemini]
+Run started:  2026-08-11 20:39:03  (4/40 pending)
+--------------------------------------------------------------------
+2026-08-11 20:40:01  assets/archetypes/character/modern/colored/Bellatrix_Lestrange.png REFUSED — Gemini: prompt refused [safety] (matched 'can't generate'): Gemini said
+
+Sorry, I can't generate unsafe images.
+2026-08-11 20:40:01  assets/archetypes/character/modern/colored/Bellatrix_Lestrange.png WHY (site's answer) — Gemini said
+
+The specific elements of your request that conflict with safety policies are the descriptions of violence, bodily harm, and restraint.
+
+Specifically, the phrases "pinning a bound girl's forearm," "cutting into it with a short curved knife," and describing "raw, smeared" cut marks trigger the filters against violence and gore. Even though the prompt includes the caveat "rather than har
+2026-08-11 20:41:13  assets/archetypes/character/modern/colored/Dolores_Umbridge.png REFUSED — Gemini: prompt refused [safety] (matched 'can't generate'): Gemini said
+
+I can't generate an image of a boy writing over
+2026-08-11 20:41:13  assets/archetypes/character/modern/colored/Dolores_Umbridge.png WHY (site's answer) — Gemini said
+
+The element of your request that conflicts with safety policies is the depiction of a child engaged in physical injury or self-harm.
+
+Specifically, the instruction for a boy to "write with a long black pen that cuts the same sentence over and over into the back of his own writing hand", leading to "raw" marks on the body, violates guidelines regarding the depiction of violence and har
+2026-08-11 20:42:04  assets/archetypes/character/modern/colored/Superman.png REFUSED — Gemini: prompt refused [safety] (matched 'can't generate'): Gemini said
+
+I can't generate an image of a small girl who h
+2026-08-11 20:42:04  assets/archetypes/character/modern/colored/Superman.png WHY (site's answer) — Gemini said
+
+The phrase "who has come there to jump" conflicts with policies regarding content related to self-harm and suicide. Specifically, the depiction of a minor in a situation involving the intent to self-harm is restricted.
+2026-08-11 20:43:33  assets/archetypes/character/modern/colored/Darth_Vader.png gen   32.8s  ours    0.7s   1024x1024 -> 954x949    975 KB  [REMOVE BG: done, CROP: done]
+--------------------------------------------------------------------
+Refused: 3 image(s) — rework those prompts in the sheet (or intervene manually) and rerun
+Images: 1  |  average generation (AI): 33s/image  |  average our time (save+bgfix+pause): 1s/image
+Total AI + our time: 33s  (wall clock: 4m 30s)
+Run finished: 2026-08-11 20:43:33  (all pending items done)
+

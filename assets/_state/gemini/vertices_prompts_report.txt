@@ -1,0 +1,26 @@
+====================================================================
+Cube Vertex Arm Plates — the Rose's Prophecy Wheel, Eight Seats  [Gemini]
+Run started:  2026-08-11 21:59:21  (16/16 pending)
+--------------------------------------------------------------------
+2026-08-11 22:00:35  assets/archetypes/vertices/primary/colored/Quiet_Devotee.png gen   38.5s  ours   27.8s    506x1024 -> 354x992    539 KB  [REMOVE BG: done, CROP: done]
+2026-08-11 22:01:26  assets/archetypes/vertices/circle/colored/Quiet_Devotee.png gen   23.4s  ours   21.3s   1024x1024 -> 972x972    1.5 MB  [REMOVE BG: done, CROP: done]
+2026-08-11 22:02:13  assets/archetypes/vertices/primary/colored/Sacrificial_Protector.png gen   28.4s  ours   12.9s    506x1024 -> 391x985    664 KB  [REMOVE BG: done, CROP: done]
+2026-08-11 22:02:55  assets/archetypes/vertices/circle/colored/Sacrificial_Protector.png REFUSED — no image — Gemini: the response answered with TEXT but no image (settled 6s), and the text matches no known marker — lou
+2026-08-11 22:04:07  assets/archetypes/vertices/primary/colored/Charismatic_Champion.png gen   20.9s  ours   32.8s    506x1024 -> 258x973    386 KB  [REMOVE BG: done, CROP: done]
+2026-08-11 22:04:58  assets/archetypes/vertices/circle/colored/Charismatic_Champion.png gen   27.1s  ours   19.0s   1024x1024 -> 930x931    918 KB  [REMOVE BG: done, CROP: done]
+2026-08-11 22:05:58  assets/archetypes/vertices/primary/colored/Steady_Guardian.png gen   29.3s  ours   24.7s    506x1024 -> 298x971    459 KB  [REMOVE BG: done, CROP: done]
+2026-08-11 22:06:56  assets/archetypes/vertices/circle/colored/Steady_Guardian.png gen   31.5s  ours   21.5s   1024x1024 -> 980x979    1.1 MB  [REMOVE BG: done, CROP: done]
+2026-08-11 22:07:48  assets/archetypes/vertices/primary/colored/Wise_Statesman.png gen   27.9s  ours   17.3s    506x1024 -> 362x980    445 KB  [REMOVE BG: done, CROP: done]
+2026-08-11 22:08:42  assets/archetypes/vertices/circle/colored/Wise_Statesman.png gen   31.2s  ours   17.6s  1024x1024 -> 1004x1002    1.1 MB  [REMOVE BG: done, CROP: done]
+2026-08-11 22:09:47  assets/archetypes/vertices/primary/colored/Visionary_Founder.png gen   36.0s  ours   22.9s    506x1024 -> 318x991    573 KB  [REMOVE BG: done, CROP: done]
+2026-08-11 22:10:38  assets/archetypes/vertices/circle/colored/Visionary_Founder.png gen   27.9s  ours   17.2s   1024x1024 -> 994x996    1.5 MB  [REMOVE BG: done, CROP: done]
+2026-08-11 22:12:12  assets/archetypes/vertices/primary/colored/Principled_Reformer.png gen   71.9s  ours   16.2s    506x1024 -> 262x954    395 KB  [REMOVE BG: done, CROP: done]
+2026-08-11 22:12:58  assets/archetypes/vertices/circle/colored/Principled_Reformer.png gen   24.0s  ours   15.7s   1024x1024 -> 996x995    1.2 MB  [REMOVE BG: done, CROP: done]
+2026-08-11 22:13:43  assets/archetypes/vertices/primary/colored/Contemplative_Sage.png gen   25.1s  ours   13.8s    506x1024 -> 367x979    537 KB  [REMOVE BG: done, CROP: done]
+2026-08-11 22:14:21  assets/archetypes/vertices/circle/colored/Contemplative_Sage.png gen   32.5s  ours    0.5s   1024x1024 -> 930x929    1.0 MB  [REMOVE BG: done, CROP: done]
+--------------------------------------------------------------------
+Refused: 1 image(s) — rework those prompts in the sheet (or intervene manually) and rerun
+Images: 15  |  average generation (AI): 32s/image  |  average our time (save+bgfix+pause): 19s/image
+Total AI + our time: 12m 37s  (wall clock: 15m 01s)
+Run finished: 2026-08-11 22:14:21  (all pending items done)
+

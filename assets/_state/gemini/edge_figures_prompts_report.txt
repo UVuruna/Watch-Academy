@@ -1,0 +1,67 @@
+====================================================================
+Edge Figure Plates — the Eight New Edge Seats, Three Sets, Both Polarities  [Gemini]
+Run started:  2026-08-11 16:07:24  (48/48 pending)
+--------------------------------------------------------------------
+2026-08-11 16:08:07  assets/archetypes/edges/archetypal/colored/Solomon.png gen   24.0s  ours   17.1s   1024x1024 -> 954x955    1.4 MB  [REMOVE BG: done, CROP: done]
+2026-08-11 16:09:00  assets/archetypes/edges/archetypal/colored/Pontius_Pilate.png gen   30.0s  ours   21.1s   1024x1024 -> 982x981    1.4 MB  [REMOVE BG: done, CROP: done]
+2026-08-11 16:10:05  assets/archetypes/edges/historical/colored/Elizabeth_I.png gen   28.4s  ours   35.2s   1024x1024 -> 954x951    1.4 MB  [REMOVE BG: done, CROP: done]
+2026-08-11 16:11:05  assets/archetypes/edges/historical/colored/Adolf_Eichmann.png gen   27.9s  ours   29.7s  1024x1024 -> 1006x1005    1.4 MB  [REMOVE BG: done, CROP: done]
+2026-08-11 16:12:12  assets/archetypes/edges/modern/colored/Spock.png gen   30.6s  ours   34.6s  1024x1024 -> 1016x1014    1.4 MB  [REMOVE BG: done, CROP: done]
+2026-08-11 16:13:09  assets/archetypes/edges/modern/colored/Dr_Manhattan.png gen   29.6s  ours   25.5s   1024x1024 -> 914x914    1.1 MB  [REMOVE BG: done, CROP: done]
+2026-08-11 16:14:15  assets/archetypes/edges/archetypal/colored/Romeo.png gen   28.1s  ours   35.6s   1024x1024 -> 978x973    1.6 MB  [REMOVE BG: done, CROP: done]
+2026-08-11 16:15:14  assets/archetypes/edges/archetypal/colored/Medea.png gen   31.8s  ours   25.6s  1024x1024 -> 1016x1013    1.5 MB  [REMOVE BG: done, CROP: done]
+2026-08-11 16:16:01  assets/archetypes/edges/historical/colored/Joan_of_Arc.png gen   31.8s  ours   13.2s  1024x1024 -> 1018x1016    1.6 MB  [REMOVE BG: done, CROP: done]
+2026-08-11 16:16:57  assets/archetypes/edges/historical/colored/Genghis_Khan.png gen   31.4s  ours   22.6s  1024x1024 -> 1024x1022    1.6 MB  [REMOVE BG: done, CROP: done]
+2026-08-11 16:18:00  assets/archetypes/edges/modern/colored/Katniss_Everdeen.png gen   29.8s  ours   31.0s   1024x1024 -> 914x911    1.3 MB  [REMOVE BG: done, CROP: done]
+2026-08-11 16:18:59  assets/archetypes/edges/modern/colored/Inigo_Montoya.png gen   30.4s  ours   27.2s  1024x1024 -> 1016x1016    1.5 MB  [REMOVE BG: done, CROP: done]
+2026-08-11 16:20:02  assets/archetypes/edges/archetypal/colored/Ruth.png gen   28.8s  ours   31.0s   1024x1024 -> 870x870    1.3 MB  [REMOVE BG: done, CROP: done]
+2026-08-11 16:21:13  assets/archetypes/edges/archetypal/colored/Iago.png gen   35.9s  ours   33.1s   1024x1024 -> 934x937    1.3 MB  [REMOVE BG: done, CROP: done]
+2026-08-11 16:22:18  assets/archetypes/edges/historical/colored/Rosa_Parks.png gen   36.0s  ours   27.0s   1024x1024 -> 882x880    1.3 MB  [REMOVE BG: done, CROP: done]
+2026-08-11 16:23:28  assets/archetypes/edges/historical/colored/Cardinal_Richelieu.png gen   37.2s  ours   30.6s  1024x1024 -> 1002x1002    1.5 MB  [REMOVE BG: done, CROP: done]
+2026-08-11 16:24:29  assets/archetypes/edges/modern/colored/Brienne_of_Tarth.png gen   35.6s  ours   23.6s  1024x1024 -> 1004x999    1.7 MB  [REMOVE BG: done, CROP: done]
+2026-08-11 16:25:29  assets/archetypes/edges/modern/colored/Petyr_Baelish.png gen   43.6s  ours   14.5s   1024x1024 -> 898x896    1.1 MB  [REMOVE BG: done, CROP: done]
+2026-08-11 16:26:31  assets/archetypes/edges/archetypal/colored/Nehemiah.png gen   35.8s  ours   24.1s  1024x1024 -> 1024x1022    1.7 MB  [REMOVE BG: done, CROP: done]
+2026-08-11 16:27:20  assets/archetypes/edges/archetypal/colored/Saul_of_Tarsus.png gen   30.8s  ours   15.1s  1024x1024 -> 1006x1005    1.5 MB  [REMOVE BG: done, CROP: done]
+2026-08-11 16:28:45  assets/archetypes/edges/historical/colored/Abraham_Lincoln.png gen   47.4s  ours   35.1s  1024x1024 -> 1007x1005    1.4 MB  [REMOVE BG: done, CROP: done]
+2026-08-11 16:30:02  assets/archetypes/edges/historical/colored/Oliver_Cromwell.png gen   49.2s  ours   26.1s   1024x1024 -> 995x998    1.7 MB  [REMOVE BG: done, CROP: done]
+2026-08-11 16:31:09  assets/archetypes/edges/modern/colored/Hermione_Granger.png gen   35.4s  ours   29.6s  1024x1024 -> 1010x1010    1.7 MB  [REMOVE BG: done, CROP: done]
+--------------------------------------------------------------------
+Images: 23  |  average generation (AI): 33s/image  |  average our time (save+bgfix+pause): 26s/image
+Total AI + our time: 22m 58s  (wall clock: 24m 49s)
+Run finished: 2026-08-11 16:32:13  (aborted: Error)
+
+====================================================================
+Edge Figure Plates — the Eight New Edge Seats, Three Sets, Both Polarities  [Gemini]
+Run started:  2026-08-11 20:43:34  (25/48 pending)
+--------------------------------------------------------------------
+2026-08-11 20:44:23  assets/archetypes/edges/modern/colored/Rorschach.png gen   25.1s  ours   21.1s   1024x1024 -> 966x965    1.4 MB  [REMOVE BG: done, CROP: done]
+2026-08-11 20:45:22  assets/archetypes/edges/archetypal/colored/Isaac.png gen   37.1s  ours   20.1s   1024x1024 -> 932x928    1.5 MB  [REMOVE BG: done, CROP: done]
+2026-08-11 20:45:53  assets/archetypes/edges/archetypal/colored/Cain.png REFUSED — no image — Gemini: the response answered with TEXT but no image (settled 6s), and the text matches no known marker — lou
+2026-08-11 20:47:00  assets/archetypes/edges/historical/colored/Francis_of_Assisi.png gen   21.6s  ours   13.6s   1024x1024 -> 984x982    1.4 MB  [REMOVE BG: done, CROP: done]
+2026-08-11 20:47:44  assets/archetypes/edges/historical/colored/Vincent_van_Gogh.png gen   25.4s  ours   15.6s  1024x1024 -> 1000x998    1.4 MB  [REMOVE BG: done, CROP: done]
+2026-08-11 20:48:45  assets/archetypes/edges/modern/colored/Frodo_Baggins.png gen   30.9s  ours   27.6s   1024x1024 -> 966x967    1.6 MB  [REMOVE BG: done, CROP: done]
+2026-08-11 20:49:30  assets/archetypes/edges/modern/colored/Theoden.png gen   19.3s  ours   23.1s  1024x1024 -> 1006x1002    1.4 MB  [REMOVE BG: done, CROP: done]
+2026-08-11 20:50:25  assets/archetypes/edges/archetypal/colored/Daedalus.png gen   29.0s  ours   24.6s  1024x1024 -> 1010x1008    1.6 MB  [REMOVE BG: done, CROP: done]
+2026-08-11 20:51:18  assets/archetypes/edges/archetypal/colored/Icarus.png gen   32.9s  ours   17.5s   1024x1024 -> 982x982    1.2 MB  [REMOVE BG: done, CROP: done]
+2026-08-11 20:52:09  assets/archetypes/edges/historical/colored/Muhammad_Ali.png gen   28.9s  ours   20.1s   1024x1024 -> 976x976    1.7 MB  [REMOVE BG: done, CROP: done]
+2026-08-11 20:53:14  assets/archetypes/edges/historical/colored/Alexander_the_Great.png gen   32.0s  ours   30.1s  1024x1024 -> 1012x1005    1.7 MB  [REMOVE BG: done, CROP: done]
+2026-08-11 20:54:12  assets/archetypes/edges/modern/colored/Rocky_Balboa.png gen   39.6s  ours   16.1s   1024x1024 -> 942x941    1.3 MB  [REMOVE BG: done, CROP: done]
+2026-08-11 20:55:14  assets/archetypes/edges/modern/colored/Tony_Stark.png gen   29.2s  ours   29.7s  1024x1024 -> 1016x1013    1.6 MB  [REMOVE BG: done, CROP: done]
+2026-08-11 20:55:52  assets/archetypes/edges/archetypal/colored/Odysseus.png gen   20.7s  ours   14.7s  1024x1024 -> 1008x1006    1.6 MB  [REMOVE BG: done, CROP: done]
+2026-08-11 20:56:53  assets/archetypes/edges/archetypal/colored/Coriolanus.png gen   28.2s  ours   30.2s   1024x1024 -> 982x981    1.5 MB  [REMOVE BG: done, CROP: done]
+2026-08-11 20:57:08  assets/archetypes/edges/historical/colored/Bruce_Lee.png REFUSED — no image — Gemini: the response answered with TEXT but no image (settled 6s), and the text matches no known marker — lou
+2026-08-11 20:58:33  assets/archetypes/edges/historical/colored/Diogenes.png gen   31.6s  ours   13.9s  1024x1024 -> 1004x1002    1.8 MB  [REMOVE BG: done, CROP: done]
+2026-08-11 20:59:44  assets/archetypes/edges/modern/colored/Uncle_Iroh.png gen   37.3s  ours   28.7s   1024x1024 -> 986x982    1.5 MB  [REMOVE BG: done, CROP: done]
+2026-08-11 21:00:46  assets/archetypes/edges/modern/colored/Tywin_Lannister.png gen   27.9s  ours   29.2s  1024x1024 -> 1020x1015    1.3 MB  [REMOVE BG: done, CROP: done]
+2026-08-11 21:01:08  assets/archetypes/edges/archetypal/colored/Martha_of_Bethany.png REFUSED — no image — Gemini: the response answered with TEXT but no image (settled 6s), and the text matches no known marker — lou
+2026-08-11 21:02:44  assets/archetypes/edges/archetypal/colored/Uriah_Heep.png gen   37.3s  ours   36.1s  1024x1024 -> 1016x1012    1.5 MB  [REMOVE BG: done, CROP: done]
+2026-08-11 21:03:40  assets/archetypes/edges/historical/colored/Mother_Teresa.png gen   29.3s  ours   20.6s   1024x1024 -> 940x937    1.3 MB  [REMOVE BG: done, CROP: done]
+2026-08-11 21:04:39  assets/archetypes/edges/historical/colored/Vidkun_Quisling.png gen   25.3s  ours   27.6s   1024x1024 -> 900x898    1.1 MB  [REMOVE BG: done, CROP: done]
+2026-08-11 21:05:46  assets/archetypes/edges/modern/colored/Andy_Dufresne.png gen   25.0s  ours   35.6s   1024x1024 -> 978x978    1.3 MB  [REMOVE BG: done, CROP: done]
+2026-08-11 21:06:31  assets/archetypes/edges/modern/colored/Dobby.png gen   37.4s  ours    0.8s   1024x1024 -> 984x982    1.6 MB  [REMOVE BG: done, CROP: done]
+--------------------------------------------------------------------
+Refused: 3 image(s) — rework those prompts in the sheet (or intervene manually) and rerun
+Images: 22  |  average generation (AI): 30s/image  |  average our time (save+bgfix+pause): 23s/image
+Total AI + our time: 19m 07s  (wall clock: 22m 56s)
+Run finished: 2026-08-11 21:06:31  (all pending items done)
+

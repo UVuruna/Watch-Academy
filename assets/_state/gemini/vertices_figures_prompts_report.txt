@@ -1,0 +1,68 @@
+====================================================================
+Prophecy Wheel Figure Plates — the Eight Cube Vertices, Three Sets, Both Polarities  [Gemini]
+Run started:  2026-08-11 21:06:33  (39/39 pending)
+--------------------------------------------------------------------
+2026-08-11 21:07:54  assets/archetypes/vertices/archetypal/colored/Ophelia.png gen   21.4s  ours   16.6s   1024x1024 -> 948x946    1.1 MB  [REMOVE BG: done, CROP: done]
+2026-08-11 21:08:54  assets/archetypes/vertices/historical/colored/Florence_Nightingale.png gen   36.2s  ours   18.2s   1024x1024 -> 942x938    1.3 MB  [REMOVE BG: done, CROP: done]
+2026-08-11 21:09:55  assets/archetypes/vertices/historical/colored/Eva_Braun.png gen   38.5s  ours   16.2s  1024x1024 -> 1014x1011    1.6 MB  [REMOVE BG: done, CROP: done]
+2026-08-11 21:10:52  assets/archetypes/vertices/modern/colored/Faramir.png gen   26.1s  ours   25.3s  1024x1024 -> 1008x1008    1.4 MB  [REMOVE BG: done, CROP: done]
+2026-08-11 21:13:01  assets/archetypes/vertices/modern/colored/Peter_Pettigrew.png gen   66.7s  ours   29.1s   1024x1024 -> 973x974    1.2 MB  [REMOVE BG: done, CROP: done]
+2026-08-11 21:13:53  assets/archetypes/vertices/historical/colored/Harriet_Tubman.png REFUSED — no image — Gemini: the response answered with TEXT but no image (settled 6s), and the text matches no known marker — lou
+2026-08-11 21:15:18  assets/archetypes/vertices/historical/colored/Yukio_Mishima.png gen   28.2s  ours   28.7s  1024x1024 -> 1013x1014    1.6 MB  [REMOVE BG: done, CROP: done]
+2026-08-11 21:16:23  assets/archetypes/vertices/modern/colored/Harry_Potter.png gen   29.3s  ours   30.6s   1024x1024 -> 909x908    1.2 MB  [REMOVE BG: done, CROP: done]
+2026-08-11 21:17:59  assets/archetypes/vertices/modern/colored/Kylo_Ren.png REFUSED — Gemini: prompt refused [safety] (matched 'can't help with this particular request'): Gemini said
+
+I'm sorry, it appears 
+2026-08-11 21:17:59  assets/archetypes/vertices/modern/colored/Kylo_Ren.png WHY (site's answer) — Gemini said
+
+The specific element in your request that conflicts with safety policy is the description of the young warrior running a blade of unstable red energy straight through the older man. Requests that depict explicit acts of violence, including impalement, are restricted.
+2026-08-11 21:19:20  assets/archetypes/vertices/archetypal/colored/Beowulf.png gen   28.9s  ours   29.6s   1024x1024 -> 984x981    1.6 MB  [REMOVE BG: done, CROP: done]
+2026-08-11 21:20:18  assets/archetypes/vertices/archetypal/colored/Agamemnon.png gen   22.9s  ours   28.2s  1024x1024 -> 1004x1003    1.7 MB  [REMOVE BG: done, CROP: done]
+2026-08-11 21:21:23  assets/archetypes/vertices/historical/colored/Winston_Churchill.png gen   31.3s  ours   28.6s   1024x1024 -> 946x943    1.4 MB  [REMOVE BG: done, CROP: done]
+2026-08-11 21:22:30  assets/archetypes/vertices/historical/colored/Benito_Mussolini.png gen   32.0s  ours   28.7s  1024x1024 -> 1000x996    1.6 MB  [REMOVE BG: done, CROP: done]
+2026-08-11 21:23:38  assets/archetypes/vertices/modern/colored/Wonder_Woman.png gen   29.0s  ours   33.2s   1024x1024 -> 956x959    1.5 MB  [REMOVE BG: done, CROP: done]
+2026-08-11 21:24:50  assets/archetypes/vertices/modern/colored/Khal_Drogo.png gen   30.4s  ours   35.6s   1024x1024 -> 948x943    1.4 MB  [REMOVE BG: done, CROP: done]
+2026-08-11 21:25:54  assets/archetypes/vertices/archetypal/colored/Hector.png gen   28.6s  ours   29.2s  1024x1024 -> 1006x1007    1.6 MB  [REMOVE BG: done, CROP: done]
+2026-08-11 21:26:44  assets/archetypes/vertices/historical/colored/Queen_Elizabeth_II.png gen   30.4s  ours   14.1s   1024x1024 -> 932x931    1.1 MB  [REMOVE BG: done, CROP: done]
+2026-08-11 21:27:38  assets/archetypes/vertices/historical/colored/Louis_XV.png gen   23.1s  ours   24.7s   1024x1024 -> 990x994    1.5 MB  [REMOVE BG: done, CROP: done]
+2026-08-11 21:28:46  assets/archetypes/vertices/modern/colored/Aragorn.png gen   29.9s  ours   32.6s   1024x1024 -> 932x933    1.4 MB  [REMOVE BG: done, CROP: done]
+2026-08-11 21:29:41  assets/archetypes/vertices/archetypal/colored/The_Grand_Inquisitor.png gen   35.4s  ours   12.6s   1024x1024 -> 978x981    1.3 MB  [REMOVE BG: done, CROP: done]
+2026-08-11 21:30:49  assets/archetypes/vertices/historical/colored/George_Washington.png gen   33.4s  ours   29.1s   1024x1024 -> 991x989    1.4 MB  [REMOVE BG: done, CROP: done]
+2026-08-11 21:31:51  assets/archetypes/vertices/historical/colored/Klemens_Von_Metternich.png gen   34.2s  ours   21.6s   1024x1024 -> 948x947    1.3 MB  [REMOVE BG: done, CROP: done]
+2026-08-11 21:33:13  assets/archetypes/vertices/modern/colored/Albus_Dumbledore.png gen   47.6s  ours   28.7s   1024x1024 -> 986x985    1.4 MB  [REMOVE BG: done, CROP: done]
+2026-08-11 21:34:09  assets/archetypes/vertices/modern/colored/Saruman.png gen   26.0s  ours   23.6s  1024x1024 -> 1008x1008    1.3 MB  [REMOVE BG: done, CROP: done]
+2026-08-11 21:35:11  assets/archetypes/vertices/archetypal/colored/Aeneas.png gen   29.3s  ours   27.2s   1024x1024 -> 956x955    1.5 MB  [REMOVE BG: done, CROP: done]
+2026-08-11 21:36:29  assets/archetypes/vertices/historical/colored/Mustafa_Kemal_Ataturk.png gen   36.8s  ours   33.7s   1024x1024 -> 996x998    1.5 MB  [REMOVE BG: done, CROP: done]
+2026-08-11 21:37:37  assets/archetypes/vertices/historical/colored/Napoleon_Bonaparte.png gen   34.6s  ours   30.1s   1024x1024 -> 978x977    1.5 MB  [REMOVE BG: done, CROP: done]
+2026-08-11 21:38:31  assets/archetypes/vertices/modern/colored/Paul_Atreides.png gen   35.5s  ours   15.1s   1024x1024 -> 984x983    1.5 MB  [REMOVE BG: done, CROP: done]
+2026-08-11 21:39:27  assets/archetypes/vertices/archetypal/colored/Antigone.png gen   38.6s  ours   15.2s   1024x1024 -> 956x956    1.4 MB  [REMOVE BG: done, CROP: done]
+2026-08-11 21:40:10  assets/archetypes/vertices/archetypal/colored/Claude_Frollo.png REFUSED — no image — Gemini: the response answered with TEXT but no image (settled 6s), and the text matches no known marker — lou
+2026-08-11 21:41:46  assets/archetypes/vertices/historical/colored/Martin_Luther_King_Jr.png gen   36.2s  ours   23.8s  1024x1024 -> 1006x1002    1.2 MB  [REMOVE BG: done, CROP: done]
+2026-08-11 21:42:55  assets/archetypes/vertices/historical/colored/Girolamo_Savonarola.png gen   30.5s  ours   35.1s  1024x1024 -> 1024x1023    1.5 MB  [REMOVE BG: done, CROP: done]
+2026-08-11 21:44:48  assets/archetypes/vertices/modern/colored/Luke_Skywalker.png REFUSED — Gemini: prompt refused [safety] (matched 'may go against my guidelines'): Gemini said
+
+I can help with all sorts of thin
+2026-08-11 21:44:48  assets/archetypes/vertices/modern/colored/Luke_Skywalker.png WHY (site's answer) — Gemini said
+
+The request was declined due to a conflict with the policy regarding Intellectual Property. The detailed description in the prompt closely mirrors a specific, widely recognized scene and copyrighted characters from a famous entertainment franchise, even without using explicit names.
+
+To proceed, please rework the request by describing original, generic characters and environments that
+2026-08-11 21:46:22  assets/archetypes/vertices/modern/colored/Stannis_Baratheon.png REFUSED — Gemini: prompt refused [safety] (matched 'cannot generate'): Gemini said
+
+I cannot generate an image depicting a small d
+2026-08-11 21:46:22  assets/archetypes/vertices/modern/colored/Stannis_Baratheon.png WHY (site's answer) — Gemini said
+
+I encountered an error doing what you asked. Could you try again?
+2026-08-11 21:47:50  assets/archetypes/vertices/archetypal/colored/Hamlet.png gen   29.2s  ours   23.1s  1024x1024 -> 1002x998    1.3 MB  [REMOVE BG: done, CROP: done]
+2026-08-11 21:48:44  assets/archetypes/vertices/historical/colored/Leo_Tolstoy.png gen   27.0s  ours   20.1s   1024x1024 -> 941x937    1.2 MB  [REMOVE BG: done, CROP: done]
+2026-08-11 21:49:39  assets/archetypes/vertices/historical/colored/Nicholas_II.png gen   34.0s  ours   14.1s  1024x1024 -> 1012x1010    1.2 MB  [REMOVE BG: done, CROP: done]
+2026-08-11 21:50:56  assets/archetypes/vertices/modern/colored/Gandalf.png gen   35.8s  ours   33.7s  1024x1024 -> 1005x1005    1.5 MB  [REMOVE BG: done, CROP: done]
+2026-08-11 21:59:15  assets/archetypes/vertices/modern/colored/Mace_Windu.png REFUSED — Gemini: prompt refused [safety] (matched 'may go against my guidelines'): Gemini said
+
+I can help with all sorts of thin
+--------------------------------------------------------------------
+Refused: 6 image(s) — rework those prompts in the sheet (or intervene manually) and rerun
+Images: 33  |  average generation (AI): 33s/image  |  average our time (save+bgfix+pause): 25s/image
+Total AI + our time: 31m 53s  (wall clock: 52m 42s)
+Run finished: 2026-08-11 21:59:15  (all pending items done)
+

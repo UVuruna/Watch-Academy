@@ -1,0 +1,107 @@
+{
+  "archetypes/crosses/secondary/colored/Themelios_gem.png": {
+    "defects": [
+      "Circular frame is slightly cut off at the top and bottom image edges."
+    ],
+    "raw": "DEFECTS:\n- Circular frame is slightly cut off at the top and bottom image edges.",
+    "checked_at": "2026-08-11T14:02:25",
+    "model": "gemini-flash-latest",
+    "mtime": 1786449737.9134178
+  },
+  "archetypes/sacred/primary/colored/Sacred_Axis_gpt.png": {
+    "defects": [
+      "The top tip of the frame is slightly cut off at the upper edge."
+    ],
+    "raw": "DEFECTS:\n- The top tip of the frame is slightly cut off at the upper edge.",
+    "checked_at": "2026-08-11T14:03:06",
+    "model": "gemini-flash-latest",
+    "mtime": 1786449779.1538818
+  },
+  "archetypes/crosses/secondary/colored/Leitourgia_gem.png": {
+    "defects": [
+      "Circular frame slightly clipped at outer edges.",
+      "Second figure is visible, contradicting prompt request for an unseen figure."
+    ],
+    "raw": "DEFECTS:\n- Circular frame slightly clipped at outer edges.\n- Second figure is visible, contradicting prompt request for an unseen figure.",
+    "checked_at": "2026-08-11T14:03:18",
+    "model": "gemini-flash-latest",
+    "mtime": 1786449792.0707471
+  },
+  "archetypes/sacred/circle/colored/Sacred_Axis_gpt.png": {
+    "defects": [
+      "Frame is slightly cut off at the top and bottom edges."
+    ],
+    "raw": "DEFECTS:\n- Frame is slightly cut off at the top and bottom edges.",
+    "checked_at": "2026-08-11T14:05:06",
+    "model": "gemini-flash-latest",
+    "mtime": 1786449898.6456163
+  },
+  "archetypes/crosses/secondary/colored/Themelios_gpt.png": {
+    "defects": [
+      "Outer circular frame slightly clipped at the image boundaries."
+    ],
+    "raw": "DEFECTS:\n- Outer circular frame slightly clipped at the image boundaries.",
+    "checked_at": "2026-08-11T14:07:02",
+    "model": "gemini-flash-latest",
+    "mtime": 1786450015.5015733
+  },
+  "weeks/films/sw_jedi/primary/colored/Chewbacca_gem.png": {
+    "defects": [
+      "Wrong subject: shows a bear instead of Chewbacca seated at a workbench with a bowcaster."
+    ],
+    "raw": "DEFECTS:\n- Wrong subject: shows a bear instead of Chewbacca seated at a workbench with a bowcaster.",
+    "checked_at": "2026-08-11T14:09:46",
+    "model": "gemini-flash-latest",
+    "mtime": 1786450172.8958282
+  },
+  "archetypes/crosses/secondary/colored/Leitourgia_gpt.png": {
+    "defects": [
+      "Outer circular frame is slightly cut off at the image edges.",
+      "Second figure is visible, contradicting the prompt requirement for an unseen figure."
+    ],
+    "raw": "DEFECTS:\n- Outer circular frame is slightly cut off at the image edges.\n- Second figure is visible, contradicting the prompt requirement for an unseen figure.",
+    "checked_at": "2026-08-11T14:09:47",
+    "model": "gemini-flash-latest",
+    "mtime": 1786450176.6480646
+  },
+  "weeks/films/sw_jedi/primary/bronze/Luke_gem.png": {
+    "defects": [
+      "Center shows a bear instead of Luke Skywalker with a lightsaber",
+      "Frame contains lettering despite prompt prohibiting it"
+    ],
+    "raw": "DEFECTS:\n- Center shows a bear instead of Luke Skywalker with a lightsaber\n- Frame contains lettering despite prompt prohibiting it",
+    "checked_at": "2026-08-11T14:11:28",
+    "model": "gemini-flash-latest",
+    "mtime": 1786450274.3553505
+  },
+  "archetypes/edges/primary/colored/Steadfastness_gpt.png": {
+    "defects": [
+      "Lower border continues three-strand braid instead of single-stranded deep blue."
+    ],
+    "raw": "DEFECTS:\n- Lower border continues three-strand braid instead of single-stranded deep blue.",
+    "checked_at": "2026-08-11T14:12:32",
+    "model": "gemini-flash-latest",
+    "mtime": 1786450345.3588696
+  },
+  "archetypes/edges/historical/colored/Vidkun_Quisling_gem.png": {
+    "defects": [
+      "Outer circular frame is slightly cut off at the image edges.",
+      "Small text artifact visible on the lower left side of the desk.",
+      "The national flag in the background is unfurled instead of furled."
+    ],
+    "raw": "DEFECTS:\n- Outer circular frame is slightly cut off at the image edges.\n- Small text artifact visible on the lower left side of the desk.\n- The national flag in the background is unfurled instead of furled.",
+    "checked_at": "2026-08-11T21:04:18",
+    "model": "gemini-flash-latest",
+    "mtime": 1786475052.7865639
+  },
+  "archetypes/vertices/modern/colored/Gandalf_gem.png": {
+    "defects": [
+      "Subject is seated on a bench rather than directly on the floor as specified.",
+      "The scroll is held upright in hand instead of lying unrolled across the knees."
+    ],
+    "raw": "DEFECTS:\n- Subject is seated on a bench rather than directly on the floor as specified.\n- The scroll is held upright in hand instead of lying unrolled across the knees.",
+    "checked_at": "2026-08-11T21:50:31",
+    "model": "gemini-flash-latest",
+    "mtime": 1786477823.9239478
+  }
+}
