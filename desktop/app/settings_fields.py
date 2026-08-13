@@ -176,6 +176,25 @@ def load_choice(raw: dict, key: str, allowed: tuple, default: str) -> str:
     return value
 
 
+def load_world_mode(raw: dict) -> str:
+    """The world mode, with the one-time rename of 2026-08-13.
+
+    The two modes used to be called `geocentric` and `heliocentric`, and
+    those names said the OPPOSITE of what the modes did (see
+    `config.dial.WORLD_MODES`). They are now named for their behaviour —
+    `noon_up` and `sky_up` — and an older settings file is translated
+    here rather than reset: the owner's standing order is that a rename
+    goes all the way and never throws his own setting away on the way.
+    A legacy key maps to the mode that BEHAVES the same, not to the one
+    whose word matches."""
+    value = raw.get("world_mode")
+    if isinstance(value, str) and value in dial.WORLD_MODE_LEGACY_KEYS:
+        return dial.WORLD_MODE_LEGACY_KEYS[value]
+    return load_choice(
+        raw, "world_mode", dial.WORLD_MODES, dial.WORLD_MODE_DEFAULT,
+    )
+
+
 def load_rotation_group(raw: dict) -> str:
     """The rotation dropdown value — with the one-time migration from
     the pre-2026-07-14 Enabled checkbox (external user data: enabled

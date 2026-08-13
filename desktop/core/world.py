@@ -1,11 +1,23 @@
 """THE TWO WORLD-MODES — which of the two turns, and by how much.
 
 The whole of [the ring rework ledger](../research/ring_rework.md) §1 that
-can be written as a number. GEOCENTRIC is the dial every release before
+can be written as a number. NOON_UP is the dial every release before
 this one drew: the observer stands still and the sun travels, so the
 STAR rotates toward true solar noon and the hour band never moves.
-HELIOCENTRIC stands the star still and turns the WORLD beneath it, and
-turns it over again at night.
+SKY_UP stands the star still and turns the WORLD beneath it, and
+turns it over again at night — so the source of light, the Sun by day and
+the Moon by night, is always overhead.
+
+THE NAMES WERE SWAPPED UNTIL 2026-08-13 (owner verdict, option B). These
+two modes used to be called `geocentric` and `heliocentric`, and each
+carried the OTHER's meaning: the mode that keeps the light source
+overhead is the GEOCENTRIC experience — the observer stands still and the
+heavens wheel around him — while the mode that keeps noon overhead, with
+the sun as the fixed reference, is the HELIOCENTRIC frame. The keys now
+name the BEHAVIOUR, so the code cannot be read backwards again, and the
+astronomical term rides in the label (`dial.WORLD_MODE_LABELS`) where it
+is finally the right way round. A settings file written before that day
+is translated by `app.settings_fields.load_world_mode`, never reset.
 
 Two numbers come out of here and the render layer places every rotating
 element with one of them:
@@ -17,9 +29,9 @@ element with one of them:
                            Moon markers, the hour hand, every hover hit
                            zone that reads the dial band
 
-They cannot drift apart: GEOCENTRIC pins the world offset at exactly 0
+They cannot drift apart: NOON_UP pins the world offset at exactly 0
 and leaves the pointer rotation bit-for-bit what it always was, while
-HELIOCENTRIC gives the world `-star_rotation` and the pointer nothing —
+SKY_UP gives the world `-star_rotation` and the pointer nothing —
 the two cancel, so true solar noon stands under the pointer's own top
 arm in both modes.
 
@@ -71,14 +83,14 @@ def world_offset_deg(
 ) -> float:
     """How far the WORLD has turned under the pointer.
 
-    Exactly 0 in GEOCENTRIC — the mode is a no-op there by construction,
+    Exactly 0 in NOON_UP — the mode is a no-op there by construction,
     not by a chain of conditionals scattered through the render layer.
-    In HELIOCENTRIC it is the solar part plus the phase, so with Solar
+    In SKY_UP it is the solar part plus the phase, so with Solar
     Rotation ON and the sun up the numeral of true solar noon stands at
     the dial top, and at night the numeral of true solar MIDNIGHT stands
     there instead (the same formula, once the phase is added)."""
     _check_mode(mode)
-    if mode == "geocentric":
+    if mode == "noon_up":
         return 0.0
     return (
         solar_part_deg(star_rotation, solar_rotation) + float(phase_deg)
@@ -91,14 +103,14 @@ def pointer_rotation_deg(
     """How far the POINTER has turned — the star, its arms, the seats
     riding them, the umbra's brightness wheel.
 
-    GEOCENTRIC is today's answer untouched: the solar offset, or 0 with
-    the switch off. HELIOCENTRIC gives it the PHASE alone — the star
+    NOON_UP is today's answer untouched: the solar offset, or 0 with
+    the switch off. SKY_UP gives it the PHASE alone — the star
     stands upright and never tilts toward noon again, because the world
     already carried noon under it. At night it takes the same half-turn
     everything else takes, which is what re-seats the weekday bodies
     while the (symmetric) star itself still reads upright."""
     _check_mode(mode)
-    if mode == "geocentric":
+    if mode == "noon_up":
         return float(star_rotation) if solar_rotation else 0.0
     return float(phase_deg) % 360.0
 

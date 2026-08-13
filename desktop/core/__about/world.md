@@ -7,9 +7,9 @@ THE TWO WORLD-MODES ([the ring rework ledger](../../research/ring_rework.md)
 §1) as pure arithmetic: which of the two turns — the sky, or the world —
 and by how many degrees, at this moment.
 
-GEOCENTRIC is the dial every release before this one drew: the observer
+NOON_UP is the dial every release before this one drew: the observer
 stands still and the sun travels, so the STAR rotates toward true solar
-noon and the hour band never moves. HELIOCENTRIC stands the star still
+noon and the hour band never moves. SKY_UP stands the star still
 and turns the WORLD beneath it — one offset carried by the outer band,
 the letters, the crown text, the aura and umbra, the weekday seats, the
 Earth and Moon markers and the hour hand alike — and inverts the whole
@@ -23,9 +23,9 @@ else to place a rotating element:
 | `pointer_rotation_deg` | the star/pointer, its arms and diamond seats, the umbra, the aura's own wedges |
 | `world_offset_deg` | the outer numeral band, the ring letters, the crown text, the daylight arcs, the Earth and Moon markers, the hour hand, and every hover hit zone that reads the dial band |
 
-The two never disagree with each other by accident: in GEOCENTRIC the
+The two never disagree with each other by accident: in NOON_UP the
 world offset is exactly 0 and the pointer rotation is what it always
-was (so the mode is a bit-for-bit no-op there), and in HELIOCENTRIC the
+was (so the mode is a bit-for-bit no-op there), and in SKY_UP the
 world offset carries `−star_rotation` so that true solar noon lands
 under the pointer's own top arm — the two cancel by construction.
 
@@ -63,10 +63,10 @@ simply stands in its phase and nothing ever fires.
   angle at which true solar noon stands, so the band must turn by the
   negative of it to bring that angle to the top.
 - `world_offset_deg(mode, star_rotation, solar_rotation, phase_deg)`:
-  `0.0` in GEOCENTRIC; `solar_part + phase_deg` in HELIOCENTRIC.
+  `0.0` in NOON_UP; `solar_part + phase_deg` in SKY_UP.
 - `pointer_rotation_deg(mode, star_rotation, solar_rotation, phase_deg)`:
-  today's `star_rotation`-or-0 in GEOCENTRIC; the phase alone in
-  HELIOCENTRIC — the star stands upright and never tilts toward noon
+  today's `star_rotation`-or-0 in NOON_UP; the phase alone in
+  SKY_UP — the star stands upright and never tilts toward noon
   again, because the world already turned noon under it.
 - `flip_eased(progress)`: the smoothstep the turning move runs on —
   `0` and `1` exactly at the ends, symmetric, no overshoot.

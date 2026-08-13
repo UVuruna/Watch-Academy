@@ -29,12 +29,12 @@ Pseudocode (language-neutral):
         RETURN -star_rotation IF solar_rotation ELSE 0
 
     FUNCTION world_offset_deg(mode, star_rotation, solar_rotation, phase):
-        IF mode == "geocentric":
+        IF mode == "noon_up":
             RETURN 0
         RETURN (solar_part_deg(star_rotation, solar_rotation) + phase) MOD 360
 
     FUNCTION pointer_rotation_deg(mode, star_rotation, solar_rotation, phase):
-        IF mode == "geocentric":
+        IF mode == "noon_up":
             RETURN star_rotation IF solar_rotation ELSE 0
         RETURN phase MOD 360
 
@@ -53,7 +53,7 @@ Pseudocode (language-neutral):
 
 `star_rotation_deg` answers **−4.17°** on the winter day (solar noon
 EARLIER than 12:00) and **+10.76°** on the DST day (solar noon later).
-In HELIOCENTRIC with Solar Rotation ON and the sun up:
+In SKY_UP with Solar Rotation ON and the sun up:
 
     winter:  world_offset = -(-4.17) + 0 = +4.17    # band turns clockwise
     DST:     world_offset = -(+10.76) + 0 = -10.76  # band turns counter-clockwise
