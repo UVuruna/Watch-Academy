@@ -2746,14 +2746,14 @@ def test_ui_icon_table_ships_what_it_names(tmp_path, monkeypatch):
         assert path.exists(), name
 
     assert defaults.ICON_FILES["eclipse_sun"].name == "eclipse_sun.svg"
-    assert defaults.ICON_FILES["eclipse_moon"].name == "eclipse_moon.png"
+    assert defaults.ICON_FILES["moon_eclipse_red"].name == "moon_eclipse_red.png"
 
     # Graceful-absent: a name whose file does not exist answers None
     # (`icon_path` checks the CURRENT file, not a cached existence flag).
     monkeypatch.setitem(
-        defaults.ICON_FILES, "eclipse_moon", tmp_path / "missing.png"
+        defaults.ICON_FILES, "moon_eclipse_red", tmp_path / "missing.png"
     )
-    assert defaults.icon_path("eclipse_moon") is None
+    assert defaults.icon_path("moon_eclipse_red") is None
 
 
 def test_computed_fast_travel_icons_are_drawn_not_shipped(app):

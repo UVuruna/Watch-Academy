@@ -174,7 +174,11 @@ ICON_FILES = {
     # row too: this glyph carries many more rays than `sun_eclipse.png`,
     # so at menu size it no longer reads as the Moon row beside it.
     "eclipse_sun": ICON_DIR / "eclipse_sun.svg",
-    "eclipse_moon": ICON_DIR / "eclipse_moon.png",  # Quick Jump Moon's own eclipse entries
+    # The Quick Jump lunar-eclipse row USED to have its own key here,
+    # pointing at a second file that was byte-identical to the red
+    # lunar-eclipse badge below (md5 bcf500c0…). One picture, two
+    # names, three call sites — nobody could tell which was live.
+    # Merged 2026-08-13: every spot now asks for `moon_eclipse_red`.
     # THE OWNER'S OWN (his order 2026-08-12, for the Ctrl+[ / Ctrl+]
     # Fast Travel picker — `config.shortcuts.FAST_TRAVEL_THEMES`). They
     # sit BESIDE the two Quick Jump glyphs above rather than replacing

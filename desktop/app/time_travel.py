@@ -508,7 +508,7 @@ class TimeTravelDialog(QDialog):
             self._turning_point_row("moon", None, "🌙", "Moon")
         )
         box_layout.addWidget(self._turning_point_row(
-            "lunar_eclipse", "eclipse_moon", "🌘",
+            "lunar_eclipse", "moon_eclipse_red", "🌘",
             f"{self._tr('Lunar')} {self._tr('Eclipse')}",
             enabled=self._deep_pack, disabled_tip=tip,
         ))
