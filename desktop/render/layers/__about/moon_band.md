@@ -26,12 +26,36 @@ draws it, "dim_only"/"always_full" draw nothing; the old
 the style (`year_marker.moon_band_style`, read only in "horizon"
 mode).
 
-THE INNER-BAND REGISTRATION LAW: the tick band this layer paints over
-NEVER rotates with `ctx.world_offset`, in any world mode (`render.
-layers.numerals`'s own "ledger §2" — the inner band's plate is keyed
-on a fixed `offset_deg=0.0`). This layer therefore never applies
-`ctx.world_offset` either — applying it would slide the band out of
-registration with the fixed tick art underneath it.
+THE HOUR FRAME RULE (owner order 2026-08-13) — and the law it
+REPLACED, kept here because the replaced one is a whole class of
+mistake. This document used to carry an "INNER-BAND REGISTRATION
+LAW": the tick art underneath never rotates with `ctx.world_offset`,
+therefore neither may the band drawn on top of it. The premise is
+true and the conclusion does not follow. What the band is painted ON
+is a matter of geometry (THE LAST LINE — the radius that slices no
+inner-ring element); what the band MEANS is a span of hours. The
+owner's rule: **the outer circle shows HOURS, the inner circle shows
+minutes, seconds and the calendar wheels — so everything drawing
+something that happens in HOURS follows the OUTER circle, wherever it
+is painted.** He found it on his own dial: the same day, the face
+turned by the solar rotation, and the Moon's above-horizon hours
+still sitting on the untuned seats, claiming the Moon was up over the
+small hours of the morning.
+
+So this layer now shifts every arc by `ctx.world_offset` through the
+one door `core.moon.shift_arcs`, shared with `RingLayer._draw_band_
+redress` (the per-degree redress of "inverted"/"ticks") and the
+eclipse segment, so the band's three halves can never answer
+differently. The redress still dresses the PLATE's own fixed 360
+points — the span moves, the points do not, which is exactly what
+"the Moon is up over THESE hours" means on a turned face.
+
+The other side of the line, for contrast: the inner minute band, the
+year wheel and the moon cycle stay put (`render.layers.year_marker.
+earth_marker_angle`) — those are positions in the CALENDAR, not in
+the day. The two teeth are twins: `tests/test_moon_band.py::test_the_
+band_turns_with_the_hours_when_the_world_turns` and `tests/test_year_
+marker.py::test_the_calendar_wheels_never_take_the_world_offset`.
 
 THE TICK-ART HONESTY NOTE: the 360 day ticks are the owner's own baked
 PNG art (`config.dial.RING_INNER_COMPOSITION`'s base plate), not

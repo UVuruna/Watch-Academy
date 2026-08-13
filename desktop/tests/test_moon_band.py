@@ -15,7 +15,7 @@ from astral import LocationInfo
 
 from app.controller import build_skin
 from app.settings_store import Settings, SettingsStore, replace
-from config import constants
+from config import constants, dial
 from core import angles
 from core.moon import moon_horizon_arcs
 from render.layers.moon_band import MoonBandLayer
@@ -140,6 +140,114 @@ def test_golden_belgrade_mockup_day() -> None:
         assert arcs[0].end_deg % 360.0 == expected_end
         assert arcs[1].start_deg == expected_start
         assert arcs[1].end_deg % 360.0 == angles.time_to_dial_angle(time(0, 0))
+
+
+# --- THE HOUR FRAME RULE (owner order 2026-08-13) ---------------------------
+#
+# The twin of `tests/test_year_marker.py::test_the_calendar_wheels_never_
+# take_the_world_offset`, and the two together ARE the rule: what is drawn
+# in HOURS turns with the outer circle, what is drawn in CALENDAR units
+# does not. The horizon band was on the wrong side of that line — its
+# module docstring claimed it "NEVER rotates with `ctx.world_offset` in
+# any world mode" because it is painted at the INNER circle's radius, and
+# the owner caught it on his own dial: the same day, the face rotated,
+# and the Moon's up-hours still sitting on the unrotated seats.
+
+_OFFSETS = (0.0, 10.76, -4.17, 90.0, 180.0, 359.0)
+
+
+@pytest.mark.parametrize("offset", _OFFSETS)
+def test_shift_arcs_moves_the_seat_and_keeps_the_span(offset) -> None:
+    from core.moon import shift_arcs
+
+    arcs = moon_horizon_arcs(
+        datetime(2026, 1, 1, 20, 0), datetime(2026, 1, 1, 4, 0)
+    )
+    moved = shift_arcs(arcs, offset)
+    assert len(moved) == len(arcs)
+    for before, after in zip(arcs, moved):
+        assert after.start_deg == pytest.approx(before.start_deg + offset)
+        assert after.end_deg - after.start_deg == pytest.approx(
+            before.end_deg - before.start_deg
+        ), "the Moon is up for the same number of hours in every world mode"
+        assert after.culmination_deg == pytest.approx(
+            (before.culmination_deg + offset) % 360.0
+        )
+        assert after.full_circle is before.full_circle
+
+
+def test_a_full_circle_arc_survives_the_shift() -> None:
+    """A polar both-None day is up all day in every world mode — the
+    shift may not turn it into a 359-degree arc with a seam."""
+    from core.moon import shift_arcs
+
+    arc = shift_arcs(moon_horizon_arcs(None, None), 137.0)[0]
+    assert arc.full_circle is True
+    assert arc.end_deg - arc.start_deg == pytest.approx(360.0)
+
+
+@pytest.mark.parametrize("offset", (90.0, 180.0))
+def test_the_band_turns_with_the_hours_when_the_world_turns(offset) -> None:
+    """The real paint path, not the helper: `MoonBandLayer.paint` with a
+    live `RenderContext` must put the thread `offset` degrees further
+    round the dial. Measured by finding the painted arc's own angular
+    midpoint at each offset — a tooth on the helper alone would pass
+    while the layer quietly ignored it, which is exactly the bug."""
+    import math as _math
+    import types
+
+    from PySide6.QtCore import Qt
+    from PySide6.QtGui import QImage, QPainter
+    from PySide6.QtWidgets import QApplication
+
+    from app.controller import build_skin
+    from app.settings_store import Settings
+    from render.context import RenderContext
+    from render.layers.moon_band import MoonBandLayer
+
+    QApplication.instance() or QApplication([])
+    skin = build_skin(Settings())
+    tz = ZoneInfo("Europe/Belgrade")
+    canvas, radius = 1200, 500.0
+
+    def painted_angles(world_offset: float) -> set[int]:
+        day = types.SimpleNamespace(
+            moonrise=datetime(2026, 1, 1, 6, 0, tzinfo=tz),
+            moonset=datetime(2026, 1, 1, 12, 0, tzinfo=tz),
+            eclipses=(), tzinfo=tz,
+            local_date=datetime(2026, 1, 1, tzinfo=tz).date(),
+        )
+        ctx = RenderContext(
+            skin=skin, day=day, tick=None, radius=radius,
+            cache=None, dpr=1.0, world_offset=world_offset,
+        )
+        image = QImage(canvas, canvas, QImage.Format.Format_ARGB32)
+        image.fill(Qt.GlobalColor.transparent)
+        painter = QPainter(image)
+        painter.translate(canvas / 2, canvas / 2)
+        MoonBandLayer(skin).paint(painter, ctx)
+        painter.end()
+        line = radius * dial.RING_INNER_CONTENT_INNER_FRACTION
+        hits = set()
+        for degree in range(360):
+            rad = _math.radians(degree)
+            x = round(canvas / 2 + line * _math.sin(rad))
+            y = round(canvas / 2 - line * _math.cos(rad))
+            if image.pixelColor(x, y).alpha() > 0:
+                hits.add(degree)
+        return hits
+
+    base = painted_angles(0.0)
+    turned = painted_angles(offset)
+    assert base and turned, "the band painted nothing — the tooth is blind"
+    expected = {(degree + round(offset)) % 360 for degree in base}
+    overlap = len(expected & turned) / len(expected)
+    assert overlap > 0.9, (
+        f"the horizon band did not follow the world offset={offset}: only "
+        f"{overlap:.0%} of the arc landed on the turned hours. The band "
+        "draws a span of HOURS, so it rides the OUTER circle's frame "
+        "however close to the inner circle it is painted."
+    )
 
 
 # --- SETTINGS defaults + persistence ----------------------------------------

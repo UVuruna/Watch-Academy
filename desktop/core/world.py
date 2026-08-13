@@ -25,9 +25,21 @@ element with one of them:
     pointer_rotation_deg   the star/pointer, its arms and diamond seats,
                            the umbra, the aura's own wedges
     world_offset_deg       the outer numeral band, the ring jewels, the
-                           crown text, the daylight arcs, the Earth and
-                           Moon markers, the hour hand, every hover hit
-                           zone that reads the dial band
+                           crown text, the daylight arcs, the eclipse
+                           body at its hour, the Moon Horizon Band and
+                           its eclipse segment, the hour hand, every
+                           hover hit zone that reads the dial band
+
+THE HOUR FRAME RULE (owner order 2026-08-13) decides that list, and it
+is a rule about UNITS, never about where on the dial a thing is drawn:
+what shows something happening in HOURS belongs to the outer circle's
+frame and takes the offset; what shows a position in the CALENDAR does
+not. The inner minute band, the year wheel and the moon cycle are the
+exempt three (`render.layers.year_marker.earth_marker_angle`). The
+Moon Horizon Band is the case that proved the rule needed writing
+down: it is painted at the INNER circle's radius for a purely
+geometric reason and an earlier round read that as membership, so a
+turned face showed the Moon's up-hours on the wrong seats.
 
 They cannot drift apart: NOON_UP pins the world offset at exactly 0
 and leaves the pointer rotation bit-for-bit what it always was, while

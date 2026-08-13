@@ -3,11 +3,23 @@ the dial's inner tick circle showing WHEN the Moon stands above the
 horizon today, in one of four owner-approved visual styles.
 
 Geometry comes entirely from `core.moon.moon_horizon_arcs` (Rule #5,
-never re-derived here); this module only paints it. That band NEVER
-rotates with `ctx.world_offset` in any world mode (the Fidelity
-Ruling, `render.layers.numerals`'s own "ledger §2"), so this layer
-does not apply the world offset either; it stays in registration with
-the fixed tick art underneath.
+never re-derived here); this module only paints it.
+
+THE HOUR FRAME RULE (owner order 2026-08-13). This docstring used to
+say the band "NEVER rotates with `ctx.world_offset` in any world
+mode", citing the Fidelity Ruling — and that was WRONG, in a way
+worth naming because the mistake is a whole class. The band's radius
+is the inner circle's for a GEOMETRIC reason (THE LAST LINE, below:
+it must slice no inner-ring element); the round that placed it there
+read the radius as membership and concluded the band belongs to the
+fixed inner art. It does not. The outer circle is the HOURS and the
+inner is minutes/seconds/calendar, and this band draws a span of
+HOURS, so it rides the outer circle's frame however far from it it
+happens to be painted. The owner saw the failure on his own dial and
+named the law: everything that draws something happening in HOURS
+follows the outer circle. `core.moon.shift_arcs` is the single door,
+shared with `RingLayer._draw_band_redress` and the eclipse segment
+below so the three halves of this band can never answer differently.
 
 THE LAST LINE (owner third round, 2026-08-11 — his explicit words
 after two wrong re-cuts): every style's line follows the INNER side
@@ -43,7 +55,7 @@ from PySide6.QtGui import QColor, QPainter, QPainterPath, QPen, QPolygonF
 
 from config import constants, dial, glow, palette
 from core import angles
-from core.moon import MoonArc, moon_horizon_arcs
+from core.moon import MoonArc, moon_horizon_arcs, shift_arcs
 from render.context import Cadence, Layer, RenderContext
 from render.eclipse_glow import eclipse_render_state
 from render.painting import dial_point
@@ -111,7 +123,10 @@ class MoonBandLayer(Layer):
         spec = ctx.skin.year_marker
         if spec.moon_band_mode != "horizon":
             return
-        arcs = moon_horizon_arcs(ctx.day.moonrise, ctx.day.moonset)
+        arcs = shift_arcs(
+            moon_horizon_arcs(ctx.day.moonrise, ctx.day.moonset),
+            ctx.world_offset,
+        )
         # THE LAST LINE (owner third round 2026-08-11, finally explicit:
         # every band line follows the INNER side of the INNER ring —
         # the last line that slices no inner-ring element, where the
@@ -165,7 +180,14 @@ class MoonBandLayer(Layer):
                     continue
                 self.draw_eclipse_segment(
                     painter, radius,
-                    angles.time_to_dial_angle(local_instant),
+                    # THE HOUR FRAME RULE again: this segment marks the
+                    # HOUR of the eclipse, so it turns with the band it
+                    # is laid over — the eclipse BODY on the ring
+                    # already did (`year_marker.eclipse_body_angle`),
+                    # and the two marks of one event must never stand
+                    # at two different hours.
+                    angles.time_to_dial_angle(local_instant)
+                    + ctx.world_offset,
                     eclipse_render_state(event),
                 )
         painter.restore()

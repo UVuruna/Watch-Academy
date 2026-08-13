@@ -88,7 +88,7 @@ class RingLayer(Layer):
         numerals and jewels all outrank it (the owner's z decree). The
         drawing itself stays in `render.layers.moon_band` (Rule #5)."""
         from render.layers.moon_band import MoonBandLayer
-        from core.moon import moon_horizon_arcs
+        from core.moon import moon_horizon_arcs, shift_arcs
 
         spec = self._skin.year_marker
         radius = (
@@ -98,7 +98,16 @@ class RingLayer(Layer):
         painter.save()
         painter.setRenderHint(QPainter.RenderHint.Antialiasing)
         band = MoonBandLayer.__new__(MoonBandLayer)
-        for arc in moon_horizon_arcs(ctx.day.moonrise, ctx.day.moonset):
+        # THE HOUR FRAME RULE (owner order 2026-08-13, `core.moon.
+        # shift_arcs`): the arc's SEAT turns with the hours even though
+        # the plate's own 360 points do not — the redress dresses
+        # whichever of those fixed points now fall inside the moved
+        # span, which is exactly what "the Moon is up over THESE hours"
+        # means once the face has turned.
+        for arc in shift_arcs(
+            moon_horizon_arcs(ctx.day.moonrise, ctx.day.moonset),
+            ctx.world_offset,
+        ):
             if spec.moon_band_style == "inverted":
                 band._draw_invert_segments(painter, radius, arc)
             else:

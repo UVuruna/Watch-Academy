@@ -84,6 +84,19 @@ day).
   hiding a visible moon" reasoning); one missing -> the arc runs from/
   to local midnight; both present but rise AFTER set (up at midnight,
   sets, rises again) -> TWO arcs, split at the dial's own seam.
+  Every seat is anchored INTO the day's own domain (`start_of_day` ..
+  `end_of_day`) before the sweep: `angles.time_to_dial_angle` answers
+  in 0..360 while the day begins at the midnight point, so an
+  unanchored evening rise swept a whole extra lap and the band read as
+  a 24h Moon for a fortnight (owner bug 2026-08-13, tooth
+  `tests/test_moon_band.py::test_no_real_belgrade_day_is_a_24h_moon`).
+- `shift_arcs(arcs, offset_deg)`: those arcs carried by the WORLD
+  OFFSET (`core.world.world_offset_deg`), span preserved exactly. THE
+  HOUR FRAME RULE (owner order 2026-08-13): the band draws a span of
+  HOURS, so it rides the OUTER circle's frame even though it is
+  painted at the inner circle's radius. The single door for all three
+  of the band's painters (`render.layers.moon_band`, `RingLayer._draw_
+  band_redress`, the eclipse segment).
 
 ## Design Decisions
 - `illumination` supersedes the older cosine mapping for every LIVE

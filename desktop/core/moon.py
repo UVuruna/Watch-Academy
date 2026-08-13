@@ -270,6 +270,44 @@ def moon_horizon_arcs(
     return (_arc(start_of_day, first_end), _arc(rise_deg, end_of_day))
 
 
+def shift_arcs(
+    arcs: tuple[MoonArc, ...], offset_deg: float
+) -> tuple[MoonArc, ...]:
+    """`arcs` carried by the WORLD OFFSET (`core.world.world_offset_deg`).
+
+    THE HOUR FRAME RULE (owner order 2026-08-13, correcting the doctrine
+    `render.layers.moon_band` used to carry): the outer circle shows
+    HOURS and the inner circle shows minutes, seconds and the calendar
+    wheels — so ANYTHING that draws a span of hours belongs to the outer
+    circle's frame and must turn with it, wherever on the dial it is
+    painted. The horizon band is drawn on the inner circle's radius for
+    a purely GEOMETRIC reason (it must slice no inner-ring element), and
+    an earlier round read that placement as membership: it pinned the
+    band to the fixed tick art and wrote "NEVER rotates with
+    `ctx.world_offset` in any world mode" into the module docstring. The
+    owner saw the result on his own dial — the same day showing the Moon
+    up over the afternoon hours while the rotated face had those seats
+    reading 00:00-09:53 — and named the law the code was missing.
+
+    The three exempt things are exempt for the OPPOSITE reason, and the
+    line between them is not placement but UNITS: the inner minute band,
+    the year wheel and the moon cycle are positions in the calendar, not
+    in the day (`render.layers.year_marker.earth_marker_angle`).
+
+    The span is preserved exactly — only the seat moves — so a
+    `full_circle` arc stays a full circle and a two-arc midnight split
+    stays split at the same two places."""
+    return tuple(
+        MoonArc(
+            arc.start_deg + offset_deg,
+            arc.end_deg + offset_deg,
+            (arc.culmination_deg + offset_deg) % 360.0,
+            full_circle=arc.full_circle,
+        )
+        for arc in arcs
+    )
+
+
 def _unwrap(start_deg: float, raw_end_deg: float) -> float:
     """`raw_end_deg` nudged forward by whole laps until it is >=
     `start_deg` — the arc always sweeps CLOCKWISE (forward in time)."""
