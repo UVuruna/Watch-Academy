@@ -28,9 +28,12 @@ from zoneinfo import ZoneInfo
 
 import astral
 import pytest
+from collections import defaultdict
 from PySide6.QtCore import QPointF
-from PySide6.QtWidgets import QApplication
+from PySide6.QtWidgets import QApplication, QComboBox
 
+from app.controller import build_skin
+from app.settings_store import Settings
 from config import defaults, dial
 from core import angles, numerals, world
 from core.clock_state import build_day_context, build_tick_state
@@ -717,3 +720,80 @@ class TestTheFlip:
         night_key = keys.pop()
         assert night_key != daylight_key
         assert {daylight_key[-1], night_key[-1]} == {0.0, 180.0}
+
+
+class TestTheWhatTurnsRowFollowsTheMode:
+    """WHAT TURNS IS A NOON-UP NO-OP (owner question 2026-08-13).
+
+    `world_offset_deg` is exactly 0.0 in `noon_up`, so both scopes draw
+    the identical dial there — and a live control that changes nothing
+    is a defect, not a feature. The row is greyed out for that mode and
+    the owner's stored pick is left alone, so it returns with the mode
+    that can use it.
+    """
+
+    @staticmethod
+    def _rows(settings):
+        from app.watch_face import numerals as page
+
+        widget = page.build(
+            settings, defaultdict(lambda: (lambda *_a: None)), lambda text: text,
+        )
+        combos = widget.findChildren(QComboBox)
+        modes = [
+            combo for combo in combos
+            if combo.itemData(0) in dial.WORLD_MODES
+        ]
+        scopes = [
+            combo for combo in combos
+            if combo.itemData(0) in dial.WORLD_ROTATION_SCOPES
+        ]
+        return widget, modes[0], scopes[0]
+
+    def test_the_two_scopes_really_are_one_dial_in_noon_up(self):
+        """The premise, proved before the GUI is asked to act on it: in
+        `noon_up` the offset is 0.0 whatever the scope says, so
+        `jewel_offset` — the ONE door for what the rotation carries —
+        hands back the same number for both."""
+        from render.layers import numerals as layer
+
+        offset = world.world_offset_deg("noon_up", 10.76, True, 0.0)
+        assert offset == 0.0
+        both = {
+            layer.jewel_offset(
+                dataclasses.replace(
+                    build_skin(Settings()), world_rotation_scope=scope,
+                ),
+                offset,
+            )
+            for scope in dial.WORLD_ROTATION_SCOPES
+        }
+        assert both == {0.0}
+
+    def test_the_row_is_dead_in_noon_up_and_says_so(self, app):
+        settings = dataclasses.replace(Settings(), world_mode="noon_up")
+        _widget, _mode, scope = self._rows(settings)
+        assert scope.isEnabled() is False
+        assert "Sky Follows You" in scope.toolTip()
+
+    def test_the_row_is_live_in_sky_up(self, app):
+        settings = dataclasses.replace(Settings(), world_mode="sky_up")
+        _widget, _mode, scope = self._rows(settings)
+        assert scope.isEnabled() is True
+        assert "Everything Turns" in scope.toolTip()
+
+    def test_switching_the_mode_wakes_the_row_without_touching_the_pick(
+        self, app
+    ):
+        """His choice is never reset — the row goes grey and comes back
+        carrying exactly what he left in it."""
+        settings = dataclasses.replace(
+            Settings(), world_mode="noon_up",
+            world_rotation_scope="numerals_turn",
+        )
+        _widget, mode, scope = self._rows(settings)
+        assert scope.isEnabled() is False
+        assert scope.currentData() == "numerals_turn"
+        mode.setCurrentIndex(list(dial.WORLD_MODES).index("sky_up"))
+        assert scope.isEnabled() is True
+        assert scope.currentData() == "numerals_turn"

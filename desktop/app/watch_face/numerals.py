@@ -112,7 +112,42 @@ def _mode_group(settings, setters, tr) -> QGroupBox:
     ))
     note.setWordWrap(True)
     form.addRow(note)
+    # WHAT TURNS IS A NOON-UP NO-OP (owner question 2026-08-13, and he
+    # was right): `core.world.world_offset_deg` is exactly 0.0 in
+    # `noon_up`, so `render.layers.numerals.jewel_offset` hands back the
+    # same number for both scopes and the occlusion at offset 0 hides
+    # precisely the seats `all_turn` skips by composition — the two
+    # picks draw a bit-for-bit identical dial there. Offering a live
+    # choice that changes nothing is the defect; the row is therefore
+    # DISABLED rather than hidden (hiding it would jump the form and
+    # lose the explanation) and his stored pick is never touched, so it
+    # is waiting for him the moment he goes back to Sky Follows You.
+    _follow_mode(mode, scope, form, tr)
     return group
+
+
+def _follow_mode(mode: QComboBox, scope: QComboBox, form: QFormLayout, tr):
+    """Grey the What-turns row out for as long as the mode is the one it
+    cannot affect, label and all, and say why in the tooltip."""
+    disabled_hint = tooltip_wrap(tr(
+        "What turns applies in Sky Follows You only. In Noon Stays Up "
+        "the hour band does not turn at all, so the jewels and the crown "
+        "have nothing to ride and both picks draw the same dial. Your "
+        "choice is kept and comes back with the other mode."
+    ))
+    live_hint = scope.toolTip()
+    label = form.labelForField(scope)
+
+    def apply() -> None:
+        turning = mode.currentData() != "noon_up"
+        scope.setEnabled(turning)
+        scope.setToolTip(live_hint if turning else disabled_hint)
+        if label is not None:
+            label.setEnabled(turning)
+            label.setToolTip(scope.toolTip())
+
+    mode.currentIndexChanged.connect(lambda _index: apply())
+    apply()
 
 
 def _outer_group(settings, setters, tr) -> QGroupBox:

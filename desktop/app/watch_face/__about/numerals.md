@@ -19,6 +19,18 @@ or a world that turns:
 | **Relief** | relief style (`cast` / `extrude` / `emboss`), depth, light (`radial` / `fixed`), darkness, contact blur, border |
 | **The live crown** | time format (`12:35` / `12h 35min`) |
 
+**What turns is GREYED OUT in Noon Stays Up** (owner question 2026-08-13,
+and he was right to ask): `core.world.world_offset_deg` is exactly 0.0 in
+that mode, so `render.layers.numerals.jewel_offset` hands back the same
+number for either scope and the two picks draw a bit-for-bit identical
+dial. Offering a live choice that changes nothing is the defect. The row
+is DISABLED rather than hidden — hiding it would jump the form and take
+the explanation with it — its tooltip says why, and the stored pick is
+never touched, so it is waiting for him the moment he goes back to Sky
+Follows You. `_follow_mode` installs that, and
+`tests/test_world_mode.py::TestTheWhatTurnsRowFollowsTheMode` pins both
+the premise and the behaviour.
+
 The live crown has NO face row (THE ONE PLATE LAW, owner decree
 2026-08-07): it draws the owner's letter plates like the jewels and the
 crown text beside it, so the font pick that used to stand here — and
