@@ -6,7 +6,7 @@ Angles here are checked against `core.angles.time_to_dial_angle`
 directly — the ONE dial mapping (Rule #5) — never re-derived.
 """
 
-from datetime import datetime, time
+from datetime import datetime, time, timedelta
 from zoneinfo import ZoneInfo
 
 import astral.moon
@@ -53,9 +53,12 @@ def test_set_only_runs_from_rise_to_midnight() -> None:
     arcs = moon_horizon_arcs(moonrise, None)
     assert len(arcs) == 1
     arc = arcs[0]
-    assert arc.start_deg == _angle(20, 0)
+    assert arc.start_deg % 360.0 == _angle(20, 0)
     assert arc.end_deg % 360.0 == _angle(0, 0)
     assert arc.end_deg > arc.start_deg
+    # 20:00 -> midnight is 4h, NOT 4h plus a stray lap (owner bug
+    # 2026-08-13: the band read as a 24h moon for a fortnight).
+    assert arc.end_deg - arc.start_deg == pytest.approx(60.0)
 
 
 def test_ordinary_day_single_arc() -> None:
@@ -80,8 +83,36 @@ def test_up_across_midnight_gives_two_arcs() -> None:
     first, second = arcs
     assert first.start_deg == _angle(0, 0)
     assert first.end_deg % 360.0 == _angle(4, 0)
-    assert second.start_deg == _angle(22, 0)
+    assert second.start_deg % 360.0 == _angle(22, 0)
     assert second.end_deg % 360.0 == _angle(0, 0)
+    # 4h + 2h = 6h up, never a whole ring (owner bug 2026-08-13).
+    total = (first.end_deg - first.start_deg) + (second.end_deg - second.start_deg)
+    assert total == pytest.approx(90.0)
+
+
+def test_no_real_belgrade_day_is_a_24h_moon() -> None:
+    """Owner bug 2026-08-13: for every day from 2026-09-20 to 2026-10-03
+    the band drew a moon standing above the horizon around the clock.
+    Root cause: an evening rise's raw 0..360 angle was swept to the day's
+    `end_of_day` (the midnight point + 360) WITHOUT first being anchored
+    into that domain, adding a whole stray lap. Belgrade is not polar —
+    no day there may total a ring or more."""
+    tz = ZoneInfo("Europe/Belgrade")
+    belgrade = LocationInfo("Belgrade", "Serbia", "Europe/Belgrade", 44.8, 20.47)
+    day = datetime(2026, 9, 18, tzinfo=tz).date()
+    for offset in range(20):
+        current = day + timedelta(days=offset)
+        try:
+            moonrise = astral.moon.moonrise(belgrade.observer, current, tz)
+        except ValueError:
+            moonrise = None
+        try:
+            moonset = astral.moon.moonset(belgrade.observer, current, tz)
+        except ValueError:
+            moonset = None
+        arcs = moon_horizon_arcs(moonrise, moonset)
+        total = sum(arc.end_deg - arc.start_deg for arc in arcs)
+        assert total < 360.0, f"{current}: {total / 15.0:.1f}h above the horizon"
 
 
 def test_golden_belgrade_mockup_day() -> None:

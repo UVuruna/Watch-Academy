@@ -251,16 +251,15 @@ def moon_horizon_arcs(
         end = _unwrap(start_of_day, angles.time_to_dial_angle(moonset))
         return (_arc(start_of_day, end),)
     if moonset is None:
-        start = angles.time_to_dial_angle(moonrise)
-        end = _unwrap(start, end_of_day)
-        # `end_of_day` is already >= any single-day angle once unwrapped
-        # relative to `start_of_day`; re-anchor to `start` itself so the
-        # sweep never comes up short of a full lap.
-        if end < start:
-            end += 360.0
-        return (_arc(start, end),)
+        # Anchor the rise INTO the day's own domain
+        # (`start_of_day` .. `end_of_day`) before sweeping to midnight:
+        # `time_to_dial_angle` returns 0..360, while the domain starts at
+        # the midnight point, so an unanchored rise makes the sweep run a
+        # whole extra lap and the band reads as a 24h moon.
+        start = _unwrap(start_of_day, angles.time_to_dial_angle(moonrise))
+        return (_arc(start, end_of_day),)
 
-    rise_deg = angles.time_to_dial_angle(moonrise)
+    rise_deg = _unwrap(start_of_day, angles.time_to_dial_angle(moonrise))
     set_deg = angles.time_to_dial_angle(moonset)
     if moonrise <= moonset:
         end = _unwrap(rise_deg, set_deg)
@@ -268,10 +267,7 @@ def moon_horizon_arcs(
 
     # Up at midnight, sets, then rises again before the next midnight.
     first_end = _unwrap(start_of_day, set_deg)
-    second_end = _unwrap(rise_deg, end_of_day)
-    if second_end < rise_deg:
-        second_end += 360.0
-    return (_arc(start_of_day, first_end), _arc(rise_deg, second_end))
+    return (_arc(start_of_day, first_end), _arc(rise_deg, end_of_day))
 
 
 def _unwrap(start_deg: float, raw_end_deg: float) -> float:
