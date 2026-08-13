@@ -78,3 +78,15 @@ and is not affected.
   up to the 1280x720 screen floor down — past the floor the scrollbar
   lawfully takes over. Verified by `tests/test_layout_audit.py`, which
   walks all nine sections at the declared minimum and +50%.
+- **The holder wears the same collar (2026-08-13).** The cap above was
+  put on the PAGE alone, while the `FlowContent` holder around it kept
+  the scroll area's full width — and it measures its content at its own
+  width. Four pixels of difference is enough to fit one more tile per
+  gallery row, so the height the holder published was a full row short
+  of what the page then needed: on the owner's live profile the Ring
+  page's "Inner (minute track)" group was handed 375px against its own
+  388px minimum and lost its bottom margin. Both now wear the same
+  `column_width`, so the measured width and the drawn width are one
+  number. Tooth:
+  `tests/test_watch_face.py::test_every_scroll_holder_is_capped_to_the_same_column_as_its_page`
+  (counter-proved: it fails on the un-capped holder).

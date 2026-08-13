@@ -30,7 +30,13 @@ modules instead of one method per subclass.
   uniform tiles (the widest label decides, ALG-5) flowing by REAL
   width, left-packed per the owner's 2026-08-06 decree, inside a host
   that publishes its true height at its current width (QScrollArea
-  never consults heightForWidth on its own).
+  never consults heightForWidth on its own). Since 2026-08-13 that
+  publishing happens from `minimumSizeHint()` (the hint the scroll area
+  actually reads) and on every `LayoutRequest` as well as on resize — a
+  resize is not the only way content grows, and switching stack pages
+  changed the content at an unchanged width, leaving the published
+  minimum stale. `FlowContent` also serves as the page holder in
+  `window.py`; it forwards to whatever layout it holds.
 - `number_row(tr, settings, setters, key, low, high, title, form,
   decimals=0)`: the shared numeric slider row (numerals-ledger units) —
   used by the Numerals relief rows and the Size section's band-size

@@ -10,7 +10,7 @@ fixed grids produced, and one vocabulary means no gallery can fork its
 own wrap again.
 """
 
-from PySide6.QtCore import QPoint, QRect, QSize, Qt
+from PySide6.QtCore import QEvent, QPoint, QRect, QSize, Qt
 from PySide6.QtGui import QIcon, QPixmap
 from PySide6.QtWidgets import (
     QLayout, QPushButton, QSizePolicy, QToolButton, QVBoxLayout, QWidget,
@@ -99,7 +99,17 @@ class FlowContent(QWidget):
     self-published minimum height on every resize, because QScrollArea's
     widgetResizable path sizes pages from plain minimum hints and never
     consults heightForWidth (measured on the owner's live profile,
-    where the widgets under a gallery compressed to 10px without it)."""
+    where the widgets under a gallery compressed to 10px without it).
+
+    A RESIZE IS NOT THE ONLY WAY CONTENT GROWS (measured 2026-08-13 on
+    the owner's live profile): republishing only from `resizeEvent` left
+    the minimum STALE whenever the content changed at an unchanged width
+    — switching stack pages in the Watch Face window did exactly that,
+    and the page holder kept a 971px minimum against a real 984px need,
+    so the Ring page's "Inner (minute track)" group was handed 375px
+    against its own 388px minimum and lost its bottom margin. Qt already
+    announces that moment: a `LayoutRequest` is delivered whenever a
+    child layout changes, so the minimum is republished from there too."""
 
     def __init__(self):
         super().__init__()
@@ -116,11 +126,39 @@ class FlowContent(QWidget):
         layout = self.layout()
         return layout.heightForWidth(width) if layout is not None else -1
 
+    def _publish_minimum(self) -> None:
+        """Re-state the honest minimum for the width this widget HAS."""
+        layout = self.layout()
+        if layout is None or not layout.hasHeightForWidth():
+            return
+        needed = layout.heightForWidth(self.width())
+        if needed >= 0 and needed != self.minimumHeight():
+            self.setMinimumHeight(needed)
+
+    def minimumSizeHint(self) -> QSize:           # noqa: N802 — Qt override
+        """The hint QScrollArea actually reads.
+
+        `setMinimumHeight` alone is not enough: the widgetResizable path
+        sizes the held widget from `minimumSizeHint()`, which Qt computes
+        from the layout's plain minimum and never from heightForWidth. So
+        the height a flow only knows once it has a width is folded in
+        HERE, where the scroll area will see it."""
+        hint = super().minimumSizeHint()
+        layout = self.layout()
+        if layout is None or not layout.hasHeightForWidth() or self.width() <= 0:
+            return hint
+        needed = layout.heightForWidth(self.width())
+        return QSize(hint.width(), max(hint.height(), needed))
+
     def resizeEvent(self, event) -> None:         # noqa: N802 — Qt override
         super().resizeEvent(event)
-        layout = self.layout()
-        if layout is not None and layout.hasHeightForWidth():
-            self.setMinimumHeight(layout.heightForWidth(self.width()))
+        self._publish_minimum()
+
+    def event(self, incoming) -> bool:            # noqa: N802 — Qt override
+        handled = super().event(incoming)
+        if incoming.type() == QEvent.Type.LayoutRequest:
+            self._publish_minimum()
+        return handled
 
 
 def flow_gallery(tiles) -> QWidget:

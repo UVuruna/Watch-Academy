@@ -22,6 +22,7 @@ from app.theme import apply_theme, size_to_screen
 from app.watch_face import (
     bodies, colors, numerals, opacity, pointer, ring, size, themes, umbra_aura,
 )
+from app.watch_face.widgets import FlowContent
 from config import constants, defaults
 from config.ui_text import ui
 
@@ -167,7 +168,17 @@ class WatchFaceDialog(QDialog):
                 page = builder(self._settings, self._setters, self._tr)
             pages.append(page)
         for page in pages:
-            holder = QWidget()
+            # THE HOLDER PUBLISHES ITS OWN HEIGHT (measured 2026-08-13 on
+            # the owner's live profile): a plain QWidget holder let the
+            # widgetResizable path size the page from the PLAIN minimum
+            # hint, which drops the height a flow gallery only knows once
+            # it has a width — the Ring page's "Inner (minute track)"
+            # group was handed 375px against its own 388px minimum and
+            # lost its bottom margin. `FlowContent` is exactly the widget
+            # that answers this (see its docstring); it forwards to
+            # whatever layout it holds, so it serves as a page holder as
+            # well as a gallery host.
+            holder = FlowContent()
             holder_layout = QVBoxLayout(holder)
             holder_layout.setContentsMargins(0, 0, 0, 0)
             holder_layout.addWidget(page)
@@ -216,6 +227,16 @@ class WatchFaceDialog(QDialog):
         column_width = max(page.minimumSizeHint().width() for page in pages)
         for page in pages:
             page.setMaximumWidth(column_width)
+            # THE HOLDER WEARS THE SAME COLLAR (measured 2026-08-13): the
+            # holder measures its content at ITS OWN width, but the page
+            # inside it is capped narrower — and 4px of difference is
+            # enough to fit one more tile per gallery row, so the height
+            # the holder published was a full row short of what the page
+            # then needed. Capping both to one width makes the measured
+            # width and the drawn width the same number.
+            holder = page.parentWidget()
+            if holder is not None:
+                holder.setMaximumWidth(column_width)
         self._declare_minimum(pages, column_width)
         # TWICE, and that is not belt-and-braces: a scrollbar's range is
         # still 0 until the layout has run, so the immediate call clamps

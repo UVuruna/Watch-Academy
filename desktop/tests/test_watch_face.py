@@ -267,3 +267,30 @@ def test_open_watch_face_shortcut_never_collides_with_an_existing_combo():
     assert len(combos) == len(set(combos)), (
         "two SHORTCUTS entries bind the same physical combo"
     )
+
+
+# --- THE HOLDER WEARS THE SAME COLLAR (regression, 2026-08-13) ---------------
+#
+# The scroll holder measured its content at ITS OWN width while the page
+# inside it was capped narrower by the one-readable-column rule. Four
+# pixels of difference fit one more tile per gallery row, so the height
+# the holder published was a full row short — and the Ring page's
+# "Inner (minute track)" group was handed 375px against its own 388px
+# minimum, losing its bottom margin. The runtime audit caught it only
+# under the owner's live profile; this tooth catches it anywhere.
+
+
+def test_every_scroll_holder_is_capped_to_the_same_column_as_its_page(app):
+    dialog = _dialog()
+    dialog.show()
+    QApplication.processEvents()
+    for index in range(dialog._stack.count()):
+        holder = dialog._stack.widget(index).widget()
+        page = holder.layout().itemAt(0).widget()
+        assert holder.maximumWidth() == page.maximumWidth(), (
+            f"page {index}: the holder measures its content at its own "
+            f"width ({holder.maximumWidth()}) while the page is drawn at "
+            f"{page.maximumWidth()} — a gallery row can wrap differently "
+            "between the two, and the published height comes up short"
+        )
+    dialog.deleteLater()
