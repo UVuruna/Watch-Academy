@@ -29,7 +29,15 @@ the NIGHT PHASE and its flip:
   False` is the SNAP a clock correction and a day-context rebuild take
   (owner bug 2026-08-06: a WM_TIMECHANGE is not a sunset). Returns True
   only when a genuine flip started, which on a polar day or polar night
-  is never.
+  is never. **A re-report of the phase already in flight is a NO-OP**
+  (owner bug 2026-08-13, root cause): the sun's state is reported on
+  EVERY scheduler tick — once a second while the seconds hand runs — so
+  a 1.5 s sunset is asked the same question mid-move. Treating "target
+  unchanged" as a snap ended the move where it stood; measured frame by
+  frame it climbed smoothly to 132.048 deg and then teleported +47.95
+  deg to 180. Standing at the target and TURNING to it are both nothing
+  to do. Tooth: `tests/test_world_mode.py::TestTheFlip::
+  test_a_running_flip_is_never_cut_short_by_the_scheduler_tick`.
 - `phase_deg()` / `flip_active()` — the eased phase and whether the move
   is still moving.
 - The composite key carries the TARGET phase, so a dial ever only holds

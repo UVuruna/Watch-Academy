@@ -54,6 +54,7 @@ from render.layers.center_body import CenterBodyLayer
 from render.layers.hand import HandLayer
 from render.layers.hover_lift import HoverLiftLayer
 from render.layers.moon_band import MoonBandLayer
+from render.layers import numerals as layer_numerals
 from render.layers.numerals import LiveCrownLayer
 from render.layers.ring import RingLayer
 from render.layers.slot import SlotLayer
@@ -612,7 +613,7 @@ class Compositor:
         # The Omega seat is a ring LETTER, so it rides THE WORLD OFFSET
         # with the band it stands on (0.0 in Geocentric).
         center = dial_point(
-            (180.0 + self._world_offset()) % 360.0,
+            (180.0 + self._jewel_offset()) % 360.0,
             radius * dial.outer_centreline(self._skin.numeral_outer_ring_size),
         )
         hit_radius = radius * dial.OMEGA_HIT_RADIUS_FRACTION
@@ -729,13 +730,24 @@ class Compositor:
         ZERO for months and this method simply keeps answering False."""
         target = (
             world.night_phase_deg(is_daylight)
-            if self._skin.world_mode == "heliocentric"
+            if self._skin.world_mode == "sky_up"
             else 0.0
         )
-        if self._flip_target is None or not animate or target == self._flip_target:
+        if self._flip_target is None or not animate:
             self._flip_from = target
             self._flip_target = target
             self._flip_started = None
+            return False
+        if target == self._flip_target:
+            # THE CUT-SHORT FLIP (owner bug 2026-08-13, root cause).
+            # The sun's state is re-reported on EVERY scheduler tick —
+            # once a second while the seconds hand runs — so a 1.5 s
+            # sunset flip is asked this question mid-move with the same
+            # answer it started on. Snapping the state here ended the
+            # move at whatever angle it had reached (measured: 132 deg)
+            # and teleported the dial to 180. Already standing at the
+            # target, or already TURNING to it, are both "nothing to
+            # do": leave the running move alone and let it finish.
             return False
         self._flip_from = self.phase_deg(now)
         self._flip_target = target
@@ -849,6 +861,22 @@ class Compositor:
             self._skin.world_mode, self._day.star_rotation,
             self._skin.solar_rotation, phase,
         )
+
+    def _jewel_offset(self) -> float:
+        """WHAT THE ROTATION CARRIES (owner ballot verdict 2026-08-13):
+        how far the JEWELS and the CROWN have turned — the world offset
+        in `all_turn`, exactly 0.0 in `numerals_turn`. Routed through
+        `render.layers.numerals.jewel_offset` so the hit zones here and
+        the glyphs the ring layer draws can never answer differently."""
+        return layer_numerals.jewel_offset(self._skin, self._world_offset())
+
+    def _jewel_theta(self, world_theta: float) -> float:
+        """A cursor angle already in the WORLD frame (`_world_theta`),
+        re-expressed in the frame the JEWELS are seated in — the identity
+        in `all_turn`, where the two frames are the same one."""
+        return (
+            world_theta + self._world_offset() - self._jewel_offset()
+        ) % 360.0
 
     @profiling.timed("Paint frame")
     @paths.in_display
@@ -2752,10 +2780,13 @@ class Compositor:
             < distance
             <= radius * self._band_hit(encyclopedia_ui.GREETINGS_JEWEL_OUTER_FRACTION)
         )
+        # The 12h seat is a JEWEL, so the trigger is read in the jewels'
+        # own frame (the identity in `all_turn`).
+        jewel_theta = self._jewel_theta(theta)
         if (
             in_jewel_band
             and self._hidden_unlocked
-            and (theta <= half or theta >= 360.0 - half)
+            and (jewel_theta <= half or jewel_theta >= 360.0 - half)
         ):
             return self._greetings_tooltip()
         # The per-letter HOVER LEGEND (owner ROADMAP 15b, "malo legende
@@ -2877,6 +2908,9 @@ class Compositor:
         legend = self._skin.ring.jewel_legend
         if not legend:
             return None
+        # WHAT THE ROTATION CARRIES: the cursor arrives in the WORLD
+        # frame; a jewel lives in its own (identical in `all_turn`).
+        theta = self._jewel_theta(theta)
         for hour, entry in legend.items():
             jewel_theta = angles.ring_position_angle(hour)
             delta = min(
@@ -2934,8 +2968,12 @@ class Compositor:
         # screen space, instead of un-rotating the cursor. `_world_theta`
         # already took the offset off, so it goes back on here. Both are
         # identities in Geocentric.
-        offset = self._world_offset()
-        screen_theta = (theta + offset) % 360.0
+        # WHAT THE ROTATION CARRIES: the SCREEN angle is always the
+        # world frame plus the world offset, but the arc itself is
+        # placed by the CROWN's own offset — the same number in
+        # `all_turn`, 0.0 in `numerals_turn` where the arc stands still.
+        screen_theta = (theta + self._world_offset()) % 360.0
+        offset = self._jewel_offset()
         for entry in crown_text:
             arc_centre = _crown_arc_centre(entry)
             entry_reading = entry.get("reading")

@@ -11,7 +11,7 @@ ledger's own numbers, never read back off the implementation:
 * The phase boundary at Belgrade's real sunrise/sunset, and BOTH polar
   regimes at Tromso, where the boundary never arrives at all.
 
-The GEOCENTRIC mode is proved by construction here (both resolvers
+The NOON_UP mode is proved by construction here (both resolvers
 reproduce the pre-mode formula exactly, and the world offset is
 literally 0.0, so every `+ ctx.world_offset` term in the render layer is
 an arithmetic no-op) and by the whole pre-existing suite staying green
@@ -113,7 +113,7 @@ class TestBelgradeBandOffsets:
     def test_winter_day_band_turns_clockwise(self, belgrade):
         star = _belgrade_star(belgrade, date(2026, 3, 28))
         assert star == pytest.approx(-4.17, abs=0.1)
-        offset = world.world_offset_deg("heliocentric", star, True, 0.0)
+        offset = world.world_offset_deg("sky_up", star, True, 0.0)
         # -(-4.17) = +4.17
         assert offset == pytest.approx(4.17, abs=0.1)
         # The numeral 12 rides to +4.17; the numeral standing AT the top
@@ -123,14 +123,14 @@ class TestBelgradeBandOffsets:
     def test_dst_day_band_turns_counterclockwise(self, belgrade):
         star = _belgrade_star(belgrade, date(2026, 3, 29))
         assert star == pytest.approx(10.76, abs=0.1)
-        offset = world.world_offset_deg("heliocentric", star, True, 0.0)
+        offset = world.world_offset_deg("sky_up", star, True, 0.0)
         # -(+10.76) = -10.76, folded onto the circle = 349.24
         assert offset == pytest.approx(349.24, abs=0.1)
         assert numerals.hour_angle(12, offset) == pytest.approx(-10.76, abs=0.1)
 
     def test_night_adds_exactly_half_a_circle(self, belgrade):
         star = _belgrade_star(belgrade, date(2026, 3, 29))
-        night = world.world_offset_deg("heliocentric", star, True, 180.0)
+        night = world.world_offset_deg("sky_up", star, True, 180.0)
         # -10.76 + 180 = 169.24
         assert night == pytest.approx(169.24, abs=0.1)
         # and hour 0 — seat (0-12)*15 = -180 — now stands at the top.
@@ -138,9 +138,9 @@ class TestBelgradeBandOffsets:
 
     def test_solar_rotation_off_leaves_only_the_phase(self, belgrade):
         star = _belgrade_star(belgrade, date(2026, 3, 29))
-        assert world.world_offset_deg("heliocentric", star, False, 0.0) == 0.0
+        assert world.world_offset_deg("sky_up", star, False, 0.0) == 0.0
         assert world.world_offset_deg(
-            "heliocentric", star, False, 180.0
+            "sky_up", star, False, 180.0
         ) == 180.0
 
 
@@ -150,10 +150,10 @@ def test_equinox_sanity_night_without_the_solar_part_is_exactly_180():
     circle, no float drift, whatever the star is doing."""
     for star in (-4.17, 0.0, 10.76, 179.0):
         assert world.world_offset_deg(
-            "heliocentric", star, False, 180.0
+            "sky_up", star, False, 180.0
         ) == 180.0
         assert world.pointer_rotation_deg(
-            "heliocentric", star, False, 180.0
+            "sky_up", star, False, 180.0
         ) == 180.0
 
 
@@ -229,14 +229,14 @@ def test_the_outer_band_plate_is_keyed_on_the_world_offset(app):
     """Wave 3's `offset_deg` finally carries a live value — and the
     INNER band still keys on 0.0, so its plate is SHARED across both
     phases (ledger §2: "the inner band NEVER rotates, in any mode")."""
-    skin = dataclasses.replace(defaults.DEFAULT_SKIN, world_mode="heliocentric")
+    skin = dataclasses.replace(defaults.DEFAULT_SKIN, world_mode="sky_up")
     day, tick = _frame(
         datetime(2026, 3, 29, 12, 0, tzinfo=ZoneInfo("Europe/Belgrade")),
         astral.Observer(latitude=44.7866, longitude=20.4489),
     )
     for phase in (0.0, 180.0):
         offset = world.world_offset_deg(
-            "heliocentric", day.star_rotation, True, phase
+            "sky_up", day.star_rotation, True, phase
         )
         ctx = RenderContext(
             skin=skin, day=day, tick=tick, radius=RADIUS,
@@ -246,24 +246,30 @@ def test_the_outer_band_plate_is_keyed_on_the_world_offset(app):
         assert band_spec(skin, "inner", ctx).offset_deg == 0.0
 
 
-def test_earth_and_moon_take_the_top_at_night(app):
-    """EARTH and MOON ride the turning dial face (ledger §1). With the
-    solar part off, the night phase is exactly +180, so:
+def test_earth_and_moon_keep_their_calendar_seats_at_night(app):
+    """EARTH and MOON DO NOT ride the turning dial face (owner order
+    2026-08-13, overturning the 2026-08-12 rule this test used to pin).
 
-      * the MOON's full phase (cycle fraction 0.5 -> 180 deg, the
-        BOTTOM by day) stands at the TOP;
-      * the new moon (0.0 -> the top by day) stands at the bottom;
-      * the EARTH's own year angle moves half a circle with it, which is
-        the winter solstice on top where the summer solstice stood.
+    They are positions in the CALENDAR, not in time: north is always the
+    summer solstice and always the new moon, at every hour and in every
+    mode — exactly as the minute band has always been exempt. With the
+    world offset at a full +180 (night, solar part off), every one of
+    them must still be found at its DAY seat:
+
+      * the MOON's full phase (cycle fraction 0.5 -> 180 deg) stays at
+        the bottom, where it is by day;
+      * the new moon (0.0) keeps the top;
+      * the EARTH's own year angle does not move at all.
 
     Proved through the compositor's own hit test, which mirrors the
-    DRAWN position exactly (its standing invariant)."""
+    DRAWN position exactly (its standing invariant) — so this pins where
+    the bodies are PAINTED, not merely what a helper returns."""
     tz = ZoneInfo("Europe/Belgrade")
     observer = astral.Observer(latitude=44.7866, longitude=20.4489)
     day, tick = _frame(datetime(2026, 7, 7, 23, 30, tzinfo=tz), observer)
     assert tick.is_daylight is False          # a real night, really derived
     night = _compositor(
-        "heliocentric", day, tick, solar_rotation=False,
+        "sky_up", day, tick, solar_rotation=False,
         show_earth=False, show_moon=True,
     )
     assert night._world_offset() == 180.0
@@ -286,17 +292,17 @@ def test_earth_and_moon_take_the_top_at_night(app):
         spot = dial_point(angle, RADIUS * orbit)
         return night._element_at(spot, RADIUS, 0.0, "sun") == "moon"
 
-    assert moon_at(0.5, 0.0)          # FULL moon on top at night
-    assert moon_at(0.0, 180.0)        # new moon at the bottom at night
-    # The 2026-07-07 golden fraction, recast: 0.7400 * 360 = 266.4 by
-    # day, + 180 = 86.4 at night.
-    assert moon_at(0.7400, 86.4)
-    assert not moon_at(0.5, 180.0)    # the DAY seat is empty at night
+    assert moon_at(0.5, 180.0)        # FULL moon keeps the bottom
+    assert moon_at(0.0, 0.0)          # the new moon keeps the TOP
+    # The 2026-07-07 golden fraction, unmoved: 0.7400 * 360 = 266.4, by
+    # day and at night alike.
+    assert moon_at(0.7400, 266.4)
+    assert not moon_at(0.5, 0.0)      # nothing was carried to the top
 
-    # The EARTH the same way: its year angle takes the same half circle,
-    # which is the winter solstice standing where the summer one did.
+    # The EARTH the same way: its year angle does NOT take the half
+    # circle — the summer solstice holds the north through the night.
     earth_night = _compositor(
-        "heliocentric", day, tick, solar_rotation=False,
+        "sky_up", day, tick, solar_rotation=False,
         show_earth=True, show_moon=False,
     )
     earth_night._last_tick = dataclasses.replace(
@@ -309,8 +315,8 @@ def test_earth_and_moon_take_the_top_at_night(app):
         max(earth_marker.scale, earth_marker.moon_scale),
     )
     for angle, expected in (
-        ((tick.year_angle + 180.0) % 360.0, "earth"),
-        (tick.year_angle % 360.0, None),
+        (tick.year_angle % 360.0, "earth"),
+        ((tick.year_angle + 180.0) % 360.0, None),
     ):
         spot = dial_point(angle, RADIUS * earth_orbit)
         assert earth_night._element_at(spot, RADIUS, 0.0, "sun") == expected
@@ -324,7 +330,7 @@ def test_a_ring_jewel_hit_zone_follows_its_rotated_seat(app):
     observer = astral.Observer(latitude=44.7866, longitude=20.4489)
     day, tick = _frame(datetime(2026, 7, 7, 23, 30, tzinfo=tz), observer)
     night = _compositor(
-        "heliocentric", day, tick, solar_rotation=False,
+        "sky_up", day, tick, solar_rotation=False,
     )
     from render.painting import dial_point
     seat = RADIUS * dial.RING_JEWEL_RADIUS_FRACTION
@@ -335,7 +341,7 @@ def test_a_ring_jewel_hit_zone_follows_its_rotated_seat(app):
         RADIUS + bottom.x(), RADIUS + bottom.y(), SIZE
     )
     # ...and Geocentric keeps it exactly where it has always been.
-    plain = _compositor("geocentric", day, tick)
+    plain = _compositor("noon_up", day, tick)
     assert plain.hit_omega(RADIUS + bottom.x(), RADIUS + bottom.y(), SIZE)
     assert not plain.hit_omega(RADIUS + top.x(), RADIUS + top.y(), SIZE)
 
@@ -417,7 +423,7 @@ class TestTheArcReadingLaw:
 
 
 def test_geocentric_reproduces_the_pre_mode_rotation_exactly(app):
-    """`world_mode="geocentric"` is a bit-for-bit no-op: the pointer rotation
+    """`world_mode="noon_up"` is a bit-for-bit no-op: the pointer rotation
     is the old one-line formula and the world offset is literally 0.0 —
     so every `+ ctx.world_offset` the render layer gained adds nothing,
     in EITHER phase and with the solar switch either way."""
@@ -428,7 +434,7 @@ def test_geocentric_reproduces_the_pre_mode_rotation_exactly(app):
             datetime(2026, 3, 29, hour, 30, tzinfo=tz), observer
         )
         for solar in (True, False):
-            plain = _compositor("geocentric", day, tick, solar_rotation=solar)
+            plain = _compositor("noon_up", day, tick, solar_rotation=solar)
             legacy = day.star_rotation if solar else 0.0
             assert plain._rotation() == legacy
             assert plain._world_offset() == 0.0
@@ -460,12 +466,12 @@ def test_geocentric_keeps_belgrades_two_golden_star_values(belgrade):
             observer,
         )
         assert day.star_rotation == pytest.approx(golden, abs=0.1)
-        plain = _compositor("geocentric", day, tick)
+        plain = _compositor("noon_up", day, tick)
         assert plain._rotation() == day.star_rotation      # bit for bit
         assert plain._world_offset() == 0.0
         # ...and the SAME star, in Heliocentric, is handed to the world
         # as its exact negation — the two never drift apart.
-        turned = _compositor("heliocentric", day, tick)
+        turned = _compositor("sky_up", day, tick)
         assert turned._rotation() == 0.0                   # the star stands
         assert turned._world_offset() == pytest.approx(
             (-day.star_rotation) % 360.0
@@ -510,7 +516,7 @@ def test_the_equinox_day_flips_at_its_own_sunrise_and_sunset(app, belgrade):
         # The dial standing in `before` and told `after` TURNS, and the
         # turn ends on the other phase exactly.
         watch = _compositor(
-            "heliocentric",
+            "sky_up",
             day,
             build_tick_state(boundary - minute, day),
             solar_rotation=False,
@@ -569,7 +575,7 @@ def test_the_hour_hand_takes_the_night_half_turn_and_the_others_do_not(app):
     day, tick = _frame(datetime(2026, 7, 7, 23, 30, tzinfo=tz), observer)
     assert tick.is_daylight is False
     skin = dataclasses.replace(
-        defaults.DEFAULT_SKIN, world_mode="heliocentric",
+        defaults.DEFAULT_SKIN, world_mode="sky_up",
         solar_rotation=False,
     )
 
@@ -598,7 +604,7 @@ class TestTheFlip:
     """An ORGANIC transition turns; a clock correction snaps."""
 
     def _night_compositor(self, day, tick):
-        return _compositor("heliocentric", day, tick, solar_rotation=False)
+        return _compositor("sky_up", day, tick, solar_rotation=False)
 
     @pytest.fixture
     def frame(self, app):
@@ -637,6 +643,54 @@ class TestTheFlip:
         assert watch.phase_deg(now=100.0) == 180.0
         assert watch.flip_active(now=100.0) is False
         assert watch._phase_target() == 180.0
+
+    def test_a_running_flip_is_never_cut_short_by_the_scheduler_tick(self, frame):
+        """THE CUT-SHORT FLIP (owner bug 2026-08-13, root cause).
+
+        `note_daylight` is called on EVERY scheduler tick — once a
+        second while the seconds hand runs — and mid-sunset it reports
+        the SAME sun state the move is already turning towards. Treating
+        that as "nothing changed, snap the state" ended the move where
+        it stood: measured frame by frame, the phase climbed smoothly to
+        **132.048 deg** and then jumped **+47.95 deg** to 180 in one
+        frame, which is exactly what the owner saw. A re-report of the
+        target already in flight must leave the move running.
+
+        Driven as the controller drives it: a frame every
+        WORLD_FLIP_FRAME_MS, with a tick landing 1.0 s in."""
+        day, tick = frame
+        watch = self._night_compositor(day, tick)
+        assert watch.note_daylight(False, animate=True, now=100.0) is True
+        step = dial.WORLD_FLIP_FRAME_MS / 1000.0
+        tick_at = 100.0 + 1.0
+        ticked = False
+        series: list[float] = []
+        moment = 100.0
+        while moment <= 100.0 + dial.WORLD_FLIP_DURATION_S:
+            if not ticked and moment >= tick_at:
+                # The running watch's own tick: same sun state, no clock
+                # jump and no day change, so `animate=True`.
+                assert watch.note_daylight(False, animate=True, now=moment) is False
+                ticked = True
+            series.append(watch.phase_deg(now=moment))
+            moment += step
+        assert ticked, "the probe must actually deliver a mid-flip tick"
+        # No frame may leap: the eased move's own largest step is ~2.88
+        # deg per 16 ms frame, so 5.0 is loose enough for the curve and
+        # far below the 47.95 deg teleport the bug produced.
+        biggest = max(
+            (b - a, i) for i, (a, b) in enumerate(zip(series, series[1:]))
+        )
+        assert biggest[0] < 5.0, (
+            f"the flip jumped {biggest[0]:.3f} deg at frame {biggest[1] + 1} "
+            f"(phase {series[biggest[1]]:.3f} -> {series[biggest[1] + 1]:.3f})"
+        )
+        # ...and it still passes through the far half and lands exactly.
+        assert any(140.0 < value < 179.0 for value in series)
+        assert watch.phase_deg(now=100.0 + dial.WORLD_FLIP_DURATION_S) == 180.0
+        assert watch.flip_active(
+            now=100.0 + dial.WORLD_FLIP_DURATION_S
+        ) is False
 
     def test_a_phase_that_did_not_change_never_animates(self, frame):
         """Polar day, hour after hour: the same answer, no motion."""
