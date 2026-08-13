@@ -9,8 +9,17 @@ these general rules, so nothing that already carries a deliberate
 per-instance color is touched.
 """
 
+from PySide6.QtCore import QEvent, QObject
 from PySide6.QtGui import QColor, QGuiApplication
-from PySide6.QtWidgets import QDialogButtonBox, QWidget
+from PySide6.QtWidgets import (
+    QAbstractScrollArea,
+    QAbstractSpinBox,
+    QApplication,
+    QComboBox,
+    QDialogButtonBox,
+    QSlider,
+    QWidget,
+)
 
 from app.ui_style import uniform_width
 from config import defaults, encyclopedia_ui, palette
@@ -72,8 +81,8 @@ QListWidget {{
     color: {_C['text_secondary']};
 }}
 QListWidget::item {{
-    padding: 10px 12px;
-    margin: 2px 0;
+    padding: {encyclopedia_ui.THEME_NAV_ITEM_PADDING_V_PX}px 12px;
+    margin: {encyclopedia_ui.THEME_NAV_ITEM_MARGIN_V_PX}px 0;
     border-radius: {_RADIUS_PILL}px;
 }}
 QListWidget::item:hover {{
@@ -287,10 +296,73 @@ QScrollBar::add-line:vertical, QScrollBar::sub-line:vertical {{
 """
 
 
+# --- Accidental-scroll guard (owner bug 2026-08-13) ------------------------
+#
+# The owner loses his own settings by resting the cursor over a dropdown
+# while scrolling PAST it — Qt's default QComboBox/QAbstractSpinBox/QSlider
+# wheelEvent treats ANY wheel tick over the widget as "change my value",
+# with no regard for whether the user actually meant to interact with it.
+# There is no shared combo-box (or spin-box, or slider) factory in this
+# codebase — every settings section builds its own widgets straight from
+# PySide6 — so a per-call-site fix would need updating N places today and
+# would silently miss every FUTURE one. This is installed ONCE, on the
+# QApplication instance, from `apply_theme` (already called by every
+# top-level dialog/window in `app/`), so no call site — present or future —
+# can opt out of it by omission.
+#
+# The rule: a wheel tick over one of these three widget types is consumed
+# (does NOT change the value) UNLESS the widget already has keyboard focus
+# — i.e. the user deliberately clicked/tabbed into it first, which reads as
+# intent. A swallowed tick still has to make the PAGE scroll, since the
+# widget sits inside a QScrollArea the user is very likely mid-scroll
+# through: the event is re-sent to the nearest ancestor scroll area's
+# viewport instead of simply being dropped.
+_GUARDED_TYPES = (QComboBox, QAbstractSpinBox, QSlider)
+
+
+class _WheelGuard(QObject):
+    """Application-wide event filter — see module note above."""
+
+    def eventFilter(self, obj, event) -> bool:  # noqa: N802 — Qt override
+        if (
+            event.type() == QEvent.Type.Wheel
+            and isinstance(obj, _GUARDED_TYPES)
+            and not obj.hasFocus()
+        ):
+            scroll_area = obj.parent()
+            while scroll_area is not None and not isinstance(
+                scroll_area, QAbstractScrollArea
+            ):
+                scroll_area = scroll_area.parent()
+            if scroll_area is not None:
+                QApplication.sendEvent(scroll_area.viewport(), event)
+            return True  # swallow — the guarded widget itself never sees it
+        return super().eventFilter(obj, event)
+
+
+_wheel_guard: _WheelGuard | None = None
+
+
+def _install_wheel_guard() -> None:
+    """Install the `_WheelGuard` on the running `QApplication`, once per
+    process — a second `apply_theme` call (a second dialog opening) must
+    not stack a second filter instance."""
+    global _wheel_guard
+    if _wheel_guard is not None:
+        return
+    app = QApplication.instance()
+    if app is None:      # headless import / no event loop yet
+        return
+    _wheel_guard = _WheelGuard(app)
+    app.installEventFilter(_wheel_guard)
+
+
 def apply_theme(widget: QWidget) -> None:
     """Apply the shared dark theme to `widget` and its whole subtree
-    (QSS cascades to every descendant of the widget it's set on)."""
+    (QSS cascades to every descendant of the widget it's set on), and
+    make sure the accidental-scroll guard (above) is installed."""
     widget.setStyleSheet(_QSS)
+    _install_wheel_guard()
 
 
 def size_to_screen(

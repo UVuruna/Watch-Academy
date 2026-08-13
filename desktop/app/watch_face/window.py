@@ -23,7 +23,7 @@ from app.watch_face import (
     bodies, colors, numerals, opacity, pointer, ring, size, themes, umbra_aura,
 )
 from app.watch_face.widgets import FlowContent
-from config import constants, defaults
+from config import constants, defaults, encyclopedia_ui
 from config.ui_text import ui
 
 # THE SPACE & LEGIBILITY LAW's screen floor (rules/GUI.md): the computed
@@ -158,10 +158,40 @@ class WatchFaceDialog(QDialog):
         nav_width = max(defaults.SETTINGS_NAV_WIDTH_PX, longest + 48)
         nav_list.setFixedWidth(nav_width)  # layout-law: exempt - measured from the longest title just above
         self._nav_width = nav_width
+        # NAV PILL ROW FIX (2026-08-13): QListWidget's own row-layout pass
+        # does not always match the delegate's styled sizeHint once QSS
+        # padding/margin is involved — left to itself the view spaced rows
+        # narrower than the pill it painted, so the SELECTED item's pill
+        # overlapped the row above and below (owner-reported text clipping
+        # on "Ring" / "Hands & Bodies" around a selected "Numerals"). Stamp
+        # the row height explicitly from the same constants the QSS pill
+        # uses, so the reserved row and the painted pill are one number.
+        nav_row_h = (
+            metrics.height()
+            + 2 * encyclopedia_ui.THEME_NAV_ITEM_PADDING_V_PX
+            + 2 * encyclopedia_ui.THEME_NAV_ITEM_MARGIN_V_PX
+        )
         stack = QStackedWidget()
         pages: list[QWidget] = []
         for title, builder in _SECTIONS:
-            nav_list.addItem(self._tr(title))
+            text = self._tr(title)
+            nav_list.addItem(text)
+            item = nav_list.item(nav_list.count() - 1)
+            # `QListWidgetItem.sizeHint()` is `QSize(-1, -1)` (invalid)
+            # until something has been stamped on it, and handing Qt an
+            # invalid width back made it discard the WHOLE override,
+            # height included, silently reviving the original overlap
+            # (first attempt here did exactly that). So the width half
+            # is computed the same way the item's own QSS padding does —
+            # text width plus the item's horizontal padding — which is
+            # always narrower than `nav_width` (the fixed list width
+            # ALREADY reserves the list's own border+padding inset on
+            # top of that, per the comment at `nav_width` above); handing
+            # the full `nav_width` there instead overran the viewport
+            # and cut the sidebar itself (ALG-8: "needs 170px, list
+            # offers 156px" on every page).
+            item_width = metrics.horizontalAdvance(text) + 24
+            item.setSizeHint(QSize(item_width, nav_row_h))
             if builder is None:
                 page = _placeholder_page(self._tr)
             else:

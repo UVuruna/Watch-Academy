@@ -64,3 +64,20 @@ OK button" out of the box by role.
   Time Travel, Report) are UNCHANGED by this stylesheet — it governs the
   surfaces and form controls those dialogs don't already own an opinion
   on, plus every dialog's own OK/Cancel/neutral buttons.
+
+### `_WheelGuard` / `_install_wheel_guard()`
+An application-wide event filter, installed by `apply_theme` so it can
+never be forgotten. It swallows `QEvent.Type.Wheel` for a `QComboBox`,
+`QAbstractSpinBox` or `QSlider` that does **not** have focus, and
+forwards the event to the nearest ancestor scroll area's viewport
+instead, so the page keeps scrolling normally. A control the user
+deliberately clicked into keeps its wheel behaviour.
+
+Born from the owner's report of 2026-08-13: scrolling a settings page
+changed whatever dropdown the cursor happened to pass over, silently
+rewriting his configuration. It is installed ONCE at application level
+rather than per widget because there is no shared combo-box factory in
+this app — every settings section builds its own, in eight different
+modules, so a per-call-site fix would have been complete on the day it
+was written and incomplete at the next section anyone adds. Tooth:
+`tests/test_wheel_guard.py`.

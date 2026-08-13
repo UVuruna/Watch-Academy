@@ -294,3 +294,37 @@ def test_every_scroll_holder_is_capped_to_the_same_column_as_its_page(app):
             "between the two, and the published height comes up short"
         )
     dialog.deleteLater()
+
+
+# --- THE HOLDER WEARS THE SAME COLLAR (nav pill row, regression 2026-08-13) --
+#
+# The selected-item pill is painted from `QListWidget::item` QSS
+# padding/margin in `app/theme.py`, but the sidebar reserved a narrower
+# row for each entry than that padding actually painted — the selected
+# pill overlapped the row above and below, clipping their text ("Ring" /
+# "Hands & Bodies" sliced around a selected "Numerals", owner-reported).
+# `window.py` now stamps every nav item's `sizeHint` from the SAME
+# padding/margin constants the QSS pill uses, so the reserved row and
+# the painted pill can never drift apart again.
+
+
+def test_nav_sidebar_selection_never_overlaps_a_neighbour_row(app):
+    from app.theme import apply_theme
+
+    apply_theme(app)  # the pill IS the QSS in app/theme.py — apply it
+    dialog = _dialog()
+    dialog.resize(dialog.minimumSize())
+    nav = dialog._nav_list
+    QApplication.processEvents()
+    for selected in range(nav.count()):
+        nav.setCurrentRow(selected)
+        QApplication.processEvents()
+        rects = [nav.visualItemRect(nav.item(i)) for i in range(nav.count())]
+        for i in range(1, len(rects)):
+            assert rects[i].top() >= rects[i - 1].bottom(), (
+                f"with '{nav.item(selected).text()}' selected, row {i} "
+                f"('{nav.item(i).text()}') overlaps row {i - 1} "
+                f"('{nav.item(i - 1).text()}') — the selected pill is "
+                "clipping a neighbour's text"
+            )
+    dialog.deleteLater()

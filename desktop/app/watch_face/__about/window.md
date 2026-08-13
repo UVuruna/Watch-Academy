@@ -90,3 +90,17 @@ and is not affected.
   number. Tooth:
   `tests/test_watch_face.py::test_every_scroll_holder_is_capped_to_the_same_column_as_its_page`
   (counter-proved: it fails on the un-capped holder).
+- **The nav pill fits its own row (2026-08-13, Space & Legibility law).**
+  `app/theme.py`'s `QListWidget::item:selected` pill is painted from QSS
+  padding (10px vertical) + margin (2px vertical); left to `QListWidget`'s
+  own row layout, the reserved row was narrower than the painted pill, so
+  the SELECTED entry's pill overlapped the row above and below and
+  clipped their text (owner-reported: "Ring" / "Hands & Bodies" sliced
+  around a selected "Numerals"). `_build` now stamps every nav item's
+  `setSizeHint` from `config.encyclopedia_ui.THEME_NAV_ITEM_PADDING_V_PX`
+  / `THEME_NAV_ITEM_MARGIN_V_PX` — the SAME constants the QSS pill reads
+  — so the reserved row and the painted pill are one number and can never
+  drift apart. Tooth:
+  `tests/test_watch_face.py::test_nav_sidebar_selection_never_overlaps_a_neighbour_row`
+  (counter-proved: it fails when the `setSizeHint` call is skipped, with
+  the real theme applied).
