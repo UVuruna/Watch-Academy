@@ -57,12 +57,16 @@ the dial to KEEP holding keyboard focus for the next press.
   `FAST_TRAVEL_FLASH_DURATION_S − FAST_TRAVEL_FLASH_FADE_MS`, then
   fades via a `QGraphicsOpacityEffect` + `QPropertyAnimation`, hiding on
   finish. A flash already in flight restarts cleanly — the latest press
-  always wins with a fresh full-opacity display. The icon is rasterized
-  at `FAST_TRAVEL_FLASH_ICON_SUPERSAMPLE` times the target size and
-  smoothly scaled down — asked for 28 px directly, Qt renders a vector's
-  fine detail below one pixel and the glyph collapses (owner report
-  2026-08-12). The COMPUTED glyphs are drawn that big to begin with, so
-  both kinds of source arrive here oversized and leave the same way.
+  always wins with a fresh full-opacity display.
+- `_icon_pixmap(icon_path)`: the icon at a LOGICAL size of exactly
+  `FAST_TRAVEL_FLASH_ICON_PX`, whatever the source and whatever the
+  screen's scaling — see [One size, one place](#one-size-one-place)
+  below. Still rasterized at `FAST_TRAVEL_FLASH_ICON_SUPERSAMPLE` times
+  the target and smoothly scaled down: asked for 28 px directly, Qt
+  renders a vector's fine detail below one pixel and the glyph collapses
+  (owner report 2026-08-12). The COMPUTED glyphs are drawn that big to
+  begin with, so both kinds of source arrive oversized and leave the same
+  way.
 - `_set_plate_text(text)`: the two-metal plate run, splitting on either
   separator — the picker's " : " or a location's "CITY, COUNTRY". Only the
   picker DRAWS its separator (the colon plate); a comma has no plate and
@@ -86,6 +90,49 @@ masters today — so a `MissingPlate` falls back to the styled font FOR THAT
 ONE TEXT and names the offending character on stderr, exactly as the
 weekday labels do for the apostrophe. Loud and per-string, never a silent
 standing font path.
+
+<a id="one-size-one-place"></a>
+
+## One size, one place (owner drift report 2026-08-13)
+
+His report: cycling the category with Ctrl+[, the flash "seems to shift
+slightly and to change size" — not always the same distance from the dial
+circle, not always the same size.
+
+**Measured before it was believed.** On his 125 % display the flash box
+stood **48 px tall for Solar Eclipse / Date / Time and 42 px for Lunar
+Eclipse / Sun Turning Points / Moon Stations**, and because
+`_position_above_or_below` anchors the box by its BOTTOM edge
+(`dial.top() − height − gap`), the whole label — text included — jumped
+**3 px** between categories while the icon itself was a quarter smaller
+in one family than the other.
+
+**The mechanism** was `QIcon.pixmap()`'s DPI awareness meeting
+`QPixmap.scaled()`'s DEVICE pixels. A source that can supply any size —
+the SVGs, a raster larger than the request — hands back `n × dpr` device
+pixels *already carrying* `devicePixelRatio = dpr`; the two COMPUTED
+icons exist at exactly `SUPERSAMPLE × ICON_PX` px, so QIcon can only
+return that many, at a dpr of 1. `scaled(28, 28)` then meant 28 DEVICE
+pixels for both and PRESERVED each source's own dpr, so one call
+produced 22.4 logical px for one family and 28.0 for the other. At
+100 % scaling the two agree exactly — which is why it shipped.
+
+Not the suspects it looked like: the letter plates are all 512 px tall
+with their ink filling 508 of them, so every glyph shares a cap height
+and the text run measured a constant 15.2 logical px in every category
+before and after. The size was never fitted to the string.
+
+**The fix** decides the size HERE, in device pixels the widget computes
+from its own `devicePixelRatioF()`, and stamps that ratio on the result;
+the aspect-preserved image is then centred on a SQUARE canvas, so the
+label's box is `ICON_PX` even for art that is not square. Position
+follows the declared metric, never the ink. After it, all six categories
+measure an identical box top, identical icon size and identical text
+height (spread 0.0 on every axis).
+
+**Tooth:** `tests/test_fast_travel_flash.py`, which measures in a
+SUBPROCESS under `QT_SCALE_FACTOR=1.25` — a scale factor is read once
+when the QApplication is built, and the defect is invisible at 100 %.
 
 ## Design Decisions
 - **Built from scratch rather than adapting `LegendPopup`** (Rule #5

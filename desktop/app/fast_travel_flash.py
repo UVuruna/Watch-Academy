@@ -13,7 +13,7 @@ One mechanism, ONE position, one look.
 import sys
 
 from PySide6.QtCore import QPropertyAnimation, Qt, QTimer
-from PySide6.QtGui import QGuiApplication, QIcon, QPixmap
+from PySide6.QtGui import QGuiApplication, QIcon, QPainter, QPixmap
 from PySide6.QtWidgets import (
     QGraphicsOpacityEffect,
     QHBoxLayout,
@@ -95,19 +95,7 @@ class FastTravelFlash(QWidget):
         has_icon = icon_path is not None or bool(emoji)
         self._icon_label.setVisible(has_icon)
         if icon_path is not None:
-            size = shortcuts.FAST_TRAVEL_FLASH_ICON_PX
-            # RASTERIZE BIG, THEN SHRINK — see
-            # `FAST_TRAVEL_FLASH_ICON_SUPERSAMPLE`. The caller hands a
-            # COMPUTED icon already drawn at that multiple, so both kinds
-            # of source arrive here oversized and leave the same way.
-            over = shortcuts.FAST_TRAVEL_FLASH_ICON_SUPERSAMPLE
-            self._icon_label.setPixmap(
-                QIcon(str(icon_path)).pixmap(over * size, over * size).scaled(
-                    size, size,
-                    Qt.AspectRatioMode.KeepAspectRatio,
-                    Qt.TransformationMode.SmoothTransformation,
-                )
-            )
+            self._icon_label.setPixmap(self._icon_pixmap(icon_path))
             self._icon_label.setText("")
         elif emoji:
             self._icon_label.setPixmap(QIcon().pixmap(0, 0))
@@ -128,6 +116,67 @@ class FastTravelFlash(QWidget):
             ),
         )
         self._hold_timer.start(hold_ms)
+
+    def _icon_pixmap(self, icon_path) -> QPixmap:
+        """The flash's icon at a LOGICAL size of exactly
+        `FAST_TRAVEL_FLASH_ICON_PX`, whatever the source and whatever the
+        screen's scaling.
+
+        ONE SIZE, ONE PLACE — the owner's drift report of 2026-08-13: as
+        he cycles the category with Ctrl+[, the label seems to shift
+        slightly and to change size, instead of always standing at the
+        same distance from the dial circle in the same size.
+
+        MEASURED before it was believed: on his 125 % display the flash
+        box stood 48 px tall for Solar Eclipse / Date / Time and 42 px
+        for the other three, and since the box is anchored by its BOTTOM
+        edge above the dial, its text jumped 3 px between categories.
+
+        The mechanism was `QIcon.pixmap()`'s DPI awareness meeting
+        `QPixmap.scaled()`'s DEVICE pixels. A source that can supply any
+        size — the SVGs, a raster larger than the request — hands back
+        `n * dpr` device pixels ALREADY carrying `devicePixelRatio =
+        dpr`; the two COMPUTED icons are drawn at exactly
+        `SUPERSAMPLE * ICON_PX` px, so QIcon can only return that many
+        at a dpr of 1. `scaled(28, 28)` then means 28 DEVICE pixels for
+        both and PRESERVES each source's dpr, so the same call produced
+        22.4 logical px for one family and 28.0 for the other — a 6 px
+        box difference, and an icon a quarter smaller, which is the
+        other half of what he saw. At 100 % scaling the bug is
+        invisible, which is why it shipped.
+
+        So the size is decided HERE, in device pixels we compute
+        ourselves, and the ratio is stamped on the result. The
+        aspect-preserved image is then centred on a SQUARE canvas, so
+        the label's box is `ICON_PX` even for art that is not square —
+        the position follows the declared metric, never the ink.
+
+        RASTERIZE BIG, THEN SHRINK survives
+        (`FAST_TRAVEL_FLASH_ICON_SUPERSAMPLE`): asked for the final size
+        directly, Qt renders a vector's fine detail below one pixel and
+        the glyph collapses."""
+        size = shortcuts.FAST_TRAVEL_FLASH_ICON_PX
+        over = shortcuts.FAST_TRAVEL_FLASH_ICON_SUPERSAMPLE
+        dpr = self.devicePixelRatioF() or 1.0
+        device = max(1, round(size * dpr))
+        drawn = QIcon(str(icon_path)).pixmap(over * device, over * device).scaled(
+            device, device,
+            Qt.AspectRatioMode.KeepAspectRatio,
+            Qt.TransformationMode.SmoothTransformation,
+        )
+        canvas = QPixmap(device, device)
+        canvas.fill(Qt.GlobalColor.transparent)
+        painter = QPainter(canvas)
+        try:
+            painter.drawPixmap(
+                (device - drawn.width()) // 2,
+                (device - drawn.height()) // 2,
+                drawn,
+            )
+        finally:
+            painter.end()
+        canvas.setDevicePixelRatio(dpr)
+        return canvas
 
     def _set_plate_text(self, text: str) -> None:
         """THE ONE PLATE LAW reaches this text (owner corrections
