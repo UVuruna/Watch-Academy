@@ -108,6 +108,42 @@ _ECLIPSE_SEGMENT_STATE_WEIGHT = {
     "lunar_penumbral": 0.22,
 }
 _ECLIPSE_SEGMENT_PENUMBRAL_DASH = (2.0, 2.0)   # in pen widths
+# THE FOUR CONTACTS (owner ballot 2026-08-13, "contact_marks"): lines
+# across the band at P1, U1, U4, P4, each seated with a diamond — the
+# SAME diamond vocabulary the silver thread's culmination mark already
+# speaks, so a moment marked on this band always looks like a moment
+# marked on this band.
+#
+# The radial reach is stated as a multiple of the SEGMENT's own full
+# width, so the marks and the bar they straddle can never drift apart.
+# The umbral pair are longer, wider and copper; the penumbral pair
+# shorter, thinner and grey — which is how the picture says which pair
+# is which without a legend.
+#
+# MEASURED, not eyeballed, and the trail is worth keeping because it is
+# the whole argument for the numbers. Cut 1 used hairlines (0.011 of the
+# band radius, reach 1.10) and the distinctness tooth scored it 0.030
+# structure against the plain "horizon_shadow" segment — far under the
+# 0.20 floor, i.e. the same picture. Cut 2 (the widths below, plus the
+# diamonds) reached 0.048-0.079: better, still one picture. What finally
+# carried was not more ink on the four lines but the PENUMBRAL SPAN ARC
+# below — the thing this style knows and "horizon_shadow" does not —
+# which took the three lunar types to 0.229/0.238/0.248. A mark too
+# faint for that measure is a mark too faint to see.
+_CONTACT_UMBRAL_REACH = 2.40       # of the full segment width, each side
+_CONTACT_PENUMBRAL_REACH = 1.60
+_CONTACT_UMBRAL_WIDTH_FRACTION = 0.024    # of the band radius
+_CONTACT_PENUMBRAL_WIDTH_FRACTION = 0.016
+_CONTACT_UMBRAL_DIAMOND_FRACTION = 0.055  # radial half-LENGTH, of the radius
+_CONTACT_PENUMBRAL_DIAMOND_FRACTION = 0.038
+# THE PENUMBRAL SPAN the outer pair brackets, drawn as a thin dashed arc
+# just outside the copper bar — P1 to P4. It is the one thing this style
+# says that "horizon_shadow" cannot: the eclipse's WHOLE duration, not
+# only its umbral part. Dashed, because like every time on this band it
+# is INDICATIVE (see `draw_contact_marks`).
+_CONTACT_SPAN_ARC_WIDTH_FRACTION = 0.042   # of the band radius
+_CONTACT_SPAN_ARC_OFFSET = 2.05            # of the full segment width, outward
+_CONTACT_SPAN_ARC_DASH = (4.0, 1.6)        # in pen widths
 
 
 class MoonBandLayer(Layer):
@@ -154,7 +190,16 @@ class MoonBandLayer(Layer):
                 self._draw_glow(painter, radius, arc)
             else:
                 self._draw_silver_thread(painter, radius, arc)
-        if spec.eclipse_lunar_style == "horizon_shadow":
+        # THE DOOR (owner ballot 2026-08-13): every lunar style asks
+        # `render.eclipse_style.resolve_eclipse_style` what actually
+        # paints. The band is up here (the mode gate above already
+        # returned otherwise), so `band_available=True`.
+        from render.eclipse_style import resolve_eclipse_style
+
+        effective_style, _fallback_reason = resolve_eclipse_style(
+            "lunar", spec.eclipse_lunar_style, band_available=True,
+        )
+        if effective_style in ("horizon_shadow", "contact_marks"):
             # THE DAY'S eclipses, not the tick's active one: this layer's
             # cadence is DAILY and `ctx.tick` is None while a cached
             # daily pass composites (`render.context`'s own note). That
@@ -178,18 +223,24 @@ class MoonBandLayer(Layer):
                 local_instant = event.instant.astimezone(ctx.day.tzinfo)
                 if local_instant.date() != ctx.day.local_date:
                     continue
-                self.draw_eclipse_segment(
-                    painter, radius,
-                    # THE HOUR FRAME RULE again: this segment marks the
-                    # HOUR of the eclipse, so it turns with the band it
-                    # is laid over — the eclipse BODY on the ring
-                    # already did (`year_marker.eclipse_body_angle`),
-                    # and the two marks of one event must never stand
-                    # at two different hours.
+                # THE HOUR FRAME RULE again: these marks say WHEN the
+                # eclipse happens, so they turn with the band they are
+                # laid over — the eclipse BODY on the ring already did
+                # (`year_marker.eclipse_body_angle`), and the marks of
+                # one event must never stand at two different hours.
+                centre_deg = (
                     angles.time_to_dial_angle(local_instant)
-                    + ctx.world_offset,
-                    eclipse_render_state(event),
+                    + ctx.world_offset
                 )
+                state = eclipse_render_state(event)
+                self.draw_eclipse_segment(painter, radius, centre_deg, state)
+                if effective_style == "contact_marks":
+                    # AN ADDITION, never a replacement (owner ballot
+                    # 2026-08-13): the segment above still draws and
+                    # these four lines bracket it.
+                    self.draw_contact_marks(
+                        painter, radius, centre_deg, state
+                    )
         painter.restore()
 
     def draw_eclipse_segment(
@@ -254,6 +305,82 @@ class MoonBandLayer(Layer):
             inner = dial_point(end % 360.0, radius - width / 2.0)
             outer = dial_point(end % 360.0, radius + width / 2.0)
             painter.drawLine(inner, outer)
+        painter.restore()
+
+    def draw_contact_marks(
+        self, painter: QPainter, radius: float, centre_deg: float,
+        state: str,
+    ) -> None:
+        """THE FOUR CONTACTS (owner ballot 2026-08-13, "contact_marks"):
+        P1, U1, U4, P4 as four thin lines across the band. It is an
+        ADDITION on top of "horizon_shadow", never a replacement — the
+        copper segment is still drawn, and these bracket it.
+
+        THE APPROXIMATION IS NOT UPGRADED INTO A CLAIM. The catalog
+        stores only the instant of GREATEST eclipse (see
+        `constants.ECLIPSE_BAND_DURATION_H`'s own note), so these are
+        NOT observed contact times and the docs say so in those words.
+        The umbral pair sit at half of that same documented span either
+        side of the peak — the identical approximation the segment
+        already draws, kept in the one place — and the penumbral pair at
+        `constants.ECLIPSE_PENUMBRAL_SPAN_RATIO` times that, a ratio
+        derived from the two shadow radii rather than guessed a second
+        time.
+
+        A PENUMBRAL eclipse draws only P1 and P4: the Moon never enters
+        the umbra, so U1 and U4 do not exist, and drawing them would be
+        the invention this whole note exists to refuse."""
+        umbral_half = constants.ECLIPSE_BAND_DURATION_H / 24.0 * 360.0 / 2.0
+        penumbral_half = umbral_half * constants.ECLIPSE_PENUMBRAL_SPAN_RATIO
+        width = radius * _ECLIPSE_SEGMENT_WIDTH_FRACTION
+        painter.save()
+        painter.setBrush(Qt.BrushStyle.NoBrush)
+        # THE PENUMBRAL SPAN first, under the ticks that bracket it: a
+        # thin dashed arc from P1 to P4, just outside the copper bar.
+        # This is what the four contacts are FOR — the umbral bar shows
+        # the deep phase, this shows the whole event, and "horizon_
+        # shadow" shows only the first.
+        span_radius = radius + width * _CONTACT_SPAN_ARC_OFFSET
+        span_pen = QPen(QColor(palette.ECLIPSE_CONTACT_PENUMBRAL_COLOR))
+        span_pen.setWidthF(max(1.0, radius * _CONTACT_SPAN_ARC_WIDTH_FRACTION))
+        span_pen.setCapStyle(Qt.PenCapStyle.FlatCap)
+        span_pen.setDashPattern(list(_CONTACT_SPAN_ARC_DASH))
+        painter.setPen(span_pen)
+        self._stroke_arc(
+            painter, span_radius,
+            MoonArc(
+                centre_deg - penumbral_half, centre_deg + penumbral_half,
+                centre_deg,
+            ),
+        )
+        marks = [
+            (penumbral_half, _CONTACT_PENUMBRAL_REACH,
+             _CONTACT_PENUMBRAL_WIDTH_FRACTION,
+             _CONTACT_PENUMBRAL_DIAMOND_FRACTION,
+             palette.ECLIPSE_CONTACT_PENUMBRAL_COLOR),
+        ]
+        if state != "lunar_penumbral":
+            marks.append((
+                umbral_half, _CONTACT_UMBRAL_REACH,
+                _CONTACT_UMBRAL_WIDTH_FRACTION,
+                _CONTACT_UMBRAL_DIAMOND_FRACTION,
+                palette.ECLIPSE_TOTAL_MOON_TINT,
+            ))
+        for half, reach, width_fraction, diamond, color in marks:
+            pen = QPen(QColor(color))
+            pen.setWidthF(max(1.0, radius * width_fraction))
+            pen.setCapStyle(Qt.PenCapStyle.FlatCap)
+            for end in (centre_deg - half, centre_deg + half):
+                theta = end % 360.0
+                painter.setPen(pen)
+                painter.setBrush(Qt.BrushStyle.NoBrush)
+                painter.drawLine(
+                    dial_point(theta, radius - width * reach),
+                    dial_point(theta, radius + width * reach),
+                )
+                self._draw_diamond(
+                    painter, theta, radius, radius * diamond, QColor(color),
+                )
         painter.restore()
 
     # -- style 1: inverted band -------------------------------------------

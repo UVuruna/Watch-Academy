@@ -425,3 +425,93 @@ def test_spared_seats_follow_the_measured_fifteen_degree_strokes() -> None:
     assert not _seat_spared(3)
     assert not _seat_spared(7)
     assert not _seat_spared(22)
+
+
+# ---------------------------------------------------------- contact marks
+
+def _contact_ink(state: str) -> "QImage":
+    """One `draw_contact_marks` pass on a bare canvas, so a test can ask
+    WHERE the marks landed rather than trust the call returned."""
+    import os
+
+    os.environ.setdefault("QT_QPA_PLATFORM", "offscreen")
+    from PySide6.QtGui import QImage, QPainter
+    from PySide6.QtWidgets import QApplication
+
+    QApplication.instance() or QApplication([])
+    size = 512
+    image = QImage(size, size, QImage.Format.Format_ARGB32)
+    image.fill(0xFF000000)
+    painter = QPainter(image)
+    painter.translate(size / 2.0, size / 2.0)
+    MoonBandLayer.draw_contact_marks(
+        MoonBandLayer.__new__(MoonBandLayer), painter, size * 0.35, 90.0, state,
+    )
+    painter.end()
+    return image
+
+
+def test_the_contacts_stand_at_the_documented_approximation() -> None:
+    """THE FOUR CONTACTS are P1, U1, U4, P4 (owner ballot 2026-08-13) and
+    they are INDICATIVE: the catalog stores only greatest eclipse, so the
+    umbral pair sit at half of `constants.ECLIPSE_BAND_DURATION_H` either
+    side of the peak — the SAME approximation the segment already draws,
+    kept in the one place — and the penumbral pair at
+    `ECLIPSE_PENUMBRAL_SPAN_RATIO` times that. This pins the arithmetic
+    so a later round cannot quietly widen one without the other."""
+    umbral_half = constants.ECLIPSE_BAND_DURATION_H / 24.0 * 360.0 / 2.0
+    assert umbral_half == pytest.approx(22.5)
+    penumbral_half = umbral_half * constants.ECLIPSE_PENUMBRAL_SPAN_RATIO
+    assert penumbral_half == pytest.approx(40.05)
+    # The ratio is the shadow geometry, never a second guess: ~4.6 lunar
+    # radii of penumbra over ~2.6 of umbra.
+    assert constants.ECLIPSE_PENUMBRAL_SPAN_RATIO == pytest.approx(
+        4.6 / 2.6, abs=0.03
+    )
+
+
+def test_a_penumbral_eclipse_draws_no_umbral_contacts() -> None:
+    """The Moon never enters the umbra in a penumbral eclipse, so U1 and
+    U4 do not exist and drawing them would be an invention. The umbral
+    pair wear the blood copper and the penumbral pair the desaturated
+    grey, so the copper's absence is the check."""
+    from PySide6.QtGui import QColor
+
+    from config import palette
+
+    copper = QColor(palette.ECLIPSE_TOTAL_MOON_TINT)
+
+    def copper_pixels(state: str) -> int:
+        image = _contact_ink(state)
+        found = 0
+        for y in range(0, image.height(), 2):
+            for x in range(0, image.width(), 2):
+                pixel = image.pixelColor(x, y)
+                if (
+                    abs(pixel.red() - copper.red()) < 24
+                    and abs(pixel.green() - copper.green()) < 24
+                    and abs(pixel.blue() - copper.blue()) < 24
+                ):
+                    found += 1
+        return found
+
+    assert copper_pixels("lunar_total") > 0, "U1/U4 must be drawn in copper"
+    assert copper_pixels("lunar_penumbral") == 0, (
+        "a penumbral eclipse has no umbral contacts to mark"
+    )
+
+
+def test_contact_marks_is_an_addition_to_horizon_shadow() -> None:
+    """The owner's own framing: it is an ADDITION on top of
+    "horizon_shadow", not a replacement. So the layer must still draw the
+    copper segment for it — the gate is a membership test over both
+    names, never an equality against one."""
+    import inspect
+
+    source = inspect.getsource(MoonBandLayer.paint)
+    gate = source[source.index("effective_style in"):]
+    assert '"horizon_shadow"' in gate.split("\n")[0]
+    assert '"contact_marks"' in gate.split("\n")[0]
+    assert "self.draw_eclipse_segment(" in gate, (
+        "contact_marks must not replace the segment it brackets"
+    )

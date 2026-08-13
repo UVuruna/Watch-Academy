@@ -62,9 +62,46 @@ asset/procedural split.
 - `draw_moon_disc(painter, fraction, radius, style, paint_face, dark_color, shadow_alpha)`
   — the whole disc in the chosen style, centred on the painter's
   current origin.
+- `shadow_placement(radius, state, magnitude)` — `(centre,
+  shadow_radius)`, ONE construction of where Earth's shadow stands, used
+  by both shadow styles so they can never disagree about it.
 - `draw_umbra_sweep(painter, radius, state, magnitude)` — Earth's
   shadow as a real curved edge crossing the face, deepening to copper
   behind it, with the turquoise ozone rim where the state carries one.
+- `draw_blood_moon(painter, radius, state, magnitude)` — the DEPTH
+  RAMP: copper at the deepest point of the umbra, neutral grey at its
+  rim, grey and only grey in the penumbra.
+
+## The blood moon (owner ballot 2026-08-13, his own recommendation)
+His specification, in his own terms: *inside the umbra the colour slides
+toward COPPER in proportion to DEPTH IN SHADOW; the penumbra stays
+grey*. His reasoning, sealed with it: a Moon in full umbra is copper,
+not grey, because the only light reaching it has passed through every
+sunrise and sunset on Earth at once.
+
+**It is not the umbra sweep recoloured, and the difference is the
+deliverable.** Both styles put the shadow in the same place —
+`shadow_placement` is shared — and then paint opposite things inside it:
+
+| | `umbra_sweep` | `blood_moon` |
+|---|---|---|
+| What the ramp measures | how DARK the shadow is | how DEEP the Moon has sunk |
+| At the shadow's centre | near-black (`ECLIPSE_UMBRA_CORE_COLOR`) | the most copper (`ECLIPSE_TOTAL_MOON_TINT`) |
+| At the umbra's rim | copper | neutral grey (`ECLIPSE_BLOOD_EDGE_COLOR`) |
+| Circles drawn | one (umbra, or penumbra for a penumbral eclipse) | both, so the umbra is a hard-edged core inside a soft grey field |
+
+Depth is a real quantity, not a mood: for a point at distance `s` from
+the shadow's centre, `depth = 1 − s/R_umbra` inside the umbra and zero
+at its rim, and the gradient's stop positions ARE that scale read
+backwards. The penumbra carries no copper at any depth, so a PENUMBRAL
+eclipse — whose umbra circle never reaches the disc — shows no copper
+anywhere on the face, which is exactly what such an eclipse looks like.
+
+`tests/test_eclipse_distinctness.py` holds the two styles apart for all
+three lunar types now that `blood_moon` has left
+`render.eclipse_style`'s `_NOT_YET_PAINTED` table; neutering this
+painter into a call to `draw_umbra_sweep` scores the pair 0.000/0.0000
+and fails that tooth immediately.
 
 ## The sweep after the eclipse rework (owner order 2026-08-13)
 Two things changed, and both were accuracy problems as much as display

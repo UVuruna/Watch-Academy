@@ -45,7 +45,7 @@ from render.painting import dial_point, draw_pie, tinted_gray
 THUMB_SOURCE_PX = 256
 # Bumped whenever the paint recipe below changes, so a stale pre-bump
 # cache file is never mistaken for the new recipe's output.
-_THUMB_CACHE_VERSION = 6
+_THUMB_CACHE_VERSION = 7   # 7: the ballot's six eclipse styles got real painters (2026-08-13)
 
 
 def _cache_dir() -> Path:
@@ -310,6 +310,16 @@ _BAND_PREVIEW_ZOOM = 1.5
 
 _MOON_BAND_DEMO_RISE = _dt_time(6, 0)
 _MOON_BAND_DEMO_SET = _dt_time(18, 0)
+# THE DANJON TILE's own body size and lift, MEASURED against
+# `render.eclipse_danjon`'s gauge rather than eyeballed: the gauge stops
+# 2.30 body radii below centre, so the whole mark is 3.30 radii tall and
+# 2.40 wide. The tile is `THUMB_SOURCE_PX` square and the other lunar
+# tiles draw at 0.40 of it, so the body here shrinks to 0.72 of that
+# (3.30 x 0.70 x 0.40 = 0.92 of the tile, height being the binding
+# dimension) and rises by (2.30 - 1) / 2 = 0.65 body radii to centre the
+# drawn extent.
+_DANJON_TILE_BODY_SCALE = 0.70
+_DANJON_TILE_LIFT = 0.65
 
 
 def moon_band_style_icon(style: str) -> QIcon:
@@ -522,7 +532,12 @@ def eclipse_solar_style_icon(style: str) -> QIcon:
     `marker_marks.draw_solar_eclipse` at a fixed demo (partial,
     magnitude 0.6, THE REAL ALGORITHM). "halo" draws nothing onto the
     body itself (the glow behind IS that style, `render.eclipse_glow.
-    draw_event_glow` — drawn here too so the tile is not a bare Sun)."""
+    draw_event_glow` — drawn here too so the tile is not a bare Sun).
+    The three ballot-accepted names with no painter yet
+    (`totality_path`/`type_emblem`/`dial_shadow`, owner ballot
+    2026-08-13) preview whatever `draw_solar_eclipse` falls back to —
+    it asks `render.eclipse_style.resolve_eclipse_style` itself, so
+    this tile needs no branch of its own."""
     radius = THUMB_SOURCE_PX * 0.36
 
     def paint(painter: QPainter) -> None:
@@ -552,16 +567,28 @@ def eclipse_lunar_style_icon(style: str) -> QIcon:
     Moon Horizon Band's own silver-thread arc instead of touching the
     disc at all — the owner's own placement of that option (2026-08-10)
     — reusing `MoonBandLayer._draw_silver_thread` exactly like
-    `moon_band_mode_icon` already does."""
+    `moon_band_mode_icon` already does. The three ballot-accepted names
+    with no painter yet (`blood_moon`/`danjon_scale`/`contact_marks`,
+    owner ballot 2026-08-13) preview whatever
+    `render.eclipse_style.resolve_eclipse_style` falls back to."""
     from datetime import date, datetime
 
     from core.moon import moon_horizon_arcs
+    from render.eclipse_style import resolve_eclipse_style
     from render.layers.moon_band import MoonBandLayer
 
     radius = THUMB_SOURCE_PX * 0.4
+    # THE DOOR (owner ballot 2026-08-13): `blood_moon`/`danjon_scale`/
+    # `contact_marks` have no painters yet — the tile previews whatever
+    # `resolve_eclipse_style` says (band presumed up, same as the
+    # Encyclopedia plates), so a new picker entry never crashes and
+    # never shows a picture it does not actually draw.
+    effective_style, _fallback_reason = resolve_eclipse_style(
+        "lunar", style, band_available=True,
+    )
 
     def paint(painter: QPainter) -> None:
-        if style == "horizon_shadow":
+        if effective_style in ("horizon_shadow", "contact_marks"):
             pen = QPen(QColor(palette.NUMERAL_RING_GROUND))
             pen.setWidthF(radius * 0.03)
             painter.setPen(pen)
@@ -578,13 +605,57 @@ def eclipse_lunar_style_icon(style: str) -> QIcon:
             # independent grader read it as an empty circle — it
             # advertised nothing, which is the exact failure the
             # "every tile shows what it picks" rule exists to prevent.
+            centre_deg = angles.time_to_dial_angle(_dt_time(12, 0))
             layer.draw_eclipse_segment(
-                painter, radius, angles.time_to_dial_angle(_dt_time(12, 0)),
-                "lunar_total",
+                painter, radius, centre_deg, "lunar_total",
             )
+            if effective_style == "contact_marks":
+                # An ADDITION on top of the segment (owner ballot
+                # 2026-08-13) — the tile shows exactly that, so the two
+                # band styles never advertise the same picture.
+                layer.draw_contact_marks(
+                    painter, radius, centre_deg, "lunar_total",
+                )
             return
-        if style not in ("umbra_sweep", "halo"):
-            raise ValueError(f"unknown lunar eclipse style {style!r}")
+        if effective_style == "danjon_scale":
+            from render import eclipse_danjon
+            from render.eclipse_plates import TYPICAL_MAGNITUDE
+
+            # THE GAUGE HANGS BELOW THE BODY, so this one tile draws a
+            # SMALLER Moon and slides it up to make room — the mark is
+            # the style, and a tile that clipped its own legend would
+            # advertise nothing (the exact failure the band tile above
+            # already records). The two numbers are measured against
+            # `render.eclipse_danjon`'s own reach: the gauge stops at
+            # 2.10 body radii below centre, so the drawn height is 3.10
+            # radii and the body's centre must sit 0.55 radii above the
+            # tile's middle for the whole mark to be centred.
+            body = radius * _DANJON_TILE_BODY_SCALE
+            painter.save()
+            painter.translate(0.0, -body * _DANJON_TILE_LIFT)
+
+            def paint_danjon_face(target: QPainter) -> None:
+                target.setBrush(QColor(palette.SKIN_MOON_LIT))
+                target.drawEllipse(QPointF(0.0, 0.0), body, body)
+
+            moon_face.draw_moon_disc(
+                painter, 1.0, body, "cut_rim", paint_danjon_face,
+                palette.SKIN_MOON_DARK,
+            )
+            # A TOTAL demo for this one tile: the Danjon scale is defined
+            # at mid-totality, so the partial demo every other lunar tile
+            # uses would show the style's own "does not apply" picture.
+            # The magnitude is the Encyclopedia plate's typical totality,
+            # read from there rather than restated.
+            eclipse_danjon.draw_danjon_scale(
+                painter, body, "lunar_total",
+                TYPICAL_MAGNITUDE[("lunar", "total")],
+            )
+            painter.restore()
+            return
+        # `effective_style` is always one of the native painters here —
+        # `resolve_eclipse_style` guarantees it — so this is a plain
+        # dispatch, not a validity check.
 
         def paint_face(target: QPainter) -> None:
             target.setBrush(QColor(palette.SKIN_MOON_LIT))
@@ -593,8 +664,11 @@ def eclipse_lunar_style_icon(style: str) -> QIcon:
         moon_face.draw_moon_disc(
             painter, 1.0, radius, "cut_rim", paint_face, palette.SKIN_MOON_DARK,
         )
-        if style == "umbra_sweep":
+        if effective_style == "umbra_sweep":
             moon_face.draw_umbra_sweep(painter, radius, "lunar_partial", 0.6)
+            return
+        if effective_style == "blood_moon":
+            moon_face.draw_blood_moon(painter, radius, "lunar_partial", 0.6)
             return
         disc = _full_disc_path(radius)
         brightness = glow.ECLIPSE_STATE_MOON_BRIGHTNESS["lunar_partial"]

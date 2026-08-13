@@ -72,6 +72,8 @@ per degree over the plate's own steps, with nothing connecting them.
 ## Connections
 
 ### Uses
+- [Eclipse Style Door](../../__about/eclipse_style.md) — `resolve_eclipse_style`,
+  asked before deciding whether to draw the band's copper segment
 - [Moon (core)](../../../core/__about/moon.md) — `MoonArc`,
   `moon_horizon_arcs` — the layer's whole geometry input
 - [Config (folder)](../../../config/___config.md) —
@@ -106,11 +108,14 @@ with the day's own moonrise/moonset, never per-tick).
   the horizon). A copper segment with turquoise end caps, straddling
   the band at the eclipse's own hour, drawn whatever the band's own
   style is: the style says how the above-horizon arc looks, this is a
-  separate mark laid over it. It runs only while
-  `eclipse_lunar_style == "horizon_shadow"`, and it is the ONLY thing
-  that style draws — the Moon's disc is deliberately left untouched,
-  because the point of the option is DURATION, which no halo and no
-  darkened disc can show.
+  separate mark laid over it. It runs whenever `paint()`'s call to
+  [Eclipse Style Door](../../__about/eclipse_style.md)'s
+  `resolve_eclipse_style("lunar", eclipse_lunar_style, band_available=True)`
+  answers `"horizon_shadow"` or `"contact_marks"` — and for
+  `horizon_shadow` it is the ONLY thing drawn — the Moon's disc is
+  deliberately left untouched, because the point of the option is
+  DURATION, which no halo and no darkened disc can show.
+  `contact_marks` adds its own four contacts over it (below).
 
   IT READS THE TYPE (eclipse rework, owner order 2026-08-13). The
   segment used to be one identical copper bar for a total, a partial
@@ -143,6 +148,43 @@ with the day's own moonrise/moonset, never per-tick).
   turned the eclipse's own mark off entirely. Every gate was green.
   What caught it was an independent grader opening the picker tile and
   reporting it as an empty circle.
+
+- `draw_contact_marks(painter, radius, centre_deg, state)`: THE FOUR
+  CONTACTS (owner ballot 2026-08-13, `contact_marks`). An ADDITION on
+  top of `horizon_shadow`, never a replacement — the copper segment is
+  still drawn and these bracket it — so it needs the same
+  `moon_band_mode == "horizon"` and falls back to `"halo"` through the
+  same door when the band is absent. What it draws: a thin dashed grey
+  arc from **P1 to P4**, and a radial tick with a seated diamond at each
+  of the four contacts — the umbral pair (**U1**, **U4**) longer, wider
+  and copper, the penumbral pair shorter, thinner and grey. A PENUMBRAL
+  eclipse draws only P1 and P4, because the Moon never enters the umbra
+  and U1/U4 do not exist.
+
+  **THESE ARE NOT OBSERVED CONTACT TIMES, and the code says so in those
+  words.** The catalog stores only the instant of GREATEST eclipse (see
+  `constants.ECLIPSE_BAND_DURATION_H`). The umbral pair therefore sit at
+  half of that same documented 3 h approximation either side of the
+  peak — the identical one the segment already draws, kept in the ONE
+  place — and the penumbral pair at
+  `constants.ECLIPSE_PENUMBRAL_SPAN_RATIO` (1.78) times that. The ratio
+  is derived, not guessed a second time: the shadow radii at the Moon's
+  distance are ~2.6 lunar radii for the umbra and ~4.6 for the penumbra,
+  the Moon crosses both on the same near-straight track, so the two
+  chords stand in that ratio (and it is the same 2.40/1.35 that
+  `render.moon_face`'s own measured shadow fractions carry). Every one
+  of the four lines is INDICATIVE; the marks are dashed for that reason,
+  and a catalog that one day carries real contact times replaces
+  `ECLIPSE_BAND_DURATION_H` and this ratio at once.
+
+  WHY THE SPAN ARC EXISTS, recorded because the first two cuts failed
+  without it: four thin lines are invisible at the scale the distinctness
+  tooth measures (0.030 structure against the plain segment, then 0.079
+  with the marks widened and diamonds added — both under the 0.20 floor,
+  i.e. "the same picture"). What made it a picture of its own was not
+  more ink but the thing this style KNOWS and `horizon_shadow` does not:
+  the eclipse's WHOLE duration, P1 to P4, drawn as the dashed outer arc.
+  That took the three lunar types to 0.229 / 0.238 / 0.248.
 
 ## Design Decisions
 - THE LAST LINE (owner third round 2026-08-11): every band line sits

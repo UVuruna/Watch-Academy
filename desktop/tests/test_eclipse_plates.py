@@ -4,7 +4,7 @@ that rides them (his art and his rule, 2026-08-13).
 Three claims live here and each one has already been wrong once in this
 project's history, in one form or another:
 
-1. **The measurement is real.** `render.marker_marks` derives every
+1. **The measurement is real.** `render.solar_eclipse` derives every
    eclipse dimension from four fractions read off his two PNGs. A
    constant that was measured once and then drifted from the file is a
    silent lie, so this module RE-MEASURES the files and requires the
@@ -15,7 +15,7 @@ project's history, in one form or another:
    PLATE LAW): a whole missing digit alphabet once shipped as font-drawn
    text with every test green, because the fallback was silent.
 3. **The dark disc never eats the rays.** His single composition rule.
-   It is enforced by a clip in `marker_marks._bite`, and proved here on
+   It is enforced by a clip in `solar_eclipse._bite`, and proved here on
    the rendered pixels rather than on the intent.
 
 Layer: tests.
@@ -32,7 +32,7 @@ from PySide6.QtGui import QImage, QPainter
 from PySide6.QtWidgets import QApplication
 
 from config import defaults
-from render import marker_marks
+from render import marker_marks, solar_eclipse
 
 # The measuring instrument: how many points are sampled around each
 # radius ring, and how far apart two radius rings are. 1/1000 of the
@@ -52,7 +52,7 @@ def app():
 def _rings(path):
     """(fraction of half-size, solid share, any-ink share, black share)
     for every radius ring of an art file — the same scan the constants
-    in `render.marker_marks` were read off."""
+    in `render.solar_eclipse` were read off."""
     image = QImage(str(path))
     assert not image.isNull(), f"the eclipse body plate {path} does not load"
     image = image.convertToFormat(QImage.Format.Format_ARGB32)
@@ -94,18 +94,18 @@ def _outermost(rows, column):
 def test_the_sun_plate_measures_what_the_constants_claim(app):
     """His Sun: a solid yellow DISC, then the ink breaks into sparse
     spokes that run out to the ray tips. Both radii are stated in
-    `marker_marks` and both are read back off the file here."""
+    `solar_eclipse` and both are read back off the file here."""
     rows = _rings(defaults.ECLIPSE_BODY_SUN_ART)
     disc = _last(rows, 0)
     rays = _outermost(rows, 1)
-    assert disc == pytest.approx(marker_marks._SUN_PLATE_DISC_FRACTION, abs=0.005), (
+    assert disc == pytest.approx(solar_eclipse._SUN_PLATE_DISC_FRACTION, abs=0.005), (
         f"the Sun plate's solid disc now ends at {disc:.3f} of its "
-        f"half-size, not the {marker_marks._SUN_PLATE_DISC_FRACTION} "
+        f"half-size, not the {solar_eclipse._SUN_PLATE_DISC_FRACTION} "
         "the composition is built on — re-measure and restate it"
     )
-    assert rays == pytest.approx(marker_marks._SUN_PLATE_RAY_FRACTION, abs=0.005), (
+    assert rays == pytest.approx(solar_eclipse._SUN_PLATE_RAY_FRACTION, abs=0.005), (
         f"the Sun plate's rays now reach {rays:.3f} of its half-size, "
-        f"not {marker_marks._SUN_PLATE_RAY_FRACTION}"
+        f"not {solar_eclipse._SUN_PLATE_RAY_FRACTION}"
     )
     # And the two are genuinely different things: past the disc the ink
     # must be SPARSE, or "clip the dark disc to the yellow disc" would
@@ -120,12 +120,12 @@ def test_the_moon_plate_measures_what_the_constants_claim(app):
     rows = _rings(defaults.ECLIPSE_BODY_MOON_ART)
     black = _last(rows, 2)
     edge = _outermost(rows, 1)
-    assert black == pytest.approx(marker_marks._MOON_PLATE_DISC_FRACTION, abs=0.005), (
+    assert black == pytest.approx(solar_eclipse._MOON_PLATE_DISC_FRACTION, abs=0.005), (
         f"the Moon plate's black body now ends at {black:.3f} of its "
-        f"half-size, not the {marker_marks._MOON_PLATE_DISC_FRACTION} "
+        f"half-size, not the {solar_eclipse._MOON_PLATE_DISC_FRACTION} "
         "the occulter is scaled by"
     )
-    assert edge == pytest.approx(marker_marks._MOON_PLATE_GLOW_FRACTION, abs=0.005), (
+    assert edge == pytest.approx(solar_eclipse._MOON_PLATE_GLOW_FRACTION, abs=0.005), (
         "the Moon plate's rim glow no longer reaches its own frame edge"
     )
 
@@ -223,10 +223,10 @@ def test_the_hybrid_ghost_ring_is_a_trace_not_the_annular_ring(app):
     ghost, dark = warm_band(hybrid), warm_band(total)
     # Tenths of a pixel: 500 samples across half a body radius.
     expected = 10 * radius * (
-        marker_marks._MOON_PLATE_GLOW_FRACTION
-        - marker_marks._MOON_PLATE_DISC_FRACTION
+        solar_eclipse._MOON_PLATE_GLOW_FRACTION
+        - solar_eclipse._MOON_PLATE_DISC_FRACTION
     )
-    ring_of_fire = 10 * radius * (1.0 - marker_marks._ANNULAR_SHRINK)
+    ring_of_fire = 10 * radius * (1.0 - solar_eclipse._ANNULAR_SHRINK)
     assert dark < 10, (
         "a total eclipse must leave no warm light on the disc beyond the "
         f"limb's own antialiasing (found {dark} tenths of a pixel)"

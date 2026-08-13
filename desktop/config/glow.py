@@ -25,6 +25,17 @@ GLOW_CORE_ALPHA = 1.0
 GLOW_MID_ALPHA = 0.85
 GLOW_MID_STOP = 0.75                 # gradient position of the mid alpha
 GLOW_RADIUS_SCALE = 1.5              # halo radius, multiple of the marker radius
+# THE MARK REACH LIMIT — the outer wall for every mark drawn around a
+# body (`render.marker_marks`, `render.solar_eclipse`). The transparent
+# window margin the widget reserves is computed from the halo scale
+# above (`defaults.dial_window_margin_fraction`), so that number is the
+# wall, not a suggestion; the 0.92 is HEADROOM, because the halo is a
+# gradient that has faded to nothing by its own edge while these marks
+# are opaque strokes that would show as a hard line the moment they
+# touched it. It lives here, beside the scale it is derived from, so
+# the two mark modules read ONE number and a re-tuned glow moves the
+# wall with it.
+MARK_REACH_LIMIT = GLOW_RADIUS_SCALE * 0.92
 
 
 ECLIPSE_INVISIBLE_STRENGTH_FACTOR = 0.5

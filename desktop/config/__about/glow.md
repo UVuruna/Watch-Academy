@@ -13,7 +13,17 @@ Layer: config — pure, no Qt, no wall clock.
 ## Contents
 
 - **Season/moon event glow rendering** — `GLOW_CORE_ALPHA`,
-  `GLOW_MID_ALPHA`, `GLOW_MID_STOP`, `GLOW_RADIUS_SCALE`.
+  `GLOW_MID_ALPHA`, `GLOW_MID_STOP`, `GLOW_RADIUS_SCALE`, and
+  `MARK_REACH_LIMIT` — the outer wall for every mark drawn around a
+  body, derived from the halo scale beside it (the window margin the
+  widget reserves is computed from that scale, and the 0.92 is
+  headroom: the halo is a gradient faded to nothing by its own edge,
+  while a mark is an opaque stroke that would show as a hard line the
+  moment it touched the wall). It lives here so
+  [Marker Marks](../../render/__about/marker_marks.md) and
+  [Solar Eclipse](../../render/__about/solar_eclipse.md) read ONE
+  number and a re-tuned glow moves the wall with it; both assert their
+  own outermost mark against it at import.
   (`GLOW_RING_RADIUS_FRACTION`, the same family, lives in
   [Dial](dial.md) instead — it is a straight alias of a `dial.py` name,
   and one new module may never import another.)

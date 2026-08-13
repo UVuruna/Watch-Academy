@@ -12,6 +12,8 @@ fallback for pointer variants, which carry no preview art of their own
 ## Connections
 
 ### Uses
+- [Eclipse Style Door](../../../render/__about/eclipse_style.md) —
+  `resolve_eclipse_style`, asked by `eclipse_lunar_style_icon`
 - [Raster Store](../../../render/__about/raster_store.md) —
   `source_prefix`/`atomic_save`, the SAME content-fingerprint disk cache
   the ring-jewel metal recolor cache uses (Rule #5, no second cache
@@ -78,9 +80,24 @@ fallback for pointer variants, which carry no preview art of their own
     `marker_marks.draw_solar_eclipse` / `moon_face.draw_umbra_sweep` at
     a fixed demo event (partial, magnitude 0.6); the lunar "halo" style
     reproduces the same multiply-darken `YearMarkerLayer._draw_moon`
-    applies, and "horizon_shadow" draws the Moon Horizon Band's own
-    silver-thread arc instead of touching the disc, mirroring
-    `moon_band_style_icon`
+    applies, "blood_moon" calls `moon_face.draw_blood_moon` at the same
+    demo, and "horizon_shadow"/"contact_marks" draw the Moon Horizon
+    Band's own silver-thread arc plus the event's marks instead of
+    touching the disc, mirroring `moon_band_style_icon`. Every tile
+    resolves through [Eclipse Style Door](../../../render/__about/eclipse_style.md)'s
+    `resolve_eclipse_style` — the solar tile asks nothing extra
+    (`draw_solar_eclipse` resolves it internally); the lunar tile
+    resolves it itself before choosing which branch above to preview.
+
+    THE DANJON TILE IS THE ONE EXCEPTION, twice over, and both are
+    deliberate. It demos a TOTAL eclipse rather than the shared partial,
+    because the Danjon scale is only defined at mid-totality and the
+    partial demo would show the style's own "does not apply" picture and
+    advertise nothing. And it draws a SMALLER Moon, lifted, because
+    [Eclipse Danjon](../../../render/__about/eclipse_danjon.md)'s gauge
+    hangs 2.30 body radii below centre — `_DANJON_TILE_BODY_SCALE` and
+    `_DANJON_TILE_LIFT` are measured from that reach, not eyeballed, so
+    the tile cannot clip its own legend
   - `moon_station_style_icon(style)` / `sun_station_style_icon(style)`:
     `marker_marks.draw_station_mark` / `draw_sun_station_mark` at the
     "youth" station, behind a plain body disc

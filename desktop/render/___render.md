@@ -46,8 +46,11 @@ hover-invariant groups, and answers every hit-test/tooltip question.
 | `weekday_body.py` | Algorithmic | one weekday body + its set-uniform label — [about](__about/weekday_body.md) · [flow](__flow/weekday_body.md) |
 | `eclipse_glow.py` | Algorithmic | eclipse render state, glow strength, the radial halo — [about](__about/eclipse_glow.md) · [flow](__flow/eclipse_glow.md) |
 | `eclipse_plates.py` | Standard | one drawn plate per (kind, type, style) for the Encyclopedia's look slider, painted by the DIAL's own functions — [about](__about/eclipse_plates.md) |
-| `moon_face.py` | Algorithmic | the Moon's own disc — the unlit half's three treatments, the umbra sweep — [about](__about/moon_face.md) · [flow](__flow/moon_face.md) |
-| `marker_marks.py` | Algorithmic | what a marker wears — pointer shapes, the four life stations, the solar eclipse's geometry — [about](__about/marker_marks.md) · [flow](__flow/marker_marks.md) |
+| `eclipse_style.py` | Standard | THE HONESTY DOOR — resolves a style to what actually paints it, and why, for styles with no painter yet — [about](__about/eclipse_style.md) |
+| `moon_face.py` | Algorithmic | the Moon's own disc — the unlit half's three treatments, the umbra sweep and the blood moon's depth ramp — [about](__about/moon_face.md) · [flow](__flow/moon_face.md) |
+| `eclipse_danjon.py` | Standard | the Danjon L=0..4 brightness scale as a lunar display style — the INDICATIVE derivation and its five-cell legend — [about](__about/eclipse_danjon.md) |
+| `marker_marks.py` | Algorithmic | what a marker wears on an ordinary day — pointer shapes and the four life stations — [about](__about/marker_marks.md) · [flow](__flow/marker_marks.md) |
+| `solar_eclipse.py` | Algorithmic | every picture the SUN side of an eclipse draws — six styles over four catalog types — [about](__about/solar_eclipse.md) · [flow](__flow/solar_eclipse.md) |
 | `compositor.py` | Algorithmic | Z-ordered stack, cached compositing, hit-testing, the tooltip HTML bank — GOD-FILE, ratcheted — [about](__about/compositor.md) · [flow](__flow/compositor.md) |
 | `assets.py` | Algorithmic | `AssetCache` — rasterize/tint/metal-swap, the working set — [about](__about/assets.md) · [flow](__flow/assets.md) |
 | `asset_recolor.py` | Algorithmic | disk-cached metal finishes, the lazy variant ledger — [about](__about/asset_recolor.md) · [flow](__flow/asset_recolor.md) |

@@ -498,7 +498,10 @@ class YearMarkerLayer(Layer):
         the eclipse on the Moon Horizon Band, where it can show DURATION
         (his own placement, 2026-08-10), so the band keeps drawing it and
         this body shows the plain face beside it rather than a second,
-        contradicting picture of the same event."""
+        contradicting picture of the same event. `contact_marks`
+        (owner ballot 2026-08-13, no painter yet) resolves onto
+        `horizon_shadow` through `render.eclipse_style.
+        resolve_eclipse_style` and so behaves the same way here."""
         event = ctx.tick.eclipse_body_event
         if event is None:
             return
@@ -544,6 +547,16 @@ class YearMarkerLayer(Layer):
             marker_marks.draw_solar_eclipse(
                 painter, spec.eclipse_solar_style, size / 2,
                 state, event.magnitude, palette.GLOW_SUN_COLOR, origin=pos,
+                # THE OBSERVER'S OWN DISTANCE (owner ballot 2026-08-13,
+                # "totality_path"): the only eclipse style that depends
+                # on WHERE this watch stands. It is the great-circle
+                # distance to the catalog's greatest-eclipse ground
+                # point, already stamped on the event by
+                # `core.clock_state._with_visibility` — read, never
+                # recomputed, so the arc and the hover's "path {d} km
+                # away" reason can never disagree. None on a catalog row
+                # with no ground point, and the style says so itself.
+                distance_km=event.distance_km,
             )
             return
         self._draw_moon(
@@ -802,9 +815,21 @@ class YearMarkerLayer(Layer):
             painter, fraction, radius, spec.moon_dark_style,
             paint_face, spec.moon_dark_color,
         )
+        # THE DOOR (owner ballot 2026-08-13): `resolve_eclipse_style`
+        # answers what to actually draw, honestly. Since the lunar
+        # painters round every style has its own painter, so the only
+        # fallback left here is the CONTEXT one — `horizon_shadow` and
+        # `contact_marks` write on the Moon Horizon Band, and without
+        # the band they resolve to "halo" and say why.
+        from render.eclipse_style import resolve_eclipse_style
+
+        effective_lunar_style, _fallback_reason = resolve_eclipse_style(
+            "lunar", spec.eclipse_lunar_style,
+            band_available=spec.moon_band_mode == "horizon",
+        )
         if (
             darken_state is not None
-            and spec.eclipse_lunar_style == "umbra_sweep"
+            and effective_lunar_style == "umbra_sweep"
         ):
             # THE UMBRA SWEEP takes the whole eclipse treatment: Earth's
             # shadow as a real curved edge crossing the face, so the
@@ -816,7 +841,37 @@ class YearMarkerLayer(Layer):
             )
             painter.restore()
             return
-        if darken_state is not None and spec.eclipse_lunar_style == "halo":
+        if darken_state is not None and effective_lunar_style == "blood_moon":
+            # THE BLOOD MOON (owner ballot 2026-08-13, his own
+            # recommendation): the colour slides toward copper with
+            # DEPTH IN THE UMBRA and the penumbra stays grey. Like the
+            # sweep it is the whole treatment — the multiply below must
+            # not also run.
+            moon_face.draw_blood_moon(
+                painter, radius, darken_state, lunar_magnitude
+            )
+            painter.restore()
+            return
+        if darken_state is not None and effective_lunar_style == "danjon_scale":
+            from render import eclipse_danjon
+
+            # THE DANJON SCALE: the disc wears the indicative step's own
+            # colour and the five-cell legend hangs beneath the body.
+            # The gauge carries TEXT, so in the southern hemisphere it
+            # is turned back upright — the disc above is deliberately
+            # upside down (the lit side really does swap), a legend is
+            # not. The L is INDICATIVE and the mark says so with a
+            # dashed marker; see `render/__about/eclipse_danjon.md`.
+            painter.save()
+            if ctx.day.southern_hemisphere:
+                painter.rotate(180.0)
+            eclipse_danjon.draw_danjon_scale(
+                painter, radius, darken_state, lunar_magnitude
+            )
+            painter.restore()
+            painter.restore()
+            return
+        if darken_state is not None and effective_lunar_style == "halo":
             disc = QPainterPath()
             disc.addEllipse(QRectF(-radius, -radius, size, size))
             brightness = glow.ECLIPSE_STATE_MOON_BRIGHTNESS[darken_state]

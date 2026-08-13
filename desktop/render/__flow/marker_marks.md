@@ -42,20 +42,7 @@ The Sun's twin adds two more styles: `uniform_seasonal` takes the same
 halo in `palette.INSTRUMENT_SEASON_COLORS[season]`, and
 `day_night_wedge` fills a ring arc to the day's own length.
 
-## The solar eclipse (`draw_solar_eclipse`)
-
-    FUNCTION draw_solar_eclipse(style, state, magnitude):
-        IF style == "halo": RETURN            # the caller already drew it
-        IF style == "magnitude_arc":
-            draw the body, then a ring gauge filled clockwise to magnitude
-            RETURN
-        # "bite" (owner correction 2026-08-11) — drawn AS SEEN, on top
-        # of config.defaults.ECLIPSE_SOLAR_ART (the owner's own icon)
-        IF state == "solar_total" AND covered >= 1.0:
-            RETURN                              # the icon alone is the look
-        IF state == "solar_annular":
-            draw the ring of fire around the black disc
-        ELSE:
-            visible = 1 - covered
-            phase = acos(1 - 2*visible) / (2*pi)      # invert moon_lit_region's own mapping
-            draw moon_lit_region(phase, radius) as a bright crescent  # the SAME terminator the Moon's phases use
+## The solar eclipse moved out
+Its flow is [Solar Eclipse — Flow](solar_eclipse.md); `marker_marks`
+only re-exports `draw_solar_eclipse` so the existing call sites did not
+have to move (2026-08-13, THE STRUCTURE LAW split).

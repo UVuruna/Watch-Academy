@@ -27,6 +27,13 @@ which is exactly how the twelve unwired figure casts happened
 ## Connections
 
 ### Uses
+- [Eclipse Style Door](eclipse_style.md) — `resolve_eclipse_style`,
+  asked by `_draw_lunar` before its disc/band dispatch (owner ballot
+  2026-08-13: `blood_moon`/`danjon_scale`/`contact_marks` have no
+  painter yet, so a plate for one of them draws whatever the door falls
+  back to; the solar side asks the same door through
+  `marker_marks.draw_solar_eclipse` below, so `_draw_solar` needs no
+  call of its own)
 - [Eclipse Glow](eclipse_glow.md) — `draw_event_glow`,
   `eclipse_state_glow_strength`
 - [Marker Marks](marker_marks.md) — `draw_solar_eclipse`, the solar
@@ -52,7 +59,7 @@ which is exactly how the twelve unwired figure casts happened
 | `PLATE_SIZE_PX` = 512 | the square plate; the body sits at `_BODY_FRACTION` (0.30) of it so the 1.5x halo and the solar rays are never clipped |
 | `_GROUND_RADIUS_FRACTION` = 0.49 | the night field drawn under the body |
 | `TYPES` | the catalog types each kind distinguishes, in the Encyclopedia's own chapter order — ONE roster, so a plate can never exist for a chapter that does not, or the other way round |
-| `STYLES` | `constants.ECLIPSE_SOLAR_STYLES` / `ECLIPSE_LUNAR_STYLES` |
+| `STYLES` | `constants.ECLIPSE_SOLAR_STYLES` / `ECLIPSE_LUNAR_STYLES` — 6 names per kind since the owner's 2026-08-13 ballot, three of them not yet painted (see [Eclipse Style Door](eclipse_style.md)) |
 | `TYPICAL_MAGNITUDE` | a typical catalog magnitude per type — a documented approximation, stated here rather than hidden in the painter |
 
 ## Functions
@@ -93,10 +100,16 @@ and the page would claim to show a picture that cannot be seen.
 - **The lunar disc is always full (fraction 0.5).** A lunar eclipse only
   ever happens at full moon, so this is not a chosen illustration but
   the phase the event requires.
-- **`horizon_shadow` draws the BAND, not the disc.** That style leaves
-  the disc alone and writes the event where DURATION can be seen (owner
-  placement 2026-08-10), so the plate shows the band arc with its copper
-  segment rather than a second, contradicting disc treatment. Its angle
-  is the plate's illustration choice, not a claim about any real
-  eclipse: it stands where an evening event would, so the arc reads as a
-  span of hours.
+- **`horizon_shadow` and `contact_marks` draw the BAND, not the disc.**
+  Those styles leave the disc alone and write the event where DURATION
+  can be seen (owner placement 2026-08-10), so the plate shows the band
+  arc with its copper segment — plus, for `contact_marks`, the four
+  contact ticks and the dashed P1–P4 span arc — rather than a second,
+  contradicting disc treatment. The angle is the plate's illustration
+  choice, not a claim about any real eclipse: it stands where an evening
+  event would, so the arc reads as a span of hours.
+- **The plate cache carries a VERSION** (`_PLATE_CACHE_VERSION`). Every
+  plate is painted once and kept on disk, so a round that changes a
+  PAINTER must bump it or a reader who already opened an eclipse chapter
+  keeps the old picture forever. The round that gave the ballot's six
+  styles real painters (2026-08-13) is exactly that case.

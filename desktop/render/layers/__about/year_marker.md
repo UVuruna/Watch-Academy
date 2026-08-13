@@ -126,6 +126,8 @@ layer, and their lift twin lives in `HoverLiftLayer`.
 ## Connections
 
 ### Uses
+- [Eclipse Style Door](../../__about/eclipse_style.md) — `resolve_eclipse_style`,
+  asked before `_draw_moon`'s umbra_sweep/halo dispatch
 - [Asset Variants](../../__about/asset_variants.md) — `moon_lit_region`
 - [Calendar Mount](../../__about/calendar_mount.md) — `calendar_day_arrow`,
   `calendar_wheel`
@@ -172,13 +174,33 @@ layer, and their lift twin lives in `HoverLiftLayer`.
   face is clipped first (the cut styles) or covered after (the opaque
   one). Its `darken_state`/`lunar_magnitude` arguments are now passed
   ONLY by `_draw_eclipse_body` — the Moon marker itself never darkens.
-  A lunar eclipse takes one of three routes there: "umbra_sweep"
-  draws Earth's shadow as a real curved edge across the disc,
+  A lunar eclipse takes one of five routes there: "umbra_sweep" draws
+  Earth's shadow as a real curved edge across the disc; "blood_moon"
+  (owner ballot 2026-08-13) ramps the colour toward copper with DEPTH IN
+  THE UMBRA and leaves the penumbra grey ([Moon
+  Face](../../__about/moon_face.md)); "danjon_scale" gives the disc the
+  indicative Danjon step's own colour and hangs the five-cell legend
+  beneath it ([Eclipse Danjon](../../__about/eclipse_danjon.md));
   "halo" keeps the older whole-disc multiply by a neutral (or copper, at
-  totality) gray, and "horizon_shadow" leaves the disc alone because the
-  event is written on the Moon Horizon Band instead.
+  totality) gray; and "horizon_shadow"/"contact_marks" leave the disc
+  alone because the event is written on the Moon Horizon Band instead.
+  `spec.eclipse_lunar_style` is read through [Eclipse Style
+  Door](../../__about/eclipse_style.md)'s `resolve_eclipse_style` first,
+  so the only fallback that can still fire here is the CONTEXT one — the
+  two band styles resolve to "halo" when `moon_band_mode != "horizon"`,
+  and say why.
+
+  THE DANJON GAUGE IS TURNED BACK UPRIGHT in the southern hemisphere.
+  The disc above it is deliberately upside down (the lit side really
+  does swap, owner spec), but the gauge carries a READ value in letter
+  plates, and text is not a phase.
 - `_draw_eclipse_body()`: the third body — seat, glow, pointer and the
-  chosen style, solar art drawn WHOLE (no disc clip: `sun_eclipse.png` is
+  chosen style. It is the ONE caller that has an observer in hand, so it
+  is the one that passes `event.distance_km` down to
+  [Solar Eclipse](../../__about/solar_eclipse.md)'s `draw_solar_eclipse`
+  — the `totality_path` style's whole subject (owner ballot 2026-08-13).
+  Read off the event, never recomputed, so the arc and the hover's
+  "path {d} km away" reason can never disagree. Also: solar art drawn WHOLE (no disc clip: `sun_eclipse.png` is
   a black disc in rays on transparency, and clipping would cut the rays
   off), lunar handed to `_draw_moon` with the eclipse state.
 - `_eclipse_glow_paint()`: the body's halo colour and strength — red,

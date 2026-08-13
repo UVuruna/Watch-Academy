@@ -570,6 +570,55 @@ ECLIPSE_PENUMBRAL_ALPHA = 0.45
 # no sweep on exactly the type it was made for.
 ECLIPSE_UMBRA_CORE_COLOR = "#2A0B04"
 
+# THE BLOOD MOON (owner ballot 2026-08-13, his own recommendation and
+# his own words: inside the umbra the colour slides toward COPPER in
+# proportion to DEPTH IN SHADOW, and the penumbra stays GREY). Its
+# sealed reasoning: a Moon in full umbra is copper, not grey, because
+# the only light reaching it has passed through every sunrise and
+# sunset on Earth at once.
+#
+# The style is therefore a DEPTH RAMP, not a recolour of the umbra
+# sweep, and it runs the OTHER WAY: the sweep goes near-black at the
+# shadow's centre out to copper at its rim (ECLIPSE_UMBRA_CORE_COLOR
+# above), while here the deepest point is the MOST copper and the
+# umbra's own edge — depth zero — is neutral grey. Two ramps, opposite
+# directions, two pictures; the deep copper is the shipped
+# ECLIPSE_TOTAL_MOON_TINT above rather than a fourth copper.
+ECLIPSE_BLOOD_EDGE_COLOR = "#4E4A4C"    # depth 0, the umbra's own rim
+ECLIPSE_BLOOD_UMBRA_ALPHA = 0.94
+# The penumbra: GREY, and only grey — no copper is bent into it at all.
+# Graded because a real penumbra deepens toward the umbra and fades to
+# nothing at its own rim, never a flat wash.
+ECLIPSE_BLOOD_PENUMBRA_COLOR = "#6C6A70"
+ECLIPSE_BLOOD_PENUMBRA_ALPHA = 0.62
+
+# THE DANJON SCALE (owner ballot 2026-08-13) — L=0..L=4, the eyeball
+# brightness scale an observer estimates at mid-totality, one colour per
+# step read straight off Danjon's own descriptions:
+#   L0 very dark, the Moon almost invisible
+#   L1 dark, grey or brownish, detail hard to make out
+#   L2 deep red or rust, very dark central shadow
+#   L3 brick red, usually with a bright or yellow shadow rim
+#   L4 very bright copper-red or orange, bluish bright umbral rim
+# These are a LEGEND (the gauge's five cells) and also the multiply the
+# disc itself wears at the indicative step, so the ladder and the Moon
+# can never disagree about what L means.
+ECLIPSE_DANJON_COLORS = (
+    "#0B0B0D", "#4A3B33", "#7A2A14", "#A83A22", "#D9752F",
+)
+# The gauge's chrome: the cell outlines, and the DASHED marker that
+# says the reading is INDICATIVE — derived from umbral magnitude, never
+# an observation (no catalog carries one; see render.eclipse_danjon).
+ECLIPSE_DANJON_FRAME_COLOR = "#8A9096"
+ECLIPSE_DANJON_MARKER_COLOR = "#E8EBEE"
+
+# THE CONTACT MARKS (owner ballot 2026-08-13): the umbral contacts U1/U4
+# wear the blood copper (ECLIPSE_TOTAL_MOON_TINT above — the same event,
+# the same metal), the penumbral contacts P1/P4 the desaturated grey,
+# because nothing on the Moon turns copper in the penumbra. Both are
+# INDICATIVE times — the catalog stores only greatest eclipse.
+ECLIPSE_CONTACT_PENUMBRAL_COLOR = GLOW_ECLIPSE_INVISIBLE_COLOR
+
 # THE CORONA (eclipse rework, owner order 2026-08-13): the pearly white
 # ring that is the ONLY thing visible around the Moon's silhouette at
 # totality. It is what makes the "bite" style's totality picture its

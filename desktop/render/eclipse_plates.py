@@ -42,6 +42,14 @@ from render.eclipse_glow import (
 # halo (1.5x the body, `glow.GLOW_RADIUS_SCALE`) and the solar rays are
 # never clipped at the edge.
 PLATE_SIZE_PX = 512
+# Bumped whenever a PAINTER these plates draw through changes, so a
+# stale pre-bump cache file on disk is never mistaken for the new
+# recipe's output — the same convention, and the same reason, as
+# `app.watch_face.thumbs._THUMB_CACHE_VERSION`. Without it the round
+# that painted the ballot's six new styles (2026-08-13) would have
+# shipped the FALLBACK pictures to every Encyclopedia reader who had
+# already opened an eclipse chapter once.
+_PLATE_CACHE_VERSION = 2
 _BODY_FRACTION = 0.30
 _GROUND_RADIUS_FRACTION = 0.49
 
@@ -96,7 +104,8 @@ def plate_file(kind: str, type_: str, style: str) -> Path:
     the failure this whole module exists to prevent."""
     cache = (
         paths.settings_path().parent / "raster_cache"
-        / f"eclipse_plate_{kind}_{type_}_{style}_{PLATE_SIZE_PX}.png"
+        / f"eclipse_plate_{kind}_{type_}_{style}_{PLATE_SIZE_PX}"
+        f"_v{_PLATE_CACHE_VERSION}.png"
     )
     if cache.exists():
         return cache
@@ -182,6 +191,19 @@ def _draw_lunar(
     painter: QPainter, centre: QPointF, radius: float, state: str,
     magnitude: float, style: str,
 ) -> None:
+    # THE DOOR: every lunar style is resolved through
+    # `render.eclipse_style.resolve_eclipse_style` exactly like every
+    # other lunar call site, band presumed up (this plate always draws
+    # its own band segment for the styles that need one, so it is never
+    # the reason a style falls back here). Since the lunar painters
+    # round of 2026-08-13 all six styles answer with themselves; the
+    # call stays because the BAND context still decides for two of them
+    # everywhere else.
+    from render.eclipse_style import resolve_eclipse_style
+
+    style, _fallback_reason = resolve_eclipse_style(
+        "lunar", style, band_available=True,
+    )
     draw_event_glow(
         painter, centre, radius, palette.GLOW_ECLIPSE_LUNAR_COLOR,
         eclipse_state_glow_strength(state, magnitude),
@@ -206,6 +228,20 @@ def _draw_lunar(
     )
     if style == "umbra_sweep":
         moon_face.draw_umbra_sweep(painter, radius, state, magnitude)
+    elif style == "blood_moon":
+        # The depth ramp — copper at the deepest point, grey at the
+        # umbra's rim, and grey ONLY in the penumbra (owner ballot
+        # 2026-08-13). The opposite ramp to "umbra_sweep" above, which
+        # is why the two are two pictures and not one recoloured.
+        moon_face.draw_blood_moon(painter, radius, state, magnitude)
+    elif style == "danjon_scale":
+        from render import eclipse_danjon
+
+        # The disc multiply AND the five-cell legend beneath it. The L
+        # it marks is INDICATIVE, derived from the umbral magnitude —
+        # no catalog carries an observed one (see
+        # `render/__about/eclipse_danjon.md`).
+        eclipse_danjon.draw_danjon_scale(painter, radius, state, magnitude)
     elif style == "halo":
         # The uniform multiply — the same brightness ladder the dial
         # applies, read off the one table (0.07 / 0.18 / 0.60).
@@ -223,12 +259,14 @@ def _draw_lunar(
         painter.fillPath(_disc_path(radius), tinted_gray(value, tint))
         painter.restore()
     painter.restore()
-    if style == "horizon_shadow":
-        # THE BAND's own picture: this style leaves the disc alone and
-        # writes the event where DURATION can be seen (owner placement
+    if style in ("horizon_shadow", "contact_marks"):
+        # THE BAND's own picture: these styles leave the disc alone and
+        # write the event where DURATION can be seen (owner placement
         # 2026-08-10), so the plate shows the band arc with its copper
         # segment rather than a second, contradicting disc treatment.
-        _draw_band_segment(painter, centre, radius, state)
+        # `contact_marks` is that same segment plus the four contact
+        # lines — an ADDITION, never a replacement.
+        _draw_band_segment(painter, centre, radius, state, style)
 
 
 def _disc_path(radius: float):
@@ -241,6 +279,7 @@ def _disc_path(radius: float):
 
 def _draw_band_segment(
     painter: QPainter, centre: QPointF, radius: float, state: str,
+    style: str,
 ) -> None:
     from render.layers.moon_band import MoonBandLayer
 
@@ -251,7 +290,8 @@ def _draw_band_segment(
     # (Rule #5). The angle is the plate's illustration choice, not a
     # claim about any real eclipse: it stands where an evening event
     # would, so the arc reads as a span of hours.
-    MoonBandLayer.draw_eclipse_segment(
-        MoonBandLayer.__new__(MoonBandLayer), painter, band, 60.0, state,
-    )
+    layer = MoonBandLayer.__new__(MoonBandLayer)
+    layer.draw_eclipse_segment(painter, band, 60.0, state)
+    if style == "contact_marks":
+        layer.draw_contact_marks(painter, band, 60.0, state)
     painter.restore()

@@ -1566,3 +1566,220 @@ def test_the_marker_yields_the_ring_to_the_eclipse(app):
     assert image.pixelColor(
         round(radius + eclipse_point.x()), round(radius + eclipse_point.y())
     ).alpha() > 0
+
+
+# ----------------------------------------------------------------------
+# THE BALLOT'S THREE SOLAR STYLES (owner ballot 2026-08-13), painted
+# ----------------------------------------------------------------------
+
+def _solar_style_image(style: str, state: str, magnitude: float,
+                       distance_km: float | None) -> "QImage":
+    """One eclipse mark on a black square — the smallest render that
+    exercises a solar style's real painter, with nothing else in it."""
+    from PySide6.QtCore import QPointF, Qt
+    from PySide6.QtGui import QImage, QPainter
+
+    from render import marker_marks
+
+    size = 256
+    image = QImage(size, size, QImage.Format.Format_ARGB32_Premultiplied)
+    image.fill(Qt.GlobalColor.black)
+    painter = QPainter(image)
+    painter.setRenderHint(QPainter.RenderHint.Antialiasing)
+    marker_marks.draw_solar_eclipse(
+        painter, style, size * 0.30, state, magnitude,
+        palette.GLOW_SUN_COLOR,
+        origin=QPointF(size / 2.0, size / 2.0), distance_km=distance_km,
+    )
+    painter.end()
+    return image
+
+
+def _ink(image) -> float:
+    """The mean luminance of a rendered mark, 0..255."""
+    total = 0
+    raw = image.convertToFormat(image.Format.Format_RGB32).constBits().tobytes()
+    for index in range(0, len(raw), 4):
+        total += 0.299 * raw[index + 2] + 0.587 * raw[index + 1] + 0.114 * raw[index]
+    return total / (len(raw) / 4)
+
+
+def test_the_totality_arc_is_derived_from_the_observers_own_distance(app):
+    """THE TOTALITY PATH READS A REAL QUANTITY (owner ballot 2026-08-13:
+    "full and bright means standing in the band, short and dim means it
+    is happening but 3,500 km away").
+
+    The quantity is `EclipseEvent.distance_km` — the observer's
+    great-circle distance to the catalog's greatest-eclipse ground
+    point — and the scale is `ECLIPSE_SOLAR_VISIBILITY_KM`, THE SAME
+    constant the visibility flag and the hover reason already use, so
+    the arc empties exactly where the app already says the eclipse
+    cannot be seen from here. A style that ignored the distance would
+    draw one picture for an observer under the shadow and for one on the
+    far side of the planet, which is the whole failure this style
+    exists to fix."""
+    from render.solar_eclipse import totality_path_reach
+
+    on_the_point, measured = totality_path_reach(1.0, 0.0)
+    assert measured and on_the_point == pytest.approx(1.0)
+    far, measured = totality_path_reach(
+        1.0, constants.ECLIPSE_SOLAR_VISIBILITY_KM
+    )
+    assert measured and far == pytest.approx(0.0)
+    beyond, _ = totality_path_reach(
+        1.0, constants.ECLIPSE_SOLAR_VISIBILITY_KM * 4
+    )
+    assert beyond == 0.0, "the reach is clamped, never negative"
+    half, _ = totality_path_reach(
+        1.0, constants.ECLIPSE_SOLAR_VISIBILITY_KM / 2
+    )
+    assert half == pytest.approx(0.5)
+    # NO GROUND POINT: the honest fallback is the catalog magnitude, and
+    # the caller is told it is an ESTIMATE so it can say so (it draws the
+    # arc dashed). Never a silent pretend-measurement.
+    estimate, measured = totality_path_reach(0.62, None)
+    assert not measured and estimate == pytest.approx(0.62)
+    # And the pictures must actually differ — the numbers above are only
+    # worth having if the paint reads them.
+    near = _solar_style_image("totality_path", "solar_total", 1.0, 100.0)
+    away = _solar_style_image(
+        "totality_path", "solar_total", 1.0,
+        constants.ECLIPSE_SOLAR_VISIBILITY_KM * 0.95,
+    )
+    assert _ink(near) > _ink(away) * 1.5, (
+        "an observer under the shadow and one 3,300 km away must not get "
+        "the same arc — length AND brightness carry the nearness"
+    )
+    assert _ink(away) > 0.0, "and 'far away' is still a visible mark"
+
+
+def test_the_type_emblem_draws_a_different_badge_for_every_type(app):
+    """THE TYPE EMBLEM's whole job is to say WHICH of the four types this
+    is (owner ballot 2026-08-13: a ring for annular, a double ring for
+    hybrid; total and partial decided in `render.solar_eclipse` and
+    reasoned there). Four types, four badges, no two alike — the
+    perceptual proof is `tests/test_eclipse_distinctness.py`; this tooth
+    pins the cheaper property that the badge is drawn AT ALL for every
+    type and that the four differ in ink."""
+    inks = {
+        state: _ink(_solar_style_image("type_emblem", state, magnitude, None))
+        for state, magnitude in (
+            ("solar_total", 1.05), ("solar_annular", 0.94),
+            ("solar_partial", 0.62), ("solar_hybrid", 1.00),
+        )
+    }
+    assert all(value > 0.0 for value in inks.values()), (
+        f"a type with no badge at all: {inks}"
+    )
+    # The open-centre grammar: a filled disc (total) must carry more ink
+    # than a single ring (annular), which must carry more than the two
+    # thin rings of a hybrid do NOT — the rings are the point, so this
+    # only pins the one ordering the grammar guarantees.
+    assert inks["solar_total"] > inks["solar_annular"], (
+        "a total eclipse's badge closes the ring's centre, so it is the "
+        "heaviest of the four"
+    )
+
+
+def test_the_dial_shadow_takes_light_away_and_is_never_the_default(app):
+    """THE ONE STYLE THAT SUBTRACTS (owner ballot 2026-08-13). Every
+    other solar style adds ink to the dial; this one removes it, and it
+    must remove MORE at totality than at a 62 % partial — depth alone
+    would be a global brightness change, which the distinctness measure
+    is blind to on purpose."""
+    from PySide6.QtCore import QPointF, Qt
+    from PySide6.QtGui import QColor, QImage, QPainter
+
+    def lit(state: str, magnitude: float) -> float:
+        size = 256
+        image = QImage(size, size, QImage.Format.Format_ARGB32_Premultiplied)
+        image.fill(Qt.GlobalColor.black)
+        painter = QPainter(image)
+        painter.setRenderHint(QPainter.RenderHint.Antialiasing)
+        # A lit field to take the light OFF — a shadow on black is
+        # invisible by construction and would prove nothing.
+        painter.setPen(Qt.PenStyle.NoPen)
+        painter.setBrush(QColor(220, 220, 220))
+        painter.drawRect(0, 0, size, size)
+        from render import marker_marks
+        marker_marks.draw_solar_eclipse(
+            painter, "dial_shadow", size * 0.30, state, magnitude,
+            palette.GLOW_SUN_COLOR, origin=QPointF(size / 2.0, size / 2.0),
+        )
+        painter.end()
+        return _ink(image)
+
+    plain = 220.0
+    total = lit("solar_total", 1.05)
+    partial = lit("solar_partial", 0.62)
+    assert total < plain and partial < plain, "the style must SUBTRACT light"
+    assert total < partial, (
+        "totality must take more light than a 62 % partial — reach and "
+        "depth both ride the covered fraction"
+    )
+    assert constants.ECLIPSE_SOLAR_STYLE_DEFAULT != "dial_shadow", (
+        "the owner's explicit order: selectable, never the default"
+    )
+
+
+# ------------------------------------------------- the Danjon scale (L)
+
+def test_the_catalog_carries_no_danjon_value() -> None:
+    """THE HONEST PROBLEM, pinned so a later round cannot forget it and
+    start presenting an estimate as an observation. The Deep Time pack's
+    lunar rows hold the instant, the type and the magnitude — and no
+    brightness reading, because L is an EYEBALL ESTIMATE made during the
+    event and depends on Earth's stratosphere on the night. If a future
+    catalog ever gains one, this test is what says so."""
+    from data.deep_time import DeepEclipse
+
+    fields = set(DeepEclipse.__dataclass_fields__)
+    assert "magnitude" in fields
+    assert not {"danjon", "danjon_l", "brightness"} & fields
+
+
+def test_the_indicative_danjon_runs_down_with_depth() -> None:
+    """The accepted proxy: deeper in the umbra means darker means a
+    LOWER L. Totality begins at magnitude 1.0 (grazing the umbra's
+    bright rim — the brightest case, L=4) and the deepest possible
+    central eclipse reaches the measured ceiling (the darkest, L=0)."""
+    from render.eclipse_danjon import (
+        DANJON_MAX_STEP,
+        DEEPEST_UMBRAL_MAGNITUDE,
+        TOTALITY_MAGNITUDE_MIN,
+        indicative_danjon,
+    )
+
+    assert indicative_danjon("lunar_total", TOTALITY_MAGNITUDE_MIN) == DANJON_MAX_STEP
+    assert indicative_danjon("lunar_total", DEEPEST_UMBRAL_MAGNITUDE) == 0
+    previous = DANJON_MAX_STEP + 1
+    for step in range(21):
+        magnitude = TOTALITY_MAGNITUDE_MIN + step * (
+            DEEPEST_UMBRAL_MAGNITUDE - TOTALITY_MAGNITUDE_MIN
+        ) / 20.0
+        value = indicative_danjon("lunar_total", magnitude)
+        assert 0 <= value <= DANJON_MAX_STEP
+        assert value <= previous, "L must never rise as the eclipse deepens"
+        previous = value
+
+
+def test_the_deepest_magnitude_is_the_measured_umbra_geometry() -> None:
+    """The ceiling is MEASURED, not chosen for a tidy ramp: Earth's umbra
+    at the Moon's distance is ~2.65 lunar radii, and the magnitude at
+    concentric immersion is (R + r) / 2r."""
+    from render.eclipse_danjon import DEEPEST_UMBRAL_MAGNITUDE
+
+    assert DEEPEST_UMBRAL_MAGNITUDE == pytest.approx((2.65 + 1.0) / 2.0, abs=0.01)
+
+
+def test_no_danjon_reading_outside_totality_or_without_a_magnitude() -> None:
+    """The scale is defined for the appearance at MID-TOTALITY. A partial
+    eclipse has no totality to rate, a penumbral one has no umbral phase
+    at all, and a malformed catalog row has nothing to derive from — all
+    three WITHHOLD rather than guess, because unlike a glow strength a
+    wrong L would be a stated fact."""
+    from render.eclipse_danjon import indicative_danjon
+
+    assert indicative_danjon("lunar_partial", 0.66) is None
+    assert indicative_danjon("lunar_penumbral", 0.95) is None
+    assert indicative_danjon("lunar_total", None) is None

@@ -141,6 +141,128 @@ def draw_moon_disc(
         painter.restore()
 
 
+def shadow_placement(
+    radius: float, state: str, magnitude: float | None,
+) -> tuple[QPointF, float]:
+    """Where Earth's shadow stands over a Moon of `radius`, and how big
+    it is — `(centre, shadow_radius)` in the disc's own coordinates.
+
+    ONE construction for both shadow styles ("umbra_sweep" and
+    "blood_moon"), so the two can differ in COLOUR and in what they
+    grade, never in where the shadow is. Lunar magnitude is the fraction
+    of the Moon's DIAMETER inside the shadow, so with a shadow of radius
+    R and a Moon of radius r the centre distance is
+    `d = R + r - 2*r*magnitude`, clamped at zero; `_SWEEP_RISE` tilts
+    the approach so the edge is not a mirror of the terminator.
+
+    `magnitude` is None only for a malformed catalog row (the schema
+    always writes it); as in `render.eclipse_glow.eclipse_glow_strength`
+    that reads as the STRONGEST case rather than a guessed middle, so a
+    broken row over-reports the event instead of hiding it — here that
+    means full immersion, the magnitude at which the centre distance
+    falls to zero."""
+    shadow_radius = radius * (
+        _PENUMBRA_RADIUS_FRACTION if state == "lunar_penumbral"
+        else _SWEEP_RADIUS_FRACTION
+    )
+    full_immersion = (shadow_radius + radius) / (2.0 * radius)
+    depth = full_immersion if magnitude is None else magnitude
+    distance = max(0.0, shadow_radius + radius - 2.0 * radius * depth)
+    travel = distance / math.hypot(1.0, _SWEEP_RISE)
+    return QPointF(travel, -travel * _SWEEP_RISE), shadow_radius
+
+
+def draw_blood_moon(
+    painter: QPainter, radius: float, state: str, magnitude: float | None,
+) -> None:
+    """THE BLOOD MOON (owner ballot 2026-08-13, his recommendation, his
+    own specification): inside the umbra the colour slides toward COPPER
+    in proportion to DEPTH IN SHADOW; the penumbra stays GREY.
+
+    His sealed reasoning: a Moon in full umbra is copper, not grey,
+    because the only light reaching it has passed through every sunrise
+    and sunset on Earth at once. So this style paints DEPTH, and depth
+    is a real quantity — for a point at distance `s` from the shadow's
+    centre, `depth = 1 - s/R_umbra` inside the umbra, zero at its rim.
+
+    It is NOT `draw_umbra_sweep` in another colour, and the difference
+    is the whole point (`tests/test_eclipse_distinctness.py` holds it to
+    that). The sweep's ramp runs near-black at the shadow's CENTRE out
+    to copper at its RIM — a picture of how dark the shadow is. This one
+    runs the other way: the deepest point is the MOST copper and the
+    umbra's own edge is neutral grey — a picture of how deep the Moon
+    has sunk. And both shadow circles are drawn, so the umbra sits as a
+    hard-edged copper core inside a soft grey penumbral field, which the
+    sweep never shows at all.
+
+    THE PENUMBRA IS ONLY GREY. A penumbral eclipse therefore carries no
+    copper anywhere on the face — its umbra circle never reaches the
+    disc — which is exactly what such an eclipse looks like, and is why
+    this style stays honest about the type it is drawing."""
+    centre, shadow_radius = shadow_placement(radius, state, magnitude)
+    # BOTH circles, always, from the ONE placement above. Whichever of
+    # the two `shadow_placement` measured the magnitude against is the
+    # anchor; the other keeps its true proportion to it (the ~1.78 the
+    # measured fractions carry — `constants.ECLIPSE_PENUMBRAL_SPAN_RATIO`
+    # states the same ratio for the band's contact marks).
+    if state == "lunar_penumbral":
+        penumbra_radius = shadow_radius
+        umbra_radius = shadow_radius * (
+            _SWEEP_RADIUS_FRACTION / _PENUMBRA_RADIUS_FRACTION
+        )
+    else:
+        umbra_radius = shadow_radius
+        penumbra_radius = shadow_radius * (
+            _PENUMBRA_RADIUS_FRACTION / _SWEEP_RADIUS_FRACTION
+        )
+    painter.save()
+    disc = QPainterPath()
+    disc.addEllipse(QRectF(-radius, -radius, 2 * radius, 2 * radius))
+    painter.setClipPath(disc)
+    painter.setPen(Qt.PenStyle.NoPen)
+    # THE GREY FIELD first: deepest against the umbra's edge, gone at
+    # the penumbra's own rim. The umbra's share of the radius is where
+    # it stops mattering, so the ramp is anchored there rather than at
+    # the centre — inside the umbra this fill is covered anyway.
+    penumbral = QRadialGradient(centre, penumbra_radius)
+    umbra_stop = min(1.0, umbra_radius / penumbra_radius)
+    penumbral.setColorAt(0.0, _with_alpha(
+        palette.ECLIPSE_BLOOD_PENUMBRA_COLOR,
+        palette.ECLIPSE_BLOOD_PENUMBRA_ALPHA,
+    ))
+    penumbral.setColorAt(umbra_stop, _with_alpha(
+        palette.ECLIPSE_BLOOD_PENUMBRA_COLOR,
+        palette.ECLIPSE_BLOOD_PENUMBRA_ALPHA,
+    ))
+    penumbral.setColorAt(1.0, _with_alpha(
+        palette.ECLIPSE_BLOOD_PENUMBRA_COLOR, 0.0
+    ))
+    painter.setBrush(penumbral)
+    painter.drawEllipse(centre, penumbra_radius, penumbra_radius)
+    # THE DEPTH RAMP inside the umbra: copper at the deepest point,
+    # neutral grey at depth zero. The stop positions ARE the depth
+    # scale read backwards (position p from the centre => depth 1-p).
+    umbral = QRadialGradient(centre, umbra_radius)
+    umbral.setColorAt(0.0, _with_alpha(
+        palette.ECLIPSE_TOTAL_MOON_TINT, palette.ECLIPSE_BLOOD_UMBRA_ALPHA
+    ))
+    umbral.setColorAt(1.0, _with_alpha(
+        palette.ECLIPSE_BLOOD_EDGE_COLOR, palette.ECLIPSE_BLOOD_UMBRA_ALPHA
+    ))
+    painter.setBrush(umbral)
+    painter.drawEllipse(centre, umbra_radius, umbra_radius)
+    if glow.ECLIPSE_STATE_FRINGE[state]:
+        # The ozone rim, on the UMBRA's edge — the same turquoise every
+        # other eclipse treatment wears (owner seal 2026-07-18), so one
+        # event reads as one event wherever it is drawn.
+        pen = QPen(QColor(palette.ECLIPSE_LUNAR_FRINGE_COLOR))
+        pen.setWidthF(max(1.0, radius * _SWEEP_FRINGE_WIDTH_FRACTION))
+        painter.setPen(pen)
+        painter.setBrush(Qt.BrushStyle.NoBrush)
+        painter.drawEllipse(centre, umbra_radius, umbra_radius)
+    painter.restore()
+
+
 def draw_umbra_sweep(
     painter: QPainter, radius: float, state: str, magnitude: float | None,
 ) -> None:
@@ -149,23 +271,11 @@ def draw_umbra_sweep(
     showed the same picture for a 20 % partial and a totality at
     different brightness.
 
-    `magnitude` is None only for a malformed catalog row (the schema
-    always writes it); as in `render.eclipse_glow.eclipse_glow_strength`
-    that reads as the STRONGEST case rather than a guessed middle, so a
-    broken row over-reports the event instead of hiding it — here that
-    means full immersion, the magnitude at which the shadow's centre
-    distance falls to zero.
+    The shadow's placement is `shadow_placement` above — shared with
+    "blood_moon" so the two styles can never disagree about WHERE the
+    shadow stands, only about what they paint inside it.
     """
-    shadow_radius = radius * (
-        _PENUMBRA_RADIUS_FRACTION if state == "lunar_penumbral"
-        else _SWEEP_RADIUS_FRACTION
-    )
-    full_immersion = (shadow_radius + radius) / (2.0 * radius)
-    depth = full_immersion if magnitude is None else magnitude
-    # d = R + r - 2*r*magnitude, never negative — see the constants above.
-    distance = max(0.0, shadow_radius + radius - 2.0 * radius * depth)
-    travel = distance / math.hypot(1.0, _SWEEP_RISE)
-    centre = QPointF(travel, -travel * _SWEEP_RISE)
+    centre, shadow_radius = shadow_placement(radius, state, magnitude)
     painter.save()
     disc = QPainterPath()
     disc.addEllipse(QRectF(-radius, -radius, 2 * radius, 2 * radius))
