@@ -15,7 +15,7 @@ builds a `QFont` from a roster label itself.
 ## The coverage proof (why this module exists at all)
 
 `Bernard MT Condensed` and `Eras Bold ITC` were **recovered from
-`illustrator/Clock 24h.ai`** and installed by hand. A recovered face can
+`UV/illustrator/Clock 24h.ai`** and installed by hand. A recovered face can
 carry a character in its cmap and still have an EMPTY outline for it —
 `QRawFont.supportsCharacter(':')` answers True while the glyph draws
 nothing. That is not hypothetical: measured on this machine (2026-08-06),

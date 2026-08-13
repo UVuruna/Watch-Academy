@@ -16,13 +16,12 @@ desktop/setup/_version_info.py
 desktop/design/example/
 DESIGN.txt
 
-# Owner's Illustrator workspace (the PATH to the assets, not the app —
-# the exported bundle copies in shared/assets/ ARE committed). The FOLDER
-# DOC is the one exception: the navigation chain from README.md must hold
-# on a fresh clone (desktop/tests/test_doc_links.py), so the .md travels,
-# the 160 MB of .ai masters do not.
-desktop/illustrator/*
-!desktop/illustrator/___illustrator.md
+# Owner's Illustrator workspace moved to UV/illustrator/ (owner decree
+# 2026-08-13) — the .ai masters are working files he assembles instructions
+# from, not files the application runs on, so they belong in his own
+# untracked drop folder and were STRIPPED FROM HISTORY in the same round
+# (240 MB). desktop/illustrator/ no longer exists; the exported bundle
+# copies in shared/assets/ ARE committed and are what the program reads.
 # Owner's raw guide screenshots (the ordered copies in shared/assets/guide/
 # ARE committed)
 guide_new/

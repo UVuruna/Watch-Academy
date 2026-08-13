@@ -60,7 +60,6 @@ edition, [Pocket Watch](android/README.md)).
     📁 app/                 ← Qt shell: window, tray, settings
     📁 tests/               ← pytest golden-value suite
     📁 design/              ← mockups and reference images (not bundled)
-    📁 illustrator/         ← vector sources for skin assets (not bundled)
     📁 research/            ← one-off analysis scripts and oversized data (not bundled)
   📁 shared/                ← the truth BOTH platforms consume — the bakery's source
     📁 assets/               ← ring faces, hands, earth, weekday themes, zodiac
@@ -102,8 +101,6 @@ diagram plus language-neutral pseudocode).
 - [Tests (folder)](desktop/tests/___tests.md)
 - [Setup (folder)](desktop/setup/___setup.md)
 - [Design (folder)](desktop/design/___design.md)
-- [Illustrator (folder)](desktop/illustrator/___illustrator.md) — vector sources
-  (gitignored on disk; the folder doc travels with the repo)
 - [Research (folder)](desktop/research/___research.md) — image-generation
   prompt sheets live here; see [How to Write a Prompt
   Sheet](../../Gadgets/PromptPainter/instructions.md) before authoring a new one

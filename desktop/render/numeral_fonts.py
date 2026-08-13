@@ -7,7 +7,7 @@ but Qt sees a FAMILY plus a STYLE. `config.dial.NUMERAL_OUTER_FACES` /
 place that reads it.
 
 WHY THE COVERAGE PROOF EXISTS (verified failure, 2026-08-06): the two
-default faces were recovered from `illustrator/Clock 24h.ai` and
+default faces were recovered from `UV/illustrator/Clock 24h.ai` and
 installed by hand, and a recovered face can carry a character in its
 cmap while its OUTLINE is empty. `QRawFont.supportsCharacter(':')`
 answers True for `Bernard MT Condensed` on this machine and the colon

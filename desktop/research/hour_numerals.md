@@ -202,7 +202,7 @@ instead of inheriting it; Eras Bold ITC covers every glyph.
 
 Bernard MT Condensed and Eras Bold ITC are the faces the original artwork
 was drawn in. They are Monotype/ITC and ship with Microsoft Office, not with
-Windows — they were **recovered from `illustrator/Clock 24h.ai`**, which
+Windows — they were **recovered from `UV/illustrator/Clock 24h.ai`**, which
 carries them embedded, renamed back to their proper families and installed
 for the user. Complete faces, 244 and 250 glyphs. If the app is ever shipped
 to another machine, those two travel with the installer.

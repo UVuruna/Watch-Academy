@@ -32,7 +32,7 @@ using the SAME map the session applied to tracked files:
 | `assets/_state/` (AI transcripts, flag files — untracked) | `shared/assets/_state/` |
 | Any in-flight untracked art under `assets/**` from the two concurrent sessions (character/edge/vertex figures, colored crosses/edges, etc. — see the `?? assets/...` entries in `git status` at session start) | same relative path under `shared/assets/...` |
 | `Database/deep_time.sqlite` (gitignored, built by `setup/make_deep_time.py`) | `shared/Database/deep_time.sqlite` |
-| `illustrator/*` (gitignored working masters, `___illustrator.md` excepted — that one IS tracked and already moved) | `desktop/illustrator/*` |
+| `illustrator/*` (gitignored working masters, `___illustrator.md` excepted — that one IS tracked and already moved) | `desktop/illustrator/*` — **superseded 2026-08-13:** the whole folder moved again, to `UV/illustrator/`, and its `.ai` blobs were stripped from history |
 | `design/example/`, `design/background/`, `design/date/`, `design/hours/`, `design/pointer/`, `design/weekday/` (gitignored) | `desktop/design/...` (same subpath) |
 | `research/recolor_preview/` (gitignored) | `desktop/research/recolor_preview/` |
 | `UV/` (owner's personal inbox) | Ask the owner. Untouched by this migration's file map; his own files, never edited by an agent. He may keep dropping it at the true repo root (sibling of `desktop/`/`shared/`/`android/`) or move it — his call. |
