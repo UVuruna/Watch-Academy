@@ -582,8 +582,14 @@ def test_the_hover_follows_the_moon_off_the_ring_when_it_yields(app):
 def test_type_state_mapping_covers_the_ground_truthed_vocabulary():
     """The catalog's ACTUAL type vocabulary (ground-truthed from
     Database/deep_time.sqlite: solar {partial, annular, total, hybrid},
-    lunar {partial, penumbral, total}) each resolve to a named state;
-    hybrid is a deliberate map to solar_total, not the unknown fallback."""
+    lunar {partial, penumbral, total}) each resolve to a named state.
+
+    HYBRID HAS ITS OWN STATE since the eclipse rework (owner order
+    2026-08-13). It used to be aliased onto "solar_total", and this test
+    pinned that alias — which is precisely why the collapse survived so
+    long: a hybrid eclipse then drew a byte-identical picture to a total
+    one in every display style at once. It is total on part of its
+    ground track and annular on the rest, and the dial now says so."""
     assert eclipse_render_state(
         EclipseEvent(kind="lunar", instant=datetime(2026, 1, 1, tzinfo=timezone.utc), type="total", magnitude=1.1)
     ) == "lunar_total"
@@ -598,7 +604,7 @@ def test_type_state_mapping_covers_the_ground_truthed_vocabulary():
     ) == "solar_total"
     assert eclipse_render_state(
         EclipseEvent(kind="solar", instant=datetime(2026, 1, 1, tzinfo=timezone.utc), type="hybrid", magnitude=1.0)
-    ) == "solar_total"
+    ) == "solar_hybrid"
     assert eclipse_render_state(
         EclipseEvent(kind="solar", instant=datetime(2026, 1, 1, tzinfo=timezone.utc), type="annular", magnitude=0.95)
     ) == "solar_annular"
@@ -624,7 +630,7 @@ def test_solar_partial_is_the_one_state_still_magnitude_scaled():
     named exception)."""
     for state in (
         "lunar_total", "lunar_partial", "lunar_penumbral",
-        "solar_total", "solar_annular",
+        "solar_total", "solar_hybrid", "solar_annular",
     ):
         assert eclipse_state_glow_strength(state, 0.01) == pytest.approx(
             eclipse_state_glow_strength(state, 1.19)
@@ -760,7 +766,13 @@ def _solar_glow_pixel(app, type_: str, magnitude: float):
     skin = dataclasses.replace(defaults.DEFAULT_SKIN, solar_rotation=False)
     image = Compositor(skin, AssetCache()).render_offscreen(540.0, 1.0, day, eclipsed)
     x, y, half = _eclipse_body_probe(skin, day, eclipsed)
-    return image.pixelColor(x, y - round(half * 1.25))
+    # THE PROBE SITS OUTSIDE THE CORONA (eclipse rework 2026-08-13). It
+    # used to read at 1.25 body radii, which the default "bite" style
+    # now fills with the pearly corona at totality — a mark, not the
+    # glow, and this test is about the GLOW's colour. 1.40 is past the
+    # corona's own fade-out (`marker_marks._CORONA_REACH`) and still
+    # well inside the halo, so what is compared is the halo alone.
+    return image.pixelColor(x, y - round(half * 1.32))
 
 
 def test_solar_annular_glow_hue_differs_from_total(app):
@@ -1231,13 +1243,74 @@ def test_hover_sweep_never_leaks_escaped_markup(app):
         )
 
 
+def test_the_partial_occulter_is_the_suns_own_size(app):
+    """THE OCCULTING DISC IS NOT SMALL (owner bug 2026-08-13, looking at
+    `solar_partial_bite.png`: "kruznica delimicnog pomracenja je manja od
+    kruznice sunca").
+
+    At a solar eclipse the Moon's apparent diameter is within a few
+    percent of the Sun's — that is the entire reason eclipses look the
+    way they do. A PARTIAL eclipse is a near-miss in ALIGNMENT, not a
+    small Moon, so the coverage must come from the centre DISTANCE and
+    never from shrinking the disc. ANNULAR is the one type whose
+    occulter is genuinely smaller (that is what leaves the ring of
+    fire), and TOTAL's is genuinely larger.
+
+    The old geometry expressed the magnitude as a lunar PHASE and asked
+    `moon_lit_region` for it, whose terminator semi-axis is
+    r*|cos 2*pi*f|: at the catalogue's typical partial magnitude 0.62
+    that drew an occulting curve 0.24 r wide — a quarter of the Sun.
+    """
+    from render import marker_marks
+
+    radius = 100.0
+    occulter, distance = marker_marks.solar_occulter_geometry(
+        "solar_partial", radius, 0.62
+    )
+    assert abs(occulter - radius) <= 0.05 * radius, (
+        f"a partial eclipse's occulter is {occulter / radius:.3f} of the "
+        "Sun's radius — a partial eclipse is a near-miss in alignment, "
+        "not a small Moon"
+    )
+    # The coverage still has to be REAL: magnitude is the covered share
+    # of the Sun's DIAMETER, so the covered length along the line of
+    # centres is R + r - d.
+    covered_length = radius + occulter - distance
+    assert covered_length == pytest.approx(2.0 * radius * 0.62), (
+        "the magnitude must be carried by the offset"
+    )
+    # The two ends of the formula: no coverage is exact tangency, full
+    # coverage is concentric.
+    assert marker_marks.solar_occulter_geometry(
+        "solar_partial", radius, 0.0
+    )[1] == pytest.approx(radius + occulter)
+    assert marker_marks.solar_occulter_geometry(
+        "solar_partial", radius, 1.0
+    )[1] == pytest.approx(0.0)
+    # ANNULAR keeps its genuinely smaller disc — the ring of fire — and
+    # TOTAL its genuinely larger one.
+    annular, _ = marker_marks.solar_occulter_geometry(
+        "solar_annular", radius, 0.94
+    )
+    total, _ = marker_marks.solar_occulter_geometry(
+        "solar_total", radius, 1.05
+    )
+    assert annular < radius, "an annular occulter must be smaller"
+    assert 0.90 * radius < annular < 0.98 * radius, (
+        "and only by the few percent the catalogue reports"
+    )
+    assert total > radius, "a total occulter must be larger"
+    assert total < 1.10 * radius
+
+
 def test_the_bite_is_the_moon_algorithms_bright_crescent(app):
     """THE BITE AS IT IS SEEN (owner correction 2026-08-11, slika 4:
     "ne moze crni isecak na crnoj eklipsi... imamo algoritam"): the
-    partial phase paints the VISIBLE remainder as a bright crescent
-    from the ONE terminator construction the Moon uses — its area
-    tracks the uncovered share, and totality adds nothing (the owner's
-    icon is the whole look)."""
+    partial phase paints the VISIBLE remainder BRIGHT — since
+    2026-08-13 as the true difference of two near-equal discs
+    (`solar_occulter_geometry`) rather than a lunar phase of matching
+    area — so its area tracks the uncovered share, and totality adds
+    nothing (the owner's icon is the whole look)."""
     import math as _math
 
     from PySide6.QtCore import Qt

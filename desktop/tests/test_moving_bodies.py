@@ -372,7 +372,10 @@ def test_the_horizon_shadow_style_marks_the_band_and_reads_the_day_not_the_tick(
     painter = QPainter(image)
     painter.translate(size / 2.0, size / 2.0)
     layer = MoonBandLayer.__new__(MoonBandLayer)
-    layer.draw_eclipse_segment(painter, radius, 0.0)   # noon, the dial's top
+    # Noon, the dial's top. The state is the segment's own weight since
+    # the eclipse rework (2026-08-13) — a total eclipse draws the full
+    # copper bar this tooth measures.
+    layer.draw_eclipse_segment(painter, radius, 0.0, "lunar_total")
     painter.end()
 
     copper = QColor(palette.ECLIPSE_TOTAL_MOON_TINT)

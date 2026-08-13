@@ -92,14 +92,90 @@ numbers are `constants.MOON_STATION_GLOW`.
 A black offset-occulter circle over the already-black eclipse art was
 invisible ("ne moze crni isecak na crnoj eklipsi") — the base art
 under the bite is now `config.defaults.ECLIPSE_SOLAR_ART`, the owner's
-own icon (a black disc in rays), and the bite paints only the VISIBLE
-remainder: a bright crescent shaped by the SAME terminator construction
-the Moon's own phases use (`render.asset_variants.moon_lit_region`),
-the cycle-fraction inverted (via `acos`) so the crescent's AREA matches
-the Sun's visible share. Totality adds nothing — the icon alone is the
-look; annular draws the ring of fire around the black disc; a partial
-phase draws the crescent over it. The old procedural corona-spikes
-block is gone with the two-circle bite it drew.
+own icon (a black disc in rays), and the bite paints the VISIBLE
+remainder BRIGHT rather than painting a dark occulter over dark art.
+Annular draws the ring of fire around the black disc; totality draws
+the corona around a silhouette. The old procedural corona-spikes block
+is gone.
+
+## THE SIZE RATIO — the occulter is the Sun's own size (owner bug 2026-08-13)
+His words, looking at `solar_partial_bite.png`: *"kruznica delimicnog
+pomracenja je manja od kruznice sunca"* — and he was right, by a factor
+of four.
+
+The 2026-08-11 cut expressed the magnitude as a lunar PHASE and asked
+`moon_lit_region` for the matching lit AREA. A phase terminator is a
+half-ellipse of semi-axis `r*|cos 2*pi*f|`, so at the catalogue's
+typical partial magnitude 0.62 the dark curve was drawn **0.24 r**
+wide. Correct area, wrong object: the picture said *a small body
+crossed the Sun*, and the bite's curvature was a tight little circle
+instead of the Sun's own.
+
+At a solar eclipse the Moon's apparent diameter is within a few percent
+of the Sun's — that is the whole reason eclipses look the way they do —
+and which side of 1.0 the ratio falls on is what DECIDES the type.
+`marker_marks._SOLAR_SIZE_RATIO` states it per state (total 1.05,
+hybrid 1.00, annular 0.95, partial 1.00), with the catalogue ranges in
+its comment. A partial eclipse is a near-MISS IN ALIGNMENT, not a small
+Moon.
+
+So `solar_occulter_geometry(state, radius, covered)` returns the
+occulter's radius from that table and its centre DISTANCE from the
+magnitude:
+
+```
+d = R + r - 2 * R * magnitude
+```
+
+— the same formula, and deliberately the same shape, as the lunar
+side's `render.moon_face.draw_umbra_sweep`; the `2 *` factor always
+multiplies the radius of the body being ECLIPSED (the Moon there, the
+Sun here). Magnitude 0 lands exactly on tangency, full coverage on
+`d = 0`. The bite then fills the intersection with the silhouette
+colour and the remainder bright, both clipped to the Sun's disc, so the
+body always reads at its true size. ANNULAR (occulter centred and
+genuinely smaller) and TOTAL (corona and silhouette) keep their own
+branches untouched. `_ANNULAR_SHRINK` stays a deliberate legibility
+exaggeration of the true 0.95 ratio — at a real 0.95 the ring of fire
+is two pixels wide on a dial mark.
+
+Tooth: `tests/test_eclipse.py::test_the_partial_occulter_is_the_suns_own_size`,
+counter-proved by restoring the phase formula (it reports 0.240).
+
+## THE ECLIPSE REWORK (owner order 2026-08-13)
+His words: *"skoro sve slikamo isto ... zato i treba rework"* — and a
+full render of the matrix proved him right twice over. Four
+combinations rendered ONE byte-identical picture, and a further pair
+(`solar_partial_halo` at magnitude 0.62 against `solar_total_halo` at
+1.05) was the same picture to the eye while a hash called it different.
+Three collapses lived in this module and all three are closed here:
+
+- **`halo` was empty.** The style returned without drawing, so the
+  caller's glow was the entire picture and the only thing separating a
+  62 % partial from totality was the glow's own alpha. It now draws a
+  MAGNITUDE RING outside the body — radius, thickness and alpha all
+  rising with the covered fraction — and the body itself is still
+  untouched, which is the property the style is chosen for. The ring is
+  PEARL, not the type's colour: the first cut drew it in the eclipse
+  red, inside a red halo, and it was invisible.
+- **`bite` collapsed into `halo` at totality.** It returned early when
+  the Sun was fully covered, so the two styles drew the same thing at
+  the one moment the style exists for. Totality now paints the CORONA
+  and the black silhouette inside it — the only thing a person actually
+  sees.
+- **`hybrid` was an alias of `total`** (`config.glow.ECLIPSE_TYPE_STATE`),
+  which made the two identical in every style at once. A hybrid eclipse
+  is total along part of its ground track and annular along the rest,
+  so every style here now draws BOTH AT ONCE, one rule learned once:
+  the `bite` shows the corona with a ring of fire along half the limb,
+  the `magnitude_arc` splits its sweep across two lanes (the annular
+  half on an inner ring, the total half on the outer), and the `halo`
+  wears two concentric rings instead of one.
+
+The tooth is [`tests/test_eclipse_distinctness.py`](../../tests/___tests.md),
+which compares every legal (type, style) pair with a perceptual measure
+rather than a hash — deliberately blind to global brightness, because
+that blindness is exactly what let the owner's pair pass a hash.
 
 ## Functions
 - `draw_pointer(painter, shape, angle_deg, dial_radius, orbit_fraction, half_size_fraction, color, tip_radius=None)`

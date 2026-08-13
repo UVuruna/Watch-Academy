@@ -65,5 +65,30 @@ asset/procedural split.
 - `draw_umbra_sweep(painter, radius, state, magnitude)` — Earth's
   shadow as a real curved edge crossing the face, deepening to copper
   behind it, with the turquoise ozone rim where the state carries one.
+
+## The sweep after the eclipse rework (owner order 2026-08-13)
+Two things changed, and both were accuracy problems as much as display
+ones:
+
+1. **The shadow's offset is now the real geometry.** Lunar magnitude is
+   the fraction of the Moon's DIAMETER inside the shadow, so the centre
+   distance is `d = R + r − 2·r·magnitude`, clamped at zero. The old
+   linear "travel" fudge pushed the shadow out by 2.10 r at magnitude 0
+   and pulled it to concentric at magnitude 1 — close, but not the
+   thing itself, and it clamped the magnitude at 1.0 so every totality
+   looked identical. A PENUMBRAL eclipse is measured against the far
+   wider penumbra, so it uses its own radius rather than claiming an
+   umbral bite it never has.
+2. **The shadow is graded, not flat.** At totality the Moon is entirely
+   inside the umbra, so a flat copper circle left the "sweep" style
+   with no edge anywhere — the one type it was made for showed a
+   featureless disc. The umbra is now painted from a near-black core
+   (`palette.ECLIPSE_UMBRA_CORE_COLOR`) out to the blood copper at its
+   rim, which is what a totally eclipsed Moon really looks like: it is
+   lit only by the light bent through every sunrise and sunset on Earth
+   at once, and it is brightest toward the limb nearest the umbra's
+   edge. The penumbral wash is graded the same way and for the same
+   physical reason — without it, "umbra_sweep" and "halo" drew the same
+   uniformly dimmed disc for a penumbral eclipse.
 - `dark_region(fraction, radius)` — the disc MINUS the lit region, the
   shared path both the opaque fill and the inner glow clip to.

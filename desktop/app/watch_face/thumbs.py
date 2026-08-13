@@ -580,6 +580,7 @@ def eclipse_lunar_style_icon(style: str) -> QIcon:
             # "every tile shows what it picks" rule exists to prevent.
             layer.draw_eclipse_segment(
                 painter, radius, angles.time_to_dial_angle(_dt_time(12, 0)),
+                "lunar_total",
             )
             return
         if style not in ("umbra_sweep", "halo"):

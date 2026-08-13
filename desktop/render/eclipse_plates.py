@@ -228,7 +228,7 @@ def _draw_lunar(
         # writes the event where DURATION can be seen (owner placement
         # 2026-08-10), so the plate shows the band arc with its copper
         # segment rather than a second, contradicting disc treatment.
-        _draw_band_segment(painter, centre, radius)
+        _draw_band_segment(painter, centre, radius, state)
 
 
 def _disc_path(radius: float):
@@ -240,7 +240,7 @@ def _disc_path(radius: float):
 
 
 def _draw_band_segment(
-    painter: QPainter, centre: QPointF, radius: float,
+    painter: QPainter, centre: QPointF, radius: float, state: str,
 ) -> None:
     from render.layers.moon_band import MoonBandLayer
 
@@ -252,6 +252,6 @@ def _draw_band_segment(
     # claim about any real eclipse: it stands where an evening event
     # would, so the arc reads as a span of hours.
     MoonBandLayer.draw_eclipse_segment(
-        MoonBandLayer.__new__(MoonBandLayer), painter, band, 60.0,
+        MoonBandLayer.__new__(MoonBandLayer), painter, band, 60.0, state,
     )
     painter.restore()

@@ -63,16 +63,22 @@ ECLIPSE_GLOW_STRENGTH_MAX = 1.0
 # (`render.eclipse_glow.eclipse_glow_strength`) — the owner's one named
 # exception ("SOLAR partial: art + glow scaled by magnitude").
 #
-# `hybrid` (annular-total transitional, ~3.2k of ~70k solar rows) has no
-# dedicated owner state — it is mapped to "solar_total" (not the
-# unknown-type fallback): a hybrid eclipse shows true totality along
-# most of its ground track, the closer of the two sealed states.
+# `hybrid` (annular-total transitional, ~3.2k of ~70k solar rows) HAS
+# ITS OWN STATE since the eclipse rework (owner order 2026-08-13, "skoro
+# sve slikamo isto ... zato i treba rework"). It used to be aliased onto
+# "solar_total", and that alias was the single widest collapse in the
+# whole eclipse matrix: it made hybrid draw a byte-identical picture to
+# total in EVERY style, so a display the catalog distinguishes on its
+# own page could not be told apart on the dial. A hybrid eclipse is
+# total on part of its ground track and annular on the rest, so its
+# state draws BOTH at once — every style splits the total picture and
+# the annular picture across the same mark (`render.marker_marks`).
 ECLIPSE_TYPE_STATE = {
     ("lunar", "total"): "lunar_total",
     ("lunar", "partial"): "lunar_partial",
     ("lunar", "penumbral"): "lunar_penumbral",
     ("solar", "total"): "solar_total",
-    ("solar", "hybrid"): "solar_total",       # nearest sealed state, see above
+    ("solar", "hybrid"): "solar_hybrid",      # both at once, see above
     ("solar", "annular"): "solar_annular",
     ("solar", "partial"): "solar_partial",
 }
@@ -99,6 +105,7 @@ ECLIPSE_STATE_GLOW_STRENGTH = {
     "lunar_partial": 0.6,
     "lunar_penumbral": 0.25,
     "solar_total": 1.0,
+    "solar_hybrid": 1.0,       # totality along most of the track
     "solar_annular": 1.0,
 }
 # The turquoise ozone fringe (Option C) reads only where totality/near-
@@ -117,11 +124,11 @@ ECLIPSE_STATE_FRINGE = {
 # The SAME emblem backs the chapter page (app.encyclopedia) AND the
 # eclipse-window hover badge on the Earth/Moon card (render.compositor).
 ECLIPSE_ART_DIR = paths.assets_dir() / "celestial" / "eclipse"
-# (kind, type) -> category emblem stem. `hybrid` keeps its OWN chapter
-# and emblem here even though the RENDER state table folds it into
-# solar_total — the reader still gets the distinct hybrid page; an
-# unknown/missing type resolves to None (no badge, graceful — the
-# render state table already documents its own fallback).
+# (kind, type) -> category emblem stem. `hybrid` has its own chapter and
+# emblem here, and since the eclipse rework its own RENDER state too —
+# the page and the dial finally say the same thing; an unknown/missing
+# type resolves to None (no badge, graceful — the render state table
+# already documents its own fallback).
 ECLIPSE_TYPE_EMBLEM = {
     ("solar", "total"): "Solar_Total",
     ("solar", "annular"): "Solar_Annular",

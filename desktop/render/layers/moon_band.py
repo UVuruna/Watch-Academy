@@ -41,10 +41,11 @@ import math
 from PySide6.QtCore import QPointF, QRectF, Qt
 from PySide6.QtGui import QColor, QPainter, QPainterPath, QPen, QPolygonF
 
-from config import constants, dial, palette
+from config import constants, dial, glow, palette
 from core import angles
 from core.moon import MoonArc, moon_horizon_arcs
 from render.context import Cadence, Layer, RenderContext
+from render.eclipse_glow import eclipse_render_state
 from render.painting import dial_point
 
 # Radial geometry (fractions of the LINE radius — the tick ROOTS, the
@@ -81,6 +82,20 @@ _GLOW_MAX_WIDTH_FRACTION = 0.08
 _GLOW_MAX_ALPHA = 88       # of 255, innermost layer
 _ECLIPSE_SEGMENT_WIDTH_FRACTION = 0.075   # the copper band segment's thickness
 _ECLIPSE_SEGMENT_EDGE_FRACTION = 0.30     # its turquoise end caps, of that width
+# THE SEGMENT READS THE TYPE (eclipse rework, owner order 2026-08-13).
+# Until the rework this mark was one copper bar drawn identically for a
+# total, a partial and a penumbral eclipse, so choosing "horizon_shadow"
+# meant the three lunar types became one picture. The DEPTH of the
+# shadow is now the segment's WEIGHT — a full-thickness bar for
+# totality, a slimmer one for a partial, a pale hairline for a
+# penumbral eclipse, which is honest about how little of one there is
+# to see.
+_ECLIPSE_SEGMENT_STATE_WEIGHT = {
+    "lunar_total": 1.0,
+    "lunar_partial": 0.50,
+    "lunar_penumbral": 0.22,
+}
+_ECLIPSE_SEGMENT_PENUMBRAL_DASH = (2.0, 2.0)   # in pen widths
 
 
 class MoonBandLayer(Layer):
@@ -151,11 +166,13 @@ class MoonBandLayer(Layer):
                 self.draw_eclipse_segment(
                     painter, radius,
                     angles.time_to_dial_angle(local_instant),
+                    eclipse_render_state(event),
                 )
         painter.restore()
 
     def draw_eclipse_segment(
         self, painter: QPainter, radius: float, centre_deg: float,
+        state: str,
     ) -> None:
         """THE ECLIPSE ON THE BAND (owner placement 2026-08-10): a copper
         segment straddling the band at the eclipse's own hour, so the
@@ -168,13 +185,32 @@ class MoonBandLayer(Layer):
         `constants.ECLIPSE_BAND_DURATION_H`, a documented approximation
         — the catalog stores only the instant of greatest eclipse (see
         that constant's own note), so a segment that claimed exact
-        contact times would be inventing them."""
+        contact times would be inventing them.
+
+        `state` is the eclipse's own render state, and it decides the
+        segment's WEIGHT and colour (`_ECLIPSE_SEGMENT_STATE_WEIGHT`):
+        the three lunar types drew one identical bar until the rework,
+        which made "horizon_shadow" type-blind."""
         half = constants.ECLIPSE_BAND_DURATION_H / 24.0 * 360.0 / 2.0
-        width = radius * _ECLIPSE_SEGMENT_WIDTH_FRACTION
+        width = radius * _ECLIPSE_SEGMENT_WIDTH_FRACTION * (
+            _ECLIPSE_SEGMENT_STATE_WEIGHT[state]
+        )
         rect = QRectF(-radius, -radius, 2 * radius, 2 * radius)
-        pen = QPen(QColor(palette.ECLIPSE_TOTAL_MOON_TINT))
+        # A penumbral eclipse never wears the blood copper — nothing on
+        # the Moon turns copper in the penumbra — so it takes the same
+        # pale grey the "cannot be seen from here" muting uses.
+        pen = QPen(QColor(
+            palette.GLOW_ECLIPSE_INVISIBLE_COLOR
+            if state == "lunar_penumbral" else palette.ECLIPSE_TOTAL_MOON_TINT
+        ))
         pen.setWidthF(width)
         pen.setCapStyle(Qt.PenCapStyle.FlatCap)
+        if state == "lunar_penumbral":
+            # BROKEN, because a penumbral eclipse has no sharp edge to
+            # draw anywhere: the Moon only fades. A dashed hairline says
+            # "faint and indistinct" where a solid bar would claim a
+            # shadow that never falls.
+            pen.setDashPattern(list(_ECLIPSE_SEGMENT_PENUMBRAL_DASH))
         painter.save()
         painter.setBrush(Qt.BrushStyle.NoBrush)
         painter.setPen(pen)
@@ -183,7 +219,12 @@ class MoonBandLayer(Layer):
         )
         # The turquoise rim at each end — the SAME ozone colour the disc
         # treatments wear, so one eclipse reads as one event wherever it
-        # is drawn.
+        # is drawn, and withheld from a penumbral eclipse for the same
+        # reason the disc withholds it (`glow.ECLIPSE_STATE_FRINGE`:
+        # there is no darkened sky rim to show).
+        if not glow.ECLIPSE_STATE_FRINGE[state]:
+            painter.restore()
+            return
         edge = QPen(QColor(palette.ECLIPSE_LUNAR_FRINGE_COLOR))
         edge.setWidthF(width * _ECLIPSE_SEGMENT_EDGE_FRACTION)
         painter.setPen(edge)

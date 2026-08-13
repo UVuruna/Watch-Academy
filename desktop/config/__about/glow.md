@@ -26,7 +26,13 @@ Layer: config — pure, no Qt, no wall clock.
     `ECLIPSE_MAGNITUDE_MIN`/`_MAX`, `ECLIPSE_GLOW_STRENGTH_MIN`/`_MAX`
     (kept alive for exactly ONE state, `solar_partial`).
   - `ECLIPSE_TYPE_STATE` — (kind, catalog type) → fixed render STATE;
-    `ECLIPSE_STATE_FALLBACK` for an unrecognised type.
+    `ECLIPSE_STATE_FALLBACK` for an unrecognised type. Since the
+    eclipse rework (owner order 2026-08-13) there are SEVEN states for
+    seven catalog types: `hybrid` used to be aliased onto `solar_total`,
+    and that one line made a hybrid eclipse draw a byte-identical
+    picture to a total one in every display style at once. It has its
+    own `solar_hybrid` state now, drawn as total and annular at once
+    (see [Marker Marks](../../render/__about/marker_marks.md)).
   - `ECLIPSE_STATE_MOON_BRIGHTNESS`, `ECLIPSE_STATE_GLOW_STRENGTH`,
     `ECLIPSE_STATE_FRINGE` — the fixed per-state visual triad (every
     state but `solar_partial`, which keeps the magnitude-linear

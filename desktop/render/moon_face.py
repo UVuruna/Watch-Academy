@@ -18,10 +18,13 @@ path for all three, which also folded away the old asset/procedural
 branch pair.
 """
 
+import math
 from collections.abc import Callable
 
 from PySide6.QtCore import QPointF, QRectF, Qt
-from PySide6.QtGui import QColor, QPainter, QPainterPath, QPen
+from PySide6.QtGui import (
+    QColor, QPainter, QPainterPath, QPen, QRadialGradient,
+)
 
 from config import glow, palette
 from render.asset_variants import moon_lit_region
@@ -43,11 +46,21 @@ _RIM_WIDTH_FRACTION = 0.055
 # The umbra sweep's shadow circle. It is LARGER than the moon disc so
 # its visible edge reads as a gentle curve rather than a small circle
 # sitting on the face — Earth's shadow really is far wider than the
-# Moon. `TRAVEL` is how far off-centre magnitude 0 pushes it (past the
-# limb, i.e. no bite at all); `RISE` tilts the approach so the edge
-# does not look like a mirror of the terminator.
+# Moon. `RISE` tilts the approach so the edge does not look like a
+# mirror of the terminator.
+#
+# THE OFFSET IS NOW THE REAL GEOMETRY (eclipse rework, owner order
+# 2026-08-13). Lunar magnitude is the fraction of the Moon's DIAMETER
+# inside the shadow, so with a shadow of radius R and a Moon of radius
+# r the centre distance is d = R + r - 2*r*magnitude. That formula
+# replaces the old `TRAVEL` fudge (a linear push of 2.10 r), and it is
+# not a cosmetic change: magnitude 0 now lands exactly on tangency
+# (d = R + r, no bite at all) and a magnitude at or above full immersion
+# lands on d = 0, the Moon concentric inside the shadow. A PENUMBRAL
+# eclipse is measured against the far wider PENUMBRA, so it uses its own
+# radius here rather than over-claiming an umbral bite it never has.
 _SWEEP_RADIUS_FRACTION = 1.35
-_SWEEP_TRAVEL_FRACTION = 2.10
+_PENUMBRA_RADIUS_FRACTION = 2.40
 _SWEEP_RISE = 0.25
 _SWEEP_FRINGE_WIDTH_FRACTION = 0.07
 
@@ -139,25 +152,58 @@ def draw_umbra_sweep(
     `magnitude` is None only for a malformed catalog row (the schema
     always writes it); as in `render.eclipse_glow.eclipse_glow_strength`
     that reads as the STRONGEST case rather than a guessed middle, so a
-    broken row over-reports the event instead of hiding it.
+    broken row over-reports the event instead of hiding it — here that
+    means full immersion, the magnitude at which the shadow's centre
+    distance falls to zero.
     """
-    covered = 1.0 if magnitude is None else max(0.0, min(1.0, magnitude))
-    travel = (1.0 - covered) * _SWEEP_TRAVEL_FRACTION * radius
+    shadow_radius = radius * (
+        _PENUMBRA_RADIUS_FRACTION if state == "lunar_penumbral"
+        else _SWEEP_RADIUS_FRACTION
+    )
+    full_immersion = (shadow_radius + radius) / (2.0 * radius)
+    depth = full_immersion if magnitude is None else magnitude
+    # d = R + r - 2*r*magnitude, never negative — see the constants above.
+    distance = max(0.0, shadow_radius + radius - 2.0 * radius * depth)
+    travel = distance / math.hypot(1.0, _SWEEP_RISE)
     centre = QPointF(travel, -travel * _SWEEP_RISE)
-    shadow_radius = radius * _SWEEP_RADIUS_FRACTION
     painter.save()
     disc = QPainterPath()
     disc.addEllipse(QRectF(-radius, -radius, 2 * radius, 2 * radius))
     painter.setClipPath(disc)
     painter.setPen(Qt.PenStyle.NoPen)
     if state == "lunar_penumbral":
-        painter.setBrush(_with_alpha(
+        # THE PENUMBRA DEEPENS INWARD, and it must be DRAWN that way.
+        # A penumbral eclipse's shadow is so wide that at its own
+        # magnitude the Moon sits almost entirely inside it, so a flat
+        # wash produced a uniformly dimmed disc — pixel for pixel the
+        # picture the "halo" style draws by multiplying the whole face.
+        # Two styles, one picture, and the distinctness measure caught
+        # it. The gradient is not a workaround: the penumbra really is
+        # darkest toward the umbra and fades to nothing at its rim.
+        gradient = QRadialGradient(centre, shadow_radius)
+        gradient.setColorAt(0.0, _with_alpha(
             palette.ECLIPSE_PENUMBRAL_WASH, palette.ECLIPSE_PENUMBRAL_ALPHA
         ))
+        gradient.setColorAt(1.0, _with_alpha(
+            palette.ECLIPSE_PENUMBRAL_WASH, 0.0
+        ))
+        painter.setBrush(gradient)
     else:
-        painter.setBrush(_with_alpha(
+        # THE SHADOW HAS A CENTRE (eclipse rework): a gradient from the
+        # near-black core out to the copper rim, instead of the flat
+        # copper circle that left a TOTAL eclipse — the Moon wholly
+        # inside the shadow — as a featureless disc with no edge to see.
+        # At totality this graded copper IS the picture: the "blood
+        # moon" is lit only by the light bent through every sunrise and
+        # sunset on Earth at once, and it is brightest toward the rim.
+        gradient = QRadialGradient(centre, shadow_radius)
+        gradient.setColorAt(0.0, _with_alpha(
+            palette.ECLIPSE_UMBRA_CORE_COLOR, palette.ECLIPSE_UMBRA_ALPHA
+        ))
+        gradient.setColorAt(1.0, _with_alpha(
             palette.ECLIPSE_TOTAL_MOON_TINT, palette.ECLIPSE_UMBRA_ALPHA
         ))
+        painter.setBrush(gradient)
     painter.drawEllipse(centre, shadow_radius, shadow_radius)
     if glow.ECLIPSE_STATE_FRINGE[state]:
         # The ozone rim at the umbra's own edge — the SAME turquoise the

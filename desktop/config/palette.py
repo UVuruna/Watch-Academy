@@ -559,6 +559,24 @@ ECLIPSE_UMBRA_ALPHA = 0.88
 ECLIPSE_PENUMBRAL_WASH = "#18161A"
 ECLIPSE_PENUMBRAL_ALPHA = 0.45
 
+# THE UMBRA HAS A CENTRE (eclipse rework, owner order 2026-08-13): the
+# shadow is painted as a gradient from this near-black core at the
+# umbra's own centre out to the copper above at its rim, because that is
+# what a totally eclipsed Moon actually looks like — the limb nearest
+# the umbra's edge stays bright copper while the deep interior goes
+# almost black. Before the rework the umbra was a FLAT copper circle,
+# which meant a total eclipse (the Moon entirely inside the shadow) drew
+# a featureless copper disc with no edge anywhere: the "sweep" style had
+# no sweep on exactly the type it was made for.
+ECLIPSE_UMBRA_CORE_COLOR = "#2A0B04"
+
+# THE CORONA (eclipse rework, owner order 2026-08-13): the pearly white
+# ring that is the ONLY thing visible around the Moon's silhouette at
+# totality. It is what makes the "bite" style's totality picture its
+# own — before the rework "bite" simply drew nothing at totality and
+# collapsed into "halo".
+ECLIPSE_CORONA_COLOR = "#F2EFE4"
+
 # THE OCCULTING BODY (owner verdict 2026-08-10, `render.marker_marks`'s
 # "bite" solar style): the Moon's own silhouette laid across the Sun.
 # Near-black rather than pure black — a hard #000 on the dial's own dark

@@ -76,7 +76,7 @@ with the day's own moonrise/moonset, never per-tick).
   one method per style, each taking only `(painter, radius, arc)` — no
   `RenderContext` — so the SAME methods double as the Watch Face
   preview tiles' real-algorithm renderer.
-- `draw_eclipse_segment(painter, radius, centre_deg)`: THE ECLIPSE ON
+- `draw_eclipse_segment(painter, radius, centre_deg, state)`: THE ECLIPSE ON
   THE BAND (owner placement 2026-08-10 — he moved that option off the
   dial circle and onto the line that shows when the Moon stands above
   the horizon). A copper segment with turquoise end caps, straddling
@@ -87,6 +87,16 @@ with the day's own moonrise/moonset, never per-tick).
   that style draws — the Moon's disc is deliberately left untouched,
   because the point of the option is DURATION, which no halo and no
   darkened disc can show.
+
+  IT READS THE TYPE (eclipse rework, owner order 2026-08-13). The
+  segment used to be one identical copper bar for a total, a partial
+  and a penumbral eclipse, so picking "horizon_shadow" collapsed the
+  three lunar types into one picture. The shadow's DEPTH is now the
+  bar's WEIGHT (`_ECLIPSE_SEGMENT_STATE_WEIGHT`): full thickness for
+  totality, half for a partial, and a pale DASHED hairline for a
+  penumbral eclipse — which also withholds the turquoise end caps, for
+  the same reason the disc withholds them (`glow.ECLIPSE_STATE_FRINGE`:
+  there is no darkened sky rim to show).
 
   THE HONEST APPROXIMATION: the catalog stores only the instant of
   greatest eclipse, never contact times, so the segment's width is the
