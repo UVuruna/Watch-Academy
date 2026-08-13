@@ -27,6 +27,7 @@ Three products, one cache:
 | INNER band plate — the minute NUMBERS alone, in white border + glow | `inner_band_plate` | its `BandSpec` changes |
 | The crown's glyph tiles — every one a recolored PLATE, in the crown-text size family | `crown_glyph_set` | its `CrownSpec` changes |
 | Each crown glyph's own INK WIDTH, for the advance law | `crown_glyph_ink` | its `CrownSpec` changes |
+| Each hour numeral's own half-wedge, for THE INK WEDGE | `numeral_ink_halves` | the plate size, face or numeral size changes (never the rotation) |
 
 A `BandSpec`/`CrownSpec` is a frozen dataclass carrying exactly what can
 make two plates differ: the pixel diameter, the face, the size, the band

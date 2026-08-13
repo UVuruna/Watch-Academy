@@ -6,6 +6,8 @@ The band cache key, and the one live-crown layer.
 |---|---|---|
 | `band_spec` | function | the `BandSpec` an on-screen watch would ask for |
 | `jewel_offset` | function | how far the JEWELS and the CROWN have turned |
+| `plate_aspect` | function | one jewel plate's width over its height |
+| `jewel_ink_halves` | function | per-seat half-wedge of the jewel's real ink |
 | `occluded_hours` | function | the numerals a FIXED jewel currently covers |
 | `crown_spec` | function | the `CrownSpec` for the live crown's glyph set |
 | `LiveCrownLayer` | `Cadence.MINUTE` | the crown's live time, re-composed each tick |
@@ -43,11 +45,23 @@ question it does — what the outer band looks like right now:
   `_jewel_theta` (the Omega hit circle, the per-letter jewel legend, the
   Four Greetings trigger and the crown-word hover). One door means the
   drawn dial and the hit zones cannot disagree.
+- `plate_aspect(asset)` is one jewel plate's width over its height, read
+  from the startup asset index (which knows every picture's size without
+  opening it) and cached per path. A file the index never saw costs one
+  header read; one that will not decode falls back to 1.0.
+- `jewel_ink_halves(skin)` is `hour -> half the arc that seat's jewel
+  really covers`, built from exactly the terms [Ring Layer](ring.md)
+  stamps with — the `RING_JEWEL_ART_SCALE * ring_jewels_scale` height,
+  that seat's `jewel_zoom`, the `outer_centreline` radius, and the
+  plate's own aspect. THE INK WEDGE's jewel half (owner order
+  2026-08-13): an M claims the width of an M and an I the width of an I,
+  where both used to claim a square.
 - `occluded_hours(skin, ctx)` returns `()` in `all_turn` — where the
   jewels ride their own seats and a collision is impossible — and
-  otherwise THE ANGULAR WEDGE's answer from
-  [Core Numerals](../../../core/__about/numerals.md): the hours whose
-  numeral a standing jewel covers, whole or in part. It rides
+  otherwise THE INK WEDGE's answer from
+  [Core Numerals](../../../core/__about/numerals.md), with BOTH halves
+  measured: `jewel_ink_halves` above and
+  `render.numeral_bands.numeral_ink_halves` for the numerals. It rides
   `BandSpec.occluded_hours`, a SECOND key beside `jewel_hours` rather
   than a reuse of it, because the two say different things — one is
   "this seat belongs to a letter", the other "this numeral happens to be

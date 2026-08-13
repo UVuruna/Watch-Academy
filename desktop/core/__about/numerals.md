@@ -59,25 +59,50 @@ and it is the whole answer only while the jewels ride the band. The
 the jewels and the crown to the SCREEN and lets the numerals travel under
 them, so the collision becomes a live one and this module answers it too:
 
-- `jewel_arc_half_deg(ring_size, jewels_scale)` — half the arc one jewel
-  occupies, derived from the ring's own seating data (the stamped height
-  `RING_JEWEL_ART_SCALE * jewels_scale` on the stamped radius
-  `dial.outer_centreline`), never a magic number. Its one honest
-  approximation is written into its docstring: the seating data knows a
-  plate's HEIGHT, not its per-glyph WIDTH, so the width is taken as equal
-  to the height — square masters, and conservative where a glyph is
-  narrower, which errs toward hiding rather than clipping.
-- `numeral_arc_half_deg()` — half a SEAT PITCH. A numeral owns its seat
-  and nothing more. Measuring ink instead would make the rule depend on
-  which digits happen to stand there, on the face and on the size slider;
-  the owner chose the wedge over a pixel test for exactly that reason.
-- `occluded_numeral_hours(jewel_hours, offset_deg, jewel_half_deg)` — the
-  hours whose numeral is NOT DRAWN because a fixed jewel's arc meets it.
-  Touching arcs do not overlap; anything that does hides the numeral
-  whole. The owner's partial-cut rule ("a jewel that clips two adjacent
-  numerals suppresses BOTH") needs no branch of its own: a jewel standing
-  between two seats simply overlaps both wedges. It can never reach a
-  third, because the seats are 15 degrees apart.
+- `ink_arc_half_deg(width, height, radius, tilt_deg)` — half the arc a
+  RECTANGLE of ink occupies on a band, read from the widest of its four
+  CORNERS (a tall glyph's near corner leans further around the dial than
+  the middle of its edge). `tilt_deg` is how far the ink's own frame is
+  turned away from the tangent: 0 for anything seated along the band,
+  and the seat's own negative angle for an `upright` numeral. The shared
+  geometry behind BOTH halves below.
+- `jewel_arc_half_deg(ring_size, jewels_scale, aspect, zoom)` — half the
+  arc one jewel occupies, derived from the ring's own seating data (the
+  stamped height `RING_JEWEL_ART_SCALE * jewels_scale * zoom` on the
+  stamped radius `dial.outer_centreline`), never a magic number.
+- `numeral_arc_half_deg()` — half a SEAT PITCH, the FALLBACK for a caller
+  with no font in hand. Deliberately generous: where nothing is measured,
+  hiding a numeral beats printing half of one under a letter.
+- `occluded_numeral_hours(jewel_hours, offset_deg, jewel_half_deg,
+  numeral_half_deg)` — the hours whose numeral is NOT DRAWN because a
+  fixed jewel's arc meets it. Touching arcs do not overlap; anything that
+  does hides the numeral whole. The owner's partial-cut rule ("a jewel
+  that clips two adjacent numerals suppresses BOTH") needs no branch of
+  its own: a jewel standing between two seats simply overlaps both
+  wedges. It can never reach a third, because the seats are 15 degrees
+  apart. **Either half may be a plain number or a `{hour: half}`
+  mapping**, so the measured caller and the unmeasured one share one
+  loop; an hour missing from a mapping falls back to the wedge it would
+  have had before.
+
+**THE INK WEDGE** (owner order 2026-08-13) is the correction that turned
+those two halves into measured numbers. As first shipped, the rule gave a
+jewel the SQUARE of its stamped height and a numeral its WHOLE 7.5-degree
+half seat — 12.06 degrees of reach against a 15-degree seat pitch, so a
+jewel took TWO numerals with it unless it stood within 2.94 degrees of a
+seat. The owner counted the cost on his own hexagram: six numbers gone
+(0, 4, 9, 12, 16, 20) where the letters had room to spare. Neither
+assumption was true of the art — `M.png` is 750 x 512 and `I.png` is
+287 x 512 on the same masters, and a single-digit numeral covers well
+under half its seat. The live path therefore MEASURES both halves
+(`render.layers.numerals.jewel_ink_halves` reads each plate's own aspect
+and zoom out of the asset index; `render.numeral_bands.numeral_ink_halves`
+measures the ink the chosen face paints at the chosen size), and this
+module stays the pure geometry both feed. Teeth:
+`tests/test_numeral_occlusion.py` for the geometry,
+`tests/test_numeral_ink_wedge.py` for the wiring — the second one walks a
+whole turn of the band and fails if the measured rule ever hides MORE
+than the assumed one did.
 
 The other half of that verdict costs this module nothing: with the jewels
 off the seats, `numeral_hours` is handed the OCCLUDED hours instead of the

@@ -17,17 +17,19 @@ and at most eleven `drawImage` calls.
 """
 
 from PySide6.QtCore import QPointF
-from PySide6.QtGui import QPainter
+from PySide6.QtGui import QImageReader, QPainter
 
 from functools import lru_cache
+from pathlib import Path
 
 from config import dial, paths
 from core import numerals
-from render import letter_plates
+from render import asset_index, letter_plates
 from render.context import Cadence, Layer, RenderContext
 from render.asset_recolor import jewel_metal_file
 from render.numeral_bands import (
     BandSpec, CrownSpec, compose_crown, crown_glyph_ink, crown_glyph_set,
+    numeral_ink_halves,
 )
 from render.painting import dial_point
 
@@ -47,24 +49,87 @@ def jewel_offset(skin, world_offset: float) -> float:
     return 0.0 if skin.world_rotation_scope == "numerals_turn" else world_offset
 
 
+@lru_cache(maxsize=256)
+def plate_aspect(asset: Path) -> float:
+    """One jewel plate's WIDTH over its HEIGHT — the number the square
+    assumption used to stand in for (owner order 2026-08-13).
+
+    Read from the startup asset index first, which knows every picture's
+    size without opening it; only a file the index has never seen costs
+    a header read, and one that will not decode falls back to 1.0 — the
+    old assumption, still a usable wedge. Cached per path, because a
+    plate's aspect cannot change while the program runs."""
+    resolved = paths.art_file(asset)
+    size = asset_index.image_size(resolved)
+    if size is None:
+        reader = QImageReader(str(resolved))
+        raw = reader.size()
+        size = (raw.width(), raw.height()) if raw.isValid() else None
+    if not size or size[1] <= 0:
+        return 1.0
+    return size[0] / size[1]
+
+
+def jewel_ink_halves(skin) -> dict:
+    """`hour -> half the arc that seat's JEWEL really covers` — the
+    jewel half of THE INK WEDGE.
+
+    Every term is the one `render.layers.ring.RingLayer._draw_jewels`
+    stamps with — the `RING_JEWEL_ART_SCALE * ring_jewels_scale` height,
+    the `outer_centreline` radius — plus the PLATE'S OWN ASPECT, so an M
+    claims the width of an M and an I the width of an I instead of both
+    claiming a square.
+
+    `jewel_zoom` is DELIBERATELY LEFT OUT, and the reason is the reason
+    it exists: `RING_EYE_SHINE_ENLARGE` pads the Eye's shine master with
+    the glory of rays and enlarges the stamp so the TRIANGLE still draws
+    the size a plain letter would (`skins.manifest.RingSkin.jewel_zoom`).
+    The zoom is therefore padding, not letter. A numeral standing in the
+    rays is lit, not covered — erasing it would put back exactly the
+    kind of hole this round was ordered to remove — so the wedge is the
+    letter's own size and the light shines over whatever it reaches."""
+    scale = skin.ring_jewels_scale
+    ring_size = skin.numeral_outer_ring_size
+    return {
+        hour % dial.NUMERAL_HOUR_COUNT: numerals.jewel_arc_half_deg(
+            ring_size, scale, aspect=plate_aspect(asset),
+        )
+        for hour, asset in skin.ring.jewel_art.items()
+    }
+
+
 def occluded_hours(skin, ctx: RenderContext) -> tuple:
     """The outer band's hours whose numeral a FIXED jewel covers right
     now — `()` in the `all_turn` scope, where the jewels ride their own
     seats and a collision is impossible by construction.
 
-    The wedge halves come from the ring's own seating data
-    (`core.numerals.jewel_arc_half_deg` reads the SAME
-    `RING_JEWEL_ART_SCALE * ring_jewels_scale` height and
-    `outer_centreline` radius `render.layers.ring` stamps the plate
-    with), so a jewel-size slider move re-solves the occlusion in the
-    same breath it re-sizes the letter."""
+    BOTH halves of the wedge are MEASURED (owner order 2026-08-13, THE
+    INK WEDGE, replacing the square-jewel-against-whole-seat rule that
+    shipped the same morning): `jewel_ink_halves` reads each plate's own
+    aspect and zoom, `render.numeral_bands.numeral_ink_halves` the ink
+    the chosen face paints at the chosen size, and every term still
+    comes from the same seating data the ring stamps with — so a
+    jewel-size or numeral-size slider move re-solves the occlusion in
+    the same breath it re-sizes the glyph.
+
+    Why it had to change, in his own measurement: a whole seat wedge
+    (7.5 deg) against a square jewel (4.56 deg) reached 12.06 deg of the
+    15-deg seat pitch, so a jewel took TWO numerals unless it stood
+    within 2.94 deg of a seat. His hexagram lost 0, 4, 9, 12, 16 and 20
+    with room to spare for all six."""
     if skin.world_rotation_scope != "numerals_turn":
         return ()
     return numerals.occluded_numeral_hours(
         tuple(sorted(skin.ring.jewels)),
         ctx.world_offset,
-        numerals.jewel_arc_half_deg(
-            skin.numeral_outer_ring_size, skin.ring_jewels_scale,
+        jewel_ink_halves(skin),
+        numeral_ink_halves(
+            max(2, round(2 * ctx.radius * ctx.dpr)),
+            skin.numeral_face,
+            float(skin.numeral_outer_size),
+            skin.numeral_outer_ring_size,
+            skin.numeral_seating,
+            ctx.world_offset,
         ),
     )
 

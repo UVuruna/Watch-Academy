@@ -32,9 +32,12 @@ the plates are COMPUTED. The layers only ever blit what they find.
 
 import math
 from dataclasses import dataclass
+from functools import lru_cache
 
 from PySide6.QtCore import QPointF, QRectF, Qt
-from PySide6.QtGui import QColor, QImage, QPainter, QPainterPath, QTransform
+from PySide6.QtGui import (
+    QColor, QFontMetricsF, QImage, QPainter, QPainterPath, QTransform,
+)
 
 from config import dial, palette
 from config.dial import (   # noqa: F401 — the law's public home; re-exported
@@ -178,6 +181,58 @@ def _unit_px(spec_pixels: int) -> float:
     """One numeral "unit" in DEVICE pixels for a plate of this size —
     the ledger's own resolution-independent length (§8)."""
     return spec_pixels * dial.NUMERAL_UNIT_FRACTION
+
+
+@lru_cache(maxsize=32)
+def _outer_ink_extents(pixels: int, face: str, size_units: float) -> dict:
+    """`label -> (width, height)` of the INK the chosen face paints for
+    every hour label, as fractions of the dial DIAMETER.
+
+    The TIGHT bounding rect, not the advance — the same metric
+    `render.numeral_relief.glyph_path` centres a numeral on, so the box
+    measured here is exactly the box drawn. Cached on the three things
+    it depends on and nothing else: the plate's pixel size, the face and
+    the size slider. The band's ROTATION is deliberately absent, so a
+    turning dial re-measures nothing."""
+    unit = _unit_px(pixels)
+    metrics = QFontMetricsF(numeral_font("outer", face, size_units * unit))
+    extents = {}
+    for label in numerals.hour_labels():
+        tight = metrics.tightBoundingRect(label)
+        extents[label] = (tight.width() / pixels, tight.height() / pixels)
+    return extents
+
+
+def numeral_ink_halves(
+    pixels: int, face: str, size_units: float, ring_size: float,
+    seating: str, offset_deg: float,
+) -> dict:
+    """`hour -> half the arc that hour's numeral REALLY covers` — the
+    measured half of THE INK WEDGE (owner order 2026-08-13: the circle
+    that tests for a collision was far larger than the letter standing
+    at that seat, so the dial lost numbers it could have drawn).
+
+    Replaces the flat 7.5-degree seat claim of
+    `core.numerals.numeral_arc_half_deg` with the ink the face actually
+    paints, corner-accurate through `core.numerals.ink_arc_half_deg`. The
+    seat's TILT is part of it: an `arc`-seated numeral lies along the
+    band (tilt 0) and reaches as far as its width, while an `upright`
+    one stands level with the screen and leans its corners further
+    around the dial the further it sits from the top.
+
+    The rotation enters only here, in cheap arithmetic over 24 seats —
+    the Qt measurement behind it is cached and offset-free."""
+    extents = _outer_ink_extents(int(pixels), face, float(size_units))
+    radius = outer_centreline(ring_size) / 2.0      # of the DIAMETER
+    halves = {}
+    for hour, label in enumerate(numerals.hour_labels()):
+        angle = numerals.hour_angle(hour, offset_deg)
+        tilt = numerals.fold_angle(
+            numerals.seat_rotation(angle, seating) - angle
+        )
+        width, height = extents[label]
+        halves[hour] = numerals.ink_arc_half_deg(width, height, radius, tilt)
+    return halves
 
 
 def band_plate(spec: BandSpec) -> QImage:
