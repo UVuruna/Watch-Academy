@@ -273,6 +273,57 @@ def test_the_instrument_draws_itself(topics, app):
         ), key
 
 
+def test_every_instrument_page_is_seen_not_merely_registered(topics, app):
+    """THE THEME COMPLETION LAW applied to the Instrument hall (owner
+    order 2026-08-13, when the three picker pages joined it): a page is
+    finished when it can be SEEN, which is three things at once — its
+    key in the roster, a non-empty TITLE and ARTICLE behind that key,
+    and a FIGURE that really puts ink on the plate.
+
+    The failure this forbids is the one the law was born from: a page
+    registered, reachable, and blank — the roster is the only half a
+    reader ever sees fail, and it is the half that passes by itself.
+    """
+    from app.encyclopedia.pages import _INSTRUMENT_KEYS
+    from app.encyclopedia.text import article_text, entry_name
+    from data.encyclopedia import shared_encyclopedia
+    from data.symbolism import shared_symbolism
+    from render import diagrams
+
+    # 1. THE ROSTER — the whole seats this topic, and the owner's three
+    #    picker pages are in it (`_INSTRUMENT_KEYS` is the ONE roster;
+    #    `tree.py` builds one entry per key).
+    assert tree.THEME_TO_WHOLE["instrument"] == "instrument"
+    for key in ("world_modes", "ring_presets", "pointers"):
+        assert key in _INSTRUMENT_KEYS, key
+    entries = topics["instrument"]["entries"]
+    assert [entry["name"][1] for entry in entries] == list(_INSTRUMENT_KEYS)
+
+    encyclopedia, symbolism = shared_encyclopedia(), shared_symbolism()
+    for entry in entries:
+        key = entry["name"][1]
+        # 2. THE TEXT — resolved through the SAME two doors the reader
+        #    and the Download file read through, never straight off the
+        #    bundle, so a broken ref fails here too.
+        title = entry_name(entry, symbolism, encyclopedia, lambda text: text)
+        article = article_text(entry["article"], symbolism, encyclopedia)
+        assert title.strip(), key
+        assert article.strip(), key
+        # 3. THE FIGURE — a drawer with real ink, or `paint_light`'s one
+        #    real picture (the documented single exception).
+        diagram = entry.get("diagram")
+        if key == "paint_light":
+            assert diagram is None
+            assert entry["images"], key
+            continue
+        image = diagrams.plate(*diagram, 300).toImage()
+        assert any(
+            image.pixelColor(x, y).alpha() > 8
+            for y in range(0, image.height(), 3)
+            for x in range(0, image.width(), 3)
+        ), key
+
+
 # --- 4. THE VARIANT LAW -----------------------------------------------------
 
 def test_registers_of_one_subject_became_one_card(topics):

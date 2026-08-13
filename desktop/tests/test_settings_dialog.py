@@ -739,8 +739,10 @@ def test_encyclopedia_expansion_wiring():
     topics = _topics()
     assert len(topics["week"]["entries"]) == 7
     # ring_rework §4d (owner ruling 2026-08-06): CHI's own article joined
-    # the instrument topic (Database/encyclopedia.json's "chi" key).
-    assert len(topics["instrument"]["entries"]) == 9
+    # the instrument topic (Database/encyclopedia.json's "chi" key). The
+    # owner's THREE PICKER PAGES joined it on 2026-08-13 — world_modes,
+    # ring_presets and pointers — taking it from nine to twelve.
+    assert len(topics["instrument"]["entries"]) == 12
     for family in ("virtues", "sins"):
         assert len(topics[family]["entries"]) == 8
     # Moods leads with the comparative WHEEL article and closes with
@@ -910,8 +912,9 @@ def test_ring_jewels_article_carries_the_mason_lore():
     QApplication.instance() or QApplication([])
     topics = _topics()
     # ring_rework §4d (owner ruling 2026-08-06) added ONE new entry
-    # (CHI's own article) to this SAME topic — still no new topic KEY.
-    assert len(topics["instrument"]["entries"]) == 9
+    # (CHI's own article) to this SAME topic, and the three picker pages
+    # (2026-08-13) three more — still no new topic KEY.
+    assert len(topics["instrument"]["entries"]) == 12
 
     article = EncyclopediaRepository().instrument("ring_jewels")["base"]
     assert "inverted cross" in article

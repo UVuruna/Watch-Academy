@@ -54,7 +54,27 @@ Layer: config — pure, no Qt, no wall clock.
   "how this clock works" pages, computed by
   `render/instrument_diagrams.py`), `INSTRUMENT_TWILIGHT_BANDS`
   (civil/nautical/astronomical depression bands, civil sourced from
-  `constants.CIVIL_DEPRESSION`).
+  `constants.CIVIL_DEPRESSION`). The three PICKER pages of 2026-08-13
+  add `INSTRUMENT_DIAGRAM_GRIDS` (a table — one row per ROW figure:
+  columns, label lines and the plate's own aspect), the row's height
+  budget (`..._ROW_TOP`, the tile-label gap/step/ratio, the caption
+  band and its ratio), the tile detail ratios — all of them per tile
+  RADIUS: the two seat dot sizes, four pen widths, the pointer arm
+  waist and Aurora's strip height.
+  **Reshaped 2026-08-13 under THE SPACE & LEGIBILITY LAW:** the three
+  were square stacks of rows and arrived ~208 px wide in a ~1123 px
+  column; a tile's RADIUS is now derived from what the height budget
+  leaves over rather than declared, so the table can never disagree
+  with the drawing.
+- **THE READER'S FIGURE BOX** — `READER_DIAGRAM_MAX_HEIGHT_FRACTION`
+  (0.45), `READER_DIAGRAM_MAX_WIDTH_PX` (a 4K sanity cap, never binding
+  at the 1280x720 floor) and `READER_DIAGRAM_MASTER_STEP_PX` (one
+  cached master per coarse width step, never one per resize pixel).
+  A computed figure is fitted into that RECTANGLE keeping its aspect —
+  a wide figure fills the article's column, a square one fills the
+  height ceiling. Distinct from `READER_IMAGE_MAX_HEIGHT_FRACTION`
+  (0.35), which still governs the ART grids and was deliberately left
+  alone: a photograph has no caption of its own to read.
 
 ## Connections
 

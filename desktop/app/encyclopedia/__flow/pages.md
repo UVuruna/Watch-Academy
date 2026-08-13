@@ -31,7 +31,9 @@
 📋 The Week / emblem tables
   🔤 _WEEK_EMBLEMS          — per-body (virtue, sin, mood) pair
   🔤 _VSM_DAYS              — the eight Virtues / Sins / Moods, in day order
-  🔤 _INSTRUMENT_KEYS       — the 8 Instrument topic pages
+  🔤 _INSTRUMENT_KEYS       — the 12 Instrument topic pages (the owner's
+                              three picker pages joined 2026-08-13:
+                              world_modes, ring_presets, pointers)
   🔤 _WEEK_ORDER            — sun, moon, mars, mercury, jupiter, venus, saturn
 
 📋 Contracts / constants

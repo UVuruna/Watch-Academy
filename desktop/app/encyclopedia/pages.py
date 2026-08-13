@@ -316,9 +316,18 @@ _VSM_DAYS = {
     "moods": ("Glory", "Awe", "Calm", "Zeal", "Sorrow", "Joy",
               "Passion", "Renewal"),
 }
+# THE INSTRUMENT pages, in reading order. Every key here resolves its
+# title and its prose from `Database/encyclopedia.json`'s "instrument"
+# section, and every key but `paint_light` names a DRAWER in
+# `render.instrument_diagrams` (the tree builder picks between the two —
+# THE INSTRUMENT DRAWS ITSELF). The owner's three picker pages joined on
+# 2026-08-13: `world_modes` beside the solar rotation it re-frames,
+# `ring_presets` beside the ring jewels it seats, and `pointers` after
+# them, because a pointer is read against the band the first two build.
 _INSTRUMENT_KEYS = (
-    "dial", "solar_rotation", "twilight", "year_wheel", "moon_lunations",
-    "paint_light", "metals", "ring_jewels", "chi",
+    "dial", "solar_rotation", "world_modes", "twilight", "year_wheel",
+    "moon_lunations", "paint_light", "metals", "ring_jewels",
+    "ring_presets", "pointers", "chi",
 )
 
 

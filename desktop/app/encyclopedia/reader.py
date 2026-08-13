@@ -397,26 +397,29 @@ class ReaderScreen(QWidget):
             font = label.font()
             font.setPixelSize(font_px + 3)
             label.setFont(font)
-        diagram_side = self._diagram_side(block_width)
+        box_width, box_height = self._diagram_box(block_width)
         for label, (kind, key) in self._diagram_labels:
-            # ONE master per figure, scaled to the page — the same
-            # ceiling the art images obey, so a diagram can never push
-            # the article off screen.
+            # ONE master per figure, scaled to the page. The box is WIDE
+            # and the scale KEEPS THE ASPECT, so a square figure fills
+            # the height ceiling and a row figure fills the column —
+            # neither can push the article off screen.
             master = diagrams.plate(
-                kind, key, encyclopedia_ui.CUBE_DIAGRAM_SIDE_PX,
+                kind, key, self._diagram_master_px(box_width),
             )
             if master.isNull():
                 continue
-            label.setPixmap(master.scaled(
-                diagram_side, diagram_side,
+            fitted = master.scaled(
+                box_width, box_height,
                 Qt.AspectRatioMode.KeepAspectRatio,
                 Qt.TransformationMode.SmoothTransformation,
-            ))
-            label.setFixedSize(diagram_side, diagram_side)
+            )
+            label.setPixmap(fitted)
+            label.setFixedSize(fitted.size())
         for panel in self._preview3d_widgets:
-            # Re-fit on every resize, same ceiling as the 2D plates
-            # above — the SAME square a page would show either way.
-            panel.set_square_size(diagram_side)
+            # Re-fit on every resize — the 3D panel is a CUBE, so it
+            # takes the square side the same ceiling grants a square
+            # plate, never the wide box.
+            panel.set_square_size(box_height)
         for state in self._cells:
             # First pass builds the grid; resizes only re-fit pixmaps.
             if "cells" in state:
@@ -424,17 +427,42 @@ class ReaderScreen(QWidget):
             else:
                 self._render_cell(state, block_width)
 
-    def _diagram_side(self, block_width: int) -> int:
-        """The square a computed diagram (2D plate or 3D panel alike)
-        fits inside — the same height ceiling the art images obey, so
-        neither can ever push the article off screen."""
-        return max(120, min(
+    def _diagram_box(self, block_width: int) -> tuple[int, int]:
+        """The RECTANGLE a computed figure is fitted into, aspect kept.
+
+        THE SPACE & LEGIBILITY LAW, ladder rung 1 (2026-08-13): the
+        figure used to be boxed into a SQUARE of the height ceiling, so
+        every drawing arrived ~208 px wide inside a ~1123 px column with
+        its own caption illegible and 915 px of that column empty. The
+        starving element takes the free space: the box is now as wide as
+        the article's own text block (capped so a 4K window does not
+        blow one drawing up absurdly), and the height fraction is only a
+        ceiling — which the wide ROW figures no longer reach and the
+        square ones still fill."""
+        width = max(120, min(
             block_width,
-            round(
-                self._scroll.viewport().height()
-                * encyclopedia_ui.READER_IMAGE_MAX_HEIGHT_FRACTION * self._zoom
-            ),
+            round(encyclopedia_ui.READER_DIAGRAM_MAX_WIDTH_PX * self._zoom),
         ))
+        height = max(120, round(
+            self._scroll.viewport().height()
+            * encyclopedia_ui.READER_DIAGRAM_MAX_HEIGHT_FRACTION * self._zoom
+        ))
+        return width, height
+
+    def _diagram_master_px(self, box_width: int) -> int:
+        """The width the ONE cached master is drawn at. It follows the
+        box in coarse STEPS — a master per step, never a redraw per
+        resize pixel (`instrument_diagrams` caches per size) — and never
+        below the square figures' own side, so nothing that was sharp
+        before this change became soft."""
+        step = encyclopedia_ui.READER_DIAGRAM_MASTER_STEP_PX
+        return max(
+            encyclopedia_ui.CUBE_DIAGRAM_SIDE_PX,
+            min(
+                encyclopedia_ui.ENCYCLOPEDIA_READER_DECODE_CEILING_PX,
+                -(-box_width // step) * step,
+            ),
+        )
 
     def _pixmap(self, path) -> QPixmap:
         """The decoded-image cache behind the lazy looks (owner

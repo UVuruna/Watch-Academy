@@ -253,6 +253,15 @@ THEME_RADIUS_CARD_PX = 14        # group-box cards
 # nav LIST the rule reads it against the shorter side (15%), and no
 # real row needs more than this to read as a pill.
 THEME_RADIUS_PILL_PX = 12        # nav selection pill, tab pills
+# NAV PILL ROW FIX (2026-08-13): the sidebar QListWidget's selected-item
+# pill is painted from `QListWidget::item` QSS padding/margin in
+# `app/theme.py`; the row height the list RESERVES for each entry must
+# match that painted size exactly, or the pill overlaps its neighbours
+# (owner-reported: "Ring"/"Hands & Bodies" sliced by the "Numerals" pill).
+# One pair of constants, read by both the QSS string and the sizeHint
+# `window.py` stamps on every nav item, so they can never drift apart.
+THEME_NAV_ITEM_PADDING_V_PX = 10  # top+bottom padding inside QListWidget::item
+THEME_NAV_ITEM_MARGIN_V_PX = 2    # top+bottom margin around QListWidget::item
 # ═══════════════════════════ READER IMAGE CEILING & HIDDEN GREETINGS ═══════════════════════════
 # Reader image ceiling (owner imperative 2026-07-14): no article or
 # Guide image may eat the page — anything taller than this fraction of
@@ -260,6 +269,29 @@ THEME_RADIUS_PILL_PX = 12        # nav selection pill, tab pills
 # Round two: the WHOLE image grid shares the ceiling — stacked rows
 # split it, so the Week's Sunday pairs still leave the text visible.
 READER_IMAGE_MAX_HEIGHT_FRACTION = 0.35
+# THE FIGURE TAKES THE FREE SPACE (2026-08-13, THE SPACE & LEGIBILITY
+# LAW, ladder rung 1). A COMPUTED figure is not a photograph: it is a
+# drawing whose own caption and tile names must be READ, and the ceiling
+# above — a share of the HEIGHT and nothing else — pinned every one of
+# them to ~208 px inside a ~1123 px column, leaving 915 px of that column
+# empty and the caption line genuinely illegible. So a figure is now
+# sized by the WIDTH it is given, KEEPING ITS ASPECT, and the height
+# fraction is only a ceiling that the wide figures no longer reach.
+#
+# The width cap exists so a 4K reader does not blow one drawing up to
+# 3000 px; it is generous enough never to bind at the 1280x720 floor.
+# The height fraction is 0.45 rather than 0.35 because a SQUARE figure
+# (the dial, the year wheel, the Cube plates) can only grow through the
+# height, and 0.45 of the viewport still leaves the article's title,
+# its first subheading and its opening paragraph on screen at the floor
+# — measured, not guessed: 0.45 x 595 = 268 px of a 595 px viewport.
+READER_DIAGRAM_MAX_HEIGHT_FRACTION = 0.45
+READER_DIAGRAM_MAX_WIDTH_PX = 1400
+# The MASTER a figure is drawn at before it is scaled to the page. It
+# follows the target width in steps (one cached master per step, never
+# one per resize pixel) and never goes below the square masters' own
+# side, so nothing that was sharp before became soft here.
+READER_DIAGRAM_MASTER_STEP_PX = 200
 # The unlocked hidden mode (owner 2026-07-16, top-only round): hovering
 # within this many degrees of the 12h ring jewel opens the Four
 # Greetings. The hit zone is the JEWEL band OUTSIDE the tick scale
@@ -323,3 +355,61 @@ INSTRUMENT_TWILIGHT_BANDS = (
     (constants.CIVIL_DEPRESSION, 12.0, "nautical"),
     (12.0, 18.0, "astronomical"),
 )
+# THE THREE PICKER PAGES (owner order 2026-08-13; RESHAPED 2026-08-13
+# round two under THE SPACE & LEGIBILITY LAW). All three draw a row of
+# small dials — one tile per bundled preset, one per pointer, one per
+# world mode — and all three used to be laid out as a SQUARE stack of
+# rows. That square was the defect: the reader can only ever grant a
+# figure about 45% of the viewport HEIGHT, so a square master arrived on
+# screen ~208 px wide inside a ~1123 px column, its own caption line
+# illegible and 915 px of the column standing empty.
+#
+# The answer is the first rung of the ladder — the starving element
+# takes the free space — and for a figure that means being drawn on a
+# canvas shaped like the space it is given: ONE ROW, WIDE. `aspect` is
+# width/height of the master; at the 1280x720 floor the reader's width
+# bound (~1123) then decides the size instead of the height ceiling, and
+# the same tiles arrive four to five times larger.
+#
+# `aspect` is chosen per figure so the widest label a tile carries still
+# fits inside its own column pitch (width / columns) at the label size
+# derived below — the arithmetic, not a taste: a tile's own radius is
+# whatever is LEFT of the height once the margins, the label stack and
+# the caption band are taken, so more label lines mean a smaller circle
+# and nothing ever overlaps.
+INSTRUMENT_DIAGRAM_GRIDS = {
+    "ring_presets": {"columns": 6, "label_lines": 3, "aspect": 4.4},
+    "pointers": {"columns": 7, "label_lines": 2, "aspect": 5.9},
+    # `caption_band` overrides the shared share below: this figure's
+    # caption is the only two-line one (what never turns, and where noon
+    # ends up), so it is given the room rather than shrunk to fit it.
+    "world_modes": {"columns": 2, "label_lines": 3, "aspect": 4.0,
+                    "caption_band": 0.24},
+}
+# The row's own budget, every share of the figure's HEIGHT. They must sum
+# to less than 1 — what is left over is the tile diameter
+# (`_grid_geometry` in render/instrument_diagrams.py owns that one
+# subtraction, so the numbers here can never disagree with the drawing).
+INSTRUMENT_DIAGRAM_ROW_TOP = 0.05          # clear air above the circles
+INSTRUMENT_DIAGRAM_TILE_LABEL_GAP = 0.04   # circle bottom to first label
+INSTRUMENT_DIAGRAM_TILE_LABEL_STEP = 0.115  # label line to label line
+INSTRUMENT_DIAGRAM_TILE_LABEL_RATIO = 0.10  # a label's pixel size
+INSTRUMENT_DIAGRAM_TILE_CAPTION_BAND = 0.14  # the band the caption owns
+INSTRUMENT_DIAGRAM_TILE_CAPTION_RATIO = 0.075   # ...and its pixel size
+# A tile's own details, all per tile RADIUS — the tile is the only frame
+# they have, so a figure may be reshaped without redrawing them.
+# (Transcribed from the pre-reshape per-side ratios divided by that
+# figure's own radius ratio, so the tiles LOOK exactly as they did.)
+INSTRUMENT_DIAGRAM_JEWEL_SEAT_RATIO = 0.116     # the outer's EMPTY fields
+INSTRUMENT_DIAGRAM_NUMERAL_SEAT_RATIO = 0.042   # ...and a numeral's seat
+INSTRUMENT_DIAGRAM_TILE_RING_PEN = 0.032        # the ring-preset band
+INSTRUMENT_DIAGRAM_TILE_BAND_PEN = 0.024        # the world-mode band
+INSTRUMENT_DIAGRAM_TILE_STAR_PEN = 0.035        # ...its hexagram
+INSTRUMENT_DIAGRAM_TILE_HAIRLINE_PEN = 0.018    # ...its upright dash
+INSTRUMENT_DIAGRAM_TILE_OUTLINE_PEN = 0.021     # a pointer arm's outline
+# A pointer arm's waist, as a fraction of the tile radius — the standing
+# diamond every armed pointer is drawn with.
+INSTRUMENT_DIAGRAM_ARM_WAIST_RATIO = 0.42
+# Aurora has no arms at all: its seven hues run dawn to dusk, so its
+# tile is a STRIP, never a wheel that would seat them at fixed hours.
+INSTRUMENT_DIAGRAM_AURORA_STRIP_HEIGHT = 0.45   # of the tile radius

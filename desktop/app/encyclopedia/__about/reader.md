@@ -52,8 +52,19 @@ button, which only knew how to do this for exactly four themes.
   look switcher, diagram/3D panel — into one centered block
 - `_block_width()` / `_rescale()`: the article block's width formula and
   the live font/pixmap re-fit on every resize
-- `_diagram_side(block_width)`: the square a computed diagram (2D plate
-  or 3D panel) fits inside — the same height ceiling art images obey
+- `_diagram_box(block_width)`: the RECTANGLE a computed figure is fitted
+  into, aspect kept — as wide as the article's own text block (capped by
+  `READER_DIAGRAM_MAX_WIDTH_PX` so a 4K window does not blow one drawing
+  up absurdly), and no taller than `READER_DIAGRAM_MAX_HEIGHT_FRACTION`
+  of the viewport. It was a SQUARE of the height ceiling until
+  2026-08-13, which starved every wide figure to ~208 px inside a
+  ~1123 px column with 915 px of that column empty — rung 1 of THE
+  SPACE & LEGIBILITY LAW's ladder, skipped. Tooth:
+  `tests/test_reader_figure_size.py`. The 3D panel is a CUBE and still
+  takes the square side (the box's height)
+- `_diagram_master_px(box_width)`: the width the ONE cached master is
+  drawn at — following the box in coarse steps, never a redraw per
+  resize pixel, and never below the square figures' own side
 - `_pixmap(path)`: the decoded-image cache behind the lazy looks
 - `_render_cell(state, block_width)` / `_resize_cell(state, block_width)`:
   build a look's image grid once, then only re-scale it on resize
