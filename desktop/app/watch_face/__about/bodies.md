@@ -25,7 +25,9 @@ plain-language `QLabel`:
   Band's mode + style galleries, moved from `opacity.py`'s
   `_moon_band_group`.
 - **Eclipses** — the solar (`eclipse_solar_style`) and lunar
-  (`eclipse_lunar_style`) treatments.
+  (`eclipse_lunar_style`) treatments; 6 names each since the owner's
+  2026-08-13 ballot, three per kind with no painter of their own yet
+  (see [Eclipse Style Door](../../../render/__about/eclipse_style.md)).
 - **Stations** — the Moon's (`moon_station_style`) and the Sun's
   (`sun_station_style`) four-life-stage marks.
 

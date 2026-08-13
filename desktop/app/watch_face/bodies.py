@@ -62,11 +62,21 @@ _ECLIPSE_SOLAR_TITLES = {
     "bite": "Bite",
     "magnitude_arc": "Magnitude arc",
     "halo": "Halo only",
+    # Owner ballot 2026-08-13 — no painter of their own yet, see
+    # `render.eclipse_style.resolve_eclipse_style`.
+    "totality_path": "Totality path",
+    "type_emblem": "Type emblem",
+    "dial_shadow": "Dial shadow",
 }
 _ECLIPSE_LUNAR_TITLES = {
     "umbra_sweep": "Umbra sweep",
     "horizon_shadow": "On the horizon band",
     "halo": "Halo only",
+    # Owner ballot 2026-08-13 — no painter of their own yet, see
+    # `render.eclipse_style.resolve_eclipse_style`.
+    "blood_moon": "Blood moon",
+    "danjon_scale": "Danjon scale",
+    "contact_marks": "Contact marks",
 }
 _MOON_STATION_TITLES = {
     "arc_grammar": "Arc grammar",
