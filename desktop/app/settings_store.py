@@ -17,7 +17,8 @@ from zoneinfo import ZoneInfo
 from app.settings_fields import (
     _HEX_COLOR, MERGED_MOUNTS, RETIRED_SLOTS, load_alpha, load_bool, load_choice,
     load_earth_label, load_hex, load_moving_bodies, load_numerals, load_palettes,
-    load_rotation_group, load_scale, migrate_palette_key, normalized_jump_city,
+    load_rotation_group, load_scale, load_world_mode, migrate_palette_key,
+    normalized_jump_city,
     save_moving_bodies, save_numerals,
 )
 from app.settings_ring import fold_ring_name, load_named_dict, normalized_ring_card
@@ -141,9 +142,12 @@ class Settings:
     # load() migrates an older file's pair, and the pre-rename
     # archetype_earth_day key, onto this single enum).
     earth_label: str = "date"
-    # THE TWO WORLD-MODES (ring_rework.md §1): "geocentric" (the
-    # default — today's dial, bit for bit) or "heliocentric" (the
-    # star stands, the world turns, and the dial inverts at night).
+    # THE TWO WORLD-MODES (ring_rework.md §1): "noon_up" (the
+    # default — today's dial, bit for bit) or "sky_up" (the
+    # star stands, the world turns, and the dial inverts at night so the
+    # source of light is always overhead). Renamed 2026-08-13 from
+    # "geocentric"/"heliocentric", which named the modes backwards; an
+    # older file is translated by `load_world_mode`, never reset.
     # Absent from an older settings file = the default, so every
     # stored watch loads clean. Solar Rotation stays its own switch.
     #
@@ -156,6 +160,14 @@ class Settings:
     # no migration BECAUSE no generation of this file ever wrote a
     # top-level `mode` — an unknown key is simply not read.
     world_mode: str = dial.WORLD_MODE_DEFAULT
+    # WHAT THE ROTATION CARRIES (owner ballot verdict 2026-08-13,
+    # `dial.WORLD_ROTATION_SCOPES`): "all_turn" — every release before
+    # this one, numerals, jewels and crown on one offset — or
+    # "numerals_turn", where the jewels and the crown stay fixed on
+    # screen and the numerals slide under them. Absent from an older
+    # settings file = "all_turn", so nothing the owner already sees
+    # changes until he picks the other one.
+    world_rotation_scope: str = dial.WORLD_ROTATION_SCOPE_DEFAULT
     solar_rotation: bool = True
     octa_slot: str = "time"             # South slot MODE
     day_slot_style: str = "sign"        # the DAY slot badge's own style
@@ -643,9 +655,11 @@ class SettingsStore:
                 transit_shadow=load_bool(raw, "transit_shadow", True),
                 transit_shrink=load_bool(raw, "transit_shrink", True),
                 transit_rim=load_bool(raw, "transit_rim", True),
-                world_mode=load_choice(
-                    raw, "world_mode", dial.WORLD_MODES,
-                    dial.WORLD_MODE_DEFAULT,
+                world_mode=load_world_mode(raw),
+                world_rotation_scope=load_choice(
+                    raw, "world_rotation_scope",
+                    dial.WORLD_ROTATION_SCOPES,
+                    dial.WORLD_ROTATION_SCOPE_DEFAULT,
                 ),
                 solar_rotation=load_bool(raw, "solar_rotation", True),
                 legend=load_bool(raw, "legend", True),
@@ -846,6 +860,7 @@ class SettingsStore:
             "earth_label": settings.earth_label,
             "z_mode": settings.z_mode,
             "world_mode": settings.world_mode,
+            "world_rotation_scope": settings.world_rotation_scope,
             "solar_rotation": settings.solar_rotation,
             "octa_slot": settings.octa_slot,
             "day_slot_style": settings.day_slot_style,

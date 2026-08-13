@@ -80,15 +80,35 @@ def _mode_group(settings, setters, tr) -> QGroupBox:
         labels=dial.WORLD_MODE_LABELS,
     )
     mode.setToolTip(tooltip_wrap(tr(
-        "Geocentric: the observer stands still and the sun travels — the "
-        "pointer turns toward true solar noon and 12 stays on top. "
-        "Heliocentric: the sun stands still and the world turns — the hour "
-        "band carries solar noon to the top, and the whole dial turns over "
-        "at night, 0h on top and noon at the bottom."
+        "Noon Stays Up: noon is the fixed point. The observer stands "
+        "still, the sun travels, the pointer turns toward true solar noon "
+        "and 12 keeps the top all day and all night. This is the ordinary "
+        "watch face, and the sun spends the night below you.\n\n"
+        "Sky Follows You: the light is the fixed point. The hour band "
+        "carries true solar noon to the top, and the whole dial turns over "
+        "at night — so the Sun is overhead by day and the Moon is overhead "
+        "by night, the way the sky looks to someone standing under it."
+    )))
+    scope = _choice_row(
+        tr, settings, setters, "world_rotation_scope",
+        dial.WORLD_ROTATION_SCOPES, "What turns", form,
+        labels=dial.WORLD_ROTATION_SCOPE_LABELS,
+    )
+    scope.setToolTip(tooltip_wrap(tr(
+        "Everything Turns: the numerals, the jewels and the crown ride "
+        "the rotation together, so a jewel always keeps its own seat and "
+        "the seats it stands on never carry a number.\n\n"
+        "Numerals Turn: the jewels and the crown hold their place on "
+        "screen and the numerals slide underneath them. A numeral a jewel "
+        "would cover is left off the ring entirely — never drawn half "
+        "under a letter — and the seats the jewels vacate finally carry "
+        "their numbers, midnight reading 0."
     )))
     note = QLabel(tr(
-        "The hands and the minute ring always show ordinary zone time — "
-        "the mode moves only what is drawn."
+        "The hands and the minute ring always show ordinary zone time, and "
+        "the year wheel keeps the summer solstice due north — the mode "
+        "turns the hour band, and What turns says whether the jewels and "
+        "the crown go with it."
     ))
     note.setWordWrap(True)
     form.addRow(note)

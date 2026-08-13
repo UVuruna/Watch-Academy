@@ -5,6 +5,8 @@ The band cache key, and the one live-crown layer.
 | Name | Kind | Answers |
 |---|---|---|
 | `band_spec` | function | the `BandSpec` an on-screen watch would ask for |
+| `jewel_offset` | function | how far the JEWELS and the CROWN have turned |
+| `occluded_hours` | function | the numerals a FIXED jewel currently covers |
 | `crown_spec` | function | the `CrownSpec` for the live crown's glyph set |
 | `LiveCrownLayer` | `Cadence.MINUTE` | the crown's live time, re-composed each tick |
 
@@ -28,6 +30,31 @@ COMPUTED plate must answer the Ring sliders exactly as the printed plate it
 replaces did. The INNER band keys on `offset_deg = 0.0` in every mode, so
 its plate is shared across both phases (ledger §2: "the inner band NEVER
 rotates").
+
+**WHAT THE ROTATION CARRIES** (owner ballot verdict 2026-08-13). Two small
+functions moved in beside `band_spec`, because both answer the same
+question it does — what the outer band looks like right now:
+
+- `jewel_offset(skin, world_offset)` is THE ONE DOOR for the scope. It
+  returns the world offset in `all_turn` and `0.0` in `numerals_turn`.
+  Every site that places a jewel, a crown glyph or one of their HOVER
+  zones asks here — [Ring Layer](ring.md)'s two draw methods, the
+  `LiveCrownLayer` below, and the compositor's `_jewel_offset` /
+  `_jewel_theta` (the Omega hit circle, the per-letter jewel legend, the
+  Four Greetings trigger and the crown-word hover). One door means the
+  drawn dial and the hit zones cannot disagree.
+- `occluded_hours(skin, ctx)` returns `()` in `all_turn` — where the
+  jewels ride their own seats and a collision is impossible — and
+  otherwise THE ANGULAR WEDGE's answer from
+  [Core Numerals](../../../core/__about/numerals.md): the hours whose
+  numeral a standing jewel covers, whole or in part. It rides
+  `BandSpec.occluded_hours`, a SECOND key beside `jewel_hours` rather
+  than a reuse of it, because the two say different things — one is
+  "this seat belongs to a letter", the other "this numeral happens to be
+  underneath one right now", and only the second changes as the world
+  turns. In `numerals_turn` `jewel_hours` is therefore empty: a fixed
+  jewel owns a place on the SCREEN, not a seat, so the labels 6, 12, 18
+  and 0 are composed the moment the rotation carries them clear.
 
 `LiveCrownLayer` is the ONE minute-cadence element of this round. It is
 minute-cadence and nothing more: the plate tiles it draws were rasterized

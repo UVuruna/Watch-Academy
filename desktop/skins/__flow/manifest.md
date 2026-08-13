@@ -73,7 +73,7 @@ SkinDefinition
     cube_look: bool = False
     daylight: bool = True                     -- Calendar/Rose only
     hide_night_borders: bool = False
-    world_mode: str = "geocentric"            -- geocentric | heliocentric
+    world_mode: str = "noon_up"            -- geocentric | heliocentric
     solar_rotation: bool = True
     archetype_mode: bool = False
     archetype_names: bool = True

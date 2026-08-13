@@ -155,7 +155,11 @@ for the full field-by-field default/meaning table):
   `config.constants.POINTER_POINTS`), `pointer_shape`, `polygon_curvature`,
   `polygon_edge`, `palette_style`, `cube_look`, `daylight`,
   `hide_night_borders`, `world_mode` (THE TWO WORLD-MODES —
-  `"geocentric"`/`"heliocentric"`, `core.world`), `solar_rotation`
+  `"noon_up"`/`"sky_up"`, `core.world`), `world_rotation_scope`
+  (WHAT THE ROTATION CARRIES, owner ballot verdict 2026-08-13 —
+  `"all_turn"`, every release before it, or `"numerals_turn"`, where the
+  jewels and the crown hold their place on screen and the numerals slide
+  under them), `solar_rotation`
   (its own independent switch in either mode), `archetype_mode`,
   `archetype_names`, `pointer_saturation`, `ring_saturation`,
   `calendar_mount`

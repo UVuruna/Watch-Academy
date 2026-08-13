@@ -971,9 +971,15 @@ def _overlay_display_settings(skin, settings: Settings, display):
         calendar_mount=settings.calendar_mount,
         # THE TWO WORLD-MODES (ring_rework.md §1): a plain pass-through
         # — `core.world` turns it into the pointer rotation and the
-        # world offset, and "geocentric" (the default) makes both
+        # world offset, and "noon_up" (the default) makes both
         # exactly what every release before this one computed.
         world_mode=settings.world_mode,
+        # WHAT THE ROTATION CARRIES (owner ballot verdict 2026-08-13) —
+        # another plain pass-through: the ring layer reads it to decide
+        # whether the jewels and the crown take the world offset, and
+        # the band spec reads it to decide which numerals a fixed jewel
+        # hides. "all_turn" (the default) is every release's behaviour.
+        world_rotation_scope=settings.world_rotation_scope,
         # Aurora is ALWAYS solar-rotated (owner spec 2026-07-12): its
         # bands anchor to the real sun events, so the whole wheel keeps
         # the solar frame regardless of the toggle.
@@ -3433,6 +3439,11 @@ class WatchController(QObject):
                     # path: persist, rebuild the skin, and the fresh
                     # compositor snaps to the phase on its first paint.
                     "world_mode",
+                    # ... and so does WHAT THE ROTATION CARRIES (owner
+                    # ballot verdict 2026-08-13): the band plate's cache
+                    # key carries the occluded seats, so a fresh skin is
+                    # all it takes to recompose the whole outer band.
+                    "world_rotation_scope",
                 )
             },
             # --- Crown Text (R-24/Phase-6-debt correction, owner --------

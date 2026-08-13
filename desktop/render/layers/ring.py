@@ -32,7 +32,7 @@ from core import angles, numerals, world
 from render import letter_plates
 from render.asset_recolor import jewel_metal_file
 from render.context import Cadence, Layer, RenderContext
-from render.layers.numerals import band_spec
+from render.layers.numerals import band_spec, jewel_offset
 from render.numeral_bands import (
     outer_centreline,
     band_plate, inner_number_clear_regions, inner_number_seat_angles,
@@ -304,8 +304,14 @@ class RingLayer(Layer):
             # the lower half re-seats readably instead of hanging
             # upside down. 0.0 in Geocentric leaves every seat exactly
             # where it always was.
+            # WHAT THE ROTATION CARRIES (owner ballot verdict
+            # 2026-08-13): in the `numerals_turn` scope the offset is
+            # 0.0 and the jewel holds its place on screen while the
+            # numerals slide under it — the ones it covers are simply
+            # not composed into the band (`occluded_hours`).
             theta = (
-                angles.ring_position_angle(hour) + ctx.world_offset
+                angles.ring_position_angle(hour)
+                + jewel_offset(self._skin, ctx.world_offset)
             ) % 360.0
             metal = self._skin.ring.jewel_metal.get(hour, "gold")
             # The Eye's SHINE ENLARGE (owner UV inbox 2026-07-27):
@@ -383,8 +389,13 @@ class RingLayer(Layer):
             # night phase. The reflection about the arc's own new centre
             # turns the run back around. 0.0 in Geocentric is the
             # identity, so nothing moves there.
+            # WHAT THE ROTATION CARRIES: 0.0 in `numerals_turn`, where
+            # the arc stands still — and 0.0 makes both the rotation and
+            # the reflection the identity, so the motto reads exactly as
+            # it does on an unturned dial.
             seats = world.arc_seats(
-                [theta for _asset, theta in glyphs], ctx.world_offset
+                [theta for _asset, theta in glyphs],
+                jewel_offset(self._skin, ctx.world_offset),
             )
             for (gold_asset, _theta), seat in zip(glyphs, seats):
                 self._draw_ring_glyph(

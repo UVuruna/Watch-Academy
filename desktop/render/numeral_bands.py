@@ -93,6 +93,17 @@ class BandSpec:
     # INNER plate the user picked, which decides which five-minute
     # seats carry a number and which carry one of his arrows.
     jewel_hours: tuple = ()
+    # THE ANGULAR WEDGE's own key (owner ballot verdict 2026-08-13).
+    # In the `numerals_turn` scope the jewels do NOT ride the band, so
+    # `jewel_hours` is empty — the jewels no longer own a SEAT, they own
+    # a place on the SCREEN — and this instead carries the hours whose
+    # numerals a fixed jewel currently covers
+    # (`core.numerals.occluded_numeral_hours`). It is a second key and
+    # not a reuse of the field above because the two say different
+    # things: one is "this seat belongs to a letter", the other is
+    # "this numeral happens to be underneath one right now", and only
+    # the second changes as the world turns.
+    occluded_hours: tuple = ()
     inner_variant: str = ""
     # The ring's own two recolors, so a COMPUTED plate answers the
     # sliders exactly as the printed plate it replaces did.
@@ -328,15 +339,20 @@ def _seats(spec: BandSpec) -> tuple[tuple[str, float, QPointF], ...]:
     content simply is not in it.
 
     The OUTER band's angles carry `offset_deg` and skip the preset's
-    LETTER seats (`core.numerals.numeral_hours`); the INNER band NEVER
-    rotates in any mode (ledger §2) and carries only the five-minute
-    seats its variant leaves empty of arrows."""
+    LETTER seats (`core.numerals.numeral_hours`) PLUS whatever a fixed
+    jewel currently covers (`occluded_hours`, THE ANGULAR WEDGE — empty
+    in the `all_turn` scope, where the jewels ride their own seats and
+    nothing can ever be covered); the INNER band NEVER rotates in any
+    mode (ledger §2) and carries only the five-minute seats its variant
+    leaves empty of arrows."""
     radius = spec.pixels / 2.0
     if spec.band == "outer":
         fraction = outer_centreline(spec.ring_size)
         pairs = [
             (str(hour), numerals.hour_angle(hour, spec.offset_deg))
-            for hour in numerals.numeral_hours(spec.jewel_hours)
+            for hour in numerals.numeral_hours(
+                tuple(spec.jewel_hours) + tuple(spec.occluded_hours)
+            )
         ]
     else:
         # THE INWARD-GROWTH LAW: the minute seats live in the interior

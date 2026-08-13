@@ -843,23 +843,70 @@ RING_LIVE_CROWN_HOVER_HALF_DEG = RING_CROWN_TEXT_LETTER_STEP_DEG * 6.0
 NUMERAL_PLATE_CACHE_MAX = 16
 
 # --- THE TWO WORLD-MODES (research/ring_rework.md §1) ------------------------------
-# Which of the two turns: the sky, or the world. GEOCENTRIC is the dial
-# every release before this one drew — the observer stands still and the
-# sun travels, so the star/pointer rotates toward true solar noon while
-# the hour band and every numeral stay fixed, 12 always on top.
-# HELIOCENTRIC stands the star still and turns the WORLD beneath it: the
-# outer band, the jewels, the crown text, the aura and umbra, the
-# weekday seats, the Earth and Moon markers and the hour hand all ride
-# ONE world offset — and the whole dial turns over at night.
+# Which of the two turns: the sky, or the world.
+#
+# NOON_UP is the dial every release before this one drew — the observer
+# stands still and the sun travels, so the star/pointer rotates toward
+# true solar noon while the hour band and every numeral stay fixed, 12
+# always on top. SKY_UP stands the star still and turns the WORLD beneath
+# it: the outer band, the jewels, the crown text, the aura and umbra, the
+# weekday seats and the hour hand all ride ONE world offset — and the
+# whole dial turns over at night, so the source of light (the Sun by day,
+# the Moon by night) is always up.
+#
+# THE NAMES WERE SWAPPED, AND ARE NOW BEHAVIOURAL (owner verdict
+# 2026-08-13, option B). The old keys said the opposite of what they did:
+# the mode that keeps the light source overhead is the GEOCENTRIC
+# experience — the observer is still and the heavens wheel around him —
+# while the mode that keeps noon overhead, with the sun as the fixed
+# reference, is the HELIOCENTRIC frame. Rather than swap two existing
+# values (where a migration slip would be invisible, both being legal
+# strings), the keys now say what the mode DOES and the astronomical term
+# rides along in the label where it is finally correct.
 #
 # Solar Rotation stays its OWN switch: it says whether the solar part of
 # that offset is taken at all, in either mode. `core.world` owns the
 # mathematics; no other module may name these strings.
-WORLD_MODES = ("geocentric", "heliocentric")
-WORLD_MODE_DEFAULT = "geocentric"
+WORLD_MODES = ("noon_up", "sky_up")
+WORLD_MODE_DEFAULT = "noon_up"
 WORLD_MODE_LABELS = {
-    "geocentric": "Geocentric (Ptolemy)",
-    "heliocentric": "Heliocentric (Copernicus)",
+    "noon_up": "Noon Stays Up (Heliocentric)",
+    "sky_up": "Sky Follows You (Geocentric)",
+}
+# THE MIGRATION (owner standing order: a rename goes all the way, and
+# never resets his own setting on the way). A settings file written
+# before 2026-08-13 carries the old key; it is translated here, once, on
+# load. Read by `app.settings_fields.load_choice` through
+# `app.settings_store`.
+WORLD_MODE_LEGACY_KEYS = {
+    "geocentric": "noon_up",
+    "heliocentric": "sky_up",
+}
+# WHAT THE ROTATION CARRIES (owner ballot verdict 2026-08-13). Until this
+# day the world offset carried EVERYTHING on the outer band together —
+# numerals, jewels and crown text ride one number, so a jewel and a
+# numeral can never meet. That is `all_turn`, and it stays the DEFAULT:
+# nothing the owner already sees changes until he picks the other one.
+#
+# `numerals_turn` pins the JEWELS and the CROWN TEXT to the screen and
+# lets only the hour numerals travel under them. Two consequences follow,
+# and both are his own specification:
+#   1. a numeral whose arc meets a fixed jewel's arc is NOT DRAWN — and
+#      when one jewel clips two adjacent numerals, BOTH go
+#      (`core.numerals.occluded_numeral_hours`, THE ANGULAR WEDGE);
+#   2. the seats the jewels stand on are no longer permanently bare —
+#      once the rotation carries a numeral off a jewel it is drawn, so
+#      the band finally says 6, 12, 18 and 0 (seat 24 IS the band's own
+#      hour 0, and 0 is the only non-duplicate name for midnight).
+#
+# The keys name the BEHAVIOUR, the same precedent `WORLD_MODES` set
+# above on the same day. `core.numerals` owns the geometry; no other
+# module may name these strings.
+WORLD_ROTATION_SCOPES = ("all_turn", "numerals_turn")
+WORLD_ROTATION_SCOPE_DEFAULT = "all_turn"
+WORLD_ROTATION_SCOPE_LABELS = {
+    "all_turn": "Everything Turns — numerals, jewels and crown together",
+    "numerals_turn": "Numerals Turn — the jewels and the crown stay put",
 }
 # THE NIGHT INVERSION: night is daylight moved half a circle — 0h stands
 # where 12 stood, noon at the bottom, every glyph re-seated readably at

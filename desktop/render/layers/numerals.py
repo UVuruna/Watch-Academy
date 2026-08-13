@@ -32,6 +32,43 @@ from render.numeral_bands import (
 from render.painting import dial_point
 
 
+def jewel_offset(skin, world_offset: float) -> float:
+    """How far the JEWELS and the CROWN have turned — THE ONE DOOR for
+    WHAT THE ROTATION CARRIES (owner ballot verdict 2026-08-13, Rule
+    #5).
+
+    `all_turn` hands back the world offset unchanged, so the jewels and
+    the crown ride the band exactly as in every release before this one.
+    `numerals_turn` hands back 0.0: they hold their place on screen and
+    only the numerals travel. Every site that places a jewel, a crown
+    glyph or their hover zones asks HERE — the ring layer, the live
+    crown, the Omega hit circle and the compositor's two crown hovers —
+    so the drawn dial and the hit zones cannot disagree."""
+    return 0.0 if skin.world_rotation_scope == "numerals_turn" else world_offset
+
+
+def occluded_hours(skin, ctx: RenderContext) -> tuple:
+    """The outer band's hours whose numeral a FIXED jewel covers right
+    now — `()` in the `all_turn` scope, where the jewels ride their own
+    seats and a collision is impossible by construction.
+
+    The wedge halves come from the ring's own seating data
+    (`core.numerals.jewel_arc_half_deg` reads the SAME
+    `RING_JEWEL_ART_SCALE * ring_jewels_scale` height and
+    `outer_centreline` radius `render.layers.ring` stamps the plate
+    with), so a jewel-size slider move re-solves the occlusion in the
+    same breath it re-sizes the letter."""
+    if skin.world_rotation_scope != "numerals_turn":
+        return ()
+    return numerals.occluded_numeral_hours(
+        tuple(sorted(skin.ring.jewels)),
+        ctx.world_offset,
+        numerals.jewel_arc_half_deg(
+            skin.numeral_outer_ring_size, skin.ring_jewels_scale,
+        ),
+    )
+
+
 def band_spec(skin, band: str, ctx: RenderContext) -> BandSpec:
     """The cache key for one band under this skin at this size/DPI —
     the ONE place a skin's numeral settings become a spec (Rule #5,
@@ -79,7 +116,12 @@ def band_spec(skin, band: str, ctx: RenderContext) -> BandSpec:
         border_units=skin.numeral_border,
         offset_deg=ctx.world_offset if band == "outer" else 0.0,
         jewel_hours=(
-            tuple(sorted(skin.ring.jewels)) if band == "outer" else ()
+            tuple(sorted(skin.ring.jewels))
+            if band == "outer" and skin.world_rotation_scope == "all_turn"
+            else ()
+        ),
+        occluded_hours=(
+            occluded_hours(skin, ctx) if band == "outer" else ()
         ),
         inner_variant="" if band == "outer" else skin.ring.inner_asset.stem,
         tint=tint,
@@ -198,7 +240,9 @@ class LiveCrownLayer(Layer):
         # becomes an angle, so the answer is resolution-independent.
         for image, angle, rotation in compose_crown(
             glyphs, sequence, self._entry["orientation"],
-            offset_deg=ctx.world_offset,
+            # WHAT THE ROTATION CARRIES: the live crown is crown text,
+            # so it holds its place in the `numerals_turn` scope.
+            offset_deg=jewel_offset(self._skin, ctx.world_offset),
             ink=crown_glyph_ink(spec),
             radius_px=radius * ctx.dpr,
             tracking_px=spec.height_px * dial.CROWN_TRACKING_FRACTION,

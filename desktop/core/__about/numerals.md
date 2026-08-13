@@ -52,6 +52,40 @@ five-minute seats that carry a number, so a seat holding one of his arrows
 never also holds a number. An Ω with a 0 under it is the defect both
 functions exist to make impossible.
 
+**THE ANGULAR WEDGE** (owner ballot verdict 2026-08-13): the composition
+law above answers a STATIC question — which seat belongs to a letter —
+and it is the whole answer only while the jewels ride the band. The
+`numerals_turn` rotation scope (`config.dial.WORLD_ROTATION_SCOPES`) pins
+the jewels and the crown to the SCREEN and lets the numerals travel under
+them, so the collision becomes a live one and this module answers it too:
+
+- `jewel_arc_half_deg(ring_size, jewels_scale)` — half the arc one jewel
+  occupies, derived from the ring's own seating data (the stamped height
+  `RING_JEWEL_ART_SCALE * jewels_scale` on the stamped radius
+  `dial.outer_centreline`), never a magic number. Its one honest
+  approximation is written into its docstring: the seating data knows a
+  plate's HEIGHT, not its per-glyph WIDTH, so the width is taken as equal
+  to the height — square masters, and conservative where a glyph is
+  narrower, which errs toward hiding rather than clipping.
+- `numeral_arc_half_deg()` — half a SEAT PITCH. A numeral owns its seat
+  and nothing more. Measuring ink instead would make the rule depend on
+  which digits happen to stand there, on the face and on the size slider;
+  the owner chose the wedge over a pixel test for exactly that reason.
+- `occluded_numeral_hours(jewel_hours, offset_deg, jewel_half_deg)` — the
+  hours whose numeral is NOT DRAWN because a fixed jewel's arc meets it.
+  Touching arcs do not overlap; anything that does hides the numeral
+  whole. The owner's partial-cut rule ("a jewel that clips two adjacent
+  numerals suppresses BOTH") needs no branch of its own: a jewel standing
+  between two seats simply overlaps both wedges. It can never reach a
+  third, because the seats are 15 degrees apart.
+
+The other half of that verdict costs this module nothing: with the jewels
+off the seats, `numeral_hours` is handed the OCCLUDED hours instead of the
+letter seats, so the labels 6, 12, 18 and 0 — bare on every release before,
+because a jewel sat on each — are composed the moment the rotation carries
+them clear. Seat 24 is the band's own hour 0 and `hour_labels` already
+names it "0", the only non-duplicate name midnight has.
+
 Everything is a plain float, tuple or string. `render/` turns them into
 pixels; nothing here knows that pixels exist.
 

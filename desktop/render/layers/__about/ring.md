@@ -38,6 +38,20 @@ before its readable rotation is derived, so a glyph carried into the
 lower half re-seats readably at its new angle instead of hanging upside
 down. `0.0` in Geocentric leaves every seat exactly where it always was.
 
+WHAT THE ROTATION CARRIES (owner ballot verdict 2026-08-13): whether the
+letters and the crown are world members AT ALL is now the user's pick.
+Neither `_draw_jewels` nor `_draw_crown_text` reads `ctx.world_offset`
+directly any more — both go through `render.layers.numerals.jewel_offset`,
+the ONE door for the question, which hands back the world offset in the
+`all_turn` scope and exactly `0.0` in `numerals_turn`, where the jewels
+and the crown hold their place on screen and only the hour numerals
+travel. The crown arc's reflection ([World](../../../core/__about/world.md)'s
+ARC READING LAW) rides the same number, so a standing arc takes neither
+the rotation nor the mirror and reads exactly as it does on an unturned
+dial. The numerals a standing jewel would cover are never composed into
+the band at all — see `occluded_hours` in
+[Numerals Layer](numerals.md).
+
 `Cadence.STATIC`: nothing on this layer depends on the day or the live
 tick — only the skin (letters, tint, saturation) and the dial's size/DPI —
 so it rebuilds only on a skin/size/DPI change. Not `hover_variable`.

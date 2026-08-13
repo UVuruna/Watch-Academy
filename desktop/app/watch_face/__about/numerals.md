@@ -13,7 +13,7 @@ or a world that turns:
 
 | Group | Rows |
 |---|---|
-| **Mode — which one turns** | world_mode (`Geocentric (Ptolemy)` / `Heliocentric (Copernicus)`, `dial.WORLD_MODE_LABELS`) |
+| **Mode — which one turns** | world_mode (`Noon Stays Up (Heliocentric)` / `Sky Follows You (Geocentric)`, `dial.WORLD_MODE_LABELS`), and beside it **What turns** — world_rotation_scope (`Everything Turns` / `Numerals Turn`, `dial.WORLD_ROTATION_SCOPE_LABELS`) |
 | **Hour ring — the outer band** | ring face (the 7-face roster), numeral size, **outer ring size** (the width of the band the jewels and numbers stand in), seating (`arc` / `upright`) |
 | **Minute ring — the inner band** | inner face (the 5-face roster), numeral size |
 | **Relief** | relief style (`cast` / `extrude` / `emboss`), depth, light (`radial` / `fixed`), darkness, contact blur, border |
@@ -23,6 +23,18 @@ The live crown has NO face row (THE ONE PLATE LAW, owner decree
 2026-08-07): it draws the owner's letter plates like the jewels and the
 crown text beside it, so the font pick that used to stand here — and
 `Settings.crown_face` behind it — is gone.
+
+**What turns** (owner ballot verdict 2026-08-13) is a DROPDOWN and not a
+checkbox under Solar Rotation, because it is not a switch on the rotation
+— it says what the rotation CARRIES. `Everything Turns` is every release
+before it: the numerals, the jewels and the crown ride one offset, so a
+jewel keeps its own seat and the seats it stands on never carry a number.
+`Numerals Turn` pins the jewels and the crown to the screen; a numeral
+that would pass under a jewel is left off the ring entirely (never drawn
+half under a letter), and the seats the jewels vacate finally show their
+numbers, midnight reading `0`. It is the DEFAULT `Everything Turns` on
+every stored settings file that predates it, so nothing the owner already
+sees changes until he picks.
 
 Solar Rotation is deliberately NOT here: it stays its own independent
 switch in the right-click menu and keeps meaning the same thing in both

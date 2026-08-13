@@ -208,6 +208,102 @@ def numeral_hours(jewel_hours) -> tuple[int, ...]:
     )
 
 
+def jewel_arc_half_deg(
+    ring_size: float = 1.0, jewels_scale: float = 1.0,
+) -> float:
+    """Half the arc ONE ring jewel occupies on the outer band, in
+    degrees — THE ANGULAR WEDGE's jewel half (owner ballot verdict
+    2026-08-13).
+
+    Derived from the ring's OWN seating data, never from a magic
+    number: `dial.RING_JEWEL_ART_SCALE * jewels_scale` is the height
+    `render.layers.ring.RingLayer._draw_jewels` stamps the plate at (a
+    fraction of the dial DIAMETER), and `dial.outer_centreline` is the
+    radius it stamps it on — the same two terms, read from the same
+    place, so the wedge cannot drift away from what is drawn.
+
+    HONEST GAP, stated because the rule rests on it: the seating data
+    knows a jewel's HEIGHT and its radius; it does not know the WIDTH of
+    any individual plate, which varies per glyph (an I is narrow, an M
+    is not). The width is therefore taken as EQUAL to the height — the
+    letter plates are drawn on square masters and stamped at a height,
+    so that is the plate's own aspect rather than an invention, and
+    where a glyph is narrower the wedge is conservative, which is the
+    safe direction: it hides a numeral that would have been clipped
+    rather than drawing half of one.
+    """
+    radius = dial.outer_centreline(ring_size) / 2.0   # of the DIAMETER
+    width = dial.RING_JEWEL_ART_SCALE * float(jewels_scale)
+    return arc_degrees(width, radius) / 2.0
+
+
+def numeral_arc_half_deg() -> float:
+    """Half the arc ONE hour numeral occupies — its own SEAT WEDGE,
+    half of `dial.NUMERAL_HOUR_STEP_DEG`.
+
+    A numeral owns its seat and the band gives it nothing more: 24 seats
+    divide the circle into 15-degree wedges, so half a wedge is the
+    widest claim a numeral can honestly make. Measuring the glyph's ink
+    instead would make the answer depend on WHICH digits happen to stand
+    there ("1" against "23"), on the picked face and on the size slider
+    — exactly the dependence the owner rejected when he chose the wedge
+    over a pixel test. This keeps the rule glyph-independent,
+    deterministic and cheap, and it is what makes the two-numeral case
+    fall out of the arithmetic instead of needing a special rule.
+    """
+    return dial.NUMERAL_HOUR_STEP_DEG / 2.0
+
+
+def occluded_numeral_hours(
+    jewel_hours, offset_deg: float, jewel_half_deg: float,
+    numeral_half_deg: float | None = None,
+) -> tuple[int, ...]:
+    """THE ANGULAR WEDGE (owner ballot verdict 2026-08-13) — which hour
+    numerals a set of FIXED jewels covers once the band has turned by
+    `offset_deg`, and which are therefore not drawn at all.
+
+    Pure geometry, no Qt: each jewel occupies the arc
+    `[j - jewel_half, j + jewel_half]` at its UNROTATED seat (fixed
+    jewels never take the world offset), each numeral the arc
+    `[n - numeral_half, n + numeral_half]` at its ROTATED seat. Any
+    overlap at all hides the numeral — never half a numeral under a
+    letter. Touching arcs (delta exactly equal to the sum of the halves)
+    do not overlap and the numeral stands.
+
+    THE TWO-NUMERAL CASE IS NOT A SPECIAL RULE. The owner's own words
+    for it, kept verbatim so the rule cannot be re-derived wrongly:
+    # lang-ok: the owner's ruling, quoted; translating it would lose the record
+    "ako znak sece oba slova delimicno oba izostaviti sa kruznice" — a
+    jewel standing between two seats overlaps both wedges, so both fall
+    out of this loop with no branch of their own. And no more than two
+    can ever fall: the seats are 15 degrees apart, so the third-nearest
+    seat is at least 15 degrees beyond the nearer of the two, past any
+    reach these halves can sum to at ordinary jewel scales.
+
+    `jewel_hours` arrives in the ring's own 1..24 counting (midnight =
+    24) and is folded to the band's 0..23 here, the same fold
+    `numeral_hours` performs — one counting meets the other in this
+    module and nowhere else. The result is the hours' own numbers, so
+    seat 24 comes back as 0 and is drawn with the label "0".
+    """
+    numeral_half = (
+        numeral_arc_half_deg() if numeral_half_deg is None
+        else float(numeral_half_deg)
+    )
+    reach = float(jewel_half_deg) + numeral_half
+    seats = {
+        hour: hour_angle(hour, offset_deg)
+        for hour in range(dial.NUMERAL_HOUR_COUNT)
+    }
+    hidden = set()
+    for jewel in jewel_hours:
+        jewel_angle = hour_angle(jewel % dial.NUMERAL_HOUR_COUNT)
+        for hour, seat in seats.items():
+            if abs(fold_angle(seat - jewel_angle)) < reach:
+                hidden.add(hour)
+    return tuple(sorted(hidden))
+
+
 def inner_composition(variant: str) -> dict:
     """One inner variant's own composition — `{"base", "numbers"}`, the
     numberless plate of the owner's that carries its ticks and arrows,

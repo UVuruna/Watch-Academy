@@ -349,14 +349,21 @@ class SkinDefinition:
     # Earth option — works in BOTH normal and archetype mode.
     earth_label: str = "date"
     # THE TWO WORLD-MODES (ring_rework.md §1, `core.world`): which of the
-    # two turns. "geocentric" is the dial every release before this one
+    # two turns. "noon_up" is the dial every release before this one
     # drew — the star travels toward true solar noon, the hour band and
-    # every numeral stay fixed, 12 on top. "heliocentric" stands the
+    # every numeral stay fixed, 12 on top. "sky_up" stands the
     # star still and turns the WORLD instead, and inverts the whole dial
     # at night. Solar Rotation below stays its OWN independent switch.
     # Named in full — a bare `mode` beside `archetype_mode`/`z_mode` in
     # a flat namespace names nothing at all.
     world_mode: str = dial.WORLD_MODE_DEFAULT
+    # WHAT THE ROTATION CARRIES (owner ballot verdict 2026-08-13):
+    # "all_turn" — the numerals, the jewels and the crown text ride one
+    # world offset, every release before this one — or "numerals_turn",
+    # where only the numerals travel and the jewels and the crown hold
+    # their place on screen, so a numeral a jewel covers is not drawn at
+    # all (`core.numerals.occluded_numeral_hours`).
+    world_rotation_scope: str = dial.WORLD_ROTATION_SCOPE_DEFAULT
     solar_rotation: bool = True        # False -> Star/Aura/Umbra stand upright
     octa_slot: str = "time"            # South slot MODE (OCTA_SLOT_MODES)
     day_slot_style: str = "sign"       # the DAY slot badge's own style
