@@ -37,6 +37,20 @@ Layer: config — pure, no Qt, no wall clock.
   for this name; `pantheon` stays imported here regardless, for the
   `DEFAULT_SKIN.weekday_set.bodies`/`moon_asset` tables further down,
   which do still call `pantheon.weekday_art`.
+- **`ECLIPSE_BODY_SUN_ART` / `ECLIPSE_BODY_MOON_ART`** (owner art
+  2026-08-13): the two plates the `bite` style composites — his rayed
+  yellow Sun and the black Moon that crosses it. `ECLIPSE_SOLAR_ART`
+  above is one finished PICTURE of an eclipse; these two are its
+  INGREDIENTS, and that distinction is the whole point: overlap them
+  fully for totality, shrink the dark one for the ring of fire, offset
+  it for a partial, and one pair of files draws every solar eclipse
+  there is (COMPUTE, DON'T GENERATE, in his own art). The disc radii
+  they are composited by are MEASURED off the files in
+  `render.marker_marks` — see [Marker Marks](../../render/__about/marker_marks.md).
+  He named them `eclipse_light`/`eclipse_dark` and renamed them himself.
+  The `.svg` twins beside them are his working files and nothing reads
+  them: Qt's SVG Tiny 1.2 drops the mask his Moon is built on, and his
+  own exporter mangles them, which is why he redrew both as PNG.
 - **Cross-DAG remnants** — `ECLIPSE_LUNAR_TYPE_ICON`/
   `eclipse_lunar_type_icon()`/`ECLIPSE_SOLAR_TYPE_ICON_SOURCE` (need
   `ICON_DIR`, defined here).

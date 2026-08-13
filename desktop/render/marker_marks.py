@@ -13,13 +13,15 @@ three shapes so neither can drift again.
 """
 
 import math
+from pathlib import Path
 
 from PySide6.QtCore import QPointF, QRectF, Qt
 from PySide6.QtGui import (
     QColor, QPainter, QPainterPath, QPen, QPolygonF, QRadialGradient,
 )
 
-from config import constants, dial, glow, palette
+from config import constants, defaults, dial, glow, palette
+from render.assets import shared_cache
 from render.eclipse_glow import draw_event_glow
 from render.moon_face import dark_region
 from render.painting import dial_point
@@ -97,13 +99,11 @@ _SOLAR_SIZE_RATIO = {
 # ... zato i treba rework"). Three collapses died here; these are the
 # numbers that replaced them.
 #
-# 1. THE CORONA — totality's own picture in the "bite" style. Before the
-#    rework "bite" RETURNED EARLY at totality, so a total eclipse drew
-#    the bare icon: byte-identical to "halo", which is how four
-#    combinations came to render one single image.
-_CORONA_REACH = 1.30        # of the body radius, the pearly ring's fade-out
-_CORONA_PEAK = 1.06         # where it is brightest — just off the limb
-_CORONA_ALPHA = 0.90
+# 1. THE CORONA — retired 2026-08-13 by the owner's own decision. The
+#    rework's procedural corona was totality's picture for one day; he
+#    then drew his two body plates and ruled that totality is his Sun
+#    plate with the yellow disc completely covered, rays alone
+#    remaining. See `_bite`.
 #
 # 2. THE MAGNITUDE RING — the "halo" style's own reading of how much of
 #    the Sun is gone. The style must leave the BODY alone (that is what
@@ -126,6 +126,54 @@ _HALO_RING_ALPHA_MAX = 1.0
 _HYBRID_SPLIT_DEG = 180.0
 _HYBRID_INNER_RING = 0.78   # the hybrid halo's second ring, of the outer peak
 _HYBRID_INNER_GAUGE = 0.84  # the hybrid gauge's annular lane, of the gauge
+# The hybrid BITE's ghost ring (see `_ghost_ring`): its WIDTH is
+# measured off the owner's Moon plate; only its strength is a choice,
+# and the choice is narrower than it looks. The ring is the ONE thing
+# separating a hybrid from a total eclipse now that both cover the disc,
+# so it must clear `tests/test_eclipse_distinctness.py`'s structure
+# floor — measured: 0.171 at alpha 0.55 (BELOW the 0.20 floor, i.e. the
+# same picture), 0.221 at 0.70, 0.291 at 0.90. It stays a TRACE all the
+# same: a fifth the width of the annular ring of fire and in the hotter
+# orange rather than the Sun's own yellow, which is what
+# `test_the_hybrid_ghost_ring_is_a_trace_not_the_annular_ring` measures.
+_HYBRID_GHOST_ALPHA = 0.90
+
+# ══════════════════════════════════════════════════════════════════
+# THE TWO BODY PLATES — MEASURED, NEVER GUESSED
+# ══════════════════════════════════════════════════════════════════
+# The owner drew `defaults.ECLIPSE_BODY_SUN_ART` and
+# `ECLIPSE_BODY_MOON_ART` and the composition has to know where each
+# picture's DISC ends, because his one composition rule is stated in
+# terms of it: the dark disc covers the Sun's yellow disc and NEVER its
+# rays. So the four numbers below were measured off the files rather
+# than eyeballed — 1,440 samples per radius ring, as a fraction of the
+# image half-size, `tests/test_eclipse_plates.py` re-measures them:
+#
+#   eclipse_body_sun.png  (576x576)
+#     0.623  the last ring that is solid yellow all the way round —
+#            the DISC's edge; past it the ink breaks into spokes
+#     0.889  the outermost ring carrying any ink at all — the ray tips
+#   eclipse_body_moon.png (360x360)
+#     0.925  the last ring of pure black — the Moon's own limb
+#     1.000  his rim glow reaches the frame edge and is cut there,
+#            which is why the plate is drawn to its full square
+_SUN_PLATE_DISC_FRACTION = 0.623
+_SUN_PLATE_RAY_FRACTION = 0.889
+_MOON_PLATE_DISC_FRACTION = 0.925
+_MOON_PLATE_GLOW_FRACTION = 1.000
+
+# THE WALL BITES THE RAY TIPS. Scaled so the yellow disc is exactly the
+# body radius, his rays would reach 0.889/0.623 = 1.427 body radii — past
+# the 1.38 the transparent window margin reserves (`_MARK_REACH_LIMIT`
+# above). Shrinking the plate instead would draw the Sun 3 % smaller than
+# the geometry every other mark is built on, so the plate is CLIPPED at
+# the wall: it costs the outer 3 % of the ray tips, on the ~13 % of the
+# limb that still carries a spoke out there, at under half alpha. A hard
+# circular edge is impossible — there is no continuous ink to cut.
+_SUN_PLATE_REACH = min(
+    _MARK_REACH_LIMIT, _SUN_PLATE_RAY_FRACTION / _SUN_PLATE_DISC_FRACTION
+)
+
 
 # THE WALL, checked at import (`tests/test_moving_bodies.py` also pins
 # it, but a module that cannot even load is the louder failure): the
@@ -134,8 +182,8 @@ _OUTERMOST_MARK = max(
     1.0 + _MARK_GAP + _CORONA_LENGTH + _MARK_WIDTH_FRACTION / 2,
     _WEDGE_RADIUS + _WEDGE_WIDTH_FRACTION / 2,
     _GAUGE_RADIUS + _GAUGE_WIDTH_FRACTION / 2,
-    _CORONA_REACH,
     _HALO_RING_MAX + _HALO_RING_WIDTH_MAX,
+    _SUN_PLATE_REACH,
 )
 assert _OUTERMOST_MARK <= _MARK_REACH_LIMIT, (
     f"a marker mark reaches {_OUTERMOST_MARK:.3f} of the body radius, past "
@@ -544,6 +592,12 @@ def _solar_eclipse_body(
     painter: QPainter, style: str, radius: float, state: str,
     covered: float, color: str,
 ) -> None:
+    # `color` is the caller's own Sun gold. Nothing reads it any more:
+    # since the owner's two body plates arrived (2026-08-13) the bite
+    # carries its own colour and the other two styles never touched the
+    # body. The parameter stays because `draw_solar_eclipse` is called
+    # positionally from the year-marker layer and from the thumbs.
+    del color
     if style == "magnitude_arc":
         _magnitude_gauge(painter, radius, state, covered)
         return
@@ -552,7 +606,7 @@ def _solar_eclipse_body(
         return
     if style != "bite":
         raise ValueError(f"unknown solar eclipse style {style!r}")
-    _bite(painter, radius, state, covered, color)
+    _bite(painter, radius, state, covered)
 
 
 def _state_color(state: str) -> str:
@@ -685,61 +739,157 @@ def _soft_ring(
     painter.restore()
 
 
-def _bite(
-    painter: QPainter, radius: float, state: str, covered: float, color: str,
-) -> None:
-    # THE BITE IS DRAWN AS IT IS SEEN (owner correction 2026-08-11,
-    # slika 4: a black occulting circle over the already-black eclipse
-    # art was invisible — "ne moze crni isecak na crnoj eklipsi... vec
-    # znamo kako se pokazuje, crta isjecak na mjesecu imamo algoritam"):
-    # the VISIBLE remainder of the Sun is painted BRIGHT over the dark
-    # art, rather than a dark occulter being painted over dark art. Its
-    # shape is the true two-disc difference (`solar_occulter_geometry`,
-    # owner bug 2026-08-13) — the earlier lunar-phase construction is
-    # retired, because a phase terminator is an ellipse that narrows
-    # with the magnitude and the Moon's apparent size does not. The base
-    # art under this is the owner's own eclipse icon (a black disc in
-    # rays), so:
-    #  - annular paints the ring of fire around the black disc;
-    #  - a partial phase paints the bright visible crescent over it;
-    #  - totality paints the CORONA around the silhouette (the rework:
-    #    it used to paint nothing, which made it "halo" twice);
-    #  - a hybrid paints the corona AND a ring of fire along half the
-    #    limb — total on one side of its track, annular on the other.
-    painter.save()
+def _bite(painter: QPainter, radius: float, state: str, covered: float) -> None:
+    """THE BITE IS THE OWNER'S OWN TWO BODIES, COMPOSITED (his art and
+    his rule, 2026-08-13) — ONE composition for all four solar types,
+    and the type is carried entirely by how big the dark disc is and
+    how far off centre it sits.
+
+    His rule, and it is uniform:
+    lang-ok: the owner's own specification of the composition, quoted
+    verbatim so it cannot be re-derived wrongly.
+    *"u totalnoj eklipsi ces prekriti cijeli onaj disk a ostavit ces
+    samo zrake da se vide; u svim onim drugim crni ces smanjiti koliko
+    je vec smanjen i ostaviti dakle pored zraka i deo suncevog diska"* —
+    at totality the dark disc covers the whole yellow disc and only the
+    rays remain; at every other type it is smaller (or offset), so part
+    of the yellow disc survives beside the rays.
+
+    Which is exactly `solar_occulter_geometry`, already: the SIZE RATIO
+    decides how big the Moon is and the magnitude carries the coverage
+    as an OFFSET. So there is nothing procedural left in this style —
+    no drawn crescent, no drawn ring of fire, no procedural corona. The
+    corona spikes and the `_corona`/`_ring_of_fire` pair that replaced
+    them are both retired: the owner was shown that his yellow rays are
+    not what a real corona looks like and answered
+    lang-ok: his verdict on the corona question, quoted for the record.
+    *"i da nisu tako je mi predstavljamo i tacka"* — it is his
+    instrument, and this is how it represents an eclipse.
+
+    The four types, in the geometry he confirmed:
+    ANNULAR — the Moon IS centred; it is simply too far away to be big
+    enough, so the dark disc shrinks and stays put. PARTIAL — the Moon
+    does not cross the centre, so a disc of the Sun's OWN size is
+    offset, and the dark edge is the real circular arc of that disc at
+    its real offset, never an approximation of the bite. TOTAL — the
+    disc is covered and the rays alone remain. HYBRID — total at the
+    epicentre, which is the instant we draw, plus the ghost ring
+    (`_ghost_ring`).
+
+    ONLY THE PNGs ARE EVER READ. The `.svg` twins beside them are the
+    owner's own dead ends twice over: Qt renders SVG Tiny 1.2 and drops
+    `mask`/`filter`/`feColorMatrix`, so his Moon comes out a flat olive
+    disc — and by his own account his exporter mangles them anyway
+    ("napravim jedno a onda kada eksportujem dobijem drugo"), which is
+    why he redrew both as PNG. Never wire the SVG back in.
+    """
+    occulter, distance = solar_occulter_geometry(state, radius, covered)
     if state == "solar_annular":
-        _ring_of_fire(painter, radius, 0.0, 360.0)
-    elif covered >= 1.0 and state in ("solar_total", "solar_hybrid"):
-        _corona(painter, radius)
-        if state == "solar_hybrid":
-            _ring_of_fire(painter, radius, 90.0, _HYBRID_SPLIT_DEG)
-    else:
-        # TWO DISCS OF NEAR-EQUAL RADIUS, OFFSET (owner bug 2026-08-13).
-        # What is left of the Sun is the Sun's disc MINUS the occulter's,
-        # and nothing else — so the bite's curved edge carries the
-        # occulter's true curvature, which at a partial eclipse is the
-        # Sun's own. The old construction asked `moon_lit_region` for a
-        # lunar PHASE of the matching area instead, and a phase's
-        # terminator is a half-ellipse of semi-axis r*|cos 2*pi*f|: at
-        # magnitude 0.62 that collapsed to 0.24 r, drawing an occulter a
-        # quarter of the Sun's size. Area alone was never the claim.
-        occulter, distance = solar_occulter_geometry(state, radius, covered)
-        sun = _disc(radius, 0.0)
-        moon = _disc(occulter, distance)
-        painter.setPen(Qt.PenStyle.NoPen)
-        # The COVERED lune first, in the same silhouette colour totality
-        # wears (`_corona`), clipped to the Sun so it can never claim
-        # ground outside the body. Without it the Sun's disc ends at the
-        # bite and the halo shows through, which reads as a SMALLER Sun —
-        # the very impression the fix is here to remove. It is not the
-        # black-on-black the owner rejected in 2026-08-11: that was a
-        # dark occulter over the dark icon with nothing bright beside
-        # it; here the bright remainder draws the limb around it.
-        painter.setBrush(QColor(palette.ECLIPSE_OCCULTER_COLOR))
-        painter.drawPath(sun.intersected(moon))
-        painter.setBrush(QColor(color))
-        painter.drawPath(sun.subtracted(moon))
+        # THE LEGIBILITY EXAGGERATION, unchanged in meaning and now
+        # expressed as the plate's SIZE instead of a stroke's width: at
+        # the true 0.95 ratio the ring of fire is two pixels wide on a
+        # dial mark and no one can tell which type they are looking at.
+        # `_SOLAR_SIZE_RATIO` stays the physics; this is how thick the
+        # physics is drawn. The OFFSET is left exactly as computed, so
+        # the ring is very slightly richer on one limb — which is what a
+        # real annular eclipse does.
+        occulter = radius * _ANNULAR_SHRINK
+    painter.save()
+    # THE WALL FIRST: his rays reach past the window margin (see
+    # `_SUN_PLATE_REACH`), so everything below is drawn inside it.
+    reach = radius * _SUN_PLATE_REACH
+    wall = QPainterPath()
+    wall.addEllipse(QPointF(0.0, 0.0), reach, reach)
+    painter.setClipPath(wall)
+    _draw_body_plate(
+        painter, defaults.ECLIPSE_BODY_SUN_ART,
+        radius / _SUN_PLATE_DISC_FRACTION, 0.0,
+    )
+    # HIS ONE COMPOSITION RULE, enforced by a clip rather than by care:
+    # the dark disc may cover the Sun's YELLOW DISC and never its rays.
+    # `tests/test_eclipse_plates.py` re-proves it on the rendered pixels.
+    painter.save()
+    painter.setClipPath(_disc(radius, 0.0), Qt.ClipOperation.IntersectClip)
+    _draw_body_plate(
+        painter, defaults.ECLIPSE_BODY_MOON_ART,
+        occulter / _MOON_PLATE_DISC_FRACTION, distance,
+    )
     painter.restore()
+    if state == "solar_hybrid":
+        _ghost_ring(painter, occulter, distance)
+    painter.restore()
+
+
+def _ghost_ring(painter: QPainter, occulter: float, distance: float) -> None:
+    """THE GHOST RING — a hybrid eclipse's own mark, and the only thing
+    that separates it from a total one (owner reasoning 2026-08-13).
+
+    We draw ONE picture, at greatest eclipse, and his own sentence
+    settles what that picture is:
+    lang-ok: the owner's own statement of the constraint, quoted so the
+    reasoning behind this mark cannot be lost.
+    *"mozes da predstavis i onako kako ona jeste a to je da razlicito
+    vreme prikazujemo razlicito stanje ali to ne mozemo zato sto uvek
+    prikazujemo sa jednom slikom i to kada je njen epicentar"* — a
+    hybrid begins annular, turns total across the middle of its path
+    and ends annular, so AT THE EPICENTRE IT IS TOTAL. The honest
+    picture is therefore the total composition, and the second half of
+    its nature has to be carried by an added MARK rather than by faking
+    a geometry no observer ever sees. (The half-and-half split this
+    replaced was geometrically fictional — no eclipse looks like that
+    from anywhere — and leaning on the 1.00 against 1.05 size ratio
+    alone is far too subtle: that is precisely how hybrid collapsed
+    into total before the rework.)
+
+    So: a thin, faint ring of fire hugging the inside of the dark
+    limb — dimmer and thinner than the annular ring, unmistakably a
+    TRACE of one rather than the thing itself. It says totality here,
+    the ring of fire elsewhere along this path, and it is true.
+
+    Its thickness is measured, not chosen: exactly the width of the rim
+    glow the owner drew on his own Moon plate
+    (`_MOON_PLATE_GLOW_FRACTION - _MOON_PLATE_DISC_FRACTION`), so the
+    trace is as thick as the finest edge in his own visual language and
+    a little over half the annular ring's `1 - _ANNULAR_SHRINK`."""
+    width = occulter * (_MOON_PLATE_GLOW_FRACTION - _MOON_PLATE_DISC_FRACTION)
+    edge = occulter - width / 2.0
+    colour = QColor(palette.GLOW_ECLIPSE_SOLAR_ANNULAR_COLOR)
+    colour.setAlphaF(_HYBRID_GHOST_ALPHA)
+    pen = QPen(colour)
+    pen.setWidthF(max(1.0, width))
+    painter.save()
+    painter.setPen(pen)
+    painter.setBrush(Qt.BrushStyle.NoBrush)
+    painter.drawEllipse(QPointF(distance, 0.0), edge, edge)
+    painter.restore()
+
+
+def _draw_body_plate(
+    painter: QPainter, path: Path, half_size: float, offset_x: float,
+) -> None:
+    """One of the owner's two body plates, centred at `offset_x` on the
+    line of centres and drawn so the plate's square has `half_size`.
+
+    Rasterized through `render.assets.shared_cache` — the one
+    process-wide decoded-image cache (THE ONE COPY RULE), keyed by the
+    pixel height it is asked for, so a dial repainting every minute
+    decodes each file once per session and not once per tick. That call
+    also runs `paths.art_file`, the single door through which a
+    canonical `.png` finds a baked `.webp`.
+
+    A MISSING PLATE RAISES. That is THE ONE PLATE LAW's own rule and it
+    is not defensive noise: a silent fallback is exactly how a whole
+    missing digit alphabet once shipped as font-drawn text with every
+    test green."""
+    height = 2.0 * half_size
+    dpr = painter.device().devicePixelRatioF()
+    pixmap = shared_cache().pixmap_by_height(path, height, dpr)
+    if pixmap is None or pixmap.isNull():
+        raise ValueError(f"the eclipse body plate {path} could not be drawn")
+    painter.drawPixmap(
+        QRectF(offset_x - half_size, -half_size, height, height),
+        pixmap, QRectF(pixmap.rect()),
+    )
 
 
 def solar_occulter_geometry(
@@ -775,39 +925,3 @@ def _disc(radius: float, offset_x: float) -> QPainterPath:
         QRectF(offset_x - radius, -radius, 2 * radius, 2 * radius)
     )
     return path
-
-
-def _ring_of_fire(
-    painter: QPainter, radius: float, start_deg: float, span_deg: float,
-) -> None:
-    """The uncovered rim of an annular eclipse, over `span_deg` of the
-    limb (the whole circle for a true annular, half of it for a
-    hybrid). Qt's angles are CCW from 3 o'clock in 1/16 degrees."""
-    ring = QPen(QColor(palette.GLOW_ECLIPSE_SOLAR_ANNULAR_COLOR))
-    ring.setWidthF(max(1.0, radius * (1.0 - _ANNULAR_SHRINK)))
-    edge_r = radius * (1.0 + _ANNULAR_SHRINK) / 2.0
-    rect = QRectF(-edge_r, -edge_r, 2 * edge_r, 2 * edge_r)
-    painter.save()
-    painter.setPen(ring)
-    painter.setBrush(Qt.BrushStyle.NoBrush)
-    if span_deg >= 360.0:
-        painter.drawEllipse(QPointF(0.0, 0.0), edge_r, edge_r)
-    else:
-        painter.drawArc(rect, round(start_deg * 16), round(span_deg * 16))
-    painter.restore()
-
-
-def _corona(painter: QPainter, radius: float) -> None:
-    """TOTALITY'S OWN PICTURE: the Moon's silhouette laid over the icon
-    and the pearly corona around it — the one thing a person actually
-    sees during totality, and the only reason to pick "bite" for a
-    total eclipse at all."""
-    _soft_ring(
-        painter, radius, _CORONA_PEAK, _CORONA_REACH - _CORONA_PEAK,
-        _CORONA_ALPHA, palette.ECLIPSE_CORONA_COLOR,
-    )
-    painter.save()
-    painter.setPen(Qt.PenStyle.NoPen)
-    painter.setBrush(QColor(palette.ECLIPSE_OCCULTER_COLOR))
-    painter.drawEllipse(QPointF(0.0, 0.0), radius, radius)
-    painter.restore()

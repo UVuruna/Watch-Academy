@@ -94,9 +94,11 @@ invisible ("ne moze crni isecak na crnoj eklipsi") — the base art
 under the bite is now `config.defaults.ECLIPSE_SOLAR_ART`, the owner's
 own icon (a black disc in rays), and the bite paints the VISIBLE
 remainder BRIGHT rather than painting a dark occulter over dark art.
-Annular draws the ring of fire around the black disc; totality draws
-the corona around a silhouette. The old procedural corona-spikes block
-is gone.
+The old procedural corona-spikes block is gone. (SUPERSEDED the same
+week — the bite is now his own two body plates composited, below. The
+correction that produced this paragraph still stands and is the reason
+the composition draws his own art rather than a procedural silhouette;
+only the mechanics changed.)
 
 ## THE SIZE RATIO — the occulter is the Sun's own size (owner bug 2026-08-13)
 His words, looking at `solar_partial_bite.png`: *"kruznica delimicnog
@@ -171,6 +173,89 @@ Three collapses lived in this module and all three are closed here:
   the `magnitude_arc` splits its sweep across two lanes (the annular
   half on an inner ring, the total half on the outer), and the `halo`
   wears two concentric rings instead of one.
+
+## THE BITE IS HIS OWN TWO BODIES (owner art + owner rule, 2026-08-13)
+The same evening as the rework, the owner drew two plates —
+`shared/assets/instrument/icons/eclipse_body_sun.png` (his rayed yellow
+Sun) and `eclipse_body_moon.png` (a black disc with a rim glow) — and
+ruled that the `bite` style is nothing but those two composited. He had
+named them `eclipse_light`/`eclipse_dark` and renamed them himself,
+because colour is the least important thing about them and "dark" reads
+as a dark Sun rather than as the Moon.
+
+**ONE composition, all four types.** Draw his Sun, then his Moon over it
+at the `occulter_radius` and `centre_distance` `solar_occulter_geometry`
+already returns, clipped so the dark disc covers the Sun's YELLOW DISC
+and never its rays. In his words: at totality cover the whole disc and
+leave only the rays; at every other type the dark disc is smaller or
+offset, so part of the yellow disc survives beside the rays. Totality is
+simply the case where the composition happens to cover everything —
+never a different picture drawn a different way.
+
+The geometry he confirmed, type by type: ANNULAR — the Moon IS centred,
+merely too far away to be big enough, so the dark disc shrinks and stays
+put. PARTIAL — the Moon does not cross the centre, so a disc of the
+Sun's own size is offset and the dark edge is that disc's real circular
+arc at its real offset. TOTAL — covered, rays alone. HYBRID — see below.
+
+**Everything is MEASURED off his files, never guessed**
+(`marker_marks._SUN_PLATE_*`, `_MOON_PLATE_*`; `tests/test_eclipse_plates.py`
+re-measures them and fails if a constant drifts from the art):
+
+| Plate | Measurement | Fraction of half-size |
+|-------|-------------|----------------------|
+| `eclipse_body_sun.png` (576²) | last fully solid yellow ring — the DISC | 0.623 |
+| | outermost ring carrying any ink — the RAY TIPS | 0.889 |
+| `eclipse_body_moon.png` (360²) | last ring of pure black — the Moon's limb | 0.925 |
+| | rim glow, which runs to the frame edge and is cut there | 1.000 |
+
+Two consequences fall straight out of those numbers. The Sun plate is
+scaled so its yellow disc is exactly the body radius, which puts his ray
+tips at 0.889/0.623 = **1.427** body radii — past the **1.38** the
+transparent window margin reserves (`_MARK_REACH_LIMIT`), so the plate is
+CLIPPED at that wall. It costs the outer 3 % of the ray tips on the ~13 %
+of the limb still carrying a spoke out there, at under half alpha; no
+continuous ink exists to cut, so no hard circular edge can appear.
+Shrinking the plate instead would have drawn the Sun 3 % smaller than the
+geometry every other mark is built on. And the Moon plate is scaled by its
+BLACK BODY, not its frame: the occulter is the solid disc, his rim glow is
+extra light beyond it, and the clip to the yellow disc keeps that glow off
+the rays.
+
+**The procedural corona is retired.** Totality was shown to the owner with
+the argument that his yellow rays are not what a real corona looks like —
+pearly white, irregular, long streamers — and he ruled against it: it is
+his instrument and this is how it represents an eclipse. `_corona` and
+`_ring_of_fire` are both gone; the `bite` style draws no procedural marks
+at all any more.
+
+**Only the PNGs are ever read.** The `.svg` twins beside them are dead
+twice over: Qt renders SVG Tiny 1.2 and silently drops `mask`, `filter`
+and `feColorMatrix`, so his mask-built Moon comes out a flat olive disc —
+and by his own account his exporter mangles them anyway, which is why he
+redrew both as PNG. Never wire the SVG back in.
+
+## THE GHOST RING — how a hybrid stays its own picture
+A hybrid begins annular, turns total across the middle of its path and
+ends annular. We draw ONE picture, at greatest eclipse, and at the
+epicentre a hybrid IS total — so the honest composition is the total one,
+and both would cover the disc completely (ratios 1.00 and 1.05, both
+landing on centre distance zero). That is the collapse the rework closed,
+about to re-open.
+
+So the hybrid's second half is carried by an added MARK rather than by a
+faked geometry: **one thin ring of fire hugging the inside of the dark
+limb**, in the annular orange. It says *totality here, the ring of fire
+elsewhere along this path* — and it is true, which the half-and-half split
+it replaced never was (no eclipse looks like that from anywhere).
+
+Its WIDTH is measured, not chosen: exactly the rim-glow band of his own
+Moon plate (1.000 − 0.925), a fifth of the annular ring's own
+`1 − _ANNULAR_SHRINK`. Only its strength is a decision, and a narrow one —
+the ring is the ONE thing separating hybrid from total, so it has to clear
+the distinctness measure's structure floor of 0.20. Measured: **0.171 at
+alpha 0.55** (below the floor — the same picture), 0.221 at 0.70,
+**0.291 at 0.90**, which is what ships.
 
 The tooth is [`tests/test_eclipse_distinctness.py`](../../tests/___tests.md),
 which compares every legal (type, style) pair with a perceptual measure

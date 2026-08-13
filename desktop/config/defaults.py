@@ -61,6 +61,36 @@ ECLIPSE_SOLAR_ART = (
     paths.assets_dir() / "instrument" / "icons" / "sun_eclipse.png"
 )
 
+# THE TWO ECLIPSE BODY PLATES (the owner drew them himself, 2026-08-13).
+# `sun_eclipse.png` above is ONE finished picture of an eclipse; these
+# two are its INGREDIENTS, and that is the whole reason they exist: the
+# Sun's rayed yellow face, and the Moon that crosses it. Composited at
+# the geometry `render.marker_marks.solar_occulter_geometry` computes,
+# one pair of files draws every partial and annular eclipse there is —
+# overlap them fully for totality, shrink the dark one for the ring of
+# fire, offset it for a partial ("kada je crni disk manji pa se vidi
+# vise oboda sunca"). THE COMPUTE-DON'T-GENERATE RULE, in his own art.
+# lang-ok: the owner's own words for the annular case, quoted so the
+# geometry cannot be re-derived wrongly.
+#
+# He named them `eclipse_light`/`eclipse_dark` and then renamed them
+# himself ("light dark sam bezveze naveo"): colour is the least
+# important thing about them, and "dark" reads as a dark Sun rather
+# than as the Moon. `eclipse_body_*` also cannot be confused with the
+# five finished `*eclipse*.png` pictures already in that folder.
+# lang-ok: his own sentence authorising the rename.
+#
+# The `.svg` twins beside them are HIS working files and nothing reads
+# them: Qt renders SVG Tiny 1.2 and silently drops `mask`, `filter` and
+# `feColorMatrix`, so the Moon's luminosity-inverted mask comes out as a
+# flat olive disc. The PNGs are the usable form.
+ECLIPSE_BODY_SUN_ART = (
+    paths.assets_dir() / "instrument" / "icons" / "eclipse_body_sun.png"
+)
+ECLIPSE_BODY_MOON_ART = (
+    paths.assets_dir() / "instrument" / "icons" / "eclipse_body_moon.png"
+)
+
 # --- Location (until the picker arrives in M6) --------------------------------
 # Owner-approved preset; values taken verbatim from world_locations.json.
 DEFAULT_CITY = {

@@ -1303,14 +1303,19 @@ def test_the_partial_occulter_is_the_suns_own_size(app):
     assert total < 1.10 * radius
 
 
-def test_the_bite_is_the_moon_algorithms_bright_crescent(app):
-    """THE BITE AS IT IS SEEN (owner correction 2026-08-11, slika 4:
-    "ne moze crni isecak na crnoj eklipsi... imamo algoritam"): the
-    partial phase paints the VISIBLE remainder BRIGHT — since
-    2026-08-13 as the true difference of two near-equal discs
-    (`solar_occulter_geometry`) rather than a lunar phase of matching
-    area — so its area tracks the uncovered share, and totality adds
-    nothing (the owner's icon is the whole look)."""
+def test_the_bite_uncovers_the_suns_disc_in_proportion(app):
+    """THE VISIBLE PART OF THE SUN'S OWN DISC tracks the uncovered
+    share — the property that survived every rewrite of this style.
+
+    The style itself has changed three times: a lunar-phase crescent
+    (2026-08-11), the true two-disc difference painted bright
+    (2026-08-13 morning), and now the owner's own two body plates
+    composited at that same geometry (2026-08-13 evening). What the
+    picture must SAY never changed, so the measurement is made inside
+    the Sun's own disc, where the answer belongs — the ray pattern
+    outside it is his art and is present at every magnitude, totality
+    included, which is exactly why counting the whole frame was the
+    wrong measure."""
     import math as _math
 
     from PySide6.QtCore import Qt
@@ -1318,7 +1323,7 @@ def test_the_bite_is_the_moon_algorithms_bright_crescent(app):
 
     from render import marker_marks
 
-    def bright_area(magnitude):
+    def bright_area(magnitude, inside_disc=True):
         image = QImage(240, 240, QImage.Format.Format_ARGB32)
         image.fill(Qt.GlobalColor.black)
         painter = QPainter(image)
@@ -1332,15 +1337,24 @@ def test_the_bite_is_the_moon_algorithms_bright_crescent(app):
             for x in range(240)
             for y in range(240)
             if image.pixelColor(x, y).red() > 128
+            and (
+                (x - 120) ** 2 + (y - 120) ** 2 <= 100.0 ** 2
+                if inside_disc else True
+            )
         )
         return lit / (_math.pi * 100.0 * 100.0)
 
-    assert bright_area(1.0) < 0.02          # totality: nothing added
+    assert bright_area(1.0) < 0.02          # totality: the disc is gone
     quarter = bright_area(0.75)
     half = bright_area(0.5)
     assert 0.15 < quarter < 0.40            # thick crescent at 25% visible
     assert 0.40 < half < 0.65               # half the face at 50% visible
     assert quarter < half
+    # AND THE RAYS SURVIVE TOTALITY (owner rule 2026-08-13: cover the
+    # whole yellow disc "and leave only the rays to be seen"). Without
+    # them a total eclipse would be a bare black hole on the dial, which
+    # is the one thing he said he would not ship.
+    assert bright_area(1.0, inside_disc=False) > 0.10
 
 
 def test_eclipse_jump_type_filter_narrows_the_catalog(deep):
