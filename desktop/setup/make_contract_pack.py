@@ -403,7 +403,30 @@ def _created_at() -> str:
     ).stdout.strip()
 
 
+def _art_gate() -> None:
+    """THE ART SYNC GATE (owner order 2026-08-13).
+
+    A pack built from an out-of-date `shared/assets/` is a pack that
+    ships art the masters no longer say, and nothing downstream can
+    tell — the manifest hashes the tables, not the pictures. So the
+    packaging step asks the bakery first, and REPAIRS rather than
+    merely complaining: the owner's order was "proveri ... i ako nije
+    uskladi ga" — check, and if it is not in sync, bring it into sync.
+
+    A machine with no `masters/` (any clone but the owner's) reports
+    nothing to do and passes, which is correct: its shipped tree is the
+    committed one and is already the truth.
+    """
+    from setup import make_art_bake
+
+    drift = make_art_bake.bake(check=True)
+    if drift:
+        print(f"art out of sync ({drift} file(s)) — baking before the pack")
+        make_art_bake.bake()
+
+
 def main() -> None:
+    _art_gate()
     vectors_payload = build_golden_vectors()
     _write_json(CONTRACT_DIR / "golden_vectors.json", vectors_payload)
 

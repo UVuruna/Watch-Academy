@@ -221,8 +221,113 @@ def _plan(
     return jobs, skipped
 
 
-def bake(force: bool = False, dry_run: bool = False) -> int:
-    """Bake every changed master. Returns how many files were written."""
+def governed_subtrees(masters: Path) -> tuple[str, ...]:
+    """The top-level areas the masters folder OWNS.
+
+    The whole safety of pruning rests on this line. `shared/assets/`
+    holds a great deal the bakery never made and no master will ever
+    account for — `instrument/`, `_baked/`, `_state/`, the SVG logos —
+    and a prune that reasoned "not in the manifest, therefore delete"
+    would erase the letter plates of THE ONE PLATE LAW on its first run.
+    So the bakery claims authority over exactly the top-level names that
+    exist under `masters/` and over nothing else.
+    """
+    return tuple(
+        sorted(entry.name for entry in masters.iterdir() if entry.is_dir())
+    )
+
+
+def _is_governed(relative: str, subtrees: tuple[str, ...]) -> bool:
+    return any(
+        relative == subtree or relative.startswith(subtree + "/")
+        for subtree in subtrees
+    )
+
+
+def reconcile(
+    masters: Path, assets: Path, records: dict
+) -> tuple[list[str], list[str]]:
+    """Find where the shipped tree and the masters have drifted apart.
+
+    Two different kinds of drift, and they get two different answers
+    because only one of them is provably ours:
+
+    * **orphans** — a manifest entry whose master is GONE. The manifest
+      is proof the bakery wrote that output from that master, so
+      deleting it is undoing our own work, not destroying someone's
+      file. This is the owner's "brisanje ako je uklonjeno iz masters".
+    * **strays** — a file inside a governed subtree that no manifest
+      entry claims. It might be art a master would have produced under a
+      name that has since changed; it might equally be something placed
+      by hand. We do not know, so we REPORT and let `--prune-strays`
+      say it out loud.
+
+    Returns (orphan relative-master-paths, stray asset paths).
+    """
+    subtrees = governed_subtrees(masters)
+    orphans = [
+        relative
+        for relative in records
+        if not (masters / relative).exists()
+    ]
+    claimed = {
+        record["output"]
+        for relative, record in records.items()
+        if relative not in orphans
+    }
+    strays: list[str] = []
+    for existing in sorted(assets.rglob("*")):
+        if not existing.is_file():
+            continue
+        relative = _rel(existing, assets)
+        if not _is_governed(relative, subtrees):
+            continue
+        if relative not in claimed:
+            strays.append(relative)
+    return orphans, strays
+
+
+def _prune(
+    assets: Path, records: dict, orphans: list[str], strays: list[str],
+    prune_strays: bool,
+) -> int:
+    """Delete what reconciliation condemned. Returns files removed."""
+    removed = 0
+    for relative in orphans:
+        output = assets / records[relative]["output"]
+        if output.exists():
+            output.unlink()
+            removed += 1
+        del records[relative]
+        print(f"  removed {relative} (master gone)")
+    if prune_strays:
+        for relative in strays:
+            (assets / relative).unlink()
+            removed += 1
+            print(f"  removed stray {relative}")
+    # An emptied theme folder left behind reads as a theme that ships
+    # nothing, and `test_theme_completeness.py` judges folders, not
+    # files — so a deletion that leaves the directory would fail the
+    # suite for a theme that no longer exists at all.
+    for directory in sorted(assets.rglob("*"), reverse=True):
+        if directory.is_dir() and not any(directory.iterdir()):
+            directory.rmdir()
+            print(f"  removed empty {_rel(directory, assets)}/")
+    return removed
+
+
+def bake(
+    force: bool = False,
+    dry_run: bool = False,
+    prune_strays: bool = False,
+    check: bool = False,
+) -> int:
+    """Bake every changed master. Returns how many files were written.
+
+    With `check=True` nothing is written: the function reports the drift
+    and returns the number of files that WOULD change, which is what a
+    build gate reads as its exit code.
+    """
     masters = paths.masters_dir()
     if masters is None:
         print(
@@ -241,12 +346,32 @@ def bake(force: bool = False, dry_run: bool = False) -> int:
         previous = json.loads(manifest_path.read_text("utf-8")).get("files", {})
 
     jobs, skipped = _plan(masters, assets, previous, force)
+    orphans, strays = reconcile(masters, assets, previous)
     print(
         f"masters: {masters}\n"
         f"assets:  {assets}\n"
         f"{len(jobs)} to bake, {skipped} unchanged, "
+        f"{len(orphans)} to remove, {len(strays)} unclaimed, "
         f"quality q{bakery.ART_BAKE_QUALITY}"
     )
+    for relative in strays[:20]:
+        print(f"  unclaimed: {relative}")
+    if len(strays) > 20:
+        print(f"  ... and {len(strays) - 20} more unclaimed")
+
+    if check:
+        # The build gate. It writes NOTHING — a check that repairs is a
+        # check nobody can trust to have told the truth about the state
+        # it found.
+        pending = len(jobs) + len(orphans) + (len(strays) if prune_strays else 0)
+        print(
+            "shared/assets is in sync with masters/"
+            if not pending else
+            f"OUT OF SYNC: {pending} file(s) — run "
+            "`python -m setup.make_art_bake` before building"
+        )
+        return pending
+
     if dry_run:
         for source, destination, ceiling, _ in jobs[:40]:
             kind = "verbatim" if ceiling is None else f"<= {ceiling}px webp"
@@ -259,6 +384,11 @@ def bake(force: bool = False, dry_run: bool = False) -> int:
     written = 0
     saved_from = 0
     saved_to = 0
+    # Prune BEFORE baking, on `previous`, so the records the bake then
+    # writes into are already free of the entries whose masters are
+    # gone. Doing it after would mean a run that crashes mid-bake leaves
+    # a manifest still promising files that were deleted.
+    removed = _prune(assets, previous, orphans, strays, prune_strays)
     workers = max(1, min(defaults.WORKING_SET_WORKERS, os.cpu_count() or 1))
     records = dict(previous)
     with ProcessPoolExecutor(max_workers=workers) as pool:
@@ -315,6 +445,8 @@ def bake(force: bool = False, dry_run: bool = False) -> int:
         ),
         "utf-8",
     )
+    if removed:
+        print(f"{removed} file(s) removed — shared/assets follows masters/")
     if saved_from:
         print(
             f"{written} baked in {perf_counter() - start:.1f}s — "
@@ -333,9 +465,27 @@ def main() -> int:
     parser.add_argument(
         "--list", action="store_true", help="report the plan, do no work"
     )
+    parser.add_argument(
+        "--check", action="store_true",
+        help="THE BUILD GATE: report drift, write nothing, exit non-zero "
+             "with the number of files out of sync",
+    )
+    parser.add_argument(
+        "--prune-strays", action="store_true",
+        help="also delete governed files no master accounts for "
+             "(reported, never deleted, without this flag)",
+    )
     arguments = parser.parse_args()
-    bake(force=arguments.force, dry_run=arguments.list)
-    return 0
+    pending = bake(
+        force=arguments.force,
+        dry_run=arguments.list,
+        prune_strays=arguments.prune_strays,
+        check=arguments.check,
+    )
+    # Only --check turns the count into an exit code; an ordinary bake
+    # returns how many files it WROTE, and a successful bake of 12 files
+    # must not look like a failure to a shell.
+    return min(pending, 1) if arguments.check else 0
 
 
 if __name__ == "__main__":

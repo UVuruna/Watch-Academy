@@ -13,6 +13,28 @@ flowchart LR
     B -. never writes back .-> M
 ```
 
+## The sync flow (owner order 2026-08-13)
+
+```mermaid
+flowchart TB
+    S[build starts] --> G[make_art_bake --check]
+    G --> Q{drift?}
+    Q -- none --> OK[build proceeds]
+    Q -- yes --> R[make_art_bake: reconcile + bake]
+    R --> O1[master gone -> delete its shipped file + manifest entry]
+    R --> O2[folder now empty -> remove the folder]
+    R --> O3[unclaimed file in a governed area -> REPORT only]
+    R --> O4[new or changed master -> bake it]
+    O1 --> OK
+    O2 --> OK
+    O3 --> OK
+    O4 --> OK
+```
+
+A governed area is a top-level folder that exists under `masters/`.
+Everything else in `shared/assets/` — `instrument/letters`, `_baked/`,
+`_state/`, the logos — is outside the prune's reach by construction.
+
 ## The bake
 
 ```mermaid

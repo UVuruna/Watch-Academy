@@ -73,6 +73,21 @@ project-specific laws and deltas that TIGHTEN the root rules.
   at runtime as they always could.
   **(e)** a clone without `masters/` is a complete, working program —
   that is the whole point.
+  **(f) THE SYNC FLOW (owner order 2026-08-13):** a bake run
+  RECONCILES before it bakes — a master taken away takes its shipped
+  file and its manifest entry with it, and an emptied folder goes too.
+  The prune's reach is exactly the top-level names that exist under
+  `masters/` (`governed_subtrees`), never `instrument/letters` or
+  anything else the bakery did not make; an unclaimed file inside a
+  governed area is REPORTED, and only `--prune-strays` deletes it.
+  `--check` is the build gate: writes nothing, exits non-zero on
+  drift, called first thing by `setup/make_contract_pack.py` and by
+  every future build. The arrow is still one-way — nothing is ever
+  written back into `masters/`.
+- **The Illustrator masters (owner decree 2026-08-13):** the `.ai`
+  files are the owner's working files, not the program's; they live in
+  `UV/illustrator/` and their 240 MB of blobs were stripped from git
+  history. `desktop/illustrator/` no longer exists — do not recreate it.
 - **Verification:** `python -m pytest tests` from inside `desktop/` (golden
   values: Belgrade DST −4.17°→+10.76°, Tromsø regimes, exact equinoxes,
   moon 0.7400 on 2026-07-07, mockup day 20.6.2025 sunrise 04:52/sunset

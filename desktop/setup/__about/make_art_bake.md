@@ -88,6 +88,60 @@ it would bake compression artifacts into all 34 finishes of every
 glyph, everywhere the program draws text. They are also already small
 (palette PNGs, tens of KB). Nothing to win, everything to lose.
 
+## THE SYNC FLOW (owner order 2026-08-13)
+
+One bake done by hand is not a flow. The owner's order was for a
+system: at build time, check whether `shared/assets/` still says what
+`masters/` says, and if it does not, make it say it — new art
+compressed, removed art removed.
+
+So a run is not "bake what is new" any more. It is **reconcile, then
+bake**:
+
+| Drift | What the bakery does | Why that answer |
+|-------|----------------------|-----------------|
+| a master with no shipped file, or a changed one | bakes it | the ordinary case |
+| a master GONE, its manifest entry still there | **deletes the shipped file** and the entry | the manifest is proof the bakery wrote that output from that master. Deleting it undoes our own work; it destroys nobody's file |
+| a folder left empty by that deletion | removes the folder | an empty theme folder reads to `test_theme_completeness.py` as a theme that ships nothing — worse than the theme being gone |
+| a file in a governed area that no master claims | **reports it, deletes nothing** | we do not know what it is. `--prune-strays` deletes it, and the flag is the person saying so |
+| anything outside a governed area | never looked at | see below — this line is the prune's whole safety |
+
+**Governed areas are exactly the top-level folders that exist under
+`masters/`** (`governed_subtrees`). `shared/assets/` holds a great deal
+the bakery never made: `instrument/letters` (the gold masters of THE
+ONE PLATE LAW), `_baked/`, `_state/`, the SVG logos. A prune reasoning
+"not in the manifest, therefore delete" would erase the program's
+entire alphabet on its first run. It reasons "not under an area the
+masters own, therefore not mine" instead.
+
+### The direction
+
+Both KINDS of drift are handled; the ARROW is still one-way. The bakery
+never writes into `masters/` — not a deletion, not a rename, not a
+re-encode. A master is the owner's file. If a shipped file has no
+master, the answer is to report it, never to invent the master it would
+have come from.
+
+### Running the flow
+
+```
+python -m setup.make_art_bake                  # reconcile + bake
+python -m setup.make_art_bake --check          # THE GATE: report, write nothing
+python -m setup.make_art_bake --prune-strays   # also delete unclaimed files
+```
+
+`--check` writes nothing and exits non-zero when the tree has drifted —
+a check that repairs is a check nobody can trust to have told the truth
+about the state it found. It is what a build reads.
+`setup/make_contract_pack.py` calls it first thing (`_art_gate`) and
+bakes when it fails; when the desktop installer pipeline is founded
+(M7, [Ship Rules](../../../../../rules/SHIP.md)) it calls the same gate.
+On a clone with no `masters/` the gate passes, correctly: that clone's
+shipped tree is the committed one and is already the truth.
+
+Teeth: `tests/test_art_bake.py` §THE SYNC FLOW — five tests, one per
+row of the table above.
+
 ## The manifest
 
 `shared/assets/_bake_manifest.json` records, per baked file, the

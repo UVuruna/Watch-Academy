@@ -159,6 +159,116 @@ def test_a_changed_master_is_rebaked(tmp_path, monkeypatch):
     assert make_art_bake.bake() == 1
 
 
+# ═══════════════════════════ THE SYNC FLOW ═══════════════════════════
+# Owner order 2026-08-13: a run must not only bake what is new, it must
+# make the shipped tree FOLLOW the masters — including when a master is
+# taken away. One bake done by hand is not a flow; these hold the flow.
+def _bakery(tmp_path, monkeypatch) -> tuple[Path, Path]:
+    masters = tmp_path / "masters"
+    assets = tmp_path / "assets"
+    (masters / "weeks").mkdir(parents=True)
+    monkeypatch.setattr(paths, "masters_dir", lambda: masters)
+    monkeypatch.setattr(paths, "assets_dir", lambda: assets)
+    return masters, assets
+
+
+def test_a_master_taken_away_takes_its_shipped_file_with_it(
+    tmp_path, monkeypatch
+):
+    masters, assets = _bakery(tmp_path, monkeypatch)
+    for name in ("A_gem.png", "B_gem.png"):
+        Image.new("RGBA", (900, 900)).save(masters / "weeks" / name)
+    make_art_bake.bake()
+    assert (assets / "weeks" / "B_gem.webp").exists()
+
+    (masters / "weeks" / "B_gem.png").unlink()
+    make_art_bake.bake()
+
+    assert not (assets / "weeks" / "B_gem.webp").exists(), (
+        "the shipped file outlived its master — the tree no longer says "
+        "what the masters say"
+    )
+    assert (assets / "weeks" / "A_gem.webp").exists(), "it took the wrong one"
+    manifest = json.loads(
+        (assets / make_art_bake.MANIFEST_NAME).read_text("utf-8")
+    )
+    assert "weeks/B_gem.png" not in manifest["files"]
+
+
+def test_an_emptied_area_leaves_no_folder_behind(tmp_path, monkeypatch):
+    """An empty theme folder reads to `test_theme_completeness.py` as a
+    theme that ships nothing — worse than the theme being gone."""
+    masters, assets = _bakery(tmp_path, monkeypatch)
+    (masters / "weeks" / "Gone").mkdir()
+    Image.new("RGBA", (600, 600)).save(masters / "weeks" / "Gone" / "x_gem.png")
+    make_art_bake.bake()
+    assert (assets / "weeks" / "Gone").is_dir()
+
+    (masters / "weeks" / "Gone" / "x_gem.png").unlink()
+    make_art_bake.bake()
+    assert not (assets / "weeks" / "Gone").exists()
+
+
+def test_ungoverned_areas_are_never_touched_by_the_prune(
+    tmp_path, monkeypatch
+):
+    """THE prune's safety line. `instrument/letters` are the gold
+    masters of THE ONE PLATE LAW and no master under `masters/weeks`
+    will ever account for them; a prune reasoning "unclaimed, therefore
+    delete" erases the program's entire alphabet on its first run."""
+    masters, assets = _bakery(tmp_path, monkeypatch)
+    Image.new("RGBA", (600, 600)).save(masters / "weeks" / "A_gem.png")
+    make_art_bake.bake()
+    plate = assets / "instrument" / "letters" / "latin" / "A.png"
+    plate.parent.mkdir(parents=True)
+    Image.new("RGBA", (64, 64)).save(plate)
+
+    make_art_bake.bake(prune_strays=True)
+    assert plate.exists(), "the prune reached outside the masters' own areas"
+
+
+def test_a_stray_inside_a_governed_area_is_reported_not_deleted(
+    tmp_path, monkeypatch
+):
+    """We do not know what an unclaimed file is. Reporting is honest;
+    deleting on a guess is not."""
+    masters, assets = _bakery(tmp_path, monkeypatch)
+    Image.new("RGBA", (600, 600)).save(masters / "weeks" / "A_gem.png")
+    make_art_bake.bake()
+    stray = assets / "weeks" / "hand_placed.webp"
+    Image.new("RGBA", (64, 64)).save(stray)
+
+    orphans, strays = make_art_bake.reconcile(
+        masters, assets,
+        json.loads((assets / make_art_bake.MANIFEST_NAME)
+                   .read_text("utf-8"))["files"],
+    )
+    assert orphans == []
+    assert "weeks/hand_placed.webp" in strays
+    make_art_bake.bake()
+    assert stray.exists(), "a stray was deleted without the flag that says so"
+    make_art_bake.bake(prune_strays=True)
+    assert not stray.exists(), "--prune-strays did nothing"
+
+
+def test_the_check_gate_writes_nothing_and_counts_the_drift(
+    tmp_path, monkeypatch
+):
+    """A check that repairs is a check nobody can trust to have told the
+    truth about the state it found."""
+    masters, assets = _bakery(tmp_path, monkeypatch)
+    Image.new("RGBA", (900, 900)).save(masters / "weeks" / "A_gem.png")
+    assert make_art_bake.bake(check=True) == 1
+    assert not (assets / "weeks" / "A_gem.webp").exists(), "the gate baked"
+
+    make_art_bake.bake()
+    assert make_art_bake.bake(check=True) == 0
+
+    (masters / "weeks" / "A_gem.png").unlink()
+    assert make_art_bake.bake(check=True) == 1
+    assert (assets / "weeks" / "A_gem.webp").exists(), "the gate deleted"
+
+
 def test_no_masters_folder_is_not_an_error(tmp_path, monkeypatch):
     """A clone without the masters is a complete, working program —
     that is the entire point of baking the shipped tree here."""
