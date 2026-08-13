@@ -2723,32 +2723,37 @@ def test_pole_light_window_math():
     assert defaults.pole_emoji("south", _date(2026, 12, 20)) == defaults.POLE_LIGHT_EMOJI
 
 
-def test_ui_icon_table_and_pole_icon_name(tmp_path, monkeypatch):
+def test_ui_icon_table_ships_what_it_names(tmp_path, monkeypatch):
     """TASK 4 (MASON/ICONS round, owner icon list 2026-07-19 approvals):
-    the four owner-approved icons ship at their canonical config paths
-    and `pole_icon_name` mirrors `pole_emoji`'s own light/dark split
-    exactly, so the icon and its documented emoji fallback never
-    disagree. `icon_path` is graceful-absent (Rule #1) for a name whose
-    file has not landed."""
-    from datetime import date as _date
+    every icon the table names ships at its canonical config path, and
+    `icon_path` is graceful-absent (Rule #1) for a name whose file has
+    not landed.
 
-    assert defaults.ICON_FILES["light"].name == "light.png"
-    assert defaults.ICON_FILES["dark"].name == "dark.svg"
-    assert defaults.ICON_FILES["eclipse_sun"].name == "eclipse_sun.svg"
-    assert defaults.ICON_FILES["eclipse_moon"].name == "eclipse_moon.png"
+    The `pole_icon_name` half of this test went with the function, in
+    the 2026-08-13 icon-folder audit: it resolved `ICON_FILES["light"]`
+    and `["dark"]` for the Quick Jump pole rows, and NOTHING in the
+    application ever called it — only this test did. Worse, the art it
+    pointed at was the owner's light/dark THEME-SWITCHER background (a
+    photographic sky), never a polar-day badge, so the table's own
+    comment described a picture that did not exist. Dead art and dead
+    code were retired together, because moving the files alone would
+    have left a function claiming icons that were no longer there for
+    the next round to "fix" by putting them back. `pole_emoji`, which IS
+    called (`app/time_travel.py`), is untouched and still covered
+    above."""
     for name, path in defaults.ICON_FILES.items():
         assert defaults.icon_path(name) == path, name
         assert path.exists(), name
 
-    assert defaults.pole_icon_name("north", _date(2026, 6, 20)) == "light"
-    assert defaults.pole_icon_name("south", _date(2026, 6, 20)) == "dark"
-    assert defaults.pole_icon_name("north", _date(2026, 12, 20)) == "dark"
-    assert defaults.pole_icon_name("south", _date(2026, 12, 20)) == "light"
+    assert defaults.ICON_FILES["eclipse_sun"].name == "eclipse_sun.svg"
+    assert defaults.ICON_FILES["eclipse_moon"].name == "eclipse_moon.png"
 
     # Graceful-absent: a name whose file does not exist answers None
     # (`icon_path` checks the CURRENT file, not a cached existence flag).
-    monkeypatch.setitem(defaults.ICON_FILES, "light", tmp_path / "missing.png")
-    assert defaults.icon_path("light") is None
+    monkeypatch.setitem(
+        defaults.ICON_FILES, "eclipse_moon", tmp_path / "missing.png"
+    )
+    assert defaults.icon_path("eclipse_moon") is None
 
 
 def test_computed_fast_travel_icons_are_drawn_not_shipped(app):

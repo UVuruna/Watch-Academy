@@ -156,8 +156,19 @@ WINDOW_ICON_SIZES_PX = (16, 24, 32, 48, 64, 128, 256)
 # (Rule #1).
 ICON_DIR = paths.assets_dir() / "instrument" / "icons"
 ICON_FILES = {
-    "light": ICON_DIR / "light.png",           # Quick Jump pole row: polar DAY
-    "dark": ICON_DIR / "dark.svg",              # Quick Jump pole row: polar NIGHT
+    # RETIRED 2026-08-13, icon-folder audit. Two keys lived here for a
+    # polar DAY/NIGHT badge on the Quick Jump pole rows. Nothing in the
+    # application ever read them — their only resolver, `pole_icon_name`,
+    # was called by one test and by no runtime code — and the art was
+    # the owner's light/dark THEME-SWITCHER background, a photographic
+    # sky, not a polar badge: the comment here described a picture that
+    # was never drawn. Art and function were retired together, because
+    # moving the files alone leaves a function claiming icons that are
+    # gone. The files are listed in `tests/test_art_reachability.py`'s
+    # RETIRED roster (deliberately NOT named here — that guard fails if
+    # a retired file's name still appears anywhere in the source, which
+    # is what keeps retirement honest). `pole_emoji` is untouched and
+    # still serves those rows.
     # Quick Jump's Sun eclipse entries — and, since the owner's
     # correction of 2026-08-12, the Fast Travel picker's solar-eclipse
     # row too: this glyph carries many more rays than `sun_eclipse.png`,
@@ -1003,9 +1014,3 @@ def pole_emoji(pole: str, on_date: date) -> str:
     return POLE_LIGHT_EMOJI if pole_is_light(pole, on_date) else POLE_DARK_EMOJI
 
 
-def pole_icon_name(pole: str, on_date: date) -> str:
-    """The `ICON_FILES` key for one pole's row (TASK 4, MASON/ICONS
-    round) — "light"/"dark" by the SAME `pole_is_light` split
-    `pole_emoji` already uses, so the icon and its documented emoji
-    fallback never disagree."""
-    return "light" if pole_is_light(pole, on_date) else "dark"

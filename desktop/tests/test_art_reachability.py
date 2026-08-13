@@ -231,6 +231,33 @@ def _art_dirs() -> list[Path]:
     ]
 
 
+# ═══════════════════════════ RETIRED ═══════════════════════════
+# The FOURTH honest state, added 2026-08-13 with the owner's icon-folder
+# order: "u tom osnovnom hocu da bude uvek samo ono sto se koristi na
+# raznim mestima a ne sve" — the base folder shows live art only, and
+# what is no longer drawn moves into an `_unused/` subfolder beside it.
+#
+# This does NOT weaken the law. The law forbids art that sits SILENT;
+# a retired folder listed here with its reason is the opposite of
+# silent. And retiring is made HARDER than it was, not easier: a second
+# assertion below reads every retired file's stem back through the
+# whole source tree and fails if anything still names it. You cannot
+# hide live art by moving it here.
+RETIRED: dict[str, str] = {
+    "instrument/icons/_unused":
+        "Retired 2026-08-13, icon-folder audit. `sun_eclipse.svg` is a "
+        "byte-identical copy of the live `eclipse_sun.svg` under the "
+        "reversed name (md5 591f24e7…), and only the other one was ever "
+        "wired. `light.png`/`dark.svg` are the owner's light/dark "
+        "THEME-SWITCHER background art, which the code had adopted as a "
+        "polar day/night badge through `pole_icon_name` — a function no "
+        "runtime caller ever used; it was retired with them. The two "
+        "`eclipse_body_*.svg` are the owner's own working files: his "
+        "exporter mangles them and Qt's SVG Tiny 1.2 drops the mask his "
+        "Moon is built on, so the PNGs he redrew are the shipped form.",
+}
+
+
 # ═══════════════════════════ THE GUARD ═══════════════════════════
 
 
@@ -245,6 +272,10 @@ def test_every_art_folder_is_resolved_named_or_owed():
         if directory.resolve() in resolved or rel in ledgered:
             continue
         if any(_matches_pattern(rel, pattern) for pattern in RESOLVED_ELSEWHERE):
+            continue
+        if rel in RETIRED or any(
+            rel.startswith(f"{retired}/") for retired in RETIRED
+        ):
             continue
         offenders.append(f"{rel} ({len(list(directory.glob('*.png')))} plates)")
     assert offenders == [], (
@@ -289,4 +320,48 @@ def test_the_ledger_owes_only_what_exists():
     assert stale == [], (
         "the ledger owes what is already wired or no longer exists — "
         "delete these rows: " + ", ".join(sorted(stale))
+    )
+
+
+def test_no_retired_art_is_still_named_by_the_program():
+    """The price of the RETIRED state, and the reason it is not a
+    loophole: nothing under a retired folder may still be named anywhere
+    in the source. Retiring is for art the program has genuinely stopped
+    drawing — if a stem is still mentioned, either the art was moved out
+    from under a live reader (which would break the dial at runtime,
+    silently, since `icon_path` is graceful-absent by Rule #1) or the
+    code that named it was left behind as a lie.
+
+    Dead art and dead code go together. Moving only the files would let
+    the next round find a function claiming icons that are no longer
+    there and "fix" it by putting them back — which is how this folder
+    filled up in the first place."""
+    sources = [
+        path for path in sorted((_ROOT).rglob("*.py"))
+        if "__pycache__" not in path.parts and "tests" not in path.parts
+    ]
+    sources += sorted((_ROOT.parent / "shared" / "Database").glob("*.json"))
+    haystack = {
+        path: path.read_text(encoding="utf-8", errors="ignore")
+        for path in sources
+    }
+    offenders = []
+    for folder in RETIRED:
+        directory = _ASSETS / folder
+        if not directory.is_dir():
+            continue
+        for retired_file in sorted(directory.glob("*")):
+            if not retired_file.is_file():
+                continue
+            for path, text in haystack.items():
+                if retired_file.name in text:
+                    offenders.append(
+                        f"{folder}/{retired_file.name} still named in "
+                        f"{path.relative_to(_ROOT.parent).as_posix()}"
+                    )
+    assert offenders == [], (
+        "RETIRED ART IS STILL NAMED: a file was moved into a retired "
+        "folder while the program still asks for it by name. Either the "
+        "art must come back, or the code that names it must go with it "
+        "— never one without the other:\n  " + "\n  ".join(offenders)
     )
