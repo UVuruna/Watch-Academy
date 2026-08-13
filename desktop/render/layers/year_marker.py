@@ -157,11 +157,7 @@ def _marker_seat(
         return earth_marker_angle(ctx), spec.scale
     if not ctx.skin.show_moon:
         return None
-    return (
-        (angles.moon_cycle_angle(ctx.tick.moon_fraction)
-         + ctx.world_offset) % 360.0,
-        spec.moon_scale,
-    )
+    return moon_marker_angle(ctx), spec.moon_scale
 
 
 def _lane_seat_is_clear(
@@ -210,24 +206,30 @@ def earth_marker_angle(ctx: RenderContext) -> float:
     mapping (owner 2026-07-16): the Earth marker rides the month wedges
     (one tick ≈ one day) instead of the shared six-anchor season wheel —
     every OTHER pointer, the Zodiac wheel included, keeps the shared
-    wheel. THE WORLD OFFSET (core.world): the year wheel is drawn ON the
-    turning dial face, so the Earth rides it — the summer solstice stands
-    at the top by day and the WINTER solstice takes the top at night
-    (ledger §1). 0.0 in Geocentric."""
-    base = (
+    wheel.
+
+    THE YEAR WHEEL DOES NOT TURN (owner order 2026-08-13, correcting the
+    2026-08-12 rule this docstring used to carry). North is ALWAYS the
+    summer solstice, exactly as north on the moon wheel is always the new
+    moon. The world offset moves what the CLOCK draws — the hour hand,
+    the hour numbers, the jewels, the eclipse body at its hour — because
+    those are positions in time. The year wheel and the moon cycle are
+    positions in the CALENDAR, and a calendar does not swing when the sky
+    is redrawn: the inner minute band was already exempt for this reason
+    and these two now join it. Tooth:
+    `tests/test_year_marker.py::test_the_calendar_wheels_never_take_the_world_offset`."""
+    return (
         almanac_marker_angle(ctx.day.local_date)
         if almanac_wheel_active(ctx)
         else ctx.tick.year_angle
-    )
-    return (base + ctx.world_offset) % 360.0
+    ) % 360.0
 
 
 def moon_marker_angle(ctx: RenderContext) -> float:
-    """The Moon marker's own dial angle, world offset included — the twin
-    of `earth_marker_angle`, and for the same reason."""
-    return (
-        angles.moon_cycle_angle(ctx.tick.moon_fraction) + ctx.world_offset
-    ) % 360.0
+    """The Moon marker's own dial angle — the twin of
+    `earth_marker_angle`, and for the same reason: north is always the
+    new moon, and no world offset may move it."""
+    return angles.moon_cycle_angle(ctx.tick.moon_fraction) % 360.0
 
 
 def _moon_transit_nearness_now(ctx: RenderContext) -> float:
@@ -393,7 +395,13 @@ class YearMarkerLayer(Layer):
             earth_pos = None
             if nearness > 0.0 and ctx.skin.show_earth:
                 earth_pos = dial_point(
-                    (ctx.tick.year_angle + ctx.world_offset) % 360.0,
+                    # THE ONE DOOR: the shadow must fall on the Earth
+                    # that is actually DRAWN, so it reads the same
+                    # function the marker does — recomputing the angle
+                    # here is how the shadow drifted off the Earth on the
+                    # Almanac wheel, and how it would drift again the
+                    # moment the offset rule changes (as it just did).
+                    earth_marker_angle(ctx),
                     ctx.radius * dial.earth_moon_orbit_fraction(
                         ctx.skin.numeral_outer_ring_size, spec.scale,
                     ),

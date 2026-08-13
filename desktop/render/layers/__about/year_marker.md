@@ -215,3 +215,30 @@ continent_from_coordinates`), except at extreme latitudes where the planet
 honestly shows its pole. Both coordinates come straight from the day
 context, so the region is recomputed every paint — no stale skin-baked
 default.
+
+## THE CALENDAR WHEELS DO NOT TURN (owner order 2026-08-13)
+
+`earth_marker_angle` and `moon_marker_angle` take **no world offset**.
+North is always the summer solstice and always the new moon, in every
+world mode and at every solar rotation.
+
+The line this draws: the world offset moves what the CLOCK draws — the
+hour hand, the hour numbers, the jewels, the crown, the eclipse body at
+its hour — because those are positions in TIME. The year wheel and the
+moon cycle are positions in the CALENDAR, and a calendar does not swing
+when the sky is redrawn. The inner minute band was already exempt for
+exactly this reason; these two now join it.
+
+The eclipse body deliberately does NOT join them: it is seated at the
+hour of greatest eclipse, which is a position in time like the hour hand,
+so it keeps riding the offset. Its collision test against the Earth still
+works, because both sides of that test are SCREEN angles.
+
+Both angles are single functions with a single caller path on purpose.
+Two places in this module used to recompute them inline, and one of those
+copies is why the Moon's cast shadow fell beside the Earth instead of on
+it whenever the Almanac wheel was active — the shadow read the plain year
+angle while the marker read the almanac one. Teeth:
+`tests/test_year_marker.py`, plus
+`tests/test_world_mode.py::test_earth_and_moon_keep_their_calendar_seats_at_night`,
+which pins the DRAWN position through the compositor's own hit test.
