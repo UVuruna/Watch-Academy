@@ -892,13 +892,13 @@ def test_world_mode_defaults_to_geocentric_in_a_file_that_predates_it(store):
         encoding="utf-8",
     )
     loaded = store.load()
-    assert loaded.world_mode == "geocentric"
+    assert loaded.world_mode == "noon_up"
     assert (loaded.window_x, loaded.window_y, loaded.diameter) == (12, 34, 360)
 
 
 def test_world_mode_round_trips_and_rejects_an_unknown_value(store):
-    store.save(replace(Settings(), world_mode="heliocentric"))
-    assert store.load().world_mode == "heliocentric"
+    store.save(replace(Settings(), world_mode="sky_up"))
+    assert store.load().world_mode == "sky_up"
     assert '"world_mode"' in store.path.read_text(encoding="utf-8")
     store.path.write_text(
         '{"schema_version": 1, "window": {"x": 0, "y": 0, "diameter": 360},'
@@ -916,7 +916,7 @@ def test_a_foreign_top_level_mode_key_can_never_become_the_world_mode(store):
     — a hand-seeded profile, another tool's leftover — must load
     cleanly and leave the dial Geocentric, no matter what that value
     says. `mode` is simply not a key this loader reads."""
-    for foreign in ("heliocentric", "dark", "12h", True, 7):
+    for foreign in ("sky_up", "dark", "12h", True, 7):
         store.path.write_text(
             '{"schema_version": 1,'
             ' "window": {"x": 0, "y": 0, "diameter": 360},'
@@ -924,14 +924,14 @@ def test_a_foreign_top_level_mode_key_can_never_become_the_world_mode(store):
             encoding="utf-8",
         )
         loaded = store.load()
-        assert loaded.world_mode == "geocentric"
+        assert loaded.world_mode == "noon_up"
     # ...and the app's own key still works in the very same file.
     store.path.write_text(
         '{"schema_version": 1, "window": {"x": 0, "y": 0, "diameter": 360},'
-        ' "mode": "heliocentric", "world_mode": "heliocentric"}',
+        ' "mode": "sky_up", "world_mode": "sky_up"}',
         encoding="utf-8",
     )
-    assert store.load().world_mode == "heliocentric"
+    assert store.load().world_mode == "sky_up"
 
 
 # --- The identity markers (2026-08-06 escalation) ----------------------------
@@ -954,7 +954,7 @@ def test_a_file_without_the_identity_markers_names_what_it_is_missing(store):
         json.dumps({
             "diameter": 540,
             "location": {"name": "Belgrade"},
-            "mode": "heliocentric",
+            "mode": "sky_up",
             "x": 100,
             "y": 200,
         }),
