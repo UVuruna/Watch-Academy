@@ -39,6 +39,7 @@ def build(settings, setters: dict, tr) -> QWidget:
     palette_group = QGroupBox(tr("Palette"))
     palette_group.setLayout(_palette_style_row(settings, setters, tr))
     layout.addWidget(palette_group)
+    layout.addWidget(_palette_hues_group(settings, setters, tr))
     if settings.pointer != "aurora":
         shape_group = QGroupBox(tr("Shape"))
         shape_layout = QVBoxLayout(shape_group)
@@ -49,6 +50,63 @@ def build(settings, setters: dict, tr) -> QWidget:
     widget = QWidget()
     widget.setLayout(layout)
     return widget
+
+
+def _palette_hues_group(settings, setters, tr) -> QGroupBox:
+    """The pointer hue chips, MOVED here from the Colors page (owner
+    ballot verdict 5B, 2026-08-14): the group changes with the pointer
+    picked right above it, so it lives beside that pick. R-21 item 2's
+    LIVE-APPLY law is unchanged — `setters["palettes"]` stores the
+    WHOLE hue tuple at once, preset-equals-no-override."""
+    from PySide6.QtGui import QColor
+    from PySide6.QtWidgets import QColorDialog, QPushButton
+
+    from app.ui_style import tooltip_wrap
+    from app.watch_face import tint_picker
+    from config import dial, palette
+
+    pointer_key = settings.pointer
+    style = palette.effective_palette_style(pointer_key, settings.palette_style)
+    key = f"{pointer_key}_{style}"
+    preset = palette.PALETTE_PRESETS[(pointer_key, style)]
+    hues = list(settings.palettes.get(key, preset))
+    arm_labels = palette.pointer_arm_labels(pointer_key, style)
+    group = QGroupBox(
+        tr("Palette — {pointer} {style}").format(
+            pointer=constants.POINTER_DISPLAY_NAMES[pointer_key],
+            style=style.capitalize(),
+        )
+    )
+    column = QVBoxLayout(group)
+    row = QHBoxLayout()
+
+    def pick(index: int) -> None:
+        chosen = QColorDialog.getColor(QColor(hues[index]), None, "Pick a hue")
+        if not chosen.isValid():
+            return
+        new_hues = list(hues)
+        new_hues[index] = chosen.name().upper()
+        setters["palettes"](pointer_key, style, tuple(new_hues))
+
+    for index, hue in enumerate(hues):
+        chip = QPushButton()
+        tint_picker.round_swatch(chip, hue, dial.PALETTE_SWATCH_PX)
+        chip.setToolTip(tooltip_wrap(f"{tr(arm_labels[index])} — {hue}"))
+        chip.clicked.connect(lambda checked, i=index: pick(i))
+        row.addWidget(chip)
+    row.addStretch(1)
+    # ALG-5: "Reset to preset" keeps its own row (a text button is not a
+    # sibling of twelve identical circles).
+    reset = QPushButton(tr("Reset to preset"))
+    reset.clicked.connect(
+        lambda: setters["palettes"](pointer_key, style, tuple(preset))
+    )
+    reset_row = QHBoxLayout()
+    reset_row.addWidget(reset)
+    reset_row.addStretch(1)
+    column.addLayout(row)
+    column.addLayout(reset_row)
+    return group
 
 
 def _pointer_gallery(settings, setters, tr) -> QWidget:

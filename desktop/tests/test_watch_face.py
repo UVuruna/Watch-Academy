@@ -108,15 +108,17 @@ def _dialog(settings: Settings | None = None) -> WatchFaceDialog:
 
 
 def test_window_builds_with_all_nine_sidebar_entries(app):
-    """NUMERALS joined the sidebar with the live numeral bands
-    (ring_rework.md §5) — it sits right after Ring, since it settles how
-    that same band is written."""
+    """Nine entries, reorganized 2026-08-14 (owner ballot verdicts
+    5A/5D): Umbra & Aura dissolved into Colors, and the over-long Hands
+    & Bodies split its Eclipses + Stations half into its own page — the
+    count stays nine."""
     dialog = _dialog()
     assert dialog._nav_list.count() == 9
     titles = [dialog._nav_list.item(i).text() for i in range(9)]
     assert titles == [
-        "Pointer", "Ring", "Numerals", "Hands & Bodies", "Umbra & Aura",
-        "Opacity", "Themes & Slots", "Colors", "Size",
+        "Pointer", "Ring", "Numerals", "Hands & Bodies",
+        "Eclipses & Stations", "Opacity", "Themes & Slots", "Colors",
+        "Size",
     ]
     assert dialog._stack.count() == 9
     dialog.deleteLater()

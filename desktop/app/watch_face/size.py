@@ -1,174 +1,138 @@
-"""Size section (see size.md) — the diameter slider + spinbox + Default
-+ the five `dial.SIZE_PRESETS` buttons (the two-way slider/spinbox sync
-`display_section._build_sizes_group` uses, plus `design_window.
-DesignDialog._size_tab`'s preset row) and every element scale slider —
-Earth, Moon, Complications (`slot_scale`), Jewels (`ring_jewels_scale`),
-Crown Text (`crown_text_scale`), Hover enlarge — wired to the SAME stored
-setting keys the Settings dialog's "Element sizes" group uses (Rule #5;
-only the on-screen labels differ, per the owner's Watch Face naming).
+"""Size section (see size.md) — migrated to THE ELEMENT CLASSES (owner
+ballot verdicts 2026-08-14, classes phase): every size control is now a
+VALUE KNOB in the size family's blue ring. The dial diameter is the one
+K-270 (no default notch — the five `dial.SIZE_PRESETS` pills above it
+are the factory voices; double-click enters an exact px value, taking
+the retired spinbox's job); every element scale and the three
+numeral-band sizes are K-270D with the green default notch (verdict
+7A). Stored keys are unchanged from the slider era (Rule #5).
 
-CROWN TEXT (R-24/Phase-6-debt correction, owner 2026-08-05: "Crown
-tekst je onaj tekst koji piše oko sata — faith, hope, suffering") — the
-outer Great Seal crown text arc IS this element
-(`skins.manifest.SkinDefinition.crown_text_scale`,
-`render.layers.ring.RingLayer._draw_crown_text`); it multiplies ON TOP of
-`ring_jewels_scale` (unaffected). Its row greys out with a tooltip when
-the active ring preset carries no crown text
-(`setters["ring_has_crown_text"]`) — the one row in `_SCALE_ROWS` that is
-not always meaningful, so `_scale_form` special-cases it by key rather
-than widening every row's shape for one exception.
+CROWN TEXT (R-24/Phase-6-debt correction, owner 2026-08-05) keeps its
+graceful-truth gate: the one knob that is not always meaningful greys
+out with a tooltip when the active ring preset carries no crown text
+(`setters["ring_has_crown_text"]`).
 """
 
-from PySide6.QtCore import Qt
-from PySide6.QtWidgets import (
-    QFormLayout, QGroupBox, QHBoxLayout, QLabel, QPushButton, QSlider,
-    QSpinBox, QVBoxLayout, QWidget,
-)
+from PySide6.QtWidgets import QGroupBox, QHBoxLayout, QVBoxLayout, QWidget
 
-from app.watch_face.widgets import number_row, pill
+from app.ui_style import tooltip_wrap
+from app.watch_face.controls import KnobKind, ValueKnob, ValueUnit, knob_row
+from app.watch_face.widgets import FlowLayout, pill
 from config import constants, dial
 
-# (setting key, on-screen label, (low, high) range, default*100)
+# (setting key, on-screen label, (low, high) range, default*100, blurb)
 _SCALE_ROWS = (
-    ("earth_scale", "Earth", constants.ELEMENT_SCALE_RANGE, 100),
-    ("moon_scale", "Moon", constants.ELEMENT_SCALE_RANGE, 100),
-    ("slot_scale", "Complications", constants.ELEMENT_SCALE_RANGE, 100),
-    ("ring_jewels_scale", "Jewels", constants.ELEMENT_SCALE_RANGE, 100),
-    ("crown_text_scale", "Crown Text", constants.ELEMENT_SCALE_RANGE, 100),
-    ("hover_enlarge", "Hover enlarge", constants.HOVER_ENLARGE_RANGE, 120),
+    ("earth_scale", "Earth", constants.ELEMENT_SCALE_RANGE, 100,
+     "The Earth marker's size."),
+    ("moon_scale", "Moon", constants.ELEMENT_SCALE_RANGE, 100,
+     "The Moon marker's size."),
+    ("slot_scale", "Complications", constants.ELEMENT_SCALE_RANGE, 100,
+     "The subdial complications' size."),
+    ("ring_jewels_scale", "Jewels", constants.ELEMENT_SCALE_RANGE, 100,
+     "The ring jewels' size."),
+    ("crown_text_scale", "Crown Text", constants.ELEMENT_SCALE_RANGE, 100,
+     "The Great Seal inscription's size — multiplies on top of Jewels."),
+    ("hover_enlarge", "Hover enlarge", constants.HOVER_ENLARGE_RANGE, 120,
+     "How much a hovered body grows."),
 )
 
 
 def build(settings, setters: dict, tr) -> QWidget:
     layout = QVBoxLayout()
-    layout.addLayout(_diameter_row(settings, setters, tr))
-    layout.addLayout(_scale_form(settings, setters, tr))
+    layout.addWidget(_diameter_group(settings, setters, tr))
+    layout.addWidget(_scale_group(settings, setters, tr))
     layout.addWidget(_numeral_bands_group(settings, setters, tr))
     widget = QWidget()
     widget.setLayout(layout)
     return widget
 
 
-def _numeral_bands_group(settings, setters, tr) -> QGroupBox:
-    """The three numeral-band SIZE sliders, moved here from the
-    Numerals section (ALG-9 SECTION TAXONOMY, owner order 2026-08-09:
-    when a Size category exists, EVERY size control lives in it). The
-    bands' FACES stay in Numerals — a face is content, a size is size."""
-    group = QGroupBox(tr("Numeral bands"))
-    form = QFormLayout(group)
-    number_row(
-        tr, settings, setters, "numeral_outer_size",
-        *dial.NUMERAL_SIZE_RANGE, "Numerals size", form,
+def _flow(knobs) -> QWidget:
+    host = QWidget()
+    flow = FlowLayout()
+    for knob in knobs:
+        flow.addWidget(knob_row(knob))
+    host.setLayout(flow)
+    return host
+
+
+def _diameter_group(settings, setters, tr) -> QGroupBox:
+    group = QGroupBox(tr("Dial size"))
+    column = QVBoxLayout(group)
+    preset_row = QHBoxLayout()
+    for preset in dial.SIZE_PRESETS:
+        preset_row.addWidget(pill(
+            f"{preset} px", settings.diameter == preset,
+            lambda p=preset: setters["diameter"](p),
+        ))
+    column.addLayout(preset_row)
+    low, high = dial.SIZE_PRESETS[0], dial.SIZE_PRESETS[-1]
+    knob = ValueKnob(
+        "diameter", tr("Diameter"),
+        tr("The watch window's size on the desktop — double-click for an exact value."),
+        unit=ValueUnit.PIXEL, low=low, high=high, family="window",
+        kind=KnobKind.K270,
+        on_change=lambda value: setters["diameter"](round(value)),
     )
-    number_row(
-        tr, settings, setters, "numeral_outer_ring_size",
-        *dial.NUMERAL_OUTER_RING_SIZE_RANGE, "Outer ring size", form,
-        decimals=2,
-    )
-    number_row(
-        tr, settings, setters, "minutes_size",
-        *dial.NUMERAL_SIZE_RANGE, "Minutes size", form,
-    )
+    knob.set_value(settings.diameter)
+    column.addWidget(_flow((knob,)))
     return group
 
 
-def _diameter_row(settings, setters, tr) -> QVBoxLayout:
-    column = QVBoxLayout()
-    preset_row = QHBoxLayout()
-    for preset in dial.SIZE_PRESETS:
-        preset_row.addWidget(_preset_pill(preset, settings, setters, tr))
-    column.addLayout(preset_row)
-
-    low, high = dial.SIZE_PRESETS[0], dial.SIZE_PRESETS[-1]
-    slider = QSlider(Qt.Orientation.Horizontal)
-    slider.setRange(low, high)
-    slider.setSingleStep(dial.MENU_SIZE_SLIDER_STEP)
-    slider.setPageStep(dial.MENU_SIZE_SLIDER_STEP * 5)
-    slider.setValue(settings.diameter)
-    value_label = QLabel(f"{settings.diameter} px")
-    spin = QSpinBox()
-    spin.setRange(low, high)
-    spin.setValue(settings.diameter)
-    spin.setSuffix(" px")
-
-    def sync_spin(value: int) -> None:
-        value_label.setText(f"{value} px")
-        if spin.value() != value:
-            spin.blockSignals(True)
-            spin.setValue(value)
-            spin.blockSignals(False)
-
-    def sync_slider(value: int) -> None:
-        if slider.value() != value:
-            slider.blockSignals(True)
-            slider.setValue(value)
-            slider.blockSignals(False)
-        value_label.setText(f"{value} px")
-
-    slider.valueChanged.connect(sync_spin)
-    spin.valueChanged.connect(sync_slider)
-    slider.sliderReleased.connect(lambda: setters["diameter"](slider.value()))
-    spin.editingFinished.connect(lambda: setters["diameter"](spin.value()))
-    reset = QPushButton(tr("Default"))
-    reset.clicked.connect(
-        lambda: setters["diameter"](dial.DEFAULT_DIAL_DIAMETER)
-    )
-    row = QHBoxLayout()
-    row.addWidget(slider)
-    row.addWidget(value_label)
-    row.addWidget(spin)
-    row.addWidget(reset)
-    column.addLayout(row)
-    return column
-
-
-def _preset_pill(preset: int, settings, setters, tr):
-    return pill(
-        f"{preset} px", settings.diameter == preset,
-        lambda p=preset: setters["diameter"](p),
-    )
-
-
-def _scale_form(settings, setters, tr) -> QFormLayout:
-    form = QFormLayout()
-    for key, title, (low, high), default in _SCALE_ROWS:
-        slider = QSlider(Qt.Orientation.Horizontal)
-        slider.setRange(round(low * 100), round(high * 100))
-        value = round(getattr(settings, key) * 100)
-        slider.setValue(value)
-        label = QLabel(f"{value}%")
-        slider.valueChanged.connect(
-            lambda new_value, lab=label: lab.setText(f"{new_value}%")
+def _scale_group(settings, setters, tr) -> QGroupBox:
+    group = QGroupBox(tr("Element sizes"))
+    column = QVBoxLayout(group)
+    knobs = []
+    for key, title, (low, high), default, blurb in _SCALE_ROWS:
+        knob = ValueKnob(
+            key, tr(title), tr(blurb),
+            unit=ValueUnit.PERCENT, low=round(low * 100),
+            high=round(high * 100), family="size", default_value=default,
+            on_change=lambda value, k=key: setters[k](value / 100.0),
         )
-        slider.sliderReleased.connect(
-            lambda s=slider, k=key: setters[k](s.value() / 100.0)
-        )
-        reset = QPushButton(tr("Default"))
-        reset.clicked.connect(_make_reset(slider, key, default, setters))
-        # CROWN TEXT (owner correction 2026-08-05): the one row that is
-        # not always meaningful — greyed out with a tooltip when the
-        # active ring preset carries no crown text (module docstring).
+        knob.set_value(round(getattr(settings, key) * 100))
         if key == "crown_text_scale" and not setters["ring_has_crown_text"]():
-            slider.setEnabled(False)
-            reset.setEnabled(False)
-            tooltip = tr(
+            knob.setEnabled(False)
+            knob.setToolTip(tooltip_wrap(tr(
                 "The active ring preset carries no Crown Text (Great Seal inscription)."
-            )
-            slider.setToolTip(tooltip)
-            reset.setToolTip(tooltip)
-        row = QHBoxLayout()
-        row.addWidget(slider)
-        row.addWidget(label)
-        row.addWidget(reset)
-        form.addRow(tr(title), row)
-    return form
+            )))
+        knobs.append(knob)
+    column.addWidget(_flow(knobs))
+    return group
 
 
-def _make_reset(slider: QSlider, key: str, default: int, setters: dict):
-    """A live-apply Default (unlike the Settings dialog's transactional
-    one, which only resets the widget — here the reset also commits
-    immediately, since this window has no OK to commit on later)."""
-    def reset() -> None:
-        slider.setValue(default)
-        setters[key](default / 100.0)
-    return reset
+def _numeral_bands_group(settings, setters, tr) -> QGroupBox:
+    """The three numeral-band SIZE knobs (ALG-9 SECTION TAXONOMY, owner
+    order 2026-08-09: every size control lives in Size; the bands'
+    FACES stay in Numerals)."""
+    group = QGroupBox(tr("Numeral bands"))
+    column = QVBoxLayout(group)
+    outer = ValueKnob(
+        "numeral_outer_size", tr("Numerals size"),
+        tr("The hour numerals' height, in the numeral's own units."),
+        unit=ValueUnit.PLAIN, low=dial.NUMERAL_SIZE_RANGE[0],
+        high=dial.NUMERAL_SIZE_RANGE[1], family="size",
+        default_value=dial.NUMERAL_OUTER_SIZE_DEFAULT,
+        on_change=lambda value: setters["numeral_outer_size"](round(value)),
+    )
+    outer.set_value(settings.numeral_outer_size)
+    ring = ValueKnob(
+        "numeral_outer_ring_size", tr("Outer ring size"),
+        tr("The outer band's scale factor."),
+        unit=ValueUnit.FACTOR, low=dial.NUMERAL_OUTER_RING_SIZE_RANGE[0],
+        high=dial.NUMERAL_OUTER_RING_SIZE_RANGE[1], family="size",
+        default_value=dial.NUMERAL_OUTER_RING_SIZE_DEFAULT, decimals=2,
+        on_change=setters["numeral_outer_ring_size"],
+    )
+    ring.set_value(settings.numeral_outer_ring_size)
+    minutes = ValueKnob(
+        "minutes_size", tr("Minutes size"),
+        tr("The minute band's height, in the numeral's own units."),
+        unit=ValueUnit.PLAIN, low=dial.NUMERAL_SIZE_RANGE[0],
+        high=dial.NUMERAL_SIZE_RANGE[1], family="size",
+        default_value=dial.MINUTES_SIZE_DEFAULT,
+        on_change=lambda value: setters["minutes_size"](round(value)),
+    )
+    minutes.set_value(settings.minutes_size)
+    column.addWidget(_flow((outer, ring, minutes)))
+    return group

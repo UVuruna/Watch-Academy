@@ -53,24 +53,28 @@ branch). This section's Aura group gates on `not settings.colorful`,
 the closest honest reading of the brief; it is grayed out, not hidden,
 while Colorful is on."""
 
-from PySide6.QtCore import Qt
-from PySide6.QtGui import QColor
 from PySide6.QtWidgets import (
-    QColorDialog, QComboBox, QFormLayout, QGroupBox, QHBoxLayout, QLabel,
-    QPushButton, QSlider, QVBoxLayout, QWidget,
+    QComboBox, QFormLayout, QGroupBox, QHBoxLayout, QLabel, QVBoxLayout,
+    QWidget,
 )
 
 from app.watch_face import thumbs, tint_picker
 from app.ui_style import tooltip_wrap
 from app.watch_face.widgets import pill
-from config import constants, dial, palette
+from config import constants, palette
 
 
 def build(settings, setters: dict, tr) -> QWidget:
+    # 2026-08-14 reorganization: the pointer hue chips moved OUT to the
+    # Pointer page (verdict 5B, `pointer._palette_hues_group`), and the
+    # Umbra form/contrast galleries moved IN beside Umbra coloring
+    # (verdict 5A — the Umbra & Aura page dissolved).
+    from app.watch_face import umbra_aura
+
     layout = QVBoxLayout()
     layout.addWidget(_ring_tint_group(settings, setters, tr))
-    layout.addWidget(_palette_group(settings, setters, tr))
     layout.addWidget(_umbra_group(settings, setters, tr))
+    layout.addWidget(umbra_aura.build(settings, setters, tr))
     layout.addWidget(_aura_group(settings, setters, tr))
     layout.addWidget(_hands_group(settings, setters, tr))
     layout.addWidget(_jewels_group(settings, setters, tr))
@@ -124,58 +128,6 @@ def _ring_tint_group(settings, setters, tr) -> QGroupBox:
         "Pick the inner (minute track) tint",
     )
     group.layout().addWidget(inner)
-    return group
-
-
-def _palette_group(settings, setters, tr) -> QGroupBox:
-    """R-21 item 2: the pointer palette chips, the LIVE-APPLY twin of
-    `app.settings_dialog.colors_section._build_palette_group` —
-    `setters["palettes"]` (`WatchController._set_watch_face_palette`)
-    stores the WHOLE hue tuple at once, the same preset-equals-no-
-    override rule the dialog's OK commit already runs."""
-    pointer = settings.pointer
-    style = palette.effective_palette_style(pointer, settings.palette_style)
-    key = f"{pointer}_{style}"
-    preset = palette.PALETTE_PRESETS[(pointer, style)]
-    hues = list(settings.palettes.get(key, preset))
-    arm_labels = palette.pointer_arm_labels(pointer, style)
-    group = QGroupBox(
-        tr("Palette — {pointer} {style}").format(
-            pointer=constants.POINTER_DISPLAY_NAMES[pointer],
-            style=style.capitalize(),
-        )
-    )
-    column = QVBoxLayout(group)
-    row = QHBoxLayout()
-
-    def pick(index: int) -> None:
-        chosen = QColorDialog.getColor(QColor(hues[index]), None, "Pick a hue")
-        if not chosen.isValid():
-            return
-        new_hues = list(hues)
-        new_hues[index] = chosen.name().upper()
-        setters["palettes"](pointer, style, tuple(new_hues))
-
-    for index, hue in enumerate(hues):
-        chip = QPushButton()
-        tint_picker.round_swatch(chip, hue, dial.PALETTE_SWATCH_PX)
-        chip.setToolTip(tooltip_wrap(f"{tr(arm_labels[index])} — {hue}"))
-        chip.clicked.connect(lambda checked, i=index: pick(i))
-        row.addWidget(chip)
-    row.addStretch(1)
-    # ALG-5 (Zubi fix round 2026-08-09): "Reset to preset" moved OUT of
-    # the swatch row into its own row — a text button is not a sibling
-    # of twelve identical 34px circles, and in one container the rule
-    # rightly demanded they share a size.
-    reset = QPushButton(tr("Reset to preset"))
-    reset.clicked.connect(
-        lambda: setters["palettes"](pointer, style, tuple(preset))
-    )
-    reset_row = QHBoxLayout()
-    reset_row.addWidget(reset)
-    reset_row.addStretch(1)
-    column.addLayout(row)
-    column.addLayout(reset_row)
     return group
 
 
@@ -318,54 +270,37 @@ def _metal_group(settings, setters, tr) -> QGroupBox:
 
 
 def _saturation_group(settings, setters, tr) -> QGroupBox:
-    """R-25: the two owner-sealed sliders (Aura/Ring, unchanged) plus
-    two bounded additions this Phase's render hooks make possible
-    (Hands/Umbra) — Jewels, Pointer and Crown stay OUT, each for its
-    own reason in the module docstring's debt note."""
+    """R-25 rows, migrated to K-270D VALUE KNOBS (classes phase, owner
+    verdicts 2026-08-14 — saturation family violet ring, the green
+    notch is the 100% factory): Aura/Ring (owner-sealed) plus
+    Hands/Umbra — Jewels, Pointer and Crown stay OUT, each for its own
+    reason in the module docstring's debt note."""
+    from app.watch_face.controls import ValueKnob, ValueUnit, knob_row
+    from app.watch_face.widgets import FlowLayout
+
     group = QGroupBox(tr("Saturation"))
-    form = QFormLayout(group)
-
-    def add_row(title: str, key: str, range_const, step_const) -> None:
-        low, high = range_const
-        slider = QSlider(Qt.Orientation.Horizontal)
-        slider.setRange(round(low * 100), round(high * 100))
-        slider.setSingleStep(step_const)
-        value = round(getattr(settings, key) * 100)
-        slider.setValue(value)
-        label = QLabel(f"{value}%")
-        slider.valueChanged.connect(
-            lambda new_value, lab=label: lab.setText(f"{new_value}%")
+    column = QVBoxLayout(group)
+    flow = FlowLayout()
+    rows = (
+        ("Aura", "pointer_saturation", constants.POINTER_SATURATION_RANGE,
+         "The aura wedges' color saturation."),
+        ("Ring", "ring_saturation", constants.RING_SATURATION_RANGE,
+         "The ring plate and its jewels together — one sealed target."),
+        ("Hands", "hands_saturation", constants.HANDS_SATURATION_RANGE,
+         "The hands' color saturation."),
+        ("Umbra", "umbra_saturation", constants.UMBRA_SATURATION_RANGE,
+         "The night shadow's color saturation."),
+    )
+    for title, key, (low, high), blurb in rows:
+        knob = ValueKnob(
+            key, tr(title), tr(blurb),
+            unit=ValueUnit.PERCENT, low=round(low * 100),
+            high=round(high * 100), family="saturation", default_value=100,
+            on_change=lambda value, k=key: setters[k](value / 100),
         )
-        slider.sliderReleased.connect(
-            lambda: setters[key](slider.value() / 100)
-        )
-        reset = QPushButton(tr("Default"))
-
-        def do_reset() -> None:
-            slider.setValue(100)
-            setters[key](1.0)
-
-        reset.clicked.connect(do_reset)
-        row = QHBoxLayout()
-        row.addWidget(slider)
-        row.addWidget(label)
-        row.addWidget(reset)
-        form.addRow(title, row)
-
-    add_row(
-        tr("Aura"), "pointer_saturation",
-        constants.POINTER_SATURATION_RANGE, constants.POINTER_SATURATION_SLIDER_STEP,
-    )
-    add_row(
-        tr("Ring"), "ring_saturation",
-        constants.RING_SATURATION_RANGE, constants.RING_SATURATION_SLIDER_STEP,
-    )
-    add_row(
-        tr("Hands"), "hands_saturation",
-        constants.HANDS_SATURATION_RANGE, constants.HANDS_SATURATION_SLIDER_STEP,
-    )
-    add_row(
-        tr("Umbra"), "umbra_saturation",
-        constants.UMBRA_SATURATION_RANGE, constants.UMBRA_SATURATION_SLIDER_STEP,
-    )
+        knob.set_value(round(getattr(settings, key) * 100))
+        flow.addWidget(knob_row(knob))
+    host = QWidget()
+    host.setLayout(flow)
+    column.addWidget(host)
     return group

@@ -205,10 +205,6 @@ def _relief_group(settings, setters, tr) -> QGroupBox:
         "Cast leaves the gap open; Extrude welds its copies into a side "
         "wall; Emboss adds a lit rim the other way."
     )))
-    _number_row(
-        tr, settings, setters, "numeral_depth", *dial.NUMERAL_DEPTH_RANGE,
-        "Depth", form, decimals=1,
-    )
     light = _choice_row(
         tr, settings, setters, "numeral_light", dial.NUMERAL_LIGHTS,
         "Light", form,
@@ -222,18 +218,35 @@ def _relief_group(settings, setters, tr) -> QGroupBox:
         "(0, +d) at the top, (+d, 0) at the right, (0, −d) at the bottom, "
         "(−d, 0) at the left."
     )))
-    _number_row(
-        tr, settings, setters, "numeral_darkness",
-        *dial.NUMERAL_DARKNESS_RANGE, "Darkness", form, decimals=2,
-    )
-    _number_row(
-        tr, settings, setters, "numeral_contact_blur",
-        *dial.NUMERAL_CONTACT_BLUR_RANGE, "Contact blur", form, decimals=1,
-    )
-    _number_row(
-        tr, settings, setters, "numeral_border", *dial.NUMERAL_BORDER_RANGE,
-        "Border", form, decimals=1,
-    )
+    # THE RELIEF KNOBS (classes phase, owner verdicts 2026-08-14): the
+    # four number rows became a row of small K-270D knobs in the relief
+    # family's teal ring — the combos above keep the form shape.
+    from app.watch_face.controls import ValueKnob, ValueUnit, knob_row
+    from app.watch_face.widgets import FlowLayout
+
+    flow = FlowLayout()
+    for key, title, (low, high), default, decimals, blurb in (
+        ("numeral_depth", "Depth", dial.NUMERAL_DEPTH_RANGE,
+         dial.NUMERAL_DEPTH_DEFAULT, 1, "How far the relief throws."),
+        ("numeral_darkness", "Darkness", dial.NUMERAL_DARKNESS_RANGE,
+         dial.NUMERAL_DARKNESS_DEFAULT, 2, "The shadow copies' darkness."),
+        ("numeral_contact_blur", "Contact blur",
+         dial.NUMERAL_CONTACT_BLUR_RANGE, dial.NUMERAL_CONTACT_BLUR_DEFAULT,
+         1, "The soft edge where the relief meets the ring."),
+        ("numeral_border", "Border", dial.NUMERAL_BORDER_RANGE,
+         dial.NUMERAL_BORDER_DEFAULT, 1, "The outline around each numeral."),
+    ):
+        knob = ValueKnob(
+            key, tr(title), tr(blurb),
+            unit=ValueUnit.FACTOR if decimals else ValueUnit.PLAIN,
+            low=low, high=high, family="relief", default_value=default,
+            decimals=decimals, on_change=setters[key], diameter_px=80,
+        )
+        knob.set_value(getattr(settings, key))
+        flow.addWidget(knob_row(knob))
+    host = QWidget()
+    host.setLayout(flow)
+    form.addRow(host)
     return group
 
 

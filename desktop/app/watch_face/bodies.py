@@ -103,10 +103,23 @@ _MOON_BAND_STYLE_TITLES = {
 
 
 def build(settings, setters: dict, tr) -> QWidget:
+    """THE PAGE SPLIT (owner ballot verdict 5D, 2026-08-14): this page
+    was the only one running past two screens — Hands/Earth/Moon stay
+    here, Eclipses + Stations moved to their own sidebar page
+    (`build_eclipses`)."""
     layout = QVBoxLayout()
     layout.addWidget(_hands_group(settings, setters, tr))
     layout.addWidget(_earth_group(settings, setters, tr))
     layout.addWidget(_moon_group(settings, setters, tr))
+    widget = QWidget()
+    widget.setLayout(layout)
+    return widget
+
+
+def build_eclipses(settings, setters: dict, tr) -> QWidget:
+    """The split's second half (verdict 5D): how the two eclipse kinds
+    draw, and the Moon/Sun station marks."""
+    layout = QVBoxLayout()
     layout.addWidget(_eclipses_group(settings, setters, tr))
     layout.addWidget(_stations_group(settings, setters, tr))
     widget = QWidget()

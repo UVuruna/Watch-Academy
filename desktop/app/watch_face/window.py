@@ -20,7 +20,7 @@ from PySide6.QtWidgets import (
 
 from app.theme import apply_theme, size_to_screen
 from app.watch_face import (
-    bodies, colors, numerals, opacity, pointer, ring, size, themes, umbra_aura,
+    bodies, colors, numerals, opacity, pointer, ring, size, themes,
 )
 from app.watch_face.widgets import FlowContent
 from config import constants, defaults, encyclopedia_ui
@@ -35,12 +35,17 @@ _SCREEN_FLOOR = (1280, 720)
 # Section registry: (title, builder). `builder(settings, setters, tr) ->
 # QWidget`, or `None` for a not-yet-built placeholder page — a later
 # phase replaces a `None` entry with a real module of the same shape.
+# THE 2026-08-14 REORGANIZATION (owner ballot verdicts 5A/5B/5D):
+# Umbra & Aura dissolved into Colors (5A — its form/contrast galleries
+# sit beside Umbra coloring), the pointer hue chips moved from Colors
+# to Pointer (5B), and the over-long Hands & Bodies split its Eclipses
+# + Stations half into its own page (5D). Nine entries stay nine.
 _SECTIONS = (
     ("Pointer", pointer.build),
     ("Ring", ring.build),
     ("Numerals", numerals.build),
     ("Hands & Bodies", bodies.build),
-    ("Umbra & Aura", umbra_aura.build),
+    ("Eclipses & Stations", bodies.build_eclipses),
     ("Opacity", opacity.build),
     ("Themes & Slots", themes.build),
     ("Colors", colors.build),
