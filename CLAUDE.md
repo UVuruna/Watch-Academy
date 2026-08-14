@@ -46,10 +46,56 @@ project-specific laws and deltas that TIGHTEN the root rules.
   never import from it.
 - **THE THREE-FOLDER MIGRATION (owner ballot verdict 2026-08-12):** one
   repo, three top-level folders — `desktop/` (all existing Python),
-  `shared/` (assets/ + Database/, the truth both platforms consume),
-  `android/` (the future Kotlin phone edition). Every command below runs
+  `shared/` (assets/ + Database/ + research/, the truth both platforms
+  consume and the briefs that make it), `android/` (the future Kotlin
+  phone edition). Every command below runs
   from `desktop/` (`cd desktop` first) unless stated otherwise; every
   `assets/`/`Database/` path is `shared/assets/`/`shared/Database/`.
+- **THE RESEARCH MOVE (owner ballot verdict 2026-08-14):** `research/`
+  is **`shared/research/`**, never `desktop/research/`. The owner's own
+  reasoning, and it is the rule to apply to the next such question:
+  research is the folder where things are INVESTIGATED and MADE, not a
+  part that serves the running application. His sealed wording, kept
+  verbatim because the next round is judged against HIS sentence:
+  <!-- lang-ok: the owner's own verdict, quoted -->
+  *"research bi trebao da bude folder gde istražujemo stvari ili pravimo stvari, a ne deo koji služi za rad aplikacije."*
+  Verified, not assumed: no runtime module reads it — the prompt
+  sheets make `shared/assets/`, and `research/ephemeris/` is read ONLY
+  by the build-time generators `setup/make_deep_time.py` and
+  `setup/make_observatory.py`, which write `shared/Database/`. Same
+  one-way shape as masters → bakery → assets. Consequences:
+  **(a)** the 26 Star Wars reference stills moved out of `UV/` to sit
+  beside their sheet at `shared/research/prompts/starwars/sw_reference/`
+  — still gitignored (third-party film frames), and their `←` paths are
+  now relative to the sheet itself.
+  **(b)** two migration leftovers were deleted with it: the root
+  `Database/` (a byte-identical, month-older orphan of
+  `shared/Database/deep_time.sqlite`, unreachable since
+  `paths.database_dir()` resolves under `shared/`) and the root
+  `tests/run_guards.py` shim.
+- **THE MASTERS PREFIX (owner ballot verdict 2026-08-14):** a prompt
+  sheet's drop path names where a GENERATION LANDS, so it reads
+  `masters/…` — never `assets/…`, which named a folder that existed
+  nowhere in the repo once THE ART BAKERY was born, leaving
+  PromptPainter with no folder its owner could select. **Its Output
+  field is the repo root**; the sheet's own path supplies the rest.
+  1,475 paths across 66 sheets were rewritten; the tooth is
+  `tests/test_prompt_paths.py`, which now reads the `masters/`
+  convention and reduces both prefixes to one canonical form (the
+  bakery mirrors the trees name for name), while still checking
+  folder existence against `shared/assets/` so a clone without
+  `masters/` grades the same.
+- **THE HALF-GOVERNED AREA (owner verdict 2026-08-14):** the bakery
+  claims the top-level names under `masters/` — EXCEPT those in
+  `make_art_bake.DEEP_GOVERNED_ROOTS`, where authority is claimed one
+  level deeper. `instrument` is the only member and must stay one:
+  `shared/assets/instrument/` also holds the 57 letter plates of THE
+  ONE PLATE LAW plus guide/hands/icons/ring — ~147 files no master
+  will ever claim — so whole-area governance would make every one of
+  them a stray, hold `--check` red forever, and let a single
+  `--prune-strays` delete the program's alphabet. `VERBATIM_SUBTREES`
+  does NOT protect against this: it exempts from re-encoding, not from
+  the prune.
 - **THE ART BAKERY (owner decree 2026-08-12) — there are now FOUR
   top-level folders, and the fourth is not in git.** `masters/` is the
   owner's gitignored inbox: every research prompt writes its
@@ -216,7 +262,7 @@ correctly placed on disk**, and not one of them was visible anywhere in the
 program. They were never registered in `constants.WEEKDAY_THEMES`, so the
 dial's picker did not know they existed, and they had no Encyclopedia topic.
 The prompt-sheet round that produced them wrote "two wiring rounds left for
-later" into [Prompt Coverage](desktop/research/prompts/COVERAGE.md) and moved on.
+later" into [Prompt Coverage](shared/research/prompts/COVERAGE.md) and moved on.
 Later never came, and nothing in the suite could say so.
 
 **Approving a theme commits FOUR deliverables, and they ship TOGETHER:**
@@ -229,7 +275,7 @@ Later never came, and nothing in the suite could say so.
 4. **The Encyclopedia seat** — a card in a whole, reachable from Home.
 
 **A round that ships only the sheet MUST, in the same commit, record its own
-debt in the STAGING LEDGER** ([Theme Staging](desktop/research/theme_staging.md)):
+debt in the STAGING LEDGER** ([Theme Staging](shared/research/theme_staging.md)):
 which cast, what art exists, what it still owes, which session owes it.
 Deferring is allowed; deferring SILENTLY is not.
 

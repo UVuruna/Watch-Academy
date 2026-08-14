@@ -44,6 +44,11 @@ MANIFEST_NAME = "_bake_manifest.json"
 # palette PNGs of a few tens of KB; there is nothing to win.
 VERBATIM_SUBTREES = ("instrument/letters",)
 
+# Top-level names under `masters/` whose governance is claimed one level
+# DEEPER — see `governed_subtrees` for why this exists and what it
+# protects. Keep it as short as the danger requires.
+DEEP_GOVERNED_ROOTS = ("instrument",)
+
 # Subtrees that are RE-ENCODED but never RESIZED (ceiling 0 below).
 #
 # `celestial/earth` is here on the owner's decree of 2026-07-15, the
@@ -222,19 +227,45 @@ def _plan(
 
 
 def governed_subtrees(masters: Path) -> tuple[str, ...]:
-    """The top-level areas the masters folder OWNS.
+    """The areas the masters folder OWNS.
 
     The whole safety of pruning rests on this line. `shared/assets/`
     holds a great deal the bakery never made and no master will ever
-    account for — `instrument/`, `_baked/`, `_state/`, the SVG logos —
-    and a prune that reasoned "not in the manifest, therefore delete"
-    would erase the letter plates of THE ONE PLATE LAW on its first run.
-    So the bakery claims authority over exactly the top-level names that
+    account for — `_baked/`, `_state/`, the SVG logos, the letter
+    plates — and a prune that reasoned "not in the manifest, therefore
+    delete" would erase the plates of THE ONE PLATE LAW on its first
+    run. So the bakery claims authority over exactly the names that
     exist under `masters/` and over nothing else.
+
+    THE HALF-GOVERNED AREA (owner verdict 2026-08-14): `instrument` is
+    the one top-level name where claiming the WHOLE area would be a
+    disaster rather than a policy. The owner's verdict was that new
+    subdial art must be baked like every other kind — but
+    `shared/assets/instrument/` also holds `letters/` (the 57 gold
+    masters THE ONE PLATE LAW draws every glyph from), plus `guide/`,
+    `hands/`, `icons/` and `ring/`: ~147 files the bakery never made and
+    no master will ever claim. Under whole-area governance every one of
+    them becomes a stray, `--check` goes red forever, and a single
+    `--prune-strays` deletes the letter library.
+
+    So for the roots named here, authority is claimed ONE LEVEL DEEPER:
+    `masters/instrument/subdial/` governs `instrument/subdial` and
+    nothing else in the area. Adding a master folder is how an area
+    comes under the bakery — never a side effect of its parent's name.
     """
-    return tuple(
-        sorted(entry.name for entry in masters.iterdir() if entry.is_dir())
-    )
+    claimed: list[str] = []
+    for entry in masters.iterdir():
+        if not entry.is_dir():
+            continue
+        if entry.name in DEEP_GOVERNED_ROOTS:
+            claimed.extend(
+                f"{entry.name}/{child.name}"
+                for child in entry.iterdir()
+                if child.is_dir()
+            )
+            continue
+        claimed.append(entry.name)
+    return tuple(sorted(claimed))
 
 
 def _is_governed(relative: str, subtrees: tuple[str, ...]) -> bool:
