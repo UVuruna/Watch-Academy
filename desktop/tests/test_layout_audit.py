@@ -161,7 +161,15 @@ def _settle(window: QWidget, width: int, height: int) -> None:
     window.show()
     QApplication.processEvents()
     # A second pass: the first installs the layout, the second lets the
-    # scroll areas react to the geometry it produced.
+    # scroll areas react to the geometry it produced. A THIRD since
+    # 2026-08-14: the gallery grammar added one more dependent level
+    # (card flow -> CardGroup -> page -> scroll area), and each level's
+    # height is only knowable once the level above has a width, so Qt
+    # needs one settling pass per level. This changes WHEN the audit
+    # measures, never WHAT it accepts — the state measured here is the
+    # one Qt paints, which is the state the law is about (the design
+    # shots this same function writes show it).
+    QApplication.processEvents()
     QApplication.processEvents()
 
 
