@@ -41,6 +41,7 @@ count means the sheet is safe to queue.
 | [Months (subfolder)](months/___months.md) | The Slavic Months Calendar-pointer 12-set |
 | [Era (subfolder)](era/___era.md) | The Age of Light / Age of Darkness ERA TERMS set |
 | [Eclipse (subfolder)](eclipse/___eclipse.md) | The seven eclipse-category Encyclopedia emblems |
+| [Continents (subfolder)](continents/___continents.md) | Pangea & Zealandia completing the earth matrix — eight `{atmo,clean} × {day,night}` globes in the resolver's own naming |
 | [Titles (subfolder)](titles/___titles.md) | Every weekday theme's title-page plate, the one sheet that intentionally carries lettering |
 | [Monsters (subfolder)](monsters/___monsters.md) | The Greek Monsters weekday theme |
 | [Chinese (subfolder)](chinese/___chinese.md) | The Chinese Mythology weekday theme |

@@ -336,6 +336,22 @@ _WHITELIST: dict[str, str] = {
     # `starwars_prompts.md`, `corporate_prompts.md`) carries only a
     # pointer, never a duplicate body. No code reads `assets/weeks/societies/wolf/primary/colored/**`
     # yet (same future wiring round as the block above).
+    # THE CONTINENTS MATRIX COMPLETION (owner audit 2026-08-14,
+    # continents_prompts.md): pangea/zealandia join the earth family's
+    # `earth_{style}_{region}_{phase}` naming, but the two regions are
+    # deliberately NOT in `config.continents._CONTINENTS` yet (they are
+    # deep-time faces, not weekday regions) — the resolver upgrade that
+    # reads style/phase for the Ninth seat is a future wiring round,
+    # recorded in the sheet's own Cleanup section. Until then no code
+    # enumerates these eight stems:
+    "celestial/earth/earth_atmo_pangea_day.png": "continents matrix, ninth-seat wiring is a future round (continents_prompts.md)",
+    "celestial/earth/earth_atmo_pangea_night.png": "continents matrix, ninth-seat wiring is a future round (continents_prompts.md)",
+    "celestial/earth/earth_clean_pangea_day.png": "continents matrix, ninth-seat wiring is a future round (continents_prompts.md)",
+    "celestial/earth/earth_clean_pangea_night.png": "continents matrix, ninth-seat wiring is a future round (continents_prompts.md)",
+    "celestial/earth/earth_atmo_zealandia_day.png": "continents matrix, ninth-seat wiring is a future round (continents_prompts.md)",
+    "celestial/earth/earth_atmo_zealandia_night.png": "continents matrix, ninth-seat wiring is a future round (continents_prompts.md)",
+    "celestial/earth/earth_clean_zealandia_day.png": "continents matrix, ninth-seat wiring is a future round (continents_prompts.md)",
+    "celestial/earth/earth_clean_zealandia_night.png": "continents matrix, ninth-seat wiring is a future round (continents_prompts.md)",
 }
 
 
