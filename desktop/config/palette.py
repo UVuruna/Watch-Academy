@@ -800,6 +800,21 @@ UI_BUTTON_COLORS = {
     "neutral": ("#546E7A", "#37474F"),      # the look arrows
 }
 
+# THE KNOB FAMILY COLORS (owner ballot verdict 7C, 2026-08-14): kin
+# groups of value knobs wear kin progress-ring hues so a page reads at
+# a glance — Opacity golden-yellow, Size blue, Saturation violet,
+# Relief teal, the window-px knob steel. The accent gold stays RESERVED
+# for selection (card borders) and no family wears it; the default
+# notch is always the "next" green (one language for "factory") — see
+# `app/watch_face/controls.py`.
+KNOB_FAMILY_COLORS = {
+    "opacity": "#FFCF5C",
+    "size": "#4DA3FF",
+    "saturation": "#B07CE8",
+    "relief": "#3FBFA8",
+    "window": "#AAB4C8",
+}
+
 
 def readable_on_dark(hex_color: str) -> str:
     """A GUI-TEXT variant of a canon hue: the same hue, lightened just

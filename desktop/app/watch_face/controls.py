@@ -256,3 +256,268 @@ class CardGroup(QGroupBox):
 def divider_present(group: CardGroup) -> bool:
     """Test hook: whether the radio/switch divider line is drawn."""
     return group._divider is not None
+
+
+# ═══════════════════════════ THE VALUE KNOBS ═══════════════════════════
+# Owner verdicts 2026-08-14: taxonomy 7 (K-360 full circle / K-270 arc /
+# K-270D arc with the default notch), 7A (the notch REPLACES the Default
+# button — click it, or double-click the disc for exact entry) and 7C
+# (kin families wear kin ring hues, `palette.KNOB_FAMILY_COLORS`; the
+# notch is always the "next" green — one language for "factory").
+
+class KnobKind(Enum):
+    K360 = "k360"     # full circle, no ends — the value IS an angle
+    K270 = "k270"     # arc, min bottom-left, max bottom-right
+    K270D = "k270d"   # K-270 plus the default notch
+
+
+class ValueUnit(Enum):
+    PERCENT = "percent"
+    PIXEL = "pixel"
+    FACTOR = "factor"
+    PLAIN = "plain"
+
+
+# The arc geometry every K-270 shares: 270 degrees of travel starting
+# at the bottom-left (225 deg in math CCW terms), sweeping CLOCKWISE to
+# the bottom-right — the owner's own SVG Styler layout.
+_ARC_START_DEG = 225.0
+_ARC_SPAN_DEG = 270.0
+#: How close (px) a click must land to the notch to count as a reset.
+_NOTCH_HIT_PX = 12.0
+
+
+class ValueKnob(QWidget):
+    """One circular value control (see controls.md) — value + unit in
+    the disc's center, the family-colored progress ring around it, and
+    (K-270D) the green default notch on the arc.
+
+    LIVE label while dragging, COMMIT (`on_change`) on release / wheel /
+    exact entry — the same commit rhythm `widgets.number_row` had."""
+
+    def __init__(
+        self, key: str, title: str, blurb: str, *, unit: ValueUnit,
+        low: float, high: float, family: str,
+        kind: KnobKind = KnobKind.K270D, default_value: float | None = None,
+        decimals: int = 0, on_change=None, diameter_px: int = 96,
+    ):
+        super().__init__()
+        if kind is KnobKind.K270D and default_value is None:
+            raise ValueError(
+                f"{key}: a K-270D knob carries the default notch — pass "
+                "default_value, or choose KnobKind.K270"
+            )
+        self.key = key
+        self.title = title
+        self.unit = unit
+        self.low = float(low)
+        self.high = float(high)
+        self.family = family
+        self.ring_color = palette.KNOB_FAMILY_COLORS[family]
+        self.kind = kind
+        self.default_value = default_value
+        self.decimals = decimals
+        self.on_change = on_change
+        self._value = self.low
+        self._dragging = False
+        self.setFixedSize(diameter_px, diameter_px)  # layout-law: exempt - a knob is a fixed circular instrument like an icon; rows of knobs wrap by count (FlowLayout), the disc itself never stretches
+        if blurb:
+            self.setToolTip(tooltip_wrap(blurb))
+
+    # ── value plumbing ────────────────────────────────────────────────
+    def value(self) -> float:
+        return self._value
+
+    def set_value(self, value: float) -> None:
+        if self.kind is KnobKind.K360:
+            value = value % 360.0
+        else:
+            value = max(self.low, min(self.high, float(value)))
+        changed = value != self._value
+        self._value = value
+        if changed:
+            self.update()
+
+    def reset(self) -> None:
+        """The notch's job (7A): back to factory, committed."""
+        if self.default_value is None:
+            return
+        self.set_value(self.default_value)
+        self._commit()
+
+    def value_text(self) -> str:
+        if self.unit is ValueUnit.PERCENT:
+            return f"{round(self._value)}%"
+        if self.unit is ValueUnit.FACTOR:
+            return f"{self._value:.{max(1, self.decimals)}f}"
+        if self.kind is KnobKind.K360:
+            return f"{round(self._value)}\N{DEGREE SIGN}"
+        return f"{self._value:.{self.decimals}f}" if self.decimals else f"{round(self._value)}"
+
+    def fraction(self) -> float:
+        """Progress along the travel, 0..1."""
+        if self.kind is KnobKind.K360:
+            return (self._value % 360.0) / 360.0
+        if self.high == self.low:
+            return 0.0
+        return (self._value - self.low) / (self.high - self.low)
+
+    def _commit(self) -> None:
+        if self.on_change is not None:
+            self.on_change(self._value)
+
+    # ── geometry ──────────────────────────────────────────────────────
+    def _fraction_to_math_deg(self, fraction: float) -> float:
+        return _ARC_START_DEG - _ARC_SPAN_DEG * fraction
+
+    def _pos_to_value(self, x: float, y: float) -> float | None:
+        """Map a widget-local point to a value along the travel; None in
+        the dead wedge under a K-270 arc."""
+        import math
+
+        cx, cy = self.width() / 2.0, self.height() / 2.0
+        math_deg = math.degrees(math.atan2(cy - y, x - cx)) % 360.0
+        if self.kind is KnobKind.K360:
+            return (90.0 - math_deg) % 360.0  # 12 o'clock = 0, clockwise
+        travelled = (_ARC_START_DEG - math_deg) % 360.0
+        if travelled > _ARC_SPAN_DEG:
+            return None
+        return self.low + (self.high - self.low) * (travelled / _ARC_SPAN_DEG)
+
+    def _notch_point(self):
+        import math
+
+        if self.default_value is None:
+            return None
+        if self.high == self.low:
+            return None
+        fraction = (self.default_value - self.low) / (self.high - self.low)
+        deg = math.radians(self._fraction_to_math_deg(fraction))
+        cx, cy = self.width() / 2.0, self.height() / 2.0
+        radius = min(cx, cy) - 5.0
+        return cx + radius * math.cos(deg), cy - radius * math.sin(deg)
+
+    # ── interaction ───────────────────────────────────────────────────
+    def wheelEvent(self, event) -> None:  # noqa: N802 — Qt override
+        span = 360.0 if self.kind is KnobKind.K360 else (self.high - self.low)
+        step = span / 100.0 if self.decimals else max(1.0, span / 100.0)
+        direction = 1.0 if event.angleDelta().y() > 0 else -1.0
+        self.set_value(self._value + direction * step)
+        self._commit()
+
+    def mousePressEvent(self, event) -> None:  # noqa: N802 — Qt override
+        position = event.position()
+        notch = self._notch_point()
+        if self.kind is KnobKind.K270D and notch is not None:
+            dx, dy = position.x() - notch[0], position.y() - notch[1]
+            if (dx * dx + dy * dy) ** 0.5 <= _NOTCH_HIT_PX:
+                self.reset()
+                return
+        value = self._pos_to_value(position.x(), position.y())
+        if value is not None:
+            self._dragging = True
+            self.set_value(value)
+
+    def mouseMoveEvent(self, event) -> None:  # noqa: N802 — Qt override
+        if not self._dragging:
+            return
+        position = event.position()
+        value = self._pos_to_value(position.x(), position.y())
+        if value is not None:
+            self.set_value(value)
+
+    def mouseReleaseEvent(self, event) -> None:  # noqa: N802 — Qt override
+        if self._dragging:
+            self._dragging = False
+            self._commit()
+
+    def mouseDoubleClickEvent(self, event) -> None:  # noqa: N802 — Qt override
+        """Exact entry (the SVG Styler's hidden `exact-value`, made
+        visible): a modal spin dialog, committed on OK."""
+        from PySide6.QtWidgets import QInputDialog
+
+        low = 0.0 if self.kind is KnobKind.K360 else self.low
+        high = 360.0 if self.kind is KnobKind.K360 else self.high
+        value, ok = QInputDialog.getDouble(
+            self, self.title, self.title, self._value, low, high,
+            max(self.decimals, 0),
+        )
+        if ok:
+            self.set_value(value)
+            self._commit()
+
+    # ── painting ──────────────────────────────────────────────────────
+    def paintEvent(self, event) -> None:  # noqa: N802 — Qt override
+        from PySide6.QtCore import QRectF
+        from PySide6.QtGui import (
+            QColor, QConicalGradient, QPainter, QPen,
+        )
+
+        painter = QPainter(self)
+        painter.setRenderHint(QPainter.RenderHint.Antialiasing)
+        ring = 6.0
+        rect = QRectF(
+            ring / 2 + 2, ring / 2 + 2,
+            self.width() - ring - 4, self.height() - ring - 4,
+        )
+        track = QPen(QColor(palette.THEME_COLORS["surface_3"]), ring)
+        track.setCapStyle(Qt.PenCapStyle.RoundCap)
+        progress = QPen(QColor(self.ring_color), ring)
+        progress.setCapStyle(Qt.PenCapStyle.RoundCap)
+        if self.kind is KnobKind.K360:
+            # The full-circle ring is the whole scale at once (the hue
+            # rainbow for the color picker); the center text is the value.
+            gradient = QConicalGradient(rect.center(), 90.0)
+            for stop in range(7):
+                gradient.setColorAt(
+                    stop / 6.0, QColor.fromHsv(int(360 * stop / 6) % 360, 220, 235)
+                )
+            painter.setPen(QPen(gradient, ring))
+            painter.drawArc(rect, 0, 360 * 16)
+        else:
+            painter.setPen(track)
+            painter.drawArc(
+                rect, int(_ARC_START_DEG * 16), int(-_ARC_SPAN_DEG * 16)
+            )
+            painter.setPen(progress)
+            painter.drawArc(
+                rect, int(_ARC_START_DEG * 16),
+                int(-_ARC_SPAN_DEG * 16 * self.fraction()),
+            )
+            notch = self._notch_point()
+            if self.kind is KnobKind.K270D and notch is not None:
+                pen = QPen(QColor(_BORDER_BY_KIND[CardKind.SWITCH]), 3.0)
+                pen.setCapStyle(Qt.PenCapStyle.RoundCap)
+                painter.setPen(pen)
+                cx, cy = self.width() / 2.0, self.height() / 2.0
+                towards = (
+                    cx + (notch[0] - cx) * 0.86, cy + (notch[1] - cy) * 0.86
+                )
+                painter.drawLine(
+                    int(towards[0]), int(towards[1]),
+                    int(notch[0]), int(notch[1]),
+                )
+        painter.setPen(QColor(palette.THEME_COLORS["text_primary"]))
+        font = painter.font()
+        font.setPointSize(11)
+        font.setBold(True)
+        painter.setFont(font)
+        painter.drawText(
+            self.rect(), Qt.AlignmentFlag.AlignCenter, self.value_text()
+        )
+        painter.end()
+
+
+def knob_row(knob: ValueKnob) -> QWidget:
+    """The knob with its centered title beneath — the mockup's shape,
+    packaged so sections place ONE widget per value."""
+    holder = QWidget()
+    column = QVBoxLayout(holder)
+    column.setContentsMargins(0, 0, 0, 0)
+    column.addWidget(knob, alignment=Qt.AlignmentFlag.AlignHCenter)
+    title = QLabel(knob.title)
+    title.setAlignment(Qt.AlignmentFlag.AlignHCenter)
+    if knob.toolTip():
+        title.setToolTip(knob.toolTip())
+    column.addWidget(title)
+    return holder
