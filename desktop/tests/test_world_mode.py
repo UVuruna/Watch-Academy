@@ -797,3 +797,103 @@ class TestTheWhatTurnsRowFollowsTheMode:
         mode.setCurrentIndex(list(dial.WORLD_MODES).index("sky_up"))
         assert scope.isEnabled() is True
         assert scope.currentData() == "numerals_turn"
+
+
+# --- The inverted crown texts -------------------------------------------------------
+
+
+class TestTheInvertedCrownTexts:
+    """THE INVERTED CROWN TEXTS (owner verdict 2026-08-14, CANON.md §The
+    Banknote): the Dollar is the one theme whose meaning breaks when the
+    dial turns, so Sky-Up's night half-turn swaps its mottos instead of
+    mirroring them — MUNDORUM ORDO NUMEN crowns the top where NOVUS ORDO
+    SECLORUM would have landed, SANCIT FŒDERA seats under the bottom in
+    ANNUIT CŒPTIS's mirrored place. The hover follows the drawn motto,
+    and the flip itself dissolves through THE TURNING CROSSFADE."""
+
+    BELGRADE = astral.Observer(latitude=44.7866, longitude=20.4489)
+    TZ = ZoneInfo("Europe/Belgrade")
+
+    def _dollar(self, when: datetime) -> Compositor:
+        day, tick = _frame(when, self.BELGRADE)
+        skin = dataclasses.replace(
+            build_skin(dataclasses.replace(Settings(), ring="Dollar")),
+            world_mode="sky_up", solar_rotation=False,
+        )
+        watch = Compositor(skin, AssetCache())
+        watch.set_day(day)
+        watch.note_daylight(tick.is_daylight, animate=False)
+        watch.render_offscreen(SIZE, 1.0, day, tick)
+        return watch
+
+    def _crown_tip(self, watch: Compositor, screen_deg: float) -> str | None:
+        import math
+
+        distance = RADIUS * dial.RING_CROWN_TEXT_RADIUS_FRACTION
+        x = RADIUS + distance * math.sin(math.radians(screen_deg))
+        y = RADIUS - distance * math.cos(math.radians(screen_deg))
+        return watch.tooltip_at(x, y, SIZE)
+
+    def _paint_live(self, watch: Compositor, tick) -> None:
+        """One painted frame WITHOUT set_day — the running app's own
+        frame path, which is the only path a mid-flip frame ever takes
+        (set_day drops the composites, and no day changes mid-flip)."""
+        from PySide6.QtGui import QImage, QPainter
+        from PySide6.QtCore import Qt
+
+        image = QImage(
+            int(SIZE), int(SIZE), QImage.Format.Format_ARGB32_Premultiplied
+        )
+        image.fill(Qt.GlobalColor.transparent)
+        painter = QPainter(image)
+        watch.paint(painter, SIZE, 1.0, tick)
+        painter.end()
+
+    def test_the_day_dial_reads_the_great_seal_itself(self, app):
+        watch = self._dollar(datetime(2026, 7, 7, 12, 0, tzinfo=self.TZ))
+        tip = self._crown_tip(watch, 45.0)     # over CŒPTIS, top-right
+        assert tip is not None and "ANNUIT CŒPTIS" in tip
+        bottom = self._crown_tip(watch, 225.0)  # over NOVUS, lower-left
+        assert bottom is not None and "NOVUS ORDO SECLORUM" in bottom
+
+    def test_the_night_dial_reads_the_sealed_mirrors(self, app):
+        watch = self._dollar(datetime(2026, 7, 7, 23, 30, tzinfo=self.TZ))
+        assert watch._last_tick.is_daylight is False
+        # The night readings NAME their day twins in their own body
+        # text, so the proof is the TITLE line: the hover leads with the
+        # night motto, never the day one.
+        top = self._crown_tip(watch, 45.0)      # the flipped top arc
+        assert top is not None and "MUNDORUM ORDO NUMEN" in top
+        assert top.index("MUNDORUM ORDO NUMEN") < top.index("NOVUS")
+        bottom = self._crown_tip(watch, 225.0)  # the flipped bottom arc
+        assert bottom is not None and "SANCIT FŒDERA" in bottom
+        assert bottom.index("SANCIT FŒDERA") < bottom.index("ANNUIT")
+
+    def test_noon_up_never_swaps(self, app):
+        """The mode that never turns never trades mottos — the night
+        list is inert while the offset is pinned at 0."""
+        watch = self._dollar(datetime(2026, 7, 7, 23, 30, tzinfo=self.TZ))
+        watch._skin = dataclasses.replace(watch._skin, world_mode="noon_up")
+        day = watch._day
+        watch.render_offscreen(SIZE, 1.0, day, watch._last_tick)
+        top = self._crown_tip(watch, 45.0)
+        assert top is not None and "ANNUIT CŒPTIS" in top
+
+    def test_the_turning_crossfade_holds_the_departing_segments(self, app):
+        """THE TURNING CROSSFADE (owner order 2026-08-14): mid-flip the
+        outgoing phase's cached segments are stashed and fade on top of
+        the incoming ones; the moment the turn ends the stash is
+        dropped — the steady state pays nothing."""
+        watch = self._dollar(datetime(2026, 7, 7, 12, 0, tzinfo=self.TZ))
+        day, tick = watch._day, watch._last_tick
+        assert watch._flip_from_composites is None
+        assert watch.note_daylight(False, animate=True) is True
+        self._paint_live(watch, tick)                   # mid-flip frame
+        assert watch._flip_from_composites is not None
+        assert any(p is not None for p in watch._flip_from_composites)
+        # Force the move to its end: the stash must clear on the next
+        # painted frame.
+        watch._flip_started = None
+        watch._flip_from = 180.0
+        self._paint_live(watch, tick)
+        assert watch._flip_from_composites is None

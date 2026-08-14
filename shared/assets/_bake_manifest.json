@@ -10648,6 +10648,15 @@
       "height": 963,
       "bytes": 188752
     },
+    "celestial/earth/pangea_gem.png": {
+      "sha256": "40034484aef241f096a782377dbd84b5133053ab1abcb17382a3ea8fab7cdd8d",
+      "output": "celestial/earth/pangea_gem.webp",
+      "ceiling": 0,
+      "quality": 90,
+      "width": 926,
+      "height": 926,
+      "bytes": 207210
+    },
     "celestial/earth/world.png": {
       "sha256": "44fe6e88b2a2f7c58ca2124eed902dd0f3aaa1562f729a2d729ecdb1e3b0712e",
       "output": "celestial/earth/world.webp",
@@ -10666,6 +10675,24 @@
       "height": 553,
       "bytes": 57276
     },
+    "celestial/earth/zealandia_gem.png": {
+      "sha256": "d31db6996beedb118ccb37c0664ba54edb532804629f69c22654ced08f9ba8c3",
+      "output": "celestial/earth/zealandia_gem.webp",
+      "ceiling": 0,
+      "quality": 90,
+      "width": 772,
+      "height": 559,
+      "bytes": 79650
+    },
+    "celestial/earth/zealandia_gpt.png": {
+      "sha256": "e194edd1681c0a66841bd07081f33123284a17af2101cc2fad97193729d6f0e4",
+      "output": "celestial/earth/zealandia_gpt.webp",
+      "ceiling": 0,
+      "quality": 90,
+      "width": 1254,
+      "height": 1247,
+      "bytes": 518670
+    },
     "celestial/eclipse/Lunar_Partial.png": {
       "sha256": "8dc26c1b2d98678253cefa6b51f2c2e5d20a0016a00a629f1f61d7d120d2cb79",
       "output": "celestial/eclipse/Lunar_Partial.webp",
@@ -10674,6 +10701,15 @@
       "width": 512,
       "height": 510,
       "bytes": 59342
+    },
+    "celestial/eclipse/Lunar_Partial_gem.png": {
+      "sha256": "9d520c93b6856bae82d4e6956a14f8f4dda32a7a137731e4d6aa8cc921c94154",
+      "output": "celestial/eclipse/Lunar_Partial_gem.webp",
+      "ceiling": 512,
+      "quality": 90,
+      "width": 512,
+      "height": 512,
+      "bytes": 69780
     },
     "celestial/eclipse/Lunar_Partial_v2.png": {
       "sha256": "ccc5e5d7fc822910427fbacf0a4caf272996b79807f649fb0e53bee70fd293d0",
@@ -10693,6 +10729,24 @@
       "height": 512,
       "bytes": 47490
     },
+    "celestial/eclipse/Lunar_Penumbral_gem.png": {
+      "sha256": "c65d1ddef574e1aadbe88ac98a1dd97d7179dd0ec6be7b9ac4597e86074ea4af",
+      "output": "celestial/eclipse/Lunar_Penumbral_gem.webp",
+      "ceiling": 512,
+      "quality": 90,
+      "width": 512,
+      "height": 509,
+      "bytes": 50562
+    },
+    "celestial/eclipse/Lunar_Penumbral_gpt.png": {
+      "sha256": "03a5ec91008a39defa1bca53294d347e7ef7819f911a64e3e6bcdb9735354370",
+      "output": "celestial/eclipse/Lunar_Penumbral_gpt.webp",
+      "ceiling": 512,
+      "quality": 90,
+      "width": 512,
+      "height": 507,
+      "bytes": 113024
+    },
     "celestial/eclipse/Lunar_Penumbral_v2.png": {
       "sha256": "8d3ac8d408886328b189b7a282cd1839f9d21a72898c303231fb0ac4135ac603",
       "output": "celestial/eclipse/Lunar_Penumbral_v2.webp",
@@ -10710,6 +10764,24 @@
       "width": 512,
       "height": 511,
       "bytes": 40600
+    },
+    "celestial/eclipse/Lunar_Total_gem.png": {
+      "sha256": "cd3bdd4a7ab5dc16fb06d387772b4baa4257cdf1677c35bb1e34709f28680b5a",
+      "output": "celestial/eclipse/Lunar_Total_gem.webp",
+      "ceiling": 512,
+      "quality": 90,
+      "width": 508,
+      "height": 512,
+      "bytes": 57862
+    },
+    "celestial/eclipse/Lunar_Total_gpt.png": {
+      "sha256": "ed754d47a9813df4ee422f653dc94a3c19815551922c10d07704752de9589ef9",
+      "output": "celestial/eclipse/Lunar_Total_gpt.webp",
+      "ceiling": 512,
+      "quality": 90,
+      "width": 512,
+      "height": 508,
+      "bytes": 104728
     },
     "celestial/eclipse/Lunar_Total_v2.png": {
       "sha256": "fe8a0dcace67eeb59be23bf88165c1257e525acf0f6605182b4f3bec75262f6b",
@@ -10729,6 +10801,24 @@
       "height": 512,
       "bytes": 58928
     },
+    "celestial/eclipse/Solar_Annular_gem.png": {
+      "sha256": "1755990c8168aff16179650725c605071a4ac1f80b0996589a31714baddcea76",
+      "output": "celestial/eclipse/Solar_Annular_gem.webp",
+      "ceiling": 512,
+      "quality": 90,
+      "width": 512,
+      "height": 512,
+      "bytes": 66490
+    },
+    "celestial/eclipse/Solar_Annular_gpt.png": {
+      "sha256": "43ddaf7e2b152155d1531c7ff5423c98210b29448bd232ec1a68d9c68b0d395c",
+      "output": "celestial/eclipse/Solar_Annular_gpt.webp",
+      "ceiling": 512,
+      "quality": 90,
+      "width": 512,
+      "height": 512,
+      "bytes": 100408
+    },
     "celestial/eclipse/Solar_Annular_v2.png": {
       "sha256": "c38e2dcc38e216874f749d1158cfbee0c6aa318aa90b2f190820322b07b11a2c",
       "output": "celestial/eclipse/Solar_Annular_v2.webp",
@@ -10746,6 +10836,15 @@
       "width": 512,
       "height": 511,
       "bytes": 52072
+    },
+    "celestial/eclipse/Solar_Hybrid_gem.png": {
+      "sha256": "cc387626c752888a7959f902392cbc511c63084060fd52156fefc4978919e7e0",
+      "output": "celestial/eclipse/Solar_Hybrid_gem.webp",
+      "ceiling": 512,
+      "quality": 90,
+      "width": 512,
+      "height": 511,
+      "bytes": 63824
     },
     "celestial/eclipse/Solar_Hybrid_v2.png": {
       "sha256": "1f0ce4ff6513ec6c3c25aaf693442da4d49487479ddddbe30535b82d289783bc",
@@ -10765,6 +10864,24 @@
       "height": 510,
       "bytes": 51504
     },
+    "celestial/eclipse/Solar_Partial_gem.png": {
+      "sha256": "6a2aead8c7441e904d7ce37dccc88d8af465f2f492f002c86dacf5f30e03011c",
+      "output": "celestial/eclipse/Solar_Partial_gem.webp",
+      "ceiling": 512,
+      "quality": 90,
+      "width": 512,
+      "height": 511,
+      "bytes": 66162
+    },
+    "celestial/eclipse/Solar_Partial_gpt.png": {
+      "sha256": "61d25024766732dedb7fd039204ca361baffb1faf0b5cb971ccd67408a216955",
+      "output": "celestial/eclipse/Solar_Partial_gpt.webp",
+      "ceiling": 512,
+      "quality": 90,
+      "width": 512,
+      "height": 507,
+      "bytes": 105214
+    },
     "celestial/eclipse/Solar_Partial_v2.png": {
       "sha256": "6c22a21313165fe401b1dc5a055e1b512467694b61c1c162b5d34958faa012ab",
       "output": "celestial/eclipse/Solar_Partial_v2.webp",
@@ -10782,6 +10899,24 @@
       "width": 511,
       "height": 512,
       "bytes": 60814
+    },
+    "celestial/eclipse/Solar_Total_gem.png": {
+      "sha256": "f19bdad24db1210493a5e05fe7b68c6a87fab5987a67ac4de07e7bff31aac735",
+      "output": "celestial/eclipse/Solar_Total_gem.webp",
+      "ceiling": 512,
+      "quality": 90,
+      "width": 512,
+      "height": 511,
+      "bytes": 67212
+    },
+    "celestial/eclipse/Solar_Total_gpt.png": {
+      "sha256": "2d31d414a133c5a8868f2895a5e08e57dd88ec7c64d97e6e2bb557a8e64ae6b7",
+      "output": "celestial/eclipse/Solar_Total_gpt.webp",
+      "ceiling": 512,
+      "quality": 90,
+      "width": 512,
+      "height": 507,
+      "bytes": 106152
     },
     "celestial/eclipse/Solar_Total_v2.png": {
       "sha256": "6c29ca75a4fc760b267d805e2cad6d692ac4f6621afeaa27a6d4e6f832113c0b",
@@ -11547,6 +11682,60 @@
       "width": 512,
       "height": 512,
       "bytes": 107198
+    },
+    "instrument/duality_gem.png": {
+      "sha256": "f28b04eea00b19363ae45412b7166c9f3c2b7adb89f7ca49540524d7a024872a",
+      "output": "instrument/duality_gem.png",
+      "ceiling": null,
+      "quality": 90,
+      "width": 964,
+      "height": 1004,
+      "bytes": 1123882
+    },
+    "instrument/logo_gem.png": {
+      "sha256": "c43599ec1601a0f3d2360781c04e0fed4ee776b411522a78c31a9d45067b141e",
+      "output": "instrument/logo_gem.png",
+      "ceiling": null,
+      "quality": 90,
+      "width": 944,
+      "height": 945,
+      "bytes": 1522617
+    },
+    "instrument/logo_gpt.png": {
+      "sha256": "723a9efb5572f9a8f65ba3dc2af8c4fac96bb4de132445fb21156ccb3620ba8d",
+      "output": "instrument/logo_gpt.png",
+      "ceiling": null,
+      "quality": 90,
+      "width": 1246,
+      "height": 1240,
+      "bytes": 2970901
+    },
+    "instrument/paint_light_gem.png": {
+      "sha256": "2e91d02e32458ceb3b35a87482df60c24ef19cb12870f58b9abb64d0dbcfb3a2",
+      "output": "instrument/paint_light_gem.png",
+      "ceiling": null,
+      "quality": 90,
+      "width": 974,
+      "height": 978,
+      "bytes": 1485056
+    },
+    "instrument/paint_light_gpt.png": {
+      "sha256": "3f82072824957b465e135eeca2b07ae4b3dcc151597e9888257f7ce3d6e471a9",
+      "output": "instrument/paint_light_gpt.png",
+      "ceiling": null,
+      "quality": 90,
+      "width": 1250,
+      "height": 1244,
+      "bytes": 3037819
+    },
+    "instrument/thirteenth_gem.png": {
+      "sha256": "26d29df96a76ae20e974e74572c93a6f3a56c658d3ae359894cb7556905f00ba",
+      "output": "instrument/thirteenth_gem.png",
+      "ceiling": null,
+      "quality": 90,
+      "width": 926,
+      "height": 955,
+      "bytes": 1485050
     },
     "weeks/celestial_bodies/cosmos/primary/bronze/Big_Bang_gem.png": {
       "sha256": "44aca458f1a5da3574bc28d78e06b6b2cbab02cd48da2a8fcc5222cdc2e24742",
@@ -13861,6 +14050,15 @@
       "height": 506,
       "bytes": 90226
     },
+    "weeks/faith/bible/primary/colored/Duality_gpt.png": {
+      "sha256": "21d60c01360fb55565d09cf47f71eb77486f7af722555ed98d8cb2a960e1fc4b",
+      "output": "weeks/faith/bible/primary/colored/Duality_gpt.webp",
+      "ceiling": 512,
+      "quality": 90,
+      "width": 512,
+      "height": 503,
+      "bytes": 133410
+    },
     "weeks/faith/bible/primary/colored/Holy_Trinity_gem.png": {
       "sha256": "3772d37b18cab4022e30608f0d199e7e3afa50e7caa372f969432e750d5ec042",
       "output": "weeks/faith/bible/primary/colored/Holy_Trinity_gem.webp",
@@ -16029,6 +16227,15 @@
       "width": 508,
       "height": 512,
       "bytes": 62876
+    },
+    "weeks/films/sw_sith/primary/colored/Title_gpt.png": {
+      "sha256": "92fa5649e41b2e9d6b6e9ee8cfec0b0d917c9d6c8b46dd51278cf0d876f7884b",
+      "output": "weeks/films/sw_sith/primary/colored/Title_gpt.webp",
+      "ceiling": 512,
+      "quality": 90,
+      "width": 512,
+      "height": 512,
+      "bytes": 108478
     },
     "weeks/gaming/cp_corpo/primary/bronze/Adam_Smasher_gem.png": {
       "sha256": "662a1207c4b2c99121f60181c31d09d9c7feab7be8968fadd469ed10510b52c2",
@@ -20277,6 +20484,15 @@
       "width": 512,
       "height": 512,
       "bytes": 77700
+    },
+    "weeks/myth/egypt/primary/colored/Duality_gpt.png": {
+      "sha256": "5466fadeb35ab4a74d52f536ced70e77b343cd2b74e465b9765e2a97be954a2e",
+      "output": "weeks/myth/egypt/primary/colored/Duality_gpt.webp",
+      "ceiling": 512,
+      "quality": 90,
+      "width": 512,
+      "height": 512,
+      "bytes": 136466
     },
     "weeks/myth/egypt/primary/colored/Hathor_gem.png": {
       "sha256": "3395b15c4d22b164a48a398460cd4b5813fbefec98f5a9f7a64d2cc17bc49fee",

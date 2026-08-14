@@ -250,11 +250,11 @@
       },
       "crown_text": [
         {
-          "text": "ANNUIT COEPTIS",
+          "text": "ANNUIT CŒPTIS",
           "pins": [["A", 1, 8], ["S", 1, 16]],
           "reading": {
-            "title": "ANNUIT COEPTIS",
-            "text": "\"He has favored our undertakings.\" The shorter half of the Great Seal's reverse motto, adapted from Virgil's Aeneid (IX.625, audacibus annue coeptis — \"look with favor on this bold endeavor\"): a prayer, not a boast — the Eye of Providence is asked to bless the work, the work does not claim to have earned it on its own."
+            "title": "ANNUIT CŒPTIS",
+            "text": "\"He has favored our undertakings.\" The shorter half of the Great Seal's reverse motto, adapted from Virgil's Aeneid (IX.625, audacibus annue coeptis — \"look with favor on this bold endeavor\"): a prayer, not a boast — the Eye of Providence is asked to bless the work, the work does not claim to have earned it on its own. Written as the seal itself writes it, with the ligature Œ as one letter: six letters ANNUIT, six CŒPTIS."
           }
         },
         {
@@ -264,6 +264,25 @@
           "reading": {
             "title": "NOVUS ORDO SECLORUM",
             "text": "\"A new order of the ages.\" The longer half of the same motto, drawn from Virgil's Fourth Eclogue (magnus ab integro saeclorum nascitur ordo — \"the great line of the centuries begins anew\"): not a new order built to replace the old by force, but a new age understood to have already begun — the pyramid's unfinished top, a work still under construction."
+          }
+        }
+      ],
+      "crown_text_night": [
+        {
+          "text": "SANCIT FŒDERA",
+          "pins": [["S", 1, 8], ["A", 2, 16]],
+          "reading": {
+            "title": "SANCIT FŒDERA",
+            "text": "\"He sanctions the covenants.\" The night mirror of ANNUIT CŒPTIS — verb for verb, act for act, S to A where the day reads A to S — from Virgil's Aeneid (XII.200, foedera fulmine sancit — \"confirms the covenants with the thunderbolt\"): the favor asked of Providence by day is the covenant sealed by night. Same weights as its day twin, with the ligature Œ as one letter: six letters SANCIT, six FŒDERA."
+          }
+        },
+        {
+          "text": "MUNDORUM ORDO NUMEN",
+          "pins": [["M", 1, 4], ["O", 2, 24], ["N", 3, 20]],
+          "clockwise": false,
+          "reading": {
+            "title": "MUNDORUM ORDO NUMEN",
+            "text": "\"The divine will of the order of worlds.\" The night mirror of NOVUS ORDO SECLORUM — the same seventeen letters with the central O still exactly central, the word lengths reflected (5–4–8 into 8–4–5), and ORDO itself kept as the shared middle word: turn the wheel and the ORDER remains while the ages give way to the worlds. Numen is the unseen divine assent — the nod ANNUIT already names — so the turned dial does not repeat the prophecy of the new order: it answers it with the power that keeps every order."
           }
         }
       ]

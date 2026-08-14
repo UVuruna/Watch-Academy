@@ -42,8 +42,18 @@ duplicate name raises naming the offending card.
   when present, `render.compositor._ring_word_legend_tooltip` shows
   THIS for every word of the entry instead of falling back to the
   seat's own jewel legend (fixes the reported bug where ANNUIT
-  COEPTIS's hover narrated the Anointed Aegis jewel under it instead
+  CŒPTIS's hover narrated the Anointed Aegis jewel under it instead
   of the Latin motto itself).
+- **`crown_text_night`** — THE INVERTED CROWN TEXTS (owner verdict
+  2026-08-14, CANON.md §The Banknote): an optional second list, same
+  forms and same validation, that draws INSTEAD of `crown_text` for
+  every arc Sky-Up's night half-turn carried across the horizon. The
+  Dollar is the only carrier: SANCIT FŒDERA (authored on the top half,
+  so the flip seats it under the bottom) and MUNDORUM ORDO NUMEN
+  (authored on NOVUS ORDO SECLORUM's own 4h/24h/20h pins, so the flip
+  crowns it over the top reading M — central O — N). The ligature
+  plates Æ/Œ count as ONE letter each, which is what keeps ANNUIT
+  CŒPTIS and SANCIT FŒDERA at six plates a word.
 - **`about`** — theme-and-name marketing copy for the Settings preset
   picker (ring_rework §5, owner ruling 2026-08-06), never a seat
   listing; optional (a custom ring need not carry one). All six bundled

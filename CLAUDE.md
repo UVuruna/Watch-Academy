@@ -89,7 +89,7 @@ project-specific laws and deltas that TIGHTEN the root rules.
   claims the top-level names under `masters/` — EXCEPT those in
   `make_art_bake.DEEP_GOVERNED_ROOTS`, where authority is claimed one
   level deeper. `instrument` is the only member and must stay one:
-  `shared/assets/instrument/` also holds the 57 letter plates of THE
+  `shared/assets/instrument/` also holds the 59 letter plates of THE
   ONE PLATE LAW plus guide/hands/icons/ring — ~147 files no master
   will ever claim — so whole-area governance would make every one of
   them a stray, hold `--check` red forever, and let a single

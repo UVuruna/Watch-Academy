@@ -272,6 +272,19 @@ def validate_preset(entry: dict) -> dict:
             )
         legend[position] = {"name": jewel_name, "reading": reading}
     crown_text = _validate_crown_text(name, entry.get("crown_text") or [], positions)
+    # THE INVERTED CROWN TEXTS (owner verdict 2026-08-14, CANON.md §The
+    # Banknote): an optional SECOND crown-text list that draws INSTEAD
+    # of `crown_text` for every arc the world offset has carried across
+    # the horizon (Sky-Up's night half-turn). Authored in the same band
+    # frame with the same pin machinery — the Dollar's night pair is
+    # SANCIT FŒDERA (a top arc in the band frame, so the flip seats it
+    # under the bottom) and MUNDORUM ORDO NUMEN (a bottom arc, so the
+    # flip crowns it over the top), the sealed mirrors of ANNUIT CŒPTIS
+    # and NOVUS ORDO SECLORUM. Empty for every other preset — the day
+    # texts then re-seat mirrored under THE ARC READING LAW, unchanged.
+    crown_text_night = _validate_crown_text(
+        name, entry.get("crown_text_night") or [], positions
+    )
     # The optional THEMATIC color pick (ENLARGE/THEMATIC round, widened
     # for CUSTOM rings, owner 2026-07-27): a card may name ANY of the
     # transformer's ramps (the five ring theme colors plus every metal
@@ -302,6 +315,7 @@ def validate_preset(entry: dict) -> dict:
         "triangle": triangle,
         "legend": legend,
         "crown_text": crown_text,
+        "crown_text_night": crown_text_night,
         "thematic": thematic,
         "about": about,
     }

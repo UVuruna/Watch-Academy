@@ -111,6 +111,14 @@ class RingSpec:
     # bottom) so they never collide; the old two-radius-by-list-order
     # scheme is gone.
     crown_text: tuple[dict, ...] = ()
+    # THE INVERTED CROWN TEXTS (owner verdict 2026-08-14): the arcs that
+    # draw INSTEAD of `crown_text` once the world offset has carried an
+    # arc across the horizon (Sky-Up's night half-turn) — the Dollar's
+    # SANCIT FŒDERA / MUNDORUM ORDO NUMEN pair, same entry shape as
+    # `crown_text`, built by the same `build_skin` pass. Empty for every
+    # preset without a night pair: the day texts then re-seat mirrored
+    # under THE ARC READING LAW exactly as before.
+    crown_text_night: tuple[dict, ...] = ()
     # The SINGLE finish every crown text glyph wears (owner: "in the ring
     # jewel metal/color family") — the same settings.ring_finish the
     # ring's own Trinity-triangle jewels wear, resolved once in

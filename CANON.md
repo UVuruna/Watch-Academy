@@ -1684,9 +1684,17 @@ and verified letter by letter:
   SANCTA GRATIA (adjective + noun — rejected because the original is
   an act, not a picture).
 
-Wiring (config tables, letter pins, the inverted arcs' angle solve)
-is NOT part of this seal — it joins the Dollar preset's own
-implementation docs when the geocentric night flip is built.
+SHIPPED the same day (0.15.028/029): the pair rides the Dollar card's
+`crown_text_night` field (`Database/ring_presets.json`,
+`data.rings._validate_crown_text` — same pin machinery, authored on
+the opposite half of the band frame so Sky-Up's night half-turn seats
+each mirror where its day twin stood); `render.layers.ring` swaps arcs
+by `core.world.arc_crosses_horizon` instead of mirroring, the hover
+follows the drawn motto by the same predicate, ANNUIT CŒPTIS now
+spells its Œ from the ligature plate (6 + 6), and the flip dissolves
+through the compositor's TURNING CROSSFADE instead of snapping.
+Teeth: `tests/test_world_mode.py::TestTheInvertedCrownTexts`,
+`tests/test_skins.py::test_mason_crown_text_arc_loads_and_pins_its_key_jewels`.
 
 <a id="working-rules"></a>
 

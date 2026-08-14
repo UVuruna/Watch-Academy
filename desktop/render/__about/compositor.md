@@ -45,6 +45,17 @@ the NIGHT PHASE and its flip:
   by the difference, because every baked member's rotation is
   phase-linear. Not one plate is re-rendered mid-move, and nothing on the
   paint path touches the disk.
+- **THE TURNING CROSSFADE (owner order 2026-08-14):** when a flip
+  re-keys the composites (and ONLY then — a resize or a new day drops
+  the stash), the departing phase's finished segments are kept and
+  painted ON TOP of the arriving ones, rotated by their own delta and
+  fading with the eased progress. Phase-dependent content — mirrored
+  numerals, re-seated jewels, the Dollar's swapped night mottos (THE
+  INVERTED CROWN TEXTS) — dissolves mid-turn instead of snapping at the
+  flip's first frame. Painted over, never alpha-blended side by side,
+  so the composite never dips below full opacity on the transparent
+  desktop. Tooth: `tests/test_world_mode.py::TestTheInvertedCrownTexts::
+  test_the_turning_crossfade_holds_the_departing_segments`.
 - `_world_theta(point)` takes the world offset back off a cursor angle,
   so every hover that reads the dial BAND asks its question in the frame
   those marks are drawn in.

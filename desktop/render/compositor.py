@@ -562,6 +562,17 @@ class Compositor:
         self._flip_from: float = 0.0
         self._flip_target: float | None = None
         self._flip_started: float | None = None
+        # THE TURNING CROSSFADE (owner order 2026-08-14 — perfect the
+        # flip animation): while a flip runs, the DEPARTING phase's
+        # cached segments are kept here and painted ON TOP of the
+        # arriving phase's, fading out as the turn progresses — so a
+        # mirrored numeral, a re-seated jewel or the Dollar's swapped
+        # night motto (THE INVERTED CROWN TEXTS) never snaps at the
+        # flip's first frame; it dissolves mid-turn while both variants
+        # ride the same rotation. None whenever no flip is in flight —
+        # the steady state pays nothing.
+        self._flip_from_composites: list | None = None
+        self._flip_from_phase: float = 0.0
 
     @staticmethod
     def _plan_steps(
@@ -917,6 +928,22 @@ class Compositor:
             self._two_faced_mount(tick), self._phase_target(),
         )
         if self._composite_key != key:
+            # THE TURNING CROSSFADE: when ONLY the phase target moved
+            # (a genuine flip in flight — same size, same day, same
+            # mount face), the outgoing phase's finished segments are
+            # kept to fade out over the incoming ones. Any other change
+            # (resize, new day, settings rebuild) drops them — there is
+            # no turn to dissolve through.
+            if (
+                self._composite_key is not None
+                and self._flip_started is not None
+                and self._composite_key[:-1] == key[:-1]
+                and len(self._composites) == len(self._cached_groups)
+            ):
+                self._flip_from_composites = self._composites
+                self._flip_from_phase = self._composite_key[-1]
+            else:
+                self._flip_from_composites = None
             self._composites = [None] * len(self._cached_groups)
             self._composite_key = key
         # The cached segments carry the window's transparent margin (the
@@ -935,6 +962,10 @@ class Compositor:
         # instant the move ends, and always 0.0 in Geocentric.
         phase = self.phase_deg()
         flip_delta = phase - self._phase_target()
+        if not flip_delta:
+            # The turn is over (or none is running): the departing
+            # phase's stashed segments have nothing left to fade.
+            self._flip_from_composites = None
         ctx = RenderContext(
             skin=self._skin, day=self._day, tick=tick,
             daylight=tick.is_daylight,
@@ -964,6 +995,33 @@ class Compositor:
                     painter.translate(-size / 2, -size / 2)
                     painter.drawPixmap(QPointF(-overhang, -overhang), pixmap)
                     painter.restore()
+                    # THE TURNING CROSSFADE: the departing phase's own
+                    # finished pixels ride the SAME turn (rotated by
+                    # their own delta, which differs by the half-turn)
+                    # ON TOP, fading with the flip's eased progress —
+                    # opaque over the arriving segment at the first
+                    # frame, gone at the last, so the phase-dependent
+                    # content (mirrored words, the Dollar's night
+                    # mottos) dissolves mid-turn instead of snapping.
+                    # Painted OVER the new segment rather than blended
+                    # side-by-side, so the composite never dips below
+                    # full opacity on the transparent desktop.
+                    stash = self._flip_from_composites
+                    old = stash[payload] if stash is not None else None
+                    if old is not None:
+                        painter.save()
+                        painter.setRenderHints(_RENDER_HINTS)
+                        painter.setOpacity(
+                            painter.opacity()
+                            * min(1.0, abs(flip_delta) / 180.0)
+                        )
+                        painter.translate(size / 2, size / 2)
+                        painter.rotate(phase - self._flip_from_phase)
+                        painter.translate(-size / 2, -size / 2)
+                        painter.drawPixmap(
+                            QPointF(-overhang, -overhang), old
+                        )
+                        painter.restore()
                     continue
                 painter.drawPixmap(QPointF(-overhang, -overhang), pixmap)
                 continue
@@ -2950,7 +3008,8 @@ class Compositor:
         silent — the graceful-absence pattern the letter legend already
         uses."""
         crown_text = self._skin.ring.crown_text
-        if not crown_text:
+        night_text = self._skin.ring.crown_text_night
+        if not crown_text and not night_text:
             return None
         band = dial.RING_CROWN_TEXT_RADIUS_FRACTION
         half_band = dial.RING_CROWN_TEXT_HOVER_HALF_FRACTION
@@ -2974,8 +3033,21 @@ class Compositor:
         # `all_turn`, 0.0 in `numerals_turn` where the arc stands still.
         screen_theta = (theta + self._world_offset()) % 360.0
         offset = self._jewel_offset()
-        for entry in crown_text:
+        # THE INVERTED CROWN TEXTS (owner verdict 2026-08-14): the hover
+        # answers for the arcs that are DRAWN — a day entry falls silent
+        # once its arc crossed the horizon and its night twin took the
+        # seat, by the SAME predicate RingLayer._draw_crown_text paints
+        # with (Rule #5: the words and their letters can never disagree
+        # about which motto is up).
+        for entry, crossed_draws in (
+            [(e, False) for e in crown_text]
+            + [(e, True) for e in night_text]
+        ):
             arc_centre = _crown_arc_centre(entry)
+            if night_text and world.arc_crosses_horizon(
+                arc_centre, offset
+            ) != crossed_draws:
+                continue
             entry_reading = entry.get("reading")
             for word in entry.get("words", ()):
                 center = world.arc_seat_deg(word["center"], arc_centre, offset)

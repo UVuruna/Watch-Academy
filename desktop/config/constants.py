@@ -1477,7 +1477,8 @@ _RING_NUMBERS = (
     "3", "4", "6", "8", "9", "12", "15", "16", "18", "20", "21",
 )
 LETTER_PLATE_GROUPS = {
-    "Latin": tuple(_LATIN_JEWEL_GLYPHS),
+    # Æ/Œ close the Latin group (THE LIGATURE PLATES, owner 2026-08-14).
+    "Latin": tuple(_LATIN_JEWEL_GLYPHS) + ("Æ", "Œ"),
     "Greek": tuple(_GREEK_ALPHABET),
     "Numbers": _RING_NUMBERS,
     "Symbols": ("✠", "$", "&", ":", "@", "!", "?"),
@@ -1488,6 +1489,13 @@ LETTER_PLATE_FILES = {
     # 2026-07-12 — the traced SVGs parsed in seconds; 512 covers every
     # on-dial size with room to spare).
     **{letter: (f"latin/{letter}.png",) for letter in _LATIN_JEWEL_GLYPHS},
+    # THE LIGATURE PLATES (owner addition 2026-08-14): Æ and Œ are ONE
+    # plate and ONE letter each — the Great Seal's own orthography
+    # (CŒPTIS), and the letter count law of the INVERTED CROWN TEXTS
+    # (CANON.md §The Banknote): ANNUIT CŒPTIS and SANCIT FŒDERA both
+    # weigh 6 + 6 plates only because the ligature is one seat.
+    "Æ": ("latin/AE.png",),
+    "Œ": ("latin/OE.png",),
     **{glyph: (f"greek/{stem}.png",) for glyph, stem in GREEK_OWN_PLATES.items()},
     **{glyph: (f"latin/{twin}.png",) for glyph, twin in GREEK_LATIN_TWINS.items()},
     **{digit: (f"numerals/{digit}.png",) for digit in _DIGIT_GLYPHS},

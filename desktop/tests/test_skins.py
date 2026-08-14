@@ -349,8 +349,9 @@ def test_crown_text_words_map_to_their_seats():
     """WORD-HOVER round (owner 2026-07-27): every arc word knows the
     SEAT whose legend it answers with — a station word its own station,
     and each Dollar crown text word the seat of its ONE pinned letter (the
-    five words spell the five letters: ANNUIT→A, COEPTIS→S, NOVUS→N,
-    ORDO→Ω, SECLORUM→M)."""
+    five words spell the five letters: ANNUIT→A, CŒPTIS→S, NOVUS→N,
+    ORDO→Ω, SECLORUM→M; THE LIGATURE PLATES round, owner 2026-08-14,
+    writes CŒPTIS as the seal itself does)."""
     from data.rings import ring_presets
 
     presets = ring_presets()
@@ -359,7 +360,18 @@ def test_crown_text_words_map_to_their_seats():
         for e in presets["Dollar"]["crown_text"] for w in e["words"]
     }
     assert dollar_words == {
-        "ANNUIT": 8, "COEPTIS": 16, "NOVUS": 4, "ORDO": 24, "SECLORUM": 20,
+        "ANNUIT": 8, "CŒPTIS": 16, "NOVUS": 4, "ORDO": 24, "SECLORUM": 20,
+    }
+    # THE INVERTED CROWN TEXTS (owner verdict 2026-08-14): the night
+    # pair carries the same one-pin-per-word law, mirrored — SANCIT
+    # FŒDERA answers ANNUIT CŒPTIS, MUNDORUM ORDO NUMEN answers NOVUS
+    # ORDO SECLORUM.
+    night_words = {
+        w["text"]: w["seat"]
+        for e in presets["Dollar"]["crown_text_night"] for w in e["words"]
+    }
+    assert night_words == {
+        "SANCIT": 8, "FŒDERA": 16, "MUNDORUM": 4, "ORDO": 24, "NUMEN": 20,
     }
     domy_words = {
         w["text"]: w["seat"]
@@ -520,24 +532,44 @@ def test_custom_ring_picks_its_own_thematic_color():
 
 def test_mason_crown_text_arc_loads_and_pins_its_key_jewels():
     """MOTO-FIX round (owner correction 2026-07-19, the Great Seal
-    reference image): ANNUIT COEPTIS pins its own A at 8h and S at 16h
-    (the TOP arc); NOVUS ORDO SECLORUM pins its own N at 4h, ORDO's own
-    final O at the bottom/24h, and M at 20h (the BOTTOM arc, reading
-    counterclockwise)."""
+    reference image): ANNUIT CŒPTIS pins its own A at 8h and S at 16h
+    (the TOP arc; the ligature Œ is ONE plate since THE LIGATURE PLATES
+    round, owner 2026-08-14 — six letters ANNUIT, six CŒPTIS); NOVUS
+    ORDO SECLORUM pins its own N at 4h, ORDO's own final O at the
+    bottom/24h, and M at 20h (the BOTTOM arc, reading counterclockwise).
+    THE INVERTED CROWN TEXTS (owner verdict 2026-08-14): the night pair
+    mirrors both — SANCIT FŒDERA authored on the TOP half so the flip
+    seats it under the bottom, MUNDORUM ORDO NUMEN on the BOTTOM half
+    (the same 4h/24h/20h pins as NOVUS, so the flip crowns it over the
+    top with M left, the central O on top and N right)."""
     from config import constants
     from data.rings import ring_presets
 
     presets = ring_presets()
     mason = presets["Dollar"]
     assert [entry["text"] for entry in mason["crown_text"]] == [
-        "ANNUIT COEPTIS", "NOVUS ORDO SECLORUM",
+        "ANNUIT CŒPTIS", "NOVUS ORDO SECLORUM",
     ]
     annuit, novus = mason["crown_text"]
     assert annuit["angles"][0] % 360.0 == pytest.approx(300.0)    # A -> 8h
-    assert annuit["angles"][13] % 360.0 == pytest.approx(60.0)    # S -> 16h
+    assert annuit["angles"][12] % 360.0 == pytest.approx(60.0)    # S -> 16h
     assert novus["angles"][0] % 360.0 == pytest.approx(240.0)     # N -> 4h
     assert novus["angles"][9] % 360.0 == pytest.approx(180.0)     # O -> 24h (bottom)
     assert novus["angles"][18] % 360.0 == pytest.approx(120.0)    # M -> 20h
+    assert [entry["text"] for entry in mason["crown_text_night"]] == [
+        "SANCIT FŒDERA", "MUNDORUM ORDO NUMEN",
+    ]
+    sancit, mundorum = mason["crown_text_night"]
+    assert sancit["angles"][0] % 360.0 == pytest.approx(300.0)    # S -> 8h
+    assert sancit["angles"][12] % 360.0 == pytest.approx(60.0)    # A -> 16h
+    assert mundorum["angles"][0] % 360.0 == pytest.approx(240.0)  # M -> 4h
+    assert mundorum["angles"][9] % 360.0 == pytest.approx(180.0)  # O -> 24h
+    assert mundorum["angles"][18] % 360.0 == pytest.approx(120.0)  # N -> 20h
+    # The mirror is EXACT: the night arcs reuse the day arcs' own pin
+    # seats, so their per-glyph angle runs are identical letter for
+    # letter — the flip re-seats both pairs by the same reflection.
+    assert mundorum["angles"] == novus["angles"]
+    assert sancit["angles"] == annuit["angles"]
 
     # The crown-text-free bundled presets stay crown-text-free (graceful
     # absence); DOMY and LOOP carry their own cross words now
@@ -555,11 +587,20 @@ def test_mason_crown_text_arc_loads_and_pins_its_key_jewels():
     assert gold_skin.crown_text_metal == "gold"
     assert len(gold_skin.crown_text) == 2
     annuit_glyphs, novus_glyphs = gold_skin.crown_text
-    assert len(annuit_glyphs["glyphs"]) == 13    # "ANNUIT COEPTIS" minus 1 space
+    assert len(annuit_glyphs["glyphs"]) == 12    # "ANNUIT CŒPTIS": 6 + 6 plates
     assert len(novus_glyphs["glyphs"]) == 17     # "NOVUS ORDO SECLORUM" minus 2 spaces
     first_asset, first_angle = annuit_glyphs["glyphs"][0]
     assert first_asset == art_dir / "latin/A.png"
     assert first_angle % 360.0 == pytest.approx(300.0)
+    # The ligature is ONE plate (THE LIGATURE PLATES, owner 2026-08-14):
+    # CŒPTIS's second glyph resolves to the owner's OE plate.
+    assert annuit_glyphs["glyphs"][7][0] == art_dir / "latin/OE.png"
+    # THE INVERTED CROWN TEXTS ride the same build: 6+6 and 17 plates.
+    assert len(gold_skin.crown_text_night) == 2
+    sancit_glyphs, mundorum_glyphs = gold_skin.crown_text_night
+    assert len(sancit_glyphs["glyphs"]) == 12    # "SANCIT FŒDERA": 6 + 6 plates
+    assert len(mundorum_glyphs["glyphs"]) == 17
+    assert sancit_glyphs["glyphs"][7][0] == art_dir / "latin/OE.png"
 
     silver_skin = build_skin(
         replace(Settings(), ring="Dollar", ring_finish="silver")
@@ -1335,7 +1376,9 @@ def test_jewel_groups_cover_the_library_exactly():
     assert material == {"0", "1", "2", "5", "7"}
     assert sorted(grouped) == sorted(library - material)
     assert len(grouped) == len(set(grouped))
-    assert len(constants.LETTER_PLATE_GROUPS["Latin"]) == 26   # the full alphabet
+    # The full alphabet plus the two ligature plates (Æ, Œ — THE
+    # LIGATURE PLATES, owner 2026-08-14: one plate, one letter each).
+    assert len(constants.LETTER_PLATE_GROUPS["Latin"]) == 28
     assert len(constants.LETTER_PLATE_GROUPS["Greek"]) == 24   # the full alphabet
     for glyph in constants.LETTER_PLATE_FILES:
         # The eye stems are SOURCED (canonical Eye[_shine].png resolves

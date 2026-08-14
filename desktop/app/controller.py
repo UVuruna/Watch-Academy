@@ -577,7 +577,40 @@ def _compose_skin(settings: Settings, location_display: str = ""):
                 # preset's own ruled bottom arc above (Rule #5).
                 "reading": dict(dial.RING_LIVE_CROWN_LOCATION_READING),
             }]
-    crown_arc = tuple(
+    crown_arc = _crown_arc_glyphs(crown_arc_entries)
+    # THE INVERTED CROWN TEXTS (owner verdict 2026-08-14): the preset's
+    # own night pair, built by the SAME pass (Rule #5) — never extended
+    # by the custom/location crowns above, which belong to the day list
+    # and re-seat mirrored like every other preset's arcs.
+    crown_arc_night = _crown_arc_glyphs(card["crown_text_night"])
+    skin = dataclasses.replace(
+        defaults.DEFAULT_SKIN,
+        ring=dataclasses.replace(
+            defaults.DEFAULT_SKIN.ring,
+            outer_asset=dial.RING_OUTER_ART_DIR / outer["file"],
+            inner_asset=_resolve_ring_inner(settings, card),
+            jewels=jewels,
+            jewel_art=jewel_art,
+            jewel_metal=jewel_metal,
+            jewel_legend=jewel_legend,
+            jewel_zoom=jewel_zoom,
+            jewel_no_shadow=jewel_no_shadow,
+            crown_text=crown_arc,
+            crown_text_night=crown_arc_night,
+            crown_text_metal=settings.ring_finish,
+        ),
+        hands=_resolve_hands(settings),
+    )
+    return apply_display_settings(skin, settings)
+
+
+def _crown_arc_glyphs(entries) -> tuple:
+    """Card crown-text entries -> render-ready arc entries (glyph asset
+    + angle pairs, per-word hover geometry, the entry's own reading) —
+    ONE builder for the day list and the night list (THE INVERTED CROWN
+    TEXTS, owner verdict 2026-08-14), so the two can never drift in
+    shape."""
+    return tuple(
         {
             "text": entry["text"],
             "glyphs": tuple(
@@ -613,26 +646,8 @@ def _compose_skin(settings: Settings, location_display: str = ""):
             # absence — dict.get default).
             "reading": entry.get("reading"),
         }
-        for entry in crown_arc_entries
+        for entry in entries
     )
-    skin = dataclasses.replace(
-        defaults.DEFAULT_SKIN,
-        ring=dataclasses.replace(
-            defaults.DEFAULT_SKIN.ring,
-            outer_asset=dial.RING_OUTER_ART_DIR / outer["file"],
-            inner_asset=_resolve_ring_inner(settings, card),
-            jewels=jewels,
-            jewel_art=jewel_art,
-            jewel_metal=jewel_metal,
-            jewel_legend=jewel_legend,
-            jewel_zoom=jewel_zoom,
-            jewel_no_shadow=jewel_no_shadow,
-            crown_text=crown_arc,
-            crown_text_metal=settings.ring_finish,
-        ),
-        hands=_resolve_hands(settings),
-    )
-    return apply_display_settings(skin, settings)
 
 
 def _slot_seconds(settings: Settings) -> bool:

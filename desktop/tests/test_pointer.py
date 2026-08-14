@@ -1538,7 +1538,7 @@ def test_ring_arc_words_answer_their_own_entry_reading(july_wednesday):
     )
     dollar.render_offscreen(360.0, 1.0, day, tick)
     annuit = dollar._tick_tooltip(point_at(316.7), radius)
-    assert "ANNUIT COEPTIS" in annuit and "favored our undertakings" in annuit
+    assert "ANNUIT CŒPTIS" in annuit and "favored our undertakings" in annuit
     assert "Anointed Aegis" not in annuit    # THE reported bug, fixed
     ordo = dollar._tick_tooltip(point_at(186.0), radius)
     assert "NOVUS ORDO SECLORUM" in ordo and "new order of the ages" in ordo

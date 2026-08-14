@@ -388,8 +388,29 @@ class RingLayer(Layer):
         # arc inherited the band's `ring_tint` wash and the time
         # inherited nothing.
         finish = letter_plates.crown_finish(ctx.skin)
-        for crown_entry in crown_texts:
+        # THE INVERTED CROWN TEXTS (owner verdict 2026-08-14, CANON.md
+        # §The Banknote): a preset carrying a night list swaps texts
+        # instead of mirroring — a DAY arc hides once the offset has
+        # carried it across the horizon and its NIGHT twin (authored on
+        # the opposite half of the band frame, so the same crossing
+        # brings it in) draws in its place: the Dollar's turned seal
+        # reads MUNDORUM ORDO NUMEN over the top and SANCIT FŒDERA
+        # under the bottom, never an upside-down prophecy. A preset
+        # without night texts keeps THE ARC READING LAW's mirror,
+        # unchanged.
+        offset = jewel_offset(self._skin, ctx.world_offset)
+        night_texts = self._skin.ring.crown_text_night
+        for crown_entry, crossed_draws in (
+            [(entry, False) for entry in crown_texts]
+            + [(entry, True) for entry in night_texts]
+        ):
             glyphs = crown_entry["glyphs"]
+            if night_texts:
+                centre = world.arc_centre_deg(
+                    [theta for _asset, theta in glyphs]
+                )
+                if world.arc_crosses_horizon(centre, offset) != crossed_draws:
+                    continue
             # THE ARC READING LAW (core.world.arc_seats, ledger §1
             # "nothing is mirrored"): a bare `+ world_offset` keeps every
             # LETTER upright but reverses which way the WORD reads the
@@ -403,8 +424,7 @@ class RingLayer(Layer):
             # the reflection the identity, so the motto reads exactly as
             # it does on an unturned dial.
             seats = world.arc_seats(
-                [theta for _asset, theta in glyphs],
-                jewel_offset(self._skin, ctx.world_offset),
+                [theta for _asset, theta in glyphs], offset,
             )
             for (gold_asset, _theta), seat in zip(glyphs, seats):
                 self._draw_ring_glyph(

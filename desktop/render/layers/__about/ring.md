@@ -52,6 +52,16 @@ dial. The numerals a standing jewel would cover are never composed into
 the band at all — see `occluded_hours` in
 [Numerals Layer](numerals.md).
 
+THE INVERTED CROWN TEXTS (owner verdict 2026-08-14): a preset carrying
+`crown_text_night` swaps mottos instead of mirroring — `_draw_crown_text`
+hides a day arc once `core.world.arc_crosses_horizon` says the offset
+carried it over, and draws the night twin (authored on the opposite half
+of the band frame, so the same crossing brings it in) in its place. The
+Dollar's turned seal thus reads MUNDORUM ORDO NUMEN over the top and
+SANCIT FŒDERA under the bottom. A preset without night texts keeps THE
+ARC READING LAW's mirror, unchanged. The hover follows the same
+predicate in `render.compositor._ring_word_legend_tooltip`.
+
 `Cadence.STATIC`: nothing on this layer depends on the day or the live
 tick — only the skin (letters, tint, saturation) and the dial's size/DPI —
 so it rebuilds only on a skin/size/DPI change. Not `hover_variable`.

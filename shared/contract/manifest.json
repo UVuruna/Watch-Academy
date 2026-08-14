@@ -1,5 +1,5 @@
 {
-  "created_at": "2026-08-12T20:13:58+02:00",
+  "created_at": "2026-08-14T17:45:04+02:00",
   "files": {
     "golden_vectors.json": {
       "sha256": "cb8f4641a41ffefdf6fad6d4f8dd75b39b6efd44fbb19226264917cbdf7529d1"
@@ -17,7 +17,7 @@
       "sha256": "67e39b44622159d3c6ed255d261c05837e8dce8778c1fc97c775498bdb591c61"
     },
     "tables/ring_presets.json": {
-      "sha256": "49a55054ee8d52749ebb88e88f3bd3c8f6d4bda30441c21f9079f549e7ca6051"
+      "sha256": "f4326399ea8b2ded45ea4a9dcd47ba1b2b7f015c0bb085228f76c0c8d973c93f"
     },
     "tables/week_themes.json": {
       "sha256": "716b9199b3c8ff5ec40473752bf2a488cfb806cb0c0cf5e1430594e06836bde6"
