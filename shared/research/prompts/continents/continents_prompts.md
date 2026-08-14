@@ -100,13 +100,24 @@ Photorealistic Earth globe from orbit distance centered on ZEALANDIA at NIGHT: t
 
 ---
 
-## Cleanup owed beside this sheet (owner's own picks, not an agent's)
+## Cleanup — RESOLVED 2026-08-14 (owner: "odaberi sam i odbaci jednu")
 
-- **Pangea candidates:** `pangaea.png` / `pangea.png` / `pangea_gem.png`
-  — ONE survives (owner picks), the other two leave `masters/`; the
-  bake reconcile then clears their shipped twins.
-- **Zealandia candidates:** `zealandia.png` / `zealandi_gem.png` (typo:
-  missing `a`) / `zealandia_gpt.png` — same: one survives, owner picks.
-- After the picks the earth area is suffixless again and
-  `test_instrument_furniture_and_earth_are_suffixless_owner_art` goes
-  back to green on its own.
+The DAY half of the matrix is filled from the owner's candidates,
+classified by eye and renamed in `masters/` (commit 0.15.035):
+
+- `pangea.png` (blue limb glow) → `earth_atmo_pangea_day.png`;
+  `pangea_gem.png` (hard clean edge, SAME geography) →
+  `earth_clean_pangea_day.png`. The surplus `pangaea.png` was discarded
+  per the owner's order — it was the only true unified supercontinent
+  but had no clean twin, a starfield background outside the family
+  register, and different geography from the surviving pair (a style
+  toggle must never morph the planet).
+- `zealandia_gpt.png` (vivid atmo glow) →
+  `earth_atmo_zealandia_day.png`; `zealandi_gem.png` (typo fixed with
+  the rename; clean edge) → `earth_clean_zealandia_day.png`. The owner
+  himself deleted the third, cropped candidate.
+- The registry ninth plates (`config/registry/week.py`) pin the ATMO
+  DAY faces until the style/phase-aware resolver lands.
+
+**Still owed: the four NIGHT generations above** — the day prompts
+stand as regeneration recipes; the night slots are empty on disk.
