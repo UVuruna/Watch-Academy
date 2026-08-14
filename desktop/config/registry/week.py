@@ -622,8 +622,14 @@ WEEK = {
             "stem": COMPUTED, "servant_plate": COMPUTED,
         },
         "ninth": {
-            "name": 'Zealandia', "plate": '../earth/zealandia.png',
-            "alt": 'Pangea', "alt_plate": '../earth/pangea.png',
+            # THE CONTINENTS MATRIX NAMES (owner order 2026-08-14): the
+            # deep-time faces joined the earth family's
+            # `earth_{style}_{region}_{phase}` naming; these two plates
+            # pin the ATMO DAY face (CONTINENTS_PREVIEW_STYLE) until the
+            # style/phase-aware ninth resolver lands (future round,
+            # continents_prompts.md).
+            "name": 'Zealandia', "plate": '../earth/earth_atmo_zealandia_day.png',
+            "alt": 'Pangea', "alt_plate": '../earth/earth_atmo_pangea_day.png',
             "mechanism": 'easter_egg',
         },
     },

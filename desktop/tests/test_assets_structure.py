@@ -245,9 +245,17 @@ def test_theme_to_group_reverse_map_is_consistent():
 
 
 def test_sourced_areas_carry_the_source_suffix():
-    """Every PNG under a sourced category is `<stem>_gem.png`/`_gpt.png`.
-    Owner hand-made art (instrument furniture, Earth faces) is exempt by
-    living OUTSIDE these areas."""
+    """A SUFFIX MEANS A PAIR (owner order 2026-08-14, superseding the
+    every-file-suffixed rule this test pinned before): a file where only
+    ONE version exists wears its BARE name — 423 suffixed singles were
+    renamed that day ("jedna verzija = golo ime", scope "svih 425"
+    approved) — and a `_gem`/`_gpt` suffix is legal ONLY while the OTHER
+    source's twin actually sits beside it. The resolver already prefers
+    the active source's suffix and falls back to the bare stem
+    (config.paths.art_file), so both shapes resolve; what this tooth
+    forbids is the LIE — a suffix promising a choice that does not
+    exist. Owner hand-made art (instrument furniture, Earth faces)
+    stays exempt by living outside these areas."""
     assets = paths.assets_dir()
     offenders = []
     for area in _SUFFIXED_AREAS:
@@ -255,9 +263,29 @@ def test_sourced_areas_carry_the_source_suffix():
         if not root.exists():
             continue
         for png in _iter_png(root):
-            if not png.stem.endswith(("_gem", "_gpt")):
+            stem = png.stem
+            if not stem.endswith(("_gem", "_gpt")):
+                continue
+            twin_suffix = "_gpt" if stem.endswith("_gem") else "_gem"
+            # A legal twin is the OTHER source's suffixed file — or the
+            # BARE stem: the owner's in-progress pairs arrive as
+            # "original + <new>_gpt" before the original is ever
+            # re-suffixed ("ako neka mesta nemaju parnjake ili ja još
+            # nisam napravio drugu verziju", 2026-08-14). Either way a
+            # real choice exists on disk, which is all the suffix may
+            # promise.
+            twin_stems = (stem[:-4] + twin_suffix, stem[:-4])
+            if not any(
+                (png.parent / f"{twin}{ext}").exists()
+                for twin in twin_stems
+                for ext in (".png", ".webp")
+            ):
                 offenders.append(str(png.relative_to(assets)))
-    assert offenders == [], offenders[:20]
+    assert offenders == [], (
+        "suffixed files whose other-source twin does not exist — a "
+        "single wears its bare name (owner order 2026-08-14): "
+        f"{offenders[:20]}"
+    )
 
 
 def test_instrument_furniture_and_earth_are_suffixless_owner_art():

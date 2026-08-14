@@ -10450,6 +10450,15 @@
       "height": 1992,
       "bytes": 129914
     },
+    "celestial/earth/earth_atmo_pangea_day.png": {
+      "sha256": "625d1547569898baa385f64e11d5eb34d1b01e1090dd0df630ce8a9e329571cc",
+      "output": "celestial/earth/earth_atmo_pangea_day.webp",
+      "ceiling": 0,
+      "quality": 90,
+      "width": 964,
+      "height": 963,
+      "bytes": 188752
+    },
     "celestial/earth/earth_atmo_south_america_day.png": {
       "sha256": "304f789f0d8ecda97b9eeac76809083e6fef87f96f749eab21f9498faf634afa",
       "output": "celestial/earth/earth_atmo_south_america_day.webp",
@@ -10485,6 +10494,15 @@
       "width": 1886,
       "height": 1886,
       "bytes": 120536
+    },
+    "celestial/earth/earth_atmo_zealandia_day.png": {
+      "sha256": "094b9b5e01da445ac56a76425dc452fec6ec5fdc128428098dab6738db713bfe",
+      "output": "celestial/earth/earth_atmo_zealandia_day.webp",
+      "ceiling": 0,
+      "quality": 90,
+      "width": 1254,
+      "height": 1254,
+      "bytes": 629368
     },
     "celestial/earth/earth_clean_africa_day.png": {
       "sha256": "cf7bd997a4fb91c7acdaee40ca23e3b13c7ad2e489d4f7526dc8d82fb8c9bda2",
@@ -10594,6 +10612,15 @@
       "height": 1992,
       "bytes": 76096
     },
+    "celestial/earth/earth_clean_pangea_day.png": {
+      "sha256": "40034484aef241f096a782377dbd84b5133053ab1abcb17382a3ea8fab7cdd8d",
+      "output": "celestial/earth/earth_clean_pangea_day.webp",
+      "ceiling": 0,
+      "quality": 90,
+      "width": 926,
+      "height": 926,
+      "bytes": 207210
+    },
     "celestial/earth/earth_clean_south_america_day.png": {
       "sha256": "5d1eea79d05f347036c1af9b72f487eff19356cfe897a4e2ef77a38ce55029c5",
       "output": "celestial/earth/earth_clean_south_america_day.webp",
@@ -10630,32 +10657,14 @@
       "height": 1873,
       "bytes": 69334
     },
-    "celestial/earth/pangaea.png": {
-      "sha256": "4badd521486cc2ae312f51bca9a68dba5e11da3cd0ac7d38554ce60a6d7c3acd",
-      "output": "celestial/earth/pangaea.webp",
+    "celestial/earth/earth_clean_zealandia_day.png": {
+      "sha256": "ea357ae9f22edf099dd1c6bd49504cfbb5abf8fbcb0f4d7e05e32156a99f2fb1",
+      "output": "celestial/earth/earth_clean_zealandia_day.webp",
       "ceiling": 0,
       "quality": 90,
-      "width": 919,
-      "height": 920,
-      "bytes": 179608
-    },
-    "celestial/earth/pangea.png": {
-      "sha256": "625d1547569898baa385f64e11d5eb34d1b01e1090dd0df630ce8a9e329571cc",
-      "output": "celestial/earth/pangea.webp",
-      "ceiling": 0,
-      "quality": 90,
-      "width": 964,
-      "height": 963,
-      "bytes": 188752
-    },
-    "celestial/earth/pangea_gem.png": {
-      "sha256": "40034484aef241f096a782377dbd84b5133053ab1abcb17382a3ea8fab7cdd8d",
-      "output": "celestial/earth/pangea_gem.webp",
-      "ceiling": 0,
-      "quality": 90,
-      "width": 926,
-      "height": 926,
-      "bytes": 207210
+      "width": 556,
+      "height": 553,
+      "bytes": 57276
     },
     "celestial/earth/world.png": {
       "sha256": "44fe6e88b2a2f7c58ca2124eed902dd0f3aaa1562f729a2d729ecdb1e3b0712e",
@@ -10665,33 +10674,6 @@
       "width": 3698,
       "height": 1876,
       "bytes": 742066
-    },
-    "celestial/earth/zealandia.png": {
-      "sha256": "ea357ae9f22edf099dd1c6bd49504cfbb5abf8fbcb0f4d7e05e32156a99f2fb1",
-      "output": "celestial/earth/zealandia.webp",
-      "ceiling": 0,
-      "quality": 90,
-      "width": 556,
-      "height": 553,
-      "bytes": 57276
-    },
-    "celestial/earth/zealandia_gem.png": {
-      "sha256": "d31db6996beedb118ccb37c0664ba54edb532804629f69c22654ced08f9ba8c3",
-      "output": "celestial/earth/zealandia_gem.webp",
-      "ceiling": 0,
-      "quality": 90,
-      "width": 772,
-      "height": 559,
-      "bytes": 79650
-    },
-    "celestial/earth/zealandia_gpt.png": {
-      "sha256": "e194edd1681c0a66841bd07081f33123284a17af2101cc2fad97193729d6f0e4",
-      "output": "celestial/earth/zealandia_gpt.webp",
-      "ceiling": 0,
-      "quality": 90,
-      "width": 1254,
-      "height": 1247,
-      "bytes": 518670
     },
     "celestial/eclipse/Lunar_Partial.png": {
       "sha256": "8dc26c1b2d98678253cefa6b51f2c2e5d20a0016a00a629f1f61d7d120d2cb79",
