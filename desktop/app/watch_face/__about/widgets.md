@@ -3,12 +3,19 @@
 **Script:** [Widgets (script)](../widgets.py)
 
 ## Purpose
-The pill/tile builders every Watch Face section imports — extracted so
-`pointer.py`/`ring.py`/`hands.py` never each redefine the same
-`QPushButton`/`QToolButton` styling (Rule #5). Direct functional
-counterpart of `design_window.DesignDialog._pill`/`_tile`, freed of the
-class so a plain module function can be shared across the five section
-modules instead of one method per subclass.
+The layout VOCABULARY every Watch Face section imports — the width-aware
+flow, the row shapes built on it, the pill and the slider row —
+extracted so no section redefines the same styling or its own wrap
+(Rule #5).
+
+**The gallery grammar moved out on 2026-08-14:** `tile` and
+`flow_gallery` were deleted with the CardGroup migration. Their job —
+a picture choice and a gallery of them — belongs to
+[Controls](controls.md)'s `OptionCard`/`CardGroup`/`picture_group`,
+which additionally carry the mandatory hover blurb, the group title and
+sentence, radio-vs-switch kind and the icon growth. Keeping a second,
+blurb-less tile builder alive would let a section fork back to it, so
+there is exactly one.
 
 ## Connections
 
@@ -19,16 +26,15 @@ modules instead of one method per subclass.
 
 ### Used by
 - `app.watch_face.pointer` / `.ring` / `.hands` / `.umbra_aura` / `.size`
-- [Weekday Theme Grid](../../__about/weekday_theme_grid.md) — its `_tile`
-  is a thin adapter over `tile` since 2026-08-08 (one tile look, one
-  icon size, one builder)
+- [Controls](controls.md) — the element classes compose `FlowLayout`,
+  `FlowContent`, `literal` and `TILE_ICON_PX`
 
 ## Functions
-- `FlowLayout` / `FlowContent` / `flow_gallery(tiles)`: THE gallery
-  shape since 2026-08-09 (replacing the fixed-column `pack_grid`, whose
+- `FlowLayout` / `FlowContent`: THE gallery shape since 2026-08-09 (replacing the fixed-column `pack_grid`, whose
   wrap could not satisfy both ALG-7 and the window minimum at once):
   uniform tiles (the widest label decides, ALG-5) flowing by REAL
-  width, left-packed per the owner's 2026-08-06 decree, inside a host
+  width, CENTERED per the owner's 2026-08-14 decree (left-packed from
+  2026-08-06 until then), inside a host
   that publishes its true height at its current width (QScrollArea
   never consults heightForWidth on its own). Since 2026-08-13 that
   publishing happens from `minimumSizeHint()` (the hint the scroll area
@@ -43,21 +49,43 @@ modules instead of one method per subclass.
   rows (ALG-9 moved the three size sliders there, owner 2026-08-09).
 - `pill(label, checked, on_click)`: a small `QPushButton`, "next" style
   when checked, else "neutral"
-- `tile(label, icon, checked, on_click)`: a `QToolButton` with
-  text-under-icon layout; `icon` is a pre-built `QIcon` (the caller
-  supplies it, typically via `thumbs.py`) rather than a raw path — the
-  one difference from `design_window._tile`, which loaded the `QIcon`
-  itself from a `Path`. Every tile shows its icon at the shared
-  `TILE_ICON_PX` (128) — set INSIDE the builder (owner instruction
-  2026-08-08: every picker shows WHAT IT PICKS at a readable size, the
-  Hands gallery being the model; nine call sites once relied on Qt's
-  ~16px default while only Hands set its own). A tile with no icon
-  reserves the same icon box transparently empty (uniform siblings,
-  GUI Rules ALG-5) — an honest blank, never invented stand-in art.
+- `flow_row(members)` / `FlowRow`: a row of pills/buttons that WRAPS
+  instead of running off the page (Space & Legibility ladder step 2).
+  Measured on the Themes & Slots page at the 1280x720 minimum, where the
+  face-layout row and the content-kind tabs were both cut by the right
+  edge — a capture at the previous commit proves it predated the
+  CardGroup migration. The row then does two things on show and on every
+  resize, in this order: it EQUALIZES its same-kind members (ALG-5, and
+  only after `ensurePolished` — an unparented button hints at the bare
+  application font) and FILLS the line up to `FILL_FACTOR` times a
+  member's natural width (ALG-7). Only the row's own most-numerous class
+  is filled, so the lone Names checkbox riding the slot row's tail is
+  never stretched into looking like a button. Publishing the wrapped
+  height happens AFTER both — a height published before the widths
+  changed described a row that no longer existed, and the pills below
+  were drawn straight over it.
+- `TILE_ICON_PX` (128): the shared gallery icon ceiling, now read by
+  [Controls](controls.md)'s `OptionCard` as its `max_icon_px` default
+  (owner instruction 2026-08-08: every picker shows WHAT IT PICKS at a
+  readable size; nine call sites once relied on Qt's ~16px default
+  while only Hands set its own).
 
 ## Design Decisions
 - **`TILE_ICON_PX` lives in the builder, not per gallery** — the defect
   behind the owner's six 2026-08-08 screenshots was structural: a
   per-gallery `setIconSize` call that eight of nine galleries forgot.
-  A default no caller can skip is the fix; a gallery genuinely needing
-  another size would override AFTER `tile()` returns.
+  A default no caller can skip is the fix; today that default is
+  `OptionCard`'s own `max_icon_px`.
+- **A row is the same problem as a gallery** — `flow_row` reuses
+  `FlowLayout` rather than growing a second wrap rule, for the same
+  reason the fixed-column grids died in 2026-08-09.
+- **Rows justify before they center** (`FlowLayout.MAX_JUSTIFY_GAP_PX`)
+  — leftover width is first spent widening the gaps, up to the point
+  where a row would read as unrelated pieces; only what remains is split
+  at the ends, which is the CENTER alignment the owner sealed on
+  2026-08-14.
+- **The lonely tail is rebalanced** (`FlowLayout._columns`) — nine equal
+  cards with room for four wrap 3-3-3, not 4-4-1. The owner's rule is
+  FILL THE ROW ("3-3-2 kad ima prostora za 4-3"), so a tail of at least
+  half a row keeps the greedy answer untouched; only a thinner tail,
+  whose band stood empty in the runtime audit, is spread.

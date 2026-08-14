@@ -19,7 +19,8 @@ from PySide6.QtWidgets import (
 
 from app.watch_face import thumbs
 from app.ui_style import tooltip_wrap
-from app.watch_face.widgets import flow_gallery, pill, tile
+from app.watch_face.controls import picture_group
+from app.watch_face.widgets import pill
 from config import constants, dial
 from data.rings import ring_presets
 
@@ -86,7 +87,7 @@ def _preset_gallery(settings, presets: dict, setters, tr) -> QWidget:
     preset is locked to exactly one outer; only the INNER stays
     user-changeable) AND, when the card carries one, its own About
     text — hovering ANY tile previews it, not only the active one."""
-    tiles = []
+    entries = []
     for name in sorted(presets):
         card = presets[name]
         outer_name = card["outer"]
@@ -95,16 +96,16 @@ def _preset_gallery(settings, presets: dict, setters, tr) -> QWidget:
             thumbs.ring_preset_thumbnail(card)
             or thumbs.art_thumbnail(dial.RING_OUTER_ART_DIR / face)
         )
-        preset_tile = tile(
-            tr(name), icon, settings.ring == name,
-            lambda n=name: setters["ring"](n),
-        )
-        tooltip = tr("Locked outer: {outer}").format(outer=outer_name)
+        blurb = tr("Locked outer: {outer}").format(outer=outer_name)
         if card["about"]:
-            tooltip += "\n\n" + card["about"]
-        preset_tile.setToolTip(tooltip_wrap(tooltip))
-        tiles.append(preset_tile)
-    return flow_gallery(tiles)
+            blurb += "\n\n" + card["about"]
+        entries.append((name, tr(name), blurb, icon))
+    return picture_group(
+        tr("Ring preset"),
+        tr("The whole band: its outer plate and the jewels seated on it. "
+           "Every bundled preset is locked to one outer."),
+        entries, settings.ring, setters["ring"],
+    )
 
 
 def _preset_about(presets: dict, ring: str, tr) -> QLabel:
@@ -131,29 +132,32 @@ def _finish_row(settings, setters, tr) -> QHBoxLayout:
     return row
 
 
-def _inner_group(settings, setters, tr) -> QGroupBox:
-    """THE INNER GALLERY (owner decree 2026-08-05): eight tiles, one per
+def _inner_group(settings, setters, tr):
+    """THE INNER GALLERY (owner decree 2026-08-05): eight cards, one per
     `constants.RING_INNERS` variant — applies to the ACTIVE preset (or
     the active custom ring), stored per-preset-name exactly like
     `ring_eye_shine` (`Settings.ring_inner`,
     `app.controller._resolve_ring_inner`)."""
-    group = QGroupBox(tr("Inner (minute track)"))
     default = constants.RING_INNER_PRESET_DEFAULT.get(
         settings.ring, constants.RING_INNER_DEFAULT
     )
     active = settings.ring_inner.get(settings.ring, default)
-    tiles = [
-        tile(
-            tr(inner.replace("_", " ").title()),
+    entries = [
+        (
+            inner, tr(inner.replace("_", " ").title()),
+            tr("The {inner} minute track on the inner band.").format(
+                inner=inner.replace("_", " ")
+            ),
             thumbs.art_thumbnail(dial.RING_INNER_ART_DIR / f"{inner}.png"),
-            active == inner,
-            lambda i=inner: setters["ring_inner"](i),
         )
         for inner in constants.RING_INNERS
     ]
-    column = QVBoxLayout(group)
-    column.addWidget(flow_gallery(tiles))
-    return group
+    return picture_group(
+        tr("Inner (minute track)"),
+        tr("The five-minute band inside the ring — free to change on any "
+           "preset, unlike the locked outer."),
+        entries, active, setters["ring_inner"],
+    )
 
 
 def _crown_text_group(settings, card: dict, setters, tr) -> QGroupBox:

@@ -25,7 +25,8 @@ from PySide6.QtWidgets import (
 )
 
 from app.watch_face import thumbs
-from app.watch_face.widgets import flow_gallery, pill, tile
+from app.watch_face.controls import picture_group
+from app.watch_face.widgets import pill
 from config import constants
 from render.skin_geometry import daylight_active
 
@@ -112,22 +113,31 @@ def _palette_hues_group(settings, setters, tr) -> QGroupBox:
 def _pointer_gallery(settings, setters, tr) -> QWidget:
     """Width-aware flow since the owner's 2026-08-09 review caught the
     fixed 3-column wrap leaving the row half empty (his "3-3-2 kad ima
-    prostora za 4-3") — `widgets.flow_gallery`, the one gallery shape."""
+    prostora za 4-3"); a `CardGroup` since the 2026-08-14 migration —
+    the same flow, now with the title, the sentence and the mandatory
+    hover blurb the ballot sealed."""
     variants = sorted(
         constants.POINTER_DIAL_COUNTS.items(), key=lambda item: item[1]
     )
-    tiles = []
+    entries = []
     for variant, count in variants:
-        title = f"{constants.POINTER_DISPLAY_NAMES[variant]} ({count})"
+        name = constants.POINTER_DISPLAY_NAMES[variant]
         style = (
             settings.palette_style if variant == settings.pointer else "primary"
         )
-        icon = thumbs.pointer_swatch_icon(variant, style)
-        tiles.append(tile(
-            tr(title), icon, settings.pointer == variant,
-            lambda v=variant: setters["pointer"](v),
+        entries.append((
+            variant, tr(f"{name} ({count})"),
+            tr("The {name} pointer — {count} fields around the dial.").format(
+                name=name, count=count,
+            ),
+            thumbs.pointer_swatch_icon(variant, style),
         ))
-    return flow_gallery(tiles)
+    return picture_group(
+        tr("Pointer"),
+        tr("Which shape the hour and minute hands ride, and how many "
+           "fields it divides the dial into."),
+        entries, settings.pointer, setters["pointer"],
+    )
 
 
 def _palette_style_row(settings, setters, tr) -> QHBoxLayout:

@@ -6,8 +6,11 @@ on the rendering-proposals page that "they are what MOVES and points" —
 the same family as the hour/minute hands, not scattered across
 Pointer/Opacity.
 
-Five named `QGroupBox` groups, each with a one-line explanatory label
-above its own gallery (plain language, not the terse constant name):
+Since the CardGroup migration (2026-08-14) every gallery here is a
+`controls.picture_group` — title, one-sentence description and the
+mandatory per-card hover blurb (`_BLURBS`), flowing centered — and the
+"Earth"/"Moon" boxes were FLATTENED into one group per gallery, because
+a titled box inside a titled box reads as a defect:
 
 - **Hands** — the hand-pack gallery (unchanged from the retired module).
 - **Earth** — the style/label/"Position pointer" rows moved verbatim
@@ -39,7 +42,8 @@ from PySide6.QtWidgets import (
 )
 
 from app.watch_face import thumbs
-from app.watch_face.widgets import flow_gallery, pill, tile
+from app.watch_face.controls import picture_group
+from app.watch_face.widgets import pill
 from config import constants, continents, dial
 from data.hands import hand_packs
 
@@ -101,6 +105,71 @@ _MOON_BAND_STYLE_TITLES = {
     "glow": "Moon glow",
 }
 
+# THE HOVER BLURBS (owner order 2026-08-14: "the description is always
+# an attribute of the card"). One sentence per option, in the reader's
+# own words — what this choice DOES on the dial, never the constant
+# name repeated. `OptionCard` requires the argument, so a new option
+# cannot ship without one.
+_BLURBS = {
+    "moon_dark_style": {
+        "cut_rim": "The shadowed part is cut away and a thin silver rim keeps the whole disc readable.",
+        "cut_ghost": "The shadowed part is cut away over a faint ghost disc, so the full Moon stays visible behind it.",
+        "opaque": "The shadowed part is filled solid — the strongest phase contrast.",
+    },
+    "moon_transit": {
+        "transit_shadow": "While crossing the Earth the Moon casts a shadow onto it.",
+        "transit_shrink": "The Moon shrinks as it passes so both bodies stay readable.",
+        "transit_rim": "The Moon rides the Earth's rim instead of overlapping its face.",
+    },
+    "marker_pointer_shape": {
+        "triangle": "A plain triangle at the body's own angle.",
+        "chevron": "An open chevron — lighter on a busy dial.",
+        "gem": "A faceted gem, the heaviest of the three.",
+    },
+    "earth_style": {
+        "clean": "The globe as bare land and sea, without an air layer.",
+        "atmo": "The globe with its atmosphere — a soft lit halo around the edge.",
+    },
+    "moon_band_mode": {
+        "horizon": "An arc appears while the Moon stands above the horizon.",
+        "dim_only": "No arc — the Moon simply dims while it is below the horizon.",
+        "always_full": "The Moon is drawn the same way whatever its altitude.",
+    },
+    "moon_band_style": {
+        "inverted": "A filled band drawn inverted against the dial ground.",
+        "silver_thread": "A thin silver line — the quietest of the four.",
+        "ticks": "Short ticks along the band instead of a continuous line.",
+        "glow": "A soft glow spread along the band.",
+    },
+    "eclipse_solar_style": {
+        "bite": "A bite is taken out of the Sun by the Moon's disc.",
+        "magnitude_arc": "An arc whose length states how deep the eclipse goes.",
+        "halo": "Only the corona halo is drawn, without cutting the disc.",
+        "totality_path": "The totality path across the globe (no painter yet — the tile stands for the sealed design).",
+        "type_emblem": "A small emblem naming the eclipse type (no painter yet — the tile stands for the sealed design).",
+        "dial_shadow": "The whole dial darkens with the eclipse (no painter yet — the tile stands for the sealed design).",
+    },
+    "eclipse_lunar_style": {
+        "umbra_sweep": "The Earth's umbra sweeps visibly across the Moon's face.",
+        "horizon_shadow": "The shadow is shown on the horizon band rather than the disc.",
+        "halo": "Only a halo marks the eclipse, the disc stays whole.",
+        "blood_moon": "The Moon reddens through totality (no painter yet — the tile stands for the sealed design).",
+        "danjon_scale": "The Danjon darkness value is stated beside the Moon (no painter yet — the tile stands for the sealed design).",
+        "contact_marks": "The four contact moments are marked (no painter yet — the tile stands for the sealed design).",
+    },
+    "moon_station_style": {
+        "arc_grammar": "Each station wears its own arc, so the four read apart at a glance.",
+        "inner_glow": "The stations are marked by a glow inside the disc.",
+        "uniform": "One identical halo marks every station.",
+    },
+    "sun_station_style": {
+        "arc_grammar": "Each solstice and equinox wears its own arc grammar.",
+        "uniform_seasonal": "One halo per station, colored by the season it opens.",
+        "day_night_wedge": "A wedge stating the day/night balance at that station.",
+        "uniform_gold": "One gold halo for all four, the quietest option.",
+    },
+}
+
 
 def build(settings, setters: dict, tr) -> QWidget:
     """THE PAGE SPLIT (owner ballot verdict 5D, 2026-08-14): this page
@@ -109,8 +178,10 @@ def build(settings, setters: dict, tr) -> QWidget:
     (`build_eclipses`)."""
     layout = QVBoxLayout()
     layout.addWidget(_hands_group(settings, setters, tr))
-    layout.addWidget(_earth_group(settings, setters, tr))
-    layout.addWidget(_moon_group(settings, setters, tr))
+    for group in _earth_groups(settings, setters, tr):
+        layout.addWidget(group)
+    for group in _moon_groups(settings, setters, tr):
+        layout.addWidget(group)
     widget = QWidget()
     widget.setLayout(layout)
     return widget
@@ -120,55 +191,71 @@ def build_eclipses(settings, setters: dict, tr) -> QWidget:
     """The split's second half (verdict 5D): how the two eclipse kinds
     draw, and the Moon/Sun station marks."""
     layout = QVBoxLayout()
-    layout.addWidget(_eclipses_group(settings, setters, tr))
-    layout.addWidget(_stations_group(settings, setters, tr))
+    for group in (
+        _eclipse_groups(settings, setters, tr)
+        + _station_groups(settings, setters, tr)
+    ):
+        layout.addWidget(group)
     widget = QWidget()
     widget.setLayout(layout)
     return widget
 
 
-def _labeled_gallery(column: QVBoxLayout, tr, text: str, tiles) -> None:
-    column.addWidget(QLabel(tr(text)))
-    column.addWidget(flow_gallery(tiles))
+def _styles(family: str, keys, titles, icon_of, tr):
+    """The `(key, label, blurb, icon)` entries of one style family —
+    labels and blurbs both translated, icons from THE REAL RENDER
+    FUNCTION (this module's own standing rule)."""
+    return [
+        (key, tr(titles[key]), tr(_BLURBS[family][key]), icon_of(key))
+        for key in keys
+    ]
 
 
-def _hands_group(settings, setters, tr) -> QGroupBox:
-    """R-14, moved verbatim from the retired `hands.py`: one LARGE tile
+def _hands_group(settings, setters, tr):
+    """R-14, moved verbatim from the retired `hands.py`: one LARGE card
     per hand pack, its OWN hours-hand image as the icon."""
-    group = QGroupBox(tr("Hands"))
-    column = QVBoxLayout(group)
     packs = hand_packs()
-    tiles = [
-        tile(
-            tr(name),
+    entries = [
+        (
+            name, tr(name),
+            tr("The {pack} hand pack — its own hour and minute art.").format(
+                pack=name
+            ),
             thumbs.art_thumbnail(packs[name]["files"]["hours"]),
-            settings.hands == name,
-            lambda n=name: setters["hands"](n),
         )
         for name in sorted(packs)
     ]
-    _labeled_gallery(column, tr, "Which image draws the hour hand.", tiles)
-    return group
+    return picture_group(
+        tr("Hands"), tr("Which image draws the hour hand."),
+        entries, settings.hands, setters["hands"],
+    )
 
 
-def _earth_group(settings, setters, tr) -> QGroupBox:
+def _earth_groups(settings, setters, tr) -> list:
     """R-06, moved verbatim from `pointer.py`'s `_earth_group`, plus the
     position-pointer SHAPE gallery (owner verdict 2026-08-10: the Moon
-    and the Earth's own markers are HANDS)."""
-    group = QGroupBox(tr("Earth"))
-    column = QVBoxLayout(group)
-    style_tiles = []
-    for style, title in (("clean", "Clean"), ("atmo", "Atmosphere")):
-        icon = thumbs.art_thumbnail(
-            continents.EARTH_ART_DIR / f"earth_{style}_europe_day.png"
-        )
-        style_tiles.append(tile(
-            tr(title), icon, settings.earth_style == style,
-            lambda s=style: setters["earth_style"](s),
-        ))
-    _labeled_gallery(
-        column, tr, "What the Earth marker's globe looks like.", style_tiles
+    and the Earth's own markers are HANDS).
+
+    FLATTENED by the CardGroup migration (2026-08-14): each titled card
+    gallery is now a group of its own instead of a second QGroupBox
+    nested inside an "Earth" box — a box inside a box reads as a defect,
+    and every CardGroup already carries the title and the sentence the
+    inner label used to supply."""
+    globe = picture_group(
+        tr("Earth globe"), tr("What the Earth marker's globe looks like."),
+        [
+            (
+                style, tr(title), tr(_BLURBS["earth_style"][style]),
+                thumbs.art_thumbnail(
+                    continents.EARTH_ART_DIR / f"earth_{style}_europe_day.png"
+                ),
+            )
+            for style, title in (("clean", "Clean"), ("atmo", "Atmosphere"))
+        ],
+        settings.earth_style, setters["earth_style"],
     )
+    group = QGroupBox(tr("Earth marker"))
+    column = QVBoxLayout(group)
     label_row = QHBoxLayout()
     enabled = settings.diameter >= dial.FULL_TEXT_MIN_DIAMETER
     for mode, title in (
@@ -188,158 +275,123 @@ def _earth_group(settings, setters, tr) -> QGroupBox:
     pointer_checkbox.setChecked(settings.show_marker_pointer)
     pointer_checkbox.toggled.connect(setters["show_marker_pointer"])
     column.addWidget(pointer_checkbox)
-    shape_tiles = [
-        tile(
-            tr(_MARKER_POINTER_SHAPE_TITLES[shape]),
-            thumbs.marker_pointer_shape_icon(shape),
-            settings.marker_pointer_shape == shape,
-            lambda s=shape: setters["marker_pointer_shape"](s),
-        )
-        for shape in constants.MARKER_POINTER_SHAPES
-    ]
-    shape_label = QLabel(tr(
-        "Shape of the small pointer at the body's own angle "
-        "(only while Position pointer is on)."
-    ))
-    shape_gallery = flow_gallery(shape_tiles)
-    shape_label.setEnabled(settings.show_marker_pointer)
-    shape_gallery.setEnabled(settings.show_marker_pointer)
-    column.addWidget(shape_label)
-    column.addWidget(shape_gallery)
-    return group
-
-
-def _moon_group(settings, setters, tr) -> QGroupBox:
-    """The unlit-half style, the Earth-crossing style, and the Moon
-    Horizon Band (owner verdict 2026-08-09, moved here 2026-08-10 —
-    "everything Moon-related in one place")."""
-    group = QGroupBox(tr("Moon"))
-    column = QVBoxLayout(group)
-    dark_tiles = [
-        tile(
-            tr(_MOON_DARK_TITLES[style]), thumbs.moon_dark_style_icon(style),
-            settings.moon_dark_style == style,
-            lambda s=style: setters["moon_dark_style"](s),
-        )
-        for style in constants.MOON_DARK_STYLES
-    ]
-    _labeled_gallery(
-        column, tr, "How the unlit half of the Moon is drawn.", dark_tiles
+    shapes = picture_group(
+        tr("Position pointer shape"),
+        tr("Shape of the small pointer at the body's own angle."),
+        _styles(
+            "marker_pointer_shape", constants.MARKER_POINTER_SHAPES,
+            _MARKER_POINTER_SHAPE_TITLES, thumbs.marker_pointer_shape_icon, tr,
+        ),
+        settings.marker_pointer_shape, setters["marker_pointer_shape"],
     )
+    if not settings.show_marker_pointer:
+        # The graceful gate (never hidden, always with its reason) —
+        # the pattern `CardGroup.disable_with_reason` was built for.
+        shapes.disable_with_reason(tr(
+            "There is no pointer to shape while Position pointer is off."
+        ))
+    return [globe, group, shapes]
+
+
+def _moon_groups(settings, setters, tr) -> list:
+    """The unlit-half style, the Earth-crossing switches, and the Moon
+    Horizon Band (owner verdict 2026-08-09, moved here 2026-08-10 —
+    "everything Moon-related in one place"), each its own CardGroup
+    since the 2026-08-14 migration."""
+    groups = [picture_group(
+        tr("Moon — unlit half"), tr("How the unlit half of the Moon is drawn."),
+        _styles(
+            "moon_dark_style", constants.MOON_DARK_STYLES, _MOON_DARK_TITLES,
+            thumbs.moon_dark_style_icon, tr,
+        ),
+        settings.moon_dark_style, setters["moon_dark_style"],
+    )]
     # THE CROSSING SWITCHES (owner ballot verdict 2026-08-11, corrected
     # the same day: the ORIGINAL three picture tiles stay — each one
-    # behavior — only the one-of rule falls away): every tile is an
-    # independent toggle rendered by THE REAL RENDER FUNCTION
-    # (`thumbs.moon_transit_style_icon`, the pre-existing icons), any
-    # mix may be lit, all three by default; with none lit the plain
-    # Moon simply passes over the Earth.
-    transit_tiles = [
-        tile(
-            tr(title), thumbs.moon_transit_style_icon(icon_style),
-            getattr(settings, field),
-            lambda f=field, was=getattr(settings, field): setters[f](not was),
-        )
-        for field, icon_style, title in (
-            ("transit_shadow", "occultation", "Cast a shadow"),
-            ("transit_shrink", "shrink_pass", "Shrink"),
-            ("transit_rim", "lane_split", "Ride the rim"),
-        )
-    ]
-    _labeled_gallery(
-        column, tr,
-        "What happens when the Moon meets the Earth (any mix; none = a plain pass).",
-        transit_tiles,
-    )
-    mode_tiles = [
-        tile(
-            tr(_MOON_BAND_MODE_TITLES[mode]), thumbs.moon_band_mode_icon(mode),
-            settings.moon_band_mode == mode,
-            lambda m=mode: setters["moon_band_mode"](m),
-        )
-        for mode in constants.MOON_BAND_MODES
-    ]
-    _labeled_gallery(
-        column, tr,
-        "Whether an arc shows when the Moon stands above the horizon.",
-        mode_tiles,
-    )
-    if settings.moon_band_mode == "horizon":
-        style_tiles = [
-            tile(
-                tr(_MOON_BAND_STYLE_TITLES[style]),
-                thumbs.moon_band_style_icon(style),
-                settings.moon_band_style == style,
-                lambda s=style: setters["moon_band_style"](s),
+    # behavior — only the one-of rule falls away): every card is an
+    # independent SWITCH (green border, the kind's own vocabulary since
+    # the classes landed) rendered by THE REAL RENDER FUNCTION, any mix
+    # may be lit; with none lit the plain Moon simply passes over.
+    groups.append(picture_group(
+        tr("Moon — crossing the Earth"),
+        tr("What happens when the Moon meets the Earth (any mix; none = a plain pass)."),
+        [], None, None,
+        switches=[
+            (
+                field, tr(title), tr(_BLURBS["moon_transit"][field]),
+                thumbs.moon_transit_style_icon(icon_style),
+                getattr(settings, field),
             )
-            for style in constants.MOON_BAND_STYLES
-        ]
-        _labeled_gallery(
-            column, tr, "How the horizon band itself is drawn.", style_tiles
-        )
-    return group
+            for field, icon_style, title in (
+                ("transit_shadow", "occultation", "Cast a shadow"),
+                ("transit_shrink", "shrink_pass", "Shrink"),
+                ("transit_rim", "lane_split", "Ride the rim"),
+            )
+        ],
+        on_toggle=lambda key, on: setters[key](on),
+    ))
+    groups.append(picture_group(
+        tr("Moon — horizon band"),
+        tr("Whether an arc shows when the Moon stands above the horizon."),
+        _styles(
+            "moon_band_mode", constants.MOON_BAND_MODES, _MOON_BAND_MODE_TITLES,
+            thumbs.moon_band_mode_icon, tr,
+        ),
+        settings.moon_band_mode, setters["moon_band_mode"],
+    ))
+    if settings.moon_band_mode == "horizon":
+        groups.append(picture_group(
+            tr("Moon — band style"), tr("How the horizon band itself is drawn."),
+            _styles(
+                "moon_band_style", constants.MOON_BAND_STYLES,
+                _MOON_BAND_STYLE_TITLES, thumbs.moon_band_style_icon, tr,
+            ),
+            settings.moon_band_style, setters["moon_band_style"],
+        ))
+    return groups
 
 
-def _eclipses_group(settings, setters, tr) -> QGroupBox:
-    group = QGroupBox(tr("Eclipses"))
-    column = QVBoxLayout(group)
-    solar_tiles = [
-        tile(
-            tr(_ECLIPSE_SOLAR_TITLES[style]),
-            thumbs.eclipse_solar_style_icon(style),
-            settings.eclipse_solar_style == style,
-            lambda s=style: setters["eclipse_solar_style"](s),
-        )
-        for style in constants.ECLIPSE_SOLAR_STYLES
+def _eclipse_groups(settings, setters, tr) -> list:
+    return [
+        picture_group(
+            tr("Solar eclipses"),
+            tr("How a solar eclipse is drawn on the Earth marker."),
+            _styles(
+                "eclipse_solar_style", constants.ECLIPSE_SOLAR_STYLES,
+                _ECLIPSE_SOLAR_TITLES, thumbs.eclipse_solar_style_icon, tr,
+            ),
+            settings.eclipse_solar_style, setters["eclipse_solar_style"],
+        ),
+        picture_group(
+            tr("Lunar eclipses"),
+            tr("How a lunar eclipse is drawn on the Moon marker."),
+            _styles(
+                "eclipse_lunar_style", constants.ECLIPSE_LUNAR_STYLES,
+                _ECLIPSE_LUNAR_TITLES, thumbs.eclipse_lunar_style_icon, tr,
+            ),
+            settings.eclipse_lunar_style, setters["eclipse_lunar_style"],
+        ),
     ]
-    _labeled_gallery(
-        column, tr, "How a solar eclipse is drawn on the Earth marker.",
-        solar_tiles,
-    )
-    lunar_tiles = [
-        tile(
-            tr(_ECLIPSE_LUNAR_TITLES[style]),
-            thumbs.eclipse_lunar_style_icon(style),
-            settings.eclipse_lunar_style == style,
-            lambda s=style: setters["eclipse_lunar_style"](s),
-        )
-        for style in constants.ECLIPSE_LUNAR_STYLES
-    ]
-    _labeled_gallery(
-        column, tr, "How a lunar eclipse is drawn on the Moon marker.",
-        lunar_tiles,
-    )
-    return group
 
 
-def _stations_group(settings, setters, tr) -> QGroupBox:
-    group = QGroupBox(tr("Stations"))
-    column = QVBoxLayout(group)
-    moon_tiles = [
-        tile(
-            tr(_MOON_STATION_TITLES[style]),
-            thumbs.moon_station_style_icon(style),
-            settings.moon_station_style == style,
-            lambda s=style: setters["moon_station_style"](s),
-        )
-        for style in constants.MOON_STATION_STYLES
+def _station_groups(settings, setters, tr) -> list:
+    return [
+        picture_group(
+            tr("Moon stations"),
+            tr("How the Moon's birth/youth/zenith/age marks are drawn."),
+            _styles(
+                "moon_station_style", constants.MOON_STATION_STYLES,
+                _MOON_STATION_TITLES, thumbs.moon_station_style_icon, tr,
+            ),
+            settings.moon_station_style, setters["moon_station_style"],
+        ),
+        picture_group(
+            tr("Sun stations"),
+            tr("How the Sun's solstice/equinox life-arc marks are drawn."),
+            _styles(
+                "sun_station_style", constants.SUN_STATION_STYLES,
+                _SUN_STATION_TITLES, thumbs.sun_station_style_icon, tr,
+            ),
+            settings.sun_station_style, setters["sun_station_style"],
+        ),
     ]
-    _labeled_gallery(
-        column, tr,
-        "How the Moon's birth/youth/zenith/age marks are drawn.",
-        moon_tiles,
-    )
-    sun_tiles = [
-        tile(
-            tr(_SUN_STATION_TITLES[style]),
-            thumbs.sun_station_style_icon(style),
-            settings.sun_station_style == style,
-            lambda s=style: setters["sun_station_style"](s),
-        )
-        for style in constants.SUN_STATION_STYLES
-    ]
-    _labeled_gallery(
-        column, tr,
-        "How the Sun's solstice/equinox life-arc marks are drawn.",
-        sun_tiles,
-    )
-    return group

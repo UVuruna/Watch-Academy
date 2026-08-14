@@ -29,7 +29,8 @@ This module keeps only the pointer VARIANT the hour/minute hands ride.
 ### Uses
 - [Watch Face Thumbnails](thumbs.md) — `pointer_swatch_icon` (gallery
   tiles)
-- [Watch Face Shared Widgets](widgets.md) — `pill`, `tile`
+- [Controls](controls.md) — `picture_group`, the one gallery door
+- [Watch Face Shared Widgets](widgets.md) — `pill`
 - [Config (folder)](../../../config/___config.md) — every pointer table
   `design_window.py` already read
 - `render.skin_geometry.daylight_active` — the "Hide night borders" gate

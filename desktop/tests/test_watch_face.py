@@ -359,3 +359,66 @@ def test_nav_sidebar_selection_never_overlaps_a_neighbour_row(app):
                 "clipping a neighbour's text"
             )
     dialog.deleteLater()
+
+
+# ── THE ROW SHAPES (the CardGroup migration round, 2026-08-14) ────────
+
+
+def test_a_flow_row_gives_its_same_kind_members_one_width(app):
+    """ALG-5 through the row builder: the widest label decides, and it
+    decides AFTER the widgets are polished (an unparented button hints
+    at the bare application font — the 90/95/92px audit finding)."""
+    from PySide6.QtWidgets import QPushButton
+    from app.watch_face.widgets import flow_row
+
+    row = flow_row([QPushButton("Full face"), QPushButton("3 subdials")])
+    row.resize(600, 40)
+    row.show()
+    widths = {button.width() for button in row.findChildren(QPushButton)}
+    row.hide()
+    assert len(widths) == 1, widths
+
+
+def test_a_flow_row_does_not_stretch_across_kinds(app):
+    """A lone checkbox riding the row's tail is not a button's sibling."""
+    from PySide6.QtWidgets import QCheckBox, QPushButton
+    from app.watch_face.widgets import flow_row
+
+    box = QCheckBox("Names")
+    row = flow_row([QPushButton("A very long button label"), box])
+    row.resize(600, 40)
+    row.show()
+    natural = box.sizeHint().width()
+    stretched = box.width()
+    row.hide()
+    assert stretched <= natural + 2
+
+
+def test_a_lonely_tail_row_is_rebalanced(app):
+    """Nine equal cards with room for four wrap 3-3-3, not 4-4-1: the
+    owner's rule is FILL THE ROW, and a tail of one fills nothing (the
+    band whose right half stood empty in the runtime audit). A tail of
+    at least half a row keeps the greedy answer — his own 4-3."""
+    from PySide6.QtCore import QRect
+    from PySide6.QtWidgets import QPushButton
+    from app.watch_face.widgets import FlowLayout, FlowContent
+
+    def rows_for(count: int, width: int) -> list[int]:
+        content = FlowContent()
+        flow = FlowLayout()
+        for index in range(count):
+            button = QPushButton("Item")
+            button.setFixedWidth(100)
+            flow.addWidget(button)
+        content.setLayout(flow)
+        flow.setGeometry(QRect(0, 0, width, 800))
+        tops: dict = {}
+        for index in range(flow.count()):
+            geometry = flow.itemAt(index).geometry()
+            tops.setdefault(geometry.y(), 0)
+            tops[geometry.y()] += 1
+        return [tops[key] for key in sorted(tops)]
+
+    # Room for four per row (4 * 100 + 3 * gap fits in 460).
+    assert rows_for(9, 460) == [3, 3, 3]
+    assert rows_for(7, 460) == [4, 3]

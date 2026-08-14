@@ -12,8 +12,12 @@ RETIRED `hands.py` (R-14's gallery moved here verbatim) and absorbs the
 Earth group out of `pointer.py` and the Moon Horizon Band out of
 `opacity.py`.
 
-Five named `QGroupBox` groups, each gallery under its own one-line
-plain-language `QLabel`:
+Since the CardGroup migration (2026-08-14) every gallery is a
+[`controls.picture_group`](controls.md) — its own title, its
+one-sentence description and a mandatory hover blurb per card
+(`_BLURBS`) — and the old "Earth"/"Moon" boxes were FLATTENED into one
+group per gallery, since a titled box inside a titled box reads as a
+defect. What the page holds is unchanged:
 
 - **Hands** — the hand-pack gallery, unchanged from the retired module.
 - **Earth** — the style/label/"Position pointer" rows moved verbatim
@@ -31,8 +35,10 @@ plain-language `QLabel`:
 - **Stations** — the Moon's (`moon_station_style`) and the Sun's
   (`sun_station_style`) four-life-stage marks.
 
-Every tile's icon is THE REAL RENDER FUNCTION at thumbnail scale
-(`thumbs.py`) — never a redrawn sketch, the same discipline the
+The three Earth-crossing choices are SWITCHES (green border, any mix),
+not a one-of gallery — the owner's 2026-08-11 correction, now carried by
+the card kind itself. Every card's icon is THE REAL RENDER FUNCTION at
+thumbnail scale (`thumbs.py`) — never a redrawn sketch, the same discipline the
 pre-existing Umbra and Moon Horizon Band galleries already followed.
 
 ## Connections
@@ -43,7 +49,8 @@ pre-existing Umbra and Moon Horizon Band galleries already followed.
   `marker_pointer_shape_icon`, `eclipse_solar_style_icon`,
   `eclipse_lunar_style_icon`, `moon_station_style_icon`,
   `sun_station_style_icon`, `moon_band_mode_icon`, `moon_band_style_icon`
-- [Watch Face Shared Widgets](widgets.md) — `tile`, `pill`, `flow_gallery`
+- [Controls](controls.md) — `picture_group`, the one gallery door
+- [Watch Face Shared Widgets](widgets.md) — `pill`
 - [Hands (data)](../../../data/__about/hands.md) — `hand_packs`
 - [Config (folder)](../../../config/___config.md) — `constants.
   MOON_DARK_STYLES`, `MOON_TRANSIT_STYLES`, `MARKER_POINTER_SHAPES`,

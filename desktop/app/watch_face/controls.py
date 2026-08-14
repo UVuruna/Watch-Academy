@@ -11,11 +11,13 @@ from enum import Enum
 from PySide6.QtCore import QSize, Qt
 from PySide6.QtGui import QIcon, QPixmap
 from PySide6.QtWidgets import (
-    QFrame, QGroupBox, QLabel, QToolButton, QVBoxLayout, QWidget,
+    QFrame, QGroupBox, QLabel, QSizePolicy, QToolButton, QVBoxLayout, QWidget,
 )
 
 from app.ui_style import tooltip_wrap, uniform_width
-from app.watch_face.widgets import FlowLayout, TILE_ICON_PX, literal
+from app.watch_face.widgets import (
+    FlowContent, FlowLayout, TILE_ICON_PX, literal,
+)
 from config import palette
 
 
@@ -32,8 +34,14 @@ _BORDER_BY_KIND = {
     CardKind.SWITCH: palette.UI_BUTTON_COLORS["next"][0],
 }
 # The icon growth floor: below this a row wraps instead of starving the
-# pictures (the ballot's min/max seal; TILE_ICON_PX stays the ceiling).
+# pictures (the ballot's min/max seal).
 MIN_ICON_PX = 64
+#: The growth CEILING — the shared gallery size stays it. Raising it to
+#: 192px was measured on 2026-08-14 and REVERTED: bigger cards pushed
+#: the Colors page's own galleries past their host and the audit read
+#: three fresh clippings, so the ladder's remedy here is spacing, not
+#: size.
+MAX_ICON_PX = TILE_ICON_PX
 
 
 class OptionCard(QToolButton):
@@ -45,7 +53,7 @@ class OptionCard(QToolButton):
     def __init__(
         self, key: str, label: str, blurb: str, icon: QIcon | None = None,
         kind: CardKind = CardKind.RADIO, compact: bool = False,
-        min_icon_px: int = MIN_ICON_PX, max_icon_px: int = TILE_ICON_PX,
+        min_icon_px: int = MIN_ICON_PX, max_icon_px: int = MAX_ICON_PX,
     ):
         super().__init__()
         self.key = key
@@ -67,11 +75,13 @@ class OptionCard(QToolButton):
             if icon is None:
                 # An honest blank field the same size as its siblings
                 # (ALG-5) — never a shrunken tile, never invented art.
-                placeholder = QPixmap(max_icon_px, max_icon_px)
+                placeholder = QPixmap(TILE_ICON_PX, TILE_ICON_PX)
                 placeholder.fill(Qt.GlobalColor.transparent)
                 icon = QIcon(placeholder)
             self.setIcon(icon)
-            self.setIconSize(QSize(max_icon_px, max_icon_px))
+            # Starts at the shared gallery size and GROWS from there
+            # (`CardGroup.resizeEvent`) — it never starts at the ceiling.
+            self.setIconSize(QSize(TILE_ICON_PX, TILE_ICON_PX))
         self._paint_border()
 
     def is_checked(self) -> bool:
@@ -119,21 +129,68 @@ class CardGroup(QGroupBox):
         self.on_toggle = on_toggle
         self._cards: dict[str, OptionCard] = {}
         self._switches: dict[str, OptionCard] = {}
+        policy = QSizePolicy(
+            QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Preferred
+        )
+        policy.setHeightForWidth(True)
+        self.setSizePolicy(policy)
+        # A GROUP MUST READ AS A GROUP. The box drew in the page's own
+        # ground with a hairline nobody could see, and the runtime audit
+        # put a number on what the eye already said: at the audit's own
+        # 12-per-channel tolerance `surface_1` is NOT distinguishable
+        # from `surface_0`, so the whole content area measured as bare
+        # background. `surface_2` is — one step up the same ladder, an
+        # existing pledge, no new hex (Rule #4).
+        self.setStyleSheet(
+            "CardGroup { background: %s; border: 1px solid %s;"
+            " border-radius: 10px; margin-top: 8px; padding-top: 10px; }"
+            "CardGroup::title { subcontrol-origin: margin;"
+            " subcontrol-position: top left; left: 10px; padding: 0 4px;"
+            " color: %s; }" % (
+                palette.THEME_COLORS["surface_2"],
+                palette.THEME_COLORS["surface_3"],
+                palette.THEME_COLORS["accent"],
+            )
+        )
         self._column = QVBoxLayout(self)
+        # THE SIDE MARGINS ARE THE GALLERY'S WIDTH. The box's own frame
+        # already separates the group visually, so the default side
+        # padding buys nothing and costs a whole card per row: at the
+        # 1280x720 minimum the theme families sat 3-per-row with room
+        # for 4, and the leftover read as an empty right half (ALG-7,
+        # audit 2026-08-14). The top/bottom margins stay as Qt set them
+        # — that is where the title lives.
+        margins = self._column.contentsMargins()
+        self._column.setContentsMargins(4, margins.top(), 4, margins.bottom())
         self._description: QLabel | None = None
         if description:
             self._description = QLabel(description)
             self._description.setWordWrap(True)
             self._column.addWidget(self._description)
+        # FlowContent, never a bare QWidget: a flow only knows its
+        # height once it has a width, and `QScrollArea`'s widgetResizable
+        # path sizes pages from plain minimum hints — the measured
+        # failure `widgets.FlowContent` documents (galleries compressed
+        # to 10px on the owner's live profile). The gallery host must
+        # publish that height or a wrapped group starves inside the
+        # page's scroll area.
         self._card_flow = FlowLayout()
-        self._card_host = QWidget()
+        self._card_host = FlowContent()
         self._card_host.setLayout(self._card_flow)
         self._column.addWidget(self._card_host)
         self._divider: QFrame | None = None
         self._switch_flow = FlowLayout()
-        self._switch_host = QWidget()
+        self._switch_host = FlowContent()
         self._switch_host.setLayout(self._switch_flow)
         self._column.addWidget(self._switch_host)
+        # AN EMPTY HOST IS NOT SPACE. A group with no switches (most of
+        # them) still held a zero-height FlowContent plus the column's
+        # spacing around it — enough to leave the group a few pixels
+        # short of its own content and to have the audit report a
+        # zero-height widget "drawn over" its sibling. Each host appears
+        # when its first member does.
+        self._card_host.setVisible(False)
+        self._switch_host.setVisible(False)
 
     # ── membership ────────────────────────────────────────────────────
     def add_card(
@@ -145,6 +202,7 @@ class CardGroup(QGroupBox):
         )
         card.clicked.connect(lambda checked=False, k=key: self._pick(k))
         self._cards[key] = card
+        self._card_host.setVisible(True)
         self._card_flow.addWidget(card)
         self._refresh_divider()
         return card
@@ -158,6 +216,7 @@ class CardGroup(QGroupBox):
         )
         card.clicked.connect(lambda checked=False, k=key: self._flip(k))
         self._switches[key] = card
+        self._switch_host.setVisible(True)
         self._switch_flow.addWidget(card)
         self._refresh_divider()
         return card
@@ -229,6 +288,60 @@ class CardGroup(QGroupBox):
             self._divider.deleteLater()
             self._divider = None
 
+    def hasHeightForWidth(self) -> bool:  # noqa: N802 — Qt API
+        """A group whose cards WRAP is a height-for-width widget, and it
+        must say so: told once, the parent layout sizes it correctly in
+        the SAME pass instead of learning the true height only from a
+        minimum republished a frame later (the 4px-short group the audit
+        measured on 2026-08-14)."""
+        return True
+
+    def heightForWidth(self, width: int) -> int:  # noqa: N802 — Qt API
+        return self._column_height(width)
+
+    def _column_height(self, width: int) -> int:
+        """What the group's own column needs at `width` — content plus
+        the column's margins, which is where a QGroupBox pays for its
+        title and frame."""
+        margins = self._column.contentsMargins()
+        inner = max(1, width - margins.left() - margins.right())
+        needed = self._column.heightForWidth(inner)
+        return -1 if needed < 0 else needed
+
+    def sizeHint(self) -> QSize:  # noqa: N802 — Qt override
+        hint = super().sizeHint()
+        needed = self._column_height(self.width()) if self.width() > 0 else -1
+        if needed < 0:
+            return hint
+        return QSize(hint.width(), max(hint.height(), needed))
+
+    def minimumSizeHint(self) -> QSize:  # noqa: N802 — Qt override
+        """The height a WRAPPED gallery really needs at this width — and
+        NOT a pixel more.
+
+        Two failures meet here. `QGroupBox` computes its minimum from
+        the layout's PLAIN minimum, which for a flow is one row, so a
+        group whose cards wrapped into three rows asked far too little.
+        But its generic frame allowance also runs a few pixels ABOVE what
+        the column margins actually consume, and asking for those was
+        just as bad: the parent grants the column's honest number and the
+        group then reads as permanently 4px clipped against its own
+        inflated claim (audit, 2026-08-14). So the answer is the
+        column's own arithmetic, which is what the layout will hand
+        out."""
+        hint = super().minimumSizeHint()
+        # Before the group has a width there is nothing to wrap against,
+        # so the column's PLAIN minimum is the honest answer — falling
+        # back to the QGroupBox hint there re-imported its inflated
+        # frame allowance and the page inherited the same 4px phantom.
+        needed = (
+            self._column_height(self.width()) if self.width() > 0
+            else self._column.minimumSize().height()
+        )
+        if needed < 0:
+            return hint
+        return QSize(hint.width(), needed)
+
     def resizeEvent(self, event) -> None:  # noqa: N802 — Qt override
         """ICON GROWTH (the wide-window remedy, owner-approved): icons
         grow toward `max_icon_px` when the row has width to spare, and
@@ -256,6 +369,36 @@ class CardGroup(QGroupBox):
 def divider_present(group: CardGroup) -> bool:
     """Test hook: whether the radio/switch divider line is drawn."""
     return group._divider is not None
+
+
+def picture_group(
+    title: str, description: str, entries, current, on_pick,
+    *, switches=(), on_toggle=None, compact: bool = False,
+) -> CardGroup:
+    """THE ONE DOOR every picture gallery now walks through (the
+    CardGroup migration, 2026-08-14) — the shape that replaced
+    `QGroupBox(title) + QLabel(sentence) + widgets.flow_gallery([tile,
+    ...])`, which every section used to assemble by hand.
+
+    `entries` are `(key, label, blurb, icon)` radio cards, `switches`
+    are `(key, label, blurb, icon, on)` independent toggles; a group
+    carrying both grows the divider line by itself. `on_pick(key)` and
+    `on_toggle(key, on)` are the section's own live-apply setters — the
+    caller no longer binds one lambda per tile, so a gallery can no
+    longer forget the reserved border, the uniform width, the hover
+    blurb or the centered flow."""
+    group = CardGroup(
+        title, description, on_pick=on_pick, on_toggle=on_toggle
+    )
+    for key, label, blurb, icon in entries:
+        group.add_card(key, label, blurb, icon, compact=compact)
+    for key, label, blurb, icon, on in switches:
+        group.add_switch(key, label, blurb, icon, compact=compact)
+        group.set_switch(key, on)
+    if current is not None:
+        group.set_value(current)
+    group.finish()
+    return group
 
 
 # ═══════════════════════════ THE VALUE KNOBS ═══════════════════════════

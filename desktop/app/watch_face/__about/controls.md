@@ -24,6 +24,15 @@ itself:
   (the wide-window remedy the owner approved), and
   `disable_with_reason` — a group is grayed with a tooltip, never
   hidden.
+- **`picture_group(...)`** — THE ONE DOOR every picture gallery walks
+  through since the migration of 2026-08-14. It takes
+  `(key, label, blurb, icon)` radio entries and
+  `(key, label, blurb, icon, on)` switches, wires the section's own
+  live-apply setters, sets the current pick and calls `finish()`. It
+  replaced the `QGroupBox(title) + QLabel(sentence) +
+  widgets.flow_gallery([tile, ...])` triple that eleven galleries each
+  assembled by hand — which is why eleven galleries could each forget
+  the blurb, the reserved border or the uniform width.
 
 ## Connections
 
@@ -38,9 +47,17 @@ itself:
 
 ### Used by
 
-- The Watch Face section modules, migrated one by one (classes phase,
-  ballot verdict 1A) — `pointer`/`ring`/`bodies`/… adopt
-  `CardGroup` in place of hand-rolled QGroupBox+loop pairs
+- EVERY picture gallery in the window, through `picture_group`:
+  [Pointer](pointer.md) (the variant gallery), [Ring](ring.md) (preset
+  + inner), [Hands & Bodies](bodies.md) (hands, globe, marker shape,
+  the Moon's four, eclipses, stations),
+  [Umbra & Aura](umbra_aura.md) (form + contrast),
+  [Themes & Slots](themes.md) (artwork, subdial set),
+  [Theme Tree](theme_tree.md) (complications, style families) and
+  [Weekday Theme Grid](../../__about/weekday_theme_grid.md) (theme
+  families, a family's casts, the calendar mount)
+- The knob-bearing sections — `opacity`/`size`/`colors`/`numerals` —
+  through `ValueKnob`/`knob_row`
 
 ## Design Decisions
 
@@ -52,6 +69,27 @@ itself:
 - A `blurb` is a REQUIRED constructor argument (owner order: hover
   description always exists). An intentionally empty blurb must be
   passed explicitly — omitting it is a TypeError, not a silent blank.
+- **The card host is a `FlowContent`, never a bare `QWidget`** — a flow
+  only knows its height once it has a width, and `QScrollArea`'s
+  widgetResizable path sizes pages from plain minimum hints. The bare
+  host the first draft used would have let a wrapped group starve
+  inside the page's scroll area, the measured failure
+  [Widgets](widgets.md) documents.
+- **A group is painted, not implied** — the box wears `surface_2` inside
+  a `surface_3` hairline. `surface_1` was tried first and is not
+  distinguishable from the page ground at the audit's own 12-per-channel
+  tolerance, which is a measurement of exactly what the eye reported: a
+  group that reads as nothing at all.
+- **Its own height, and not a pixel more** — `heightForWidth` /
+  `sizeHint` / `minimumSizeHint` all answer from the COLUMN's
+  arithmetic. QGroupBox's minimum is computed from the flow's one-row
+  minimum (far too little for a wrapped gallery) while its frame
+  allowance runs a few pixels above what the column margins actually
+  consume (which reads as a permanent clip). Both were measured on
+  2026-08-14.
+- **An empty host is not space** — a group with no switches hides the
+  switch host entirely; a zero-height child still cost the column's
+  spacing and was reported by the audit as drawn over its sibling.
 - Icon growth happens in `CardGroup.resizeEvent`, not per card: the
   group is the only one who knows the row's width budget, and clamping
   at `min_icon_px` is what lets a narrow window wrap instead of starve.

@@ -19,7 +19,8 @@ from app.settings_store import slot_layout_target
 from app.watch_face import theme_tree
 from app.ui_style import tooltip_wrap
 from app.watch_face import thumbs
-from app.watch_face.widgets import flow_gallery, pill, tile
+from app.watch_face.controls import picture_group
+from app.watch_face.widgets import flow_row, pill
 from app.weekday_theme_grid import build_calendar_mount_grid
 from config import constants, pantheon
 
@@ -52,6 +53,14 @@ def _clear(layout) -> None:
         item = layout.takeAt(0)
         widget = item.widget()
         if widget is not None:
+            # UNPARENT, then delete. `deleteLater` alone leaves the
+            # widget a visible child of the page until the event loop
+            # gets around to it, and a widget no layout owns keeps its
+            # old geometry — so the rebuilt rows were painted ON TOP of
+            # the ones they replaced (caught on the live-profile audit
+            # shot, 2026-08-14; it only became visible once the rows
+            # were widgets rather than nested layouts).
+            widget.setParent(None)
             widget.deleteLater()
         elif item.layout() is not None:
             _clear(item.layout())
@@ -71,7 +80,7 @@ def build(settings, setters: dict, tr) -> QWidget:
 
 
 def _populate(root, settings, setters, tr, rebuild) -> None:
-    root.addLayout(_face_layout_row(settings, setters, tr))
+    root.addWidget(_face_layout_row(settings, setters, tr))
     descriptors = setters["slot_descriptors"]()
     enabled = [d for d in descriptors if d.enabled_value]
     full_face = not enabled
@@ -87,7 +96,7 @@ def _populate(root, settings, setters, tr, rebuild) -> None:
     if not slot_off:
         content_source = active if not full_face else descriptors[0]
         names = _names_checkbox(content_source, settings, setters, tr)
-    root.addLayout(_slot_picker_row(descriptors, tr, rebuild, names))
+    root.addWidget(_slot_picker_row(descriptors, tr, rebuild, names))
     if slot_off:
         note = QLabel(tr("This Slot is off — Ctrl+N cycles the visible Slots."))
         note.setWordWrap(True)
@@ -113,19 +122,19 @@ def _populate(root, settings, setters, tr, rebuild) -> None:
     root.addWidget(_rotation_group(settings, setters, tr))
 
 
-def _face_layout_row(settings, setters, tr) -> QHBoxLayout:
-    row = QHBoxLayout()
+def _face_layout_row(settings, setters, tr) -> QWidget:
     current = slot_layout_target(settings)
-    for target, title in enumerate(_FACE_LAYOUT_TITLES):
-        row.addWidget(pill(
+    return flow_row(
+        pill(
             tr(title), current == target,
             lambda t=target: setters["slot_layout"](t),
-        ))
-    return row
+        )
+        for target, title in enumerate(_FACE_LAYOUT_TITLES)
+    )
 
 
-def _slot_picker_row(descriptors, tr, rebuild, names=None) -> QHBoxLayout:
-    row = QHBoxLayout()
+def _slot_picker_row(descriptors, tr, rebuild, names=None) -> QWidget:
+    members = []
     for descriptor in descriptors:
         button = QPushButton(f"{_MEDALS[descriptor.index]} {tr(descriptor.title)}")
         button.setCheckable(True)
@@ -138,11 +147,12 @@ def _slot_picker_row(descriptors, tr, rebuild, names=None) -> QHBoxLayout:
         button.clicked.connect(
             lambda checked=False, i=descriptor.index: _select_slot(i, rebuild)
         )
-        row.addWidget(button)
+        members.append(button)
     if names is not None:
-        row.addSpacing(12)
-        row.addWidget(names)
-    return row
+        # The Names switch still rides this row's free tail (ALG-7,
+        # 2026-08-09) — it now WRAPS with it instead of being cut.
+        members.append(names)
+    return flow_row(members)
 
 
 def _select_slot(index: int, rebuild) -> None:
@@ -173,16 +183,16 @@ def _names_checkbox(active, settings, setters, tr) -> QCheckBox:
     return checkbox
 
 
-def _calendar_mount_group(settings, setters, tr) -> QGroupBox:
-    """The Calendar mount gallery, wrapped in its own group box —
-    `build_calendar_mount_grid` is the SAME gallery the retired Pointer
-    Theme window built (Rule #5, no second copy)."""
-    group = QGroupBox(tr("Calendar mount"))
-    layout = QVBoxLayout(group)
-    layout.addWidget(build_calendar_mount_grid(
+def _calendar_mount_group(settings, setters, tr) -> QWidget:
+    """The Calendar mount gallery — `build_calendar_mount_grid` is the
+    SAME gallery the retired Pointer Theme window built (Rule #5, no
+    second copy). The extra QGroupBox this used to wrap it in fell away
+    with the CardGroup migration (2026-08-14): the gallery carries its
+    own title and sentence now, and a box around a box reads as a
+    defect."""
+    return build_calendar_mount_grid(
         settings.calendar_mount, setters["calendar_mount"], tr,
-    ))
-    return group
+    )
 
 
 def _subdial_plate_group(settings, setters, tr) -> QGroupBox:
@@ -207,32 +217,37 @@ def _artwork_group(settings, setters, tr) -> QGroupBox:
     when the theme has no plate there, the dial's own fallback — and,
     when the theme carries a SUNDAY DUAL on disk, a second per-source
     tile shows it). LIVE-APPLY, as before."""
-    group = QGroupBox(tr("Artwork"))
-    column = QVBoxLayout(group)
     theme = settings.weekday_theme
-    tiles = []
+    entries = []
     for source in constants.ART_SOURCES:
-        tiles.append(tile(
-            tr(constants.ART_SOURCE_TITLES[source]),
+        title = constants.ART_SOURCE_TITLES[source]
+        entries.append((
+            source, tr(title),
+            tr("The {source} cast of this theme's plates.").format(
+                source=title
+            ),
             thumbs.art_source_icon(source, theme),
-            settings.art_source == source,
-            lambda src=source: setters["art_source"](src),
         ))
-    duals = [
-        (source, thumbs.art_source_dual_icon(source, theme))
-        for source in constants.ART_SOURCES
-    ]
-    for source, icon in duals:
-        if icon is not None:
-            tiles.append(tile(
-                tr("{source} — Sunday dual").format(
-                    source=constants.ART_SOURCE_TITLES[source]
-                ),
-                icon,
-                False,
-                lambda src=source: setters["art_source"](src),
-            ))
-    column.addWidget(flow_gallery(tiles))
+    for source in constants.ART_SOURCES:
+        icon = thumbs.art_source_dual_icon(source, theme)
+        if icon is None:
+            continue
+        title = constants.ART_SOURCE_TITLES[source]
+        entries.append((
+            # A dual preview is the SAME pick as its source — a distinct
+            # key would make the group think two cards can be checked.
+            f"{source}__dual", tr("{source} — Sunday dual").format(source=title),
+            tr("This theme's Sunday dual plate, as {source} draws it.").format(
+                source=title
+            ),
+            icon,
+        ))
+    group = picture_group(
+        tr("Artwork"),
+        tr("Which cast of plates the weekday bodies wear."),
+        entries, settings.art_source,
+        lambda key: setters["art_source"](key.removesuffix("__dual")),
+    )
     return group
 
 
@@ -245,18 +260,22 @@ def _subdial_set_group(settings, setters, tr) -> QGroupBox:
     WHICH of the five hand-picked plate looks draws (`settings.
     subdial_set`); the active jewel finish still decides which color
     draws within it."""
-    group = QGroupBox(tr("Subdial plate set"))
-    column = QVBoxLayout(group)
-    column.addWidget(flow_gallery([
-        tile(
-            tr(constants.SUBDIAL_SET_TITLES[name]),
-            thumbs.subdial_set_icon(name),
-            settings.subdial_set == name,
-            lambda n=name: setters["subdial_set"](n),
-        )
-        for name in constants.SUBDIAL_SETS
-    ]))
-    return group
+    return picture_group(
+        tr("Subdial plate set"),
+        tr("Which hand-picked plate look the subdials wear — the active "
+           "jewel finish still decides which metal draws within it."),
+        [
+            (
+                name, tr(constants.SUBDIAL_SET_TITLES[name]),
+                tr("The {name} subdial plates.").format(
+                    name=constants.SUBDIAL_SET_TITLES[name]
+                ),
+                thumbs.subdial_set_icon(name),
+            )
+            for name in constants.SUBDIAL_SETS
+        ],
+        settings.subdial_set, setters["subdial_set"],
+    )
 
 
 def _rotation_selection(group_key: str, custom_themes: tuple) -> tuple:

@@ -18,23 +18,21 @@ Calendar pointer is active (`app.watch_face.themes._calendar_mount_group`).
 
 from datetime import date
 
-from PySide6.QtCore import Qt
-from PySide6.QtWidgets import QFrame, QLabel, QToolButton, QVBoxLayout, QWidget
+from PySide6.QtWidgets import QVBoxLayout, QWidget
 
 
 from app.watch_face import thumbs
-from app.watch_face.widgets import flow_gallery, tile
+from app.watch_face.controls import picture_group
 from config import calendar_mounts, defaults, pantheon
 
-def _tile(label: str, icon_path, selected: bool, on_click) -> QToolButton:
-    """One gallery tile — image over name, an accent border when it is
-    the active choice. The ONE tile builder both galleries use — since
-    2026-08-08 a thin adapter over `app.watch_face.widgets.tile` (Rule
-    #5: one tile look, one icon size, one builder), which also moves
-    the raw `QIcon(path)` load these galleries carried onto
-    `thumbs.art_thumbnail`'s disk-cached 256px source (R-33: every
-    gallery draws its icon from the thumbnail service)."""
-    return tile(label, thumbs.art_thumbnail(icon_path), selected, on_click)
+
+def _entry(key: str, label: str, blurb: str, icon_path) -> tuple:
+    """One card's `(key, label, blurb, icon)` — the ONE entry builder
+    both galleries use. Since the 2026-08-14 CardGroup migration the
+    tile itself is built by `controls.picture_group`; this keeps the
+    thumbnail service as the single icon door (R-33: every gallery
+    draws its icon from `thumbs.art_thumbnail`'s disk-cached source)."""
+    return (key, label, blurb, thumbs.art_thumbnail(icon_path))
 
 
 def _theme_icon(key: str):
@@ -47,22 +45,29 @@ def _theme_icon(key: str):
     return pantheon.weekday_theme_body_art(key, "sun", on_date=date.today())
 
 
-def _add_section(column: QVBoxLayout, title: str | None, tiles: list) -> None:
-    """A labeled, centered, wrapped row of tiles — the ONE section
-    builder both galleries use (`title` None = no header/rule)."""
-    if title is not None:
-        header = QLabel(title)
-        header.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        header.setStyleSheet("font-weight: 700; font-size: 13px;")
-        column.addWidget(header)
-        rule = QFrame()
-        rule.setFrameShape(QFrame.Shape.HLine)
-        rule.setFrameShadow(QFrame.Shadow.Sunken)
-        column.addWidget(rule)
-    # ONE gallery shape (widgets.flow_gallery): uniform tiles flowing
-    # by real width, left-packed — see widgets.py on why fixed columns
-    # died in the 2026-08-09 Zubi round.
-    column.addWidget(flow_gallery(tiles))
+def _theme_blurb(key: str, tr) -> str:
+    """One theme card's hover line (the mandatory blurb the element
+    classes require). Stated from what the REGISTRY actually knows —
+    the theme's title and, when it declares one, its article set — and
+    never invented lore: the encyclopedic text is the Encyclopedia's
+    job, this is the one line that says what picking the card does."""
+    title = tr(pantheon.WEEKDAY_THEME_TITLES[key])
+    return tr("The weekday bodies drawn from the {title} cast.").format(
+        title=title
+    )
+
+
+def _add_section(
+    column: QVBoxLayout, title: str, description: str, entries: list,
+    current, on_pick,
+) -> None:
+    """One titled card gallery — the ONE section builder both galleries
+    use. The hand-built header + rule + `flow_gallery` it replaced
+    (2026-08-14) is exactly what `CardGroup` is: a title, a sentence
+    under it, and the centered width-aware flow underneath."""
+    column.addWidget(picture_group(
+        title, description, entries, current, on_pick
+    ))
 
 
 def build_weekday_theme_grid(current_theme: str, on_pick, tr) -> QWidget:
@@ -78,18 +83,22 @@ def build_weekday_theme_grid(current_theme: str, on_pick, tr) -> QWidget:
     column = QVBoxLayout(content)
     column.setSpacing(12)
 
-    def add_group(title: str | None, keys: tuple[str, ...]) -> None:
-        _add_section(column, tr(title) if title is not None else None, [
-            _tile(
-                tr(pantheon.WEEKDAY_THEME_TITLES[key]),
-                _theme_icon(key),
-                key == current_theme,
-                lambda k=key: on_pick(k),
-            )
-            for key in keys
-        ])
+    def add_group(title: str, keys: tuple[str, ...]) -> None:
+        _add_section(
+            column, tr(title),
+            tr("Which cast of bodies fills the seven weekday seats."),
+            [
+                _entry(
+                    key, tr(pantheon.WEEKDAY_THEME_TITLES[key]),
+                    _theme_blurb(key, tr), _theme_icon(key),
+                )
+                for key in keys
+            ],
+            current_theme if current_theme in keys else None,
+            on_pick,
+        )
 
-    add_group(None, pantheon.WEEKDAY_MENU_TOP)
+    add_group(PLANETS_GROUP_TITLE, pantheon.WEEKDAY_MENU_TOP)
     for group_title, keys in pantheon.WEEKDAY_MENU_GROUPS:
         add_group(group_title, keys)
     column.addStretch(1)
@@ -102,7 +111,7 @@ def build_weekday_theme_grid(current_theme: str, on_pick, tr) -> QWidget:
 # dumps all ~30 weekday themes flat — it shows kinship groups first
 # (Level 2), then that ONE group's own tiles (Level 3). These three
 # functions expose the SAME `pantheon.WEEKDAY_MENU_TOP`/`_GROUPS` data
-# `build_weekday_theme_grid` already reads, through the SAME `_tile`/
+# `build_weekday_theme_grid` already reads, through the SAME `_entry`/
 # `_add_section` primitives, so the tree never forks a second copy of
 # the theme list (Rule #5) — it is a different SHAPE over identical data.
 
@@ -136,16 +145,21 @@ def build_weekday_group_grid(current_group: str | None, on_pick, tr) -> QWidget:
     content = QWidget()
     column = QVBoxLayout(content)
     column.setSpacing(12)
-    tiles = []
-    for title in weekday_group_titles():
-        first_key = weekday_group_keys(title)[0]
-        tiles.append(_tile(
-            tr(title),
-            _theme_icon(first_key),
-            title == current_group,
-            lambda t=title: on_pick(t),
-        ))
-    _add_section(column, None, tiles)
+    entries = [
+        _entry(
+            title, tr(title),
+            tr("The {title} family — open it to see its themes.").format(
+                title=tr(title)
+            ),
+            _theme_icon(weekday_group_keys(title)[0]),
+        )
+        for title in weekday_group_titles()
+    ]
+    _add_section(
+        column, tr("Theme families"),
+        tr("Themes are grouped by kinship — pick a family to see its casts."),
+        entries, current_group, on_pick,
+    )
     column.addStretch(1)
     return content
 
@@ -160,20 +174,28 @@ def build_weekday_theme_tiles(
     content = QWidget()
     column = QVBoxLayout(content)
     column.setSpacing(12)
-    tiles = [
-        _tile(
+    entries = [
+        _entry(
+            key,
             (
                 f"★ {tr(pantheon.WEEKDAY_THEME_TITLES[key])}"
                 if key == default_theme
                 else tr(pantheon.WEEKDAY_THEME_TITLES[key])
             ),
+            (
+                _theme_blurb(key, tr) + " "
+                + tr("This is this pointer's own default.")
+                if key == default_theme else _theme_blurb(key, tr)
+            ),
             _theme_icon(key),
-            key == current_theme,
-            lambda k=key: on_pick(k),
         )
         for key in weekday_group_keys(group_title)
     ]
-    _add_section(column, None, tiles)
+    _add_section(
+        column, tr(group_title),
+        tr("The casts inside this family — ★ marks this pointer's default."),
+        entries, current_theme, on_pick,
+    )
     column.addStretch(1)
     return content
 
@@ -194,16 +216,23 @@ def build_calendar_mount_grid(current_mount: str, on_pick, tr) -> QWidget:
     content = QWidget()
     column = QVBoxLayout(content)
     column.setSpacing(12)
-    tiles = [_tile(
-        tr("None"), None, current_mount == "off", lambda: on_pick("off"),
+    entries = [_entry(
+        "off", tr("None"),
+        tr("The wedges stay empty — no roster rides the Calendar pointer."),
+        None,
     )]
     for key, mount in calendar_mounts.CALENDAR_MOUNTS.items():
-        tiles.append(_tile(
-            f"{tr(mount.title)} ({mount.seats})",
+        entries.append(_entry(
+            key, f"{tr(mount.title)} ({mount.seats})",
+            tr("{title} rides the twelve wedges — {seats} seats.").format(
+                title=tr(mount.title), seats=mount.seats,
+            ),
             defaults.ZODIAC_ART_DIR / mount.art_dir / f"{mount.stems[0]}.png",
-            key == current_mount,
-            lambda k=key: on_pick(k),
         ))
-    _add_section(column, None, tiles)
+    _add_section(
+        column, tr("Calendar mount"),
+        tr("Which roster rides the Calendar pointer's twelve wedges."),
+        entries, current_mount, on_pick,
+    )
     column.addStretch(1)
     return content

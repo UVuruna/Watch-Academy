@@ -70,7 +70,12 @@ def test_colors_section_builds_a_real_page_not_a_placeholder(app):
     groups = widget.findChildren(QGroupBox)
     titles = {group.title() for group in groups}
     assert "Ring tint" in titles
-    assert any(title.startswith("Palette") for title in titles)
+    # The pointer HUE CHIPS left this page for Pointer (ballot verdict
+    # 5B, 2026-08-14) — they change with the pointer picked there. What
+    # arrived in exchange is the dissolved Umbra & Aura page (5A).
+    assert not any(title.startswith("Palette") for title in titles)
+    assert "Umbra form" in titles
+    assert "Contrast" in titles
     assert "Umbra coloring" in titles
     assert any(title.startswith("Aura coloring") for title in titles)
     assert "Hands color" in titles

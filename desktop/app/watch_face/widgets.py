@@ -1,23 +1,25 @@
-"""Shared pill/tile/gallery builders (see widgets.md) — the functional
-twin of `design_window.DesignDialog._pill`/`_tile`, freed of the class
-so every Watch Face section module can share ONE definition (Rule #5)
-instead of each redefining its own styled button. Since the 2026-08-09
-Zubi round this is also the ONE home of the width-aware gallery flow
-(`FlowLayout`/`FlowContent`/`flow_gallery`) — a fixed column count can
-never satisfy both ALG-7 (fill the row) and the window minimum (no
-horizontal scroll), the owner's own review caught the 3-3-1 wrap the
-fixed grids produced, and one vocabulary means no gallery can fork its
-own wrap again.
+"""Shared layout VOCABULARY for the Watch Face sections (see
+widgets.md) — the width-aware flow (`FlowLayout`/`FlowContent`), the
+row shapes built on it (`flow_row`), the pill, the label escape and the
+slider row. A fixed column count can never satisfy both ALG-7 (fill the
+row) and the window minimum (no horizontal scroll); the owner's own
+review caught the 3-3-1 wrap the fixed grids produced, and one
+vocabulary means no gallery can fork its own wrap again.
+
+THE GALLERY GRAMMAR MOVED OUT (2026-08-14): `tile` and `flow_gallery`
+are gone, replaced by `app.watch_face.controls`'s OptionCard/CardGroup
+and its `picture_group` door — which owns the reserved selection
+border, the uniform width, the mandatory hover blurb and the icon
+growth this module's tile builder used to carry alone. Two tile
+builders would mean a section could fork back to the blurb-less one, so
+there is exactly one.
 """
 
 from PySide6.QtCore import QEvent, QPoint, QRect, QSize, Qt
-from PySide6.QtGui import QIcon, QPixmap
-from PySide6.QtWidgets import (
-    QLayout, QPushButton, QSizePolicy, QToolButton, QVBoxLayout, QWidget,
-)
+from PySide6.QtWidgets import QLayout, QPushButton, QSizePolicy, QWidget
 
 from app.ui_style import style_button, uniform_width
-from config import defaults, palette
+from config import defaults
 
 # The ONE gallery icon size (owner instruction 2026-08-08: every picker
 # shows WHAT IT PICKS at a readable size, the Hands gallery being the
@@ -41,6 +43,9 @@ class FlowLayout(QLayout):
     left-packed two-tile gallery left the whole right half of a wide
     window empty (independent grader's 7/10, this session) — each row
     now centers its leftover space instead."""
+
+    #: The widest a justified row may push its members apart.
+    MAX_JUSTIFY_GAP_PX = 64
 
     def __init__(self, spacing: int | None = None):
         super().__init__()
@@ -83,6 +88,35 @@ class FlowLayout(QLayout):
             size = size.expandedTo(item.minimumSize())
         return size
 
+    def _columns(self, rect: QRect) -> int | None:
+        """How many EQUAL items per row, or None when the items differ
+        in width (then the greedy wrap below is the only sane answer).
+
+        THE LONELY TAIL (audit 2026-08-14): greedy wrapping put nine
+        equal cards at 4-4-1, and that last band's right half stood
+        wholly empty while the page continued below it (ALG-7). The
+        owner's own rule is FILL THE ROW — his "3-3-2 kad ima prostora
+        za 4-3" — so a tail of at least half a row keeps the greedy
+        answer untouched; only a tail thinner than that is rebalanced
+        (9 -> 3-3-3), which fills every band instead of one and a
+        remainder."""
+        items = self._items
+        if len(items) < 3:
+            return None
+        widths = {item.sizeHint().expandedTo(item.minimumSize()).width()
+                  for item in items}
+        if len(widths) != 1:
+            return None
+        width = widths.pop()
+        capacity = max(1, (rect.width() + self._gap) // (width + self._gap))
+        if capacity >= len(items):
+            return None
+        tail = len(items) % capacity
+        if tail == 0 or tail * 2 >= capacity:
+            return None
+        rows = -(-len(items) // capacity)
+        return -(-len(items) // rows)
+
     def _arrange(self, rect: QRect, apply_geometry: bool) -> int:
         # Two passes per row: measure the row first, then place it with
         # the leftover space split evenly left and right (CENTER).
@@ -90,19 +124,44 @@ class FlowLayout(QLayout):
         row: list = []
         row_width = 0
 
+        def item_size(item) -> QSize:
+            # The hint EXPANDED to the item's own minimum: ALG-5 states
+            # a row's uniform width through `setMinimumWidth`, and a
+            # placement that only read `sizeHint()` silently ignored it
+            # — three medal buttons stayed 90/95/92px wide with the
+            # uniform minimum already set on them (audit, 2026-08-14).
+            return item.sizeHint().expandedTo(item.minimumSize())
+
         def place() -> None:
+            # JUSTIFY, THEN CENTER. A row of equal cards that leaves the
+            # window's right half bare fails ALG-7 even when it is
+            # perfectly centered, so the leftover is first spent WIDENING
+            # THE GAPS (up to `MAX_JUSTIFY_GAP_PX`, past which a row of
+            # three would read as three unrelated things); whatever is
+            # left over after that is split evenly at the ends, which is
+            # the CENTER alignment the owner sealed on 2026-08-14.
             if not apply_geometry or not row:
                 return
-            x = rect.x() + max(0, (rect.width() - row_width) // 2)
+            gap = self._gap
+            leftover = rect.width() - row_width
+            if len(row) > 1 and leftover > 0:
+                gap = min(
+                    self.MAX_JUSTIFY_GAP_PX,
+                    self._gap + leftover // (len(row) - 1),
+                )
+            spread = row_width + (gap - self._gap) * (len(row) - 1)
+            x = rect.x() + max(0, (rect.width() - spread) // 2)
             for item in row:
-                hint = item.sizeHint()
-                item.setGeometry(QRect(QPoint(x, y), hint))
-                x += hint.width() + self._gap
+                size = item_size(item)
+                item.setGeometry(QRect(QPoint(x, y), size))
+                x += size.width() + gap
 
+        columns = self._columns(rect)
         for item in self._items:
-            hint = item.sizeHint()
+            hint = item_size(item)
             width_if_added = row_width + (self._gap if row else 0) + hint.width()
-            if row and rect.x() + width_if_added > rect.right() + 1:
+            if row and (rect.x() + width_if_added > rect.right() + 1
+                        or (columns is not None and len(row) >= columns)):
                 place()
                 y += row_height + self._gap
                 row, row_width, row_height = [], 0, 0
@@ -154,6 +213,13 @@ class FlowContent(QWidget):
         needed = layout.heightForWidth(self.width())
         if needed >= 0 and needed != self.minimumHeight():
             self.setMinimumHeight(needed)
+            # Tell the ancestors in the same breath. `setMinimumHeight`
+            # invalidates this widget alone, so a page holding a group
+            # holding a flow learned the new height only on the NEXT
+            # event pass and was laid out a few pixels short in between
+            # (measured 2026-08-14, one level deeper than the 2026-08-13
+            # case above).
+            self.updateGeometry()
 
     def minimumSizeHint(self) -> QSize:           # noqa: N802 — Qt override
         """The hint QScrollArea actually reads.
@@ -181,17 +247,110 @@ class FlowContent(QWidget):
         return handled
 
 
-def flow_gallery(tiles) -> QWidget:
-    """THE gallery shape: uniform tiles (ALG-5 — the widest label
-    decides for all), flowing by real width, left-packed, inside a
-    FlowContent host. Every tile gallery routes through here so no
-    section can fork back to a fixed column count."""
-    tiles = list(tiles)
-    uniform_width(tiles)
-    content = FlowContent()
+class FlowRow(FlowContent):
+    """A wrapping row that keeps its same-kind members the SAME width.
+
+    The equalizing happens on SHOW, not at build time: a button that has
+    not been polished by its window's stylesheet yet hints at the bare
+    application font, so a build-time pass measured three medal buttons
+    at one width and the shown row wore another (90/95/92px against a
+    minimum computed from the unstyled hints — audit finding,
+    2026-08-14). Grouping by exact class keeps a lone checkbox riding
+    the row's tail from being stretched to a button's width: it is not
+    that button's sibling (ALG-5 groups by kind for the same reason)."""
+
+    #: How far a member may be stretched past its natural width to fill
+    #: the line (ALG-7 row occupancy). Twice is enough to close a real
+    #: gap and little enough that a wide window never grows a row of
+    #: absurd slabs — past that the row simply centers, the alignment
+    #: the owner sealed on 2026-08-14.
+    FILL_FACTOR = 2.0
+
+    def _equalize(self) -> None:
+        layout = self.layout()
+        if layout is None:
+            return
+        members = []
+        by_kind: dict = {}
+        for index in range(layout.count()):
+            item = layout.itemAt(index)
+            widget = item.widget() if item is not None else None
+            if widget is None:
+                continue
+            widget.ensurePolished()
+            members.append(widget)
+            by_kind.setdefault(type(widget), []).append(widget)
+        for kin in by_kind.values():
+            if len(kin) > 1:
+                uniform_width(kin)
+        if not members:
+            return
+        # ONLY THE ROW'S OWN KIND IS FILLED. The spread hands its members
+        # an equal share, which is right for a row of pills and wrong for
+        # the lone Names checkbox riding the slot row's tail — stretched
+        # to a button's width it would read as a button (2026-08-14). The
+        # most numerous class is the row; anything else keeps its size.
+        members = max(by_kind.values(), key=len)
+        # ALG-7 ROW OCCUPANCY: a single-line row spreads to FILL the
+        # width instead of leaving its right half empty while content
+        # continues below (the finding the reflow itself uncovered on
+        # the Themes & Slots page — the clipped rows had merely HIDDEN
+        # it). Only while everything still fits on one line; a wrapped
+        # row is already as full as its content makes it.
+        others = sum(
+            w.sizeHint().width() + layout._gap
+            for kin in by_kind.values() if kin is not members
+            for w in kin
+        )
+        widest = max(w.sizeHint().width() for w in members)
+        available = self.width() - others
+        gap = layout._gap
+        # How many fit on ONE line at their natural width — the row is
+        # filled per LINE, not only when everything fits on a single one:
+        # five kind tabs wrapping 3-2 left the second line's right half
+        # bare, which is the very finding this pass answers.
+        per_line = max(1, (available + gap) // (widest + gap))
+        per_line = min(per_line, len(members))
+        share = (available - gap * (per_line - 1)) // per_line
+        # ONE ceiling for the whole row, taken from the WIDEST member:
+        # a per-widget ceiling would hand each button a different target
+        # and break the uniformity the pass above just established.
+        target = min(share, int(widest * self.FILL_FACTOR))
+        for widget in members:
+            widget.setMinimumWidth(max(target, widget.minimumWidth()))
+
+    def showEvent(self, event) -> None:           # noqa: N802 — Qt override
+        super().showEvent(event)
+        self._equalize()
+        self._publish_minimum()
+
+    def resizeEvent(self, event) -> None:         # noqa: N802 — Qt override
+        super().resizeEvent(event)
+        # EQUALIZE FIRST, THEN PUBLISH. Widening the members changes
+        # where the row wraps, so a height published before that pass
+        # described a row that no longer exists — on the owner's live
+        # profile the five kind tabs wrapped onto a second line inside a
+        # one-line-tall widget, and the pills below were drawn straight
+        # over them (audit shot, 2026-08-14).
+        self._equalize()
+        self._publish_minimum()
+
+
+def flow_row(members) -> QWidget:
+    """A row of pills/buttons that WRAPS instead of running off the page.
+
+    THE SPACE & LEGIBILITY LADDER, step 2 (reflow): a plain `QHBoxLayout`
+    of pills has no wrap point, so once the labels outgrow the viewport
+    the last pill is simply cut by the right edge — measured on the
+    Themes & Slots page at the declared 1280x720 minimum (the face-layout
+    row and the content-kind tabs both clipped, and the same capture at
+    the previous commit proves it predates the CardGroup migration).
+    The gallery flow already solved exactly this problem; a row of
+    buttons is the same problem with smaller items."""
+    content = FlowRow()
     flow = FlowLayout()
-    for tile_widget in tiles:
-        flow.addWidget(tile_widget)
+    for member in members:
+        flow.addWidget(member)
     content.setLayout(flow)
     return content
 
@@ -213,40 +372,6 @@ def literal(label: str) -> str:
 def pill(label: str, checked: bool, on_click) -> QPushButton:
     button = QPushButton(literal(label))
     style_button(button, "next" if checked else "neutral", small=True)
-    button.clicked.connect(lambda checked=False: on_click())
-    return button
-
-
-def tile(label: str, icon: QIcon | None, checked: bool, on_click) -> QToolButton:
-    """A gallery tile. Unlike `design_window._tile`, `icon` is an
-    already-built `QIcon` (the caller resolves it, typically through
-    `thumbs.py`'s disk-cached service) rather than a raw `Path` — the
-    tile builder itself does no file I/O. A tile with no icon reserves
-    the SAME icon box, transparently empty (uniform siblings, GUI Rules
-    ALG-5): an honest blank field, never a shrunken tile beside full
-    ones — and never invented stand-in art."""
-    button = QToolButton()
-    button.setToolButtonStyle(Qt.ToolButtonStyle.ToolButtonTextUnderIcon)
-    button.setText(literal(label))
-    if icon is None:
-        placeholder = QPixmap(TILE_ICON_PX, TILE_ICON_PX)
-        placeholder.fill(Qt.GlobalColor.transparent)
-        icon = QIcon(placeholder)
-    button.setIcon(icon)
-    button.setIconSize(QSize(TILE_ICON_PX, TILE_ICON_PX))
-    # THE SELECTION BORDER IS ALWAYS THERE, and only its colour changes.
-    # Adding a 2px border to the checked tile alone made that tile 4px
-    # narrower and shorter INSIDE than its siblings, and the label —
-    # which sits under the icon and is the last thing to get room — had
-    # its bottom row shaved off by the border (caught on a capture,
-    # 2026-08-10; THE SPACE & LEGIBILITY LAW: nothing a user must read
-    # is ever cut). A transparent border in the off state reserves the
-    # same box, so picking a tile changes its colour and nothing else.
-    border = palette.THEME_COLORS["accent"] if checked else "transparent"
-    button.setStyleSheet(
-        f"QToolButton {{ border: 2px solid {border};"
-        "border-radius: 8px; padding: 3px; }"
-    )
     button.clicked.connect(lambda checked=False: on_click())
     return button
 

@@ -29,7 +29,8 @@ checkbox that replaces the crown text with the active location's own
 ### Uses
 - [Watch Face Thumbnails](thumbs.md) — `ring_preset_thumbnail`,
   `art_thumbnail` (fallback)
-- [Watch Face Shared Widgets](widgets.md) — `pill`, `tile`
+- [Controls](controls.md) — `picture_group`, the one gallery door
+- [Watch Face Shared Widgets](widgets.md) — `pill`
 - [Rings (data)](../../../data/__about/rings.md) — `ring_presets`
 - [Config (folder)](../../../config/___config.md) — `RING_OUTERS`,
   `RING_OUTER_LOCK`, `RING_INNERS`, `RING_INNER_PRESET_DEFAULT`,

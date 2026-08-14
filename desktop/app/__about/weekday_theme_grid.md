@@ -14,7 +14,8 @@ Face window's Themes & Slots section.
 
 ### Uses
 - [Watch Face — Shared Widgets](../watch_face/__about/widgets.md) —
-  `tile` (the ONE tile builder, shared icon size `TILE_ICON_PX`)
+  `picture_group` (the ONE gallery door since 2026-08-14 — title,
+  sentence, mandatory blurb, reserved border, shared icon size)
 - [Watch Face — Thumbnails](../watch_face/__about/thumbs.md) —
   `art_thumbnail` (disk-cached 256px icon source, R-33)
 - [Config (folder)](../../config/___config.md) — `pantheon.WEEKDAY_MENU_TOP`/

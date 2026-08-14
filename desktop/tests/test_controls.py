@@ -8,6 +8,7 @@ from PySide6.QtWidgets import QApplication
 
 from app.watch_face.controls import (
     CardGroup, CardKind, MIN_ICON_PX, OptionCard, divider_present,
+    picture_group,
 )
 from app.watch_face.widgets import TILE_ICON_PX
 
@@ -208,3 +209,100 @@ def test_family_color_comes_from_the_palette_and_unknown_raises(app):
     assert _knob().ring_color == palette.KNOB_FAMILY_COLORS["opacity"]
     with pytest.raises(KeyError):
         _knob(family="no-such-family")
+
+
+# ── THE MIGRATION'S OWN TEETH (the gallery move, 2026-08-14) ──────────
+# `picture_group` is the ONE door every picture gallery walks through
+# now; these pin what a section may rely on when it hands over entries.
+
+
+def test_picture_group_checks_the_current_key(app):
+    group = picture_group(
+        "Group", "Sentence.",
+        [("a", "Alpha", "First.", None), ("b", "Beta", "Second.", None)],
+        "b", lambda key: None,
+    )
+    assert group.value() == "b"
+
+
+def test_picture_group_leaves_nothing_checked_without_a_current(app):
+    """A branch whose family is not the active one shows no pick —
+    `theme_tree._style_branch` passes None exactly for that case."""
+    group = picture_group(
+        "Group", "Sentence.", [("a", "Alpha", "First.", None)],
+        None, lambda key: None,
+    )
+    assert group.value() is None
+
+
+def test_picture_group_reports_the_picked_key(app):
+    picked = []
+    group = picture_group(
+        "Group", "Sentence.",
+        [("a", "Alpha", "First.", None), ("b", "Beta", "Second.", None)],
+        "a", picked.append,
+    )
+    group._cards["b"].click()
+    assert picked == ["b"]
+
+
+def test_picture_group_switches_carry_their_own_state(app):
+    """The Moon's crossing switches: three independent toggles, each
+    pre-lit from its own setting, no radio exclusivity between them."""
+    flips = []
+    group = picture_group(
+        "Group", "Sentence.", [], None, None,
+        switches=[
+            ("shadow", "Shadow", "Casts.", None, True),
+            ("shrink", "Shrink", "Shrinks.", None, False),
+        ],
+        on_toggle=lambda key, on: flips.append((key, on)),
+    )
+    assert group.values() == frozenset({"shadow"})
+    group._switches["shrink"].click()
+    assert flips == [("shrink", True)]
+    assert group.values() == frozenset({"shadow", "shrink"})
+
+
+def test_picture_group_grows_the_divider_only_when_both_kinds_meet(app):
+    """The same divider law, reached through the migration door."""
+    radios_only = picture_group(
+        "Group", "Sentence.", [("a", "Alpha", "First.", None)],
+        "a", lambda key: None,
+    )
+    assert not divider_present(radios_only)
+    mixed = picture_group(
+        "Group", "Sentence.", [("a", "Alpha", "First.", None)], "a",
+        lambda key: None,
+        switches=[("s", "Switch", "Toggles.", None, False)],
+        on_toggle=lambda key, on: None,
+    )
+    assert divider_present(mixed)
+
+
+def test_a_group_with_no_switches_hides_the_switch_host(app):
+    """An empty host is not space: it once held the column's spacing and
+    was reported by the audit as a zero-height widget over its sibling."""
+    group = picture_group(
+        "Group", "Sentence.", [("a", "Alpha", "First.", None)],
+        "a", lambda key: None,
+    )
+    assert not group._switch_host.isVisibleTo(group)
+    assert group._card_host.isVisibleTo(group)
+
+
+def test_the_group_states_the_height_its_wrapped_cards_need(app):
+    """The clip that started the height work: QGroupBox computes its
+    minimum from the flow's ONE-ROW minimum, so a wrapped gallery must
+    answer for itself — and never above what the column will be given,
+    which is the other half of the same bug."""
+    group = picture_group(
+        "Group", "Sentence.",
+        [(f"k{i}", f"Option {i}", "Blurb.", None) for i in range(9)],
+        "k0", lambda key: None,
+    )
+    group.resize(400, 100)
+    narrow = group.heightForWidth(400)
+    wide = group.heightForWidth(2000)
+    assert narrow > wide, "more rows at a narrower width"
+    assert group.minimumSizeHint().height() == group.heightForWidth(400)

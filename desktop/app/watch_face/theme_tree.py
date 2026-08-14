@@ -11,7 +11,8 @@ from PySide6.QtWidgets import (
 )
 
 from app.watch_face import thumbs
-from app.watch_face.widgets import flow_gallery, pill, tile
+from app.watch_face.controls import picture_group
+from app.watch_face.widgets import flow_row, pill
 from app.weekday_theme_grid import (
     build_weekday_group_grid,
     build_weekday_theme_tiles,
@@ -75,6 +76,14 @@ def _clear(layout) -> None:
         item = layout.takeAt(0)
         widget = item.widget()
         if widget is not None:
+            # UNPARENT, then delete. `deleteLater` alone leaves the
+            # widget a visible child of the page until the event loop
+            # gets around to it, and a widget no layout owns keeps its
+            # old geometry — so the rebuilt rows were painted ON TOP of
+            # the ones they replaced (caught on the live-profile audit
+            # shot, 2026-08-14; it only became visible once the rows
+            # were widgets rather than nested layouts).
+            widget.setParent(None)
             widget.deleteLater()
         elif item.layout() is not None:
             _clear(item.layout())
@@ -115,14 +124,18 @@ def _populate(root, active, full_face, pointer, pointer_shape, tr, rebuild) -> N
         note.setWordWrap(True)
         root.addWidget(note)
         return
-    tabs_row = QHBoxLayout()
-    for key, title in available:
-        tabs_row.addWidget(pill(
-            tr(title), _nav.kind == key,
-            lambda k=key: _select_kind(k, rebuild),
-        ))
     if len(available) > 1:
-        root.addLayout(tabs_row)
+        # WRAPS (Space & Legibility ladder step 2): five kind tabs ran
+        # off the right edge at the 1280px minimum — measured, and the
+        # same capture at the previous commit proves it predates the
+        # CardGroup migration.
+        root.addWidget(flow_row(
+            pill(
+                tr(title), _nav.kind == key,
+                lambda k=key: _select_kind(k, rebuild),
+            )
+            for key, title in available
+        ))
     active_kind = _nav.kind if _nav.kind in dict(available) else available[0][0]
     if active_kind == "weekday":
         root.addWidget(_weekday_branch(active, pointer, pointer_shape, tr, rebuild))
@@ -222,15 +235,20 @@ def _complications_branch(active, tr) -> QWidget:
     order: every picker shows what it picks; his instruction allows a
     sketch, and the recon proved complications have no bounded art
     door — they draw computed text/ticks on the dial)."""
-    return flow_gallery([
-        tile(
-            tr(title),
-            thumbs.complication_icon(mode),
-            active.mode_value == mode,
-            lambda m=mode: active.set_mode(m),
-        )
-        for mode, title in constants.SLOT_COMPLICATION_TITLES.items()
-    ])
+    return picture_group(
+        tr("Complication"), tr("What this subdial counts or shows."),
+        [
+            (
+                mode, tr(title),
+                tr("The {title} complication on this subdial.").format(
+                    title=title
+                ),
+                thumbs.complication_icon(mode),
+            )
+            for mode, title in constants.SLOT_COMPLICATION_TITLES.items()
+        ],
+        active.mode_value, active.set_mode,
+    )
 
 
 def _style_icon(family: str, style: str):
@@ -254,13 +272,18 @@ def _style_icon(family: str, style: str):
 
 
 def _style_branch(active, family: str, styles: tuple[str, ...], tr) -> QWidget:
-    """Tiles with the style's own art since the 2026-08-09 round."""
-    return flow_gallery([
-        tile(
-            tr(style.capitalize()),
-            _style_icon(family, style),
-            active.mode_value == family and active.style_value == style,
-            lambda s=style: active.set_style_mode(family, s),
-        )
-        for style in styles
-    ])
+    """Cards with the style's own art since the 2026-08-09 round."""
+    current = active.style_value if active.mode_value == family else None
+    return picture_group(
+        tr("{family} style").format(family=family.capitalize()),
+        tr("Which art draws this family's figures."),
+        [
+            (
+                style, tr(style.capitalize()),
+                tr("The {style} art for this family.").format(style=style),
+                _style_icon(family, style),
+            )
+            for style in styles
+        ],
+        current, lambda style: active.set_style_mode(family, style),
+    )
