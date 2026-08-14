@@ -75,35 +75,35 @@ glass; no file is shared by design (see above).
 ## The five office plates
 
 **Malignant Accuser — M, the Devil as Prosecutor** →
-`assets/archetypes/banknote/primary/colored/Malignant_Accuser.png`
+`masters/archetypes/banknote/primary/colored/Malignant_Accuser.png`
 
 ```
 ENGRAVED BANKNOTE PLATE, intaglio style — fine parallel-line hatching and cross-hatching exactly like a nineteenth-century dollar engraving, dollar-green and black-green ink on aged cream paper, photorealistic render of the printed plate, isolated background. ASPECT RATIO exactly 1:1 — a perfect square image. Center vignette: a gaunt robed figure standing at a high court bench seen from below, one long arm extended in a pointing accusation over a small kneeling soul, and the SHADOW of the pointing arm falling across the floor as a serpent; behind the accuser a set of scales hangs visibly tipped to one side. The face is sharp, intelligent and cold, a slanderer's face, not a monster's. Round guilloche frame of interlaced spirograph line-work, corner rosettes, all pure ornament. Palette: dollar green, black-green ink, aged cream paper. NO lettering anywhere — no numbers, no crown texts, no words.
 ```
 
 **Anointed Aegis — A, Jesus as Guardian** →
-`assets/archetypes/banknote/primary/colored/Anointed_Aegis.png`
+`masters/archetypes/banknote/primary/colored/Anointed_Aegis.png`
 
 ```
 ENGRAVED BANKNOTE PLATE, intaglio style — fine parallel-line hatching and cross-hatching exactly like a nineteenth-century dollar engraving, dollar-green and black-green ink on aged cream paper, photorealistic render of the printed plate, isolated background. ASPECT RATIO exactly 1:1 — a perfect square image. Center vignette: a serene robed figure standing squarely between danger and a small kneeling child-figure, holding a great ROUND SHIELD raised — three arrows visibly BROKEN against its face and falling away — the guardian's own body relaxed and unhurried, taking the blow so the sheltered one never feels it; a faint radiance engraved as a halo of fine rays around the guardian's head, olive sprigs at the vignette's base. Round guilloche frame of interlaced spirograph line-work, corner rosettes, all pure ornament. Palette: dollar green, black-green ink, aged cream paper. NO lettering anywhere — no numbers, no crown texts, no words.
 ```
 
 **Satanic Scourge — S, the Devil as Destroyer** →
-`assets/archetypes/banknote/primary/colored/Satanic_Scourge.png`
+`masters/archetypes/banknote/primary/colored/Satanic_Scourge.png`
 
 ```
 ENGRAVED BANKNOTE PLATE, intaglio style — fine parallel-line hatching and cross-hatching exactly like a nineteenth-century dollar engraving, dollar-green and black-green ink on aged cream paper, photorealistic render of the printed plate, isolated background. ASPECT RATIO exactly 1:1 — a perfect square image. Center vignette: a storm-winged figure sweeping low across a field of toppled and broken columns, a many-tailed scourge trailing from one fist, engraved whirlwind lines spiraling off the wing-tips and pulling the debris into the air; nothing built stands upright in the vignette, and the figure does not look at any of it — destruction as force, not judgment. Round guilloche frame of interlaced spirograph line-work, corner rosettes, all pure ornament. Palette: dollar green, black-green ink, aged cream paper. NO lettering anywhere — no numbers, no crown texts, no words.
 ```
 
 **Omnific Originator — Ω, God as Creator** →
-`assets/archetypes/banknote/primary/colored/Omnific_Originator.png`
+`masters/archetypes/banknote/primary/colored/Omnific_Originator.png`
 
 ```
 ENGRAVED BANKNOTE PLATE, intaglio style — fine parallel-line hatching and cross-hatching exactly like a nineteenth-century dollar engraving, dollar-green and black-green ink on aged cream paper, photorealistic render of the printed plate, isolated background. ASPECT RATIO exactly 1:1 — a perfect square image. Center vignette: two great open HANDS emerging from engraved cloud-banks at the base, palms up, releasing upward an orb of concentric engraved rings — worlds within worlds, a small sun, a crescent, a scatter of stars spiraling out of the orb into the upper frame — the whole upper half of the plate becoming a radiating guilloche SUNBURST whose rays are the engraving's own line-work, creation drawn as ornament. No figure, no face: only the hands and what they release. Round guilloche frame of interlaced spirograph line-work, corner rosettes, all pure ornament. Palette: dollar green, black-green ink, aged cream paper. NO lettering anywhere — no numbers, no crown texts, no words.
 ```
 
 **Nazarene Advocate — N, Jesus as Advocate** →
-`assets/archetypes/banknote/primary/colored/Nazarene_Advocate.png`
+`masters/archetypes/banknote/primary/colored/Nazarene_Advocate.png`
 
 ```
 ENGRAVED BANKNOTE PLATE, intaglio style — fine parallel-line hatching and cross-hatching exactly like a nineteenth-century dollar engraving, dollar-green and black-green ink on aged cream paper, photorealistic render of the printed plate, isolated background. ASPECT RATIO exactly 1:1 — a perfect square image. Center vignette: a robed figure standing upright beside a bowed, chained prisoner — one hand resting on the prisoner's shoulder, the other raised open-palmed toward a high unseen bench outside the frame's upper edge; at the prisoner's feet one shackle already lies OPEN on the floor. The advocate does not deny — the stance is entirely "I stand with this one." Round guilloche frame of interlaced spirograph line-work, corner rosettes, all pure ornament. Palette: dollar green, black-green ink, aged cream paper. NO lettering anywhere — no numbers, no crown texts, no words.
@@ -121,7 +121,7 @@ ENGRAVED BANKNOTE PLATE, intaglio style — fine parallel-line hatching and cros
   a future Encyclopedia/hover round; the legend text ships first).
 - The Eye of Providence (the sixth seat, God as Judge) deliberately
   has NO entry — its four masters already live in the ring letter
-  library (`assets/instrument/ring/letters/Eye<_shine>_<src>.png`).
+  library (`masters/instrument/ring/letters/Eye<_shine>_<src>.png`).
 - **NO lettering** — doubly underlined for this family: real banknotes
   are full of text, these plates carry none.
 - Verify with `python main.py "research/prompts/archetype/banknote_offices_prompts.md" --dry-run`

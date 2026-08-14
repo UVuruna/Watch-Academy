@@ -15,7 +15,7 @@ matched pair.
 > `moon_lunations`, `metals` and `ring_letters` are no longer files at
 > all — the program DRAWS them, live, from the same constants the dial
 > itself is drawn from (see
-> [Instrument Diagrams](../../../render/__about/instrument_diagrams.md)). **Do
+> [Instrument Diagrams](../../../../desktop/render/__about/instrument_diagrams.md)). **Do
 > not capture the five screenshots this sheet plans below, and do not
 > generate anything for `metals` or `ring_letters`.** A stored capture
 > of a live geometry is exactly the asset Rule #19 forbids: it is right
@@ -29,8 +29,8 @@ matched pair.
 > plots.
 
 Suggested drop locations:
-- `assets/instrument/logo.png` — the section logo
-- `assets/instrument/paint_light.png` — the one abstract-concept Gemini image
+- `masters/instrument/logo.png` — the section logo
+- `masters/instrument/paint_light.png` — the one abstract-concept Gemini image
 - Encyclopedia screenshots: wherever the owner's existing capture
   pipeline drops raw grabs before processing (see Delivery, below)
 - `metals` and `ring_letters` need no new files — see their sections
@@ -68,7 +68,7 @@ centered) rather than the paraphrase.
 
 ## Section logo — aged bronze cameo, gear-tooth field
 
-**The Instrument section logo** → `assets/instrument/logo.png`
+**The Instrument section logo** → `masters/instrument/logo.png`
 
 ```
 Ornate circular badge, aged bronze relief, engraved gear-tooth field, photorealistic render, perfectly centered, isolated on white background. Center: a weathered brass instrument face — a full 24-hour clock, noon marked at the very top and midnight at the very bottom, a slender hour hand standing partway down the right side and a thinner minute hand ticking just past it, fine engraved numerals running once around the rim from 1 to 24, small exposed gears and a tiny pendulum bob visible beneath the hands where the mechanism shows through the case. Read plainly as a working timekeeping instrument, NOT a zodiac wheel: no star signs, no constellations, no astrological glyphs anywhere on the face or the border. Border: aged bronze ring machined with fine tick-tooth relief like the dial's own 360-degree rim, four small dark-patina roundels at the cardinal points each bearing a tiny embossed cog. Colors: aged bronze dominant, warm brass highlight, deep patina shadow.
@@ -165,7 +165,7 @@ are the app's own Seasons/Compass rendering.
 
 ## Paint and Light (`paint_light`) — GEMINI PROMPT
 
-**Paint and Light** → `assets/instrument/paint_light.png`
+**Paint and Light** → `masters/instrument/paint_light.png`
 
 Genuinely abstract: pre-Newton pigment theory vs. post-Newton light
 theory, and the one twist the article hangs everything on — mixed
@@ -186,15 +186,15 @@ bronze as the ambient plate finish everything else is struck in — is
 already sitting in the asset tree, generated for the weekday alchemy
 set and needing no rework:
 
-- **Gold:** `assets/weeks/crafts/alchemy/primary/colored/Gold.png` — crucible pouring molten
+- **Gold:** `masters/weeks/crafts/alchemy/primary/colored/Gold.png` — crucible pouring molten
   gold beside a polished sun-face disc, exactly "gold to the Sun."
-- **Silver:** `assets/weeks/crafts/alchemy/primary/colored/Silver.png` — half-polished,
+- **Silver:** `masters/weeks/crafts/alchemy/primary/colored/Silver.png` — half-polished,
   half-tarnished mirror-disc and chalice, exactly "silver to the Moon."
 - **Bronze:** no dedicated medallion exists (or is needed) — bronze is
   the default, ambient finish of dozens of existing plates project-wide
   (every weekday god, every profession, every ring letter). If the
   article wants one concrete bronze image anyway, reuse
-  `assets/instrument/guide/63_ring_domy_bronze.png` — an actual in-app screenshot
+  `masters/instrument/guide/63_ring_domy_bronze.png` — an actual in-app screenshot
   of the DOMY ring struck in plain bronze, already owner-captured and
   processed for the Guide.
 
@@ -209,14 +209,14 @@ M=12h, Y=20h, Ω=24h, each at its Greek alphabetical hour) — a screenshot
 of the ring already proves it, and one already exists from the Guide's
 "Rings/Letters/Metals" chapter:
 
-- **Primary:** `assets/instrument/guide/22_ring_domy_gold.png` — whole dial, DOMY
+- **Primary:** `masters/instrument/guide/22_ring_domy_gold.png` — whole dial, DOMY
   ring in gold, all four letters (D, M, Y, Ω) legible at their hours.
-- **Alternative / complement:** `assets/instrument/guide/64_ring_numbers_seal.png`
+- **Alternative / complement:** `masters/instrument/guide/64_ring_numbers_seal.png`
   — the plain-number ring (12/16/20/4 + Ω) that the article's closing
   paragraph calls "the plain confession of the trick"; pairing the two
   images (letters, then numbers) would directly illustrate that line.
-- Also on file if a wider view is wanted: `assets/instrument/guide/19_rings.png`
-  (overview grid) and `assets/instrument/guide/36_ring_morph_silver.png` (the
+- Also on file if a wider view is wanted: `masters/instrument/guide/19_rings.png`
+  (overview grid) and `masters/instrument/guide/36_ring_morph_silver.png` (the
   MORPH sister ring: M/Π/H/Ω, same alphabetical-hour rule).
 
 No new Gemini generation and no new screenshot needed for this article
@@ -280,7 +280,7 @@ today.
 ---
 
 **The Generic Duality — the seat with two faces** →
-`assets/instrument/duality.png`
+`masters/instrument/duality.png`
 
 *One throne, split down the middle: day on one side, night on the
 other, and the ninth standing outside the ring entirely. Nobody is
@@ -293,7 +293,7 @@ Ornate circular medallion, aged bronze and dark silver relief, photorealistic re
 ---
 
 **The Generic Thirteenth — the count that does not close** →
-`assets/instrument/thirteenth.png`
+`masters/instrument/thirteenth.png`
 
 *Every set on this instrument is built on twelve. This is what happens
 when a thirteenth arrives: the same craft, the same metal, and no seat

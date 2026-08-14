@@ -12,7 +12,7 @@ owner-sealed rosters 2026-07-22) — a NEW theme with THREE parallel casts.
 ## Connections
 
 ### Uses
-- [Config (folder)](../../../config/___config.md) —
+- [Config (folder)](../../../../desktop/config/___config.md) —
   `defaults.rotating_art_file`, the rotation-seat search this sheet's
   `alt/`/`_v*` convention is built directly on
 

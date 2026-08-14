@@ -74,10 +74,10 @@ generated in a similar spirit.
 mirroring the art-source switch — the function's own signature never
 changed, so `render.layers.draw_slot_roundel`'s call site did not need
 to either). For sets 1-4 it returns the matching hand-drawn file
-directly — `assets/instrument/subdial/<set>/<finish>.png` (`<set>` = set1..set4,
+directly — `masters/instrument/subdial/<set>/<finish>.png` (`<set>` = set1..set4,
 `<finish>` = gold/silver/bronze — twelve files, no placeholder glob
 needed since every combination is a real file on disk). For "solo" it
-returns `assets/instrument/subdial/solo/<finish>.png` where `<finish>` = silver AS
+returns `masters/instrument/subdial/solo/<finish>.png` where `<finish>` = silver AS
 DRAWN (the only hand-drawn file — the owner's original silver plate),
 or a disk-cached live recolor for gold/bronze. The layer draws the
 directional shadow separately, underneath, keyed off the seat's own
@@ -110,8 +110,8 @@ dial position — never the file, in either model.
   plus a fifth "solo" set carrying only a hand-drawn silver, gold/
   bronze still algorithmic. Both former per-source master files are
   `git rm`-ed (their subdial/ folders are gone with them); the new tree
-  lives at `assets/instrument/subdial/<set>/<finish>.png` (`<set>` = set1..set4,
-  `<finish>` = gold/silver/bronze) and `assets/instrument/subdial/solo/<finish>.png`
+  lives at `masters/instrument/subdial/<set>/<finish>.png` (`<set>` = set1..set4,
+  `<finish>` = gold/silver/bronze) and `masters/instrument/subdial/solo/<finish>.png`
   (`<finish>` = silver, the only hand-drawn file there) — a root
   deliberately OUTSIDE `constants.ART_SOURCED_ROOTS` (see
   `assets/___assets.md`: the set choice is now orthogonal to the

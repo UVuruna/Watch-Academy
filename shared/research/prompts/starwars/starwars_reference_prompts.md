@@ -25,10 +25,12 @@ line(s) under the output arrow (PromptPainter's rule 3c — the old
 per-figure `Attach:` lines are gone; one truth per entry, and the
 dual Father plate carries TWO `←` lines whose ORDER is the prompt's
 "FIRST/SECOND attached image"). In PromptPainter: queue this sheet,
-turn ON **Prompt + Image**, point the **Reference folder** at the
-owner's local `UV/` folder (the `←` paths are relative to it —
-`sw_reference/` holds the 26 gitignored third-party stills, never
-committed), and Start: the tool attaches each entry's reference(s),
+turn ON **Prompt + Image**, point the **Reference folder** at THIS
+SHEET'S OWN folder, `shared/research/prompts/starwars/` (owner order
+2026-08-14 — the stills moved out of his personal `UV/` inbox to sit
+beside the prompts that use them, so the `←` paths are now relative to
+the sheet itself; `sw_reference/` still holds the 26 gitignored
+third-party stills and is still never committed), and Start: the tool attaches each entry's reference(s),
 pastes the fenced prompt, and generates ONLY entries whose references
 exist on disk. Manual fallback: attach the file(s) the `←` line(s)
 name, paste the fenced prompt, drop the result at the arrow path
@@ -106,13 +108,13 @@ generation route (composited likeness), not a tint or recolor pass of
 
 ### Monday — Obi-Wan (Ben) Kenobi
 
-**Obi-Wan — reference** → `assets/weeks/films/sw_jedi/primary/bronze/Obi_Wan_v3.png`
+**Obi-Wan — reference** → `masters/weeks/films/sw_jedi/primary/bronze/Obi_Wan_v3.png`
 ← `sw_reference/ObiWan.png`
 ```
 ROUND medallion, aged bronze relief, photorealistic render, isolated background, the circular shape IS the frame. Use the ATTACHED IMAGE as the exact likeness of the central figure — keep the face, build and costume of the attached figure faithfully, and re-render the whole figure as warm aged-bronze sculpted relief (monochrome bronze patina, darker recesses, polished highlights; no paint, no enamel). Pose and staging: the attached figure standing at the edge of a wind-carved dune beneath twin setting suns, one weathered hand resting on the slim hilt of a blade at the belt rather than igniting it, gaze fixed on a distant homestead far below — calm, watchful, guarding a hope not yet named. Border: a monastic temple-pillar frame carved in bronze relief, fine invented-glyph tick ornament at each joint, broken by four small roundels bearing the Moon crescent glyph in bronze relief. NO lettering anywhere.
 ```
 
-**Obi-Wan — reference (colored)** → `assets/weeks/films/sw_jedi/primary/colored/Obi_Wan_v3.png`
+**Obi-Wan — reference (colored)** → `masters/weeks/films/sw_jedi/primary/colored/Obi_Wan_v3.png`
 ← `sw_reference/ObiWan.png`
 ```
 Ornate circular badge, vivid full-color paint over polished bronze-and-blue, photorealistic render, perfectly centered, isolated on white background. Use the ATTACHED IMAGE as the exact likeness of the central figure — keep its face, build and costume faithfully, rendered in full saturated color as a fresh painting (never a tinted copy of a bronze relief). Pose and staging: the attached figure at a twin-sunset dune, one hand resting on the slim hilt at the belt, watching a distant homestead. Border: the temple-pillar frame recut in polished bronze with glowing blue insets, four enamel roundels bearing a silver Moon crescent. Colors: dusk blue, sandstone bronze, twin-sun amber, desert-robe tan.
@@ -120,13 +122,13 @@ Ornate circular badge, vivid full-color paint over polished bronze-and-blue, pho
 
 ### Tuesday — Leia, General Organa
 
-**Leia — reference** → `assets/weeks/films/sw_jedi/primary/bronze/Leia_v3.png`
+**Leia — reference** → `masters/weeks/films/sw_jedi/primary/bronze/Leia_v3.png`
 ← `sw_reference/Leia.png`
 ```
 ROUND medallion, aged bronze relief, photorealistic render, isolated background, the circular shape IS the frame. Use the ATTACHED IMAGE as the exact likeness of the central figure — keep the face, hair and build faithfully, re-rendered as warm aged-bronze sculpted relief throughout (monochrome patina, no paint). Pose and staging: the attached figure in a field commander's coat, one hand steady on a tactical hologram table, posture unbowed under the weight of command, a small winged insignia at the collar — courage disciplined into command. Border: a monastic temple-pillar frame carved in bronze relief, fine invented-glyph tick ornament, broken by four roundels bearing the Mars glyph in bronze relief. NO lettering anywhere.
 ```
 
-**Leia — reference (colored)** → `assets/weeks/films/sw_jedi/primary/colored/Leia_v3.png`
+**Leia — reference (colored)** → `masters/weeks/films/sw_jedi/primary/colored/Leia_v3.png`
 ← `sw_reference/Leia.png`
 ```
 Ornate circular badge, vivid full-color paint over polished bronze-and-blue, photorealistic render, perfectly centered, isolated on white background. Use the ATTACHED IMAGE as the exact likeness of the central figure, rendered in full saturated color as a fresh painting. Pose and staging: the attached figure in a grey field commander's coat, one hand on a glowing blue tactical hologram, a small winged insignia at the collar. Border: the temple-pillar frame recut in polished bronze with glowing blue insets, four enamel roundels bearing an orange Mars glyph. Colors: ember orange, command grey, hologram blue, warm skin-tone.
@@ -134,13 +136,13 @@ Ornate circular badge, vivid full-color paint over polished bronze-and-blue, pho
 
 ### Wednesday — Han Solo
 
-**Han — reference** → `assets/weeks/films/sw_jedi/primary/bronze/Han_v3.png`
+**Han — reference** → `masters/weeks/films/sw_jedi/primary/bronze/Han_v3.png`
 ← `sw_reference/Han.png`
 ```
 ROUND medallion, aged bronze relief, photorealistic render, isolated background, the circular shape IS the frame. Use the ATTACHED IMAGE as the exact likeness of the central figure — face, build and costume kept faithfully, re-rendered as warm aged-bronze sculpted relief throughout. Pose and staging: the attached figure leaning easy against a battered saucer-shaped freighter's open hatch, a sidearm holstered rather than drawn, one hand counting a small stack of coins while the eyes are already on the ship's own controls — a sly grin that has not yet decided which way this deal will go. Border: a monastic temple-pillar frame carved in bronze relief, fine invented-glyph tick ornament, broken by four roundels bearing the Mercury glyph in bronze relief. NO lettering anywhere.
 ```
 
-**Han — reference (colored)** → `assets/weeks/films/sw_jedi/primary/colored/Han_v3.png`
+**Han — reference (colored)** → `masters/weeks/films/sw_jedi/primary/colored/Han_v3.png`
 ← `sw_reference/Han.png`
 ```
 Ornate circular badge, vivid full-color paint over polished bronze-and-blue, photorealistic render, perfectly centered, isolated on white background. Use the ATTACHED IMAGE as the exact likeness of the central figure, in full saturated color as a fresh painting. Pose and staging: the attached figure leaning against a battered freighter's open hatch, one hand counting coins, eyes on the ship's controls. Border: the temple-pillar frame recut in polished bronze with glowing blue insets, four enamel roundels bearing a purple Mercury glyph. Colors: violet shadow, ship-hull grey, credit copper, warm skin-tone.
@@ -148,13 +150,13 @@ Ornate circular badge, vivid full-color paint over polished bronze-and-blue, pho
 
 ### Thursday — Qui-Gon Jinn
 
-**Qui-Gon — reference** → `assets/weeks/films/sw_jedi/primary/bronze/Qui_Gon_v3.png`
+**Qui-Gon — reference** → `masters/weeks/films/sw_jedi/primary/bronze/Qui_Gon_v3.png`
 ← `sw_reference/QuiGon.png`
 ```
 ROUND medallion, aged bronze relief, photorealistic render, isolated background, the circular shape IS the frame. Use the ATTACHED IMAGE as the exact likeness of the central figure — keep the face, long hair and robed build faithfully, re-rendered as warm aged-bronze sculpted relief. Pose and staging: the attached figure kneeling down to a small child's eye level in a dusty marketplace, long hair falling forward, one hand extended in an offer of freedom rather than toward a weapon, an order's seal deliberately set aside on the ground beside him — warm, unconventional generosity that breaks a rule to do what is right. Border: a monastic temple-pillar frame carved in bronze relief, fine invented-glyph tick ornament, broken by four roundels bearing the Jupiter glyph in bronze relief. NO lettering anywhere.
 ```
 
-**Qui-Gon — reference (colored)** → `assets/weeks/films/sw_jedi/primary/colored/Qui_Gon_v3.png`
+**Qui-Gon — reference (colored)** → `masters/weeks/films/sw_jedi/primary/colored/Qui_Gon_v3.png`
 ← `sw_reference/QuiGon.png`
 ```
 Ornate circular badge, vivid full-color paint over polished bronze-and-blue, photorealistic render, perfectly centered, isolated on white background. Use the ATTACHED IMAGE as the exact likeness of the central figure, in full saturated color as a fresh painting. Pose and staging: the attached figure kneeling to a child's eye level in a dusty marketplace, one hand extended, a small seal set aside on the ground. Border: the temple-pillar frame recut in polished bronze with glowing blue insets, four enamel roundels bearing a yellow Jupiter glyph. Colors: amber gold, dusty tan, glowing blue, warm brown robe.
@@ -162,13 +164,13 @@ Ornate circular badge, vivid full-color paint over polished bronze-and-blue, pho
 
 ### Friday — Padmé
 
-**Padmé — reference** → `assets/weeks/films/sw_jedi/primary/bronze/Padme_v3.png`
+**Padmé — reference** → `masters/weeks/films/sw_jedi/primary/bronze/Padme_v3.png`
 ← `sw_reference/Padme.png`
 ```
 ROUND medallion, aged bronze relief, photorealistic render, isolated background, the circular shape IS the frame. Use the ATTACHED IMAGE as the exact likeness of the central figure — face, hair and gown kept faithfully, re-rendered as warm aged-bronze sculpted relief, tender and aching. Pose and staging: the attached figure in flowing senatorial robes on a private balcony above a green lake-country, one hand pressed to her own heart, the other holding a small secret ring half-hidden in her palm, her gaze soft and unguarded — a love that began before the galaxy needed her to be anyone but herself. Border: a monastic temple-pillar frame carved in bronze relief, fine invented-glyph tick ornament, broken by four roundels bearing the Venus glyph in bronze relief. NO lettering anywhere.
 ```
 
-**Padmé — reference (colored)** → `assets/weeks/films/sw_jedi/primary/colored/Padme_v3.png`
+**Padmé — reference (colored)** → `masters/weeks/films/sw_jedi/primary/colored/Padme_v3.png`
 ← `sw_reference/Padme.png`
 ```
 Ornate circular badge, vivid full-color paint over polished bronze-and-blue, photorealistic render, perfectly centered, isolated on white background. Use the ATTACHED IMAGE as the exact likeness of the central figure, in full saturated color as a fresh painting. Pose and staging: the attached figure on a balcony above soft lake-country, one hand over her heart, the other holding a small hidden ring. Border: the temple-pillar frame recut in polished bronze with glowing blue insets, four enamel roundels bearing a red Venus glyph. Colors: rose red, lake blue, ivory gown, warm skin-tone.
@@ -176,13 +178,13 @@ Ornate circular badge, vivid full-color paint over polished bronze-and-blue, pho
 
 ### Saturday — Chewbacca
 
-**Chewbacca — reference** → `assets/weeks/films/sw_jedi/primary/bronze/Chewbacca_v3.png`
+**Chewbacca — reference** → `masters/weeks/films/sw_jedi/primary/bronze/Chewbacca_v3.png`
 ← `sw_reference/Chewbacca.png`
 ```
 ROUND medallion, aged bronze relief, photorealistic render, isolated background, the circular shape IS the frame. Use the ATTACHED IMAGE as the exact likeness of the central figure — the tall shaggy-furred creature's own face, build and bandolier kept faithfully, re-rendered as warm aged-bronze sculpted relief, patient and steady. Pose and staging: the attached figure seated calmly at a starship workbench, a heavy crossbow-like weapon laid at rest across the lap rather than raised, one massive hand carefully fitting a small mechanical part into place — unhurried after two centuries of exactly this quiet loyalty. Border: a monastic temple-pillar frame carved in bronze relief, fine invented-glyph tick ornament, broken by four roundels bearing the Saturn glyph in bronze relief. NO lettering anywhere.
 ```
 
-**Chewbacca — reference (colored)** → `assets/weeks/films/sw_jedi/primary/colored/Chewbacca_v3.png`
+**Chewbacca — reference (colored)** → `masters/weeks/films/sw_jedi/primary/colored/Chewbacca_v3.png`
 ← `sw_reference/Chewbacca.png`
 ```
 Ornate circular badge, vivid full-color paint over polished bronze-and-blue, photorealistic render, perfectly centered, isolated on white background. Use the ATTACHED IMAGE as the exact likeness of the central figure, in full saturated color as a fresh painting. Pose and staging: the attached figure seated at a workbench, a heavy crossbow-like weapon across the lap, carefully fitting a mechanical part into place. Border: the temple-pillar frame recut in polished bronze with glowing blue insets, four enamel roundels bearing a green Saturn glyph. Colors: jade green, shaggy warm brown, workbench copper, glowing-blue accent.
@@ -190,13 +192,13 @@ Ornate circular badge, vivid full-color paint over polished bronze-and-blue, pho
 
 ### Sunday (Throne) — Young Luke
 
-**Young Luke — reference** → `assets/weeks/films/sw_jedi/primary/bronze/Luke_v3.png`
+**Young Luke — reference** → `masters/weeks/films/sw_jedi/primary/bronze/Luke_v3.png`
 ← `sw_reference/Luke.png`
 ```
 ROUND medallion, brightly polished bronze relief, photorealistic render, isolated background, the circular shape IS the frame — the BRIGHTEST plate of the set. Use the ATTACHED IMAGE as the exact likeness of the central figure — face, hair and simple robes kept faithfully, re-rendered as brightly polished bronze sculpted relief. Pose and staging: the attached figure standing tall, an energy blade held UPRIGHT rather than swung, a small twin-sun emblem glowing softly on the horizon behind — untested, unbowed moral certainty, pride in the sense of conviction rather than vanity. Border: a monastic temple-pillar frame carved in bronze relief, fine invented-glyph tick ornament, broken by four roundels bearing the Sun glyph in brightly polished bronze relief. NO lettering anywhere.
 ```
 
-**Young Luke — reference (colored)** → `assets/weeks/films/sw_jedi/primary/colored/Luke_v3.png`
+**Young Luke — reference (colored)** → `masters/weeks/films/sw_jedi/primary/colored/Luke_v3.png`
 ← `sw_reference/Luke.png`
 ```
 Ornate circular badge, vivid full-color paint over polished bright gold, photorealistic render, perfectly centered, isolated on white background. Use the ATTACHED IMAGE as the exact likeness of the central figure, in full saturated color as a fresh painting. Pose and staging: the attached figure standing tall, a glowing blue energy blade held upright, twin suns glowing on the horizon behind. Border: the temple-pillar frame recut in polished gold with glowing blue insets, four enamel roundels bearing a white-gold Sun glyph. Colors: radiant gold, glowing blue, twin-sun amber, tan robe.
@@ -206,14 +208,14 @@ Ornate circular badge, vivid full-color paint over polished bright gold, photore
 
 *(this plate is a half-and-half composite — attach BOTH)*
 
-**The Father — reference** → `assets/weeks/films/sw_jedi/primary/bronze/Vader_v3.png`
+**The Father — reference** → `masters/weeks/films/sw_jedi/primary/bronze/Vader_v3.png`
 ← `sw_reference/Vader.png`
 ← `sw_reference/Luke.png`
 ```
 ROUND medallion, aged bronze relief darkened to a near-black patina, photorealistic render, isolated background, the circular shape IS the frame — the DARKEST plate of the set, and deliberately the SAME upright standing silhouette as the bright Throne plate. TWO ATTACHED IMAGES: use the FIRST attached image (the masked black-armored figure) and the SECOND attached image (the young fair-haired figure) as exact likenesses, both re-rendered as darkened bronze sculpted relief. Composition: the young figure's face fills the near half of the disc, and across its other half the masked figure's helm emerges as a half-reflection in the same frame — not a separate figure standing beside him but literally overlapping his features, as if a dark mirror had been laid directly across the face at the exact moment of a revelation — one body, two truths finally meeting. Border: the monastic temple-pillar frame carved in bronze relief, patina darkened to match, broken by four roundels bearing the Sun glyph in oxidized dark-bronze relief — the same glyph the Throne wears, the shadow face of the same crown. NO lettering anywhere.
 ```
 
-**The Father — reference (colored)** → `assets/weeks/films/sw_jedi/primary/colored/Vader_v3.png`
+**The Father — reference (colored)** → `masters/weeks/films/sw_jedi/primary/colored/Vader_v3.png`
 ← `sw_reference/Vader.png`
 ← `sw_reference/Luke.png`
 ```
@@ -222,13 +224,13 @@ Ornate circular badge, vivid full-color paint over dark iron and cold silver, ph
 
 ### Ninth (Unfound) — Yoda
 
-**Yoda — reference** → `assets/weeks/films/sw_jedi/primary/bronze/Yoda_v3.png`
+**Yoda — reference** → `masters/weeks/films/sw_jedi/primary/bronze/Yoda_v3.png`
 ← `sw_reference/Yoda.png`
 ```
 ROUND medallion, aged bronze relief fading to bare unpatinated metal at the rim, photorealistic render, isolated background, the circular shape IS the frame — hidden from every star chart. Use the ATTACHED IMAGE as the exact likeness of the central figure — the small long-eared elder's own face, build and robe kept faithfully, re-rendered as aged bronze sculpted relief. Pose and staging: the attached figure alone inside a small hut sunk deep in a tangled swamp, seated in quiet meditation, one gnarled hand resting on a walking stick, no visitor, no signal, no map marking this place — nine centuries of exile worn as simple, patient stillness. Border: the monastic temple-pillar frame carved in bronze relief, its pillars breaking open into bare swamp-vine at the top where the bronze fades to bare metal, NO roundel glyph — this seat answers to no single day. NO lettering anywhere.
 ```
 
-**Yoda — reference (colored)** → `assets/weeks/films/sw_jedi/primary/colored/Yoda_v3.png`
+**Yoda — reference (colored)** → `masters/weeks/films/sw_jedi/primary/colored/Yoda_v3.png`
 ← `sw_reference/Yoda.png`
 ```
 Ornate circular badge, vivid full-color paint over pale fading bronze, photorealistic render, perfectly centered, isolated on white background. Use the ATTACHED IMAGE as the exact likeness of the central figure, in full saturated color as a fresh painting. Pose and staging: the attached figure seated in meditation inside a small swamp hut, a walking stick at rest, tangled vines pressing close outside. Border: the temple-pillar frame recut in pale fading bronze, its pillars breaking into bare vine at the top, no day-glyph roundel. Colors: swamp green, fog grey, warm hut-light amber.
@@ -240,13 +242,13 @@ Ornate circular badge, vivid full-color paint over pale fading bronze, photoreal
 
 ### Monday — Tarkin
 
-**Tarkin — reference** → `assets/weeks/films/sw_sith/primary/bronze/Tarkin_v3.png`
+**Tarkin — reference** → `masters/weeks/films/sw_sith/primary/bronze/Tarkin_v3.png`
 ← `sw_reference/Tarkin.png`
 ```
 ROUND medallion, aged bronze relief, photorealistic render, isolated background, the circular shape IS the frame. Use the ATTACHED IMAGE as the exact likeness of the central figure — the gaunt uniformed officer's face and build kept faithfully, re-rendered as warm aged-bronze sculpted relief, cold and calculating. Pose and staging: the attached figure standing rigid at a viewport overlooking a moon-sized battle station's own curved horizon, hands clasped behind the back, the thin face lit only by the pale glow of a targeting readout — dread worn as a governing philosophy rather than a threat. Border: an authoritarian cog frame carved in bronze relief, interlocking gear-teeth segments, fine invented-glyph tick ornament, broken by four roundels bearing the Moon crescent glyph in bronze relief. NO lettering anywhere.
 ```
 
-**Tarkin — reference (colored)** → `assets/weeks/films/sw_sith/primary/colored/Tarkin_v3.png`
+**Tarkin — reference (colored)** → `masters/weeks/films/sw_sith/primary/colored/Tarkin_v3.png`
 ← `sw_reference/Tarkin.png`
 ```
 Ornate circular badge, vivid full-color paint over black-and-red steel, photorealistic render, perfectly centered, isolated on white background. Use the ATTACHED IMAGE as the exact likeness of the central figure, in full saturated color as a fresh painting. Pose and staging: the attached figure rigid at a viewport, a battle station's curved horizon glowing beyond, hands clasped behind the back. Border: the cog frame recut in black steel with red inlays, four enamel roundels bearing a blue Moon crescent. Colors: regime grey, indigo black, readout blue, red accent lighting.
@@ -254,13 +256,13 @@ Ornate circular badge, vivid full-color paint over black-and-red steel, photorea
 
 ### Tuesday — General Grievous
 
-**Grievous — reference** → `assets/weeks/films/sw_sith/primary/bronze/Grievous_v3.png`
+**Grievous — reference** → `masters/weeks/films/sw_sith/primary/bronze/Grievous_v3.png`
 ← `sw_reference/Grievous.png`
 ```
 ROUND medallion, aged bronze relief, photorealistic render, isolated background, the circular shape IS the frame. Use the ATTACHED IMAGE as the exact likeness of the central figure — the multi-armed war-cyborg's own plating, mask and cape kept faithfully, re-rendered as warm aged-bronze sculpted relief, relentless and mechanical. Pose and staging: the attached figure mid-stride on clawed limbs, extra arms unfolding from beneath the cape, a row of captured blade-hilts clipped like trophies across the chest-plate — wrath as a collection. Border: an authoritarian cog frame carved in bronze relief, interlocking gear-teeth segments, fine invented-glyph tick ornament, broken by four roundels bearing the Mars glyph in bronze relief. NO lettering anywhere.
 ```
 
-**Grievous — reference (colored)** → `assets/weeks/films/sw_sith/primary/colored/Grievous_v3.png`
+**Grievous — reference (colored)** → `masters/weeks/films/sw_sith/primary/colored/Grievous_v3.png`
 ← `sw_reference/Grievous.png`
 ```
 Ornate circular badge, vivid full-color paint over black-and-red steel, photorealistic render, perfectly centered, isolated on white background. Use the ATTACHED IMAGE as the exact likeness of the central figure, in full saturated color as a fresh painting. Pose and staging: the attached figure mid-stride on four limbs, a row of captured blade-hilts trophied across the chest-plate. Border: the cog frame recut in black steel with red inlays, four enamel roundels bearing an orange Mars glyph. Colors: gunmetal grey, ember orange, trophy silver, cape-black.
@@ -268,13 +270,13 @@ Ornate circular badge, vivid full-color paint over black-and-red steel, photorea
 
 ### Wednesday — Jabba the Hutt
 
-**Jabba — reference** → `assets/weeks/films/sw_sith/primary/bronze/Jabba_v3.png`
+**Jabba — reference** → `masters/weeks/films/sw_sith/primary/bronze/Jabba_v3.png`
 ← `sw_reference/Jabba.png`
 ```
 ROUND medallion, aged bronze relief, photorealistic render, isolated background, the circular shape IS the frame. Use the ATTACHED IMAGE as the exact likeness of the central figure — the enormous coiled slug-like crime-lord's own face and bulk kept faithfully, re-rendered as warm aged-bronze sculpted relief, heavy and glittering. Pose and staging: the attached figure sprawled across its own raised dais, a thick chain of stolen wealth draped across the coiled bulk, one small clawed hand resting on a pile of coin — cunning worn as fat. Border: an authoritarian cog frame carved in bronze relief, interlocking gear-teeth segments, fine invented-glyph tick ornament, broken by four roundels bearing the Mercury glyph in bronze relief. NO lettering anywhere.
 ```
 
-**Jabba — reference (colored)** → `assets/weeks/films/sw_sith/primary/colored/Jabba_v3.png`
+**Jabba — reference (colored)** → `masters/weeks/films/sw_sith/primary/colored/Jabba_v3.png`
 ← `sw_reference/Jabba.png`
 ```
 Ornate circular badge, vivid full-color paint over black-and-red steel, photorealistic render, perfectly centered, isolated on white background. Use the ATTACHED IMAGE as the exact likeness of the central figure, in full saturated color as a fresh painting. Pose and staging: the attached figure sprawled on its dais, a chain of wealth across the bulk, one clawed hand on a pile of coin. Border: the cog frame recut in black steel with red inlays, four enamel roundels bearing a purple Mercury glyph. Colors: olive green, coin gold, violet shadow, chain-silver.
@@ -282,13 +284,13 @@ Ornate circular badge, vivid full-color paint over black-and-red steel, photorea
 
 ### Thursday — Count Dooku
 
-**Dooku — reference** → `assets/weeks/films/sw_sith/primary/bronze/Dooku_v3.png`
+**Dooku — reference** → `masters/weeks/films/sw_sith/primary/bronze/Dooku_v3.png`
 ← `sw_reference/Dooku.png`
 ```
 ROUND medallion, aged bronze relief, photorealistic render, isolated background, the circular shape IS the frame. Use the ATTACHED IMAGE as the exact likeness of the central figure — the tall silver-haired aristocrat's face, cape and bearing kept faithfully, re-rendered as warm aged-bronze sculpted relief, refined and seductive. Pose and staging: the attached figure in an elegant dark cape, a curved-hilt energy blade held loosely as if OFFERING it rather than threatening with it, the other hand extended in a falsely generous gesture — the fallen teacher handing down "truths" that poison. Border: an authoritarian cog frame carved in bronze relief, interlocking gear-teeth segments, fine invented-glyph tick ornament, broken by four roundels bearing the Jupiter glyph in bronze relief. NO lettering anywhere.
 ```
 
-**Dooku — reference (colored)** → `assets/weeks/films/sw_sith/primary/colored/Dooku_v3.png`
+**Dooku — reference (colored)** → `masters/weeks/films/sw_sith/primary/colored/Dooku_v3.png`
 ← `sw_reference/Dooku.png`
 ```
 Ornate circular badge, vivid full-color paint over black-and-red steel, photorealistic render, perfectly centered, isolated on white background. Use the ATTACHED IMAGE as the exact likeness of the central figure, in full saturated color as a fresh painting. Pose and staging: the attached figure in an elegant dark cape, a curved-hilt blade held loosely, one hand extended in a falsely generous gesture. Border: the cog frame recut in black steel with red inlays, four enamel roundels bearing a yellow Jupiter glyph. Colors: amber gold, cape black, silver hair, curved-hilt steel.
@@ -296,13 +298,13 @@ Ornate circular badge, vivid full-color paint over black-and-red steel, photorea
 
 ### Friday — Maul
 
-**Maul — reference** → `assets/weeks/films/sw_sith/primary/bronze/Maul_v3.png`
+**Maul — reference** → `masters/weeks/films/sw_sith/primary/bronze/Maul_v3.png`
 ← `sw_reference/Maul.png`
 ```
 ROUND medallion, aged bronze relief, photorealistic render, isolated background, the circular shape IS the frame. Use the ATTACHED IMAGE as the exact likeness of the central figure — the horned, tattoo-patterned face and build kept faithfully, re-rendered as warm aged-bronze sculpted relief, bitter and undying. Pose and staging: the attached figure crouched low on mismatched mechanical legs, a twin-bladed energy weapon spinning at rest, the face fixed on a small flickering holo-image of an old enemy — a decades-long vendetta that outlived the body it began in. Border: an authoritarian cog frame carved in bronze relief, interlocking gear-teeth segments, fine invented-glyph tick ornament, broken by four roundels bearing the Venus glyph in bronze relief. NO lettering anywhere.
 ```
 
-**Maul — reference (colored)** → `assets/weeks/films/sw_sith/primary/colored/Maul_v3.png`
+**Maul — reference (colored)** → `masters/weeks/films/sw_sith/primary/colored/Maul_v3.png`
 ← `sw_reference/Maul.png`
 ```
 Ornate circular badge, vivid full-color paint over black-and-red steel, photorealistic render, perfectly centered, isolated on white background. Use the ATTACHED IMAGE as the exact likeness of the central figure, in full saturated color as a fresh painting. Pose and staging: the attached figure crouched on mechanical legs, a small flickering blue holo-image of an old enemy hovering before him. Border: the cog frame recut in black steel with red inlays, four enamel roundels bearing a red Venus glyph. Colors: rose red, horn black, holo-flicker blue, mechanical-leg chrome.
@@ -310,13 +312,13 @@ Ornate circular badge, vivid full-color paint over black-and-red steel, photorea
 
 ### Saturday — Boba Fett
 
-**Boba Fett — reference** → `assets/weeks/films/sw_sith/primary/bronze/BobaFett_v3.png`
+**Boba Fett — reference** → `masters/weeks/films/sw_sith/primary/bronze/BobaFett_v3.png`
 ← `sw_reference/BobaFett.png`
 ```
 ROUND medallion, aged bronze relief, photorealistic render, isolated background, the circular shape IS the frame. Use the ATTACHED IMAGE as the exact likeness of the central figure — the scarred clan-forged bounty-hunter armor and visored helm kept faithfully, re-rendered as warm aged-bronze sculpted relief, patient and unreadable. Pose and staging: the attached figure standing motionless, a tracking device held level and unblinking in one hand, the visored helm giving nothing away — patience as the only virtue a hunter truly needs. Border: an authoritarian cog frame carved in bronze relief, interlocking gear-teeth segments, fine invented-glyph tick ornament, broken by four roundels bearing the Saturn glyph in bronze relief. NO lettering anywhere.
 ```
 
-**Boba Fett — reference (colored)** → `assets/weeks/films/sw_sith/primary/colored/BobaFett_v3.png`
+**Boba Fett — reference (colored)** → `masters/weeks/films/sw_sith/primary/colored/BobaFett_v3.png`
 ← `sw_reference/BobaFett.png`
 ```
 Ornate circular badge, vivid full-color paint over black-and-red steel, photorealistic render, perfectly centered, isolated on white background. Use the ATTACHED IMAGE as the exact likeness of the central figure, in full saturated color as a fresh painting. Pose and staging: the attached figure standing motionless with a tracking device held level, the visored helm unreadable. Border: the cog frame recut in black steel with red inlays, four enamel roundels bearing a green Saturn glyph. Colors: armor green, battle-grey, tracking-device amber, visor black.
@@ -324,13 +326,13 @@ Ornate circular badge, vivid full-color paint over black-and-red steel, photorea
 
 ### Sunday (Throne) — Palpatine
 
-**Palpatine — reference** → `assets/weeks/films/sw_sith/primary/bronze/Palpatine_v3.png`
+**Palpatine — reference** → `masters/weeks/films/sw_sith/primary/bronze/Palpatine_v3.png`
 ← `sw_reference/Palpatine.png`
 ```
 ROUND medallion, brightly polished bronze relief, photorealistic render, isolated background, the circular shape IS the frame — the BRIGHTEST plate of the set. Use the ATTACHED IMAGE as the exact likeness of the central figure — the hooded, pale-faced robed ruler kept faithfully, re-rendered as brightly polished bronze sculpted relief. Pose and staging: the attached figure ENTHRONED within a tall cylindrical chamber, hooded robes pooling around a high-backed seat, hands resting still on its arms, nothing in motion at all — power that no longer needs to move to be absolute. Border: an authoritarian cog frame carved in bronze relief, interlocking gear-teeth segments, fine invented-glyph tick ornament, broken by four roundels bearing the Sun glyph in brightly polished bronze relief. NO lettering anywhere.
 ```
 
-**Palpatine — reference (colored)** → `assets/weeks/films/sw_sith/primary/colored/Palpatine_v3.png`
+**Palpatine — reference (colored)** → `masters/weeks/films/sw_sith/primary/colored/Palpatine_v3.png`
 ← `sw_reference/Palpatine.png`
 ```
 Ornate circular badge, vivid full-color paint over polished dark gold-and-red, photorealistic render, perfectly centered, isolated on white background. Use the ATTACHED IMAGE as the exact likeness of the central figure, in full saturated color as a fresh painting. Pose and staging: the attached figure enthroned, dark robes pooling around a high-backed seat, the cylindrical crimson chamber glowing around it. Border: the cog frame recut in dark gold with crimson inlays, four enamel roundels bearing a white-gold Sun glyph. Colors: blood-gold, chamber crimson, hooded black, pale skin.
@@ -340,13 +342,13 @@ Ornate circular badge, vivid full-color paint over polished dark gold-and-red, p
 
 *(the reference's blade reads RED — correct for this corrupted-arc seat)*
 
-**Anakin — reference** → `assets/weeks/films/sw_sith/primary/bronze/Anakin_v3.png`
+**Anakin — reference** → `masters/weeks/films/sw_sith/primary/bronze/Anakin_v3.png`
 ← `sw_reference/Anakin.png`
 ```
 ROUND medallion, aged bronze relief darkened to a near-black patina, photorealistic render, isolated background, the circular shape IS the frame — the DARKEST plate of the set, and deliberately the SAME throne silhouette as the bright Throne plate, though the figure in it kneels rather than reigns. Use the ATTACHED IMAGE as the exact likeness of the central figure — face, hair and robes kept faithfully, re-rendered as darkened bronze sculpted relief. Pose and staging: the attached figure KNEELING before the same high-backed seat the Throne plate shows, head bowed, an energy blade lowered at his side, the seat itself empty above him — the servant who did not know he served, groomed from childhood. Border: the authoritarian cog frame carved in bronze relief, patina darkened to match, broken by four roundels bearing the Sun glyph in oxidized dark-bronze relief — the same glyph the Throne wears, its shadow face. NO lettering anywhere.
 ```
 
-**Anakin — reference (colored)** → `assets/weeks/films/sw_sith/primary/colored/Anakin_v3.png`
+**Anakin — reference (colored)** → `masters/weeks/films/sw_sith/primary/colored/Anakin_v3.png`
 ← `sw_reference/Anakin.png`
 ```
 Ornate circular badge, vivid full-color paint over dark iron and cold silver, photorealistic render, perfectly centered, isolated on white background — the identical kneeling composition to the Throne's own colored plate, palette inverted to night. Use the ATTACHED IMAGE as the exact likeness of the central figure, in full saturated color as a fresh painting: robes of warm tan darkening toward armor-black as they fall, a red blade lowered at his side, head bowed before an empty high-backed seat. Border: the cog frame recut in dark iron and cold silver, four roundels bearing a dull ember Sun glyph. Colors: iron black, cold silver, warm robe-tan fading to armor-black, one red blade accent.
@@ -357,13 +359,13 @@ Ornate circular badge, vivid full-color paint over dark iron and cold silver, ph
 *(CROP to the hooded figure first)*
 *(the source is book-cover art; a second kneeling figure shares the frame)*
 
-**Plagueis — reference** → `assets/weeks/films/sw_sith/primary/bronze/Plagueis_v3.png`
+**Plagueis — reference** → `masters/weeks/films/sw_sith/primary/bronze/Plagueis_v3.png`
 ← `sw_reference/Plagueis.png`
 ```
 ROUND medallion, aged bronze relief fading to bare unpatinated metal at the rim, photorealistic render, isolated background, the circular shape IS the frame — a figure that exists only as a story. Use the ATTACHED IMAGE as the likeness of the SHADOW figure only — the tall hooded long-skulled elder — and render it deliberately UNRESOLVED: half-formed in curling smoke, never fully solid, as if remembered rather than seen. Pose and staging: an opera-house box glimpsed in silhouette, a young apprentice's own listening profile lit in the foreground, and behind him the attached figure barely suggested in the smoke — a legend told only in whispers, of one who mastered death and was killed in his sleep anyway. Border: an authoritarian cog frame carved in bronze relief, its gear-teeth dissolving into bare metal at the top where the story runs out, NO roundel glyph — this seat answers to no single day. NO lettering anywhere.
 ```
 
-**Plagueis — reference (colored)** → `assets/weeks/films/sw_sith/primary/colored/Plagueis_v3.png`
+**Plagueis — reference (colored)** → `masters/weeks/films/sw_sith/primary/colored/Plagueis_v3.png`
 ← `sw_reference/Plagueis.png`
 ```
 Ornate circular badge, vivid full-color paint over pale fading dark gold, photorealistic render, perfectly centered, isolated on white background. Use the ATTACHED IMAGE as the likeness of the SHADOW figure only, kept deliberately half-formed and smoke-dissolved, never fully resolved. Pose and staging: an opera-box scene in full color, a young apprentice's lit profile in the foreground, the attached figure barely suggested in curling smoke behind him. Border: the cog frame recut in pale fading dark gold, its gear-teeth dissolving at the top, no day-glyph roundel. Colors: violet-black, smoke grey, warm listening-light gold, faint unresolved shadow-purple.
@@ -375,13 +377,13 @@ Ornate circular badge, vivid full-color paint over pale fading dark gold, photor
 
 ### Monday — Rose Tico
 
-**Rose — reference** → `assets/weeks/films/sw_dyad/primary/bronze/Rose_v3.png`
+**Rose — reference** → `masters/weeks/films/sw_dyad/primary/bronze/Rose_v3.png`
 ← `sw_reference/Rose.png`
 ```
 ROUND medallion, aged bronze relief, photorealistic render, isolated background, the circular shape IS the frame. Use the ATTACHED IMAGE as the exact likeness of the central figure — face, hair and mechanic's coveralls kept faithfully, re-rendered as warm aged-bronze sculpted relief, warm and grounded. Pose and staging: the attached figure kneeling beside a damaged transport engine, tools spread with careful order around her, one hand resting gently on its housing as if on a living thing — serenity built out of care, saving what she loves rather than fighting what she hates. Border: a FUSED frame carved in bronze relief, alternating monastic temple-pillar segments and interlocking gear-teeth segments around the same ring, fine invented-glyph tick ornament, broken by four roundels bearing the Moon crescent glyph in bronze relief. NO lettering anywhere.
 ```
 
-**Rose — reference (colored)** → `assets/weeks/films/sw_dyad/primary/colored/Rose_v3.png`
+**Rose — reference (colored)** → `masters/weeks/films/sw_dyad/primary/colored/Rose_v3.png`
 ← `sw_reference/Rose.png`
 ```
 Ornate circular badge, vivid full-color paint over fused bronze-and-steel, photorealistic render, perfectly centered, isolated on white background. Use the ATTACHED IMAGE as the exact likeness of the central figure, in full saturated color as a fresh painting. Pose and staging: the attached figure kneeling beside a damaged engine, tools spread around her, one hand resting on its housing. Border: the fused temple-pillar-and-gear frame recut in polished bronze and steel, four enamel roundels bearing a blue Moon crescent. Colors: dusk blue, engine copper, mechanic tan, warm skin-tone.
@@ -389,13 +391,13 @@ Ornate circular badge, vivid full-color paint over fused bronze-and-steel, photo
 
 ### Tuesday — Finn
 
-**Finn — reference** → `assets/weeks/films/sw_dyad/primary/bronze/Finn_v3.png`
+**Finn — reference** → `masters/weeks/films/sw_dyad/primary/bronze/Finn_v3.png`
 ← `sw_reference/Finn.png`
 ```
 ROUND medallion, aged bronze relief, photorealistic render, isolated background, the circular shape IS the frame. Use the ATTACHED IMAGE as the exact likeness of the central figure — face and build kept faithfully, re-rendered as warm aged-bronze sculpted relief, breaking free and unpolished. Pose and staging: the attached figure mid-stride, HALF still in white soldier's plate and half already stripped down to a stolen jacket, a sidearm held with raw untrained determination — the soldier who walked away from the regime that made him. Border: a FUSED frame carved in bronze relief, alternating temple-pillar and gear-teeth segments, fine invented-glyph tick ornament, broken by four roundels bearing the Mars glyph in bronze relief. NO lettering anywhere.
 ```
 
-**Finn — reference (colored)** → `assets/weeks/films/sw_dyad/primary/colored/Finn_v3.png`
+**Finn — reference (colored)** → `masters/weeks/films/sw_dyad/primary/colored/Finn_v3.png`
 ← `sw_reference/Finn.png`
 ```
 Ornate circular badge, vivid full-color paint over fused bronze-and-steel, photorealistic render, perfectly centered, isolated on white background. Use the ATTACHED IMAGE as the exact likeness of the central figure, in full saturated color as a fresh painting. Pose and staging: the attached figure half in white soldier plate and half in a stolen brown jacket, a sidearm held with raw determination. Border: the fused frame recut in polished bronze and steel, four enamel roundels bearing an orange Mars glyph. Colors: ember orange, soldier white, jacket brown, warm skin-tone.
@@ -403,13 +405,13 @@ Ornate circular badge, vivid full-color paint over fused bronze-and-steel, photo
 
 ### Tuesday (alt) — Captain Phasma
 
-**Phasma — reference (alt)** → `assets/weeks/films/sw_dyad/primary/bronze/Phasma_v3.png`
+**Phasma — reference (alt)** → `masters/weeks/films/sw_dyad/primary/bronze/Phasma_v3.png`
 ← `sw_reference/Phasma.png`
 ```
 ROUND medallion, aged bronze relief, photorealistic render, isolated background, the circular shape IS the frame. Use the ATTACHED IMAGE as the exact likeness of the central figure — the mirror-polished command armor and long cape kept faithfully, re-rendered as warm aged-bronze sculpted relief, polished and unbending. Pose and staging: the attached figure standing immaculate, the long cape settled still around the shoulders, one gloved hand resting on a baton — the same armor as the deserter's, and the opposite choice made in it. Border: a FUSED frame carved in bronze relief, alternating temple-pillar and gear-teeth segments, fine invented-glyph tick ornament, broken by four roundels bearing the Mars glyph in bronze relief. NO lettering anywhere.
 ```
 
-**Phasma — reference (alt, colored)** → `assets/weeks/films/sw_dyad/primary/colored/Phasma_v3.png`
+**Phasma — reference (alt, colored)** → `masters/weeks/films/sw_dyad/primary/colored/Phasma_v3.png`
 ← `sw_reference/Phasma.png`
 ```
 Ornate circular badge, vivid full-color paint over fused bronze-and-steel, photorealistic render, perfectly centered, isolated on white background. Use the ATTACHED IMAGE as the exact likeness of the central figure, in full saturated color as a fresh painting. Pose and staging: the attached figure standing immaculate in gleaming mirror-plated armor and a flowing silver cape, one gloved hand on a baton. Border: the fused frame recut in polished bronze and steel, four enamel roundels bearing an orange Mars glyph. Colors: chrome silver, cape grey, ember-orange accent, polished-plate white.
@@ -419,13 +421,13 @@ Ornate circular badge, vivid full-color paint over fused bronze-and-steel, photo
 
 *(CROP out the background/foreground blur first)*
 
-**Maz — reference** → `assets/weeks/films/sw_dyad/primary/bronze/Maz_v3.png`
+**Maz — reference** → `masters/weeks/films/sw_dyad/primary/bronze/Maz_v3.png`
 ← `sw_reference/Maz.png`
 ```
 ROUND medallion, aged bronze relief, photorealistic render, isolated background, the circular shape IS the frame. Use the ATTACHED IMAGE as the exact likeness of the central figure — the tiny wrinkled elder's own face and oversized round goggles kept faithfully, re-rendered as warm aged-bronze sculpted relief, ancient and knowing. Pose and staging: the attached figure perched behind a cluttered castle bar, the oversized goggled eyes fixed with a thousand years of accumulated judgment, one hand resting on a shelf of collected relics — wisdom as a collection nobody else thought to keep. Border: a FUSED frame carved in bronze relief, alternating temple-pillar and gear-teeth segments, fine invented-glyph tick ornament, broken by four roundels bearing the Mercury glyph in bronze relief. NO lettering anywhere.
 ```
 
-**Maz — reference (colored)** → `assets/weeks/films/sw_dyad/primary/colored/Maz_v3.png`
+**Maz — reference (colored)** → `masters/weeks/films/sw_dyad/primary/colored/Maz_v3.png`
 ← `sw_reference/Maz.png`
 ```
 Ornate circular badge, vivid full-color paint over fused bronze-and-steel, photorealistic render, perfectly centered, isolated on white background. Use the ATTACHED IMAGE as the exact likeness of the central figure, in full saturated color as a fresh painting. Pose and staging: the attached figure perched behind a cluttered relic-lined bar, one hand resting on a shelf holding an old artifact. Border: the fused frame recut in polished bronze and steel, four enamel roundels bearing a purple Mercury glyph. Colors: violet, relic bronze, goggle amber, warm wood-brown.
@@ -435,13 +437,13 @@ Ornate circular badge, vivid full-color paint over fused bronze-and-steel, photo
 
 *(CROP out the background first)*
 
-**DJ — reference (alt)** → `assets/weeks/films/sw_dyad/primary/bronze/DJ_v3.png`
+**DJ — reference (alt)** → `masters/weeks/films/sw_dyad/primary/bronze/DJ_v3.png`
 ← `sw_reference/DJ.png`
 ```
 ROUND medallion, aged bronze relief, photorealistic render, isolated background, the circular shape IS the frame. Use the ATTACHED IMAGE as the exact likeness of the central figure — face, unkempt hair and mismatched patchwork coat kept faithfully, re-rendered as warm aged-bronze sculpted relief, shifty and self-interested. Pose and staging: the attached figure lounging inside a cramped starship hold, a stolen datapad balanced on one knee, a sly half-smile that has already priced both sides of the war — greed with no cause but itself. Border: a FUSED frame carved in bronze relief, alternating temple-pillar and gear-teeth segments, fine invented-glyph tick ornament, broken by four roundels bearing the Mercury glyph in bronze relief. NO lettering anywhere.
 ```
 
-**DJ — reference (alt, colored)** → `assets/weeks/films/sw_dyad/primary/colored/DJ_v3.png`
+**DJ — reference (alt, colored)** → `masters/weeks/films/sw_dyad/primary/colored/DJ_v3.png`
 ← `sw_reference/DJ.png`
 ```
 Ornate circular badge, vivid full-color paint over fused bronze-and-steel, photorealistic render, perfectly centered, isolated on white background. Use the ATTACHED IMAGE as the exact likeness of the central figure, in full saturated color as a fresh painting. Pose and staging: the attached figure lounging in a cramped hold, a glowing blue datapad balanced on one knee, a sly half-smile. Border: the fused frame recut in polished bronze and steel, four enamel roundels bearing a purple Mercury glyph. Colors: patchwork multicolor, datapad blue, violet shadow, worn metal-grey.
@@ -451,13 +453,13 @@ Ornate circular badge, vivid full-color paint over fused bronze-and-steel, photo
 
 *(age the attached likeness (see prompt))*
 
-**Old Leia — reference** → `assets/weeks/films/sw_dyad/primary/bronze/Leia_v3.png`
+**Old Leia — reference** → `masters/weeks/films/sw_dyad/primary/bronze/Leia_v3.png`
 ← `sw_reference/Leia.png`
 ```
 ROUND medallion, aged bronze relief, photorealistic render, isolated background, the circular shape IS the frame. Use the ATTACHED IMAGE as the likeness of the central figure but render her OLDER than the reference — decades further on, silver-streaked hair still bound in the same braided style, the face weathered but steady — re-rendered as warm aged-bronze sculpted relief, weathered and giving. Pose and staging: the attached figure standing with one hand extended in guidance to someone just outside the frame, the other resting closed at her side, a faint inner-energy glow gathering at her fingertips — decades of sacrifice given away as teaching. Border: a FUSED frame carved in bronze relief, alternating temple-pillar and gear-teeth segments, fine invented-glyph tick ornament, broken by four roundels bearing the Jupiter glyph in bronze relief. NO lettering anywhere.
 ```
 
-**Old Leia — reference (colored)** → `assets/weeks/films/sw_dyad/primary/colored/Leia_v3.png`
+**Old Leia — reference (colored)** → `masters/weeks/films/sw_dyad/primary/colored/Leia_v3.png`
 ← `sw_reference/Leia.png`
 ```
 Ornate circular badge, vivid full-color paint over fused bronze-and-steel, photorealistic render, perfectly centered, isolated on white background. Use the ATTACHED IMAGE as the likeness of the central figure, aged decades further on — silver-streaked braided hair, a weathered but steady face — in full saturated color as a fresh painting. Pose and staging: one hand extended in guidance with a faint white inner-light glow gathering at the fingertips. Border: the fused frame recut in polished bronze and steel, four enamel roundels bearing a yellow Jupiter glyph. Colors: amber gold, silver hair, inner-light white, warm skin-tone.
@@ -467,13 +469,13 @@ Ornate circular badge, vivid full-color paint over fused bronze-and-steel, photo
 
 *(age the attached likeness (see prompt))*
 
-**Old Han — reference** → `assets/weeks/films/sw_dyad/primary/bronze/Han_v3.png`
+**Old Han — reference** → `masters/weeks/films/sw_dyad/primary/bronze/Han_v3.png`
 ← `sw_reference/Han.png`
 ```
 ROUND medallion, aged bronze relief, photorealistic render, isolated background, the circular shape IS the frame. Use the ATTACHED IMAGE as the likeness of the central figure but render him OLDER than the reference — greying hair, a lined face, the same worn jacket — re-rendered as warm aged-bronze sculpted relief, aching and resolute. Pose and staging: the attached figure walking alone out onto a narrow exposed bridge over a black chasm, BOTH hands open and empty rather than reaching for a weapon, a masked figure waiting distant at the far end — a father who walks out knowing exactly how this ends. Border: a FUSED frame carved in bronze relief, alternating temple-pillar and gear-teeth segments, fine invented-glyph tick ornament, broken by four roundels bearing the Venus glyph in bronze relief. NO lettering anywhere.
 ```
 
-**Old Han — reference (colored)** → `assets/weeks/films/sw_dyad/primary/colored/Han_v3.png`
+**Old Han — reference (colored)** → `masters/weeks/films/sw_dyad/primary/colored/Han_v3.png`
 ← `sw_reference/Han.png`
 ```
 Ornate circular badge, vivid full-color paint over fused bronze-and-steel, photorealistic render, perfectly centered, isolated on white background. Use the ATTACHED IMAGE as the likeness of the central figure, aged — greying hair, a worn jacket — in full saturated color as a fresh painting. Pose and staging: the attached figure walking alone onto a narrow bridge with both hands open and empty, a masked figure waiting distant at the far end. Border: the fused frame recut in polished bronze and steel, four enamel roundels bearing a red Venus glyph. Colors: rose red, bridge grey, distant-figure black, worn jacket-brown.
@@ -481,13 +483,13 @@ Ornate circular badge, vivid full-color paint over fused bronze-and-steel, photo
 
 ### Saturday — General Hux
 
-**Hux — reference** → `assets/weeks/films/sw_dyad/primary/bronze/Hux_v3.png`
+**Hux — reference** → `masters/weeks/films/sw_dyad/primary/bronze/Hux_v3.png`
 ← `sw_reference/Hux.png`
 ```
 ROUND medallion, aged bronze relief, photorealistic render, isolated background, the circular shape IS the frame. Use the ATTACHED IMAGE as the exact likeness of the central figure — face and crisp uniform kept faithfully, re-rendered as warm aged-bronze sculpted relief, seething and controlled. Pose and staging: the attached figure standing stiffly at attention on a warship bridge, his own reflection faintly doubled in the viewport beside him, a resentful glance cast sideways toward an empty command chair — envy dressed as discipline, waiting for a rival to fall. Border: a FUSED frame carved in bronze relief, alternating temple-pillar and gear-teeth segments, fine invented-glyph tick ornament, broken by four roundels bearing the Saturn glyph in bronze relief. NO lettering anywhere.
 ```
 
-**Hux — reference (colored)** → `assets/weeks/films/sw_dyad/primary/colored/Hux_v3.png`
+**Hux — reference (colored)** → `masters/weeks/films/sw_dyad/primary/colored/Hux_v3.png`
 ← `sw_reference/Hux.png`
 ```
 Ornate circular badge, vivid full-color paint over fused bronze-and-steel, photorealistic render, perfectly centered, isolated on white background. Use the ATTACHED IMAGE as the exact likeness of the central figure, in full saturated color as a fresh painting. Pose and staging: the attached figure stiff at attention in a crisp grey uniform, a resentful glance cast toward an empty command chair. Border: the fused frame recut in polished bronze and steel, four enamel roundels bearing a green Saturn glyph. Colors: regime grey, jade green, void black, red hair.
@@ -495,13 +497,13 @@ Ornate circular badge, vivid full-color paint over fused bronze-and-steel, photo
 
 ### Sunday (Throne) — Rey
 
-**Rey — reference** → `assets/weeks/films/sw_dyad/primary/bronze/Rey_v3.png`
+**Rey — reference** → `masters/weeks/films/sw_dyad/primary/bronze/Rey_v3.png`
 ← `sw_reference/Rey.png`
 ```
 ROUND medallion, brightly polished bronze relief, photorealistic render, isolated background, the circular shape IS the frame — the BRIGHTEST plate of the set. Use the ATTACHED IMAGE as the exact likeness of the central figure — face, hair and wrapped desert clothing kept faithfully, re-rendered as brightly polished bronze sculpted relief. Pose and staging: the attached figure standing tall with a golden-hilted energy blade held UPRIGHT rather than swung, twin suns of a desert horizon glowing behind her — the day half of a bound pair, justice chosen by someone who had every reason to choose otherwise. Border: a FUSED frame carved in bronze relief, alternating temple-pillar and gear-teeth segments, fine invented-glyph tick ornament, broken by four roundels bearing the Sun glyph in brightly polished bronze relief. NO lettering anywhere.
 ```
 
-**Rey — reference (colored)** → `assets/weeks/films/sw_dyad/primary/colored/Rey_v3.png`
+**Rey — reference (colored)** → `masters/weeks/films/sw_dyad/primary/colored/Rey_v3.png`
 ← `sw_reference/Rey.png`
 ```
 Ornate circular badge, vivid full-color paint over polished bright gold, photorealistic render, perfectly centered, isolated on white background. Use the ATTACHED IMAGE as the exact likeness of the central figure, in full saturated color as a fresh painting. Pose and staging: the attached figure standing tall in wrapped tan desert clothing, a golden-hilted energy blade held upright, twin desert suns glowing behind her. Border: the fused frame recut in polished gold, four enamel roundels bearing a white-gold Sun glyph. Colors: radiant gold, desert amber, scavenger tan, warm skin-tone.
@@ -509,13 +511,13 @@ Ornate circular badge, vivid full-color paint over polished bright gold, photore
 
 ### Sunday (Mirror, dual) — Kylo Ren
 
-**Kylo — reference** → `assets/weeks/films/sw_dyad/primary/bronze/Kylo_v3.png`
+**Kylo — reference** → `masters/weeks/films/sw_dyad/primary/bronze/Kylo_v3.png`
 ← `sw_reference/Kylo.png`
 ```
 ROUND medallion, aged bronze relief darkened to a near-black patina, photorealistic render, isolated background, the circular shape IS the frame — the DARKEST plate of the set, and deliberately the SAME upright standing silhouette as the bright Throne plate. Use the ATTACHED IMAGE as the exact likeness of the central figure — the dark-robed young warrior, his cracked chrome-and-black helm and unstable crossguard energy blade kept faithfully, re-rendered as darkened bronze sculpted relief. Pose and staging: the attached figure standing tall in the mirrored pose the Throne plate holds, the crossguard blade crackling and spitting held upright, a starless void behind him instead of suns — the night half of the same bound pair. Border: the FUSED frame carved in bronze relief, patina darkened to match, broken by four roundels bearing the Sun glyph in oxidized dark-bronze relief — the same glyph the Throne wears, its shadow face. NO lettering anywhere.
 ```
 
-**Kylo — reference (colored)** → `assets/weeks/films/sw_dyad/primary/colored/Kylo_v3.png`
+**Kylo — reference (colored)** → `masters/weeks/films/sw_dyad/primary/colored/Kylo_v3.png`
 ← `sw_reference/Kylo.png`
 ```
 Ornate circular badge, vivid full-color paint over dark iron and cold silver, photorealistic render, perfectly centered, isolated on white background — the identical upright composition to the Throne's own colored plate, palette inverted to night. Use the ATTACHED IMAGE as the exact likeness of the central figure, in full saturated color as a fresh painting: dark robes, a fine crack visible across the chrome-black helm, a crackling red crossguard blade held upright, a starless void behind. Border: the fused frame recut in dark iron and cold silver, four roundels bearing a dull ember Sun glyph. Colors: iron black, cold silver, crackling red blade, cracked-chrome accent.

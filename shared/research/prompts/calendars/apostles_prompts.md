@@ -48,7 +48,7 @@ carrying his traditional attribute; the field runs warm gold at the
 crown, cooling and darkening toward the root, so the pair beside
 midnight visibly sinks toward the purple of Hatred's own arm.
 
-**Drop paths:** `assets/calendars/apostles/primary/colored/<Figure>.png` — a sourceless
+**Drop paths:** `masters/calendars/apostles/primary/colored/<Figure>.png` — a sourceless
 calendar-mount root (PromptPainter appends `_gem`/`_gpt`). Thirteen
 files — the twelve plus the axle: `Peter.png`, `Andrew.png`,
 `James.png`, `John.png`, `Philip.png`, `Bartholomew.png`, `Thomas.png`,
@@ -63,13 +63,13 @@ circular window shape IS the frame, NO lettering anywhere in any image.
 
 ## The crown pair — Peter (12–14h) & Andrew (10–12h)
 
-**Peter — the rock** → `assets/calendars/apostles/primary/colored/Peter.png`
+**Peter — the rock** → `masters/calendars/apostles/primary/colored/Peter.png`
 
 ```
 ROUND rose-window stained-glass medallion, night-window register, photorealistic render, isolated background, the circular window shape IS the frame. Radiant gold, warm amber and white glass, the brightest of the twelve. Center: a robust bearded apostle, a gold halo behind him, holding up two CROSSED KEYS (the keys of the kingdom, Matthew 16:19) in one hand, resting the other on a great foundation stone, a small inverted cross faint behind his shoulder — the rock on whom the Church is built, first of the Twelve. Border: the shared knotted-Net leadwork rim in dark gold. Palette: radiant gold, warm amber, white light, dark-gold lead. NO lettering anywhere.
 ```
 
-**Andrew — the first-called** → `assets/calendars/apostles/primary/colored/Andrew.png`
+**Andrew — the first-called** → `masters/calendars/apostles/primary/colored/Andrew.png`
 
 ```
 ROUND rose-window stained-glass medallion, night-window register, photorealistic render, isolated background, the circular window shape IS the frame. Warm gold and sea-blue glass, bright and open. Center: a bearded apostle with a gold halo leaning on a great DIAGONAL X-CROSS (the saltire, crux decussata) that fills the disc, a fisherman's net gathered over his other arm — Peter's brother, first of the disciples to follow, the fisher who left his nets. Border: the shared knotted-Net leadwork rim in dark gold. Palette: warm gold, sea blue, white light, dark-gold lead. NO lettering anywhere.
@@ -77,13 +77,13 @@ ROUND rose-window stained-glass medallion, night-window register, photorealistic
 
 ## The Sons of Thunder — James the Greater (14–16h) & John (16–18h)
 
-**James the Greater — the pilgrim** → `assets/calendars/apostles/primary/colored/James.png`
+**James the Greater — the pilgrim** → `masters/calendars/apostles/primary/colored/James.png`
 
 ```
 ROUND rose-window stained-glass medallion, night-window register, photorealistic render, isolated background, the circular window shape IS the frame. Warm russet, gold and traveller's-brown glass. Center: an apostle with a gold halo dressed as a pilgrim, a tall walking staff in hand, a broad hat and a large SCALLOP SHELL at his breast (the Camino sign), a road winding behind him — the first apostle to be martyred, the far-travelling missionary of Compostela. Border: the shared knotted-Net leadwork rim in dark gold. Palette: warm russet, gold, traveller brown, dark-gold lead. NO lettering anywhere.
 ```
 
-**John — the eagle** → `assets/calendars/apostles/primary/colored/John.png`
+**John — the eagle** → `masters/calendars/apostles/primary/colored/John.png`
 
 ```
 ROUND rose-window stained-glass medallion, night-window register, photorealistic render, isolated background, the circular window shape IS the frame. Clear white, sky-blue and eagle-gold glass, the highest-toned of the middle pairs. Center: a youthful beardless apostle with a gold halo, an EAGLE at his shoulder (his evangelist symbol, the gospel that flies highest) and a chalice with a small serpent rising from it in his hand, an open book on his knee — the beloved disciple, the eagle-eyed theologian, *"in the beginning was the Word."* Border: the shared knotted-Net leadwork rim in dark gold. Palette: clear white, sky blue, eagle gold, dark-gold lead. NO lettering anywhere.
@@ -91,13 +91,13 @@ ROUND rose-window stained-glass medallion, night-window register, photorealistic
 
 ## The pair — Philip (18–20h) & Bartholomew (20–22h)
 
-**Philip — the loaves** → `assets/calendars/apostles/primary/colored/Philip.png`
+**Philip — the loaves** → `masters/calendars/apostles/primary/colored/Philip.png`
 
 ```
 ROUND rose-window stained-glass medallion, night-window register, photorealistic render, isolated background, the circular window shape IS the frame. Warm wheat-gold and green glass. Center: a gentle bearded apostle with a gold halo holding a tall slender cross-staff in one hand and a basket of LOAVES in the other (his part in the feeding of the five thousand, John 6:5–7) — the apostle who reasoned about bread and was answered with a miracle, who brought Nathanael to Christ. Border: the shared knotted-Net leadwork rim in dark gold. Palette: wheat gold, warm green, soft light, dark-gold lead. NO lettering anywhere.
 ```
 
-**Bartholomew — the flayed** → `assets/calendars/apostles/primary/colored/Bartholomew.png`
+**Bartholomew — the flayed** → `masters/calendars/apostles/primary/colored/Bartholomew.png`
 
 ```
 ROUND rose-window stained-glass medallion, night-window register, photorealistic render, isolated background, the circular window shape IS the frame. Deep umber, iron and muted gold glass, sober and grave. Center: a bearded apostle with a gold halo holding a curved FLAYING KNIFE (the sign of his martyrdom) point-down and a folded cloak over his arm, standing steady and unafraid — Nathanael, *"an Israelite in whom is no guile"* (John 1:47), the honest man who paid the hardest price. Border: the shared knotted-Net leadwork rim in dark gold. Palette: deep umber, iron grey, muted gold, dark-gold lead. NO lettering anywhere.
@@ -105,13 +105,13 @@ ROUND rose-window stained-glass medallion, night-window register, photorealistic
 
 ## The pair — Thomas (02–04h) & Matthew (04–06h)
 
-**Thomas — the builder who doubted** → `assets/calendars/apostles/primary/colored/Thomas.png`
+**Thomas — the builder who doubted** → `masters/calendars/apostles/primary/colored/Thomas.png`
 
 ```
 ROUND rose-window stained-glass medallion, night-window register, photorealistic render, isolated background, the circular window shape IS the frame. Cool grey-blue and clear silver glass, questioning and clear. Center: a bearded apostle with a gold halo holding a CARPENTER'S SET-SQUARE (the builder of the Indian church) and a spear, one hand half-raised as if reaching to touch a wound — Doubting Thomas, who would not believe till he saw, then confessed *"my Lord and my God"* (John 20:28). Border: the shared knotted-Net leadwork rim in dark gold. Palette: grey-blue, clear silver, cool gold, dark-gold lead. NO lettering anywhere.
 ```
 
-**Matthew — the counting-table left** → `assets/calendars/apostles/primary/colored/Matthew.png`
+**Matthew — the counting-table left** → `masters/calendars/apostles/primary/colored/Matthew.png`
 
 ```
 ROUND rose-window stained-glass medallion, night-window register, photorealistic render, isolated background, the circular window shape IS the frame. Warm amber-gold and ink-brown glass. Center: a bearded apostle with a gold halo, an open GOSPEL BOOK on his knee and a quill in hand, a small winged man (his evangelist symbol) at his shoulder, a spilled MONEY-BAG and abandoned tax-table behind him — the publican who rose from the counting-table when called (Matthew 9:9) and wrote the first Gospel. Border: the shared knotted-Net leadwork rim in dark gold. Palette: warm amber, gold, ink brown, dark-gold lead. NO lettering anywhere.
@@ -119,13 +119,13 @@ ROUND rose-window stained-glass medallion, night-window register, photorealistic
 
 ## The pair — James of Alphaeus (06–08h) & Thaddaeus (08–10h)
 
-**James of Alphaeus — the lesser** → `assets/calendars/apostles/primary/colored/James_Alphaeus.png`
+**James of Alphaeus — the lesser** → `masters/calendars/apostles/primary/colored/James_Alphaeus.png`
 
 ```
 ROUND rose-window stained-glass medallion, night-window register, photorealistic render, isolated background, the circular window shape IS the frame. Quiet sage-green, grey and soft gold glass, plain and humble. Center: a modest bearded apostle with a gold halo holding a FULLER'S CLUB (the instrument of his martyrdom) resting against his shoulder, hands folded in quiet — James the Less, the quieter of the two Jameses, the unassuming faithful mission. Border: the shared knotted-Net leadwork rim in dark gold. Palette: sage green, soft grey, muted gold, dark-gold lead. NO lettering anywhere.
 ```
 
-**Thaddaeus — the flame** → `assets/calendars/apostles/primary/colored/Thaddaeus.png`
+**Thaddaeus — the flame** → `masters/calendars/apostles/primary/colored/Thaddaeus.png`
 
 ```
 ROUND rose-window stained-glass medallion, night-window register, photorealistic render, isolated background, the circular window shape IS the frame. Warm ember-gold and hopeful amber glass, a small bright flame the focus. Center: a bearded apostle with a gold halo holding a wooden CLUB in one hand and a small round medallion bearing a faint image of Christ against his chest, a single TONGUE OF FLAME above his head (Pentecost) — Jude Thaddaeus, patron of hope in hard causes, whose short epistle bids the faithful *"keep yourselves in the love of God."* Border: the shared knotted-Net leadwork rim in dark gold. Palette: ember gold, hopeful amber, warm flame, dark-gold lead. NO lettering anywhere.
@@ -133,13 +133,13 @@ ROUND rose-window stained-glass medallion, night-window register, photorealistic
 
 ## The root pair — Simon the Zealot (00–02h) & Judas Iscariot (22–24h)
 
-**Simon the Zealot — the fire kept** → `assets/calendars/apostles/primary/colored/Simon.png`
+**Simon the Zealot — the fire kept** → `masters/calendars/apostles/primary/colored/Simon.png`
 
 ```
 ROUND rose-window stained-glass medallion, night-window register, photorealistic render, isolated background, the circular window shape IS the frame. Deep indigo-violet cooling toward the root, iron and dim gold glass. Center: a fierce-eyed bearded apostle with a dim gold halo holding a SAW (the instrument of his martyrdom) upright and a closed book, a banked ember-glow at his breast — the zealot whose burning zeal for God was turned from the sword to the faith, sitting at the edge of midnight but still holding the light. Border: the shared knotted-Net leadwork rim in dark gold, here shadowed. Palette: deep indigo-violet, iron grey, dim gold, dark lead. NO lettering anywhere.
 ```
 
-**Judas Iscariot — the betrayer at midnight** → `assets/calendars/apostles/primary/colored/Judas.png`
+**Judas Iscariot — the betrayer at midnight** → `masters/calendars/apostles/primary/colored/Judas.png`
 
 *(Root note: Judas seated beside midnight mirrors the Prism primary's
 `Devil_Hatred` at 24h — the same purple, the same collapse of love into
@@ -162,7 +162,7 @@ own image in the calendar-mount rondel register — the Master among the
 Twelve, not the Prism lancet `Jesus_Humility`, which keeps its own
 register and its own green.
 
-**Jesus — the Master among the Twelve** → `assets/calendars/apostles/primary/colored/Jesus.png`
+**Jesus — the Master among the Twelve** → `masters/calendars/apostles/primary/colored/Jesus.png`
 
 ```
 ROUND rose-window stained-glass medallion, night-window register, photorealistic render, isolated background, the circular window shape IS the frame. Radiant white and pure gold glass with deep-red and clear-blue accents — the brightest window of the thirteen, the source the other twelve are lit FROM, warm and unmoving. Center: Christ enthroned in perfect frontal symmetry at the dead center of the disc, a great CRUCIFORM HALO of white gold behind His head, the right hand raised in blessing and the left resting on an open book, twelve small rays of light going out from Him to the rim of the disc in even spacing — the master the Twelve are gathered around, the still point they were sent out from and return to. Everything composed concentrically; no motion anywhere but the outgoing light. Border: the shared knotted-Net leadwork rim in bright gold, here at its brightest. Palette: radiant white, pure gold, deep red, clear blue, bright-gold lead. NO lettering anywhere.

@@ -53,7 +53,7 @@ precedent) — plus a **1:1 circle companion** condensing the upper
 reading (see [Badge 1:1 Prompts](../badge/badge_1to1_prompts.md)).
 
 **Register & look (the tree law, `assets/___assets.md`):** every image
-lands at `assets/archetypes/<family>/<register>/<look>/<Figure>[_vN]_<src>.png`
+lands at `masters/archetypes/<family>/<register>/<look>/<Figure>[_vN]_<src>.png`
 — the lancets in the **primary** register's **colored** look, the round
 companions in the **circle** register's **colored** look. Sheets state
 canonical SOURCE-LESS paths; PromptPainter appends the `_gem`/`_gpt`
@@ -135,112 +135,112 @@ sheets under `research/rose_round/`.
 ## The eight directions
 
 **Loyalty — and its fall, Tribalism (yellow, 12h)** →
-`assets/archetypes/character/primary/colored/Loyalty.png`
+`masters/archetypes/character/primary/colored/Loyalty.png`
 
 ```
 TALL pointed-arch lancet stained-glass window, night-window register, photorealistic render, isolated background, the window shape IS the lancet. ASPECT RATIO exactly 1:2 — a tall portrait image, twice as tall as wide; the whole image is one window. The window reads in TWO STOREYS, one composition: the UPPER two thirds bright, the LOWER third sunk in shadow, divided by a single band of leadwork. Radiant yellow, warm amber and white glass above; the same yellow gone brassy, hard and dim below. UPPER: a lamp kept burning in a window for someone who has not come home, a half-finished weaving on a loom beside it with the night's own threads still on the shuttle, and a plain unhurried figure seated keeping both — covenant kept when no one is watching. LOWER: the identical lamp now walled inside a tight closed ring of shields turned OUTWARD, its light reaching nobody past them; at the ring's edge a hand bars a stranger's hand at a door, and a small two-pan balance carries one law on one pan and a different law on the other. Border: gothic leadwork in dark gold; three rim roundels — a burning window-lamp at the apex, a loom shuttle at one side, a closed ring of shields at the other. Palette: radiant yellow, warm amber, white light above; brassy dim yellow and iron shadow below; dark-gold lead. NO lettering anywhere.
 ```
 
 **Loyalty — circle** →
-`assets/archetypes/character/circle/colored/Loyalty.png`
+`masters/archetypes/character/circle/colored/Loyalty.png`
 
 ```
 ROUND stained-glass badge medallion, night-window register, photorealistic render, isolated background, the circular window shape IS the frame. ASPECT RATIO exactly 1:1 — a perfect square image. Radiant yellow, warm amber and white glass. Center: a lamp kept burning in a window for someone not yet home, a half-finished weaving on a loom beside it — filling the round frame. Border: gothic leadwork in dark gold, a small window-lamp roundel at the top. Palette: radiant yellow, warm amber, white light, dark-gold lead. NO lettering anywhere.
 ```
 
 **Patronage — and its fall, Favoritism (orange, 15h)** →
-`assets/archetypes/character/primary/colored/Patronage.png`
+`masters/archetypes/character/primary/colored/Patronage.png`
 
 ```
 TALL pointed-arch lancet stained-glass window, night-window register, photorealistic render, isolated background, the window shape IS the lancet. ASPECT RATIO exactly 1:2 — a tall portrait image, twice as tall as wide; the whole image is one window. The orange here is a true BLEND of yellow and red — warm amber-orange, harvest-coloured, neither pure gold nor ember. The window reads in TWO STOREYS: the UPPER two thirds warm and open, the LOWER third airless and hoarded, split by one band of leadwork. UPPER: a wide harvest field with whole standing sheaves deliberately LEFT at its edges for whoever comes, and above it an open hand guiding a young worker's hand onto a set of good tools — the strong lifting another into standing of his own. LOWER: the same hand now tipping an entire granary into ONE lap while four empty bowls are held up unseen beside it; a two-pan scale visibly weighted by a family ring dropped on one pan; a table where every seat but one has been taken away. Border: sheaf-and-cord leadwork in dark bronze-amber; three rim roundels — an open giving hand at the apex, a left-standing sheaf at one side, a ring dropped on a scale pan at the other. Palette: harvest amber-orange, warm gold, deep bronze; airless brown-orange and shadow below; dark bronze lead. NO lettering anywhere.
 ```
 
 **Patronage — circle** →
-`assets/archetypes/character/circle/colored/Patronage.png`
+`masters/archetypes/character/circle/colored/Patronage.png`
 
 ```
 ROUND stained-glass badge medallion, night-window register, photorealistic render, isolated background, the circular window shape IS the frame. ASPECT RATIO exactly 1:1 — a perfect square image. Warm harvest amber-orange (a true yellow-and-red blend), gold and bronze glass. Center: an open hand setting a young worker's hand onto good tools, whole sheaves left standing behind them — filling the round frame. Border: sheaf-and-cord leadwork in dark bronze-amber, a small open-hand roundel at the top. Palette: harvest amber-orange, warm gold, bronze, dark bronze lead. NO lettering anywhere.
 ```
 
 **Dignity — and its fall, Self-Worship (red, 18h)** →
-`assets/archetypes/character/primary/colored/Dignity.png`
+`masters/archetypes/character/primary/colored/Dignity.png`
 
 ```
 TALL pointed-arch lancet stained-glass window, night-window register, photorealistic render, isolated background, the window shape IS the lancet. ASPECT RATIO exactly 1:2 — a tall portrait image, twice as tall as wide; the whole image is one window. Ember-red, deep crimson and molten gold glass. TWO STOREYS split by one leadwork band: the UPPER two thirds clear and upright, the LOWER third close and airless. UPPER: a figure standing straight and unbowed before a pressure that fills the window's edges, head level, sword SHEATHED and hands empty, a plain circlet resting lightly on the brow — worn, not gripped; nothing about the pose is aggressive and nothing about it yields. LOWER: the same figure seated on a throne of mirrors, lifting a heavy jewelled crown ONTO HIS OWN HEAD with both hands, every ray of light in the lower window bending inward toward him, the sheathed sword now unsheathed and pointed up. Border: laurel-and-blade leadwork in dark red; three rim roundels — a resting circlet at the apex, a sheathed sword at one side, a mirrored throne at the other. Palette: ember red, deep crimson, molten gold above; hot airless red and black below; dark-red lead. NO lettering anywhere.
 ```
 
 **Dignity — circle** →
-`assets/archetypes/character/circle/colored/Dignity.png`
+`masters/archetypes/character/circle/colored/Dignity.png`
 
 ```
 ROUND stained-glass badge medallion, night-window register, photorealistic render, isolated background, the circular window shape IS the frame. ASPECT RATIO exactly 1:1 — a perfect square image. Ember-red, deep crimson and molten gold glass. Center: a figure standing straight and unbowed under pressure, sword sheathed and hands empty, a plain circlet resting lightly on the brow — filling the round frame. Border: laurel-and-blade leadwork in dark red, a small resting-circlet roundel at the top. Palette: ember red, deep crimson, molten gold, dark-red lead. NO lettering anywhere.
 ```
 
 **Conviction — and its fall, Dogmatism (pink, 21h)** →
-`assets/archetypes/character/primary/colored/Conviction.png`
+`masters/archetypes/character/primary/colored/Conviction.png`
 
 ```
 TALL pointed-arch lancet stained-glass window, night-window register, photorealistic render, isolated background, the window shape IS the lancet. ASPECT RATIO exactly 1:2 — a tall portrait image, twice as tall as wide; the whole image is one window. The PINK here is RED THINNED BY MOONLIGHT — a pale cold rose, silvered and dusty, lit as if by a moon rather than a fire; never a warm candy or bubblegum pink. With cold silver and muted moon-gray violet at the edges. TWO STOREYS split by one leadwork band: UPPER clear rose light, LOWER hard and iron-cold. UPPER: one figure standing alone with both feet planted on a single line scored across the stone floor, an entire crowd of dim silhouettes pressing in from every side and stopping at that line; the figure holds one small flame steady in an open hand against a wind that bends everyone else. LOWER: the same scored line has become a raised iron rail penning a herd of identical figures into one narrow track, and the same small flame is now a brand burning the pages of a book held open by someone else's hands; a rigid measuring rod is laid across a row of unequal shoulders. Border: rod-and-thorn leadwork in cold silver-rose; three rim roundels — a line scored in stone at the apex, a lone steady flame at one side, an iron rail at the other. Palette: pale moonlit rose, cold silver, muted moon-gray violet above; iron gray and dull rose below; silver-gray lead. NO lettering anywhere.
 ```
 
 **Conviction — circle** →
-`assets/archetypes/character/circle/colored/Conviction.png`
+`masters/archetypes/character/circle/colored/Conviction.png`
 
 ```
 ROUND stained-glass badge medallion, night-window register, photorealistic render, isolated background, the circular window shape IS the frame. ASPECT RATIO exactly 1:1 — a perfect square image. Pale moonlit rose glass — red thinned by moonlight, silvered and cold, never candy pink — with cold silver. Center: one figure alone with both feet planted on a line scored across stone, a crowd of dim silhouettes stopping at that line, a single steady flame held in an open hand — filling the round frame. Border: rod-and-thorn leadwork in cold silver-rose, a small scored-line roundel at the top. Palette: pale moonlit rose, cold silver, silver-gray lead. NO lettering anywhere.
 ```
 
 **Integrity — and its fall, Legalism (moon-purple, 24h)** →
-`assets/archetypes/character/primary/colored/Integrity.png`
+`masters/archetypes/character/primary/colored/Integrity.png`
 
 ```
 TALL pointed-arch lancet stained-glass window, night-window register, photorealistic render, isolated background, the window shape IS the lancet. ASPECT RATIO exactly 1:2 — a tall portrait image, twice as tall as wide; the whole image is one window. MUTED MOON-GRAY VIOLET glass throughout — a cold dusty gray-violet like moonlight on stone, NEVER royal or magenta purple — with tarnished silver and midnight blue-black. TWO STOREYS split by one leadwork band. UPPER: a plumb line hanging dead true down the full height of a tower whose every course of stone answers it, and beside it a single unbroken wax seal on a folded letter, with one figure alone in an empty room keeping a promise no one is present to witness. LOWER: the same plumb line has become a taut chain, and it is being used to measure a starving man's stolen loaf; an enormous ledger stands open with one tiny entry circled and the rest of the page ignored; the wax seal below is intact while the letter under it has crumbled to dust — the letter kept, the life gone. Border: gothic leadwork in tarnished silver-violet; three rim roundels — a true plumb line at the apex, an unbroken seal at one side, a chain across a loaf at the other. Palette: moon-gray violet, tarnished silver, midnight blue-black above; dead gray-violet and iron below; silver-violet lead. NO lettering anywhere.
 ```
 
 **Integrity — circle** →
-`assets/archetypes/character/circle/colored/Integrity.png`
+`masters/archetypes/character/circle/colored/Integrity.png`
 
 ```
 ROUND stained-glass badge medallion, night-window register, photorealistic render, isolated background, the circular window shape IS the frame. ASPECT RATIO exactly 1:1 — a perfect square image. Muted moon-gray violet, tarnished silver and midnight glass — a cold dusty gray-violet, never royal purple. Center: a plumb line hanging dead true down a tower whose every stone course answers it, an unbroken wax seal beside it — filling the round frame. Border: gothic leadwork in tarnished silver-violet, a small plumb-line roundel at the top. Palette: moon-gray violet, tarnished silver, midnight blue-black, silver-violet lead. NO lettering anywhere.
 ```
 
 **Renunciation — and its fall, Mortification (cyan, 03h)** →
-`assets/archetypes/character/primary/colored/Renunciation.png`
+`masters/archetypes/character/primary/colored/Renunciation.png`
 
 ```
 TALL pointed-arch lancet stained-glass window, night-window register, photorealistic render, isolated background, the window shape IS the lancet. ASPECT RATIO exactly 1:2 — a tall portrait image, twice as tall as wide; the whole image is one window. The CYAN here is BLUE THINNED BY MOONLIGHT — a pale cold blue-green, silvered, dusty and dim, never a bright swimming-pool or neon cyan. With cold silver and moon-gray violet at the edges. TWO STOREYS split by one leadwork band. UPPER: a figure walking away from a threshold, LIGHTER, having laid down at that threshold in a neat row a crown, a heavy cloak and a full purse — none of them broken, all of them simply put down; behind him a lamp is deliberately dimming because the first pale light of dawn has begun in the window's top, and the lamp is no longer needed. LOWER: the same figure has emptied past the end of the giving — kneeling in a bare stone cell, a knotted cord in one hand, ribs showing, the bowl beside him not merely empty but broken; his lamp is out and no dawn has come to replace it, only cold. Border: reed-and-water leadwork in pale silver-blue; three rim roundels — a crown and cloak laid down at the apex, a dimming lamp under first dawn at one side, an extinguished lamp at the other. Palette: pale moonlit cyan, cold silver, moon-gray violet above; drained gray-blue and black below; silver-blue lead. NO lettering anywhere.
 ```
 
 **Renunciation — circle** →
-`assets/archetypes/character/circle/colored/Renunciation.png`
+`masters/archetypes/character/circle/colored/Renunciation.png`
 
 ```
 ROUND stained-glass badge medallion, night-window register, photorealistic render, isolated background, the circular window shape IS the frame. ASPECT RATIO exactly 1:1 — a perfect square image. Pale moonlit cyan glass — blue thinned by moonlight, silvered and dim, never neon — with cold silver. Center: a crown, a heavy cloak and a full purse laid down in a neat row at a threshold, a figure walking on lighter beyond it, a lamp dimming under a first pale dawn — filling the round frame. Border: reed-and-water leadwork in pale silver-blue, a small laid-down-crown roundel at the top. Palette: pale moonlit cyan, cold silver, silver-blue lead. NO lettering anywhere.
 ```
 
 **Humility — and its fall, Self-Annihilation (blue, 06h)** →
-`assets/archetypes/character/primary/colored/Humility.png`
+`masters/archetypes/character/primary/colored/Humility.png`
 
 ```
 TALL pointed-arch lancet stained-glass window, night-window register, photorealistic render, isolated background, the window shape IS the lancet. ASPECT RATIO exactly 1:2 — a tall portrait image, twice as tall as wide; the whole image is one window. Deep midnight-blue, cold silver and clear white glass. TWO STOREYS split by one leadwork band. UPPER: a figure kneeling low to wash another's feet, a basin and a folded towel beside him and the LOWEST seat at a long table left deliberately taken by him while the high seats stand empty above; in the window's upper corner a single grain of wheat falls into dark ground and a first green thread answers it. LOWER: the same grain lies rotting in the same ground with nothing rising from it, and the figure's own outline is DISSOLVING into the dark — hands, then arms, then shoulders going to blue-black nothing, a discarded cloak collapsing where a body was; the basin below is overturned and empty. Nothing violent, nothing bloody: a self going out like a candle nobody asked to be blown out. Border: thorned-vine leadwork in blue-black; three rim roundels — a basin and towel at the apex, a falling grain with a green thread at one side, an empty collapsed cloak at the other. Palette: midnight blue, cold silver, clear white light above; drowned blue-black below; blue-black lead. NO lettering anywhere.
 ```
 
 **Humility — circle** →
-`assets/archetypes/character/circle/colored/Humility.png`
+`masters/archetypes/character/circle/colored/Humility.png`
 
 ```
 ROUND stained-glass badge medallion, night-window register, photorealistic render, isolated background, the circular window shape IS the frame. ASPECT RATIO exactly 1:1 — a perfect square image. Deep midnight-blue, cold silver and clear white glass. Center: a figure kneeling low to wash another's feet, basin and folded towel beside him, the lowest seat at the table taken — filling the round frame. Border: thorned-vine leadwork in blue-black, a small basin-and-towel roundel at the top. Palette: midnight blue, cold silver, white light, blue-black lead. NO lettering anywhere.
 ```
 
 **Devotion — and its fall, Martyrdom (green, 09h)** →
-`assets/archetypes/character/primary/colored/Devotion.png`
+`masters/archetypes/character/primary/colored/Devotion.png`
 
 ```
 TALL pointed-arch lancet stained-glass window, night-window register, photorealistic render, isolated background, the window shape IS the lancet. ASPECT RATIO exactly 1:2 — a tall portrait image, twice as tall as wide; the whole image is one window. The GREEN here is a true BLEND of blue and yellow — living leaf-green with both parents visible in it, cool in the shadows and gold in the light. TWO STOREYS split by one leadwork band. UPPER: a figure walking steadily ahead of a line of children through a narrow dark passage, one hand back holding the first child's hand, the far end of the passage already showing green light — the whole strength of a life spent on something that will outlive it and keep walking. LOWER: the same figure has set his shoulders between TWO PILLARS and is pulling them in on himself; the roof is already coming down and the small figures who were following are under it too — strength spent so that nothing at all survives, the death that takes the saved along with it. Border: vine-and-leaf leadwork in deep green; three rim roundels — a hand leading a child's hand at the apex, a green light at a passage end at one side, two pillars pulled inward at the other. Palette: living blue-gold green, warm gold-green, clear light above; choked black-green and dust below; green-black lead. NO lettering anywhere.
 ```
 
 **Devotion — circle** →
-`assets/archetypes/character/circle/colored/Devotion.png`
+`masters/archetypes/character/circle/colored/Devotion.png`
 
 ```
 ROUND stained-glass badge medallion, night-window register, photorealistic render, isolated background, the circular window shape IS the frame. ASPECT RATIO exactly 1:1 — a perfect square image. Living leaf-green glass, a true blue-and-yellow blend — cool in the shadows, gold in the light. Center: a figure walking ahead of a line of children through a narrow dark passage, one hand back holding the first child's hand, green light at the far end — filling the round frame. Border: vine-and-leaf leadwork in deep green, a small leading-hand roundel at the top. Palette: living blue-gold green, warm gold-green, clear light, green-black lead. NO lettering anywhere.
@@ -295,14 +295,14 @@ commissioned here: the round register belongs to the wheel's arms, and
 these two hold no arm.
 
 **Composure — and its fall, Lethargy (blue, the Cube's 04h Activation
-pole)** → `assets/archetypes/character/primary/colored/Composure.png`
+pole)** → `masters/archetypes/character/primary/colored/Composure.png`
 
 ```
 TALL pointed-arch lancet stained-glass window, night-window register, photorealistic render, isolated background, the window shape IS the lancet. ASPECT RATIO exactly 1:2 — a tall portrait image, twice as tall as wide; the whole image is one window. Deep sea-blue, cold indigo and clear white glass. ONE continuous lead line runs the entire height of the window from apex to sill — the axis — and the window still reads in TWO STOREYS, the UPPER two thirds lit, the LOWER third sunk and airless. UPPER: a storm stopped mid-fury over open water — the waves still standing high and every one of them held motionless, the rain hanging in the air unfallen — and in the boat a seated figure with an open hand lowered toward the water, entirely unhurried; beside the boat, resting on the thwart, a plain cup set down as though only just accepted. LOWER: the same figure sunk into a couch that has not been left in years, a dressing gown gone shapeless, dust thick on an unopened letter and on a pair of boots never worn, the same open hand now hanging off the couch's edge over nothing at all — the storm outside the window raging untouched and unanswered. Border: gothic leadwork in dark indigo; three rim roundels — a stilled wave at the apex, a set-down cup at one side, an unopened dusty letter at the other. Palette: deep sea blue, cold indigo, clear white above; dead slate blue and grey dust below; dark-indigo lead. NO lettering anywhere.
 ```
 
 **Vigor — and its fall, Frenzy (orange, the Cube's 16h Activation
-pole)** → `assets/archetypes/character/primary/colored/Vigor.png`
+pole)** → `masters/archetypes/character/primary/colored/Vigor.png`
 
 ```
 TALL pointed-arch lancet stained-glass window, night-window register, photorealistic render, isolated background, the window shape IS the lancet. ASPECT RATIO exactly 1:2 — a tall portrait image, twice as tall as wide; the whole image is one window. EMBER-ORANGE glass — fire-coloured and hot, the Destroyer's own orange, not the harvest amber of the Patronage arm — with molten gold and deep red. ONE continuous lead line runs the entire height of the window from apex to sill — the axis — and the window reads in TWO STOREYS, UPPER lit and open, LOWER hot and blind. UPPER: a figure hauling a fallen boulder clear of a road with a lever and a braced shoulder, the road running open past him toward a village, a small crowd already walking the cleared stretch behind his back; every muscle of the effort is aimed at the stone, and the stone is nearly out. LOWER: the same figure at full sprint dragging a body behind a chariot in a closed circle around a wall, the ground rutted where the same circle has been run many times over, nothing ahead of him and nothing gained; at the window's edge a herd of identical shapes runs the same circle with him. Border: hammer-and-flame leadwork in dark bronze-red; three rim roundels — a lever under a stone at the apex, an opened road at one side, a closed circular rut at the other. Palette: ember orange, molten gold, deep red above; scorched red-black and dull iron below; dark bronze-red lead. NO lettering anywhere.

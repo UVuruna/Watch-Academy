@@ -92,28 +92,28 @@ seats: no candidate — the subjects differ by design (see the header).
 ## The Path of Darkness — four words
 
 **Ysteria — Y, the word for Fear** →
-`assets/archetypes/crosses/secondary/colored/Ysteria.png`
+`masters/archetypes/crosses/secondary/colored/Ysteria.png`
 
 ```
 ROUND stained-glass badge medallion, night-window register, photorealistic render, isolated background, the circular window shape IS the frame. ASPECT RATIO exactly 1:1 — a perfect square image. Blood-red, dark bronze and black glass, dusk light. Center: PANIC personified — a running female figure of classical Greek dress caught mid-flight, head half-turned back toward nothing visible, hair torn loose across the frame by her own speed, both hands flung up and open, the drapery streaming; the ground under her is tilting and nothing in the window shows what she runs from — the terror is entirely inside her. Border: thorn-and-dusk leadwork in dark bronze-red, a small wide-open eye roundel at the top. Palette: blood red, dark bronze, black glass, dark bronze-red lead. NO lettering anywhere.
 ```
 
 **Orge — Ω, the word for Anger** →
-`assets/archetypes/crosses/secondary/colored/Orge.png`
+`masters/archetypes/crosses/secondary/colored/Orge.png`
 
 ```
 ROUND stained-glass badge medallion, night-window register, photorealistic render, isolated background, the circular window shape IS the frame. ASPECT RATIO exactly 1:1 — a perfect square image. Livid bruise-violet and iron-gray glass — a cold dusty gray-violet going to swollen purple-black, never royal purple — with one hot red glow. Center: WRATH THAT KEEPS personified — a seated figure of classical dress cradling a small bed of banked embers in two cupped hands close to the chest, jaw set, eyes open and fixed, feeding the coals with its own warmth in the middle of the night; the embers throw the only light in the window, from below, and the shadows they cast climb the figure like smoke. Border: knotted-iron leadwork in bruised violet, a small banked-ember roundel at the top. Palette: livid bruise violet, iron gray, one hot ember red, black-iron lead. NO lettering anywhere.
 ```
 
 **Detestatio — D, the word for Hate** →
-`assets/archetypes/crosses/secondary/colored/Detestatio.png`
+`masters/archetypes/crosses/secondary/colored/Detestatio.png`
 
 ```
 ROUND stained-glass badge medallion, night-window register, photorealistic render, isolated background, the circular window shape IS the frame. ASPECT RATIO exactly 1:1 — a perfect square image. Midnight blue, iron gray and frost-white glass, everything cold and formal. Center: THE ROMAN CURSE personified — a still, composed figure in a Roman mantle pressing one flat palm down onto a small BLANK lead tablet on a stone altar, an iron nail already driven through the tablet's center, the gesture finished and deliberate, the face without any heat at all; frost creeps outward from the tablet across the altar stone. Hatred as ritual: cold, decided, formalized. Border: frost-and-chain leadwork in cold blue, a small iron-nail roundel at the top. Palette: midnight blue, iron gray, frost white, blue-black lead. NO lettering anywhere — the tablet is blank.
 ```
 
 **Miseria — M, the word for Suffering** →
-`assets/archetypes/crosses/secondary/colored/Miseria.png`
+`masters/archetypes/crosses/secondary/colored/Miseria.png`
 
 ```
 ROUND stained-glass badge medallion, night-window register, photorealistic render, isolated background, the circular window shape IS the frame. ASPECT RATIO exactly 1:1 — a perfect square image. Blackened gold, ash-gray and smoke-brown glass with amber buried underneath — a noon sky gone dark. Center: WRETCHEDNESS personified — a bowed figure walking under a great shapeless bundle strapped across the shoulders, twice the figure's own bulk, the head down and one hand steadying the load; the walk happens in full open daylight that has failed, a black noon disc small and high above, and the figure casts almost no shadow because the light itself is dying. Border: ash-and-thorn leadwork in blackened gold, a small bent-back roundel at the top. Palette: blackened gold, ash gray, smoke brown, buried amber, black-iron lead. NO lettering anywhere.
@@ -124,28 +124,28 @@ ROUND stained-glass badge medallion, night-window register, photorealistic rende
 ## The Path of Light — four words
 
 **Themelios — Θ, the word for Faith** →
-`assets/archetypes/crosses/secondary/colored/Themelios.png`
+`masters/archetypes/crosses/secondary/colored/Themelios.png`
 
 ```
 ROUND stained-glass badge medallion, night-window register, photorealistic render, isolated background, the circular window shape IS the frame. ASPECT RATIO exactly 1:1 — a perfect square image. Living green, cool morning gold and clear white glass, first light of day. Center: THE FOUNDATION STONE personified — a kneeling figure of classical dress setting a single squared stone block into open ground at first light, both palms pressed flat on its top face, weight fully committed to it, the stone already settled and immovable while nothing has yet been built above it; the low morning sun catches the stone's cut edge. Faith as what is RECEIVED and laid at the start of the road, not invented partway along it. Border: vine-and-furrow leadwork in deep green, a small squared-stone roundel at the top. Palette: living green, cool morning gold, dew silver, clear white light, green-black lead. NO lettering anywhere.
 ```
 
 **Leitourgia — L, the word for Love** →
-`assets/archetypes/crosses/secondary/colored/Leitourgia.png`
+`masters/archetypes/crosses/secondary/colored/Leitourgia.png`
 
 ```
 ROUND stained-glass badge medallion, night-window register, photorealistic render, isolated background, the circular window shape IS the frame. ASPECT RATIO exactly 1:1 — a perfect square image. Radiant yellow, warm amber and molten gold glass, full noon light with no shadow to hide in. Center: SERVICE AS DEED personified — a serving figure with sleeves rolled, kneeling to wash a second, unseen figure's feet with a plain basin and cloth, the work practical and unhurried, the face turned down and entirely on the task rather than on being watched; the noon light falls straight down over the whole scene. Love as the act that costs something in full view — not sentiment kept in private, but the deed done in the open. Border: gothic leadwork in dark gold, a small basin-and-cloth roundel at the top. Palette: radiant yellow, warm amber, molten gold, white noon light, dark-gold lead. NO lettering anywhere.
 ```
 
 **Prosdokia — Π, the word for Hope** →
-`assets/archetypes/crosses/secondary/colored/Prosdokia.png`
+`masters/archetypes/crosses/secondary/colored/Prosdokia.png`
 
 ```
 ROUND stained-glass badge medallion, night-window register, photorealistic render, isolated background, the circular window shape IS the frame. ASPECT RATIO exactly 1:1 — a perfect square image. Burning orange, warm amber and deep evening blue glass, the light already leaving. Center: THE OPEN-EYED WATCH personified — a figure standing at a low stone sea-wall in classical dress, both hands resting on a coiled rope beside a small stone anchor, eyes fixed unblinking on the far horizon where the light is going down, the body still and upright rather than straining forward; nothing is yet visible on the horizon — the watch is kept for what has not arrived. Hope as expectation held with open eyes, the anchor of the soul (Hebrews 6:19). Border: rope-and-anchor leadwork in dark bronze-orange, a small anchor roundel at the top. Palette: burning orange, warm amber, deep evening blue, dark bronze lead. NO lettering anywhere.
 ```
 
 **Opheleia — Ω, the word for Salvation** →
-`assets/archetypes/crosses/secondary/colored/Opheleia.png`
+`masters/archetypes/crosses/secondary/colored/Opheleia.png`
 
 ```
 ROUND stained-glass badge medallion, night-window register, photorealistic render, isolated background, the circular window shape IS the frame. ASPECT RATIO exactly 1:1 — a perfect square image. Pure white and clear uncolored glass against midnight blue-black. Center: HELP THAT DELIVERS personified — a strong forearm reaching straight down out of plain white light into dark night water, hand clasped firmly around the wrist of a second hand rising from below, the two grips locked at the exact center of the frame, water streaming off the rising arm; the white light stands open in the darkness without fighting it. Succour: the help that arrives in the dark's own hour. Border: gothic leadwork in dark iron with fine silver seams, a small clasped-wrists roundel at the top. Palette: pure white light, clear uncolored glass, midnight blue-black, silver seams, dark-iron lead. NO lettering anywhere.

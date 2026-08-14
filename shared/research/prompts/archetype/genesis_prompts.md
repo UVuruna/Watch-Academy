@@ -42,7 +42,7 @@ office, two frames.
 
 **Register & look (the tree law, `assets/___assets.md`, owner-approved
 2026-07-26):** every image lands at
-`assets/archetypes/<family>/<register>/<look>/<Figure>[_vN]_<src>.png` —
+`masters/archetypes/<family>/<register>/<look>/<Figure>[_vN]_<src>.png` —
 the lancets in the **primary** register's **colored** look, the round
 companions in the **circle** register's **colored** look. Sheets state
 canonical SOURCE-LESS paths; PromptPainter appends the terminal
@@ -98,42 +98,42 @@ elsewhere can be transformed into them.
 ## The three creation offices
 
 **God — the Creator (moon-gray purple arm, 24h)** →
-`assets/archetypes/genesis/primary/colored/God_Creator.png`
+`masters/archetypes/genesis/primary/colored/God_Creator.png`
 
 ```
 TALL pointed-arch lancet stained-glass window, night-window register, photorealistic render, isolated background, the window shape IS the lancet. ASPECT RATIO exactly 1:2 — a tall portrait image, twice as tall as wide; the whole image is one window and no element inside it changes that frame. MUTED MOON-GRAY VIOLET glass throughout — a cold dusty gray-violet like moonlight on stone, NEVER a rich royal or magenta purple — with tarnished silver and deep midnight blue-black. Center: the CREATOR whose face is VEILED in pale radiance, never shown, standing above a dark formless deep at the window's base; both hands open and moving outward over the water, and where they pass the black water turns to ordered light — the first division of light from darkness opening as a clean pale seam straight up the middle of the window; a pair of open dividers rests in the crook of one arm. His drapery is night given shape. Upper left panel: the waters divided into two calm bands; upper right panel: a single seed dropped into a dark furrow. Border: gothic leadwork in tarnished silver-violet; three rim roundels — the first spark of light at the apex, a pair of dividers at one side, a newly formed sphere at the other. Palette: moon-gray violet, tarnished silver, midnight blue-black, one seam of pure white first light. NO lettering anywhere.
 ```
 
 **God — the Creator, circle** →
-`assets/archetypes/genesis/circle/colored/God_Creator.png`
+`masters/archetypes/genesis/circle/colored/God_Creator.png`
 
 ```
 ROUND stained-glass badge medallion, night-window register, photorealistic render, isolated background, the circular window shape IS the frame. ASPECT RATIO exactly 1:1 — a perfect square image. Muted moon-gray violet, tarnished silver and midnight glass — a cold dusty gray-violet, never royal purple. Center: a veiled radiant figure with both hands opened over a dark deep, a clean seam of pure white first light opening where the hands pass — filling the round frame. Border: gothic leadwork in tarnished silver-violet, a small first-spark roundel at the top. Palette: moon-gray violet, tarnished silver, midnight blue-black, white first light. NO lettering anywhere.
 ```
 
 **Jesus — the Preserver (green arm, 08h)** →
-`assets/archetypes/genesis/primary/colored/Jesus_Preserver.png`
+`masters/archetypes/genesis/primary/colored/Jesus_Preserver.png`
 
 ```
 TALL pointed-arch lancet stained-glass window, night-window register, photorealistic render, isolated background, the window shape IS the lancet. ASPECT RATIO exactly 1:2 — a tall portrait image, twice as tall as wide; the whole image is one window. Living green, warm gold-green and clear white glass throughout, no ember tones. Center: Jesus as the KEEPER — standing calm at the window's heart holding a small living world cupped in both hands at his chest, a green sphere veined with rivers and root-lines, whole and unbroken; a great vine grows up through the window behind him and every branch of it visibly hangs from and rests on his shoulders and arms, nothing falling; a cool white rose of light behind his head. At his feet a single lamp burns steady with a sheltering hand curved around the flame against a wind that bends everything else. Upper left panel: a vine holding its heavy branches; upper right panel: a hand shielding a small flame from a slanting wind. Border: vine-and-leaf leadwork in deep green; three rim roundels — a cupped living sphere at the apex, a sheltered flame at one side, a root gripping stone at the other. Palette: living green, warm gold-green, clear white light, dark green-black lead. NO lettering anywhere.
 ```
 
 **Jesus — the Preserver, circle** →
-`assets/archetypes/genesis/circle/colored/Jesus_Preserver.png`
+`masters/archetypes/genesis/circle/colored/Jesus_Preserver.png`
 
 ```
 ROUND stained-glass badge medallion, night-window register, photorealistic render, isolated background, the circular window shape IS the frame. ASPECT RATIO exactly 1:1 — a perfect square image. Living green, gold-green and clear white glass. Center: two hands cupping a small whole living world, a green sphere veined with rivers and roots, vine branches resting unbroken on the wrists — filling the round frame. Border: vine-and-leaf leadwork in deep green, a small sheltered-flame roundel at the top. Palette: living green, warm gold-green, white light, green-black lead. NO lettering anywhere.
 ```
 
 **the Devil — the Destroyer (orange arm, 16h)** →
-`assets/archetypes/genesis/primary/colored/Devil_Destroyer.png`
+`masters/archetypes/genesis/primary/colored/Devil_Destroyer.png`
 
 ```
 TALL pointed-arch lancet stained-glass window, night-window register, photorealistic render, isolated background, the window shape IS the lancet. ASPECT RATIO exactly 1:2 — a tall portrait image, twice as tall as wide; the whole image is one window. Burning orange, molten amber and charcoal-black glass throughout, no cold tones. Center: the beautiful horned UNMAKER, calm and unhurried, one hand drawing the keystone OUT of a great arch that fills the upper window — the whole structure already beginning to come apart above him in a slow fall of glowing embers and gray ash; his other hand holds a low torch at his hip; behind him the field he has already burned lies bare, black and level, smoking, with nothing standing on it. His expression is workmanlike, not gleeful — this face is the Destroyer, not the Prosecutor. Upper left panel: a wall dissolving into ash mid-collapse; upper right panel: a burned field lying bare and smoking, cleared to the soil. Border: ember-and-ash leadwork in dark bronze-orange; three rim roundels — a drawn keystone at the apex, a low torch at one side, a broken hourglass at the other. Palette: burning orange, molten amber, charcoal black, gray ash, dark bronze lead. NO lettering anywhere.
 ```
 
 **the Devil — the Destroyer, circle** →
-`assets/archetypes/genesis/circle/colored/Devil_Destroyer.png`
+`masters/archetypes/genesis/circle/colored/Devil_Destroyer.png`
 
 ```
 ROUND stained-glass badge medallion, night-window register, photorealistic render, isolated background, the circular window shape IS the frame. ASPECT RATIO exactly 1:1 — a perfect square image. Burning orange, molten amber and charcoal-black glass. Center: a horned hand drawing the keystone out of an arch, the structure above already falling in embers and gray ash — filling the round frame. Border: ember-and-ash leadwork in dark bronze-orange, a small drawn-keystone roundel at the top. Palette: burning orange, molten amber, charcoal black, gray ash, dark bronze lead. NO lettering anywhere.
@@ -151,7 +151,7 @@ Genesis 1:1, the verse CUBE.md already gives this wheel — the art is the
 Eye's own composition INVERTED, the same way the wheel is.
 
 **The Beginning** →
-`assets/archetypes/genesis/primary/colored/Beginning.png`
+`masters/archetypes/genesis/primary/colored/Beginning.png`
 
 ```
 ROUND rose window — a circular stained-glass rosette, night-window register, photorealistic render, isolated background. ASPECT RATIO exactly 1:1 — a perfect square image. Center: a large radiant TRIANGLE of glass POINTING DOWNWARD, its apex at the bottom of the window; the triangle's three SIDES are glazed in three colours — the upper horizontal side muted moon-gray violet (a cold dusty gray-violet, never royal purple), the left descending side living green, the right descending side burning orange, meeting cleanly at the corners. At its heart, where the Court's rosette carries an eye, this one carries the FIRST LIGHT over the deep: a small round pane of PERFECTLY CLEAR uncolored glass with plain white daylight passing through it, the brightest point of the window, and beneath it a dark still water that the light is only now touching. Straight rays of white glass burst from the triangle through rings of soft cloudglass to the rim. Rim: gothic stone tracery; three rim roundels evenly placed — a pair of open dividers in moon-gray violet glass, a cupped living sphere in green glass, a drawn keystone in orange glass. Palette: white first light, moon-gray violet, living green, burning orange, black-iron lead, the clear centre pane the only uncolored glass. NO lettering anywhere.

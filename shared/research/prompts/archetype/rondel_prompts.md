@@ -76,7 +76,7 @@ Where the paragraph names a FALL or a SHADOW, the plate keeps the
 parent's palette and darkens it — the fall is the same colour gone
 wrong, never a different colour.
 
-**Drop path:** `assets/archetypes/<family>/primary/colored/Rondel_<Stem>.png`
+**Drop path:** `masters/archetypes/<family>/primary/colored/Rondel_<Stem>.png`
 — beside the lancet, in the family's own primary register, exactly
 where the 13 existing rondels already sit. Where a figure owns three
 paragraphs the third takes a `_3` suffix.

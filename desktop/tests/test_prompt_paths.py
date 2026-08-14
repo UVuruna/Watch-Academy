@@ -6,8 +6,8 @@ landed under `archetype/<source>/temperaments/tetramorph_<Creature>
 .png` while the app has only ever read `archetype/<source>/tetramorph/
 <Creature>.png`).
 
-Every prompt sheet under `research/prompts/**` states backticked
-`assets/...` drop paths — the per-image title-and-arrow line
+Every prompt sheet under `shared/research/prompts/**` states backticked
+`masters/...` drop paths — the per-image title-and-arrow line
 (`**Title** -> \\`assets/...\\``) and the summary "Drop paths:" prose.
 This test walks every sheet, extracts every such CONCRETE path (a
 `<placeholder>` or a `*` glob is a template, not a declared file, and
@@ -58,11 +58,12 @@ import pytest
 from config import calendar_mounts, constants, continents, pantheon
 
 _ROOT = Path(__file__).resolve().parents[1]
-_PROMPTS_ROOT = _ROOT / "research" / "prompts"
-# THE THREE-FOLDER MIGRATION (2026-08-12): every declared `assets/...`
-# drop path is checked against the ACTUAL assets tree, which now lives
-# under shared/, one level up from the desktop Python root.
+# THE RESEARCH MOVE (owner verdict 2026-08-14): research is where things
+# are investigated and made — a sibling of `assets/` and `Database/`,
+# which it produces — so it moved out of the desktop Python root into
+# shared/.
 _SHARED = _ROOT.parent / "shared"
+_PROMPTS_ROOT = _SHARED / "research" / "prompts"
 
 # The modules whose own path TABLES feed the reference set — config's
 # whole package (the primary source per Rule #19/this lint's design)
@@ -105,7 +106,7 @@ _SCAN_MODULES = (
 # extension — the drop-path convention every sheet in this repo uses,
 # in both the per-image arrow line and the summary "Drop paths:" prose.
 # `<...>` template placeholders and `*` globs are NOT concrete paths.
-_PATH_PATTERN = re.compile(r"`(assets/[^`<*]+\.(?:png|svg))`")
+_PATH_PATTERN = re.compile(r"`(masters/[^`<*]+\.(?:png|svg))`")
 
 # A quoted filename literal anywhere in scanned source TEXT — the
 # fallback for names built inside a function body (e.g. the "moon.png"
@@ -348,8 +349,17 @@ def _sheet_paths() -> dict[Path, list[str]]:
 
 
 def _normalize(raw: str) -> str:
-    """`raw` relative to assets/, with any art-SOURCE segment removed
-    — the one canonical, comparable form both sides get reduced to.
+    """`raw` relative to the art-tree root, with any art-SOURCE segment
+    removed — the one canonical, comparable form both sides get reduced
+    to.
+
+    TWO roots reduce to the same form, and that is the point. Code
+    references name `assets/...` (what the program READS, under
+    `shared/`); prompt sheets name `masters/...` (where a generation
+    LANDS, in the owner's gitignored inbox — THE ART BAKERY, owner
+    decree 2026-08-12). The bakery mirrors one tree onto the other file
+    for file, so `masters/weeks/x.png` and `assets/weeks/x.webp` are the
+    same seat seen from the two ends of the arrow.
 
     A leading `../` step-up is dropped: a few config tables reach across
     family roots that way (the Continents ninths name
@@ -357,7 +367,7 @@ def _normalize(raw: str) -> str:
     `config.paths.art_file` collapses the step-up before touching disk),
     so it is a spelling of the reference, never part of its identity."""
     parts = Path(raw.replace("\\", "/")).parts
-    if parts and parts[0] == "assets":
+    if parts and parts[0] in ("assets", "masters"):
         parts = parts[1:]
     while parts and parts[0] == "..":
         parts = parts[1:]
@@ -455,7 +465,7 @@ def test_every_sheet_path_is_read_by_something():
     references = _reference_set()
     offenders = []
     for sheet, raw_paths in _sheet_paths().items():
-        sheet_rel = sheet.relative_to(_ROOT)
+        sheet_rel = sheet.relative_to(_SHARED.parent)
         for raw in sorted(set(raw_paths)):
             norm = _normalize(raw)
             if norm in _WHITELIST:
@@ -517,7 +527,7 @@ def test_every_sheet_declares_at_least_one_path_or_is_an_index(sheet):
 # roots, and the art has to be rescued later. It happened three times:
 # the zodiac re-drop twice (4c683ed, 0.14.517) and the badge circles
 # (0.14.519). These two tests close it.
-_CONCRETE_ASSET_PATH = re.compile(r"assets/[A-Za-z0-9_./-]+")
+_CONCRETE_ASSET_PATH = re.compile(r"masters/[A-Za-z0-9_./-]+")
 _TEMPLATE_NEXT = "<[*"          # what follows a truncated placeholder path
 
 
@@ -536,16 +546,29 @@ def _declared(sheet_text: str):
 
 def _sheet_folders():
     for sheet in sorted(_PROMPTS_ROOT.rglob("*.md")):
-        name = sheet.relative_to(_ROOT).as_posix()
+        name = sheet.relative_to(_SHARED.parent).as_posix()
         for folder, is_drop in _declared(sheet.read_text(encoding="utf-8")):
             yield name, folder.as_posix(), is_drop
+
+
+def _shipped_dir(folder: str) -> Path:
+    """The SHIPPED folder a sheet's `masters/...` drop folder maps onto.
+
+    Checked against `shared/assets/`, never `masters/` itself: the
+    masters are gitignored and a clone without them is a complete
+    working program (THE ART BAKERY, owner decree 2026-08-12 point e),
+    so a guard that looked in `masters/` would pass or fail depending on
+    whose machine ran it. The bakery mirrors the tree name for name, so
+    the shipped side answers the same question and answers it everywhere.
+    """
+    return _SHARED / "assets" / Path(folder).relative_to("masters")
 
 
 def test_no_sheet_names_a_folder_the_tree_does_not_have():
     offenders = sorted({
         f"{sheet} -> {folder}"
         for sheet, folder, _ in _sheet_folders()
-        if not (_SHARED / folder).is_dir()
+        if not _shipped_dir(folder).is_dir()
     })
     assert offenders == [], (
         "a prompt sheet declares a folder that does not exist — generating "

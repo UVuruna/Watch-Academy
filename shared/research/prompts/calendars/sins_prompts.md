@@ -62,7 +62,7 @@ carries the cold that finishes at its center; the frost tells a sin
 from a virtue at a glance exactly the way the Mean's balance-beam tells
 a virtue from its vice.
 
-**Drop paths:** `assets/calendars/sins/primary/colored/<Figure>.png` — a
+**Drop paths:** `masters/calendars/sins/primary/colored/<Figure>.png` — a
 sourceless calendar-mount root (PromptPainter appends `_gem`/`_gpt`).
 Thirteen files — the twelve plus the axle: `Pride.png`,
 `Hypocrisy.png`, `Violence.png`, `Avarice.png`, `Lust.png`, `Envy.png`,
@@ -86,13 +86,13 @@ circular window shape IS the frame, NO lettering anywhere in any image.
 
 ## The crown and the root
 
-**Pride — 12h, the CROWN (Vainglory folded in)** → `assets/calendars/sins/primary/colored/Pride.png`
+**Pride — 12h, the CROWN (Vainglory folded in)** → `masters/calendars/sins/primary/colored/Pride.png`
 
 ```
 ROUND rose-window stained-glass medallion, night-window register, photorealistic render, isolated background, the circular window shape IS the frame, made of heavy PAINT that BLOCKS the light — thick, opaque, subtractive pigment. Hard gold and bruised amber glass, brilliant and airless. Center: a figure standing alone on a high narrow pedestal, head thrown back and a heavy crown set on his own brow by his own hands, a great mirror behind him throwing his image back at him instead of a sky, the twelve spokes of the wheel all running out from beneath his feet and none reaching him — the self as its own summit, the root from which the rest proceed. Border: the shared FROST RING, creeping ice-crystal frostwork in cold pale-blue and grey-white leadwork reaching inward from the rim. Palette: hard gold, bruised amber, airless black, pale frost blue. NO lettering anywhere.
 ```
 
-**Treachery — 24h, the ROOT** → `assets/calendars/sins/primary/colored/Treachery.png`
+**Treachery — 24h, the ROOT** → `masters/calendars/sins/primary/colored/Treachery.png`
 
 ```
 ROUND rose-window stained-glass medallion, night-window register, photorealistic render, isolated background, the circular window shape IS the frame, made of heavy PAINT that BLOCKS the light — thick, opaque, subtractive pigment. Deep violet-black and cold iron-grey glass, the darkest of the thirteen. Center: two hands clasped in a bond, and a third hand driving a thin blade into the joint from behind; a broken table with an overturned cup and a torn loaf below, thirty small coins spilled across the frozen ground, a bare heel lifted in the shadow — the bond made first and then broken, the only sin that needs love to exist. Border: the shared FROST RING, creeping ice-crystal frostwork in cold pale-blue and grey-white leadwork reaching inward from the rim, here thickest of all — the ice of the ninth circle beginning at this seat. Palette: violet-black, cold iron grey, spilled silver, pale frost blue. NO lettering anywhere.
@@ -102,61 +102,61 @@ ROUND rose-window stained-glass medallion, night-window register, photorealistic
 
 ## The ten between
 
-**Hypocrisy — 14h** → `assets/calendars/sins/primary/colored/Hypocrisy.png`
+**Hypocrisy — 14h** → `masters/calendars/sins/primary/colored/Hypocrisy.png`
 
 ```
 ROUND rose-window stained-glass medallion, night-window register, photorealistic render, isolated background, the circular window shape IS the frame, made of heavy PAINT that BLOCKS the light — thick, opaque, subtractive pigment. Bleached bone-white and chalk glass over a rotting green-black interior. Center: a smiling theatre mask of polished white held up on a slender rod, and behind it a hollow, corrupt darkness with grave-worms; a whitewashed tomb standing bright in flat midday light with its stone lid slid open a finger's width onto blackness — the stage-player's face, beautiful outward and full of dead men's bones. Border: the shared FROST RING, creeping ice-crystal frostwork in cold pale-blue and grey-white leadwork reaching inward from the rim. Palette: bleached bone white, chalk, rotting green-black, pale frost blue. NO lettering anywhere.
 ```
 
-**Violence — 16h** → `assets/calendars/sins/primary/colored/Violence.png`
+**Violence — 16h** → `masters/calendars/sins/primary/colored/Violence.png`
 
 ```
 ROUND rose-window stained-glass medallion, night-window register, photorealistic render, isolated background, the circular window shape IS the frame, made of heavy PAINT that BLOCKS the light — thick, opaque, subtractive pigment. Rabid orange and arterial red glass over scorched brown. Center: a raised fist gripping a broken blade, striking downward at a bowed and unarmed figure; behind them a river running red between banks of burnt stubble, a felled tree still bleeding sap and a torn-up field — the same violence turned outward against the neighbour, inward against the self and upward against the maker. Courage's own orange gone rabid: the guard is gone, only the blow is left. Border: the shared FROST RING, creeping ice-crystal frostwork in cold pale-blue and grey-white leadwork reaching inward from the rim. Palette: rabid orange, arterial red, scorched brown, pale frost blue. NO lettering anywhere.
 ```
 
-**Avarice — 18h** → `assets/calendars/sins/primary/colored/Avarice.png`
+**Avarice — 18h** → `masters/calendars/sins/primary/colored/Avarice.png`
 
 ```
 ROUND rose-window stained-glass medallion, night-window register, photorealistic render, isolated background, the circular window shape IS the frame, made of heavy PAINT that BLOCKS the light — thick, opaque, subtractive pigment. Ember-orange and old tarnished-gold glass, banked and smouldering. Center: a hunched figure locked over a great chest of coin, both arms closed around it, a heavy chain and padlock crossing his own chest as much as the lid; the coins climb to his chin and keep climbing, an empty beggar's bowl untouched at the rim of the disc — the reach for MORE with no end written into it. Border: the shared FROST RING, creeping ice-crystal frostwork in cold pale-blue and grey-white leadwork reaching inward from the rim. Palette: ember orange, tarnished gold, banked coal red, pale frost blue. NO lettering anywhere.
 ```
 
-**Lust — 20h** → `assets/calendars/sins/primary/colored/Lust.png`
+**Lust — 20h** → `masters/calendars/sins/primary/colored/Lust.png`
 
 ```
 ROUND rose-window stained-glass medallion, night-window register, photorealistic render, isolated background, the circular window shape IS the frame, made of heavy PAINT that BLOCKS the light — thick, opaque, subtractive pigment. Hot crimson and smoke-black glass, feverish. Center: a great single EYE burning in the upper field and a dark wind below it carrying two entwined figures helplessly along like leaves in a storm, feet off the ground and no ground to return to; heavy red drapery whipping past — the look that has already done the deed, appetite made a weather that carries the person rather than being carried by him. TASTEFUL and non-explicit: silhouettes and drapery only. Border: the shared FROST RING, creeping ice-crystal frostwork in cold pale-blue and grey-white leadwork reaching inward from the rim. Palette: hot crimson, smoke black, dull rose, pale frost blue. NO lettering anywhere.
 ```
 
-**Envy — 22h** → `assets/calendars/sins/primary/colored/Envy.png`
+**Envy — 22h** → `masters/calendars/sins/primary/colored/Envy.png`
 
 ```
 ROUND rose-window stained-glass medallion, night-window register, photorealistic render, isolated background, the circular window shape IS the frame, made of heavy PAINT that BLOCKS the light — thick, opaque, subtractive pigment. Crimson and bilious yellow-green glass, bruised. Center: a sunken-eyed figure in the near dark staring sideways at a small warm light held in another's hands, his own hands empty and clenched; a serpent at his shoulder with its eye on the same light, a green sickness spreading through his chest from the place he is looking — the wound of another's good, and the death that entered the world through it. Border: the shared FROST RING, creeping ice-crystal frostwork in cold pale-blue and grey-white leadwork reaching inward from the rim. Palette: deep crimson, bilious yellow-green, bruise purple, pale frost blue. NO lettering anywhere.
 ```
 
-**Despair — 02h** → `assets/calendars/sins/primary/colored/Despair.png`
+**Despair — 02h** → `masters/calendars/sins/primary/colored/Despair.png`
 
 ```
 ROUND rose-window stained-glass medallion, night-window register, photorealistic render, isolated background, the circular window shape IS the frame, made of heavy PAINT that BLOCKS the light — thick, opaque, subtractive pigment. Deep indigo and drowned blue-black glass. Center: a figure collapsed face-down at the foot of a wall, and an OPEN DOOR standing plainly in that wall a single step away with light coming through it, unlooked-at; a rope coiled on the flagstones, a lamp guttering out — not the absence of mercy but the refusal of one that is still standing open. Border: the shared FROST RING, creeping ice-crystal frostwork in cold pale-blue and grey-white leadwork reaching inward from the rim. Palette: deep indigo, drowned blue-black, cold lamp-yellow, pale frost blue. NO lettering anywhere.
 ```
 
-**Wrath — 04h** → `assets/calendars/sins/primary/colored/Wrath.png`
+**Wrath — 04h** → `masters/calendars/sins/primary/colored/Wrath.png`
 
 ```
 ROUND rose-window stained-glass medallion, night-window register, photorealistic render, isolated background, the circular window shape IS the frame, made of heavy PAINT that BLOCKS the light — thick, opaque, subtractive pigment. Black and blood-red glass under a starless sky. Center: a figure roaring with the tendons standing out in his neck, a snapped bowstring whipping loose from a broken bow in his hands, a shattered cup at his feet; behind him a black horizon with NO sun anywhere on it, the whole night having gone down on the anger and left it burning — endurance held too long and then broken all at once. Border: the shared FROST RING, creeping ice-crystal frostwork in cold pale-blue and grey-white leadwork reaching inward from the rim. Palette: black, blood red, dull iron, pale frost blue. NO lettering anywhere.
 ```
 
-**Idolatry — 06h** → `assets/calendars/sins/primary/colored/Idolatry.png`
+**Idolatry — 06h** → `masters/calendars/sins/primary/colored/Idolatry.png`
 
 ```
 ROUND rose-window stained-glass medallion, night-window register, photorealistic render, isolated background, the circular window shape IS the frame, made of heavy PAINT that BLOCKS the light — thick, opaque, subtractive pigment. Cold teal and dead gold glass at grey first light. Center: a figure halted at a fork in the road with one foot committed to each branch, bowing toward a squat gilded calf-idol on a stone plinth on one side while a plain empty altar stands on the other; a dead-still sky behind, the fire on neither altar lit — the divided step, the will that will not choose and so has already chosen. Border: the shared FROST RING, creeping ice-crystal frostwork in cold pale-blue and grey-white leadwork reaching inward from the rim. Palette: cold teal, dead gold, grey dawn stone, pale frost blue. NO lettering anywhere.
 ```
 
-**Gluttony — 08h** → `assets/calendars/sins/primary/colored/Gluttony.png`
+**Gluttony — 08h** → `masters/calendars/sins/primary/colored/Gluttony.png`
 
 ```
 ROUND rose-window stained-glass medallion, night-window register, photorealistic render, isolated background, the circular window shape IS the frame, made of heavy PAINT that BLOCKS the light — thick, opaque, subtractive pigment. Sour green and greasy brown glass. Center: a heaped table with a figure bent low over it devouring with both hands, crumbs and bones falling into the mud; at the very edge of the disc a thin hand reaches in from the outside and is not seen — the DAILY gift taken and not shared, the belly set up where God should be. A single green shoot crushed flat under the table leg. Border: the shared FROST RING, creeping ice-crystal frostwork in cold pale-blue and grey-white leadwork reaching inward from the rim. Palette: sour green, greasy brown, spoiled cream, pale frost blue. NO lettering anywhere.
 ```
 
-**Acedia — 10h** → `assets/calendars/sins/primary/colored/Acedia.png`
+**Acedia — 10h** → `masters/calendars/sins/primary/colored/Acedia.png`
 
 ```
 ROUND rose-window stained-glass medallion, night-window register, photorealistic render, isolated background, the circular window shape IS the frame, made of heavy PAINT that BLOCKS the light — thick, opaque, subtractive pigment. Flat chartreuse and dust-grey glass, drained of contrast. Center: a figure slumped in a doorway with the work laid out untouched beside him and good morning light falling across it, dust already settling on the tools and on his own shoulders; a garden going to weed just beyond the threshold, the gate open — sorrow at one's OWN good, the refusal to be gladdened by what is actually there. Border: the shared FROST RING, creeping ice-crystal frostwork in cold pale-blue and grey-white leadwork reaching inward from the rim. Palette: flat chartreuse, dust grey, faded straw, pale frost blue. NO lettering anywhere.
@@ -181,7 +181,7 @@ through Exodus. And the bottom of Dante's hell is ICE, not fire —
 Cocytus, the frozen lake, with the TRAITORS in it: the Treachery root
 at 24h stands directly above the frozen center it belongs to.
 
-**Hardness of Heart — the heart that froze** → `assets/calendars/sins/primary/colored/Hardness_of_Heart.png`
+**Hardness of Heart — the heart that froze** → `masters/calendars/sins/primary/colored/Hardness_of_Heart.png`
 
 ```
 ROUND rose-window stained-glass medallion, night-window register, photorealistic render, isolated background, the circular window shape IS the frame, made of heavy PAINT that BLOCKS the light — thick, opaque, subtractive pigment. Frozen pale-blue, black ice and dead grey-white glass, the coldest and stillest of the thirteen — a window that gives no warmth back. Center: a single human heart of grey stone locked dead-center inside clear black ice, hairline fractures running through it and nothing moving; a warm light presses against the ice from outside and stops at its surface without entering, the frozen lake stretching flat to the rim in every direction with figures held motionless under it; the twelve spokes of the wheel run inward and END at the ice. Everything composed concentrically around the sealed heart, perfectly still, which is the horror of it. Border: the shared FROST RING, creeping ice-crystal frostwork in cold pale-blue and grey-white leadwork reaching inward from the rim — here it has reached all the way in and closed. Palette: frozen pale blue, black ice, dead grey-white, refused warm gold, pale frost blue. NO lettering anywhere.

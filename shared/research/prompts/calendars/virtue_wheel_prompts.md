@@ -61,9 +61,9 @@ and cast in tarnished, corroded lead. The border itself tells virtue
 from vice at a glance, the way the Prism-light pillars carry their own
 shadow.
 
-**Drop paths:** `assets/calendars/virtues/primary/colored/<Figure>.png` (the twelve
+**Drop paths:** `masters/calendars/virtues/primary/colored/<Figure>.png` (the twelve
 LIGHT windows **plus the light axle, `Prudence.png`**) and
-`assets/calendars/vices/primary/colored/<Figure>.png` (the twelve PAINT windows
+`masters/calendars/vices/primary/colored/<Figure>.png` (the twelve PAINT windows
 **plus the paint axle, `Cunning.png`**) — sourceless calendar-mount
 roots (PromptPainter appends `_gem`/`_gpt`). Stems are the virtue/vice
 English names: `Courage.png` … and `Cowardice.png` …. Figure-first: the
@@ -78,73 +78,73 @@ circular window shape IS the frame, NO lettering anywhere in any image.
 
 ## The twelve virtues — the LIGHT register
 
-**Courage** → `assets/calendars/virtues/primary/colored/Courage.png`
+**Courage** → `masters/calendars/virtues/primary/colored/Courage.png`
 
 ```
 ROUND rose-window stained-glass medallion, night-window register, photorealistic render, isolated background, the circular window shape IS the frame, made of LIGHT passing through — luminous, additive, no heavy pigment. Warm daylight gold and orange glass, clear and radiant. Center: a single upright spear planted firm and a burnished round shield braced against a dark tide breaking at the base, an orange corona of light behind them — the will that holds its ground between fear and recklessness. Border: the shared Mean leadwork rim, the balance-beam hanging LEVEL and true across the top, cast in bright clear lead. Palette: daylight gold, warm orange, white light, clear bright lead. NO lettering anywhere.
 ```
 
-**Temperance** → `assets/calendars/virtues/primary/colored/Temperance.png`
+**Temperance** → `masters/calendars/virtues/primary/colored/Temperance.png`
 
 ```
 ROUND rose-window stained-glass medallion, night-window register, photorealistic render, isolated background, the circular window shape IS the frame, made of LIGHT passing through — luminous, additive. Cool clear water-blue and pale silver glass. Center: a single cup held level, filled exactly to its measure and no further, a slim stream of clear water poured in stopping precisely at the brim — self-command, the pleasure taken to its right measure and no more. Border: the shared Mean leadwork rim, the beam LEVEL, bright clear lead. Palette: clear water-blue, pale aqua, silver light, bright lead. NO lettering anywhere.
 ```
 
-**Generosity** → `assets/calendars/virtues/primary/colored/Generosity.png`
+**Generosity** → `masters/calendars/virtues/primary/colored/Generosity.png`
 
 ```
 ROUND rose-window stained-glass medallion, night-window register, photorealistic render, isolated background, the circular window shape IS the frame, made of LIGHT passing through — luminous, additive. Warm open gold-green glass. Center: an open hand giving freely, coins and grain falling from it into another's cupped hands below, a young shoot springing up where the gift lands — the right measure of giving, neither hoarding nor squandering. Border: the shared Mean leadwork rim, the beam LEVEL, bright clear lead. Palette: warm gold, open green, honey light, bright lead. NO lettering anywhere.
 ```
 
-**Magnificence** → `assets/calendars/virtues/primary/colored/Magnificence.png`
+**Magnificence** → `masters/calendars/virtues/primary/colored/Magnificence.png`
 
 ```
 ROUND rose-window stained-glass medallion, night-window register, photorealistic render, isolated background, the circular window shape IS the frame, made of LIGHT passing through — luminous, additive. Royal gold and deep amethyst glass, grand and clean. Center: a great arched hall or a rising temple built in fitting proportion, its columns catching gold light, one clear noble line to the whole — large spending done rightly, greatness of scale without excess. Border: the shared Mean leadwork rim, the beam LEVEL, bright clear lead. Palette: royal gold, deep amethyst, clean white light, bright lead. NO lettering anywhere.
 ```
 
-**Magnanimity — 12h, the CROWN of the light register** → `assets/calendars/virtues/primary/colored/Magnanimity.png`
+**Magnanimity — 12h, the CROWN of the light register** → `masters/calendars/virtues/primary/colored/Magnanimity.png`
 
 ```
 ROUND rose-window stained-glass medallion, night-window register, photorealistic render, isolated background, the circular window shape IS the frame, made of LIGHT passing through — luminous, additive. Deep royal blue and clear silver glass, still and high. Center: a figure standing tall and calm, head level (not lifted, not bowed), a great soul at rest in its own worth, a quiet silver light around the shoulders — greatness of soul, claiming the honour one is due and no more. Border: the shared Mean leadwork rim, the beam LEVEL, bright clear lead. Palette: royal blue, clear silver, cool white light, bright lead. NO lettering anywhere.
 ```
 
-**Patience** → `assets/calendars/virtues/primary/colored/Patience.png`
+**Patience** → `masters/calendars/virtues/primary/colored/Patience.png`
 
 ```
 ROUND rose-window stained-glass medallion, night-window register, photorealistic render, isolated background, the circular window shape IS the frame, made of LIGHT passing through — luminous, additive. Calm deep green and soft gold glass, slow and unhurried. Center: a still figure seated beside a candle that burns steady and unhurried, a slow river passing behind, no strain in the face — good temper, the right measure of anger held long and released rarely. Border: the shared Mean leadwork rim, the beam LEVEL, bright clear lead. Palette: calm green, soft gold, steady warm light, bright lead. NO lettering anywhere.
 ```
 
-**Truthfulness — 14h, beside the crown** → `assets/calendars/virtues/primary/colored/Truthfulness.png`
+**Truthfulness — 14h, beside the crown** → `masters/calendars/virtues/primary/colored/Truthfulness.png`
 
 ```
 ROUND rose-window stained-glass medallion, night-window register, photorealistic render, isolated background, the circular window shape IS the frame, made of LIGHT passing through — luminous, additive. PERFECTLY CLEAR uncolored glass and white light, the truth shown as the only glass that does not color what passes through it. Center: a single pane of flawless clear glass held up to a plain white light, nothing hidden behind it, a level plumb-line hanging dead straight beside it — honesty about oneself, claiming exactly what one is. Border: the shared Mean leadwork rim, the beam LEVEL, bright clear lead. Palette: clear uncolored glass, pure white light, faint silver, bright lead. NO lettering anywhere.
 ```
 
-**Wit** → `assets/calendars/virtues/primary/colored/Wit.png`
+**Wit** → `masters/calendars/virtues/primary/colored/Wit.png`
 
 ```
 ROUND rose-window stained-glass medallion, night-window register, photorealistic render, isolated background, the circular window shape IS the frame, made of LIGHT passing through — luminous, additive. Bright quick cyan and spark-white glass, lively and clean. Center: a single bright spark of light caught mid-leap between two hands, a light easy curve to everything, a lyre or a comedy-mask lit softly at the side — readiness of wit, the right measure of play, neither boorish nor buffoonish. Border: the shared Mean leadwork rim, the beam LEVEL, bright clear lead. Palette: bright cyan, spark white, light gold, bright lead. NO lettering anywhere.
 ```
 
-**Friendliness** → `assets/calendars/virtues/primary/colored/Friendliness.png`
+**Friendliness** → `masters/calendars/virtues/primary/colored/Friendliness.png`
 
 ```
 ROUND rose-window stained-glass medallion, night-window register, photorealistic render, isolated background, the circular window shape IS the frame, made of LIGHT passing through — luminous, additive. Warm rose and soft gold glass, open and kind. Center: two figures meeting hand to hand as equals, both faces easy and warm, a small shared lamp between them — the pleasantness that pleases rightly, neither cold nor fawning. Border: the shared Mean leadwork rim, the beam LEVEL, bright clear lead. Palette: warm rose, soft gold, kind light, bright lead. NO lettering anywhere.
 ```
 
-**Modesty** → `assets/calendars/virtues/primary/colored/Modesty.png`
+**Modesty** → `masters/calendars/virtues/primary/colored/Modesty.png`
 
 ```
 ROUND rose-window stained-glass medallion, night-window register, photorealistic render, isolated background, the circular window shape IS the frame, made of LIGHT passing through — luminous, additive. Soft dove-violet and pale silver glass, quiet and gentle. Center: a figure with eyes lowered and a faint honest flush, a hand drawn modestly to the breast, a soft veil of pale light — the right measure of shame, the healthy modesty that feels disgrace fittingly, between shyness and shamelessness. Border: the shared Mean leadwork rim, the beam LEVEL, bright clear lead. Palette: dove violet, pale silver, soft rose light, bright lead. NO lettering anywhere.
 ```
 
-**Right Ambition** → `assets/calendars/virtues/primary/colored/Right_Ambition.png`
+**Right Ambition** → `masters/calendars/virtues/primary/colored/Right_Ambition.png`
 
 ```
 ROUND rose-window stained-glass medallion, night-window register, photorealistic render, isolated background, the circular window shape IS the frame, made of LIGHT passing through — luminous, additive. Warm amber and copper-gold glass, measured and driving. Center: a steady hand setting a lamp on the next rung of a firm ladder, climbing at the right pace toward a fitting height (not the far crown, not the ground) — the right measure of desire for honour, reaching for what is due. Border: the shared Mean leadwork rim, the beam LEVEL, bright clear lead. Palette: warm amber, copper gold, measured light, bright lead. NO lettering anywhere.
 ```
 
-**Just Indignation — 24h, the ROOT of the light register** → `assets/calendars/virtues/primary/colored/Just_Indignation.png`
+**Just Indignation — 24h, the ROOT of the light register** → `masters/calendars/virtues/primary/colored/Just_Indignation.png`
 
 ```
 ROUND rose-window stained-glass medallion, night-window register, photorealistic render, isolated background, the circular window shape IS the frame, made of LIGHT passing through — luminous, additive. Clean righteous crimson and clear gold glass, warm and upright. Center: a level set of scales tipping justly against a small dark unearned crown on the high pan, a clean gold light behind — pain rightly felt at UNDESERVED good fortune, the mean between spite and envy: grieving the wrong reward, not the rewarded person. Border: the shared Mean leadwork rim, the beam LEVEL, bright clear lead. Palette: clean crimson, clear gold, upright light, bright lead. NO lettering anywhere.
@@ -154,73 +154,73 @@ ROUND rose-window stained-glass medallion, night-window register, photorealistic
 
 ## The twelve vices — the PAINT register
 
-**Boastfulness** → `assets/calendars/vices/primary/colored/Boastfulness.png`
+**Boastfulness** → `masters/calendars/vices/primary/colored/Boastfulness.png`
 
 ```
 ROUND rose-window stained-glass medallion, night-window register, photorealistic render, isolated background, the circular window shape IS the frame, made of heavy PAINT that BLOCKS the light — thick, opaque, subtractive pigment. Brassy over-gilt cheap-gold glass, loud and hollow. Center: a figure puffed up too large, chest thrust out, wearing a mask of fake medals and over-bright brass laurels it did not earn, an empty boast-scroll unrolling — claiming more than one is. The excess of Truthfulness. Border: the shared Mean leadwork rim, the beam TILTED hard to the excess side, cast in tarnished corroded lead. Palette: brassy over-gilt gold, loud cheap yellow, hollow shadow, tarnished lead. NO lettering anywhere.
 ```
 
-**Buffoonery** → `assets/calendars/vices/primary/colored/Buffoonery.png`
+**Buffoonery** → `masters/calendars/vices/primary/colored/Buffoonery.png`
 
 ```
 ROUND rose-window stained-glass medallion, night-window register, photorealistic render, isolated background, the circular window shape IS the frame, made of heavy PAINT that BLOCKS the light — thick, opaque, subtractive. Garish clashing clown-color glass, jarring and overloud. Center: a capering jester-figure mid-pratfall, laughing too hard at its own joke, a broken cracked comedy-mask askew, everything overdone past all measure — the excess of Wit, the buffoon who will do anything for a laugh. Border: the shared Mean leadwork rim, the beam TILTED to excess, tarnished lead. Palette: garish clashing brights, cracked mask white, jarring shadow, tarnished lead. NO lettering anywhere.
 ```
 
-**Flattery** → `assets/calendars/vices/primary/colored/Flattery.png`
+**Flattery** → `masters/calendars/vices/primary/colored/Flattery.png`
 
 ```
 ROUND rose-window stained-glass medallion, night-window register, photorealistic render, isolated background, the circular window shape IS the frame, made of heavy PAINT that BLOCKS the light — thick, opaque, subtractive. Sickly-sweet syrup-rose and cloying pink glass, too much sugar. Center: a bowing, scraping figure heaping false honey-praise on a bored patron, a too-sweet smile fixed on, a dripping syrup running down — the excess of Friendliness, pleasing for gain past all honesty. Border: the shared Mean leadwork rim, the beam TILTED to excess, tarnished lead. Palette: syrup rose, cloying pink, over-sweet gold, tarnished lead. NO lettering anywhere.
 ```
 
-**Shamelessness** → `assets/calendars/vices/primary/colored/Shamelessness.png`
+**Shamelessness** → `masters/calendars/vices/primary/colored/Shamelessness.png`
 
 ```
 ROUND rose-window stained-glass medallion, night-window register, photorealistic render, isolated background, the circular window shape IS the frame, made of heavy PAINT that BLOCKS the light — thick, opaque, subtractive. Lurid exposed hot-red and brazen orange glass, hard and unblushing. Center: a brazen figure caught in a plain wrong and feeling NOTHING, chin up, a torn-away veil discarded at its feet, no flush, no lowered eye — the deficiency of Modesty, the one who cannot be shamed. Border: the shared Mean leadwork rim, the beam TILTED to deficiency, tarnished lead. Palette: lurid red, brazen orange, hard exposed light, tarnished lead. NO lettering anywhere.
 ```
 
-**Over-ambition** → `assets/calendars/vices/primary/colored/Over_Ambition.png`
+**Over-ambition** → `masters/calendars/vices/primary/colored/Over_Ambition.png`
 
 ```
 ROUND rose-window stained-glass medallion, night-window register, photorealistic render, isolated background, the circular window shape IS the frame, made of heavy PAINT that BLOCKS the light — thick, opaque, subtractive. Burnt over-reached black-red and scorched gold glass, straining and cracked. Center: a figure clawing far past the top rung of a ladder that snaps beneath it, grasping at a crown it can never reach, the whole structure burning as it climbs — the excess of Right Ambition, the reach that ruins itself. Border: the shared Mean leadwork rim, the beam TILTED hard to excess, tarnished lead. Palette: burnt black-red, scorched gold, straining shadow, tarnished lead. NO lettering anywhere.
 ```
 
-**Envy — 24h, the ROOT of the paint register** → `assets/calendars/vices/primary/colored/Envy.png`
+**Envy — 24h, the ROOT of the paint register** → `masters/calendars/vices/primary/colored/Envy.png`
 
 ```
 ROUND rose-window stained-glass medallion, night-window register, photorealistic render, isolated background, the circular window shape IS the frame, made of heavy PAINT that BLOCKS the light — thick, opaque, subtractive. Bilious jaundice green-yellow and sour glass, curdled and cold. Center: a shrunken figure glaring sideways at another's DESERVED good fortune, a green sickness running out from its own chest, a hand half-reaching to spoil what it cannot have — the excess of Just Indignation, grief at good fortune that was in fact earned. Border: the shared Mean leadwork rim, the beam TILTED to excess, tarnished lead. Palette: bilious green-yellow, sour curdled tone, cold shadow, tarnished lead. NO lettering anywhere.
 ```
 
-**Cowardice — 16h, at Courage's own seat** → `assets/calendars/vices/primary/colored/Cowardice.png`
+**Cowardice — 16h, at Courage's own seat** → `masters/calendars/vices/primary/colored/Cowardice.png`
 
 ```
 ROUND rose-window stained-glass medallion, night-window register, photorealistic render, isolated background, the circular window shape IS the frame, made of heavy PAINT that BLOCKS the light — thick, opaque, subtractive. Cold drained gray-blue glass, colorless and dead, the light choked out. Center: a figure fled and cowering behind a dropped shield at the very base of the disc, back turned to a threat, a spear cast away in the dirt, all courage gone gray — the deficiency of Courage, drawn as the very same seat read in paint instead of light. Border: the shared Mean leadwork rim, the beam TILTED hard to deficiency, tarnished lead. Palette: drained gray-blue, dead pallor, choked shadow, corroded lead. NO lettering anywhere.
 ```
 
-**Gluttony** → `assets/calendars/vices/primary/colored/Gluttony.png`
+**Gluttony** → `masters/calendars/vices/primary/colored/Gluttony.png`
 
 ```
 ROUND rose-window stained-glass medallion, night-window register, photorealistic render, isolated background, the circular window shape IS the frame, made of heavy PAINT that BLOCKS the light — thick, opaque, subtractive. Bloated brown-purple and overfull glass, heavy and sated to sickness. Center: an overfull cup spilling everywhere, a figure gorging past all measure, the table groaning and overflowing onto the floor — the excess of Temperance, appetite with no brim to stop it. Border: the shared Mean leadwork rim, the beam TILTED hard to excess, tarnished lead. Palette: bloated brown-purple, overfull ochre, heavy shadow, corroded lead. NO lettering anywhere.
 ```
 
-**Greed** → `assets/calendars/vices/primary/colored/Greed.png`
+**Greed** → `masters/calendars/vices/primary/colored/Greed.png`
 
 ```
 ROUND rose-window stained-glass medallion, night-window register, photorealistic render, isolated background, the circular window shape IS the frame, made of heavy PAINT that BLOCKS the light — thick, opaque, subtractive. Hoarded dull-gold and tarnished-brass glass, locked and lightless. Center: two clawed hands clutching a heap of coins against the chest, a locked iron chest chained shut behind, nothing given, a shoot withering for want of the gift — the deficiency of Generosity, the grip that will not open. Border: the shared Mean leadwork rim, the beam TILTED to deficiency, tarnished lead. Palette: dull hoarded gold, tarnished brass, locked shadow, corroded lead. NO lettering anywhere.
 ```
 
-**Vulgarity** → `assets/calendars/vices/primary/colored/Vulgarity.png`
+**Vulgarity** → `masters/calendars/vices/primary/colored/Vulgarity.png`
 
 ```
 ROUND rose-window stained-glass medallion, night-window register, photorealistic render, isolated background, the circular window shape IS the frame, made of heavy PAINT that BLOCKS the light — thick, opaque, subtractive. Gaudy overwrought gilt-on-gilt glass, tasteless and crammed. Center: a grotesquely over-decorated hall crammed with too much gilt, mismatched over-large ornament piled with no proportion, spending flung about to show off — the excess of Magnificence, grand scale with no taste. Border: the shared Mean leadwork rim, the beam TILTED hard to excess, tarnished lead. Palette: gaudy over-gilt, clashing ornament, crammed shadow, corroded lead. NO lettering anywhere.
 ```
 
-**Vanity — 12h, the CROWN of the paint register** → `assets/calendars/vices/primary/colored/Vanity.png`
+**Vanity — 12h, the CROWN of the paint register** → `masters/calendars/vices/primary/colored/Vanity.png`
 
 ```
 ROUND rose-window stained-glass medallion, night-window register, photorealistic render, isolated background, the circular window shape IS the frame, made of heavy PAINT that BLOCKS the light — thick, opaque, subtractive. Hollow mirror-silver and cold-glare glass, self-reflecting and empty. Center: a figure gazing into a mirror that shows a version far greater than itself, a paper crown perched too high, claiming honour it has not earned — the excess of Magnanimity, greatness of soul curdled into empty self-regard. Border: the shared Mean leadwork rim, the beam TILTED to excess, tarnished lead. Palette: cold mirror-silver, hollow glare, empty shadow, corroded lead. NO lettering anywhere.
 ```
 
-**Wrath** → `assets/calendars/vices/primary/colored/Wrath.png`
+**Wrath** → `masters/calendars/vices/primary/colored/Wrath.png`
 
 ```
 ROUND rose-window stained-glass medallion, night-window register, photorealistic render, isolated background, the circular window shape IS the frame, made of heavy PAINT that BLOCKS the light — thick, opaque, subtractive. Molten black-red and boiling glass, seething and overheated. Center: a figure exploding in rage over a small slight, a candle knocked over and setting the whole scene alight, the face contorted, anger loosed with no measure — the excess of Patience, good temper burned to fury. Border: the shared Mean leadwork rim, the beam TILTED hard to excess, tarnished lead. Palette: molten black-red, boiling ember, seething shadow, corroded lead. NO lettering anywhere.
@@ -239,7 +239,7 @@ appear only when the year overflows. (Folly, the mere absence of
 judgment, was weighed and set aside: the axle must STEER. Folly
 sleeps.)
 
-**Prudence — the charioteer (LIGHT register)** → `assets/calendars/virtues/primary/colored/Prudence.png`
+**Prudence — the charioteer (LIGHT register)** → `masters/calendars/virtues/primary/colored/Prudence.png`
 
 *(Axle note: PRUDENCE — Aristotle's *phronesis* — is the judgment that
 FINDS every other virtue's mean. Without it courage turns reckless and
@@ -252,7 +252,7 @@ never rides the rim.)*
 ROUND rose-window stained-glass medallion, night-window register, photorealistic render, isolated background, the circular window shape IS the frame, made of LIGHT passing through — luminous, additive, no heavy pigment. Clear gold and warm daylight glass, the steadiest and most even light of the twenty-six, no glare and no shadow. Center: a calm charioteer seated dead-center of the disc holding the reins of a team that circles AROUND him, both hands level, eyes on the road ahead; a small clear mirror at his belt (seeing things as they are) and a serpent coiled at his feet held in check, the twelve spokes of a wheel running out from him to the rim — the judgment that steers from the middle and never rides the rim. Everything composed concentrically around his stillness. Border: the shared Mean leadwork rim, the balance-beam hanging LEVEL and true across the top, cast in bright clear lead. Palette: clear gold, warm daylight, level white light, bright clear lead. NO lettering anywhere.
 ```
 
-**Cunning — the dark charioteer (PAINT register)** → `assets/calendars/vices/primary/colored/Cunning.png`
+**Cunning — the dark charioteer (PAINT register)** → `masters/calendars/vices/primary/colored/Cunning.png`
 
 *(Axle note: CUNNING — Aristotle's own* panourgia, *cleverness in the
 service of base ends (EN VI.12) — is the same skill driving the

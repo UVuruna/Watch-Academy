@@ -12,7 +12,7 @@ Art for the Encyclopedia's "The Instrument" chapter and the subdial plates.
 ## Connections
 
 ### Uses
-- [Recolor (folder)](../../../recolor/___recolor.md) — the metal-recolor
+- [Recolor (folder)](../../../../desktop/recolor/___recolor.md) — the metal-recolor
   pipeline the subdial's gold/bronze looks derive from, live, from the
   silver master
 

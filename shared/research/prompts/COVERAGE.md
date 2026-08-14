@@ -183,7 +183,7 @@ discoverable once both files land.
 | Collection | Expected by code | On disk | Sheet entry | Verdict |
 |---|---|---|---|---|
 | `era/*` — 2 Ages + 4 Starry Seasons | Age_of_Light, Age_of_Darkness, Starry_{Spring,Summer,Autumn,Winter} | 0/6 | `era_prompts.md` ✔ | ART GAP — full generation pending, wired + graceful-absent on the Encyclopedia's ERA topic |
-| `era/Anno_Lucis.png` | 1 file | 0/1 | `era_prompts.md` ✔ (§Anno Lucis) | ART GAP + WIRING GAP — no code references `assets/celestial/era/Anno_Lucis.png` at all today; the Anno Lucis year is TEXT-ONLY in the hover legend (`core.deep_time.format_anno_lucis`) — generating the art alone would not yet make it appear anywhere |
+| `era/Anno_Lucis.png` | 1 file | 0/1 | `era_prompts.md` ✔ (§Anno Lucis) | ART GAP + WIRING GAP — no code references `masters/celestial/era/Anno_Lucis.png` at all today; the Anno Lucis year is TEXT-ONLY in the hover legend (`core.deep_time.format_anno_lucis`) — generating the art alone would not yet make it appear anywhere |
 | `era/calendar/*` — 10 calendar-system emblems | AUC, Byzantine, Hebrew, Hegirae, Buddhist, Huangdi, Maya, Kali Yuga, Olympiad, Unix | 0/10 | `era_prompts.md` ✔ (§The Eras of the World's own calendars) | ART GAP — wired (`app/encyclopedia.py` `_ERA_CALENDAR_ART`, strings as the "Eras of the World" essay's image strip), graceful-absent, NOW ALSO ROTATING (ERA-TRIO round) |
 | `celestial/era/calendar/Byzantine_v2.png` — the Byzantine v2 rotation variant | 1 file | 0/1 | `era_prompts.md` ✔ (§The Eras of the World's own calendars, "Byzantine Anno Mundi — v2") | ART GAP — a genuinely new design (tetragrammatic cross, four firesteels), not a regeneration of the canonical prompt; discovered automatically by `rotating_art_file` once both this file AND the canonical `Byzantine.png` exist, no separate code entry needed (THE UNIVERSAL ROTATION CONVENTION) |
 
@@ -217,9 +217,9 @@ run to completion anyway before the owner caught it (12/12 Gemini,
 9/12 ChatGPT) and the resulting 20 extra files were deleted the same
 round. The one-master model itself is NOW ALSO retired (Rsub round,
 2026-07-21): the plate is no longer an art-SOURCE family at all — five
-hand-picked sets live under `assets/instrument/subdial/<set>/<finish>.png`
+hand-picked sets live under `masters/instrument/subdial/<set>/<finish>.png`
 (`<set>` = set1..set4, `<finish>` = gold/silver/bronze) plus
-`assets/instrument/subdial/solo/<finish>.png` (only silver hand-drawn, gold/
+`masters/instrument/subdial/solo/<finish>.png` (only silver hand-drawn, gold/
 bronze still algorithmic) — see
 [Subdial Prompts](instrument/subdial_circle_prompts.md) for the full
 story and the derivation-check paragraph Rule #19 requires. This row
@@ -234,7 +234,7 @@ tracked here the moment they're written, per this file's own charter
 ("read it before writing a sheet, not after").
 
 - **Slavic Months** — [Months Prompts](months/months_prompts.md).
-  Twelve ROUND rose-window medallions, `assets/calendars/slavic_months/primary/colored/<stem>.png`
+  Twelve ROUND rose-window medallions, `masters/calendars/slavic_months/primary/colored/<stem>.png`
   (the SAME sourceless-root precedent as the subdial sets — see
   `assets/___assets.md`), registered in `config.defaults.
   SLAVIC_MONTHS` (R7b, 2026-07-21) and the `months` Encyclopedia topic
@@ -248,7 +248,7 @@ tracked here the moment they're written, per this file's own charter
   families (Trinity, Family, Temperaments, Persons, One Soul, Walks,
   Life-Tree — the five CENTER rosettes and the already-round
   Tetramorph/Evangelist rondels correctly excluded, they need no
-  companion). Drop root `assets/badge/circle/<family>/<Stem>.png`, a
+  companion). Drop root `masters/badge/circle/<family>/<Stem>.png`, a
   NEW staging area deliberately outside `assets/archetypes/` since the
   hover-card left-column WIRING is undecided (owner call — DO NOT
   invent it). **Art: 0/38.** The Animals register's own 8 Life badges
@@ -284,7 +284,7 @@ tracked here the moment they're written, per this file's own charter.
   Olympian family's own Greek-key border, recut as dark leadwork
   instead of bronze relief — "the greek-key border family the god
   medallions already wear but in a darker bestiary register" (owner).
-  Drop root `assets/weeks/myth/age_of_heroes/{primary,colored}/<Stem>.png`.
+  Drop root `masters/weeks/myth/age_of_heroes/{primary,colored}/<Stem>.png`.
   **Art: 0/18** (9 figures × 2 registers). Theme NOT yet registered in
   `config/defaults.py` — sheet-writing only, per this round's own
   scope ("Sheets ONLY... NO app code"); `assets/weekday/**` is a
@@ -312,7 +312,7 @@ tracked here the moment they're written, per this file's own charter.
   self-taken title). Night-window register wearing its OWN cloud-scroll
   (xiangyun) border in a jade-and-lacquer palette — deliberately NOT
   the Greek key, per the owner's own instruction. Drop root
-  `assets/weeks/myth/celestial_court/{primary,colored}/<Stem>.png`. **Art:
+  `masters/weeks/myth/celestial_court/{primary,colored}/<Stem>.png`. **Art:
   0/18** (slot count unchanged by the v2 reseat — one figure traded per
   seat, none added). Same data-driven-root, zero-whitelist-needed
   status as Greek Monsters.
@@ -327,14 +327,14 @@ tracked here the moment they're written, per this file's own charter.
   2026-07-22:** those 2 were cross-referenced since R8c but carried no
   fenced generatable prompt body anywhere until this round (the R10
   report caught it live) — both are now written in full in this sheet.
-  NEW canonical sourceless root, `assets/weeks/societies/wolf/primary/colored/<key>.png` — the SAME
+  NEW canonical sourceless root, `masters/weeks/societies/wolf/primary/colored/<key>.png` — the SAME
   "NOT art-sourced, one shared file per name" precedent `assets/
   months/` and `assets/instrument/subdial/` already set, chosen over per-theme
   folders because a title plate has exactly ONE consumer regardless of
   the theme's own cast register (see the sheet's own "canonical drop
   path" section for the full reasoning). Continents is deliberately
   EXCLUDED — it already has a real, wired title image
-  (`assets/celestial/earth/world.png`, `defaults.CONTINENTS_TITLE_IMAGE`), the
+  (`masters/celestial/earth/world.png`, `defaults.CONTINENTS_TITLE_IMAGE`), the
   owner's own SKIP instruction. **Art: 0/26** in this sheet now (24
   original + the 2 gap-closed entries). This is also the ONE documented
   exception to the
@@ -388,7 +388,7 @@ the CORRECTED split, not the original bug.
   wolf-fang totem / saronite-and-ice fang) the only per-block
   identifier; `colored` keeps each block's own paint (blue-gold /
   red-black / saronite-ice). No rotation seats. Drop root
-  `assets/weeks/gaming/wow_<block>/{primary,colored}/<Stem>.png`.
+  `masters/weeks/gaming/wow_<block>/{primary,colored}/<Stem>.png`.
   **Art: 0/54** (27 figures × 2 registers; 3 title plates tracked in
   `titles/theme_title_prompts.md`). Dry-run: 54/54, 0 problems.
 - **Cyberpunk 2077** — [Cyberpunk Prompts](cyberpunk/cyberpunk_prompts.md).
@@ -409,7 +409,7 @@ the CORRECTED split, not the original bug.
   circuit-trace (PCB) border motif carved into the same bronze,
   constant across blocks; `colored` is the full-saturated neon-noir
   poster, gang-canonical neon colors per figure. Drop root
-  `assets/weeks/gaming/cp_<block>/{primary,colored}/<Stem>.png`.
+  `masters/weeks/gaming/cp_<block>/{primary,colored}/<Stem>.png`.
   **Art: 0/78** (Gangs 28 + Street 26 + Power 24; 3 title plates
   tracked separately). Dry-run: 78/78, 0 problems.
 - **Star Wars** — [Star Wars Prompts](starwars/starwars_prompts.md).
@@ -431,7 +431,7 @@ the CORRECTED split, not the original bug.
   never a genuine readable alphabet, and not even that flavor on
   regular cast plates, which carry zero lettering) carved into the
   same bronze; `colored` is the full-color paint version. Drop root
-  `assets/weeks/films/sw_<set>/{primary,colored}/<Stem>.png`.
+  `masters/weeks/films/sw_<set>/{primary,colored}/<Stem>.png`.
   **Art: 0/60** (30 figures × 2 registers; 3 title plates tracked
   separately). Dry-run: 60/60, 0 problems.
 - **The Corporation** — [Corporate Prompts](corporate/corporate_prompts.md).
@@ -446,7 +446,7 @@ the CORRECTED split, not the original bug.
   line-and-node border motif carved into the same bronze; `colored`
   is the clean annual-report paint version (steel and gold accents).
   No rotation seats. Drop root
-  `assets/weeks/crafts/corporate/{primary,colored}/<Stem>.png`. **Art:
+  `masters/weeks/crafts/corporate/{primary,colored}/<Stem>.png`. **Art:
   0/18** (9 figures × 2 registers; 1 title plate tracked separately).
   Dry-run: 18/18, 0 problems.
 - **Ten new title plates** — filed into the existing
@@ -653,7 +653,7 @@ Unchanged, re-confirmed 2026-07-19:
   itself is `config/___config.md`'s ECLIPSE TYPE ICONS note, not an
   AI-prompt gap either (no new icon files needed — the mapping picks
   among files already on disk, one computationally tinted).
-- **Guide** (`assets/instrument/guide/*.png` — 91 files, confirmed on disk) — the
+- **Guide** (`masters/instrument/guide/*.png` — 91 files, confirmed on disk) — the
   owner's own screenshots; no sheet applicable.
 
 <a id="zero-gap"></a>
@@ -716,7 +716,7 @@ geometry, and root Rule #19's question kills them as art: *if changing
 a constant would make the painted plate a lie, the plate must not be
 painted.* Move `DIAL_OFFSET_DEG` and a commissioned dial illustration
 is silently wrong. They are COMPUTED now, live, by
-[Instrument Diagrams](../../render/__about/instrument_diagrams.md) — the same
+[Instrument Diagrams](../../../desktop/render/__about/instrument_diagrams.md) — the same
 verdict the Cube's twenty-three compositions took. `paint_light` is the
 counter-example and keeps its picture: it illustrates a doctrine, not a
 geometry.
@@ -758,7 +758,7 @@ Reading the 73 back to the owner produced four verdicts that removed
 | 2 sacred plates | **0** | drawn by the program (agreed the same day) |
 
 Both generic plates are the INSTRUMENT's own furniture
-(`assets/instrument/duality.png`, `assets/instrument/thirteenth.png`) —
+(`masters/instrument/duality.png`, `masters/instrument/thirteenth.png`) —
 they belong to no theme, and the tree law has no seat for "everyone's".
 Their briefs are in [The Instrument](instrument/instrument_prompts.md)
 §The Two Generic Plates. The per-theme briefs they replace are NOT

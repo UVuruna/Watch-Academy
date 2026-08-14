@@ -13,8 +13,8 @@ What the theme still owes is its **two Ninths**, and only those:
 
 | Ninth | When it shows | File |
 |---|---|---|
-| **Zealandia** | the ordinary Ninth seat | `assets/celestial/earth/zealandia.png` |
-| **Pangea** | INSTEAD of Zealandia when the sky is doing something — an eclipse, a solstice or equinox, a full or new moon (`core.continents`, the owner's Easter egg) | `assets/celestial/earth/pangea.png` |
+| **Zealandia** | the ordinary Ninth seat | `masters/celestial/earth/zealandia.png` |
+| **Pangea** | INSTEAD of Zealandia when the sky is doing something — an eclipse, a solstice or equinox, a full or new moon (`core.continents`, the owner's Easter egg) | `masters/celestial/earth/pangea.png` |
 
 Both are wired ahead of the art and both articles are written
 (`Database/encyclopedia.json` §`ninths`). Pangea is the file the Session
@@ -56,7 +56,7 @@ what it already does with the rest.
 ---
 
 **Zealandia — the Unfound** →
-`assets/celestial/earth/zealandia.png`
+`masters/celestial/earth/zealandia.png`
 
 *A true continent, 94% drowned and unrecognized until 2017 — the Ninth
 that is really there and is simply not seen.*
@@ -66,7 +66,7 @@ Photorealistic satellite view of Earth from orbit, ONE globe centred and filling
 ```
 
 **Pangea — the deep-time Ninth** →
-`assets/celestial/earth/pangea.png`
+`masters/celestial/earth/pangea.png`
 
 *Was one, is many, will be one again — the whole wheel of continents as
 a single body, 300 million years ago.*
