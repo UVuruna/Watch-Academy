@@ -64,9 +64,9 @@ app bundles only the compact file.
 ### Uses
 - [Database (folder)](../../shared/Database/___database.md) — source data for
   analysis
-- [Core (folder)](../core/___core.md) — `cube_seating` module drawn by
+- [Core (folder)](../../desktop/core/___core.md) — `cube_seating` module drawn by
   `seating_preview.py`
-- [Config (folder)](../config/___config.md) — theme/roster/palette tables
+- [Config (folder)](../../desktop/config/___config.md) — theme/roster/palette tables
   read by `build_roster.py` and the relocation scripts
 
 ### Used by

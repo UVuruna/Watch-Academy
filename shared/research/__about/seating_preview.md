@@ -23,7 +23,7 @@ Writes `research/seating/rose_24.png` and `research/seating/calendar_12.png`.
 ## Connections
 
 ### Uses
-- [Cube Seating](../../core/__about/cube_seating.md) —
+- [Cube Seating](../../../desktop/core/__about/cube_seating.md) —
   `rose_seating()`, `calendar_seating()`, `ray_star()`, `RAY_STEP_DEG`
 - `config.constants`, `config.cube`, `config.defaults`, `config.palette` —
   arm geometry, the sacred-trio names, the Rose/Calendar palettes

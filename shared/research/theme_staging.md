@@ -167,7 +167,7 @@ Exegol. Session 33's provisional (a) is GONE:
 new `constants.WEEKDAY_THEME_NINTH_NIGHT["sw_dyad"]` table carries
 Exegol's plate, dispatched by `constants.NINTH_MECHANISMS["sw_dyad"] ==
 "daynight"` — part of THE DOUBLE NINTH LAW (owner decree 2026-07-29,
-[Config (folder)](../config/___config.md)). The regression this table's
+[Config (folder)](../../desktop/config/___config.md)). The regression this table's
 old note pointed at is renamed:
 `test_sw_dyad_ninth_is_a_daylight_night_switch` in
 `tests/test_weekday_rotation.py` now pins mechanism (b); the guard
