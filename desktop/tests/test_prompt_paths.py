@@ -344,11 +344,9 @@ _WHITELIST: dict[str, str] = {
     # reads style/phase for the Ninth seat is a future wiring round,
     # recorded in the sheet's own Cleanup section. Until then no code
     # enumerates these eight stems:
-    "celestial/earth/earth_atmo_pangea_day.png": "continents matrix, ninth-seat wiring is a future round (continents_prompts.md)",
     "celestial/earth/earth_atmo_pangea_night.png": "continents matrix, ninth-seat wiring is a future round (continents_prompts.md)",
     "celestial/earth/earth_clean_pangea_day.png": "continents matrix, ninth-seat wiring is a future round (continents_prompts.md)",
     "celestial/earth/earth_clean_pangea_night.png": "continents matrix, ninth-seat wiring is a future round (continents_prompts.md)",
-    "celestial/earth/earth_atmo_zealandia_day.png": "continents matrix, ninth-seat wiring is a future round (continents_prompts.md)",
     "celestial/earth/earth_atmo_zealandia_night.png": "continents matrix, ninth-seat wiring is a future round (continents_prompts.md)",
     "celestial/earth/earth_clean_zealandia_day.png": "continents matrix, ninth-seat wiring is a future round (continents_prompts.md)",
     "celestial/earth/earth_clean_zealandia_night.png": "continents matrix, ninth-seat wiring is a future round (continents_prompts.md)",

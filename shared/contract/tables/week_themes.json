@@ -452,10 +452,10 @@
       "blurbs": "day",
       "ninth": {
         "alt": "Pangea",
-        "alt_plate": "../earth/pangea.png",
+        "alt_plate": "../earth/earth_atmo_pangea_day.png",
         "mechanism": "easter_egg",
         "name": "Zealandia",
-        "plate": "../earth/zealandia.png"
+        "plate": "../earth/earth_atmo_zealandia_day.png"
       },
       "seats": {
         "friday": {

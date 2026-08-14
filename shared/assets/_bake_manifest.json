@@ -10054,6 +10054,15 @@
       "height": 512,
       "bytes": 85138
     },
+    "calendars/zodiac/chinese/elements/colored/Earth_gem.png": {
+      "sha256": "22c19b8b90bb0e51749a93fa4ed0c6ac74ae6f07f67dd67f871129ba8627b8fc",
+      "output": "calendars/zodiac/chinese/elements/colored/Earth_gem.webp",
+      "ceiling": 512,
+      "quality": 90,
+      "width": 512,
+      "height": 511,
+      "bytes": 89954
+    },
     "calendars/zodiac/chinese/elements/colored/Fire.png": {
       "sha256": "a65d105195c4790a673154517b9618b44de0a611de8824d82403fe1ae5da1328",
       "output": "calendars/zodiac/chinese/elements/colored/Fire.webp",
@@ -10062,6 +10071,15 @@
       "width": 512,
       "height": 509,
       "bytes": 66898
+    },
+    "calendars/zodiac/chinese/elements/colored/Fire_gem.png": {
+      "sha256": "602114e8fd0faba85d9dd73e5a2cdff2af15fd2d4b0257dec70f5dbf834ccebf",
+      "output": "calendars/zodiac/chinese/elements/colored/Fire_gem.webp",
+      "ceiling": 512,
+      "quality": 90,
+      "width": 507,
+      "height": 512,
+      "bytes": 67698
     },
     "calendars/zodiac/chinese/elements/colored/Metal.png": {
       "sha256": "00d33b0b7e4af8443818ab658f06ca733960842917cd720a102439dfb740fab0",
@@ -10072,6 +10090,15 @@
       "height": 512,
       "bytes": 71170
     },
+    "calendars/zodiac/chinese/elements/colored/Metal_gem.png": {
+      "sha256": "dbabfc15e3baae54c338f33790e72f4412b0424d5c71acca02380ee3d56f3d87",
+      "output": "calendars/zodiac/chinese/elements/colored/Metal_gem.webp",
+      "ceiling": 512,
+      "quality": 90,
+      "width": 512,
+      "height": 510,
+      "bytes": 76814
+    },
     "calendars/zodiac/chinese/elements/colored/Water.png": {
       "sha256": "cfa8ec6cb3cd77bb6864f3e885e27c5c76685c832c2d28ae1188acef0e2dfb38",
       "output": "calendars/zodiac/chinese/elements/colored/Water.webp",
@@ -10081,6 +10108,15 @@
       "height": 512,
       "bytes": 73804
     },
+    "calendars/zodiac/chinese/elements/colored/Water_gem.png": {
+      "sha256": "ffbc128beaf0abb4c2f2df5c60dfb811cd9f7dbf4a1b1e3d6d0be06bfd22bc5e",
+      "output": "calendars/zodiac/chinese/elements/colored/Water_gem.webp",
+      "ceiling": 512,
+      "quality": 90,
+      "width": 512,
+      "height": 511,
+      "bytes": 74030
+    },
     "calendars/zodiac/chinese/elements/colored/Wood.png": {
       "sha256": "31688d69d468ebbee11ef0fbf86b2016ca4d437390d09b35e375c59d19a015b3",
       "output": "calendars/zodiac/chinese/elements/colored/Wood.webp",
@@ -10089,6 +10125,15 @@
       "width": 512,
       "height": 511,
       "bytes": 80474
+    },
+    "calendars/zodiac/chinese/elements/colored/Wood_gem.png": {
+      "sha256": "c2e2c833b8497e4c7d05e32247267bbdbb76b00c844e1244b30de10119ef1cb3",
+      "output": "calendars/zodiac/chinese/elements/colored/Wood_gem.webp",
+      "ceiling": 512,
+      "quality": 90,
+      "width": 512,
+      "height": 512,
+      "bytes": 89572
     },
     "calendars/zodiac/chinese/primary/bronze/Cat_gem.png": {
       "sha256": "e6da3d27c0cfa460bbe1c1eb8bbfb4cce22166183a0f4a9d856b62d0541fbe33",
@@ -10459,6 +10504,42 @@
       "height": 963,
       "bytes": 188752
     },
+    "celestial/earth/earth_atmo_pangea_day_gem.png": {
+      "sha256": "9d3db4fc8a2152041af36aef13ec059ae658fcd45a9b690fa4ba5125f5325d0f",
+      "output": "celestial/earth/earth_atmo_pangea_day_gem.webp",
+      "ceiling": 0,
+      "quality": 90,
+      "width": 959,
+      "height": 957,
+      "bytes": 142882
+    },
+    "celestial/earth/earth_atmo_pangea_day_gpt.png": {
+      "sha256": "dc70afca957817a6b012d89436b430ecd339004c4f113d952f45c2211c15846a",
+      "output": "celestial/earth/earth_atmo_pangea_day_gpt.webp",
+      "ceiling": 0,
+      "quality": 90,
+      "width": 1254,
+      "height": 1245,
+      "bytes": 628040
+    },
+    "celestial/earth/earth_atmo_pangea_night_gem.png": {
+      "sha256": "69856af6804094f5123640732594ff51db74be0bc9c12f46c9da1ba2c5ddc856",
+      "output": "celestial/earth/earth_atmo_pangea_night_gem.webp",
+      "ceiling": 0,
+      "quality": 90,
+      "width": 962,
+      "height": 961,
+      "bytes": 103754
+    },
+    "celestial/earth/earth_atmo_pangea_night_gpt.png": {
+      "sha256": "1f2d477056190ebbdc51305a49f9e346a19434cb6fb526743c69b9a26a7ec280",
+      "output": "celestial/earth/earth_atmo_pangea_night_gpt.webp",
+      "ceiling": 0,
+      "quality": 90,
+      "width": 1254,
+      "height": 1233,
+      "bytes": 376008
+    },
     "celestial/earth/earth_atmo_south_america_day.png": {
       "sha256": "304f789f0d8ecda97b9eeac76809083e6fef87f96f749eab21f9498faf634afa",
       "output": "celestial/earth/earth_atmo_south_america_day.webp",
@@ -10503,6 +10584,42 @@
       "width": 1254,
       "height": 1254,
       "bytes": 629368
+    },
+    "celestial/earth/earth_atmo_zealandia_day_gem.png": {
+      "sha256": "74d4f8cc71beda1455d0d2ceded120c87f8d65603ecfe206f6d4c8e8054c538c",
+      "output": "celestial/earth/earth_atmo_zealandia_day_gem.webp",
+      "ceiling": 0,
+      "quality": 90,
+      "width": 980,
+      "height": 980,
+      "bytes": 108310
+    },
+    "celestial/earth/earth_atmo_zealandia_day_gpt.png": {
+      "sha256": "682025d2d9f3c587fd70d3c8bb5e5782dc238fb69e905c76c5f522ab8315fa34",
+      "output": "celestial/earth/earth_atmo_zealandia_day_gpt.webp",
+      "ceiling": 0,
+      "quality": 90,
+      "width": 1254,
+      "height": 1254,
+      "bytes": 552330
+    },
+    "celestial/earth/earth_atmo_zealandia_night_gem.png": {
+      "sha256": "54b82388e49f244222d7e98d65a41620be4c702fb1598224398570a5dca58743",
+      "output": "celestial/earth/earth_atmo_zealandia_night_gem.webp",
+      "ceiling": 0,
+      "quality": 90,
+      "width": 980,
+      "height": 979,
+      "bytes": 67398
+    },
+    "celestial/earth/earth_atmo_zealandia_night_gpt.png": {
+      "sha256": "65d27104912fc0108f187a9983cb48aa851aa7dbc35ac426d472d28e2ec87caf",
+      "output": "celestial/earth/earth_atmo_zealandia_night_gpt.webp",
+      "ceiling": 0,
+      "quality": 90,
+      "width": 1254,
+      "height": 1252,
+      "bytes": 316242
     },
     "celestial/earth/earth_clean_africa_day.png": {
       "sha256": "cf7bd997a4fb91c7acdaee40ca23e3b13c7ad2e489d4f7526dc8d82fb8c9bda2",
@@ -10621,6 +10738,42 @@
       "height": 926,
       "bytes": 207210
     },
+    "celestial/earth/earth_clean_pangea_day_gem.png": {
+      "sha256": "7cc957aae41babe7d144039d3dfd18892c11287b570e438e2e91f909d0510284",
+      "output": "celestial/earth/earth_clean_pangea_day_gem.webp",
+      "ceiling": 0,
+      "quality": 90,
+      "width": 950,
+      "height": 948,
+      "bytes": 150132
+    },
+    "celestial/earth/earth_clean_pangea_day_gpt.png": {
+      "sha256": "abdfb1ec74ea918db35728f95c96908da5b46e2d72d87f3ec423cc4706c8c010",
+      "output": "celestial/earth/earth_clean_pangea_day_gpt.webp",
+      "ceiling": 0,
+      "quality": 90,
+      "width": 1254,
+      "height": 1244,
+      "bytes": 486456
+    },
+    "celestial/earth/earth_clean_pangea_night_gem.png": {
+      "sha256": "654fca2a6967263e9a7c27d60a5607b6500ab9b60e851dd3ea8e8d49adb0f43a",
+      "output": "celestial/earth/earth_clean_pangea_night_gem.webp",
+      "ceiling": 0,
+      "quality": 90,
+      "width": 945,
+      "height": 945,
+      "bytes": 77678
+    },
+    "celestial/earth/earth_clean_pangea_night_gpt.png": {
+      "sha256": "d405f28fca36bc697d462a6413a0a886d40b4c2785bbed4015f6768a21c5b706",
+      "output": "celestial/earth/earth_clean_pangea_night_gpt.webp",
+      "ceiling": 0,
+      "quality": 90,
+      "width": 1254,
+      "height": 1245,
+      "bytes": 350016
+    },
     "celestial/earth/earth_clean_south_america_day.png": {
       "sha256": "5d1eea79d05f347036c1af9b72f487eff19356cfe897a4e2ef77a38ce55029c5",
       "output": "celestial/earth/earth_clean_south_america_day.webp",
@@ -10666,6 +10819,60 @@
       "height": 553,
       "bytes": 57276
     },
+    "celestial/earth/earth_clean_zealandia_day_gem.png": {
+      "sha256": "4432c66324cdedbb599e5932bfa520791fe0772b88a617285c7e5d9fda0ef2ac",
+      "output": "celestial/earth/earth_clean_zealandia_day_gem.webp",
+      "ceiling": 0,
+      "quality": 90,
+      "width": 951,
+      "height": 946,
+      "bytes": 105786
+    },
+    "celestial/earth/earth_clean_zealandia_day_gpt.png": {
+      "sha256": "514d8ca70e57ac6709ba0e9e3d56da7b1db3a49f96d3bcf41857d5c9bc39f82f",
+      "output": "celestial/earth/earth_clean_zealandia_day_gpt.webp",
+      "ceiling": 0,
+      "quality": 90,
+      "width": 1254,
+      "height": 1247,
+      "bytes": 467498
+    },
+    "celestial/earth/earth_clean_zealandia_night_gem.png": {
+      "sha256": "4faf39ae1f3fdf50abb748b3ecc7aaeca41f2630eb05fc94e187efedd1826636",
+      "output": "celestial/earth/earth_clean_zealandia_night_gem.webp",
+      "ceiling": 0,
+      "quality": 90,
+      "width": 950,
+      "height": 945,
+      "bytes": 51076
+    },
+    "celestial/earth/earth_clean_zealandia_night_gpt.png": {
+      "sha256": "640a910310867332fee3d02ed893853d65ce995e25b0f116422b0dbecc887f15",
+      "output": "celestial/earth/earth_clean_zealandia_night_gpt.webp",
+      "ceiling": 0,
+      "quality": 90,
+      "width": 1254,
+      "height": 1243,
+      "bytes": 421612
+    },
+    "celestial/earth/pangea_gem.png": {
+      "sha256": "2ab8cbeb98672ba88ff443a70295afc972a1b7d89c4cafdd9cb5085dd006e880",
+      "output": "celestial/earth/pangea_gem.webp",
+      "ceiling": 0,
+      "quality": 90,
+      "width": 923,
+      "height": 929,
+      "bytes": 156912
+    },
+    "celestial/earth/pangea_gpt.png": {
+      "sha256": "7645af3bedba4700776a6cb27db2cfdf8d368dfa1b6eef2060492c09620ca273",
+      "output": "celestial/earth/pangea_gpt.webp",
+      "ceiling": 0,
+      "quality": 90,
+      "width": 1254,
+      "height": 1254,
+      "bytes": 613440
+    },
     "celestial/earth/world.png": {
       "sha256": "44fe6e88b2a2f7c58ca2124eed902dd0f3aaa1562f729a2d729ecdb1e3b0712e",
       "output": "celestial/earth/world.webp",
@@ -10674,6 +10881,24 @@
       "width": 3698,
       "height": 1876,
       "bytes": 742066
+    },
+    "celestial/earth/zealandia_gem.png": {
+      "sha256": "c7e7c6fbb3f883e491be90ee0020ae1f25d04df74ea6c90b4877eb104dee25a1",
+      "output": "celestial/earth/zealandia_gem.webp",
+      "ceiling": 0,
+      "quality": 90,
+      "width": 965,
+      "height": 966,
+      "bytes": 127836
+    },
+    "celestial/earth/zealandia_gpt.png": {
+      "sha256": "4d95c409558e4512fd70663a5cd13f3e0d8d1f5b74ca44dd14b76a4d8901100a",
+      "output": "celestial/earth/zealandia_gpt.webp",
+      "ceiling": 0,
+      "quality": 90,
+      "width": 1254,
+      "height": 1249,
+      "bytes": 499138
     },
     "celestial/eclipse/Lunar_Partial.png": {
       "sha256": "8dc26c1b2d98678253cefa6b51f2c2e5d20a0016a00a629f1f61d7d120d2cb79",
@@ -10692,6 +10917,15 @@
       "width": 512,
       "height": 512,
       "bytes": 69780
+    },
+    "celestial/eclipse/Lunar_Partial_gpt.png": {
+      "sha256": "2f300a6104fddcc756c2595e9f2dcedbf0f2ab7b4e5087602b353a8fe9ff5640",
+      "output": "celestial/eclipse/Lunar_Partial_gpt.webp",
+      "ceiling": 512,
+      "quality": 90,
+      "width": 512,
+      "height": 504,
+      "bytes": 125348
     },
     "celestial/eclipse/Lunar_Partial_v2.png": {
       "sha256": "ccc5e5d7fc822910427fbacf0a4caf272996b79807f649fb0e53bee70fd293d0",
@@ -10827,6 +11061,15 @@
       "width": 512,
       "height": 511,
       "bytes": 63824
+    },
+    "celestial/eclipse/Solar_Hybrid_gpt.png": {
+      "sha256": "a4cb85fb01541c7549c1679b7038a236cd301675db0301379110d37ab37f61cd",
+      "output": "celestial/eclipse/Solar_Hybrid_gpt.webp",
+      "ceiling": 512,
+      "quality": 90,
+      "width": 512,
+      "height": 506,
+      "bytes": 110198
     },
     "celestial/eclipse/Solar_Hybrid_v2.png": {
       "sha256": "1f0ce4ff6513ec6c3c25aaf693442da4d49487479ddddbe30535b82d289783bc",
@@ -11674,6 +11917,15 @@
       "height": 1004,
       "bytes": 1123882
     },
+    "instrument/duality_gpt.png": {
+      "sha256": "3c3f1c6f38fec3e03c0d33627ea1c890c5458956e8382f36b9795796937d8b0b",
+      "output": "instrument/duality_gpt.png",
+      "ceiling": null,
+      "quality": 90,
+      "width": 1135,
+      "height": 1249,
+      "bytes": 2676847
+    },
     "instrument/logo_gem.png": {
       "sha256": "c43599ec1601a0f3d2360781c04e0fed4ee776b411522a78c31a9d45067b141e",
       "output": "instrument/logo_gem.png",
@@ -11718,6 +11970,15 @@
       "width": 926,
       "height": 955,
       "bytes": 1485050
+    },
+    "instrument/thirteenth_gpt.png": {
+      "sha256": "0ea253ee553f6043ebf0a04d5c16dfd1deb78c6696dedcacdbd008b4467dbe7e",
+      "output": "instrument/thirteenth_gpt.png",
+      "ceiling": null,
+      "quality": 90,
+      "width": 1165,
+      "height": 1226,
+      "bytes": 2729154
     },
     "weeks/celestial_bodies/cosmos/primary/bronze/Big_Bang_gem.png": {
       "sha256": "44aca458f1a5da3574bc28d78e06b6b2cbab02cd48da2a8fcc5222cdc2e24742",
@@ -12330,6 +12591,24 @@
       "width": 512,
       "height": 504,
       "bytes": 88316
+    },
+    "weeks/celestial_bodies/planets/primary/photo/Sun_Eclipse_gem.png": {
+      "sha256": "de4cc01486da06d5eb8cd760faa5a6f5c3e34c355fd872675ab730aaf002d8d3",
+      "output": "weeks/celestial_bodies/planets/primary/photo/Sun_Eclipse_gem.webp",
+      "ceiling": 512,
+      "quality": 90,
+      "width": 512,
+      "height": 498,
+      "bytes": 43640
+    },
+    "weeks/celestial_bodies/planets/primary/photo/Sun_Eclipse_gpt.png": {
+      "sha256": "d63179a1a77656c47a4facb8188cba579bd67b12e08488e40b53162c406990a6",
+      "output": "weeks/celestial_bodies/planets/primary/photo/Sun_Eclipse_gpt.webp",
+      "ceiling": 512,
+      "quality": 90,
+      "width": 472,
+      "height": 512,
+      "bytes": 54688
     },
     "weeks/celestial_bodies/planets/primary/photo/Title_gem.png": {
       "sha256": "30a48afdaf5d3dc374a029ea64c546e28a2f56f5b599512e12574aa79eba71f0",
@@ -18073,6 +18352,15 @@
       "height": 512,
       "bytes": 67232
     },
+    "weeks/gaming/wow_evil/primary/bronze/Illidan_gem.png": {
+      "sha256": "60069a88a46dd7ba08614352bc3efa802579029f001f1109ee5a44a5f8f71193",
+      "output": "weeks/gaming/wow_evil/primary/bronze/Illidan_gem.webp",
+      "ceiling": 512,
+      "quality": 90,
+      "width": 512,
+      "height": 511,
+      "bytes": 77996
+    },
     "weeks/gaming/wow_evil/primary/bronze/Kel_Thuzad_gem.png": {
       "sha256": "d24d4aab10d4c0636cea4546554ebdd6868a86d3b42a6c341e9d1ec67614c9f1",
       "output": "weeks/gaming/wow_evil/primary/bronze/Kel_Thuzad_gem.webp",
@@ -18135,6 +18423,15 @@
       "width": 507,
       "height": 512,
       "bytes": 69334
+    },
+    "weeks/gaming/wow_evil/primary/bronze/Medivh_gem.png": {
+      "sha256": "b54edc8f6d647a5af1c4c45ff1dde3d7db96790bf18ac067f506f3c7e623e37c",
+      "output": "weeks/gaming/wow_evil/primary/bronze/Medivh_gem.webp",
+      "ceiling": 512,
+      "quality": 90,
+      "width": 512,
+      "height": 508,
+      "bytes": 89706
     },
     "weeks/gaming/wow_evil/primary/bronze/Sylvanas_gem.png": {
       "sha256": "c349fe61dd759e7d8af19458513bc9d90cbf534b9e7a1089ae96f53f584fa81e",
@@ -18217,6 +18514,15 @@
       "height": 512,
       "bytes": 71366
     },
+    "weeks/gaming/wow_evil/primary/colored/Illidan_gem.png": {
+      "sha256": "650ea157a00614ced0a0ef333b31ce74151a096b3f11e29b556c8f9b31fdedf8",
+      "output": "weeks/gaming/wow_evil/primary/colored/Illidan_gem.webp",
+      "ceiling": 512,
+      "quality": 90,
+      "width": 512,
+      "height": 511,
+      "bytes": 73952
+    },
     "weeks/gaming/wow_evil/primary/colored/Kel_Thuzad_gem.png": {
       "sha256": "3fe02b93331bf299aea6919d640293c48314e0a4d09ba4fe1b5bf71d471c94d0",
       "output": "weeks/gaming/wow_evil/primary/colored/Kel_Thuzad_gem.webp",
@@ -18279,6 +18585,15 @@
       "width": 510,
       "height": 512,
       "bytes": 74978
+    },
+    "weeks/gaming/wow_evil/primary/colored/Medivh_gem.png": {
+      "sha256": "1316c6b18ef51648f35bb2854b93a4df73491cc72fb47e646358c57023b42a96",
+      "output": "weeks/gaming/wow_evil/primary/colored/Medivh_gem.webp",
+      "ceiling": 512,
+      "quality": 90,
+      "width": 512,
+      "height": 508,
+      "bytes": 85254
     },
     "weeks/gaming/wow_evil/primary/colored/Sylvanas_gem.png": {
       "sha256": "16fca442fea2bd5c469dcaa6b65f639344d8581aee72103f9bd91752c74b1599",
@@ -20611,6 +20926,24 @@
       "height": 512,
       "bytes": 74070
     },
+    "weeks/myth/egypt/wider/bronze/geb_gem.png": {
+      "sha256": "48fd874bcee29d8ae68e33ecadf4b774c3f94fc0e229e58f8fe573f505470abd",
+      "output": "weeks/myth/egypt/wider/bronze/geb_gem.webp",
+      "ceiling": 512,
+      "quality": 90,
+      "width": 512,
+      "height": 510,
+      "bytes": 85462
+    },
+    "weeks/myth/egypt/wider/bronze/geb_gpt.png": {
+      "sha256": "a01d70bf95cff8445e6266431525b95f5b97b7422f859eb672b90e8e9667a367",
+      "output": "weeks/myth/egypt/wider/bronze/geb_gpt.webp",
+      "ceiling": 512,
+      "quality": 90,
+      "width": 512,
+      "height": 502,
+      "bytes": 141376
+    },
     "weeks/myth/egypt/wider/bronze/nut.png": {
       "sha256": "d67b08e876d66e9d8fe13502b1e1d9e6ef92a1189e1ef41679c1936393e06461",
       "output": "weeks/myth/egypt/wider/bronze/nut.webp",
@@ -20620,6 +20953,24 @@
       "height": 511,
       "bytes": 81722
     },
+    "weeks/myth/egypt/wider/bronze/nut_gem.png": {
+      "sha256": "8bbed7c4552f5e9eb291772e03baf4ac8865fd17294ce189ac4fcaa8e86c8ebb",
+      "output": "weeks/myth/egypt/wider/bronze/nut_gem.webp",
+      "ceiling": 512,
+      "quality": 90,
+      "width": 512,
+      "height": 511,
+      "bytes": 101940
+    },
+    "weeks/myth/egypt/wider/bronze/nut_gpt.png": {
+      "sha256": "f8534bb4812c289d7db16ec55fe06d15334a06c35322a6f6234bc7364a49d581",
+      "output": "weeks/myth/egypt/wider/bronze/nut_gpt.webp",
+      "ceiling": 512,
+      "quality": 90,
+      "width": 512,
+      "height": 505,
+      "bytes": 139146
+    },
     "weeks/myth/egypt/wider/bronze/ptah.png": {
       "sha256": "db75a1a577688e060cc40739c1371b5a28e603b2157b5824713950020d8d76c2",
       "output": "weeks/myth/egypt/wider/bronze/ptah.webp",
@@ -20628,6 +20979,15 @@
       "width": 512,
       "height": 511,
       "bytes": 72026
+    },
+    "weeks/myth/egypt/wider/bronze/ptah_gem.png": {
+      "sha256": "da5f6191747ee31c453089cc75f943f8a86662660b598e15ca09f593c84a0d3f",
+      "output": "weeks/myth/egypt/wider/bronze/ptah_gem.webp",
+      "ceiling": 512,
+      "quality": 90,
+      "width": 511,
+      "height": 512,
+      "bytes": 85722
     },
     "weeks/myth/egypt/wider/bronze/ptah_gpt.png": {
       "sha256": "fdc9238ab9e555a19e3aa81321ab46e0ee9f9e1a20c03c1bf2a0d00d1ad46aef",
@@ -20647,6 +21007,24 @@
       "height": 512,
       "bytes": 85484
     },
+    "weeks/myth/egypt/wider/bronze/sekhmet_gem.png": {
+      "sha256": "0c40728fa5e8481b6b26b6c7f1a8f2fe7f98f62b63e7a51c199480fce51e6a75",
+      "output": "weeks/myth/egypt/wider/bronze/sekhmet_gem.webp",
+      "ceiling": 512,
+      "quality": 90,
+      "width": 511,
+      "height": 512,
+      "bytes": 99248
+    },
+    "weeks/myth/egypt/wider/bronze/sekhmet_gpt.png": {
+      "sha256": "14dbd6185825fca145c2b30797703b97cf02f9699096e99cc18b3be8f3152069",
+      "output": "weeks/myth/egypt/wider/bronze/sekhmet_gpt.webp",
+      "ceiling": 512,
+      "quality": 90,
+      "width": 512,
+      "height": 509,
+      "bytes": 136426
+    },
     "weeks/myth/egypt/wider/bronze/set.png": {
       "sha256": "d7e12154e656d90eb34f50c5406186e8b6dcac345d52b5f143d5682ba5e8efd4",
       "output": "weeks/myth/egypt/wider/bronze/set.webp",
@@ -20655,6 +21033,15 @@
       "width": 511,
       "height": 512,
       "bytes": 84186
+    },
+    "weeks/myth/egypt/wider/bronze/set_gem.png": {
+      "sha256": "f9337c2ba056cf223154c335c598afcb49b4ebd3d86ebf56d992ea69b76127f3",
+      "output": "weeks/myth/egypt/wider/bronze/set_gem.webp",
+      "ceiling": 512,
+      "quality": 90,
+      "width": 512,
+      "height": 511,
+      "bytes": 88940
     },
     "weeks/myth/egypt/wider/bronze/set_gpt.png": {
       "sha256": "0682e2e279c09d5823ddbfb4e8037e14f5d65cc5b7b85f2c35cf0643880dea1b",
@@ -21898,6 +22285,15 @@
       "height": 512,
       "bytes": 88008
     },
+    "weeks/myth/norse/wider/bronze/baldur_gem.png": {
+      "sha256": "01f85bc6e96cda563761d75de8e18a6771c6a87d6e4b669dcdec27c166b0e4cf",
+      "output": "weeks/myth/norse/wider/bronze/baldur_gem.webp",
+      "ceiling": 512,
+      "quality": 90,
+      "width": 512,
+      "height": 511,
+      "bytes": 113156
+    },
     "weeks/myth/norse/wider/bronze/baldur_gpt.png": {
       "sha256": "7241abe81d78b58f5611dd9e2d4908e0ada5c1627c9ca7d37088faec009da617",
       "output": "weeks/myth/norse/wider/bronze/baldur_gpt.webp",
@@ -21916,6 +22312,15 @@
       "height": 510,
       "bytes": 80396
     },
+    "weeks/myth/norse/wider/bronze/heimdall_gem.png": {
+      "sha256": "c20595ccea2e5f5341e9f40fc997f55494c34e67fffac8d8d95f30f7acb79eea",
+      "output": "weeks/myth/norse/wider/bronze/heimdall_gem.webp",
+      "ceiling": 512,
+      "quality": 90,
+      "width": 512,
+      "height": 511,
+      "bytes": 98554
+    },
     "weeks/myth/norse/wider/bronze/heimdall_gpt.png": {
       "sha256": "08adb8cb7324b2f707d92dce6a8462a177bfaec1a97108965ddd15c4e3996282",
       "output": "weeks/myth/norse/wider/bronze/heimdall_gpt.webp",
@@ -21933,6 +22338,24 @@
       "width": 511,
       "height": 512,
       "bytes": 79526
+    },
+    "weeks/myth/norse/wider/bronze/njord_gem.png": {
+      "sha256": "0202264ebe52f485138bcf028da16a14ba67139f8544eb15eec6ee5bac3ec47d",
+      "output": "weeks/myth/norse/wider/bronze/njord_gem.webp",
+      "ceiling": 512,
+      "quality": 90,
+      "width": 507,
+      "height": 512,
+      "bytes": 97258
+    },
+    "weeks/myth/norse/wider/bronze/njord_gpt.png": {
+      "sha256": "6bd4650c1b961aa0289a2a75bf8a7e0399a4e0ab50e1da6e484cda6f4914eb3c",
+      "output": "weeks/myth/norse/wider/bronze/njord_gpt.webp",
+      "ceiling": 512,
+      "quality": 90,
+      "width": 512,
+      "height": 505,
+      "bytes": 145854
     },
     "weeks/myth/norse/wider/colored/.gitkeep": {
       "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
@@ -22420,6 +22843,24 @@
       "height": 512,
       "bytes": 70332
     },
+    "weeks/myth/slavic/wider/bronze/crnobog_gem.png": {
+      "sha256": "eaf9408e0488b677ca870d085cf1a1820bdd4a3c776c9a374cf9604138361b00",
+      "output": "weeks/myth/slavic/wider/bronze/crnobog_gem.webp",
+      "ceiling": 512,
+      "quality": 90,
+      "width": 512,
+      "height": 511,
+      "bytes": 94272
+    },
+    "weeks/myth/slavic/wider/bronze/crnobog_gpt.png": {
+      "sha256": "edfaacd1340f56a4b950f1eb64d68f32960ee115c936f401732677a8ddabcd67",
+      "output": "weeks/myth/slavic/wider/bronze/crnobog_gpt.webp",
+      "ceiling": 512,
+      "quality": 90,
+      "width": 512,
+      "height": 504,
+      "bytes": 133780
+    },
     "weeks/myth/slavic/wider/bronze/jarilo.png": {
       "sha256": "a196359b8d9f037d4c27401552cbccce737851e49bd796b7c0eee5ba4533dc6e",
       "output": "weeks/myth/slavic/wider/bronze/jarilo.webp",
@@ -22428,6 +22869,24 @@
       "width": 512,
       "height": 508,
       "bytes": 84308
+    },
+    "weeks/myth/slavic/wider/bronze/jarilo_gem.png": {
+      "sha256": "b655dbf7d3ce26e6b9808939b1f40e72a5f6e84e7dc7caf3403981519752e804",
+      "output": "weeks/myth/slavic/wider/bronze/jarilo_gem.webp",
+      "ceiling": 512,
+      "quality": 90,
+      "width": 512,
+      "height": 512,
+      "bytes": 98788
+    },
+    "weeks/myth/slavic/wider/bronze/jarilo_gpt.png": {
+      "sha256": "384cad0b1d47189d614631dc7f138feaf146556d936d7f8663a12e74adbafad5",
+      "output": "weeks/myth/slavic/wider/bronze/jarilo_gpt.webp",
+      "ceiling": 512,
+      "quality": 90,
+      "width": 512,
+      "height": 510,
+      "bytes": 134940
     },
     "weeks/myth/slavic/wider/bronze/rod.png": {
       "sha256": "3df6434e94684d8fa0d921e1612236186135e31d71c07d00f59cd3007918ebcd",
@@ -22438,6 +22897,24 @@
       "height": 511,
       "bytes": 90504
     },
+    "weeks/myth/slavic/wider/bronze/rod_gem.png": {
+      "sha256": "be476b2b716999e055aa929e02aa30b33cb43f98cffba20269ecdeb80187ece5",
+      "output": "weeks/myth/slavic/wider/bronze/rod_gem.webp",
+      "ceiling": 512,
+      "quality": 90,
+      "width": 512,
+      "height": 511,
+      "bytes": 109626
+    },
+    "weeks/myth/slavic/wider/bronze/rod_gpt.png": {
+      "sha256": "92a1787b2b3c8a069d5eef72448dc4ff91d7a9b25573bfaa22fcef3ef3a311fa",
+      "output": "weeks/myth/slavic/wider/bronze/rod_gpt.webp",
+      "ceiling": 512,
+      "quality": 90,
+      "width": 512,
+      "height": 510,
+      "bytes": 142508
+    },
     "weeks/myth/slavic/wider/bronze/stribog.png": {
       "sha256": "208f95ecf31a9e163595733fb4164c43c259ce53520b8bf6dfc69fa5bcf25cf1",
       "output": "weeks/myth/slavic/wider/bronze/stribog.webp",
@@ -22446,6 +22923,24 @@
       "width": 511,
       "height": 512,
       "bytes": 81612
+    },
+    "weeks/myth/slavic/wider/bronze/stribog_gem.png": {
+      "sha256": "8ff125108c28221363b84ceaab05643818693d6f067ab597cb0bdf050a6c235c",
+      "output": "weeks/myth/slavic/wider/bronze/stribog_gem.webp",
+      "ceiling": 512,
+      "quality": 90,
+      "width": 512,
+      "height": 511,
+      "bytes": 99420
+    },
+    "weeks/myth/slavic/wider/bronze/stribog_gpt.png": {
+      "sha256": "c9c524e2afba56c13128c57014510fee4d667b9fee71790482068c360fc9d425",
+      "output": "weeks/myth/slavic/wider/bronze/stribog_gpt.webp",
+      "ceiling": 512,
+      "quality": 90,
+      "width": 512,
+      "height": 511,
+      "bytes": 142428
     },
     "weeks/myth/slavic/wider/colored/.gitkeep": {
       "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",

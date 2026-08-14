@@ -299,7 +299,16 @@ def test_instrument_furniture_and_earth_are_suffixless_owner_art():
     (`Eye[_shine]_gem/_gpt.png`) ARE sourced — the owner shipped a
     ChatGPT and a Gemini eye, each with and without rays, and placed
     them with the letters; their canonical `Eye[_shine].png` stems
-    resolve through `config.paths.art_file` like every sourced area."""
+    resolve through `config.paths.art_file` like every sourced area.
+
+    A SECOND documented exception, of the same shape (owner's own drop,
+    2026-08-14): the Continents theme's two NINTHS. The six weekday
+    regions are photographs of the real planet and stay suffixless, but
+    Pangea and Zealandia are places no camera can photograph — the owner
+    generates them, and he generated both a Gemini and a ChatGPT face
+    for all four states of each (atmo/clean x day/night). They resolve
+    through `config.paths.art_file` like every sourced pair, and their
+    canonical suffixless stems are what the registry names."""
     assets = paths.assets_dir()
     suffixless_areas = (
         "instrument/hands", "instrument/ring", "instrument/subdial",
@@ -308,7 +317,10 @@ def test_instrument_furniture_and_earth_are_suffixless_owner_art():
     offenders = []
     for area in suffixless_areas:
         for png in _iter_png(assets / area):
-            if png.stem.endswith(("_gem", "_gpt")) and not (
+            sourced_ninth = any(
+                ninth in png.stem for ninth in ("pangea", "zealandia")
+            )
+            if png.stem.endswith(("_gem", "_gpt")) and not sourced_ninth and not (
                 png.parent.name == "letters" and png.stem.startswith("Eye")
             ):
                 offenders.append(str(png.relative_to(assets)))
