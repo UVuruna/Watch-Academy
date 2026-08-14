@@ -16,9 +16,13 @@ from core.deep_time import canonical_proxy
 from core.moon import illumination, nominal_illumination, phase_fraction
 from data.moon_phases import MoonPhaseRepository
 
+# THE RESEARCH MOVE (owner verdict 2026-08-14): research/ is not part of
+# the running application — it is where things are investigated and made,
+# a sibling of what it produces. It now lives under shared/, so this is
+# the TRUE repo root's shared/research, not desktop/research.
 RESEARCH_DB = (
-    Path(__file__).resolve().parents[1]
-    / "research" / "ephemeris" / "events.sqlite"
+    Path(__file__).resolve().parents[2]
+    / "shared" / "research" / "ephemeris" / "events.sqlite"
 )
 
 

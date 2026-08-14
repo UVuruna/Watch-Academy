@@ -21,7 +21,7 @@ has not landed here yet.
 ## Connections
 
 ### Uses
-- [Research Ephemeris (subfolder)](../research/ephemeris/___ephemeris.md)
+- [Research Ephemeris (subfolder)](../../shared/research/ephemeris/___ephemeris.md)
   — the events database and companion JSON files both generators read
 - `core`, `data`, `config.registry` — `make_contract_pack.py` imports
   the real desktop packages to compute its golden vectors and re-export

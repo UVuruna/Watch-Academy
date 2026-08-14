@@ -29,7 +29,7 @@ computation (root Rule #5).
 ### Used by
 - [Cube Seating Tests](../../tests/___tests.md) — re-runs the whole
   search and pins every seat
-- [Research (folder)](../../research/___research.md) — the offscreen
+- [Research (folder)](../../../shared/research/___research.md) — the offscreen
   preview generator draws both seatings from here
 - [Cube Diagrams](../../render/__about/cube_diagrams.md) — `cell_color()` and
   `find_pole()`, the 2D drawer's own colour and lookup

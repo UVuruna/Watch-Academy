@@ -275,7 +275,7 @@ and gets no sheet at all; the inversion, the Diamond/Cube toggle, the
 blend hues, tints and the ciphers are all derived or text). Every sheet
 dry-run clean in PromptPainter; the four new family roots recorded in
 `tests/test_prompt_paths.py`; the ledger's §The Cube Wave added to
-[Prompt Coverage](desktop/research/prompts/COVERAGE.md). The crosses are
+[Prompt Coverage](shared/research/prompts/COVERAGE.md). The crosses are
 LETTERLESS by house rule — FALL/STAR/DOMY/SAFE and the Latin/Greek rows
 live in the articles, with an inscribed variant offered as a pathless
 PENDING OWNER option. Open for the owner: the Council's route (new
@@ -779,7 +779,7 @@ the dial's theme picker does not know they exist; and none has an
 Encyclopedia topic. `config.taxonomy` knows their FOLDERS — the tree
 law is satisfied, the art is correctly placed — but the registry does
 not know their KEYS. This was not an accident of one round:
-[Prompt Coverage](desktop/research/prompts/COVERAGE.md) items 1a and 1b
+[Prompt Coverage](shared/research/prompts/COVERAGE.md) items 1a and 1b
 recorded "two wiring rounds left for later" when the sheets shipped.
 Later never came, and nothing in the suite could notice.
 

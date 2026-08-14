@@ -27,7 +27,7 @@ runs happily without it (the bundled `seasons_utc.json`/
 ### Uses
 - `research/ephemeris/events.sqlite` (gitignored, ~92 MB) — the sole
   input, produced by the research pipeline; see
-  [Research Ephemeris (subfolder)](../../research/ephemeris/___ephemeris.md)
+  [Research Ephemeris (subfolder)](../../../shared/research/ephemeris/___ephemeris.md)
 
 ### Used by
 - Nobody at runtime — the owner runs it manually before an M7 FULL

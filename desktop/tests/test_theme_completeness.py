@@ -37,7 +37,7 @@ from data.encyclopedia import EncyclopediaRepository
 from data.symbolism import SymbolismRepository
 
 _ROOT = Path(__file__).resolve().parents[1]
-_LEDGER_PATH = _ROOT / "research" / "theme_staging.md"
+_LEDGER_PATH = _ROOT.parent / "shared" / "research" / "theme_staging.md"
 
 _WEEKDAY_BODIES = (
     "sun", "moon", "mars", "mercury", "jupiter", "venus", "saturn",

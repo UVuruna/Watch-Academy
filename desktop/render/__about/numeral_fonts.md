@@ -1,6 +1,6 @@
 # render/numeral_fonts.py
 
-Resolves a ROSTER NAME from [The Dial Numerals](../../research/hour_numerals.md)
+Resolves a ROSTER NAME from [The Dial Numerals](../../../shared/research/hour_numerals.md)
 §7 to a real `QFont` on this machine, and PROVES that the face can actually
 draw the glyphs the dial asks of it.
 

@@ -7,7 +7,7 @@
 
 Paints the composed ring — THE COMPOSITIONAL RING MODEL (owner decree
 2026-08-05), sharpened by THE FIDELITY RULING (owner correction
-2026-08-06, [the ledger](../../../research/ring_rework.md) §2). FIVE
+2026-08-06, [the ledger](../../../../shared/research/ring_rework.md) §2). FIVE
 things, drawn in ONE ordered pass, and the ORDER is the composition:
 
 | # | Drawn | Source |

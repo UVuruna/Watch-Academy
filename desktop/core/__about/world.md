@@ -3,7 +3,7 @@
 **Script:** [World (script)](../world.py) · **Flow:** [diagram](../__flow/world.md)
 
 ## Purpose
-THE TWO WORLD-MODES ([the ring rework ledger](../../research/ring_rework.md)
+THE TWO WORLD-MODES ([the ring rework ledger](../../../shared/research/ring_rework.md)
 §1) as pure arithmetic: which of the two turns — the sky, or the world —
 and by how many degrees, at this moment.
 

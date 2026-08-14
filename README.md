@@ -60,10 +60,10 @@ edition, [Pocket Watch](android/README.md)).
     📁 app/                 ← Qt shell: window, tray, settings
     📁 tests/               ← pytest golden-value suite
     📁 design/              ← mockups and reference images (not bundled)
-    📁 research/            ← one-off analysis scripts and oversized data (not bundled)
   📁 shared/                ← the truth BOTH platforms consume — the bakery's source
     📁 assets/               ← ring faces, hands, earth, weekday themes, zodiac
     📁 Database/             ← bundled astronomical/location data
+    📁 research/             ← one-off analysis scripts and oversized data (not bundled)
   📁 android/               ← Pocket Watch, the Kotlin phone edition (not yet founded)
 ```
 
@@ -101,12 +101,12 @@ diagram plus language-neutral pseudocode).
 - [Tests (folder)](desktop/tests/___tests.md)
 - [Setup (folder)](desktop/setup/___setup.md)
 - [Design (folder)](desktop/design/___design.md)
-- [Research (folder)](desktop/research/___research.md) — image-generation
+- [Research (folder)](shared/research/___research.md) — image-generation
   prompt sheets live here; see [How to Write a Prompt
   Sheet](../../Gadgets/PromptPainter/instructions.md) before authoring a new one
 - [Roster — the Master Systematics](ROSTER.md) — every theme, every
   figure, its seat, per-source art coverage (generated:
-  `python desktop/research/build_roster.py`)
+  `python shared/research/build_roster.py`)
 - [Android Charter](ANDROID.md) — the sealed decisions for the phone
   edition ([Pocket Watch](android/README.md)) and Phase 1 (the bakery)
   in this repo

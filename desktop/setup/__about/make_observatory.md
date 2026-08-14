@@ -33,7 +33,7 @@ build, so the Observatory never requires `deep_time.sqlite`:
 ### Uses
 - `research/ephemeris/events.sqlite` (gitignored, ~92 MB) — source for
   the seasons and eclipses bundles; see
-  [Research Ephemeris (subfolder)](../../research/ephemeris/___ephemeris.md)
+  [Research Ephemeris (subfolder)](../../../shared/research/ephemeris/___ephemeris.md)
 - `research/ephemeris/season_halves.json` — validates the derived
   light/dark half-year sums (loud `ValueError` on drift, Rule #1)
 - `research/ephemeris/anno_lucis.json` — the era markers folded into

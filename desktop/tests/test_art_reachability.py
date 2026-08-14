@@ -41,7 +41,7 @@ from config import (
 )
 
 _ROOT = Path(__file__).resolve().parents[1]
-_LEDGER_PATH = _ROOT / "research" / "theme_staging.md"
+_LEDGER_PATH = _ROOT.parent / "shared" / "research" / "theme_staging.md"
 _ASSETS = paths.assets_dir().resolve()
 
 # ═══════════════════════════ RESOLVED ELSEWHERE ═══════════════════════════

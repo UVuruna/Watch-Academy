@@ -2,7 +2,7 @@
 
 The pure mathematics of the dial's two NUMERAL BANDS — every angle, every
 seat rotation, every light vector and every relief step of
-[The Dial Numerals](../../research/hour_numerals.md), with no Qt and no
+[The Dial Numerals](../../../shared/research/hour_numerals.md), with no Qt and no
 wall clock anywhere near them.
 
 ## Purpose
@@ -41,7 +41,7 @@ fixed step) stays for the callers that only pin the arc's DIRECTION, and
 feeding equal advances to the new law reproduces it exactly.
 
 **THE COMPOSITION LAW** (THE FIDELITY RULING, owner correction
-2026-08-06, [the ring ledger](../../research/ring_rework.md) §2): a seat
+2026-08-06, [the ring ledger](../../../shared/research/ring_rework.md) §2): a seat
 carries exactly ONE content. `numeral_hours(letter_hours)` returns the
 hours of the outer band that carry a NUMERAL — every hour except the ones
 the preset seats a LETTER on — and is the one place the ring's own 1..24

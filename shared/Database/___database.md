@@ -64,7 +64,7 @@ the slice alone is ~401 rows — no further decimation needed). Built by
 trend, never exact dates beyond the DE441 window.
 
 ### `seasons_large.json`
-Moved to [Research (folder)](../../desktop/research/___research.md) — an oversized
+Moved to [Research (folder)](../research/___research.md) — an oversized
 variant kept for analysis only, not bundled.
 
 ### `symbolism.json`

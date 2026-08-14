@@ -129,7 +129,7 @@ lives in [The DOMY Canon](CANON.md). The phone edition's sealed charter —
   (solar total/annular/partial/hybrid, lunar total/partial/penumbral —
   nine chapters, every one describing its exact sealed state-table
   representation). A new prompt sheet
-  [Eclipse Prompts](desktop/research/prompts/eclipse/eclipse_prompts.md) carries
+  [Eclipse Prompts](shared/research/prompts/eclipse/eclipse_prompts.md) carries
   the seven category emblems (`assets/eclipse/<Stem>.png`,
   `ECLIPSE_ART_DIR`, graceful-absent); the same emblem shows on the
   Earth/Moon HOVER CARD during an eclipse window (owner slika 7,
@@ -206,7 +206,7 @@ lives in [The DOMY Canon](CANON.md). The phone edition's sealed charter —
   recipe (silver = achromatic value, gold/bronze = that value tinted).
   20 generated files deleted the same round (11 Gemini + 8 ChatGPT
   variants + 1 stray duplicate) — see
-  [Subdial Prompts](desktop/research/prompts/instrument/subdial_circle_prompts.md).
+  [Subdial Prompts](shared/research/prompts/instrument/subdial_circle_prompts.md).
 - **THE MOTO ROUND (owner "може radi" 2026-07-19) — DONE:** two
   features on the Mason ring. (1) THE OUTER CROWN TEXT ARC — ANNUIT
   COEPTIS and NOVUS ORDO SECLORUM render as curved text just outside
@@ -637,7 +637,7 @@ lives in [The DOMY Canon](CANON.md). The phone edition's sealed charter —
    `Database/encyclopedia.json` (`data/encyclopedia.py` `era(key)`),
    wired as a new "era" topic in `app/encyclopedia.py`'s "The Clock"
    gallery group. A new PROMPT SHEET
-   [Era Prompts](desktop/research/prompts/era/era_prompts.md) carries one
+   [Era Prompts](shared/research/prompts/era/era_prompts.md) carries one
    rose-window emblem per era and per starry season (house
    night-window register, `assets/era/<Name>.png`) — not yet
    generated. The "Eras of the World" article (new

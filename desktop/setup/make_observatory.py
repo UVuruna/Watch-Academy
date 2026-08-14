@@ -48,7 +48,7 @@ PROJECT_ROOT = Path(__file__).resolve().parents[1]
 # THE THREE-FOLDER MIGRATION (2026-08-12): Database/ lives one level up
 # from the desktop Python root, under shared/.
 SHARED = PROJECT_ROOT.parent / "shared"
-EPHEMERIS = PROJECT_ROOT / "research" / "ephemeris"
+EPHEMERIS = SHARED / "research" / "ephemeris"
 SOURCE = EPHEMERIS / "events.sqlite"
 SEASON_HALVES = EPHEMERIS / "season_halves.json"
 ANNO_LUCIS = EPHEMERIS / "anno_lucis.json"

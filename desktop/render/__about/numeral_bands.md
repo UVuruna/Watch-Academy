@@ -44,7 +44,7 @@ its plate is shared across both phases.
 
 The first live-rendered bands reached the owner's screen and diverged from
 his art. Three laws followed
-([the ledger](../../research/ring_rework.md) §2), and this module is where
+([the ledger](../../../shared/research/ring_rework.md) §2), and this module is where
 they are implemented.
 
 **1 · The band COMPOSES; it never stacks.** The outer plate is drawn

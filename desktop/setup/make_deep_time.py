@@ -35,7 +35,7 @@ from datetime import date
 from pathlib import Path
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
-SOURCE = PROJECT_ROOT / "research" / "ephemeris" / "events.sqlite"
+SOURCE = PROJECT_ROOT.parent / "shared" / "research" / "ephemeris" / "events.sqlite"
 # THE THREE-FOLDER MIGRATION (2026-08-12): Database/ lives one level up
 # from the desktop Python root, under shared/.
 TARGET = PROJECT_ROOT.parent / "shared" / "Database" / "deep_time.sqlite"
