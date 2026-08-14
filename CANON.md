@@ -1643,6 +1643,51 @@ paragraph (`render.compositor._ring_letter_legend_tooltip`,
 this entry; each letter's own line names the OTHER letter of its axis
 as the pointer, so both seats of a pair read the identical clause.
 
+**THE INVERTED CROWN TEXTS (owner verdict 2026-08-14, sealed):** the
+Dollar is the one complex theme whose meaning BREAKS when the dial
+rotates — in the geocentric night regime the wheel turns and the two
+Great Seal arcs trade halves: what read under the bottom now crowns
+the top, mirrored. Rather than let the seal read upside-down, the
+inverted state carries its own PAIR of crown texts — true mirrors of
+the originals, chosen against the same constraints the originals obey
+and verified letter by letter:
+
+- **Top arc (where NOVUS ORDO SECLORUM's own M–O–N lands after the
+  flip): MUNDORUM ORDO NUMEN** — "the divine power of the order of
+  worlds". Novus Ordo Seclorum reads N — central O — M across its
+  whole 17 letters (the O exactly central both with and without
+  spaces); Mundorum Ordo Numen reads M — central O — N across ITS
+  17 letters, central both ways too, and its word lengths 8–4–5 are
+  the original's 5–4–8 reflected. The two even share the middle word
+  ORDO: turn the wheel and the ORDER remains while the ages (seclorum)
+  give way to the worlds (mundorum) — the prophecy of the new order
+  answered by the cosmos that keeps it. *Numen* is the unseen divine
+  will itself — the same Providence the Eye watches with.
+- **Bottom arc (ANNUIT COEPTIS's mirror): SANCIT FOEDERA** — "He
+  sanctions the covenants" (Virgil, Aeneid XII, 200: *foedera fulmine
+  sancit* — Jupiter confirming covenants with the thunderbolt).
+  Annuit Coeptis is A → S, verb + object, a divine ACT ("He favors
+  the undertakings", adapted from Aeneid IX's *adnue coeptis*);
+  Sancit Foedera is S → A, verb + object, the answering act — the
+  favor asked above, the covenant sealed below. Both crown texts of
+  the pair are Virgil, both the same god's gesture: the mirror holds
+  in structure, in grammar and in source.
+- **The 6+6 plate law of the pair (owner rule 2026-08-14):** on the
+  bottom crown text the two words must weigh SIX PLATES each,
+  counting a Latin ligature as ONE plate — the owner added the
+  **AE and OE ligature plates** to the alphabet for exactly this
+  (`shared/assets/instrument/letters/latin/AE.png`, `OE.png`).
+  SANCIT is six plates plain; FOEDERA is F·OE·D·E·R·A — six plates
+  through the OE ligature. (ANNUIT and COEPTIS balance the same way
+  once COEPTIS composes with its OE plate: 6 + 6.) Runners-up, kept
+  for the record: SERVAT FOEDERA (softer verb, same mathematics),
+  SANCTA GRATIA (adjective + noun — rejected because the original is
+  an act, not a picture).
+
+Wiring (config tables, letter pins, the inverted arcs' angle solve)
+is NOT part of this seal — it joins the Dollar preset's own
+implementation docs when the geocentric night flip is built.
+
 <a id="working-rules"></a>
 
 ## Working Rules for Agents
