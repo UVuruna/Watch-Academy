@@ -66,30 +66,27 @@ and is not affected.
 - Sidebar selection persistence mirrors `design_window.py`'s tab
   persistence exactly, for the same reason: every pick routes through
   `refresh()`, which rebuilds the whole sidebar+stack pair.
-- **One scrolling content column per section (layout law, 2026-08-06).**
-  Bare pages in the stack made the window's minimum the TALLEST section
-  (Colors — 2090px, taller than any screen) while a maximized window
-  stretched every row across the whole 4K width — the owner's
-  screenshots. Each page now sits top-packed inside a `QScrollArea`,
-  capped at a content-column width COMPUTED as the widest section's own
-  polished hint (`ensurePolished` first — QSS paddings are part of the
-  real size), and `_declare_minimum` declares the window minimum from
-  that column: sidebar + column + scrollbar across, the tallest section
-  up to the 1280x720 screen floor down — past the floor the scrollbar
-  lawfully takes over. Verified by `tests/test_layout_audit.py`, which
-  walks all nine sections at the declared minimum and +50%.
-- **The holder wears the same collar (2026-08-13).** The cap above was
-  put on the PAGE alone, while the `FlowContent` holder around it kept
-  the scroll area's full width — and it measures its content at its own
-  width. Four pixels of difference is enough to fit one more tile per
-  gallery row, so the height the holder published was a full row short
-  of what the page then needed: on the owner's live profile the Ring
-  page's "Inner (minute track)" group was handed 375px against its own
-  388px minimum and lost its bottom margin. Both now wear the same
-  `column_width`, so the measured width and the drawn width are one
-  number. Tooth:
-  `tests/test_watch_face.py::test_every_scroll_holder_is_capped_to_the_same_column_as_its_page`
-  (counter-proved: it fails on the un-capped holder).
+- **No pinned width (owner decree 2026-08-14, superseding the fixed
+  column of 2026-08-06).** The one-readable-column fix capped every page
+  (and, since 2026-08-13, its holder) with `setMaximumWidth` to the
+  widest section's MINIMUM hint — so an ultra-wide window still drew
+  every gallery in the same narrow column, wrapping the eclipse tiles
+  into two rows beside a screen of empty space (the owner's
+  screenshot). His ruling: minimums that keep text legible are lawful,
+  a hard-coded width never is. The caps are gone; content follows the
+  real viewport width and the flow galleries absorb it by refilling
+  their rows. `column_width` survives only as the MINIMUM the window
+  must offer (`_declare_minimum`: sidebar + column + scrollbar across,
+  the tallest section up to the 1280x720 screen floor down — past the
+  floor the scrollbar lawfully takes over; measured from polished hints,
+  since QSS paddings are part of the real size). Teeth:
+  `tests/test_watch_face.py::test_no_page_carries_a_pinned_maximum_width`
+  (the new law) and
+  `…::test_every_scroll_holder_is_capped_to_the_same_column_as_its_page`
+  (kept: holder and page must always wear the SAME width — the
+  2026-08-13 row-wrap drift between the two is still a bug, cap or no
+  cap). Runtime coverage: `tests/test_layout_audit.py` walks all nine
+  sections at the declared minimum and +50%.
 - **The nav pill fits its own row (2026-08-13, Space & Legibility law).**
   `app/theme.py`'s `QListWidget::item:selected` pill is painted from QSS
   padding (10px vertical) + margin (2px vertical); left to `QListWidget`'s

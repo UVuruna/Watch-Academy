@@ -242,31 +242,24 @@ class WatchFaceDialog(QDialog):
         self._body.addWidget(stack, stretch=1)
         self._nav_list = nav_list
         self._stack = stack
-        # ONE readable content column for every section (the fix for the
-        # owner's 2026-08-06 screenshots: bare pages in the stack made the
-        # window's minimum the TALLEST section — 2090px — while maximized
-        # the rows stretched across the whole 4K screen). The column width
-        # is COMPUTED from the widest section's own hint — polished FIRST,
-        # because the theme's paddings are part of the real size (hints
-        # taken un-polished measured 20px short on the Colors groups) —
-        # so no section is starved and none inflated past what any need.
+        # NO PINNED WIDTH (owner decree 2026-08-14, superseding the fixed
+        # column of 2026-08-06): the pages used to be capped with
+        # setMaximumWidth() to the widest section's MINIMUM hint, so even
+        # an ultra-wide window rendered every gallery in the same narrow
+        # column — the eclipse gallery wrapped into two rows while half
+        # the window stood empty. The owner's ruling: minimums that keep
+        # text legible are lawful, a hard-coded width never is. Content
+        # now follows the real viewport width; the flow galleries absorb
+        # it by refilling their rows. `column_width` survives only as the
+        # MINIMUM the window must offer (no horizontal scrollbar by
+        # construction), measured from polished hints — the theme's
+        # paddings are part of the real size (hints taken un-polished
+        # measured 20px short on the Colors groups).
         for page in pages:
             page.ensurePolished()
             for child in page.findChildren(QWidget):
                 child.ensurePolished()
         column_width = max(page.minimumSizeHint().width() for page in pages)
-        for page in pages:
-            page.setMaximumWidth(column_width)
-            # THE HOLDER WEARS THE SAME COLLAR (measured 2026-08-13): the
-            # holder measures its content at ITS OWN width, but the page
-            # inside it is capped narrower — and 4px of difference is
-            # enough to fit one more tile per gallery row, so the height
-            # the holder published was a full row short of what the page
-            # then needed. Capping both to one width makes the measured
-            # width and the drawn width the same number.
-            holder = page.parentWidget()
-            if holder is not None:
-                holder.setMaximumWidth(column_width)
         self._declare_minimum(pages, column_width)
         # TWICE, and that is not belt-and-braces: a scrollbar's range is
         # still 0 until the layout has run, so the immediate call clamps

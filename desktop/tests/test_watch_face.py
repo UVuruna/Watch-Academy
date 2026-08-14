@@ -296,6 +296,35 @@ def test_every_scroll_holder_is_capped_to_the_same_column_as_its_page(app):
     dialog.deleteLater()
 
 
+# --- NO PINNED WIDTH (owner decree 2026-08-14) -------------------------------
+#
+# The one-readable-column rule of 2026-08-06 capped every page (and its
+# holder) with setMaximumWidth to the widest section's MINIMUM hint —
+# so an ultra-wide window still drew every gallery in the same narrow
+# column, wrapping the eclipse tiles into two rows beside a screen of
+# empty space (owner's screenshot). The ruling: minimums that keep text
+# legible are lawful, a hard-coded width never is. Content follows the
+# real viewport width; the flow galleries absorb it by refilling rows.
+
+
+def test_no_page_carries_a_pinned_maximum_width(app):
+    QWIDGETSIZE_MAX = 16777215  # Qt's "no maximum" sentinel
+    dialog = _dialog()
+    dialog.show()
+    QApplication.processEvents()
+    for index in range(dialog._stack.count()):
+        holder = dialog._stack.widget(index).widget()
+        page = holder.layout().itemAt(0).widget()
+        for name, widget in (("holder", holder), ("page", page)):
+            assert widget.maximumWidth() == QWIDGETSIZE_MAX, (
+                f"page {index}: the {name} carries a pinned maximum width "
+                f"({widget.maximumWidth()}px) — the owner's 2026-08-14 "
+                "decree forbids hard-coded widths; content must follow "
+                "the real viewport width"
+            )
+    dialog.deleteLater()
+
+
 # --- THE HOLDER WEARS THE SAME COLLAR (nav pill row, regression 2026-08-13) --
 #
 # The selected-item pill is painted from `QListWidget::item` QSS
