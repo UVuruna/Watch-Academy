@@ -299,7 +299,8 @@ class ValueKnob(QWidget):
         self, key: str, title: str, blurb: str, *, unit: ValueUnit,
         low: float, high: float, family: str,
         kind: KnobKind = KnobKind.K270D, default_value: float | None = None,
-        decimals: int = 0, on_change=None, diameter_px: int = 96,
+        decimals: int = 0, on_change=None, on_reset=None,
+        diameter_px: int = 96,
     ):
         super().__init__()
         if kind is KnobKind.K270D and default_value is None:
@@ -318,6 +319,7 @@ class ValueKnob(QWidget):
         self.default_value = default_value
         self.decimals = decimals
         self.on_change = on_change
+        self.on_reset = on_reset
         self._value = self.low
         self._dragging = False
         self.setFixedSize(diameter_px, diameter_px)  # layout-law: exempt - a knob is a fixed circular instrument like an icon; rows of knobs wrap by count (FlowLayout), the disc itself never stretches
@@ -339,11 +341,17 @@ class ValueKnob(QWidget):
             self.update()
 
     def reset(self) -> None:
-        """The notch's job (7A): back to factory, committed."""
+        """The notch's job (7A): back to factory, committed. An
+        `on_reset` hook REPLACES the plain commit — the override rows'
+        "Skin default" semantics, where reset stores None so the render
+        side genuinely stops overriding (opacity.py's own law)."""
         if self.default_value is None:
             return
         self.set_value(self.default_value)
-        self._commit()
+        if self.on_reset is not None:
+            self.on_reset()
+        else:
+            self._commit()
 
     def value_text(self) -> str:
         if self.unit is ValueUnit.PERCENT:

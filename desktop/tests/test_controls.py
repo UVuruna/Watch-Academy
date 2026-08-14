@@ -167,6 +167,21 @@ def test_notch_reset_commits_the_factory_value(app):
     assert committed == [36]
 
 
+def test_on_reset_replaces_the_plain_commit(app):
+    """The override rows' Skin-default law: the notch stores None via
+    on_reset, and the plain on_change does NOT also fire."""
+    committed, resets = [], []
+    knob = _knob(
+        on_change=committed.append, default_value=36,
+        on_reset=lambda: resets.append(None),
+    )
+    knob.set_value(80)
+    knob.reset()
+    assert knob.value() == 36
+    assert resets == [None]
+    assert committed == []
+
+
 def test_unit_formatting(app):
     assert _knob().value_text() == "0%"
     factor = _knob(unit=ValueUnit.FACTOR, low=0.5, high=2.0,

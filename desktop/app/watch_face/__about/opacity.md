@@ -7,7 +7,16 @@ Phase ④ (R-15/R-36 + the moved rows): the Watch Face window's real
 Opacity page — every render alpha channel this Phase's render hooks
 make speakable, grouped "Clock body" (Pointer, Aura sunlight/twilight,
 Umbra) and "Bodies on the ring" (Moon below horizon, Inactive icons,
-Crown Text). LIVE-APPLY, sliders apply on release.
+Crown Text). LIVE-APPLY, commit on release/wheel/exact entry.
+
+**THE KNOB MIGRATION (owner ballot verdicts 2026-08-14 — the FIRST
+section on THE ELEMENT CLASSES):** the sliders and their
+Default/Skin-default buttons became K-270D value knobs
+([Controls](controls.md), opacity family gold ring) flowing centered
+per group. The green default notch replaces the reset button (verdict
+7A); on the OVERRIDE rows its click stores None (`on_reset`), so the
+render side genuinely stops overriding — the same law the old "Skin
+default" button enforced.
 
 Three rows were MOVED from the RETIRED `app.settings_dialog.
 display_section._build_opacity_group` (Phase 6 FINAL cleanup deleted
