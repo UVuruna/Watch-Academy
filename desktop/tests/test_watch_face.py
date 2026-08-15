@@ -95,11 +95,20 @@ def _setters(settings: Settings | None = None) -> dict:
     test_design_window.py for the analogous stub). `slot_descriptors`
     and `opacity_skin_defaults` are DATA PROVIDERS, not scalar setters
     (Rule #5), so they need a real return value, not a no-op."""
-    base = defaultdict(lambda: _noop)
+    # ONE REQUIRED VALUE, like every real setter (2026-08-15): the
+    # per-section Reset tells a settable key from a data provider by
+    # arity, so a stub of `(*args)` would silently make every section
+    # look unresettable and the Reset tooth would pass on nothing.
+    def _one(value, *_rest) -> None:
+        return None
+
+    base = defaultdict(lambda: _one)
     base["slot_descriptors"] = lambda: fake_descriptors(
         settings if settings is not None else Settings()
     )
     base["opacity_skin_defaults"] = fake_opacity_defaults
+    base["ring_has_crown_text"] = lambda: True
+    base["open_custom_ring"] = _noop
     return base
 
 
@@ -482,3 +491,90 @@ def test_the_rebuild_never_creates_a_top_level_window(app):
         if child.windowType() == Qt.WindowType.Window
     ]
     assert strays == []
+
+
+# --- THE PER-SECTION RESET (owner order 2026-08-15) --------------------------
+
+
+def test_every_section_ends_with_a_reset(app):
+    """"svaka sekcija na dnu treba da ima reset to default" — all nine.
+
+    Opacity was the one page that grew none on the first pass, and the
+    reason is worth keeping: its knobs looked their setter up INSIDE the
+    click callback, so the build never asked for the key and the
+    recording wrapper never saw it. The lookup is bound at build time
+    now. Any future section that defers its lookups the same way fails
+    here rather than shipping a page the owner cannot reset."""
+    from PySide6.QtWidgets import QPushButton
+
+    dialog = _dialog()
+    for index, (title, _builder) in enumerate(_SECTIONS):
+        page = dialog._stack.widget(index).widget()
+        buttons = [
+            button for button in page.findChildren(QPushButton)
+            if button.text() == "Reset"
+        ]
+        assert len(buttons) == 1, f"{title} has {len(buttons)} Reset buttons"
+    dialog.deleteLater()
+
+
+def test_reset_writes_the_factory_value_of_every_key_the_section_owns(app):
+    """The button is only worth its space if it actually writes — and
+    only the keys that section owns, never the whole Settings."""
+    from app.watch_face import section_reset
+
+    written: dict = {}
+    setters = _setters(Settings())
+    for key in ("ring", "ring_finish", "pointer"):
+        setters[key] = lambda value, k=key: written.__setitem__(k, value)
+    row = section_reset.reset_row(
+        ["ring", "ring_finish", "slot_descriptors", "pointer"],
+        Settings(), setters, lambda text: text,
+    )
+    assert row is not None
+    from PySide6.QtWidgets import QPushButton
+    row.findChild(QPushButton).click()
+    factory = Settings()
+    assert written == {
+        "ring": factory.ring,
+        "ring_finish": factory.ring_finish,
+        "pointer": factory.pointer,
+    }
+    # `slot_descriptors` is a data PROVIDER, not a setting — it must not
+    # have been written, and it is not a `Settings` field at all.
+    assert "slot_descriptors" not in written
+
+
+def test_reset_skips_a_setter_that_needs_a_target_as_well_as_a_value(app):
+    """`palettes` IS a `Settings` field, but its setter takes
+    (pointer, style, hues) — resetting it by handing it one value would
+    raise. Arity is the filter, and it only works because the
+    controller's `wrap` carries `functools.wraps` so the wrapper reports
+    the real setter's signature instead of `(*args, **kwargs)`."""
+    from app.watch_face import section_reset
+
+    setters = _setters(Settings())
+    setters["palettes"] = lambda pointer, style, hues: None
+    assert "palettes" not in section_reset.resettable_keys(
+        ["palettes", "ring"], setters
+    )
+    assert "ring" in section_reset.resettable_keys(["palettes", "ring"], setters)
+
+
+def test_the_controller_wrapper_reports_the_real_setter_signature(app):
+    """The tooth for the `functools.wraps` above — without it every
+    Watch Face setter looks like `(*args, **kwargs)`, arity tells
+    nothing apart, and the Reset silently degrades to writing nothing."""
+    import functools
+    import inspect
+
+    def wrap(setter):
+        @functools.wraps(setter)
+        def wrapped(*args, **kwargs):
+            return setter(*args, **kwargs)
+        return wrapped
+
+    assert len(inspect.signature(wrap(lambda value: None)).parameters) == 1
+    assert len(
+        inspect.signature(wrap(lambda a, b, c: None)).parameters
+    ) == 3

@@ -1883,16 +1883,17 @@ class Compositor:
             if same_unit:
                 dual_image = self._skin.weekday_set.dual_asset
             else:
-                dual_rel = pantheon.WEEKDAY_DUAL_FILES[theme]
-                if roster == "pantheon" and theme in pantheon.WEEKDAY_PANTHEON:
-                    # The pantheon dual wins only when its plate is on
-                    # disk — otherwise the WHOLE planetary pair stays
-                    # (the classic unit's Sunday law).
-                    candidate = pantheon.WEEKDAY_PANTHEON[theme]["dual"][0]
-                    if paths.art_file(
-                        pantheon.weekday_art(f"{candidate}.png")
-                    ).exists():
-                        dual_rel = candidate
+                # ONE DOOR for "which Sunday does this roster wear"
+                # (`pantheon.weekday_dual_rel`, extracted 2026-08-15):
+                # the pantheon dual wins only when its plate is on
+                # disk, otherwise the WHOLE planetary pair stays (the
+                # classic unit's Sunday law). The Artwork previews ask
+                # the same door — they used to ask nothing at all and
+                # drew the planetary dual for both rosters.
+                dual_rel = (
+                    pantheon.weekday_dual_rel(theme, roster)
+                    or pantheon.WEEKDAY_DUAL_FILES[theme]
+                )
                 dual_image = pantheon.weekday_art(f"{dual_rel}.png")
             image = (image, metal_variant_file(dual_image, metal))
         node = self._symbolism.article(article_set, article_body)

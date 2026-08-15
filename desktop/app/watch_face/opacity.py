@@ -45,12 +45,18 @@ def _knob(
     law: the notch stores None (`on_reset`), a turn stores the float."""
     current = getattr(settings, key)
     shown = current if current is not None else default_value
+    # BOUND NOW, not at click time: the per-section Reset learns which
+    # settings a page owns by recording the setter keys the BUILD asks
+    # for (app.watch_face.section_reset), and a lookup deferred into the
+    # callback is a key the build never asked for — this page was the
+    # one section that grew no Reset button because of it.
+    apply_value = setters[key]
     knob = ValueKnob(
         key, tr(title), tr(blurb),
         unit=ValueUnit.PERCENT, low=0, high=100, family="opacity",
         default_value=round(default_value * 100),
-        on_change=lambda value, k=key: setters[k](value / 100),
-        on_reset=(lambda k=key: setters[k](None)) if override else None,
+        on_change=lambda value: apply_value(value / 100),
+        on_reset=(lambda: apply_value(None)) if override else None,
     )
     knob.set_value(round(shown * 100))
     return knob

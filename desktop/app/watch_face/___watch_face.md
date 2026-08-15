@@ -29,6 +29,8 @@ silently dropped.
 | `__init__.py` | Trivial | bare module docstring — no re-exports |
 | `window.py` | Algorithmic | the `WatchFaceDialog` shell — sidebar + stacked pages, live-apply refresh — [about](__about/window.md) · [flow](__flow/window.md) |
 | `thumbs.py` | Algorithmic | R-33: the disk-cached thumbnail service (ring/hand art + the pointer palette-swatch fallback) — [about](__about/thumbs.md) · [flow](__flow/thumbs.md) |
+| `section_reset.py` | Algorithmic | the per-section Reset button, and the recorded (never declared) list of settings each section owns — [about](__about/section_reset.md) |
+| `theme_thumbs.py` | Algorithmic | the previews ASSEMBLED FROM PLATES — Subdial plate set, and one Artwork card per source carrying its Sunday dual — [about](__about/theme_thumbs.md) |
 | `widgets.py` | Standard | shared pill/tile builders every section imports — [about](__about/widgets.md) |
 | `controls.py` | Standard | OptionCard + CardGroup, the sealed element classes (ballot 1A) — [about](__about/controls.md) |
 | `pointer.py` | Algorithmic | R-04/R-05: pointer gallery, shape/curvature/edge, night borders, Daylight-Night — [about](__about/pointer.md) · [flow](__flow/pointer.md) |

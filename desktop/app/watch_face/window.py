@@ -22,6 +22,7 @@ from app.theme import apply_theme, size_to_screen
 from app.watch_face import (
     bodies, colors, numerals, opacity, pointer, ring, size, themes,
 )
+from app.watch_face import section_reset
 from app.watch_face.widgets import FlowContent
 from config import constants, defaults, encyclopedia_ui
 from config.ui_text import ui
@@ -212,7 +213,21 @@ class WatchFaceDialog(QDialog):
             if builder is None:
                 page = _placeholder_page(self._tr)
             else:
-                page = builder(self._settings, self._setters, self._tr)
+                # THE PER-SECTION RESET (owner order 2026-08-15) is wired
+                # HERE, once, for all nine pages — no section module
+                # declares anything. The recording wrapper notes which
+                # setters the builder asked for while it built, and that
+                # IS the page's own list of settings; see
+                # section_reset.py for why a declared list was refused.
+                recording = section_reset.RecordingSetters(self._setters)
+                page = builder(self._settings, recording, self._tr)
+                reset = section_reset.reset_row(
+                    recording.asked, self._settings, self._setters, self._tr,
+                )
+                if reset is not None:
+                    page_layout = page.layout()
+                    if page_layout is not None:
+                        page_layout.addWidget(reset)
             pages.append(page)
         for page in pages:
             # THE HOLDER PUBLISHES ITS OWN HEIGHT (measured 2026-08-13 on

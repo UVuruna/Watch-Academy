@@ -259,12 +259,17 @@ def test_artwork_and_subdial_set_galleries_mark_the_stored_pick(app):
     """The 2026-08-09 review turned both combos into PREVIEW tile
     galleries (owner order: every picker shows what it picks) — the
     stored pick's tile carries the accent border, exactly like every
-    other gallery's active tile."""
+    other gallery's active tile. The theme is one that HAS two casts:
+    since verdict 8A the Artwork group is absent altogether for a
+    single-cast theme like the default Planets (see the test below)."""
     from PySide6.QtWidgets import QToolButton
 
     from config import constants, palette
 
-    settings = replace(Settings(), art_source="chatgpt", subdial_set="solo")
+    settings = replace(
+        Settings(), weekday_theme="greek", art_source="chatgpt",
+        subdial_set="solo",
+    )
     page = themes.build(settings, _RecordingSetters(settings), lambda s: s)
     tiles = {b.text(): b for b in page.findChildren(QToolButton)}
     art_tile = tiles[constants.ART_SOURCE_TITLES["chatgpt"]]
@@ -273,6 +278,66 @@ def test_artwork_and_subdial_set_galleries_mark_the_stored_pick(app):
     assert accent in art_tile.styleSheet()
     assert accent in solo_tile.styleSheet()
     assert accent not in tiles[constants.ART_SOURCE_TITLES["gemini"]].styleSheet()
+
+
+def test_artwork_spends_one_card_per_source_not_one_per_dual(app):
+    """ONE CARD PER SOURCE (owner order 2026-08-15). The picker used to
+    add a SECOND card per source for the Sunday dual — four cards for
+    two settings, which reads as four choices. The dual now rides
+    INSIDE its source's own image, the way the Subdial plate set card
+    already carries three plates."""
+    from PySide6.QtWidgets import QToolButton
+
+    from config import constants
+
+    settings = replace(Settings(), weekday_theme="greek")
+    page = themes.build(settings, _RecordingSetters(settings), lambda s: s)
+    labels = [b.text() for b in page.findChildren(QToolButton)]
+    for title in constants.ART_SOURCE_TITLES.values():
+        assert labels.count(title) == 1
+    assert not any("dual" in label.lower() for label in labels)
+
+
+def test_a_single_cast_theme_prints_no_artwork_group_at_all(app):
+    """VERDICT 8A, its first real case (owner report 2026-08-15 on
+    Planets Photo: "nema GEMINI i CHATGPT kao 2 verzije vec samo taj
+    jedan — zasto onda ima ARTWORK").
+
+    Planets resolves to the same plate under every source, so there is
+    nothing to choose. A row with no choice is STRUCTURE, not state:
+    it is absent, not greyed. The grey-with-a-reason treatment is for
+    an option that exists but cannot be taken right now."""
+    from PySide6.QtWidgets import QGroupBox
+
+    from app.watch_face import theme_thumbs
+
+    assert theme_thumbs.theme_art_sources("planets") == ()
+    settings = replace(Settings(), weekday_theme="planets")
+    page = themes.build(settings, _RecordingSetters(settings), lambda s: s)
+    titles = {box.title() for box in page.findChildren(QGroupBox)}
+    assert "Artwork" not in titles
+    # ...and the group is genuinely there for a theme that has two.
+    settings = replace(Settings(), weekday_theme="greek")
+    page = themes.build(settings, _RecordingSetters(settings), lambda s: s)
+    assert "Artwork" in {box.title() for box in page.findChildren(QGroupBox)}
+
+
+def test_the_sunday_dual_preview_follows_the_roster(app):
+    """PLANETARY AND PANTHEON ARE NOT THE SAME SUNDAY (owner report
+    2026-08-15: both rosters drew the identical dual tile). The rule
+    lives in ONE place — `pantheon.weekday_dual_rel`, the same door the
+    compositor asks — and the preview now asks it too."""
+    from config import pantheon
+
+    differing = [
+        theme for theme in pantheon.WEEKDAY_PANTHEON
+        if (pantheon.weekday_dual_rel(theme, "pantheon")
+            != pantheon.weekday_dual_rel(theme, "planetary"))
+    ]
+    assert differing, (
+        "no theme's pantheon dual is on disk — the roster split cannot "
+        "be proved, and a green test here would be meaningless"
+    )
 
 
 def test_rotation_group_picker_shows_the_custom_grid_only_in_custom_mode(app):

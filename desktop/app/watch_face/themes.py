@@ -18,7 +18,7 @@ from PySide6.QtWidgets import (
 from app.settings_store import slot_layout_target
 from app.watch_face import theme_tree
 from app.ui_style import tooltip_wrap
-from app.watch_face import thumbs
+from app.watch_face import theme_thumbs, thumbs
 from app.watch_face.controls import picture_group
 from app.watch_face.widgets import flow_row, pill
 from app.weekday_theme_grid import build_calendar_mount_grid
@@ -68,6 +68,14 @@ def _clear(layout) -> None:
 
 def build(settings, setters: dict, tr) -> QWidget:
     root = QVBoxLayout()
+    # NO DEAD BAND BETWEEN GROUPS (runtime audit ALG-7, 2026-08-15):
+    # the default inter-widget spacing plus each group's own top margin
+    # left a full-width strip of bare background between the Theme
+    # families card and the Subdial plate group — space bought with
+    # nothing, which is precisely what the ladder's first step forbids.
+    # The groups carry their own internal padding already, so the page
+    # does not need to add a second gap on top of it.
+    root.setSpacing(4)
     widget = QWidget()
 
     def rebuild() -> None:
@@ -117,7 +125,9 @@ def _populate(root, settings, setters, tr, rebuild) -> None:
         # Calendar pointer has wedges to mount one on.
         root.addWidget(_calendar_mount_group(settings, setters, tr))
     root.addWidget(_subdial_plate_group(settings, setters, tr))
-    root.addWidget(_artwork_group(settings, setters, tr))
+    artwork = _artwork_group(settings, setters, tr)
+    if artwork is not None:                  # verdict 8A — see the builder
+        root.addWidget(artwork)
     root.addWidget(_subdial_set_group(settings, setters, tr))
     root.addWidget(_rotation_group(settings, setters, tr))
 
@@ -210,45 +220,40 @@ def _subdial_plate_group(settings, setters, tr) -> QGroupBox:
     return group
 
 
-def _artwork_group(settings, setters, tr) -> QGroupBox:
-    """The ART SOURCE pick (owner 2026-07-14; PREVIEWS since the owner's
-    2026-08-09 review: each source's tile shows the ACTIVE weekday
-    theme's own Sun plate resolved UNDER that source — planetary Sun
-    when the theme has no plate there, the dial's own fallback — and,
-    when the theme carries a SUNDAY DUAL on disk, a second per-source
-    tile shows it). LIVE-APPLY, as before."""
+def _artwork_group(settings, setters, tr) -> QGroupBox | None:
+    """The ART SOURCE pick — ONE card per source, each carrying that
+    source's Sun plate AND (when the theme has one) its Sunday dual in
+    the SAME image, exactly the way the Subdial plate set card carries
+    three plates (owner order 2026-08-15).
+
+    Returns None — and the caller prints NOTHING — when the theme has
+    only one cast on disk. That is ballot verdict 8A applied to its
+    first real case: Planets Photo has a single set of plates, so the
+    group used to offer four cards that all resolved to the same
+    picture. A row with nothing to choose is STRUCTURE, not state, so
+    it is absent rather than greyed (a greyed row is for an option that
+    exists but cannot be taken right now)."""
     theme = settings.weekday_theme
+    sources = theme_thumbs.theme_art_sources(theme)
+    if not sources:
+        return None
+    roster = settings.weekday_roster
     entries = []
-    for source in constants.ART_SOURCES:
+    for source in sources:
         title = constants.ART_SOURCE_TITLES[source]
         entries.append((
             source, tr(title),
-            tr("The {source} cast of this theme's plates.").format(
+            tr("The {source} cast of this theme's plates — its Sunday "
+               "dual included, when the theme carries one.").format(
                 source=title
             ),
-            thumbs.art_source_icon(source, theme),
+            theme_thumbs.art_source_icon(source, theme, roster),
         ))
-    for source in constants.ART_SOURCES:
-        icon = thumbs.art_source_dual_icon(source, theme)
-        if icon is None:
-            continue
-        title = constants.ART_SOURCE_TITLES[source]
-        entries.append((
-            # A dual preview is the SAME pick as its source — a distinct
-            # key would make the group think two cards can be checked.
-            f"{source}__dual", tr("{source} — Sunday dual").format(source=title),
-            tr("This theme's Sunday dual plate, as {source} draws it.").format(
-                source=title
-            ),
-            icon,
-        ))
-    group = picture_group(
+    return picture_group(
         tr("Artwork"),
         tr("Which cast of plates the weekday bodies wear."),
-        entries, settings.art_source,
-        lambda key: setters["art_source"](key.removesuffix("__dual")),
+        entries, settings.art_source, setters["art_source"],
     )
-    return group
 
 
 def _subdial_set_group(settings, setters, tr) -> QGroupBox:
@@ -270,7 +275,7 @@ def _subdial_set_group(settings, setters, tr) -> QGroupBox:
                 tr("The {name} subdial plates.").format(
                     name=constants.SUBDIAL_SET_TITLES[name]
                 ),
-                thumbs.subdial_set_icon(name),
+                theme_thumbs.subdial_set_icon(name),
             )
             for name in constants.SUBDIAL_SETS
         ],

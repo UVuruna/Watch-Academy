@@ -487,6 +487,27 @@ WEEKDAY_DUAL_NAMES = registry.DUAL_NAMES
 WEEKDAY_DUAL_FILES = registry.DUAL_FILES
 
 
+def weekday_dual_rel(theme: str, roster: str = "planetary") -> str | None:
+    """WHICH Sunday dual plate a theme wears under `roster` — the ONE
+    implementation of a rule the compositor used to hold alone (owner
+    report 2026-08-15, "svaki bi trebao da prikazuje svoju verziju
+    nedelje jer nisu isti": the Artwork previews drew the planetary dual
+    for both rosters, because they never asked this question at all).
+
+    The pantheon dual wins ONLY when its plate is actually on disk —
+    otherwise the whole planetary pair stays, which is the classic
+    unit's Sunday law. `None` when the theme carries no dual at all
+    (graceful absence, never a stand-in)."""
+    dual_rel = WEEKDAY_DUAL_FILES.get(theme)
+    if dual_rel is None:
+        return None
+    if roster == "pantheon" and theme in WEEKDAY_PANTHEON:
+        candidate = WEEKDAY_PANTHEON[theme]["dual"][0]
+        if paths.existing_art_file(weekday_art(f"{candidate}.png")) is not None:
+            return candidate
+    return dual_rel
+
+
 def colored_variant_rel(rel: str) -> str:
     """`rel`'s colored twin — the LOOK segment (the last folder of a
     `<theme>/<register>/<look>/<stem>` relative path) swapped to

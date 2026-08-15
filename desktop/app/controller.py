@@ -16,6 +16,7 @@ a `WatchController` itself still knows nothing about its siblings.
 """
 
 import dataclasses
+import functools
 import hashlib
 import re
 import sys
@@ -3262,6 +3263,14 @@ class WatchController(QObject):
         section — the Settings dialog only ever applied these on OK; here
         they are LIVE, like every other Watch Face pick)."""
         def wrap(setter):
+            # `functools.wraps` is not cosmetics here (2026-08-15): it
+            # sets `__wrapped__`, so `inspect.signature` sees the REAL
+            # setter's arity through the wrapper. The per-section Reset
+            # (app.watch_face.section_reset) reads exactly that to tell
+            # a one-value setting apart from a target-plus-value one
+            # like `palettes` — without it every setter here looks like
+            # `(*args, **kwargs)` and the Reset can never be safe.
+            @functools.wraps(setter)
             def wrapped(*args, **kwargs):
                 setter(*args, **kwargs)
                 if self._watch_face is not None:
@@ -3596,6 +3605,14 @@ class WatchController(QObject):
         settings = self._settings
 
         def wrap(setter):
+            # `functools.wraps` is not cosmetics here (2026-08-15): it
+            # sets `__wrapped__`, so `inspect.signature` sees the REAL
+            # setter's arity through the wrapper. The per-section Reset
+            # (app.watch_face.section_reset) reads exactly that to tell
+            # a one-value setting apart from a target-plus-value one
+            # like `palettes` — without it every setter here looks like
+            # `(*args, **kwargs)` and the Reset can never be safe.
+            @functools.wraps(setter)
             def wrapped(*args, **kwargs):
                 setter(*args, **kwargs)
                 if self._watch_face is not None:

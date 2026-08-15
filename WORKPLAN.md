@@ -1098,10 +1098,22 @@ a session file.**
 | 2 | `ValueKnob`/rows + `SettingsShell` contract | DONE 0.15.039-041 (the shell contract is still informal) |
 | 7A / 7C | K-270D notch, family colours | DONE 0.15.039-041 |
 | 5A / 5B / 5D | Umbra into Colors, hues to Pointer, Eclipses split off | DONE 0.15.041 |
-| **4A** | compact `TintControl` + popover, curated ~12 tints, K-360 hue wheel for Custom | **OWED** -- parked on the palette ballot (artifact `aae0a35d`), never returned |
+| **4A** | compact `TintControl` + popover, the twelve open seats below, K-360 hue wheel for Custom | **UNBLOCKED 2026-08-15** -- palette ballot returned |
 | **3A + 8A** | `ThemeSelection = (base, style, metal, source)`, the permanent Variant panel, a choiceless row NOT printed at all | **OWED** -- this is what makes the Artwork group vanish for a one-source theme |
 | **5C** | one Crown seat on the Ring page (text, Location, Time format, colour, size, opacity) | **OWED** |
 | **5E** | Theme rotation thinned once the metal combos leave | **OWED** (rides 3A) |
+
+**THE TWELVE SEATS (owner ballot verdict 2026-08-15, artifact
+`aae0a35d`).** These sit OPEN on the Colors page, with no click; the
+popover still holds all 39, so nothing is lost. Scope, his own pick:
+**the same twelve everywhere** -- not per control, not last-used.
+
+`Gray - Gold - Satin Gold - Copper - Silver - Slate Gray - Glaucous -
+Charcoal - Gunmetal - Navy - Bordeaux - Periwinkle`
+
+(Thirteen lines came back; the thirteenth is the scope answer, not a
+colour.) No instructions were added, so the seats stand exactly as
+listed and in that order.
 
 Owner findings of 2026-08-15 that belong to this program, beyond the
 verdicts above -- each one is its own deliverable, none may be closed on
