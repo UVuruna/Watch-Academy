@@ -29,6 +29,11 @@ class CardKind(Enum):
 # The selection border hues — existing pledges only, no new hex enters
 # the program (Rule #4): amber is the window's own accent, green is the
 # "next"/on pill's light stop.
+#: A card's own horizontal chrome around its label — the 2px reserved
+#: border plus the 3px padding on each side, and a little air so the
+#: glyph never touches the rounded corner.
+_LABEL_PAD_PX = 16
+
 _BORDER_BY_KIND = {
     CardKind.RADIO: palette.THEME_COLORS["accent"],
     CardKind.SWITCH: palette.UI_BUTTON_COLORS["next"][0],
@@ -83,6 +88,33 @@ class OptionCard(QToolButton):
             # (`CardGroup.resizeEvent`) — it never starts at the ceiling.
             self.setIconSize(QSize(TILE_ICON_PX, TILE_ICON_PX))
         self._paint_border()
+
+    def sizeHint(self) -> QSize:  # noqa: N802 — Qt override
+        """WIDE ENOUGH FOR THE LABEL, not just the icon (audit CLIPPED,
+        2026-08-15 — a metal-shade column measured "has 130, needs at
+        least 141", the 11px by which "Dark bronze" overran a card sized
+        from its 128px tile alone).
+
+        `QToolButton`'s own hint for a text-under-icon button takes the
+        ICON's width and lets the label spill; on a card in a wrapping
+        gallery that spill is invisible until the gallery is squeezed,
+        and then it is a cut word. The card is the only thing that knows
+        its own label, so the floor belongs here — and because it is
+        measured from the text, a longer name in any language moves it."""
+        hint = super().sizeHint()
+        if self.compact:
+            return hint
+        needed = self.fontMetrics().horizontalAdvance(self.text()) + _LABEL_PAD_PX
+        return QSize(max(hint.width(), needed), hint.height())
+
+    def minimumSizeHint(self) -> QSize:  # noqa: N802 — Qt override
+        """The same floor: a card may wrap out of a row, never out of
+        its own label."""
+        hint = super().minimumSizeHint()
+        if self.compact:
+            return hint
+        needed = self.fontMetrics().horizontalAdvance(self.text()) + _LABEL_PAD_PX
+        return QSize(max(hint.width(), needed), hint.height())
 
     def is_checked(self) -> bool:
         return self._checked
@@ -338,9 +370,18 @@ class CardGroup(QGroupBox):
             self._column_height(self.width()) if self.width() > 0
             else self._column.minimumSize().height()
         )
+        # THE WIDTH COMES FROM THE COLUMN TOO (audit CLIPPED, 2026-08-15
+        # — "has 164x561, needs at least 175x529"). The height half of
+        # this hint has been the column's own arithmetic since the 4px
+        # phantom; the width half was still `QGroupBox`'s, which knows
+        # nothing about the flow inside it and under-reported by exactly
+        # the column's margins. A group narrower than one card cannot
+        # wrap its way out of trouble — one card is the floor — so this
+        # is the honest number, not a claim.
+        width = max(hint.width(), self._column.minimumSize().width())
         if needed < 0:
-            return hint
-        return QSize(hint.width(), needed)
+            return QSize(width, hint.height())
+        return QSize(width, needed)
 
     def resizeEvent(self, event) -> None:  # noqa: N802 — Qt override
         """ICON GROWTH (the wide-window remedy, owner-approved): icons

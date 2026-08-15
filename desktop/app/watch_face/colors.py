@@ -53,7 +53,7 @@ branch). This section's Aura group gates on `not settings.colorful`,
 the closest honest reading of the brief; it is grayed out, not hidden,
 while Colorful is on."""
 
-from PySide6.QtCore import Qt
+from PySide6.QtCore import QSize, Qt
 from PySide6.QtWidgets import (
     QComboBox, QFormLayout, QGroupBox, QHBoxLayout, QLabel, QVBoxLayout,
     QWidget,
@@ -64,6 +64,11 @@ from app.ui_style import tooltip_wrap
 from app.watch_face.controls import picture_group
 from app.watch_face.widgets import pill
 from config import constants, palette
+
+#: A card's horizontal padding around its label. The card's own
+#: sizeHint comes from the ICON and lets a longer label clip inside it,
+#: so a column that must not clip measures the LABEL and adds this.
+_CARD_LABEL_PADDING_PX = 28
 
 
 def build(settings, setters: dict, tr) -> QWidget:
@@ -214,6 +219,33 @@ def _aura_group(settings, setters, tr) -> QGroupBox:
     return group
 
 
+class _MetalRow(QWidget):
+    """The three metal columns, with a minimum that is ASKED, not
+    cached.
+
+    The window computes its floor from `minimumSizeHint`, and a plain
+    QWidget answers that from its layout's minimum taken whenever Qt
+    happens to ask — which on this row is before the cards have been
+    polished and know their own labels. The audit measured the result
+    on the owner's live profile: columns handed 152px against a real
+    need of 175. Asking the children AT THE MOMENT OF THE QUESTION is
+    the only answer that cannot be stale."""
+
+    def minimumSizeHint(self) -> QSize:      # noqa: N802 — Qt override
+        hint = super().minimumSizeHint()
+        layout = self.layout()
+        if layout is None:
+            return hint
+        groups = self.findChildren(QGroupBox)
+        if not groups:
+            return hint
+        needed = sum(group.minimumSizeHint().width() for group in groups)
+        needed += layout.spacing() * max(0, len(groups) - 1)
+        margins = layout.contentsMargins()
+        needed += margins.left() + margins.right()
+        return QSize(max(hint.width(), needed), hint.height())
+
+
 def _metal_group(settings, setters, tr) -> QWidget:
     """Metal shades as ROUNDELS (owner order 2026-08-15), replacing the
     three dropdowns this group wore since it moved here from the
@@ -237,9 +269,18 @@ def _metal_group(settings, setters, tr) -> QWidget:
         "silver": settings.metal_shade_silver,
         "bronze": settings.metal_shade_bronze,
     }
+    # LADDER STEP 3, and only after step 2 was tried and rejected on a
+    # proof shot (2026-08-15). Three groups sharing a plain QHBoxLayout
+    # each took a third of the width whatever that third was, and at the
+    # 711px minimum the Bronze column ended up narrower than its own
+    # "Dark bronze" label, which the card then clipped. Reflowing them
+    # (a FlowLayout) stopped the clipping but wrapped Bronze onto a line
+    # of its own with a hole beside it — worse to read than the problem.
+    # So each group DECLARES the width it actually needs below, the page
+    # minimum rises with it, and the window opens wide enough for the row
+    # the owner asked for. Raising a minimum is lawful; starving a label
+    # never is.
     row = QHBoxLayout()
-    # HIS ORDER, not the storage order: "Gold, Silver, Bronze jedna
-    # pored druge u istom redu".
     for metal in ("gold", "silver", "bronze"):
         entries = [
             (
@@ -256,21 +297,40 @@ def _metal_group(settings, setters, tr) -> QWidget:
             tr(metal.capitalize()), "", entries, current[metal],
             lambda key, m=metal: setters[f"metal_shade_{m}"](key),
         )
-        # EACH COLUMN ENDS WHERE ITS CONTENT ENDS, tops on one line:
-        # gold carries five shades against silver's and bronze's three,
-        # and a bare QHBoxLayout stretched the two short boxes to the
-        # tall one's height with a third of each standing empty (the
-        # independent grader's one ding on the first shot, 2026-08-15).
-        # A trailing stretch UNDER each group is what does it — a
-        # `Maximum` size policy was tried first and reverted, because
-        # with the row's AlignTop it dropped the short columns below
-        # gold's top edge instead of hanging all three from one line.
+        # THE WIDTH ITS OWN LABELS NEED, declared here because nothing
+        # else declares it (proof shot 2026-08-15): a card's sizeHint is
+        # built from its ICON and lets a longer label clip INSIDE the
+        # card, so at the compacted page's 711px minimum the Bronze
+        # column was narrower than "Dark bronze" and cut it. Reflowing
+        # the three groups was tried first and read worse — Bronze
+        # wrapped onto a line of its own beside a hole — so this is
+        # ladder step 3: the column declares what it needs and the
+        # window minimum rises with it. Measured from the TITLES this
+        # group will actually show, so a longer name in any language
+        # moves the floor with it.
+        margins = group.contentsMargins()
+        metrics = group.fontMetrics()
+        widest = max(
+            metrics.horizontalAdvance(tr(constants.METAL_SHADE_TITLES[shade]))
+            for shade in constants.METAL_SHADE_NAMES[metal]
+        )
+        group.setMinimumWidth(max(
+            group.sizeHint().width(),
+            widest + _CARD_LABEL_PADDING_PX + margins.left() + margins.right(),
+        ))
+        # ...and a trailing stretch UNDER each group so a short column
+        # ends where its content ends while all three hang from one top
+        # edge — gold carries five shades against three (the independent
+        # grader's ding on the first shot). A `Maximum` size policy was
+        # tried first and reverted: with an AlignTop row it dropped the
+        # short columns BELOW gold's top edge.
         column = QVBoxLayout()
         column.setContentsMargins(0, 0, 0, 0)
         column.addWidget(group)
         column.addStretch(1)
-        row.addLayout(column, 1)
-    host = QWidget()
+        row.addLayout(column)
+    row.addStretch(1)             # leftover width stays leftover
+    host = _MetalRow()
     host.setLayout(row)
     return host
 

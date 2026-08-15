@@ -30,7 +30,7 @@ and so is any hue at all.
 """
 
 from PySide6.QtCore import Qt
-from PySide6.QtGui import QColor
+from PySide6.QtGui import QColor, QGuiApplication
 from PySide6.QtWidgets import (
     QDialog, QFrame, QGridLayout, QHBoxLayout, QLabel, QPushButton,
     QVBoxLayout, QWidget,
@@ -123,7 +123,7 @@ class TintPopover(QDialog):
         self._all.setVisible(False)
         self._reveal = QPushButton(tr("All colours…"))
         self._reveal.setCheckable(True)
-        self._reveal.toggled.connect(self._all.setVisible)
+        self._reveal.toggled.connect(self._show_all)
         layout.addWidget(self._reveal)
         layout.addWidget(self._all)
 
@@ -191,6 +191,38 @@ class TintPopover(QDialog):
         return row
 
     # ── behaviour ─────────────────────────────────────────────────────
+    def _show_all(self, revealed: bool) -> None:
+        """Reveal the full grids AND stay on screen.
+
+        THE DEFECT THAT EARNED THIS (proof shot 2026-08-15, caught by
+        opening the image rather than by any test): the popover is
+        placed under its "Change…" button while it is narrow, and the
+        reveal roughly doubles its width. Left to itself it grew to the
+        RIGHT, straight off the window — "All colou…" cut mid-word, the
+        whole Darker grid gone, the twelve seats cropped to two columns.
+        A popup that grows must re-place itself, so the grown box is
+        clamped back inside the screen it opened on."""
+        self._all.setVisible(revealed)
+        # ACTIVATE BEFORE MEASURING: `adjustSize` reads the layout's
+        # CURRENT hint, and a widget shown a microsecond ago has not
+        # been folded into it yet — the first attempt grew the box to a
+        # width the revealed grids still overflowed, so the Darker
+        # column was cut inside a popover that had already been resized
+        # for it (proof shot 2026-08-15).
+        self.layout().activate()
+        self.adjustSize()
+        screen = self.screen() or QGuiApplication.primaryScreen()
+        if screen is None:
+            return
+        available = screen.availableGeometry()
+        frame = self.frameGeometry()
+        # Clamp right/bottom first, then left/top, so a box too big for
+        # the screen ends flush at the top-left corner and shows its
+        # BEGINNING rather than its middle.
+        x = min(frame.x(), available.right() - frame.width() + 1)
+        y = min(frame.y(), available.bottom() - frame.height() + 1)
+        self.move(max(available.x(), x), max(available.y(), y))
+
     def _turn(self, degrees: float) -> None:
         """The wheel keeps the seed's saturation and value and moves only
         the HUE — a wheel that also flattened the other two would make
