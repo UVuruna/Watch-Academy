@@ -16,6 +16,8 @@ Full reasoning, the scale's own five descriptions and what this style
 honestly cannot know: __about/eclipse_danjon.md. Layer: render.
 """
 
+import math
+
 from PySide6.QtCore import QPointF, QRectF, Qt
 from PySide6.QtGui import QColor, QPainter, QPainterPath, QPen
 
@@ -37,31 +39,45 @@ DANJON_MAX_STEP = 4
 # THE GAUGE, in fractions of the Moon body's own radius — every number
 # below is measured against the body it hangs under, so the mark scales
 # with the marker and never needs a second set for the picker tile or
-# the Encyclopedia plate. The deepest point the gauge reaches is
-# `_BAR_TOP + _BAR_HEIGHT` = 2.30 r, which still clears the Encyclopedia
-# plate's night ground (body 0.30 of the plate, ground 0.49 — 2.30 x
-# 0.15 = 0.35 of the plate against a 0.49 ground). The label sits
-# BETWEEN the body and the ladder and the three bands never overlap:
-# 1.12-1.58 text, 1.76-2.06 ladder, 2.18-2.30 bar. The 0.18 gap under
-# the text is not slack — the selected cell's DASHED marker is drawn
-# `_MARKER_INSET` (0.07) OUTSIDE its cell, and at a 0.08 gap the render
-# showed the digit's tail sitting on the marker's top edge.
+# the Encyclopedia plate.
+#
+# TWO PIECES, TWO RULES (owner order 2026-08-15):
+# 1. The LABEL (`L3`) sits INSIDE the disc, dead centre, and stays
+#    upright always — it is TEXT, and text does not rotate with the
+#    dial (the southern-hemisphere "turn the gauge back upright" call
+#    site in `render/layers/year_marker.py` depends on exactly this:
+#    the label was never part of what that flip corrects).
+# 2. The LADDER (plus, for partial/penumbral, the bar/strike riding the
+#    same block) sits CLOSE TO THE RIM, on the side facing the dial
+#    centre, its long axis parallel to the rim's own tangent there.
+#    `_gauge_placement` derives both the translation and the rotation
+#    from ONE angle — the Moon's own dial angle — because "parallel to
+#    the tangent" is a single rotation law, not four cardinal cases.
 _LADDER_HALF_WIDTH = 1.20
-_LADDER_TOP = 1.76
+# Local to the ladder's OWN centre (see `_gauge_placement`), not to the
+# Moon's — the ladder is vertically centred on the point
+# `_gauge_placement` returns, so its own top sits half a cell above that
+# point and its bottom half a cell below.
 _CELL_HEIGHT = 0.30
+_LADDER_TOP = -_CELL_HEIGHT / 2.0
 _CELL_GAP = 0.06
 _FRAME_WIDTH = 0.035
 _MARKER_INSET = 0.07
 _MARKER_DASH = (2.0, 2.0)              # in pen widths
 _TEXT_HEIGHT = 0.46
-# MEASURED off the first render: at 1.02 the label's top sat inside the
-# body's own glow and, in bronze, a dark-red L3 stood on a dark-red
-# disc — unreadable. It clears the body entirely at 1.12 and wears
-# SILVER, the brightest plate metal, because this label is the one part
-# of the mark that must be READ rather than recognised.
-_TEXT_TOP = 1.12
-_TEXT_METAL = "silver"
-_BAR_TOP = 2.18                        # the partial's magnitude bar
+_TEXT_METAL = "silver"                 # the brightest plate metal: this
+                                        # label is the one part of the
+                                        # mark that must be READ, not
+                                        # merely recognised, sitting as
+                                        # it now does over the disc art.
+# The ladder's own centre sits this many body radii out from the Moon's
+# centre — close enough that the block's near edge (centre minus half a
+# cell) clears the rim (radius 1.0) by a visible margin, without the
+# old design's now-vacated gap for the label that used to hang between
+# body and ladder.
+_GAUGE_CENTER_DISTANCE = 1.25
+_BAR_GAP = 0.12                        # ladder-bottom to bar-top, local
+_BAR_TOP = _CELL_HEIGHT / 2.0 + _BAR_GAP
 _BAR_HEIGHT = 0.12
 _EMPTY_ALPHA = 0.55                    # the partial's unfilled ladder
 _PENUMBRAL_ALPHA = 0.28                # fainter still: no umbral phase
@@ -92,17 +108,69 @@ def indicative_danjon(state: str, magnitude: float | None) -> int | None:
     return max(0, min(DANJON_MAX_STEP, step))
 
 
+def _gauge_placement(
+    radius: float, dial_angle_deg: float,
+) -> tuple[float, float, float]:
+    """PURE — no QPainter, no Qt painting. The ladder block's own centre
+    (`dx`, `dy`, offset from the Moon's centre) and the rotation the
+    whole block is drawn under, both derived from `dial_angle_deg` (the
+    Moon's dial angle, clockwise from top — the same convention as
+    `render.painting.dial_point`) by ONE rotation, not four cardinal
+    cases.
+
+    THE RULE: rotate the local "straight down from the Moon" placement —
+    `dial_angle_deg == 0`'s own picture, and the untouched default this
+    function must reproduce — by `dial_angle_deg` itself. Two facts make
+    that single rotation correct for every angle at once, not just the
+    four the owner named as consequences:
+
+    1. At angle 0 (Moon at dial-top), "straight down" IS "toward the
+       dial centre" — dial_point's own origin sits below a Moon drawn at
+       the top. So the un-rotated placement already satisfies "on the
+       inward side" for angle 0, and rotating the SAME construction by
+       the Moon's own angle keeps it inward at every angle: dial_point's
+       clockwise-from-top convention means the vector from a body at
+       angle theta back to the dial centre is theta's own "downward"
+       direction rotated by theta.
+    2. Painter rotation and this rotation share one convention (Qt's
+       `QPainter.rotate` turns the coordinate system clockwise in a
+       y-down frame, `dial_point` places bodies clockwise from top in
+       the same frame), so a placement built to face "down" at angle 0
+       and then carried through `painter.rotate(dial_angle_deg)` lands
+       exactly on the inward-facing, tangent-parallel picture the owner
+       described for all four cardinals — and, because it is one
+       rotation with no branch on the angle, for every angle between
+       them too (pinned at 45 deg/200 deg in the tooth).
+    """
+    theta = math.radians(dial_angle_deg)
+    distance = _GAUGE_CENTER_DISTANCE * radius
+    dx = -distance * math.sin(theta)
+    dy = distance * math.cos(theta)
+    return dx, dy, dial_angle_deg
+
+
 def draw_danjon_scale(
     painter: QPainter, radius: float, state: str, magnitude: float | None,
+    dial_angle_deg: float = 0.0,
 ) -> None:
     """The whole style, centred on the painter's current origin: the
-    Moon's disc wearing the indicated step's own colour, and the five-
-    cell legend beneath it.
+    Moon's disc wearing the indicated step's own colour, the `L` label
+    inside it (upright, never rotated), and the five-cell legend riding
+    the rim on the side facing the dial centre.
+
+    `dial_angle_deg` is the Moon's own dial angle (clockwise from top,
+    `render.painting.dial_point`'s convention) — 0.0, the default, is
+    "Moon at the top" and reproduces the style's original picture
+    unchanged, which is why the Encyclopedia plate and the picker tile
+    (both fixed compositions with no dial angle of their own) pass
+    nothing and keep their current look. Only the live dial passes a
+    real angle (`render.layers.year_marker`, which already computes
+    `moon_marker_angle(ctx)` for its own placement).
 
     Three pictures, one per lunar type, because the scale genuinely says
     three different things:
     * TOTAL — filled colour ladder, dashed marker under the indicative
-      step, the value spelled beside it in letter plates.
+      step, the value spelled inside the disc in letter plates.
     * PARTIAL — the ladder as empty outlines (no reading exists) with a
       bar beneath showing the umbral magnitude, the datum that IS real.
     * PENUMBRAL — no umbral phase to rate: faint outlines, struck
@@ -112,13 +180,28 @@ def draw_danjon_scale(
     _multiply_disc(painter, radius, state, step)
     painter.save()
     painter.setRenderHint(QPainter.RenderHint.Antialiasing)
-    _draw_ladder(painter, radius, state, step)
     if step is not None:
+        # THE LABEL STAYS UPRIGHT (owner order 2026-08-15): drawn in the
+        # painter's own frame, never under the ladder's rotation below —
+        # a rotated `L3` would be unreadable, and the whole point of
+        # moving it onto the disc was to make it easier to read, not
+        # harder.
         _draw_value(painter, radius, step)
-    elif state == "lunar_partial":
-        _draw_magnitude_bar(painter, radius, magnitude)
-    else:
-        _strike_through(painter, radius)
+    painter.save()
+    dx, dy, rotation = _gauge_placement(radius, dial_angle_deg)
+    painter.translate(dx, dy)
+    painter.rotate(rotation)
+    # From here on, "down" in this LOCAL frame is "away from the ladder's
+    # own centre, deeper into the dial" — the direction the bar/strike
+    # extend the same block in, so they travel with the ladder's
+    # rotation by construction rather than a second, separate rotate.
+    _draw_ladder(painter, radius, state, step)
+    if step is None:
+        if state == "lunar_partial":
+            _draw_magnitude_bar(painter, radius, magnitude)
+        else:
+            _strike_through(painter, radius)
+    painter.restore()
     painter.restore()
 
 
@@ -198,11 +281,15 @@ def _draw_ladder(
 def _draw_value(painter: QPainter, radius: float, step: int) -> None:
     """`L3`, in LETTER PLATES — THE ONE PLATE LAW, never a font. Every
     glyph this needs (`L` and the five digits) has a plate, so a missing
-    one would be a real defect and `plate_text_pixmap` raises on it."""
+    one would be a real defect and `plate_text_pixmap` raises on it.
+
+    DEAD CENTRE of the disc (owner order 2026-08-15, moved off the old
+    below-the-body seat), and never rotated with the ladder below — see
+    `draw_danjon_scale`."""
     height = max(1, round(radius * _TEXT_HEIGHT))
     pixmap = plate_text_pixmap(f"L{step}", height, _TEXT_METAL)
     painter.drawPixmap(
-        QPointF(-pixmap.width() / 2.0, radius * _TEXT_TOP), pixmap
+        QPointF(-pixmap.width() / 2.0, -pixmap.height() / 2.0), pixmap
     )
 
 

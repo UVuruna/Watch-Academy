@@ -562,6 +562,12 @@ class YearMarkerLayer(Layer):
         self._draw_moon(
             painter, ctx, pos, size,
             darken_state=state, lunar_magnitude=event.magnitude,
+            # THE DANJON LADDER'S OWN ANGLE (owner order 2026-08-15): the
+            # eclipse body's dial angle, the very one `pos` above was
+            # placed at — the one call site that KNOWS it, so the ladder
+            # can be rotated onto the rim's tangent instead of hanging
+            # fixed below the body regardless of where the body sits.
+            dial_angle_deg=angle,
         )
 
     def _eclipse_glow_paint(
@@ -757,6 +763,7 @@ class YearMarkerLayer(Layer):
     def _draw_moon(
         self, painter: QPainter, ctx: RenderContext, pos: QPointF, size: float,
         darken_state: str | None = None, lunar_magnitude: float | None = None,
+        dial_angle_deg: float = 0.0,
     ) -> None:
         """The Moon marker: the face in the chosen unlit-half treatment
         (`render.moon_face`, owner verdict 2026-08-10), plus whatever a
@@ -856,7 +863,11 @@ class YearMarkerLayer(Layer):
             from render import eclipse_danjon
 
             # THE DANJON SCALE: the disc wears the indicative step's own
-            # colour and the five-cell legend hangs beneath the body.
+            # colour, the `L` sits inside it, and the five-cell legend
+            # rides the rim on the side facing the dial centre (owner
+            # order 2026-08-15) — `dial_angle_deg` is this body's own
+            # dial angle, so the ladder's long axis stays parallel to the
+            # rim's tangent wherever the eclipse stands.
             # The gauge carries TEXT, so in the southern hemisphere it
             # is turned back upright — the disc above is deliberately
             # upside down (the lit side really does swap), a legend is
@@ -866,7 +877,8 @@ class YearMarkerLayer(Layer):
             if ctx.day.southern_hemisphere:
                 painter.rotate(180.0)
             eclipse_danjon.draw_danjon_scale(
-                painter, radius, darken_state, lunar_magnitude
+                painter, radius, darken_state, lunar_magnitude,
+                dial_angle_deg=dial_angle_deg,
             )
             painter.restore()
             painter.restore()
