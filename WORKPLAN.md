@@ -1098,7 +1098,7 @@ a session file.**
 | 2 | `ValueKnob`/rows + `SettingsShell` contract | DONE 0.15.039-041 (the shell contract is still informal) |
 | 7A / 7C | K-270D notch, family colours | DONE 0.15.039-041 |
 | 5A / 5B / 5D | Umbra into Colors, hues to Pointer, Eclipses split off | DONE 0.15.041 |
-| **4A** | compact `TintControl` + popover, the twelve open seats below, K-360 hue wheel for Custom | **UNBLOCKED 2026-08-15** -- palette ballot returned |
+| **4A** | compact `TintControl` + popover, the twelve open seats below, K-360 hue wheel for Custom | DONE 0.15.049 |
 | **3A + 8A** | `ThemeSelection = (base, style, metal, source)`, the permanent Variant panel, a choiceless row NOT printed at all | **OWED** -- this is what makes the Artwork group vanish for a one-source theme |
 | **5C** | one Crown seat on the Ring page (text, Location, Time format, colour, size, opacity) | **OWED** |
 | **5E** | Theme rotation thinned once the metal combos leave | **OWED** (rides 3A) |
@@ -1122,22 +1122,20 @@ a session file:
 1. A window flashed open mid-screen on every live pick -- **FIXED
    0.15.045**, root cause + tooth in
    [window.md](desktop/app/watch_face/__about/window.md).
-2. **Artwork must show one card per source, each carrying its base AND
-   its Sunday dual in ONE image** -- the way `subdial_set_icon` already
-   puts three plates in one tile -- instead of today's four cards. OWED.
-3. **The Sunday dual preview must follow the ROSTER** (Planetary and
-   Pantheon are not the same Sunday); today both rosters draw the same
-   tile. OWED.
-4. **Metal shades are ROUNDELS, not a dropdown** -- Gold/Silver/Bronze
-   as three cards in one row, each a metal plate with its own sheen,
-   under the ordinary card grammar (image, text, hover, resize). OWED.
-5. **The Danjon scale sits ON the moon** -- the L0-L4 label centred in
-   the moon and the colour bar close to its rim, the bar's rectangle
-   PARALLEL TO THE TANGENT at that point of the circle (South = above,
-   North = below, East = left and vertical, West = right and vertical),
-   derived from the angle, never four hand-written cases. OWED.
-6. **Every section ends with a Reset** button that returns that
-   section's settings to their defaults. OWED.
+4. Metal shades are ROUNDELS, not a dropdown -- **DONE 0.15.047**.
+5. The Danjon scale sits ON the moon -- **DONE 0.15.050**, one rotation
+   in `_gauge_placement`, pinned at 45 and 200 degrees as well as the
+   four cardinals so a four-case implementation cannot pass.
+6. Every section ends with a Reset -- **DONE 0.15.046**, all nine
+   pages; the key list is recorded from the build, never declared.
+
+2. Artwork's one card per source, dual included -- **DONE 0.15.046**.
+3. The Sunday dual follows the ROSTER -- **DONE 0.15.046**.
+
+**What is still OWED after 2026-08-15:** verdicts **3A + 8A**'s full
+Variant panel (8A's rule is applied to Artwork already, but the panel
+itself is not built), **5C** (the Crown's one seat on the Ring page)
+and **5E** (the thinned Theme rotation, which rides 3A).
 
 ## Open Owner Decisions (any session may receive the verdict)
 
