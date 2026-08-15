@@ -75,7 +75,11 @@ def test_colors_section_builds_a_real_page_not_a_placeholder(app):
     assert "Colours" in titles
     labels = {label.text() for label in widget.findChildren(QLabel)}
     assert {"Ring tint", "Inner (Minute track)", "Hands color",
-            "Jewels color", "Crown Text color"} <= labels
+            "Jewels color"} <= labels
+    # CROWN TEXT COLOR MOVED OUT (ballot verdict 5C, 2026-08-15): it now
+    # lives on the Ring page's Crown group, not here — Rule #5, no
+    # second copy.
+    assert "Crown Text color" not in labels
     # The pointer HUE CHIPS left this page for Pointer (ballot verdict
     # 5B, 2026-08-14) — they change with the pointer picked there. What
     # arrived in exchange is the dissolved Umbra & Aura page (5A).
@@ -459,6 +463,8 @@ def test_the_colors_page_draws_the_preset_grid_once_per_target_no_more(app):
         button for button in page.findChildren(QPushButton)
         if "border-radius" in button.styleSheet() and not button.text()
     ]
-    # Five tint targets on the page in the default state (the Umbra and
+    # Four tint targets on the page in the default state (the Umbra and
     # Aura custom rows only appear in "custom" mode) — one chip each.
-    assert len(round_chips) == 5
+    # Was five until Crown Text color moved to the Ring page's Crown
+    # group (ballot verdict 5C, 2026-08-15).
+    assert len(round_chips) == 4

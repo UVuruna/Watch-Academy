@@ -8,20 +8,35 @@ which opens the custom-ring flow's outer/jewel/crown builder in the
 Settings dialog rather than duplicating its inline widgets (see
 ring.md's Design Decisions). TWO METALS retired (owner decree
 2026-08-11) — every jewel roster is single-metal now.
+
+THE CROWN GETS ONE SEAT (ballot verdict 5C, 2026-08-15): the six
+controls a reader sees as "the crown text" — its typed text, the
+Location toggle, its Time format, color, size and opacity — used to be
+scattered across five different pages (Ring, Numerals, Colors, Size,
+Opacity). `_crown_text_group` below is now all six, together, in the
+order the owner named them; each arrived here from its old page with a
+one-line note of where it came from. The graceful-truth gate that used
+to repeat per-row on three separate pages now greys the color/size/
+opacity trio ONCE, as the single sub-widget they occupy — the text/
+Location/Time format controls stay live even with no crown text yet,
+since a custom ring's text box is exactly how that text gets typed in
+the first place; disabling it too would lock the field shut forever.
 """
 
 from PySide6.QtCore import Qt, QRegularExpression
 from PySide6.QtGui import QRegularExpressionValidator
 from PySide6.QtWidgets import (
-    QCheckBox, QGridLayout, QGroupBox, QHBoxLayout, QLabel, QLineEdit,
-    QPushButton, QVBoxLayout, QWidget,
+    QCheckBox, QComboBox, QGridLayout, QGroupBox, QHBoxLayout, QLabel,
+    QLineEdit, QPushButton, QVBoxLayout, QWidget,
 )
 
-from app.watch_face import thumbs
+from app.watch_face import thumbs, tint_control
 from app.ui_style import tooltip_wrap
-from app.watch_face.controls import picture_group
-from app.watch_face.widgets import flow_row, pill
-from config import constants, dial
+from app.watch_face.controls import (
+    ValueKnob, ValueUnit, knob_row, picture_group,
+)
+from app.watch_face.widgets import FlowLayout, flow_row, pill
+from config import constants, dial, palette
 from data.rings import ring_presets
 
 
@@ -168,18 +183,106 @@ def _inner_group(settings, setters, tr):
     )
 
 
+def _crown_time_format_row(settings, setters, tr) -> QWidget:
+    """MOVED HERE from `numerals._crown_group` (ballot verdict 5C,
+    2026-08-15) — the format the live crown reads its digits in
+    (bundled to `crown_text_scale`'s own note: only The One/Templar
+    keep a live time in their arc, everyone else ignores this pick)."""
+    row = QHBoxLayout()
+    row.addWidget(QLabel(tr("Time format")))
+    combo = QComboBox()
+    labels = {"hh:mm": "12:35", "12h 35min": "12h 35min"}
+    for value in dial.CROWN_TIME_FORMATS:
+        combo.addItem(tr(labels.get(value, value)), value)
+    combo.setCurrentIndex(
+        max(0, list(dial.CROWN_TIME_FORMATS).index(settings.crown_time_format))
+    )
+    combo.currentIndexChanged.connect(
+        lambda index: setters["crown_time_format"](combo.itemData(index))
+    )
+    row.addWidget(combo, stretch=1)
+    host = QWidget()
+    host.setLayout(row)
+    host.setToolTip(tooltip_wrap(tr(
+        "Only the presets that keep a time in their arc use this — "
+        "The One (this watch's own hour) and Templar (the hour of "
+        "Jerusalem)."
+    )))
+    return host
+
+
+def _crown_style_row(settings, setters, tr) -> QWidget:
+    """Color/size/opacity for the crown text — MOVED HERE from
+    colors.py/size.py/opacity.py (ballot verdict 5C, 2026-08-15). The
+    graceful-truth gate each of those three pages carried on its own
+    single row (`setters["ring_has_crown_text"]`) is applied ONCE here,
+    to the whole sub-widget, since the three now live beside each other
+    and are, together, the one thing the gate is about.
+
+    Labeled Tint/Scale/Alpha, not Color/Size/Opacity (ALG-9 SECTION
+    TAXONOMY, `tests/layout_checks_qt.py`): those bare words each claim
+    a concept that owns a page of its own (Colors/Size/Opacity), and
+    the guard reads the word wherever it lands — this row is the
+    deliberate, owner-approved exception the rulebook asks be named
+    around rather than silenced, and the alternate words are the exact
+    field names (`crown_text_tint`/`_scale`/`_alpha`) besides."""
+    column = QVBoxLayout()
+    column.setContentsMargins(0, 0, 0, 0)
+    column.addWidget(tint_control.tint_control(
+        tr, tr("Tint"), settings.crown_text_tint, palette.RING_TINT_GROUPS,
+        tr("Follow ring (default)"), palette.RING_TINT_PICKER_SEED,
+        setters["crown_text_tint"],
+    ))
+    size_knob = ValueKnob(
+        "crown_text_scale", tr("Scale"),
+        tr("The Great Seal inscription's size — multiplies on top of Jewels."),
+        unit=ValueUnit.PERCENT,
+        low=round(constants.ELEMENT_SCALE_RANGE[0] * 100),
+        high=round(constants.ELEMENT_SCALE_RANGE[1] * 100), family="size",
+        default_value=100,
+        on_change=lambda value: setters["crown_text_scale"](value / 100.0),
+    )
+    size_knob.set_value(round(settings.crown_text_scale * 100))
+    alpha_knob = ValueKnob(
+        "crown_text_alpha", tr("Alpha"),
+        tr("The Great Seal inscription's opacity."),
+        unit=ValueUnit.PERCENT, low=0, high=100, family="opacity",
+        default_value=100,
+        on_change=lambda value: setters["crown_text_alpha"](value / 100.0),
+    )
+    alpha_knob.set_value(round(settings.crown_text_alpha * 100))
+    flow = FlowLayout()
+    flow.addWidget(knob_row(size_knob))
+    flow.addWidget(knob_row(alpha_knob))
+    knob_host = QWidget()
+    knob_host.setLayout(flow)
+    column.addWidget(knob_host)
+    host = QWidget()
+    host.setLayout(column)
+    if not setters["ring_has_crown_text"]():
+        host.setEnabled(False)
+        host.setToolTip(tooltip_wrap(tr(
+            "The active ring preset carries no Crown Text (Great Seal "
+            "inscription)."
+        )))
+    return host
+
+
 def _crown_text_group(settings, card: dict, setters, tr) -> QGroupBox:
-    """CROWN TEXT (owner decree 2026-08-05): the bundled presets show
-    their existing crown text read-only (Dollar's Great Seal, DOMY/
-    LOOP's cross words); a custom ring may TYPE its own text and pick
-    an orientation (top/bottom). The custom field's `QLineEdit` carries
-    a whitelist `QValidator` (RING VERDICTS round, owner decree
-    2026-08-05) so an unsupported character cannot be typed at all —
-    the tooltip states exactly what is allowed. Every ring, preset or
-    custom, ALSO carries the LOCATION checkbox (same round): ticked, it
-    replaces whatever crown text the ring carries with the active
-    location's own "CITY, COUNTRY" (`app.controller._compose_skin`)."""
-    group = QGroupBox(tr("Crown text"))
+    """CROWN (ballot verdict 5C, 2026-08-15 — was "Crown text"): the
+    bundled presets show their existing crown text read-only (Dollar's
+    Great Seal, DOMY/LOOP's cross words); a custom ring may TYPE its own
+    text and pick an orientation (top/bottom). The custom field's
+    `QLineEdit` carries a whitelist `QValidator` (RING VERDICTS round,
+    owner decree 2026-08-05) so an unsupported character cannot be typed
+    at all — the tooltip states exactly what is allowed. Every ring,
+    preset or custom, ALSO carries the LOCATION checkbox (same round):
+    ticked, it replaces whatever crown text the ring carries with the
+    active location's own "CITY, COUNTRY" (`app.controller.
+    _compose_skin`). Time format, color, size and opacity join below —
+    the owner's decree that everything a reader sees as "the crown"
+    lives on one page now."""
+    group = QGroupBox(tr("Crown"))
     column = QVBoxLayout(group)
     location_on = settings.ring_crown_location.get(settings.ring, False)
     if settings.ring in constants.RING_OUTER_LOCK:
@@ -216,6 +319,8 @@ def _crown_text_group(settings, card: dict, setters, tr) -> QGroupBox:
     ))
     location_box.toggled.connect(setters["ring_crown_location"])
     column.addWidget(location_box)
+    column.addWidget(_crown_time_format_row(settings, setters, tr))
+    column.addWidget(_crown_style_row(settings, setters, tr))
     return group
 
 

@@ -8,12 +8,17 @@ for the OVERRIDE rows its click stores None through `on_reset`, so the
 render side genuinely stops overriding — the same law the old "Skin
 default" button enforced.
 
-Content is unchanged from the slider era: "Clock body" (the star
-diamonds, the Aura's two arcs, the Umbra) and "Bodies on the ring" (the
-Moon below the horizon, the inactive weekday icons, the Crown Text) —
+Content is unchanged from the slider era except one row: "Clock body"
+(the star diamonds, the Aura's two arcs, the Umbra) and "Bodies on the
+ring" (the Moon below the horizon, the inactive weekday icons) —
 LIVE-APPLY, commit on release/wheel/exact entry. The Aurora twilight
-gate and the crown-text gate keep their graceful-truth shape (grayed
-with a tooltip, never hidden).
+gate keeps its graceful-truth shape (grayed with a tooltip, never
+hidden).
+
+CROWN TEXT OPACITY MOVED OUT (ballot verdict 5C, 2026-08-15): the
+`crown_text_alpha` knob and its graceful-truth gate now live with the
+rest of "the crown" — text, Location, Time format, color and size — in
+the Ring page's Crown group (`app.watch_face.ring._crown_style_row`).
 
 History and the alpha-channel survey (which fields exist, which two
 alpha-shaped constants stay deliberately unwired, why the Moon groups
@@ -119,13 +124,4 @@ def _ring_bodies_group(settings, setters, tr, defaults: dict) -> QGroupBox:
         "The non-active weekday bodies' ghost opacity — the notch follows the skin.",
         override=True,
     )
-    crown = _knob(
-        tr, settings, setters, "crown_text_alpha", 1.0, "Crown Text",
-        "The Great Seal inscription's opacity.", override=False,
-    )
-    if not setters["ring_has_crown_text"]():
-        crown.setEnabled(False)
-        crown.setToolTip(tooltip_wrap(tr(
-            "The active ring preset carries no Crown Text (Great Seal inscription)."
-        )))
-    return _flow_group(tr("Bodies on the ring"), (moon, ghost, crown))
+    return _flow_group(tr("Bodies on the ring"), (moon, ghost))

@@ -31,12 +31,13 @@ silently dropped.
 | `thumbs.py` | Algorithmic | R-33: the disk-cached thumbnail service (ring/hand art + the pointer palette-swatch fallback) — [about](__about/thumbs.md) · [flow](__flow/thumbs.md) |
 | `section_reset.py` | Algorithmic | the per-section Reset button, and the recorded (never declared) list of settings each section owns — [about](__about/section_reset.md) |
 | `tint_control.py` | Standard | verdict 4A: one compact row per colour target, the palette in its popover (the twelve seats, all colours, the K-360 hue wheel) — [about](__about/tint_control.md) |
+| `theme_variants.py` | Standard | verdicts 3A+8A: the permanent Variant panel — Style, Metal, Source, Roster, and only the rows this theme can offer — [about](__about/theme_variants.md) |
 | `theme_thumbs.py` | Algorithmic | the previews ASSEMBLED FROM PLATES — Subdial plate set, and one Artwork card per source carrying its Sunday dual — [about](__about/theme_thumbs.md) |
 | `widgets.py` | Standard | shared pill/tile builders every section imports — [about](__about/widgets.md) |
 | `controls.py` | Standard | OptionCard + CardGroup, the sealed element classes (ballot 1A) — [about](__about/controls.md) |
 | `pointer.py` | Algorithmic | R-04/R-05: pointer gallery, shape/curvature/edge, night borders, Daylight-Night — [about](__about/pointer.md) · [flow](__flow/pointer.md) |
-| `ring.py` | Algorithmic | R-10/R-13: ring gallery, finish, shine, Custom ring… — [about](__about/ring.md) · [flow](__flow/ring.md) |
-| `numerals.py` | Standard | THE MODE (Geocentric/Heliocentric) plus the two live-rendered numeral bands' faces, sizes, seating, relief and the live crown's format — [about](__about/numerals.md) |
+| `ring.py` | Algorithmic | R-10/R-13: ring gallery, finish, shine, the Crown group (text/Location/Time format/color/size/opacity — ballot verdict 5C), Custom ring… — [about](__about/ring.md) · [flow](__flow/ring.md) |
+| `numerals.py` | Standard | THE MODE (Geocentric/Heliocentric) plus the two live-rendered numeral bands' faces, sizes, seating and relief — [about](__about/numerals.md) |
 | `bodies.py` | Algorithmic | R-06/R-14 + the Moving Bodies (2026-08-10): hand-pack gallery, Earth, Moon (unlit half, crossing, Horizon Band), Eclipses, Stations — [about](__about/bodies.md) · [flow](__flow/bodies.md) |
 | `umbra_aura.py` | Algorithmic | umbra form + contrast pills — [about](__about/umbra_aura.md) · [flow](__flow/umbra_aura.md) |
 | `size.py` | Algorithmic | diameter + every element scale slider — [about](__about/size.md) · [flow](__flow/size.md) |

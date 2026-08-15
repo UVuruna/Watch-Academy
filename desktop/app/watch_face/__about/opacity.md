@@ -6,8 +6,15 @@
 Phase ④ (R-15/R-36 + the moved rows): the Watch Face window's real
 Opacity page — every render alpha channel this Phase's render hooks
 make speakable, grouped "Clock body" (Pointer, Aura sunlight/twilight,
-Umbra) and "Bodies on the ring" (Moon below horizon, Inactive icons,
-Crown Text). LIVE-APPLY, commit on release/wheel/exact entry.
+Umbra) and "Bodies on the ring" (Moon below horizon, Inactive icons).
+LIVE-APPLY, commit on release/wheel/exact entry.
+
+**CROWN TEXT OPACITY MOVED OUT (ballot verdict 5C, 2026-08-15):** the
+`crown_text_alpha` knob (R-24/Phase-6-debt correction, owner
+2026-08-05) and its graceful-truth gate (`setters["ring_has_crown_text"]`)
+now live on the Ring page's Crown group, labeled "Alpha" there (not
+"Opacity" — ALG-9 SECTION TAXONOMY reads that bare word as a claim on
+this page).
 
 **THE KNOB MIGRATION (owner ballot verdicts 2026-08-14 — the FIRST
 section on THE ELEMENT CLASSES):** the sliders and their
@@ -22,13 +29,14 @@ Three rows were MOVED from the RETIRED `app.settings_dialog.
 display_section._build_opacity_group` (Phase 6 FINAL cleanup deleted
 that copy outright). Two are NEW: R-15 Umbra opacity (owner-requested,
 a layer-alpha multiplier), R-36 "Inactive icons" (the weekday ghost
-bodies' existing opacity). A third, "Crown Text" (`crown_text_alpha`,
+bodies' existing opacity). A third, Crown Text (`crown_text_alpha`,
 R-24/Phase-6-debt correction, owner 2026-08-05), was added the same
 round the Phase ④ debt note calling "Crown Text" nonexistent was
 corrected — the outer Great Seal crown text arc IS this element
-(`skin.ring.crown_text`, `RingLayer._draw_crown_text`); a direct row
-like `umbra_alpha`, greyed out with a tooltip
-(`setters["ring_has_crown_text"]`) on crown-text-less presets.
+(`skin.ring.crown_text`, `RingLayer._draw_crown_text`); it lived here as
+a direct row like `umbra_alpha`, greyed out with a tooltip
+(`setters["ring_has_crown_text"]`) on crown-text-less presets, until
+ballot verdict 5C (2026-08-15) moved it to the Ring page's Crown group.
 
 **THE MOON HORIZON BAND MOVED OUT (owner verdict 2026-08-10):** its
 group used to sit FIRST on this page (owner verdict 2026-08-09, ALG-7
@@ -60,8 +68,8 @@ still loads without a migration, but no render hook reads it.
   STORED override to `None`, not merely the slider position, so the
   render side actually stops overriding — mirrors `app.settings_dialog.
   display_section`'s existing pattern exactly.
-- **Direct rows** (`moon_hidden_alpha`, `umbra_alpha`, `crown_text_alpha`):
-  no None state, "Default" resets to the field's own documented default.
+- **Direct rows** (`moon_hidden_alpha`, `umbra_alpha`): no None state,
+  "Default" resets to the field's own documented default.
 - **Open-list note (every alpha channel found through R-15/R-35/R-36):**
   the rows above were every alpha a `Settings`-reachable render hook
   could bind to at the time. Two more alpha-shaped fields turned up and

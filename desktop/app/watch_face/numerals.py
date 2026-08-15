@@ -12,8 +12,13 @@ numbers stand in, and the seating law), MINUTES — the inner minute band
 (its own face and size — the ledger settles that nothing else about it
 is user-changeable: it never rotates and it follows the outer band's
 seating), and the RELIEF the outer numerals wear (style, depth, light,
-darkness, contact blur, border) plus the live crown's own face and time
-format.
+darkness, contact blur, border).
+
+THE CROWN'S TIME FORMAT MOVED OUT (ballot verdict 5C, 2026-08-15): the
+live crown's Time format pick joined the rest of "the crown" — its
+text, Location, color, size and opacity — on the Ring page's Crown
+group (`app.watch_face.ring._crown_time_format_row`). This page no
+longer builds a crown group at all.
 
 LIVE-APPLY like every other Watch Face section: each pick calls its
 setter immediately through `setters`, and the window rebuilds this page
@@ -37,7 +42,6 @@ def build(settings, setters: dict, tr) -> QWidget:
     layout.addWidget(_outer_group(settings, setters, tr))
     layout.addWidget(_inner_group(settings, setters, tr))
     layout.addWidget(_relief_group(settings, setters, tr))
-    layout.addWidget(_crown_group(settings, setters, tr))
     layout.addStretch(1)
     widget = QWidget()
     widget.setLayout(layout)
@@ -247,26 +251,4 @@ def _relief_group(settings, setters, tr) -> QGroupBox:
     host = QWidget()
     host.setLayout(flow)
     form.addRow(host)
-    return group
-
-
-def _crown_group(settings, setters, tr) -> QGroupBox:
-    group = QGroupBox(tr("The live crown"))
-    form = QFormLayout(group)
-    # NO FACE PICKER (THE ONE PLATE LAW, owner decree 2026-08-07): the
-    # crown draws the owner's letter plates, exactly like the jewels and
-    # the crown text beside it, so there is no font left to pick. The row
-    # that used to stand here chose the face for the font-drawn digits.
-    _choice_row(
-        tr, settings, setters, "crown_time_format", dial.CROWN_TIME_FORMATS,
-        "Time format", form,
-        labels={"hh:mm": "12:35", "12h 35min": "12h 35min"},
-    )
-    live = QLabel(tr(
-        "Only the presets that keep a time in their arc use these — "
-        "The One (this watch's own hour) and Templar (the hour of "
-        "Jerusalem)."
-    ))
-    live.setWordWrap(True)
-    form.addRow(live)
     return group

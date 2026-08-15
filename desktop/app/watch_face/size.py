@@ -7,15 +7,15 @@ the retired spinbox's job); every element scale and the three
 numeral-band sizes are K-270D with the green default notch (verdict
 7A). Stored keys are unchanged from the slider era (Rule #5).
 
-CROWN TEXT (R-24/Phase-6-debt correction, owner 2026-08-05) keeps its
-graceful-truth gate: the one knob that is not always meaningful greys
-out with a tooltip when the active ring preset carries no crown text
-(`setters["ring_has_crown_text"]`).
+CROWN TEXT SIZE MOVED OUT (ballot verdict 5C, 2026-08-15): the
+`crown_text_scale` knob and its graceful-truth gate
+(`setters["ring_has_crown_text"]`) now live with the rest of "the
+crown" — text, Location, Time format, color and opacity — in the Ring
+page's Crown group (`app.watch_face.ring._crown_style_row`).
 """
 
 from PySide6.QtWidgets import QGroupBox, QHBoxLayout, QVBoxLayout, QWidget
 
-from app.ui_style import tooltip_wrap
 from app.watch_face.controls import KnobKind, ValueKnob, ValueUnit, knob_row
 from app.watch_face.widgets import FlowLayout, pill
 from config import constants, dial
@@ -30,8 +30,6 @@ _SCALE_ROWS = (
      "The subdial complications' size."),
     ("ring_jewels_scale", "Jewels", constants.ELEMENT_SCALE_RANGE, 100,
      "The ring jewels' size."),
-    ("crown_text_scale", "Crown Text", constants.ELEMENT_SCALE_RANGE, 100,
-     "The Great Seal inscription's size — multiplies on top of Jewels."),
     ("hover_enlarge", "Hover enlarge", constants.HOVER_ENLARGE_RANGE, 120,
      "How much a hovered body grows."),
 )
@@ -91,11 +89,6 @@ def _scale_group(settings, setters, tr) -> QGroupBox:
             on_change=lambda value, k=key: setters[k](value / 100.0),
         )
         knob.set_value(round(getattr(settings, key) * 100))
-        if key == "crown_text_scale" and not setters["ring_has_crown_text"]():
-            knob.setEnabled(False)
-            knob.setToolTip(tooltip_wrap(tr(
-                "The active ring preset carries no Crown Text (Great Seal inscription)."
-            )))
         knobs.append(knob)
     column.addWidget(_flow(knobs))
     return group

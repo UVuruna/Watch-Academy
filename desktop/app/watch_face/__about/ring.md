@@ -13,30 +13,49 @@ METALS retired — owner decree 2026-08-11), an INNER gallery (eight
 tiles — user-changeable
 independent of the locked outer), a word-wrapped label showing the
 ACTIVE preset's own About (THE SPACE & LEGIBILITY LAW — never only a
-tooltip) and a Crown Text group (read-only preset text, or a custom
-ring's own typed text + top/bottom orientation) — plus R-13's "Custom
-ring…" button. RING VERDICTS round (owner correction 2026-08-05) added
-two things to the Crown Text group: the typed field's `QLineEdit` now
-carries a WHITELIST `QValidator` (`_crown_text_validator`, built
-straight off `constants.RING_CROWN_TEXT_CHARSET`) so an unsupported
-character can never be typed at all — a tooltip states exactly what is
-allowed — and every ring (preset or custom) gained a "Location"
-checkbox that replaces the crown text with the active location's own
-"CITY, COUNTRY" (`setters["ring_crown_location"]`).
+tooltip) and a Crown group (read-only preset text, or a custom ring's
+own typed text + top/bottom orientation) — plus R-13's "Custom ring…"
+button. RING VERDICTS round (owner correction 2026-08-05) added two
+things to the Crown group: the typed field's `QLineEdit` now carries a
+WHITELIST `QValidator` (`_crown_text_validator`, built straight off
+`constants.RING_CROWN_TEXT_CHARSET`) so an unsupported character can
+never be typed at all — a tooltip states exactly what is allowed — and
+every ring (preset or custom) gained a "Location" checkbox that
+replaces the crown text with the active location's own "CITY,
+COUNTRY" (`setters["ring_crown_location"]`).
+
+**THE CROWN GETS ONE SEAT (ballot verdict 5C, 2026-08-15):** the group
+grew from "Crown text" to "Crown" and now holds all six controls a
+reader sees as one thing — text, Location, Time format
+(`crown_time_format`, moved from `numerals.py`), color (`crown_text_tint`,
+moved from `colors.py`), size (`crown_text_scale`, moved from
+`size.py`) and opacity (`crown_text_alpha`, moved from `opacity.py`).
+`_crown_time_format_row` builds the plain combo; `_crown_style_row`
+builds the color popover plus two `ValueKnob`s (labeled Tint/Scale/
+Alpha rather than Color/Size/Opacity — ALG-9 SECTION TAXONOMY reads
+those bare words as claims on the Colors/Size/Opacity pages) and
+carries the graceful-truth gate ONCE, on the whole sub-widget, for
+`setters["ring_has_crown_text"]`. The text/Location/Time-format
+controls stay live even with no crown text yet, on purpose: for a
+custom ring the text box IS how that text gets typed in the first
+place, so gating it too would lock the field shut forever.
 
 ## Connections
 
 ### Uses
 - [Watch Face Thumbnails](thumbs.md) — `ring_preset_thumbnail`,
   `art_thumbnail` (fallback)
-- [Controls](controls.md) — `picture_group`, the one gallery door
-- [Watch Face Shared Widgets](widgets.md) — `pill`
+- [Controls](controls.md) — `picture_group`, `ValueKnob`/`knob_row`,
+  the one gallery/knob doors
+- [Watch Face Shared Widgets](widgets.md) — `pill`, `FlowLayout`
+- [Tint Control](tint_control.md) — `tint_control`, the Crown color row
 - [Rings (data)](../../../data/__about/rings.md) — `ring_presets`
 - [Config (folder)](../../../config/___config.md) — `RING_OUTERS`,
   `RING_OUTER_LOCK`, `RING_INNERS`, `RING_INNER_PRESET_DEFAULT`,
   `RING_INNER_DEFAULT`, `RING_FINISHES`, `RING_EYE_GLYPH`,
-  `RING_EYE_SHINE_DEFAULT`,
-  `RING_CROWN_TEXT_CHARSET`
+  `RING_EYE_SHINE_DEFAULT`, `RING_CROWN_TEXT_CHARSET`,
+  `CROWN_TIME_FORMATS`, `ELEMENT_SCALE_RANGE`,
+  `palette.RING_TINT_GROUPS`/`RING_TINT_PICKER_SEED`
 
 ### Used by
 - `app.watch_face.window` — registered as the Ring section's builder

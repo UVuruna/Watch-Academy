@@ -1,12 +1,12 @@
 # app/watch_face/numerals.py
 
 The Watch Face window's **Numerals** page — the controls for the two
-LIVE-RENDERED numeral bands and the live crown.
+LIVE-RENDERED numeral bands.
 
 ## Purpose
 
 `research/hour_numerals.md` §8 and `research/ring_rework.md` §5 settle a
-list of settings; this page is where a reader meets them. FIVE groups,
+list of settings; this page is where a reader meets them. FOUR groups,
 in the order they appear on the dial — the MODE first, because it is the
 one pick that says whether the hour band below is a fixed ring of markers
 or a world that turns:
@@ -17,7 +17,13 @@ or a world that turns:
 | **Hour ring — the outer band** | ring face (the 7-face roster), numeral size, **outer ring size** (the width of the band the jewels and numbers stand in), seating (`arc` / `upright`) |
 | **Minute ring — the inner band** | inner face (the 5-face roster), numeral size |
 | **Relief** | relief style (`cast` / `extrude` / `emboss`), depth, light (`radial` / `fixed`), darkness, contact blur, border |
-| **The live crown** | time format (`12:35` / `12h 35min`) |
+
+**THE LIVE CROWN'S TIME FORMAT MOVED OUT (ballot verdict 5C,
+2026-08-15):** the group that used to close this page ("The live
+crown", `crown_time_format`) joined the rest of "the crown" — its text,
+Location, color, size and opacity — on the Ring page's Crown group
+(`app.watch_face.ring._crown_time_format_row`). This page builds no
+crown group at all now.
 
 **What turns is GREYED OUT in Noon Stays Up** (owner question 2026-08-13,
 and he was right to ask): `core.world.world_offset_deg` is exactly 0.0 in
@@ -31,10 +37,11 @@ Follows You. `_follow_mode` installs that, and
 `tests/test_world_mode.py::TestTheWhatTurnsRowFollowsTheMode` pins both
 the premise and the behaviour.
 
-The live crown has NO face row (THE ONE PLATE LAW, owner decree
-2026-08-07): it draws the owner's letter plates like the jewels and the
-crown text beside it, so the font pick that used to stand here — and
-`Settings.crown_face` behind it — is gone.
+The live crown (now on the Ring page's Crown group) has NO face row
+(THE ONE PLATE LAW, owner decree 2026-08-07): it draws the owner's
+letter plates like the jewels and the crown text beside it, so the
+font pick that used to stand here — and `Settings.crown_face` behind
+it — is gone.
 
 **What turns** (owner ballot verdict 2026-08-13) is a DROPDOWN and not a
 checkbox under Solar Rotation, because it is not a switch on the rotation

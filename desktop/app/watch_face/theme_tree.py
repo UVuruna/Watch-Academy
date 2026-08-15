@@ -7,8 +7,7 @@ FULL-FACE weekday binding when no slot is enabled.
 from dataclasses import dataclass
 
 from PySide6.QtWidgets import (
-    QGridLayout, QGroupBox, QHBoxLayout, QLabel, QPushButton, QVBoxLayout,
-    QWidget,
+    QGridLayout, QHBoxLayout, QLabel, QPushButton, QVBoxLayout, QWidget,
 )
 
 from app.watch_face import thumbs
@@ -171,26 +170,15 @@ def _select_kind(key: str, rebuild) -> None:
 
 def _weekday_branch(active, pointer, pointer_shape, tr, rebuild) -> QWidget:
     layout = QVBoxLayout()
-    host = layout
     if _nav.weekday_group is None:
         families = build_weekday_group_grid(
             None, lambda group: _select_group(group, rebuild), tr,
         )
         layout.addWidget(families)
-        # THE ROSTER RIDES INSIDE THE FAMILIES CARD GROUP (runtime
-        # audit ALG-7, 2026-08-15): standing on its own below the
-        # gallery it took a band of its own plus the inter-group gap
-        # beneath it — two half-empty rows with the Subdial plate group
-        # continuing below them. It is a property of the theme you just
-        # picked, so its home is that card group, which is also where
-        # ballot verdict 3A will eventually seat it as one row of the
-        # permanent Variant panel. The grid builder returns a plain
-        # holder around the group, so the GROUP is what we look for:
-        # adding to the holder would only have shaved one layout
-        # spacing and left the row visually outside the box.
-        group = families.findChild(QGroupBox)
-        if group is not None and group.layout() is not None:
-            host = group.layout()
+        # (The Roster row used to be seated inside this card, a stop on
+        # its way from a band of its own to where it actually belongs:
+        # verdict 3A's Variant panel, beside every other thing a theme
+        # can vary. `app.watch_face.theme_variants` owns it now.)
     else:
         crumb = QHBoxLayout()
         back = QPushButton(f"← {tr(_nav.weekday_group)}")
@@ -203,43 +191,9 @@ def _weekday_branch(active, pointer, pointer_shape, tr, rebuild) -> QWidget:
             default_weekday_theme(pointer, pointer_shape),
             lambda theme: active.set_weekday(theme), tr,
         ))
-    _add_roster_row(host, active, tr)
     widget = QWidget()
     widget.setLayout(layout)
     return widget
-
-
-def _add_roster_row(layout: QVBoxLayout, active, tr) -> None:
-    """THE ROSTER PICKER, returned (owner review 2026-08-09: "gods nema
-    opciju biranja pantheon ili planetary"). The whole pipeline already
-    existed end-to-end — `constants.FIGURE_ROSTERS`, the per-slot
-    roster settings, `render.slot_layout.slot_view`, and every
-    controller setter takes a `roster=` kwarg — but the control itself
-    died with the classic menu's Planetary/Pantheon pair in the Phase 6
-    consolidation and this tree never re-grew it. Shown only while the
-    ACTIVE theme actually declares a pantheon block
-    (`pantheon.WEEKDAY_PANTHEON`: greek/egypt/norse/slavic today), so
-    it is never a dead pair."""
-    from config import pantheon
-
-    if active.theme_value not in pantheon.WEEKDAY_PANTHEON:
-        return
-    row = QHBoxLayout()
-    row.addWidget(QLabel(tr("Roster")))
-    for roster in constants.FIGURE_ROSTERS:
-        # THE PILLS TAKE THE FREE SPACE (ladder step 1, runtime audit
-        # ALG-7 of 2026-08-15): this row used to end in `addStretch(1)`,
-        # so two short pills sat at the left and up to 100% of the band
-        # stood empty while the Subdial plate group continued below it.
-        # The face-layout row at the top of this same page has always
-        # filled its width — this row now speaks that grammar too.
-        row.addWidget(pill(
-            tr(roster.capitalize()), active.roster_value == roster,
-            lambda r=roster: active.set_weekday(
-                active.theme_value, roster=r,
-            ),
-        ), 1)
-    layout.addLayout(row)
 
 
 def _select_group(group: str, rebuild) -> None:

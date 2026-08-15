@@ -26,13 +26,15 @@ fresh on every pick.
 - [Watch Controller](../../__about/controller.md) — every setter key
   this page calls (`ring_tint`, `ring_tint_inner`, `palettes`,
   `umbra_tint_mode`, `umbra_tint`, `aura_off_tint_mode`, `aura_off_tint`,
-  `hands_tint`, `jewels_tint`, `crown_text_tint`,
+  `hands_tint`, `jewels_tint`,
   `metal_shade_gold`/`bronze`/`silver`, `pointer_saturation`,
   `ring_saturation`, `hands_saturation`, `umbra_saturation`) is wired in
-  `_watch_face_setters()`, plus the data PROVIDER `ring_has_crown_text` the
-  Crown Text row reads to grey itself out (the Inner-tint row is always
-  live now — THE COMPOSITIONAL RING MODEL, owner decree 2026-08-05);
-  `test_watch_face_colors.py`'s static check pins it
+  `_watch_face_setters()` (the Inner-tint row is always live now — THE
+  COMPOSITIONAL RING MODEL, owner decree 2026-08-05);
+  `test_watch_face_colors.py`'s static check pins it. `crown_text_tint`
+  is no longer called from here — ballot verdict 5C (2026-08-15) moved
+  the Crown Text color row, and its `ring_has_crown_text` gate, to the
+  Ring page's Crown group.
 
 ## Design Decisions
 
@@ -73,10 +75,11 @@ fresh on every pick.
   below is always live now, no more disk-presence gate. R-24's Crown
   Text color IS built too: the outer arc IS the Great Seal crown text
   inscription (`RingSpec.crown_text`) — it always had a seat, just no
-  control; `crown_text_tint` (this section) and `crown_text_scale`/`crown_text_alpha`
-  (Size/Opacity sections) now read it independently of
-  `jewels_tint`/`ring_jewels_scale`. See `skins.manifest.
-  SkinDefinition`'s Crown Text fields for the full design note.
+  control; `crown_text_tint`/`crown_text_scale`/`crown_text_alpha` now
+  read it independently of `jewels_tint`/`ring_jewels_scale`. See
+  `skins.manifest.SkinDefinition`'s Crown Text fields for the full
+  design note. **All three now live on the Ring page's Crown group, not
+  here — ballot verdict 5C, 2026-08-15.**
 - **R-25's Jewels saturation as a separate slider**: `ring_saturation`
   already scales the ring plate AND its jewels together, a UNIFIED
   target sealed by owner decree (Session 21-D, fix round E,

@@ -24,10 +24,11 @@ this round —
     below is always live — no more disk-presence gate.
   * R-24's Crown Text color: the outer arc IS the Great Seal crown text
     inscription (`RingSpec.crown_text`) — it always had a seat, just no
-    control. `crown_text_tint` (this section) and `crown_text_scale`/`crown_text_alpha`
-    (Size/Opacity sections) now read it independently of
-    `jewels_tint`/`ring_jewels_scale`. See `skins.manifest.
-    SkinDefinition`'s Crown Text fields for the full design note.
+    control. `crown_text_tint`, `crown_text_scale` and `crown_text_alpha`
+    read it independently of `jewels_tint`/`ring_jewels_scale`; ALL THREE
+    now live in the Ring page's Crown group (ballot verdict 5C,
+    2026-08-15), not here. See `skins.manifest.SkinDefinition`'s Crown
+    Text fields for the full design note.
 
 DEBT (owner honesty rule — a control that does nothing must never
 ship): two items below are NOT built, each recorded where it would
@@ -115,13 +116,12 @@ def _tint_group(
 
 
 def _tints_group(settings, setters, tr) -> QGroupBox:
-    """THE FIVE STRAIGHT TINT TARGETS in one group (verdict 4A).
+    """THE FOUR STRAIGHT TINT TARGETS in one group (verdict 4A; a fifth,
+    Crown Text color, moved out to the Ring page's Crown group — ballot
+    verdict 5C, 2026-08-15).
 
     Each was its own group box with its own copy of the whole preset
-    grid; as rows they are five lines. The gates they carried are kept,
-    not dropped — Crown Text still greys with its reason when the active
-    ring preset has no crown text, which is the graceful-truth pattern
-    this page has used since the Aura group's Colorful gate.
+    grid; as rows they are four lines now.
 
     Ring tint and its Inner (Minute track) partner sit first because the
     inner FOLLOWS the outer by default: reading them in that order is
@@ -145,18 +145,11 @@ def _tints_group(settings, setters, tr) -> QGroupBox:
         tr, "Jewels color", settings.jewels_tint, setters["jewels_tint"],
         "Metal finish only (default)", "Pick the jewels tint",
     ))
-    crown = _tint_group(
-        tr, "Crown Text color", settings.crown_text_tint,
-        setters["crown_text_tint"], "Follow ring (default)",
-        "Pick the Crown Text tint",
-    )
-    if not setters["ring_has_crown_text"]():
-        crown.setEnabled(False)
-        crown.setToolTip(tooltip_wrap(tr(
-            "The active ring preset carries no Crown Text (Great Seal "
-            "inscription)."
-        )))
-    column.addWidget(crown)
+    # CROWN TEXT COLOR MOVED OUT (ballot verdict 5C, 2026-08-15): it now
+    # sits with the rest of "the crown" — text, Location, Time format,
+    # size and opacity — in the Crown group on the Ring page
+    # (`app.watch_face.ring._crown_style_row`). Its graceful-truth gate
+    # (`ring_has_crown_text`) moved with it.
     return group
 
 

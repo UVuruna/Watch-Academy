@@ -72,6 +72,28 @@ R-20) — replaces the placeholder. Top to bottom:
   builder
 
 ## Design Decisions
+
+- **THE VARIANT PANEL took the Artwork group's seat** (ballot verdicts
+  3A + 8A, 2026-08-15). Artwork was only ever ONE of the four scattered
+  mechanisms the owner reported as "variant of a theme"; the panel
+  (`theme_variants.py`) gathers all four — style, metal, source, roster
+  — under the content tree, beside the theme the tree just picked, and
+  prints only the rows that theme can offer. `_artwork_group` is DELETED
+  rather than deprecated in place (Rule "No Backward Compatibility");
+  the panel's Source row draws the same base-plus-Sunday-dual composite
+  it drew.
+- **The Roster row left this module's tree too.** It spent one round
+  seated inside the Theme families card (a runtime ALG-7 fix) on its way
+  to where it belongs. Two seats for one control would be a Rule #5
+  violation, so `theme_tree._add_roster_row` is gone.
+- **VERDICT 5E: the per-theme METAL combos are gone from Theme
+  rotation.** They never belonged there — a setting reachable only while
+  its theme happened to be in the rotation is a setting hidden behind an
+  unrelated choice, which is exactly what the owner reported. Rotation
+  now carries only what rotation is: which themes rotate, how often, and
+  whether the ring colour drives the metal.
+
+
 - **Full face has no enabled slot** (owner architecture: `show_weekday
   = False` skips the weekday render layer entirely — confirmed in
   `render/compositor.py`'s `skipped["weekday_set"]`). Rather than a

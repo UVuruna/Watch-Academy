@@ -204,3 +204,11 @@ def art_source_icon(
     except OSError:
         return QIcon(QPixmap.fromImage(canvas))
     return QIcon(str(cache_path))
+
+def theme_style_icon(theme: str) -> "QIcon | None":
+    """One STYLE's preview for the Variant panel — the theme's own Sun
+    plate in that look, resolved through the app's own door so Photo,
+    Art and Signs show the three pictures they actually are rather than
+    three words."""
+    plate = _sun_plate(constants.ART_SOURCE_DEFAULT, theme)
+    return art_thumbnail(plate) if plate is not None else None

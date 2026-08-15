@@ -8,15 +8,17 @@ Default + the five `dial.SIZE_PRESETS` buttons (the SAME two-way
 slider/spinbox sync `display_section._build_sizes_group` uses, plus
 `design_window.DesignDialog._size_tab`'s preset row) and every element
 scale slider — Earth, Moon, Complications (`slot_scale`), Jewels
-(`ring_jewels_scale`), Crown Text (`crown_text_scale`, R-24/Phase-6-debt
-correction, owner 2026-08-05), Hover enlarge — wired to the SAME
-stored setting keys the Settings dialog's "Element sizes" group uses
-(Rule #5, no renamed keys this phase; only the on-screen labels read
-"Complications"/"Jewels" instead of "Slot"/"Ring Jewels"). The Crown
-Text row multiplies `crown_text_scale` ON TOP OF `ring_jewels_scale`
-(unaffected) and greys itself out with a tooltip
-(`setters["ring_has_crown_text"]`) when the active ring preset carries no
-crown text.
+(`ring_jewels_scale`), Hover enlarge — wired to the SAME stored setting
+keys the Settings dialog's "Element sizes" group uses (Rule #5, no
+renamed keys this phase; only the on-screen labels read
+"Complications"/"Jewels" instead of "Slot"/"Ring Jewels").
+
+**CROWN TEXT SIZE MOVED OUT (ballot verdict 5C, 2026-08-15):** the
+`crown_text_scale` knob (R-24/Phase-6-debt correction, owner 2026-08-05
+— it multiplies ON TOP OF `ring_jewels_scale`, unaffected) and its
+graceful-truth gate (`setters["ring_has_crown_text"]`) now live on the
+Ring page's Crown group, labeled "Scale" there (not "Size" — ALG-9
+SECTION TAXONOMY reads that bare word as a claim on this page).
 
 ## Connections
 

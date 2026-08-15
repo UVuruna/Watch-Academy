@@ -255,78 +255,164 @@ def test_calendar_mount_pick_calls_its_setter(app):
     assert ("calendar_mount", ("off",)) in setters.calls
 
 
-def test_artwork_and_subdial_set_galleries_mark_the_stored_pick(app):
-    """The 2026-08-09 review turned both combos into PREVIEW tile
-    galleries (owner order: every picker shows what it picks) — the
-    stored pick's tile carries the accent border, exactly like every
-    other gallery's active tile. The theme is one that HAS two casts:
-    since verdict 8A the Artwork group is absent altogether for a
-    single-cast theme like the default Planets (see the test below)."""
+def test_the_subdial_set_gallery_marks_the_stored_pick(app):
+    """The 2026-08-09 review turned this combo into a PREVIEW tile
+    gallery (owner order: every picker shows what it picks) — the stored
+    pick's tile carries the accent border. Artwork left this page in the
+    same round the Variant panel arrived (verdicts 3A + 8A); its own
+    test lives below."""
     from PySide6.QtWidgets import QToolButton
 
     from config import constants, palette
 
-    settings = replace(
-        Settings(), weekday_theme="greek", art_source="chatgpt",
-        subdial_set="solo",
-    )
+    settings = replace(Settings(), weekday_theme="greek", subdial_set="solo")
     page = themes.build(settings, _RecordingSetters(settings), lambda s: s)
     tiles = {b.text(): b for b in page.findChildren(QToolButton)}
-    art_tile = tiles[constants.ART_SOURCE_TITLES["chatgpt"]]
-    solo_tile = tiles[constants.SUBDIAL_SET_TITLES["solo"]]
-    accent = palette.THEME_COLORS["accent"]
-    assert accent in art_tile.styleSheet()
-    assert accent in solo_tile.styleSheet()
-    assert accent not in tiles[constants.ART_SOURCE_TITLES["gemini"]].styleSheet()
+    assert palette.THEME_COLORS["accent"] in tiles[
+        constants.SUBDIAL_SET_TITLES["solo"]
+    ].styleSheet()
 
 
-def test_artwork_spends_one_card_per_source_not_one_per_dual(app):
-    """ONE CARD PER SOURCE (owner order 2026-08-15). The picker used to
-    add a SECOND card per source for the Sunday dual — four cards for
-    two settings, which reads as four choices. The dual now rides
-    INSIDE its source's own image, the way the Subdial plate set card
-    already carries three plates."""
-    from PySide6.QtWidgets import QToolButton
+# --- VERDICTS 3A + 8A: the Variant panel -------------------------------------
 
-    from config import constants
+
+def test_the_variant_panel_gathers_all_four_mechanisms(app):
+    """His diagnosis: "variant of a theme" was four scattered
+    mechanisms that could not see each other — style, metal, source and
+    roster. The panel is the one seat they share."""
+    from PySide6.QtWidgets import QGroupBox, QLabel
 
     settings = replace(Settings(), weekday_theme="greek")
     page = themes.build(settings, _RecordingSetters(settings), lambda s: s)
-    labels = [b.text() for b in page.findChildren(QToolButton)]
-    for title in constants.ART_SOURCE_TITLES.values():
-        assert labels.count(title) == 1
-    assert not any("dual" in label.lower() for label in labels)
+    variant = next(
+        box for box in page.findChildren(QGroupBox) if box.title() == "Variant"
+    )
+    # Rows that pick a PICTURE are card groups (the owner's standing
+    # law: a picker shows what it picks); rows that pick a word are
+    # captioned pill rows. Both are rows of this panel.
+    captions = {label.text() for label in variant.findChildren(QLabel)}
+    titles = {box.title() for box in variant.findChildren(QGroupBox)}
+    assert {"Metal", "Roster"} <= captions
+    assert "Source" in titles
+    # Greek has a pantheon, metals and two art casts — but ONE style, so
+    # verdict 8A prints no Style row at all, not an empty one.
+    assert "Style" not in titles and "Style" not in captions
 
 
-def test_a_single_cast_theme_prints_no_artwork_group_at_all(app):
-    """VERDICT 8A, its first real case (owner report 2026-08-15 on
-    Planets Photo: "nema GEMINI i CHATGPT kao 2 verzije vec samo taj
-    jedan — zasto onda ima ARTWORK").
+def test_the_style_row_gives_the_hidden_relatives_a_door(app):
+    """THE DEFECT THIS ROUND EXISTS FOR: `planet_signs` and
+    `planets_art` are reachable from NO picker group — measured against
+    the registry, not assumed — so two of the owner's themes had no way
+    in at all. The Style row is that way in, and picking a style stores
+    the relative's OWN registry key, which is why no settings migration
+    was needed."""
+    from PySide6.QtWidgets import QGroupBox, QLabel, QPushButton
 
-    Planets resolves to the same plate under every source, so there is
-    nothing to choose. A row with no choice is STRUCTURE, not state:
-    it is absent, not greyed. The grey-with-a-reason treatment is for
-    an option that exists but cannot be taken right now."""
+    from config.registry.week import MENU, MENU_TOP, WEEK
+
+    reachable = set(MENU_TOP)
+    for _title, keys in MENU:
+        reachable.update(keys)
+    assert set(WEEK) - reachable == {"planet_signs", "planets_art"}
+
+    settings = replace(Settings(), weekday_theme="planets")
+    setters = _RecordingSetters(settings)
+    page = themes.build(settings, setters, lambda s: s)
+    variant = next(
+        box for box in page.findChildren(QGroupBox) if box.title() == "Variant"
+    )
+    assert "Style" in {box.title() for box in variant.findChildren(QGroupBox)}
+    from PySide6.QtWidgets import QToolButton
+    cards = {b.text(): b for b in variant.findChildren(QToolButton)}
+    assert {"Photo", "Art", "Signs"} <= set(cards)
+    # ...and each style shows the picture it picks, not a bare word.
+    assert all(not cards[name].icon().isNull() for name in ("Photo", "Art", "Signs"))
+    # ...and a click writes the RELATIVE'S OWN registry key through the
+    # slot's own `set_weekday` — the reason no settings migration was
+    # needed. Asserted against a recording stand-in for the slot,
+    # because the page's descriptors are no-op stubs here.
+    from types import SimpleNamespace
+
+    from app.watch_face import theme_variants
+
+    wrote: list = []
+    stand_in = SimpleNamespace(
+        theme_value="planets", roster_value="planetary",
+        set_weekday=lambda key, **kw: wrote.append((key, kw)),
+    )
+    row = theme_variants._style_row("planets", stand_in, lambda text: text)
+    next(
+        b for b in row.findChildren(QToolButton) if b.text() == "Signs"
+    ).click()
+    assert wrote == [("planet_signs", {})]
+
+
+def test_a_theme_with_nothing_to_vary_prints_no_panel_at_all(app):
+    """VERDICT 8A at the panel level: absent, not an empty box.
+
+    Continents is the theme that has nothing to vary at all — one
+    style, no metals, no pantheon, and (measured, not assumed) a single
+    art cast on disk. Virtues looked like a candidate and is NOT one:
+    it carries two casts, so it earns a Source row and therefore a
+    panel. That distinction is the whole point of measuring instead of
+    listing."""
     from PySide6.QtWidgets import QGroupBox
 
-    from app.watch_face import theme_thumbs
+    from app.watch_face import theme_thumbs, theme_variants
 
-    assert theme_thumbs.theme_art_sources("planets") == ()
-    settings = replace(Settings(), weekday_theme="planets")
+    assert len(theme_variants.family_members("continents")) == 1
+    assert theme_thumbs.theme_art_sources("continents") == ()
+
+    settings = replace(Settings(), weekday_theme="continents")
     page = themes.build(settings, _RecordingSetters(settings), lambda s: s)
-    titles = {box.title() for box in page.findChildren(QGroupBox)}
-    assert "Artwork" not in titles
-    # ...and the group is genuinely there for a theme that has two.
+    assert "Variant" not in {
+        box.title() for box in page.findChildren(QGroupBox)
+    }
+
+
+def test_the_metal_row_greys_with_its_reason_when_the_ring_drives_it(app):
+    """VERDICT 8A's other half: an option that EXISTS but cannot be
+    taken right now is greyed with the reason, never hidden — hiding it
+    is what made the owner's buttons appear and vanish."""
+    from PySide6.QtWidgets import QGroupBox, QLabel
+
+    settings = replace(
+        Settings(), weekday_theme="greek", theme_metal_follow_ring=True,
+    )
+    page = themes.build(settings, _RecordingSetters(settings), lambda s: s)
+    variant = next(
+        box for box in page.findChildren(QGroupBox) if box.title() == "Variant"
+    )
+    metal_row = next(
+        label.parentWidget() for label in variant.findChildren(QLabel)
+        if label.text() == "Metal"
+    )
+    assert not metal_row.isEnabled()
+    assert metal_row.toolTip()
+
+
+def test_the_variant_panel_writes_the_metal_setter(app):
+    """The metal moved here from the Theme rotation group (verdict 5E),
+    and it must still write the same key — a move, never a rewrite."""
+    from PySide6.QtWidgets import QGroupBox, QPushButton
+
     settings = replace(Settings(), weekday_theme="greek")
-    page = themes.build(settings, _RecordingSetters(settings), lambda s: s)
-    assert "Artwork" in {box.title() for box in page.findChildren(QGroupBox)}
+    setters = _RecordingSetters(settings)
+    page = themes.build(settings, setters, lambda s: s)
+    variant = next(
+        box for box in page.findChildren(QGroupBox) if box.title() == "Variant"
+    )
+    bronze = next(
+        b for b in variant.findChildren(QPushButton) if b.text() == "Bronze"
+    )
+    bronze.click()
+    assert ("theme_metal", ("greek", "bronze")) in setters.calls
 
 
 def test_the_sunday_dual_preview_follows_the_roster(app):
     """PLANETARY AND PANTHEON ARE NOT THE SAME SUNDAY (owner report
-    2026-08-15: both rosters drew the identical dual tile). The rule
-    lives in ONE place — `pantheon.weekday_dual_rel`, the same door the
-    compositor asks — and the preview now asks it too."""
+    2026-08-15). The rule lives in ONE place — `pantheon.
+    weekday_dual_rel`, the same door the compositor asks."""
     from config import pantheon
 
     differing = [
@@ -362,20 +448,3 @@ def test_rotation_group_picker_hides_the_custom_grid_when_not_custom(app):
     )
 
 
-def test_per_theme_metal_combo_calls_theme_metal_setter(app):
-    settings = replace(
-        Settings(), theme_rotation_group="custom",
-        theme_rotation_themes=("greek",),
-    )
-    setters = _RecordingSetters(settings)
-    page = themes.build(settings, setters, lambda s: s)
-    from config import constants as cfg_constants
-
-    metal_combo = next(
-        c for c in page.findChildren(QComboBox)
-        if set(c.itemData(i) for i in range(c.count()))
-        >= set(cfg_constants.theme_metals("greek"))
-    )
-    index = metal_combo.findData("bronze")
-    metal_combo.setCurrentIndex(index)
-    assert ("theme_metal", ("greek", "bronze")) in setters.calls

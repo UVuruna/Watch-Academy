@@ -16,7 +16,7 @@ from PySide6.QtWidgets import (
 )
 
 from app.settings_store import slot_layout_target
-from app.watch_face import theme_tree
+from app.watch_face import theme_tree, theme_variants
 from app.ui_style import tooltip_wrap
 from app.watch_face import theme_thumbs, thumbs
 from app.watch_face.controls import picture_group
@@ -124,10 +124,16 @@ def _populate(root, settings, setters, tr, rebuild) -> None:
         # cleanup): WHICH roster rides the twelve wedges — only the
         # Calendar pointer has wedges to mount one on.
         root.addWidget(_calendar_mount_group(settings, setters, tr))
+    # THE VARIANT PANEL (verdicts 3A + 8A) takes the place the Artwork
+    # group used to hold alone. Artwork was only ever ONE of the four
+    # scattered "variant" mechanisms; the panel gathers all four — style,
+    # metal, source, roster — and prints only the rows this theme can
+    # actually offer. It sits directly under the content tree, because
+    # what it varies is the theme the tree just picked.
+    variants = theme_variants.build(active, settings, setters, tr)
+    if variants is not None:                 # verdict 8A — see the builder
+        root.addWidget(variants)
     root.addWidget(_subdial_plate_group(settings, setters, tr))
-    artwork = _artwork_group(settings, setters, tr)
-    if artwork is not None:                  # verdict 8A — see the builder
-        root.addWidget(artwork)
     root.addWidget(_subdial_set_group(settings, setters, tr))
     root.addWidget(_rotation_group(settings, setters, tr))
 
@@ -220,42 +226,6 @@ def _subdial_plate_group(settings, setters, tr) -> QGroupBox:
     return group
 
 
-def _artwork_group(settings, setters, tr) -> QGroupBox | None:
-    """The ART SOURCE pick — ONE card per source, each carrying that
-    source's Sun plate AND (when the theme has one) its Sunday dual in
-    the SAME image, exactly the way the Subdial plate set card carries
-    three plates (owner order 2026-08-15).
-
-    Returns None — and the caller prints NOTHING — when the theme has
-    only one cast on disk. That is ballot verdict 8A applied to its
-    first real case: Planets Photo has a single set of plates, so the
-    group used to offer four cards that all resolved to the same
-    picture. A row with nothing to choose is STRUCTURE, not state, so
-    it is absent rather than greyed (a greyed row is for an option that
-    exists but cannot be taken right now)."""
-    theme = settings.weekday_theme
-    sources = theme_thumbs.theme_art_sources(theme)
-    if not sources:
-        return None
-    roster = settings.weekday_roster
-    entries = []
-    for source in sources:
-        title = constants.ART_SOURCE_TITLES[source]
-        entries.append((
-            source, tr(title),
-            tr("The {source} cast of this theme's plates — its Sunday "
-               "dual included, when the theme carries one.").format(
-                source=title
-            ),
-            theme_thumbs.art_source_icon(source, theme, roster),
-        ))
-    return picture_group(
-        tr("Artwork"),
-        tr("Which cast of plates the weekday bodies wear."),
-        entries, settings.art_source, setters["art_source"],
-    )
-
-
 def _subdial_set_group(settings, setters, tr) -> QGroupBox:
     """The SUBDIAL PLATE SET pick (owner decree 2026-07-21, Rsub round,
     ported verbatim from
@@ -281,19 +251,6 @@ def _subdial_set_group(settings, setters, tr) -> QGroupBox:
         ],
         settings.subdial_set, setters["subdial_set"],
     )
-
-
-def _rotation_selection(group_key: str, custom_themes: tuple) -> tuple:
-    """The themes the CURRENT rotation pick would rotate (ported
-    verbatim from
-    `app.settings_dialog.themes_section._SectionMixin._rotation_
-    selection`, Phase 6 FINAL cleanup)."""
-    if group_key == "custom":
-        return custom_themes
-    for title, keys in pantheon.WEEKDAY_MENU_GROUPS:
-        if title == group_key:
-            return keys
-    return ()
 
 
 def _rotation_group(settings, setters, tr) -> QGroupBox:
@@ -338,49 +295,13 @@ def _rotation_group(settings, setters, tr) -> QGroupBox:
             )
             grid.addWidget(box, index // 4, index % 4)
         layout.addLayout(grid)
-    selected = set(_rotation_selection(
-        settings.theme_rotation_group, settings.theme_rotation_themes
-    ))
-    # REFLOW, not one endless strip (Space & Legibility ladder step 2,
-    # Zubi fix round 2026-08-09): with a whole kinship family selected
-    # this row once asked ~5,600px of width in a 1280px window — every
-    # label squeezed and clipped. A grid wraps label+combo pairs at
-    # three per row; each label keeps its measured width.
-    metal_grid = QGridLayout()
-    metal_grid.setHorizontalSpacing(12)
-    pairs_per_row = 3
-    slot = 0
-    for theme in constants.METAL_THEMES:
-        if theme not in pantheon.WEEKDAY_THEME_TITLES or theme not in selected:
-            continue
-        combo = QComboBox()
-        for metal in constants.theme_metals(theme):
-            combo.addItem(tr(metal.capitalize()), metal)
-        combo.setCurrentIndex(
-            combo.findData(settings.theme_metals.get(theme, "colored"))
-        )
-        combo.setEnabled(not settings.theme_metal_follow_ring)
-        # KNAP + COLORED (owner review 2026-08-09, slika 5): the combo
-        # hugs its content and wears the SAME fill vocabulary the
-        # Encyclopedia's look chips wear, keyed by the selection.
-        combo.setSizeAdjustPolicy(
-            QComboBox.SizeAdjustPolicy.AdjustToContents
-        )
-        _paint_metal_combo(combo)
-        combo.currentIndexChanged.connect(
-            lambda _i, c=combo, t=theme: (
-                setters["theme_metal"](t, c.currentData()),
-                _paint_metal_combo(c),
-            )
-        )
-        row, pair = divmod(slot, pairs_per_row)
-        metal_grid.addWidget(
-            QLabel(tr(pantheon.WEEKDAY_THEME_TITLES[theme])), row, pair * 2
-        )
-        metal_grid.addWidget(combo, row, pair * 2 + 1)
-        slot += 1
-    metal_grid.setColumnStretch(pairs_per_row * 2, 1)
-    layout.addLayout(metal_grid)
+    # VERDICT 5E (2026-08-15): the per-theme METAL combos are GONE from
+    # here. They never belonged: a setting reachable only while its
+    # theme happened to be in the rotation is a setting hidden behind an
+    # unrelated choice, which is exactly what the owner reported. They
+    # live in the Variant panel above now, beside the theme they vary,
+    # and this group keeps only what rotation actually is — which themes
+    # rotate, how often, and whether the ring colour drives the metal.
     row = QHBoxLayout()
     row.addWidget(QLabel(tr("Every")))
     minutes = settings.theme_rotation_minutes
@@ -412,28 +333,3 @@ def _rotation_group(settings, setters, tr) -> QGroupBox:
     return group
 
 
-def _paint_metal_combo(combo: QComboBox) -> None:
-    """The rotation metal combo's FILL — the Encyclopedia look-chip
-    vocabulary (`ui_style._LOOK_FILLS` colors, Rule #5: same metals,
-    same hexes) applied to the combo itself so the selection reads at a
-    glance. Text color is derived from the fill's own luminance, never
-    hand-picked (the `readable_on_dark`/`_readable_text` law)."""
-    from app.ui_style import _LOOK_FILLS, _readable_text
-
-    pick = (combo.currentData() or "").capitalize()
-    fill = _LOOK_FILLS.get(pick)
-    if fill is None:
-        combo.setStyleSheet("")
-        return
-    if isinstance(fill, tuple):
-        background = (
-            "qlineargradient(x1:0, y1:0, x2:1, y2:0, "
-            f"stop:0 {fill[0]}, stop:1 {fill[1]})"
-        )
-    else:
-        background = fill
-    combo.setStyleSheet(
-        f"QComboBox {{ background: {background};"
-        f" color: {_readable_text(fill)}; font-weight: 600;"
-        " padding: 3px 10px; }"
-    )
