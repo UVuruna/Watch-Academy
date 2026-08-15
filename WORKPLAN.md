@@ -1075,6 +1075,58 @@ absent. Everything else in the original Session 28 entry stands.
 
 ---
 
+## THE WATCH FACE ELEMENT SYSTEM — a multi-round program (2026-08-14 -->)
+
+**Why this section exists at all** (THE REPEAT LAW, owner report
+2026-08-15). The owner approved a whole reorganization of the Watch Face
+window as one ballot -- verdicts **1A - 2 - 3A - 4A - 5A-5E - 7A - 7C -
+8A** -- and the ballot itself said it would take several sessions (its
+own closing section, "the order of execution"). The session that started
+it recorded its remaining rounds ONLY in `.claude/session-tasks.md`,
+which is session-scoped and rewritten by the next session. So a program
+the owner had approved in full existed nowhere durable: `WORKPLAN.md`
+and `ROADMAP.md` never heard of it, no test could name a missing round,
+and the round closed WAITING on a palette ballot the owner never
+returned -- which silently parked everything behind it. He found the
+gaps by opening the window himself, which is exactly the failure mode
+the law forbids. **The fix is this list. A round is closed here, not in
+a session file.**
+
+| Verdict | What it owes | State |
+|---|---|---|
+| 1A | `OptionCard` + `CardGroup` | DONE 0.15.037-043 |
+| 2 | `ValueKnob`/rows + `SettingsShell` contract | DONE 0.15.039-041 (the shell contract is still informal) |
+| 7A / 7C | K-270D notch, family colours | DONE 0.15.039-041 |
+| 5A / 5B / 5D | Umbra into Colors, hues to Pointer, Eclipses split off | DONE 0.15.041 |
+| **4A** | compact `TintControl` + popover, curated ~12 tints, K-360 hue wheel for Custom | **OWED** -- parked on the palette ballot (artifact `aae0a35d`), never returned |
+| **3A + 8A** | `ThemeSelection = (base, style, metal, source)`, the permanent Variant panel, a choiceless row NOT printed at all | **OWED** -- this is what makes the Artwork group vanish for a one-source theme |
+| **5C** | one Crown seat on the Ring page (text, Location, Time format, colour, size, opacity) | **OWED** |
+| **5E** | Theme rotation thinned once the metal combos leave | **OWED** (rides 3A) |
+
+Owner findings of 2026-08-15 that belong to this program, beyond the
+verdicts above -- each one is its own deliverable, none may be closed on
+a session file:
+
+1. A window flashed open mid-screen on every live pick -- **FIXED
+   0.15.045**, root cause + tooth in
+   [window.md](desktop/app/watch_face/__about/window.md).
+2. **Artwork must show one card per source, each carrying its base AND
+   its Sunday dual in ONE image** -- the way `subdial_set_icon` already
+   puts three plates in one tile -- instead of today's four cards. OWED.
+3. **The Sunday dual preview must follow the ROSTER** (Planetary and
+   Pantheon are not the same Sunday); today both rosters draw the same
+   tile. OWED.
+4. **Metal shades are ROUNDELS, not a dropdown** -- Gold/Silver/Bronze
+   as three cards in one row, each a metal plate with its own sheen,
+   under the ordinary card grammar (image, text, hover, resize). OWED.
+5. **The Danjon scale sits ON the moon** -- the L0-L4 label centred in
+   the moon and the colour bar close to its rim, the bar's rectangle
+   PARALLEL TO THE TANGENT at that point of the circle (South = above,
+   North = below, East = left and vertical, West = right and vertical),
+   derived from the angle, never four hand-written cases. OWED.
+6. **Every section ends with a Reset** button that returns that
+   section's settings to their defaults. OWED.
+
 ## Open Owner Decisions (any session may receive the verdict)
 
 - ~~The 27 PROPOSED terms of the 65-grid~~ — **SEALED 2026-07-28 by

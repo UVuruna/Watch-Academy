@@ -149,7 +149,19 @@ class WatchFaceDialog(QDialog):
             if widget is not None:
                 widget.setParent(None)
                 widget.deleteLater()
-        nav_list = QListWidget()
+        # PARENTED AT CONSTRUCTION, never adopted later (owner bug
+        # 2026-08-15, "FLASH sa otvaranjem nekog prozora u sredini"):
+        # a parentless QWidget IS a top-level window. Built bare, this
+        # sidebar and the stack below stayed windows for the whole span
+        # between here and the `addWidget` calls at the end of `_build`
+        # — and `setCurrentRow`/`setCurrentIndex` in that span makes a
+        # window VISIBLE, so Windows handed each one a real native
+        # window at the default (screen-centre) spot and the reparent
+        # hid it again a repaint later. Measured with a global
+        # Show/PlatformSurface spy: PlatformSurface → WinIdChange →
+        # Show at (1451,600) and (1216,600), then Hide. Every live pick
+        # runs `_build`, which is why it flashed on EVERY change.
+        nav_list = QListWidget(self)
         # MEASURED width, never a guessed constant (ITEM CUT, Zubi fix
         # round 2026-08-09: "Themes & Slots" needed 198px while the old
         # fixed 170 offered 156): the longest section title in the
@@ -176,7 +188,7 @@ class WatchFaceDialog(QDialog):
             + 2 * encyclopedia_ui.THEME_NAV_ITEM_PADDING_V_PX
             + 2 * encyclopedia_ui.THEME_NAV_ITEM_MARGIN_V_PX
         )
-        stack = QStackedWidget()
+        stack = QStackedWidget(self)     # parented — see `nav_list` above
         pages: list[QWidget] = []
         for title, builder in _SECTIONS:
             text = self._tr(title)

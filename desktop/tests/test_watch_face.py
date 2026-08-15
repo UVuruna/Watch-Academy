@@ -7,13 +7,17 @@ the split into `app/watch_face/`).
 """
 
 from collections import defaultdict
+from unittest import mock
 
 import pytest
 from PySide6.QtCore import Qt
-from PySide6.QtWidgets import QApplication, QListWidget, QToolButton
+from PySide6.QtWidgets import (
+    QApplication, QListWidget, QStackedWidget, QToolButton, QWidget,
+)
 
 from app.settings_store import Settings
 from app.slot_descriptor import SlotDescriptor
+from app.watch_face import window
 from app.watch_face.window import WatchFaceDialog, _SECTIONS
 from config import constants, shortcuts
 from data.hands import hand_packs
@@ -422,3 +426,59 @@ def test_a_lonely_tail_row_is_rebalanced(app):
     # Room for four per row (4 * 100 + 3 * gap fits in 460).
     assert rows_for(9, 460) == [3, 3, 3]
     assert rows_for(7, 460) == [4, 3]
+
+
+# --- THE MIDWIFE WINDOW (owner bug 2026-08-15) -------------------------------
+
+
+def test_the_rebuild_never_creates_a_top_level_window(app):
+    """A live pick may not flash a window onto the desktop.
+
+    Owner report 2026-08-15 (GIF): changing anything in the Watch Face
+    window made "a window open in the middle and close again" on every
+    single pick. Root cause, measured with a global Show/PlatformSurface
+    spy on the running app: `_build` created the sidebar and the page
+    stack PARENTLESS, and a parentless QWidget IS a top-level window. It
+    stayed one for the whole span between construction and the closing
+    `addWidget` calls — and `setCurrentRow`/`setCurrentIndex` inside that
+    span makes a window VISIBLE, so Windows handed each a real native
+    window at the default screen-centre spot before the reparent hid it
+    again.
+
+    The tooth watches CONSTRUCTION, not the end state, and that is the
+    whole point: by the time `_build` returns, `addWidget` has adopted
+    both widgets into the dialog either way, so an after-the-fact
+    `parent()` check passes on the broken code too (verified — it did).
+    What has to be pinned is that neither is ever born parentless, which
+    is the only condition under which the window can never exist."""
+    parents: list = []
+
+    class _WatchedList(QListWidget):
+        def __init__(self, parent=None):
+            parents.append(("QListWidget", parent))
+            super().__init__(parent)
+
+    class _WatchedStack(QStackedWidget):
+        def __init__(self, parent=None):
+            parents.append(("QStackedWidget", parent))
+            super().__init__(parent)
+
+    dialog = _dialog()
+    parents.clear()
+    with mock.patch.object(window, "QListWidget", _WatchedList), \
+            mock.patch.object(window, "QStackedWidget", _WatchedStack):
+        dialog.refresh(dialog._settings, dialog._setters)   # the live-pick path
+    assert [name for name, _parent in parents] == [
+        "QListWidget", "QStackedWidget",
+    ]
+    assert [parent for _name, parent in parents] == [dialog, dialog]
+    # ...and nothing the finished window owns is an ordinary top-level
+    # either. (Popups are exempt: a combo box owns a `Qt::Popup` frame
+    # by construction — thirteen on these nine pages — and a popup is
+    # only ever shown on demand.)
+    strays = [
+        type(child).__name__
+        for child in dialog.findChildren(QWidget)
+        if child.windowType() == Qt.WindowType.Window
+    ]
+    assert strays == []

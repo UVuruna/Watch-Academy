@@ -59,6 +59,23 @@ of_every_page` and `test_refresh_never_hands_focus_to_the_sidebar` in
 and is not affected.
 
 ## Design Decisions
+- **NOTHING `_build` MAKES IS EVER BORN PARENTLESS** (owner bug
+  2026-08-15 — a window flashed open in the middle of the screen and
+  shut again on EVERY live pick). A parentless `QWidget` *is* a
+  top-level window, and the sidebar/stack pair used to be built bare
+  and adopted only by the closing `addWidget` calls. In that span
+  `setCurrentRow`/`setCurrentIndex` makes a window VISIBLE, so Windows
+  gave each one a real native window at its default (screen-centre)
+  spot; the reparent hid it a repaint later. Measured on the running
+  app with a global Show/PlatformSurface spy — `PlatformSurface →
+  WinIdChange → Show` at (1451,600) and (1216,600), then `Hide`; the
+  same spy is silent after the fix. Both are constructed
+  `QListWidget(self)` / `QStackedWidget(self)` now. The tooth
+  (`tests/test_watch_face.py::test_the_rebuild_never_creates_a_top_
+  level_window`) watches CONSTRUCTION, not the end state — by the time
+  `_build` returns, `addWidget` has adopted both either way, so an
+  after-the-fact `parent()` check passes on the broken code too
+  (verified).
 - `_SECTIONS` is a flat `(title, builder)` tuple, `builder` a
   `(settings, setters, tr) -> QWidget` function or `None` for a
   not-yet-built placeholder — a later phase turns a `None` into a real
