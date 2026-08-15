@@ -1099,9 +1099,9 @@ a session file.**
 | 7A / 7C | K-270D notch, family colours | DONE 0.15.039-041 |
 | 5A / 5B / 5D | Umbra into Colors, hues to Pointer, Eclipses split off | DONE 0.15.041 |
 | **4A** | compact `TintControl` + popover, the twelve open seats below, K-360 hue wheel for Custom | DONE 0.15.049 |
-| **3A + 8A** | `ThemeSelection = (base, style, metal, source)`, the permanent Variant panel, a choiceless row NOT printed at all | **OWED** -- this is what makes the Artwork group vanish for a one-source theme |
-| **5C** | one Crown seat on the Ring page (text, Location, Time format, colour, size, opacity) | **OWED** |
-| **5E** | Theme rotation thinned once the metal combos leave | **OWED** (rides 3A) |
+| **3A + 8A** | the permanent Variant panel, a choiceless row NOT printed at all | DONE 0.15.053 -- and with NO settings migration: the panel is a VIEW over keys the settings already held, so the one irreversible step in the programme was never needed |
+| **5C** | one Crown seat on the Ring page (text, Location, Time format, colour, size, opacity) | DONE 0.15.053 -- the code landed inside that commit by a staging mistake of mine, see below |
+| **5E** | Theme rotation thinned once the metal combos leave | DONE 0.15.053 |
 
 **THE TWELVE SEATS (owner ballot verdict 2026-08-15, artifact
 `aae0a35d`).** These sit OPEN on the Colors page, with no click; the
@@ -1126,16 +1126,46 @@ a session file:
 5. The Danjon scale sits ON the moon -- **DONE 0.15.050**, one rotation
    in `_gauge_placement`, pinned at 45 and 200 degrees as well as the
    four cardinals so a four-case implementation cannot pass.
+   **THE LADDER'S DIRECTION IS SEALED (owner verdict 2026-08-15,
+   option A): the tangent rule stands alone and the ladder turns with
+   it, so on the lower half of the dial the cells read right to left.**
+   He was given three options -- leave it (A), flip it past 90 degrees
+   so L0 always sits left (B), or make it always grow toward the dial
+   centre (C) -- and chose A: one rule, no exception, no visible flip
+   mid-journey. The colour and the `L` numeral in the middle of the moon
+   carry the reading; the cell order does not have to. Do not "fix" this
+   in a later round.
 6. Every section ends with a Reset -- **DONE 0.15.046**, all nine
    pages; the key list is recorded from the build, never declared.
 
 2. Artwork's one card per source, dual included -- **DONE 0.15.046**.
 3. The Sunday dual follows the ROSTER -- **DONE 0.15.046**.
 
-**What is still OWED after 2026-08-15:** verdicts **3A + 8A**'s full
-Variant panel (8A's rule is applied to Artwork already, but the panel
-itself is not built), **5C** (the Crown's one seat on the Ring page)
-and **5E** (the thinned Theme rotation, which rides 3A).
+**THE PROGRAMME IS CLOSED** as of 2026-08-15: every ballot verdict
+(1A, 2, 3A, 4A, 5A-5E, 7A, 7C, 8A) and all six of his findings that day
+are DONE. Two things are worth carrying forward rather than forgetting:
+
+- 5C's code is inside commit 0.15.053, whose message describes only the
+  Variant panel. That is MY error, not a mystery for the next reader:
+  a background agent was writing the Crown seat in the same working
+  tree while I staged with `git add desktop/`, and the sweep took its
+  files with mine. Nothing was lost or altered -- but if you are
+  archaeologising 5C later, look in 0.15.053, not for a commit of its
+  own. The lesson is the plain one: never stage a whole directory while
+  another writer is live in it.
+- The Crown group's two knobs are labelled **Scale** and **Alpha**, not
+  Size and Opacity. That is ALG-9's OWN prescribed remedy (a concept
+  that owns a section owns every control of that concept; the rule says
+  rename the label or the section rather than scatter the concept), and
+  Size/Opacity are sections. "Alpha" is developer vocabulary in front of
+  a user, so it is flagged for the owner rather than settled by me.
+- The Danjon ladder's direction is SEALED at option A (see finding 5) --
+  do not "fix" the right-to-left reading on the dial's lower half.
+- 3A shipped with NO settings migration. If a later round is tempted to
+  introduce a stored `ThemeSelection` shape, read `theme_variants.py`'s
+  docstring first: the coordinates already map onto existing keys, and
+  a rewrite would be the one irreversible step this programme managed
+  to avoid.
 
 ## Open Owner Decisions (any session may receive the verdict)
 
