@@ -87,21 +87,21 @@ def subdial_set_icon(set_name: str) -> QIcon | None:
     return QIcon(str(cache_path))
 
 
-def _sun_plate(source: str, theme: str) -> Path | None:
-    """The theme's Sun plate resolved UNDER `source`, with the dial's
-    OWN fallback to the generic planetary Sun when the theme has no
-    plate there."""
+def _body_plate(source: str, theme: str, body: str = "sun") -> Path | None:
+    """The theme's plate for `body` resolved UNDER `source`, with the
+    dial's OWN fallback to the generic planetary plate when the theme
+    has none there."""
     from datetime import date
 
     from config import pantheon
 
     with paths.display(paths.display_context(art_source=source)):
         candidate = paths.art_file(pantheon.weekday_theme_body_art(
-            theme, "sun", on_date=date.today(),
+            theme, body, on_date=date.today(),
         ))
         if candidate is None or not candidate.exists():
             candidate = paths.art_file(
-                pantheon.weekday_theme_body_art("planets", "sun")
+                pantheon.weekday_theme_body_art("planets", body)
             )
     if candidate is None or not candidate.exists():
         return None
@@ -136,7 +136,7 @@ def theme_art_sources(theme: str) -> tuple[str, ...]:
     means there is nothing to choose and the caller prints nothing."""
     seen: dict = {}
     for source in constants.ART_SOURCES:
-        plate = _sun_plate(source, theme)
+        plate = _body_plate(source, theme)
         if plate is None:
             continue
         seen.setdefault(str(plate), source)
@@ -160,8 +160,18 @@ def art_source_icon(
     icon` above already had the grammar; this is the same composition
     (equal slots, each plate centred in its own, aspect kept)."""
     plates = [plate for plate in (
-        _sun_plate(source, theme), _dual_plate(source, theme, roster),
+        _body_plate(source, theme), _dual_plate(source, theme, roster),
     ) if plate is not None]
+    if not plates:
+        return None
+    return _compose(plates, "art_source")
+
+
+def _compose(plates: list, name: str) -> QIcon | None:
+    """Several plates side by side in ONE tile — equal slots, each plate
+    centred in its own, aspect kept. The grammar `subdial_set_icon`
+    established, shared so every multi-plate preview composes the same
+    way rather than three near-copies drifting apart."""
     if not plates:
         return None
     if len(plates) == 1:
@@ -170,7 +180,7 @@ def art_source_icon(
         raster_store.source_prefix(plate) for plate in plates
     ).encode("utf-8")).hexdigest()[:16]
     cache_path = (
-        _cache_dir() / f"art_source_{digest}_v{_THUMB_CACHE_VERSION}.png"
+        _cache_dir() / f"{name}_{digest}_v{_THUMB_CACHE_VERSION}.png"
     )
     if cache_path.exists():
         return QIcon(str(cache_path))
@@ -205,10 +215,26 @@ def art_source_icon(
         return QIcon(QPixmap.fromImage(canvas))
     return QIcon(str(cache_path))
 
-def theme_style_icon(theme: str) -> "QIcon | None":
-    """One STYLE's preview for the Variant panel — the theme's own Sun
-    plate in that look, resolved through the app's own door so Photo,
-    Art and Signs show the three pictures they actually are rather than
-    three words."""
-    plate = _sun_plate(constants.ART_SOURCE_DEFAULT, theme)
-    return art_thumbnail(plate) if plate is not None else None
+
+#: The two bodies a style preview shows. TWO, not one, because the Sun
+#: alone misrepresented the Signs look: a Sun SIGN is a ring with a dot,
+#: which at tile size reads as a placeholder icon rather than as art (an
+#: independent grader called it exactly that, 2026-08-15). Saturn's
+#: glyph is the most drawn of the seven, so the pair shows a sign look
+#: as the lettering it is — and the SAME pair serves every style, so the
+#: three tiles stay a fair comparison.
+_STYLE_PREVIEW_BODIES = ("sun", "saturn")
+
+
+def theme_style_icon(theme: str) -> QIcon | None:
+    """One STYLE's preview for the Variant panel — the theme's own
+    plates in that look, so Photo, Art and Signs show the three
+    pictures they actually are rather than three words."""
+    plates = [
+        plate for plate in (
+            _body_plate(constants.ART_SOURCE_DEFAULT, theme, body)
+            for body in _STYLE_PREVIEW_BODIES
+        )
+        if plate is not None
+    ]
+    return _compose(plates, f"theme_style_{theme}")

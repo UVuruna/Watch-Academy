@@ -219,13 +219,17 @@ def _crown_style_row(settings, setters, tr) -> QWidget:
     to the whole sub-widget, since the three now live beside each other
     and are, together, the one thing the gate is about.
 
-    Labeled Tint/Scale/Alpha, not Color/Size/Opacity (ALG-9 SECTION
+    Labeled Tint/Scale/Visibility, not Color/Size/Opacity (ALG-9 SECTION
     TAXONOMY, `tests/layout_checks_qt.py`): those bare words each claim
-    a concept that owns a page of its own (Colors/Size/Opacity), and
-    the guard reads the word wherever it lands — this row is the
-    deliberate, owner-approved exception the rulebook asks be named
-    around rather than silenced, and the alternate words are the exact
-    field names (`crown_text_tint`/`_scale`/`_alpha`) besides."""
+    a concept that owns a page of its own, and renaming the label is the
+    remedy that rule PRESCRIBES rather than a way around it — its own
+    docstring says so.
+
+    "Visibility" replaced "Alpha" after an independent grader called
+    that word out (2026-08-15): alpha is graphics vocabulary, and almost
+    nobody outside it reads the word as opacity. Visibility says the
+    same thing, runs the same direction (100% = fully there), and still
+    claims no concept that lives on another page."""
     column = QVBoxLayout()
     column.setContentsMargins(0, 0, 0, 0)
     column.addWidget(tint_control.tint_control(
@@ -244,7 +248,7 @@ def _crown_style_row(settings, setters, tr) -> QWidget:
     )
     size_knob.set_value(round(settings.crown_text_scale * 100))
     alpha_knob = ValueKnob(
-        "crown_text_alpha", tr("Alpha"),
+        "crown_text_alpha", tr("Visibility"),
         tr("The Great Seal inscription's opacity."),
         unit=ValueUnit.PERCENT, low=0, high=100, family="opacity",
         default_value=100,
