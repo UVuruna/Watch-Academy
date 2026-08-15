@@ -19,7 +19,7 @@ os.environ.setdefault("QT_QPA_PLATFORM", "offscreen")
 
 import astral
 import pytest
-from PySide6.QtWidgets import QApplication, QGroupBox, QWidget
+from PySide6.QtWidgets import QApplication, QGroupBox, QLabel, QWidget
 
 from app import controller as controller_module
 from app.settings_store import Settings, SettingsStore
@@ -69,7 +69,13 @@ def test_colors_section_builds_a_real_page_not_a_placeholder(app):
     assert isinstance(widget, QWidget)
     groups = widget.findChildren(QGroupBox)
     titles = {group.title() for group in groups}
-    assert "Ring tint" in titles
+    # VERDICT 4A (2026-08-15): the five straight tint targets are COMPACT
+    # ROWS inside one "Colours" group now, not five groups each carrying
+    # its own copy of the 42-swatch grid. Their titles are row labels.
+    assert "Colours" in titles
+    labels = {label.text() for label in widget.findChildren(QLabel)}
+    assert {"Ring tint", "Inner (Minute track)", "Hands color",
+            "Jewels color", "Crown Text color"} <= labels
     # The pointer HUE CHIPS left this page for Pointer (ballot verdict
     # 5B, 2026-08-14) — they change with the pointer picked there. What
     # arrived in exchange is the dissolved Umbra & Aura page (5A).
@@ -78,8 +84,6 @@ def test_colors_section_builds_a_real_page_not_a_placeholder(app):
     assert "Contrast" in titles
     assert "Umbra coloring" in titles
     assert any(title.startswith("Aura coloring") for title in titles)
-    assert "Hands color" in titles
-    assert "Jewels color" in titles
     # METAL SHADES ARE ROUNDELS NOW (owner order 2026-08-15): the one
     # "Metal shades" box of three dropdowns became three card groups in
     # one row, each titled by its metal. A box around those three boxes
@@ -404,3 +408,57 @@ def test_every_metal_shade_can_draw_its_roundel(app):
                 f"{metal}/{shade} has no ramp to draw"
             )
     assert thumbs.metal_roundel_icon("gold", "no_such_shade") is None
+
+
+# --- VERDICT 4A: the compact tint control (owner ballot 2026-08-15) ----------
+
+
+def test_the_twelve_seats_are_the_owners_twelve_and_resolve_to_real_hues(app):
+    """His ballot verdict named twelve tints and answered the scope
+    question himself — "the same twelve everywhere", one list for every
+    control. A seat is a NAME pointing into `RING_TINT_GROUPS`, so a
+    retuned hue moves the seat with it; a name the grids no longer hold
+    must RAISE rather than quietly seat nothing, because a seat that
+    disappears in silence is how a ballot verdict gets lost."""
+    from app.watch_face import tint_control
+
+    assert tint_control.OPEN_SEAT_NAMES == (
+        "Gray", "Gold", "Satin Gold", "Copper", "Silver", "Slate Gray",
+        "Glaucous", "Charcoal", "Gunmetal", "Navy", "Bordeaux", "Periwinkle",
+    )
+    seats = tint_control.open_seats()
+    assert len(seats) == 12
+    assert [name for name, _hue in seats] == list(tint_control.OPEN_SEAT_NAMES)
+    # "Gray" is the untouched art and carries None, exactly as in the grids.
+    assert seats[0] == ("Gray", None)
+    assert all(hue is not None for _name, hue in seats[1:])
+
+
+def test_a_seat_the_grids_no_longer_hold_raises(app):
+    from unittest import mock
+
+    from app.watch_face import tint_control
+
+    with mock.patch.object(
+        tint_control, "OPEN_SEAT_NAMES", ("Gold", "No Such Tint"),
+    ):
+        with pytest.raises(KeyError, match="No Such Tint"):
+            tint_control.open_seats()
+
+
+def test_the_colors_page_draws_the_preset_grid_once_per_target_no_more(app):
+    """THE MEASUREMENT THAT STARTED 4A: the same 42-swatch grid was drawn
+    seven times down this page — about 290 circles, many
+    indistinguishable at swatch size. The grids moved into each row's
+    popover, so the page itself now carries ONE swatch per target (the
+    state chip) and nothing else."""
+    from PySide6.QtWidgets import QPushButton
+
+    page = colors.build(Settings(), _setters(), lambda text: text)
+    round_chips = [
+        button for button in page.findChildren(QPushButton)
+        if "border-radius" in button.styleSheet() and not button.text()
+    ]
+    # Five tint targets on the page in the default state (the Umbra and
+    # Aura custom rows only appear in "custom" mode) — one chip each.
+    assert len(round_chips) == 5

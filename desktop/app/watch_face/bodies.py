@@ -43,7 +43,7 @@ from PySide6.QtWidgets import (
 
 from app.watch_face import thumbs
 from app.watch_face.controls import picture_group
-from app.watch_face.widgets import pill
+from app.watch_face.widgets import flow_row, pill
 from config import constants, continents, dial
 from data.hands import hand_packs
 
@@ -256,8 +256,12 @@ def _earth_groups(settings, setters, tr) -> list:
     )
     group = QGroupBox(tr("Earth marker"))
     column = QVBoxLayout(group)
-    label_row = QHBoxLayout()
+    # A FLOW ROW, not a bare QHBoxLayout (runtime audit ALG-5,
+    # 2026-08-15): "Date & Weekday" is 30px wider than its three
+    # siblings and the plain row neither wrapped nor equalised them.
+    # `flow_row` carries both rules for everything that passes through.
     enabled = settings.diameter >= dial.FULL_TEXT_MIN_DIAMETER
+    label_buttons = []
     for mode, title in (
         ("date", "Date"), ("weekday", "Weekday"),
         ("date_weekday", "Date & Weekday"), ("full", "Full Date"),
@@ -268,9 +272,10 @@ def _earth_groups(settings, setters, tr) -> list:
             lambda m=mode, was=is_active: setters["earth_label"](m, not was),
         )
         button.setEnabled(enabled)
-        label_row.addWidget(button)
+        label_buttons.append(button)
+    label_row = flow_row(label_buttons)
     column.addWidget(QLabel(tr("What text the Earth marker shows.")))
-    column.addLayout(label_row)
+    column.addWidget(label_row)
     pointer_checkbox = QCheckBox(tr("Position pointer"))
     pointer_checkbox.setChecked(settings.show_marker_pointer)
     pointer_checkbox.toggled.connect(setters["show_marker_pointer"])

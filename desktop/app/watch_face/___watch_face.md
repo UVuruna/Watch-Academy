@@ -30,6 +30,7 @@ silently dropped.
 | `window.py` | Algorithmic | the `WatchFaceDialog` shell — sidebar + stacked pages, live-apply refresh — [about](__about/window.md) · [flow](__flow/window.md) |
 | `thumbs.py` | Algorithmic | R-33: the disk-cached thumbnail service (ring/hand art + the pointer palette-swatch fallback) — [about](__about/thumbs.md) · [flow](__flow/thumbs.md) |
 | `section_reset.py` | Algorithmic | the per-section Reset button, and the recorded (never declared) list of settings each section owns — [about](__about/section_reset.md) |
+| `tint_control.py` | Standard | verdict 4A: one compact row per colour target, the palette in its popover (the twelve seats, all colours, the K-360 hue wheel) — [about](__about/tint_control.md) |
 | `theme_thumbs.py` | Algorithmic | the previews ASSEMBLED FROM PLATES — Subdial plate set, and one Artwork card per source carrying its Sunday dual — [about](__about/theme_thumbs.md) |
 | `widgets.py` | Standard | shared pill/tile builders every section imports — [about](__about/widgets.md) |
 | `controls.py` | Standard | OptionCard + CardGroup, the sealed element classes (ballot 1A) — [about](__about/controls.md) |

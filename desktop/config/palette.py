@@ -813,6 +813,10 @@ KNOB_FAMILY_COLORS = {
     "saturation": "#B07CE8",
     "relief": "#3FBFA8",
     "window": "#AAB4C8",
+    # The hue wheel (verdict 7C's one K-360) is the single knob whose
+    # value IS a colour, so this is only its RESTING ring — the popover
+    # paints the live hue on as it turns (app/watch_face/tint_control.py).
+    "hue": "#9A9A9A",
 }
 
 

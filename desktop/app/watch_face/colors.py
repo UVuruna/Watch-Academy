@@ -59,7 +59,7 @@ from PySide6.QtWidgets import (
     QWidget,
 )
 
-from app.watch_face import thumbs, tint_picker
+from app.watch_face import thumbs, tint_control, tint_picker
 from app.ui_style import tooltip_wrap
 from app.watch_face.controls import picture_group
 from app.watch_face.widgets import pill
@@ -74,13 +74,16 @@ def build(settings, setters: dict, tr) -> QWidget:
     from app.watch_face import umbra_aura
 
     layout = QVBoxLayout()
-    layout.addWidget(_ring_tint_group(settings, setters, tr))
+    # VERDICT 4A: the five straight tint targets share ONE group of
+    # compact rows now. Each used to be a group of its own carrying a
+    # full 42-swatch grid — the same grid, seven times down one page,
+    # ~290 circles and three screens of scroll. The palette moved into
+    # the row's own popover (app.watch_face.tint_control), so nothing is
+    # lost and the page fits on one screen.
+    layout.addWidget(_tints_group(settings, setters, tr))
     layout.addWidget(_umbra_group(settings, setters, tr))
     layout.addWidget(umbra_aura.build(settings, setters, tr))
     layout.addWidget(_aura_group(settings, setters, tr))
-    layout.addWidget(_hands_group(settings, setters, tr))
-    layout.addWidget(_jewels_group(settings, setters, tr))
-    layout.addWidget(_crown_text_group(settings, setters, tr))
     layout.addWidget(_metal_group(settings, setters, tr))
     layout.addWidget(_saturation_group(settings, setters, tr))
     widget = QWidget()
@@ -91,45 +94,64 @@ def build(settings, setters: dict, tr) -> QWidget:
 def _tint_group(
     tr, title: str, current: str | None, on_pick, none_label: str,
     dialog_title: str,
-) -> QGroupBox:
-    """The shared body of every simple tint control here (Ring/Hands/
-    Jewels/Umbra-custom/Aura-custom): the preset grids plus the Custom
-    row plus the live label — one shape, five callers (Rule #5)."""
-    group = QGroupBox(tr(title))
+) -> QWidget:
+    """One tint target as a COMPACT ROW (ballot verdict 4A, 2026-08-15):
+    swatch, "Change…", and the state in words. The palette itself — the
+    twelve open seats, the full grids one reveal deeper, and the K-360
+    custom hue wheel — lives in the row's popover, built once in
+    `app.watch_face.tint_control`.
+
+    `dialog_title` survives as the popover's own accessible name; it
+    used to title the QColorDialog the Custom button opened."""
+    return tint_control.tint_control(
+        tr, title, current, palette.RING_TINT_GROUPS, none_label,
+        palette.RING_TINT_PICKER_SEED, on_pick,
+    )
+
+
+def _tints_group(settings, setters, tr) -> QGroupBox:
+    """THE FIVE STRAIGHT TINT TARGETS in one group (verdict 4A).
+
+    Each was its own group box with its own copy of the whole preset
+    grid; as rows they are five lines. The gates they carried are kept,
+    not dropped — Crown Text still greys with its reason when the active
+    ring preset has no crown text, which is the graceful-truth pattern
+    this page has used since the Aura group's Colorful gate.
+
+    Ring tint and its Inner (Minute track) partner sit first because the
+    inner FOLLOWS the outer by default: reading them in that order is
+    reading the rule."""
+    group = QGroupBox(tr("Colours"))
     column = QVBoxLayout(group)
-    grids, _swatches = tint_picker.build_preset_grids(
-        tr, palette.RING_TINT_GROUPS, current, on_pick,
-        palette.RING_TINT_NONE_SWATCH,
-    )
-    column.addLayout(grids)
-    row = tint_picker.build_custom_row(
-        tr, current, palette.RING_TINT_PICKER_SEED, on_pick, dialog_title,
-    )
-    row.addWidget(
-        QLabel(tint_picker.tint_label_text(tr, current, palette.RING_TINT_GROUPS, none_label))
-    )
-    column.addLayout(row)
-    return group
-
-
-def _ring_tint_group(settings, setters, tr) -> QGroupBox:
-    """R-21 item 1: the Clock/ring tint picker, MOVED here (renamed
-    "Ring tint" in THIS window — the stored key is untouched; the
-    retired Settings dialog copy was deleted outright by Phase 6).
-    THE COMPOSITIONAL RING MODEL (owner decree 2026-08-05) made the
-    outer/inner split the ONLY ring render path, so the "Inner (Minute
-    track)" tint picker for `ring_tint_inner` is always live now — no
-    more disk-presence gate."""
-    group = _tint_group(
+    column.addWidget(_tint_group(
         tr, "Ring tint", settings.ring_tint, setters["ring_tint"],
         "Gray (default)", "Pick the ring tint",
-    )
-    inner = _tint_group(
+    ))
+    column.addWidget(_tint_group(
         tr, "Inner (Minute track)", settings.ring_tint_inner,
         setters["ring_tint_inner"], "Follow outer (default)",
         "Pick the inner (minute track) tint",
+    ))
+    column.addWidget(_tint_group(
+        tr, "Hands color", settings.hands_tint, setters["hands_tint"],
+        "Follow ring (default)", "Pick the hands tint",
+    ))
+    column.addWidget(_tint_group(
+        tr, "Jewels color", settings.jewels_tint, setters["jewels_tint"],
+        "Metal finish only (default)", "Pick the jewels tint",
+    ))
+    crown = _tint_group(
+        tr, "Crown Text color", settings.crown_text_tint,
+        setters["crown_text_tint"], "Follow ring (default)",
+        "Pick the Crown Text tint",
     )
-    group.layout().addWidget(inner)
+    if not setters["ring_has_crown_text"]():
+        crown.setEnabled(False)
+        crown.setToolTip(tooltip_wrap(tr(
+            "The active ring preset carries no Crown Text (Great Seal "
+            "inscription)."
+        )))
+    column.addWidget(crown)
     return group
 
 
@@ -189,50 +211,6 @@ def _aura_group(settings, setters, tr) -> QGroupBox:
             "Pick the Aura off-color",
         ))
     group.setEnabled(enabled)   # cascades to every child above
-    return group
-
-
-def _hands_group(settings, setters, tr) -> QGroupBox:
-    """R-24: Hands free color — picking "Gray" (None) reverts to
-    following the ring tint, exactly like every release before this
-    Phase; a preset or custom hex overrides it independently."""
-    return _tint_group(
-        tr, "Hands color", settings.hands_tint, setters["hands_tint"],
-        "Follow ring (default)", "Pick the hands tint",
-    )
-
-
-def _jewels_group(settings, setters, tr) -> QGroupBox:
-    """R-24: Jewels (ring jewels) free color — an EXTRA tint layered
-    OVER the metal finish (Gold/Bronze/Silver stay chosen in the Metal
-    shades group below); "Gray" (None) leaves the metal finish
-    untouched, today's behavior on every release before this Phase.
-    Crown Text has its OWN independent tint below (`_crown_text_group`)
-    — the two controls no longer share one recolor."""
-    return _tint_group(
-        tr, "Jewels color", settings.jewels_tint, setters["jewels_tint"],
-        "Metal finish only (default)", "Pick the jewels tint",
-    )
-
-
-def _crown_text_group(settings, setters, tr) -> QGroupBox:
-    """R-24/Phase-6-debt correction (owner 2026-08-05, LOUD: "Crown
-    tekst je onaj tekst koji piše oko sata — faith, hope, suffering") —
-    the outer Great Seal crown text arc's own free color, independent of
-    `jewels_tint`: "Follow ring" (default, None) reads `ring_tint`
-    exactly like the Hands do; a preset or custom hex overrides it.
-    Greyed out with a tooltip when the active ring preset carries no
-    crown text (`setters["ring_has_crown_text"]`) — the same graceful-truth
-    pattern the Aura group's Colorful gate uses above."""
-    group = _tint_group(
-        tr, "Crown Text color", settings.crown_text_tint, setters["crown_text_tint"],
-        "Follow ring (default)", "Pick the Crown Text tint",
-    )
-    if not setters["ring_has_crown_text"]():
-        group.setEnabled(False)
-        group.setToolTip(tooltip_wrap(
-            tr("The active ring preset carries no Crown Text (Great Seal inscription).")
-        ))
     return group
 
 

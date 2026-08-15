@@ -349,8 +349,20 @@ def flow_row(members) -> QWidget:
     buttons is the same problem with smaller items."""
     content = FlowRow()
     flow = FlowLayout()
+    members = list(members)
     for member in members:
         flow.addWidget(member)
+    # UNIFORM SIBLINGS, here rather than at ten call sites (runtime audit
+    # ALG-5, 2026-08-15): a wrapping pill row had no uniform width at
+    # all, so 'Silver jewels' stood 122px beside 'Thematic jewels' at
+    # 136px and 'Date' 108 beside 'Date & Weekday' 137. It went unseen
+    # while the window's minimum was wide enough to keep these rows on
+    # one line; compacting the Colors page dropped that minimum and the
+    # audit caught them immediately. `uniform_width` is the one
+    # implementation of the rule (app.ui_style) — this is simply the
+    # place every wrapping row passes through. Checkboxes riding a row's
+    # free tail are NOT buttons of the same kind and keep their own size.
+    uniform_width([m for m in members if isinstance(m, QPushButton)])
     content.setLayout(flow)
     return content
 

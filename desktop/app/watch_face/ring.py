@@ -20,7 +20,7 @@ from PySide6.QtWidgets import (
 from app.watch_face import thumbs
 from app.ui_style import tooltip_wrap
 from app.watch_face.controls import picture_group
-from app.watch_face.widgets import pill
+from app.watch_face.widgets import flow_row, pill
 from config import constants, dial
 from data.rings import ring_presets
 
@@ -55,7 +55,7 @@ def build(settings, setters: dict, tr) -> QWidget:
     presets = ring_presets(settings.custom_rings)
     layout.addWidget(_preset_gallery(settings, presets, setters, tr))
     layout.addWidget(_preset_about(presets, settings.ring, tr))
-    layout.addLayout(_finish_row(settings, setters, tr))
+    layout.addWidget(_finish_row(settings, setters, tr))
     active_card = presets[settings.ring]
     if constants.RING_EYE_GLYPH in active_card["jewels"]:
         shine = settings.ring_eye_shine.get(
@@ -122,14 +122,22 @@ def _preset_about(presets: dict, ring: str, tr) -> QLabel:
     return label
 
 
-def _finish_row(settings, setters, tr) -> QHBoxLayout:
-    row = QHBoxLayout()
-    for finish in constants.RING_FINISHES:
-        row.addWidget(pill(
+def _finish_row(settings, setters, tr) -> QWidget:
+    """THE FOUR JEWEL FINISHES. A `flow_row`, not a bare QHBoxLayout
+    (runtime audit ALG-5, 2026-08-15): the plain row neither wrapped nor
+    equalised, so at a narrow window "Silver jewels" stood 122px beside
+    "Thematic jewels" at 136px. It went unseen while the window's
+    minimum was wide enough to keep the row on one line; compacting the
+    Colors page dropped that minimum and the audit found it the same
+    hour. `flow_row` carries both rules for every row that passes
+    through it."""
+    return flow_row(
+        pill(
             tr(f"{finish.capitalize()} jewels"), settings.ring_finish == finish,
             lambda f=finish: setters["ring_finish"](f),
-        ))
-    return row
+        )
+        for finish in constants.RING_FINISHES
+    )
 
 
 def _inner_group(settings, setters, tr):
