@@ -28,8 +28,9 @@ from pathlib import Path
 
 from PySide6.QtCore import QPointF, QRectF, Qt
 from PySide6.QtGui import (
-    QBrush, QColor, QConicalGradient, QFont, QIcon, QImage, QPainter,
-    QPainterPath, QPen, QPixmap,
+    QBrush, QColor, QConicalGradient, QFont, QIcon, QImage,
+    QLinearGradient, QPainter, QPainterPath, QPen, QPixmap,
+    QRadialGradient,
 )
 
 from config import constants, dial, glow, palette, paths
@@ -844,6 +845,74 @@ def metal_swatch_icon(hue: str) -> QIcon:
         painter.drawEllipse(QRectF(-radius, -radius, 2 * radius, 2 * radius))
 
     return _computed_icon(f"metal_swatch_{hue.lstrip('#')}", paint)
+
+
+def _shade_ramp(metal: str, shade: str) -> list | None:
+    """One metal SHADE's whole ramp — the stops the dial's own recolor
+    uses (`recolor/presets/metals.json` through `defaults.METAL_SHADES`),
+    sorted dark to light. None when the ramp is absent."""
+    import json
+
+    from config import defaults
+    from recolor.recipe import PRESETS
+
+    ramp_name = defaults.METAL_SHADES.get(metal, {}).get(shade)
+    if ramp_name is None:
+        return None
+    try:
+        data = json.loads(Path(PRESETS).read_text(encoding="utf-8"))
+        entry = data["metals"][ramp_name]
+    except (OSError, KeyError, ValueError):
+        return None
+    stops = sorted(entry.get("stops") or [], key=lambda stop: stop[0])
+    if len(stops) < 2:
+        return None
+    return stops
+
+
+def metal_roundel_icon(metal: str, shade: str) -> QIcon | None:
+    """ONE METAL SHADE AS A ROUNDEL — a struck disc that catches the
+    light, not a name in a dropdown (owner order 2026-08-15: "napravi
+    ROUNDEL koji ce simulirati metalnu plocu sa odsjajem i prikazivati
+    te opcije kako izgledaju").
+
+    Everything drawn here is READ from the shade's own ramp, never
+    hand-picked: the disc is a top-left-to-bottom-right linear sweep
+    through the ramp's real stops, so a pale gold and a dark amber
+    differ here exactly as much as they differ on the dial. The
+    highlight arc uses the ramp's lightest stop and the rim its
+    darkest, which is what gives a flat circle the read of a struck
+    plate. None when the ramp is absent — an honest blank tile."""
+    stops = _shade_ramp(metal, shade)
+    if stops is None:
+        return None
+    radius = THUMB_SOURCE_PX * 0.44
+
+    def paint(painter) -> None:
+        # The plate: the ramp swept corner to corner, dark rim to lit
+        # edge, exactly the direction a struck disc is lit from.
+        sweep = QLinearGradient(-radius, -radius, radius, radius)
+        for position, colour in stops:
+            sweep.setColorAt(max(0.0, min(1.0, float(position))), QColor(colour))
+        painter.setBrush(QBrush(sweep))
+        painter.setPen(QPen(QColor(stops[0][1]), radius * 0.06))
+        painter.drawEllipse(QPointF(0.0, 0.0), radius, radius)
+        # The specular: a soft crescent of the ramp's lightest stop
+        # riding the upper-left edge, the way light sits on metal.
+        gloss = QRadialGradient(
+            QPointF(-radius * 0.35, -radius * 0.4), radius * 1.1
+        )
+        highlight = QColor(stops[-1][1])
+        highlight.setAlpha(150)
+        gloss.setColorAt(0.0, highlight)
+        faded = QColor(highlight)
+        faded.setAlpha(0)
+        gloss.setColorAt(0.75, faded)
+        painter.setPen(Qt.PenStyle.NoPen)
+        painter.setBrush(QBrush(gloss))
+        painter.drawEllipse(QPointF(0.0, 0.0), radius, radius)
+
+    return _computed_icon(f"metal_roundel_{metal}_{shade}", paint)
 
 
 def shade_hue(metal: str, shade: str) -> str | None:

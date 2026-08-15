@@ -112,7 +112,11 @@ fallback for pointer variants, which carry no preview art of their own
   disk) resolved UNDER a specific art source via `paths.display`
 - `shade_hue(metal, shade)` / `metal_swatch_icon(hue)`: a metal shade's
   representative ramp hue (mid stop of `recolor/presets/metals.json`)
-  as a round swatch — the Metal shades combos' item icons
+  as a round swatch — kept for any caller that wants a bare hue
+  chip; the Metal shades picker itself now draws `metal_roundel_icon`
+  (a struck disc swept through the shade's WHOLE ramp, with a rim and
+  a specular crescent read from that ramp's own darkest and lightest
+  stops), never a flat swatch beside a name in a dropdown
 
 ## Design Decisions
 - **Asset-honesty fallback (R-33):** pointer variants have no dedicated

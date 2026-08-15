@@ -80,7 +80,11 @@ def test_colors_section_builds_a_real_page_not_a_placeholder(app):
     assert any(title.startswith("Aura coloring") for title in titles)
     assert "Hands color" in titles
     assert "Jewels color" in titles
-    assert "Metal shades" in titles
+    # METAL SHADES ARE ROUNDELS NOW (owner order 2026-08-15): the one
+    # "Metal shades" box of three dropdowns became three card groups in
+    # one row, each titled by its metal. A box around those three boxes
+    # would be the nested-group defect the CardGroup migration removed.
+    assert {"Gold", "Silver", "Bronze"} <= titles
     assert "Saturation" in titles
 
 
@@ -360,3 +364,43 @@ def test_jewels_scale_is_a_no_op_on_the_crown(app, frame_args):
         return static, crown_spec(skin, ctx).height_px
 
     assert crown_boxes(1.0) == crown_boxes(1.6) == crown_boxes(0.6)
+
+
+def test_metal_shades_are_roundel_cards_not_dropdowns(app):
+    """Owner order 2026-08-15: a roundel that simulates a metal plate
+    with its sheen and SHOWS how each option looks, under the ordinary
+    card grammar — Gold, Silver, Bronze side by side in one row. A
+    dropdown can only name a shade.
+
+    Three groups, not one of eleven cards: the shades of a metal are
+    alternatives to each other and not to the other metals', which is
+    what the three separate settings already say."""
+    from PySide6.QtWidgets import QComboBox, QGroupBox, QToolButton
+
+    from app.watch_face import colors, thumbs
+    from config import constants
+
+    page = colors.build(Settings(), _setters(), lambda text: text)
+    boxes = {box.title(): box for box in page.findChildren(QGroupBox)}
+    for metal in ("gold", "silver", "bronze"):
+        box = boxes[metal.capitalize()]
+        assert not box.findChildren(QComboBox), f"{metal} still wears a combo"
+        cards = box.findChildren(QToolButton)
+        assert len(cards) == len(constants.METAL_SHADE_NAMES[metal])
+        for card in cards:
+            assert not card.icon().isNull(), f"{card.text()} has no roundel"
+
+
+def test_every_metal_shade_can_draw_its_roundel(app):
+    """The roundel is READ from the shade's own ramp in
+    `recolor/presets/metals.json`, never hand-picked — so a shade whose
+    ramp went missing must fail here rather than ship a blank tile."""
+    from app.watch_face import thumbs
+    from config import constants
+
+    for metal in ("gold", "silver", "bronze"):
+        for shade in constants.METAL_SHADE_NAMES[metal]:
+            assert thumbs.metal_roundel_icon(metal, shade) is not None, (
+                f"{metal}/{shade} has no ramp to draw"
+            )
+    assert thumbs.metal_roundel_icon("gold", "no_such_shade") is None

@@ -35,6 +35,33 @@ fresh on every pick.
   `test_watch_face_colors.py`'s static check pins it
 
 ## Design Decisions
+
+- **METAL SHADES ARE ROUNDELS** (owner order 2026-08-15). The group
+  used to be three `QComboBox` rows — a dropdown can name a shade but
+  never show it, and he asked for "a roundel that simulates a metal
+  plate with its sheen and shows how each option looks". It is three
+  card groups now, Gold / Silver / Bronze in his order side by side in
+  one row, each holding its shades as `OptionCard`s under the ordinary
+  card grammar (image, text, hover blurb, resize).
+  - Everything the roundel draws is READ from that shade's own ramp in
+    `recolor/presets/metals.json` (`thumbs.metal_roundel_icon` →
+    `_shade_ramp`): a corner-to-corner sweep through the real stops,
+    the rim in the darkest stop, the specular crescent in the lightest.
+    So two shades differ on this tile exactly as much as they differ on
+    the dial. A shade with no ramp draws no tile rather than a
+    stand-in, and a tooth fails if any registered shade loses its ramp.
+  - THREE groups, not one of eleven cards: the shades of a metal are
+    alternatives to each other and not to the other metals' — which is
+    what the three separate settings (`metal_shade_gold` /
+    `_silver` / `_bronze`) already say. One flat group would read as
+    eleven mutually exclusive picks.
+  - The row aligns its three boxes to a common TOP and lets them share
+    a height. A `Maximum` vertical policy was tried and reverted the
+    same day (proof shots): it does end each column at its content, but
+    with the row's AlignTop it dropped the two short columns below
+    Gold's top edge — worse than the even bottoms it was meant to fix.
+
+
 - **CORRECTION (owner 2026-08-05, LOUD): the two items below were
   WRONGLY declared impossible — the owner's own art and words proved
   it.** R-21's Outer/Inner ring-tint split IS built, and THE

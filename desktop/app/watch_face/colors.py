@@ -53,6 +53,7 @@ branch). This section's Aura group gates on `not settings.colorful`,
 the closest honest reading of the brief; it is grayed out, not hidden,
 while Colorful is on."""
 
+from PySide6.QtCore import Qt
 from PySide6.QtWidgets import (
     QComboBox, QFormLayout, QGroupBox, QHBoxLayout, QLabel, QVBoxLayout,
     QWidget,
@@ -60,6 +61,7 @@ from PySide6.QtWidgets import (
 
 from app.watch_face import thumbs, tint_picker
 from app.ui_style import tooltip_wrap
+from app.watch_face.controls import picture_group
 from app.watch_face.widgets import pill
 from config import constants, palette
 
@@ -234,39 +236,65 @@ def _crown_text_group(settings, setters, tr) -> QGroupBox:
     return group
 
 
-def _metal_group(settings, setters, tr) -> QGroupBox:
-    """Metal shades — MOVED here from the Settings dialog's Themes
-    section (`app.settings_dialog.themes_section._build_metal_shade_
-    group`, R8a round): the same three combos, the same stored keys,
-    now LIVE instead of OK-committed."""
-    group = QGroupBox(tr("Metal shades"))
-    form = QFormLayout(group)
-    titles = {"gold": tr("Gold"), "bronze": tr("Bronze"), "silver": tr("Silver")}
+def _metal_group(settings, setters, tr) -> QWidget:
+    """Metal shades as ROUNDELS (owner order 2026-08-15), replacing the
+    three dropdowns this group wore since it moved here from the
+    Settings dialog.
+
+    His words: a roundel that simulates a metal plate with its sheen
+    and SHOWS how each option looks — Gold, Silver and Bronze beside
+    one another in the same row, each under the ordinary card grammar
+    (image, text, hover, resize) that `CardGroup`/`OptionCard` already
+    carry. A dropdown could only ever name a shade; a struck disc drawn
+    from that shade's OWN ramp shows it.
+
+    Three card groups sharing one row rather than one group of eleven
+    cards: the shades of a metal are alternatives to each other and
+    NOT to the other metals' — three separate radio groups is what the
+    setting actually is (`metal_shade_gold`/`_silver`/`_bronze`), and
+    one flat group of eleven would let the eye read them as eleven
+    mutually exclusive picks."""
     current = {
         "gold": settings.metal_shade_gold,
-        "bronze": settings.metal_shade_bronze,
         "silver": settings.metal_shade_silver,
+        "bronze": settings.metal_shade_bronze,
     }
-    for metal in ("gold", "bronze", "silver"):
-        combo = QComboBox()
-        for shade in constants.METAL_SHADE_NAMES[metal]:
-            # THE SHADE SWATCH (owner review 2026-08-09, slika 8): every
-            # option shows ITS OWN ramp hue, read from the recolor
-            # preset itself — never a bare name again.
-            hue = thumbs.shade_hue(metal, shade)
-            title = tr(constants.METAL_SHADE_TITLES[shade])
-            if hue is not None:
-                combo.addItem(thumbs.metal_swatch_icon(hue), title, shade)
-            else:
-                combo.addItem(title, shade)
-        index = combo.findData(current[metal])
-        if index >= 0:
-            combo.setCurrentIndex(index)
-        combo.currentIndexChanged.connect(
-            lambda _i, c=combo, m=metal: setters[f"metal_shade_{m}"](c.currentData())
+    row = QHBoxLayout()
+    # HIS ORDER, not the storage order: "Gold, Silver, Bronze jedna
+    # pored druge u istom redu".
+    for metal in ("gold", "silver", "bronze"):
+        entries = [
+            (
+                shade, tr(constants.METAL_SHADE_TITLES[shade]),
+                tr("The {shade} {metal} ramp, as the dial strikes it.").format(
+                    shade=tr(constants.METAL_SHADE_TITLES[shade]),
+                    metal=tr(metal.capitalize()),
+                ),
+                thumbs.metal_roundel_icon(metal, shade),
+            )
+            for shade in constants.METAL_SHADE_NAMES[metal]
+        ]
+        group = picture_group(
+            tr(metal.capitalize()), "", entries, current[metal],
+            lambda key, m=metal: setters[f"metal_shade_{m}"](key),
         )
-        form.addRow(titles[metal], combo)
-    return group
+        # EACH COLUMN ENDS WHERE ITS CONTENT ENDS, tops on one line:
+        # gold carries five shades against silver's and bronze's three,
+        # and a bare QHBoxLayout stretched the two short boxes to the
+        # tall one's height with a third of each standing empty (the
+        # independent grader's one ding on the first shot, 2026-08-15).
+        # A trailing stretch UNDER each group is what does it — a
+        # `Maximum` size policy was tried first and reverted, because
+        # with the row's AlignTop it dropped the short columns below
+        # gold's top edge instead of hanging all three from one line.
+        column = QVBoxLayout()
+        column.setContentsMargins(0, 0, 0, 0)
+        column.addWidget(group)
+        column.addStretch(1)
+        row.addLayout(column, 1)
+    host = QWidget()
+    host.setLayout(row)
+    return host
 
 
 def _saturation_group(settings, setters, tr) -> QGroupBox:
