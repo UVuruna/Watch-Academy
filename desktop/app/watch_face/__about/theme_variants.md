@@ -42,6 +42,16 @@ theme can actually offer.
   a title. The Style row is their first door. A tooth pins that set
   against the registry, so if the owner wires them into a menu group
   later the test says so rather than going quietly stale.
+- **The explanatory sentence is printed only when it says something**
+  (ALG-7 ROW OCCUPANCY, live-profile audit 2026-08-16). "What this theme
+  can wear. A row it has nothing to offer is not shown at all" compares
+  rows, so on a theme that offers a SINGLE row there is nothing to
+  compare — and the sentence became a half-empty text band stacked over
+  the row's own half-empty sub-label, with the cards continuing below.
+  That is the exact shape THE SPACE & LEGIBILITY LAW's ladder answers at
+  step 2, and the honest reflow for a caption carrying no information is
+  not to print it. Fixed at the source; nothing was added to the Zubi
+  baseline, which only ever shrinks.
 - **NO SETTINGS MIGRATION, deliberately.** A `ThemeSelection` that
   became a new stored shape would have to rewrite every existing
   profile — the one irreversible step in the whole programme. It is not

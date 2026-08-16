@@ -109,12 +109,21 @@ def build(active, settings, setters, tr) -> QWidget | None:
         return None
     group = QGroupBox(tr("Variant"))
     column = QVBoxLayout(group)
-    note = QLabel(tr(
-        "What this theme can wear. A row it has nothing to offer is not "
-        "shown at all."
-    ))
-    note.setWordWrap(True)
-    column.addWidget(note)
+    # THE SENTENCE EARNS ITS BAND OR IT IS NOT PRINTED (ALG-7 ROW
+    # OCCUPANCY, live-profile audit 2026-08-16). It explains that a row
+    # with nothing to offer is hidden — which says something only when
+    # there is more than one row to compare. On a theme that offers a
+    # single row it became a half-empty text band stacked above another
+    # half-empty one, with the cards continuing below: exactly the shape
+    # the law's ladder answers at step 2, and the honest reflow here is
+    # to stop printing a caption that carries no information.
+    if len(rows) > 1:
+        note = QLabel(tr(
+            "What this theme can wear. A row it has nothing to offer is not "
+            "shown at all."
+        ))
+        note.setWordWrap(True)
+        column.addWidget(note)
     for row in rows:
         column.addWidget(row)
     return group
