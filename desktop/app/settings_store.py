@@ -15,7 +15,8 @@ from pathlib import Path
 from zoneinfo import ZoneInfo
 
 from app.settings_fields import (
-    _HEX_COLOR, MERGED_MOUNTS, RETIRED_SLOTS, load_alpha, load_bool, load_choice,
+    _HEX_COLOR, MERGED_MOUNTS, RETIRED_SLOT_MODES, RETIRED_SLOTS,
+    load_alpha, load_bool, load_choice,
     load_earth_label, load_hex, load_moving_bodies, load_numerals, load_palettes,
     load_rotation_group, load_scale, load_world_mode, migrate_palette_key,
     normalized_jump_city,
@@ -559,6 +560,15 @@ class SettingsStore:
                 raw["palette_style"] = RETIRED_SLOTS[raw["palette_style"]]
             if raw.get("calendar_mount") in MERGED_MOUNTS:
                 raw["calendar_mount"] = MERGED_MOUNTS[raw["calendar_mount"]]
+            # Fourth migration (2026-08-16): a slot MODE that was renamed
+            # ("astrology" -> "zodiac", 0.14.159's own word for it) is
+            # translated before validation. Same reason as the two above,
+            # and the same evidence: the owner's live file carried the
+            # old word, so every launch read the whole file as corrupt
+            # and offered him a reset — losing every stored watch.
+            for slot_key in ("weekday_slot", "octa_slot", "third_slot"):
+                if raw.get(slot_key) in RETIRED_SLOT_MODES:
+                    raw[slot_key] = RETIRED_SLOT_MODES[raw[slot_key]]
             if isinstance(raw.get("palettes"), dict):
                 raw["palettes"] = {
                     migrate_palette_key(key): hues

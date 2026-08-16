@@ -295,6 +295,18 @@ RETIRED_SLOTS = {"paint": "primary", "light": "secondary", "cube": "tertiary"}
 # pattern — never a Rule-#6 shim.
 MERGED_MOUNTS = {"vices": "virtues"}
 
+# Slot MODES that were renamed, mapped onto the name in force today.
+# "astrology" was a legal `weekday_slot` from 0.14.159 ("the weekday
+# POSITION can now carry an astrology badge instead of the bodies —
+# Bodies / Astrology / Ascendant"); the mode list later renamed it
+# "zodiac" and nobody wrote the migration. Found 2026-08-16 in the
+# OWNER'S OWN live settings file, which therefore read as corrupt on
+# every launch and offered him a reset — the exact loss the comment on
+# `RETIRED_SLOTS` above says this mechanism exists to prevent. Applied
+# to all three slot keys because the rename is of the MODE, and the
+# same vocabulary fills every slot.
+RETIRED_SLOT_MODES = {"astrology": "zodiac"}
+
 
 def migrate_palette_key(key: str) -> str:
     """"hexa_paint" -> "hexa_primary"; anything already positional (or

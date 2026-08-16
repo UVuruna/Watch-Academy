@@ -24,10 +24,23 @@ What lives here:
   `show_earth_date`/`earth_weekday` bool pair folded onto the label
   enum), `load_rotation_group` (the pre-2026-07-14 Enabled checkbox),
   `migrate_palette_key`/`RETIRED_SLOTS` (the wheel slots renamed
-  2026-07-28) and `MERGED_MOUNTS` (a calendar mount that was absorbed by
-  another). These exist so a settings file written by an older release
-  loads clean instead of reading as corrupt and offering the user a
-  reset.
+  2026-07-28), `MERGED_MOUNTS` (a calendar mount that was absorbed by
+  another) and `RETIRED_SLOT_MODES` (a slot MODE that was renamed).
+  These exist so a settings file written by an older release loads clean
+  instead of reading as corrupt and offering the user a reset.
+
+  `RETIRED_SLOT_MODES` was written the day the rule proved itself:
+  `"astrology"` was a legal `weekday_slot` from 0.14.159 ("the weekday
+  POSITION can now carry an astrology badge instead of the bodies —
+  Bodies / Astrology / Ascendant"), the mode list later renamed it
+  `"zodiac"`, and nobody wrote the migration. It was found on
+  2026-08-16 in the OWNER'S OWN live file, which had been reading as
+  corrupt on every launch and offering him the one button that throws
+  away every stored watch. The mechanism was already here; the entry
+  was missing. Tooth:
+  `desktop/tests/test_settings_migrations.py`, which also checks that
+  every retired name in every one of these tables lands on a value the
+  program still accepts.
 - **`load_numerals` / `save_numerals`** — the live numeral bands' own
   group, as one list read on the way in and on the way out, so a field
   can never be loaded and then silently not saved.
