@@ -34,19 +34,49 @@ from render.numeral_bands import (
 from render.painting import dial_point
 
 
-def jewel_offset(skin, world_offset: float) -> float:
+def jewel_offset(
+    skin, world_offset: float, night_phase: float = 0.0,
+) -> float:
     """How far the JEWELS and the CROWN have turned — THE ONE DOOR for
     WHAT THE ROTATION CARRIES (owner ballot verdict 2026-08-13, Rule
     #5).
 
-    `all_turn` hands back the world offset unchanged, so the jewels and
-    the crown ride the band exactly as in every release before this one.
-    `numerals_turn` hands back 0.0: they hold their place on screen and
-    only the numerals travel. Every site that places a jewel, a crown
-    glyph or their hover zones asks HERE — the ring layer, the live
-    crown, the Omega hit circle and the compositor's two crown hovers —
-    so the drawn dial and the hit zones cannot disagree."""
-    return 0.0 if skin.world_rotation_scope == "numerals_turn" else world_offset
+    THE WORLD OFFSET IS TWO TERMS, NOT ONE (owner order 2026-08-16, and
+    the defect that forced it): `core.world.world_offset_deg` is
+    `solar_part + night_phase`, and only the SOLAR term is what the
+    scope switch chooses between. The NIGHT term is not a rotation
+    anybody picks — it is the state of the world, and it carries
+    everything, always: at nightfall the WHOLE ring turns over, every
+    jewel in it included, exactly as it does with Solar Rotation off.
+
+    So:
+      `all_turn`      -> the whole offset, jewels and crown ride the band.
+      `numerals_turn` -> the NIGHT PHASE ALONE. The jewels do not follow
+                         the sun, but they do turn over at nightfall and
+                         stand at their NIGHT seats — never where they
+                         stood by day.
+
+    This used to hand back a flat 0.0, which threw BOTH terms away: the
+    jewels stayed on their daylight seats all night while the hands
+    turned over under them (his screenshots of 16.8.), and
+    `_draw_crown_text`'s `arc_crosses_horizon(centre, 0.0)` was False at
+    every angle, so `crown_text_night` could never draw. One number, two
+    defects.
+
+    `night_phase` is the EASED phase (`Compositor.phase_deg`), so the
+    jewels turn over on the same animated arc as everything else; it is
+    ignored outside `sky_up`, where the phase rides the POINTER instead
+    and the world stands still (`core.world.pointer_rotation_deg`).
+
+    Every site that places a jewel, a crown glyph or their hover zones
+    asks HERE — the ring layer, the live crown, the Omega hit circle and
+    the compositor's two crown hovers — so the drawn dial and the hit
+    zones cannot disagree."""
+    if skin.world_rotation_scope != "numerals_turn":
+        return world_offset
+    if skin.world_mode != "sky_up":
+        return 0.0
+    return night_phase % 360.0
 
 
 @lru_cache(maxsize=256)
@@ -119,9 +149,18 @@ def occluded_hours(skin, ctx: RenderContext) -> tuple:
     with room to spare for all six."""
     if skin.world_rotation_scope != "numerals_turn":
         return ()
+    # THE RELATIVE OFFSET (owner order 2026-08-16): the wedge test is
+    # about the angle BETWEEN a jewel and a numeral, and since the night
+    # phase now turns both of them over together
+    # (`jewel_offset`), only the part that MOVES THEM APART counts —
+    # the solar term. Handing the whole world offset here would have the
+    # jewels chase numerals half a dial away every night.
+    relative = (
+        ctx.world_offset - jewel_offset(skin, ctx.world_offset, ctx.rotation)
+    ) % 360.0
     return numerals.occluded_numeral_hours(
         tuple(sorted(skin.ring.jewels)),
-        ctx.world_offset,
+        relative,
         jewel_ink_halves(skin),
         numeral_ink_halves(
             max(2, round(2 * ctx.radius * ctx.dpr)),
@@ -129,7 +168,7 @@ def occluded_hours(skin, ctx: RenderContext) -> tuple:
             float(skin.numeral_outer_size),
             skin.numeral_outer_ring_size,
             skin.numeral_seating,
-            ctx.world_offset,
+            relative,
         ),
     )
 
@@ -306,8 +345,12 @@ class LiveCrownLayer(Layer):
         for image, angle, rotation in compose_crown(
             glyphs, sequence, self._entry["orientation"],
             # WHAT THE ROTATION CARRIES: the live crown is crown text,
-            # so it holds its place in the `numerals_turn` scope.
-            offset_deg=jewel_offset(self._skin, ctx.world_offset),
+            # so it does not follow the sun in the `numerals_turn`
+            # scope — but it turns over with the night, like every
+            # other member of the ring.
+            offset_deg=jewel_offset(
+                self._skin, ctx.world_offset, ctx.rotation,
+            ),
             ink=crown_glyph_ink(spec),
             radius_px=radius * ctx.dpr,
             tracking_px=spec.height_px * dial.CROWN_TRACKING_FRACTION,

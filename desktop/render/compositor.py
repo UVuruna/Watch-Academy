@@ -876,10 +876,17 @@ class Compositor:
     def _jewel_offset(self) -> float:
         """WHAT THE ROTATION CARRIES (owner ballot verdict 2026-08-13):
         how far the JEWELS and the CROWN have turned — the world offset
-        in `all_turn`, exactly 0.0 in `numerals_turn`. Routed through
-        `render.layers.numerals.jewel_offset` so the hit zones here and
-        the glyphs the ring layer draws can never answer differently."""
-        return layer_numerals.jewel_offset(self._skin, self._world_offset())
+        in `all_turn`, the NIGHT PHASE ALONE in `numerals_turn` (owner
+        order 2026-08-16: the night turns the whole ring over, jewels
+        included; only the SOLAR term is what the scope switch chooses
+        between). Routed through `render.layers.numerals.jewel_offset`
+        so the hit zones here and the glyphs the ring layer draws can
+        never answer differently — and it takes the SAME eased phase the
+        rest of the flip runs on, so a hit zone cannot lag its glyph
+        mid-turn."""
+        return layer_numerals.jewel_offset(
+            self._skin, self._world_offset(), self.phase_deg(),
+        )
 
     def _jewel_theta(self, world_theta: float) -> float:
         """A cursor angle already in the WORLD frame (`_world_theta`),

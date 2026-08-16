@@ -320,7 +320,7 @@ class RingLayer(Layer):
             # not composed into the band (`occluded_hours`).
             theta = (
                 angles.ring_position_angle(hour)
-                + jewel_offset(self._skin, ctx.world_offset)
+                + jewel_offset(self._skin, ctx.world_offset, ctx.rotation)
             ) % 360.0
             metal = self._skin.ring.jewel_metal.get(hour, "gold")
             # The Eye's SHINE ENLARGE (owner UV inbox 2026-07-27):
@@ -398,7 +398,7 @@ class RingLayer(Layer):
         # under the bottom, never an upside-down prophecy. A preset
         # without night texts keeps THE ARC READING LAW's mirror,
         # unchanged.
-        offset = jewel_offset(self._skin, ctx.world_offset)
+        offset = jewel_offset(self._skin, ctx.world_offset, ctx.rotation)
         night_texts = self._skin.ring.crown_text_night
         for crown_entry, crossed_draws in (
             [(entry, False) for entry in crown_texts]

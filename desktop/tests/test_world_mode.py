@@ -770,6 +770,37 @@ class TestTheWhatTurnsRowFollowsTheMode:
         }
         assert both == {0.0}
 
+    def test_the_night_turns_the_jewels_over_in_both_scopes(self):
+        """THE NIGHT IS NOT A ROTATION ANYBODY PICKS (owner order
+        2026-08-16): the scope switch chooses what the SUN carries, never
+        what the NIGHT carries. At nightfall the whole ring turns over,
+        every jewel in it — so `numerals_turn` hands back the night phase
+        alone, and a jewel never stands on its daylight seat after dark.
+
+        The defect this pins: `jewel_offset` used to hand back a flat
+        0.0, which threw the night term away with the solar one. The
+        jewels held their daylight seats all night while the hands turned
+        over under them, and `crown_text_night` could never draw, because
+        `arc_crosses_horizon(centre, 0.0)` is False at every angle."""
+        from render.layers import numerals as layer
+
+        night = world.night_phase_deg(False)
+        assert night == 180.0
+        for scope in dial.WORLD_ROTATION_SCOPES:
+            skin = dataclasses.replace(
+                build_skin(Settings()),
+                world_mode="sky_up", world_rotation_scope=scope,
+            )
+            offset = world.world_offset_deg("sky_up", 10.76, True, night)
+            carried = layer.jewel_offset(skin, offset, night)
+            # the SOLAR term is the scope's business...
+            assert carried == (offset if scope == "all_turn" else night)
+            # ...the NIGHT term is nobody's: both scopes turn over.
+            assert carried % 360.0 != 0.0
+            # and by day both stand on the plain seats.
+            day_offset = world.world_offset_deg("sky_up", 0.0, False, 0.0)
+            assert layer.jewel_offset(skin, day_offset, 0.0) == 0.0
+
     def test_the_row_is_dead_in_noon_up_and_says_so(self, app):
         settings = dataclasses.replace(Settings(), world_mode="noon_up")
         _widget, _mode, scope = self._rows(settings)

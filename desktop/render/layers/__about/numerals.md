@@ -37,8 +37,23 @@ rotates").
 functions moved in beside `band_spec`, because both answer the same
 question it does — what the outer band looks like right now:
 
-- `jewel_offset(skin, world_offset)` is THE ONE DOOR for the scope. It
-  returns the world offset in `all_turn` and `0.0` in `numerals_turn`.
+- `jewel_offset(skin, world_offset, night_phase)` is THE ONE DOOR for the
+  scope. It returns the world offset in `all_turn` and, in
+  `numerals_turn`, THE NIGHT PHASE ALONE.
+  **THE WORLD OFFSET IS TWO TERMS, NOT ONE** (owner order 2026-08-16):
+  `core.world.world_offset_deg` is `solar_part + night_phase`, and only
+  the SOLAR term is what the scope switch chooses between. The night is
+  not a rotation anybody picks — it is the state of the world, and it
+  turns the WHOLE ring over, every jewel in it, exactly as it does with
+  Solar Rotation off. This used to return a flat `0.0`, which threw both
+  terms away: the jewels held their DAYLIGHT seats all night while the
+  hands turned over under them, and `crown_text_night` could never draw
+  because `arc_crosses_horizon(centre, 0.0)` is False at every angle —
+  one number, two defects, both fixed by putting the night term back.
+  The phase passed in is the EASED one (`Compositor.phase_deg` /
+  `ctx.rotation`), so the jewels turn on the same animated arc as
+  everything else and every baked member stays phase-linear, which is
+  what lets the compositor rotate finished pixels mid-flip.
   Every site that places a jewel, a crown glyph or one of their HOVER
   zones asks here — [Ring Layer](ring.md)'s two draw methods, the
   `LiveCrownLayer` below, and the compositor's `_jewel_offset` /
