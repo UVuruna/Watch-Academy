@@ -36,6 +36,14 @@ _SCALE_ROWS = (
 
 
 def build(settings, setters: dict, tr) -> QWidget:
+    """Every setter on this page is looked up ONCE, HERE AND NOW, into a
+    local name — never `setters[key]` inside a callback. The per-section
+    Reset learns a page's settings by recording which keys the BUILD
+    asked for (`section_reset.RecordingSetters`), so a lookup deferred
+    into a lambda is a lookup the Reset never sees: this page's Reset
+    once moved only `numeral_outer_ring_size` — the single key that
+    happened to be bound eagerly — and left all eight others where the
+    user had dragged them. Tooth: `tests/test_section_reset.py`."""
     layout = QVBoxLayout()
     layout.addWidget(_diameter_group(settings, setters, tr))
     layout.addWidget(_scale_group(settings, setters, tr))
@@ -57,11 +65,13 @@ def _flow(knobs) -> QWidget:
 def _diameter_group(settings, setters, tr) -> QGroupBox:
     group = QGroupBox(tr("Dial size"))
     column = QVBoxLayout(group)
+    # BOUND NOW, not at click time — see the note in build().
+    apply_diameter = setters["diameter"]
     preset_row = QHBoxLayout()
     for preset in dial.SIZE_PRESETS:
         preset_row.addWidget(pill(
             f"{preset} px", settings.diameter == preset,
-            lambda p=preset: setters["diameter"](p),
+            lambda p=preset: apply_diameter(p),
         ))
     column.addLayout(preset_row)
     low, high = dial.SIZE_PRESETS[0], dial.SIZE_PRESETS[-1]
@@ -70,7 +80,7 @@ def _diameter_group(settings, setters, tr) -> QGroupBox:
         tr("The watch window's size on the desktop — double-click for an exact value."),
         unit=ValueUnit.PIXEL, low=low, high=high, family="window",
         kind=KnobKind.K270,
-        on_change=lambda value: setters["diameter"](round(value)),
+        on_change=lambda value: apply_diameter(round(value)),
     )
     knob.set_value(settings.diameter)
     column.addWidget(_flow((knob,)))
@@ -82,11 +92,12 @@ def _scale_group(settings, setters, tr) -> QGroupBox:
     column = QVBoxLayout(group)
     knobs = []
     for key, title, (low, high), default, blurb in _SCALE_ROWS:
+        apply_value = setters[key]          # BOUND NOW — see build()
         knob = ValueKnob(
             key, tr(title), tr(blurb),
             unit=ValueUnit.PERCENT, low=round(low * 100),
             high=round(high * 100), family="size", default_value=default,
-            on_change=lambda value, k=key: setters[k](value / 100.0),
+            on_change=lambda value, a=apply_value: a(value / 100.0),
         )
         knob.set_value(round(getattr(settings, key) * 100))
         knobs.append(knob)
@@ -100,13 +111,16 @@ def _numeral_bands_group(settings, setters, tr) -> QGroupBox:
     FACES stay in Numerals)."""
     group = QGroupBox(tr("Numeral bands"))
     column = QVBoxLayout(group)
+    # BOUND NOW, not at change time — see the note in build().
+    apply_outer = setters["numeral_outer_size"]
+    apply_minutes = setters["minutes_size"]
     outer = ValueKnob(
         "numeral_outer_size", tr("Numerals size"),
         tr("The hour numerals' height, in the numeral's own units."),
         unit=ValueUnit.PLAIN, low=dial.NUMERAL_SIZE_RANGE[0],
         high=dial.NUMERAL_SIZE_RANGE[1], family="size",
         default_value=dial.NUMERAL_OUTER_SIZE_DEFAULT,
-        on_change=lambda value: setters["numeral_outer_size"](round(value)),
+        on_change=lambda value: apply_outer(round(value)),
     )
     outer.set_value(settings.numeral_outer_size)
     ring = ValueKnob(
@@ -124,7 +138,7 @@ def _numeral_bands_group(settings, setters, tr) -> QGroupBox:
         unit=ValueUnit.PLAIN, low=dial.NUMERAL_SIZE_RANGE[0],
         high=dial.NUMERAL_SIZE_RANGE[1], family="size",
         default_value=dial.MINUTES_SIZE_DEFAULT,
-        on_change=lambda value: setters["minutes_size"](round(value)),
+        on_change=lambda value: apply_minutes(round(value)),
     )
     minutes.set_value(settings.minutes_size)
     column.addWidget(_flow((outer, ring, minutes)))

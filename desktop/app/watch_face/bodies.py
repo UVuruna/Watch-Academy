@@ -311,6 +311,10 @@ def _moon_groups(settings, setters, tr) -> list:
         ),
         settings.moon_dark_style, setters["moon_dark_style"],
     )]
+    apply_transit = {
+        field: setters[field]
+        for field in ("transit_shadow", "transit_shrink", "transit_rim")
+    }
     # THE CROSSING SWITCHES (owner ballot verdict 2026-08-11, corrected
     # the same day: the ORIGINAL three picture tiles stay — each one
     # behavior — only the one-of rule falls away): every card is an
@@ -333,7 +337,11 @@ def _moon_groups(settings, setters, tr) -> list:
                 ("transit_rim", "lane_split", "Ride the rim"),
             )
         ],
-        on_toggle=lambda key, on: setters[key](on),
+        # BOUND NOW, not at toggle time: a lookup deferred into a lambda
+        # is a lookup the per-section Reset never records (see
+        # section_reset.py). The three switch keys are bound eagerly
+        # into `apply_transit` above.
+        on_toggle=lambda key, on: apply_transit[key](on),
     ))
     groups.append(picture_group(
         tr("Moon — horizon band"),

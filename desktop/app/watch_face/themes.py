@@ -129,11 +129,14 @@ def _populate(root, settings, setters, tr, rebuild) -> None:
 
 
 def _face_layout_row(settings, setters, tr) -> QWidget:
+    # BOUND NOW, not at click time: a lookup deferred into a lambda is a
+    # lookup the per-section Reset never records (see section_reset.py).
+    apply_layout = setters["slot_layout"]
     current = slot_layout_target(settings)
     return flow_row(
         pill(
             tr(title), current == target,
-            lambda t=target: setters["slot_layout"](t),
+            lambda t=target, a=apply_layout: a(t),
         )
         for target, title in enumerate(_FACE_LAYOUT_TITLES)
     )
@@ -174,12 +177,13 @@ def _names_checkbox(active, settings, setters, tr) -> QCheckBox:
     (`archetype_names`, previously reachable only through the classic
     right-click menu). The two stored keys stay separate — the menu's
     per-key toggles still work — this switch simply sets both."""
+    apply_names = setters["archetype_names"]   # BOUND NOW — see _face_layout_row
     checkbox = QCheckBox(tr("Names"))
     checkbox.setChecked(active.names_value or settings.archetype_names)
 
     def apply(checked: bool) -> None:
         active.set_names(checked)
-        setters["archetype_names"](checked)
+        apply_names(checked)
 
     checkbox.setToolTip(tooltip_wrap(tr(
         "The day name written on the weekday bodies — and the figure "
@@ -205,13 +209,14 @@ def _subdial_plate_group(settings, setters, tr) -> QGroupBox:
     """R-20: moved from `design_window.DesignDialog._complications_tab`
     — `settings.subdial_style` unchanged."""
     group = QGroupBox(tr("Subdial plate"))
+    apply_style = setters["subdial_style"]   # BOUND NOW — see _face_layout_row
     row = QHBoxLayout(group)
     for style, title in (
         ("theme", "Theme background"), ("black", "Classic black"),
     ):
         row.addWidget(pill(
             tr(title), settings.subdial_style == style,
-            lambda s=style: setters["subdial_style"](s),
+            lambda s=style, a=apply_style: a(s),
         ))
     return group
 
@@ -253,6 +258,11 @@ def _rotation_group(settings, setters, tr) -> QGroupBox:
     _build_theme_rotation_group` — LIVE-APPLY here instead of the old
     copy's on-OK commit."""
     group = QGroupBox(tr("Theme rotation"))
+    # BOUND NOW — see `_face_layout_row`. Both above the "custom" branch,
+    # so the Reset owns the roster key even when the checkbox grid that
+    # writes it is not on screen.
+    apply_group = setters["theme_rotation_group"]
+    apply_themes = setters["theme_rotation_themes"]
     layout = QVBoxLayout(group)
     group_combo = QComboBox()
     group_combo.addItem(tr("None"), "none")
@@ -263,7 +273,7 @@ def _rotation_group(settings, setters, tr) -> QGroupBox:
     if index >= 0:
         group_combo.setCurrentIndex(index)
     group_combo.currentIndexChanged.connect(
-        lambda _i: setters["theme_rotation_group"](group_combo.currentData())
+        lambda _i: apply_group(group_combo.currentData())
     )
     layout.addWidget(group_combo)
     if settings.theme_rotation_group == "custom":
@@ -275,7 +285,7 @@ def _rotation_group(settings, setters, tr) -> QGroupBox:
             box = QCheckBox(tr(label))
             box.setChecked(key in settings.theme_rotation_themes)
             box.toggled.connect(
-                lambda checked, k=key: setters["theme_rotation_themes"](
+                lambda checked, k=key, a=apply_themes: a(
                     tuple(sorted(
                         (set(settings.theme_rotation_themes) | {k})
                         if checked
@@ -294,6 +304,7 @@ def _rotation_group(settings, setters, tr) -> QGroupBox:
     # rotate, how often, and whether the ring colour drives the metal.
     row = QHBoxLayout()
     row.addWidget(QLabel(tr("Every")))
+    apply_minutes = setters["theme_rotation_minutes"]   # BOUND NOW
     minutes = settings.theme_rotation_minutes
     amount = QSpinBox()
     amount.setRange(1, 999)
@@ -308,7 +319,7 @@ def _rotation_group(settings, setters, tr) -> QGroupBox:
 
     def apply_interval() -> None:
         factor = unit.currentData()
-        setters["theme_rotation_minutes"](amount.value() * factor)
+        apply_minutes(amount.value() * factor)
 
     amount.editingFinished.connect(apply_interval)
     unit.currentIndexChanged.connect(lambda _index: apply_interval())

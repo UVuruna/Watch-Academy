@@ -146,10 +146,13 @@ def _finish_row(settings, setters, tr) -> QWidget:
     Colors page dropped that minimum and the audit found it the same
     hour. `flow_row` carries both rules for every row that passes
     through it."""
+    # BOUND NOW, not at click time: a lookup deferred into a lambda is a
+    # lookup the per-section Reset never records (see section_reset.py).
+    apply_finish = setters["ring_finish"]
     return flow_row(
         pill(
             tr(f"{finish.capitalize()} jewels"), settings.ring_finish == finish,
-            lambda f=finish: setters["ring_finish"](f),
+            lambda f=finish, a=apply_finish: a(f),
         )
         for finish in constants.RING_FINISHES
     )
@@ -188,6 +191,7 @@ def _crown_time_format_row(settings, setters, tr) -> QWidget:
     2026-08-15) — the format the live crown reads its digits in
     (bundled to `crown_text_scale`'s own note: only The One/Templar
     keep a live time in their arc, everyone else ignores this pick)."""
+    apply_format = setters["crown_time_format"]   # BOUND NOW — see _finish_row
     row = QHBoxLayout()
     row.addWidget(QLabel(tr("Time format")))
     combo = QComboBox()
@@ -198,7 +202,7 @@ def _crown_time_format_row(settings, setters, tr) -> QWidget:
         max(0, list(dial.CROWN_TIME_FORMATS).index(settings.crown_time_format))
     )
     combo.currentIndexChanged.connect(
-        lambda index: setters["crown_time_format"](combo.itemData(index))
+        lambda index: apply_format(combo.itemData(index))
     )
     row.addWidget(combo, stretch=1)
     host = QWidget()
@@ -230,6 +234,8 @@ def _crown_style_row(settings, setters, tr) -> QWidget:
     nobody outside it reads the word as opacity. Visibility says the
     same thing, runs the same direction (100% = fully there), and still
     claims no concept that lives on another page."""
+    apply_scale = setters["crown_text_scale"]   # BOUND NOW — see _finish_row
+    apply_alpha = setters["crown_text_alpha"]
     column = QVBoxLayout()
     column.setContentsMargins(0, 0, 0, 0)
     column.addWidget(tint_control.tint_control(
@@ -244,7 +250,7 @@ def _crown_style_row(settings, setters, tr) -> QWidget:
         low=round(constants.ELEMENT_SCALE_RANGE[0] * 100),
         high=round(constants.ELEMENT_SCALE_RANGE[1] * 100), family="size",
         default_value=100,
-        on_change=lambda value: setters["crown_text_scale"](value / 100.0),
+        on_change=lambda value: apply_scale(value / 100.0),
     )
     size_knob.set_value(round(settings.crown_text_scale * 100))
     alpha_knob = ValueKnob(
@@ -252,7 +258,7 @@ def _crown_style_row(settings, setters, tr) -> QWidget:
         tr("The Great Seal inscription's opacity."),
         unit=ValueUnit.PERCENT, low=0, high=100, family="opacity",
         default_value=100,
-        on_change=lambda value: setters["crown_text_alpha"](value / 100.0),
+        on_change=lambda value: apply_alpha(value / 100.0),
     )
     alpha_knob.set_value(round(settings.crown_text_alpha * 100))
     flow = FlowLayout()
@@ -288,6 +294,11 @@ def _crown_text_group(settings, card: dict, setters, tr) -> QGroupBox:
     lives on one page now."""
     group = QGroupBox(tr("Crown"))
     column = QVBoxLayout(group)
+    # BOUND NOW — see `_finish_row`. Above the branch, so the Reset owns
+    # both keys even on a preset ring, whose read-only arm builds no
+    # editor at all.
+    apply_text = setters["custom_ring_crown_text"]
+    apply_orientation = setters["custom_ring_crown_orientation"]
     location_on = settings.ring_crown_location.get(settings.ring, False)
     if settings.ring in constants.RING_OUTER_LOCK:
         texts = " · ".join(entry["text"] for entry in card["crown_text"]) or tr("(none)")
@@ -302,7 +313,7 @@ def _crown_text_group(settings, card: dict, setters, tr) -> QGroupBox:
         edit.setToolTip(tooltip_wrap(_crown_text_tooltip(tr)))
         edit.setEnabled(not location_on)
         edit.editingFinished.connect(
-            lambda: setters["custom_ring_crown_text"](edit.text())
+            lambda: apply_text(edit.text())
         )
         column.addLayout(_labeled(tr("Text"), edit))
         orient_row = QHBoxLayout()
@@ -310,7 +321,7 @@ def _crown_text_group(settings, card: dict, setters, tr) -> QGroupBox:
         for orientation in ("top", "bottom"):
             pill_button = pill(
                 tr(orientation.capitalize()), current == orientation,
-                lambda o=orientation: setters["custom_ring_crown_orientation"](o),
+                lambda o=orientation, a=apply_orientation: a(o),
             )
             pill_button.setEnabled(not location_on)
             orient_row.addWidget(pill_button)

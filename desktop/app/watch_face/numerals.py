@@ -56,13 +56,16 @@ def _choice_row(
     documented order (the first entry of a roster is that band's SETTLED
     default), so the combo can never offer a value the store would call
     corrupt."""
+    # BOUND NOW, not at change time: a lookup deferred into a lambda is
+    # a lookup the per-section Reset never records (see section_reset.py).
+    apply_value = setters[key]
     combo = QComboBox()
     current = getattr(settings, key)
     for value in choices:
         combo.addItem(tr((labels or {}).get(value, value)), value)
     combo.setCurrentIndex(max(0, list(choices).index(current)))
     combo.currentIndexChanged.connect(
-        lambda index: setters[key](combo.itemData(index))
+        lambda index: apply_value(combo.itemData(index))
     )
     form.addRow(tr(title), combo)
     return combo

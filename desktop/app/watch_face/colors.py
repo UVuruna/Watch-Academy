@@ -161,11 +161,14 @@ def _umbra_group(settings, setters, tr) -> QGroupBox:
     docstring's debt note)."""
     group = QGroupBox(tr("Umbra coloring"))
     column = QVBoxLayout(group)
+    # BOUND NOW, not at click time: a lookup deferred into a lambda is a
+    # lookup the per-section Reset never records (see section_reset.py).
+    apply_mode = setters["umbra_tint_mode"]
     mode_row = QHBoxLayout()
     for mode, title in (("follow", "Follow ring"), ("custom", "Custom color")):
         mode_row.addWidget(pill(
             tr(title), settings.umbra_tint_mode == mode,
-            lambda m=mode: setters["umbra_tint_mode"](m),
+            lambda m=mode: apply_mode(m),
         ))
     column.addLayout(mode_row)
     if settings.umbra_tint_mode == "custom":
@@ -192,6 +195,7 @@ def _aura_group(settings, setters, tr) -> QGroupBox:
             )
         ))
     column = QVBoxLayout(group)
+    apply_mode = setters["aura_off_tint_mode"]   # BOUND NOW — see _umbra_group
     mode_row = QHBoxLayout()
     for mode, title in (
         ("follow", "Follow ring (to white)"), ("white", "White"),
@@ -199,7 +203,7 @@ def _aura_group(settings, setters, tr) -> QGroupBox:
     ):
         mode_row.addWidget(pill(
             tr(title), settings.aura_off_tint_mode == mode,
-            lambda m=mode: setters["aura_off_tint_mode"](m),
+            lambda m=mode: apply_mode(m),
         ))
     column.addLayout(mode_row)
     if settings.aura_off_tint_mode == "custom":
@@ -286,9 +290,10 @@ def _metal_group(settings, setters, tr) -> QWidget:
             )
             for shade in constants.METAL_SHADE_NAMES[metal]
         ]
+        apply_shade = setters[f"metal_shade_{metal}"]   # BOUND NOW
         group = picture_group(
             tr(metal.capitalize()), "", entries, current[metal],
-            lambda key, m=metal: setters[f"metal_shade_{m}"](key),
+            lambda key, a=apply_shade: a(key),
         )
         # THE WIDTH ITS OWN LABELS NEED, declared here because nothing
         # else declares it (proof shot 2026-08-15): a card's sizeHint is
@@ -351,11 +356,12 @@ def _saturation_group(settings, setters, tr) -> QGroupBox:
          "The night shadow's color saturation."),
     )
     for title, key, (low, high), blurb in rows:
+        apply_value = setters[key]                      # BOUND NOW
         knob = ValueKnob(
             key, tr(title), tr(blurb),
             unit=ValueUnit.PERCENT, low=round(low * 100),
             high=round(high * 100), family="saturation", default_value=100,
-            on_change=lambda value, k=key: setters[k](value / 100),
+            on_change=lambda value, a=apply_value: a(value / 100),
         )
         knob.set_value(round(getattr(settings, key) * 100))
         flow.addWidget(knob_row(knob))

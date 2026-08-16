@@ -141,6 +141,9 @@ def _pointer_gallery(settings, setters, tr) -> QWidget:
 
 
 def _palette_style_row(settings, setters, tr) -> QHBoxLayout:
+    # BOUND NOW, not at click time: a lookup deferred into a lambda is a
+    # lookup the per-section Reset never records (see section_reset.py).
+    apply_style = setters["palette_style"]
     row = QHBoxLayout()
     labels = constants.POINTER_PALETTE_LABELS.get(
         settings.pointer, constants.POINTER_PALETTE_LABELS["default"]
@@ -150,17 +153,23 @@ def _palette_style_row(settings, setters, tr) -> QHBoxLayout:
     ):
         row.addWidget(pill(
             tr(label), settings.palette_style == style,
-            lambda s=style: setters["palette_style"](s),
+            lambda s=style, a=apply_style: a(s),
         ))
     return row
 
 
 def _add_shape_rows(layout: QVBoxLayout, settings, setters, tr) -> None:
+    # BOUND NOW — see `_palette_style_row`. All three keys are looked up
+    # here, before the early return, so the Reset knows the page owns
+    # them even on the pointers whose curvature rows never appear.
+    apply_shape = setters["pointer_shape"]
+    apply_curvature = setters["polygon_curvature"]
+    apply_edge = setters["polygon_edge"]
     shape_row = QHBoxLayout()
     for shape in constants.POINTER_SHAPES:
         shape_row.addWidget(pill(
             tr(shape.capitalize()), settings.pointer_shape == shape,
-            lambda s=shape: setters["pointer_shape"](s),
+            lambda s=shape, a=apply_shape: a(s),
         ))
     layout.addLayout(shape_row)
     if not (
@@ -177,7 +186,7 @@ def _add_shape_rows(layout: QVBoxLayout, settings, setters, tr) -> None:
         lambda value, label=percent_label: label.setText(f"{value}%")
     )
     slider.sliderReleased.connect(
-        lambda: setters["polygon_curvature"](slider.value() / 100.0)
+        lambda: apply_curvature(slider.value() / 100.0)
     )
     curvature_row = QHBoxLayout()
     curvature_row.addWidget(QLabel(tr("Curvature")))
@@ -188,7 +197,7 @@ def _add_shape_rows(layout: QVBoxLayout, settings, setters, tr) -> None:
     for edge, title in (("smooth", "Smooth concave"), ("notched", "V-notched")):
         edge_row.addWidget(pill(
             tr(title), settings.polygon_edge == edge,
-            lambda e=edge: setters["polygon_edge"](e),
+            lambda e=edge, a=apply_edge: a(e),
         ))
     layout.addLayout(edge_row)
 
@@ -212,5 +221,5 @@ def _add_daylight_switch(layout: QVBoxLayout, settings, setters, tr) -> None:
     checkbox = QCheckBox(tr("Daylight - Night"))
     checkbox.setChecked(settings.daylight)
     checkbox.setEnabled(settings.pointer in constants.DAYLIGHT_SWITCH_POINTERS)
-    checkbox.toggled.connect(lambda value: setters["daylight"](value))
+    checkbox.toggled.connect(setters["daylight"])   # BOUND NOW
     layout.addWidget(checkbox)

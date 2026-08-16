@@ -401,6 +401,9 @@ def number_row(
     from PySide6.QtWidgets import QHBoxLayout, QLabel, QSlider
 
     steps = 10 ** decimals
+    # BOUND NOW, not at release time: a lookup deferred into a lambda is
+    # a lookup the per-section Reset never records (see section_reset.py).
+    apply_value = setters[key]
     value = getattr(settings, key)
     slider = QSlider(Qt.Orientation.Horizontal)
     slider.setRange(round(low * steps), round(high * steps))
@@ -410,7 +413,7 @@ def number_row(
         lambda v, lab=label: lab.setText(f"{v / steps:.{decimals}f}")
     )
     slider.sliderReleased.connect(
-        lambda: setters[key](
+        lambda: apply_value(
             slider.value() / steps if decimals else slider.value()
         )
     )

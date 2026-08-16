@@ -48,9 +48,37 @@ section actually own?
 - **A lookup deferred into a callback is invisible here.** The Opacity
   page grew no button on the first pass because its knobs looked their
   setter up inside the click callback, so the build never asked for the
-  key. `opacity._knob` binds it at build time now, and
-  `test_every_section_ends_with_a_reset` fails for any future section
-  that defers the same way.
+  key. `opacity._knob` binds it at build time now.
+- **THE HALF-FIX (owner bug 2026-08-16) — why the same mechanism came
+  back, which is the first thing to record.** The 2026-08-15 round
+  treated the deferred lookup as an OPACITY problem and fixed one
+  module, then guarded it with
+  `test_every_section_ends_with_a_reset` — a test that asks whether a
+  page has a BUTTON, never whether the button MOVES anything. Eight
+  other pages carried the identical shape and passed every gate. The
+  owner saw it on Size, whose Reset moved exactly one knob
+  (`numeral_outer_ring_size`, the single key that happened to be bound
+  eagerly) and left the other eight where he had dragged them. The
+  lesson is the rule now: a failure mode found in one module is a
+  failure mode of the PATTERN, and the tooth must be written against
+  the pattern, not against the module that revealed it.
+  Every affected key is now bound in its builder's body — Size (9
+  keys), Colors (umbra/aura modes, the four metal shades, five
+  saturations), Ring (finish, crown time format / scale / visibility /
+  custom text / orientation), Pointer (palette style, shape,
+  curvature, edge, daylight), Themes (face layout, subdial plate,
+  rotation group / roster / interval, archetype names), Bodies (the
+  three crossing switches), plus the two shared row helpers
+  (`numerals._choice_row`, `widgets._slider_row`).
+- **The tooth is `tests/test_section_reset.py`**, an AST check: in any
+  `app/watch_face/*.py`, a `setters[...]` subscript may not appear
+  inside a lambda or a nested function, so a deferred lookup fails the
+  suite in the session that writes it. Its allowlist holds only the
+  keys the two filters above would drop anyway, and a second test keeps
+  that allowlist honest. Where a control lives behind a branch (the
+  Ring's custom-crown editor, the Pointer's curvature rows, the Themes
+  rotation roster) the lookup sits ABOVE the branch — otherwise the
+  Reset would own the key only on the screens that happen to show it.
 - **No button when there is nothing to reset** — the same grammar as
   ballot verdict 8A: a control with nothing to offer is absent, not
   greyed.
