@@ -3408,6 +3408,17 @@ class WatchController(QObject):
             "art_source": wrap(
                 lambda v: self._set_display_choice("art_source", v)
             ),
+            # THE DEAD PILL (owner crash 2026-08-16): the Themes page's
+            # "Subdial plate" row asked for this key and it was never
+            # here, so clicking either pill raised KeyError — invisibly,
+            # because the lookup sat inside the click callback and only
+            # fired if somebody clicked. Binding it at build time turned
+            # that latent crash into a window that would not open, which
+            # is how it was finally seen. Tooth:
+            # tests/test_watch_face.py::test_every_page_key_has_a_setter.
+            "subdial_style": wrap(
+                lambda v: self._set_display_choice("subdial_style", v)
+            ),
             "subdial_set": wrap(
                 lambda v: self._set_display_choice("subdial_set", v)
             ),

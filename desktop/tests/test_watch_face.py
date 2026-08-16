@@ -578,3 +578,41 @@ def test_the_controller_wrapper_reports_the_real_setter_signature(app):
     assert len(
         inspect.signature(wrap(lambda a, b, c: None)).parameters
     ) == 3
+
+
+def _real_controller_setters(settings: Settings) -> dict:
+    """The mapping the LIVE controller hands the Watch Face window,
+    obtained without booting a controller: `_watch_face_setters` reads
+    nothing off `self` at construction time — every `self._set_*` sits
+    inside a lambda — so an unbound call with a stand-in `self` returns
+    the real dict, real keys and all. Only the three DATA PROVIDERS are
+    swapped for the fakes above, because those ARE called during a
+    build and a stand-in would hand the builders nonsense."""
+    from app.controller import WatchController
+
+    setters = WatchController._watch_face_setters(mock.MagicMock())
+    setters["slot_descriptors"] = lambda: fake_descriptors(settings)
+    setters["opacity_skin_defaults"] = fake_opacity_defaults
+    setters["ring_has_crown_text"] = lambda: True
+    return setters
+
+
+def test_every_page_builds_against_the_real_controller_setters(app):
+    """THE KEY THAT WAS NEVER THERE (owner crash 2026-08-16).
+
+    Every other test in this file stubs the setters as a `defaultdict`,
+    which answers ANY key — so a page could ask for a setter the
+    controller never registered and the whole suite stayed green. The
+    Themes page did exactly that with `subdial_style`: the lookup sat
+    inside the click callback, so it raised only if somebody clicked
+    that pill, and the pill had been dead for as long as it had existed.
+    Moving the lookup to build time (so the per-section Reset could see
+    the key) turned that latent crash into a Watch Face that would not
+    open at all.
+
+    So this test builds all nine pages against the mapping the REAL
+    controller returns. A page that asks for a key the controller does
+    not register fails here, at build, with the key's own name."""
+    settings = Settings()
+    dialog = WatchFaceDialog(settings, _real_controller_setters(settings))
+    assert dialog.findChildren(QWidget)
