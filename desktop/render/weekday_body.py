@@ -13,6 +13,7 @@ from core import continents
 from render.context import RenderContext
 from render.painting import draw_name_label, draw_pixmap_centered, name_label_px
 from render.skin_geometry import center_duality, servant_seat_angle, visible_occupant, weekday_slots
+from render.body_disc import disc_match_scale
 from render.slot_layout import servant_holds_the_seat, weekday_body_size
 
 
@@ -126,8 +127,16 @@ def draw_weekday_body(
     if asset is not None:
         # The theme's metal (owner 2026-07-12): the hue-selective swap
         # turns only the bronze details gold/silver; None = as drawn.
+        # THE DISC IS THE MEASURE, THE SHINE IS EXTRA (owner order
+        # 2026-08-16): a listed plate is stamped by its own filled disc
+        # instead of its frame, so the eclipsed Sun's black disc lands at
+        # the roundel's diameter and its corona overhangs — 1.0, and
+        # therefore pixel-identical, for every other body
+        # (`render.body_disc`). The LABEL keeps the roundel's size, since
+        # it belongs to the seat and not to the picture's glory.
         draw_pixmap_centered(
-            painter, ctx, asset, pos, size, metal=spec.metal,
+            painter, ctx, asset, pos, size * disc_match_scale(asset),
+            metal=spec.metal,
         )
     else:
         painter.setPen(Qt.PenStyle.NoPen)

@@ -461,6 +461,29 @@ SLOT_SEAT_OUTWARD = {"cross": 1.12, "octa": 1.12, "rose": 1.12}
 # pointer (Trinity/Prism/Seasons/Compass all inherit the same position).
 WEEKDAY_ROMB_CENTER_OF_TIP = 0.5
 
+# THE DISC IS THE MEASURE, THE SHINE IS EXTRA (owner order 2026-08-16).
+# A weekday plate is stamped to `weekday_body_size` — which sizes the
+# WHOLE PICTURE, so a plate that spends half its frame on glory draws a
+# body half the size of its neighbours. His eclipsed Sun is exactly that:
+# a small black disc inside a wide corona, sitting between a full-frame
+# Moon and a full-frame Jupiter. His ruling: the DISC takes the roundel's
+# dimensions and the shine goes over the top, free to reach across the
+# neighbouring sectors and the hands ("sme").
+#
+# So a listed plate is stamped by its FILLED DISC instead of its frame:
+# `render.body_disc` measures the largest solid disc of opaque pixels
+# once per file, and the stamp grows by REFERENCE / measured.
+#
+# It is a LIST, not a rule for every body, and deliberately so — an
+# ordinary body already fills its frame (Moon 0.99, Sun 0.96), so
+# matching them all would resize the whole instrument to fix one plate,
+# and the planet SIGNS (a thin glyph in a wide frame, 0.26) would blow up
+# fourfold. Prefix-matched on the file stem, so the whole Sun_Eclipse
+# family — photo, art, gem, gpt — is covered by the one entry.
+BODY_DISC_MATCH_PREFIXES = ("Sun_Eclipse",)
+BODY_DISC_REFERENCE_FILL = 0.975         # what an ordinary body plate fills
+BODY_DISC_MATCH_MAX = 1.8                # never grow a stamp further
+
 SUBDIAL_SHADOW_OFFSET_FRACTION = 0.05    # of the subdial diameter
 SUBDIAL_SHADOW_SPREAD = 1.04             # shadow radius vs the plate's
 

@@ -9,6 +9,7 @@ from render.context import Cadence, Layer, RenderContext
 from render.ninths import active_thirteenth, center_face, ninth_alt_active, theme_ninth, thirteenth_plate
 from render.painting import draw_name_label, draw_pixmap_centered, name_label_px
 from render.skin_geometry import center_duality, hover_factor
+from render.body_disc import disc_match_scale
 from render.slot_layout import center_dual_face, weekday_body_size, weekday_classic_slot
 from render.weekday_body import (
     draw_body_label, draw_weekday_body, weekday_label_set_px,
@@ -117,8 +118,16 @@ class CenterBodyLayer(Layer):
                     _ninth_name, asset = ninth
                 painter.save()
                 painter.setOpacity(1.0)
+                # THE DISC IS THE MEASURE, THE SHINE IS EXTRA (owner
+                # order 2026-08-16) — the CENTRE seat's own half of the
+                # rule, and the seat his eclipsed Sun actually sits in
+                # (`render.body_disc`; 1.0 for every unlisted plate, so
+                # every other face is pixel-identical). The label below
+                # keeps the roundel's size: it belongs to the seat, not
+                # to the picture's glory.
                 draw_pixmap_centered(
-                    painter, ctx, asset, QPointF(0, 0), center_size,
+                    painter, ctx, asset, QPointF(0, 0),
+                    center_size * disc_match_scale(asset),
                     metal=spec.metal,
                 )
                 if names_on:
