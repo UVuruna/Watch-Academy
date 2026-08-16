@@ -12,6 +12,7 @@ of guesswork.
 ## Connections
 
 ### Uses
+- [Rebuild](../../__about/rebuild.md) — `clear_layout`, the ONE door a live rebuild throws widgets away through: `hide()` BEFORE `setParent(None)`, because an orphan QWidget IS a top-level window and a visible one flashes open at the centre of the screen (owner bug 2026-08-15, reported again 2026-08-16). This module's private `_clear` was a byte-identical twin of another and is now an alias for the shared one.
 - [Asset Variants](../../../render/__about/asset_variants.md) — `scaled_variant_file`, the pre-warmed downscale a card icon decodes from
 
 ### Used by

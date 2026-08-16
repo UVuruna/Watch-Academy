@@ -18,6 +18,7 @@ from PySide6.QtWidgets import (
     QStackedWidget, QStyle, QVBoxLayout, QWidget,
 )
 
+from app import rebuild
 from app.theme import apply_theme, size_to_screen
 from app.watch_face import (
     bodies, colors, numerals, opacity, pointer, ring, size, themes,
@@ -144,12 +145,17 @@ class WatchFaceDialog(QDialog):
         # scratch, and a fresh `QListWidget` always opens at row 0.
         previous = self._nav_list.currentRow() if self._nav_list is not None else 0
         scrolls = self._capture_scrolls()
-        while self._body.count():
-            item = self._body.takeAt(0)
-            widget = item.widget()
-            if widget is not None:
-                widget.setParent(None)
-                widget.deleteLater()
+        # THE OTHER HALF OF THE SAME LAW (owner bug 2026-08-15, reported
+        # AGAIN 2026-08-16 because only the half below was fixed): the
+        # OLD sidebar and stack are VISIBLE when this loop reaches them,
+        # and a visible child handed `setParent(None)` stops being a
+        # child and becomes a real top-level window at the default
+        # screen-centre spot — with its full old contents — until
+        # `deleteLater` is reached a repaint later. Measured with the
+        # same global Show/PlatformSurface spy that found the half
+        # below: `Show QListWidget parent=None items=['Pointer','Ring',
+        # 'Numerals',…]`, and silent once `rebuild.discard` hides first.
+        rebuild.clear_layout(self._body)
         # PARENTED AT CONSTRUCTION, never adopted later (owner bug
         # 2026-08-15, "FLASH sa otvaranjem nekog prozora u sredini"):
         # a parentless QWidget IS a top-level window. Built bare, this

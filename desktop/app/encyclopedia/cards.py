@@ -28,6 +28,7 @@ from PySide6.QtCore import QRect, QSize, Qt, Signal
 from PySide6.QtGui import QColor, QPainter, QPixmap
 from PySide6.QtWidgets import QFrame, QHBoxLayout, QLabel, QVBoxLayout, QWidget
 
+from app import rebuild
 from config import encyclopedia_ui, palette, paths
 from render.asset_variants import scaled_variant_file
 
@@ -293,17 +294,14 @@ class CardGrid(QWidget):
     def set_cards(self, specs: list[dict]) -> None:
         """Rebuild the grid from `specs` — one dict per card with
         `key`, `title`, `about`, `plate`, `footer`, `accent`."""
-        while self._column.count():
-            item = self._column.takeAt(0)
-            layout = item.layout()
-            if layout is not None:
-                while layout.count():
-                    child = layout.takeAt(0).widget()
-                    if child is not None:
-                        child.setParent(None)
-                layout.setParent(None)
-            elif item.widget() is not None:
-                item.widget().setParent(None)
+        # ONE DOOR (owner bug 2026-08-16). This teardown was the worst of
+        # the seven: it unparented every card and every row WITHOUT a
+        # `deleteLater`, so each orphan — and an orphan QWidget IS a
+        # top-level window — stayed alive, and on screen, until Python's
+        # garbage collector happened to reach it. `rebuild.clear_layout`
+        # hides before unparenting (no window can ever exist) and hands
+        # destruction to the event loop instead of to chance.
+        rebuild.clear_layout(self._column)
         self._cards = []
         for start in range(0, len(specs), self._columns):
             row = QHBoxLayout()

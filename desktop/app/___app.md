@@ -18,6 +18,7 @@ their outputs through the render compositor.
 | `settings_ring.py` | Standard | ring-name resolution + custom-ring-card normalization, split out of `settings_store.py` (THE STRUCTURE LAW) — [about](__about/settings_ring.md) |
 | `settings_fields.py` | Standard | the per-field validators + stored-data migrations, split out of `settings_store.py` (THE STRUCTURE LAW) — [about](__about/settings_fields.md) |
 | `time_travel.py` | Algorithmic | the scenario-tester dialog + its Quick Jump rows — [about](__about/time_travel.md) · [flow](__flow/time_travel.md) |
+| `rebuild.py` | Standard | the ONE door a live rebuild throws a widget away through — `hide()` before `setParent(None)`, because an orphan QWidget IS a top-level window (owner bug 2026-08-15/16) — [about](__about/rebuild.md) |
 | `slot_descriptor.py` | Standard | the shared `SlotDescriptor` dataclass the controller builds and the Watch Face window reads — [about](__about/slot_descriptor.md) |
 | `weekday_theme_grid.py` | Algorithmic | the shared image+name gallery builders (the weekday-body gallery, the Calendar mount gallery) the Watch Face window uses — [about](__about/weekday_theme_grid.md) · [flow](__flow/weekday_theme_grid.md) |
 | `legend_popup.py` | Algorithmic | the scrollable hover window replacing QToolTip — [about](__about/legend_popup.md) · [flow](__flow/legend_popup.md) |

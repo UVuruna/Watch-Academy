@@ -23,6 +23,7 @@ button, which only knew how to do this for exactly four themes.
 ## Connections
 
 ### Uses
+- [Rebuild](../../__about/rebuild.md) — `clear_layout`, the ONE door a live rebuild throws widgets away through: `hide()` BEFORE `setParent(None)`, because an orphan QWidget IS a top-level window and a visible one flashes open at the centre of the screen (owner bug 2026-08-15, reported again 2026-08-16). This module's private `_clear` was a byte-identical twin of another and is now an alias for the shared one.
 - [Text Resolution](text.md) — `article_text`, `entry_name`, `flow_html`, `image_tooltip`
 - [Topic Tree](tree.md) — `switch_variant`, the pure offset law
 - [Asset Recolor](../../../render/__about/asset_recolor.md) — `ensure_variant`, `variant_pending`

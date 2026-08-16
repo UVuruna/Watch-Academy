@@ -14,6 +14,7 @@ Slots, Colors, Opacity) that simply read "Arrives in a later phase".
 ## Connections
 
 ### Uses
+- [Rebuild](../../__about/rebuild.md) — `clear_layout`/`discard`, the ONE door a live rebuild throws widgets away through: `hide()` BEFORE `setParent(None)`, because an orphan QWidget IS a top-level window and a visible one flashes open at the centre of the screen (owner bug 2026-08-15, reported again 2026-08-16 because only half of it was fixed the first time)
 - [Theme](../../__about/theme.md) — `apply_theme`, `size_to_screen`
 - `app.watch_face.pointer` / `.ring` / `.hands` / `.umbra_aura` / `.size`
   — one builder module per real section

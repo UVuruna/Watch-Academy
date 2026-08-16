@@ -10,6 +10,7 @@ from PySide6.QtWidgets import (
     QGridLayout, QHBoxLayout, QLabel, QPushButton, QVBoxLayout, QWidget,
 )
 
+from app import rebuild
 from app.watch_face import thumbs
 from app.watch_face.controls import picture_group
 from app.watch_face.widgets import flow_row, pill
@@ -71,22 +72,11 @@ def reset_navigation() -> None:
     _nav = _Nav()
 
 
-def _clear(layout) -> None:
-    while layout.count():
-        item = layout.takeAt(0)
-        widget = item.widget()
-        if widget is not None:
-            # UNPARENT, then delete. `deleteLater` alone leaves the
-            # widget a visible child of the page until the event loop
-            # gets around to it, and a widget no layout owns keeps its
-            # old geometry — so the rebuilt rows were painted ON TOP of
-            # the ones they replaced (caught on the live-profile audit
-            # shot, 2026-08-14; it only became visible once the rows
-            # were widgets rather than nested layouts).
-            widget.setParent(None)
-            widget.deleteLater()
-        elif item.layout() is not None:
-            _clear(item.layout())
+# ONE DOOR, not a private twin: this helper stood here and in
+# `theme_tree.py` byte for byte, and both spelled a teardown that made a
+# top-level window flash open mid-screen. The rule and the measurement
+# live in `app.rebuild` — hide BEFORE unparenting.
+_clear = rebuild.clear_layout
 
 
 def build(active, full_face: bool, pointer: str, pointer_shape: str, tr) -> QWidget:

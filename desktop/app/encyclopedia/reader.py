@@ -37,6 +37,7 @@ from PySide6.QtWidgets import (
     QWidget,
 )
 
+from app import rebuild
 from app.encyclopedia import tree as topic_tree
 from app.encyclopedia.text import article_text, entry_name, flow_html, image_tooltip
 from app.ui_style import style_button, style_look_chip, uniform_width
@@ -499,12 +500,10 @@ class ReaderScreen(QWidget):
             return
         old = container.layout()
         if old is not None:
-            while old.count():
-                item = old.takeAt(0)
-                widget = item.widget()
-                if widget is not None:
-                    widget.setParent(None)
-                    widget.deleteLater()
+            # ONE DOOR (owner bug 2026-08-16) — hide before unparenting,
+            # or every cell is a top-level window for the repaint it
+            # takes `deleteLater` to arrive. See `app.rebuild`.
+            rebuild.clear_layout(old)
             QWidget().setLayout(old)     # detach so a fresh grid can bind
         grid = QGridLayout(container)
         grid.setContentsMargins(0, 0, 0, 0)
