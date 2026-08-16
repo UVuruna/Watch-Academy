@@ -180,14 +180,26 @@ def arc_seat_deg(theta: float, centre: float, offset_deg: float) -> float:
     return (theta + offset_deg) % 360.0
 
 
-def arc_seats(angles, offset_deg: float) -> tuple[float, ...]:
+def arc_seats(angles, offset_deg: float, centre_deg: float | None = None):
     """A whole arc's glyph seats after the world offset, reading order
-    preserved — the centre is the run's own (`arc_centre_deg`), so every
-    glyph of one arc is mapped by the SAME reflection."""
+    preserved — every glyph of one arc is mapped by the SAME reflection.
+
+    `centre_deg` names that reflection's axis explicitly. Pass it
+    whenever the glyphs handed in are a SUBSET of the run the arc was
+    laid out from, because the centre derived from a subset is not the
+    arc's centre — and a reflection about the wrong axis moves every
+    glyph by twice the error (owner defect 2026-08-16: the Dollar's
+    night crown drew its letters through the DRAWN glyphs only, spaces
+    dropped, which put MUNDORUM's own centre 1.41 deg off and its M
+    2.8 deg past the M jewel it is pinned to — his "M from the ring and
+    M from MUNDORUM do not line up nicely", visible against a DAY arc
+    that lands perfectly because a zero offset makes the reflection the
+    identity). Omitted, the run is taken to be whole and the centre is
+    its own (`arc_centre_deg`)."""
     seats = tuple(angles)
     if not seats:
         return ()
-    centre = arc_centre_deg(seats)
+    centre = arc_centre_deg(seats) if centre_deg is None else centre_deg
     return tuple(arc_seat_deg(seat, centre, offset_deg) for seat in seats)
 
 

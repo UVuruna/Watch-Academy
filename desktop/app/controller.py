@@ -78,6 +78,7 @@ from core.deep_time import (
     shift_calendar,
 )
 from core.crown_text import free_arc_angles
+from core.world import arc_centre_deg
 from core.moon import chinese_name_of_year
 from data.deep_time import shared_deep_time
 from data.hands import HAND_NAMES, hand_packs
@@ -167,7 +168,7 @@ def watch_title(
     pointer's own wheel-pair (`constants.POINTER_PALETTE_LABELS`), read
     by the ACTIVE `palette_style` — the SAME table the Design menu's
     pair labels translate from (Rule #5, one source)."""
-    location = settings.city_name if location_name is None else location_name
+    location = settings.place.name if location_name is None else location_name
     if not full:
         return location
     labels = constants.POINTER_PALETTE_LABELS.get(
@@ -188,7 +189,7 @@ def watch_title(
 def _location_flash_text(name: str, path: tuple = (), timezone: str = "") -> str:
     """R-30: "CITY, COUNTRY" for the location-change flash. COUNTRY is
     `path[2]` when a full picked-city path is known (`data.locations.
-    CityRecord.path` is always (continent, subregion, country[, admin],
+    Place.path` is always (continent, subregion, country[, admin],
     city) — a Settings dialog preset pick carries it). A Quick Jump
     city stores only name/lat/lon/timezone (no path) and a hand-tuned
     coordinate has no picked path either — COUNTRY is genuinely
@@ -619,6 +620,17 @@ def _crown_arc_glyphs(entries) -> tuple:
                 for char, angle in zip(entry["text"], entry["angles"])
                 if char != " "
             ),
+            # THE ARC'S OWN CENTRE (owner defect 2026-08-16 — "M from the
+            # ring and M from MUNDORUM do not line up nicely"): solved
+            # from the WHOLE run, spaces included, because that is the
+            # arc the pins were laid out across. The glyph list above
+            # DROPS the spaces, and MUNDORUM ORDO NUMEN's two do not sit
+            # symmetrically in it, so a centre re-derived from the drawn
+            # glyphs stood 1.41 deg off — and THE ARC READING LAW's
+            # reflection about the wrong axis moved every letter by
+            # TWICE that, carrying the M 2.8 deg past its own jewel.
+            # Solved ONCE here, never re-derived at paint time.
+            "centre": arc_centre_deg(entry["angles"]),
             # Per-WORD hover geometry (WORD-HOVER round, owner
             # 2026-07-27): each word's angular center/half-span plus
             # the seat whose legend it answers with — solved once here,
@@ -1152,7 +1164,7 @@ class WatchController(QObject):
         # when a simulation ends. Never re-derived from `self._settings`
         # directly, so a running simulation (which never touches the
         # home Settings) does not leave the title frozen on the old city.
-        self._active_location_name = self._settings.city_name
+        self._active_location_name = self._settings.place.name
         # THE LOCATION CROWN's own text (RING VERDICTS round, owner
         # decree 2026-08-05): "CITY, COUNTRY", resolved through the SAME
         # `_location_flash_text` formatter R-30's flash uses (Rule #5 —
@@ -1162,8 +1174,8 @@ class WatchController(QObject):
         # always sees the CURRENT active place, never the home city
         # frozen mid-simulation.
         self._active_location_display = _location_flash_text(
-            self._settings.city_name, self._settings.city_path,
-            self._settings.timezone,
+            self._settings.place.name, self._settings.place.path,
+            self._settings.place.timezone,
         )
         #: Set by `discard()` (Remove Watch). A discarded watch is DEAD:
         #: its settings file has just been deleted by the manager, so it
@@ -1259,9 +1271,10 @@ class WatchController(QObject):
             )
             raise SystemExit(1) from error
 
-        self._tz = ZoneInfo(self._settings.timezone)
+        self._tz = ZoneInfo(self._settings.place.timezone)
         self._observer = astral.Observer(
-            latitude=self._settings.latitude, longitude=self._settings.longitude
+            latitude=self._settings.place.latitude,
+            longitude=self._settings.place.longitude,
         )
         # DEEP TIME (Session 16): the pack detected once above (the ONE
         # resolution point) is injected into both repositories; present
@@ -2250,7 +2263,7 @@ class WatchController(QObject):
                 icon_key=self._LOCATION_FLASH_ICONS["greenwich"],
             )
         else:                               # "city" — the user's own place
-            self._flash_location(city["name"], (), city["timezone"])
+            self._flash_location(city.name, city.path, city.timezone)
 
     def _step_fast_travel(self, direction: int) -> None:
         """Ctrl+minus/Ctrl+plus: one step past (`direction=-1`)/future
@@ -2293,7 +2306,7 @@ class WatchController(QObject):
         city = cities[self._jump_city_index % count]
         self._jump_city_index = (self._jump_city_index + direction) % count
         moment, observer, cycles = self._active_simulation_or_now()
-        self._apply_jump(moment, observer, cycles, "city", dict(city))
+        self._apply_jump(moment, observer, cycles, "city", city)
 
     def _cycle_slots(self) -> None:
         """Ctrl+N: the number of visible Slots, 0 → 1 → 2 → 3 → 0 (the
@@ -3812,25 +3825,29 @@ class WatchController(QObject):
         the SAME dialog navigated to a different section (Rule #5: one
         apply path, however the dialog was reached)."""
         new_settings = dialog.result_settings()
-        location_changed = (
-            new_settings.latitude,
-            new_settings.longitude,
-            new_settings.timezone,
-        ) != (self._settings.latitude, self._settings.longitude, self._settings.timezone)
+        # ONE comparison of ONE object (owner decree 2026-08-16): a
+        # location either changed or it did not, and asking three
+        # separate fields whether they moved is how the parts drifted
+        # apart in the first place. The NAME and the PATH count too —
+        # picking a different city at the same coordinates (a renamed
+        # record, a Quick Jump city applied as home) is a real change
+        # the crown must follow.
+        location_changed = new_settings.place != self._settings.place
         language_changed = new_settings.language != self._settings.language
         self._settings = new_settings
         if language_changed:
             self._apply_language(start_missing=True)
         if location_changed:
-            self._tz = ZoneInfo(new_settings.timezone)
+            self._tz = ZoneInfo(new_settings.place.timezone)
             self._observer = astral.Observer(
-                latitude=new_settings.latitude, longitude=new_settings.longitude
+                latitude=new_settings.place.latitude,
+                longitude=new_settings.place.longitude,
             )
             self._day = None                # full rebuild for the new place
             self._flash_location(          # R-30: the Settings preset pick
-                new_settings.city_name,
-                new_settings.city_path,
-                new_settings.timezone,
+                new_settings.place.name,
+                new_settings.place.path,
+                new_settings.place.timezone,
             )
         # Rebuild from DEFAULT_SKIN so cleared overrides (back to "skin
         # default") actually clear instead of sticking.
@@ -4008,8 +4025,8 @@ class WatchController(QObject):
         # text, the tray title and the skin in one call, which is exactly
         # what this method used to open-code.
         self._flash_location(
-            self._settings.city_name, self._settings.city_path,
-            self._settings.timezone,
+            self._settings.place.name, self._settings.place.path,
+            self._settings.place.timezone,
         )
         self._on_tick(clock_jumped=False)
 
@@ -4222,9 +4239,9 @@ class WatchController(QObject):
             moment = base_moment.astimezone(timezone.utc)
         elif kind == "city":                # the user's own place (slika 12)
             observer = astral.Observer(
-                latitude=city["latitude"], longitude=city["longitude"]
+                latitude=city.latitude, longitude=city.longitude
             )
-            moment = base_moment.astimezone(ZoneInfo(city["timezone"]))
+            moment = base_moment.astimezone(ZoneInfo(city.timezone))
         else:                               # greenwich — the REAL place
             observer = astral.Observer(
                 latitude=defaults.GREENWICH_LATITUDE,

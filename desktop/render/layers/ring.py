@@ -405,10 +405,20 @@ class RingLayer(Layer):
             + [(entry, True) for entry in night_texts]
         ):
             glyphs = crown_entry["glyphs"]
+            # THE ARC'S OWN CENTRE (owner defect 2026-08-16 — "M from the
+            # ring and M from MUNDORUM do not line up nicely"): the axis
+            # comes from the WHOLE run the arc was laid out from,
+            # `crown_entry["angles"]`, never from the drawn glyphs. The
+            # glyph list DROPS SPACES, and MUNDORUM ORDO NUMEN's two
+            # spaces do not sit symmetrically in it, so the subset's
+            # centre stood 1.41 deg off the arc's — and a reflection
+            # about the wrong axis moves every letter by TWICE that,
+            # carrying the M 2.8 deg past the jewel it is pinned to. The
+            # DAY arcs never showed it: at offset 0 the reflection is the
+            # identity, which is exactly why his day screenshot lines up
+            # and his night one does not.
+            centre = crown_entry["centre"]
             if night_texts:
-                centre = world.arc_centre_deg(
-                    [theta for _asset, theta in glyphs]
-                )
                 if world.arc_crosses_horizon(centre, offset) != crossed_draws:
                     continue
             # THE ARC READING LAW (core.world.arc_seats, ledger §1
@@ -424,7 +434,7 @@ class RingLayer(Layer):
             # the reflection the identity, so the motto reads exactly as
             # it does on an unturned dial.
             seats = world.arc_seats(
-                [theta for _asset, theta in glyphs], offset,
+                [theta for _asset, theta in glyphs], offset, centre,
             )
             for (gold_asset, _theta), seat in zip(glyphs, seats):
                 self._draw_ring_glyph(
