@@ -95,6 +95,8 @@ ECLIPSE_BODY_MOON_ART = (
 # Owner-approved preset; values taken verbatim from world_locations.json.
 DEFAULT_CITY = {
     "name": "Belgrade",
+    # Its own world_locations.json path — a WHOLE `data.locations.Place`.
+    "path": ("Europe", "Southern Europe", "Serbia", "Grad Beograd", "Belgrade"),
     "latitude": 44.82,
     "longitude": 20.46,
     "timezone": "Europe/Belgrade",

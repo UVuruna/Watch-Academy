@@ -12,18 +12,18 @@ import json
 import os
 from dataclasses import dataclass, field
 from pathlib import Path
-from zoneinfo import ZoneInfo
 
 from app.settings_fields import (
     _HEX_COLOR, MERGED_MOUNTS, RETIRED_SLOT_MODES, RETIRED_SLOTS,
     load_alpha, load_bool, load_choice,
     load_earth_label, load_hex, load_moving_bodies, load_numerals, load_palettes,
-    load_rotation_group, load_scale, load_world_mode, migrate_palette_key,
-    normalized_jump_city,
+    jump_place, load_place, load_rotation_group, load_scale, load_world_mode,
+    migrate_palette_key, place_json,
     save_moving_bodies, save_numerals,
 )
 from app.settings_ring import fold_ring_name, load_named_dict, normalized_ring_card
 from config import calendar_mounts, constants, defaults, dial, pantheon
+from data.locations import Place, default_place
 from data.rings import ring_presets
 
 
@@ -288,16 +288,18 @@ class Settings:
     show_era_suffix: bool = False
     third_era: str = "none"
     # QUICK JUMP CITIES (owner slika 12): the user's own places in the
-    # Quick Jump ▸ Location submenu — tuples of {name, latitude,
-    # longitude, timezone} picked from the location database in
-    # Settings; a jump moves the OBSERVER there, the moment stays.
-    jump_cities: tuple = ()
-    # Location (M6 picker; defaults = the Belgrade preset).
-    city_name: str = defaults.DEFAULT_CITY["name"]
-    city_path: tuple[str, ...] = ()     # picker combo restore; () = never picked
-    latitude: float = defaults.DEFAULT_CITY["latitude"]
-    longitude: float = defaults.DEFAULT_CITY["longitude"]
-    timezone: str = defaults.DEFAULT_CITY["timezone"]
+    # Quick Jump ▸ Location submenu, each a whole `Place` picked from
+    # the location database in Settings; a jump moves the OBSERVER
+    # there, the moment stays.
+    jump_cities: tuple[Place, ...] = ()
+    # WHERE THIS WATCH IS — ONE field, one object (owner decree
+    # 2026-08-16). This was five loose fields (city_name, city_path,
+    # latitude, longitude, timezone) until "BELGRADE BURUNDI" proved
+    # that five fields nothing holds together can drift apart; the full
+    # account is in `data.locations.Place`. A watch has exactly one
+    # place, two watches are two objects, and Quick Jump REPLACES this
+    # object rather than editing parts of it.
+    place: Place = field(default_factory=default_place)
     # Element size multipliers + the shared hover-enlarge factor
     # (owner EXTRAS): 1.0 = the skin's own size; hovering an element
     # draws it hover_enlarge times larger (1.0 disables the effect).
@@ -480,9 +482,17 @@ class SettingsStore:
                 normalized_ring_card(entry)
                 for entry in raw.get("custom_rings", ())
             )
+            # A Quick Jump city is a PLACE like any other (owner decree
+            # 2026-08-16) — same door, same wholeness rule. Older files
+            # stored these without a path; `place_from_mapping` accepts
+            # that (empty path, the crown falls back to the zone region)
+            # while still refusing a path belonging to another city.
+            # A hand-edited coordinate or zone still fails LOUDLY here
+            # rather than inside a jump, which is why this one raises
+            # where the home location repairs: the home location's
+            # incoherence was OUR bug, a broken jump entry is not.
             jump_cities = tuple(
-                normalized_jump_city(entry)
-                for entry in raw.get("jump_cities", ())
+                jump_place(entry) for entry in raw.get("jump_cities", ())
             )
             by_fold = {
                 name.lower(): name for name in ring_presets(custom_rings)
@@ -619,24 +629,7 @@ class SettingsStore:
                 if value not in allowed:
                     raise ValueError(f"{key} {value!r} unknown")
                 choices[key] = value
-            location = raw.get("location", {})
-            latitude = float(location.get("latitude", defaults.DEFAULT_CITY["latitude"]))
-            longitude = float(
-                location.get("longitude", defaults.DEFAULT_CITY["longitude"])
-            )
-            if not constants.LATITUDE_RANGE[0] <= latitude <= constants.LATITUDE_RANGE[1]:
-                raise ValueError(f"latitude {latitude} outside allowed range")
-            if (
-                not constants.LONGITUDE_RANGE[0]
-                <= longitude
-                <= constants.LONGITUDE_RANGE[1]
-            ):
-                raise ValueError(f"longitude {longitude} outside allowed range")
-            timezone = str(location.get("timezone", defaults.DEFAULT_CITY["timezone"]))
-            try:
-                ZoneInfo(timezone)
-            except Exception as exc:
-                raise ValueError(f"timezone {timezone!r} unknown: {exc}") from exc
+            place = load_place(raw)
             loaded = Settings(
                 schema_version=int(raw["schema_version"]),
                 window_x=None if window["x"] is None else int(window["x"]),
@@ -732,11 +725,7 @@ class SettingsStore:
                 theme_metal_follow_ring=load_bool(
                     raw, "theme_metal_follow_ring", False
                 ),
-                city_name=str(location.get("name", defaults.DEFAULT_CITY["name"])),
-                city_path=tuple(location.get("path", ())),
-                latitude=latitude,
-                longitude=longitude,
-                timezone=timezone,
+                place=place,
                 ring=ring,
                 custom_rings=custom_rings,
                 ring_eye_shine=ring_eye_shine,
@@ -921,14 +910,11 @@ class SettingsStore:
             "era_notation": settings.era_notation,
             "show_era_suffix": settings.show_era_suffix,
             "third_era": settings.third_era,
-            "jump_cities": [dict(city) for city in settings.jump_cities],
-            "location": {
-                "name": settings.city_name,
-                "path": list(settings.city_path),
-                "latitude": settings.latitude,
-                "longitude": settings.longitude,
-                "timezone": settings.timezone,
-            },
+            # One place in, one place out — the file format is unchanged
+            # (same five keys), it is only no longer possible to write
+            # five keys that disagree with each other.
+            "jump_cities": [place_json(city) for city in settings.jump_cities],
+            "location": place_json(settings.place),
             "earth_scale": settings.earth_scale,
             "moon_scale": settings.moon_scale,
             "slot_scale": settings.slot_scale,

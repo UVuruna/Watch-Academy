@@ -50,8 +50,9 @@ Settings (frozen dataclass)
     language
     era_notation, show_era_suffix, third_era
   Location
-    city_name, city_path, latitude, longitude, timezone
-    jump_cities                  tuple of {name, latitude, longitude, timezone}
+    place                        ONE Place (path, name, latitude,
+                                 longitude, timezone) — never five fields
+    jump_cities                  tuple of Place
   Sizing
     moon_scale, slot_scale, ring_jewels_scale, hover_enlarge
   Saturation / opacity

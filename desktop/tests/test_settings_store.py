@@ -5,8 +5,11 @@ import json
 
 import pytest
 
+import dataclasses
+
 from app.settings_store import Settings, SettingsCorruptError, SettingsStore, replace
 from config import calendar_mounts, constants, paths
+from data.locations import default_place, shared_locations
 
 
 @pytest.fixture
@@ -36,11 +39,13 @@ def test_multi_watch_settings_round_trip_independently(tmp_path, monkeypatch):
     monkeypatch.setenv("APPDATA", str(tmp_path))
     store1 = SettingsStore(paths.settings_path(1))
     store2 = SettingsStore(paths.settings_path(2))
-    store1.save(replace(Settings(), city_name="Belgrade", diameter=360))
-    store2.save(replace(Settings(), city_name="Tromso", diameter=480))
-    assert store1.load().city_name == "Belgrade"
+    belgrade = default_place()
+    tromso = dataclasses.replace(default_place(), name="Tromso")
+    store1.save(replace(Settings(), place=belgrade, diameter=360))
+    store2.save(replace(Settings(), place=tromso, diameter=480))
+    assert store1.load().place.name == "Belgrade"
     assert store1.load().diameter == 360
-    assert store2.load().city_name == "Tromso"
+    assert store2.load().place.name == "Tromso"
     assert store2.load().diameter == 480
 
 
@@ -697,10 +702,7 @@ def test_year_line_and_jump_cities_round_trip(store):
         show_era_suffix=True,
         third_era="hebrew",
         jump_cities=(
-            {
-                "name": "Tromso", "latitude": 69.6489,
-                "longitude": 18.9551, "timezone": "Europe/Oslo",
-            },
+            shared_locations().find_city("Tromso")[0],
         ),
     )
     store.save(saved)
@@ -784,11 +786,7 @@ def test_string_boolean_is_corrupt(store):
 def test_location_and_overrides_round_trip(store):
     saved = replace(
         Settings(),
-        city_name="Tromso",
-        city_path=("Europe", "Northern Europe", "Norway", "Troms", "Tromso"),
-        latitude=69.6489,
-        longitude=18.9551,
-        timezone="Europe/Oslo",
+        place=shared_locations().find_city("Tromso")[0],
         star_alpha=0.5,
         aura_day_alpha=0.25,
         aura_twilight_alpha=0.6,
@@ -807,6 +805,16 @@ def test_location_and_overrides_round_trip(store):
     ],
 )
 def test_bad_location_raises(store, location):
+    """A location block that is PRESENT but not a usable place — a
+    latitude of 95, an unknown zone — is a hand edit or a damaged file,
+    and it is still surfaced LOUDLY (Rule #1, no error masking).
+
+    Unchanged by the `Place` round (owner decree 2026-08-16), and the
+    line that round had to hold: the SILENT repair it introduced is for
+    a location THIS APP wrote wrong (a path naming another city — the
+    "BELGRADE BURUNDI" defect), never for one the user damaged. Quietly
+    resetting somebody's location to Belgrade because their file said
+    200 would be exactly the masking Rule #1 forbids."""
     store.path.write_text(
         '{"schema_version": 1, "window": {"x": 0, "y": 0, "diameter": 360},'
         f' "location": {location}}}',

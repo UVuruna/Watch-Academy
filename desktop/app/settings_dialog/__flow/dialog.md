@@ -48,16 +48,19 @@ Face window instead) and added the SEPARATE hidden path for Custom art.
             select nav row 0 (or initial_section's row, if named)
         size window: square at 50% of screen height,
                      width = max(content width, nav width + panel floor)
-        IF NOT custom-art-only AND settings.city_path exists:
-            restore the combo cascade to that path
-            re-seed city_name / timezone / latitude / longitude from settings
-                (the combo cascade must NOT silently win over the stored values)
+        seed self._place = settings.place            (the ONE location field)
+        IF NOT custom-art-only AND settings.place.path exists:
+            walk the combo cascade to that path      (presentation only —
+                the cascade can no longer write the place back)
+            show the place's timezone / latitude / longitude
             arm suggestion popups — only react to USER input from here on
+            connect the coordinate spin boxes LAST, so seeding them above
+                is never mistaken for a hand tune
 
     ON OK (accepted):
         result_settings():
             custom-art-only -> replace(settings, custom_rings=...) ONLY
-            ordinary -> replace(settings, city_name=..., language=..., z_mode=..., ...)
+            ordinary -> replace(settings, place=..., language=..., z_mode=..., ...)
                         every OTHER field (Watch-Face-owned) passes through
                         UNCHANGED, never read off a widget that no longer exists
         the caller (Watch Controller) applies the result

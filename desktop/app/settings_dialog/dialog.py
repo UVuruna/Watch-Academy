@@ -87,8 +87,10 @@ class SettingsDialog(
         # cannot pull it away (owner bug 2026-08-06).
         self._locations = shared_locations()
         self._locations.acquire()
-        self._timezone = settings.timezone
-        self._city_name = settings.city_name
+        # WHERE THIS WATCH IS — one field, seeded from the settings and
+        # changed only by `_apply_place`. The combo boxes below are
+        # navigation; they are never read back to build the result.
+        self._place = settings.place
         # The major-cities suggestions only appear on USER interaction
         # (owner 2026-07-12: the box popped huge on every open although
         # the location is picked once) — armed after construction.
@@ -96,7 +98,7 @@ class SettingsDialog(
 
         # QUICK JUMP CITIES (Session 16, owner slika 12): the working
         # list starts from the saved settings; the group below edits it.
-        self._jump_cities = [dict(city) for city in settings.jump_cities]
+        self._jump_cities = list(settings.jump_cities)
 
         tr = self._tr
         self._custom_art_only = initial_section == "Custom art"
@@ -237,21 +239,21 @@ class SettingsDialog(
             # The Custom-art-only page carries no Location widgets at all
             # (see above) — nothing to restore or re-seed.
             return
-        if settings.city_path:
-            self._restore_path(settings.city_path)
-        # Re-seed the ACTIVE location from the settings AFTER the combo
-        # cascade (review finding): building the combos fires _on_city
-        # with whatever city is alphabetically first, silently clobbering
-        # the real location on first run — and the user's fine-tuned
-        # lat/lng even with a stored path. The settings always win here;
-        # the combos are only navigation.
-        self._city_name = settings.city_name
-        self._timezone = settings.timezone
-        self._tz_label.setText(settings.timezone)
-        self._latitude.setValue(settings.latitude)
-        self._longitude.setValue(settings.longitude)
+        # Walk the combo boxes to where the watch IS, so the user opens
+        # the dialog looking at their own city. This is presentation
+        # only — `self._place` was seeded in __init__ and the cascade
+        # cannot touch it (`_on_city` returns until armed, below).
+        if settings.place.path:
+            self._restore_path(settings.place.path)
+        self._tz_label.setText(settings.place.timezone)
+        self._latitude.setValue(settings.place.latitude)
+        self._longitude.setValue(settings.place.longitude)
         self._results.hide()
         self._suggestions_armed = True   # from here on, changes are the user's
+        # Armed LAST, so a hand-tuned coordinate is the user's doing and
+        # never the seeding above.
+        self._latitude.valueChanged.connect(self._on_coordinate_tuned)
+        self._longitude.valueChanged.connect(self._on_coordinate_tuned)
 
     def _tr(self, text: str) -> str:
         """The active language's form of a chrome string (Phase 2)."""
@@ -278,11 +280,7 @@ class SettingsDialog(
             )
         return replace(
             self._settings,
-            city_name=self._city_name,
-            city_path=self._current_path(),
-            latitude=round(self._latitude.value(), 4),
-            longitude=round(self._longitude.value(), 4),
-            timezone=self._timezone,
+            place=self._current_place(),
             language=self._language_combo.currentData(),
             era_notation=self._era_combo.currentData(),
             show_era_suffix=self._era_suffix_check.isChecked(),

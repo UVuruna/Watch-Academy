@@ -44,6 +44,7 @@ hover-invariant groups, and answers every hit-test/tooltip question.
 | `archetype_geometry.py` | Algorithmic | archetype hour-space lighting, THE TWO-TYPE sizing law — [about](__about/archetype_geometry.md) · [flow](__flow/archetype_geometry.md) |
 | `ninths.py` | Algorithmic | the Ninth and thirteenth plate resolution, the center face — [about](__about/ninths.md) · [flow](__flow/ninths.md) |
 | `weekday_body.py` | Algorithmic | one weekday body + its set-uniform label — [about](__about/weekday_body.md) · [flow](__flow/weekday_body.md) |
+| `body_disc.py` | Algorithmic | THE DISC IS THE MEASURE, THE SHINE IS EXTRA — a plate's solid-disc fraction and the stamp correction built on it — [about](__about/body_disc.md) |
 | `eclipse_glow.py` | Algorithmic | eclipse render state, glow strength, the radial halo — [about](__about/eclipse_glow.md) · [flow](__flow/eclipse_glow.md) |
 | `eclipse_plates.py` | Standard | one drawn plate per (kind, type, style) for the Encyclopedia's look slider, painted by the DIAL's own functions — [about](__about/eclipse_plates.md) |
 | `eclipse_style.py` | Standard | THE HONESTY DOOR — resolves a style to what actually paints it, and why, for styles with no painter yet — [about](__about/eclipse_style.md) |

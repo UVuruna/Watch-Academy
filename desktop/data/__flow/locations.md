@@ -10,7 +10,7 @@ flowchart TB
     B -- no --> C[parse world_locations.json] --> D
     B -- yes --> D[walk node]
     D --> E{"latitude" in value?}
-    E -- yes --> F[city leaf: build CityRecord]
+    E -- yes --> F[city leaf: build Place]
     E -- no --> G[navigable group: recurse/push children]
     F --> H[collect / compare / yield]
     G --> D

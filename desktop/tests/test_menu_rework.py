@@ -28,6 +28,7 @@ from app.controller import WatchController, watch_title
 from app.settings_store import Settings
 from app.time_travel import TimeTravelDialog
 from config import dial, shortcuts
+from data.locations import Place, default_place
 
 
 @pytest.fixture(scope="module")
@@ -51,7 +52,7 @@ def controller(app, tmp_path, monkeypatch):
 
 
 def test_watch_title_short_form_is_just_the_location():
-    settings = dataclasses.replace(Settings(), city_name="Belgrade")
+    settings = dataclasses.replace(Settings(), place=default_place())
     assert watch_title(settings) == "Belgrade"
     assert watch_title(settings, full=False) == "Belgrade"
 
@@ -63,7 +64,7 @@ def test_watch_title_full_form_matches_the_owner_example():
     wheel-pair label."""
     settings = dataclasses.replace(
         Settings(),
-        city_name="Belgrade", ring="DOMY", ring_finish="gold",
+        place=default_place(), ring="DOMY", ring_finish="gold",
         pointer="trio", palette_style="secondary",
     )
     assert watch_title(settings, full=True) == "Belgrade-Gold DOMY-Family Trinity"
@@ -72,7 +73,7 @@ def test_watch_title_full_form_matches_the_owner_example():
 def test_watch_title_full_form_reads_the_paint_style_too():
     settings = dataclasses.replace(
         Settings(),
-        city_name="Tromso", ring="Dollar", ring_finish="silver",
+        place=dataclasses.replace(default_place(), name="Tromso"), ring="Dollar", ring_finish="silver",
         pointer="cross", palette_style="primary",
     )
     assert watch_title(settings, full=True) == (
@@ -88,7 +89,7 @@ def test_watch_title_falls_back_to_the_default_pair_off_the_table():
     # (CANON.md §Prism primary — the Persons).
     settings = dataclasses.replace(
         Settings(),
-        city_name="Oslo", ring="DOMY", ring_finish="bronze",
+        place=dataclasses.replace(default_place(), name="Oslo"), ring="DOMY", ring_finish="bronze",
         pointer="hexa", palette_style="primary",
     )
     assert watch_title(settings, full=True) == "Oslo-Bronze DOMY-Persons Prism"
@@ -365,10 +366,10 @@ def test_open_time_travel_wires_the_jump_callback_and_cities(controller, monkeyp
     monkeypatch.setattr(TimeTravelDialog, "exec", lambda self: 0)
     controller._settings = dataclasses.replace(
         controller._settings,
-        jump_cities=({
-            "name": "Kyoto", "latitude": 35.0, "longitude": 135.77,
-            "timezone": "Asia/Tokyo",
-        },),
+        jump_cities=(
+            Place(path=(), name="Kyoto", latitude=35.0, longitude=135.77,
+                  timezone="Asia/Tokyo"),
+        ),
     )
     controller._open_time_travel()
 
@@ -411,7 +412,7 @@ def test_dialog_jump_travels_the_live_watch_and_mirrors_the_dialog(controller):
     shows."""
     assert controller._simulation is None
     dialog = TimeTravelDialog(
-        controller._settings.latitude, controller._settings.longitude,
+        controller._settings.place.latitude, controller._settings.place.longitude,
         initial_moment=datetime(2026, 6, 20, 12, 0),
         coverage=controller._travel_coverage(),
         core_coverage=controller._bundled_coverage(),
@@ -437,7 +438,7 @@ def test_return_to_now_still_ends_the_simulation_after_live_jumps(controller):
     dialog's own `RETURN_TO_NOW` exit code is unaffected by the new
     per-jump side effect."""
     dialog = TimeTravelDialog(
-        controller._settings.latitude, controller._settings.longitude,
+        controller._settings.place.latitude, controller._settings.place.longitude,
         initial_moment=datetime(2026, 6, 20, 12, 0),
         coverage=controller._travel_coverage(),
         core_coverage=controller._bundled_coverage(),
@@ -456,19 +457,19 @@ def test_location_jump_flashes_and_moves_the_tray_title(controller):
     COUNTRY" overlay AND moves the tray tooltip/menu TITLE's own
     location word, even though the home `Settings.city_name` never
     changes. `_end_simulation` must restore it afterward."""
-    home_name = controller._settings.city_name
+    home_name = controller._settings.place.name
     assert controller._active_location_name == home_name
     dialog = TimeTravelDialog(
-        controller._settings.latitude, controller._settings.longitude,
+        controller._settings.place.latitude, controller._settings.place.longitude,
         initial_moment=datetime(2026, 6, 20, 12, 0),
         coverage=controller._travel_coverage(),
         core_coverage=controller._bundled_coverage(),
         jump_callback=controller._dialog_jump,
     )
-    tokyo = {
-        "name": "Tokyo", "latitude": 35.7, "longitude": 139.7,
-        "timezone": "Asia/Tokyo",
-    }
+    tokyo = Place(
+        path=(), name="Tokyo", latitude=35.7, longitude=139.7,
+        timezone="Asia/Tokyo",
+    )
     dialog._on_jump("city", tokyo)
     assert controller._active_location_name == "Tokyo"
     assert controller._active_location_name != home_name
@@ -503,8 +504,10 @@ def test_settings_location_change_flashes_and_updates_the_title(controller, monk
     )
     new_settings = dataclasses.replace(
         controller._settings,
-        city_name="Oslo", city_path=("Europe", "Northern Europe", "Norway", "Oslo"),
-        latitude=59.91, longitude=10.75, timezone="Europe/Oslo",
+        place=Place(
+            path=("Europe", "Northern Europe", "Norway", "Oslo"),
+            name="Oslo", latitude=59.91, longitude=10.75, timezone="Europe/Oslo",
+        ),
     )
     monkeypatch.setattr(dialog, "result_settings", lambda: new_settings)
     controller._apply_settings_dialog_result(dialog)
@@ -550,13 +553,13 @@ def test_pole_and_greenwich_and_city_rows_exist(controller, monkeypatch):
     monkeypatch.setattr(TimeTravelDialog, "exec", lambda self: 0)
     controller._settings = dataclasses.replace(
         controller._settings,
-        jump_cities=({
-            "name": "Kyoto", "latitude": 35.0, "longitude": 135.77,
-            "timezone": "Asia/Tokyo",
-        },),
+        jump_cities=(
+            Place(path=(), name="Kyoto", latitude=35.0, longitude=135.77,
+                  timezone="Asia/Tokyo"),
+        ),
     )
     dialog = TimeTravelDialog(
-        controller._settings.latitude, controller._settings.longitude,
+        controller._settings.place.latitude, controller._settings.place.longitude,
         initial_moment=datetime(2026, 6, 20, 12, 0),
         jump_callback=controller._dialog_jump,
         jump_cities=controller._settings.jump_cities,

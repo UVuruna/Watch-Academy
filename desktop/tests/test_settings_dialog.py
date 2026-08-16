@@ -12,6 +12,7 @@ from app.controller import apply_display_settings
 from app.settings_dialog.dialog import SettingsDialog
 from app.settings_store import Settings, replace
 from config import defaults, encyclopedia_ui, palette, pantheon
+from data.locations import Place, default_place
 from render.skin_geometry import palette_for
 
 BELGRADE_PATH = ("Europe", "Southern Europe", "Serbia", "Grad Beograd", "Belgrade")
@@ -23,14 +24,14 @@ def app():
 
 
 def test_dialog_restores_the_stored_city(app):
-    settings = replace(Settings(), city_path=BELGRADE_PATH)
+    settings = replace(Settings(), place=default_place())
     dialog = SettingsDialog(settings, defaults.DEFAULT_SKIN)
     assert dialog._continent.currentText() == "Europe"
     assert dialog._country.currentText() == "Serbia"
     assert dialog._city.currentText() == "Belgrade"
     result = dialog.result_settings()
-    assert result.city_path == BELGRADE_PATH
-    assert result.timezone == "Europe/Belgrade"
+    assert result.place.path == BELGRADE_PATH
+    assert result.place.timezone == "Europe/Belgrade"
     dialog.done(0)
 
 
@@ -40,9 +41,9 @@ def test_dialog_city_pick_fills_coordinates(app):
         ("Europe", "Northern Europe", "Norway", "Troms og Finnmark", "Tromso")
     )
     result = dialog.result_settings()
-    assert result.city_name == "Tromso"
-    assert result.timezone == "Europe/Oslo"
-    assert result.latitude == pytest.approx(69.65, abs=0.05)
+    assert result.place.name == "Tromso"
+    assert result.place.timezone == "Europe/Oslo"
+    assert result.place.latitude == pytest.approx(69.65, abs=0.05)
     dialog.done(0)
 
 
@@ -65,8 +66,8 @@ def test_live_search_filters_and_jumps(app):
     )
     dialog._pick_result(uk_london)
     result = dialog.result_settings()
-    assert result.city_name == "London"
-    assert result.timezone == "Europe/London"
+    assert result.place.name == "London"
+    assert result.place.timezone == "Europe/London"
     dialog._search.setText("Xyzzyqq")
     assert dialog._results.count() == 0
     assert dialog._search_status.text() == "not found"
@@ -93,7 +94,7 @@ def test_major_cities_pinned_per_country(app):
     )
     dialog._pick_result(london)
     result = dialog.result_settings()
-    assert result.city_name == "London" and result.timezone == "Europe/London"
+    assert result.place.name == "London" and result.place.timezone == "Europe/London"
     dialog.done(0)
 
 
@@ -102,7 +103,7 @@ def test_major_cities_stay_quiet_until_the_user_acts(app):
     huge suggestion box — the location is picked once. Suggestions
     appear only after the USER touches the cascade, and the box wraps
     its rows instead of holding a fixed 120 px."""
-    settings = replace(Settings(), city_path=BELGRADE_PATH)
+    settings = replace(Settings(), place=default_place())
     dialog = SettingsDialog(settings, defaults.DEFAULT_SKIN)
     assert dialog._results.count() == 0            # nothing suggested on open
     assert dialog._results.isHidden()
@@ -395,10 +396,10 @@ def test_dialog_open_close_keeps_the_location(app):
     dialog = SettingsDialog(Settings(), defaults.DEFAULT_SKIN)
     result = dialog.result_settings()
     dialog.done(0)
-    assert result.city_name == d.DEFAULT_CITY["name"]
-    assert result.timezone == d.DEFAULT_CITY["timezone"]
-    assert result.latitude == d.DEFAULT_CITY["latitude"]
-    assert result.longitude == d.DEFAULT_CITY["longitude"]
+    assert result.place.name == d.DEFAULT_CITY["name"]
+    assert result.place.timezone == d.DEFAULT_CITY["timezone"]
+    assert result.place.latitude == d.DEFAULT_CITY["latitude"]
+    assert result.place.longitude == d.DEFAULT_CITY["longitude"]
 
 
 def test_every_theme_skeleton_is_complete():
@@ -2147,19 +2148,24 @@ def test_quick_jump_list_has_no_height_cap_and_stretches(app):
 
 def test_double_click_jump_city_applies_it_as_the_location(app):
     """R-32: double-clicking a saved Quick Jump city sets it as the
-    location immediately — through the SAME `_apply_city_selection`
+    location immediately — through the SAME `_apply_place`
     body a home combo pick runs (Rule #5), not a second implementation."""
     dialog = SettingsDialog(Settings(), defaults.DEFAULT_SKIN)
-    dialog._jump_cities.append({
-        "name": "Tokyo", "latitude": 35.7, "longitude": 139.7,
-        "timezone": "Asia/Tokyo",
-    })
+    dialog._jump_cities.append(Place(
+        path=(), name="Tokyo", latitude=35.7, longitude=139.7,
+        timezone="Asia/Tokyo",
+    ))
     dialog._refresh_jump_list()
-    item = dialog._jump_list.item(0)
-    dialog._apply_jump_city_as_location(item)
+    # Row 0 is the STARRED city (owner sheet 2026-08-16: the watch's own
+    # place is always in this list and always the starred row), so Tokyo
+    # is found by its position in the working list, never by index 0.
+    row = dialog._jump_cities.index(
+        next(c for c in dialog._jump_cities if c.name == "Tokyo")
+    )
+    dialog._apply_jump_city_as_location(dialog._jump_list.item(row))
     result = dialog.result_settings()
-    assert result.city_name == "Tokyo"
-    assert result.timezone == "Asia/Tokyo"
-    assert result.latitude == pytest.approx(35.7)
-    assert result.longitude == pytest.approx(139.7)
+    assert result.place.name == "Tokyo"
+    assert result.place.timezone == "Asia/Tokyo"
+    assert result.place.latitude == pytest.approx(35.7)
+    assert result.place.longitude == pytest.approx(139.7)
     dialog.deleteLater()

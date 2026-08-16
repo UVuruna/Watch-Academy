@@ -532,7 +532,7 @@ class TimeTravelDialog(QDialog):
         ))
         for city in self._jump_cities:
             box_layout.addWidget(self._place_button(
-                "city", None, "📍", city["name"], city=dict(city),
+                "city", None, "📍", city.name, city=city,
             ))
         box_layout.addStretch(1)
         scroll = QScrollArea()

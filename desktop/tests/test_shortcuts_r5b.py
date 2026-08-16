@@ -24,6 +24,7 @@ from app.fast_travel_flash import FastTravelFlash
 from app.settings_store import Settings, replace
 from config import constants, defaults, shortcuts
 from core.deep_time import real_year
+from data.locations import Place
 
 
 @pytest.fixture(scope="module")
@@ -499,9 +500,9 @@ def test_location_city_cycle_is_a_strict_noop_with_none_defined(controller):
 
 def test_location_city_cycle_wraps_forward_through_the_list(controller):
     cities = (
-        {"name": "A", "latitude": 10.0, "longitude": 10.0, "timezone": "UTC"},
-        {"name": "B", "latitude": 20.0, "longitude": 20.0, "timezone": "UTC"},
-        {"name": "C", "latitude": 30.0, "longitude": 30.0, "timezone": "UTC"},
+        Place(path=(), name="A", latitude=10.0, longitude=10.0, timezone="UTC"),
+        Place(path=(), name="B", latitude=20.0, longitude=20.0, timezone="UTC"),
+        Place(path=(), name="C", latitude=30.0, longitude=30.0, timezone="UTC"),
     )
     controller._settings = replace(controller._settings, jump_cities=cities)
     seen = []
@@ -514,9 +515,9 @@ def test_location_city_cycle_wraps_forward_through_the_list(controller):
 
 def test_location_city_cycle_wraps_backward_through_the_list(controller):
     cities = (
-        {"name": "A", "latitude": 10.0, "longitude": 10.0, "timezone": "UTC"},
-        {"name": "B", "latitude": 20.0, "longitude": 20.0, "timezone": "UTC"},
-        {"name": "C", "latitude": 30.0, "longitude": 30.0, "timezone": "UTC"},
+        Place(path=(), name="A", latitude=10.0, longitude=10.0, timezone="UTC"),
+        Place(path=(), name="B", latitude=20.0, longitude=20.0, timezone="UTC"),
+        Place(path=(), name="C", latitude=30.0, longitude=30.0, timezone="UTC"),
     )
     controller._settings = replace(controller._settings, jump_cities=cities)
     seen = []
@@ -904,4 +905,4 @@ def test_ctrl_home_flashes_the_home_location_like_every_other_jump(controller):
     flashed.clear()
     controller._end_simulation()
     assert flashed, "Ctrl+Home said nothing"
-    assert controller._settings.city_name in flashed[-1]
+    assert controller._settings.place.name in flashed[-1]

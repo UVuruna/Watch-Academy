@@ -31,8 +31,12 @@
         re-run city selection
 
     ON city selected:
+        IF suggestions not armed yet: STOP        (construction, not a user pick)
         look up the record for (group path, city name)
-        fill city_name, timezone, latitude, longitude from the record
+        apply that whole Place as self._place     (_apply_place)
+
+    ON latitude/longitude typed by hand:
+        keep name and timezone, DROP the path     (_on_coordinate_tuned)
 
     ON search text changed (≥ 2 chars):
         fold the typed text; match against ALL 45k cities (loaded once,
@@ -47,4 +51,16 @@
         refresh the jump list widget
 
     ON "Remove selected":
-        delete the jump list's current row from the working jump_cities list
+        IF only one city left, OR the row is the STARRED city: refuse
+        ELSE delete that row from the working jump_cities list
+
+    ON "Add the city above":
+        append self._place (the Location picker's current place)
+
+    ON "Make Main" / double-click a row:
+        apply that row's Place as self._place -> the star moves
+
+    ON repaint (_refresh_jump_list):
+        IF self._place is not in the list: insert it first (his invariant)
+        draw a star on the row equal to self._place
+        enable/disable Make Main and Remove for the current selection

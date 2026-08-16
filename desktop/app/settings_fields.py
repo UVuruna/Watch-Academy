@@ -16,9 +16,9 @@ never silently defaulted).
 """
 
 import re
-from zoneinfo import ZoneInfo
 
 from config import constants, dial, pantheon
+from data.locations import Place, default_place, place_from_mapping
 
 _HEX_COLOR = re.compile(r"^#[0-9A-Fa-f]{6}$")
 
@@ -132,38 +132,68 @@ def save_moving_bodies(settings) -> dict:
     }
 
 
-def normalized_jump_city(entry: dict) -> dict:
-    """One Quick Jump city (Session 16), validated field by field — a
-    hand-edited coordinate or timezone must fail HERE, not inside a
-    jump (Rule #1).
+def load_place(raw: dict) -> Place:
+    """THE STORED LOCATION, and its migration (owner decree 2026-08-16).
 
-    Lives with the other per-field validators rather than in the store
-    (moved 2026-08-10 under THE STRUCTURE LAW, which is exactly this
-    module's own reason for existing): it takes a raw parsed fragment
-    and answers with a validated value, and it knows nothing about the
-    settings file."""
-    name = str(entry["name"]).strip()
-    if not name:
-        raise ValueError("jump city with an empty name")
-    latitude = float(entry["latitude"])
-    longitude = float(entry["longitude"])
-    if not constants.LATITUDE_RANGE[0] <= latitude <= constants.LATITUDE_RANGE[1]:
-        raise ValueError(f"jump city {name!r}: latitude {latitude} out of range")
-    if not constants.LONGITUDE_RANGE[0] <= longitude <= constants.LONGITUDE_RANGE[1]:
-        raise ValueError(f"jump city {name!r}: longitude {longitude} out of range")
-    timezone = str(entry["timezone"])
-    try:
-        ZoneInfo(timezone)
-    except Exception as exc:
-        raise ValueError(
-            f"jump city {name!r}: timezone {timezone!r} unknown: {exc}"
-        ) from exc
+    Every settings file ever written — by this version and by every
+    version before it — arrives here, and goes through the ONE door
+    `place_from_mapping`, which answers with a whole place or with
+    nothing. An absent `location` block (a file older than the picker)
+    and a location whose parts contradict each other land on the SAME
+    repair: the Belgrade preset, whole. A location whose only fault is
+    a path naming another city keeps its name, coordinates and zone and
+    has the real path looked up for it — that is the owner's own live
+    file, whose 44.82 / 20.46 / Europe/Belgrade were always right while
+    the stored path said Burundi.
+
+    TWO FAULTS, TWO ANSWERS — the distinction is who wrote the fault:
+
+    - OURS: an absent block, or a whole place whose stored PATH names
+      another city. This app wrote that into an otherwise valid file,
+      and refusing to start over our own defect would punish the user
+      for it. Repaired silently.
+    - THEIRS: a location block that is PRESENT but not a usable place —
+      a latitude of 200, an unknown IANA zone, a missing coordinate.
+      That is a hand edit or a damaged file, and it is surfaced LOUDLY
+      (Rule #1, no error masking) exactly as it was before this round.
+      Quietly resetting someone's location to Belgrade because their
+      file said 200 would be the masking that rule forbids."""
+    stored = raw.get("location")
+    if stored is None:
+        return default_place()             # a file older than the picker
+    place = place_from_mapping(stored)
+    if place is None:
+        raise ValueError(f"location is not a usable place: {stored!r}")
+    return place
+
+
+def place_json(place: Place) -> dict:
+    """A place on its way to disk. The ONE writer of a location block —
+    so the five keys can never again be written from five different
+    sources, which is how "BELGRADE BURUNDI" was saved
+    (`data.locations.Place`)."""
     return {
-        "name": name,
-        "latitude": latitude,
-        "longitude": longitude,
-        "timezone": timezone,
+        "name": place.name,
+        "path": list(place.path),
+        "latitude": place.latitude,
+        "longitude": place.longitude,
+        "timezone": place.timezone,
     }
+
+
+def jump_place(entry: object) -> Place:
+    """One stored Quick Jump city, whole or not at all.
+
+    Succeeded `normalized_jump_city`, which validated the same four
+    values field by field and handed back a dict. It is gone: the
+    wholeness rule now lives in `place_from_mapping`, and two validators
+    for one fact is the shape of defect this round removed. Still raises
+    where the HOME location repairs — an incoherent home location was
+    this app's own bug, a hand-edited jump entry is not (Rule #1)."""
+    place = place_from_mapping(entry)
+    if place is None:
+        raise ValueError(f"jump city is not a usable place: {entry!r}")
+    return place
 
 
 def load_choice(raw: dict, key: str, allowed: tuple, default: str) -> str:

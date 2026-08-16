@@ -30,17 +30,59 @@ onto [Settings Dialog](dialog.md)'s `QDialog` shell.
   the enclosing Location page gives this group the layout's stretch
   factor (`dialog.py`'s section table), so it fills every pixel left
   below the Location group instead of sitting capped in empty space.
-  A DOUBLE-CLICK on a saved city (R-32) applies it AS THE LOCATION
-  immediately, through the SAME `_apply_city_selection` body a home
-  combo pick already runs (Rule #5) — no `city_path` combo walk (a
-  Quick Jump city carries no picker path), same precedent as a
-  hand-tuned coordinate.
+  Each saved city is a whole `Place`, so a DOUBLE-CLICK (R-32) simply
+  REPLACES the dialog's place with it, through the SAME `_apply_place`
+  body a home combo pick runs (Rule #5).
 
-`_current_path()` (the combo cascade's current selection) and
-`_restore_path()` (re-selecting a stored city path on open) are called from
-the shell's `__init__`/`result_settings()` across the mixin boundary —
-resolved via ordinary attribute lookup since both classes compose onto the
-same `self`.
+## THE STARRED CITY (owner sheet 2026-08-16)
+
+His rules, and they are ONE mechanism rather than three:
+
+- the list holds many cities but ALWAYS at least one, and exactly one
+  wears the star — the place the watch is showing right now;
+- a city is added from the Location picker ABOVE, so the Add row is a
+  BUTTON and not a second search field (there used to be one here, over
+  the same 45k cities with the same folding: two ways to name a city on
+  one page, one of which silently did not move the watch);
+- "Make Main" — and a double-click — move the star;
+- Remove refuses the starred city and the last remaining one, and says
+  so by DISABLING itself rather than declining after the click.
+
+The star is not a flag stored beside the list: `self._place` IS the
+starred city (`_is_main` compares them) and `_refresh_jump_list` seeds
+the list from it when absent. One answer to "where is this watch",
+rendered — never a second copy that could drift, which is exactly how
+`city_path` drifted away from `city_name`.
+
+## THE COMBOS ARE NAVIGATION (owner decree 2026-08-16)
+
+`self._place` — one `data.locations.Place` — is this section's answer,
+and `_apply_place()` is the only thing that writes it. The
+Continent/Subregion/Country/Region/City combo boxes walk the user to a
+record and are NEVER read back to build the result.
+
+They used to be. `result_settings()` took the name and coordinates from
+the stored settings but the PATH from `_current_path()`, i.e. from
+wherever the cascade happened to sit — and on a watch that had never
+picked a city the cascade sits on the alphabetically first entry,
+Africa ▸ Eastern Africa ▸ Burundi ▸ Bubanza. Pressing OK without
+touching anything therefore saved Burundi's path beside the name
+"Belgrade", and the crown drew "BELGRADE BURUNDI". Two further guards
+follow from the same rule: `_on_city()` returns unless
+`_suggestions_armed` (the construction cascade is not a user pick), and
+`_apply_place()` blocks the coordinate spin boxes' signals so seeding
+them is not mistaken for a hand tune.
+
+A hand-tuned coordinate (`_on_coordinate_tuned`) keeps the name and the
+zone but DROPS the path: those coordinates are no longer the database
+record that path names, and a path that no longer describes its own
+place is the very lie this design exists to make unwritable.
+
+`_current_place()` and `_restore_path()` (walking the combos to the
+stored place on open, presentation only) are called from the shell's
+`__init__`/`result_settings()` across the mixin boundary — resolved via
+ordinary attribute lookup since both classes compose onto the same
+`self`.
 
 ## Connections
 
@@ -54,7 +96,7 @@ same `self`.
 ### Used by
 - [Settings Dialog](dialog.md) — the shell's `__init__` calls
   `_build_location_group()`/`_build_jump_cities_group()` and
-  `_restore_path()`; `result_settings()` calls `_current_path()`
+  `_restore_path()`; `result_settings()` calls `_current_place()`
 
 ## Classes
 
@@ -68,21 +110,31 @@ same `self`.
 - `_on_level(level)`: repopulates everything below the changed combo
 - `_show_major_cities()`: pins a country's IANA-canonical cities into the
   results list on country change
-- `_on_city()`: fills lat/lng/timezone from the selected city's record,
-  via `_apply_city_selection`
-- `_apply_city_selection(name, latitude, longitude, timezone)`: the ONE
-  body that lands a city's coordinates on the Location fields —
-  `_on_city()` and `_apply_jump_city_as_location()` (R-32) both call it
+- `_on_city()`: hands the selected city's whole record to
+  `_apply_place` — a no-op until `_suggestions_armed`, so the
+  construction cascade can never become the watch's place
+- `_apply_place(place)`: the ONE body that lands a `Place` on this
+  dialog — `_on_city()` and `_apply_jump_city_as_location()` (R-32)
+  both call it; blocks the coordinate spin boxes' signals while seeding
+  them
 - `_restore_path(path)`: re-selects a stored city path on dialog open
 - `_filter_cities(text)`: live search over all 45k cities
 - `_fit_results()`: wraps the suggestion box height to its row count
 - `_pick_result(item)`: jumps the combos to a clicked search result
 - `_restore_search(path)`: walks the combos to a found city
-- `_current_path() -> tuple[str, ...]`: the combo cascade's current full path
+- `_on_coordinate_tuned()`: a hand-typed coordinate — keeps name and
+  zone, drops the path
+- `_current_place() -> Place`: this dialog's answer on OK, straight from
+  `self._place`; never assembled from the combos
 - `_build_jump_cities_group() -> QGroupBox`: the Quick Jump cities group
-- `_filter_jump_cities(text)`: live search feeding the jump results list
-- `_add_jump_city(item)`: appends a picked city to the jump list
-- `_remove_jump_city()`: removes the selected jump-list row
+- `_is_main(city)`: is this the STARRED city — i.e. `self._place`
+- `_add_jump_city()`: adds the city the Location picker above shows
+- `_remove_jump_city()`: removes the selected row — never the starred
+  one, never the last one
+- `_make_main_selected()` / `_make_main(city)`: the star moves, through
+  `_apply_place`
+- `_refresh_jump_buttons()`: both buttons say what they can do BEFORE
+  they are pressed
 - `_apply_jump_city_as_location(item)`: R-32 — double-click applies the
-  clicked jump-list row as the location, via `_apply_city_selection`
+  clicked jump-list row as the location, via `_apply_place`
 - `_refresh_jump_list()`: repaints the jump list from `self._jump_cities`
