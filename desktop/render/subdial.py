@@ -27,8 +27,19 @@ def octa_slot_art(folder: str, name: str) -> Path | None:
     "zodiac/chinese/primary/colored" — the family/variant tree. `name` is the
     entity ("Cancer" / "Horse") — or None while the owner's art folder
     does not have it yet."""
-    path = paths.art_file(defaults.ZODIAC_ART_DIR / folder / f"{name}.png")
-    return path if path.exists() else None
+    # `existing_art_file`, never `art_file(...).exists()` — the same
+    # correction `render.slot_layout` and `config.pantheon` already
+    # carry (owner bug 2026-08-06). `art_file` answers a RESOLVED path
+    # from its cache, but that path no longer ends in `.png`, so the
+    # stat here was paid on EVERY paint of an image slot: one
+    # filesystem call per tick per watch, forever, on a file the
+    # resolver had just proven exists. Invisible until 2026-08-16
+    # because it only fires with an image slot selected — which is the
+    # owner's own configuration, and `test_repeat_work` could not see
+    # it while his profile still failed to load at all.
+    return paths.existing_art_file(
+        defaults.ZODIAC_ART_DIR / folder / f"{name}.png"
+    )
 
 
 def slot_text(mode: str, ctx: RenderContext) -> str:

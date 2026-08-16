@@ -16,7 +16,16 @@ and is shared with the calendar mounts and the thirteenth plates.
 - [Asset Variants](asset_variants.md) — `ring_face_color`,
   `subdial_plate_file`
 - [Config (folder)](../../config/___config.md) — `defaults`, `dial`,
-  `palette`, `paths`
+  `palette`, `paths` — `octa_slot_art` resolves through
+  `paths.existing_art_file`, NEVER `art_file(...).exists()` (the
+  correction `render.slot_layout` and `config.pantheon` already carry,
+  owner bug 2026-08-06): `art_file` answers a resolved path from its
+  cache, but that path no longer ends in `.png`, so the extra stat was
+  paid on EVERY paint of an image slot — one filesystem call per tick
+  per watch. Fixed 2026-08-16; the tooth is
+  `desktop/tests/test_repeat_work.py::test_a_steady_state_repaint_touches_no_files`,
+  which could not see it until the owner's own profile stopped reading
+  as corrupt.
 - [Core (folder)](../../core/___core.md) — `format_official`, `real_year`
 
 ### Used by
