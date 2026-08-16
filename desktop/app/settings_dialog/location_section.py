@@ -435,6 +435,10 @@ class _LocationSectionMixin:
         this is where the added city gets written")."""
         if self._place not in self._jump_cities:
             self._jump_cities.append(self._place)
+        # Pressing Add is the user KEEPING this city: it stops being the
+        # replaceable seed slot above, so the next navigation cannot
+        # overwrite it.
+        self._seeded_place = None
         self._refresh_jump_list()
 
     def _remove_jump_city(self) -> None:
@@ -472,9 +476,24 @@ class _LocationSectionMixin:
         """Repaint the list, and hold his invariant while doing it: the
         watch's own place is ALWAYS in the list, so an empty list (a
         fresh install, or an older settings file that never had one)
-        seeds itself from the place instead of showing him nothing."""
+        seeds itself from the place instead of showing him nothing.
+
+        THE SEED IS ONE SLOT, NOT A GROWING TAIL (owner bug 2026-08-16).
+        Walking the combos to a searched city passes THROUGH every
+        intermediate seat (`_restore_search` sets five combos, and each
+        one fires `_on_city` ▸ `_apply_place` ▸ here). When this method
+        merely inserted, one click on "Munich" wrote Andorra la Vella,
+        Abensberg and Berlin into his list on the way. So the seed is
+        remembered: a place that is only here because the watch stands
+        on it is REPLACED by the next such place, and only a city the
+        user ADDED (or loaded from settings) keeps its row."""
         if self._place not in self._jump_cities:
-            self._jump_cities.insert(0, self._place)
+            seed = getattr(self, "_seeded_place", None)
+            if seed is not None and seed in self._jump_cities:
+                self._jump_cities[self._jump_cities.index(seed)] = self._place
+            else:
+                self._jump_cities.insert(0, self._place)
+            self._seeded_place = self._place
         row = self._jump_list.currentRow()
         self._jump_list.clear()
         # THE STAR RIDES THE ICON SLOT, not a run of spaces. Spaces were

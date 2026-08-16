@@ -54,6 +54,16 @@ the list from it when absent. One answer to "where is this watch",
 rendered — never a second copy that could drift, which is exactly how
 `city_path` drifted away from `city_name`.
 
+THE SEED IS ONE SLOT (owner bug 2026-08-16). `_restore_search` walks
+five combo boxes to reach a searched city, and every intermediate seat
+fires `_on_city` ▸ `_apply_place` ▸ `_refresh_jump_list` — so a seed
+that merely INSERTED wrote each passing city into the list (one click on
+"Munich" left Andorra la Vella, Abensberg and Berlin behind). The
+auto-seeded place is remembered in `self._seeded_place` and REPLACED by
+the next one; pressing Add clears that marker, which is what promotes a
+row from "where the watch happens to stand" to "a city the user keeps".
+Tooth: `tests/test_settings_dialog.py::test_search_pick_does_not_grow_the_quick_jump_list`.
+
 ## THE COMBOS ARE NAVIGATION (owner decree 2026-08-16)
 
 `self._place` — one `data.locations.Place` — is this section's answer,

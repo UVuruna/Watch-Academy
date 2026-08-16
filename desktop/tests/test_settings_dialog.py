@@ -2169,3 +2169,39 @@ def test_double_click_jump_city_applies_it_as_the_location(app):
     assert result.place.latitude == pytest.approx(35.7)
     assert result.place.longitude == pytest.approx(139.7)
     dialog.deleteLater()
+
+
+def test_search_pick_does_not_grow_the_quick_jump_list(app):
+    """Owner bug 2026-08-16: clicking ONE searched city wrote four into
+    Quick Jump. `_restore_search` walks five combo boxes and every
+    intermediate seat fires `_on_city` -> `_apply_place`, which seeded
+    the list with the place the watch "stood on" at that instant. The
+    seed is one replaceable slot now: navigating anywhere leaves the
+    list exactly one row long until the user presses Add."""
+    dialog = SettingsDialog(Settings(), defaults.DEFAULT_SKIN)
+    before = len(dialog._jump_cities)
+    dialog._search.setText("Munich")
+    munich = next(
+        dialog._results.item(i)
+        for i in range(dialog._results.count())
+        if dialog._results.item(i).text().startswith("Munich ")
+    )
+    dialog._pick_result(munich)
+    assert len(dialog._jump_cities) == max(before, 1)
+    assert dialog._jump_cities[-1].name == "Munich"
+
+    dialog._search.setText("New York")
+    new_york = next(
+        dialog._results.item(i)
+        for i in range(dialog._results.count())
+        if dialog._results.item(i).text().startswith("New York ")
+    )
+    dialog._pick_result(new_york)
+    assert len(dialog._jump_cities) == max(before, 1)
+
+    # Add KEEPS a city: the next pick may no longer overwrite it.
+    dialog._add_jump_city()
+    dialog._search.setText("Tromso")
+    dialog._pick_result(dialog._results.item(0))
+    assert len(dialog._jump_cities) == max(before, 1) + 1
+    dialog.done(0)
