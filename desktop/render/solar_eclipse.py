@@ -247,27 +247,43 @@ _SUN_PLATE_RAY_FRACTION = 0.889
 _MOON_PLATE_DISC_FRACTION = 0.925
 _MOON_PLATE_GLOW_FRACTION = 1.000
 
-# THE WALL BITES THE RAY TIPS. Scaled so the yellow disc is exactly the
-# body radius, his rays would reach 0.889/0.623 = 1.427 body radii — past
-# the 1.38 the transparent window margin reserves (`glow.MARK_REACH_LIMIT`
-# above). Shrinking the plate instead would draw the Sun 3 % smaller than
-# the geometry every other mark is built on, so the plate is CLIPPED at
-# the wall: it costs the outer 3 % of the ray tips, on the ~13 % of the
-# limb that still carries a spoke out there, at under half alpha. A hard
-# circular edge is impossible — there is no continuous ink to cut.
-_SUN_PLATE_REACH = min(
-    glow.MARK_REACH_LIMIT, _SUN_PLATE_RAY_FRACTION / _SUN_PLATE_DISC_FRACTION
-)
+# THE SHINE IS NOT A MARK (owner verdict 2026-08-16, asked directly and
+# answered "shine SME slobodno preko svega" — the shine may go freely
+# over everything). His rule for the eclipsed Sun is two-part and the
+# two parts obey different laws:
+#
+#   the DISC  — exactly the body radius, the same roundel every other
+#               weekday body is drawn at. That is `_SUN_PLATE_DISC_
+#               FRACTION` normalizing the plate, unchanged.
+#   the SHINE — EXTRA, over and beyond that measure, over neighbouring
+#               sectors and the hands alike. Not clipped, not shrunk.
+#
+# So this reaches the plate's own 0.889/0.623 = 1.427 body radii. It
+# used to be `min(...)`-ed down to `glow.MARK_REACH_LIMIT` (1.38), which
+# bit the outer 3 % of the ray tips off. That limit is `GLOW_RADIUS_
+# SCALE * 0.92`, and the 0.92 is HEADROOM held back for marks that are
+# OPAQUE STROKES — a gauge arc or a halo ring touching the window edge
+# shows as a hard cut line. These ray tips are the opposite case: faded
+# spokes at under half alpha over ~13 % of the limb, with no continuous
+# ink that could form an edge. The window itself reserves the full
+# `GLOW_RADIUS_SCALE` (1.5), so 1.427 stands INSIDE the transparent
+# margin — the shine is freed from our own headroom, never from the
+# window, and THE SPACE & LEGIBILITY LAW is untouched.
+_SUN_PLATE_REACH = _SUN_PLATE_RAY_FRACTION / _SUN_PLATE_DISC_FRACTION
 
 
 # THE WALL, checked at import (`tests/test_moving_bodies.py` also pins
 # it, but a module that cannot even load is the louder failure): the
 # outermost pixel any eclipse mark can touch, against
 # `glow.MARK_REACH_LIMIT` — the ONE wall both mark modules read.
+# The Sun plate's SHINE is deliberately not in this list — see
+# `_SUN_PLATE_REACH`: the headroom below is held back for opaque strokes
+# that would cut a hard line at the window edge, which faded ray tips
+# cannot do. It answers to the window's own reserve instead, asserted
+# separately underneath.
 _OUTERMOST_MARK = max(
     _GAUGE_RADIUS + _GAUGE_WIDTH_FRACTION / 2,
     _HALO_RING_MAX + _HALO_RING_WIDTH_MAX,
-    _SUN_PLATE_REACH,
     _TOTALITY_ARC_RADIUS + _TOTALITY_ARC_WIDTH / 2,
     _EMBLEM_SEAT + _EMBLEM_RADIUS,
     _SHADOW_REACH_MAX,
@@ -277,6 +293,13 @@ assert _OUTERMOST_MARK <= glow.MARK_REACH_LIMIT, (
     f"past the {glow.MARK_REACH_LIMIT:.3f} the window margin reserves — it "
     "would be clipped by the transparent window edge (THE SPACE & "
     "LEGIBILITY LAW)"
+)
+assert _SUN_PLATE_REACH <= glow.GLOW_RADIUS_SCALE, (
+    f"the eclipsed Sun's shine reaches {_SUN_PLATE_REACH:.3f} of the body "
+    f"radius, past the {glow.GLOW_RADIUS_SCALE:.3f} the transparent window "
+    "margin itself reserves (`defaults.dial_window_margin_fraction`) — the "
+    "shine may cross sectors and hands freely (owner 2026-08-16), but not "
+    "the window edge (THE SPACE & LEGIBILITY LAW)"
 )
 
 
@@ -803,12 +826,12 @@ def _bite(painter: QPainter, radius: float, state: str, covered: float) -> None:
         # real annular eclipse does.
         occulter = radius * _ANNULAR_SHRINK
     painter.save()
-    # THE WALL FIRST: his rays reach past the window margin (see
-    # `_SUN_PLATE_REACH`), so everything below is drawn inside it.
-    reach = radius * _SUN_PLATE_REACH
-    wall = QPainterPath()
-    wall.addEllipse(QPointF(0.0, 0.0), reach, reach)
-    painter.setClipPath(wall)
+    # NO WALL AROUND THE SHINE (owner verdict 2026-08-16). A circular
+    # clip at `_SUN_PLATE_REACH` used to sit here, biting the outer ray
+    # tips off; the plate is now drawn at its own full extent, which is
+    # what "shine EXTRA, over and beyond the disc" means. The disc below
+    # is still exactly the body radius — that half of his rule is the
+    # one this must not touch.
     _draw_body_plate(
         painter, defaults.ECLIPSE_BODY_SUN_ART,
         radius / _SUN_PLATE_DISC_FRACTION, 0.0,
