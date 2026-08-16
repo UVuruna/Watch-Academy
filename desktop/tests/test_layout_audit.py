@@ -456,6 +456,11 @@ def _audit(window: QWidget, image=None, at_minimum: bool = False) -> list[str]:
 # ever show — an empty window passes any audit and proves nothing.
 
 
+def _one_value_noop(_value) -> None:
+    """A stub setter with the REAL arity of an ordinary settings setter —
+    see `_AuditSetters.__missing__`."""
+
+
 def _noop(*_args, **_kwargs) -> None:
     return None
 
@@ -466,7 +471,13 @@ class _AuditSetters(dict):
     builders actually read are seeded with real values below."""
 
     def __missing__(self, _key):
-        return _noop
+        # ONE required value, not `*args` (owner bug 2026-08-16): the
+        # per-section Reset only claims a setter whose signature takes
+        # exactly one value (`section_reset._takes_one_value`), so a
+        # `*args` stub made every page look unresettable and NO audit
+        # shot ever contained the Reset row the owner sees. A guard blind
+        # to the widget it is supposed to guard is not a guard.
+        return _one_value_noop
 
 
 def _audit_settings():

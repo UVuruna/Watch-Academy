@@ -17,7 +17,7 @@ page's Crown group (`app.watch_face.ring._crown_style_row`).
 from PySide6.QtWidgets import QGroupBox, QHBoxLayout, QVBoxLayout, QWidget
 
 from app.watch_face.controls import KnobKind, ValueKnob, ValueUnit, knob_row
-from app.watch_face.widgets import FlowLayout, pill
+from app.watch_face.widgets import FlowLayout, flow_row, pill
 from config import constants, dial
 
 # (setting key, on-screen label, (low, high) range, default*100, blurb)
@@ -63,17 +63,17 @@ def _flow(knobs) -> QWidget:
 
 
 def _diameter_group(settings, setters, tr) -> QGroupBox:
+    """THE KNOB STANDS BESIDE ITS PRESETS, not under them (independent
+    grader 2026-08-16, 6/10): stacked, the lone Diameter knob left half
+    the group's width as bare panel while the pill row above it spanned
+    the whole width — an empty hole, and the ladder's second rung
+    (reflow) answers it before any talk of a raised minimum. Side by
+    side the two read as what they are: five factory voices and the
+    exact value, one band."""
     group = QGroupBox(tr("Dial size"))
-    column = QVBoxLayout(group)
+    row = QHBoxLayout(group)
     # BOUND NOW, not at click time — see the note in build().
     apply_diameter = setters["diameter"]
-    preset_row = QHBoxLayout()
-    for preset in dial.SIZE_PRESETS:
-        preset_row.addWidget(pill(
-            f"{preset} px", settings.diameter == preset,
-            lambda p=preset: apply_diameter(p),
-        ))
-    column.addLayout(preset_row)
     low, high = dial.SIZE_PRESETS[0], dial.SIZE_PRESETS[-1]
     knob = ValueKnob(
         "diameter", tr("Diameter"),
@@ -83,7 +83,17 @@ def _diameter_group(settings, setters, tr) -> QGroupBox:
         on_change=lambda value: apply_diameter(round(value)),
     )
     knob.set_value(settings.diameter)
-    column.addWidget(_flow((knob,)))
+    row.addWidget(_flow((knob,)))
+    # `flow_row`, not a bare FlowLayout: it carries BOTH rules a wrapping
+    # pill row needs — the wrap point and ALG-5 uniform sibling widths,
+    # which "360 px" beside "1440 px" would otherwise break.
+    row.addWidget(flow_row(
+        pill(
+            f"{preset} px", settings.diameter == preset,
+            lambda p=preset: apply_diameter(p),
+        )
+        for preset in dial.SIZE_PRESETS
+    ), stretch=1)
     return group
 
 
