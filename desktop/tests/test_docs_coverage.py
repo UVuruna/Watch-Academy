@@ -152,6 +152,7 @@ FLOW_REQUIRED = frozenset({
     "render/calendar_mount.py",
     "render/canon_diagrams.py",
     "render/compositor.py",
+    "render/tooltip_composer.py",
     "render/context.py",
     "render/cube_diagrams.py",
     "render/cube_preview3d.py",

@@ -51,7 +51,7 @@ ONE SEAT, TWO READERS (owner report + question 2026-08-12: "the hover does
 not seem to follow the Moon's relocation off the ring when it overlaps the
 eclipse", and "how is the hover not simply every time the cursor crosses
 that element's own dimensions — what imaginary space is it following?"). It
-was following one: `Compositor._element_at` carried its own hand-written
+was following one: `Compositor.element_at` carried its own hand-written
 copy of this file's geometry, so each relocation the paint learned had to be
 copied there too, and the ones that were not — the Moon's rim-riding lane
 split, the transit shrink, and the band-yielding above — left the cursor

@@ -160,7 +160,7 @@ def test_dollar_crown_word_hover_answers_with_the_motto_not_the_seat_legend(
         build_skin(replace(Settings(), ring="Dollar")), AssetCache()
     )
     dollar.render_offscreen(360.0, 1.0, day, tick)
-    annuit = dollar._tick_tooltip(point_at(316.7), radius)
+    annuit = dollar._tooltips._tick_tooltip(point_at(316.7), radius)
     assert annuit is not None
     assert "ANNUIT CŒPTIS" in annuit
     assert "Anointed Aegis" not in annuit

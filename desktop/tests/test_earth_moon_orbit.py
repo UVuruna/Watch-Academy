@@ -13,7 +13,7 @@ Walks the radial extremes of every setting that can move the shared
 orbit — "Outer ring size" and both marker scale sliders — and proves
 the computed orbit (`config.dial.earth_moon_orbit_fraction`, the exact
 call `render.layers.year_marker.YearMarkerLayer` and
-`render.compositor.Compositor._element_at` both make) puts the disc's
+`render.compositor.Compositor.element_at` both make) puts the disc's
 edge exactly on the line at every combination.
 """
 

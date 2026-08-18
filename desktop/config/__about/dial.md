@@ -42,7 +42,7 @@ Layer: config — pure, no Qt, no wall clock.
   `interior_scale`) or `POLYGON_FILL_MIN_RADIUS_FRACTION` (below), by
   whichever marker is currently bigger, plus a fixed gap. Read by
   `render.layers.year_marker.YearMarkerLayer` and mirrored by
-  `render.compositor.Compositor._element_at`'s hit-test.
+  `render.compositor.Compositor.element_at`'s hit-test.
 - **THE HEXAGRAM/PENTAGON FLOOR** (owner correction round 2026-08-09 —
   a marker was seen sitting across the star/polygon background fill's
   own boundary line): `STAR_RADIUS_FRACTION` (the star/polygon tip,

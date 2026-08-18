@@ -81,6 +81,7 @@ from render.art_warm import warm_pending_art
 from render.asset_recolor import pending_art
 from render.assets import AssetCache
 from render.compositor import Compositor
+from render.tooltip_composer import TooltipComposer
 
 
 @pytest.fixture
@@ -653,5 +654,8 @@ def test_legend_off_skips_the_hover_sweep_entirely(app, monkeypatch):
     def forbidden(*args, **kwargs):
         raise AssertionError("the sweep probed with the legend off")
 
-    monkeypatch.setattr(Compositor, "_tooltip_at", forbidden)
+    # THE MONKEYPATCH TRAP (R13, 2026-08-18): `_tooltip_at` moved to the
+    # collaborator that owns it, and a patch on `Compositor` would stop
+    # patching what the sweep actually calls — silently.
+    monkeypatch.setattr(TooltipComposer, "_tooltip_at", forbidden)
     assert compositor.warm_hover_articles(360.0) == 0

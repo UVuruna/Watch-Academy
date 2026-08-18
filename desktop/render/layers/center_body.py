@@ -161,7 +161,7 @@ class CenterBodyLayer(Layer):
         ABOVE the hands (`active_thirteenth` already gates this to
         `skin.pointer == "calendar"`, whose own center is otherwise
         empty — see the class docstring). Its own hover element is
-        "thirteenth" (`render.compositor._element_at`), never a
+        "thirteenth" (`render.compositor.element_at`), never a
         `center_seat_body_key` piggyback (that key names a DIFFERENT
         seat — the classic weekday unit's — which the Calendar pointer
         never carries). Graceful-absent like the calendar mount's own

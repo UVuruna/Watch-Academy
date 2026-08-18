@@ -261,7 +261,7 @@ def test_the_rose_carries_the_dual_sunday_face(app):
 def test_rose_sunday_hover_fires_on_the_sabbath_seat_not_the_legacy_bottom(app):
     """REGRESSION (owner screenshot 2026-07-28): the two Sunday faces
     DRAW on the Sunday axis (Servant blue 06h/270°, Ruler red 18h/90°),
-    but `Compositor._element_at`/`_weekday_body_at` used to hardcode
+    but `Compositor.element_at`/`_weekday_body_at` used to hardcode
     `constants.SOUTH_SLOT_ANGLE` (24h/180°, the Compass/Seasons seat)
     for the Servant hit-test instead of calling `servant_seat_angle` —
     so the Rose's hover fired at the legacy bottom instead of its own
@@ -275,16 +275,16 @@ def test_rose_sunday_hover_fires_on_the_sabbath_seat_not_the_legacy_bottom(app):
     # The legacy bottom seat (24h/180°) must NOT answer as the Servant —
     # on the Rose that arm is Wednesday's own purple seat, undisturbed.
     legacy_point = dial_point(constants.SOUTH_SLOT_ANGLE, orbit)
-    assert compositor._element_at(legacy_point, radius, 0.0, "sun") != (
+    assert compositor.element_at(legacy_point, radius, 0.0, "sun") != (
         "sun_servant"
     )
-    assert compositor._element_at(
+    assert compositor.element_at(
         legacy_point, radius, 0.0, "sun"
     ) == "body:mercury"
 
     # The Rose's OWN seat — the blue 06h/270° Sunday arm — must answer.
     sabbath_point = dial_point(servant_seat_angle(skin), orbit)
-    assert compositor._element_at(
+    assert compositor.element_at(
         sabbath_point, radius, 0.0, "sun"
     ) == "sun_servant"
 

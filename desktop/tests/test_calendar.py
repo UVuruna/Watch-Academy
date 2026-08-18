@@ -442,7 +442,7 @@ def test_calendar_mount_off_speaks_no_mark_hover(app):
     comp.set_day(day)
     comp._last_tick = tick
     point = dial_point(15.0, 180.0 * calendar_mounts.CALENDAR_MOUNT_RADIUS_FRACTION)
-    assert comp._calendar_mount_tooltip(point, 180.0) is None
+    assert comp._tooltips._calendar_mount_tooltip(point, 180.0) is None
 
 
 def test_calendar_mount_modes_are_derived_from_the_registry():

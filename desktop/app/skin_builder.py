@@ -451,7 +451,7 @@ def _crown_arc_glyphs(entries) -> tuple:
             # Per-WORD hover geometry (WORD-HOVER round, owner
             # 2026-07-27): each word's angular center/half-span plus
             # the seat whose legend it answers with — solved once here,
-            # read by render.compositor._ring_word_legend_tooltip.
+            # read by render.tooltip_composer._ring_word_legend_tooltip.
             "words": tuple(
                 {
                     "text": word["text"],
@@ -471,7 +471,7 @@ def _crown_arc_glyphs(entries) -> tuple:
             # THE ONE TERM ONE HOVER LAW (ring_rework §3, owner ruling
             # 2026-08-06): an entry's own `reading`, when it carries
             # one, wins over the seat's letter legend in
-            # render.compositor._ring_word_legend_tooltip. Custom rings'
+            # render.tooltip_composer._ring_word_legend_tooltip. Custom rings'
             # free-typed/location crowns never carry one (graceful
             # absence — dict.get default).
             "reading": entry.get("reading"),

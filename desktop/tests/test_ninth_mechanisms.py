@@ -106,7 +106,7 @@ def test_every_alt_ninth_name_has_an_encyclopedia_article():
     `tests/test_theme_completeness.py` already checks) must resolve a
     real `encyclopedia.json` "ninths" article — the exact landmine THE
     THEME COMPLETION LAW exists to catch: the day it becomes reachable
-    is the day `render.compositor._dual_face_columns` calls `self.
+    is the day `render.compositor._tooltips._dual_face_columns` calls `self.
     _encyclopedia.entry("ninths", name)` on it, a plain dict lookup that
     raises loudly (Rule #1) rather than swallowing a missing key."""
     from data.encyclopedia import EncyclopediaRepository

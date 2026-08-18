@@ -52,7 +52,8 @@ hover-invariant groups, and answers every hit-test/tooltip question.
 | `eclipse_danjon.py` | Standard | the Danjon L=0..4 brightness scale as a lunar display style — the INDICATIVE derivation and its five-cell legend — [about](__about/eclipse_danjon.md) |
 | `marker_marks.py` | Algorithmic | what a marker wears on an ordinary day — pointer shapes and the four life stations — [about](__about/marker_marks.md) · [flow](__flow/marker_marks.md) |
 | `solar_eclipse.py` | Algorithmic | every picture the SUN side of an eclipse draws — six styles over four catalog types — [about](__about/solar_eclipse.md) · [flow](__flow/solar_eclipse.md) |
-| `compositor.py` | Algorithmic | Z-ordered stack, cached compositing, hit-testing, the tooltip bank — GOD-FILE, ratcheted — [about](__about/compositor.md) · [flow](__flow/compositor.md) |
+| `compositor.py` | Algorithmic | Z-ordered stack, cached compositing, hit-testing, and the nine geometry questions the tooltip composer asks — [about](__about/compositor.md) · [flow](__flow/compositor.md) |
+| `tooltip_composer.py` | Algorithmic | THE TOOLTIP COMPOSER — everything the dial SAYS, over the dial it says it about — [about](__about/tooltip_composer.md) · [flow](__flow/tooltip_composer.md) |
 | `assets.py` | Algorithmic | `AssetCache` — rasterize/tint/metal-swap, the working set — [about](__about/assets.md) · [flow](__flow/assets.md) |
 | `asset_recolor.py` | Algorithmic | disk-cached metal finishes, the lazy variant ledger — [about](__about/asset_recolor.md) · [flow](__flow/asset_recolor.md) |
 | `asset_variants.py` | Algorithmic | moon render, subdial plate resolver, computed icons — [about](__about/asset_variants.md) · [flow](__flow/asset_variants.md) |

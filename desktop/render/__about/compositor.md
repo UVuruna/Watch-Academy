@@ -102,8 +102,22 @@ violated in the code, not papered over here).
 
 ## Connections
 
-**The ARTICLE HTML vocabulary is NOT here any more** (R11 of the [OOP
-audit](../../../docs/AUDIT-OOP-2026-08-18.md), 2026-08-18). The free
+**The TOOLTIP BANK is NOT here any more** (R13 of the [OOP
+audit](../../../docs/AUDIT-OOP-2026-08-18.md), 2026-08-18). Everything
+the dial SAYS — sixty-seven methods, ~2,400 lines — is
+[Tooltip Composer](tooltip_composer.md), a collaborator that HOLDS this
+compositor and asks it for two things: state, through the read-only
+properties `skin`/`day`/`tick`/`overlay`/`encyclopedia`/`symbolism`/
+`hidden_unlocked`, and geometry, through the nine public questions
+`element_at`, `interior_hit`, `world_theta`, `world_offset`, `rotation`,
+`jewel_offset`, `jewel_theta`, `arm_angle_at`, `band_hit`. Those nine
+were private methods; a name reached across an object boundary has to be
+public, which is the same rule finding L1 was about. `tooltip_at`,
+`encyclopedia_target` and `warm_hover_articles` stay here as one-line
+doors, because that is what the widget and twenty test files call.
+
+**And the free ARTICLE HTML helpers are not here either** (R11 of the
+same audit). The free
 helpers that turn an article's prose into rich text — the bold spine,
 the teaser, the `[[Subhead]]` marker, the justified column, the LEARN
 MORE footer, the hover badge — live in [Article

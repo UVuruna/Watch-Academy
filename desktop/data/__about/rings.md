@@ -39,7 +39,7 @@ duplicate name raises naming the offending card.
   (pinned / centered / free-form crown text) and their angle-solving.
   Each entry may also carry an optional `reading` {title, text} — THE
   ONE TERM ONE HOVER LAW (ring_rework §3, owner ruling 2026-08-06):
-  when present, `render.compositor._ring_word_legend_tooltip` shows
+  when present, `render.tooltip_composer._ring_word_legend_tooltip` shows
   THIS for every word of the entry instead of falling back to the
   seat's own jewel legend (fixes the reported bug where ANNUIT
   CŒPTIS's hover narrated the Anointed Aegis jewel under it instead

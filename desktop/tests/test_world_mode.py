@@ -275,7 +275,7 @@ def test_earth_and_moon_keep_their_calendar_seats_at_night(app):
         "sky_up", day, tick, solar_rotation=False,
         show_earth=False, show_moon=True,
     )
-    assert night._world_offset() == 180.0
+    assert night.world_offset() == 180.0
     marker = night._skin.year_marker
 
     from render.painting import dial_point
@@ -293,7 +293,7 @@ def test_earth_and_moon_keep_their_calendar_seats_at_night(app):
             max(marker.scale, marker.moon_scale),
         )
         spot = dial_point(angle, RADIUS * orbit)
-        return night._element_at(spot, RADIUS, 0.0, "sun") == "moon"
+        return night.element_at(spot, RADIUS, 0.0, "sun") == "moon"
 
     assert moon_at(0.5, 180.0)        # FULL moon keeps the bottom
     assert moon_at(0.0, 0.0)          # the new moon keeps the TOP
@@ -322,7 +322,7 @@ def test_earth_and_moon_keep_their_calendar_seats_at_night(app):
         ((tick.year_angle + 180.0) % 360.0, None),
     ):
         spot = dial_point(angle, RADIUS * earth_orbit)
-        assert earth_night._element_at(spot, RADIUS, 0.0, "sun") == expected
+        assert earth_night.element_at(spot, RADIUS, 0.0, "sun") == expected
 
 
 def test_a_ring_jewel_hit_zone_follows_its_rotated_seat(app):
@@ -439,8 +439,8 @@ def test_geocentric_reproduces_the_pre_mode_rotation_exactly(app):
         for solar in (True, False):
             plain = _compositor("noon_up", day, tick, solar_rotation=solar)
             legacy = day.star_rotation if solar else 0.0
-            assert plain._rotation() == legacy
-            assert plain._world_offset() == 0.0
+            assert plain.rotation() == legacy
+            assert plain.world_offset() == 0.0
             assert plain._phase_target() == 0.0
             # ...whatever the sun is doing: the phase never leaves 0.
             assert plain.note_daylight(False, animate=True) is False
@@ -470,13 +470,13 @@ def test_geocentric_keeps_belgrades_two_golden_star_values(belgrade):
         )
         assert day.star_rotation == pytest.approx(golden, abs=0.1)
         plain = _compositor("noon_up", day, tick)
-        assert plain._rotation() == day.star_rotation      # bit for bit
-        assert plain._world_offset() == 0.0
+        assert plain.rotation() == day.star_rotation      # bit for bit
+        assert plain.world_offset() == 0.0
         # ...and the SAME star, in Heliocentric, is handed to the world
         # as its exact negation — the two never drift apart.
         turned = _compositor("sky_up", day, tick)
-        assert turned._rotation() == 0.0                   # the star stands
-        assert turned._world_offset() == pytest.approx(
+        assert turned.rotation() == 0.0                   # the star stands
+        assert turned.world_offset() == pytest.approx(
             (-day.star_rotation) % 360.0
         )
 

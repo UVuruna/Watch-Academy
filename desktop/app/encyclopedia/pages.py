@@ -90,7 +90,7 @@ _ERA_ENTRIES = (
 # (assets/eclipse/<Stem>.png, graceful-absent); the overview strings its
 # body's category emblems as a strip, like the Eras essay. The chapter
 # ORDER here is the golden the Spacebar jump indexes into
-# (render.compositor._ENC_ECLIPSE_SOLAR_ORDER / _LUNAR_ORDER) — keep
+# (render.tooltip_composer._ENC_ECLIPSE_SOLAR_ORDER / _LUNAR_ORDER) — keep
 # them in lockstep.
 _ECLIPSE_SOLAR_EMBLEMS = (
     "Solar_Total.png", "Solar_Annular.png",
@@ -334,7 +334,7 @@ _INSTRUMENT_KEYS = (
 _WEEK_ORDER = ("sun", "moon", "mars", "mercury", "jupiter", "venus", "saturn")
 
 # THE SPACE-JUMP INDEX REMAP (owner contract, round R3 restructure,
-# item 9): `render.compositor._weekday_encyclopedia_target` (out of
+# item 9): `render.tooltip_composer._weekday_encyclopedia_target` (out of
 # this round's scope) still returns the OLD raw index — sun=0,
 # moon=1..saturn=6 (`_ENC_WEEK_ORDER`, unaware of the restructure).
 # `_weekday_topic`'s new order happens to leave Monday..Saturday at

@@ -1149,7 +1149,7 @@ def test_seated_digital_slot_enlarges_but_stays_silent(july_wednesday):
     image = compositor.render_offscreen(360.0, 1.0, day, tick)
     assert image.pixelColor(180, 8).alpha() > 200        # painted, no crash
     orbit = 180.0 * defaults.DEFAULT_SKIN.weekday_set.orbit_fraction
-    assert compositor._element_at(
+    assert compositor.element_at(
         QPointF(0.0, orbit), 180.0, 0.0, "mercury"
     ) == "slot:1"
     tip = compositor.tooltip_at(180.0, 180.0 + orbit, 360.0)
@@ -1226,11 +1226,11 @@ def test_seated_slot_wears_its_own_roster():
     # The seated hover speaks the seated figure — same theme on both
     # slots, two casts (the same_unit shortcut must compare rosters).
     comp = Compositor(skin, AssetCache())
-    pantheon_tip = comp._weekday_tooltip(
+    pantheon_tip = comp._tooltips._weekday_tooltip(
         "sun", active=False, theme="greek",
         slot_metal="bronze", roster="pantheon",
     )
-    planetary_tip = comp._weekday_tooltip(
+    planetary_tip = comp._tooltips._weekday_tooltip(
         "sun", active=False, theme="greek",
         slot_metal="bronze", roster="planetary",
     )
@@ -1293,7 +1293,7 @@ def test_hover_rework_moon_and_earth_formats(july_wednesday):
     day, tick = july_wednesday
     compositor = Compositor(defaults.DEFAULT_SKIN, AssetCache())
     compositor.render_offscreen(360.0, 1.0, day, tick)
-    moon = compositor._moon_text()
+    moon = compositor._tooltips._moon_text()
     # Formatting round 2026-07-13: the phase NAME is the title — no
     # "Phase:" label anywhere, the name rides the bigger bold line.
     assert "Phase:</b>" not in moon
@@ -1307,7 +1307,7 @@ def test_hover_rework_moon_and_earth_formats(july_wednesday):
     # does not rise (rises again just after midnight on the 9th); the
     # hover shows the side that exists.
     assert "Moonset:</b> 13:53" in moon
-    earth = compositor._earth_text()
+    earth = compositor._tooltips._earth_text()
     # Fix round E (owner verdict 2026-07-19, slika 1): the date row is
     # the plain date alone — no "Date:" label, no Anno Lucis pairing
     # (the era block right below restates the year in full).
@@ -1334,7 +1334,7 @@ def test_hover_rework_moon_and_earth_formats(july_wednesday):
     nm_tick = build_tick_state(new_moon, nm_day)
     principal = Compositor(defaults.DEFAULT_SKIN, AssetCache())
     principal.render_offscreen(360.0, 1.0, nm_day, nm_tick)
-    title = principal._moon_text()
+    title = principal._tooltips._moon_text()
     assert "14<sup>th</sup> July - 11:43" in title
     assert "&lt;sup&gt;" not in title
 
@@ -1350,7 +1350,7 @@ def test_earth_hover_card_layout_order(july_wednesday):
     day, tick = july_wednesday
     compositor = Compositor(defaults.DEFAULT_SKIN, AssetCache())
     compositor.render_offscreen(360.0, 1.0, day, tick)
-    earth = compositor._earth_text()
+    earth = compositor._tooltips._earth_text()
     date_title = earth.index(">Date<")
     date_row = earth.index("8<sup>th</sup> July 2026")
     era_title = earth.index(">Age of Light<")
@@ -1372,7 +1372,7 @@ def test_earth_hover_card_season_event_line_precedes_season_row(july_wednesday):
     glowing = dataclasses.replace(tick, season_event="Summer Solstice")
     compositor = Compositor(defaults.DEFAULT_SKIN, AssetCache())
     compositor.render_offscreen(360.0, 1.0, day, glowing)
-    earth = compositor._earth_text()
+    earth = compositor._tooltips._earth_text()
     assert earth.index(">Date<") < earth.index("Summer Solstice")
     assert earth.index("Summer Solstice") < earth.index("Season:</b>")
 
@@ -1389,7 +1389,7 @@ def test_earth_hover_card_era_flips_to_darkness_past_6423(july_wednesday):
     far_day = dataclasses.replace(day, deep_cycles=-12)
     compositor = Compositor(defaults.DEFAULT_SKIN, AssetCache())
     compositor.render_offscreen(360.0, 1.0, far_day, tick)
-    earth = compositor._earth_text()
+    earth = compositor._tooltips._earth_text()
     assert ">Age of Darkness<" in earth
     assert ">Age of Light<" not in earth
 
@@ -1414,10 +1414,10 @@ def test_greetings_ride_the_top_ring_jewel_only_when_unlocked(july_wednesday):
     ) / 2
     top = QPointF(0.0, -180.0 * letters)
     bottom = QPointF(0.0, 180.0 * letters)
-    assert compositor._tick_tooltip(top, 180.0) is None      # locked
+    assert compositor._tooltips._tick_tooltip(top, 180.0) is None      # locked
     compositor.set_hidden_unlocked(True)
-    assert compositor._tick_tooltip(bottom, 180.0) is None   # Omega: silent
-    poem = compositor._tick_tooltip(top, 180.0)
+    assert compositor._tooltips._tick_tooltip(bottom, 180.0) is None   # Omega: silent
+    poem = compositor._tooltips._tick_tooltip(top, 180.0)
     assert "Četiri pozdrava" in poem
     assert "Dobar dan" in poem and "ponovi sve ovo" in poem
     assert "Komentar časovničara" in poem
@@ -1459,23 +1459,23 @@ def test_mason_ring_jewels_answer_their_own_hover_legend(july_wednesday):
     # CROSS-WORDS round (owner UV inbox 2026-07-27): every Dollar seat
     # answers with BOTH symbolics — the Double-Trinity OFFICE and the
     # Cube term (the retired Sigma/Alpha/Master readings are gone).
-    g_hover = compositor._tick_tooltip(point_at(12), radius)
+    g_hover = compositor._tooltips._tick_tooltip(point_at(12), radius)
     assert "Eye of Providence" in g_hover and "JUDGE" in g_hover
     assert "eyes of the LORD" in g_hover
     assert "Across the wheel" in g_hover and "Creator" in g_hover
-    s_hover = compositor._tick_tooltip(point_at(16), radius)
+    s_hover = compositor._tooltips._tick_tooltip(point_at(16), radius)
     assert "Satanic Scourge" in s_hover and "DESTROYER" in s_hover
     assert "STORM" in s_hover and "Frenzy" in s_hover
-    m_hover = compositor._tick_tooltip(point_at(20), radius)
+    m_hover = compositor._tooltips._tick_tooltip(point_at(20), radius)
     assert "Malignant Accuser" in m_hover and "PROSECUTOR" in m_hover
     assert "MEGALOMANIA" in m_hover and "Isaiah 14:13" in m_hover
-    omega_hover = compositor._tick_tooltip(point_at(24), radius)
+    omega_hover = compositor._tooltips._tick_tooltip(point_at(24), radius)
     assert "Omnific Originator" in omega_hover and "CREATOR" in omega_hover
     assert "OBLIGATION" in omega_hover
-    n_hover = compositor._tick_tooltip(point_at(4), radius)
+    n_hover = compositor._tooltips._tick_tooltip(point_at(4), radius)
     assert "Nazarene Advocate" in n_hover and "1 John 2:1" in n_hover
     assert "NUMBNESS" in n_hover and "Lethargy" in n_hover
-    a_hover = compositor._tick_tooltip(point_at(8), radius)
+    a_hover = compositor._tooltips._tick_tooltip(point_at(8), radius)
     assert "Anointed Aegis" in a_hover and "GUARDIAN" in a_hover
     assert "ABNEGATION" in a_hover and "Self-Annihilation" in a_hover
 
@@ -1492,7 +1492,7 @@ def test_mason_ring_jewels_answer_their_own_hover_legend(july_wednesday):
     # the same radius/angle — the mechanism never invents an answer.
     domy = Compositor(defaults.DEFAULT_SKIN, AssetCache())
     domy.render_offscreen(360.0, 1.0, day, tick)
-    assert domy._tick_tooltip(point_at(16), radius) is None
+    assert domy._tooltips._tick_tooltip(point_at(16), radius) is None
 
 
 def test_ring_arc_words_answer_their_own_entry_reading(july_wednesday):
@@ -1520,27 +1520,27 @@ def test_ring_arc_words_answer_their_own_entry_reading(july_wednesday):
 
     domy = Compositor(build_skin(Settings()), AssetCache())
     domy.render_offscreen(360.0, 1.0, day, tick)
-    fear = domy._tick_tooltip(point_at(120.0), radius)
+    fear = domy._tooltips._tick_tooltip(point_at(120.0), radius)
     assert fear is not None and "FEAR" in fear and "panic" in fear
-    suffering = domy._tick_tooltip(point_at(0.0), radius)
+    suffering = domy._tooltips._tick_tooltip(point_at(0.0), radius)
     assert "SUFFERING" in suffering and "noon light" in suffering
-    assert domy._tick_tooltip(point_at(90.0), radius) is None  # between words
+    assert domy._tooltips._tick_tooltip(point_at(90.0), radius) is None  # between words
 
     loop = Compositor(
         build_skin(settings_replace(Settings(), ring="LOOP")), AssetCache()
     )
     loop.render_offscreen(360.0, 1.0, day, tick)
-    salvation = loop._tick_tooltip(point_at(180.0), radius)
+    salvation = loop._tooltips._tick_tooltip(point_at(180.0), radius)
     assert "SALVATION" in salvation and "help that delivers" in salvation
 
     dollar = Compositor(
         build_skin(settings_replace(Settings(), ring="Dollar")), AssetCache()
     )
     dollar.render_offscreen(360.0, 1.0, day, tick)
-    annuit = dollar._tick_tooltip(point_at(316.7), radius)
+    annuit = dollar._tooltips._tick_tooltip(point_at(316.7), radius)
     assert "ANNUIT CŒPTIS" in annuit and "favored our undertakings" in annuit
     assert "Anointed Aegis" not in annuit    # THE reported bug, fixed
-    ordo = dollar._tick_tooltip(point_at(186.0), radius)
+    ordo = dollar._tooltips._tick_tooltip(point_at(186.0), radius)
     assert "NOVUS ORDO SECLORUM" in ordo and "new order of the ages" in ordo
     assert "Omnific Originator" not in ordo
 
@@ -1771,14 +1771,14 @@ def test_lunation_before_the_years_first_new_moon(app, july_wednesday):
     tick = build_tick_state(now, day)
     compositor = Compositor(defaults.DEFAULT_SKIN, AssetCache())
     compositor.render_offscreen(360.0, 1.0, day, tick)
-    january = compositor._lunation_ordinal()
+    january = compositor._tooltips._lunation_ordinal()
     assert "12" in january and "2025" in january
     # ...and a mid-year date counts within its own year (first 2026
     # New Moon 18 Jan; by 8 July SIX lunations have started — July's
     # own new moon has not fallen yet).
     july_day, july_tick = july_wednesday
     compositor.render_offscreen(360.0, 1.0, july_day, july_tick)
-    july = compositor._lunation_ordinal()
+    july = compositor._tooltips._lunation_ordinal()
     assert "6" in july and "2026" in july
 
 
@@ -1805,8 +1805,8 @@ def test_lunation_ordinal_reads_the_ring_side(app):
         compositor = Compositor(defaults.DEFAULT_SKIN, AssetCache())
         compositor.render_offscreen(360.0, 1.0, day, tick)
         return (
-            compositor._lunation_ordinal(),
-            compositor._lunation_ordinal(next_cycle=True),
+            compositor._tooltips._lunation_ordinal(),
+            compositor._tooltips._lunation_ordinal(next_cycle=True),
         )
 
     current, following = ordinals(datetime(2026, 7, 11, 12, 0, tzinfo=tz))
@@ -1910,7 +1910,7 @@ def test_climate_zones_name_the_events_and_seasons(app):
     assert "Winter Solstice" in names and "Summer Solstice" in names
     compositor = Compositor(defaults.DEFAULT_SKIN, AssetCache())
     compositor.render_offscreen(360.0, 1.0, sydney, tick)
-    earth = compositor._earth_text()
+    earth = compositor._tooltips._earth_text()
     assert "Winter 18<sup>th</sup> of 94 Days" in earth   # July = their winter
 
     singapore, tick = _day_and_tick(1.3521, 103.8198, "Asia/Singapore")
@@ -1919,7 +1919,7 @@ def test_climate_zones_name_the_events_and_seasons(app):
     assert "June Solstice" in names and "December Solstice" in names
     compositor = Compositor(defaults.DEFAULT_SKIN, AssetCache())
     compositor.render_offscreen(360.0, 1.0, singapore, tick)
-    earth = compositor._earth_text()
+    earth = compositor._tooltips._earth_text()
     assert "Wet season 111<sup>th</sup> of 186 Days" in earth
 
 
@@ -2433,15 +2433,15 @@ def test_moon_marker_hover_outranks_the_ring_tick_during_glow(app):
     moon_x = radius + orbit * math.sin(moon_angle)
     moon_y = radius - orbit * math.cos(moon_angle)
     point = QPointF(moon_x - radius, moon_y - radius)
-    element = comp._element_at(
-        point, radius, comp._rotation(),
+    element = comp.element_at(
+        point, radius, comp.rotation(),
         constants.WEEKDAY_BODIES[day.weekday_index],
     )
     assert element == "moon"          # not None (which would fall to the tick)
     tooltip = comp.tooltip_at(moon_x, moon_y, 540.0)
     # The Moon card leads; the LEARN MORE / SPACE footer (owner
     # 2026-07-26) rides after it — the marker owns a Moon-topic page.
-    assert tooltip.startswith(comp._moon_text())
+    assert tooltip.startswith(comp._tooltips._moon_text())
     assert "domy:encyclopedia" in tooltip
 
 

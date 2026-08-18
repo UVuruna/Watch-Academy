@@ -580,7 +580,7 @@ def test_the_calendar_draws_nothing_with_the_pointer_switched_off(app):
 
 
 def test_the_arm_hover_follows_the_drawn_shape(app):
-    """Rule #5: `Compositor._arm_angle_at` hit-tests the very path the
+    """Rule #5: `Compositor.arm_angle_at` hit-tests the very path the
     layer paints (`arm_shape_path`), so a point inside the drawn HEXAGON
     but outside the star diamond it replaced still answers with its
     arm."""
@@ -596,10 +596,10 @@ def test_the_arm_hover_follows_the_drawn_shape(app):
         polygon_reach = _silhouette_radius(polygon, angle) * tip / TIP
         assert polygon_reach > star_reach
         point = dial_point(angle, (star_reach + polygon_reach) / 2.0)
-        assert Compositor(polygon, AssetCache())._arm_angle_at(
+        assert Compositor(polygon, AssetCache()).arm_angle_at(
             point, radius, 0.0
         ) is not None
-        assert Compositor(star, AssetCache())._arm_angle_at(
+        assert Compositor(star, AssetCache()).arm_angle_at(
             point, radius, 0.0
         ) is None
 

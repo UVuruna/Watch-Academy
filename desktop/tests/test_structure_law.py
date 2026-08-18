@@ -53,17 +53,37 @@ RATCHET: dict[str, tuple[str, str]] = {
         "four names directly), then the class",
     ),
     "render/compositor.py": (
-        "3,311 lines carrying THREE responsibilities: layer stacking with "
-        "cadence-driven caching (~450 lines), hit-testing (_element_at, "
-        "_weekday_body_at, _arm_angle_at, set_hover, encyclopedia_target "
-        "and its targeters), and a ~2,000-line bank of tooltip/article "
-        "HTML builders. The 2026-08-01 session split render/layers.py and "
-        "mapped this one, but the tooltip bank is METHODS reading self._"
-        "skin/_day/_tick and the repositories — extracting it means a "
-        "collaborator object, not a file move",
-        "a dedicated compositor split session — lift the free HTML "
-        "helpers to render/article_html.py first, then the tooltip bank "
-        "into a TooltipComposer, then hit-testing",
+        "1,015 lines on THIS measure (747 on the shared "
+        "structure_guard.py's, which does not count comments) — down "
+        "from 3,311 when this entry was written. R13 of the OOP audit "
+        "(2026-08-18) lifted the ~2,400-line tooltip/article bank out "
+        "into the collaborator render/tooltip_composer.py. What is left "
+        "is layer stacking with cadence-driven caching, hit-testing, and "
+        "the nine geometry questions the composer asks — fifteen logic "
+        "lines over the wall, and the ratchet may only shrink from here",
+        "one more cut, and the audit already named it: hit-testing "
+        "(_element_at, _weekday_body_at, _arm_angle_at, set_hover and "
+        "the hover state they share with paint) is the second "
+        "responsibility in what remains. It needs the owner's word "
+        "because `set_hover` WRITES state `paint` reads, so it is a "
+        "collaborator with a back-channel, not a file move",
+    ),
+    "render/tooltip_composer.py": (
+        "2,238 logic lines, and they are ONE responsibility: every hover "
+        "the dial answers, one short named method per element — the arm "
+        "legends, the weekday bodies, the tick readout, the ring's jewels "
+        "and words, the crown, the moon, the eclipses, the Earth, the "
+        "calendar wedges, the twilight bands, plus the Encyclopedia "
+        "target each of them jumps to. There is no second subject hiding "
+        "in it; its size is the dial's own vocabulary. PENDING OWNER "
+        "RATIFICATION: this entry was added by the autonomous R13 round "
+        "of 2026-08-18, which is also the round that removed the much "
+        "larger compositor.py entry",
+        "a further cut by QUESTION, if the owner wants one: "
+        "render/encyclopedia_targets.py for the ~200 lines that answer "
+        "'what article does this open' rather than 'what does this say' "
+        "(the audit's own third piece). It does not bring the rest under "
+        "the wall, which is why it was not done blind",
     ),
     "config/constants.py": (
         "the second config god-file; Session 36's map covers defaults.py only",

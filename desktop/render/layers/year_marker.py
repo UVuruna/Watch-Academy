@@ -358,7 +358,7 @@ class YearMarkerLayer(Layer):
             # this geometry living in the hit test, and every time the
             # paint moved a marker the copy stayed where it was. So the
             # seat, the lane and the size are module functions now, and
-            # `Compositor._element_at` calls these very ones: what is
+            # `Compositor.element_at` calls these very ones: what is
             # drawn IS what answers the cursor, by construction.
             factor = moon_marker_scale(ctx) / spec.moon_scale
             # During its ±6 h event window the Moon RELOCATES radially to

@@ -158,13 +158,13 @@ def test_phase2b_hover_lines_speak_the_overlay():
     tick = build_tick_state(now, day)
     sr = Compositor(build_skin(Settings()), AssetCache(), overlay=overlay)
     sr._day, sr._last_tick = day, tick
-    title = sr._weekday_tooltip("sun", active=True)
+    title = sr._tooltips._weekday_tooltip("sun", active=True)
     assert "Sunce" in title and "nedelja, 12. jul 2026" in title
-    assert "Leto 22. od 94 dana" in sr._season_row()
-    assert "Osvetljenost" in sr._moon_text()
+    assert "Leto 22. od 94 dana" in sr._tooltips._season_row()
+    assert "Osvetljenost" in sr._tooltips._moon_text()
     en = Compositor(build_skin(Settings()), AssetCache())
     en._day, en._last_tick = day, tick
-    assert "12<sup>th</sup> July 2026" in en._weekday_tooltip("sun", True)
+    assert "12<sup>th</sup> July 2026" in en._tooltips._weekday_tooltip("sun", True)
 
 
 def test_theme_rotation_cycles_and_persists(tmp_path):

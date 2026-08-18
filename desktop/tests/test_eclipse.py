@@ -277,13 +277,13 @@ def test_eclipse_invisible_hover_names_the_reason(app):
         kind="lunar", instant=instant, type="total", magnitude=1.2,
         visible=False,
     )
-    far_line = compositor._eclipse_visibility_text(far_event)
-    horizon_line = compositor._eclipse_visibility_text(horizon_event)
+    far_line = compositor._tooltips._eclipse_visibility_text(far_event)
+    horizon_line = compositor._tooltips._eclipse_visibility_text(horizon_event)
     assert "16123 km away" in far_line
     assert "below the horizon" in horizon_line
     assert str(constants.ECLIPSE_SOLAR_VISIBILITY_KM) not in far_line
     # A visible one says so rather than falling silent.
-    assert "Visible" in compositor._eclipse_visibility_text(
+    assert "Visible" in compositor._tooltips._eclipse_visibility_text(
         dataclasses.replace(far_event, visible=True)
     )
 
@@ -466,8 +466,8 @@ def test_the_eclipse_body_answers_the_cursor_not_the_earth(app):
     today = constants.WEEKDAY_BODIES[day.weekday_index]
 
     def element_at(x: float, y: float) -> str | None:
-        return comp._element_at(
-            QPointF(x - radius, y - radius), radius, comp._rotation(), today,
+        return comp.element_at(
+            QPointF(x - radius, y - radius), radius, comp.rotation(), today,
         )
 
     x, y, _half = _eclipse_body_probe(skin, day, eclipsed)
@@ -556,8 +556,8 @@ def test_the_hover_follows_the_moon_off_the_ring_when_it_yields(app):
     today = constants.WEEKDAY_BODIES[day.weekday_index]
 
     def element_at(point) -> str | None:
-        return comp._element_at(
-            QPointF(point.x(), point.y()), radius, comp._rotation(), today,
+        return comp.element_at(
+            QPointF(point.x(), point.y()), radius, comp.rotation(), today,
         )
 
     ctx = _eclipse_ctx(skin, day, eclipsed)
@@ -815,14 +815,14 @@ def test_the_eclipse_card_is_its_own_and_the_markers_say_nothing(app):
     )
     comp = Compositor(defaults.DEFAULT_SKIN, AssetCache())
     comp.render_offscreen(360.0, 1.0, day, eclipsed)
-    card = comp._eclipse_text()
+    card = comp._tooltips._eclipse_text()
     assert "Total Solar Eclipse" in card          # the chapter's own title
     assert "Magnitude" in card and "1.04" in card
     assert "19:45" in card or "17:45" in card     # local (CEST) vs UT
     assert "Visibility" in card
     # The markers keep their own subjects, and only their own.
-    assert "Eclipse" not in comp._earth_text()
-    assert "Eclipse" not in comp._moon_text()
+    assert "Eclipse" not in comp._tooltips._earth_text()
+    assert "Eclipse" not in comp._tooltips._moon_text()
 
 
 def test_the_lunar_eclipse_card_speaks_its_own_chapter(app):
@@ -839,10 +839,10 @@ def test_the_lunar_eclipse_card_speaks_its_own_chapter(app):
     )
     comp = Compositor(defaults.DEFAULT_SKIN, AssetCache())
     comp.render_offscreen(360.0, 1.0, day, eclipsed)
-    card = comp._eclipse_text()
+    card = comp._tooltips._eclipse_text()
     assert "Total Lunar Eclipse" in card
     assert "1.15" in card
-    assert "Eclipse" not in comp._moon_text()
+    assert "Eclipse" not in comp._tooltips._moon_text()
 
 
 # --- THE ECLIPSES ENCYCLOPEDIA (fix round F, owner order 2026-07-19) -----------
@@ -946,7 +946,7 @@ def test_eclipse_emblem_maps_every_category_and_is_graceful(app):
             kind=kind, instant=now.astimezone(timezone.utc),
             type=type_, magnitude=1.0,
         )
-        path = comp._eclipse_emblem(event)
+        path = comp._tooltips._eclipse_emblem(event)
         assert path is not None and path.name == stem
         assert path.parent == glow.ECLIPSE_ART_DIR
         # Art-arrival-proof (the subdial lesson, 0.14.367): while the
@@ -962,7 +962,7 @@ def test_eclipse_emblem_maps_every_category_and_is_graceful(app):
         kind="solar", instant=now.astimezone(timezone.utc),
         type="bogus", magnitude=1.0,
     )
-    assert comp._eclipse_emblem(unknown) is None
+    assert comp._tooltips._eclipse_emblem(unknown) is None
 
 
 def test_eclipse_hover_card_shows_emblem_when_art_present(app, tmp_path, monkeypatch):
@@ -994,7 +994,7 @@ def test_eclipse_hover_card_shows_emblem_when_art_present(app, tmp_path, monkeyp
     )
     comp = Compositor(defaults.DEFAULT_SKIN, AssetCache())
     comp.render_offscreen(360.0, 1.0, solar_day, solar_tick)
-    card = comp._eclipse_text()
+    card = comp._tooltips._eclipse_text()
     assert "Solar Eclipse" in card
     assert tmp_path.joinpath("Solar_Total.png").as_uri() in card
 
@@ -1010,7 +1010,7 @@ def test_eclipse_hover_card_shows_emblem_when_art_present(app, tmp_path, monkeyp
         eclipse_event=lunar_event, eclipse_body_event=lunar_event,
     )
     comp.render_offscreen(360.0, 1.0, lunar_day, lunar_tick)
-    card = comp._eclipse_text()
+    card = comp._tooltips._eclipse_text()
     assert "Lunar Eclipse" in card
     assert tmp_path.joinpath("Lunar_Total.png").as_uri() in card
 
@@ -1098,7 +1098,7 @@ def test_eclipse_hover_line_carries_the_lunar_type_icon(app):
         )
         comp = Compositor(defaults.DEFAULT_SKIN, AssetCache())
         comp.render_offscreen(360.0, 1.0, day, tick)
-        card = comp._eclipse_text()
+        card = comp._tooltips._eclipse_text()
         assert stem in card, (type_, card)
         # It rides BEFORE the Type row it belongs to, not after.
         assert card.index(stem) < card.index("Type")
@@ -1124,7 +1124,7 @@ def test_eclipse_hover_line_carries_the_solar_type_icon(app):
         )
         comp = Compositor(defaults.DEFAULT_SKIN, AssetCache())
         comp.render_offscreen(360.0, 1.0, day, tick)
-        earth = comp._eclipse_text()
+        earth = comp._tooltips._eclipse_text()
         expected = eclipse_solar_type_icon(type_)
         # `scaled_variant_file` may downscale to a differently-STAMPED
         # cache file, but its name always ends in the source's own
@@ -1157,14 +1157,14 @@ def _sweep_tooltip_texts(comp, size=480.0, rings=6, angles=24):
     not warm the asset cache. Returns every non-empty tooltip string."""
     radius = size / 2
     texts = []
-    center = comp._tooltip_at(radius, radius, size)
+    center = comp._tooltips._tooltip_at(radius, radius, size)
     if center is not None:
         texts.append(center)
     for ring in range(1, rings + 1):
         fraction = ring / rings
         for step in range(angles):
             theta = math.radians(step * 360.0 / angles)
-            text = comp._tooltip_at(
+            text = comp._tooltips._tooltip_at(
                 radius + math.sin(theta) * radius * fraction,
                 radius - math.cos(theta) * radius * fraction,
                 size,
@@ -1206,7 +1206,7 @@ def test_hover_sweep_never_leaks_escaped_markup(app):
         x, y, _half = _eclipse_body_probe(
             defaults.DEFAULT_SKIN, day, tick, radius=size / 2,
         )
-        seat = comp._tooltip_at(float(x), float(y), size)
+        seat = comp._tooltips._tooltip_at(float(x), float(y), size)
         if seat is not None:
             texts.append(seat)
         return texts

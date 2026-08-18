@@ -60,7 +60,7 @@ of the band frame, so the same crossing brings it in) in its place. The
 Dollar's turned seal thus reads MUNDORUM ORDO NUMEN over the top and
 SANCIT FŒDERA under the bottom. A preset without night texts keeps THE
 ARC READING LAW's mirror, unchanged. The hover follows the same
-predicate in `render.compositor._ring_word_legend_tooltip`.
+predicate in `render.tooltip_composer._ring_word_legend_tooltip`.
 
 `Cadence.STATIC`: nothing on this layer depends on the day or the live
 tick — only the skin (letters, tint, saturation) and the dial's size/DPI —

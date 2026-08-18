@@ -591,9 +591,9 @@ def test_trinity_topic_lists_faith_love_hope_and_the_jump_mirrors_it(topics):
     the Encyclopedia's own Trinity topic, which listed Faith, Hope, Love
     until 2026-08-10 (caught in the owner's semantic re-verification).
     The Spacebar jump indexes the hovered trio arm's virtue through
-    render.compositor._ENC_TRIO_ORDER, so the two orders must stay one
+    render.tooltip_composer._ENC_TRIO_ORDER, so the two orders must stay one
     order or the jump opens the wrong page."""
-    from render.compositor import _ENC_TRIO_ORDER
+    from render.tooltip_composer import _ENC_TRIO_ORDER
 
     names = tuple(entry["name"] for entry in topics["trinity"]["entries"])
     assert names == ("Faith", "Love", "Hope")

@@ -1696,7 +1696,7 @@ def test_weekday_title_law_names_the_day_on_ghost_bodies():
     for body, day_name in (
         ("mars", "Tuesday"), ("venus", "Friday"), ("sun", "Sunday"),
     ):
-        tip = comp._weekday_tooltip(body, active=False)
+        tip = comp._tooltips._weekday_tooltip(body, active=False)
         assert day_name in tip, body
 
 

@@ -4,9 +4,9 @@
     "why": "six responsibilities left after WA-R10 lifted the skin composition into app/skin_builder.py (OOP audit 2026-08-18, section 3): lifecycle/tick/settings, shortcuts, menu building, dialog hosting + setter tables, time travel/simulation, translation and window plumbing. All six need the object, so each is a collaborator or a mixin decision, not a file move.",
     "owes": "WA-R14 — shortcuts / menu / dialog hosts / simulation as named modules; the controller keeps state and wiring"
   },
-  "render/compositor.py": {
-    "lines": 2953,
-    "why": "three responsibilities in one file (OOP audit 2026-08-18, section 3): layer stacking with cadence-driven caching, hit-testing, and a ~2,100-line bank of tooltip/article HTML builders that reach into self._skin/_day/_tick.",
-    "owes": "WA-R13 — render/tooltip_composer.py as a collaborator over skin/day/tick; the compositor keeps paint and hit-testing. The free article-HTML helpers left in WA-R11 (render/article_html.py)."
+  "render/tooltip_composer.py": {
+    "lines": 2238,
+    "why": "every hover the dial answers, one short named method per element (WA-R13, 2026-08-18) — the arm legends, the weekday bodies, the tick readout, the ring's jewels and words, the crown, the moon, the eclipses, the Earth, the calendar wedges, the twilight bands, plus the Encyclopedia target each jumps to. ONE responsibility; its size is the dial's own vocabulary. It replaced a 3,099-line render/compositor.py entry, which is now 747 lines and OFF the ratchet. PENDING OWNER RATIFICATION — added by an autonomous round.",
+    "owes": "a further cut by QUESTION if the owner wants one: render/encyclopedia_targets.py for the ~200 lines answering 'what article does this open' rather than 'what does this say'. It would not bring the rest under the wall."
   }
 }
