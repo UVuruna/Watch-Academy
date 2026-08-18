@@ -265,19 +265,19 @@ class EncyclopediaDialog(QDialog):
         self._stack.setCurrentIndex(_HOME)
         self._title.setText(self._tr("Encyclopedia"))
         self._home_button.hide()
-        self._home.fit(self._zoom)
+        self._home.apply_zoom(self._zoom)
         self._refresh_header()
 
     def show_whole(self, key: str) -> None:
         self._themes.show_whole(key)
         self._stack.setCurrentIndex(_THEMES)
-        self._themes.fit(self._zoom)
+        self._themes.apply_zoom(self._zoom)
         self._refresh_header()
 
     def show_topic(self, key: str) -> None:
         self._reader.open_topic(key, 0)
         self._stack.setCurrentIndex(_READER)
-        self._reader.set_zoom(self._zoom)
+        self._reader.apply_zoom(self._zoom)
         self._refresh_header()
 
     def navigate_to(self, topic: str | None, entry: int = 0) -> None:
@@ -295,7 +295,7 @@ class EncyclopediaDialog(QDialog):
         key, index = target
         self._reader.open_topic(key, index)
         self._stack.setCurrentIndex(_READER)
-        self._reader.set_zoom(self._zoom)
+        self._reader.apply_zoom(self._zoom)
         self._refresh_header()
 
     def _crumb_clicked(self, event) -> None:
@@ -374,13 +374,12 @@ class EncyclopediaDialog(QDialog):
         self._apply_zoom()
 
     def _apply_zoom(self) -> None:
-        screen = self._stack.currentIndex()
-        if screen == _HOME:
-            self._home.fit(self._zoom)
-        elif screen == _THEMES:
-            self._themes.fit(self._zoom)
-        else:
-            self._reader.set_zoom(self._zoom)
+        """The screen on show re-lays itself out at the new factor.
+        No branch on WHICH screen: all three are
+        [EncyclopediaScreen](screen.md)s and answer the one protocol
+        (R8 of the OOP audit, 2026-08-18 — this used to be an
+        if/elif/else naming each screen and its own spelling of zoom)."""
+        self._stack.currentWidget().apply_zoom(self._zoom)
 
     def wheelEvent(self, event) -> None:      # noqa: N802 — Qt override
         """Ctrl+MouseWheel zooms the WHOLE encyclopedia when the cursor

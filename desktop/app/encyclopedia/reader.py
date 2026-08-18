@@ -39,6 +39,7 @@ from PySide6.QtWidgets import (
 
 from app import rebuild
 from app.encyclopedia import tree as topic_tree
+from app.encyclopedia.screen import EncyclopediaScreen
 from app.encyclopedia.text import article_text, entry_name, flow_html, image_tooltip
 from app.ui_style import style_button, style_look_chip, uniform_width
 from config import constants, defaults, encyclopedia_ui, paths
@@ -48,21 +49,17 @@ from render.asset_variants import scaled_variant_file
 from render.article_html import HEX_NOTE, SUBHEAD
 
 
-class ReaderScreen(QWidget):
+class ReaderScreen(EncyclopediaScreen):
     """The article slider for one topic."""
 
     page_changed = Signal()
     zoomed = Signal(float)
 
     def __init__(self, topics: dict, symbolism, encyclopedia, tr):
-        super().__init__()
-        self._topics = topics
+        super().__init__(topics, encyclopedia, tr)
         self._symbolism = symbolism
-        self._encyclopedia = encyclopedia
-        self._tr = tr
         self._topic_key: str | None = None
         self._entry_index = 0
-        self._zoom = 1.0
         self._cells: list[dict] = []
         self._blocks: list[QWidget] = []
         self._text_labels: list[QLabel] = []
@@ -189,8 +186,9 @@ class ReaderScreen(QWidget):
         )
         self._show_entry()
 
-    def set_zoom(self, zoom: float) -> None:
-        self._zoom = zoom
+    def _relayout(self) -> None:
+        """The reader has no grid to fit: it rescales its own page —
+        the font, the images and the diagrams together."""
         self._rescale()
 
     # --- the page ----------------------------------------------------------

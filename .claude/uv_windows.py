@@ -7,9 +7,11 @@ LEGIBILITY LAW, and this file points the runner at those same builders. One
 window built two ways is two windows in practice, and the audit's one is the
 one the law is written about.
 
-Registered here: the four windows the owner opens most. The remaining ones
-(EncyclopediaDialog, ObservatoryDialog, TimeTravelDialog, LegendPopup) stay in
-the pytest audit only - add them below when a session touches them.
+Registered here: the four windows the owner opens most, plus the three the
+OOP-audit refactor round of 2026-08-18 touched (EncyclopediaDialog for R8's
+screen base, ObservatoryDialog for R12's package split, TimeTravelDialog for
+R9's dialog base) - exactly as this file has always instructed: add a window
+below when a session touches it. LegendPopup stays in the pytest audit only.
 """
 
 from __future__ import annotations
@@ -66,9 +68,24 @@ def make_report():
     return _audit_factory("ReportDialog")()
 
 
+def make_encyclopedia():
+    return _audit_factory("EncyclopediaDialog")()
+
+
+def make_observatory():
+    return _audit_factory("ObservatoryDialog")()
+
+
+def make_time_travel():
+    return _audit_factory("TimeTravelDialog")()
+
+
 WINDOWS = {
     "WatchFaceDialog": make_watch_face,
     "SettingsDialog": make_settings_dialog,
     "ShortcutsDialog": make_shortcuts,
     "ReportDialog": make_report,
+    "EncyclopediaDialog": make_encyclopedia,
+    "ObservatoryDialog": make_observatory,
+    "TimeTravelDialog": make_time_travel,
 }

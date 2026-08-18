@@ -21,6 +21,7 @@ flowchart LR
 | File | Tier | One line |
 |------|------|----------|
 | `dialog.py` | Algorithmic | the window shell — header row, stack, navigation — [about](__about/dialog.md) · [flow](__flow/dialog.md) |
+| `screen.py` | Standard | `EncyclopediaScreen` — the base every level is: `(topics, encyclopedia, tr)`, a zoom factor, and ONE `apply_zoom` — [about](__about/screen.md) |
 | `home.py` | Algorithmic | level one, the nine wholes, no scroll ever — [about](__about/home.md) · [flow](__flow/home.md) |
 | `themes.py` | Algorithmic | level two, one whole's theme cards, vertical scroll only — [about](__about/themes.md) · [flow](__flow/themes.md) |
 | `reader.py` | Algorithmic | level three, the article slider and its sizing algorithm — [about](__about/reader.md) · [flow](__flow/reader.md) |

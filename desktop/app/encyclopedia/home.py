@@ -18,24 +18,21 @@ Layer: app. Documentation: home.md.
 
 from PySide6.QtCore import Signal
 from PySide6.QtGui import QPixmap
-from PySide6.QtWidgets import QSizePolicy, QVBoxLayout, QWidget
+from PySide6.QtWidgets import QSizePolicy, QVBoxLayout
 
 from app.encyclopedia.cards import CardGrid, mosaic_pixmap
+from app.encyclopedia.screen import EncyclopediaScreen
 from config import encyclopedia_ui, paths
 from config import encyclopedia_tree as tree
 
 
-class HomeScreen(QWidget):
+class HomeScreen(EncyclopediaScreen):
     """The nine wholes, 3x3, no scroll ever."""
 
     opened = Signal(str)
 
     def __init__(self, topics: dict, encyclopedia, tr):
-        super().__init__()
-        self._topics = topics
-        self._encyclopedia = encyclopedia
-        self._tr = tr
-        self._zoom = 1.0
+        super().__init__(topics, encyclopedia, tr)
         self._grid = CardGrid(encyclopedia_ui.ENCYCLOPEDIA_HOME_COLUMNS)
         self._grid.opened.connect(self.opened)
         # THE GRID NEVER DICTATES A MINIMUM (owner bug 2026-07-29, the
@@ -89,11 +86,11 @@ class HomeScreen(QWidget):
             "accent": whole.accent,
         }
 
-    def fit(self, zoom: float | None = None) -> None:
-        if zoom is not None:
-            self._zoom = zoom
+    def _relayout(self) -> None:
+        """The 3x3 never scrolls, so the cards are measured from THIS
+        widget's own box — width and height both."""
         self._grid.fit(self.width(), self.height(), self._zoom)
 
     def resizeEvent(self, event) -> None:      # noqa: N802 — Qt override
         super().resizeEvent(event)
-        self.fit()
+        self.apply_zoom()

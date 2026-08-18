@@ -16,24 +16,21 @@ Layer: app. Documentation: themes.md.
 """
 
 from PySide6.QtCore import Qt, Signal
-from PySide6.QtWidgets import QFrame, QScrollArea, QVBoxLayout, QWidget
+from PySide6.QtWidgets import QFrame, QScrollArea, QVBoxLayout
 
 from app.encyclopedia.cards import CardGrid, card_pixmap
+from app.encyclopedia.screen import EncyclopediaScreen
 from config import encyclopedia_ui
 from config import encyclopedia_tree as tree
 
 
-class ThemeScreen(QWidget):
+class ThemeScreen(EncyclopediaScreen):
     """The theme cards of ONE whole."""
 
     opened = Signal(str)
 
     def __init__(self, topics: dict, encyclopedia, tr):
-        super().__init__()
-        self._topics = topics
-        self._encyclopedia = encyclopedia
-        self._tr = tr
-        self._zoom = 1.0
+        super().__init__(topics, encyclopedia, tr)
         self._whole: tree.Whole | None = None
         self._grid = CardGrid(encyclopedia_ui.ENCYCLOPEDIA_GALLERY_MAX_COLUMNS)
         self._grid.opened.connect(self.opened)
@@ -58,7 +55,7 @@ class ThemeScreen(QWidget):
             self._spec(theme) for theme in self._whole.themes
             if theme in self._topics
         ])
-        self.fit()
+        self.apply_zoom()
         self._scroll.verticalScrollBar().setValue(0)
 
     def _spec(self, theme: str) -> dict:
@@ -76,11 +73,11 @@ class ThemeScreen(QWidget):
             "accent": self._whole.accent,
         }
 
-    def fit(self, zoom: float | None = None) -> None:
-        if zoom is not None:
-            self._zoom = zoom
+    def _relayout(self) -> None:
+        """This gallery SCROLLS, so only the viewport's width is an
+        input — the height is whatever the cards need."""
         self._grid.fit(self._scroll.viewport().width(), None, self._zoom)
 
     def resizeEvent(self, event) -> None:      # noqa: N802 — Qt override
         super().resizeEvent(event)
-        self.fit()
+        self.apply_zoom()
