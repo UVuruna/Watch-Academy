@@ -9,48 +9,27 @@ want them, so they moved out here (Rule #5).
 Layer: app. Documentation: text.md.
 """
 
-import html as _html
 from pathlib import Path
 
-from config import encyclopedia_ui
-from render.compositor import _HEX_NOTE, _SUBHEAD, _highlight_terms
+from render.article_html import article_paragraphs
 
 
 def flow_html(text: str, tr=None) -> str:
     """Article prose that REFLOWS with the window (owner 2026-07-13: the
     paragraphs span the block and re-wrap live) — no fixed character
-    wrap; QLabel's word wrap fills the width. The spine terms bolded
-    (THE LEGEND BOLD LAW, owner 2026-07-26), hex notes stripped,
-    JUSTIFIED like the legend, and [[Subhead]] markers drawn as bold
-    headings (owner 2026-07-14; `tr` localizes the label)."""
-    text = _HEX_NOTE.sub("", text)
-    parts = []
-    for paragraph in text.split("\n\n"):
-        match = _SUBHEAD.match(paragraph)
-        body_style = ""
-        if match:
-            label = match.group(1)
-            if tr is not None:
-                label = tr(label)
-            # CENTERED, hugging its own paragraph (owner 2026-07-14
-            # round two — same rule as the hover legends).
-            parts.append(
-                "<p align='center' style='"
-                f"margin-top:{encyclopedia_ui.ARTICLE_SUBHEAD_GAP_ABOVE_PX}px;"
-                f"margin-bottom:{encyclopedia_ui.ARTICLE_SUBHEAD_GAP_BELOW_PX}px'>"
-                f"<b>{_html.escape(label)}</b></p>"
-            )
-            paragraph = paragraph[match.end():]
-            body_style = (
-                f" style='margin-top:"
-                f"{encyclopedia_ui.ARTICLE_SUBHEAD_GAP_BELOW_PX}px'"
-            )
-        parts.append(
-            f"<p align='justify'{body_style}>"
-            + _highlight_terms(_html.escape(paragraph))
-            + "</p>"
-        )
-    return "<div>" + "".join(parts) + "</div>"
+    wrap; QLabel's word wrap fills the width.
+
+    The paragraphs themselves come from [Article
+    HTML](../../render/__about/article_html.md), the ONE place the
+    owner's article rules live — the spine terms bolded (THE LEGEND
+    BOLD LAW), hex notes stripped, justified, [[Subhead]] markers drawn
+    as bold headings. This function's whole contribution is the `<div>`
+    around them: the reader's label wants a block element, the hover
+    legend's fixed-width table does not. Until R11 of the OOP audit
+    (2026-08-18) it was a line-for-line copy of that builder, kept in
+    step by hand and reaching into the render layer for three PRIVATE
+    names to do it."""
+    return "<div>" + article_paragraphs(text, tr) + "</div>"
 
 
 def image_tooltip(path: Path) -> str:

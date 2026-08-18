@@ -1629,9 +1629,9 @@ def test_legend_highlighting_bolds_the_spine_only():
     WEEKDAY — pops in plain bold; color words and everything else read
     plain, and no colored span survives anywhere; hex notes never
     display."""
-    from render.compositor import _article_body_html
+    from render.article_html import article_body_html
 
-    out = _article_body_html(
+    out = article_body_html(
         "Patience heals Jealousy in green (#007E00), the mood called "
         "Renewal — the red planet pays in gold on Tuesday."
     )
@@ -1644,21 +1644,21 @@ def test_legend_highlighting_bolds_the_spine_only():
     assert ">green</b>" not in out
     assert ">red</b>" not in out
     assert ">gold</b>" not in out
-    sr = _article_body_html("Strpljenje leči Ljubomoru, a zeleno je Obnova.")
+    sr = article_body_html("Strpljenje leči Ljubomoru, a zeleno je Obnova.")
     assert "<b>Strpljenje</b>" in sr
     assert "<b>Ljubomoru</b>" in sr
     assert "<b>Obnova</b>" in sr
     assert ">zeleno</b>" not in sr
     # LOWERCASE canon mentions burn too (owner report 2026-07-12), the
     # -šću instrumentals included.
-    lower = _article_body_html(
+    lower = article_body_html(
         "njegov porok je gordost, a vrlina poniznost — gordošću pada"
     )
     assert "<b>gordost</b>" in lower
     assert "<b>poniznost</b>" in lower
     assert "<b>gordošću</b>" in lower
     # No spine terms at all: nothing bolds.
-    plain = _article_body_html("A quiet field under an open sky.")
+    plain = article_body_html("A quiet field under an open sky.")
     assert "</b>" not in plain
 
 
@@ -1667,21 +1667,21 @@ def test_hover_teaser_law_truncates_to_the_thesis():
     hover speaks only the first LEGEND_TEASER_SENTENCES of the first
     paragraph, closed with an ellipsis; a short single-paragraph text
     passes whole; a leading [[Subhead]] marker is dropped."""
-    from render.compositor import _teaser
+    from render.article_html import teaser
 
     long = (
         "First sentence. Second sentence! Third sentence?"
         "\n\nSecond paragraph never shows."
     )
-    out = _teaser(long)
+    out = teaser(long)
     assert out == "First sentence. Second sentence! …"
     assert "Third" not in out and "Second paragraph" not in out
     # A short, single-paragraph article passes untouched — no ellipsis.
-    assert _teaser("One line only.") == "One line only."
+    assert teaser("One line only.") == "One line only."
     # More paragraphs behind a short first one still earn the ellipsis.
-    assert _teaser("One line.\n\nMore.").endswith("…")
+    assert teaser("One line.\n\nMore.").endswith("…")
     # Subhead markers never leak into a teaser.
-    assert _teaser("[[The Figure]] Odin rules. And more. And more.\n\nX") \
+    assert teaser("[[The Figure]] Odin rules. And more. And more.\n\nX") \
         .startswith("Odin rules.")
 
 
@@ -1704,9 +1704,9 @@ def test_learn_more_footer_names_both_roads():
     """THE HOVER TEASER LAW's footer (owner 2026-07-26): the clickable
     LEARN MORE anchor and the SPACE hint, on the domy:encyclopedia
     href the popup routes to the Spacebar jump."""
-    from render.compositor import _learn_more_footer
+    from render.article_html import learn_more_footer
 
-    out = _learn_more_footer(lambda s: s)
+    out = learn_more_footer(lambda s: s)
     assert "domy:encyclopedia" in out
     assert "<u>Learn more</u>" in out
     assert "press SPACE" in out
@@ -1716,10 +1716,10 @@ def test_subhead_markers_render_as_translated_headings():
     """RUNDA D (owner plan 2026-07-14): a [[Marker]] paragraph prefix
     becomes a bold left-aligned heading translated through the ui
     catalog; the marker itself never reaches the justified body."""
-    from render.compositor import _article_paragraphs
+    from render.article_html import article_paragraphs
 
     text = "[[The Figure]] Odin rules Wednesday.\n\nA plain paragraph."
-    sr = _article_paragraphs(
+    sr = article_paragraphs(
         text, tr=lambda s: {"The Figure": "Lik"}.get(s, s)
     )
     assert "<b>Lik</b>" in sr
@@ -1736,7 +1736,7 @@ def test_subhead_markers_render_as_translated_headings():
         encyclopedia_ui.ARTICLE_SUBHEAD_GAP_ABOVE_PX
         > encyclopedia_ui.ARTICLE_SUBHEAD_GAP_BELOW_PX
     )
-    en = _article_paragraphs(text)                   # no translator: EN label
+    en = article_paragraphs(text)                   # no translator: EN label
     assert "<b>The Figure</b>" in en and "[[" not in en
 
 

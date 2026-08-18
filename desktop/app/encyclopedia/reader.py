@@ -45,7 +45,7 @@ from config import constants, defaults, encyclopedia_ui, paths
 from render.asset_recolor import ensure_variant, variant_pending
 from render import cube_preview3d, diagrams
 from render.asset_variants import scaled_variant_file
-from render.compositor import _HEX_NOTE, _SUBHEAD
+from render.article_html import HEX_NOTE, SUBHEAD
 
 
 class ReaderScreen(QWidget):
@@ -613,9 +613,9 @@ class ReaderScreen(QWidget):
             ch if ch.isalnum() or ch in " ·-_()" else "_" for ch in name
         ).strip()
         lines = [name, ""]
-        text = _HEX_NOTE.sub("", self._article_text(entry["article"]))
+        text = HEX_NOTE.sub("", self._article_text(entry["article"]))
         for paragraph in text.split("\n\n"):
-            match = _SUBHEAD.match(paragraph)
+            match = SUBHEAD.match(paragraph)
             if match:
                 lines.append(f"[{self._tr(match.group(1))}]")
                 paragraph = paragraph[match.end():]

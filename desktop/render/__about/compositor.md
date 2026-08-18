@@ -102,6 +102,17 @@ violated in the code, not papered over here).
 
 ## Connections
 
+**The ARTICLE HTML vocabulary is NOT here any more** (R11 of the [OOP
+audit](../../../docs/AUDIT-OOP-2026-08-18.md), 2026-08-18). The free
+helpers that turn an article's prose into rich text — the bold spine,
+the teaser, the `[[Subhead]]` marker, the justified column, the LEARN
+MORE footer, the hover badge — live in [Article
+HTML](article_html.md) and are PUBLIC there, which is what lets the
+Encyclopedia stop importing private names out of the render layer
+(finding L1). Two free functions stayed, because neither is about
+text: `_crown_arc_centre` (dial geometry) and `_greetings` (a JSON
+read).
+
 ### Uses
 - [Layers (subfolder)](../layers/___layers.md) — every concrete `Layer`
   subclass, stacked by `_build_layers`

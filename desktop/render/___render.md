@@ -52,7 +52,7 @@ hover-invariant groups, and answers every hit-test/tooltip question.
 | `eclipse_danjon.py` | Standard | the Danjon L=0..4 brightness scale as a lunar display style — the INDICATIVE derivation and its five-cell legend — [about](__about/eclipse_danjon.md) |
 | `marker_marks.py` | Algorithmic | what a marker wears on an ordinary day — pointer shapes and the four life stations — [about](__about/marker_marks.md) · [flow](__flow/marker_marks.md) |
 | `solar_eclipse.py` | Algorithmic | every picture the SUN side of an eclipse draws — six styles over four catalog types — [about](__about/solar_eclipse.md) · [flow](__flow/solar_eclipse.md) |
-| `compositor.py` | Algorithmic | Z-ordered stack, cached compositing, hit-testing, the tooltip HTML bank — GOD-FILE, ratcheted — [about](__about/compositor.md) · [flow](__flow/compositor.md) |
+| `compositor.py` | Algorithmic | Z-ordered stack, cached compositing, hit-testing, the tooltip bank — GOD-FILE, ratcheted — [about](__about/compositor.md) · [flow](__flow/compositor.md) |
 | `assets.py` | Algorithmic | `AssetCache` — rasterize/tint/metal-swap, the working set — [about](__about/assets.md) · [flow](__flow/assets.md) |
 | `asset_recolor.py` | Algorithmic | disk-cached metal finishes, the lazy variant ledger — [about](__about/asset_recolor.md) · [flow](__flow/asset_recolor.md) |
 | `asset_variants.py` | Algorithmic | moon render, subdial plate resolver, computed icons — [about](__about/asset_variants.md) · [flow](__flow/asset_variants.md) |
@@ -67,6 +67,7 @@ hover-invariant groups, and answers every hit-test/tooltip question.
 | `canon_diagrams.py` | Algorithmic | the doctrine's journeys and tables, computed — [about](__about/canon_diagrams.md) · [flow](__flow/canon_diagrams.md) |
 | `cube_diagrams.py` | Algorithmic | the Character Cube's isometric compositions — [about](__about/cube_diagrams.md) · [flow](__flow/cube_diagrams.md) |
 | `cube_preview3d.py` | Algorithmic | guarded bridge to the 3D Preview gadget, graceful 2D fallback — [about](__about/cube_preview3d.md) · [flow](__flow/cube_preview3d.md) |
+| `article_html.py` | Standard | THE ARTICLE HTML VOCABULARY — the owner's article rules (bold spine, teaser, subheads, justified column) in ONE place — [about](__about/article_html.md) |
 | `diagram_bank.py` | Standard | `DiagramBank` — the drawer table, the cache and `plate()`/`kinds()`, written once for all three diagram modules — [about](__about/diagram_bank.md) |
 | `diagrams.py` | Standard | the one door to the three diagram modules — [about](__about/diagrams.md) |
 | `__init__.py` | Trivial | docstring only, no code |

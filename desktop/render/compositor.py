@@ -37,6 +37,11 @@ from core.year_wheel import (
     meteorological_span,
     zodiac_span,
 )
+from render.article_html import (
+    article_body_html, article_html, article_paragraphs, centered,
+    centered_html, hover_badge, hover_title, learn_more_footer,
+    ordinal, teaser,
+)
 from render.assets import AssetCache
 from render.asset_recolor import metal_variant_file
 from render.asset_variants import eclipse_solar_type_icon, scaled_variant_file
@@ -114,25 +119,6 @@ _RENDER_HINTS = (
 )
 
 
-def _centered(*lines: str) -> str:
-    """Tooltip rich text with CENTERED lines (owner spec — QToolTip
-    left-aligns plain text). Every line keeps its full width — QToolTip
-    would otherwise wrap long lines at its own narrow heuristic (owner
-    bug report: "Dusk 21:01" broke onto a new line)."""
-    return _centered_html(*(html.escape(line) for line in lines))
-
-
-def _centered_html(*lines: str) -> str:
-    """Centered tooltip from lines that are ALREADY safe HTML (ordinal
-    superscripts etc.) — the caller escapes any free-form data. Each
-    line is wrapped in a no-wrap div so it owns one full-width row."""
-    body = "".join(
-        f"<div style='white-space:nowrap'>{line if line else '&nbsp;'}</div>"
-        for line in lines
-    )
-    return f"<div align='center'>{body}</div>"
-
-
 def _crown_arc_centre(entry: dict) -> float:
     """One crown-text entry's own arc centre — the axis THE ARC READING
     LAW reflects about (`core.world.arc_centre_deg`). Computed from the
@@ -142,50 +128,6 @@ def _crown_arc_centre(entry: dict) -> float:
     return world.arc_centre_deg([theta for _asset, theta in entry["glyphs"]])
 
 
-def _ordinal(n: int) -> str:
-    """"9<sup>th</sup>" — the raised ordinal suffix of the hover rework
-    (owner spec: the suffix rides above the line)."""
-    if 10 <= n % 100 <= 20:
-        suffix = "th"
-    else:
-        suffix = {1: "st", 2: "nd", 3: "rd"}.get(n % 10, "th")
-    return f"{n}<sup>{suffix}</sup>"
-
-
-# THE LEGEND BOLD LAW (owner 2026-07-26, CUBE.md §Display and Legend
-# Laws — supersedes the 2026-07-12 rainbow): the web's SPINE pops in the
-# article prose in plain BOLD, nothing else — the virtues, the vices,
-# the emotions/moods and the WEEKDAYS, the terms that bind the abstract
-# figures together. Color words read plain. Hex notes like " (#F8E600)"
-# never display. Rules are owner-tunable in defaults; matching runs
-# over the shipped ORIGINALS (English + Serbian) — machine-translated
-# languages read plain.
-_HEX_NOTE = re.compile(r"\s*\(#[0-9A-Fa-f]{6}\)")
-_TERM_RULES = [
-    re.compile(
-        rf"\b(?:{'|'.join(encyclopedia_ui.LEGEND_TERM_PATTERNS[category])})\b",
-        re.IGNORECASE,
-    )
-    for category in ("virtue", "vice", "mood", "weekday")
-]
-
-
-def _highlight_terms(escaped: str) -> str:
-    """Wrap every spine term of an ESCAPED prose line in plain bold
-    (the markup the rules insert never re-matches a rule)."""
-    for pattern in _TERM_RULES:
-        escaped = pattern.sub(
-            lambda match: f"<b>{match.group(0)}</b>", escaped
-        )
-    return escaped
-
-
-# Subheadings (owner 2026-07-14): article paragraphs may open with a
-# [[Subhead]] marker from the FIXED vocabulary — rendered as a bold
-# heading line, translated through the ui catalog.
-_SUBHEAD = re.compile(r"^\[\[(.+?)\]\]\s*")
-
-
 @lru_cache(maxsize=1)
 def _greetings() -> dict:
     """The owner's Four Greetings (Database/verses.json) — Serbian in
@@ -193,133 +135,6 @@ def _greetings() -> dict:
     return json.loads(
         (paths.database_dir() / "verses.json").read_text(encoding="utf-8")
     )["trinity"]
-
-
-def _teaser(text: str) -> str:
-    """THE HOVER TEASER LAW (owner 2026-07-26, CUBE.md §Display and
-    Legend Laws): an article hover speaks only its THESIS — the first
-    `LEGEND_TEASER_SENTENCES` of the first paragraph — never the whole
-    article; the full text lives in the Encyclopedia (the LEARN MORE /
-    SPACE footer rides in `tooltip_at`). A leading [[Subhead]] marker
-    is dropped with the rest of the body."""
-    first = text.split("\n\n", 1)[0]
-    first = _SUBHEAD.sub("", first).strip()
-    sentences = re.split(r"(?<=[.!?])\s+", first)
-    keep = encyclopedia_ui.LEGEND_TEASER_SENTENCES
-    if len(sentences) <= keep and first == text.strip():
-        return first
-    return " ".join(sentences[:keep]).rstrip() + " …"
-
-
-def _learn_more_footer(tr) -> str:
-    """THE HOVER TEASER LAW's footer (owner 2026-07-26 + the clickable
-    amendment): every hover that owns an Encyclopedia page closes with
-    a separated, underlined LEARN MORE link — the popup routes its
-    click to the SAME jump SPACE makes — plus the SPACE hint for those
-    who know it."""
-    return (
-        "<hr/><div align='center'>"
-        f"<a href='domy:encyclopedia' "
-        f"style='color:{palette.LEGEND_MORE_LINK_COLOR}'>"
-        f"<u>{html.escape(tr('Learn more'))}</u></a>"
-        f"&nbsp;&nbsp;<span style='color:{palette.LEGEND_MORE_HINT_COLOR}'>"
-        f"{html.escape(tr('press SPACE'))}</span></div>"
-    )
-
-
-def _article_paragraphs(text: str, tr=None) -> str:
-    """The bare JUSTIFIED paragraphs of an article (owner 2026-07-13
-    round two — clean edges on both sides, like a book column): the
-    spine terms bolded (THE LEGEND BOLD LAW above), hex notes
-    stripped, [[Subhead]] markers drawn as bold headings (owner
-    2026-07-14; `tr` localizes the label). The caller provides the
-    width-constrained cell."""
-    text = _HEX_NOTE.sub("", text)
-    parts = []
-    for p in text.split("\n\n"):
-        match = _SUBHEAD.match(p)
-        body_style = ""
-        if match:
-            label = match.group(1)
-            if tr is not None:
-                label = tr(label)
-            # CENTERED, hugging its own paragraph (owner 2026-07-14
-            # round two: the gap above must beat the gap below).
-            parts.append(
-                "<p align='center' style='"
-                f"margin-top:{encyclopedia_ui.ARTICLE_SUBHEAD_GAP_ABOVE_PX}px;"
-                f"margin-bottom:{encyclopedia_ui.ARTICLE_SUBHEAD_GAP_BELOW_PX}px'>"
-                f"<b>{html.escape(label)}</b></p>"
-            )
-            p = p[match.end():]
-            body_style = (
-                f" style='margin-top:"
-                f"{encyclopedia_ui.ARTICLE_SUBHEAD_GAP_BELOW_PX}px'"
-            )
-        parts.append(
-            f"<p align='justify'{body_style}>"
-            f"{_highlight_terms(html.escape(p))}</p>"
-        )
-    return "".join(parts)
-
-
-def _article_body_html(text: str, tr=None) -> str:
-    """One article as a single fixed-width column: the paragraphs
-    reflow inside the declared table cell (the legend popup measures
-    the document and honors this width)."""
-    return (
-        f"<table><tr><td width='{encyclopedia_ui.ARTICLE_TEXT_WIDTH_PX}'>"
-        f"{_article_paragraphs(text, tr)}</td></tr></table>"
-    )
-
-
-def _hover_title(text_html: str) -> str:
-    """A hover TITLE line (owner 2026-07-13 round two): bigger and
-    bold, centered — the phase name, the Ascendant word, the season
-    and turning-point names all wear it."""
-    return (
-        f"<div align='center'><span style='font-size:"
-        f"{encyclopedia_ui.ARTICLE_TITLE_PX}px; font-weight:bold'>"
-        f"{text_html}</span></div>"
-    )
-
-
-def _article_html(
-    image, title_html: str | None, text: str, tr=None,
-) -> str:
-    """One ARTICLE hover: the entity's art on top (larger and
-    clearer than on the dial — owner EXTRAS; a TUPLE draws the images
-    side by side — the dual Sunday's two plates, owner 2026-07-13), an
-    optional centered title line, then the article's TEASER (THE HOVER
-    TEASER LAW — never the whole text; the Encyclopedia holds it)."""
-    parts = []
-    images = image if isinstance(image, tuple) else (image,)
-    tags = "".join(
-        f"<img src='"
-        f"{scaled_variant_file(img, 2 * encyclopedia_ui.ARTICLE_IMAGE_WIDTH_PX).as_uri()}' "
-        f"width='{encyclopedia_ui.ARTICLE_IMAGE_WIDTH_PX}'/>"
-        for img in images
-        if img is not None and paths.art_file(img).exists()
-    )
-    if tags:
-        parts.append(f"<div align='center'>{tags}</div>")
-    if title_html is not None:
-        parts.append(f"<div align='center'>{title_html}</div><br/>")
-    parts.append(_article_body_html(_teaser(text), tr))
-    return "".join(parts)
-
-
-def _hover_badge(path) -> str:
-    """The emblem above an arm hover (owner 2026-07-13: the trinity,
-    season and turning-point badges ride their tooltips) — empty when
-    the art is missing."""
-    if path is None or not paths.art_file(path).exists():
-        return ""
-    small = scaled_variant_file(path, 2 * defaults.HOVER_BADGE_WIDTH_PX)
-    return (
-        f"<div align='center'><img src='{small.as_uri()}' "
-        f"width='{defaults.HOVER_BADGE_WIDTH_PX}'/></div>"
-    )
 
 
 def _build_layers(skin: SkinDefinition) -> list[Layer]:
@@ -668,7 +483,7 @@ class Compositor:
     def _ord(self, n: int) -> str:
         """English keeps the raised suffix (owner spec); every other
         language reads the standard European "12."."""
-        return f"{n}." if self._overlay else _ordinal(n)
+        return f"{n}." if self._overlay else ordinal(n)
 
     def _month(self, when) -> str:
         return self._tr(_MONTHS[when.month - 1])
@@ -1061,7 +876,7 @@ class Compositor:
         if tip is None:
             return None
         if self.encyclopedia_target(x, y, size) is not None:
-            tip += _learn_more_footer(self._tr)
+            tip += learn_more_footer(self._tr)
         return tip
 
     def _tooltip_at(self, x: float, y: float, size: float) -> str | None:
@@ -1445,7 +1260,7 @@ class Compositor:
     def _eclipse_emblem(self, eclipse):
         """The active eclipse's category emblem Path (fix round F, owner
         slika 7 — the hover-card badge), or None for an unknown type;
-        `_hover_badge(None)` degrades to empty, so a missing/unknown
+        `hover_badge(None)` degrades to empty, so a missing/unknown
         emblem simply shows no image (graceful-absent)."""
         stem = glow.ECLIPSE_TYPE_EMBLEM.get((eclipse.kind, eclipse.type))
         return glow.ECLIPSE_ART_DIR / f"{stem}.png" if stem else None
@@ -1929,7 +1744,7 @@ class Compositor:
                 f"<br/>"
                 f"{html.escape(self._tr(constants.WEEKDAY_FULL_NAMES[body]))}"
             )
-        return _article_html(image, title, text, tr=self._tr)
+        return article_html(image, title, text, tr=self._tr)
 
     def _archetype_arm_index(self, arm_angle: float) -> int:
         """The figures-tuple index of an unrotated arm angle — the same
@@ -1971,11 +1786,11 @@ class Compositor:
         node = self._symbolism.archetype_article(set_name, tree_fig["entity"])
         rows = (node or {}).get("rows") or ()
         # Column 1 — the age name and its text (or the pending line).
-        text_col = _hover_title(html.escape(self._tr(tree_fig["name"])))
+        text_col = hover_title(html.escape(self._tr(tree_fig["name"])))
         if rows:
-            text_col += _article_paragraphs(_teaser(rows[0]), tr=self._tr)
+            text_col += article_paragraphs(teaser(rows[0]), tr=self._tr)
         else:
-            text_col += _centered_html(
+            text_col += centered_html(
                 "",
                 html.escape(self._tr(archetypes.ARCHETYPE_PENDING_LINE)),
             )
@@ -1991,9 +1806,9 @@ class Compositor:
                     f"width='{encyclopedia_ui.ARTICLE_THREE_IMAGE_PX}'/></div>"
                 )
             return (
-                _hover_title(html.escape(self._tr(caption)))
+                hover_title(html.escape(self._tr(caption)))
                 + image
-                + _centered_html(f"<b>{html.escape(self._tr(fig['row2']))}</b>")
+                + centered_html(f"<b>{html.escape(self._tr(fig['row2']))}</b>")
             )
 
         width = encyclopedia_ui.ARTICLE_THREE_COLUMN_WIDTH_PX
@@ -2025,7 +1840,7 @@ class Compositor:
         node = self._symbolism.archetype_article(set_name, fig["entity"])
         rows = (node or {}).get("rows") or ()
         # Column 1 — the creature (glass + name + text).
-        creature_col = _hover_title(html.escape(self._tr(fig["name"])))
+        creature_col = hover_title(html.escape(self._tr(fig["name"])))
         if archetype_art_ready(fig["file"]):
             small = scaled_variant_file(
                 fig["file"], 2 * encyclopedia_ui.ARTICLE_THREE_IMAGE_PX
@@ -2035,14 +1850,14 @@ class Compositor:
                 f"width='{encyclopedia_ui.ARTICLE_THREE_IMAGE_PX}'/></div>"
             )
         if rows:
-            creature_col += _article_paragraphs(_teaser(rows[0]), tr=self._tr)
+            creature_col += article_paragraphs(teaser(rows[0]), tr=self._tr)
         else:
-            creature_col += _centered_html(
+            creature_col += centered_html(
                 "", html.escape(self._tr(archetypes.ARCHETYPE_PENDING_LINE))
             )
         # Column 2 — the Evangelist: his rondel (real art only), his name
         # (the figure's row-2), then his article (rows[1] when written).
-        evangelist_col = _hover_title(html.escape(self._tr("The Evangelist")))
+        evangelist_col = hover_title(html.escape(self._tr("The Evangelist")))
         ev_file = archetypes.tetramorph_evangelist_file(index)
         if archetype_art_ready(ev_file):
             small = scaled_variant_file(
@@ -2052,22 +1867,22 @@ class Compositor:
                 f"<div align='center'><img src='{small.as_uri()}' "
                 f"width='{encyclopedia_ui.ARTICLE_THREE_IMAGE_PX}'/></div>"
             )
-        evangelist_col += _centered_html(
+        evangelist_col += centered_html(
             f"<b>{html.escape(self._tr(fig['row2']))}</b>"
         )
         if len(rows) > 1:
-            evangelist_col += _article_paragraphs(_teaser(rows[1]), tr=self._tr)
+            evangelist_col += article_paragraphs(teaser(rows[1]), tr=self._tr)
         # Column 3 — the Element: the name in its active wheel hue, then
         # its humoral article (rows[2] when written).
         hue = palette_for(self._skin)[index]
-        element_col = _hover_title(
+        element_col = hover_title(
             html.escape(self._tr("The Element"))
-        ) + _centered_html(
+        ) + centered_html(
             f"<b style='color: {hue}'>"
             f"{html.escape(self._tr(archetypes.tetramorph_element(index)))}</b>"
         )
         if len(rows) > 2:
-            element_col += _article_paragraphs(_teaser(rows[2]), tr=self._tr)
+            element_col += article_paragraphs(teaser(rows[2]), tr=self._tr)
         width = encyclopedia_ui.ARTICLE_THREE_COLUMN_WIDTH_PX
         return (
             "<table cellspacing='10'><tr>"
@@ -2098,29 +1913,29 @@ class Compositor:
         KeyError."""
         set_name = archetypes.ARCHETYPES[key]["articles"]
         node = self._symbolism.archetype_article(set_name, entity)
-        badge = _hover_badge(art) if archetype_art_ready(art) else ""
-        title = _hover_title(html.escape(self._tr(name)))
+        badge = hover_badge(art) if archetype_art_ready(art) else ""
+        title = hover_title(html.escape(self._tr(name)))
         rows = (node or {}).get("rows") or ()
         if rows:
             parts = [
                 badge, title,
-                _article_body_html(_teaser(rows[0]), tr=self._tr),
+                article_body_html(teaser(rows[0]), tr=self._tr),
             ]
             if row2 is not None and len(rows) > 1:
                 # The second row, split off by a rule — the same shape
                 # as the cross arms' two data sets (owner pattern).
                 parts += [
                     "<hr/>",
-                    _hover_title(html.escape(self._tr(row2))),
-                    _article_body_html(_teaser(rows[1]), tr=self._tr),
+                    hover_title(html.escape(self._tr(row2))),
+                    article_body_html(teaser(rows[1]), tr=self._tr),
                 ]
             return "".join(parts)
         subtitle = (
-            _centered_html(f"<b>{html.escape(self._tr(row2))}</b>")
+            centered_html(f"<b>{html.escape(self._tr(row2))}</b>")
             if row2 is not None
             else ""
         )
-        return badge + title + subtitle + _centered_html(
+        return badge + title + subtitle + centered_html(
             "",
             html.escape(self._tr(archetypes.ARCHETYPE_PENDING_LINE)),
         )
@@ -2172,7 +1987,7 @@ class Compositor:
                 f"<br/>"
                 f"{html.escape(self._tr(constants.WEEKDAY_FULL_NAMES['sun']))}"
             )
-        return _article_html(image, title, text, tr=self._tr)
+        return article_html(image, title, text, tr=self._tr)
 
     def _dual_face_columns(self, theme: str, faces: tuple[str, str]) -> str:
         """The CENTER seat's TWO-FACE hover CARD (owner verdict B, round
@@ -2211,11 +2026,11 @@ class Compositor:
                 # THE WEEKDAY-TITLE LAW: both throne faces are Sunday's.
                 day_line = f"<br/>{sunday}"
             columns.append(
-                _hover_badge(asset)
-                + _hover_title(
+                hover_badge(asset)
+                + hover_title(
                     f"<b>{html.escape(self._tr(name))}</b>{day_line}"
                 )
-                + _article_paragraphs(_teaser(text), tr=self._tr)
+                + article_paragraphs(teaser(text), tr=self._tr)
             )
         return (
             "<table cellspacing='12'><tr>"
@@ -2254,7 +2069,7 @@ class Compositor:
         absent contract, same as a missing art plate) skips the
         `entry()` lookup entirely rather than crash on an unwritten
         family/article pair, and the closing line itself becomes the
-        teaser (`_teaser` reads the text BEFORE the first blank line —
+        teaser (`teaser` reads the text BEFORE the first blank line —
         appending the closing note after an empty base would tease a
         bare " …", not this line)."""
         name, asset = thirteenth_plate(key)
@@ -2276,7 +2091,7 @@ class Compositor:
             f"<span style='font-size: {encyclopedia_ui.ARTICLE_TITLE_PX}px'>"
             f"<b>{html.escape(self._tr(name))}</b></span>"
         )
-        return _article_html(asset, title, text, tr=self._tr)
+        return article_html(asset, title, text, tr=self._tr)
 
     def _dual_seat_taken(self) -> str | None:
         """Which TWO-BADGE seat the Ninth borrows RIGHT NOW ("ruler" /
@@ -2427,9 +2242,9 @@ class Compositor:
                 if variant:
                     text += "\n\n" + variant
                 columns.append(
-                    _hover_title(header)
+                    hover_title(header)
                     + plate
-                    + _article_paragraphs(_teaser(text), tr=self._tr)
+                    + article_paragraphs(teaser(text), tr=self._tr)
                 )
             # ONE flat table, both columns width-declared (nested
             # tables measured wrong — the popup honors these cells).
@@ -2463,27 +2278,27 @@ class Compositor:
                 # pending line, never a KeyError (the same graceful
                 # path every unwritten archetype article walks).
                 person, office = constants.GENESIS_ARM_OFFICES[arm_angle]
-                header = _centered_html(
+                header = centered_html(
                     f"<b>{html.escape(self._tr(office))}</b>"
                     f"{html.escape(star)}",
                     html.escape(self._tr(person)),
                     f"{start_hour:02d}:00 - {end_hour:02d}:00",
                     html.escape(days),
                 )
-                return header + "<br/>" + _article_body_html(
+                return header + "<br/>" + article_body_html(
                     archetypes.ARCHETYPE_PENDING_LINE, tr=self._tr
                 )
             theme = constants.TRIO_ARM_THEMES[arm_angle]
-            header = _centered_html(
+            header = centered_html(
                 f"<b>{html.escape(self._tr(theme))}</b>{html.escape(star)}",
                 f"{start_hour:02d}:00 - {end_hour:02d}:00",
                 html.escape(days),
             )
             article = self._symbolism.trio_article(theme)
             return (
-                _hover_badge(defaults.TRINITY_ART_DIR / f"{theme}.png")
+                hover_badge(defaults.TRINITY_ART_DIR / f"{theme}.png")
                 + header + "<br/>"
-                + _article_body_html(_teaser(article["base"]), tr=self._tr)
+                + article_body_html(teaser(article["base"]), tr=self._tr)
             )
         if arm_angle % 90.0 == 0.0:
             # Cardinal arms (cross and octa) point at the season events:
@@ -2510,11 +2325,11 @@ class Compositor:
             badge = (
                 "Equinox" if "Equinox" in name else name.replace(" ", "_")
             )
-            head = _hover_badge(
+            head = hover_badge(
                 defaults.SEASON_ART_DIR / "turning_point" / f"{badge}.png"
-            ) + _hover_title(
+            ) + hover_title(
                 f"{html.escape(self._tr(name))}{html.escape(star)}"
-            ) + _centered_html(
+            ) + centered_html(
                 "",
                 f"{self._ord(instant.day)} {html.escape(self._month(instant))} "
                 f"{self._year(instant)} - {instant:%H:%M}",
@@ -2532,7 +2347,7 @@ class Compositor:
                 # arms CENTER theirs, the equinox arms START theirs.
                 span_start = 270.0 if anchor_angle in (270.0, 360.0) else 450.0
                 is_wet, block = self._wet_dry_block(span_start)
-                return head + "<hr/>" + _hover_badge(
+                return head + "<hr/>" + hover_badge(
                     defaults.SEASON_ART_DIR
                     / f"{'Wet' if is_wet else 'Dry'}_Season.png"
                 ) + block
@@ -2543,15 +2358,15 @@ class Compositor:
             met_start = met_start.astimezone(self._day.tzinfo)
             met_end = met_end.astimezone(self._day.tzinfo)
             met_days = (met_end - met_start).total_seconds() / 86400
-            return head + "<hr/>" + _hover_badge(
+            return head + "<hr/>" + hover_badge(
                 defaults.SEASON_ART_DIR / "meteorological" / f"{season}.png"
-            ) + _hover_title(
+            ) + hover_title(
                 html.escape(
                     self._tr("Meteorological {season}").format(
                         season=self._tr(season)
                     )
                 )
-            ) + _centered_html(
+            ) + centered_html(
                 "",
                 f"<b>{self._tr('From')}</b> {self._ord(met_start.day)} "
                 f"{self._month(met_start)} {self._year(met_start)} - "
@@ -2594,19 +2409,19 @@ class Compositor:
                 f"{half}{html.escape(star)}"
             )
             _, whole = self._wet_dry_block(270.0 if starts_in_march else 450.0)
-            return _hover_badge(
+            return hover_badge(
                 defaults.SEASON_ART_DIR
                 / f"{'Wet' if is_wet else 'Dry'}_Season.png"
-            ) + _centered_html(
+            ) + centered_html(
                 season_line,
                 self._span_line(start, end, days),
                 f"{self._tr('Heart:')} {self._ord(middle.day)} "
                 f"{self._month(middle)}",
             ) + "<hr/>" + whole
         season = self._season_name_for(start_angle)
-        return _hover_badge(
+        return hover_badge(
             defaults.SEASON_ART_DIR / f"{season}.png"
-        ) + _centered_html(
+        ) + centered_html(
             f"<b>{html.escape(self._tr(season))}</b>{html.escape(star)}",
             self._span_line(start, end, days),
             f"{self._tr('Heart:')} {self._ord(middle.day)} {self._month(middle)}",
@@ -2633,9 +2448,9 @@ class Compositor:
         starts_in_march = span_start_angle % 360.0 == 270.0
         is_wet = starts_in_march != self._day.southern_hemisphere
         days = (end - start).total_seconds() / 86400
-        return is_wet, _hover_title(
+        return is_wet, hover_title(
             html.escape(self._tr("Wet season" if is_wet else "Dry season"))
-        ) + _centered_html(
+        ) + centered_html(
             "",
             f"<b>{self._tr('From')}</b> {self._ord(start.day)} "
             f"{self._month(start)} {self._year(start)}",
@@ -2667,7 +2482,7 @@ class Compositor:
 
         day = self._day
         element, animal = day.chinese_name.split()
-        header = _centered(
+        header = centered(
             self._tr("{element} {animal}").format(
                 element=self._tr(element), animal=self._tr(animal)
             ),
@@ -2688,7 +2503,7 @@ class Compositor:
             octa_slot_art(folder, animal),
             style if style in defaults.METAL_SWAP_TARGETS else None,
         )
-        return header + "<br/>" + _article_html(
+        return header + "<br/>" + article_html(
             image, None, text, tr=self._tr,
         )
 
@@ -2743,7 +2558,7 @@ class Compositor:
         (base only — the palette variants speak in hexa arm colors)."""
         day = self._day
         last = day.zodiac_end - timedelta(days=1)
-        header = _hover_title(html.escape(self._tr(day.zodiac_name))) + _centered(
+        header = hover_title(html.escape(self._tr(day.zodiac_name))) + centered(
             f"{day.zodiac_start.day} {self._month_short(day.zodiac_start)} – "
             f"{last.day} {self._month_short(last)}",
         )
@@ -2751,7 +2566,7 @@ class Compositor:
         return (
             header
             + self._zodiac_image_trio(style, day.zodiac_name)
-            + _article_body_html(_teaser(article["base"]), tr=self._tr)
+            + article_body_html(teaser(article["base"]), tr=self._tr)
         )
 
     def _lunation_ordinal(self, next_cycle: bool = False) -> str:
@@ -2945,7 +2760,7 @@ class Compositor:
                 )
             )
         )
-        return _centered_html(
+        return centered_html(
             f"<b>{html.escape(self._tr('Day'))}</b>",
             line_time,
             "",
@@ -2984,9 +2799,9 @@ class Compositor:
                 (jewel_theta - theta) % 360.0,
             )
             if delta <= half:
-                return _hover_title(
+                return hover_title(
                     html.escape(entry["name"])
-                ) + _article_body_html(entry["reading"])
+                ) + article_body_html(entry["reading"])
         return None
 
     def _ring_word_legend_tooltip(
@@ -3069,18 +2884,18 @@ class Compositor:
                     # THE ONE TERM ONE HOVER LAW: the entry speaks for
                     # itself, regardless of which (if any) seat this
                     # word happens to hang on.
-                    return _hover_title(
+                    return hover_title(
                         html.escape(entry_reading["title"])
-                    ) + _article_body_html(entry_reading["text"])
+                    ) + article_body_html(entry_reading["text"])
                 if word["seat"] is None:
                     continue
                 seat_entry = legend.get(word["seat"] % 24)
                 if seat_entry is None:
                     return None
                 title = f'{word["text"]} · {seat_entry["name"]}'
-                return _hover_title(
+                return hover_title(
                     html.escape(title)
-                ) + _article_body_html(seat_entry["reading"])
+                ) + article_body_html(seat_entry["reading"])
         return None
 
     def _live_crown_tooltip(
@@ -3120,9 +2935,9 @@ class Compositor:
         reading = dial.RING_LIVE_CROWN_READING.get(self._skin.ring_name)
         if reading is None:
             return None
-        return _hover_title(
+        return hover_title(
             html.escape(reading["title"])
-        ) + _article_body_html(reading["text"])
+        ) + article_body_html(reading["text"])
 
     def _ascendant_text(self, style: str | None = None) -> str:
         """The Ascendant hover (owner request 2026-07-12, formatting
@@ -3131,14 +2946,14 @@ class Compositor:
         sign's article."""
         sign = self._last_tick.ascendant_sign
         symbol = dict(constants.ZODIAC_SIGNS)[sign]
-        header = _hover_title(
+        header = hover_title(
             html.escape(self._tr("Ascendant"))
-        ) + _centered(f"{symbol} {self._tr(sign)}")
+        ) + centered(f"{symbol} {self._tr(sign)}")
         article = self._symbolism.zodiac_article(sign)
         return (
             header
             + self._zodiac_image_trio(style, sign)
-            + _article_body_html(_teaser(article["base"]), tr=self._tr)
+            + article_body_html(teaser(article["base"]), tr=self._tr)
         )
 
     def _greetings_tooltip(self) -> str:
@@ -3160,9 +2975,9 @@ class Compositor:
             for stanza in data["verses"].split("\n\n")
         )
         return (
-            _hover_title(html.escape(data["title"]))
+            hover_title(html.escape(data["title"]))
             + stanzas
-            + _article_body_html(
+            + article_body_html(
                 data["explanation"] + "\n\n" + data["commentary"]
             )
         )
@@ -3174,7 +2989,7 @@ class Compositor:
         day = self._day
         tick = self._last_tick
         name = phase_name(tick.moon_fraction)
-        title = _hover_title(html.escape(self._tr(name)))
+        title = hover_title(html.escape(self._tr(name)))
         if name in constants.MOON_PHASE_FRACTIONS:
             # A principal phase name holds ±12 h around its instant —
             # show that instant (the nearest principal event by name),
@@ -3185,10 +3000,10 @@ class Compositor:
                 (event for event in day.moon_events if event[1] == name),
                 key=lambda event: abs(event[0] - noon),
             )[0].astimezone(day.tzinfo)
-            # _centered_html — the ordinal carries real <sup> markup
+            # centered_html — the ordinal carries real <sup> markup
             # (owner bug 2026-07-14: it printed literally through the
-            # escaping _centered).
-            title += _centered_html(
+            # escaping centered).
+            title += centered_html(
                 f"{self._ord(instant.day)} {html.escape(self._month(instant))}"
                 f" - {instant:%H:%M}"
             )
@@ -3212,7 +3027,7 @@ class Compositor:
         # so this one speaks the PHASE — which is all the Moon marker
         # shows on an eclipse day, exactly as on any other.
         cycle_day = tick.moon_fraction * constants.SYNODIC_MONTH_DAYS
-        return title + _centered_html(
+        return title + centered_html(
             "",
             *lines,
             "",
@@ -3360,9 +3175,9 @@ class Compositor:
             else html.escape(self._tr("unknown"))
         )
         card = (
-            _hover_badge(self._eclipse_emblem(eclipse))
-            + _hover_title(html.escape(self._tr(title)))
-            + _centered_html(
+            hover_badge(self._eclipse_emblem(eclipse))
+            + hover_title(html.escape(self._tr(title)))
+            + centered_html(
                 "",
                 f"{self._eclipse_type_icon_tag(eclipse)}"
                 f"{self._label('Type')} "
@@ -3381,7 +3196,7 @@ class Compositor:
             )
         )
         if article is not None:
-            card += _article_body_html(_teaser(article["base"]), self._tr)
+            card += article_body_html(teaser(article["base"]), self._tr)
         return card
 
     def _eclipse_article(self, eclipse) -> dict | None:
@@ -3410,10 +3225,10 @@ class Compositor:
         point badge while a season event glows, else the current
         season's own badge — the exact art the arm hovers use) over
         the existing Season:/Sign: lines. Three HTML blocks are
-        concatenated directly (never passed as `_centered_html` LINES)
-        — `_hover_title`/`_hover_badge` already emit their own centered
+        concatenated directly (never passed as `centered_html` LINES)
+        — `hover_title`/`hover_badge` already emit their own centered
         div, matching how every other hover in this file layers badge +
-        title + `_centered_html` (the cardinal-arm block a few hundred
+        title + `centered_html` (the cardinal-arm block a few hundred
         lines up). The eclipse/season-event line rides ahead of the
         Season: line — inside the season block, right before it — not
         at the very top of the whole card any more, since the card now
@@ -3431,7 +3246,7 @@ class Compositor:
         # block right below restates it via `format_anno_lucis`). The
         # official year alone, deep-travel aware (`real_year` un-shifts
         # the proxy frame first, matching every other year read here).
-        date_block = _hover_title(html.escape(self._tr("Date"))) + _centered_html(
+        date_block = hover_title(html.escape(self._tr("Date"))) + centered_html(
             f"{self._ord(date.day)} {html.escape(self._month(date))} "
             f"{html.escape(format_official(real, self._skin.era_notation, self._skin.show_era_suffix))}",
             self._tr("{ordinal} Day - {ordinal_week} Week").format(
@@ -3449,9 +3264,9 @@ class Compositor:
             defaults.ERA_ART_DIR / era_file, date
         ) or defaults.ERA_ART_DIR / era_file
         era_block = (
-            _hover_badge(era_art)
-            + _hover_title(html.escape(self._tr(era_name)))
-            + _centered_html(html.escape(format_anno_lucis(real)), "")
+            hover_badge(era_art)
+            + hover_title(html.escape(self._tr(era_name)))
+            + centered_html(html.escape(format_anno_lucis(real)), "")
         )
 
         season_event = self._last_tick.season_event
@@ -3479,7 +3294,7 @@ class Compositor:
             f"{html.escape(self._month(day.zodiac_start))} - "
             f"{self._ord(last.day)} {html.escape(self._month(last))})"
         )
-        season_block = _hover_badge(season_art) + _centered_html(*tail)
+        season_block = hover_badge(season_art) + centered_html(*tail)
 
         return date_block + era_block + season_block
 
@@ -3530,7 +3345,7 @@ class Compositor:
             art = octa_slot_art(
                 constants.CHINESE_STYLE_ART_DIRS["colored"], animal
             )
-            return _hover_badge(art) + _centered_html(
+            return hover_badge(art) + centered_html(
                 f"<b>{html.escape(self._tr(_MONTHS[month - 1]))}</b>",
                 "",
                 html.escape(self._tr(animal)),
@@ -3560,7 +3375,7 @@ class Compositor:
         start = start.astimezone(day.tzinfo)
         last = end.astimezone(day.tzinfo) - timedelta(days=1)
         art = octa_slot_art(constants.ZODIAC_STYLE_ART_DIRS["colored"], name)
-        return _hover_badge(art) + _centered_html(
+        return hover_badge(art) + centered_html(
             f"<b>{html.escape(symbol)} {html.escape(self._tr(name))}</b>",
             f"{self._ord(start.day)} {html.escape(self._month(start))} - "
             f"{self._ord(last.day)} {html.escape(self._month(last))}",
@@ -3570,7 +3385,7 @@ class Compositor:
         """The mounted Slavic-months mark's hover (owner spec: "month
         name + gloss"): the Croatian proper noun as the bold title, the
         English gloss beneath, above the plate art — graceful-absent
-        (owner R7b contract) via the SAME `_hover_badge` empty-string
+        (owner R7b contract) via the SAME `hover_badge` empty-string
         rule every other emblem uses until the prompt sheet lands."""
         month = (index + 5) % 12 + 1
         croatian, gloss, stem, _gregorian = next(
@@ -3578,7 +3393,7 @@ class Compositor:
         )
         art = paths.art_file(defaults.MONTHS_ART_DIR / f"{stem}.png")
         art = art if art.exists() else None
-        return _hover_badge(art) + _centered_html(
+        return hover_badge(art) + centered_html(
             f"<b>{html.escape(self._tr(croatian))}</b>",
             html.escape(self._tr(gloss)),
         )
@@ -3616,11 +3431,11 @@ class Compositor:
             lines.append(
                 html.escape(self._tr("lending its month to The Cat this year"))
             )
-        return _hover_badge(art) + _centered_html(*lines)
+        return hover_badge(art) + centered_html(*lines)
 
     def _mount_seat_html(self, mount: str, index: int) -> str:
         """The generic mounted-seat hover: the member's name over its own
-        plate, graceful-absent through the SAME `_hover_badge`
+        plate, graceful-absent through the SAME `hover_badge`
         empty-string rule every other emblem uses. Serves every roster
         that has nothing richer to say than its name (the Emotions
         Dozen, the Month Dozen) — the three sets that DO (a sign's dates,
@@ -3645,7 +3460,7 @@ class Compositor:
             )
         else:
             title = f"<b>{html.escape(self._tr(name))}</b>"
-        return _hover_badge(art) + _centered_html(title)
+        return hover_badge(art) + centered_html(title)
 
     def _calendar_mount_tooltip(self, point: QPointF, radius: float) -> str | None:
         """The mounted set's seat under the cursor (DESIGN ZODIAC law,
@@ -3716,7 +3531,7 @@ class Compositor:
                     f"{self._label('Dawn')} {sun.dawn:%H:%M} - "
                     f"{self._label('Dusk')} {sun.dusk:%H:%M}",
                 ]
-            return self._period_earth_html("day") + _centered_html(*lines)
+            return self._period_earth_html("day") + centered_html(*lines)
         if distance > radius * self._interior_hit(self._skin.background.umbra_radius_fraction):
             return None
         night = 24 * 60 - (hours * 60 + minutes)
@@ -3736,7 +3551,7 @@ class Compositor:
                 f"{self._label('Dusk')} {sun.dusk:%H:%M} - "
                 f"{self._label('Dawn')} {sun.dawn:%H:%M}",
             ]
-        return self._period_earth_html("night") + _centered_html(*lines)
+        return self._period_earth_html("night") + centered_html(*lines)
 
     def _twilight_tooltip(self, point: QPointF, radius: float) -> str | None:
         """Hovering a twilight band (owner formatting round 2026-07-12):
@@ -3759,7 +3574,7 @@ class Compositor:
         def band(title: str, a: str, first: datetime,
                  b: str, second: datetime) -> str:
             span = round((second - first).total_seconds() / 60)
-            return _centered_html(
+            return centered_html(
                 f"<b>{html.escape(self._tr(title))}</b>",
                 f"{self._label(a)} {first:%H:%M} - "
                 f"{self._label(b)} {second:%H:%M}",

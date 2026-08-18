@@ -10,6 +10,14 @@ they moved out here (Rule #5).
 
 ## Connections
 
+`flow_html` is [Article
+HTML](../../../render/__about/article_html.md)'s `article_paragraphs`
+inside a `<div>` — the reader's label wants a block element, the hover
+legend's fixed-width table does not, and that one difference is this
+function's whole contribution. Until R11 (2026-08-18) it was a
+line-for-line copy of that builder, kept in step by hand, reaching into
+the render layer for three PRIVATE names to do it.
+
 ### Uses
 - [Symbolism Repository](../../../data/__about/symbolism.md), [Encyclopedia Repository](../../../data/__about/encyclopedia.md) — the prose these functions resolve against
 - [Compositor](../../../render/__about/compositor.md) — `_HEX_NOTE`, `_SUBHEAD`, `_highlight_terms` (Rule #5: the reader highlights exactly like the dial's hover legends)

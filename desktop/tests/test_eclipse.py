@@ -925,7 +925,7 @@ def test_eclipse_emblem_maps_every_category_and_is_graceful(app):
     its own category emblem under assets/eclipse/, an unknown type to
     None, and the badge degrades to EMPTY while the art is absent
     (graceful-absent — the sheet's art has not landed)."""
-    from render.compositor import _hover_badge
+    from render.article_html import hover_badge
 
     tz = ZoneInfo("Europe/Belgrade")
     now = datetime(2026, 3, 3, 12, 0, tzinfo=tz)
@@ -955,9 +955,9 @@ def test_eclipse_emblem_maps_every_category_and_is_graceful(app):
         # unlocked by registering the "eclipse" root) it must RENDER.
         from config import paths as _paths
         if _paths.art_file(path).exists():
-            assert _hover_badge(path) != ""
+            assert hover_badge(path) != ""
         else:
-            assert _hover_badge(path) == ""
+            assert hover_badge(path) == ""
     unknown = EclipseEvent(
         kind="solar", instant=now.astimezone(timezone.utc),
         type="bogus", magnitude=1.0,
