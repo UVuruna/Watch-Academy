@@ -37,7 +37,7 @@ Layer: config — pure. `week.py` imports NOTHING, which is what lets
   Ninth tables and the metal looks
 - [Pantheon](../__about/pantheon.md) — seat names, dirs, stems, duals,
   titles, rosters and the picker menu
-- [The Theme Dictionary](../../../THEME-REGISTRY.md) — the design brief
+- [The Theme Dictionary](../../../docs/archive/THEME-REGISTRY.md) — the design brief
   this package answers
 
 ### Related

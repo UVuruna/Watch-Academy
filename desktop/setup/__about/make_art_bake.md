@@ -135,7 +135,7 @@ a check that repairs is a check nobody can trust to have told the truth
 about the state it found. It is what a build reads.
 `setup/make_contract_pack.py` calls it first thing (`_art_gate`) and
 bakes when it fails; when the desktop installer pipeline is founded
-(M7, [Ship Rules](../../../../../rules/SHIP.md)) it calls the same gate.
+(M7, [Build Rules](../../../../../rules/BUILD.md)) it calls the same gate.
 On a clone with no `masters/` the gate passes, correctly: that clone's
 shipped tree is the committed one and is already the truth.
 

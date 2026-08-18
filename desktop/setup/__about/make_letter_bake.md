@@ -18,7 +18,7 @@ guided box filter and a specular ramp, per plate, per metal, per shade
 — is work that should have been done once, by us, before shipping.
 
 There is no build pipeline on this machine yet
-([Ship Rules](../../../../../rules/SHIP.md) — this project has none), so
+([Build Rules](../../../../../rules/BUILD.md) — this project has none), so
 this script IS the setup step for now and its output is committed
 alongside the assets. When the installer arrives it runs the same
 script; nothing about the format changes.

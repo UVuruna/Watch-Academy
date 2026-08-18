@@ -5,7 +5,7 @@
 ## Purpose
 
 Dial geometry and window sizing — one of six modules Session 36 (THE
-CONFIG SPLIT, [Work Plan Structure](../../../WORKPLAN-STRUCTURE.md))
+CONFIG SPLIT, [Work Plan Structure](../../../docs/archive/WORKPLAN-STRUCTURE.md))
 carved out of `config/defaults.py`, which had grown into a
 ~3,700-line god-file (root `CLAUDE.md` Rule #20). Everything about how
 the drawn DIAL itself is sized and shaped: the window/diameter

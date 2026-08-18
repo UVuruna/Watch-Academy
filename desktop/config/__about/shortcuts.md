@@ -5,7 +5,7 @@
 ## Purpose
 
 Keyboard input and the fast-travel it drives — one of six modules
-Session 36 (THE CONFIG SPLIT, [Work Plan Structure](../../../WORKPLAN-STRUCTURE.md))
+Session 36 (THE CONFIG SPLIT, [Work Plan Structure](../../../docs/archive/WORKPLAN-STRUCTURE.md))
 carved out of `config/defaults.py`.
 
 Layer: config — pure, no Qt, no wall clock.

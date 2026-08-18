@@ -59,7 +59,7 @@ here; nothing here imports from them.
   own declarative shape lives in `skin.json` per skin (M5); user
   runtime state lives in `settings.json`.
 - **A fixed, PARTIAL import DAG governs six of these files.** Session
-  36 (THE CONFIG SPLIT, [Work Plan Structure](../../WORKPLAN-STRUCTURE.md))
+  36 (THE CONFIG SPLIT, [Work Plan Structure](../../docs/archive/WORKPLAN-STRUCTURE.md))
   carved `dial.py`, `shortcuts.py`, `pantheon.py`, `calendar_mounts.py`,
   `encyclopedia_ui.py` and `glow.py` out of a ~3,700-line
   `defaults.py` god-file as PEERS that may import only `paths`/

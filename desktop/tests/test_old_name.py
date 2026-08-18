@@ -58,7 +58,7 @@ ALLOWED: dict[str, tuple[str, ...]] = {
     # PyInstaller spec file still carries its own never-renamed filename
     # (`DOMYWatch.spec`) — a fact this apply-doc must state exactly to be
     # actionable, not a claim that the PROJECT is still called that.
-    "RESTRUCTURE-APPLY.md": (
+    "docs/archive/RESTRUCTURE-APPLY.md": (
         "## 4. `DOMYWatch.spec` (gitignored, untracked, present only on the real",
         "tree — confirmed: `Applications/WatchAcademy/DOMYWatch.spec` exists today)",
     ),

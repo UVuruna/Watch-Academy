@@ -1,5 +1,7 @@
 # RESTRUCTURE — The One-Hierarchy Refactor
 
+**STATUS: phases 1-4 done; the "New Content Specs" (Dozens) section is UNCONFIRMED — the owner still owes a yes or a no on it.**
+
 **Owner-approved plan (sealed 2026-07-22).** One hierarchy everywhere:
 the Encyclopedia halls, the Settings/Design panels and the `assets/`
 folder tree all mirror ONE taxonomy defined in ONE config module.

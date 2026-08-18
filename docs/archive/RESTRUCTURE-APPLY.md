@@ -1,7 +1,7 @@
 # RESTRUCTURE-APPLY — bringing THE THREE-FOLDER MIGRATION onto the real tree
 
 This session did THE THREE-FOLDER MIGRATION (owner ballot verdict
-2026-08-12, [ANDROID.md](ANDROID.md) → The Sealed Verdicts → Home row) in
+2026-08-12, [ANDROID.md](../../ANDROID.md) → The Sealed Verdicts → Home row) in
 the dedicated worktree `WatchAcademy-migration` on branch
 `three-folder-migration`. It never touched the real tree
 (`Applications/WatchAcademy`), by the owner's explicit condition — the two
@@ -153,7 +153,7 @@ are in place.
 - No code refactor beyond path fixes — every behavior-bearing line is
   unchanged.
 - No `android/` Kotlin work — `android/README.md` carries only the name
-  story and a pointer to [ANDROID.md](ANDROID.md); the founding session is
+  story and a pointer to [ANDROID.md](../../ANDROID.md); the founding session is
   separate, later work.
 - No bakery/CONTRACT PACK work — Phase 1 (the bakery) still starts fresh,
   now with `shared/` as its declared source instead of the old flat root.

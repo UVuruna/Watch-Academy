@@ -6,7 +6,7 @@ all 35 themes; `pointers.py`; `sentinel.py`; docs in `___registry.md`), the
 `PATCHING_RATCHET` entry for `config/pantheon.py` is gone (the ratchet is
 empty), and `constants.WEEKDAY_THEMES` reads the registry. The owner's
 availability verdict of 2026-08-12 (base pack vs L1 locks) lives in the
-registry as well — see [Android Charter](ANDROID.md) → The Base Pack
+registry as well — see [Android Charter](../../ANDROID.md) → The Base Pack
 Agreement. The text below is kept as the original agenda for the record.
 
 ---

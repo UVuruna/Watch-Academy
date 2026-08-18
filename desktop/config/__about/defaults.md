@@ -6,7 +6,7 @@
 
 Developer tunables — everything read-only at runtime that does not fit
 any ONE of the six single-responsibility modules Session 36 (THE
-CONFIG SPLIT, [Work Plan Structure](../../../WORKPLAN-STRUCTURE.md))
+CONFIG SPLIT, [Work Plan Structure](../../../docs/archive/WORKPLAN-STRUCTURE.md))
 carved out of this file (`dial.py`, `shortcuts.py`, `pantheon.py`,
 `calendar_mounts.py`, `encyclopedia_ui.py`, `glow.py`, plus
 `continents.py`, the pantheon fallback) — landed at 812 lines from

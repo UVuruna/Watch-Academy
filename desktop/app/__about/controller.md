@@ -20,7 +20,7 @@ knows nothing about its siblings.
 `controller.py` is 3,449 lines — well past the ~1,000-line Violation
 threshold — and carries a `tests/test_structure_law.py` ratchet entry.
 It currently holds SIX distinct responsibilities that a future session
-owes a split (see [Refactor God-Files](../../../../../REFACTOR-GODFILES.md)
+owes a split (see [Refactor God-Files](../../../../../rules/briefs/REFACTOR-GODFILES.md)
 for the procedure):
 
 1. **Skin building from settings** — the module-level `build_skin`/

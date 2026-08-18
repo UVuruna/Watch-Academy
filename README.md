@@ -77,6 +77,16 @@ diagram plus language-neutral pseudocode).
 
 - [Agent Guidance](CLAUDE.md) — how Claude Code works in this project;
   inherits the monorepo constitution
+- [Decisions](docs/DECISIONS.md) — the owner's sealed verdicts, dated: the
+  three-folder shape, the research move, the translation policy
+- [The Dial](docs/DIAL.md) — the dial conventions, the one-way architecture
+  and THE RING VOCABULARY (jewels are not numerals)
+- [Art Pipeline](docs/ART-PIPELINE.md) — masters → bakery → `shared/assets/`;
+  read before touching art or globbing image files
+- [Enforcement](docs/ENFORCEMENT.md) — every guard installed here and the
+  three ratchets, each of which may only shrink
+- [Runtime Notes](docs/RUNTIME-NOTES.md) — golden values, the ~18-minute
+  suite, and the root causes that are closed
 - [Main (Entry Point)](desktop/__about/main.md) — what `main.py` does at startup
 - [Work Plan](WORKPLAN.md) — the ORDER of the closing sessions:
   what to tell each fresh agent, what it reads, what it delivers,
@@ -105,26 +115,24 @@ diagram plus language-neutral pseudocode).
   prompt sheets live here; see [How to Write a Prompt
   Sheet](../../Gadgets/PromptPainter/instructions.md) before authoring a new one
 - [Roster — the Master Systematics](ROSTER.md) — every theme, every
-  figure, its seat, per-source art coverage (generated:
-  `python shared/research/build_roster.py`)
+  figure, its seat, per-source art coverage. GENERATED, never hand-edited:
+  `python shared/research/build_roster.py` from the repo root
 - [Android Charter](ANDROID.md) — the sealed decisions for the phone
   edition ([Pocket Watch](android/README.md)) and Phase 1 (the bakery)
   in this repo
-- [Apply The Three-Folder Migration](RESTRUCTURE-APPLY.md) — the exact
-  steps to bring this move onto the real tree once its two in-flight
-  sessions finish
 
 ### Structural plans (history, still referenced)
 
-- [The Theme Registry](THEME-REGISTRY.md) — **OPEN discussion brief**
-  (owner decree 2026-08-01): one registry of all themes grouped by kind,
-  per-member contract; resolves the `pantheon.py` patching ratchet
 - [The One-Hierarchy Refactor](RESTRUCTURE.md) — the owner-approved
-  plan (sealed 2026-07-22) behind today's `assets/` and Encyclopedia shape
-- [The Structural Arc](WORKPLAN-STRUCTURE.md) — the plan for the
-  config-split sessions
-- [Refactor God-Files](REFACTOR-GODFILES.md) — a local copy of the
-  monorepo task brief (the canonical one now lives at the repo root)
+  plan (sealed 2026-07-22) behind today's `assets/` and Encyclopedia shape;
+  phases 1–4 are done, its "New Content Specs" section is unconfirmed
+- [Apply The Three-Folder Migration](docs/archive/RESTRUCTURE-APPLY.md) —
+  archived: the steps that brought the move onto the real tree
+- [The Theme Registry](docs/archive/THEME-REGISTRY.md) — archived design
+  brief (owner decree 2026-08-01): one registry of all themes grouped by
+  kind, per-member contract; resolves the `pantheon.py` patching ratchet
+- [The Structural Arc](docs/archive/WORKPLAN-STRUCTURE.md) — archived: the
+  plan for the config-split sessions
 
 ## Running from source
 
