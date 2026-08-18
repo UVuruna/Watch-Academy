@@ -2,16 +2,38 @@
 
 Pins the two clauses the split's own method promises:
 
-1. Every `config/*.py` file is at or under the god-file threshold, no
-   exemptions (this test carries no ratchet of its own — a config
+1. Every config module is at or under the god-file threshold, no
+   exemptions at all (this test carries no ratchet of its own — a config
    module earns cohesion, not tolerance; `tests/test_structure_law.py`
-   is the project-wide ratchet, and `config/pantheon.py` is a KNOWN,
-   documented, owner-flagged exception recorded there, not here).
+   is the project-wide ratchet).
 2. A name that moved out of `config/defaults.py` (dial.py, shortcuts.py,
    pantheon.py, calendar_mounts.py, encyclopedia_ui.py, glow.py, and
    continents.py — the pantheon deterministic fallback) is GONE from
    `defaults.py`: `defaults.MOVED_NAME` must raise `AttributeError`.
    Rule #6, no re-export shims.
+
+WA-R15 (2026-08-19) fixed two things this guard had wrong.
+
+**It counted RAW lines** and was RED at HEAD for `config/defaults.py`
+(1,036) — a module whose actual content is 418 lines, wrapped in 618
+lines of section banners and blank space. Banner comments are what makes
+a config file READABLE; counting them as bulk punishes the very habit
+THE CONFIG SECTION LAW demands. The measure is now
+`tests/line_measure.logic_lines` — non-blank, non-comment, the monorepo's
+own definition, shared with `test_structure_law.py`.
+
+Tables are NOT subtracted here, unlike in THE STRUCTURE LAW: a config
+module is almost all table, so subtracting them would leave every file
+measuring near zero and this guard could never fire. Its subject is
+exactly "how many table rows live in one module".
+
+**It carried two exemptions** — `constants.py` and `pantheon.py` — in a
+test whose own docstring promised none. Under the shared measure neither
+is over (770 and 344), so both are gone and the guard is exemption-free
+again, as it always claimed to be.
+
+**And it only looked at `config/*.py`.** `config/registry/` is config
+too, and its largest module is 903 lines; the walk is now recursive.
 """
 
 import ast
@@ -20,6 +42,7 @@ import pathlib
 import pytest
 
 from config import calendar_mounts, continents, defaults, dial, encyclopedia_ui, glow, pantheon, shortcuts
+from tests.line_measure import logic_lines, raw_lines
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent
 CONFIG_DIR = ROOT / "config"
@@ -35,38 +58,30 @@ NEW_MODULES = {
     "continents": continents,
 }
 
-# Two pre-existing, ALREADY-tracked exceptions -- both are named in
-# tests/test_structure_law.py's own ratchet, the ONE place a size
-# exception may be granted (requires the owner's explicit approval).
-# Listing them here too avoids this stricter, exemption-free config-only
-# check duplicating a fight that test is already carrying:
-#   - config/constants.py: untouched by Session 36 (the split map does
-#     not cover it) -- "a constants split round after Session 36" owes it.
-#   - config/pantheon.py: every WEEKDAY_* table plus the roster/rotation
-#     engine the split map's own pre-answered Q&A binds to it already
-#     totals ~1.17k lines at the floor, before the rest of the map's
-#     carves -- see config/pantheon.md Design Decisions. THIS is the one
-#     genuinely NEW exception Session 36 could not avoid; the owner
-#     still owes it a ratchet entry or a further-split decision.
-KNOWN_OVER_THRESHOLD = {"constants.py", "pantheon.py"}
-
-
-def _line_count(path: pathlib.Path) -> int:
-    with path.open("r", encoding="utf-8", errors="replace") as handle:
-        return sum(1 for _ in handle)
+def _config_modules() -> list[pathlib.Path]:
+    """Every config module, `config/registry/` included; caches and
+    package markers excluded."""
+    return sorted(
+        path
+        for path in CONFIG_DIR.rglob("*.py")
+        if "__pycache__" not in path.parts and path.name != "__init__.py"
+    )
 
 
 @pytest.mark.parametrize(
     "path",
-    sorted(p for p in CONFIG_DIR.glob("*.py") if p.name not in KNOWN_OVER_THRESHOLD),
-    ids=lambda p: p.name,
+    _config_modules(),
+    ids=lambda p: p.relative_to(CONFIG_DIR).as_posix(),
 )
 def test_every_config_module_is_at_or_under_the_threshold(path):
-    lines = _line_count(path)
+    lines = logic_lines(path)
     assert lines <= MAX_LINES, (
-        f"{path.relative_to(ROOT).as_posix()} is {lines} lines, over the "
-        f"{MAX_LINES}-line god-file threshold, and is not a documented "
-        "exception in this test's KNOWN_OVER_THRESHOLD set."
+        f"{path.relative_to(ROOT).as_posix()} is {lines} logic lines "
+        f"({raw_lines(path)} total), over the {MAX_LINES}-line god-file "
+        "threshold. This guard has no ratchet and no exemption list: "
+        "split the module by TOPIC, keeping each section whole (THE "
+        "CONFIG SECTION LAW), and repoint the callers — never a "
+        "re-export shim."
     )
 
 

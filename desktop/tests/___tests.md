@@ -115,16 +115,19 @@ The project's guards, ratchets and their current entries are documented in
 [Enforcement](../../docs/ENFORCEMENT.md).
 
 - **`test_structure_law.py`** **[standard]** — THE STRUCTURE LAW's
-  god-file ratchet. Fails the build on any `.py` file over ~1,000 lines
-  that is not a named `RATCHET` entry; a second test fails if a healed or
-  deleted file is still listed. Current ratchet: `app/controller.py`,
-  `render/compositor.py`, `config/constants.py`, `config/pantheon.py`
-  (owner-approved), `app/observatory.py`, plus five test files
+  god-file ratchet. Fails the build on any `.py` file over ~1,000 logic
+  lines that is not a named `RATCHET` entry; a second test fails if a
+  healed or deleted file is still listed. It measures through
+  [The One Arithmetic](line_measure.py) — see the helper section below.
+  Current ratchet: `render/tooltip_composer.py` plus five test files
   (`test_pointer.py`, `test_settings_dialog.py`, `test_skins.py`,
   `test_archetype.py`, `test_eclipse.py`) owed to a future test-hygiene
-  round. `render/layers.py` LEFT the list on 2026-08-01 when it was split
-  into `render/layers/` plus twelve responsibility modules — the ratchet
-  only ever shrinks.
+  round. `render/layers.py` left on 2026-08-01 (split into
+  `render/layers/` plus twelve responsibility modules), `config/pantheon.py`
+  on 2026-08-05, `app/observatory.py` on 2026-08-18 (it became the
+  `app/observatory/` package), and `app/controller.py`,
+  `render/compositor.py` and `config/constants.py` on 2026-08-19 — the
+  ratchet only ever shrinks.
 - **`structure_ratchet.json`** — the same law in machine-readable form,
   checked by the monorepo tool `rules/tools/structure_guard.py` from the
   FULL pass. `{path: {lines, why, owes}}` over a 1,000-line wall measured
@@ -221,6 +224,16 @@ The project's guards, ratchets and their current entries are documented in
   their own hand-written exception list (Rule #5). Semantics are SUBSET,
   never equality — art arriving can never turn the suite red, but an
   ungueued gap fails immediately.
+- **`line_measure.py`** — THE ONE ARITHMETIC: what "a line" means to
+  every size guard here. `test_structure_law.py` and
+  `test_config_cohesion.py` both read it (WA-R15, 2026-08-19), because
+  until then the project measured the same file three different ways —
+  the monorepo tool said `app/controller.py` was 899 lines, the structure
+  guard said 1,218, and the cohesion guard read `config/defaults.py` as
+  1,036 when its actual content is 418. It starts from the monorepo's
+  definition (non-blank, non-comment) and keeps the owner's 2026-08-05
+  ruling that a declarative table is not behaviour; the module's own
+  docstring says which guard subtracts tables and why the other must not.
 - **`deep_fixture.py`** — builds the SMALL Deep Time fixture pack (same
   schema as the real generator, never the 92 MB build) that
   `test_deep_time.py`'s goldens run against.

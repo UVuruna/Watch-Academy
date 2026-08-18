@@ -11,10 +11,21 @@ deleted from the list — the second test enforces the shrink.
 Born the same day the law was: `config/defaults.py` at 3,498 lines with
 no section banners and `render/layers.py` at 3,521 had been flagged for
 weeks and tolerated, because no test failed. This one fails.
+
+THE MEASURE LIVES IN ONE PLACE (WA-R15, 2026-08-19). This guard used to
+count total lines minus declarative tables — comments included — while
+the monorepo tool wired into the same `run_guards.py` FULL counted
+non-blank, non-comment lines. The two read `app/controller.py` as 1,218
+and 899, and the disagreement kept a file on the ratchet a whole
+refactor after it had earned its way off. Both now read
+`tests/line_measure.py`, which starts from the monorepo's definition and
+keeps the owner's 2026-08-05 ruling that a declarative table is not
+behaviour.
 """
 
-import ast
 from pathlib import Path
+
+from tests.line_measure import behaviour_lines, raw_lines
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
 MAX_LINES = 1000
@@ -39,47 +50,20 @@ RATCHET: dict[str, tuple[str, str]] = {
     # skin_geometry, calendar_mount, shapes, daylight, eclipse_glow,
     # slot_layout, archetype_geometry, ninths, weekday_body). The ratchet
     # shrinks; it never grows back.
-    "app/controller.py": (
-        "WA-R14 (2026-08-19) cut the class into five responsibility "
-        "MIXINS beside it — controller_shortcuts, controller_menu, "
-        "controller_display, controller_dialogs, controller_simulation "
-        "— and what remains is the composition root: construction and "
-        "wiring, settings load/recover/save, the tick and wake "
-        "plumbing, the hover warm, the translation overlay, window "
-        "position and the click-through poller. It measures 899 lines "
-        "on the MONOREPO's shared measure (rules/tools/"
-        "structure_guard.py: non-blank, non-comment) and left "
-        "tests/structure_ratchet.json in that commit. It stays here "
-        "because THIS file measures something else — total lines minus "
-        "declarative tables, comments included — and reads the same "
-        "file as 1,218. Two guards for one law must not disagree about "
-        "what a line is, and cutting three more slivers out of a "
-        "899-line composition root to satisfy the looser arithmetic is "
-        "exactly the 'unnatural pieces' the owner forbade on "
-        "2026-08-18",
-        "WA-R15 — the measure ruling. The same disagreement makes "
-        "tests/test_config_cohesion.py red on config/defaults.py at "
-        "HEAD. Once both guards measure logic the same way (non-blank, "
-        "non-comment, minus top-level declarative tables — rules/"
-        "CODE.md's own definition), this entry goes away without a "
-        "line of code moving",
-    ),
-    "render/compositor.py": (
-        "1,015 lines on THIS measure (747 on the shared "
-        "structure_guard.py's, which does not count comments) — down "
-        "from 3,311 when this entry was written. R13 of the OOP audit "
-        "(2026-08-18) lifted the ~2,400-line tooltip/article bank out "
-        "into the collaborator render/tooltip_composer.py. What is left "
-        "is layer stacking with cadence-driven caching, hit-testing, and "
-        "the nine geometry questions the composer asks — fifteen logic "
-        "lines over the wall, and the ratchet may only shrink from here",
-        "one more cut, and the audit already named it: hit-testing "
-        "(_element_at, _weekday_body_at, _arm_angle_at, set_hover and "
-        "the hover state they share with paint) is the second "
-        "responsibility in what remains. It needs the owner's word "
-        "because `set_hover` WRITES state `paint` reads, so it is a "
-        "collaborator with a back-channel, not a file move",
-    ),
+    # THREE ENTRIES LEFT THIS LIST ON 2026-08-19, when WA-R15 gave the
+    # project ONE arithmetic (tests/line_measure.py) instead of three:
+    #   app/controller.py   885 — WA-R14 cut it into five mixins
+    #   render/compositor.py 740 — WA-R13 lifted the tooltip bank out
+    #   config/constants.py  125 — 645 of its 770 logic lines are
+    #     declarative tables, and the owner ruled on 2026-08-05 that a
+    #     table is not behaviour. Its SIZE is settled; its SHAPE is not:
+    #     38 top-level sections is a junk drawer, not a directory, and
+    #     the topic split is recorded as a responsibility debt in
+    #     docs/ENFORCEMENT.md — it repoints 1,070 references across 142
+    #     files, so the module names need the owner's own vocabulary
+    #     (CANON.md), not an agent's guess.
+    # The ratchet only shrinks; none of the three may come back without
+    # the owner's word in that same session.
     "render/tooltip_composer.py": (
         "2,238 logic lines, and they are ONE responsibility: every hover "
         "the dial answers, one short named method per element — the arm "
@@ -87,19 +71,19 @@ RATCHET: dict[str, tuple[str, str]] = {
         "and words, the crown, the moon, the eclipses, the Earth, the "
         "calendar wedges, the twilight bands, plus the Encyclopedia "
         "target each of them jumps to. There is no second subject hiding "
-        "in it; its size is the dial's own vocabulary. PENDING OWNER "
-        "RATIFICATION: this entry was added by the autonomous R13 round "
-        "of 2026-08-18, which is also the round that removed the much "
-        "larger compositor.py entry",
-        "a further cut by QUESTION, if the owner wants one: "
+        "in it; its size is the dial's own vocabulary. RATIFIED by the "
+        "owner on 2026-08-18 when he accepted R13, the round that added "
+        "this entry and removed the much larger compositor.py one",
+        "the natural next cut is BY TOOLTIP FAMILY, recorded 2026-08-19 "
+        "(WA-R14, no code): render/tooltip_sky.py (sun, moon, eclipses, "
+        "twilight bands, the Earth), render/tooltip_ring.py (jewels, "
+        "numerals, minutes, crown, the arm legends), "
+        "render/tooltip_calendar.py (calendar wedges, weekday bodies, "
+        "the tick readout). Beside it stands the earlier "
         "render/encyclopedia_targets.py for the ~200 lines that answer "
-        "'what article does this open' rather than 'what does this say' "
-        "(the audit's own third piece). It does not bring the rest under "
-        "the wall, which is why it was not done blind",
-    ),
-    "config/constants.py": (
-        "the second config god-file; Session 36's map covers defaults.py only",
-        "a constants split round after Session 36, same snapshot method",
+        "'what article does this open' rather than 'what does this say'. "
+        "Neither is done blind: the composer HOLDS THE DIAL, so three "
+        "holders is three back-channels — it needs the owner's word",
     ),
     # `config/pantheon.py` (1,549 lines) LEFT this list on 2026-08-05 without
     # being touched: the threshold now measures LOGIC, and 962 of its lines
@@ -137,58 +121,10 @@ def _python_files():
         yield path
 
 
-def _line_count(path: Path) -> int:
-    with path.open("r", encoding="utf-8", errors="replace") as handle:
-        return sum(1 for _ in handle)
-
-
-def _declared_data_lines(path: Path) -> int:
-    """Lines spanned by top-level DECLARATIVE data — a module-level
-    assignment whose value is a literal dict/list/tuple/set (or a
-    literal nested inside one). Docstrings count too.
-
-    THE MEASURE IS LOGIC, NOT LENGTH (owner ruling 2026-08-05). The law
-    exists so nobody has to hold a thousand lines of BEHAVIOUR in their
-    head at once; a registry is a DIRECTORY — thirty-five sibling
-    entries of one kind, read by looking one up, never top to bottom.
-    Splitting such a table across files makes one subject live in eight
-    places and forces a reader to chase imports to compare two entries,
-    which is the opposite of what the law is for. So a declarative table
-    is subtracted before the threshold is applied, and a file that is
-    ALL table can be as long as its subject is.
-
-    A literal that CALLS anything, or a comprehension, is not
-    declarative and is not subtracted: the moment a table computes, it
-    is logic again.
-    """
-    try:
-        tree = ast.parse(path.read_text(encoding="utf-8", errors="replace"))
-    except SyntaxError:
-        return 0
-    total = 0
-    for node in tree.body:
-        value = None
-        if isinstance(node, (ast.Assign, ast.AnnAssign)):
-            value = node.value
-        elif isinstance(node, ast.Expr) and isinstance(node.value, ast.Constant):
-            value = node.value          # the module docstring
-        if value is None or not isinstance(
-            value, (ast.Dict, ast.List, ast.Tuple, ast.Set, ast.Constant)
-        ):
-            continue
-        if any(
-            isinstance(child, (ast.Call, ast.comprehension, ast.Lambda))
-            for child in ast.walk(value)
-        ):
-            continue                    # it computes — that is logic
-        end = getattr(node, "end_lineno", node.lineno)
-        total += end - node.lineno + 1
-    return total
-
-
 def _logic_lines(path: Path) -> int:
-    """What the threshold actually measures."""
-    return _line_count(path) - _declared_data_lines(path)
+    """What the threshold actually measures — `tests/line_measure.py`
+    holds the definition and the reason for every clause in it."""
+    return behaviour_lines(path)
 
 
 def test_no_file_crosses_the_threshold_outside_the_ratchet():
@@ -202,7 +138,7 @@ def test_no_file_crosses_the_threshold_outside_the_ratchet():
         logic = _logic_lines(path)
         if logic > MAX_LINES:
             offenders.append(
-                f"{rel} ({logic} lines of logic, {_line_count(path)} total)"
+                f"{rel} ({logic} lines of logic, {raw_lines(path)} total)"
             )
     assert not offenders, (
         "THE STRUCTURE LAW (root CLAUDE.md, Rule #20): these files crossed "

@@ -45,32 +45,92 @@ Screenshot evidence for GUI work is produced by the monorepo runner —
 `python u:/Coding/UVuruna/rules/tools/uv.py shot --all`, window registry in
 `.claude/uv_windows.py` — not by the audit's own shots.
 
+<a id="the-measure"></a>
+
+## THE ONE ARITHMETIC (WA-R15, 2026-08-19) — awaiting the owner's word
+
+Until this round the project measured a file's size three ways, and two
+guards inside the SAME `run_guards.py` FULL disagreed about the same file:
+
+| Measure | Used by | `app/controller.py` | `config/defaults.py` |
+|---------|---------|--------------------|----------------------|
+| non-blank, non-comment | `rules/tools/structure_guard.py` (monorepo) | 899 | 418 |
+| total minus declarative tables | `desktop/tests/test_structure_law.py` | 1,218 | 835 |
+| raw lines | `desktop/tests/test_config_cohesion.py` | — | **1,036 (RED)** |
+
+That is why `test_config_cohesion.py` was red at HEAD, and why WA-R14
+had to leave a ratchet entry on a file it had already brought under the
+wall. A law whose guards cannot agree on the number is not enforced, it
+is argued about.
+
+**The ruling applied here:** the definition lives in ONE module,
+`desktop/tests/line_measure.py`, and it starts from the monorepo's —
+non-blank, non-comment lines. On top of it the owner's ruling of
+2026-08-05 is kept whole: a top-level declarative table is not
+behaviour, so THE STRUCTURE LAW subtracts it. **CONFIG COHESION does
+not subtract it**, because a config module is almost all table and a
+guard that cannot fire is worse than none — its subject is precisely how
+many table rows live in one module.
+
+This makes the project's structure guard never STRICTER than the shared
+tool, so a file the shared tool rejects still fails the FULL pass through
+`structure_ratchet.json`. The two can no longer disagree in the direction
+where "fine" wins.
+
+Both guards were shown FAILING on a planted over-wall module and passing
+after it was removed by hand.
+
+**Consequences, all of them shrinks:** `app/controller.py` (885),
+`render/compositor.py` (740) and `config/constants.py` (125) left the
+structure ratchet; `test_config_cohesion.py` lost both of its
+exemptions (`constants.py` 770, `pantheon.py` 344 — a test whose own
+docstring promised none) and now walks `config/` RECURSIVELY, so
+`config/registry/` is covered for the first time.
+
+<a id="constants-debt"></a>
+
+### The debt this leaves: `config/constants.py`'s SHAPE
+
+Its SIZE is settled — 125 lines of behaviour behind 645 lines of
+declarative tables. Its SHAPE is not: **38 top-level sections** spanning
+app identity, era notation, weekday bodies, pointer geometry, ring
+finishes, zodiac, translation languages, UI scale and seating is a junk
+drawer, not a directory. The [OOP audit](AUDIT-OOP-2026-08-18.md)'s R15
+asked for a topic split in the shape of Session 36 (new
+`config/<topic>.py` modules, callers repointed, no re-export shims).
+
+**It was NOT done in this round, deliberately.** No guard demands it any
+more, and it repoints **1,070 references across 142 files**; the topic
+names have to come from the owner's own vocabulary
+([The DOMY Canon](../CANON.md), THE RING VOCABULARY in
+[The Dial](DIAL.md)), not an agent's guess — a wrong name here is a
+wrong name in a hundred files. It waits for his word.
+
 ## The ratchets — all of them may only SHRINK
 
 Adding an entry to any of them needs the owner's explicit approval in that
 same session.
 
 **THE STRUCTURE RATCHET** lives in `desktop/tests/test_structure_law.py`.
-Today: `render/compositor.py`, `render/tooltip_composer.py`,
-`config/constants.py`, and five test files owed to a test-hygiene round
-(`test_pointer`, `test_settings_dialog`, `test_skins`, `test_archetype`,
-`test_eclipse`). Each entry names why it is tolerated and who owes the
-split.
+Today: `render/tooltip_composer.py` and five test files owed to a
+test-hygiene round (`test_pointer`, `test_settings_dialog`, `test_skins`,
+`test_archetype`, `test_eclipse`). Each entry names why it is tolerated
+and who owes the split. It now measures through
+[THE ONE ARITHMETIC](#the-measure), so it holds exactly what the
+machine-readable ratchet holds — `render/tooltip_composer.py` — plus the
+test files the monorepo tool does not scan.
 
-**TWO GUARDS, TWO ARITHMETICS (found by WA-R14, 2026-08-19).** WA-R14
-cut `app/controller.py` into five responsibility mixins beside it
+**TWO GUARDS, TWO ARITHMETICS — found by WA-R14, closed by WA-R15.**
+WA-R14 cut `app/controller.py` into five responsibility mixins beside it
 (`controller_shortcuts`, `controller_menu`, `controller_display`,
-`controller_dialogs`, `controller_simulation`). The composition root
-that remains measures **899** lines on the monorepo's shared measure
-(`rules/tools/structure_guard.py`: non-blank, non-comment) and left
-`structure_ratchet.json` in that commit — but **1,218** on this file's
-own measure (total lines minus declarative tables, comments included),
-so its entry here stayed, with the disagreement written into it. The
-same disagreement is why `test_config_cohesion.py` is red on
-`config/defaults.py`. **WA-R15 rules on the measure**, and the entry
-goes away with it — no code moves. Cutting three more slivers out of a
-899-line composition root to satisfy the looser arithmetic is exactly
-the "unnatural pieces" the owner forbade on 2026-08-18.
+`controller_dialogs`, `controller_simulation`) and left
+`structure_ratchet.json` in that commit — but its entry HERE had to stay
+one more round, because this guard read the same file as 1,218 where the
+shared tool read 899. Cutting three more slivers out of a 899-line
+composition root to satisfy the looser arithmetic would have been exactly
+the "unnatural pieces" the owner forbade on 2026-08-18, so the
+disagreement was written into the entry instead and
+[THE ONE ARITHMETIC](#the-measure) closed it the next commit.
 
 **The refactor round of 2026-08-18** ([OOP
 audit](AUDIT-OOP-2026-08-18.md#round-2026-08-18)) moved it a long way in
