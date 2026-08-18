@@ -5,7 +5,11 @@
 ## Purpose
 
 The composition-root shell of the M6 settings window — Phase 6 FINAL cleanup
-narrowed it to THREE nav sections (`QListWidget` + `QStackedWidget` — see
+narrowed it to THREE nav sections (a shared
+[Section Host](../../__about/section_host.md) since WA-R16, 2026-08-19 —
+the nav list, the per-page scroll areas and the measured sidebar width
+it used to write out itself; `_nav_list`/`_stack` read through to it and
+stay `None` in the sidebar-less Custom art mode — see
 [settings_dialog (subfolder)](../___settings_dialog.md) for the full layout
 and per-group narrative): Location, Language, System. The Display, Colors and
 Themes sections' whole content now lives LIVE-APPLY in the Watch Face window

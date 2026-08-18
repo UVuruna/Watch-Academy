@@ -271,6 +271,12 @@ SETTINGS_NAV_CHROME_PX = 48
 # What one nav ITEM spends around its own text (its QSS padding) —
 # always narrower than the list, which reserves its own inset on top.
 SETTINGS_NAV_ITEM_CHROME_PX = 24
+# What the WINDOW spends around a nav column plus its panel — the
+# dialog's own margins and the gap between the two. Named here on
+# 2026-08-19 (WA-R16); it had been a bare `+ 24` inside the Settings
+# dialog's minimum-size arithmetic since that minimum was first
+# computed.
+SETTINGS_PANEL_CHROME_PX = 24
 
 
 # The WORKING SET (owner 2026-07-15): originals ship at full

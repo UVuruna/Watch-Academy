@@ -83,6 +83,7 @@ FLOW_REQUIRED = frozenset({
     "app/observatory/dialog.py",
     "app/report.py",
     "app/scheduler.py",
+    "app/section_host.py",
     "app/settings_dialog/custom_art_section.py",
     "app/settings_dialog/dialog.py",
     "app/skin_builder.py",

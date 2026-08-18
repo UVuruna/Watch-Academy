@@ -31,9 +31,10 @@ view (`initial_section="Custom art"`) instead of the ordinary three-section
 list, since nothing else ever routes a user there by browsing.
 """
 
-from PySide6.QtWidgets import QDialogButtonBox, QFrame, QHBoxLayout, QListWidget, QScrollArea, QStackedWidget, QStyle, QVBoxLayout, QWidget
+from PySide6.QtWidgets import QDialogButtonBox, QFrame, QScrollArea, QStyle, QVBoxLayout, QWidget
 
 from app.dialog_base import AcademyDialog
+from app.section_host import SCREEN_FLOOR, SectionHost
 from app.settings_dialog.custom_art_section import _CustomArtSectionMixin
 from app.settings_dialog.language_system_section import (
     _LanguageSystemSectionMixin,
@@ -58,6 +59,19 @@ class SettingsDialog(
     # "Custom art" is NOT one of these three — it is a special HIDDEN
     # mode (see the module docstring), never a sidebar row.
     _SECTION_KEYS = ("Location", "Language", "System")
+
+    # THE WINDOW'S OWN PARTS. The sidebar and the stack are what this
+    # dialog's tests and the runtime layout audit have always asked it
+    # for; `SectionHost` holds them now, so these two read through — and
+    # both stay `None` in the sidebar-less Custom art mode, exactly as
+    # the attributes they replace did.
+    @property
+    def _nav_list(self):
+        return None if self._host is None else self._host.nav_list
+
+    @property
+    def _stack(self):
+        return None if self._host is None else self._host.stack
 
     def __init__(self, settings: Settings, skin,
                  overlay: dict | None = None, parent=None,
@@ -92,9 +106,9 @@ class SettingsDialog(
             # area holding just the Custom ring/hands groups, since the
             # ONLY caller of this mode (the Watch Face Ring section's
             # "Custom ring…" button) always wants exactly this page and
-            # nothing else.
-            self._nav_list = None
-            self._stack = None
+            # nothing else. There is no section list here, so there is no
+            # SectionHost either.
+            self._host = None
             page = QWidget()
             page_layout = QVBoxLayout(page)
             page_layout.setContentsMargins(0, 0, 0, 0)
@@ -115,6 +129,14 @@ class SettingsDialog(
             # TITLES (each with a right arrow ▸), clicking a title shows
             # THAT section's panel on the right. Each panel keeps its OWN
             # scroll area (owner: "keep the scroll cap for tall panels").
+            #
+            # THE SECTIONS STAY MIXINS (WA-R16, 2026-08-19): each
+            # `_build_*_group` writes its widget handles onto `self`,
+            # because `result_settings()` reads them back when OK is
+            # pressed. A free builder would have to be handed the dialog
+            # and hand its widgets back — the back-channel a mixin exists
+            # to avoid. What the shared host takes is the BUILT PAGE, so
+            # it never needs to know how one was made.
             sections: list[tuple[str, list]] = [
                 (tr("Location"), [
                     self._build_location_group(),
@@ -125,25 +147,9 @@ class SettingsDialog(
                 ]),
                 (tr("System"), [self._build_system_group()]),
             ]
-            self._nav_list = QListWidget()
-            # MEASURED width (ITEM CUT, Zubi fix round 2026-08-09 —
-            # same fix as the Watch Face window's sidebar): the longest
-            # "<title>  ▸" row in the CURRENT font plus the theme QSS
-            # item/list chrome, never below the design constant.
-            metrics = self._nav_list.fontMetrics()
-            longest = max(
-                metrics.horizontalAdvance(f"{title}  ▸")
-                for title, _groups in sections
-            )
-            measured_nav = max(
-                defaults.SETTINGS_NAV_WIDTH_PX,
-                longest + defaults.SETTINGS_NAV_CHROME_PX,
-            )
-            self._nav_list.setFixedWidth(measured_nav)  # layout-law: exempt - measured from the longest title just above
-            self._stack = QStackedWidget()
             pages = []
+            host_sections: list[tuple[str, QWidget]] = []
             for title, groups in sections:
-                self._nav_list.addItem(f"{title}  ▸")
                 page = QWidget()
                 page_layout = QVBoxLayout(page)
                 page_layout.setContentsMargins(0, 0, 0, 0)
@@ -160,27 +166,25 @@ class SettingsDialog(
                 if not has_stretchy_group:
                     page_layout.addStretch(1)
                 pages.append(page)
-                panel_scroll = QScrollArea()
-                panel_scroll.setWidgetResizable(True)
-                panel_scroll.setFrameShape(QFrame.Shape.NoFrame)
-                panel_scroll.setWidget(page)
-                self._stack.addWidget(panel_scroll)
-            self._nav_list.currentRowChanged.connect(self._stack.setCurrentIndex)
-            self._nav_list.setCurrentRow(0)
+                host_sections.append((f"{title}  ▸", page))
+            # The sidebar width, the per-page scroll areas and the
+            # nav-to-stack wiring are the host's; the measured-width
+            # formula it uses is the one this dialog and the Watch Face
+            # window each used to write out (see section_host.md).
+            self._host = SectionHost(
+                host_sections,
+                parent=self,
+                measure_minimum=False,
+            )
             if initial_section in self._SECTION_KEYS:
-                self._nav_list.setCurrentRow(
+                self._host.set_current_row(
                     self._SECTION_KEYS.index(initial_section)
                 )
-            body = QHBoxLayout()
-            body.addWidget(self._nav_list)
-            body.addWidget(self._stack, stretch=1)
-            nav_width = measured_nav
+            body = self._host
+            nav_width = self._host.nav_width
 
         layout = QVBoxLayout(self)
-        if isinstance(body, QHBoxLayout):
-            layout.addLayout(body, stretch=1)
-        else:
-            layout.addWidget(body, stretch=1)
+        layout.addWidget(body, stretch=1)
         buttons = QDialogButtonBox(
             QDialogButtonBox.StandardButton.Ok
             | QDialogButtonBox.StandardButton.Cancel
@@ -210,17 +214,23 @@ class SettingsDialog(
         # scroll lawfully past it — the window is genuinely full there).
         # Without this the minimum was whatever the layout defaulted to
         # (~290x160), and the window could be shrunk into garbage.
-        scrollbar = self.style().pixelMetric(
-            QStyle.PixelMetric.PM_ScrollBarExtent
-        )
         margins = layout.contentsMargins()
-        tallest = max(page.sizeHint().height() for page in pages)
         chrome_h = (margins.top() + margins.bottom() + layout.spacing()
                     + buttons.sizeHint().height())
-        self.setMinimumSize(
-            min(content_width + nav_width + scrollbar + 24, 1280),
-            min(tallest + chrome_h, 720),
-        )
+        if self._host is None:
+            scrollbar = self.style().pixelMetric(
+                QStyle.PixelMetric.PM_ScrollBarExtent
+            )
+            floor_w, floor_h = SCREEN_FLOOR
+            tallest = max(page.sizeHint().height() for page in pages)
+            self.setMinimumSize(
+                min(content_width + scrollbar + defaults.SETTINGS_PANEL_CHROME_PX, floor_w),
+                min(tallest + chrome_h, floor_h),
+            )
+        else:
+            self.setMinimumSize(
+                self._host.measured_minimum(defaults.SETTINGS_PANEL_CHROME_PX, chrome_h)
+            )
 
         if self._custom_art_only:
             # The Custom-art-only page carries no Location widgets at all

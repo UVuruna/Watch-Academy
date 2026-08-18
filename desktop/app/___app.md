@@ -31,6 +31,7 @@ their outputs through the render compositor.
 | `fast_travel_flash.py` | Algorithmic | the transient icon+text toast for Ctrl+[ / Ctrl+] — [about](__about/fast_travel_flash.md) · [flow](__flow/fast_travel_flash.md) |
 | `report.py` | Algorithmic | the hidden efficiency report — table + bar chart + sparkline — [about](__about/report.md) · [flow](__flow/report.md) |
 | `shortcuts_window.py` | Standard | R-37 read-only Shortcuts reference table, enumerated off `config.shortcuts.SHORTCUTS` — [about](__about/shortcuts_window.md) |
+| `section_host.py` | Algorithmic | the ONE nav-list-beside-a-page-stack — measured sidebar, per-page scroll, computed minimum; the Watch Face window and the Settings dialog both build theirs with it — [about](__about/section_host.md) · [flow](__flow/section_host.md) |
 | `dialog_base.py` | Standard | `AcademyDialog` — the overlay, the `tr`, the title and the stay-on-top flag every top-level window shares — [about](__about/dialog_base.md) |
 | `theme.py` | Algorithmic | the shared dark QSS + the one dialog-opening-size algorithm — [about](__about/theme.md) · [flow](__flow/theme.md) |
 | `native.py` | Algorithmic | the only module touching user32/kernel32 — hit test, click-through, the keyboard hook — [about](__about/native.md) · [flow](__flow/native.md) |

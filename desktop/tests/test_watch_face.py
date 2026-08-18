@@ -17,6 +17,7 @@ from PySide6.QtWidgets import (
 
 from app.settings_store import Settings
 from app.slot_descriptor import SlotDescriptor
+from app import section_host
 from app.watch_face import window
 from app.watch_face.window import WatchFaceDialog, _SECTIONS
 from config import constants, shortcuts
@@ -459,7 +460,12 @@ def test_the_rebuild_never_creates_a_top_level_window(app):
     both widgets into the dialog either way, so an after-the-fact
     `parent()` check passes on the broken code too (verified — it did).
     What has to be pinned is that neither is ever born parentless, which
-    is the only condition under which the window can never exist."""
+    is the only condition under which the window can never exist.
+
+    WA-R16 (2026-08-19) moved the pair into `app.section_host.SectionHost`,
+    so that is where the spy is planted now and the recorded parent is
+    the HOST — which `__init__` has already parented to the dialog by the
+    time it builds either widget, so the law holds one level deeper."""
     parents: list = []
 
     class _WatchedList(QListWidget):
@@ -474,13 +480,18 @@ def test_the_rebuild_never_creates_a_top_level_window(app):
 
     dialog = _dialog()
     parents.clear()
-    with mock.patch.object(window, "QListWidget", _WatchedList), \
-            mock.patch.object(window, "QStackedWidget", _WatchedStack):
+    with mock.patch.object(section_host, "QListWidget", _WatchedList), \
+            mock.patch.object(section_host, "QStackedWidget", _WatchedStack):
         dialog.refresh(dialog._settings, dialog._setters)   # the live-pick path
     assert [name for name, _parent in parents] == [
         "QListWidget", "QStackedWidget",
     ]
-    assert [parent for _name, parent in parents] == [dialog, dialog]
+    host = dialog._host
+    assert [parent for _name, parent in parents] == [host, host]
+    # ...and the host they were born into was itself already the
+    # dialog's child at that moment — the chain to a real window is
+    # unbroken from the first constructor on.
+    assert host.parent() is dialog
     # ...and nothing the finished window owns is an ordinary top-level
     # either. (Popups are exempt: a combo box owns a `Qt::Popup` frame
     # by construction — thirteen on these nine pages — and a popup is

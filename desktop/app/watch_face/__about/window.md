@@ -36,11 +36,17 @@ immediately; there is nothing to commit, no OK/Cancel.
 #### Methods
 - `refresh(settings, setters)`: re-supplies the live settings after a
   pick applies, then rebuilds — called by the controller
-- `_build()`: rebuilds the sidebar + stack from the `_SECTIONS` registry
-  on every pick, KEEPING the previously selected row (the SAME
+- `_build()`: builds the nine pages from the `_SECTIONS` registry and
+  hands them to a fresh [Section Host](../../__about/section_host.md) —
+  the sidebar, the per-page scroll areas and the measured nav width are
+  the host's since WA-R16 (2026-08-19); this window keeps WHAT its
+  sections are and what a pick does. `_nav_list` and `_stack` read
+  through to the host, so this window's tests and the runtime layout
+  audit still ask the WINDOW for its parts.
+  It runs on every pick, KEEPING the previously selected row (the SAME
   "a fresh container reopens at row 0" fix `design_window.DesignDialog
   ._build` already carries for its `QTabWidget`)
-- `_capture_scrolls()` / `_restore_scrolls(offsets)`: the per-page scroll
+- `SectionHost.capture_scrolls()` / `.restore_scrolls(offsets)`: the per-page scroll
   offsets carried across that rebuild
 
 ## THE NO-MOVEMENT DECREE (owner 2026-08-10, third report)

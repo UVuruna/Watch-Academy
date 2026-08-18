@@ -12,11 +12,12 @@ FINAL cleanup then DELETED the old windows/dialog groups outright —
 this window is now the ONLY place any of that content lives.
 """
 
-from PySide6.QtCore import QSize, Qt, QTimer
-from PySide6.QtWidgets import QFrame, QHBoxLayout, QLabel, QListWidget, QScrollArea, QStackedWidget, QStyle, QVBoxLayout, QWidget
+from PySide6.QtCore import Qt, QTimer
+from PySide6.QtWidgets import QHBoxLayout, QLabel, QVBoxLayout, QWidget
 
 from app import rebuild
 from app.dialog_base import AcademyDialog
+from app.section_host import SectionHost, stretched_holder
 from app.theme import apply_theme, size_to_screen
 from app.watch_face import (
     bodies, colors, numerals, opacity, pointer, ring, size, themes,
@@ -24,12 +25,6 @@ from app.watch_face import (
 from app.watch_face import section_reset
 from app.watch_face.widgets import FlowContent
 from config import defaults, encyclopedia_ui
-
-# THE SPACE & LEGIBILITY LAW's screen floor (rules/GUI.md): the computed
-# window minimum below may never demand a screen the user does not have.
-# Content past the floor scrolls instead (ladder step 4 — at the floor
-# the window is genuinely full).
-_SCREEN_FLOOR = (1280, 720)
 
 # Section registry: (title, builder). `builder(settings, setters, tr) ->
 # QWidget`, or `None` for a not-yet-built placeholder page — a later
@@ -73,8 +68,7 @@ class WatchFaceDialog(AcademyDialog):
         super().__init__("Watch Face", overlay, stay_on_top, parent)
         self._settings = settings
         self._setters = setters
-        self._nav_list: QListWidget | None = None
-        self._stack: QStackedWidget | None = None
+        self._host: SectionHost | None = None
         self._layout = QVBoxLayout(self)
         self._body = QHBoxLayout()
         self._layout.addLayout(self._body, stretch=1)
@@ -86,6 +80,20 @@ class WatchFaceDialog(AcademyDialog):
         self._build()
         size_to_screen(self, 1, 1, defaults.DIALOG_SQUARE_HEIGHT_FRACTION)
 
+    # THE WINDOW'S OWN PARTS. The sidebar and the stack are what this
+    # window's tests and the runtime layout audit have always asked it
+    # for; `SectionHost` holds them now, so these two read through. They
+    # are accessors, not a compatibility wrapper: the audit walks a
+    # WINDOW's sections, and it should not have to know which widget
+    # class the window built them with.
+    @property
+    def _nav_list(self):
+        return None if self._host is None else self._host.nav_list
+
+    @property
+    def _stack(self):
+        return None if self._host is None else self._host.stack
+
     def refresh(self, settings, setters: dict) -> None:
         """Re-supplies the live settings after a pick applies (owner
         spec: a live picker, not a transactional dialog) — called by
@@ -94,125 +102,25 @@ class WatchFaceDialog(AcademyDialog):
         self._setters = setters
         self._build()
 
-    def _capture_scrolls(self) -> list[tuple[int, int]]:
-        """The scroll offset of every page, so a live-pick rebuild can put
-        each one back exactly where it stood (owner decree 2026-08-10: a
-        pick may change the WATCH and nothing else — never the section,
-        never the scroll, never the focused side of the window)."""
-        if self._stack is None:
-            return []
-        offsets: list[tuple[int, int]] = []
-        for index in range(self._stack.count()):
-            page_scroll = self._stack.widget(index)
-            if isinstance(page_scroll, QScrollArea):
-                offsets.append((page_scroll.horizontalScrollBar().value(),
-                                page_scroll.verticalScrollBar().value()))
-            else:
-                offsets.append((0, 0))
-        return offsets
-
-    def _restore_scrolls(self, offsets: list[tuple[int, int]]) -> None:
-        if self._stack is None:
-            return
-        for index, (horizontal, vertical) in enumerate(offsets):
-            if index >= self._stack.count():
-                break
-            page_scroll = self._stack.widget(index)
-            if not isinstance(page_scroll, QScrollArea):
-                continue
-            # ONLY a bar that has somewhere to go (proof shot 2026-08-10):
-            # writing a value into an empty scrollbar MAKES IT APPEAR —
-            # the rebuild grew a horizontal bar with range 0 under the
-            # page, which is precisely the "a scrollbar while the window
-            # still holds unused space" the layout law forbids.
-            for bar, value in ((page_scroll.horizontalScrollBar(), horizontal),
-                               (page_scroll.verticalScrollBar(), vertical)):
-                if bar.maximum() > 0:
-                    bar.setValue(value)
-
     def _build(self) -> None:
-        # KEEP THE SELECTED ROW across live-pick rebuilds — the SAME fix
-        # `design_window.DesignDialog._build` carries for its
-        # `QTabWidget`: every pick routes through the controller's
-        # `refresh()`, which rebuilds this sidebar+stack pair from
-        # scratch, and a fresh `QListWidget` always opens at row 0.
-        previous = self._nav_list.currentRow() if self._nav_list is not None else 0
-        scrolls = self._capture_scrolls()
-        # THE OTHER HALF OF THE SAME LAW (owner bug 2026-08-15, reported
-        # AGAIN 2026-08-16 because only the half below was fixed): the
-        # OLD sidebar and stack are VISIBLE when this loop reaches them,
-        # and a visible child handed `setParent(None)` stops being a
-        # child and becomes a real top-level window at the default
-        # screen-centre spot — with its full old contents — until
-        # `deleteLater` is reached a repaint later. Measured with the
-        # same global Show/PlatformSurface spy that found the half
-        # below: `Show QListWidget parent=None items=['Pointer','Ring',
-        # 'Numerals',…]`, and silent once `rebuild.discard` hides first.
+        # KEEP THE SELECTED ROW and every page's scroll across live-pick
+        # rebuilds (owner decree 2026-08-10: a pick may change the WATCH
+        # and nothing else): every pick routes through the controller's
+        # `refresh()`, which rebuilds this host from scratch, and a fresh
+        # `QListWidget` always opens at row 0.
+        previous = self._host.current_row() if self._host is not None else 0
+        scrolls = self._host.capture_scrolls() if self._host is not None else []
+        # THE OLD HOST IS VISIBLE when this reaches it, and a visible
+        # child handed `setParent(None)` stops being a child and becomes
+        # a real top-level window at the default screen-centre spot —
+        # with its full old contents — until `deleteLater` is reached a
+        # repaint later (owner bug 2026-08-15, reported AGAIN 2026-08-16;
+        # measured with a global Show/PlatformSurface spy, silent once
+        # `rebuild.discard` hides first).
         rebuild.clear_layout(self._body)
-        # PARENTED AT CONSTRUCTION, never adopted later (owner bug
-        # 2026-08-15, "FLASH sa otvaranjem nekog prozora u sredini"):
-        # a parentless QWidget IS a top-level window. Built bare, this
-        # sidebar and the stack below stayed windows for the whole span
-        # between here and the `addWidget` calls at the end of `_build`
-        # — and `setCurrentRow`/`setCurrentIndex` in that span makes a
-        # window VISIBLE, so Windows handed each one a real native
-        # window at the default (screen-centre) spot and the reparent
-        # hid it again a repaint later. Measured with a global
-        # Show/PlatformSurface spy: PlatformSurface → WinIdChange →
-        # Show at (1451,600) and (1216,600), then Hide. Every live pick
-        # runs `_build`, which is why it flashed on EVERY change.
-        nav_list = QListWidget(self)
-        # MEASURED width, never a guessed constant (ITEM CUT, Zubi fix
-        # round 2026-08-09: "Themes & Slots" needed 198px while the old
-        # fixed 170 offered 156): the longest section title in the
-        # CURRENT font, plus the item/list chrome the theme QSS adds
-        # (12px item padding + 6px list padding per side, borders).
-        metrics = nav_list.fontMetrics()
-        longest = max(
-            metrics.horizontalAdvance(self._tr(title))
-            for title, _builder in _SECTIONS
-        )
-        nav_width = max(
-            defaults.SETTINGS_NAV_WIDTH_PX,
-            longest + defaults.SETTINGS_NAV_CHROME_PX,
-        )
-        nav_list.setFixedWidth(nav_width)  # layout-law: exempt - measured from the longest title just above
-        self._nav_width = nav_width
-        # NAV PILL ROW FIX (2026-08-13): QListWidget's own row-layout pass
-        # does not always match the delegate's styled sizeHint once QSS
-        # padding/margin is involved — left to itself the view spaced rows
-        # narrower than the pill it painted, so the SELECTED item's pill
-        # overlapped the row above and below (owner-reported text clipping
-        # on "Ring" / "Hands & Bodies" around a selected "Numerals"). Stamp
-        # the row height explicitly from the same constants the QSS pill
-        # uses, so the reserved row and the painted pill are one number.
-        nav_row_h = (
-            metrics.height()
-            + 2 * encyclopedia_ui.THEME_NAV_ITEM_PADDING_V_PX
-            + 2 * encyclopedia_ui.THEME_NAV_ITEM_MARGIN_V_PX
-        )
-        stack = QStackedWidget(self)     # parented — see `nav_list` above
-        pages: list[QWidget] = []
+        sections: list[tuple[str, QWidget]] = []
         for title, builder in _SECTIONS:
             text = self._tr(title)
-            nav_list.addItem(text)
-            item = nav_list.item(nav_list.count() - 1)
-            # `QListWidgetItem.sizeHint()` is `QSize(-1, -1)` (invalid)
-            # until something has been stamped on it, and handing Qt an
-            # invalid width back made it discard the WHOLE override,
-            # height included, silently reviving the original overlap
-            # (first attempt here did exactly that). So the width half
-            # is computed the same way the item's own QSS padding does —
-            # text width plus the item's horizontal padding — which is
-            # always narrower than `nav_width` (the fixed list width
-            # ALREADY reserves the list's own border+padding inset on
-            # top of that, per the comment at `nav_width` above); handing
-            # the full `nav_width` there instead overran the viewport
-            # and cut the sidebar itself (ALG-8: "needs 170px, list
-            # offers 156px" on every page).
-            item_width = (metrics.horizontalAdvance(text)
-                          + defaults.SETTINGS_NAV_ITEM_CHROME_PX)
-            item.setSizeHint(QSize(item_width, nav_row_h))
             if builder is None:
                 page = _placeholder_page(self._tr)
             else:
@@ -231,52 +139,44 @@ class WatchFaceDialog(AcademyDialog):
                     page_layout = page.layout()
                     if page_layout is not None:
                         page_layout.addWidget(reset)
-            pages.append(page)
-        for page in pages:
-            # THE HOLDER PUBLISHES ITS OWN HEIGHT (measured 2026-08-13 on
-            # the owner's live profile): a plain QWidget holder let the
-            # widgetResizable path size the page from the PLAIN minimum
-            # hint, which drops the height a flow gallery only knows once
-            # it has a width — the Ring page's "Inner (minute track)"
-            # group was handed 375px against its own 388px minimum and
-            # lost its bottom margin. `FlowContent` is exactly the widget
-            # that answers this (see its docstring); it forwards to
-            # whatever layout it holds, so it serves as a page holder as
-            # well as a gallery host.
-            holder = FlowContent()
-            holder_layout = QVBoxLayout(holder)
-            holder_layout.setContentsMargins(0, 0, 0, 0)
-            holder_layout.addWidget(page)
-            # Content packs to the top; leftover height stays EMPTY below
-            # instead of being wedged between the rows.
-            holder_layout.addStretch(1)
-            page_scroll = QScrollArea()
-            page_scroll.setWidgetResizable(True)
-            page_scroll.setFrameShape(QFrame.Shape.NoFrame)
-            page_scroll.setWidget(holder)
-            # NEVER a horizontal bar (measured 2026-08-10: a QScrollArea
-            # rebuilt inside an ALREADY VISIBLE window shows an empty one
-            # — range 0, nothing to scroll — which is exactly the bar the
-            # layout law forbids). It is not needed by construction: the
-            # pages are capped to `column_width` and the declared minimum
-            # guarantees a viewport that wide.
-            page_scroll.setHorizontalScrollBarPolicy(
-                Qt.ScrollBarPolicy.ScrollBarAlwaysOff
-            )
-            stack.addWidget(page_scroll)
-        nav_list.currentRowChanged.connect(stack.setCurrentIndex)
-        row = max(0, min(previous, nav_list.count() - 1))
-        nav_list.setCurrentRow(row)
-        stack.setCurrentIndex(row)
+            sections.append((text, page))
+        # NAV PILL ROW HEIGHT (2026-08-13): QListWidget's own row-layout
+        # pass does not always match the delegate's styled sizeHint once
+        # QSS padding/margin is involved — left to itself the view spaced
+        # rows narrower than the pill it painted, so the SELECTED item's
+        # pill overlapped the row above and below (owner-reported text
+        # clipping on "Ring" / "Hands & Bodies" around a selected
+        # "Numerals"). The reserved row and the painted pill must be one
+        # number, computed from the same constants the QSS pill uses.
+        metrics = self.fontMetrics()
+        row_height = (
+            metrics.height()
+            + 2 * encyclopedia_ui.THEME_NAV_ITEM_PADDING_V_PX
+            + 2 * encyclopedia_ui.THEME_NAV_ITEM_MARGIN_V_PX
+        )
+        host = SectionHost(
+            sections,
+            parent=self,
+            measure_minimum=True,
+            row_height=row_height,
+            # A plain holder under `widgetResizable` sizes the page from
+            # the width-independent minimum hint, which drops the height
+            # a flow gallery only knows once it has a width — the Ring
+            # page's "Inner (minute track)" group was handed 375px
+            # against its own 388px minimum and lost its bottom margin
+            # (measured 2026-08-13 on the owner's live profile).
+            # `FlowContent` is exactly the widget that answers this.
+            page_holder=stretched_holder(FlowContent),
+            horizontal_scroll=False,
+        )
         # The sidebar must NEVER steal the caret from the pick the user
         # just made (owner decree 2026-08-10 — "odvede me na levu
         # stranu"): the list is reachable by mouse and by Tab, but a
         # rebuilt list never grabs focus on its own.
-        nav_list.setFocusPolicy(Qt.FocusPolicy.TabFocus)
-        self._body.addWidget(nav_list)
-        self._body.addWidget(stack, stretch=1)
-        self._nav_list = nav_list
-        self._stack = stack
+        host.nav_list.setFocusPolicy(Qt.FocusPolicy.TabFocus)
+        host.set_current_row(previous)
+        self._body.addWidget(host, stretch=1)
+        self._host = host
         # NO PINNED WIDTH (owner decree 2026-08-14, superseding the fixed
         # column of 2026-08-06): the pages used to be capped with
         # setMaximumWidth() to the widest section's MINIMUM hint, so even
@@ -285,40 +185,24 @@ class WatchFaceDialog(AcademyDialog):
         # the window stood empty. The owner's ruling: minimums that keep
         # text legible are lawful, a hard-coded width never is. Content
         # now follows the real viewport width; the flow galleries absorb
-        # it by refilling their rows. `column_width` survives only as the
-        # MINIMUM the window must offer (no horizontal scrollbar by
-        # construction), measured from polished hints — the theme's
-        # paddings are part of the real size (hints taken un-polished
-        # measured 20px short on the Colors groups).
-        for page in pages:
-            page.ensurePolished()
-            for child in page.findChildren(QWidget):
-                child.ensurePolished()
-        column_width = max(page.minimumSizeHint().width() for page in pages)
-        self._declare_minimum(pages, column_width)
+        # it by refilling their rows. The measured column survives only
+        # as the MINIMUM the window must offer (no horizontal scrollbar
+        # by construction), taken from POLISHED hints.
+        host.polish_pages()
+        self._declare_minimum(host)
         # TWICE, and that is not belt-and-braces: a scrollbar's range is
         # still 0 until the layout has run, so the immediate call clamps
         # to the top on a page whose geometry is not settled yet. The
         # queued call lands after that layout pass, with the real range.
-        self._restore_scrolls(scrolls)
-        QTimer.singleShot(0, lambda: self._restore_scrolls(scrolls))
+        host.restore_scrolls(scrolls)
+        QTimer.singleShot(0, lambda: host.restore_scrolls(scrolls))
 
-    def _declare_minimum(self, pages: list[QWidget], column_width: int) -> None:
-        """The DECLARED minimum, computed from measured content (THE
-        SPACE & LEGIBILITY LAW): wide enough for the sidebar plus the
-        widest section column plus the scrollbar — no section ever needs
-        a horizontal scrollbar — and tall enough for the tallest section
-        up to the screen floor, where the vertical scrollbar lawfully
-        takes over (the window is genuinely full there)."""
-        scrollbar = self.style().pixelMetric(
-            QStyle.PixelMetric.PM_ScrollBarExtent
-        )
+    def _declare_minimum(self, host: SectionHost) -> None:
+        """The window's own chrome around the host's measured content —
+        the sidebar/column/scrollbar arithmetic and the screen floor live
+        in [Section Host](../__about/section_host.md)."""
         margins = self._layout.contentsMargins()
-        chrome_w = margins.left() + margins.right() + self._body.spacing()
-        chrome_h = margins.top() + margins.bottom()
-        width = (self._nav_width + column_width
-                 + scrollbar + chrome_w)
-        tallest = max(page.minimumSizeHint().height() for page in pages)
-        floor_w, floor_h = _SCREEN_FLOOR
-        self.setMinimumSize(QSize(min(width, floor_w),
-                                  min(tallest + chrome_h, floor_h)))
+        self.setMinimumSize(host.measured_minimum(
+            margins.left() + margins.right() + host.spacing,
+            margins.top() + margins.bottom(),
+        ))
