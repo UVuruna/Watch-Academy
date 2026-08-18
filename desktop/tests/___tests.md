@@ -109,7 +109,8 @@ runtime layout audit runs only for the windows whose sources changed
 (`run_guards.WINDOW_SOURCES`, kept beside `test_layout_audit.WINDOWS` — a
 new window needs a row there or it is never audited). "Cannot tell" always
 means RUN EVERYTHING. The FULL pass also calls the monorepo clone guard
-against `clone_ratchet.json` (ONE KIND, ONE CLASS) and the rules-size guard.
+against `clone_ratchet.json` (ONE KIND, ONE CLASS), the monorepo structure
+guard against `structure_ratchet.json`, and the rules-size guard.
 The project's guards, ratchets and their current entries are documented in
 [Enforcement](../../docs/ENFORCEMENT.md).
 
@@ -124,6 +125,15 @@ The project's guards, ratchets and their current entries are documented in
   round. `render/layers.py` LEFT the list on 2026-08-01 when it was split
   into `render/layers/` plus twelve responsibility modules — the ratchet
   only ever shrinks.
+- **`structure_ratchet.json`** — the same law in machine-readable form,
+  checked by the monorepo tool `rules/tools/structure_guard.py` from the
+  FULL pass. `{path: {lines, why, owes}}` over a 1,000-line wall measured
+  in non-blank non-comment lines; a file over the wall with no entry, a
+  ratcheted file that **GREW**, or a stale entry all exit 2. The "grew"
+  tooth is the one the pytest ratchet never had, and it is the one that
+  would have caught `app/controller.py` climbing from 3,449 to 4,483 lines
+  while it waited for its split. Every split lowers the recorded number in
+  the same commit.
 - **`test_config_sections.py`** **[standard]** — THE CONFIG SECTION LAW.
   For every `config/*.py`: no module-level patching of a table defined
   earlier in the same file (`TABLE[...] = ...`, `TABLE.update(...)`), no

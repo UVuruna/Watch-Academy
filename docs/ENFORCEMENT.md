@@ -1,6 +1,6 @@
 # Enforcement installed here
 
-The guards this project runs, what each one fails on, and the two ratchets
+The guards this project runs, what each one fails on, and the ratchets
 that may only shrink. The shared rules are the monorepo's
 [Code Rules](../../../rules/CODE.md); this file records only what is
 installed HERE. Sibling docs: [Decisions](DECISIONS.md) ·
@@ -34,6 +34,7 @@ Exit 2 blocks. The FULL pass runs only when
 | `test_art_reachability.py` | full, art only | art on disk that nothing in the program can reach (walks the whole assets tree — runs only when art, config or registry files were touched) |
 | `test_layout_audit.py` | full, GUI only | THE SPACE & LEGIBILITY LAW, runtime half — builds each touched window offscreen and measures it (clipped, elided, scroll+slack, item cut, overlap, contrast). A window's declared minimum must EXIST; its SIZE is printed, never judged |
 | `clone_guard.py` (monorepo) | full | a duplicated function body across two files, outside `tests/clone_ratchet.json` |
+| `structure_guard.py` (monorepo) | full | a `.py` under `desktop/` over 1,000 logic lines with no entry in `tests/structure_ratchet.json`, a ratcheted file that GREW, or a stale entry |
 
 `test_config_cohesion.py` and `test_theme_completeness.py` are
 project-specific and are NOT part of the standard four.
@@ -44,10 +45,10 @@ Screenshot evidence for GUI work is produced by the monorepo runner —
 `python u:/Coding/UVuruna/rules/tools/uv.py shot --all`, window registry in
 `.claude/uv_windows.py` — not by the audit's own shots.
 
-## The ratchets — both may only SHRINK
+## The ratchets — all of them may only SHRINK
 
-Adding an entry to either needs the owner's explicit approval in that same
-session.
+Adding an entry to any of them needs the owner's explicit approval in that
+same session.
 
 **THE STRUCTURE RATCHET** lives in `desktop/tests/test_structure_law.py`.
 Today: `app/controller.py`, `render/compositor.py`, `config/constants.py`,
@@ -57,6 +58,17 @@ Today: `app/controller.py`, `render/compositor.py`, `config/constants.py`,
 split. Two files have already LEFT the list — `render/layers.py` by being
 split, `config/pantheon.py` because the threshold now measures logic and 962
 of its lines are declarative cast tables.
+
+**THE MACHINE-READABLE STRUCTURE RATCHET** lives beside it in
+`desktop/tests/structure_ratchet.json` and is read by the monorepo tool
+`rules/tools/structure_guard.py` (wired into `run_guards.py` FULL). It is
+the same law in a form other tools can read: `{path: {lines, why, owes}}`
+measured in non-blank non-comment lines over a 1,000-line wall. It bites in
+one place the pytest ratchet cannot — **a ratcheted file that GREW** — which
+is the failure that let `app/controller.py` go from the 3,449 lines its own
+entry quotes to 4,483 while it "waited for its split". Every split lowers
+the recorded number in the same commit; an entry whose file drops under the
+wall is deleted.
 
 **THE ZUBI BASELINE RATCHET (approval 2026-08-09)** lives in
 `desktop/tests/zubi_baseline.json`. The runtime layout audit fails ONLY on

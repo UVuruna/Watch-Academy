@@ -30,8 +30,11 @@ Three tiers:
   edits `app/report.py` audits ReportDialog, not eight windows.
 
 The full pass also runs the monorepo clone guard against this project's
-`tests/clone_ratchet.json` (ONE KIND, ONE CLASS) and the rules-size
-guard (`CLAUDE.md` <= 6,000 bytes).
+`tests/clone_ratchet.json` (ONE KIND, ONE CLASS), the monorepo structure
+guard against `tests/structure_ratchet.json` (the machine-readable
+god-file ratchet other tools read: a file over the wall needs a written
+reason, and a ratcheted file may only SHRINK) and the rules-size guard
+(`CLAUDE.md` <= 6,000 bytes).
 """
 
 from __future__ import annotations
@@ -238,6 +241,21 @@ def main(argv: list[str]) -> int:
             print("\nGUARD FAILURE (FULL) — clone_guard found an "
                   "un-ratcheted duplicate (ONE KIND, ONE CLASS). Extract "
                   "the shared base or registry; the ratchet only shrinks.",
+                  file=sys.stderr)
+            return 2
+
+    structure_guard = _load("rules/tools/structure_guard.py")
+    if structure_guard is not None:
+        problems = structure_guard.check(
+            DESKTOP_ROOT, TESTS_DIR / "structure_ratchet.json", wall=1000)
+        if problems:
+            for line in problems:
+                print(line, file=sys.stderr)
+            print("\nGUARD FAILURE (FULL) — THE STRUCTURE LAW's machine-"
+                  "readable ratchet (structure_ratchet.json) rejects this "
+                  "tree: a file over the wall with no written reason, or a "
+                  "ratcheted file that GREW. Put the code in the module "
+                  "whose responsibility it serves; the ratchet only shrinks.",
                   file=sys.stderr)
             return 2
 
