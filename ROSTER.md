@@ -1,8 +1,8 @@
 # ROSTER — the Master Systematics
 
-**GENERATED — do not edit by hand.** Regenerate with `python research/build_roster.py` after any theme-table change or art drop. Every theme, every figure, its seat in the position system, and per-source asset coverage — the one place to check what is missing.
+**GENERATED — do not edit by hand.** Regenerate with `python shared/research/build_roster.py` after any theme-table change or art drop. Every theme, every figure, its seat in the position system, and per-source asset coverage — the one place to check what is missing.
 
-_Last generated: 2026-07-28_
+_Last generated: 2026-08-18_
 
 ## The Position System — seat archetypes
 
@@ -24,13 +24,13 @@ Every weekday theme seats SEVEN figures on these archetypes plus the Sunday DUAL
 
 | Seat | Day | Figure | File | Gemini | ChatGPT |
 |---|---|---|---|---|---|
-| sun | Sunday | sun | `sun` | ✔ | — |
-| moon | Monday | moon | `moon` | ✔ | — |
-| mars | Tuesday | mars | `mars` | ✔ | — |
-| mercury | Wednesday | mercury | `mercury` | ✔ | — |
-| jupiter | Thursday | jupiter | `jupiter` | ✔ | — |
-| venus | Friday | venus | `venus` | ✔ | — |
-| saturn | Saturday | saturn | `saturn` | ✔ | — |
+| sun | Sunday | sun | `sun` | ✔ | ✔ |
+| moon | Monday | moon | `moon` | ✔ | ✔ |
+| mars | Tuesday | mars | `mars` | ✔ | ✔ |
+| mercury | Wednesday | mercury | `mercury` | ✔ | ✔ |
+| jupiter | Thursday | jupiter | `jupiter` | ✔ | ✔ |
+| venus | Friday | venus | `venus` | ✔ | ✔ |
+| saturn | Saturday | saturn | `saturn` | ✔ | ✔ |
 | dual | Sunday | Sun / Eclipsed Sun | `Sun_Eclipse` | ✔ | ✔ |
 
 ### Planet signs (`planet_signs`)
@@ -113,7 +113,7 @@ Every weekday theme seats SEVEN figures on these archetypes plus the Sunday DUAL
 | venus | Friday | Mokoš | `Mokos` | ✔ | ✔ |
 | saturn | Saturday | Morana | `Morana` | ✔ | ✔ |
 | dual | Sunday | Young Dažbog / Old Dažbog | `Dazbog_Old` | ✔ | ✔ |
-| ninth | — | Triglav | `Triglav` | — | — |
+| ninth | — | Triglav | `Triglav` | ✔ | ✔ |
 
 ### Alchemy (`alchemy`)
 
@@ -154,7 +154,7 @@ Every weekday theme seats SEVEN figures on these archetypes plus the Sunday DUAL
 | venus | Friday | Sikhism | `Sikhism` | ✔ | ✔ |
 | saturn | Saturday | Judaism | `Judaism` | ✔ | ✔ |
 | dual | Sunday | Christianity / Satanism | `Satanism` | ✔ | ✔ |
-| ninth | — | Freemasonry | `Freemasonry` | ✔ | — |
+| ninth | — | Freemasonry | `Freemasonry` | ✔ | ✔ |
 
 ### Ancient religions (`religion_alt`)
 
@@ -174,14 +174,14 @@ Every weekday theme seats SEVEN figures on these archetypes plus the Sunday DUAL
 
 | Seat | Day | Figure | File | Gemini | ChatGPT | Colored G | Colored C |
 |---|---|---|---|---|---|---|---|
-| sun | Sunday | Ruler · Servant | `Ruler` | ✔ | ✔ | ✔ | — |
-| moon | Monday | Physician | `Physician` | ✔ | ✔ | ✔ | — |
-| mars | Tuesday | Soldier | `Soldier` | ✔ | ✔ | ✔ | — |
-| mercury | Wednesday | Merchant | `Merchant` | ✔ | ✔ | ✔ | — |
-| jupiter | Thursday | Priest | `Priest` | ✔ | ✔ | ✔ | — |
-| venus | Friday | Artist | `Artist` | ✔ | ✔ | ✔ | — |
-| saturn | Saturday | Farmer | `Farmer` | ✔ | ✔ | ✔ | — |
-| dual | Sunday | Ruler / Servant | `Servant_Dual` | ✔ | ✔ | ✔ | — |
+| sun | Sunday | Ruler · Servant | `Ruler` | ✔ | ✔ | ✔ | ✔ |
+| moon | Monday | Physician | `Physician` | ✔ | ✔ | ✔ | ✔ |
+| mars | Tuesday | Soldier | `Soldier` | ✔ | ✔ | ✔ | ✔ |
+| mercury | Wednesday | Merchant | `Merchant` | ✔ | ✔ | ✔ | ✔ |
+| jupiter | Thursday | Priest | `Priest` | ✔ | ✔ | ✔ | ✔ |
+| venus | Friday | Artist | `Artist` | ✔ | ✔ | ✔ | ✔ |
+| saturn | Saturday | Farmer | `Farmer` | ✔ | ✔ | ✔ | ✔ |
+| dual | Sunday | Ruler / Servant | `Servant_Dual` | ✔ | ✔ | ✔ | ✔ |
 | ninth | — | The Polymath | `Polymath` | ✔ | ✔ | ✔ | ✔ |
 
 ### Wolf Pack (`wolf`)
@@ -323,7 +323,7 @@ Every weekday theme seats SEVEN figures on these archetypes plus the Sunday DUAL
 
 ## Pantheon vs Planetary — per-seat coverage
 
-Per pantheon theme, the seated Pantheon name against the Planetary fallback, with per-source on-disk coverage of every PANTHEON candidate plate (`defaults.WEEKDAY_PANTHEON`).
+Per pantheon theme, the seated Pantheon name against the Planetary fallback, with per-source on-disk coverage of every PANTHEON candidate plate (`pantheon.WEEKDAY_PANTHEON`).
 
 ### Greek gods — Pantheon (`greek`)
 
@@ -399,18 +399,18 @@ Per pantheon theme, the seated Pantheon name against the Planetary fallback, wit
 
 | Animal | primary G | primary C | colored G | colored C |
 |---|---|---|---|---|
-| Rat | ✔ | — | ✔ | — |
-| Ox | ✔ | — | ✔ | — |
-| Tiger | ✔ | — | ✔ | — |
-| Rabbit | ✔ | — | ✔ | — |
-| Dragon | ✔ | — | ✔ | — |
-| Snake | ✔ | — | ✔ | — |
-| Horse | ✔ | — | ✔ | — |
-| Goat | ✔ | — | ✔ | — |
-| Monkey | ✔ | — | ✔ | — |
-| Rooster | ✔ | — | ✔ | — |
-| Dog | ✔ | — | ✔ | — |
-| Pig | ✔ | — | ✔ | — |
+| Rat | ✔ | ✔ | ✔ | ✔ |
+| Ox | ✔ | ✔ | ✔ | ✔ |
+| Tiger | ✔ | ✔ | ✔ | ✔ |
+| Rabbit | ✔ | ✔ | ✔ | ✔ |
+| Dragon | ✔ | ✔ | ✔ | ✔ |
+| Snake | ✔ | ✔ | ✔ | ✔ |
+| Horse | ✔ | ✔ | ✔ | ✔ |
+| Goat | ✔ | ✔ | ✔ | ✔ |
+| Monkey | ✔ | ✔ | ✔ | ✔ |
+| Rooster | ✔ | ✔ | ✔ | ✔ |
+| Dog | ✔ | ✔ | ✔ | ✔ |
+| Pig | ✔ | ✔ | ✔ | ✔ |
 | Cat | ✔ | ✔ | ✔ | ✔ |
 
 ## Badges
@@ -485,15 +485,8 @@ Per pantheon theme, the seated Pantheon name against the Planetary fallback, wit
 
 ## Shortage List — everything the tables marked —
 
-**chatgpt** (51):
+**chatgpt** (10):
 
-- weeks/celestial_bodies/planets/primary/photo/sun.png
-- weeks/celestial_bodies/planets/primary/photo/moon.png
-- weeks/celestial_bodies/planets/primary/photo/mars.png
-- weeks/celestial_bodies/planets/primary/photo/mercury.png
-- weeks/celestial_bodies/planets/primary/photo/jupiter.png
-- weeks/celestial_bodies/planets/primary/photo/venus.png
-- weeks/celestial_bodies/planets/primary/photo/saturn.png
 - weeks/celestial_bodies/planets/primary/colored/Sun.png
 - weeks/celestial_bodies/planets/primary/colored/Moon.png
 - weeks/celestial_bodies/planets/primary/colored/Mars.png
@@ -502,44 +495,10 @@ Per pantheon theme, the seated Pantheon name against the Planetary fallback, wit
 - weeks/celestial_bodies/planets/primary/colored/Venus.png
 - weeks/celestial_bodies/planets/primary/colored/Saturn.png
 - weeks/celestial_bodies/planets/primary/colored/Sun_Eclipse.png
-- weeks/myth/slavic/pantheon/bronze/Triglav.png
-- weeks/faith/creeds/primary/colored/Freemasonry.png
-- weeks/crafts/profession/primary/colored/Ruler.png
-- weeks/crafts/profession/primary/colored/Physician.png
-- weeks/crafts/profession/primary/colored/Soldier.png
-- weeks/crafts/profession/primary/colored/Merchant.png
-- weeks/crafts/profession/primary/colored/Priest.png
-- weeks/crafts/profession/primary/colored/Artist.png
-- weeks/crafts/profession/primary/colored/Farmer.png
-- weeks/crafts/profession/primary/colored/Servant_Dual.png
 - weeks/myth/greek/pantheon/bronze/Zeus.png
-- calendars/zodiac/chinese/primary/bronze/Rat.png
-- calendars/zodiac/chinese/primary/colored/Rat.png
-- calendars/zodiac/chinese/primary/bronze/Ox.png
-- calendars/zodiac/chinese/primary/colored/Ox.png
-- calendars/zodiac/chinese/primary/bronze/Tiger.png
-- calendars/zodiac/chinese/primary/colored/Tiger.png
-- calendars/zodiac/chinese/primary/bronze/Rabbit.png
-- calendars/zodiac/chinese/primary/colored/Rabbit.png
-- calendars/zodiac/chinese/primary/bronze/Dragon.png
-- calendars/zodiac/chinese/primary/colored/Dragon.png
-- calendars/zodiac/chinese/primary/bronze/Snake.png
-- calendars/zodiac/chinese/primary/colored/Snake.png
-- calendars/zodiac/chinese/primary/bronze/Horse.png
-- calendars/zodiac/chinese/primary/colored/Horse.png
-- calendars/zodiac/chinese/primary/bronze/Goat.png
-- calendars/zodiac/chinese/primary/colored/Goat.png
-- calendars/zodiac/chinese/primary/bronze/Monkey.png
-- calendars/zodiac/chinese/primary/colored/Monkey.png
-- calendars/zodiac/chinese/primary/bronze/Rooster.png
-- calendars/zodiac/chinese/primary/colored/Rooster.png
-- calendars/zodiac/chinese/primary/bronze/Dog.png
-- calendars/zodiac/chinese/primary/colored/Dog.png
-- calendars/zodiac/chinese/primary/bronze/Pig.png
-- calendars/zodiac/chinese/primary/colored/Pig.png
 - instrument/subdial/silver/center.png
 
-**gemini** (11):
+**gemini** (10):
 
 - weeks/celestial_bodies/planets/primary/colored/Sun.png
 - weeks/celestial_bodies/planets/primary/colored/Moon.png
@@ -549,7 +508,6 @@ Per pantheon theme, the seated Pantheon name against the Planetary fallback, wit
 - weeks/celestial_bodies/planets/primary/colored/Venus.png
 - weeks/celestial_bodies/planets/primary/colored/Saturn.png
 - weeks/celestial_bodies/planets/primary/colored/Sun_Eclipse.png
-- weeks/myth/slavic/pantheon/bronze/Triglav.png
 - weeks/myth/greek/pantheon/bronze/Zeus.png
 - instrument/subdial/silver/center.png
 

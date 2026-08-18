@@ -4,7 +4,7 @@ system, and per-SOURCE asset coverage (Gemini / ChatGPT, colored,
 dual, ninth) — the one place to check what is missing ("Gemini 9th
 wolf", "ChatGPT tuesday Alchemy").
 
-Run from the project root:  python research/build_roster.py
+Run from the repo root:  python shared/research/build_roster.py
 Regenerate after any theme-table change or art drop.
 """
 
@@ -12,15 +12,17 @@ import sys
 from datetime import date
 from pathlib import Path
 
-ROOT = Path(__file__).resolve().parents[1]
-sys.path.insert(0, str(ROOT))
-# THE THREE-FOLDER MIGRATION (2026-08-12): assets/ lives one level up from
-# the desktop Python root, under shared/; ROSTER.md stays at the true repo
-# root, one level up from desktop entirely.
-SHARED = ROOT.parent / "shared"
+ROOT = Path(__file__).resolve().parents[1]          # shared/
+# THE THREE-FOLDER MIGRATION (2026-08-12): assets/ and this script live under
+# shared/, the importable Python package tree under desktop/, and ROSTER.md
+# stays at the true repo root. The import root is desktop/ — pointing it at
+# shared/ (as it did until 2026-08-18) made `from config import ...` raise
+# ModuleNotFoundError and the generator unrunnable.
 REPO_ROOT = ROOT.parent
+SHARED = REPO_ROOT / "shared"
+sys.path.insert(0, str(REPO_ROOT / "desktop"))
 
-from config import constants, defaults  # noqa: E402
+from config import constants, pantheon, paths  # noqa: E402
 
 SOURCES = ("gemini", "chatgpt")
 SEATS = ("sun", "moon", "mars", "mercury", "jupiter", "venus", "saturn")
@@ -69,16 +71,29 @@ missing: list[str] = []
 SOURCE_SUFFIX = {"gemini": "_gem", "chatgpt": "_gpt"}
 
 
+def _on_disk(base: Path, source: str) -> bool:
+    """Whether this source's art for the canonical `.png` path `base`
+    exists — an owner hand-made suffix-less file satisfies either source.
+
+    THE ART BAKERY (owner decree 2026-08-12) re-encoded the shipped tree
+    to WebP while every config table still names the canonical `.png`, so
+    a bare `base.exists()` here would answer "missing" for all 1,000+
+    baked files and print a roster of lies. Every extension the program
+    ships is probed, exactly as `config.paths.art_file` does."""
+    stems = (f"{base.stem}{SOURCE_SUFFIX[source]}", base.stem)
+    return any((base.parent / f"{stem}{ext}").exists()
+               for stem in stems for ext in paths.ART_EXTENSIONS)
+
+
 def mark(source: str, rel: str) -> str:
     """✔ / — per source-resolved file; a miss joins the shortage list.
-    `rel` is theme-relative — `defaults.weekday_art` resolves it into
+    `rel` is theme-relative — `pantheon.weekday_art` resolves it into
     the one-hierarchy tree (weeks/<group>/... plus the ../emblem and
     ../earth step-ups), then the SOURCE lands as the terminal filename
     suffix (RESTRUCTURE 2026-07-22, mirroring config.paths.art_file);
     an owner hand-made suffix-less file satisfies either source."""
-    base = defaults.weekday_art(f"{rel}.png")
-    suffixed = base.with_name(f"{base.stem}{SOURCE_SUFFIX[source]}{base.suffix}")
-    if suffixed.exists() or base.exists():
+    base = pantheon.weekday_art(f"{rel}.png")
+    if _on_disk(base, source):
         return "✔"
     missing.append(f"{source}: {base.relative_to(SHARED / 'assets').as_posix()}")
     return "—"
@@ -87,7 +102,7 @@ def mark(source: str, rel: str) -> str:
 def theme_dir(theme: str) -> str:
     if theme == "planets":
         return "planets/primary/photo"
-    return defaults.WEEKDAY_THEME_DIRS[theme]
+    return pantheon.WEEKDAY_THEME_DIRS[theme]
 
 
 def colored_dir(theme: str) -> str | None:
@@ -100,14 +115,14 @@ def colored_dir(theme: str) -> str | None:
 def weekday_sections() -> list[str]:
     out = []
     for theme in THEME_ORDER:
-        title = defaults.WEEKDAY_THEME_TITLES.get(
+        title = pantheon.WEEKDAY_THEME_TITLES.get(
             theme, theme.replace("_", " ").title()
         )
         files = (
-            defaults.WEEKDAY_THEME_FILES.get(theme)
+            pantheon.WEEKDAY_THEME_FILES.get(theme)
             or {seat: seat for seat in SEATS}   # planets: body = file
         )
-        names = defaults.WEEKDAY_THEME_NAMES.get(theme, {})
+        names = pantheon.WEEKDAY_THEME_NAMES.get(theme, {})
         colored = colored_dir(theme)
         head = "| Seat | Day | Figure | File | Gemini | ChatGPT |"
         rule = "|---|---|---|---|---|---|"
@@ -132,9 +147,9 @@ def weekday_sections() -> list[str]:
                     f"| {mark('chatgpt', f'{colored}/{stem}')} |"
                 )
             out.append(row)
-        dual = defaults.WEEKDAY_DUAL_FILES.get(theme)
+        dual = pantheon.WEEKDAY_DUAL_FILES.get(theme)
         if dual:
-            dual_name = defaults.WEEKDAY_DUAL_NAMES.get(theme, "Dual")
+            dual_name = pantheon.WEEKDAY_DUAL_NAMES.get(theme, "Dual")
             if isinstance(dual_name, tuple):
                 dual_name = " / ".join(dual_name)
             row = (
@@ -142,7 +157,7 @@ def weekday_sections() -> list[str]:
                 f"| {mark('gemini', dual)} | {mark('chatgpt', dual)} |"
             )
             if colored:
-                cdual = defaults.colored_variant_rel(dual)
+                cdual = pantheon.colored_variant_rel(dual)
                 if cdual != dual:
                     row += (
                         f" {mark('gemini', cdual)} "
@@ -159,7 +174,7 @@ def weekday_sections() -> list[str]:
                 f"| {mark('gemini', rel)} | {mark('chatgpt', rel)} |"
             )
             if colored:
-                crel = defaults.colored_variant_rel(rel)
+                crel = pantheon.colored_variant_rel(rel)
                 row += (
                     f" {mark('gemini', crel)} | {mark('chatgpt', crel)} |"
                 )
@@ -176,11 +191,11 @@ def pantheon_sections() -> list[str]:
     out.append(
         "Per pantheon theme, the seated Pantheon name against the "
         "Planetary fallback, with per-source on-disk coverage of every "
-        "PANTHEON candidate plate (`defaults.WEEKDAY_PANTHEON`).\n"
+        "PANTHEON candidate plate (`pantheon.WEEKDAY_PANTHEON`).\n"
     )
     for theme in PANTHEON_THEMES:
-        table = defaults.WEEKDAY_PANTHEON[theme]
-        title = defaults.WEEKDAY_THEME_TITLES.get(theme, theme.title())
+        table = pantheon.WEEKDAY_PANTHEON[theme]
+        title = pantheon.WEEKDAY_THEME_TITLES.get(theme, theme.title())
         out.append(f"### {title} — Pantheon (`{theme}`)\n")
         out.append(
             "| Seat | Day | Pantheon Name | Candidates | Gemini | ChatGPT |"
@@ -216,10 +231,7 @@ def suffix_mark(source: str, rel: str) -> str:
     the terminal filename suffix (RESTRUCTURE 2026-07-22); an owner
     hand-made suffix-less file satisfies either source."""
     base = SHARED / "assets" / f"{rel}.png"
-    suffixed = base.with_name(
-        f"{base.stem}{SOURCE_SUFFIX[source]}{base.suffix}"
-    )
-    if suffixed.exists() or base.exists():
+    if _on_disk(base, source):
         return "✔"
     missing.append(f"{source}: {rel}.png")
     return "—"
@@ -286,7 +298,7 @@ def main() -> None:
     lines.append("")
     lines.append(
         "**GENERATED — do not edit by hand.** Regenerate with "
-        "`python research/build_roster.py` after any theme-table "
+        "`python shared/research/build_roster.py` after any theme-table "
         "change or art drop. Every theme, every figure, its seat in "
         "the position system, and per-source asset coverage — the one "
         "place to check what is missing."

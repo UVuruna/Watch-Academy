@@ -15,20 +15,28 @@ still missing.
 ## Usage
 
 ```bash
-python research/build_roster.py
+python shared/research/build_roster.py
 ```
 
-Run from the project root. Regenerate after any theme-table change or art
-drop — `ROSTER.md` is a build artifact, never hand-edited.
+Run from the REPO ROOT (`shared/` holds the assets and this script; the
+importable package tree is `desktop/`, which the script puts on `sys.path`
+itself). Regenerate after any theme-table change or art drop — `ROSTER.md`
+is a build artifact, never hand-edited.
 
 ## Connections
 
 ### Uses
-- `config.constants`, `config.defaults` — `WEEKDAY_THEME_*` tables,
+- `config.constants`, `config.pantheon` — `WEEKDAY_THEME_*` tables,
   `WEEKDAY_PANTHEON`, `WEEKDAY_THEME_NINTHS`, `ZODIAC_*`, `CHINESE_ANIMALS`,
-  `METAL_THEMES` — the same live tables the app itself reads (Rule #5: no
-  parallel copy)
-- Files under `assets/` — existence checks only, per source suffix
+  `METAL_THEMES` — the same live tables the app itself reads (no parallel
+  copy). The weekday tables moved out of `config.defaults` into
+  `config.pantheon` in Session 36's config split; this script kept asking
+  `defaults` until 2026-08-18 and simply crashed.
+- `config.paths.ART_EXTENSIONS` — the extension probe. THE ART BAKERY
+  re-encoded the shipped tree to WebP while the tables still name the
+  canonical `.png`; a bare `.png` existence check would report every baked
+  file as missing.
+- Files under `shared/assets/` — existence checks only, per source suffix
   (`_gem`/`_gpt`)
 
 ### Used by
@@ -54,5 +62,9 @@ drop — `ROSTER.md` is a build artifact, never hand-edited.
 
 `NINTHS` is built from `constants.WEEKDAY_THEME_NINTHS` (the one live
 table, per the script's own comment warning against a stale parallel copy)
-— this is correct today. No other drift found while reading the current
-code.
+— this is correct today.
+
+Nothing runs this generator automatically, which is why it could rot
+through two structural rounds (the config split and the bakery) unnoticed
+while `ROSTER.md` kept a 2026-07-28 snapshot on disk. Regenerate it in the
+same session that changes a theme table or drops art.
