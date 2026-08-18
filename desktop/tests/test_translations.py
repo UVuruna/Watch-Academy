@@ -172,7 +172,7 @@ def test_theme_rotation_cycles_and_persists(tmp_path):
     or the custom checkbox list — the cycle helper wraps, the group
     resolves through the menu grouping, the settings round-trip, and
     the pre-dropdown Enabled flag migrates (external user data)."""
-    from app.controller import _next_rotation_theme
+    from app.controller_display import _next_rotation_theme
     from app.settings_store import (
         Settings, SettingsStore, replace, rotation_themes,
     )

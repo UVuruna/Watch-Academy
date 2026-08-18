@@ -1,12 +1,7 @@
 {
-  "app/controller.py": {
-    "lines": 2538,
-    "why": "six responsibilities left after WA-R10 lifted the skin composition into app/skin_builder.py (OOP audit 2026-08-18, section 3): lifecycle/tick/settings, shortcuts, menu building, dialog hosting + setter tables, time travel/simulation, translation and window plumbing. All six need the object, so each is a collaborator or a mixin decision, not a file move.",
-    "owes": "WA-R14 — shortcuts / menu / dialog hosts / simulation as named modules; the controller keeps state and wiring"
-  },
   "render/tooltip_composer.py": {
     "lines": 2238,
-    "why": "every hover the dial answers, one short named method per element (WA-R13, 2026-08-18) — the arm legends, the weekday bodies, the tick readout, the ring's jewels and words, the crown, the moon, the eclipses, the Earth, the calendar wedges, the twilight bands, plus the Encyclopedia target each jumps to. ONE responsibility; its size is the dial's own vocabulary. It replaced a 3,099-line render/compositor.py entry, which is now 747 lines and OFF the ratchet. PENDING OWNER RATIFICATION — added by an autonomous round.",
-    "owes": "a further cut by QUESTION if the owner wants one: render/encyclopedia_targets.py for the ~200 lines answering 'what article does this open' rather than 'what does this say'. It would not bring the rest under the wall."
+    "why": "every hover the dial answers, one short named method per element (WA-R13, 2026-08-18) — the arm legends, the weekday bodies, the tick readout, the ring's jewels and words, the crown, the moon, the eclipses, the Earth, the calendar wedges, the twilight bands, plus the Encyclopedia target each jumps to. ONE responsibility; its size is the dial's own vocabulary. It replaced a 3,099-line render/compositor.py entry, which is now 747 lines and OFF the ratchet. RATIFIED by the owner 2026-08-18 when he accepted R13.",
+    "owes": "the natural next cut is BY TOOLTIP FAMILY, recorded here as debt on 2026-08-19 (WA-R14 round, no code): render/tooltip_sky.py (sun, moon, eclipses, twilight bands, the Earth), render/tooltip_ring.py (jewels, numerals, minutes, crown, the arm legends) and render/tooltip_calendar.py (the calendar wedges, the weekday bodies, the tick readout) — each family already reads a different part of the dial's vocabulary. Beside it stands the earlier-recorded render/encyclopedia_targets.py for the ~200 lines answering 'what article does this open' rather than 'what does this say'. Neither is done blind: the split needs the owner's word because the composer HOLDS THE DIAL, and three holders is three back-channels."
   }
 }

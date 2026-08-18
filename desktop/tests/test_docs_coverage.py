@@ -64,6 +64,8 @@ TRIVIAL = frozenset({
 # its zones; a config file draws its section/key tree).
 FLOW_REQUIRED = frozenset({
     "app/controller.py",
+    "app/controller_menu.py",
+    "app/controller_simulation.py",
     "app/encyclopedia/builders.py",
     "app/encyclopedia/cards.py",
     "app/encyclopedia/dialog.py",

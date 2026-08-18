@@ -51,11 +51,26 @@ Adding an entry to any of them needs the owner's explicit approval in that
 same session.
 
 **THE STRUCTURE RATCHET** lives in `desktop/tests/test_structure_law.py`.
-Today: `app/controller.py`, `render/compositor.py`,
-`render/tooltip_composer.py`, `config/constants.py`, and five test files
-owed to a test-hygiene round (`test_pointer`, `test_settings_dialog`,
-`test_skins`, `test_archetype`, `test_eclipse`). Each entry names why it
-is tolerated and who owes the split.
+Today: `render/compositor.py`, `render/tooltip_composer.py`,
+`config/constants.py`, and five test files owed to a test-hygiene round
+(`test_pointer`, `test_settings_dialog`, `test_skins`, `test_archetype`,
+`test_eclipse`). Each entry names why it is tolerated and who owes the
+split.
+
+**TWO GUARDS, TWO ARITHMETICS (found by WA-R14, 2026-08-19).** WA-R14
+cut `app/controller.py` into five responsibility mixins beside it
+(`controller_shortcuts`, `controller_menu`, `controller_display`,
+`controller_dialogs`, `controller_simulation`). The composition root
+that remains measures **899** lines on the monorepo's shared measure
+(`rules/tools/structure_guard.py`: non-blank, non-comment) and left
+`structure_ratchet.json` in that commit — but **1,218** on this file's
+own measure (total lines minus declarative tables, comments included),
+so its entry here stayed, with the disagreement written into it. The
+same disagreement is why `test_config_cohesion.py` is red on
+`config/defaults.py`. **WA-R15 rules on the measure**, and the entry
+goes away with it — no code moves. Cutting three more slivers out of a
+899-line composition root to satisfy the looser arithmetic is exactly
+the "unnatural pieces" the owner forbade on 2026-08-18.
 
 **The refactor round of 2026-08-18** ([OOP
 audit](AUDIT-OOP-2026-08-18.md#round-2026-08-18)) moved it a long way in
@@ -65,8 +80,14 @@ the wall); `app/controller.py` fell from 3,436 to 2,538 logic lines when
 the skin composition became `app/skin_builder.py`; and
 `render/compositor.py` fell from 3,100 to 747 when the tooltip bank
 became the collaborator `render/tooltip_composer.py` — which took its
-place on the list at 2,238 lines, **pending the owner's ratification**,
-carrying a written reason and what it owes. Before that round,
+place on the list at 2,238 lines, carrying a written reason and what it
+owes. **The owner RATIFIED that entry** when he accepted R13 on
+2026-08-18; on 2026-08-19 its `owes` line gained the natural next cut,
+BY TOOLTIP FAMILY (sky · ring · calendar), recorded as debt with no code
+written. **The round of 2026-08-19 (WA-R14)** then took
+`app/controller.py` off the machine-readable list entirely: 2,538 logic
+lines became an 899-line composition root plus five mixins, none of them
+near the wall. Before that round,
 `render/layers.py` had left by being split and `config/pantheon.py`
 because the threshold measures logic and 962 of its lines are declarative
 cast tables. The ratchet only ever shrinks.
@@ -80,7 +101,8 @@ one place the pytest ratchet cannot — **a ratcheted file that GREW** — which
 is the failure that let `app/controller.py` go from the 3,449 lines its own
 entry quotes to 4,483 while it "waited for its split". Every split lowers
 the recorded number in the same commit; an entry whose file drops under the
-wall is deleted.
+wall is deleted — which is what happened to `app/controller.py` itself on
+2026-08-19, leaving `render/tooltip_composer.py` as the file's only entry.
 
 **THE ZUBI BASELINE RATCHET (approval 2026-08-09)** lives in
 `desktop/tests/zubi_baseline.json`. The runtime layout audit fails ONLY on

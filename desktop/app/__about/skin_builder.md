@@ -84,3 +84,44 @@ them directly, as if the module they wanted had always existed.
   subject's size, not a second responsibility hiding: `_compose_skin`
   alone answers for every visible part of one dial. It sits under the
   wall with room, and it is one thing.
+
+## The location crown
+*(moved here from [Watch Controller](controller.md) by WA-R14,
+2026-08-19 — the prose described `_compose_skin`, which has lived in
+this module since R10.)*
+
+**THE LOCATION CROWN (RING VERDICTS round, owner decree 2026-08-05):**
+a per-ring toggle (`Settings.ring_crown_location`, keyed by ring name)
+that REPLACES whatever crown text the active
+ring carries — a bundled preset's own crown text or a custom ring's typed
+text — with the active location's "CITY, COUNTRY", available for
+presets and custom rings alike (`_compose_skin`). `WatchController`
+keeps a live `_active_location_display` string in lockstep with
+`_active_location_name` (R-31) at every one of its update points
+(`__init__`, `_flash_location`, `_end_simulation`) — `_flash_location`
+(R-30's own flash/tray-title path, every location change funnels
+through it: Settings dialog preset pick, Quick Jump, Time Travel,
+Greenwich, the poles) ALSO recomposes the skin there, so the crown
+follows a location change the same tick the flash/tray title do,
+never lagging a tick behind. `_set_ring_crown_location` is the ONE
+setter the Watch Face Ring section's "Location" checkbox calls.
+
+**THE RULED LOCATION ARC (owner defect 2026-08-07):** the ledger rules
+The One's BOTTOM crown arc to be "City, Country", and until this round
+nothing drew it — the toggle above is OFF by default and, when ticked,
+draws at the TOP, straight through the live time crown. A preset's ruled
+arc is not a user pick, so it is declared in
+`dial.RING_LIVE_CROWN[...]["location"]` (the orientation, or `None`) and
+APPENDED by `_compose_skin` beside the preset's own crown text. The user
+toggle still wins when ticked, so the two never draw together.
+
+**The separator.** `constants.LETTER_PLATE_FILES` has no COMMA plate (78
+entries: uppercase Latin/Greek, digits, `$`, `&`, `✠`, the Eye, the
+colon), so `_location_crown_text` drops the comma and collapses the gap
+to ONE SPACE — "Belgrade, Serbia" reads "BELGRADE SERBIA". That is the
+existing formatter reused, not a new rule: it is what the Location
+toggle has drawn since the RING VERDICTS round.
+
+`dial.RING_LIVE_CROWN_LOCATION_READING` holds the arc's hover text once
+(it was a dict literal inlined in the toggle's branch), shared by both
+paths.

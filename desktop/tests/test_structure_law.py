@@ -40,17 +40,29 @@ RATCHET: dict[str, tuple[str, str]] = {
     # slot_layout, archetype_geometry, ninths, weekday_body). The ratchet
     # shrinks; it never grows back.
     "app/controller.py": (
-        "3,449 lines: ~780 of module-level skin building (build_skin, "
-        "apply_display_settings, display_for, watch_title and their "
-        "helpers) plus a 2,577-line WatchController carrying the window/"
-        "tray/menu shell, dialog opening, shortcuts, time travel and tick "
-        "plumbing. The 2026-08-01 split session mapped it but did NOT cut "
-        "it: the free functions lift out cleanly into app/skin_builder.py, "
-        "but the controller itself needs responsibility MIXINS or "
-        "collaborator objects, and every step costs an 18-minute suite run",
-        "a dedicated app-controller split session — start with "
-        "app/skin_builder.py (self-contained, 15 test files import those "
-        "four names directly), then the class",
+        "WA-R14 (2026-08-19) cut the class into five responsibility "
+        "MIXINS beside it — controller_shortcuts, controller_menu, "
+        "controller_display, controller_dialogs, controller_simulation "
+        "— and what remains is the composition root: construction and "
+        "wiring, settings load/recover/save, the tick and wake "
+        "plumbing, the hover warm, the translation overlay, window "
+        "position and the click-through poller. It measures 899 lines "
+        "on the MONOREPO's shared measure (rules/tools/"
+        "structure_guard.py: non-blank, non-comment) and left "
+        "tests/structure_ratchet.json in that commit. It stays here "
+        "because THIS file measures something else — total lines minus "
+        "declarative tables, comments included — and reads the same "
+        "file as 1,218. Two guards for one law must not disagree about "
+        "what a line is, and cutting three more slivers out of a "
+        "899-line composition root to satisfy the looser arithmetic is "
+        "exactly the 'unnatural pieces' the owner forbade on "
+        "2026-08-18",
+        "WA-R15 — the measure ruling. The same disagreement makes "
+        "tests/test_config_cohesion.py red on config/defaults.py at "
+        "HEAD. Once both guards measure logic the same way (non-blank, "
+        "non-comment, minus top-level declarative tables — rules/"
+        "CODE.md's own definition), this entry goes away without a "
+        "line of code moving",
     ),
     "render/compositor.py": (
         "1,015 lines on THIS measure (747 on the shared "

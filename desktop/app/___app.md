@@ -10,7 +10,12 @@ their outputs through the render compositor.
 | File | Tier | One line |
 |------|------|----------|
 | `__init__.py` | Trivial | bare module docstring — no re-exports |
-| `controller.py` | Algorithmic | composition root for ONE watch — Qt shell, dialogs, shortcuts, time travel, tick plumbing (documented god-file, ratchet entry) — [about](__about/controller.md) · [flow](__flow/controller.md) |
+| `controller.py` | Algorithmic | composition root for ONE watch — state, wiring, the tick, the translation overlay; the other five responsibilities are the mixins below (WA-R14, off the ratchet) — [about](__about/controller.md) · [flow](__flow/controller.md) |
+| `controller_shortcuts.py` | Standard | mixin — every keyboard shortcut the watch answers, and the flashes they raise — [about](__about/controller_shortcuts.md) |
+| `controller_menu.py` | Algorithmic | mixin — the right-click / tray menu: builds it, keeps its checks and gray states in step — [about](__about/controller_menu.md) · [flow](__flow/controller_menu.md) |
+| `controller_display.py` | Standard | mixin — one visual choice in, a rebuilt skin out; the single `Settings` writer menu, window and shortcuts share — [about](__about/controller_display.md) |
+| `controller_dialogs.py` | Standard | mixin — the watch's own windows: opens, re-raises, forgets, and builds each one's payload — [about](__about/controller_dialogs.md) |
+| `controller_simulation.py` | Algorithmic | mixin — the moment the watch shows when it is not now: jump arithmetic, simulation lifecycle, the Time Travel dialog — [about](__about/controller_simulation.md) · [flow](__flow/controller_simulation.md) |
 | `skin_builder.py` | Algorithmic | THE SKIN BUILDER — settings + location in, a `SkinDefinition` out — [about](__about/skin_builder.md) · [flow](__flow/skin_builder.md) |
 | `watch_manager.py` | Standard | process-wide `AppController` — builds/tears down the watch roster, arms the shared warm — [about](__about/watch_manager.md) |
 | `observatory/` | (package) | the statistics sibling of the Encyclopedia — 5 interactive QPainter charts, split into charts / panels / dialog — [folder](observatory/___observatory.md) |

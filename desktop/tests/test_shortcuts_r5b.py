@@ -380,28 +380,28 @@ def test_fast_travel_step_chains_from_the_active_simulation(controller):
 
 
 def test_filtered_sun_anchors_none_keeps_all_six():
-    from app.controller import _filtered_sun_anchors
+    from app.controller_simulation import _filtered_sun_anchors
 
     instants = tuple(range(6))   # stand-ins; the function never inspects values
     assert _filtered_sun_anchors(instants, None) == instants
 
 
 def test_filtered_sun_anchors_solstice_keeps_the_even_indices():
-    from app.controller import _filtered_sun_anchors
+    from app.controller_simulation import _filtered_sun_anchors
 
     instants = ("dec0", "mar", "jun", "sep", "dec1", "mar2")
     assert _filtered_sun_anchors(instants, "solstice") == ("dec0", "jun", "dec1")
 
 
 def test_filtered_sun_anchors_equinox_keeps_the_odd_indices():
-    from app.controller import _filtered_sun_anchors
+    from app.controller_simulation import _filtered_sun_anchors
 
     instants = ("dec0", "mar", "jun", "sep", "dec1", "mar2")
     assert _filtered_sun_anchors(instants, "equinox") == ("mar", "sep", "mar2")
 
 
 def test_filtered_moon_events_new_full_quarter():
-    from app.controller import _filtered_moon_events
+    from app.controller_simulation import _filtered_moon_events
 
     events = (
         ("new1", 0.0), ("fq1", 0.25), ("full1", 0.5), ("tq1", 0.75),
@@ -413,7 +413,7 @@ def test_filtered_moon_events_new_full_quarter():
 
 
 def test_sun_moon_jump_pattern_parses_every_fast_travel_stem():
-    from app.controller import _SUN_MOON_JUMP_PATTERN
+    from app.controller_simulation import _SUN_MOON_JUMP_PATTERN
 
     for stem in (
         "sun", "sun_solstice", "sun_equinox",
@@ -794,7 +794,7 @@ def test_every_fast_travel_stem_resolves_to_a_jump_branch(controller):
                 controller._ECLIPSE_JUMP_PATTERN.match(kind) is not None
                 or kind in controller._TIME_JUMPS
                 or kind in controller._UNIT_JUMPS
-                or __import__("app.controller", fromlist=["x"])
+                or __import__("app.controller_simulation", fromlist=["x"])
                 ._SUN_MOON_JUMP_PATTERN.match(kind) is not None
             )
             assert recognized, f"unhandled jump stem {option['jump_stem']}"

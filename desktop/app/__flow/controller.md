@@ -41,116 +41,53 @@ probes measured at 58.2 s. And because Windows broadcasts the message to
 every window while Qt runs it through every installed filter, N watches
 saw one SYNC as N² wakes until the coalescer collapsed the burst.
 
-## Layout — the right-click / tray menu (`_build_menu`)
+## What moved out (WA-R14, 2026-08-19)
+The menu tree is [Controller Menu — Flow](controller_menu.md); the jump
+arithmetic and the flowing simulated moment are
+[Controller Simulation — Flow](controller_simulation.md). What is drawn
+here is what the composition root itself still runs.
 
-```mermaid
-%%{init: {'flowchart': {'subGraphTitleMargin': {'top': 0, 'bottom': 35}}}}%%
-flowchart TB
-    subgraph MENU["_StayOpenMenu — shared by tray popup and dial right-click"]
-        TITLE["TITLE row (location, or the full name form with 2+ watches)"]
-        ADD["Add Watch"]
-        REM["Remove this Watch (watches 2+ only)"]
-        SHOW["Show (tray-only — hidden on the dial's own popup)"]
-        DESIGN["Design...   Pointer Theme...   Slot Theme..."]
-        VIS["Visible ▸ (dropdown: Pointer/Colorful/Earth/Moon/Seconds)"]
-        TOGGLES["Legend   Solar rotation   Archetype   Click-through"]
-        DIALOGS["Settings...   Encyclopedia...   Observatory...
-        Guide...   Time Travel..."]
-        REPORT["Report (hidden until the secret code unlocks it)"]
-        EXIT["Exit"]
-    end
-    TITLE --> ADD --> REM --> SHOW --> DESIGN --> VIS --> TOGGLES --> DIALOGS --> REPORT --> EXIT
-```
-
-Every level is a `_StayOpenMenu` — checkable picks (and actions tagged
-`"stay_open"`) keep it open so several settings can change in one visit.
-
-## Algorithm — `_compute_jump` (the shared travel arithmetic)
-
-```mermaid
-%%{init: {'flowchart': {'subGraphTitleMargin': {'top': 0, 'bottom': 35}}}}%%
-flowchart TB
-    A["_compute_jump(moment, observer, cycles, kind, city)"] --> B{kind matches
-    the sun/moon pattern?}
-    B -- yes --> C["find nearest turning point/phase,
-    narrowed by the optional phase filter"]
-    B -- no --> D{kind is a place (pole/Greenwich/city)?}
-    D -- yes --> E["real coordinates, real local clock"]
-    D -- no --> F{kind is a calendar unit (day/month/year/century/millennium)?}
-    F -- yes --> G["shift_calendar(moment, unit)"]
-    F -- yes --> G["shift_calendar(moment, unit)"]
-    F -- no --> F2{kind matches\n_ECLIPSE_JUMP_PATTERN?\n(next/prev, solar/lunar,\noptional TYPE suffix)}
-    F2 -- yes --> G2["deep.eclipse_after/before(jd, kind, type_)\ntype_ narrows to one catalog type\n(owner selector spec 2026-08-11)"]
-    F2 -- no --> F3{kind in _TIME_JUMPS?\n(hour/minute/second)}
-    F3 -- yes --> G3["base_moment + sign * timedelta(unit)\nNO minute-flooring — returned early"]
-    C --> H
-    E --> H
-    G --> H{landing found?}
-    G2 --> H
-    H -- no --> I[(None — edge clamp, no-op)]
-    H -- yes --> J["deep-travel events rebased into the
-    caller's proxy frame via julian_day_of"]
-    J --> K["re-canonicalize into the 400-year proxy
-    (canonical_proxy) before returning"]
-    K --> L[("(moment, observer, cycles)")]
-    G3 --> L
-```
-
-Three callers wrap this pure function: `_apply_jump` (keyboard
-shortcuts — starts/refreshes the live simulation directly),
-`_dialog_jump` (the Time Travel dialog's Quick Jump rows — starts the
-live simulation AND returns the landing for the dialog to mirror onto
-its own fields), and the Time Travel dialog's own OK button (via
-`TimeTravelDialog.moment()`/`.cycles()`, which the controller reads
-directly rather than through `_compute_jump`).
-
-## The flowing simulated moment (owner spec 2026-08-11)
-
-```mermaid
-flowchart LR
-    A["_start_simulation(moment, observer)"] --> B["self._simulation = (moment, observer)
-    self._sim_started = monotonic()"]
-    B --> C["_simulated_moment()
-    = moment + (monotonic() - _sim_started)"]
-    C --> D["_on_tick / _active_simulation_or_now /
-    _open_observatory / _effective_travel_date /
-    _effective_is_daylight all read THIS,
-    never the stored tuple directly"]
-```
-
-The landed moment is not a frozen frame for the rest of
-`TIME_TRAVEL_DURATION_S` — every second of real wall-clock time that
-passes advances the displayed moment by the same second, so a
-traveled dial keeps running (day into night, an eclipse closing)
-instead of holding still.
-
-## Responsibility map (see `__about/controller.md` for the split this owes)
+## Responsibility map — one class, six modules
 
 ```mermaid
 %%{init: {'flowchart': {'subGraphTitleMargin': {'top': 0, 'bottom': 35}}}}%%
 flowchart LR
-    subgraph SKIN["skin_builder.py (left in R10)"]
-        BS[build_skin] --> AD[apply_display_settings]
+    subgraph ROOT["controller.py — the composition root"]
+        RUN["__init__ / run / quit
+        _on_tick / _on_wake
+        _install_skin / _apply_language
+        _position_widget / _poll_hover"]
     end
-    subgraph SHELL["2. Qt shell"]
-        RUN[run/menu/tray/quit]
+    subgraph SKIN["skin_builder.py (R10)"]
+        BS["build_skin -> apply_display_settings"]
     end
-    subgraph DLG["3. Dialog lifecycle"]
-        OPEN["_open_* / one-live-instance"]
+    subgraph MENU["controller_menu.py"]
+        BM["_build_menu / _refresh_menu_gating"]
     end
-    subgraph SC["4. Shortcuts"]
-        ONSC[_on_shortcut + families]
+    subgraph DISP["controller_display.py"]
+        SET["_set_* / _rotate_theme"]
     end
-    subgraph TT["5. Time travel"]
-        CJ[_compute_jump / simulation]
+    subgraph DLG["controller_dialogs.py"]
+        OPEN["_open_* / _reopen_live / _watch_face_setters"]
     end
-    subgraph TICK["6. Tick plumbing"]
-        OT[_on_tick / _on_wake / hover poll]
+    subgraph SC["controller_shortcuts.py"]
+        ONSC["_on_shortcut + its families"]
     end
-    SHELL --> SKIN
-    SHELL --> DLG
-    SHELL --> SC
+    subgraph TT["controller_simulation.py"]
+        CJ["_compute_jump / _start_simulation"]
+    end
+    ROOT --> SKIN
+    ROOT --> MENU
+    ROOT --> DLG
+    MENU --> DISP
+    MENU --> DLG
+    SC --> DISP
     SC --> TT
-    SHELL --> TICK
-    TICK --> SKIN
+    DLG --> DISP
+    DISP --> SKIN
+    TT --> ROOT
 ```
+
+All five are MIXINS of `WatchController`, so every arrow above is a
+plain `self.` call — no back-channels, and no call site changed when
+they were cut out.
