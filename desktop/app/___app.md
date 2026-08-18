@@ -13,7 +13,7 @@ their outputs through the render compositor.
 | `controller.py` | Algorithmic | composition root for ONE watch — Qt shell, dialogs, shortcuts, time travel, tick plumbing (documented god-file, ratchet entry) — [about](__about/controller.md) · [flow](__flow/controller.md) |
 | `skin_builder.py` | Algorithmic | THE SKIN BUILDER — settings + location in, a `SkinDefinition` out — [about](__about/skin_builder.md) · [flow](__flow/skin_builder.md) |
 | `watch_manager.py` | Standard | process-wide `AppController` — builds/tears down the watch roster, arms the shared warm — [about](__about/watch_manager.md) |
-| `observatory.py` | Algorithmic | the statistics sibling of the Encyclopedia — 5 interactive QPainter charts (documented god-file, ratchet entry) — [about](__about/observatory.md) · [flow](__flow/observatory.md) |
+| `observatory/` | (package) | the statistics sibling of the Encyclopedia — 5 interactive QPainter charts, split into charts / panels / dialog — [folder](observatory/___observatory.md) |
 | `widget.py` | Algorithmic | the frameless, transparent dial window — [about](__about/widget.md) · [flow](__flow/widget.md) |
 | `settings_store.py` | Algorithmic | the `Settings` data table + its atomic JSON store — [about](__about/settings_store.md) · [flow](__flow/settings_store.md) |
 | `settings_ring.py` | Standard | ring-name resolution + custom-ring-card normalization, split out of `settings_store.py` (THE STRUCTURE LAW) — [about](__about/settings_ring.md) |
@@ -71,6 +71,6 @@ their outputs through the render compositor.
 - **One `QMenu` is shared** by the tray icon and the widget's own
   right-click popup.
 - **Two files remain documented god-files** ([Watch
-  Controller](__about/controller.md), [Observatory](__about/observatory.md))
+  Controller](__about/controller.md), [Observatory](observatory/___observatory.md))
   — both carry a `tests/test_structure_law.py` ratchet entry; a split is
   owed, not yet done (Rule #20).

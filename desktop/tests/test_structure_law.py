@@ -75,10 +75,6 @@ RATCHET: dict[str, tuple[str, str]] = {
     # the rotation engine, the seat resolvers, the title-plate resolver —
     # were never the god-file the law was written against. The ratchet
     # shrinks; it never grows back.
-    "app/observatory.py": (
-        "the statistics window in one file",
-        "the app split round",
-    ),
     "tests/test_pointer.py": (
         "one test file pins every pointer",
         "a test split-by-subsystem hygiene round — owed, not yet scheduled",

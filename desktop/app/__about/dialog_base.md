@@ -7,7 +7,7 @@
 every one of them does.
 
 Seven top-level dialogs open off the dial: [Encyclopedia](
-../encyclopedia/__about/dialog.md), [Observatory](observatory.md),
+../encyclopedia/__about/dialog.md), [Observatory](../observatory/__about/dialog.md),
 [Report](report.md), [Shortcuts](shortcuts_window.md), [Time
 Travel](time_travel.md), [Settings](
 ../settings_dialog/__about/dialog.md) and the [Watch Face

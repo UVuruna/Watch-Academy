@@ -45,6 +45,7 @@ DOC_EXEMPT_FOLDERS = {"tests"}
 TRIVIAL = frozenset({
     "app/__init__.py",
     "app/encyclopedia/__init__.py",
+    "app/observatory/__init__.py",
     "app/settings_dialog/__init__.py",
     "config/__init__.py",
     "core/__init__.py",
@@ -76,7 +77,8 @@ FLOW_REQUIRED = frozenset({
     "app/fast_travel_flash.py",
     "app/legend_popup.py",
     "app/native.py",
-    "app/observatory.py",
+    "app/observatory/charts.py",
+    "app/observatory/dialog.py",
     "app/report.py",
     "app/scheduler.py",
     "app/settings_dialog/custom_art_section.py",

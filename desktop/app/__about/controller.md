@@ -100,7 +100,7 @@ procedure):
 - [Legend Popup](legend_popup.md), [Fast Travel Flash](fast_travel_flash.md) —
   one instance each, owned here
 - [Time Travel](time_travel.md), [Report](report.md),
-  [Observatory](observatory.md) — opens/owns the one live instance of each
+  [Observatory](../observatory/___observatory.md) — opens/owns the one live instance of each
 - [Watch Face (subfolder)](../watch_face/___watch_face.md) —
   `WatchFaceDialog`, opened/owned the SAME way (the owner-approved Watch
   Face & Settings UI rework — Phase 6 FINAL cleanup deleted the

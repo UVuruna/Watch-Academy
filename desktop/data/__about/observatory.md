@@ -21,7 +21,7 @@ Time pack.
   `OBSERVATORY_EXTREMA_WINDOW_YEARS`, `paths.database_dir()`
 
 ### Used by
-- [Observatory Dialog](../../app/__about/observatory.md) — the five charts
+- [Observatory Dialog](../../app/observatory/___observatory.md) — the five charts
 - [Instrument Diagrams](../../render/__about/instrument_diagrams.md)
 
 ## Classes

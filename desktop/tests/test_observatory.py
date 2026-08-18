@@ -246,16 +246,16 @@ def test_zoom_clamps_to_the_minimum_span(app):
 def test_zoom_floor_falls_back_to_the_base_heuristic_without_a_series(app):
     """A chart with fewer than 2 points (or no visible series) cannot
     measure a data stride — `_zoom_floor` must fall back to the base
-    `_ChartBase` heuristic rather than crash or floor at zero."""
+    `ChartBase` heuristic rather than crash or floor at zero."""
     dialog = _open(None)
     chart = dialog._envelope
     for entry in chart._series:
         entry["visible"] = False
     assert chart._data_stride() is None
     full_span = 1000.0
-    from app.observatory import _ChartBase
+    from app.observatory.charts import ChartBase
 
-    assert chart._zoom_floor(full_span) == _ChartBase._zoom_floor(chart, full_span)
+    assert chart._zoom_floor(full_span) == ChartBase._zoom_floor(chart, full_span)
     dialog.accept()
 
 
@@ -396,7 +396,7 @@ def _enlarge_button_of(chart) -> QPushButton:
 # Task 1 — the adaptive tick ladder ----------------------------------------------
 
 def test_nice_step_ladder_is_year_friendly():
-    from app.observatory import _nice_step
+    from app.observatory.charts import _nice_step
 
     # Near/at the tightened max-zoom floor, the ladder bottoms out at a
     # 1-year pitch (owner: "na max zumu TICK na 1 GODINU").
@@ -443,7 +443,7 @@ def test_day_length_reaches_a_1_day_tick_at_its_own_max_zoom(app):
     honestly reach a 1-day tick pitch — never finer (Item 5's MIN TICK:
     `_nice_ticks(..., min_step=OBSERVATORY_DAYLENGTH_MIN_TICK_DAYS)`),
     since "Mon D" labels round to the nearest whole day."""
-    from app.observatory import _nice_step
+    from app.observatory.charts import _nice_step
 
     dialog = _open(None)
     chart = dialog._day_chart
@@ -548,7 +548,7 @@ def test_splitter_sizes_persist_across_reopens_this_session(app, monkeypatch):
     """Task 2: SESSION-only persistence — a module-level cache (no
     settings key), matching that this dialog's own window geometry is
     likewise not written to disk."""
-    import app.observatory as observatory_module
+    import app.observatory.dialog as observatory_module
     monkeypatch.setattr(observatory_module, "_last_splitter_sizes", None)
 
     dialog1 = _open(None)
@@ -591,7 +591,7 @@ def test_enlarge_dialog_hosts_the_same_chart_and_carries_zoom_state(app, monkeyp
     """Task 3: reparenting (not copying) the panel means the SAME chart
     instance, its zoom/pan view AND its checkbox state, carry into the
     enlarged dialog and back out again untouched."""
-    import app.observatory as observatory_module
+    import app.observatory.dialog as observatory_module
 
     dialog = _open(None)
     dialog.resize(900, 3000)
@@ -617,7 +617,7 @@ def test_enlarge_dialog_hosts_the_same_chart_and_carries_zoom_state(app, monkeyp
     index_before = dialog._splitter.indexOf(_panel_of(chart))
 
     captured = []
-    real_cls = observatory_module._EnlargeDialog
+    real_cls = observatory_module.EnlargeDialog
 
     class _RecordingEnlarge(real_cls):
         # NON-MODAL now (ITEM 1, R4 owner instruction batch 2026-07-20):
@@ -630,7 +630,7 @@ def test_enlarge_dialog_hosts_the_same_chart_and_carries_zoom_state(app, monkeyp
             super().__init__(*args, **kwargs)
             captured.append(self)
 
-    monkeypatch.setattr(observatory_module, "_EnlargeDialog", _RecordingEnlarge)
+    monkeypatch.setattr(observatory_module, "EnlargeDialog", _RecordingEnlarge)
 
     button = _enlarge_button_of(chart)
     assert button.isVisible()
@@ -663,7 +663,7 @@ def test_enlarge_dialog_extended_legend_and_laskar_caption(app, monkeypatch):
     a current-value readout, and the Laskar chart's info strip keeps
     its doctrine caption (owner: "the Laskar chart keeps its doctrine
     caption")."""
-    import app.observatory as observatory_module
+    import app.observatory.dialog as observatory_module
 
     dialog = _open(None)
     dialog.resize(900, 3000)
@@ -672,7 +672,7 @@ def test_enlarge_dialog_extended_legend_and_laskar_caption(app, monkeypatch):
     chart = dialog._laskar_chart
 
     captured = []
-    real_cls = observatory_module._EnlargeDialog
+    real_cls = observatory_module.EnlargeDialog
 
     class _RecordingEnlarge(real_cls):
         # NON-MODAL now (ITEM 1, R4): capture at construction — see the
@@ -682,7 +682,7 @@ def test_enlarge_dialog_extended_legend_and_laskar_caption(app, monkeypatch):
             super().__init__(*args, **kwargs)
             captured.append(self)
 
-    monkeypatch.setattr(observatory_module, "_EnlargeDialog", _RecordingEnlarge)
+    monkeypatch.setattr(observatory_module, "EnlargeDialog", _RecordingEnlarge)
     _enlarge_button_of(chart).click()
 
     enlarged = captured[0]
@@ -700,7 +700,7 @@ def test_enlarge_dialog_render_smoke_for_every_chart(app, monkeypatch):
     without error WHILE GENUINELY OPEN (extended legend + info strip +
     the reparented chart itself, not just the shell left behind after
     the panel already returned to the splitter)."""
-    import app.observatory as observatory_module
+    import app.observatory.dialog as observatory_module
 
     dialog = _open(None)
     dialog.resize(900, 3000)
@@ -708,7 +708,7 @@ def test_enlarge_dialog_render_smoke_for_every_chart(app, monkeypatch):
     QApplication.processEvents()
 
     captured = []
-    real_cls = observatory_module._EnlargeDialog
+    real_cls = observatory_module.EnlargeDialog
 
     class _RecordingEnlarge(real_cls):
         # NON-MODAL now (ITEM 1, R4): capture at construction — see the
@@ -718,7 +718,7 @@ def test_enlarge_dialog_render_smoke_for_every_chart(app, monkeypatch):
             super().__init__(*args, **kwargs)
             captured.append(self)
 
-    monkeypatch.setattr(observatory_module, "_EnlargeDialog", _RecordingEnlarge)
+    monkeypatch.setattr(observatory_module, "EnlargeDialog", _RecordingEnlarge)
 
     for chart in (
         dialog._season_chart, dialog._envelope, dialog._eclipse_chart,
@@ -754,14 +754,14 @@ def test_enlarge_close_cycle_survives_a_real_qt_event_loop_twice(app, monkeypatc
     end to end. The whole 5-chart cycle repeats TWICE — the crash log
     shows repeat hits, and a deleted-object bug is exactly the kind
     that bites hardest on the SECOND round trip."""
-    import app.observatory as observatory_module
+    import app.observatory.dialog as observatory_module
 
-    class _AutoCloseEnlarge(observatory_module._EnlargeDialog):
+    class _AutoCloseEnlarge(observatory_module.EnlargeDialog):
         def __init__(self, *args, **kwargs):
             super().__init__(*args, **kwargs)
             QTimer.singleShot(0, self.accept)
 
-    monkeypatch.setattr(observatory_module, "_EnlargeDialog", _AutoCloseEnlarge)
+    monkeypatch.setattr(observatory_module, "EnlargeDialog", _AutoCloseEnlarge)
 
     dialog = _open(None)
     dialog.resize(900, 3000)
@@ -824,7 +824,7 @@ def test_collapse_button_hides_the_chart_and_toggles_to_show(app):
 def test_enlarge_dialog_sizes_to_16_9_at_half_screen_height(app, monkeypatch):
     """Item 1 (owner): the Enlarge dialog opens at ASPECT 16:9, height
     = 50% of the (available) screen height — not maximized."""
-    import app.observatory as observatory_module
+    import app.observatory.dialog as observatory_module
 
     dialog = _open(None)
     dialog.resize(900, 3000)
@@ -834,13 +834,13 @@ def test_enlarge_dialog_sizes_to_16_9_at_half_screen_height(app, monkeypatch):
 
     captured = []
 
-    class _CapturingEnlarge(observatory_module._EnlargeDialog):
+    class _CapturingEnlarge(observatory_module.EnlargeDialog):
         def __init__(self, *args, **kwargs):
             super().__init__(*args, **kwargs)
             captured.append(self.size())
             QTimer.singleShot(0, self.accept)
 
-    monkeypatch.setattr(observatory_module, "_EnlargeDialog", _CapturingEnlarge)
+    monkeypatch.setattr(observatory_module, "EnlargeDialog", _CapturingEnlarge)
     _enlarge_button_of(chart).click()
     QApplication.processEvents()
 
@@ -899,13 +899,13 @@ def test_units_combo_moved_beside_the_envelope_panel(app):
     dialog.close()
 
 
-def test_year_label_carries_a_thousands_separator(app):
+def testyear_label_carries_a_thousands_separator(app):
     """Item 6 (owner: "FORMAT brojeva je 000,000")."""
-    from app.observatory import _year_label
+    from app.observatory.charts import year_label
 
-    assert _year_label(139622) == "139,622"
-    assert _year_label(-139622) == "139,622 BCE"
-    assert _year_label(500) == "500"
+    assert year_label(139622) == "139,622"
+    assert year_label(-139622) == "139,622 BCE"
+    assert year_label(500) == "500"
 
 
 def test_dialog_with_splitter_renders_at_a_small_size(app):

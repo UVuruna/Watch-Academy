@@ -22,7 +22,7 @@ always computable, even in polar night.
 ### Used by
 - [Clock State](clock_state.md) — `compute_sun_day`, `day_length_hm`,
   `DaylightRegime`, `SunDay`
-- [Observatory](../../app/__about/observatory.md) — `day_length_curve` for the
+- [Observatory](../../app/observatory/___observatory.md) — `day_length_curve` for the
   local day-length chart
 - [Tests (folder)](../../tests/___tests.md) — regime/event goldens
 

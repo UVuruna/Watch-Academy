@@ -164,7 +164,7 @@ lives in [The DOMY Canon](CANON.md). The phone edition's sealed charter —
   and back out for free; adds an extended legend (every series' color
   chip + current value) and an info strip (title + whatever caption the
   chart already has — the Laskar doctrine line survives). 12 new tests,
-  500 green. See [Observatory](desktop/app/__about/observatory.md).
+  500 green. See [Observatory](desktop/app/observatory/___observatory.md).
 
 - **THE ONE-IMAGE-ONE-PLACE LAW (owner 2026-07-19):** an image serves
   exactly ONE place; where a scene appears again it is RETOLD in a new
@@ -576,7 +576,7 @@ lives in [The DOMY Canon](CANON.md). The phone edition's sealed charter —
    DONE (Session 17, 2026-07-18); EXTENDED (Fix round D, owner verdicts
    2026-07-19); EXTENDED AGAIN (Fix round G, owner verdicts 2026-07-19,
    slika 8 + addendum — adaptive ticks, per-chart resize, Enlarge; see
-   the "Where We Stand" entry above and [Observatory](desktop/app/__about/observatory.md)
+   the "Where We Stand" entry above and [Observatory](desktop/app/observatory/___observatory.md)
    for the details).** A right-click sibling of the Encyclopedia
    (🔭 Observatory… beside 🏛️ Encyclopedia…) of dark, QPainter-drawn
    interactive CHARTS over the long data: the season-duration
@@ -602,7 +602,7 @@ lives in [The DOMY Canon](CANON.md). The phone edition's sealed charter —
    fixed per-series canon colors (season cross-wheel hues; light/dark
    gold vs slate; Laskar gold/silver/teal), a deduped legend, a
    crosshair readout, the filter row above. See
-   [Observatory](desktop/app/__about/observatory.md).
+   [Observatory](desktop/app/observatory/___observatory.md).
 15a2. **The year line doctrine (owner 2026-07-17).** Everywhere a
    year shows, BOTH forms show: the official year and the Anno
    Lucis year ("2026 · 6105. Anno Lucis"). Settings govern the

@@ -99,7 +99,7 @@ WINDOW_SOURCES: dict[str, tuple[str, ...]] = {
     "WatchFaceDialog": ("desktop/app/watch_face/",),
     "SettingsDialog": ("desktop/app/settings_dialog/",),
     "EncyclopediaDialog": ("desktop/app/encyclopedia/",),
-    "ObservatoryDialog": ("desktop/app/observatory.py",),
+    "ObservatoryDialog": ("desktop/app/observatory/",),
     "ReportDialog": ("desktop/app/report.py",),
     "ShortcutsDialog": ("desktop/app/shortcuts_window.py",),
     "TimeTravelDialog": ("desktop/app/time_travel.py",),

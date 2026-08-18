@@ -1,6 +1,6 @@
-# Observatory — Flow
+# Dialog — Flow
 
-**About:** [description](../__about/observatory.md)
+**About:** [description](../__about/dialog.md)
 
 ## Layout
 
@@ -28,8 +28,8 @@ flowchart TB
     HEADER --> SCROLL --> CLOSE
 ```
 
-Each panel's chart is one `_ChartBase` subclass instance; "Enlarge"
-reparents that SAME instance into a separate `_EnlargeDialog` (16:9 at
+Each panel's chart is one `ChartBase` subclass instance; "Enlarge"
+reparents that SAME instance into a separate `EnlargeDialog` (16:9 at
 50% of screen height) and back on close.
 
 ## Algorithm — Enlarge / close cycle (the fixed crash)
@@ -49,31 +49,8 @@ flowchart TB
     I --> J["enlarge_dialog.deleteLater()  — ONLY AFTER the reparent"]
 ```
 
-The crash this pins: `_EnlargeDialog` must NOT carry
+The crash this pins: `EnlargeDialog` must NOT carry
 `WA_DeleteOnClose` — that flag queues the dialog's own C++ destruction,
 and since `panel` was a real Qt child of it, the queued deletion could
 destroy `panel` before step H ran. Reparenting back BEFORE the explicit
 `deleteLater()` call is what makes the order safe.
-
-## Algorithm — zoom / pan (`_ChartBase`)
-
-```mermaid
-%%{init: {'flowchart': {'subGraphTitleMargin': {'top': 0, 'bottom': 35}}}}%%
-flowchart TB
-    A[wheelEvent] --> B["_zoom_at(cursor_x_px, factor)"]
-    B --> C["new span = current span / factor,
-    clamped to _zoom_floor(full_span)"]
-    C --> D["re-center the visible x range on cursor_x_px"]
-    D --> E["_fit_y_to_view() — y axis fits the new x slice"]
-    E --> F[repaint]
-    G[mouse drag while zoomed] --> H[pan the visible x range]
-    H --> E
-    I[double-click] --> J["_reset_view() — full span, un-zoomed"]
-    J --> E
-```
-
-`_zoom_floor(full_span)` is the overridable seam: `_LineChart` floors at
-the median gap between consecutive x samples of its first visible
-series (so a decimated 20-year-stride bundle cannot be zoomed to a
-misleading 1-year view of interpolated points); `_EclipseChart` floors
-at the median gap between eclipse years, or the density bucket width.
