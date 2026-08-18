@@ -48,7 +48,12 @@ for the procedure):
    the ~16 controls that need a real method of their own — the
    fifty-six hand-written `wrap(lambda v: self._set_display_choice(
    "<key>", v))` blocks are gone, and adding a plain setting is one row
-   in the config tuple. All three
+   in the config tuple. The three SLOTS went the same way in R3
+   ([config/registry/slots.py](../../config/registry/__about/slots.md)):
+   one `_set_slot(index, ...)` writer, one `_cycle_slot`, and the
+   descriptors built by comprehension — the day slot's MODE keeps its
+   own `_set_display_choice` path, because that path's no-op guard
+   skips a whole skin rebuild and the other two never had one. All three
    non-modal openers go through ONE door, `_reopen_live` (owner bug
    2026-08-07, "CHI neće da mi otvori Watch Face, ostali hoće"): a
    handler that only called `raise_()` left a window HIDDEN without

@@ -68,6 +68,7 @@ from app.tray import TrayController, logo_icon, window_icon
 from app.widget import ClockWidget
 from config import archetypes, constants, defaults, dial, palette, pantheon, paths, profiling, shortcuts
 from config import watch_face as watch_face_keys
+from config.registry.slots import SLOT_KEYS
 from config.ui_text import ui
 from core.clock_state import build_day_context, build_tick_state
 from core.continents import date_is_solstice
@@ -2053,71 +2054,70 @@ class WatchController(QObject):
         with (the 3rd only counts on top of the 2nd, `show_third_slot
         and show_octa_slot` — the "slots enable IN ORDER" rule)."""
         settings = self._settings
-        if index == 1:
-            return settings.show_weekday
-        if index == 2:
-            return settings.show_octa_slot
-        return settings.show_third_slot and settings.show_octa_slot
+        active = getattr(settings, SLOT_KEYS[index]["enabled"])
+        return bool(active and (index != 3 or settings.show_octa_slot))
 
     def _slot_mode_state(self, index: int) -> tuple[str, Callable[[str], None]]:
         """(current mode, setter) for Slot `index`'s own MODE field —
         the SAME setters `_slot_descriptors()` wires the Watch Face
-        window's own mode picker through (Rule #5)."""
-        settings = self._settings
+        window's own mode picker through (Rule #5).
+
+        The DAY slot is the one exception, and it is a real one: its
+        mode goes through `_set_display_choice`, whose no-op guard
+        skips the whole skin rebuild when the pick did not change —
+        `_set_slot` has no such guard, and giving it one would change
+        what the other two slots do."""
+        mode = getattr(self._settings, SLOT_KEYS[index]["mode"])
         if index == 1:
-            return settings.weekday_slot, (
-                lambda mode: self._set_display_choice("weekday_slot", mode)
+            return mode, (
+                lambda new: self._set_display_choice("weekday_slot", new)
             )
-        if index == 2:
-            return settings.octa_slot, self._set_south_slot
-        return settings.third_slot, self._set_third_slot
+        return mode, (lambda new: self._set_slot(index, new))
 
     def _slot_theme_state(self, index: int) -> tuple[str, Callable[[str], None]]:
         """(current weekday theme, setter) for Slot `index` — the setter
         ALSO switches that slot's mode to "weekday" as a side effect
-        (the SAME `_set_weekday_theme`/`_set_south_slot`/
-        `_set_third_slot` behavior the Watch Face window's own theme
+        (the SAME `_set_slot` behavior the Watch Face window's own theme
         picker already relies on), so cycling the theme via the
         keyboard is also how you switch a slot INTO weekday-display
         mode with one repeated press."""
-        settings = self._settings
-        if index == 1:
-            return settings.weekday_theme, self._set_weekday_theme
-        if index == 2:
-            return settings.info_slot_theme, (
-                lambda theme: self._set_south_slot("weekday", theme=theme)
-            )
-        return settings.third_slot_theme, (
-            lambda theme: self._set_third_slot("weekday", theme=theme)
+        theme = getattr(self._settings, SLOT_KEYS[index]["theme"])
+        return theme, (
+            lambda new: self._set_slot(index, "weekday", theme=new)
         )
+
+    def _cycle_slot(self, index: int, state, order: tuple) -> None:
+        """One step of a slot cycle: read `state(index)`'s current value
+        and setter, advance it through `order`, apply. A strict no-op
+        while the slot is not active/visible (`_slot_active`), and a
+        value OUTSIDE the list starts the cycle from the top — the same
+        "outside the list starts fresh" rule `_next_rotation_theme`
+        already applies to theme rotation."""
+        if not self._slot_active(index):
+            return
+        current, setter = state(index)
+        setter(_next_rotation_theme(current, order))
 
     def _cycle_slot_complication(self, index: int) -> None:
         """Ctrl+1/2/3: the next Complication (Digital Time -> Date ->
         Day length -> Seconds, `_SLOT_COMPLICATION_ORDER`) in Slot
-        `index` — a strict no-op while that slot is not active/visible
-        (`_slot_active`). A slot currently showing a NON-complication
+        `index`. A slot currently showing a NON-complication
         (Weekday/Zodiac/Ascendant/Chinese) starts the cycle from the
-        top, the SAME "outside the list starts fresh" rule
-        `_next_rotation_theme` already applies to theme rotation."""
-        if not self._slot_active(index):
-            return
-        mode, setter = self._slot_mode_state(index)
-        setter(_next_rotation_theme(mode, self._SLOT_COMPLICATION_ORDER))
+        top."""
+        self._cycle_slot(index, self._slot_mode_state,
+                         self._SLOT_COMPLICATION_ORDER)
 
     def _cycle_slot_weekday_theme(self, index: int) -> None:
         """Ctrl+Alt+1/2/3: the next Weekday theme in Slot `index`
-        (`_WEEKDAY_THEME_ORDER`) — a strict no-op while that slot is not
-        active/visible (`_slot_active`). Unlike Ctrl+W this carries NO
+        (`_WEEKDAY_THEME_ORDER`). Unlike Ctrl+W this carries NO
         "already displaying a theme" guard: the setter itself switches
         the slot's mode to "weekday" (see `_slot_theme_state`), so one
         press both picks the next theme AND makes it visible — the
         direct route into weekday-display mode for slots 2/3, which
         have no dedicated "show weekday bodies here" toggle of their
         own beyond picking a theme."""
-        if not self._slot_active(index):
-            return
-        theme, setter = self._slot_theme_state(index)
-        setter(_next_rotation_theme(theme, self._WEEKDAY_THEME_ORDER))
+        self._cycle_slot(index, self._slot_theme_state,
+                         self._WEEKDAY_THEME_ORDER)
 
     # --- FAST TRAVEL shortcuts (R5b round, owner spec) --------------------------
 
@@ -2602,16 +2602,6 @@ class WatchController(QObject):
         self._install_skin(build_skin(self._settings, self._active_location_display))
         self._flush_position()
 
-    def _set_weekday_badge(self, mode: str, style: str) -> None:
-        """Day slot content + its OWN style in one click (owner
-        2026-07-12: the slots are independent — this never touches the
-        info slot's look)."""
-        self._settings = replace(
-            self._settings, weekday_slot=mode, day_slot_style=style
-        )
-        self._install_skin(build_skin(self._settings, self._active_location_display))
-        self._flush_position()
-
     def _metal_updates(self, theme: str, metal: str | None) -> dict:
         """The settings delta of an EXPLICIT metal pick (either slot's
         Weekday submenu): remembers the theme's metal and releases
@@ -2623,40 +2613,30 @@ class WatchController(QObject):
         metals[theme] = metal
         return {"theme_metals": metals, "theme_metal_follow_ring": False}
 
-    def _set_south_slot(
-        self, mode: str, style: str | None = None,
+    def _set_slot(
+        self, index: int, mode: str, style: str | None = None,
         theme: str | None = None, metal: str | None = None,
         roster: str | None = None,
     ) -> None:
-        """Info slot content + its OWN style/theme/metal/roster in one
-        click (owner 2026-07-12: independent of the day slot's look)."""
-        updates: dict = {"octa_slot": mode}
-        if style is not None:
-            updates["info_slot_style"] = style
-        if theme is not None:
-            updates["info_slot_theme"] = theme
-            updates.update(self._metal_updates(theme, metal))
-        if roster is not None:
-            updates["info_slot_roster"] = roster
-        self._settings = replace(self._settings, **updates)
-        self._install_skin(build_skin(self._settings, self._active_location_display))
-        self._flush_position()
+        """Slot `index`'s content plus its OWN style/theme/metal/roster
+        in one click (owner 2026-07-12: the slots are independent —
+        setting one never touches another's look).
 
-    def _set_third_slot(
-        self, mode: str, style: str | None = None,
-        theme: str | None = None, metal: str | None = None,
-        roster: str | None = None,
-    ) -> None:
-        """The 3rd slot's content (owner 2026-07-14) — the same shape
-        as the other two, its own style/theme/metal/roster."""
-        updates: dict = {"third_slot": mode}
+        THE one writer for all three. Which `Settings` fields it writes
+        is `SLOT_KEYS[index]`, not an `if index ==` chain: the bodies of
+        the old `_set_south_slot`/`_set_third_slot` were identical but
+        for four strings (clone C4, OOP audit 2026-08-18), and the day
+        slot's `_set_weekday_badge`/`_set_weekday_theme` were the same
+        shape again with a third set."""
+        keys = SLOT_KEYS[index]
+        updates: dict = {keys["mode"]: mode}
         if style is not None:
-            updates["third_slot_style"] = style
+            updates[keys["style"]] = style
         if theme is not None:
-            updates["third_slot_theme"] = theme
+            updates[keys["theme"]] = theme
             updates.update(self._metal_updates(theme, metal))
         if roster is not None:
-            updates["third_slot_roster"] = roster
+            updates[keys["roster"]] = roster
         self._settings = replace(self._settings, **updates)
         self._install_skin(build_skin(self._settings, self._active_location_display))
         self._flush_position()
@@ -2669,16 +2649,8 @@ class WatchController(QObject):
         menu 2026-07-12: the theme list lives inside Day slot ▸ Weekday,
         so picking a theme also picks the mode; bronze-plate themes
         pick their metal in the same click, pantheon themes their
-        roster)."""
-        self._settings = replace(
-            self._settings,
-            weekday_slot="weekday",
-            weekday_theme=theme,
-            **({"weekday_roster": roster} if roster is not None else {}),
-            **self._metal_updates(theme, metal),
-        )
-        self._install_skin(build_skin(self._settings, self._active_location_display))
-        self._flush_position()
+        roster). The named menu action; `_set_slot` does the writing."""
+        self._set_slot(1, "weekday", theme=theme, metal=metal, roster=roster)
 
     def _configure_theme_rotation(self) -> None:
         """Start/stop the rotation timer per the settings (called at
@@ -3426,9 +3398,9 @@ class WatchController(QObject):
     def _slot_descriptors(self) -> tuple:
         """One `SlotDescriptor` per slot, built fresh from the LIVE
         settings — each carries its OWN setter, wrapped so a pick
-        BOTH applies (through the SAME `_set_weekday_theme`/
-        `_set_south_slot`/`_set_third_slot`/`_set_display_choice`
-        methods the old menu chain used, Rule #5) AND re-supplies the
+        BOTH applies (through the SAME `_set_slot`/`_set_display_choice`
+        methods the keyboard and the old menu chain use, Rule #5) AND
+        re-supplies the
         Watch Face window with a fresh triple (R-18, Watch Face
         Phase ③: the content tree is the sole reader since Phase 6
         FINAL cleanup retired the Slot Theme window)."""
@@ -3451,73 +3423,36 @@ class WatchController(QObject):
                     )
             return wrapped
 
-        return (
-            SlotDescriptor(
-                index=1, title="1st Slot",
-                mode_value=settings.weekday_slot,
-                style_value=settings.day_slot_style,
-                theme_value=settings.weekday_theme,
-                roster_value=settings.weekday_roster,
-                names_value=settings.show_weekday_names,
-                enabled_value=settings.show_weekday,
-                set_mode=wrap(
-                    lambda mode: self._set_display_choice("weekday_slot", mode)
-                ),
-                set_style_mode=wrap(self._set_weekday_badge),
-                set_weekday=wrap(self._set_weekday_theme),
-                set_names=wrap(
-                    lambda checked: self._set_display_choice(
-                        "show_weekday_names", checked
-                    )
-                ),
-            ),
-            SlotDescriptor(
-                index=2, title="2nd Slot",
-                mode_value=settings.octa_slot,
-                style_value=settings.info_slot_style,
-                theme_value=settings.info_slot_theme,
-                roster_value=settings.info_slot_roster,
-                names_value=settings.show_info_slot_names,
-                enabled_value=settings.show_octa_slot,
-                set_mode=wrap(self._set_south_slot),
+        def descriptor(index: int) -> SlotDescriptor:
+            keys = SLOT_KEYS[index]
+            return SlotDescriptor(
+                index=index, title=keys["title"],
+                mode_value=getattr(settings, keys["mode"]),
+                style_value=getattr(settings, keys["style"]),
+                theme_value=getattr(settings, keys["theme"]),
+                roster_value=getattr(settings, keys["roster"]),
+                names_value=getattr(settings, keys["names"]),
+                enabled_value=getattr(settings, keys["enabled"]),
+                # The mode setter is the ONE the keyboard cycles through
+                # too (`_slot_mode_state`), day slot's no-op guard and
+                # all — never a second spelling of the same pick.
+                set_mode=wrap(self._slot_mode_state(index)[1]),
                 set_style_mode=wrap(
-                    lambda mode, style: self._set_south_slot(mode, style=style)
+                    lambda mode, style: self._set_slot(index, mode, style=style)
                 ),
                 set_weekday=wrap(
-                    lambda theme, metal=None, roster=None: self._set_south_slot(
-                        "weekday", theme=theme, metal=metal, roster=roster
+                    lambda theme, metal=None, roster=None: self._set_slot(
+                        index, "weekday", theme=theme, metal=metal,
+                        roster=roster,
                     )
                 ),
                 set_names=wrap(
-                    lambda checked: self._set_display_choice(
-                        "show_info_slot_names", checked
-                    )
+                    lambda checked, key=keys["names"]:
+                    self._set_display_choice(key, checked)
                 ),
-            ),
-            SlotDescriptor(
-                index=3, title="3rd Slot",
-                mode_value=settings.third_slot,
-                style_value=settings.third_slot_style,
-                theme_value=settings.third_slot_theme,
-                roster_value=settings.third_slot_roster,
-                names_value=settings.show_info_slot_names,
-                enabled_value=settings.show_third_slot,
-                set_mode=wrap(self._set_third_slot),
-                set_style_mode=wrap(
-                    lambda mode, style: self._set_third_slot(mode, style=style)
-                ),
-                set_weekday=wrap(
-                    lambda theme, metal=None, roster=None: self._set_third_slot(
-                        "weekday", theme=theme, metal=metal, roster=roster
-                    )
-                ),
-                set_names=wrap(
-                    lambda checked: self._set_display_choice(
-                        "show_info_slot_names", checked
-                    )
-                ),
-            ),
-        )
+            )
+
+        return tuple(descriptor(index) for index in sorted(SLOT_KEYS))
 
     @paths.in_display
     def _open_observatory(self) -> None:

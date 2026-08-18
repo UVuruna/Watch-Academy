@@ -24,6 +24,7 @@ Layer: config — pure. `week.py` imports NOTHING, which is what lets
 | `pointers.py` | Algorithmic | THE POINTER REGISTRY — the permission matrix: what each pointer may carry, per shape — [about](__about/pointers.md) |
 | `week.py` | Algorithmic | THE WEEK REGISTRY, the 6+3 kind: all 35 theme entries, whole — [about](__about/week.md) · [flow](__flow/week.md) |
 | `availability.py` | Standard | THE AVAILABILITY FIELD — base vs. locked, per WEEK theme — [about](__about/availability.md) |
+| `slots.py` | Standard | THE SLOT REGISTRY — the three dial slots and the `Settings` field each keeps its mode/style/theme/roster/names/enablement in — [about](__about/slots.md) |
 
 ## Connections
 

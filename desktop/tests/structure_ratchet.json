@@ -1,6 +1,6 @@
 {
   "app/controller.py": {
-    "lines": 3268,
+    "lines": 3198,
     "why": "seven responsibilities in one file (OOP audit 2026-08-18, section 3): module-level skin composition, lifecycle/tick/settings, shortcuts, menu building, dialog hosting + setter tables, time travel/simulation, translation and window plumbing. The 2026-08-01 session mapped the split and never cut it.",
     "owes": "WA-R10 (app/skin_builder.py) then WA-R14 (shortcuts / menu / dialog hosts / simulation as named modules); the controller keeps state and wiring"
   },
