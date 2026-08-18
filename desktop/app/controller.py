@@ -67,6 +67,7 @@ from app.time_travel import TimeTravelDialog
 from app.tray import TrayController, logo_icon, window_icon
 from app.widget import ClockWidget
 from config import archetypes, constants, defaults, dial, palette, pantheon, paths, profiling, shortcuts
+from config import watch_face as watch_face_keys
 from config.ui_text import ui
 from core.clock_state import build_day_context, build_tick_state
 from core.continents import date_is_solstice
@@ -1118,6 +1119,20 @@ def _overlay_display_settings(skin, settings: Settings, display):
         ring_name=settings.ring,
         display=display,
     )
+
+
+def _display_choice(set_display_choice, key: str):
+    """The ONE setter shape behind every plain Watch Face control:
+    store `key` and rebuild the skin.
+
+    A real function of arity ONE, exactly like the fifty-six lambdas it
+    replaces — `app.watch_face.section_reset` reads that arity through
+    `functools.wraps`'s `__wrapped__` to tell a one-value setting apart
+    from a target-plus-value one, so the shape is load-bearing and not
+    an implementation detail."""
+    def apply(value):
+        set_display_choice(key, value)
+    return apply
 
 
 class WatchController(QObject):
@@ -3293,34 +3308,25 @@ class WatchController(QObject):
             return wrapped
 
         return {
-            "pointer": wrap(lambda v: self._set_display_choice("pointer", v)),
-            "palette_style": wrap(
-                lambda v: self._set_display_choice("palette_style", v)
-            ),
-            "pointer_shape": wrap(
-                lambda v: self._set_display_choice("pointer_shape", v)
-            ),
-            "polygon_curvature": wrap(
-                lambda v: self._set_display_choice("polygon_curvature", v)
-            ),
-            "polygon_edge": wrap(
-                lambda v: self._set_display_choice("polygon_edge", v)
-            ),
-            "hide_night_borders": wrap(
-                lambda v: self._set_display_choice("hide_night_borders", v)
-            ),
-            "daylight": wrap(lambda v: self._set_display_choice("daylight", v)),
-            # THE UNIFIED NAMES SWITCH (owner review 2026-08-09: the
-            # Names switcher applies to the ARCHETYPE wheel too) — the
-            # stored keys stay separate; the Watch Face checkbox writes
-            # this one alongside the slot's own set_names.
-            "archetype_names": wrap(
-                lambda v: self._set_display_choice("archetype_names", v)
-            ),
+            # THE PLAIN DISPLAY CHOICES — every control whose whole job
+            # is "store this key and rebuild the skin" is a ROW in
+            # `config.watch_face.DISPLAY_CHOICE_KEYS`, not a block here
+            # (OOP audit 2026-08-18: this was written out fifty-six
+            # times, the key repeated twice per line). The seven MOVING
+            # BODY menus take the same path but are named by their own
+            # registry, so a body can never be added in one place and
+            # forgotten in the other.
+            **{
+                key: wrap(_display_choice(self._set_display_choice, key))
+                for key in (*watch_face_keys.DISPLAY_CHOICE_KEYS,
+                            *constants.MOVING_BODY_MENUS)
+            },
+            # --- and the controls that are NOT a plain key write -------
+            # Each of these needs a method of its own: it touches more
+            # than one key, opens a window, or ANSWERS a question
+            # instead of setting anything. One line each, so that being
+            # special is visible.
             "ring": wrap(self._set_ring),
-            "ring_finish": wrap(
-                lambda v: self._set_display_choice("ring_finish", v)
-            ),
             "ring_eye_shine": wrap(self._set_ring_eye_shine),
             "ring_inner": wrap(self._set_ring_inner),
             "custom_ring_crown_text": wrap(self._set_custom_ring_crown_text),
@@ -3329,228 +3335,28 @@ class WatchController(QObject):
             ),
             "ring_crown_location": wrap(self._set_ring_crown_location),
             "open_custom_ring": self._open_custom_ring_editor,
-            # THE CALENDAR MOUNT (owner decree 2026-07-29): WHICH roster
-            # rides the Calendar's twelve wedges — ported here from the
-            # retired Pointer Theme window (Phase 6 FINAL cleanup); the
-            # SAME `_set_display_choice` path, same stored key.
-            "calendar_mount": wrap(
-                lambda v: self._set_display_choice("calendar_mount", v)
-            ),
-            "umbra_form": wrap(
-                lambda v: self._set_display_choice("umbra_form", v)
-            ),
-            "umbra_contrast": wrap(
-                lambda v: self._set_display_choice("umbra_contrast", v)
-            ),
             "hands": wrap(self._set_hands),
-            "earth_style": wrap(
-                lambda v: self._set_display_choice("earth_style", v)
-            ),
             "earth_label": wrap(self._set_earth_label),
-            "transit_shadow": wrap(
-                lambda v: self._set_display_choice("transit_shadow", v)
-            ),
-            "transit_shrink": wrap(
-                lambda v: self._set_display_choice("transit_shrink", v)
-            ),
-            "transit_rim": wrap(
-                lambda v: self._set_display_choice("transit_rim", v)
-            ),
-            "show_marker_pointer": wrap(
-                lambda v: self._set_display_choice("show_marker_pointer", v)
-            ),
-            "moon_band_mode": wrap(
-                lambda v: self._set_display_choice("moon_band_mode", v)
-            ),
-            "moon_band_style": wrap(
-                lambda v: self._set_display_choice("moon_band_style", v)
-            ),
-            # THE MOVING BODIES' eight menus, registered from the same
-            # roster the storage and the overlay walk — each is a plain
-            # display choice, so a hand-written entry per menu would be
-            # seven chances to typo one name (Rule #5).
-            **{
-                name: wrap(
-                    lambda v, key=name: self._set_display_choice(key, v)
-                )
-                for name in constants.MOVING_BODY_MENUS
-            },
             "diameter": wrap(self._set_diameter),
-            "earth_scale": wrap(
-                lambda v: self._set_display_choice("earth_scale", v)
-            ),
-            "moon_scale": wrap(
-                lambda v: self._set_display_choice("moon_scale", v)
-            ),
-            "slot_scale": wrap(
-                lambda v: self._set_display_choice("slot_scale", v)
-            ),
-            "ring_jewels_scale": wrap(
-                lambda v: self._set_display_choice("ring_jewels_scale", v)
-            ),
-            "hover_enlarge": wrap(
-                lambda v: self._set_display_choice("hover_enlarge", v)
-            ),
-            # --- Themes & Slots (Phase ③, R-17/R-18/R-19/R-20) -----------
             "slot_layout": wrap(self._set_slot_layout),
+            "theme_metal": wrap(self._set_theme_metal),
+            "palettes": wrap(self._set_watch_face_palette),
             # A data PROVIDER, not a scalar setter (Rule #5): the
             # Themes & Slots section reuses the EXACT `SlotDescriptor`
             # triple `_slot_descriptors()` builds — its own `wrap()`
             # already refreshes this window (see above), so no second
             # wrapping here.
             "slot_descriptors": self._slot_descriptors,
-            "theme_rotation_minutes": wrap(
-                lambda v: self._set_display_choice("theme_rotation_minutes", v)
-            ),
-            "theme_metal_follow_ring": wrap(
-                lambda v: self._set_display_choice(
-                    "theme_metal_follow_ring", v
-                )
-            ),
-            # Phase 6 FINAL cleanup: the rotation GROUP picker + the
-            # per-theme metal combos, ported from the retired Settings
-            # dialog Themes section (same stored keys — only the
-            # picker's home and its live-vs-on-OK timing changed).
-            "theme_rotation_group": wrap(
-                lambda v: self._set_display_choice("theme_rotation_group", v)
-            ),
-            "theme_rotation_themes": wrap(
-                lambda v: self._set_display_choice("theme_rotation_themes", v)
-            ),
-            "theme_metal": wrap(self._set_theme_metal),
-            "art_source": wrap(
-                lambda v: self._set_display_choice("art_source", v)
-            ),
-            # THE DEAD PILL (owner crash 2026-08-16): the Themes page's
-            # "Subdial plate" row asked for this key and it was never
-            # here, so clicking either pill raised KeyError — invisibly,
-            # because the lookup sat inside the click callback and only
-            # fired if somebody clicked. Binding it at build time turned
-            # that latent crash into a window that would not open, which
-            # is how it was finally seen. Tooth:
-            # tests/test_watch_face.py::test_every_page_key_has_a_setter.
-            "subdial_style": wrap(
-                lambda v: self._set_display_choice("subdial_style", v)
-            ),
-            "subdial_set": wrap(
-                lambda v: self._set_display_choice("subdial_set", v)
-            ),
-            # --- Colors (Phase 4, R-21..R-25) --------------------------
-            "pointer_saturation": wrap(
-                lambda v: self._set_display_choice("pointer_saturation", v)
-            ),
-            "ring_saturation": wrap(
-                lambda v: self._set_display_choice("ring_saturation", v)
-            ),
-            "hands_saturation": wrap(
-                lambda v: self._set_display_choice("hands_saturation", v)
-            ),
-            "umbra_saturation": wrap(
-                lambda v: self._set_display_choice("umbra_saturation", v)
-            ),
-            "ring_tint": wrap(lambda v: self._set_display_choice("ring_tint", v)),
-            "palettes": wrap(self._set_watch_face_palette),
-            "umbra_tint_mode": wrap(
-                lambda v: self._set_display_choice("umbra_tint_mode", v)
-            ),
-            "umbra_tint": wrap(
-                lambda v: self._set_display_choice("umbra_tint", v)
-            ),
-            "aura_off_tint_mode": wrap(
-                lambda v: self._set_display_choice("aura_off_tint_mode", v)
-            ),
-            "aura_off_tint": wrap(
-                lambda v: self._set_display_choice("aura_off_tint", v)
-            ),
-            "hands_tint": wrap(
-                lambda v: self._set_display_choice("hands_tint", v)
-            ),
-            "jewels_tint": wrap(
-                lambda v: self._set_display_choice("jewels_tint", v)
-            ),
-            # --- The LIVE NUMERAL BANDS (ring_rework.md §5) ------------
-            # Every knob of the two hand-drawn bands is a plain display
-            # choice: persist, rebuild the skin, and the render side
-            # re-renders both plates ONCE under the new cache key.
-            **{
-                key: wrap(
-                    lambda v, key=key: self._set_display_choice(key, v)
-                )
-                for key in (
-                    "numeral_outer_size", "minutes_size",
-                    "numeral_outer_ring_size", "numeral_face",
-                    "minutes_face", "numeral_seating",
-                    "numeral_relief", "numeral_depth", "numeral_light",
-                    "numeral_darkness", "numeral_contact_blur",
-                    "numeral_border", "crown_time_format",
-                    # THE WORLD MODE (ring_rework.md §1) rides the same
-                    # path: persist, rebuild the skin, and the fresh
-                    # compositor snaps to the phase on its first paint.
-                    "world_mode",
-                    # ... and so does WHAT THE ROTATION CARRIES (owner
-                    # ballot verdict 2026-08-13): the band plate's cache
-                    # key carries the occluded seats, so a fresh skin is
-                    # all it takes to recompose the whole outer band.
-                    "world_rotation_scope",
-                )
-            },
-            # --- Crown Text (R-24/Phase-6-debt correction, owner --------
-            # 2026-08-05: the outer Great Seal crown text arc's own controls) -
-            "ring_tint_inner": wrap(
-                lambda v: self._set_display_choice("ring_tint_inner", v)
-            ),
-            "crown_text_alpha": wrap(
-                lambda v: self._set_display_choice("crown_text_alpha", v)
-            ),
-            "crown_text_scale": wrap(
-                lambda v: self._set_display_choice("crown_text_scale", v)
-            ),
-            "crown_text_tint": wrap(
-                lambda v: self._set_display_choice("crown_text_tint", v)
-            ),
-            "metal_shade_gold": wrap(
-                lambda v: self._set_display_choice("metal_shade_gold", v)
-            ),
-            "metal_shade_bronze": wrap(
-                lambda v: self._set_display_choice("metal_shade_bronze", v)
-            ),
-            "metal_shade_silver": wrap(
-                lambda v: self._set_display_choice("metal_shade_silver", v)
-            ),
-            # --- Opacity (Phase 4, R-15/R-35/R-36 + the moved rows) ----
-            "star_alpha": wrap(
-                lambda v: self._set_display_choice("star_alpha", v)
-            ),
-            "aura_day_alpha": wrap(
-                lambda v: self._set_display_choice("aura_day_alpha", v)
-            ),
-            "aura_twilight_alpha": wrap(
-                lambda v: self._set_display_choice("aura_twilight_alpha", v)
-            ),
-            "moon_hidden_alpha": wrap(
-                lambda v: self._set_display_choice("moon_hidden_alpha", v)
-            ),
-            "umbra_alpha": wrap(
-                lambda v: self._set_display_choice("umbra_alpha", v)
-            ),
-            "moon_transit_alpha": wrap(
-                lambda v: self._set_display_choice("moon_transit_alpha", v)
-            ),
-            "ghost_alpha": wrap(
-                lambda v: self._set_display_choice("ghost_alpha", v)
-            ),
-            # A data PROVIDER, not a scalar setter (Rule #5, the SAME
-            # "slot_descriptors" shape above): the Opacity section's
-            # None-override sliders (Pointer/Aura/Moon transit/Inactive
-            # icons) need the ACTIVE skin's own resolved value to show a
-            # true "Skin default" reset target — read here instead of
-            # widening `builder(settings, setters, tr)`'s shared shape.
+            # A data PROVIDER too: the Opacity section's None-override
+            # sliders (Pointer/Aura/Moon transit/Inactive icons) need
+            # the ACTIVE skin's own resolved value to show a true "Skin
+            # default" reset target — read here instead of widening
+            # `builder(settings, setters, tr)`'s shared shape.
             "opacity_skin_defaults": self._opacity_skin_defaults,
-            # A data PROVIDER (Rule #5, the same shape as
-            # `opacity_skin_defaults`/`slot_descriptors` above): whether
-            # the ACTIVE ring preset carries a Crown Text at all —
-            # Opacity/Size/Colors each grey their Crown Text row when
-            # this reads False (graceful truth, not a dead control).
+            # A data PROVIDER (the same shape): whether the ACTIVE ring
+            # preset carries a Crown Text at all — Opacity/Size/Colors
+            # each grey their Crown Text row when this reads False
+            # (graceful truth, not a dead control).
             "ring_has_crown_text": lambda: bool(self._skin.ring.crown_text),
         }
 

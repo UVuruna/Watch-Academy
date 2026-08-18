@@ -35,6 +35,7 @@ here; nothing here imports from them.
 | `profiling.py` | Algorithmic | `@timed`/`measure()` execution-time statistics behind the hidden Report — [about](__about/profiling.md) · [flow](__flow/profiling.md) |
 | `shortcuts.py` | Algorithmic | the keyboard shortcut table and Fast Travel's theme/option jumps — [about](__about/shortcuts.md) · [flow](__flow/shortcuts.md) |
 | `taxonomy.py` | Algorithmic | THE ONE HIERARCHY — five categories → groups → weekday themes — [about](__about/taxonomy.md) · [flow](__flow/taxonomy.md) |
+| `watch_face.py` | Standard | THE WATCH FACE CONTROL VOCABULARY — every control whose setter is just "store this key" — [about](__about/watch_face.md) |
 | `ui_text.py` | Algorithmic | the UI text catalog — every translatable chrome string, one flat tuple — [about](__about/ui_text.md) · [flow](__flow/ui_text.md) |
 | `winapi.py` | Standard | Win32 API literals and the keyboard-hook ABI, the one enum-exception to Rule #4 — [about](__about/winapi.md) |
 

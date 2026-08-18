@@ -41,7 +41,14 @@ for the procedure):
    Settings/Time Travel/Report/Shortcuts openers (`_open_watch_face`,
    `_open_encyclopedia_at`, `_open_observatory`, `_open_guide`,
    `_open_settings`, `_open_report`, `_open_shortcuts` — R-37) and their
-   `_watch_face_setters`/`_slot_descriptors` callable bundles. All three
+   `_watch_face_setters`/`_slot_descriptors` callable bundles. Since the
+   OOP audit's R2 (2026-08-18) `_watch_face_setters` is a COMPREHENSION
+   over [config/watch_face.py](../../config/__about/watch_face.md)'s
+   `DISPLAY_CHOICE_KEYS` plus `constants.MOVING_BODY_MENUS`, followed by
+   the ~16 controls that need a real method of their own — the
+   fifty-six hand-written `wrap(lambda v: self._set_display_choice(
+   "<key>", v))` blocks are gone, and adding a plain setting is one row
+   in the config tuple. All three
    non-modal openers go through ONE door, `_reopen_live` (owner bug
    2026-08-07, "CHI neće da mi otvori Watch Face, ostali hoće"): a
    handler that only called `raise_()` left a window HIDDEN without

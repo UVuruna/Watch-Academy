@@ -7,10 +7,10 @@ tint) actually alter the composed pixels — never a control that paints
 nothing (root CLAUDE.md's honesty rule)."""
 
 import dataclasses
-import inspect
 import os
 import tempfile
 from collections import defaultdict
+from unittest import mock
 from datetime import datetime
 from pathlib import Path
 from zoneinfo import ZoneInfo
@@ -139,16 +139,27 @@ _OPACITY_SETTER_KEYS = (
 
 @pytest.mark.parametrize("key", _COLORS_SETTER_KEYS + _OPACITY_SETTER_KEYS)
 def test_every_setter_key_is_wired_in_the_controller(key):
-    """A STATIC check standing in for a live `WatchController` (too
-    heavy to construct in a unit test — it owns a tray icon, timers and
-    a warm-cache thread): the controller's OWN `_watch_face_setters`
-    source must declare this key as a dict entry, or a Colors/Opacity
-    pick would silently no-op against a `defaultdict`-style stub
-    forever (the exact failure this test exists to catch)."""
-    source = inspect.getsource(controller_module.WatchController._watch_face_setters)
-    assert f'"{key}"' in source, (
+    """The REAL mapping must contain this key, or a Colors/Opacity pick
+    would silently no-op against a `defaultdict`-style stub forever
+    (the exact failure this test exists to catch).
+
+    This used to grep the method's SOURCE TEXT, standing in for a live
+    `WatchController` (too heavy to construct in a unit test — it owns
+    a tray icon, timers and a warm-cache thread). It no longer has to:
+    `_watch_face_setters` reads nothing off `self` at construction
+    time, so an UNBOUND call with a stand-in self returns the real
+    dict, real keys and all (the same door
+    `test_watch_face._real_controller_setters` goes through). Asking
+    the mapping is strictly stronger than grepping for a quoted string
+    — and it survives the keys living in `config.watch_face` rather
+    than in fifty-six hand-written lines, which is what broke the text
+    version (OOP audit R2, 2026-08-18)."""
+    setters = controller_module.WatchController._watch_face_setters(
+        mock.MagicMock()
+    )
+    assert key in setters, (
         f"{key!r} is called by colors.py/opacity.py but "
-        "WatchController._watch_face_setters() never declares it"
+        "WatchController._watch_face_setters() never binds it"
     )
 
 

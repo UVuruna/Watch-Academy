@@ -82,7 +82,10 @@ bug, guarded the same way).
 ### Used by
 - [Watch Controller](../__about/controller.md) — `_open_watch_face`
   (non-modal, one live instance); `_watch_face_setters()` wraps every
-  setter so a pick both applies AND refreshes the open window
+  setter so a pick both applies AND refreshes the open window. The
+  PLAIN ones (a key write and nothing else) are built by comprehension
+  from [config/watch_face.py](../../config/__about/watch_face.md), so a
+  new one of that kind is a row of data, never a block of code
 
 ## Design Decisions
 - **R-33 honesty note:** pointer variants carry no dedicated preview art
