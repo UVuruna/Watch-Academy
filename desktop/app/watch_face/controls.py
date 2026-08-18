@@ -89,7 +89,7 @@ class OptionCard(QToolButton):
             self.setIconSize(QSize(TILE_ICON_PX, TILE_ICON_PX))
         self._paint_border()
 
-    def sizeHint(self) -> QSize:  # noqa: N802 — Qt override
+    def _label_floor(self, hint: QSize) -> QSize:
         """WIDE ENOUGH FOR THE LABEL, not just the icon (audit CLIPPED,
         2026-08-15 — a metal-shade column measured "has 130, needs at
         least 141", the 11px by which "Dark bronze" overran a card sized
@@ -100,21 +100,20 @@ class OptionCard(QToolButton):
         gallery that spill is invisible until the gallery is squeezed,
         and then it is a cut word. The card is the only thing that knows
         its own label, so the floor belongs here — and because it is
-        measured from the text, a longer name in any language moves it."""
-        hint = super().sizeHint()
+        measured from the text, a longer name in any language moves it.
+
+        BOTH hints take it: a card may wrap out of a row, never out of
+        its own label. A compact card is passed through untouched."""
         if self.compact:
             return hint
         needed = self.fontMetrics().horizontalAdvance(self.text()) + _LABEL_PAD_PX
         return QSize(max(hint.width(), needed), hint.height())
 
+    def sizeHint(self) -> QSize:  # noqa: N802 — Qt override
+        return self._label_floor(super().sizeHint())
+
     def minimumSizeHint(self) -> QSize:  # noqa: N802 — Qt override
-        """The same floor: a card may wrap out of a row, never out of
-        its own label."""
-        hint = super().minimumSizeHint()
-        if self.compact:
-            return hint
-        needed = self.fontMetrics().horizontalAdvance(self.text()) + _LABEL_PAD_PX
-        return QSize(max(hint.width(), needed), hint.height())
+        return self._label_floor(super().minimumSizeHint())
 
     def is_checked(self) -> bool:
         return self._checked
@@ -225,33 +224,42 @@ class CardGroup(QGroupBox):
         self._switch_host.setVisible(False)
 
     # ── membership ────────────────────────────────────────────────────
+    def _add(
+        self, kind: CardKind, key: str, label: str, blurb: str,
+        icon: QIcon | None = None, compact: bool = False,
+    ) -> OptionCard:
+        """Join a card of `kind` to the subset that holds that kind: its
+        own members dict, its own host, its own flow. A RADIO picks
+        (exclusive), a SWITCH flips (independent) — that, and which of
+        the two subsets it lands in, is the whole difference between
+        them (clone C7, OOP audit 2026-08-18)."""
+        radio = kind is CardKind.RADIO
+        card = OptionCard(key, label, blurb, icon, kind, compact=compact)
+        card.clicked.connect(
+            (lambda checked=False, k=key: self._pick(k)) if radio
+            else (lambda checked=False, k=key: self._flip(k))
+        )
+        members = self._cards if radio else self._switches
+        members[key] = card
+        host = self._card_host if radio else self._switch_host
+        host.setVisible(True)
+        (self._card_flow if radio else self._switch_flow).addWidget(card)
+        self._refresh_divider()
+        return card
+
     def add_card(
         self, key: str, label: str, blurb: str, icon: QIcon | None = None,
         compact: bool = False,
     ) -> OptionCard:
-        card = OptionCard(
-            key, label, blurb, icon, CardKind.RADIO, compact=compact
-        )
-        card.clicked.connect(lambda checked=False, k=key: self._pick(k))
-        self._cards[key] = card
-        self._card_host.setVisible(True)
-        self._card_flow.addWidget(card)
-        self._refresh_divider()
-        return card
+        """One EXCLUSIVE choice among the group's cards."""
+        return self._add(CardKind.RADIO, key, label, blurb, icon, compact)
 
     def add_switch(
         self, key: str, label: str, blurb: str, icon: QIcon | None = None,
         compact: bool = False,
     ) -> OptionCard:
-        card = OptionCard(
-            key, label, blurb, icon, CardKind.SWITCH, compact=compact
-        )
-        card.clicked.connect(lambda checked=False, k=key: self._flip(k))
-        self._switches[key] = card
-        self._switch_host.setVisible(True)
-        self._switch_flow.addWidget(card)
-        self._refresh_divider()
-        return card
+        """One INDEPENDENT on/off, in the group's second subset."""
+        return self._add(CardKind.SWITCH, key, label, blurb, icon, compact)
 
     def finish(self) -> None:
         """Uniform member widths (ALG-5), called once after the last

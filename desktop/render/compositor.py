@@ -848,30 +848,30 @@ class Compositor:
         and the move itself is a rotation of finished pixels."""
         return 0.0 if self._flip_target is None else self._flip_target
 
+    def _phase_angle(self, turn, phase_deg: float | None = None) -> float:
+        """One of `core.world`'s two phase-driven angles, asked the ONE
+        way — the two callers below differ only in which `world`
+        function they name (clone C9, OOP audit 2026-08-18)."""
+        if self._day is None:
+            return 0.0          # before the first day context (hit tests)
+        phase = self.phase_deg() if phase_deg is None else phase_deg
+        return turn(
+            self._skin.world_mode, self._day.star_rotation,
+            self._skin.solar_rotation, phase,
+        )
+
     def _rotation(self, phase_deg: float | None = None) -> float:
         """THE POINTER ROTATION (`core.world`): Star/Aura/Umbra/slot
         rotation. Geocentric — the solar offset, or 0 upright, exactly
         as every release before this one. Heliocentric — the night phase
         alone: the star stands still and the world turns under it."""
-        if self._day is None:
-            return 0.0          # before the first day context (hit tests)
-        phase = self.phase_deg() if phase_deg is None else phase_deg
-        return world.pointer_rotation_deg(
-            self._skin.world_mode, self._day.star_rotation,
-            self._skin.solar_rotation, phase,
-        )
+        return self._phase_angle(world.pointer_rotation_deg, phase_deg)
 
     def _world_offset(self, phase_deg: float | None = None) -> float:
         """THE WORLD OFFSET (`core.world`): how far the dial FACE has
         turned — 0.0 in Geocentric, so that mode is a bit-for-bit
         no-op."""
-        if self._day is None:
-            return 0.0          # before the first day context (hit tests)
-        phase = self.phase_deg() if phase_deg is None else phase_deg
-        return world.world_offset_deg(
-            self._skin.world_mode, self._day.star_rotation,
-            self._skin.solar_rotation, phase,
-        )
+        return self._phase_angle(world.world_offset_deg, phase_deg)
 
     def _jewel_offset(self) -> float:
         """WHAT THE ROTATION CARRIES (owner ballot verdict 2026-08-13):

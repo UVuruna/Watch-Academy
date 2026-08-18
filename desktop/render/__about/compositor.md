@@ -20,8 +20,11 @@ tests and the settings preview.
 **THE TWO WORLD-MODES (`ring_rework.md` §1,
 [World](../../core/__about/world.md)):** this class is where the mode
 becomes two numbers. `_rotation()` answers the POINTER rotation and
-`_world_offset()` the WORLD offset; every layer and every hit test reads
-one of the two, and both are stamped on the `RenderContext`. It also owns
+`_world_offset()` the WORLD offset — both over ONE `_phase_angle(turn,
+phase_deg)`, which defaults the phase to the live one and answers 0.0
+before the first day context lands, so the two can never disagree about
+either (clone C9, OOP audit 2026-08-18). Every layer and every hit test
+reads one of the two, and both are stamped on the `RenderContext`. It also owns
 the NIGHT PHASE and its flip:
 
 - `note_daylight(is_daylight, animate)` — the caller reports the sun's

@@ -65,7 +65,9 @@ itself:
   group's mode, `add_switch` is always a switch): mixing kinds
   arbitrarily inside one flow was the bug class the ballot named, so
   the API makes it unrepresentable — and the divider between the two
-  subsets draws itself.
+  subsets draws itself. Both doors are one line over `_add(kind, ...)`,
+  which is the only place that knows a member joins its kind's own
+  dict, host and flow (clone C7, OOP audit 2026-08-18).
 - A `blurb` is a REQUIRED constructor argument (owner order: hover
   description always exists). An intentionally empty blurb must be
   passed explicitly — omitting it is a TypeError, not a silent blank.
@@ -80,6 +82,12 @@ itself:
   distinguishable from the page ground at the audit's own 12-per-channel
   tolerance, which is a measurement of exactly what the eye reported: a
   group that reads as nothing at all.
+- **A card is never narrower than its own label** — both
+  `OptionCard.sizeHint` and `minimumSizeHint` pass Qt's answer through
+  ONE `_label_floor(hint)`, measured from the text, so a longer name in
+  any language moves the floor and neither hint can drift from the
+  other (clone C8; the 2026-08-15 CLIPPED finding is in that method's
+  docstring).
 - **Its own height, and not a pixel more** — `heightForWidth` /
   `sizeHint` / `minimumSizeHint` all answer from the COLUMN's
   arithmetic. QGroupBox's minimum is computed from the flow's one-row
