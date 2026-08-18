@@ -179,7 +179,10 @@ class WatchFaceDialog(QDialog):
             metrics.horizontalAdvance(self._tr(title))
             for title, _builder in _SECTIONS
         )
-        nav_width = max(defaults.SETTINGS_NAV_WIDTH_PX, longest + 48)
+        nav_width = max(
+            defaults.SETTINGS_NAV_WIDTH_PX,
+            longest + defaults.SETTINGS_NAV_CHROME_PX,
+        )
         nav_list.setFixedWidth(nav_width)  # layout-law: exempt - measured from the longest title just above
         self._nav_width = nav_width
         # NAV PILL ROW FIX (2026-08-13): QListWidget's own row-layout pass
@@ -214,7 +217,8 @@ class WatchFaceDialog(QDialog):
             # the full `nav_width` there instead overran the viewport
             # and cut the sidebar itself (ALG-8: "needs 170px, list
             # offers 156px" on every page).
-            item_width = metrics.horizontalAdvance(text) + 24
+            item_width = (metrics.horizontalAdvance(text)
+                          + defaults.SETTINGS_NAV_ITEM_CHROME_PX)
             item.setSizeHint(QSize(item_width, nav_row_h))
             if builder is None:
                 page = _placeholder_page(self._tr)

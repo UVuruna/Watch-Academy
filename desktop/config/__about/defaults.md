@@ -165,6 +165,13 @@ Layer: config — pure, no Qt, no wall clock.
   window (no astronomy call)
 
 ## Design Decisions
+- **A number two windows both compute with is ONE number here** (R7 of
+  the OOP audit, 2026-08-18). `SETTINGS_NAV_CHROME_PX` is what a nav
+  LIST spends around its widest title, and both the Settings dialog and
+  the Watch Face window measure `max(NAV_WIDTH, longest + CHROME)` with
+  it — they each carried their own `+ 48` before, which is two places to
+  change and one to forget. `SETTINGS_NAV_ITEM_CHROME_PX` is the same
+  story for one nav ITEM's own padding.
 
 - **A cross-referencing name follows its dependency, or stays here.**
   Every value that turned out to need TWO new modules' data (or one

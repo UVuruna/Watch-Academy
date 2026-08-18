@@ -264,6 +264,13 @@ ECLIPSE_SOLAR_TYPE_ICON_SOURCE = {
 # 2026-07-18): a left list of section TITLES, each opening its panel on
 # the right — replacing the old one-long-scroll layout.
 SETTINGS_NAV_WIDTH_PX = 170
+# What a nav LIST spends around the widest title (border, padding,
+# scrollbar gutter): `max(NAV_WIDTH, longest + CHROME)`. Both windows
+# with a nav column measure with THIS number, not a `+ 48` each.
+SETTINGS_NAV_CHROME_PX = 48
+# What one nav ITEM spends around its own text (its QSS padding) —
+# always narrower than the list, which reserves its own inset on top.
+SETTINGS_NAV_ITEM_CHROME_PX = 24
 
 
 # The WORKING SET (owner 2026-07-15): originals ship at full
@@ -398,6 +405,10 @@ SUBDIAL_RECOLOR_FIELD_GAIN = 1.9
 REPORT_REFRESH_MS = 1000
 REPORT_BAR_TOP_N = 10
 REPORT_CHART_HEIGHT_PX = 170
+# Its opening size — every other dialog already reads a `defaults.*_PX`
+# pair; this one carried a bare `resize(760, 620)`.
+REPORT_WINDOW_WIDTH_PX = 760
+REPORT_WINDOW_HEIGHT_PX = 620
 
 # ═══════════════════════════ THE SHORTCUTS WINDOW ═══════════════════════════
 # R-37: a modal reference window listing EVERY keyboard shortcut, read
@@ -573,6 +584,9 @@ GUIDE_TITLE_PX = 22
 GUIDE_SUBTITLE_PX = 17
 GUIDE_BODY_PX = 14        # owner 2026-07-14: the caption text was tiny
 GUIDE_SPACING_PX = 8
+# The inset a boxed INFO PANEL keeps between its rounded edge and its
+# text (the Observatory's "About this chart" panel).
+INFO_PANEL_MARGIN_PX = 12
 
 # Translation (owner spec: translate-once-then-cache, no accounts, no
 # keys): the keyless Google gtx endpoint; the per-language cache lives

@@ -971,7 +971,7 @@ def _build_info_panel(
         f"border-radius: {encyclopedia_ui.THEME_RADIUS_CARD_PX}px; }}"
     )
     layout = QVBoxLayout(panel)
-    layout.setContentsMargins(12, 12, 12, 12)
+    layout.setContentsMargins(*[defaults.INFO_PANEL_MARGIN_PX] * 4)
     layout.setSpacing(defaults.GUIDE_SPACING_PX)
     layout.addWidget(QLabel(f"<b>{tr('About this chart')}</b>"))
     if caption:

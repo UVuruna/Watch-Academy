@@ -151,7 +151,10 @@ class SettingsDialog(
                 metrics.horizontalAdvance(f"{title}  ▸")
                 for title, _groups in sections
             )
-            measured_nav = max(defaults.SETTINGS_NAV_WIDTH_PX, longest + 48)
+            measured_nav = max(
+                defaults.SETTINGS_NAV_WIDTH_PX,
+                longest + defaults.SETTINGS_NAV_CHROME_PX,
+            )
             self._nav_list.setFixedWidth(measured_nav)  # layout-law: exempt - measured from the longest title just above
             self._stack = QStackedWidget()
             pages = []

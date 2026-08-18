@@ -138,6 +138,9 @@ ENCYCLOPEDIA_MAX_FONT_PX = 21
 # two bounds; below the minimum the scrollbar takes over).
 ENCYCLOPEDIA_TOPIC_ICON_MIN_PX = 72
 ENCYCLOPEDIA_TOPIC_ICON_MAX_PX = 200
+# The reader's LOOK caption between its two arrows: wide enough that the
+# longest look name does not make the arrows jump as the user cycles.
+READER_LOOK_CAPTION_MIN_WIDTH_PX = 120
 # DECODE CEILINGS (owner order 2026-07-26: entering the Encyclopedia
 # must never block or crash — full-res sources decoded straight into
 # QPixmaps both stalled the first paint and piled up RAM). A gallery

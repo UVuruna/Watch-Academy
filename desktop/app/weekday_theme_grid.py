@@ -25,6 +25,11 @@ from app.watch_face import thumbs
 from app.watch_face.controls import picture_group
 from config import calendar_mounts, defaults, pantheon
 
+#: The gap between the stacked picture groups every builder in this
+#: module lays out — one number, four readers (it was written out four
+#: times; OOP audit 2026-08-18, section 4).
+_COLUMN_SPACING_PX = 12
+
 
 def _entry(key: str, label: str, blurb: str, icon_path) -> tuple:
     """One card's `(key, label, blurb, icon)` — the ONE entry builder
@@ -81,7 +86,7 @@ def build_weekday_theme_grid(current_theme: str, on_pick, tr) -> QWidget:
     CURRENTLY active theme's tile carries an accent border."""
     content = QWidget()
     column = QVBoxLayout(content)
-    column.setSpacing(12)
+    column.setSpacing(_COLUMN_SPACING_PX)
 
     def add_group(title: str, keys: tuple[str, ...]) -> None:
         _add_section(
@@ -144,7 +149,7 @@ def build_weekday_group_grid(current_group: str | None, on_pick, tr) -> QWidget:
     plate as a representative icon."""
     content = QWidget()
     column = QVBoxLayout(content)
-    column.setSpacing(12)
+    column.setSpacing(_COLUMN_SPACING_PX)
     entries = [
         _entry(
             title, tr(title),
@@ -173,7 +178,7 @@ def build_weekday_theme_tiles(
     default is visible without opening a tooltip."""
     content = QWidget()
     column = QVBoxLayout(content)
-    column.setSpacing(12)
+    column.setSpacing(_COLUMN_SPACING_PX)
     entries = [
         _entry(
             key,
@@ -215,7 +220,7 @@ def build_calendar_mount_grid(current_mount: str, on_pick, tr) -> QWidget:
     "None" leads, the way "off" leads the setting's own value list."""
     content = QWidget()
     column = QVBoxLayout(content)
-    column.setSpacing(12)
+    column.setSpacing(_COLUMN_SPACING_PX)
     entries = [_entry(
         "off", tr("None"),
         tr("The wedges stay empty — no roster rides the Calendar pointer."),

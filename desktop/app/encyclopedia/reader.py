@@ -105,7 +105,9 @@ class ReaderScreen(QWidget):
         self._look_back.clicked.connect(lambda: self._cycle_look(-1))
         self._look_caption = QLabel()
         self._look_caption.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        self._look_caption.setMinimumWidth(120)
+        self._look_caption.setMinimumWidth(
+            encyclopedia_ui.READER_LOOK_CAPTION_MIN_WIDTH_PX
+        )
         self._look_forward = QToolButton()
         self._look_forward.setText("▶")
         style_button(self._look_forward, "neutral", small=True)

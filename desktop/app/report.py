@@ -202,7 +202,8 @@ class ReportDialog(QDialog):
         tr = self._tr = lambda text: ui(overlay or {}, text)
         self.setWindowTitle(f"{constants.APP_NAME} — {tr('Report')}")
         self.setWindowFlag(Qt.WindowType.WindowStaysOnTopHint, True)
-        self.resize(760, 620)
+        self.resize(defaults.REPORT_WINDOW_WIDTH_PX,
+                    defaults.REPORT_WINDOW_HEIGHT_PX)
 
         column = QVBoxLayout(self)
         self._chart = _BarChart()
