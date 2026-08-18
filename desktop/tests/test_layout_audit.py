@@ -530,7 +530,7 @@ def _audit_settings():
 
 
 def _audit_setters(settings) -> _AuditSetters:
-    from app.controller import build_skin
+    from app.skin_builder import build_skin
     from app.slot_descriptor import SlotDescriptor
 
     skin = build_skin(settings)
@@ -590,7 +590,7 @@ def make_watch_face() -> QWidget:
 
 
 def make_settings_dialog() -> QWidget:
-    from app.controller import build_skin
+    from app.skin_builder import build_skin
     from app.settings_dialog.dialog import SettingsDialog
     from app.settings_store import Settings
 

@@ -17,7 +17,7 @@ import types
 import pytest
 from PySide6.QtWidgets import QApplication
 
-from app.controller import build_skin
+from app.skin_builder import build_skin
 from app.settings_store import Settings
 from render.context import RenderContext
 from render.layers.year_marker import earth_marker_angle, moon_marker_angle

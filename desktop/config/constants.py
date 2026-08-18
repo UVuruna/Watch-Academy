@@ -436,7 +436,7 @@ POINTER_DISPLAY_NAMES = {
 # both the Watch Face Pointer section's palette-style row
 # (`app.watch_face.pointer`, `tr()`-wrapped at build time) and the watch
 # TITLE row
-# (`app.controller.watch_title`, untranslated — a name, not chrome)
+# (`app.skin_builder.watch_title`, untranslated — a name, not chrome)
 # read (Rule #5: one source, two readers). Index 0 = "primary", index 1
 # = "secondary", index 2 (where present) = "tertiary" — the slot keys
 # are POSITIONAL (owner decree 2026-07-28); the MEANING of a wheel lives
@@ -1398,7 +1398,7 @@ RING_INNER_DEFAULT = "simple"       # every custom ring's own fallback
 # is the ADAPTIVE glyph — its canonical Eye.png resolves to
 # Eye_gem/Eye_gpt per the Settings art source (config.paths.art_file),
 # and the per-preset "Shine" toggle (Settings.ring_eye_shine,
-# app.controller._ring_eye_shine) swaps the whole stem for the glory-of-rays
+# app.skin_builder._ring_eye_shine) swaps the whole stem for the glory-of-rays
 # master Eye_shine.png. The four EXPLICIT variants in the letter
 # library below are the CUSTOM ring builder's own picks (owner: "any
 # of the four") — source and rays baked into the chosen glyph,
@@ -1416,7 +1416,7 @@ RING_EYE_SHINE_DEFAULT = {"Dollar": True}
 # PADDED on disk so the triangle sits at the exact frame center
 # (originally it rode high, which would have drawn the zoomed triangle
 # off-seat). ChatGPT: plain 0.97 vs shine 0.46 of frame -> 2.11;
-# Gemini: 0.98 vs 0.59 -> 1.67. `app.controller.build_skin` stamps the
+# Gemini: 0.98 vs 0.59 -> 1.67. `app.skin_builder.build_skin` stamps the
 # factor into `SkinDefinition.ring.jewel_zoom` for the shine stems so
 # the triangle draws the SAME size and only the rays extend beyond it.
 RING_EYE_SHINE_ENLARGE = {"gem": 1.67, "gpt": 2.11}

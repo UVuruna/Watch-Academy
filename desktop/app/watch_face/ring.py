@@ -45,7 +45,7 @@ def _crown_text_validator(parent: QLineEdit) -> QRegularExpressionValidator:
     field must only ACCEPT a character the crown-text renderer can actually
     draw — a `QRegularExpressionValidator` built straight off
     `constants.RING_CROWN_TEXT_CHARSET` (DERIVED, never a hand-written
-    list — Rule #5, the exact set `app.controller._location_crown_text`
+    list — Rule #5, the exact set `app.skin_builder._location_crown_text`
     filters the Location crown through too) so an unsupported keystroke
     is rejected outright instead of silently dropping the whole crown
     text at build time."""
@@ -163,7 +163,7 @@ def _inner_group(settings, setters, tr):
     `constants.RING_INNERS` variant — applies to the ACTIVE preset (or
     the active custom ring), stored per-preset-name exactly like
     `ring_eye_shine` (`Settings.ring_inner`,
-    `app.controller._resolve_ring_inner`)."""
+    `app.skin_builder._resolve_ring_inner`)."""
     default = constants.RING_INNER_PRESET_DEFAULT.get(
         settings.ring, constants.RING_INNER_DEFAULT
     )

@@ -3,7 +3,7 @@ WHITELIST (a `QValidator` derived from `constants.RING_CROWN_TEXT_
 CHARSET` rejects an unsupported keystroke outright) and the LOCATION
 crown option (a per-ring toggle that replaces the crown text with the
 active location's own "CITY, COUNTRY", following every location change
-— `app.controller._location_crown_text`/`_compose_skin`,
+— `app.skin_builder._location_crown_text`/`_compose_skin`,
 `WatchController._active_location_display`).
 """
 
@@ -15,7 +15,8 @@ import pytest
 from PySide6.QtGui import QValidator
 from PySide6.QtWidgets import QApplication, QLineEdit
 
-from app.controller import WatchController, _location_crown_text, build_skin
+from app.controller import WatchController
+from app.skin_builder import _location_crown_text, build_skin
 from app.settings_store import Settings, replace
 from app.watch_face.ring import _crown_text_validator
 from config import constants

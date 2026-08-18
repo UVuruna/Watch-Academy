@@ -670,7 +670,7 @@ def test_metal_shade_round_trip_and_default(store):
             # The THEMATIC pseudo-metal (ENLARGE/THEMATIC round, owner
             # 2026-07-27) is NOT a user setting — its shade follows the
             # active ring preset (`constants.RING_THEMATIC_SHADES`,
-            # resolved in `app.controller.apply_display_settings`).
+            # resolved in `app.skin_builder.apply_display_settings`).
             continue
         field = f"metal_shade_{metal}"
         for shade in names:

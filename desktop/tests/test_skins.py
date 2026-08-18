@@ -3,7 +3,7 @@ gone — DOMY and LOOP are ring preset names, nothing more)."""
 
 import pytest
 
-from app.controller import build_skin
+from app.skin_builder import build_skin
 from app.settings_store import Settings, replace
 from config import continents, defaults, dial, encyclopedia_ui, pantheon, paths
 from render import letter_plates

@@ -16,21 +16,25 @@ process-wide owner that builds/tears down the roster; a
 (`watch_count`, `on_add_watch`, `on_remove_watch`, `on_exit`) — it still
 knows nothing about its siblings.
 
-## THIS FILE IS A DOCUMENTED GOD-FILE (Rule #20 ratchet)
-`controller.py` is 3,449 lines — well past the ~1,000-line Violation
-threshold — and carries a `tests/test_structure_law.py` ratchet entry.
-It currently holds SIX distinct responsibilities that a future session
-owes a split (see [Refactor God-Files](../../../../../rules/briefs/REFACTOR-GODFILES.md)
-for the procedure):
+## THIS FILE IS A DOCUMENTED GOD-FILE (THE STRUCTURE LAW's ratchet)
+`controller.py` is over the ~1,000-line threshold and carries entries in
+both `tests/test_structure_law.py` and `tests/structure_ratchet.json`.
 
-1. **Skin building from settings** — the module-level `build_skin`/
-   `_compose_skin`/`apply_display_settings`/`display_for`/
-   `_overlay_display_settings` functions and their small pure helpers
-   (`_jewel_metal`, `_ring_eye_shine`, `_theme_metal`,
-   `_resolve_hands`, `_themed_weekday_set`,
-   `_pantheon_weekday_set`, `_classic_slot_theme`) — turning a `Settings`
-   into a `SkinDefinition`. Pure, testable, no `QObject` involved.
-2. **The Qt window/tray/menu shell** — `__init__`'s wiring, `run()`,
+**The first cut landed 2026-08-18 (R10 of the [OOP
+audit](../../../docs/AUDIT-OOP-2026-08-18.md)):** skin building — the
+module-level `build_skin`/`_compose_skin`/`apply_display_settings`/
+`display_for`/`watch_title` and their pure helpers — is
+[Skin Builder](skin_builder.md) now. Those were free functions over
+plain data with no `self` and no window, and 28 test files already
+imported them directly. The controller calls four names across
+(`build_skin`, `watch_title`, `effective_weekday_slot`, `slot_seconds`).
+
+What is LEFT here is the responsibilities that need the object, and
+each still owes its own cut (see [Refactor
+God-Files](../../../../../rules/briefs/REFACTOR-GODFILES.md) for the
+procedure):
+
+1. **The Qt window/tray/menu shell** — `__init__`'s wiring, `run()`,
    `_build_menu()` (255 lines alone), `_teardown_windows()`, `discard()`,
    `_prepare_quit()`, `quit()`, `_position_widget()`, the debounced-save
    pair (`_on_widget_moved`/`_flush_position`), `refresh_title()`.

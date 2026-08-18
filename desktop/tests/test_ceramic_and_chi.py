@@ -17,7 +17,7 @@ import pytest
 from PySide6.QtCore import QPointF
 from PySide6.QtWidgets import QApplication
 
-from app.controller import build_skin
+from app.skin_builder import build_skin
 from app.settings_store import Settings, replace
 from config import constants, defaults, dial
 from core.clock_state import build_day_context, build_tick_state

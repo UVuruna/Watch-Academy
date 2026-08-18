@@ -135,7 +135,7 @@ list lives:
   is "City, Country", drawn through `RingLayer`'s own crown-text arc from
   the jewel LETTER PLATES. Since the 2026-08-07 round that bottom arc is
   RULED BY THE PRESET (`RING_LIVE_CROWN["The One"]["location"] ==
-  "bottom"`, wired in `app.controller._compose_skin`) rather than served
+  "bottom"`, wired in `app.skin_builder._compose_skin`) rather than served
   only by the per-ring `Settings.ring_crown_location` toggle — the toggle
   is OFF by default and draws at the TOP, straight through the live time,
   so the ruled line simply did not exist on the owner's dial. The toggle

@@ -81,6 +81,7 @@ FLOW_REQUIRED = frozenset({
     "app/scheduler.py",
     "app/settings_dialog/custom_art_section.py",
     "app/settings_dialog/dialog.py",
+    "app/skin_builder.py",
     "app/settings_dialog/language_system_section.py",
     "app/settings_dialog/location_section.py",
     "app/settings_store.py",

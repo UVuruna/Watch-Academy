@@ -727,7 +727,7 @@ SKIN_EARTH_NIGHT = "#20344F"
 SKIN_MOON_LIT = "#E8E4D8"
 SKIN_MOON_DARK = "#2A2D36"
 # THE POSITION POINTER's fallback (owner feature 2026-08-09, Settings ▸
-# Earth): `app.controller._overlay_display_settings` resolves the
+# Earth): `app.skin_builder._overlay_display_settings` resolves the
 # pointer to the SAME ramp hue the ring jewels/crown text wear
 # (`app.watch_face.thumbs.shade_hue`, off the active ring finish +
 # shade); this is the honest stand-in for the rare case that lookup

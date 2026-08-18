@@ -2,7 +2,7 @@
 off by default): a small triangle at the Earth/Moon orbit circle, at
 each body's own angle, colored with the SAME ramp hue the ring
 jewels/crown text wear. See `render.layers.year_marker.YearMarkerLayer.
-marker_marks.draw_pointer` and `app.controller._overlay_display_settings`.
+marker_marks.draw_pointer` and `app.skin_builder._overlay_display_settings`.
 (The drawing moved out of `YearMarkerLayer._draw_orbit_pointer` on
 2026-08-10 when the owner approved two more shapes beside the triangle;
 the geometry is unchanged, so these teeth kept biting through the move.)
@@ -16,7 +16,7 @@ import astral
 import pytest
 from PySide6.QtWidgets import QApplication
 
-from app.controller import build_skin
+from app.skin_builder import build_skin
 from app.settings_store import Settings
 from app.watch_face import thumbs
 from config import defaults, palette

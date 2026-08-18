@@ -289,7 +289,7 @@ def validate_preset(entry: dict) -> dict:
     # for CUSTOM rings, owner 2026-07-27): a card may name ANY of the
     # transformer's ramps (the five ring theme colors plus every metal
     # ramp — copper, iron, …) as its own Thematic-finish color;
-    # absent, `app.controller.apply_display_settings` falls back to
+    # absent, `app.skin_builder.apply_display_settings` falls back to
     # `constants.RING_THEMATIC_SHADES` (bundled) or the moon indigo.
     thematic_raw = entry.get("thematic")
     thematic = None

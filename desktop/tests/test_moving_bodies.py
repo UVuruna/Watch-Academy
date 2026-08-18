@@ -416,7 +416,7 @@ def test_the_band_marks_only_the_displayed_days_own_eclipse():
     from render.assets import AssetCache
     from render.context import RenderContext
     from render.layers.moon_band import MoonBandLayer
-    from app.controller import build_skin
+    from app.skin_builder import build_skin
     from app.settings_store import Settings
 
     QApplication.instance() or QApplication([])

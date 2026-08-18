@@ -20,7 +20,7 @@ import astral
 import pytest
 from PySide6.QtWidgets import QApplication
 
-from app.controller import build_skin
+from app.skin_builder import build_skin
 from app.settings_store import Settings
 from config import constants, dial
 from core.clock_state import build_day_context, build_tick_state
@@ -113,7 +113,7 @@ def test_every_outer_by_inner_combination_renders(app, frame_args, outer, inner)
 def test_ring_inner_choice_is_user_changeable_per_preset(app, frame_args):
     """Rule 1: the preset's INNER stays user-changeable independent of
     its locked outer (`Settings.ring_inner`,
-    `app.controller._resolve_ring_inner`)."""
+    `app.skin_builder._resolve_ring_inner`)."""
     day, tick = frame_args
     default = build_skin(Settings(ring="DOMY"))
     assert default.ring.inner_asset.name == "seconds.png"

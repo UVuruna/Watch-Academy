@@ -32,7 +32,7 @@ from collections import defaultdict
 from PySide6.QtCore import QPointF
 from PySide6.QtWidgets import QApplication, QComboBox
 
-from app.controller import build_skin
+from app.skin_builder import build_skin
 from app.settings_store import Settings
 from config import defaults, dial
 from core import angles, numerals, world

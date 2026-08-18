@@ -255,7 +255,7 @@ def test_mode_overrides_slots_without_mutating_settings():
     OVERRIDE lives at the render level (enabled_slots), so neither the
     settings nor the skin's own slot switches are mutated and toggling
     back restores everything."""
-    from app.controller import apply_display_settings
+    from app.skin_builder import apply_display_settings
     from app.settings_store import Settings, replace
 
     settings = replace(
@@ -295,7 +295,7 @@ def test_mode_overrides_slots_without_mutating_settings():
 def test_mode_returns_the_big_seconds_hand():
     """A seated small-seconds slot silences the big hand — but the
     mode overrides the slots, so the big hand returns while it runs."""
-    from app.controller import apply_display_settings
+    from app.skin_builder import apply_display_settings
     from app.settings_store import Settings, replace
 
     seated = replace(Settings(), weekday_slot="seconds")

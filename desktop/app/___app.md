@@ -10,7 +10,8 @@ their outputs through the render compositor.
 | File | Tier | One line |
 |------|------|----------|
 | `__init__.py` | Trivial | bare module docstring — no re-exports |
-| `controller.py` | Algorithmic | composition root for ONE watch — skin building, Qt shell, dialogs, shortcuts, time travel, tick plumbing (documented god-file, ratchet entry) — [about](__about/controller.md) · [flow](__flow/controller.md) |
+| `controller.py` | Algorithmic | composition root for ONE watch — Qt shell, dialogs, shortcuts, time travel, tick plumbing (documented god-file, ratchet entry) — [about](__about/controller.md) · [flow](__flow/controller.md) |
+| `skin_builder.py` | Algorithmic | THE SKIN BUILDER — settings + location in, a `SkinDefinition` out — [about](__about/skin_builder.md) · [flow](__flow/skin_builder.md) |
 | `watch_manager.py` | Standard | process-wide `AppController` — builds/tears down the watch roster, arms the shared warm — [about](__about/watch_manager.md) |
 | `observatory.py` | Algorithmic | the statistics sibling of the Encyclopedia — 5 interactive QPainter charts (documented god-file, ratchet entry) — [about](__about/observatory.md) · [flow](__flow/observatory.md) |
 | `widget.py` | Algorithmic | the frameless, transparent dial window — [about](__about/widget.md) · [flow](__flow/widget.md) |

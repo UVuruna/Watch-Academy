@@ -27,7 +27,8 @@ from PySide6.QtCore import Qt
 from PySide6.QtGui import QColor, QImage, QPainter
 from PySide6.QtWidgets import QApplication
 
-from app.controller import WatchController, build_skin
+from app.controller import WatchController
+from app.skin_builder import build_skin
 from app.settings_store import (
     Settings,
     SettingsCorruptError,

@@ -129,7 +129,7 @@ instead of holding still.
 ```mermaid
 %%{init: {'flowchart': {'subGraphTitleMargin': {'top': 0, 'bottom': 35}}}}%%
 flowchart LR
-    subgraph SKIN["1. Skin building"]
+    subgraph SKIN["skin_builder.py (left in R10)"]
         BS[build_skin] --> AD[apply_display_settings]
     end
     subgraph SHELL["2. Qt shell"]

@@ -66,11 +66,11 @@ class Settings:
     # of rays and the plain eye, for every preset seating the adaptive
     # eye glyph (the Dollar today) — keyed by preset name; absent
     # presets fall back to `constants.RING_EYE_SHINE_DEFAULT`
-    # (`app.controller._ring_eye_shine` resolves both).
+    # (`app.skin_builder._ring_eye_shine` resolves both).
     ring_eye_shine: dict = field(default_factory=dict)
     # COMPOSITIONAL RING MODEL (owner decree 2026-08-05): the active
     # preset's inner-band pick, keyed by preset name
-    # (`app.controller._resolve_ring_inner`). Crown text for CUSTOM
+    # (`app.skin_builder._resolve_ring_inner`). Crown text for CUSTOM
     # rings: free-typed inscription + orientation ("top"/"bottom"),
     # keyed by ring name — bundled presets' motto text lives in
     # Database/ring_presets.json instead.
@@ -81,7 +81,7 @@ class Settings:
     # per-ring choice to replace the crown text (a preset's own motto or
     # a custom ring's typed text) with the ACTIVE location ("CITY,
     # COUNTRY") — keyed by ring name, available for bundled presets AND
-    # custom rings alike (`app.controller._compose_skin`).
+    # custom rings alike (`app.skin_builder._compose_skin`).
     ring_crown_location: dict = field(default_factory=dict)
     # Install defaults per the owner's 2026-07-12 list: hexa primary,
     # gradient-dark Umbra, atmosphere Earth, STEEL hands, 720 dial.

@@ -258,7 +258,7 @@ def crown_spec(skin, ctx: RenderContext) -> CrownSpec:
     THE TIME CROWN LOOK (owner correction 2026-08-06, `research/
     ring_rework.md` §3): the crown's own finish is
     `skin.ring.crown_text_metal` — the SAME `settings.ring_finish` the
-    ring's own jewels wear (`app.controller.build_skin`) — never the
+    ring's own jewels wear (`app.skin_builder.build_skin`) — never the
     outer band's `numeral_relief`/`numeral_depth`/`numeral_light`/
     `numeral_darkness`/`numeral_border` knobs, which no longer reach the
     crown at all. `shade` is resolved here (not left to the glyph

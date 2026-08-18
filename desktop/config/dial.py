@@ -838,7 +838,7 @@ RING_LIVE_CROWN_READING = {
 # THE LOCATION ARC's own hover — verbatim from research/crown_content.md
 # §1, the counterpart to RING_LIVE_CROWN_READING above. Stated ONCE here
 # (Rule #5) and read by BOTH the preset's ruled bottom arc and the user's
-# own per-ring Location toggle in `app.controller._compose_skin`; before
+# own per-ring Location toggle in `app.skin_builder._compose_skin`; before
 # the 2026-08-07 round it was a dict literal inlined in that one branch,
 # so the ruled arc would have had to copy it.
 RING_LIVE_CROWN_LOCATION_READING = {

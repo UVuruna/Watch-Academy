@@ -29,7 +29,7 @@ def app():
 
 
 def _skin(pointer: str, style: str = "primary", theme: str | None = None):
-    from app.controller import apply_display_settings
+    from app.skin_builder import apply_display_settings
     from app.settings_store import Settings, replace
 
     settings = replace(

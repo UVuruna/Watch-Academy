@@ -94,7 +94,7 @@ class RingSpec:
     # The outer GREAT SEAL CROWN TEXT ARC (TASK 1, owner "može radi"
     # 2026-07-19, CANON.md §The Banknote; corrected MOTO-FIX round,
     # owner correction 2026-07-19, the dollar's Great Seal reference
-    # image): built once by app.controller.build_skin from the preset's
+    # image): built once by app.skin_builder.build_skin from the preset's
     # own `crown_text` card field (data.rings.validate_preset ->
     # core.crown_text.crown_glyph_angles) — curved text just outside the
     # ring band, its pinned jewels landing on the SAME six hexagram
@@ -190,7 +190,7 @@ class YearMarkerSpec:
     # THE POSITION POINTER (owner feature 2026-08-09, Settings ▸ Earth,
     # off by default): `pointer_enabled` is a plain pass-through of
     # `Settings.show_marker_pointer`; `pointer_color` is resolved ONCE
-    # per settings change, in `app.controller._overlay_display_settings`
+    # per settings change, in `app.skin_builder._overlay_display_settings`
     # — the SAME ramp hue the ring jewels/crown text wear
     # (`app.watch_face.thumbs.shade_hue`) — never at paint time (that
     # accessor lives in `app/`, and `render/` never imports upward from
@@ -212,7 +212,7 @@ class YearMarkerSpec:
     # THE MOVING BODIES (owner verdict 2026-08-10, `config.constants`'s
     # section of the same name): eight menus for how the Moon and the
     # Earth are DRAWN, all of them plain pass-throughs of the matching
-    # `Settings` field via `app.controller._overlay_display_settings`,
+    # `Settings` field via `app.skin_builder._overlay_display_settings`,
     # exactly like the two band fields above. The render side reads them
     # off this spec and nothing else — `render.moon_face`,
     # `render.marker_pointer`, `render.eclipse_marks` and

@@ -22,7 +22,7 @@ import pytest
 from PySide6.QtWidgets import QApplication
 
 from config import archetypes, constants, defaults, palette
-from app.controller import apply_display_settings, build_skin, watch_title
+from app.skin_builder import apply_display_settings, build_skin, watch_title
 from app.settings_store import Settings
 from core.clock_state import build_day_context, build_tick_state
 from data.moon_phases import MoonPhaseRepository

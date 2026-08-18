@@ -18,7 +18,7 @@ import astral
 import pytest
 from PySide6.QtWidgets import QApplication
 
-from app.controller import build_skin
+from app.skin_builder import build_skin
 from app.settings_store import Settings
 from config import dial
 from core import numerals

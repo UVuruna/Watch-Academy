@@ -24,7 +24,8 @@ from PySide6.QtCore import QEvent, Qt
 from PySide6.QtGui import QKeyEvent
 from PySide6.QtWidgets import QApplication
 
-from app.controller import WatchController, watch_title
+from app.controller import WatchController
+from app.skin_builder import watch_title
 from app.settings_store import Settings
 from app.time_travel import TimeTravelDialog
 from config import dial, shortcuts

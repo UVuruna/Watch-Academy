@@ -2778,7 +2778,7 @@ class Compositor:
     ) -> str | None:
         """The per-letter HOVER LEGEND (ROADMAP 15b): `skin.ring.
         jewel_legend` is hour -> {name, reading}, built by
-        `app.controller.build_skin` from the active ring preset's
+        `app.skin_builder.build_skin` from the active ring preset's
         optional `legend` card (`data.rings.validate_preset`) — the
         Dollar, DOMY and LOOP today (CROSS-WORDS round). Finds the legend entry
         whose OWN jewel position is within `half` degrees of the
@@ -2824,7 +2824,7 @@ class Compositor:
         five words each carry exactly one pinned letter (ANNUIT→A,
         COEPTIS→S, NOVUS→N, ORDO→Ω, SECLORUM→M: the five words spell
         the five letters). Geometry is pre-solved by
-        `app.controller.build_skin` into `ring.crown_text[…]["words"]`
+        `app.skin_builder.build_skin` into `ring.crown_text[…]["words"]`
         (angular center + half-span per word); here only the band/angle
         test and the reading/legend lookup run. A word with no seat and
         no entry reading, or a seat without a legend entry, stays

@@ -32,7 +32,7 @@ import pytest
 from PySide6.QtGui import QColor, QFontDatabase
 from PySide6.QtWidgets import QApplication
 
-from app.controller import build_skin
+from app.skin_builder import build_skin
 from app.settings_store import Settings, SettingsStore, replace
 from config import dial, palette
 from core import numerals

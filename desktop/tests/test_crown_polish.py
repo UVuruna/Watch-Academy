@@ -35,7 +35,7 @@ import pytest
 from PySide6.QtGui import QColor
 from PySide6.QtWidgets import QApplication
 
-from app.controller import _location_crown_text, build_skin
+from app.skin_builder import _location_crown_text, build_skin
 from app.settings_store import Settings, replace
 from config import constants, dial
 from core import numerals

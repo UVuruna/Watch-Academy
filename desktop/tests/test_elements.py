@@ -175,7 +175,7 @@ def test_element_scales_flow_into_the_specs():
     """Owner EXTRAS: the Settings size multipliers scale the spec values
     (so the render AND the hover hit regions follow), and the octa slot
     and hover-enlarge factors ride the skin fields."""
-    from app.controller import build_skin
+    from app.skin_builder import build_skin
     from app.settings_store import Settings, replace
 
     base = build_skin(Settings())

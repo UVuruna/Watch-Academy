@@ -282,7 +282,7 @@ def test_classic_unit_wears_the_driving_slots_theme():
     mode and the 2ND is weekday, the classic rotating unit is DRIVEN
     by the 2nd slot — so it wears the 2nd slot's own theme, not the
     1st's. Every other case keeps the weekday theme."""
-    from app.controller import _classic_slot_theme
+    from app.skin_builder import _classic_slot_theme
     from app.settings_store import Settings, replace
 
     base = replace(
@@ -444,7 +444,7 @@ def test_dual_sunday_two_faces_on_compass_and_seasons(app, july_wednesday):
     Every theme's dual art is ON DISK, colored variants too — except the
     Mirrors the ART DEBT REGISTRY names (`tests/art_debt.py`), which run
     single-faced until the owner's plate lands."""
-    from app.controller import apply_display_settings
+    from app.skin_builder import apply_display_settings
     from app.settings_store import Settings, replace
     from render.slot_layout import servant_holds_the_seat, sunday_dual_face
 
@@ -588,7 +588,7 @@ def test_center_dual_face_is_the_complement_of_sunday_dual_face(app):
     theme's dual asset exist" test as `sunday_dual_face`, gated on the
     OPPOSITE pointer/mode split — every combination resolves through
     EXACTLY one of the two laws, never both, never neither."""
-    from app.controller import apply_display_settings
+    from app.skin_builder import apply_display_settings
     from app.settings_store import Settings, replace
     from render.slot_layout import center_dual_face, sunday_dual_face
 
@@ -729,7 +729,7 @@ def test_center_dual_hover_pairs_by_solar_window(app):
     the single GOOD article outside its solar windows, GOOD+NINTH near
     solar noon, EVIL+NINTH near solar midnight; a theme with only two
     faces ALWAYS speaks both side by side, any hour."""
-    from app.controller import apply_display_settings
+    from app.skin_builder import apply_display_settings
     from app.settings_store import Settings, replace
 
     city = defaults.DEFAULT_CITY
@@ -914,7 +914,7 @@ def test_slot_modes_are_real_everywhere():
     exception: the Seasons with all three slots lock the 1st on the
     weekday unit. The Chinese styles keep carrying their art folder
     and selective-swap metal."""
-    from app.controller import apply_display_settings
+    from app.skin_builder import apply_display_settings
     from app.settings_store import Settings, replace
 
     for pointer in ("hexa", "octa", "cross", "trio", "aurora"):
@@ -1006,7 +1006,7 @@ def test_aurora_bands_spread_the_day_hues_evenly():
 
     import astral
 
-    from app.controller import apply_display_settings
+    from app.skin_builder import apply_display_settings
     from app.settings_store import Settings, replace
     from core.clock_state import build_day_context
     from core import angles
@@ -1161,7 +1161,7 @@ def test_info_slot_weekday_wears_its_theme_metal(july_wednesday):
     second body carries ITS OWN theme's metal — resolved from
     theme_metals in apply_display_settings, run through the selective
     swap (or the colored/ art) on the info body alone."""
-    from app.controller import apply_display_settings
+    from app.skin_builder import apply_display_settings
     from app.settings_store import Settings, replace
 
     skin = apply_display_settings(
@@ -1189,7 +1189,7 @@ def test_seated_slot_wears_its_own_roster():
     safety law (identity and plate travel together or not at all),
     and the seated hover speaks the seated figure even when both
     slots share the theme."""
-    from app.controller import apply_display_settings
+    from app.skin_builder import apply_display_settings
     from app.settings_store import Settings, replace
     from config import paths as _paths
     from render.slot_layout import slot_view
@@ -1439,7 +1439,7 @@ def test_mason_ring_jewels_answer_their_own_hover_legend(july_wednesday):
     carries the AXIS-OPPOSITION line — the three diameters across the
     center (N↔S, A↔M, 👁↔Ω since the DOLLAR/EYE round) — as a second
     paragraph."""
-    from app.controller import build_skin
+    from app.skin_builder import build_skin
     from app.settings_store import Settings, replace as settings_replace
 
     day, tick = july_wednesday
@@ -1504,7 +1504,7 @@ def test_ring_arc_words_answer_their_own_entry_reading(july_wednesday):
     to narrate the Anointed Aegis (the A letter's own seat legend)
     instead of the Latin motto; that legend must NOT appear any more.
     Between the words the band stays silent."""
-    from app.controller import build_skin
+    from app.skin_builder import build_skin
     from app.settings_store import Settings, replace as settings_replace
 
     day, tick = july_wednesday
@@ -1567,7 +1567,7 @@ def test_mason_crown_text_arc_paints_outside_the_ring(july_wednesday):
     anymore (the arc passes OVER the G, never onto it) and the 90/270
     deg gaps — the dial's left/right sides, in the 60 deg dead zones
     between the two 120 deg arcs — stay transparent."""
-    from app.controller import build_skin
+    from app.skin_builder import build_skin
     from app.settings_store import Settings, replace as settings_replace
 
     day, tick = july_wednesday
@@ -2248,7 +2248,7 @@ def test_window_margin_is_tight_and_never_clips():
     Pinned at default AND at max-everything settings."""
     import dataclasses as dc
 
-    from app.controller import apply_display_settings
+    from app.skin_builder import apply_display_settings
     from app.settings_store import Settings
 
     for earth_scale, hover, letters in ((1.0, 1.2, 1.0), (2.0, 2.0, 2.0)):
@@ -2292,7 +2292,7 @@ def test_window_margin_renders_glow_without_clipping(app):
     from PySide6.QtCore import Qt as _Qt
     from PySide6.QtGui import QImage, QPainter
 
-    from app.controller import apply_display_settings
+    from app.skin_builder import apply_display_settings
     from app.settings_store import Settings
 
     city = defaults.DEFAULT_CITY
@@ -2650,7 +2650,7 @@ def test_window_margin_is_live_from_the_settings(app):
     from the user's ACTUAL settings, not a fixed max constant. At DEFAULT
     settings it shrinks below the old fixed 0.1465; at MAX-everything it
     grows past it — and the worst-case glow still fits at BOTH extremes."""
-    from app.controller import build_skin
+    from app.skin_builder import build_skin
     from app.settings_store import Settings, replace
 
     default_margin = defaults.dial_window_margin_fraction(build_skin(Settings()))
@@ -3067,7 +3067,7 @@ def test_the_sunday_badge_names_the_day_even_when_its_face_swaps(app):
     )
     tick = build_tick_state(now, day)
     assert not tick.is_daylight                          # the face swaps
-    from app.controller import apply_display_settings
+    from app.skin_builder import apply_display_settings
     from app.settings_store import Settings, replace
     from render.slot_layout import center_dual_face as _center_dual_face
 

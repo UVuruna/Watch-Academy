@@ -62,7 +62,7 @@ RESOLVED_ELSEWHERE: dict[str, str] = {
         "app.encyclopedia.tree — the five elements, a parallel reading "
         "of the same zodiac rather than a thirteenth animal",
     "instrument/subdial/{set}":
-        "config.constants.SUBDIAL_SETS + app.controller.build_skin — the "
+        "config.constants.SUBDIAL_SETS + app.skin_builder.build_skin — the "
         "set name is a settings value, the path built from it",
     "instrument/hands/{style}":
         "the skin's own hand sets — path built from the skin JSON",

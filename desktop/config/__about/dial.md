@@ -77,7 +77,7 @@ Layer: config — pure, no Qt, no wall clock.
 - **Ring OUTER/INNER composition** (THE COMPOSITIONAL RING MODEL, owner
   decree 2026-08-05) — `RING_OUTER_ART_DIR`/`RING_INNER_ART_DIR`; the
   active outer/inner file names come from `constants.RING_OUTERS`/
-  `RING_INNERS` (resolved per-preset by `app.controller._compose_skin`/
+  `RING_INNERS` (resolved per-preset by `app.skin_builder._compose_skin`/
   `_resolve_ring_inner`), composed unconditionally by
   `render.layers.ring.RingLayer.paint` — no opt-in, no fallback.
 - **Hand sizing** — `HAND_SECOND_REACH_FRACTION`, `HAND_MINUTE_REACH_

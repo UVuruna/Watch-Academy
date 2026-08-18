@@ -13,7 +13,7 @@ import astral.moon
 import pytest
 from astral import LocationInfo
 
-from app.controller import build_skin
+from app.skin_builder import build_skin
 from app.settings_store import Settings, SettingsStore, replace
 from config import constants, dial
 from core import angles
@@ -200,7 +200,7 @@ def test_the_band_turns_with_the_hours_when_the_world_turns(offset) -> None:
     from PySide6.QtGui import QImage, QPainter
     from PySide6.QtWidgets import QApplication
 
-    from app.controller import build_skin
+    from app.skin_builder import build_skin
     from app.settings_store import Settings
     from render.context import RenderContext
     from render.layers.moon_band import MoonBandLayer

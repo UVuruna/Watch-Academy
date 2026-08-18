@@ -81,7 +81,7 @@ def test_phase2_chrome_speaks_the_overlay():
     os.environ.setdefault("QT_QPA_PLATFORM", "offscreen")
     from PySide6.QtWidgets import QApplication, QGroupBox
 
-    from app.controller import build_skin
+    from app.skin_builder import build_skin
     from app.settings_dialog.dialog import SettingsDialog
     from app.settings_store import SettingsStore
     from app.time_travel import TimeTravelDialog
@@ -132,7 +132,7 @@ def test_phase2b_hover_lines_speak_the_overlay():
     import astral
     from PySide6.QtWidgets import QApplication
 
-    from app.controller import build_skin
+    from app.skin_builder import build_skin
     from app.settings_store import Settings
     from config import defaults
     from core.clock_state import build_day_context, build_tick_state

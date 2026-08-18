@@ -620,7 +620,7 @@ def weekday_theme_body_art(
     resolution lives ONCE in config and both readers import it. THE
     SAME expression used to be re-typed at every render call site
     (`render.weekday_body._draw_weekday_slot`, `render.compositor`'s hover
-    legend, `app.controller._themed_weekday_set`'s baked bodies dict) —
+    legend, `app.skin_builder._themed_weekday_set`'s baked bodies dict) —
     consolidated here (weekday ALT ROTATION round, owner 2026-07-20/21)
     so the universal rotation convention has exactly ONE weekday-body
     chokepoint instead of four copies drifting apart. `colored`

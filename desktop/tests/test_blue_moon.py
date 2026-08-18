@@ -23,7 +23,7 @@ import astral
 import pytest
 from PySide6.QtWidgets import QApplication
 
-from app.controller import apply_display_settings
+from app.skin_builder import apply_display_settings
 from app.settings_store import Settings, replace
 from config import constants, defaults, paths
 from core.blue_moon import (

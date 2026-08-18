@@ -308,7 +308,7 @@ def test_the_sunday_dual_probe_agrees_with_the_form_it_replaced(app):
     weekday theme the app ships, both doors must return the same verdict
     for the same skin. If they ever diverge, a Servant seat silently
     appears or vanishes."""
-    from app.controller import build_skin
+    from app.skin_builder import build_skin
     from app.settings_store import Settings, replace
     from config import constants
     from render.slot_layout import sunday_dual_face

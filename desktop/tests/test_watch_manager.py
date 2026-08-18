@@ -18,7 +18,8 @@ os.environ.setdefault("QT_QPA_PLATFORM", "offscreen")
 import pytest
 from PySide6.QtWidgets import QApplication, QMessageBox
 
-from app.controller import WatchController, watch_title
+from app.controller import WatchController
+from app.skin_builder import watch_title
 from app.watch_manager import AppController
 from config import paths
 

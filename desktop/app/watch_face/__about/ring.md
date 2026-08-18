@@ -66,7 +66,7 @@ place, so gating it too would lock the field shut forever.
   character key of `LETTER_PLATE_FILES` — the multi-character symbol
   keys are the custom-builder's own jewel picks, never typed running
   text — plus the space), the exact same set
-  `app.controller._location_crown_text` filters the Location crown
+  `app.skin_builder._location_crown_text` filters the Location crown
   through. One source, never two lists drifting apart (Rule #5).
 - **R-13 honesty note:** `app/settings_dialog/custom_art_section.py`'s
   custom-ring flow is a plain-Python mixin baked directly onto
