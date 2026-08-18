@@ -7,6 +7,7 @@ mechanism as the dial articles (encyclopedia/<section>/<key>/... keys).
 
 from config import paths
 from data._io import load_json_checked
+from data._shared import Shared
 
 
 #: THE process-wide Encyclopedia content, ONE per language (owner bug
@@ -19,7 +20,7 @@ from data._io import load_json_checked
 #: Before this, a fresh 439 KB parse happened on every skin install (~24
 #: call sites, the theme-rotation timer among them) AND again for every
 #: Encyclopedia window opened on every watch.
-_SHARED: dict[str, "EncyclopediaRepository"] = {}
+_SHARED = Shared(lambda **kwargs: EncyclopediaRepository(**kwargs))
 
 
 def shared_encyclopedia(
@@ -28,10 +29,7 @@ def shared_encyclopedia(
     """The one Encyclopedia repository for `language`. The overlay is
     honored on FIRST call per language; a retranslation calls
     `reset_shared_encyclopedia()` to drop the stale ones."""
-    repository = _SHARED.get(language)
-    if repository is None:
-        repository = _SHARED[language] = EncyclopediaRepository(overlay=overlay)
-    return repository
+    return _SHARED.get(language, overlay=overlay)
 
 
 def reset_shared_encyclopedia() -> None:

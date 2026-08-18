@@ -18,6 +18,7 @@ from core.clock_state import EclipseEvent
 from core.deep_time import julian_day_of, proxy_cycles
 from core.moon import MoonWindow
 from core.year_wheel import YearAnchors
+from data._shared import Shared
 
 # sun_events.type is the ecliptic crossing degree: 0 = March equinox,
 # 90 = June solstice, 180 = September equinox, 270 = December solstice.
@@ -50,19 +51,16 @@ class DeepEclipse:
 #: GUI thread (`_on_tick` and the day build); sqlite3's default
 #: `check_same_thread=True` turns any future violation of that into a
 #: loud error rather than silent corruption.
-_SHARED: "DeepTimeRepository | None" = None
-_DETECTED = False
+_SHARED = Shared(lambda: DeepTimeRepository.detect())
 
 
 def shared_deep_time() -> "DeepTimeRepository | None":
     """The one Deep Time repository this process uses, or None when the
     pack is not installed (a supported state — see `detect`). The
-    detection itself is memoized: absent means absent for the session."""
-    global _SHARED, _DETECTED
-    if not _DETECTED:
-        _SHARED = DeepTimeRepository.detect()
-        _DETECTED = True
-    return _SHARED
+    detection itself is memoized: absent means absent for the session,
+    which `Shared` gives for free — it remembers by MEMBERSHIP, so None
+    is a cached answer and not a reason to look again."""
+    return _SHARED.get()
 
 
 class DeepTimeRepository:

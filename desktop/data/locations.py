@@ -19,6 +19,7 @@ from zoneinfo import ZoneInfo
 
 from config import constants, defaults, paths
 from data._io import load_json_checked
+from data._shared import Shared
 
 
 @dataclass(frozen=True)
@@ -322,15 +323,12 @@ def place_from_mapping(raw: object) -> Place | None:
 #: one PICKS out of it. Two Settings dialogs open at once used to hold
 #: two independent parsed trees, and reopening the same dialog reparsed
 #: from scratch every time.
-_SHARED: "LocationRepository | None" = None
+_SHARED = Shared(LocationRepository)
 
 
 def shared_locations() -> "LocationRepository":
     """The one city database this process uses. It still RELEASES when
     the last picker closes (`LocationRepository.release`) — shared does
     not mean resident forever."""
-    global _SHARED
-    if _SHARED is None:
-        _SHARED = LocationRepository()
-    return _SHARED
+    return _SHARED.get()
 

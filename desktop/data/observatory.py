@@ -11,6 +11,7 @@ density + per-type summary are available.
 
 from config import defaults, paths
 from data._io import load_json_checked
+from data._shared import Shared
 
 
 #: THE process-wide Observatory bundles (owner bug 2026-08-06). These
@@ -18,15 +19,12 @@ from data._io import load_json_checked
 #: watch, its observer or its theme — yet every Observatory window
 #: opened on every watch re-parsed all three, and the instrument-diagram
 #: plates built a second, independent copy of their own.
-_SHARED: "ObservatoryData | None" = None
+_SHARED = Shared(lambda: ObservatoryData())
 
 
 def shared_observatory() -> "ObservatoryData":
     """The one Observatory repository this process uses."""
-    global _SHARED
-    if _SHARED is None:
-        _SHARED = ObservatoryData()
-    return _SHARED
+    return _SHARED.get()
 
 
 class ObservatoryData:

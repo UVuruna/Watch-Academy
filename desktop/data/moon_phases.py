@@ -12,21 +12,19 @@ from pathlib import Path
 from config import constants, paths
 from core.moon import MoonWindow
 from data._io import load_json_checked, year_bounds
+from data._shared import Shared
 
 
 #: THE process-wide moon repository — the twin of
 #: `data.seasons.shared_seasons`, and the one that saved the most: the
 #: bundled file is 2.9 MB and every watch used to parse its own copy.
-_SHARED: "MoonPhaseRepository | None" = None
+_SHARED = Shared(lambda **kwargs: MoonPhaseRepository(**kwargs))
 
 
 def shared_moon_phases(deep=None) -> "MoonPhaseRepository":
     """The one moon repository this process uses; `deep` is honored on
     FIRST call only (see `data.seasons.shared_seasons`)."""
-    global _SHARED
-    if _SHARED is None:
-        _SHARED = MoonPhaseRepository(deep=deep)
-    return _SHARED
+    return _SHARED.get(deep=deep)
 
 
 class MoonPhaseRepository:

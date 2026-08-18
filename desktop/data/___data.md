@@ -21,6 +21,7 @@ purity test).
 | `rings.py` | Algorithmic | ring preset cards, layout resolution, crown-text angle solving — [about](__about/rings.md) · [flow](__flow/rings.md) |
 | `hands.py` | Standard | hand pack loading + validation — [about](__about/hands.md) |
 | `_io.py` | Trivial | `load_json_checked()` / `year_bounds()` — the shared JSON loader every repository above calls |
+| `_shared.py` | Standard | `Shared` — THE ONE COPY RULE's mechanism: one copy per process (or per language), built on first ask — [about](__about/_shared.md) |
 | `__init__.py` | Trivial | docstring only, no code |
 
 ## Connections
@@ -49,6 +50,15 @@ purity test).
   handful of small repositories does not justify a hierarchy (Rule #5
   is about not duplicating logic, not about forcing OOP where a
   function suffices).
+- **THE ONE COPY RULE's mechanism is `_shared.Shared`, its DOOR is each
+  repository's own `shared_*` accessor** (R6 of the OOP audit,
+  2026-08-18). The eight accessors each held a retyped four-line
+  singleton, two of them with a variation — one copy per LANGUAGE for
+  the Encyclopedia and the Symbolism book, and a second `_DETECTED`
+  flag for the Deep Time pack because None is a real answer there. The
+  mechanism is one object now; the named accessors stay, because they
+  are what app code is allowed to call and each carries its own
+  history.
 - **Bundled-first chaining:** `SeasonsRepository` and
   `MoonPhaseRepository` each accept an optional `deep=` repository,
   injected once at startup by the controller when

@@ -14,6 +14,7 @@ from pathlib import Path
 from config import paths
 from core.year_wheel import YearAnchors
 from data._io import load_json_checked, year_bounds
+from data._shared import Shared
 
 
 #: THE process-wide seasons repository. Owner ruling 2026-07-28, applied
@@ -23,7 +24,7 @@ from data._io import load_json_checked, year_bounds
 #: holding N parses of the same 476 KB file, and N copies of the same
 #: extracted anchors, was pure waste. The LOCATION is what differs
 #: between watches, never the astronomy database.
-_SHARED: "SeasonsRepository | None" = None
+_SHARED = Shared(lambda **kwargs: SeasonsRepository(**kwargs))
 
 
 def shared_seasons(deep=None) -> "SeasonsRepository":
@@ -31,10 +32,7 @@ def shared_seasons(deep=None) -> "SeasonsRepository":
     on FIRST call only — the Deep Time pack is itself a process-wide
     singleton (`data.deep_time.shared_deep_time`), so every caller
     passes the same one."""
-    global _SHARED
-    if _SHARED is None:
-        _SHARED = SeasonsRepository(deep=deep)
-    return _SHARED
+    return _SHARED.get(deep=deep)
 
 
 class SeasonsRepository:

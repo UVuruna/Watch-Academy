@@ -10,6 +10,7 @@ from pathlib import Path
 
 from config import paths
 from data._io import load_json_checked
+from data._shared import Shared
 
 
 #: THE process-wide article source, ONE per language (owner bug
@@ -19,7 +20,7 @@ from data._io import load_json_checked
 #: plus once more for each open Encyclopedia window. The book does not
 #: change because a second dial is looking at it; see
 #: `data.encyclopedia.shared_encyclopedia`, its twin.
-_SHARED: dict[str, "SymbolismRepository"] = {}
+_SHARED = Shared(lambda **kwargs: SymbolismRepository(**kwargs))
 
 
 def shared_symbolism(
@@ -28,10 +29,7 @@ def shared_symbolism(
     """The one symbolism repository for `language`. The overlay is
     honored on FIRST call per language; `reset_shared_symbolism()` drops
     the cached ones when a retranslation lands."""
-    repository = _SHARED.get(language)
-    if repository is None:
-        repository = _SHARED[language] = SymbolismRepository(overlay=overlay)
-    return repository
+    return _SHARED.get(language, overlay=overlay)
 
 
 def reset_shared_symbolism() -> None:

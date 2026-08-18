@@ -36,6 +36,7 @@ from PySide6.QtSvg import QSvgRenderer
 
 from config import defaults, paths
 from config.paths import art_file
+from data._shared import Shared
 from recolor import recolor
 from recolor.recipe import load as recolor_recipe
 from render import raster_store
@@ -455,7 +456,7 @@ class AssetCache:
         return pixmap
 
 
-_SHARED_CACHE: AssetCache | None = None
+_SHARED_CACHE = Shared(lambda: AssetCache())
 
 
 def shared_cache() -> AssetCache:
@@ -473,7 +474,4 @@ def shared_cache() -> AssetCache:
     source), the device pixel height, tint, desaturation, metal AND its
     shade, and saturation.
     """
-    global _SHARED_CACHE
-    if _SHARED_CACHE is None:
-        _SHARED_CACHE = AssetCache()
-    return _SHARED_CACHE
+    return _SHARED_CACHE.get()
