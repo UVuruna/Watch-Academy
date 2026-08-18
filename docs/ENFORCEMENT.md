@@ -51,13 +51,25 @@ Adding an entry to any of them needs the owner's explicit approval in that
 same session.
 
 **THE STRUCTURE RATCHET** lives in `desktop/tests/test_structure_law.py`.
-Today: `app/controller.py`, `render/compositor.py`, `config/constants.py`,
-`app/observatory.py`, and five test files owed to a test-hygiene round
-(`test_pointer`, `test_settings_dialog`, `test_skins`, `test_archetype`,
-`test_eclipse`). Each entry names why it is tolerated and who owes the
-split. Two files have already LEFT the list — `render/layers.py` by being
-split, `config/pantheon.py` because the threshold now measures logic and 962
-of its lines are declarative cast tables.
+Today: `app/controller.py`, `render/compositor.py`,
+`render/tooltip_composer.py`, `config/constants.py`, and five test files
+owed to a test-hygiene round (`test_pointer`, `test_settings_dialog`,
+`test_skins`, `test_archetype`, `test_eclipse`). Each entry names why it
+is tolerated and who owes the split.
+
+**The refactor round of 2026-08-18** ([OOP
+audit](AUDIT-OOP-2026-08-18.md#round-2026-08-18)) moved it a long way in
+one night: `app/observatory.py` LEFT the list by becoming the
+`app/observatory/` package (charts / panels / dialog, none of them near
+the wall); `app/controller.py` fell from 3,436 to 2,538 logic lines when
+the skin composition became `app/skin_builder.py`; and
+`render/compositor.py` fell from 3,100 to 747 when the tooltip bank
+became the collaborator `render/tooltip_composer.py` — which took its
+place on the list at 2,238 lines, **pending the owner's ratification**,
+carrying a written reason and what it owes. Before that round,
+`render/layers.py` had left by being split and `config/pantheon.py`
+because the threshold measures logic and 962 of its lines are declarative
+cast tables. The ratchet only ever shrinks.
 
 **THE MACHINE-READABLE STRUCTURE RATCHET** lives beside it in
 `desktop/tests/structure_ratchet.json` and is read by the monorepo tool
@@ -83,10 +95,14 @@ DOMY_ZUBI_REBASELINE=1 python -m pytest desktop/tests/test_layout_audit.py -k te
 It REFUSES to add keys unless `=force`, which is legal only with the owner's
 explicit in-session approval.
 
-**THE CLONE RATCHET** lives in `desktop/tests/clone_ratchet.json`, written
-from the clones that existed on 2026-08-18. Same law: it shrinks, and a
-stale entry (a group the code no longer produces) fails the run so it gets
-removed by hand.
+**THE CLONE RATCHET** lives in `desktop/tests/clone_ratchet.json` and is
+**EMPTY** since 2026-08-18. It held one group — the `plate()` diagram
+bank, written out in `canon_diagrams.py` and `cube_diagrams.py` — and R1
+of the OOP audit absorbed it (and an unratcheted third copy) into
+`render/diagram_bank.py: DiagramBank`. The same law still applies: it
+shrinks, and a stale entry (a group the code no longer produces) fails
+the run so it gets removed by hand. The clone guard is silent on this
+project at its own threshold and reports no same-file WARN either.
 
 <a id="theme-completion"></a>
 
