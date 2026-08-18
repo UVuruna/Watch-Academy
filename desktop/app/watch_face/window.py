@@ -13,20 +13,17 @@ this window is now the ONLY place any of that content lives.
 """
 
 from PySide6.QtCore import QSize, Qt, QTimer
-from PySide6.QtWidgets import (
-    QDialog, QFrame, QHBoxLayout, QLabel, QListWidget, QScrollArea,
-    QStackedWidget, QStyle, QVBoxLayout, QWidget,
-)
+from PySide6.QtWidgets import QFrame, QHBoxLayout, QLabel, QListWidget, QScrollArea, QStackedWidget, QStyle, QVBoxLayout, QWidget
 
 from app import rebuild
+from app.dialog_base import AcademyDialog
 from app.theme import apply_theme, size_to_screen
 from app.watch_face import (
     bodies, colors, numerals, opacity, pointer, ring, size, themes,
 )
 from app.watch_face import section_reset
 from app.watch_face.widgets import FlowContent
-from config import constants, defaults, encyclopedia_ui
-from config.ui_text import ui
+from config import defaults, encyclopedia_ui
 
 # THE SPACE & LEGIBILITY LAW's screen floor (rules/GUI.md): the computed
 # window minimum below may never demand a screen the user does not have.
@@ -64,7 +61,7 @@ def _placeholder_page(tr) -> QWidget:
     return widget
 
 
-class WatchFaceDialog(QDialog):
+class WatchFaceDialog(AcademyDialog):
     """Non-modal, LIVE-APPLY (see window.md): every section's pick calls
     its setter immediately — there is nothing to commit, so no
     OK/Cancel."""
@@ -73,11 +70,7 @@ class WatchFaceDialog(QDialog):
         self, settings, setters: dict, overlay: dict | None = None,
         stay_on_top: bool = False, parent=None,
     ):
-        super().__init__(parent)
-        self._tr = lambda text: ui(overlay or {}, text)  # noqa: E731
-        self.setWindowTitle(f"{constants.APP_NAME} — {self._tr('Watch Face')}")
-        if stay_on_top:
-            self.setWindowFlag(Qt.WindowType.WindowStaysOnTopHint, True)
+        super().__init__("Watch Face", overlay, stay_on_top, parent)
         self._settings = settings
         self._setters = setters
         self._nav_list: QListWidget | None = None

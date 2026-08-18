@@ -6,23 +6,15 @@ hand-written copy that can drift from what actually fires).
 """
 
 from PySide6.QtCore import Qt
-from PySide6.QtWidgets import (
-    QDialog,
-    QHBoxLayout,
-    QHeaderView,
-    QPushButton,
-    QTableWidget,
-    QTableWidgetItem,
-    QVBoxLayout,
-)
+from PySide6.QtWidgets import QHBoxLayout, QHeaderView, QPushButton, QTableWidget, QTableWidgetItem, QVBoxLayout
 
+from app.dialog_base import AcademyDialog
 from app.theme import apply_theme
 from app.ui_style import style_button
-from config import constants, defaults, shortcuts
-from config.ui_text import ui
+from config import defaults, shortcuts
 
 
-class ShortcutsDialog(QDialog):
+class ShortcutsDialog(AcademyDialog):
     """A quiet, modal table: Shortcut / Action — one row per
     `shortcuts.SHORTCUTS` entry, in the table's own curated order (the
     config module's comments already group them Ring/Slots/Fast Travel/
@@ -31,10 +23,9 @@ class ShortcutsDialog(QDialog):
     COLUMNS = ("Shortcut", "Action")
 
     def __init__(self, overlay: dict | None = None, parent=None):
-        super().__init__(parent)
-        tr = self._tr = lambda text: ui(overlay or {}, text)
-        self.setWindowTitle(f"{constants.APP_NAME} — {tr('Shortcuts')}")
-        self.setWindowFlag(Qt.WindowType.WindowStaysOnTopHint, True)
+        super().__init__("Shortcuts", overlay, stay_on_top=True,
+                         parent=parent)
+        tr = self._tr
         self.resize(
             defaults.SHORTCUTS_WINDOW_WIDTH_PX, defaults.SHORTCUTS_WINDOW_HEIGHT_PX
         )

@@ -31,20 +31,9 @@ view (`initial_section="Custom art"`) instead of the ordinary three-section
 list, since nothing else ever routes a user there by browsing.
 """
 
-from PySide6.QtCore import Qt
-from PySide6.QtWidgets import (
-    QDialog,
-    QDialogButtonBox,
-    QFrame,
-    QHBoxLayout,
-    QListWidget,
-    QScrollArea,
-    QStackedWidget,
-    QStyle,
-    QVBoxLayout,
-    QWidget,
-)
+from PySide6.QtWidgets import QDialogButtonBox, QFrame, QHBoxLayout, QListWidget, QScrollArea, QStackedWidget, QStyle, QVBoxLayout, QWidget
 
+from app.dialog_base import AcademyDialog
 from app.settings_dialog.custom_art_section import _CustomArtSectionMixin
 from app.settings_dialog.language_system_section import (
     _LanguageSystemSectionMixin,
@@ -52,13 +41,12 @@ from app.settings_dialog.language_system_section import (
 from app.settings_dialog.location_section import _LocationSectionMixin
 from app.settings_store import Settings, replace
 from app.theme import apply_theme, size_to_screen, style_dialog_buttons
-from config import constants, defaults
-from config.ui_text import ui
+from config import defaults
 from data.locations import shared_locations
 
 
 class SettingsDialog(
-    QDialog,
+    AcademyDialog,
     _LocationSectionMixin,
     _CustomArtSectionMixin,
     _LanguageSystemSectionMixin,
@@ -74,12 +62,8 @@ class SettingsDialog(
     def __init__(self, settings: Settings, skin,
                  overlay: dict | None = None, parent=None,
                  initial_section: str | None = None):
-        super().__init__(parent)
-        self._overlay = overlay or {}
-        self.setWindowTitle(
-            f"{constants.APP_NAME} — {self._tr('Settings')}"
-        )
-        self.setWindowFlag(Qt.WindowType.WindowStaysOnTopHint, True)
+        super().__init__("Settings", overlay, stay_on_top=True,
+                         parent=parent)
         self._settings = settings
         self._skin = skin
         # THE ONE COPY RULE: the 5.6 MB city tree is shared, and this
@@ -257,10 +241,6 @@ class SettingsDialog(
         # never the seeding above.
         self._latitude.valueChanged.connect(self._on_coordinate_tuned)
         self._longitude.valueChanged.connect(self._on_coordinate_tuned)
-
-    def _tr(self, text: str) -> str:
-        """The active language's form of a chrome string (Phase 2)."""
-        return ui(self._overlay, text)
 
     def done(self, result: int) -> None:
         self._locations.release()

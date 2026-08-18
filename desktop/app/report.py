@@ -12,23 +12,12 @@ import csv
 
 from PySide6.QtCore import Qt, QTimer
 from PySide6.QtGui import QColor, QPainter, QPen
-from PySide6.QtWidgets import (
-    QDialog,
-    QFileDialog,
-    QHBoxLayout,
-    QHeaderView,
-    QLabel,
-    QPushButton,
-    QTableWidget,
-    QTableWidgetItem,
-    QVBoxLayout,
-    QWidget,
-)
+from PySide6.QtWidgets import QFileDialog, QHBoxLayout, QHeaderView, QLabel, QPushButton, QTableWidget, QTableWidgetItem, QVBoxLayout, QWidget
 
+from app.dialog_base import AcademyDialog
 from app.theme import apply_theme
 from app.ui_style import style_button, uniform_width
-from config import constants, defaults, palette, profiling
-from config.ui_text import ui
+from config import defaults, palette, profiling
 
 
 def format_ns(ns: int) -> str:
@@ -194,14 +183,12 @@ class _Sparkline(QWidget):
     _empty_text = ""
 
 
-class ReportDialog(QDialog):
+class ReportDialog(AcademyDialog):
     COLUMNS = ("Function", "Calls", "Average", "Min", "Max", "Total", "Last")
 
     def __init__(self, overlay: dict | None = None, parent=None):
-        super().__init__(parent)
-        tr = self._tr = lambda text: ui(overlay or {}, text)
-        self.setWindowTitle(f"{constants.APP_NAME} — {tr('Report')}")
-        self.setWindowFlag(Qt.WindowType.WindowStaysOnTopHint, True)
+        super().__init__("Report", overlay, stay_on_top=True, parent=parent)
+        tr = self._tr
         self.resize(defaults.REPORT_WINDOW_WIDTH_PX,
                     defaults.REPORT_WINDOW_HEIGHT_PX)
 

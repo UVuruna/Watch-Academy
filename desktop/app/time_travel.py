@@ -19,29 +19,14 @@ calendar) via the ONE formatter.
 
 from datetime import datetime
 
-from PySide6.QtCore import Qt, QSize, QTime
+from PySide6.QtCore import QSize, QTime
 from PySide6.QtGui import QIcon
-from PySide6.QtWidgets import (
-    QComboBox,
-    QDialog,
-    QDoubleSpinBox,
-    QFormLayout,
-    QGroupBox,
-    QHBoxLayout,
-    QLabel,
-    QPushButton,
-    QScrollArea,
-    QSizePolicy,
-    QSpinBox,
-    QTimeEdit,
-    QVBoxLayout,
-    QWidget,
-)
+from PySide6.QtWidgets import QComboBox, QDoubleSpinBox, QFormLayout, QGroupBox, QHBoxLayout, QLabel, QPushButton, QScrollArea, QSizePolicy, QSpinBox, QTimeEdit, QVBoxLayout, QWidget
 
+from app.dialog_base import AcademyDialog
 from app.theme import apply_theme, size_to_screen
 from app.ui_style import style_button, uniform_width
 from config import constants, defaults, palette, shortcuts
-from config.ui_text import ui
 from core.deep_time import (
     astro_from_display,
     canonical_proxy,
@@ -63,7 +48,7 @@ _MONTHS_SHORT = (
 )
 
 
-class TimeTravelDialog(QDialog):
+class TimeTravelDialog(AcademyDialog):
     # The third exit (owner 2026-07-15): end the simulation and return
     # the dial to the present immediately (Accepted=1, Rejected=0).
     RETURN_TO_NOW = 2
@@ -101,9 +86,9 @@ class TimeTravelDialog(QDialog):
         default) hides the whole Quick Jump section — every production
         caller supplies it; tests that only exercise the moment editor
         may omit it."""
-        super().__init__(parent)
-        tr = lambda text: ui(overlay or {}, text)  # noqa: E731 — dialog chrome
-        self._tr = tr
+        super().__init__("Time Travel", overlay, stay_on_top=True,
+                         parent=parent)
+        tr = self._tr
         self._jump_callback = jump_callback
         self._jump_cities = jump_cities
         # The ACTIVE year span (astronomical years): the bundled seasons
@@ -117,8 +102,6 @@ class TimeTravelDialog(QDialog):
         self._suffix = show_era_suffix
         self._third_era = third_era
         self._deep_pack = deep_pack
-        self.setWindowTitle(f"{constants.APP_NAME} — {tr('Time Travel')}")
-        self.setWindowFlag(Qt.WindowType.WindowStaysOnTopHint, True)
 
         # A running simulation seeds the moment (owner 2026-07-14) —
         # the PROXY frame plus its cycles arrive from the controller and

@@ -23,7 +23,7 @@ import math
 from datetime import date, timedelta
 
 from PySide6.QtCore import QPointF, QRectF, QSize, Qt, QTimer
-from PySide6.QtGui import QColor, QFont, QGuiApplication, QPainter, QPen, QPolygonF
+from PySide6.QtGui import QColor, QGuiApplication, QPainter, QPen, QPolygonF
 from PySide6.QtWidgets import (
     QCheckBox,
     QComboBox,
@@ -39,10 +39,10 @@ from PySide6.QtWidgets import (
     QWidget,
 )
 
+from app.dialog_base import AcademyDialog
 from app.theme import apply_theme, size_to_screen
 from app.ui_style import style_button, uniform_width
 from config import constants, defaults, encyclopedia_ui, palette
-from config.ui_text import ui
 from core.deep_time import julian_day_of, real_year
 from core.sun import day_length_curve
 from data.observatory import shared_observatory
@@ -1142,23 +1142,12 @@ class _ChartPane(QWidget):
         return hint
 
 
-class ObservatoryDialog(QDialog):
+class ObservatoryDialog(AcademyDialog):
     def __init__(
         self, now, observer, tz, cycles=0, deep=None, translations=None,
         stay_on_top: bool = False,
     ):
-        super().__init__()
-        self._overlay = translations or {}
-        self._tr = lambda text: ui(self._overlay, text)
-        self.setWindowTitle(f"{constants.APP_NAME} — {self._tr('Observatory')}")
-        # FIX ROUND A (owner verdict 2026-07-19, screenshots): a NORMAL
-        # window by default, like the Encyclopedia — but in "top" z-mode
-        # the dial forces itself to the TRUE top of the Z-order
-        # (`native.assert_topmost`, HWND_TOPMOST), so an ordinary window
-        # opens UNDER it. `stay_on_top` is the controller's
-        # `z_mode == "top"` reading; every other z-mode is unchanged.
-        if stay_on_top:
-            self.setWindowFlag(Qt.WindowType.WindowStaysOnTopHint, True)
+        super().__init__("Observatory", translations, stay_on_top)
         self.setWindowFlag(Qt.WindowType.WindowMaximizeButtonHint, True)
         self.setWindowFlag(Qt.WindowType.WindowMinimizeButtonHint, True)
         # NON-MODAL lifecycle (ITEM 1, R4 owner instruction batch

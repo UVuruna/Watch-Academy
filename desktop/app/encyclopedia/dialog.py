@@ -21,16 +21,9 @@ import json
 from datetime import date
 
 from PySide6.QtCore import Qt
-from PySide6.QtWidgets import (
-    QDialog,
-    QHBoxLayout,
-    QLabel,
-    QPushButton,
-    QStackedWidget,
-    QToolButton,
-    QVBoxLayout,
-)
+from PySide6.QtWidgets import QHBoxLayout, QLabel, QPushButton, QStackedWidget, QToolButton, QVBoxLayout
 
+from app.dialog_base import AcademyDialog
 from app.encyclopedia import tree as topic_tree
 from app.encyclopedia.cards import row_content_width
 from app.encyclopedia.home import HomeScreen
@@ -40,7 +33,6 @@ from app.theme import apply_theme
 from app.ui_style import style_button
 from config import constants, defaults, encyclopedia_ui, palette, pantheon, paths
 from config import encyclopedia_tree as tree
-from config.ui_text import ui
 from data.encyclopedia import shared_encyclopedia
 from data.symbolism import shared_symbolism
 
@@ -53,7 +45,7 @@ _session_zoom = 1.0
 _HOME, _THEMES, _READER = 0, 1, 2
 
 
-class EncyclopediaDialog(QDialog):
+class EncyclopediaDialog(AcademyDialog):
     def __init__(
         self,
         translations: dict | None = None,
@@ -66,18 +58,7 @@ class EncyclopediaDialog(QDialog):
         is_daylight: bool = True,
         language: str = "en",
     ):
-        super().__init__()
-        self._overlay = translations or {}
-        self._tr = lambda text: ui(self._overlay, text)
-        self.setWindowTitle(
-            f"{constants.APP_NAME} — {self._tr('Encyclopedia')}"
-        )
-        # A NORMAL window by default (owner 2026-07-13: no stay-on-top —
-        # it must yield to whatever has focus). In "top" z-mode the dial
-        # forces itself to the TRUE top of the Z-order, so the reader
-        # has to follow it up (owner verdict 2026-07-19).
-        if stay_on_top:
-            self.setWindowFlag(Qt.WindowType.WindowStaysOnTopHint, True)
+        super().__init__("Encyclopedia", translations, stay_on_top)
         self.setWindowFlag(Qt.WindowType.WindowMaximizeButtonHint, True)
         self.setWindowFlag(Qt.WindowType.WindowMinimizeButtonHint, True)
         # NON-MODAL lifecycle (ITEM 1, R4 2026-07-20): the controller
