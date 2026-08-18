@@ -52,6 +52,78 @@ from render.art_warm import warm_pending_art
 from render.asset_variants import drain_pending_working
 
 
+class _Drain:
+    """ONE background drain of ONE derived-asset ledger.
+
+    Two ledgers record recipes a paint could not satisfy — the metal
+    recolors (`render.art_warm.warm_pending_art`) and the working-set
+    downscales (`render.asset_variants.drain_pending_working`) — and
+    both are emptied under exactly the same contract, which the OOP
+    audit of 2026-08-18 measured as clone C3 (two 48-line pairs whose
+    own docstrings said "the exact twin of" and "'s exact shape"):
+
+    * **at most one thread alive.** A kick during a running drain sets
+      the rerun flag and the drain loops once more; a second thread is
+      never started, because two threads over one ledger would build the
+      same file twice.
+    * **a kick mid-drain is honored, never lost.** The flag is read
+      under the same lock the kick writes it under, AFTER the body has
+      returned — so a recipe recorded while the body was running is
+      picked up by the extra lap.
+    * **the status row is set on entry and cleared in a `finally`.** A
+      drain that raises still leaves the menus idle rather than stuck on
+      "building…".
+
+    `kick()` is cheap and thread-agnostic on purpose: it runs inside a
+    paint, on the GUI thread."""
+
+    def __init__(self, name: str, opening: str,
+                 body: Callable[[], None],
+                 status: Callable[[str | None], None]) -> None:
+        #: The OS thread name — one per ledger, so a stack dump names
+        #: which drain is running.
+        self._name = name
+        #: The progress row's first line: small batches finish before
+        #: the body's own progress would print, and the row must still
+        #: name the work (0.14.710).
+        self._opening = opening
+        self._body = body
+        self._status = status
+        self._lock = threading.Lock()
+        self._thread: threading.Thread | None = None
+        self._rerun = False
+
+    @property
+    def thread(self) -> threading.Thread | None:
+        """The live drain thread, or None — read by the tests that
+        prove a paint's miss actually started one."""
+        return self._thread
+
+    def kick(self) -> None:
+        """Start the drain, or re-arm the running one."""
+        with self._lock:
+            if self._thread is not None and self._thread.is_alive():
+                self._rerun = True
+                return
+            self._rerun = False
+            self._thread = threading.Thread(
+                target=self._run, daemon=True, name=self._name,
+            )
+            self._thread.start()
+
+    def _run(self) -> None:
+        try:
+            self._status(self._opening)
+            while True:
+                self._body()
+                with self._lock:
+                    if not self._rerun:
+                        return
+                    self._rerun = False
+        finally:
+            self._status(None)
+
+
 class AppController:
     """Owns the watch roster and the app-wide window icon. Each
     WatchController is fully self-contained (its own settings/widget/
@@ -67,21 +139,6 @@ class AppController:
         #: The watches the NEXT warm pass covers — the startup roster, or
         #: the single watch a mid-session ADD WATCH just created.
         self._armed: set = set()
-        # The on-demand art drain (owner bug 2026-08-02): one thread,
-        # re-armed by a rerun flag instead of ever running two at once.
-        self._art_lock = threading.Lock()
-        self._art_thread: threading.Thread | None = None
-        self._art_rerun = False
-        # The on-demand WORKING-SET drain (owner bar 2026-08-09,
-        # MIGRATE-GUI Phase 1): the working-set ledger's own twin of the
-        # art drain above, same one-thread-plus-rerun-flag shape — a
-        # paint after the startup warm has finished (a skin switch, a
-        # time-travel day that pulls in different archetype art) can
-        # still record a fresh miss, and this is what builds it without
-        # a restart.
-        self._working_lock = threading.Lock()
-        self._working_thread: threading.Thread | None = None
-        self._working_rerun = False
         # The on-demand HOVER queue (owner bug 2026-08-06), same shape:
         # one worker, a pending list instead of a rerun flag, because a
         # sweep belongs to ONE watch and two different watches both
@@ -100,6 +157,7 @@ class AppController:
         #: hidden. Written by the warm/drain threads, read on the GUI
         #: thread at menu-open — a single str reference, no lock needed.
         self._warm_status: str | None = None
+        self._install_drains()
         asset_recolor.set_art_stale_notifier(self.kick_art_warm)
         asset_variants.set_working_stale_notifier(self.kick_working_warm)
         self._watches: list[WatchController] = []
@@ -276,7 +334,42 @@ class AppController:
         self._warm_status = line
         print(line)
 
-    # --- the on-demand art drain ---------------------------------------------
+    # --- the two on-demand drains ---------------------------------------------
+
+    def _install_drains(self) -> None:
+        """Build the two on-demand ledger drains. Both are `_Drain`
+        instances over the SAME contract (one thread, a rerun flag, a
+        status row) and differ only in which ledger they empty.
+
+        `_emit_art_ready` is deliberately BOTH drains' landed callback:
+        a working-set copy landing invalidates the same path caches a
+        recolor landing does and wants the same debounced repaint, so it
+        rides the SAME Qt signal rather than a second one (owner bar
+        2026-08-09: "ride the same or an equivalent mechanism")."""
+        self._art_drain = _Drain(
+            "DOMY art drain", "building switched art…",
+            body=lambda: warm_pending_art(
+                progress=self._report_progress,
+                on_ready=self._emit_art_ready,
+                should_stop=lambda: self._quitting,
+            ),
+            status=self._set_warm_status,
+        )
+        self._working_drain = _Drain(
+            "DOMY working-set drain", "building working-set copies…",
+            body=lambda: drain_pending_working(
+                progress=self._report_progress,
+                on_ready=self._emit_art_ready,
+                should_stop=lambda: self._quitting,
+            ),
+            status=self._set_warm_status,
+        )
+
+    def _set_warm_status(self, line: str | None) -> None:
+        """The drains' status door — written by a drain thread, read on
+        the GUI thread at menu-open; a single str reference, no lock
+        needed (see `_warm_status`)."""
+        self._warm_status = line
 
     def kick_art_warm(self) -> None:
         """Drain freshly-recorded derived-art recipes on a background
@@ -286,96 +379,27 @@ class AppController:
         theme switch recorded recipes nobody ever built — the dial
         stayed gold until the next process restart).
 
-        Cheap and thread-agnostic on purpose (it runs inside a paint):
-        one lock, one flag, at most ONE drain thread alive — a kick
-        during a running drain sets the rerun flag and the drain loops
-        once more instead of a second thread starting. Before the
-        startup warm has been armed and started, the kick stands down:
-        that first drain belongs to `run_warm`, AFTER every dial's
-        first frame (owner 2026-07-28 — nothing competes with the
+        Before the startup warm has been armed and started, the kick
+        stands down: that first drain belongs to `run_warm`, AFTER every
+        dial's first frame (owner 2026-07-28 — nothing competes with the
         first paint)."""
         if self._quitting or self._warm_thread is None:
             return
-        with self._art_lock:
-            if self._art_thread is not None and self._art_thread.is_alive():
-                self._art_rerun = True
-                return
-            self._art_rerun = False
-            self._art_thread = threading.Thread(
-                target=self._drain_art, daemon=True, name="DOMY art drain",
-            )
-            self._art_thread.start()
-
-    def _drain_art(self) -> None:
-        """The kicked drain's body: `warm_pending_art` until the ledger
-        is stable, then once more per rerun flag — a kick that arrived
-        mid-drain is honored, never lost."""
-        try:
-            # Small batches finish before their first progress line
-            # would print — the row still names the work (0.14.710).
-            self._warm_status = "building switched art…"
-            while True:
-                warm_pending_art(
-                    progress=self._report_progress,
-                    on_ready=self._emit_art_ready,
-                    should_stop=lambda: self._quitting,
-                )
-                with self._art_lock:
-                    if not self._art_rerun:
-                        return
-                    self._art_rerun = False
-        finally:
-            self._warm_status = None
-
-    # --- the on-demand working-set drain --------------------------------------
+        self._art_drain.kick()
 
     def kick_working_warm(self) -> None:
         """Drain freshly-recorded working-set recipes on a background
         thread — installed as `render.asset_variants`'s stale notifier,
-        rung the moment a paint records a MISSING downscale (the exact
-        twin of `kick_art_warm` above, for the OTHER derived-image
-        ledger, Rule #5: one drain SHAPE, two resources).
+        rung the moment a paint records a MISSING downscale (the OTHER
+        derived-image ledger, Rule #5: one drain SHAPE, two resources).
 
-        Same cheap, thread-agnostic, at-most-one-drain-alive contract as
-        `kick_art_warm`, and the same startup guard: before the startup
+        The same startup guard as `kick_art_warm`: before the startup
         warm has been armed and started, the kick stands down — that
         first drain belongs to `run_warm`'s own VISIBLE-FIRST phase,
         right after every dial's first frame."""
         if self._quitting or self._warm_thread is None:
             return
-        with self._working_lock:
-            if self._working_thread is not None and self._working_thread.is_alive():
-                self._working_rerun = True
-                return
-            self._working_rerun = False
-            self._working_thread = threading.Thread(
-                target=self._drain_working, daemon=True,
-                name="DOMY working-set drain",
-            )
-            self._working_thread.start()
-
-    def _drain_working(self) -> None:
-        """The kicked drain's body — `_drain_art`'s exact shape, over
-        `drain_pending_working` instead of `warm_pending_art`. Reuses
-        `_emit_art_ready` as the landed-copy callback: a working-set
-        copy landing invalidates the same path caches a recolor landing
-        does and wants the same debounced repaint, so it rides the SAME
-        Qt signal rather than a second one (owner bar 2026-08-09: "ride
-        the same or an equivalent mechanism")."""
-        try:
-            self._warm_status = "building working-set copies…"
-            while True:
-                drain_pending_working(
-                    progress=self._report_progress,
-                    on_ready=self._emit_art_ready,
-                    should_stop=lambda: self._quitting,
-                )
-                with self._working_lock:
-                    if not self._working_rerun:
-                        return
-                    self._working_rerun = False
-        finally:
-            self._warm_status = None
+        self._working_drain.kick()
 
     # --- the on-demand hover queue -------------------------------------------
 

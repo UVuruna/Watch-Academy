@@ -272,9 +272,8 @@ def test_a_finish_switch_after_the_warm_drains_again(app, cold_cache):
     startup.start()                                  # warm: came, went
     startup.join()
     manager._warm_thread = startup
-    manager._art_lock = threading.Lock()
-    manager._art_thread = None
-    manager._art_rerun = False
+    manager._warm_status = None
+    manager._install_drains()          # the two `_Drain` objects, as __init__ does
     manager._watches = []
     asset_recolor.set_art_stale_notifier(manager.kick_art_warm)
     try:
@@ -286,11 +285,11 @@ def test_a_finish_switch_after_the_warm_drains_again(app, cold_cache):
         stand_in = asset_recolor.jewel_metal_file(letter, "silver")
         assert stand_in == art_file(letter), "the miss must stand the master in"
 
-        assert manager._art_thread is not None, (
+        assert manager._art_drain.thread is not None, (
             "the miss never kicked a drain — the 2026-08-02 bug is back"
         )
-        manager._art_thread.join(timeout=120)
-        assert not manager._art_thread.is_alive(), "the drain hung"
+        manager._art_drain.thread.join(timeout=120)
+        assert not manager._art_drain.thread.is_alive(), "the drain hung"
         assert pending_art() == [], "the kicked drain left work behind"
         derived = asset_recolor.jewel_metal_path(letter, "silver")
         assert derived.exists(), "the switched finish was never built"
@@ -620,20 +619,19 @@ def test_a_working_set_miss_after_the_warm_drains_again(app, working_set_tree):
     startup.start()                                   # warm: came, went
     startup.join()
     manager._warm_thread = startup
-    manager._working_lock = threading.Lock()
-    manager._working_thread = None
-    manager._working_rerun = False
+    manager._warm_status = None
+    manager._install_drains()          # the two `_Drain` objects, as __init__ does
     manager._watches = []
     asset_variants.set_working_stale_notifier(manager.kick_working_warm)
     try:
         cache = AssetCache().pixmap_by_height(tree / "big.png", 300.0, 1.0)
         assert cache is None, "the miss must stand down, not build inline"
 
-        assert manager._working_thread is not None, (
+        assert manager._working_drain.thread is not None, (
             "the miss never kicked a drain"
         )
-        manager._working_thread.join(timeout=120)
-        assert not manager._working_thread.is_alive(), "the drain hung"
+        manager._working_drain.thread.join(timeout=120)
+        assert not manager._working_drain.thread.is_alive(), "the drain hung"
         assert asset_variants.pending_working() == [], (
             "the kicked drain left work behind"
         )
