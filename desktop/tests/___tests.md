@@ -95,12 +95,23 @@ its own — this file is the ONLY doc in the folder; no `__about/`, no
 
 Nine tests enforce the monorepo constitution's laws rather than astronomy.
 FOUR of them are the standard guard set every project in the monorepo
-carries ([Code Rules](../../../../rules/CODE.md) -> Enforcement) — marked
-**[standard]** below; the rest are this project's own. All four standard
-guards run from [Guard Runner (script)](run_guards.py), which the Claude
-Code hooks in `.claude/settings.json` fire after every edit (`--fast`:
-structure + config sections) and again when a session tries to stop (all
-four). It exits **2**, which is what makes a hook BLOCKING.
+carries ([Code Rules](../../../../rules/CODE.md) -> Guards) — marked
+**[standard]** below; the rest are this project's own. They run from [Guard
+Runner (script)](run_guards.py), which the Claude Code hooks in
+`.claude/settings.json` fire after every edit (`--fast`) and again when a
+session tries to stop (FULL). It exits **2**, which is what makes a hook
+BLOCKING.
+
+**The FULL pass is scoped to what the session touched** (2026-08-18): it
+runs at all only when `rules/hooks/changed_files.py` reports a change, the
+whole-tree art guard runs only when art or a config table moved, and the
+runtime layout audit runs only for the windows whose sources changed
+(`run_guards.WINDOW_SOURCES`, kept beside `test_layout_audit.WINDOWS` — a
+new window needs a row there or it is never audited). "Cannot tell" always
+means RUN EVERYTHING. The FULL pass also calls the monorepo clone guard
+against `clone_ratchet.json` (ONE KIND, ONE CLASS) and the rules-size guard.
+The project's guards, ratchets and their current entries are documented in
+[Enforcement](../../docs/ENFORCEMENT.md).
 
 - **`test_structure_law.py`** **[standard]** — THE STRUCTURE LAW's
   god-file ratchet. Fails the build on any `.py` file over ~1,000 lines
@@ -212,8 +223,9 @@ four). It exits **2**, which is what makes a hook BLOCKING.
   its own reference-set checks (overlap/item-cut); `live_profile_source()`
   is this project's ONE edit, wired to watch 1's real
   `%APPDATA%/Watch Academy/settings.json`. First-run findings, recorded
-  verbatim and NOT fixed per the owner's boundary, live in
-  `.claude/zubi-v2-findings.md` (gitignored `.claude/`, not tracked here).
+  verbatim and NOT fixed per the owner's boundary, survive as
+  `zubi_baseline.json` beside this file — the frozen list, which may only
+  shrink.
 
 ## How to run
 

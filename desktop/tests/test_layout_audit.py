@@ -5,8 +5,10 @@ window whose sections overflow even a 4K screen): the registry now holds
 EVERY top-level window of the project, the checks are the reference set
 from Vibe Coder's audit (OVERLAP and ITEM CUT included — sizes can all
 be green while two cells are painted over each other), and every window
-is screenshotted at its minimum for the DESIGN REVIEW gate
-(`.claude/shots/`, graded >= 8/10 in `.claude/layout-proof.md`).
+is screenshotted at its minimum into `.claude/shots/layout-audit/`.
+Those shots are a debugging aid, not the proof: THE VISUAL PROOF is now
+`python rules/tools/uv.py shot --all` (registry `.claude/uv_windows.py`),
+which writes graded evidence rows a hook can read.
 
 Checked, on a REAL constructed window at its declared minimum AND larger:
 
@@ -52,8 +54,11 @@ wired to watch 1's real settings.json) runs every window a second time.
 ALG-9 (`check_section_taxonomy`) is fed separately, from SettingsDialog's own
 nav structure, in `test_section_taxonomy` below - it is not part of the
 generic walk (see the check's own docstring). First-run findings are recorded
-verbatim, NOT fixed, in `.claude/zubi-v2-findings.md` per the owner's boundary
-("ne popravljaj postojeće stanje, samo ugrađuj pravila za buduće agente").
+verbatim, NOT fixed, per the owner's boundary — the frozen list itself is
+`zubi_baseline.json` beside this file, and it may only shrink.
+lang-ok-begin: the owner's own boundary, quoted verbatim
+    "ne popravljaj postojeće stanje, samo ugrađuj pravila za buduće agente"
+lang-ok-end
 """
 
 from __future__ import annotations
@@ -815,7 +820,7 @@ def test_layout_audit(app, name, factory, states):
                 if _BASELINE_PATH.is_file() else {"_comment": (
                     "THE ZUBI BASELINE RATCHET (owner approval "
                     "2026-08-09): the owner-frozen pre-existing findings "
-                    "(zubi-v2-findings.md), digit/hex-normalized. "
+                    "of 2026-08-08, digit/hex-normalized. "
                     "test_layout_audit fails ONLY on findings not in "
                     "here. Entries may only be REMOVED; adding one "
                     "needs the owner's explicit in-session approval "
@@ -928,7 +933,7 @@ def test_the_audit_actually_inspects_something(app):
 
 
 @pytest.mark.xfail(
-    reason="STALE PIN, recorded in .claude/zubi-v2-findings.md (2026-08-08):"
+    reason="STALE PIN (recorded 2026-08-08 with the frozen Zubi backlog):"
            " its second assertion (roomy == []) now finds 5 elision hits at"
            " the larger size that were never pinned. Part of the owner-frozen"
            " Zubi backlog (baseline ratchet, owner approval 2026-08-09) —"
@@ -968,7 +973,7 @@ def test_the_encyclopedia_cards_outgrow_their_box_when_zoomed(app):
 
 def main() -> int:
     """Report mode: measure EVERY window, print every problem, never stop
-    at the first — the fix list of MIGRATE-LAYOUT.md step 4."""
+    at the first — the fix list of rules/briefs/MIGRATE-LAYOUT.md step 4."""
     _make_app()
     failed = False
     for name, factory, states in WINDOWS:
