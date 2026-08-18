@@ -85,6 +85,9 @@ diagram plus language-neutral pseudocode).
   read before touching art or globbing image files
 - [Enforcement](docs/ENFORCEMENT.md) — every guard installed here and the
   three ratchets, each of which may only shrink
+- [OOP Audit 2026-08-18](docs/AUDIT-OOP-2026-08-18.md) — the ONE KIND, ONE
+  CLASS and STRUCTURE audit: the kind map, the clones, the god-files and
+  the ordered refactor plan
 - [Runtime Notes](docs/RUNTIME-NOTES.md) — golden values, the ~18-minute
   suite, and the root causes that are closed
 - [Main (Entry Point)](desktop/__about/main.md) — what `main.py` does at startup
