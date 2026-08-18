@@ -94,12 +94,20 @@ shared/research/recolor_preview/
 # the TRUE repo root (THE THREE-FOLDER MIGRATION, 2026-08-12) — it did not
 # move into desktop/. `settings.local.json` is personal (per-machine
 # permission grants) and stays out.
+# `.claude/` is ignored EXCEPT the files a fresh clone needs to enforce the
+# laws: `settings.json` carries the two run_guards hooks, `skills/` is the
+# launch/verify recipe, `uv_windows.py` is the window registry `uv shot`
+# imports. The blanket `.claude/` line that used to sit below this block is
+# gone: git never re-includes a file under an ignored DIRECTORY, so it
+# silently cancelled every `!` line here.
 .claude/*
 !.claude/settings.json
 !.claude/skills/
+!.claude/uv_windows.py
 .claude/settings.local.json
 
-
-# Claude Code working folder - never tracked (owner decree 2026-08-09)
-.claude/
-/tests/run_guards.py
+# Machine-written working files of the session runner (root rules/tools/uv.py)
+# and the session ledger — never tracked. Listed explicitly so they stay
+# ignored even if the whitelist above ever widens.
+.claude/sessions/
+.claude/evidence/

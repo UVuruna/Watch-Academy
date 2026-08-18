@@ -1,0 +1,90 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(xargs -I {} find {} -type d)",
+      "Skill(deep-research)",
+      "Skill(deep-research:*)",
+      "Workflow(deep-research)",
+      "WebSearch",
+      "WebFetch(domain:daysoftheweek.org)",
+      "WebFetch(domain:sonsofvikings.com)",
+      "WebFetch(domain:en.wikipedia.org)",
+      "WebFetch(domain:www.ancient-origins.net)",
+      "WebFetch(domain:www.historyskills.com)",
+      "WebFetch(domain:mythnerd.com)",
+      "WebFetch(domain:historycooperative.org)",
+      "WebFetch(domain:www.thecollector.com)",
+      "WebFetch(domain:worldhistoryedu.com)",
+      "WebFetch(domain:pantheon.org)",
+      "WebFetch(domain:www.universetoday.com)",
+      "WebFetch(domain:www.oldgreekgods.com)",
+      "WebFetch(domain:empiresofold.com)",
+      "WebFetch(domain:www.culturefrontier.com)",
+      "WebFetch(domain:greekreporter.com)",
+      "Bash(powershell -Command \"Get-Date\")",
+      "Bash(curl -s \"https://daysoftheweek.org/origins/\")",
+      "WebFetch(domain:www.theoi.com)",
+      "WebFetch(domain:www.worldhistory.org)",
+      "Bash(powershell -Command \"Write-Host 'Starting claim verification for Uranus'\")",
+      "Bash(powershell -Command ' *)",
+      "Bash(curl -s \"https://en.wikipedia.org/wiki/Uranus\")",
+      "Bash(curl -s \"https://pantheon.org/miscellaneous/origin_names_celestial_bodies.php\")",
+      "Bash(git log *)",
+      "Bash(python -m pytest tests -q)",
+      "Bash(python -c ' *)",
+      "Bash(sed 's/```//')",
+      "Bash(python desktop/tests/run_guards.py)",
+      "Bash(git remote *)",
+      "Bash(echo \"EXIT:$?\")",
+      "Bash(cd /u/Coding/UVuruna/Applications/WatchAcademy *)",
+      "Bash(python:*)",
+      "Bash(python3:*)",
+      "Bash(git status:*)",
+      "Bash(git log:*)",
+      "Bash(git diff:*)",
+      "Bash(git mv:*)",
+      "Bash(git add:*)",
+      "Bash(git ls-files:*)",
+      "Bash(git check-ignore:*)",
+      "Bash(ls:*)",
+      "Bash(find:*)",
+      "Bash(grep:*)",
+      "Bash(du:*)",
+      "Bash(wc:*)",
+      "Bash(head:*)",
+      "Bash(tail:*)",
+      "Bash(sed:*)",
+      "Bash(cat:*)",
+      "Bash(mkdir:*)",
+      "Bash(mv:*)",
+      "Bash(echo:*)",
+      "Bash(for:*)"
+    ],
+    "additionalDirectories": [
+      "U:\\Coding\\UVuruna\\Applications\\WatchAcademy"
+    ]
+  },
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Write|Edit|MultiEdit|NotebookEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python desktop/tests/run_guards.py --fast"
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python desktop/tests/run_guards.py"
+          }
+        ]
+      }
+    ]
+  }
+}
