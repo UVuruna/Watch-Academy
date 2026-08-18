@@ -47,6 +47,9 @@ schematic X would not teach "ceramic" at all.
   own fidelity engine (the `chi` figure alone)
 - [Assets](assets.md) — `shared_cache`, the process-wide recolor cache
   (the `chi` figure alone)
+- [Diagram Bank](diagram_bank.md) — `plate()`/`kinds()` are one bank's
+  bound methods; this is the KEY-indexed shape, because all twelve
+  figures answer under the single kind `"instrument"`
 
 ### Used by
 - [Diagrams](diagrams.md) — the one door a page's `(kind, key)` goes

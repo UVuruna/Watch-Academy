@@ -57,7 +57,8 @@ re-tuned palette moves the whole cube at once and no hex is ever
 hand-picked here (Rule #4).
 
 ## Design Decisions
-- **One master, scaled.** `plate()` caches per (kind, key, size), but
+- **One master, scaled.** `plate()` — a [Diagram Bank](diagram_bank.md)
+  built over this module's `_DRAWERS` — caches per (kind, key, size), but
   the reader always asks for `CUBE_DIAGRAM_SIDE_PX` and scales that one
   pixmap itself — a page turn never repaints the same figure twice, and
   one drawing serves every zoom level.

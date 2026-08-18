@@ -11,7 +11,6 @@ recipe.
 """
 
 import sys
-import threading
 from pathlib import Path
 
 import numpy as np
@@ -20,6 +19,7 @@ from PySide6.QtGui import QColor, QImage, QPixmap
 from config import defaults, palette, paths, profiling
 from config.paths import art_file
 from render import letter_bake, raster_store
+from render.locks import KeyedLocks
 from render.assets import AssetCache
 
 
@@ -276,8 +276,7 @@ def _recolored_plate(
 # a background thread that has none, so the shade cannot be re-read at
 # build time — it must be remembered.
 _PENDING_VARIANTS: dict[str, tuple[Path, str, str, str, str]] = {}
-_VARIANT_LOCKS: dict[str, threading.Lock] = {}
-_VARIANT_LOCKS_GUARD = threading.Lock()
+_VARIANT_LOCK = KeyedLocks()
 
 # THE STALE NOTIFIER (owner bug 2026-08-02: "kada promjenim sa npr
 # DOLLAR NA DOMY thematic bude zlatni i ne uradi RECOLOR dok ne ugasim
@@ -298,14 +297,6 @@ def set_art_stale_notifier(notifier) -> None:
     thread, mirroring `shared_cache()`'s one-per-process shape."""
     global _ART_STALE_NOTIFIER
     _ART_STALE_NOTIFIER = notifier
-
-
-def _variant_lock(key: str) -> threading.Lock:
-    with _VARIANT_LOCKS_GUARD:
-        lock = _VARIANT_LOCKS.get(key)
-        if lock is None:
-            lock = _VARIANT_LOCKS[key] = threading.Lock()
-        return lock
 
 
 def metal_variant_path(path: Path, metal: str | None) -> Path:
@@ -378,7 +369,7 @@ def ensure_variant(path: Path | None) -> Path | None:
     recipe = _PENDING_VARIANTS.get(key)
     if recipe is None or path.exists():
         return path
-    with _variant_lock(key):
+    with _VARIANT_LOCK(key):
         if path.exists():
             return path
         source, metal, source_metal, mask_mode, shade = recipe

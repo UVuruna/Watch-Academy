@@ -89,7 +89,8 @@ band never pays for it.
 - `metal_variant_path(path, metal)`: PURE cache-path computation + a
   ledger recipe entry — no pixel work.
 - `ensure_variant(path)`: materializes a recorded variant on first use,
-  per-path locked.
+  per-path locked — one lock per cache path, from the shared
+  [Locks](locks.md) table `_VARIANT_LOCK`.
 - `variant_pending(path)`: recorded-but-not-yet-built test, read by the
   Encyclopedia's exists-or-pending filter.
 - `metal_variant_file(path, metal)`: the EAGER door — path + ensure in

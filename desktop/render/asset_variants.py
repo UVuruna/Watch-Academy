@@ -35,7 +35,6 @@ first-use cache the ledger does not cover.
 import math
 import os
 import sys
-import threading
 from pathlib import Path
 
 from PySide6.QtCore import Qt, QPointF, QRectF
@@ -49,6 +48,7 @@ from config import (
 from config.paths import art_file
 from render import raster_store
 from render.asset_recolor import _recolored_plate, tinted_pixmap
+from render.locks import KeyedLocks
 
 
 _ring_face_colors: dict[str, QColor] = {}
@@ -332,8 +332,7 @@ def working_ceiling(path: Path | None) -> int | None:
 # the on-demand kick (`app.watch_manager.AppController.kick_working_warm`,
 # installed as this ledger's stale notifier) call.
 _PENDING_WORKING: dict[str, tuple[Path, int]] = {}
-_WORKING_LOCKS: dict[str, threading.Lock] = {}
-_WORKING_LOCKS_GUARD = threading.Lock()
+_WORKING_LOCK = KeyedLocks()
 
 #: Rung by `working_variant_path` the moment a paint records a MISS —
 #: the working-set twin of `asset_recolor._ART_STALE_NOTIFIER`. Must
@@ -358,14 +357,6 @@ def working_stale_notify() -> None:
     globals directly."""
     if _WORKING_STALE_NOTIFIER is not None:
         _WORKING_STALE_NOTIFIER()
-
-
-def _working_lock(key: str) -> threading.Lock:
-    with _WORKING_LOCKS_GUARD:
-        lock = _WORKING_LOCKS.get(key)
-        if lock is None:
-            lock = _WORKING_LOCKS[key] = threading.Lock()
-        return lock
 
 
 def working_variant_path(path: Path, ceiling: int) -> Path:
@@ -423,7 +414,7 @@ def ensure_working_variant(path: Path | None) -> Path | None:
     recipe = _PENDING_WORKING.get(key)
     if recipe is None or path.exists():
         return path
-    with _working_lock(key):
+    with _WORKING_LOCK(key):
         if path.exists():
             return path
         source, ceiling = recipe

@@ -19,14 +19,22 @@ flowchart LR
         IF cell is The One (center): RETURN the dial's accent color
         ELSE: RETURN the AVERAGE of the poles the cell stands between
 
-## The plate cache (`plate`)
+## The plate cache (`render.diagram_bank.DiagramBank`)
 
-    FUNCTION plate(kind, key, size):
+This module declares `_DRAWERS` and hands it to one bank; the lookup,
+the cache and `kinds()` live there, written once for all three diagram
+modules ([Diagram Bank](../__about/diagram_bank.md)):
+
+    _BANK = DiagramBank(_DRAWERS)          # indexed by KIND
+    plate = _BANK.plate
+    kinds = _BANK.kinds
+
+    FUNCTION DiagramBank.plate(kind, key, size):
         cache_key = (kind, key, size)
         IF cache_key not cached:
             drawer = _DRAWERS[kind]                  # None -> QPixmap() (unknown kind)
-            _CACHE[cache_key] = drawer(key, size)
-        RETURN _CACHE[cache_key]
+            cache[cache_key] = drawer(key, size)
+        RETURN cache[cache_key]
 
 Drawing is cheap, but a page turn must never repaint the same figure
 twice. The reader always REQUESTS `CUBE_DIAGRAM_SIDE_PX` and scales

@@ -42,7 +42,9 @@ ways.
   the three table-shaped pages, all through one shared table drawer
   (`_draw_table`).
 - `plate(kind, key, size)` / `kinds()`: the module's door, read by
-  [Diagrams](diagrams.md).
+  [Diagrams](diagrams.md). Both are bound methods of one
+  [Diagram Bank](diagram_bank.md) built over `_DRAWERS` — this module
+  declares WHAT it draws and nothing about caching or dispatch.
 
 ## Design Decisions
 - **Nothing parses an article.** The stations and fields were prose

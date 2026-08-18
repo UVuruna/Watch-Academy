@@ -34,7 +34,9 @@ resulting 3-file cycle with a LOCAL import inside `pixmap_by_height`.
 **THE LAZY WORKING-SET LEDGER** (owner bar 2026-08-09, MIGRATE-GUI
 Phase 1 — "the 75-second dead clock"): mirrors `asset_recolor.py`'s
 `_PENDING_VARIANTS`/`jewel_metal_path`/`pending_art`/`ensure_variant`/
-`warm_pending_art` SHAPE for a different resource. Root cause: the GUI
+`warm_pending_art` SHAPE for a different resource — including its
+per-key lock table, which is why both now hold an instance of the one
+[Locks](locks.md) class instead of two hand-written copies. Root cause: the GUI
 paint path used to call `scaled_variant_file(path, ceiling)` with
 `build=True` on a cache MISS — a multi-MB decode INSIDE `paintEvent`.
 `working_variant_path(path, ceiling)` now only NAMES a working copy —

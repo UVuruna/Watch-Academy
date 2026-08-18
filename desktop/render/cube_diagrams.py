@@ -28,6 +28,7 @@ from PySide6.QtGui import QColor, QFont, QPainter, QPen, QPixmap
 
 from config import cube, encyclopedia_ui, palette
 from core import cube_seating
+from render.diagram_bank import DiagramBank
 
 # THE ISOMETRIC EYE. A cube of 27 cells read on a flat page needs a
 # projection that never lets two different cells land on the same point;
@@ -333,24 +334,7 @@ _DRAWERS = {
     "banknote": lambda _key, size: banknote_axes(size),
 }
 
-_CACHE: dict = {}
+_BANK = DiagramBank(_DRAWERS)
 
-
-def plate(kind: str, key: str, size: int) -> QPixmap:
-    """The diagram for one page, cached per (kind, key, size). Drawing
-    is cheap, but a page turn must never repaint the same figure twice —
-    the reader re-fits on every resize."""
-    cached = _CACHE.get((kind, key, size))
-    if cached is None:
-        drawer = _DRAWERS.get(kind)
-        if drawer is None:
-            return QPixmap()
-        cached = drawer(key, size)
-        _CACHE[(kind, key, size)] = cached
-    return cached
-
-
-def kinds() -> tuple:
-    """Every kind this module answers — the coverage test reads it so a
-    page can never declare a diagram nobody draws."""
-    return tuple(_DRAWERS)
+plate = _BANK.plate
+kinds = _BANK.kinds

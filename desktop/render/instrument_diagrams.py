@@ -33,6 +33,7 @@ from PySide6.QtGui import (
 from config import constants, dial, doctrine, encyclopedia_ui, palette, paths
 from core import angles
 from render import letter_plates
+from render.diagram_bank import DiagramBank
 
 # The twelve figures this module draws, in the order the Instrument topic
 # reads them. `app.encyclopedia.tree` imports this tuple rather than
@@ -920,25 +921,9 @@ _DRAWERS = {
     "oscillations": _oscillations,
     "chi": _chi,
 }
-_CACHE: dict = {}
+# The KEY names the figure here, not the kind: all twelve live under the
+# one kind "instrument".
+_BANK = DiagramBank(_DRAWERS, key_by="key", answers=("instrument",))
 
-
-def plate(kind: str, key: str, size: int) -> QPixmap:
-    """The figure for one page, cached per (kind, key, size) — the
-    reader re-fits on every resize and must never redraw the same
-    figure twice. `kind` is always "instrument"; the KEY names the
-    figure."""
-    cached = _CACHE.get((kind, key, size))
-    if cached is None:
-        drawer = _DRAWERS.get(key)
-        if drawer is None:
-            return QPixmap()
-        cached = drawer(key, size)
-        _CACHE[(kind, key, size)] = cached
-    return cached
-
-
-def kinds() -> tuple:
-    """The one kind this module answers — the facade reads it to route a
-    page's declaration here."""
-    return ("instrument",)
+plate = _BANK.plate
+kinds = _BANK.kinds

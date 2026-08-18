@@ -25,6 +25,7 @@ from PySide6.QtGui import QColor, QFont, QPainter, QPen, QPixmap
 
 from config import archetypes, cube, doctrine, encyclopedia_ui, palette
 from core import angles
+from render.diagram_bank import DiagramBank
 
 _INK = palette.THEME_COLORS["text_primary"]
 _MUTED = palette.THEME_COLORS["text_secondary"]
@@ -319,20 +320,7 @@ _DRAWERS = {
     "fields": lambda _key, size: union_fields(size),
 }
 
-_CACHE: dict = {}
+_BANK = DiagramBank(_DRAWERS)
 
-
-def plate(kind: str, key: str, size: int) -> QPixmap:
-    """The diagram for one page, cached per (kind, key, size)."""
-    cached = _CACHE.get((kind, key, size))
-    if cached is None:
-        drawer = _DRAWERS.get(kind)
-        if drawer is None:
-            return QPixmap()
-        cached = drawer(key, size)
-        _CACHE[(kind, key, size)] = cached
-    return cached
-
-
-def kinds() -> tuple:
-    return tuple(_DRAWERS)
+plate = _BANK.plate
+kinds = _BANK.kinds
