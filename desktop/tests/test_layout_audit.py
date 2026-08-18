@@ -21,13 +21,18 @@ Checked, on a REAL constructed window at its declared minimum AND larger:
                     (item views truncate silently; items are not widgets)
   E. OVERLAP      — two cells of one layout drawn on the same pixels
 
-plus the two preconditions the law puts on every window:
+plus the ONE precondition the law puts on every window:
 
-  - a DECLARED minimum size, COMPUTED from real content, and
-  - that minimum FITS THE SCREEN FLOOR 1280x720 — a window demanding a
-    screen the user does not have is the absurd-minimum bug; the answer
-    is REFLOW, never widen (`.claude/layout-frame.json` may raise the
-    floor, with a written reason).
+  - a DECLARED minimum size, COMPUTED from real content.
+
+The minimum is REPORTED, never judged (owner decree 2026-08-18, which
+abolished the fixed 1280x720 screen floor): "1280x720 is nobody's
+screen; a window is judged on the device profiles it is shot on; what
+is taller than a screen scrolls; the minimum is information, never a
+verdict." `report_minimum()` prints each window's declared minimum
+beside the reference profile screen; nothing fails on that comparison.
+The CLIPPED / STARVED / CONTRAST teeth above are untouched — they are
+what actually decides whether a window is readable.
 
 Windows NOT in the registry, and why:
   - ClockWidget — the frameless transparent dial itself; its size is the
@@ -112,15 +117,19 @@ SLACK_TOLERANCE = 24
 # px of padding assumed between a framed element's frame and its text
 TEXT_PADDING = 8
 
-# The screen every window must survive. Raising it needs
-# `.claude/layout-frame.json` = {"width": W, "height": H, "reason": "..."}.
+# The REFERENCE screen a declared minimum is printed beside - information,
+# never a verdict (owner decree 2026-08-18). The number is the `pc-low` device
+# profile's screen (rules/devices.json), kept only so the reported line has
+# something to compare against; `.claude/layout-frame.json` = {"width": W,
+# "height": H, "reason": "..."} names a different reference when a project's
+# audience has one.
 _FRAME_FILE = REPO_ROOT / ".claude" / "layout-frame.json"
-FLOOR_WIDTH, FLOOR_HEIGHT = 1280, 720
+REFERENCE_WIDTH, REFERENCE_HEIGHT = 1280, 720
 if _FRAME_FILE.is_file():
     _frame = json.loads(_FRAME_FILE.read_text(encoding="utf-8"))
     if _frame.get("reason"):
-        FLOOR_WIDTH = int(_frame.get("width", FLOOR_WIDTH))
-        FLOOR_HEIGHT = int(_frame.get("height", FLOOR_HEIGHT))
+        REFERENCE_WIDTH = int(_frame.get("width", REFERENCE_WIDTH))
+        REFERENCE_HEIGHT = int(_frame.get("height", REFERENCE_HEIGHT))
 
 # The DESIGN REVIEW shots: one per window state, at the declared minimum.
 # In a TOPIC subfolder (rules/GUI.md -> "Screenshots live in TOPIC
@@ -189,16 +198,32 @@ def _walk(window: QWidget):
 
 
 def check_declared_minimum(window: QWidget) -> list[str]:
+    """The law still requires a minimum to EXIST and to be computed from real
+    content. How BIG it is stopped being a verdict on 2026-08-18 - see
+    `report_minimum` below."""
     minimum = window.minimumSize()
     if minimum.width() <= 0 or minimum.height() <= 0:
         return ["no declared minimum size - the law requires one, COMPUTED "
                 "from the longest real content (setMinimumSize)"]
-    if minimum.width() > FLOOR_WIDTH or minimum.height() > FLOOR_HEIGHT:
-        return [f"ABSURD MINIMUM {minimum.width()}x{minimum.height()} - it "
-                f"does not fit the screen floor {FLOOR_WIDTH}x{FLOOR_HEIGHT}: "
-                "the window demands a screen the user does not have. REFLOW "
-                "it (ladder step 2); widening your way out is the bug itself"]
     return []
+
+
+def report_minimum(tag: str, window: QWidget) -> None:
+    """INFORMATION, never a verdict (owner decree 2026-08-18: "1280x720 is
+    nobody's screen; a window is judged on the device profiles it is shot on;
+    what is taller than a screen scrolls; the minimum is information, never a
+    verdict"). The old ABSURD MINIMUM failure lived here and failed windows for
+    a screen size nobody owns; what is taller than the screen scrolls."""
+    minimum = window.minimumSize()
+    over = []
+    if minimum.width() > REFERENCE_WIDTH:
+        over.append(f"+{minimum.width() - REFERENCE_WIDTH}px wide")
+    if minimum.height() > REFERENCE_HEIGHT:
+        over.append(f"+{minimum.height() - REFERENCE_HEIGHT}px tall")
+    note = f"  [{', '.join(over)} - scrolls there]" if over else ""
+    print(f"[layout-audit] {tag}: declared minimum "
+          f"{minimum.width()}x{minimum.height()}  "
+          f"(reference screen {REFERENCE_WIDTH}x{REFERENCE_HEIGHT}){note}")
 
 
 def _layout_cells(layout: QLayout, path: str = ""):
@@ -716,6 +741,7 @@ def audit_window(name: str, factory, states, profile: str = "") -> list[str]:
 
     tag = f"{name} ({profile})" if profile else name
     problems = [f"[{tag}] {p}" for p in check_declared_minimum(window)]
+    report_minimum(tag, window)
     width, height = _effective_minimum(window)
     state_list = states(window) if states else [("", None)]
     for label, activate in state_list:

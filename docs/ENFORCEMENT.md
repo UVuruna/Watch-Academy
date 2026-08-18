@@ -32,11 +32,13 @@ Exit 2 blocks. The FULL pass runs only when
 | `test_config_cohesion.py` | full | Session 36's config split undone — a `config/*.py` over the threshold, or a moved name still reachable through `defaults` |
 | `test_theme_completeness.py` | full | a registered theme with no text, or a theme folder that is neither registered nor in the staging ledger |
 | `test_art_reachability.py` | full, art only | art on disk that nothing in the program can reach (walks the whole assets tree — runs only when art, config or registry files were touched) |
-| `test_layout_audit.py` | full, GUI only | THE SPACE & LEGIBILITY LAW, runtime half — builds each touched window offscreen and measures it |
+| `test_layout_audit.py` | full, GUI only | THE SPACE & LEGIBILITY LAW, runtime half — builds each touched window offscreen and measures it (clipped, elided, scroll+slack, item cut, overlap, contrast). A window's declared minimum must EXIST; its SIZE is printed, never judged |
 | `clone_guard.py` (monorepo) | full | a duplicated function body across two files, outside `tests/clone_ratchet.json` |
 
 `test_config_cohesion.py` and `test_theme_completeness.py` are
 project-specific and are NOT part of the standard four.
+
+**The screen floor was abolished on 2026-08-18** (owner decree): "1280×720 is nobody's screen; a window is judged on the device profiles it is shot on; what is taller than a screen scrolls; the minimum is information, never a verdict." The old ABSURD MINIMUM failure in `test_layout_audit.py` / `layout_checks_qt.py` is now the informational line `report_minimum()` prints beside each window — the declared minimum against the `pc-low` reference screen. The clipped, starved and contrast teeth are unchanged.
 
 Screenshot evidence for GUI work is produced by the monorepo runner —
 `python u:/Coding/UVuruna/rules/tools/uv.py shot --all`, window registry in

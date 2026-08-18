@@ -29,10 +29,14 @@ from PySide6.QtWidgets import (QAbstractScrollArea, QAbstractSlider,
 
 # --- CONFIGURATION (thresholds - a project that must bend one bends it here,
 # with the reason written beside it) ------------------------------------------
-# The screen every window must survive. A declared minimum bigger than this is
-# the absurd-minimum bug (a two-item menu demanding 6000px): REFLOW, never widen.
-# Raising it needs `.claude/layout-frame.json` with a stated reason.
-FLOOR_WIDTH, FLOOR_HEIGHT = 1280, 720
+# The REFERENCE screen a declared minimum is REPORTED beside - information,
+# never a verdict (owner decree 2026-08-18, which abolished the fixed screen
+# floor: "1280x720 is nobody's screen; a window is judged on the device
+# profiles it is shot on; what is taller than a screen scrolls; the minimum is
+# information, never a verdict"). The number is the `pc-low` device profile's
+# screen (rules/devices.json); `.claude/layout-frame.json` names another when a
+# project's audience has one.
+REFERENCE_WIDTH, REFERENCE_HEIGHT = 1280, 720
 # px of slack tolerated before a spacer counts as "unused space"
 SLACK_TOLERANCE = 24
 # px of padding assumed between an element's frame and its text
@@ -106,16 +110,28 @@ def settle(window: QWidget) -> None:
     instance.processEvents()
 
 def check_declared_minimum(window: QWidget) -> list[str]:
+    """The law still requires a minimum to EXIST, computed from real content.
+    How BIG it is stopped being a verdict on 2026-08-18 - `describe_minimum`
+    reports it instead."""
     minimum = window.minimumSize()
     if minimum.width() <= 0 or minimum.height() <= 0:
         return ["no declared minimum size - the law requires one, COMPUTED "
                 "from the longest real content (setMinimumSize)"]
-    if minimum.width() > FLOOR_WIDTH or minimum.height() > FLOOR_HEIGHT:
-        return [f"ABSURD MINIMUM {minimum.width()}x{minimum.height()} - it does "
-                f"not fit the screen floor {FLOOR_WIDTH}x{FLOOR_HEIGHT}, so "
-                "the window demands a screen the user does not have. REFLOW "
-                "it (ladder step 2); widening your way out is the bug itself"]
     return []
+
+
+def describe_minimum(window: QWidget) -> str:
+    """One INFORMATION line: the declared minimum beside the reference profile
+    screen. Never a failure - what is taller than a screen scrolls."""
+    minimum = window.minimumSize()
+    over = []
+    if minimum.width() > REFERENCE_WIDTH:
+        over.append(f"+{minimum.width() - REFERENCE_WIDTH}px wide")
+    if minimum.height() > REFERENCE_HEIGHT:
+        over.append(f"+{minimum.height() - REFERENCE_HEIGHT}px tall")
+    note = f"  [{', '.join(over)} - scrolls there]" if over else ""
+    return (f"declared minimum {minimum.width()}x{minimum.height()}  "
+            f"(reference screen {REFERENCE_WIDTH}x{REFERENCE_HEIGHT}){note}")
 def _fits_its_own_content(widget: QWidget) -> bool:
     """Whether a widget the author gave a FIXED height still shows all of
     its content.

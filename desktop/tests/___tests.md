@@ -220,9 +220,12 @@ The project's guards, ratchets and their current entries are documented in
   algorithmic teeth (extreme-state matrix, contrast, tooltip geometry, space
   ceiling, uniform siblings, radius-by-aspect-ratio, row occupancy, live
   profile, section taxonomy). `test_layout_audit.py` folds these in beside
-  its own reference-set checks (overlap/item-cut); `live_profile_source()`
-  is this project's ONE edit, wired to watch 1's real
-  `%APPDATA%/Watch Academy/settings.json`. First-run findings, recorded
+  its own reference-set checks (overlap/item-cut). Two edits diverge from
+  the template: `live_profile_source()` is wired to watch 1's real
+  `%APPDATA%/Watch Academy/settings.json`, and the screen-floor verdict
+  was turned into INFORMATION on 2026-08-18 (owner decree — a declared
+  minimum is REPORTED beside the `pc-low` reference screen, never
+  failed; what is taller than a screen scrolls). First-run findings, recorded
   verbatim and NOT fixed per the owner's boundary, survive as
   `zubi_baseline.json` beside this file — the frozen list, which may only
   shrink.
