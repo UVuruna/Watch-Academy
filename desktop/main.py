@@ -11,7 +11,7 @@ from PySide6.QtCore import Qt
 from PySide6.QtGui import QGuiApplication
 from PySide6.QtWidgets import QApplication
 
-from config import constants, paths
+from config import identity, paths
 
 # Held open for faulthandler's whole lifetime — a garbage-collected file
 # object would close the fd out from under it.
@@ -41,7 +41,7 @@ def _install_crash_logging() -> None:
         print(f"crash log unavailable: {error}", file=sys.stderr)
         return
     _crash_log.write(
-        f"\n===== {constants.APP_NAME} session "
+        f"\n===== {identity.APP_NAME} session "
         f"{datetime.now():%Y-%m-%d %H:%M:%S} (pid {os.getpid()}) =====\n"
     )
     _crash_log.flush()
@@ -73,8 +73,8 @@ def _migrate_legacy_user_dir() -> None:
     appdata = os.environ.get("APPDATA")
     if not appdata:
         return
-    legacy = Path(appdata) / constants.APP_NAME_LEGACY
-    current = Path(appdata) / constants.APP_NAME
+    legacy = Path(appdata) / identity.APP_NAME_LEGACY
+    current = Path(appdata) / identity.APP_NAME
     if legacy.is_dir() and not current.exists():
         try:
             legacy.rename(current)
@@ -96,7 +96,7 @@ def main() -> int:
     # (owner screenshot 2026-07-20: Encyclopedia/Guide/Observatory showed
     # python's own logo in the taskbar) — needs no QApplication and no
     # HWND, so it runs first.
-    native.set_app_user_model_id(constants.APP_USER_MODEL_ID)
+    native.set_app_user_model_id(identity.APP_USER_MODEL_ID)
     # ...and the autostart entry follows the name once, the same decree.
     native.migrate_legacy_autostart()
     # Must run before QApplication exists: 125%/150% Windows scaling should
@@ -105,19 +105,19 @@ def main() -> int:
         Qt.HighDpiScaleFactorRoundingPolicy.PassThrough
     )
     app = QApplication(sys.argv)
-    app.setApplicationName(constants.APP_NAME)
-    app.setOrganizationName(constants.ORGANIZATION)
+    app.setApplicationName(identity.APP_NAME)
+    app.setOrganizationName(identity.ORGANIZATION)
     # The dial is a Qt.Tool window and the settings dialog comes and goes —
     # without this, closing any dialog would quit the whole app.
     app.setQuitOnLastWindowClosed(False)
 
     from app.watch_manager import AppController
 
-    if not native.acquire_single_instance(constants.SINGLE_INSTANCE_MUTEX):
+    if not native.acquire_single_instance(identity.SINGLE_INSTANCE_MUTEX):
         from PySide6.QtWidgets import QMessageBox
 
         QMessageBox.information(
-            None, constants.APP_NAME, "Watch Academy is already running."
+            None, identity.APP_NAME, "Watch Academy is already running."
         )
         return 0
 

@@ -164,7 +164,7 @@ def test_shortcut_table_covers_the_owner_named_candidates():
 
 def test_shortcut_table_never_collides_with_the_hidden_mode_secret():
     """Every shortcut carries a MODIFIER — the secret buffer
-    (`constants.HIDDEN_MODE_SECRET`) only ever sees PRINTABLE
+    (`identity.HIDDEN_MODE_SECRET`) only ever sees PRINTABLE
     NO-MODIFIER text (`ClockWidget.keyPressEvent`), so a held-modifier
     combo can never feed it by construction; pinned here as an
     explicit table-shape assertion, not just an inline comment."""

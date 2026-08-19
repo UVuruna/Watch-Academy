@@ -30,7 +30,7 @@ from PySide6.QtGui import QAction, QMouseEvent
 from PySide6.QtWidgets import QApplication, QMenu
 
 from app import native
-from config import winapi
+from config import identity, winapi
 
 
 @pytest.fixture(scope="module")
@@ -332,13 +332,13 @@ def test_the_renaming_migrates_the_legacy_user_dir(tmp_path, monkeypatch):
 
     monkeypatch.setenv("APPDATA", str(tmp_path))
     monkeypatch.delenv("WATCH_ACADEMY_USER_DIR_OVERRIDE", raising=False)
-    legacy = tmp_path / constants.APP_NAME_LEGACY
+    legacy = tmp_path / identity.APP_NAME_LEGACY
     legacy.mkdir()
     (legacy / "settings.json").write_text('{"live": 1}', encoding="utf-8")
 
     main_mod._migrate_legacy_user_dir()
 
-    current = tmp_path / constants.APP_NAME
+    current = tmp_path / identity.APP_NAME
     assert not legacy.exists()
     assert (current / "settings.json").read_text(
         encoding="utf-8"

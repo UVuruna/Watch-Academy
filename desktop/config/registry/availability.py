@@ -4,7 +4,7 @@ Owner-sealed ballot verdict 2026-08-12. Content is either BASE (unlocked
 the moment the app installs) or LOCKED (L1 lock — visible in the picker
 and the Encyclopedia, but not enterable until the owner's future
 download/unlock flow admits it). On desktop, the existing
-`constants.HIDDEN_MODE_SECRET` typed-sequence unlock
+`identity.HIDDEN_MODE_SECRET` typed-sequence unlock
 (`app.controller.Controller._collect_secret`) is the FUTURE trigger that
 flips every LOCKED theme open at once for that session — this module
 does not touch that mechanism, it only names the set it will one day

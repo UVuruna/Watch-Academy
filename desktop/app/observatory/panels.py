@@ -18,7 +18,7 @@ from PySide6.QtWidgets import (
 from app.observatory.charts import ChartBase
 from app.theme import apply_theme
 from app.ui_style import style_button
-from config import constants, defaults, encyclopedia_ui, palette
+from config import defaults, encyclopedia_ui, identity, palette
 
 
 def build_info_panel(
@@ -97,7 +97,7 @@ class EnlargeDialog(QDialog):
         super().__init__(parent)
         self._chart = chart
         self._tr = tr
-        self.setWindowTitle(f"{constants.APP_NAME} — {title}")
+        self.setWindowTitle(f"{identity.APP_NAME} — {title}")
         self.setWindowFlag(Qt.WindowType.WindowMaximizeButtonHint, True)
         self.setWindowFlag(Qt.WindowType.WindowMinimizeButtonHint, True)
 

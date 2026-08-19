@@ -16,7 +16,7 @@ from pathlib import Path
 from types import MappingProxyType
 from typing import Mapping
 
-from config import constants
+from config import constants, identity
 
 
 # ═══════════════════════════ PATH ROOTS & BUNDLED RESOURCES ═══════════════════════════
@@ -113,7 +113,7 @@ def user_dir() -> Path:
     override = os.environ.get("WATCH_ACADEMY_USER_DIR_OVERRIDE")
     if override:
         return Path(override)
-    return Path(os.environ["APPDATA"]) / constants.APP_NAME
+    return Path(os.environ["APPDATA"]) / identity.APP_NAME
 
 
 def settings_path(watch_index: int = 1) -> Path:
@@ -173,7 +173,7 @@ class DisplayContext:
     than mutating the live one, so a context captured by a background
     thread never changes underneath it."""
 
-    art_source: str = constants.ART_SOURCE_DEFAULT
+    art_source: str = identity.ART_SOURCE_DEFAULT
     subdial_set: str = constants.SUBDIAL_SET_DEFAULT
     metal_shades: Mapping[str, str] = MappingProxyType(
         dict(constants.METAL_SHADE_DEFAULT)
@@ -184,7 +184,7 @@ class DisplayContext:
 
 
 def display_context(
-    art_source: str = constants.ART_SOURCE_DEFAULT,
+    art_source: str = identity.ART_SOURCE_DEFAULT,
     subdial_set: str = constants.SUBDIAL_SET_DEFAULT,
     metal_shades: Mapping[str, str] | None = None,
 ) -> DisplayContext:
@@ -192,7 +192,7 @@ def display_context(
     `set_*` functions each validated their own argument; that check lives
     here now, so an unknown source/set/shade still fails loudly at the
     point of choice rather than as missing art at paint time)."""
-    if art_source not in constants.ART_SOURCES:
+    if art_source not in identity.ART_SOURCES:
         raise ValueError(f"unknown art source: {art_source}")
     if subdial_set not in constants.SUBDIAL_SETS:
         raise ValueError(f"unknown subdial set: {subdial_set}")

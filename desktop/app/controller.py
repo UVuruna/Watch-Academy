@@ -51,7 +51,7 @@ from app.settings_store import (
 )
 from app.tray import TrayController, logo_icon, window_icon
 from app.widget import ClockWidget
-from config import constants, defaults, dial, paths, profiling
+from config import constants, defaults, dial, identity, paths, profiling
 from core.clock_state import build_day_context, build_tick_state
 from core.deep_time import real_year
 from core.moon import chinese_name_of_year
@@ -412,7 +412,7 @@ class WatchController(
         and deletes its settings file; `self._on_remove_watch` defaults
         to a no-op for standalone/test use (no manager attached)."""
         box = QMessageBox(
-            QMessageBox.Icon.Question, constants.APP_NAME,
+            QMessageBox.Icon.Question, identity.APP_NAME,
             self._ui("Remove this watch? Its settings file will be deleted."),
             QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No,
         )
@@ -876,7 +876,7 @@ class WatchController(
         persists)."""
         if self._hidden_unlocked:
             return
-        secret = constants.HIDDEN_MODE_SECRET
+        secret = identity.HIDDEN_MODE_SECRET
         self._secret_buffer = (self._secret_buffer + char)[-len(secret):]
         if self._secret_buffer != secret:
             return
@@ -1226,7 +1226,7 @@ class WatchController(
 
     @staticmethod
     def _critical_box(text: str, buttons, default) -> int:
-        box = QMessageBox(QMessageBox.Icon.Critical, constants.APP_NAME, text, buttons)
+        box = QMessageBox(QMessageBox.Icon.Critical, identity.APP_NAME, text, buttons)
         box.setDefaultButton(default)
         # Without a parent window the box can open buried under other
         # windows (verified on Windows 11) — the error must be seen.

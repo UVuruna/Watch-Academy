@@ -11,7 +11,7 @@ from PySide6.QtWidgets import QApplication
 from app.skin_builder import apply_display_settings
 from app.settings_dialog.dialog import SettingsDialog
 from app.settings_store import Settings, replace
-from config import defaults, encyclopedia_ui, palette, pantheon
+from config import defaults, encyclopedia_ui, identity, palette, pantheon
 from data.locations import Place, default_place
 from render.skin_geometry import palette_for
 
@@ -476,7 +476,7 @@ def test_hidden_mode_unlocks_the_four_greetings(app):
     assert not hasattr(Settings(), "hidden_unlocked")
     from config import constants
 
-    assert len(constants.HIDDEN_MODE_SECRET) >= 3
+    assert len(identity.HIDDEN_MODE_SECRET) >= 3
 
 
 def test_hidden_mode_binds_the_poem_to_seasons_too(app):
@@ -581,8 +581,8 @@ def test_art_source_resolves_with_fallback(tmp_path, monkeypatch):
         fallback = paths.art_file(greek / "Zeus.png")  # no ChatGPT copy
         assert fallback.name == "Zeus_gem.png" and fallback.exists()
     # The scope RESTORES — outside it the shipped default source is back.
-    assert paths.art_source() == constants.ART_SOURCE_DEFAULT
-    assert Settings().art_source == constants.ART_SOURCE_DEFAULT
+    assert paths.art_source() == identity.ART_SOURCE_DEFAULT
+    assert Settings().art_source == identity.ART_SOURCE_DEFAULT
 
 
 def test_legend_off_silences_every_hover(app):

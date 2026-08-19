@@ -33,7 +33,7 @@ Layer: app. Documentation: __about/dialog_base.md.
 from PySide6.QtCore import Qt
 from PySide6.QtWidgets import QDialog
 
-from config import constants
+from config import identity
 from config.ui_text import ui
 
 
@@ -53,7 +53,7 @@ class AcademyDialog(QDialog):
                  stay_on_top: bool = False, parent=None):
         super().__init__(parent)
         self._overlay = overlay or {}
-        self.setWindowTitle(f"{constants.APP_NAME} — {self._tr(title)}")
+        self.setWindowTitle(f"{identity.APP_NAME} — {self._tr(title)}")
         if stay_on_top:
             self.setWindowFlag(Qt.WindowType.WindowStaysOnTopHint, True)
 

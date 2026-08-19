@@ -37,7 +37,7 @@ from app.ui_style import tooltip_wrap
 from app.watch_face import theme_thumbs
 from app.watch_face.controls import picture_group
 from app.watch_face.widgets import flow_row, pill
-from config import constants, pantheon
+from config import constants, identity, pantheon
 from config.registry.week import WEEK
 
 #: The style each `title_plate` look is called in front of a person.
@@ -218,10 +218,10 @@ def _source_row(theme, settings, setters, tr, roster: str) -> QWidget | None:
         tr("Source"), "",
         [
             (
-                source, tr(constants.ART_SOURCE_TITLES[source]),
+                source, tr(identity.ART_SOURCE_TITLES[source]),
                 tr("The {source} cast of this theme's plates — its Sunday "
                    "dual included, when the theme carries one.").format(
-                    source=constants.ART_SOURCE_TITLES[source]
+                    source=identity.ART_SOURCE_TITLES[source]
                 ),
                 theme_thumbs.art_source_icon(source, theme, roster),
             )

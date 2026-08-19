@@ -13,7 +13,7 @@ from typing import Callable
 
 from PySide6.QtCore import QAbstractNativeEventFilter
 
-from config import winapi
+from config import identity, winapi
 
 _user32 = ctypes.windll.user32
 _kernel32 = ctypes.windll.kernel32
@@ -145,13 +145,13 @@ def migrate_legacy_autostart() -> None:
             winreg.KEY_QUERY_VALUE | winreg.KEY_SET_VALUE,
         ) as key:
             try:
-                winreg.QueryValueEx(key, constants.APP_NAME_LEGACY)
+                winreg.QueryValueEx(key, identity.APP_NAME_LEGACY)
             except FileNotFoundError:
                 return
             winreg.SetValueEx(
                 key, _RUN_VALUE, 0, winreg.REG_SZ, _autostart_command()
             )
-            winreg.DeleteValue(key, constants.APP_NAME_LEGACY)
+            winreg.DeleteValue(key, identity.APP_NAME_LEGACY)
     except OSError:
         pass
 

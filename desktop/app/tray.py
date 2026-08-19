@@ -11,7 +11,7 @@ from PySide6.QtGui import QIcon, QPainter, QPixmap
 from PySide6.QtSvg import QSvgRenderer
 from PySide6.QtWidgets import QMenu, QSystemTrayIcon
 
-from config import constants, defaults, palette
+from config import defaults, identity, palette
 from render.asset_recolor import tinted_pixmap
 
 
@@ -90,7 +90,7 @@ class TrayController:
     def __init__(self, menu: QMenu, icon: QIcon):
         self._menu = menu
         self._icon = QSystemTrayIcon(icon)
-        self._icon.setToolTip(constants.APP_NAME)
+        self._icon.setToolTip(identity.APP_NAME)
         self._icon.setContextMenu(menu)
 
     def set_menu(self, menu: QMenu) -> None:

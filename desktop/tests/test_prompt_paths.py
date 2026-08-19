@@ -55,7 +55,7 @@ from pathlib import Path
 
 import pytest
 
-from config import calendar_mounts, constants, continents, pantheon
+from config import calendar_mounts, continents, identity, pantheon
 
 _ROOT = Path(__file__).resolve().parents[1]
 # THE RESEARCH MOVE (owner verdict 2026-08-14): research is where things
@@ -385,7 +385,7 @@ def _normalize(raw: str) -> str:
         parts = parts[1:]
     while parts and parts[0] == "..":
         parts = parts[1:]
-    if len(parts) >= 2 and parts[1] in constants.ART_SOURCES:
+    if len(parts) >= 2 and parts[1] in identity.ART_SOURCES:
         parts = (parts[0],) + parts[2:]
     return "/".join(parts)
 

@@ -21,7 +21,7 @@ from PySide6.QtGui import QIcon, QImage, QPainter, QPixmap
 from app.watch_face.thumbs import (
     THUMB_SOURCE_PX, _THUMB_CACHE_VERSION, _cache_dir, art_thumbnail,
 )
-from config import constants, paths
+from config import identity, paths
 from render import raster_store
 
 
@@ -135,7 +135,7 @@ def theme_art_sources(theme: str) -> tuple[str, ...]:
     the app's own resolver, never a hand-kept list: one entry back
     means there is nothing to choose and the caller prints nothing."""
     seen: dict = {}
-    for source in constants.ART_SOURCES:
+    for source in identity.ART_SOURCES:
         plate = _body_plate(source, theme)
         if plate is None:
             continue
@@ -232,7 +232,7 @@ def theme_style_icon(theme: str) -> QIcon | None:
     pictures they actually are rather than three words."""
     plates = [
         plate for plate in (
-            _body_plate(constants.ART_SOURCE_DEFAULT, theme, body)
+            _body_plate(identity.ART_SOURCE_DEFAULT, theme, body)
             for body in _STYLE_PREVIEW_BODIES
         )
         if plate is not None

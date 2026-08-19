@@ -22,7 +22,7 @@ from app.settings_fields import (
     save_moving_bodies, save_numerals,
 )
 from app.settings_ring import fold_ring_name, load_named_dict, normalized_ring_card
-from config import calendar_mounts, constants, defaults, dial, pantheon
+from config import calendar_mounts, constants, defaults, dial, identity, pantheon
 from data.locations import Place, default_place
 from data.rings import ring_presets
 
@@ -224,7 +224,7 @@ class Settings:
     # Artwork source (owner 2026-07-14): the Gemini and ChatGPT
     # generations coexist on disk; this picks which one the dial and
     # the readers show (missing files fall back to the other source).
-    art_source: str = constants.ART_SOURCE_DEFAULT
+    art_source: str = identity.ART_SOURCE_DEFAULT
     legend: bool = True
     # Elements switches (owner spec, FINAL.txt #5): each removes one dial
     # element; the day/twilight indication itself always stays.
@@ -617,8 +617,8 @@ class SettingsStore:
                 ("weekday_roster", "planetary", constants.FIGURE_ROSTERS),
                 ("info_slot_roster", "planetary", constants.FIGURE_ROSTERS),
                 ("third_slot_roster", "planetary", constants.FIGURE_ROSTERS),
-                ("art_source", constants.ART_SOURCE_DEFAULT,
-                 constants.ART_SOURCES),
+                ("art_source", identity.ART_SOURCE_DEFAULT,
+                 identity.ART_SOURCES),
                 ("era_notation", "bce_ce", constants.ERA_NOTATIONS),
                 ("third_era", "none", constants.THIRD_ERAS),
                 ("z_mode", "bottom", constants.Z_MODES),

@@ -13,21 +13,6 @@ Win32 API literals live in winapi.py.
 from config import registry
 
 # ═══════════════════════════ APP IDENTITY ═══════════════════════════
-APP_NAME = "Watch Academy"
-# The retired product name, kept ONLY for the one-time migrations that
-# carry an existing install onto the new identity (the %APPDATA% folder
-# in main._migrate_legacy_user_dir, the HKCU Run value in
-# app.native.migrate_legacy_autostart). THE RENAMING (owner decree
-# 2026-08-10): the app is Watch Academy everywhere; DOMY survives only
-# as the dial's own name and its dark-cross ring preset.
-APP_NAME_LEGACY = "DOMY Watch"
-ORGANIZATION = "UVuruna"
-SINGLE_INSTANCE_MUTEX = "WatchAcademy.SingleInstance"
-# Windows taskbar/AppUserModelID identity (owner screenshot 2026-07-20):
-# without an explicit ID, Windows groups every window this interpreter
-# opens under python.exe's OWN identity and can fall back to ITS icon
-# for the taskbar button — see app.native.set_app_user_model_id.
-APP_USER_MODEL_ID = "UVuruna.WatchAcademy"
 
 # --- Dial identity -----------------------------------------------------------
 # The dial is a 24-hour clock face, CLOCKWISE, with 12:00 noon at the TOP
@@ -58,26 +43,6 @@ CIVIL_TWILIGHT_ELEVATION_DEG = -6.0
 # summer solstice (top of dial after mod 360), autumn equinox, December
 # solstice, next spring equinox. Clockwise, 0 deg = summer solstice = top.
 YEAR_ANCHOR_ANGLES = (180.0, 270.0, 360.0, 450.0, 540.0, 630.0)
-
-# --- Hidden mode ----------------------------------------------------------------
-# Typing this character sequence while the dial has focus unlocks the
-# hidden extras (owner 2026-07-14) — for now the Four Greetings verses
-# page in the Encyclopedia's Trinity topic. The owner sets the final
-# sequence here; the unlock persists in settings.
-HIDDEN_MODE_SECRET = "36m36u36v"
-
-# --- Artwork sources -----------------------------------------------------------
-# The Gemini and ChatGPT generations COEXIST (owner 2026-07-14). Since
-# the RESTRUCTURE (2026-07-22) the source is NO LONGER a folder segment
-# — it is a terminal filename SUFFIX (`<Figure>[_vN]_<src>.png`, source
-# last: `_gem`/`_gpt`). The user picks the active source in Settings;
-# `config.paths.art_file` resolves the suffix at every disk boundary,
-# falling back to the other source and then the suffix-less name (owner
-# hand-made art). There is no longer a per-root registry — every PNG is
-# resolved uniformly by filename suffix.
-ART_SOURCES = ("gemini", "chatgpt")
-ART_SOURCE_DEFAULT = "gemini"
-ART_SOURCE_TITLES = {"gemini": "Gemini", "chatgpt": "ChatGPT"}
 
 # --- Moon ----------------------------------------------------------------------
 SYNODIC_MONTH_DAYS = 29.53           # mean lunar cycle length
@@ -714,14 +679,12 @@ WATCH_FACE_KINDS_BY_POINTER = {
     "aurora": set(),
 }
 
-
 def watch_face_kinds(pointer: str, pointer_shape: str) -> set:
     """The content kinds `pointer` carries in FULL-FACE — resolves the
     Rose's shape-dependent split; every other pointer ignores
     `pointer_shape`."""
     key = f"rose_{pointer_shape}" if pointer == "rose" else pointer
     return WATCH_FACE_KINDS_BY_POINTER.get(key, set())
-
 
 # ═══════════════════════════ TRIO & GENESIS ARM THEMES ═══════════════════════════
 # The trio's theological themes per arm angle (SYMBOLISM.md trio canon:
@@ -1037,7 +1000,6 @@ PALETTE_STYLES = ("primary", "secondary", "tertiary")
 # Rose (7, 12, 24) carry two — eighteen wheels in all.
 THIRD_WHEEL_POINTERS = ("trio", "cross", "hexa", "octa")
 
-
 def palette_styles_for(pointer: str) -> tuple[str, ...]:
     """The wheel slots THIS pointer actually serves — ("primary",
     "secondary") everywhere, plus "tertiary" on the three-wheel
@@ -1046,7 +1008,6 @@ def palette_styles_for(pointer: str) -> tuple[str, ...]:
     if pointer in THIRD_WHEEL_POINTERS:
         return PALETTE_STYLES
     return PALETTE_STYLES[:2]
-
 
 # ═══════════════════════════ WHEEL ARM OFFSETS ═══════════════════════════
 # THE GENESIS INVERSION (owner: "trougao ka dole", CUBE.md §Double
@@ -1567,7 +1528,6 @@ THEME_METALS_OVERRIDE: dict[str, tuple[str, ...]] = {
     "planets_art": ("gold", "bronze", "silver"),
 }
 
-
 def theme_metals(theme: str) -> tuple[str, ...]:
     """The metal looks `theme` may wear — THEME_METALS unless the theme
     overrides it (documented exceptions only, see THEME_METALS_OVERRIDE)."""
@@ -1727,7 +1687,6 @@ CHINESE_BRANCH_TERMS = {
                                # classical calendar calls that lunar
                                # month "the eleventh"
 }
-
 
 def chinese_branch_span(month: int) -> tuple[tuple[int, int], tuple[int, int], str]:
     """((open month, open day), (close month, close day), term name) of

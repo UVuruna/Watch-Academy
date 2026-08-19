@@ -13,7 +13,7 @@ from PySide6.QtGui import QAction, QPainter
 from PySide6.QtWidgets import QMenu, QWidget
 
 from app import native
-from config import constants, defaults, dial, shortcuts, winapi
+from config import defaults, dial, identity, shortcuts, winapi
 
 # The hover-bypass key, resolved from the config name (Qt enums do
 # not belong in config — Rule: config stays Qt-free).
@@ -113,7 +113,7 @@ class ClockWidget(QWidget):
         self.setWindowFlags(self._window_flags("bottom"))
         self.setAttribute(Qt.WidgetAttribute.WA_TranslucentBackground)
         self.setAttribute(Qt.WidgetAttribute.WA_ShowWithoutActivating)
-        self.setWindowTitle(constants.APP_NAME)
+        self.setWindowTitle(identity.APP_NAME)
         self.setMouseTracking(True)     # hover tooltips on small dials
         # A click gives the dial keyboard focus so the hidden-mode
         # code can be typed on it (owner 2026-07-14).
