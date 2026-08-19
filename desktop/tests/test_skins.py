@@ -847,14 +847,14 @@ def test_bronze_finish_and_theme_metals():
     assert bronze_ring.jewel_metal[4] == "bronze"
     assert bronze_ring.jewel_metal[0] == "bronze"     # TWO METALS RETIRED: no accent
     assert missing_assets(build_skin(replace(Settings(), ring_finish="bronze"))) == []
-    from config import constants as c
+    from config import constants
     # The EAGER door: the dial itself now draws the gold master until the
     # background warm catches up (owner 2026-07-28), so a test that wants
     # to see the real bronze pixels must ask for them (`jewel_metal_
     # variant` = name + materialize).
     from render.asset_recolor import jewel_metal_variant
 
-    for glyph in c.LETTER_PLATE_FILES:
+    for glyph in constants.LETTER_PLATE_FILES:
         gold = letter_plates.plate_path(glyph)
         derived = jewel_metal_variant(gold, "bronze")
         assert derived.exists(), glyph

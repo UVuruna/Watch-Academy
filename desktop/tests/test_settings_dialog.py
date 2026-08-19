@@ -841,9 +841,9 @@ def test_encyclopedia_expansion_wiring():
     ]
     # The Moon topic grows to EIGHT phase pages (owner 2026-07-16,
     # ROADMAP queue #8b) — in sky.MOON_PHASE_NAMES cycle order.
-    from config import constants as _constants
+    from config import sky
     assert [e["name"][1] for e in topics["moon"]["entries"]] == list(
-        _constants.MOON_PHASE_NAMES
+        sky.MOON_PHASE_NAMES
     )
     # LIVE-RENDERED (owner 2026-07-19, retiring the eight pre-baked
     # assets/moon/ plates): every phase image resolves to a real,
@@ -1767,9 +1767,9 @@ def test_encyclopedia_zoom_bounds_and_persists_for_the_session():
     written to settings, resets on app restart)."""
     import app.encyclopedia.dialog as dialog_module
     from app.encyclopedia import EncyclopediaDialog
-    from config import constants as _constants
+    from config import constants
 
-    low, high = _constants.ENCYCLOPEDIA_ZOOM_RANGE
+    low, high = constants.ENCYCLOPEDIA_ZOOM_RANGE
     original = dialog_module._session_zoom
     try:
         first = EncyclopediaDialog()
@@ -1778,7 +1778,7 @@ def test_encyclopedia_zoom_bounds_and_persists_for_the_session():
         first._apply_zoom_delta(-120 * 1000)          # way past the floor
         assert first._zoom == low
         first._apply_zoom_delta(120)                  # one notch back up
-        expected = min(high, low + _constants.ENCYCLOPEDIA_ZOOM_STEP)
+        expected = min(high, low + constants.ENCYCLOPEDIA_ZOOM_STEP)
         assert first._zoom == pytest.approx(expected)
         second = EncyclopediaDialog()                 # a fresh "reopen"
         assert second._zoom == first._zoom
