@@ -114,7 +114,7 @@ properties `skin`/`day`/`tick`/`overlay`/`encyclopedia`/`symbolism`/
 were private methods; a name reached across an object boundary has to be
 public, which is the same rule finding L1 was about. `tooltip_at`,
 `encyclopedia_target` and `warm_hover_articles` stay here as one-line
-doors, because that is what the widget and twenty test files call.
+doors, because that is what the widget and seventeen test files call.
 
 **And the free ARTICLE HTML helpers are not here either** (R11 of the
 same audit). The free

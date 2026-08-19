@@ -51,7 +51,7 @@ face. `term_weekly` needs no alt table at all: its roster already names
 both halves.
 
 `tests/test_registry.py` pins every table here against the live
-`constants`/`pantheon` values, so the two cannot drift while the
+`config.ninth` / `pantheon` values, so the two cannot drift while the
 migration finishes.
 
 ## Connections

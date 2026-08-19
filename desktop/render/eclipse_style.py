@@ -62,7 +62,7 @@ _BAND_ONLY_STYLES = frozenset({"horizon_shadow", "contact_marks"})
 # currently borrows, and WHY — read by any caller that wants to say so
 # rather than pretend. Removing an entry here (because a real painter
 # landed) is the whole point of this table; adding one needs the same
-# ballot discipline THE CONFIG SECTION LAW asks of `constants.py`.
+# ballot discipline THE CONFIG SECTION LAW asks of every `config/*.py`.
 _NOT_YET_PAINTED: dict[tuple[str, str], tuple[str, str]] = {
     # THE SOLAR THREE ARE GONE FROM HERE (2026-08-13): `totality_path`,
     # `type_emblem` and `dial_shadow` all have their own painters in

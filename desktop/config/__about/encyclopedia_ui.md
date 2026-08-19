@@ -54,7 +54,7 @@ Layer: config — pure, no Qt, no wall clock.
   "how this clock works" pages, computed by
   `render/instrument_diagrams.py`), `INSTRUMENT_TWILIGHT_BANDS`
   (civil/nautical/astronomical depression bands, civil sourced from
-  `constants.CIVIL_DEPRESSION`). The three PICKER pages of 2026-08-13
+  `sky.CIVIL_DEPRESSION`). The three PICKER pages of 2026-08-13
   add `INSTRUMENT_DIAGRAM_GRIDS` (a table — one row per ROW figure:
   columns, label lines and the plate's own aspect), the row's height
   budget (`..._ROW_TOP`, the tile-label gap/step/ratio, the caption
@@ -79,7 +79,7 @@ Layer: config — pure, no Qt, no wall clock.
 ## Connections
 
 ### Uses
-- [Config (folder)](../___config.md) — `constants`, `paths`
+- [Config (folder)](../___config.md) — `sky`, `paths`
 
 ### Used by
 - [App (folder)](../../app/___app.md) — the Encyclopedia package

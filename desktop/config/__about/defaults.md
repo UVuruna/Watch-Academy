@@ -18,7 +18,8 @@ need more than one new module's data
 (`dial_window_margin_fraction` combines `dial.py`'s ring/jewel/crown-text
 geometry with `glow.py`'s own glow extent; `ECLIPSE_SOLAR_ART` needs
 `pantheon.py`'s `weekday_art`). The fixed import DAG lets a new module
-import only stdlib + `config.{paths, constants, palette}`, never each
+import only stdlib + `config.{paths, palette}` and the topic modules
+THE CONSTANTS SPLIT made (2026-08-19), never each
 other and never this file — so a value two new modules both need
 either duplicates (forbidden, Rule #5) or stays here, and this remnant
 alone may import every new module downhill.
@@ -118,7 +119,7 @@ Layer: config — pure, no Qt, no wall clock.
 ## Connections
 
 ### Uses
-- [Config (folder)](../___config.md) — `calendar_mounts`, `constants`,
+- [Config (folder)](../___config.md) — `calendar_mounts`, `ring`,
   `continents`, `dial`, `encyclopedia_ui`, `glow`, `palette`,
   `pantheon`, `paths` (every DAG-peer module downhill, plus the base
   three)
@@ -180,7 +181,7 @@ Layer: config — pure, no Qt, no wall clock.
 - **`METAL_SHADES` here, `METAL_SHADE_NAMES` in [Ring](ring.md).**
   The split follows the same rule as `SUBDIAL_SETS` (names, in
   constants) vs `SUBDIAL_RECOLOR_COLORS` (recipe, in defaults) — the
-  validation/enumeration surface lives in `constants.py` (nothing else
+  validation/enumeration surface lives in `config/ring.py` (nothing else
   depends on it), the numeric recipe lives here because it depends on
   nothing else either but is not a product invariant.
 - **The move was proven value-identical.** The pre-split `defaults.py`

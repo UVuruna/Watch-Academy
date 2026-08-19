@@ -63,7 +63,7 @@ Layer: config — pure, no Qt, no wall clock.
 ## Connections
 
 ### Uses
-- [Config (folder)](../___config.md) — `constants`, `continents`,
+- [Config (folder)](../___config.md) — `ninth`, `continents`,
   `paths`; `config.taxonomy` (local imports inside `weekday_art()` and
   `theme_title_art()`)
 

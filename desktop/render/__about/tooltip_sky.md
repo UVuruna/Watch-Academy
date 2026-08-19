@@ -21,12 +21,18 @@ it, its size is the dial's own vocabulary — and the same entry recorded
 the natural next cut: **BY TOOLTIP FAMILY**. On **2026-08-19** the owner
 gave the word, and this module is one of the four families.
 
-**Nothing was rewritten.** Every method travelled verbatim, with its
-comments and decorators, and `tests/test_tooltip_families.py` — recorded
-from the UN-SPLIT composer at commit `6aa49db` — proves the dial says
-byte-for-byte what it said before: 959 hover points across seven dial
-configurations, SHA-256 per point plus 42 representative tooltips kept as
-full HTML.
+**Nothing was rewritten.** All 69 methods travelled verbatim, with their
+comments and decorators — verified by comparing `ast.dump` of every one
+before and after — **with a single named exception**:
+`_weekday_tooltip` (in `render/tooltip_calendar.py`) has two occurrences
+of `ring.METAL_THEMES` reading `registry.METAL_THEMES` instead, because
+the round's last commit deleted that alias. Same object, same behaviour,
+and it is the only body that differs.
+
+`tests/test_tooltip_families.py` — recorded from the UN-SPLIT composer at
+commit `6aa49db` — proves the dial says byte-for-byte what it said
+before: 959 hover points across seven dial configurations, SHA-256 per
+point plus 42 representative tooltips kept as full HTML.
 
 ## How the dial is held: it is NOT
 

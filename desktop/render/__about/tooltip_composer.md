@@ -18,9 +18,14 @@ each of them jumps to when the reader presses SPACE.
 Targets](encyclopedia_targets.md)), which this class INHERITS. What is
 left here is what belongs to no family:
 
-- **the three doors** — `tooltip_at`, `encyclopedia_target` and
+- **the doors' NAMES** — `tooltip_at`, `encyclopedia_target` and
   `warm_hover_articles`, addressed by [Clock
-  Widget](../../app/__about/widget.md) and twenty test files;
+  Widget](../../app/__about/widget.md) and seventeen test files. Two of
+  the three bodies are in this file; `encyclopedia_target`'s body rides
+  in [Encyclopedia Targets](encyclopedia_targets.md) and reaches the
+  public surface by inheritance, because everything it calls is in that
+  family and pulling only the entry point back here would have split one
+  chain across two files;
 - **the dispatch** — `_tooltip_at`, which names the element under the
   cursor and decides WHICH family answers;
 - **the six formatting helpers every family uses** — `_tr` (the active
@@ -54,7 +59,7 @@ lifted into [Article HTML](article_html.md).
 - [Compositor](compositor.md) — builds ONE in `__init__` and keeps
   `tooltip_at`, `encyclopedia_target` and `warm_hover_articles` as
   one-line doors, because that is what [Clock
-  Widget](../../app/__about/widget.md) and twenty test files call
+  Widget](../../app/__about/widget.md) and seventeen test files call
 
 ## The interface — what the composer asks the dial for
 Two things, and nothing else. Both are PUBLIC on the compositor now,

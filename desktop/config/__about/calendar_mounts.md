@@ -40,10 +40,10 @@ Layer: config — pure, no Qt, no wall clock.
 ## Connections
 
 ### Uses
-- [Config (folder)](../___config.md) — `constants` (`CalendarMount`
-  builds `CALENDAR_MOUNTS["chinese"]` from `constants.CHINESE_MONTH_
-  BRANCH_ANIMALS`, `CALENDAR_MOUNTS["zodiac"]` from `constants.
-  ZODIAC_SIGNS`, `["almanac"]` from `constants.GREGORIAN_MONTH_NAMES`),
+- [Config (folder)](../___config.md) — `zodiac` and `pointer_geometry` (`CalendarMount`
+  builds `CALENDAR_MOUNTS["chinese"]` from `zodiac.CHINESE_MONTH_
+  BRANCH_ANIMALS`, `CALENDAR_MOUNTS["zodiac"]` from `zodiac.
+  ZODIAC_SIGNS`, `["almanac"]` from `pointer_geometry.GREGORIAN_MONTH_NAMES`),
   `paths`
 
 ### Used by
@@ -66,11 +66,11 @@ Systems and the Four Dozens):
   OPPOSITES (`almanac`, `months`, `chinese`, `emotions`, `virtues`,
   `sins`) — the Vices ride the Virtue Wheel as its `paint` face.
 
-A mount's `centre` names a `constants.THIRTEENTHS` key. Two laws
+A mount's `centre` names a `zodiac.THIRTEENTHS` key. Two laws
 govern whether that seat actually shows: a CALENDAR-DRIVEN centre
 (Ophiuchus/Sol/Modrenik/The Cat) keeps its own narrow appearance
 window (`core.blue_moon`); an ALWAYS-CENTRE
-(`constants.AXLE_ALWAYS_CENTERS`) is unconditionally present on every
+(`zodiac.AXLE_ALWAYS_CENTERS`) is unconditionally present on every
 date instead.
 
 ## Design Decisions

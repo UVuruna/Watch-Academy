@@ -20,7 +20,7 @@ argument. One holder of the dial, `self._dial`, and every method here
 reads it live.
 
 **The door is still `render/tooltip_composer.py`.** `encyclopedia_target`
-is a public name on the composer and twenty test files plus the widget
+is a public name on the composer and seventeen test files plus the widget
 call it there; this module is where its body lives, not where it is
 addressed.
 

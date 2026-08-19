@@ -23,7 +23,7 @@ each of those; `self` already is one.
 
 **The door is still `render/tooltip_composer.py`.** Nothing outside it
 imports this module: `tooltip_at`, `encyclopedia_target` and
-`warm_hover_articles` stay the composer's, and the twenty test files
+`warm_hover_articles` stay the composer's, and the seventeen test files
 that call them changed by not one line.
 
 Layer: render. Documentation: __about/tooltip_sky.md.

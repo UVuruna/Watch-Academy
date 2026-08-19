@@ -235,12 +235,17 @@ def _dual_files():
     return out
 
 
-# LAZY, and it has to be (2026-08-05). `constants` reads this module,
-# and the Continents' COMPUTED stems reach `config.continents` ->
-# `config.paths` -> back to `constants` — a cycle if the resolution runs
-# at import time. PEP 562's module `__getattr__` moves it to FIRST
-# ACCESS instead, by which point every module in the ring is built. The
-# result is cached: the tables are read on every paint.
+# LAZY, and it STILL has to be (2026-08-05; the ring it breaks was
+# re-checked on 2026-08-19, when THE CONSTANTS SPLIT deleted the module
+# the original note named). The Continents' COMPUTED stems reach
+# `config.continents` -> `config.paths`, and `config.paths` imports
+# `config.ring`, which imports THIS package — so resolving the stems at
+# import time closes the ring `registry -> continents -> paths -> ring ->
+# registry` while `registry` is still half-built. (Before the split the
+# last hop was `paths -> constants -> registry`; the module changed, the
+# cycle did not.) PEP 562's module `__getattr__` moves the resolution to
+# FIRST ACCESS instead, by which point every module in the ring is built.
+# The result is cached: the tables are read on every paint.
 _CACHE: dict = {}
 _LAZY = {"FILES": _files, "DUAL_FILES": _dual_files}
 

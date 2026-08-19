@@ -62,7 +62,7 @@ Layer: config — pure, no Qt, no wall clock.
 ## Connections
 
 ### Uses
-- [Config (folder)](../___config.md) — `constants` (`ART_SOURCES`,
+- [Config (folder)](../___config.md) — `identity` (`APP_NAME`, `ART_SOURCES`,
   `SUBDIAL_SETS`, `METAL_SHADE_NAMES`, `METAL_SHADE_DEFAULT`,
   `DEEP_TIME_DB_FILENAME`, `APP_NAME` — the validation source for
   `display_context`)
@@ -83,14 +83,14 @@ every entry point that resolves art installs it for the duration of
 its work via `with paths.display(context):`.
 
 #### Attributes
-- `art_source`: `"gemini"` or `"chatgpt"`, default `constants.
+- `art_source`: `"gemini"` or `"chatgpt"`, default `identity.
   ART_SOURCE_DEFAULT`
-- `subdial_set`: one of `constants.SUBDIAL_SETS`
+- `subdial_set`: one of `ring.SUBDIAL_SETS`
 - `metal_shades`: `Mapping[str, str]`, metal → chosen shade name
 
 #### Methods
 - `shade(metal)`: this context's shade for `metal`, falling back to
-  `constants.METAL_SHADE_DEFAULT[metal]`
+  `ring.METAL_SHADE_DEFAULT[metal]`
 
 ## Design Decisions
 

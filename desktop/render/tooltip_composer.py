@@ -1,10 +1,10 @@
-"""THE TOOLTIP COMPOSER — everything the dial SAYS.
+"""THE TOOLTIP COMPOSER — the ONE DOOR to everything the dial SAYS.
 
-Every hover the dial answers is built here: the arm legends, the weekday
-bodies, the tick readout, the ring's jewels and words, the crown, the
-moon, the eclipses, the Earth, the calendar wedges, the twilight bands —
-and the Encyclopedia TARGET each of them jumps to when the reader presses
-SPACE.
+Every hover the dial answers is built BEHIND this class: the arm
+legends, the weekday bodies, the tick readout, the ring's jewels and
+words, the crown, the moon, the eclipses, the Earth, the calendar
+wedges, the twilight bands — and the Encyclopedia TARGET each of them
+jumps to when the reader presses SPACE.
 
 It was ~2,400 lines inside `render/compositor.py`, a module whose job is
 to stack paint layers and answer hit tests (OOP audit 2026-08-18, section
@@ -13,8 +13,8 @@ of paint and geometry"). Two responsibilities, one file, and the audit
 graded the cut HIGH RISK for a reason: these are METHODS over shared
 state, not free functions.
 
-So this is a COLLABORATOR, not a file move. It holds the dial and asks it
-for two things, and nothing else:
+So this is a COLLABORATOR of the dial, not a file move. It holds the dial
+and asks it for two things, and nothing else:
 
 * **STATE**, through the dial's own read-only properties — `skin`, `day`,
   `tick`, `overlay`, `encyclopedia`, `symbolism`, `hidden_unlocked`. Read
@@ -27,9 +27,22 @@ for two things, and nothing else:
   must name the same thing the paint drew, so it asks the painter rather
   than re-deriving the angles.
 
+THE FAMILY CUT (owner 2026-08-19). At 2,239 logic lines this was the last
+file on the structure ratchet, and its entry had already recorded the
+natural next cut: BY TOOLTIP FAMILY. The bodies now live in four modules
+beside this one — `render/tooltip_sky.py`, `render/tooltip_ring.py`,
+`render/tooltip_calendar.py`, `render/encyclopedia_targets.py` — which
+this class INHERITS as MIXINS, so the dial is still held exactly ONCE
+and not one call site changed. What stays here is what belongs to no
+family: the three doors, the `_tooltip_at` dispatch that decides WHICH
+family answers, and the six formatting helpers they all use (`_tr`,
+`_ord`, `_month`, `_month_short`, `_year`, `_label`). The move is proved
+byte-for-byte by `tests/test_tooltip_families.py`, recorded from the
+un-split file.
+
 The dial keeps `tooltip_at`, `encyclopedia_target` and
 `warm_hover_articles` as one-line doors, because that is what the widget
-and twenty test files call.
+and seventeen test files call.
 
 Layer: render. Documentation: __about/tooltip_composer.md.
 """

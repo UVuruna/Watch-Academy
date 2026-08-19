@@ -73,8 +73,14 @@ here; nothing here imports from them.
   36 (THE CONFIG SPLIT, [Work Plan Structure](../../docs/archive/WORKPLAN-STRUCTURE.md))
   carved `dial.py`, `shortcuts.py`, `pantheon.py`, `calendar_mounts.py`,
   `encyclopedia_ui.py` and `glow.py` out of a ~3,700-line
-  `defaults.py` god-file as PEERS that may import only `paths`/
-  `constants`/`palette` and never each other; `continents.py` is
+  `defaults.py` god-file as PEERS that may import only the BASE tier and
+  never each other. **The base tier changed on 2026-08-19**: it was
+  `paths`/`constants`/`palette`, and with `constants.py` deleted it is
+  now `paths`, `palette` and the LEAF topic modules THE CONSTANTS SPLIT
+  made — `identity`, `sky`, `eras`, `pointer_geometry`, `pointer_names`,
+  `umbra`, `complications`, `zodiac`, `ui_ranges`, which import nothing
+  at all, plus `ring` and `ninth`, which import only
+  `config.registry`. `continents.py` is `continents.py` is
   `pantheon.py`'s own deterministic fallback (a subordinate, not a
   seventh peer); `defaults.py` itself is the one remnant allowed to
   import every peer downhill, holding whichever coordinator value
@@ -107,10 +113,31 @@ ARITHMETIC](../../docs/ENFORCEMENT.md#the-measure)); its SHAPE was.
 
 The owner ruled on **2026-08-19** and named every destination module
 himself. Each section moved WHOLE, with its comments; **1,070 references
-across 142 files** were repointed to the real module; **no re-export shim
-was left behind** (`rules/CODE.md` — No backward compatibility), so
-`constants.NAME` does not resolve anywhere any more — the name tells you
-which module owns it.
+across 142 files** were repointed to the real module; **no shim of
+`constants.py` was left behind** (`rules/CODE.md` — No backward
+compatibility), so `constants.NAME` resolves nowhere any more — the name
+tells you which module owns it.
+
+**One class of alias survives, named here so nobody has to discover it.**
+`config/ninth.py` keeps four one-line aliases of THE REGISTRY's own
+derived tables — `WEEKDAY_THEME_NINTHS = registry.NINTHS`,
+`WEEKDAY_THEME_NINTH_EASTER_EGG`, `WEEKDAY_THEME_NINTH_NIGHT` and
+`NINTH_MECHANISMS = registry.MECHANISMS`. They existed before this round
+(in `constants.py`) and the owner's map sent THE NINTH TABLES to
+`ninth.py`, doctrine and all, so they moved rather than dissolved. By the
+strict reading below they ARE shims, and the round did not pretend
+otherwise: what it refused was a shim of the DELETED module, and a second
+name that would COLLIDE. The distinction it drew:
+
+* an alias whose name is the SAME as the registry's, in a module callers
+  import beside `registry`, is worse than a differently-named one — that
+  is why `ring.METAL_THEMES` was deleted and its 16 call sites repointed;
+* an alias that carries a subject's whole doctrine in its comment, under
+  a name the project has always used, in the module ABOUT that subject,
+  was kept — a reader of `render.ninths` looks in `config/ninth.py`.
+
+**This is the one thing in the split that is a judgement call rather than
+a rule, and it is the owner's to overrule.**
 
 Where each of the 38 sections went, and why:
 
@@ -181,18 +208,22 @@ import cycle. Re-deriving them from `WEEK` inside `week.py` instead would
 have given one truth two homes — exactly the drift THE REGISTRY was
 created to end.
 
-So the three aliases were **deleted** and their 42 call sites in 13 files
+So the three aliases were **deleted** and their 45 call sites in 15 files
 now read `registry.THEMES`, `registry.BLURBS` and `registry.ARTICLES`
 directly. Each alias's explanatory comment moved to the derivation site
-in `registry/__init__.py`, where the table is actually made. A second
-name for the same object IS a re-export shim, and this round's whole rule
-was that there are none.
+in `registry/__init__.py`, where the table is actually made.
 
-The registry-derived tables the owner's map sent to NEW modules —
-`ninth.py`'s `WEEKDAY_THEME_NINTHS` family and `ring.py`'s
-`METAL_THEMES` — stayed as mapped: those modules CAN import
-`config.registry` without a cycle, and each carries a long doctrinal
-comment that belongs with its subject rather than with the derivation.
+**A fourth alias went the same way for a sharper reason.**
+`ring.METAL_THEMES = registry.METAL_THEMES` was the SAME NAME for the
+same object in two config modules, and nine files import both — so it was
+deleted too and its 16 call sites repointed. What stays in `config/ring.py`
+is what the owner's map is actually about: the metal LOOKS
+(`THEME_METALS`), the per-theme override, and the `theme_metals()` gate.
+
+`config/ninth.py`'s four registry-derived tables stayed as mapped —
+different names, no collision, and each carries a long doctrinal comment
+that belongs with the seat rather than with the derivation. They are the
+round's one judgement call and they are declared above.
 
 ### What this cost, and what it bought
 
@@ -201,8 +232,8 @@ comment that belongs with its subject rather than with the derivation.
   in the folder: **the next weekday table added there needs a split, not
   a row.**
 - Nothing else in `config/` is near the wall. The eleven new modules run
-  from 62 to 420 raw lines.
-- `config/paths.py` gained two sibling imports (`identity`, `ring`,
+  from 62 to 421 raw lines.
+- `config/paths.py` gained three sibling imports (`identity`, `ring`,
   `sky`) where it had one (`constants`). All three are leaves or import
   only `config.registry`, so `paths → ring → registry` closes without
   touching `paths` again; `python -c "import config.paths"` was run after

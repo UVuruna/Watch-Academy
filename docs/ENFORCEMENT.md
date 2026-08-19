@@ -107,9 +107,13 @@ topic names had to come from the owner's own vocabulary
 **The owner gave the map and the names on 2026-08-19, and the split
 landed the same day.** `config/constants.py` is DELETED. Eleven new
 modules were born and nine existing ones grew; every reference was
-repointed to the module that now owns the name; **no re-export shim was
-left behind** (`rules/CODE.md` — No backward compatibility), so
-`constants.NAME` no longer resolves anywhere.
+repointed to the module that now owns the name; **no shim of the deleted
+module was left behind** (`rules/CODE.md` — No backward compatibility),
+so `constants.NAME` no longer resolves anywhere. Four registry-derived
+aliases that predate the round survive under their project-facing names
+in `config/ninth.py`, declared and argued at
+[Config → THE CONSTANTS SPLIT](../desktop/config/___config.md#the-constants-split)
+rather than left to be discovered.
 
 The map, one row per section, with the reason for every destination:
 [Config (folder) → THE CONSTANTS
@@ -151,7 +155,7 @@ but their three names were one-line aliases of `registry.THEMES` /
 `.BLURBS` / `.ARTICLES` — and `config/registry/__init__.py` imports
 `week.py`, so reading them back there is an import cycle, while
 re-deriving them would give one truth two homes. The aliases were
-DELETED and their 42 call sites repointed to THE REGISTRY directly; each
+DELETED and their 45 call sites repointed to THE REGISTRY directly; each
 alias's comment moved to the derivation site. A second name for the same
 object is itself a re-export shim.
 

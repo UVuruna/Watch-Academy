@@ -72,7 +72,8 @@ is composing, not declaring, and is allowed anywhere.
 ## Connections
 
 ### Uses
-- [Config (folder)](../___config.md) — `constants` only, for the
+- [Config (folder)](../___config.md) — `pointer_names` and
+  `registry.slots` only, for the
   per-pointer style roster `effective_palette_style` normalizes
   against
 

@@ -38,8 +38,11 @@
 flowchart TB
     subgraph BASE["base — every module may import these"]
         paths[paths.py]
-        constants[constants.py]
         palette[palette.py]
+        topics["the CONSTANTS SPLIT leaves (2026-08-19)
+        identity · sky · eras · pointer_geometry · pointer_names
+        umbra · complications · zodiac · ui_ranges — import NOTHING
+        ring · ninth — import only config.registry"]
     end
     subgraph PEERS["Session-36 DAG peers — never import each other"]
         dial[dial.py]
