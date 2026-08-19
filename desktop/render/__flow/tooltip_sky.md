@@ -6,7 +6,7 @@
 
 ```mermaid
 flowchart TB
-    W["ClockWidget / 20 test files"] --> D["TooltipComposer.tooltip_at()\nencyclopedia_target() · warm_hover_articles()"]
+    W["ClockWidget / 17 test files"] --> D["TooltipComposer.tooltip_at()\nencyclopedia_target() · warm_hover_articles()"]
     D --> X["_tooltip_at — the dispatch"]
     X -->|sun, moon, eclipse, Earth,\ntwilight, period| S["SkyTooltips (this module)"]
     X -->|arms, jewels, words, crown,\ncentre seat| R[RingTooltips]
