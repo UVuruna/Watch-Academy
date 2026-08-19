@@ -398,3 +398,16 @@ CALENDAR_AXIS_ORDER = {
 # The Calendar's centre medallion is a SINGLE slot and holds The One
 # alone; the Rose's axle holds all three sacred seats (the Being view).
 CALENDAR_CENTRE = THE_ONE
+
+# ═══════════════════════════ THE CUBE LOOK ═══════════════════════════
+# THE CUBE LOOK (owner seal 2026-07-26, CUBE.md §Display laws): the
+# Double-Trinity FAMILY wheels — the Court (trio primary), Genesis (trio
+# tertiary) and the Council (hexa tertiary) — render in TWO looks: "Diamond"
+# (the slim arm diamonds, the current form) and "Cube" (the owner's
+# corner-view: the arm diamonds widen to 180/N half-angles, so the
+# three/six rhombi tile the hexagon exactly — three visible cube faces
+# on the trio wheels, the two interlocked corners on the Council).
+# `Settings.cube_look` toggles it; render.skin_geometry.cube_look_active gates.
+CUBE_LOOK_WHEELS = (
+    ("trio", "primary"), ("trio", "tertiary"), ("hexa", "tertiary"),
+)

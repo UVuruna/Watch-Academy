@@ -8,7 +8,7 @@ weekday slots sit. Pure functions of a `SkinDefinition`; no painting.
 
 from PySide6.QtGui import QColor
 
-from config import archetypes, calendar_mounts, constants, palette, pointer_geometry
+from config import archetypes, calendar_mounts, constants, cube, palette, pointer_geometry
 from config.registry import week as week_registry
 from config.registry import slots as slot_registry
 from render.context import RenderContext
@@ -313,7 +313,7 @@ def cube_look_active(skin: SkinDefinition) -> bool:
     return (
         skin.cube_look
         and skin.show_pointer
-        and (skin.pointer, skin.palette_style) in constants.CUBE_LOOK_WHEELS
+        and (skin.pointer, skin.palette_style) in cube.CUBE_LOOK_WHEELS
     )
 
 
