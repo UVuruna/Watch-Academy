@@ -13,7 +13,7 @@ from PySide6.QtWidgets import (
 from app.settings_store import Settings, replace, slot_layout_target
 from app.watch_face import theme_tree, themes
 from app.watch_face.window import WatchFaceDialog
-from config import calendar_mounts, constants, palette
+from config import calendar_mounts, constants, palette, watch_face
 from tests.test_watch_face import _setters, fake_descriptors
 
 #: The "next" role's gradient top color — pills painted with it are the
@@ -139,12 +139,12 @@ def test_default_weekday_theme_tile_is_starred(app):
 
 
 def test_full_face_offers_nothing_for_calendar():
-    kinds = constants.watch_face_kinds("calendar", "star")
+    kinds = watch_face.watch_face_kinds("calendar", "star")
     assert "week" not in kinds
 
 
 def test_full_face_offers_nothing_for_aurora():
-    kinds = constants.watch_face_kinds("aurora", "star")
+    kinds = watch_face.watch_face_kinds("aurora", "star")
     assert kinds == set()
 
 
@@ -195,7 +195,7 @@ def test_subdial_slot_offers_every_content_kind_regardless_of_pointer():
         assert theme_tree._KIND_TITLES == tuple(
             (key, title) for key, title in theme_tree._KIND_TITLES
         )
-    # A real, enabled slot never calls `constants.watch_face_kinds` at
+    # A real, enabled slot never calls `watch_face.watch_face_kinds` at
     # all — `full_face=False` is the ONLY switch the tree reads.
     settings = Settings()
     descriptor = fake_descriptors(settings)[0]

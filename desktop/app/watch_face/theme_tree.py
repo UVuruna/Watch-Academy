@@ -19,7 +19,7 @@ from app.weekday_theme_grid import (
     build_weekday_theme_tiles,
     weekday_group_titles,
 )
-from config import constants, defaults
+from config import constants, defaults, watch_face
 from config.registry import pointers
 
 # Order-preserving DEDUPE (owner review round 2026-08-09): the source
@@ -82,7 +82,7 @@ _clear = rebuild.clear_layout
 def build(active, full_face: bool, pointer: str, pointer_shape: str, tr) -> QWidget:
     """`active` is a `SlotDescriptor` (see `app.slot_descriptor`) —
     built fresh by `app.controller._slot_descriptors()` on every call.
-    `full_face=True` filters Level 1 through `constants.watch_face_kinds`;
+    `full_face=True` filters Level 1 through `watch_face.watch_face_kinds`;
     a real subdial offers every kind (owner verdict P-4)."""
     root = QVBoxLayout()
     widget = QWidget()
@@ -102,7 +102,7 @@ def _populate(root, active, full_face, pointer, pointer_shape, tr, rebuild) -> N
         # — see themes.md's Design Decisions); Complications/Astrology/
         # Ascendant/Chinese have no full-face rendering path at all, so
         # they are never offered there — never a dead button.
-        kinds = constants.watch_face_kinds(pointer, pointer_shape)
+        kinds = watch_face.watch_face_kinds(pointer, pointer_shape)
         available = (
             [("weekday", "Weekday themes")] if "week" in kinds else []
         )

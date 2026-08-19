@@ -173,7 +173,7 @@ def build_weekday_theme_tiles(
     group_title: str, current_theme: str, default_theme: str, on_pick, tr,
 ) -> QWidget:
     """Level 3 — one group's own theme tiles. The pointer's documented
-    DEFAULT theme (`constants.WATCH_FACE_KINDS_BY_POINTER`, see
+    DEFAULT theme (`watch_face.WATCH_FACE_KINDS_BY_POINTER`, see
     themes.md) carries a "★ " prefix wherever it appears, so the
     default is visible without opening a tooltip."""
     content = QWidget()
