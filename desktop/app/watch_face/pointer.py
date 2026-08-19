@@ -27,7 +27,8 @@ from PySide6.QtWidgets import (
 from app.watch_face import thumbs
 from app.watch_face.controls import picture_group
 from app.watch_face.widgets import pill
-from config import calendar_mounts, constants, pointer_geometry, pointer_names
+from config import calendar_mounts, pointer_geometry, pointer_names
+from config.registry import slots as slot_registry
 from render.skin_geometry import daylight_active
 
 
@@ -149,7 +150,7 @@ def _palette_style_row(settings, setters, tr) -> QHBoxLayout:
         settings.pointer, pointer_names.POINTER_PALETTE_LABELS["default"]
     )
     for style, label in zip(
-        constants.palette_styles_for(settings.pointer), labels
+        slot_registry.palette_styles_for(settings.pointer), labels
     ):
         row.addWidget(pill(
             tr(label), settings.palette_style == style,

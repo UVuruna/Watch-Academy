@@ -17,7 +17,8 @@ never silently defaulted).
 
 import re
 
-from config import constants, dial, eras, pantheon, pointer_geometry, umbra
+from config import dial, eras, pantheon, pointer_geometry, umbra
+from config.registry import slots as slot_registry
 from data.locations import Place, default_place, place_from_mapping
 
 _HEX_COLOR = re.compile(r"^#[0-9A-Fa-f]{6}$")
@@ -356,7 +357,7 @@ def load_palettes(raw: dict) -> dict:
     valid_keys = {
         f"{pointer}_{style}"
         for pointer in pointer_geometry.POINTER_POINTS
-        for style in constants.PALETTE_STYLES
+        for style in slot_registry.PALETTE_STYLES
     }
     palettes: dict = {}
     for key, hues in raw.items():

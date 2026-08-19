@@ -29,6 +29,7 @@ import re
 import pytest
 
 from config import palette
+from config.registry import slots as slot_registry
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent
 #: The program itself. `tests/` is exempt: a test may name a colour as a
@@ -126,4 +127,4 @@ def test_the_wheels_a_pointer_declares_are_the_ones_it_serves():
     for pointer, style in palette.PALETTE_PRESETS:
         declared.setdefault(pointer, set()).add(style)
     for pointer, styles in declared.items():
-        assert styles == set(constants.palette_styles_for(pointer)), pointer
+        assert styles == set(slot_registry.palette_styles_for(pointer)), pointer

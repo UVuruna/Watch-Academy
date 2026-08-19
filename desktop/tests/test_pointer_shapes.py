@@ -35,8 +35,9 @@ from app.settings_store import (
     SettingsStore,
     replace,
 )
-from config import calendar_mounts, constants, dial, palette, pointer_geometry
+from config import calendar_mounts, dial, palette, pointer_geometry
 from config import defaults
+from config.registry import slots as slot_registry
 from core.clock_state import build_day_context, build_tick_state
 from data.moon_phases import MoonPhaseRepository
 from data.seasons import SeasonsRepository
@@ -336,7 +337,7 @@ def test_the_seasons_wheel_puts_its_boundaries_on_the_cardinal_hours(app):
     """Owner spec 2026-07-29: the cross's TERTIARY wheel — the Seasons —
     turns 45°, so a season BEGINS at 12h/3h/6h/9h (astronomical). Its
     other two wheels stay centered on the cardinals (meteorological)."""
-    assert constants.SEASONS_ARM_OFFSET_DEG == 45.0
+    assert slot_registry.SEASONS_ARM_OFFSET_DEG == 45.0
     seasons = _skin("cross", palette_style="tertiary")
     assert arm_offset_deg(seasons) == 45.0
     assert _arm_angles(seasons) == [[45.0, 135.0, 225.0, 315.0]]

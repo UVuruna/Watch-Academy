@@ -118,7 +118,7 @@ def watch_title(
     labels = pointer_names.POINTER_PALETTE_LABELS.get(
         settings.pointer, pointer_names.POINTER_PALETTE_LABELS["default"]
     )
-    styles = constants.palette_styles_for(settings.pointer)
+    styles = slot_registry.palette_styles_for(settings.pointer)
     style = palette.effective_palette_style(
         settings.pointer, settings.palette_style
     )

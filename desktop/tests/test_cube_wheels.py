@@ -21,8 +21,9 @@ import astral
 import pytest
 from PySide6.QtWidgets import QApplication
 
-from config import archetypes, constants, defaults, palette, pointer_geometry, pointer_names
+from config import archetypes, defaults, palette, pointer_geometry, pointer_names
 from config.registry import week as week_registry
+from config.registry import slots as slot_registry
 from app.skin_builder import apply_display_settings, build_skin, watch_title
 from app.settings_store import Settings
 from core.clock_state import build_day_context, build_tick_state
@@ -78,15 +79,15 @@ def test_the_third_wheel_follows_the_arm_count():
     Quaternity (cross). The law is the arm count — 3, 4, 6 and 8 carry
     three wheels, the armless instruments and the Rose (7, 12, 24) carry
     two: eighteen wheels in all."""
-    assert constants.PALETTE_STYLES == ("primary", "secondary", "tertiary")
+    assert slot_registry.PALETTE_STYLES == ("primary", "secondary", "tertiary")
     for pointer in ("trio", "cross", "hexa", "octa"):
-        assert constants.palette_styles_for(pointer) == (
+        assert slot_registry.palette_styles_for(pointer) == (
             "primary", "secondary", "tertiary"
         )
     for pointer in ("aurora", "calendar", "rose"):
-        assert constants.palette_styles_for(pointer) == ("primary", "secondary")
+        assert slot_registry.palette_styles_for(pointer) == ("primary", "secondary")
     wheels = sum(
-        len(constants.palette_styles_for(pointer))
+        len(slot_registry.palette_styles_for(pointer))
         for pointer in pointer_geometry.POINTER_POINTS
     )
     assert wheels == 18

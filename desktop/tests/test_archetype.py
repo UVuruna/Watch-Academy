@@ -25,6 +25,7 @@ from PySide6.QtWidgets import QApplication
 
 from config import archetypes, constants, defaults, dial, encyclopedia_ui, pointer_geometry
 from config.registry import week as week_registry
+from config.registry import slots as slot_registry
 from core.clock_state import build_day_context, build_tick_state
 from data.moon_phases import MoonPhaseRepository
 from data.seasons import SeasonsRepository
@@ -160,7 +161,7 @@ def test_figure_order_matches_the_hour_spaces():
         assert len(figs) == arms
         step = 360.0 / arms
         offset = (
-            constants.GENESIS_ARM_OFFSET_DEG
+            slot_registry.GENESIS_ARM_OFFSET_DEG
             if (pointer, style) == ("trio", "tertiary") else 0.0
         )
         assert [fig["angle"] for fig in figs] == [

@@ -18,6 +18,7 @@ from PySide6.QtWidgets import QApplication
 
 from config import constants, defaults, dial, encyclopedia_ui, glow, palette, pantheon, pointer_geometry, shortcuts, umbra
 from config.registry import week as week_registry
+from config.registry import slots as slot_registry
 from core.clock_state import build_day_context, build_tick_state
 from data.moon_phases import MoonPhaseRepository
 from data.seasons import SeasonsRepository
@@ -848,7 +849,7 @@ def test_palette_presets_cover_every_pointer_and_style():
     (`palette_styles_for` — the Cube pointers carry the third wheel,
     the rest stay two-wheel; a preset must exist for each)."""
     for pointer, arms in pointer_geometry.POINTER_POINTS.items():
-        for style in constants.palette_styles_for(pointer):
+        for style in slot_registry.palette_styles_for(pointer):
             wheel_hues = palette.PALETTE_PRESETS[(pointer, style)]
             assert len(wheel_hues) == arms, (pointer, style)
         # And no orphan preset beyond the served styles — the armless
@@ -1745,9 +1746,9 @@ def test_every_pointer_wheel_pair_differs(app):
     menu, submenu = QMenu(), QMenu()
     actions = WatchController._add_choice_group(
         None, menu, submenu,
-        [(style, style) for style in constants.PALETTE_STYLES],
-        constants.PALETTE_STYLES[0], lambda value: None,
-        disabled=constants.PALETTE_STYLES,
+        [(style, style) for style in slot_registry.PALETTE_STYLES],
+        slot_registry.PALETTE_STYLES[0], lambda value: None,
+        disabled=slot_registry.PALETTE_STYLES,
     )
     assert all(not a.isEnabled() for a in actions)
 

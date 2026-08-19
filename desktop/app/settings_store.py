@@ -24,6 +24,7 @@ from app.settings_fields import (
 from app.settings_ring import fold_ring_name, load_named_dict, normalized_ring_card
 from config import calendar_mounts, constants, defaults, dial, eras, identity, pantheon, pointer_geometry, umbra
 from config.registry import week as week_registry
+from config.registry import slots as slot_registry
 from data.locations import Place, default_place
 from data.rings import ring_presets
 
@@ -591,7 +592,7 @@ class SettingsStore:
                 ("pointer", "hexa", tuple(pointer_geometry.POINTER_POINTS)),
                 ("umbra_form", "gradient", umbra.UMBRA_FORMS),
                 ("umbra_contrast", "dark", umbra.UMBRA_CONTRAST_VARIANTS),
-                ("palette_style", "primary", constants.PALETTE_STYLES),
+                ("palette_style", "primary", slot_registry.PALETTE_STYLES),
                 ("pointer_shape", pointer_geometry.POINTER_SHAPE_DEFAULT,
                  pointer_geometry.POINTER_SHAPES),
                 ("polygon_edge", pointer_geometry.POLYGON_EDGE_DEFAULT,

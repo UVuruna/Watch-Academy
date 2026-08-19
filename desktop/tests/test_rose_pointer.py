@@ -23,6 +23,7 @@ from PySide6.QtWidgets import QApplication
 from app.skin_builder import build_skin
 from app.settings_store import Settings
 from config import calendar_mounts, constants, defaults, palette, pantheon, pointer_geometry, pointer_names
+from config.registry import slots as slot_registry
 from core.clock_state import build_day_context, build_tick_state
 from core.year_wheel import year_marker_angle
 from data.moon_phases import MoonPhaseRepository
@@ -94,9 +95,9 @@ def test_the_rose_is_the_seventh_pointer_with_two_wheels():
     assert len(pointer_geometry.POINTER_POINTS) == 7
     assert pointer_names.POINTER_DISPLAY_NAMES["rose"] == "Rose"
     # Two wheels, not three — the Rose is not a Cube-wheel pointer.
-    assert constants.palette_styles_for("rose") == ("primary", "secondary")
+    assert slot_registry.palette_styles_for("rose") == ("primary", "secondary")
     assert pointer_names.POINTER_PALETTE_LABELS["rose"] == ("Legacy", "Prophecy")
-    assert "rose" not in constants.THIRD_WHEEL_POINTERS
+    assert "rose" not in slot_registry.THIRD_WHEEL_POINTERS
 
 
 # --- The three stars ----------------------------------------------------------------

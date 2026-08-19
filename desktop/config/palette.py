@@ -34,7 +34,8 @@ alpha fraction and radius that merely happens to sit beside a hue.
 Layer: config (pure — no Qt, no wall clock). Documentation: palette.md.
 """
 
-from config import constants, pointer_names
+from config import pointer_names
+from config.registry import slots as slot_registry
 
 
 # ==================================================================
@@ -308,13 +309,13 @@ PALETTE_PRESETS = {
 def effective_palette_style(pointer: str, palette_style: str) -> str:
     """The wheel slot AS RENDERED for this pointer: "tertiary" holds
     only where the pointer actually serves a third wheel
-    (`constants.palette_styles_for`); everywhere else — a stored
+    (`slot_registry.palette_styles_for`); everywhere else — a stored
     "tertiary" left behind by a pointer switch — it normalizes to
     "primary". The ONE normalization point (Rule #5): `app.controller.
     apply_display_settings`, the settings dialog's palette group and
     `watch_title` all read the style through here, so no consumer ever
     indexes PALETTE_PRESETS with a pair that does not exist."""
-    if palette_style in constants.palette_styles_for(pointer):
+    if palette_style in slot_registry.palette_styles_for(pointer):
         return palette_style
     return "primary"
 

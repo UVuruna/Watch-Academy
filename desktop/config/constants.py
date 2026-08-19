@@ -14,61 +14,6 @@ from config import registry
 
 # ═══════════════════════════ APP IDENTITY ═══════════════════════════
 
-# ═══════════════════════════ WHEEL SLOTS ═══════════════════════════
-# The WHEEL SLOTS a pointer's palette row can hold. The keys are
-# POSITIONAL and carry NO meaning of their own (owner decree
-# 2026-07-28, closing the "paint"/"light" era: those two words named a
-# subtractive-vs-additive distinction that stopped being true the moment
-# the slots started carrying the Zodiac, the Persons, the Walks of Life
-# and the Rose's Legacy). A wheel's MEANING lives in exactly one place —
-# `POINTER_PALETTE_LABELS` above. The third slot exists ONLY on the
-# pointers `palette_styles_for` names; everywhere else a stored
-# "tertiary" normalizes back to "primary"
-# (`palette.effective_palette_style`).
-PALETTE_STYLES = ("primary", "secondary", "tertiary")
-# The pointers whose wheel row carries a THIRD wheel: trio — Genesis
-# (the creation trio, drawn INVERTED); cross — Seasons (owner seal
-# 2026-07-28, the wheel the pointer used to be named after); hexa —
-# Council (all six Double-Trinity offices); octa — Character (the Cube
-# at depth zero), CUBE.md. The law is the arm count: the pointers that
-# draw 3, 4, 6 or 8 arms carry three wheels; the armless ones and the
-# Rose (7, 12, 24) carry two — eighteen wheels in all.
-THIRD_WHEEL_POINTERS = ("trio", "cross", "hexa", "octa")
-
-def palette_styles_for(pointer: str) -> tuple[str, ...]:
-    """The wheel slots THIS pointer actually serves — ("primary",
-    "secondary") everywhere, plus "tertiary" on the three-wheel
-    pointers. The ONE gate the Design window's wheel row, the settings
-    normalization and the tests all read (Rule #5)."""
-    if pointer in THIRD_WHEEL_POINTERS:
-        return PALETTE_STYLES
-    return PALETTE_STYLES[:2]
-
-# ═══════════════════════════ WHEEL ARM OFFSETS ═══════════════════════════
-# THE GENESIS INVERSION (owner: "trougao ka dole", CUBE.md §Double
-# Trinity): the trio's TERTIARY wheel draws its three arms on the OPPOSITE
-# seats — 24h/16h/08h instead of 12h/20h/04h — one arm-angle offset fed
-# through render.skin_geometry.arm_offset_deg into the star diamonds, the Aura
-# wedges, the weekday slots, the lit-index math and the arm hit-test.
-GENESIS_ARM_OFFSET_DEG = 180.0
-
-# THE SEASONS ROTATION (Pointers REWORK phase 1, owner spec 2026-07-29):
-# the cross's TERTIARY wheel — the Seasons — turns its four arms by half
-# a wedge, so the color BOUNDARIES land exactly on 12h/3h/6h/9h and the
-# wheel reads ASTRONOMICAL seasons (a season begins at its turning
-# point) instead of the meteorological quarters the primary
-# (Temperaments) and secondary (Elements) wheels keep.
-SEASONS_ARM_OFFSET_DEG = 45.0
-
-# Every WHEEL that seats its arms off the pointer's own default angles,
-# keyed (pointer, wheel slot) — the ONE table `render.layers.
-# arm_offset_deg` reads, so a new offset wheel is a line here rather
-# than a branch in the renderer (Rule #5).
-WHEEL_ARM_OFFSET_DEG = {
-    ("trio", "tertiary"): GENESIS_ARM_OFFSET_DEG,
-    ("cross", "tertiary"): SEASONS_ARM_OFFSET_DEG,
-}
-
 # ═══════════════════════════ THE CUBE LOOK ═══════════════════════════
 # THE CUBE LOOK (owner seal 2026-07-26, CUBE.md §Display laws): the
 # Double-Trinity FAMILY wheels — the Court (trio primary), Genesis (trio

@@ -10,6 +10,7 @@ from PySide6.QtGui import QColor
 
 from config import archetypes, calendar_mounts, constants, palette, pointer_geometry
 from config.registry import week as week_registry
+from config.registry import slots as slot_registry
 from render.context import RenderContext
 from skins.manifest import SkinDefinition
 
@@ -55,7 +56,7 @@ def saturate_hue(hue: str, factor: float) -> str:
 
 
 def arm_offset_deg(skin: SkinDefinition) -> float:
-    """THE OFFSET WHEELS (`constants.WHEEL_ARM_OFFSET_DEG`) — the wheels
+    """THE OFFSET WHEELS (`slot_registry.WHEEL_ARM_OFFSET_DEG`) — the wheels
     that seat their arms off the pointer's own default angles, read by
     every arm consumer through this ONE function (Rule #5): the star
     diamonds and polygon faces, the Aura wedges, the weekday slots, the
@@ -70,7 +71,7 @@ def arm_offset_deg(skin: SkinDefinition) -> float:
       cardinals (meteorological).
 
     0 on every other wheel."""
-    return constants.WHEEL_ARM_OFFSET_DEG.get(
+    return slot_registry.WHEEL_ARM_OFFSET_DEG.get(
         (skin.pointer, skin.palette_style), 0.0
     )
 
