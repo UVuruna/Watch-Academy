@@ -22,7 +22,7 @@ from PySide6.QtWidgets import QApplication
 
 from app.skin_builder import build_skin
 from app.settings_store import Settings
-from config import calendar_mounts, constants, defaults, palette, pantheon, pointer_geometry, pointer_names
+from config import calendar_mounts, defaults, doctrine, palette, pantheon, pointer_geometry, pointer_names
 from config.registry import slots as slot_registry
 from core.clock_state import build_day_context, build_tick_state
 from core.year_wheel import year_marker_angle
@@ -252,7 +252,7 @@ def test_the_compass_servant_seat_is_untouched(app):
     Seasons keep 24h (Rule #6: one reader, no behavior drift)."""
     for pointer in ("octa", "cross"):
         skin = build_skin(dataclasses.replace(Settings(), pointer=pointer))
-        assert servant_seat_angle(skin) == constants.SOUTH_SLOT_ANGLE
+        assert servant_seat_angle(skin) == doctrine.SOUTH_SLOT_ANGLE
 
 
 def test_the_rose_carries_the_dual_sunday_face(app):
@@ -263,7 +263,7 @@ def test_rose_sunday_hover_fires_on_the_sabbath_seat_not_the_legacy_bottom(app):
     """REGRESSION (owner screenshot 2026-07-28): the two Sunday faces
     DRAW on the Sunday axis (Servant blue 06h/270°, Ruler red 18h/90°),
     but `Compositor.element_at`/`_weekday_body_at` used to hardcode
-    `constants.SOUTH_SLOT_ANGLE` (24h/180°, the Compass/Seasons seat)
+    `doctrine.SOUTH_SLOT_ANGLE` (24h/180°, the Compass/Seasons seat)
     for the Servant hit-test instead of calling `servant_seat_angle` —
     so the Rose's hover fired at the legacy bottom instead of its own
     drawn blue arm, and blanked Wednesday's real 24h/purple seat on
@@ -275,7 +275,7 @@ def test_rose_sunday_hover_fires_on_the_sabbath_seat_not_the_legacy_bottom(app):
 
     # The legacy bottom seat (24h/180°) must NOT answer as the Servant —
     # on the Rose that arm is Wednesday's own purple seat, undisturbed.
-    legacy_point = dial_point(constants.SOUTH_SLOT_ANGLE, orbit)
+    legacy_point = dial_point(doctrine.SOUTH_SLOT_ANGLE, orbit)
     assert compositor.element_at(legacy_point, radius, 0.0, "sun") != (
         "sun_servant"
     )
@@ -294,7 +294,7 @@ def test_rose_sunday_hover_fires_on_the_sabbath_seat_not_the_legacy_bottom(app):
 
 
 def test_the_blind_default_carries_over_for_every_undeclared_theme(app):
-    """`config.constants.DUALITY_RULER_ON_COLD_POLE` lists only the
+    """`config.doctrine.DUALITY_RULER_ON_COLD_POLE` lists only the
     Sacred-Axis proof case — every OTHER dual theme keeps the Rose's
     plain default: Ruler on red (18h), Servant on blue (06h)."""
     for theme in ("greek", "norse", "profession", "wolf", "bible_dark"):
@@ -310,7 +310,7 @@ def test_creeds_flips_to_the_sacred_axis_colours(app):
     red — the reverse of the blind default, and of what the Rose drew
     before this config existed."""
     skin = _skin(weekday_theme="religion")
-    assert "religion" in constants.DUALITY_RULER_ON_COLD_POLE
+    assert "religion" in doctrine.DUALITY_RULER_ON_COLD_POLE
     assert ruler_seat_angle(skin) == 270.0     # Christianity — blue, 06h
     assert servant_seat_angle(skin) == 90.0    # Satanism — red, 18h
     # The Ruler's own drawn/hovered slot in the weekday table moves
@@ -330,7 +330,7 @@ def test_the_vertical_axis_never_flips(app):
                 Settings(), pointer=pointer, weekday_theme="religion",
             )
         )
-        assert servant_seat_angle(skin) == constants.SOUTH_SLOT_ANGLE
+        assert servant_seat_angle(skin) == doctrine.SOUTH_SLOT_ANGLE
 
 
 def test_creeds_flip_carries_no_art_or_name_swap(app):

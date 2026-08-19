@@ -16,7 +16,7 @@ import pytest
 from PySide6.QtCore import QPointF
 from PySide6.QtWidgets import QApplication
 
-from config import complications, constants, defaults, dial, encyclopedia_ui, glow, ninth, palette, pantheon, pointer_geometry, ring, shortcuts, ui_ranges, umbra
+from config import complications, constants, defaults, dial, doctrine, encyclopedia_ui, glow, ninth, palette, pantheon, pointer_geometry, ring, shortcuts, ui_ranges, umbra
 from config.registry import week as week_registry
 from config.registry import slots as slot_registry
 from core.clock_state import build_day_context, build_tick_state
@@ -110,7 +110,7 @@ def test_slot_angles_sit_on_the_pointer_arms():
 
 def test_octa_reserves_the_bottom_arm_for_the_info_slot():
     occupied = [angle for angle, _ in week_registry.POINTER_WEEKDAY_SLOTS["octa"]]
-    assert constants.SOUTH_SLOT_ANGLE not in occupied
+    assert doctrine.SOUTH_SLOT_ANGLE not in occupied
 
 
 def test_slot_layout_matrix():
@@ -126,9 +126,9 @@ def test_slot_layout_matrix():
     TOP = complications.SLOT_SEAT_TOP_ANGLE
     RIGHT_ARM = complications.SLOT_SEAT_RIGHT_ARM_ANGLE
     LEFT_ARM = complications.SLOT_SEAT_LEFT_ARM_ANGLE
-    H3 = constants.AURORA_DUAL_WEEKDAY_ANGLE
-    H21 = constants.AURORA_DUAL_SLOT_ANGLE
-    SOUTH = constants.SOUTH_SLOT_ANGLE
+    H3 = doctrine.AURORA_DUAL_WEEKDAY_ANGLE
+    H21 = doctrine.AURORA_DUAL_SLOT_ANGLE
+    SOUTH = doctrine.SOUTH_SLOT_ANGLE
 
     def skin(**kw):
         kw.setdefault("show_octa_slot", False)
@@ -229,7 +229,7 @@ def test_slot_seat_geometry_follows_the_pointer():
         skin(pointer="octa", show_pointer=False)
     ) == dial.SLOT_SIZE_PINNED == 1.50
     # (3) The outward shift: angle seats on cross/octa only.
-    H3 = constants.AURORA_DUAL_WEEKDAY_ANGLE
+    H3 = doctrine.AURORA_DUAL_WEEKDAY_ANGLE
     for pointer in ("cross", "octa"):
         assert slot_seat_orbit(skin(pointer=pointer), H3) == \
             dial.SLOT_SEAT_OUTWARD[pointer], pointer

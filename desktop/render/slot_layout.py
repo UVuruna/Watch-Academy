@@ -6,7 +6,7 @@ the duality questions that decide who holds the Sunday and the centre
 seat.
 """
 
-from config import complications, constants, dial, pantheon, paths
+from config import complications, dial, doctrine, pantheon, paths
 from render.skin_geometry import archetype_active, center_duality, servant_seat_angle, visible_occupant, weekday_slots
 from skins.manifest import SkinDefinition
 
@@ -55,9 +55,9 @@ def slot_layout(skin: SkinDefinition) -> dict:
     )
     if pinned:
         seats = {
-            1: (constants.SOUTH_SLOT_ANGLE,),
-            2: (constants.AURORA_DUAL_WEEKDAY_ANGLE,
-                constants.AURORA_DUAL_SLOT_ANGLE),
+            1: (doctrine.SOUTH_SLOT_ANGLE,),
+            2: (doctrine.AURORA_DUAL_WEEKDAY_ANGLE,
+                doctrine.AURORA_DUAL_SLOT_ANGLE),
             3: (complications.SLOT_SEAT_TOP_ANGLE,
                 complications.SLOT_SEAT_RIGHT_ARM_ANGLE,
                 complications.SLOT_SEAT_LEFT_ARM_ANGLE),
@@ -70,7 +70,7 @@ def slot_layout(skin: SkinDefinition) -> dict:
                 return {index: "classic"}
             return {
                 index: (
-                    constants.SOUTH_SLOT_ANGLE
+                    doctrine.SOUTH_SLOT_ANGLE
                     if skin.pointer == "trio"
                     else "center"
                 )
@@ -97,21 +97,21 @@ def slot_layout(skin: SkinDefinition) -> dict:
             other = next(index for index in order if index != classic)
             return {classic: "classic", other: "center"}
         return {
-            order[0]: constants.AURORA_DUAL_WEEKDAY_ANGLE,
-            order[1]: constants.AURORA_DUAL_SLOT_ANGLE,
+            order[0]: doctrine.AURORA_DUAL_WEEKDAY_ANGLE,
+            order[1]: doctrine.AURORA_DUAL_SLOT_ANGLE,
         }
     if skin.pointer == "cross":
         # The 1st is LOCKED to the weekday unit (owner; coerced in
         # apply_display_settings) — the other two flank at 3h/21h.
         return {
             order[0]: "classic",
-            order[1]: constants.AURORA_DUAL_SLOT_ANGLE,
-            order[2]: constants.AURORA_DUAL_WEEKDAY_ANGLE,
+            order[1]: doctrine.AURORA_DUAL_SLOT_ANGLE,
+            order[2]: doctrine.AURORA_DUAL_WEEKDAY_ANGLE,
         }
     return {
         order[0]: complications.SLOT_SEAT_TOP_ANGLE,
-        order[1]: constants.AURORA_DUAL_SLOT_ANGLE,
-        order[2]: constants.AURORA_DUAL_WEEKDAY_ANGLE,
+        order[1]: doctrine.AURORA_DUAL_SLOT_ANGLE,
+        order[2]: doctrine.AURORA_DUAL_WEEKDAY_ANGLE,
     }
 
 

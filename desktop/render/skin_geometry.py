@@ -8,7 +8,7 @@ weekday slots sit. Pure functions of a `SkinDefinition`; no painting.
 
 from PySide6.QtGui import QColor
 
-from config import archetypes, calendar_mounts, constants, cube, palette, pointer_geometry
+from config import archetypes, calendar_mounts, cube, doctrine, palette, pointer_geometry
 from config.registry import week as week_registry
 from config.registry import slots as slot_registry
 from render.context import RenderContext
@@ -191,23 +191,23 @@ def horizontal_duality(skin: SkinDefinition) -> bool:
     """Whether this skin's Sunday duality rides the HORIZONTAL blue<->red
     axis — Servant on blue 06h left, Ruler on red 18h right (owner seal
     2026-07-29): the Rose on BOTH its wheels, plus the wheels
-    `constants.HORIZONTAL_DUALITY_WHEELS` names (the Compass's Character
+    `doctrine.HORIZONTAL_DUALITY_WHEELS` names (the Compass's Character
     wheel, which wears the same ROSE_PALETTE hues)."""
     return (
         skin.pointer == "rose"
-        or (skin.pointer, _wheel(skin)) in constants.HORIZONTAL_DUALITY_WHEELS
+        or (skin.pointer, _wheel(skin)) in doctrine.HORIZONTAL_DUALITY_WHEELS
     )
 
 
 def center_duality(skin: SkinDefinition) -> bool:
     """Whether this skin's Sunday duality lives in ONE CENTER image —
     the Trinity and the Prism on every wheel, plus the wheels
-    `constants.CENTER_DUALITY_WHEELS` names (the Quaternity's Seasons
+    `doctrine.CENTER_DUALITY_WHEELS` names (the Quaternity's Seasons
     wheel: its arms turn onto the diagonals, so no 12h/24h seat exists
     to hold a second face — owner seal 2026-07-29)."""
     return (
         skin.pointer in ("hexa", "trio")
-        or (skin.pointer, _wheel(skin)) in constants.CENTER_DUALITY_WHEELS
+        or (skin.pointer, _wheel(skin)) in doctrine.CENTER_DUALITY_WHEELS
     )
 
 
@@ -217,7 +217,7 @@ def _base_weekday_slots(skin: SkinDefinition) -> tuple:
     pointers (the Compass's Character wheel), which take the ROSE's
     hue-seated table wholesale, because their arms wear the Rose's own
     hues and the seat is the HUE (owner seal 2026-07-29)."""
-    if (skin.pointer, _wheel(skin)) in constants.HORIZONTAL_DUALITY_WHEELS:
+    if (skin.pointer, _wheel(skin)) in doctrine.HORIZONTAL_DUALITY_WHEELS:
         return week_registry.POINTER_WEEKDAY_SLOTS["rose"]
     return week_registry.POINTER_WEEKDAY_SLOTS[skin.pointer]
 
@@ -238,8 +238,8 @@ def _duality_servant_default_angle(skin: SkinDefinition) -> float:
     arm on every horizontal-duality wheel (`constants.SERVANT_SEAT_
     ANGLE`), the 24h bottom everywhere else."""
     if horizontal_duality(skin):
-        return constants.SERVANT_SEAT_ANGLE["rose"]
-    return constants.SOUTH_SLOT_ANGLE
+        return doctrine.SERVANT_SEAT_ANGLE["rose"]
+    return doctrine.SOUTH_SLOT_ANGLE
 
 
 def _duality_flipped(skin: SkinDefinition) -> bool:
@@ -248,14 +248,14 @@ def _duality_flipped(skin: SkinDefinition) -> bool:
     on a HORIZONTAL wheel, the Sacred-Axis themes (`constants.DUALITY_
     RULER_ON_COLD_POLE` — Christianity pulls to the cold blue pole,
     Satanism to the warm red); on a VERTICAL wheel, the geographic
-    themes (`constants.DUALITY_SERVANT_ON_TOP` — the Arctic IS the
+    themes (`doctrine.DUALITY_SERVANT_ON_TOP` — the Arctic IS the
     north, owner seal 2026-07-29). A CENTER duality has no seats to
     swap."""
     if center_duality(skin):
         return False
     if horizontal_duality(skin):
-        return skin.weekday_theme in constants.DUALITY_RULER_ON_COLD_POLE
-    return skin.weekday_theme in constants.DUALITY_SERVANT_ON_TOP
+        return skin.weekday_theme in doctrine.DUALITY_RULER_ON_COLD_POLE
+    return skin.weekday_theme in doctrine.DUALITY_SERVANT_ON_TOP
 
 
 def ruler_seat_angle(skin: SkinDefinition) -> float:
@@ -271,7 +271,7 @@ def ruler_seat_angle(skin: SkinDefinition) -> float:
 
 def servant_seat_angle(skin: SkinDefinition) -> float:
     """The angle the SERVANT face of Sunday occupies (Rule #5 — the ONE
-    reader of `constants.SERVANT_SEAT_ANGLE`). The 24h bottom on the
+    reader of `doctrine.SERVANT_SEAT_ANGLE`). The 24h bottom on the
     vertical wheels (Quaternity/Compass primary+secondary); the BLUE
     06h arm on every horizontal wheel (the Rose and the Compass's
     Character wheel), because blue is the servant's hue and red the

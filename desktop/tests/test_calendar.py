@@ -19,7 +19,7 @@ import astral
 import pytest
 from PySide6.QtWidgets import QApplication
 
-from config import calendar_mounts, constants, defaults, palette, pointer_geometry, zodiac
+from config import calendar_mounts, defaults, doctrine, palette, pointer_geometry, zodiac
 from core.clock_state import build_day_context, build_tick_state
 from core.year_wheel import almanac_marker_angle, almanac_month_index
 from data.moon_phases import MoonPhaseRepository
@@ -248,11 +248,11 @@ def test_calendar_uses_the_pinned_slot_layout():
     the pointer-off case — the weekday mode sits in a seat, never the
     classic unit."""
     skin = _calendar_skin()
-    assert slot_layout(skin) == {1: constants.SOUTH_SLOT_ANGLE}
+    assert slot_layout(skin) == {1: doctrine.SOUTH_SLOT_ANGLE}
     assert weekday_classic_slot(skin) is None
     assert slot_layout(_calendar_skin(show_octa_slot=True)) == {
-        1: constants.AURORA_DUAL_WEEKDAY_ANGLE,
-        2: constants.AURORA_DUAL_SLOT_ANGLE,
+        1: doctrine.AURORA_DUAL_WEEKDAY_ANGLE,
+        2: doctrine.AURORA_DUAL_SLOT_ANGLE,
     }
 
 

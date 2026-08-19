@@ -12,7 +12,7 @@ sealed per-theme flips (religion horizontal, continents vertical)."""
 import pytest
 from PySide6.QtWidgets import QApplication
 
-from config import constants, defaults
+from config import defaults, doctrine
 from config.registry import week as week_registry
 from render.skin_geometry import (
     center_duality,
@@ -61,7 +61,7 @@ def test_compass_character_wheel_rides_the_horizontal_axis(app):
         vertical = _skin("octa", style)
         assert not horizontal_duality(vertical)
         assert ruler_seat_angle(vertical) == 0.0
-        assert servant_seat_angle(vertical) == constants.SOUTH_SLOT_ANGLE
+        assert servant_seat_angle(vertical) == doctrine.SOUTH_SLOT_ANGLE
 
 
 def test_character_wheel_honors_the_sacred_axis_flip(app):
@@ -106,7 +106,7 @@ def test_continents_geographic_vertical_flip(app):
     stay standard (18h red Antarctica, 06h blue Arctic)."""
     for pointer in ("cross", "octa"):
         skin = _skin(pointer, "primary", theme="continents")
-        assert ruler_seat_angle(skin) == constants.SOUTH_SLOT_ANGLE
+        assert ruler_seat_angle(skin) == doctrine.SOUTH_SLOT_ANGLE
         assert servant_seat_angle(skin) == 0.0
         slots = dict(weekday_slots(skin))
         assert "sun" in slots[180.0]
