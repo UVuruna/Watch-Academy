@@ -67,9 +67,9 @@ RATCHET: dict[str, tuple[str, str]] = {
     # `render/tooltip_composer.py` (2,239 logic lines) LEFT this list on
     # 2026-08-19, and with it the LAST non-test entry: the owner ruled the
     # cut BY TOOLTIP FAMILY and it landed — render/tooltip_sky.py (624),
-    # render/tooltip_ring.py (748), render/tooltip_calendar.py (504) and
+    # render/tooltip_ring.py (748), render/tooltip_calendar.py (514) and
     # render/encyclopedia_targets.py (262) are MIXINS on the composer, which
-    # is down to 266 and keeps the two text doors, the dispatch and the six
+    # is down to 278 and keeps the two text doors, the dispatch and the six
     # shared formatting helpers (`encyclopedia_target`'s BODY rides in the
     # targets mixin; the NAME is still the composer's, by inheritance). One holder of the dial, not four; the HTML
     # of 959 hover points is proven byte-identical by

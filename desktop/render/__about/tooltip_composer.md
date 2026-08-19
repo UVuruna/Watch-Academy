@@ -34,7 +34,7 @@ left here is what belongs to no family:
   Anno Lucis plus the optional third calendar) and `_label`;
 - **`_skin`**, the property `config.paths.in_display` reads.
 
-266 logic lines, down from 2,239.
+278 logic lines, down from 2,239.
 
 It was ~2,400 lines inside [Compositor](compositor.md), a module whose
 job is to stack paint layers and answer hit tests. The [OOP

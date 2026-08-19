@@ -184,8 +184,8 @@ the last product file: the owner gave the word for the cut BY TOOLTIP
 FAMILY that its own `owes` line had recorded as debt. 2,239 logic lines
 became five files, none near the wall —
 `render/tooltip_sky.py` (624), `render/tooltip_ring.py` (748),
-`render/tooltip_calendar.py` (504), `render/encyclopedia_targets.py`
-(262) and the composer itself (266), which keeps the three doors, the
+`render/tooltip_calendar.py` (514), `render/encyclopedia_targets.py`
+(262) and the composer itself (278), which keeps the three door NAMES, the
 dispatch and the six shared formatting helpers. **The families are
 MIXINS, not collaborators** — the entry's own objection was "three
 holders is three back-channels", so the dial stays held ONCE, by the
