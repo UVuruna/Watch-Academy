@@ -43,7 +43,7 @@ sys.path.insert(0, str(PROJECT_ROOT))
 
 import astral                                            # noqa: E402
 
-from config import constants                              # noqa: E402
+from config import constants                              # noqa: E402, dial
 from config.registry import availability as availability_registry  # noqa: E402
 from config.registry import pointers as pointers_registry  # noqa: E402
 from config.registry.week import WEEK                     # noqa: E402
@@ -279,9 +279,9 @@ def build_golden_vectors() -> dict:
                     "calling the real desktop core, never typed by hand. "
                     "A group is DONE on the Kotlin side when its vectors "
                     "are green.",
-            "dial_offset_deg": constants.DIAL_OFFSET_DEG,
-            "seconds_per_day": constants.SECONDS_PER_DAY,
-            "seconds_per_hour": constants.SECONDS_PER_HOUR,
+            "dial_offset_deg": dial.DIAL_OFFSET_DEG,
+            "seconds_per_day": dial.SECONDS_PER_DAY,
+            "seconds_per_hour": dial.SECONDS_PER_HOUR,
             "hexagram_formula": "(noon_secs - 43200) / 240",
         },
         "groups": {name: builder() for name, builder in VECTOR_GROUPS.items()},

@@ -16,7 +16,7 @@ proxies and produce identical results.
 import math
 from datetime import datetime
 
-from config import constants
+from config import constants, dial
 
 
 # --- Era notation (owner amendment 2026-07-17) --------------------------------
@@ -189,7 +189,7 @@ def unix_epoch_seconds(astro_year: int, month: int, day: int) -> int:
     days = int(julian_day(astro_year, month, day, 0.5)) - int(
         julian_day(1970, 1, 1, 0.5)
     )
-    return days * constants.SECONDS_PER_DAY
+    return days * dial.SECONDS_PER_DAY
 
 
 def era_names(notation: str) -> tuple[str, str]:

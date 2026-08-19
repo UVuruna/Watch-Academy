@@ -8,7 +8,7 @@ coordinates.
 
 from datetime import datetime, time
 
-from config import constants
+from config import dial
 
 
 def time_to_dial_angle(t: datetime | time) -> float:
@@ -17,13 +17,13 @@ def time_to_dial_angle(t: datetime | time) -> float:
     12:00 -> 0 (top), 18:00 -> 90 (right), 00:00 -> 180 (bottom),
     06:00 -> 270 (left).
     """
-    secs = t.hour * constants.SECONDS_PER_HOUR + t.minute * 60 + t.second
-    return (secs / constants.SECONDS_PER_DAY * 360.0 + constants.DIAL_OFFSET_DEG) % 360.0
+    secs = t.hour * dial.SECONDS_PER_HOUR + t.minute * 60 + t.second
+    return (secs / dial.SECONDS_PER_DAY * 360.0 + dial.DIAL_OFFSET_DEG) % 360.0
 
 
 def minute_hand_angle(t: datetime | time) -> float:
     """Angle of the large hand: one revolution per hour, 0 at the top."""
-    return (t.minute * 60 + t.second) / constants.SECONDS_PER_HOUR * 360.0
+    return (t.minute * 60 + t.second) / dial.SECONDS_PER_HOUR * 360.0
 
 
 def second_hand_angle(t: datetime | time) -> float:
@@ -48,7 +48,7 @@ def ring_position_angle(position: int) -> float:
     letters, the per-letter hover legend and the outer Great Seal crown text
     arc (`core.crown_text`) alike, so a pinned letter and its ring seat always
     agree by construction."""
-    return (position * 15.0 + constants.DIAL_OFFSET_DEG) % 360.0
+    return (position * 15.0 + dial.DIAL_OFFSET_DEG) % 360.0
 
 
 def readable_rotation_deg(theta: float) -> float:
@@ -101,8 +101,8 @@ def star_rotation_deg(solar_noon: datetime) -> float:
     bugs.
     """
     secs = (
-        solar_noon.hour * constants.SECONDS_PER_HOUR
+        solar_noon.hour * dial.SECONDS_PER_HOUR
         + solar_noon.minute * 60
         + solar_noon.second
     )
-    return (secs - constants.SOLAR_NOON_SECS) / constants.SECONDS_PER_DEGREE
+    return (secs - dial.SOLAR_NOON_SECS) / dial.SECONDS_PER_DEGREE

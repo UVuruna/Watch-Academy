@@ -14,24 +14,6 @@ from config import registry
 
 # ═══════════════════════════ APP IDENTITY ═══════════════════════════
 
-# --- Dial identity -----------------------------------------------------------
-# The dial is a 24-hour clock face, CLOCKWISE, with 12:00 noon at the TOP
-# and 00:00 midnight at the BOTTOM (18:00 right, 06:00 left).
-HOURS_PER_REVOLUTION = 24
-DIAL_TOP_HOUR = 12
-
-SECONDS_PER_DAY = 86_400
-SECONDS_PER_HOUR = 3_600
-
-# Raw time-of-day angle has 00:00 at the top; the dial puts noon there.
-DIAL_OFFSET_DEG = 180.0
-SOLAR_NOON_SECS = 43_200            # 12:00 as seconds since local midnight
-SECONDS_PER_DEGREE = SECONDS_PER_DAY / 360.0    # 240 s of day per dial degree
-
-# Owner's hand-design convention: every hand rotates about a point
-# exactly this many design units above its canvas bottom.
-HAND_HUB_OFFSET_UNITS = 15
-
 # --- Sun ----------------------------------------------------------------------
 CIVIL_DEPRESSION = 6.0              # degrees below horizon for dawn/dusk
 HORIZON_ELEVATION_DEG = -0.833      # solar disc touches the horizon (refraction)

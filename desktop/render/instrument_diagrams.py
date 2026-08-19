@@ -184,7 +184,7 @@ def _dial_face(painter: QPainter, center: QPointF, radius: float,
     painter.setPen(_pen(_FAINT, size, 0.005))
     painter.setBrush(Qt.BrushStyle.NoBrush)
     painter.drawEllipse(center, radius, radius)
-    for hour in range(constants.HOURS_PER_REVOLUTION):
+    for hour in range(dial.HOURS_PER_REVOLUTION):
         cardinal = hour % 6 == 0
         angle = angles.ring_position_angle(hour)
         inner = radius * (0.90 if cardinal else 0.95)
@@ -213,11 +213,11 @@ def _dial(_key: str, size: int) -> QPixmap:
     radius = size * encyclopedia_ui.INSTRUMENT_DIAGRAM_RING_RATIO
     _dial_face(painter, center, radius, size)
     hour, minute = encyclopedia_ui.INSTRUMENT_DIAGRAM_SAMPLE_TIME
-    seconds = hour * constants.SECONDS_PER_HOUR + minute * 60
+    seconds = hour * dial.SECONDS_PER_HOUR + minute * 60
     hour_angle = (
-        seconds / constants.SECONDS_PER_DAY * 360.0 + constants.DIAL_OFFSET_DEG
+        seconds / dial.SECONDS_PER_DAY * 360.0 + dial.DIAL_OFFSET_DEG
     ) % 360.0
-    minute_angle = (minute * 60) / constants.SECONDS_PER_HOUR * 360.0
+    minute_angle = (minute * 60) / dial.SECONDS_PER_HOUR * 360.0
     painter.setPen(_pen(_ACCENT, size, 0.011))
     painter.drawLine(center, _on_dial(center, radius * 0.60, hour_angle))
     painter.setPen(_pen(_INK, size, 0.006))
@@ -601,7 +601,7 @@ def _ring_presets(_key: str, size: int) -> QPixmap:
         painter.drawEllipse(center, radius, radius)
         seats = set(card["positions"])
         painter.setPen(Qt.PenStyle.NoPen)
-        for hour in range(1, constants.HOURS_PER_REVOLUTION + 1):
+        for hour in range(1, dial.HOURS_PER_REVOLUTION + 1):
             jewel = hour in seats
             painter.setBrush(QColor(_ACCENT if jewel else _FAINT))
             dot = jewel_dot if jewel else numeral_dot
@@ -662,7 +662,7 @@ def _world_modes(_key: str, size: int) -> QPixmap:
             # gap under the circle.
             if hour in (12, 24):
                 _text(painter, _on_dial(center, radius * 0.72, seat),
-                      f"{hour % constants.HOURS_PER_REVOLUTION:02d}h", size,
+                      f"{hour % dial.HOURS_PER_REVOLUTION:02d}h", size,
                       height=row.height)
         # The STAR: the hexagram, turned by its own rotation.
         painter.setPen(_pen_px(
