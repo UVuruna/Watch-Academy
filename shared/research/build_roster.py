@@ -22,7 +22,7 @@ REPO_ROOT = ROOT.parent
 SHARED = REPO_ROOT / "shared"
 sys.path.insert(0, str(REPO_ROOT / "desktop"))
 
-from config import complications, constants, pantheon, paths  # noqa: E402
+from config import complications, constants, pantheon, paths  # noqa: E402, ring
 
 SOURCES = ("gemini", "chatgpt")
 SEATS = ("sun", "moon", "mars", "mercury", "jupiter", "venus", "saturn")
@@ -106,7 +106,7 @@ def theme_dir(theme: str) -> str:
 
 
 def colored_dir(theme: str) -> str | None:
-    if theme not in constants.METAL_THEMES:
+    if theme not in ring.METAL_THEMES:
         return None
     base = theme_dir(theme)
     return base.rsplit("/", 1)[0] + "/colored"

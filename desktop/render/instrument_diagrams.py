@@ -30,7 +30,7 @@ from PySide6.QtGui import (
     QColor, QFont, QFontMetricsF, QPainter, QPen, QPixmap,
 )
 
-from config import calendar_mounts, constants, dial, doctrine, encyclopedia_ui, palette, paths, pointer_geometry, pointer_names, sky
+from config import calendar_mounts, dial, doctrine, encyclopedia_ui, palette, paths, pointer_geometry, pointer_names, ring, sky
 from core import angles
 from render import letter_plates
 from render.diagram_bank import DiagramBank
@@ -785,13 +785,13 @@ def _pointers(_key: str, size: int) -> QPixmap:
 
 def _chi(_key: str, size: int) -> QPixmap:
     """The composed CHI band itself, not a diagram OF it: the real
-    `"full"` outer plate (`constants.RING_OUTERS["full"]`) with its
+    `"full"` outer plate (`ring.RING_OUTERS["full"]`) with its
     hour numerals built by the SAME fidelity engine the dial's own ring
     composes with (`render.numeral_bands.band_plate`, the plate the
     `dial`/`ring_jewels` figures only sketch the geometry of) — every
     hour but the 24th, which the letter owns — and the X master
     recolored to CHI's own ceramic thematic shade
-    (`constants.RING_THEMATIC_SHADES["CHI"]`) through the SAME asset
+    (`ring.RING_THEMATIC_SHADES["CHI"]`) through the SAME asset
     cache the dial's own ring jewels recolor through
     (`render.assets.shared_cache`, THE ONE COPY RULE). Root Rule #19
     rules out a hand-drawn stand-in here specifically: the article is
@@ -816,7 +816,7 @@ def _chi(_key: str, size: int) -> QPixmap:
     painter.drawImage(QPointF(0, 0), band_plate(outer_spec))
 
     with paths.display(paths.display_context(
-        metal_shades={"thematic": constants.RING_THEMATIC_SHADES["CHI"]}
+        metal_shades={"thematic": ring.RING_THEMATIC_SHADES["CHI"]}
     )):
         glyph = shared_cache().pixmap_by_height(
             letter_plates.plate_path("X"),

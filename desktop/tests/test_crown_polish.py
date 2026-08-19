@@ -37,7 +37,7 @@ from PySide6.QtWidgets import QApplication
 
 from app.skin_builder import _location_crown_text, build_skin
 from app.settings_store import Settings, replace
-from config import constants, dial
+from config import dial, ring
 from core import numerals
 from data.rings import ring_presets
 from render import letter_plates, numeral_bands
@@ -215,7 +215,7 @@ def test_colon_and_digits_wear_ONE_metal(app, metal):
     are materialized first (`ensure_variant`) — the real dial reaches
     this state as soon as the background drain lands, and the cache key
     change above is what lets it."""
-    shade = constants.METAL_SHADE_DEFAULT[metal]
+    shade = ring.METAL_SHADE_DEFAULT[metal]
     sources = {}
     for glyph in (":", "5"):
         derived = jewel_metal_path(letter_plates.plate_path(glyph), metal)
@@ -251,7 +251,7 @@ def test_the_one_metal_proof_catches_the_defect_it_was_written_for(app):
     tooth that covers every metal is
     `test_crown_cache_key_carries_every_resolved_plate` above, which
     fails whatever metal the fallback happened to be."""
-    metal, shade = "silver", constants.METAL_SHADE_DEFAULT["silver"]
+    metal, shade = "silver", ring.METAL_SHADE_DEFAULT["silver"]
     digit = ensure_variant(jewel_metal_path(letter_plates.plate_path("5"), metal))
     if digit is None or not digit.exists():
         pytest.skip("the silver digit variant could not be materialized here")
@@ -349,8 +349,8 @@ def test_the_location_arc_separator_is_a_space_because_no_comma_plate_exists(app
     COMMA plate, so the comma is dropped and the gap collapses to one
     space — `_location_crown_text`'s existing behavior, reused rather
     than reinvented."""
-    assert "," not in constants.LETTER_PLATE_FILES
-    assert "," not in constants.RING_CROWN_TEXT_CHARSET
+    assert "," not in ring.LETTER_PLATE_FILES
+    assert "," not in ring.RING_CROWN_TEXT_CHARSET
     assert _location_crown_text("Belgrade, Serbia") == "BELGRADE SERBIA"
 
 
@@ -496,7 +496,7 @@ def test_crown_and_jewels_share_one_treatment(app, ring):
             assert dial.LETTER_ART_DIR in asset.parents, ring
     for hour, asset in skin.ring.jewel_art.items():
         glyph = skin.ring.jewels[hour]
-        if glyph == constants.RING_EYE_GLYPH:
+        if glyph == ring.RING_EYE_GLYPH:
             continue                     # the Shine toggle picks its own master
         assert asset == letter_plates.plate_path(glyph), (ring, hour, glyph)
 
@@ -612,7 +612,7 @@ def test_a_crown_tint_reaches_the_baked_time_too(app):
     clock above it untouched. The baked tile must wear it."""
     import dataclasses
 
-    plain = _spec_with_sources("gold", constants.METAL_SHADE_DEFAULT["gold"], {})
+    plain = _spec_with_sources("gold", ring.METAL_SHADE_DEFAULT["gold"], {})
     tinted = dataclasses.replace(plain, tint="#C0392B")
     assert tinted != plain and hash(tinted) != hash(plain), (
         "a tint change must be a new cache key, or the baked tiles outlive it"

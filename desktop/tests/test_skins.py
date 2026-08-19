@@ -5,7 +5,7 @@ import pytest
 
 from app.skin_builder import build_skin
 from app.settings_store import Settings, replace
-from config import continents, defaults, dial, encyclopedia_ui, pantheon, paths
+from config import continents, defaults, dial, encyclopedia_ui, pantheon, paths, ring
 from render import letter_plates
 from skins.manifest import missing_assets
 
@@ -16,7 +16,6 @@ def test_ring_preset_cards_load_and_validate():
     empty fields; a broken card names itself loudly."""
     import pytest
 
-    from config import constants
     from data.rings import ring_presets, validate_preset
 
     presets = ring_presets()
@@ -36,7 +35,7 @@ def test_ring_preset_cards_load_and_validate():
     assert presets["The One"]["jewels"] == (
         "12", "15", "18", "21", "Ω", "3", "6", "9",
     )
-    for outer in constants.RING_OUTERS.values():
+    for outer in ring.RING_OUTERS.values():
         assert (dial.RING_OUTER_ART_DIR / outer["file"]).exists()
     with pytest.raises(ValueError):
         validate_preset({"name": "BAD", "outer": "nope", "jewels": ["M"]})
@@ -72,7 +71,7 @@ def test_dollar_preset_loads_single_metal():
     # time (render.asset_recolor.jewel_metal_file), never separate files.
     gold_ring = build_skin(replace(Settings(), ring="Dollar")).ring
     # The apex wears the Eye — with the Dollar's own Shine default ON
-    # (constants.RING_EYE_SHINE_DEFAULT) the glory-of-rays master.
+    # (ring.RING_EYE_SHINE_DEFAULT) the glory-of-rays master.
     assert gold_ring.jewel_art[12] == art_dir / "emblems/Eye_shine.png"
     assert gold_ring.jewel_art[20] == art_dir / "latin/M.png"
     assert gold_ring.jewel_art[4] == art_dir / "latin/N.png"
@@ -212,10 +211,9 @@ def test_dollar_eye_shine_toggle_swaps_the_master():
     the canonical stems resolve to the active art source's _gem/_gpt
     file on disk; a custom ring's EXPLICIT eye variant is untouched by
     the toggle (its rays are baked into the chosen glyph)."""
-    from config import constants
 
     art_dir = dial.LETTER_ART_DIR
-    assert constants.RING_EYE_SHINE_DEFAULT == {"Dollar": True}
+    assert ring.RING_EYE_SHINE_DEFAULT == {"Dollar": True}
 
     shine_on = build_skin(replace(Settings(), ring="Dollar")).ring
     assert shine_on.jewel_art[12] == art_dir / "emblems/Eye_shine.png"
@@ -252,17 +250,17 @@ def test_dollar_eye_shine_toggle_swaps_the_master():
     # stays the no-light size — stamped as ring.jewel_zoom, absent
     # (1.0) for the plain eye and for every ordinary letter.
     assert shine_on.jewel_zoom == {
-        12: constants.RING_EYE_SHINE_ENLARGE["gem"]
+        12: ring.RING_EYE_SHINE_ENLARGE["gem"]
     }
     assert shine_off.jewel_zoom == {}
     assert custom_ring.jewel_zoom == {
-        12: constants.RING_EYE_SHINE_ENLARGE["gem"]
+        12: ring.RING_EYE_SHINE_ENLARGE["gem"]
     }
     gpt_shine = build_skin(replace(
         Settings(), ring="Dollar", art_source="chatgpt",
     )).ring
     assert gpt_shine.jewel_zoom == {
-        12: constants.RING_EYE_SHINE_ENLARGE["gpt"]
+        12: ring.RING_EYE_SHINE_ENLARGE["gpt"]
     }
 
 
@@ -392,7 +390,7 @@ def test_thematic_finish_wears_the_preset_color():
     recolor transformer (DOMY cross red, LOOP cross blue, Dollar
     green, The One moon indigo, Templar black); outside the ring band
     the skin reads gold (documented containment)."""
-    from config import constants, paths
+    from config import paths
 
     thematic = build_skin(replace(Settings(), ring_finish="thematic"))
     # TWO METALS RETIRED (owner decree 2026-08-11): every seat, not
@@ -419,7 +417,7 @@ def test_thematic_finish_wears_the_preset_color():
     flat = build_skin(replace(Settings(), ring_finish="thematic")).ring
     assert all(m == "thematic" for m in flat.jewel_metal.values())
     # The full preset->shade table is pinned.
-    assert constants.RING_THEMATIC_SHADES == {
+    assert ring.RING_THEMATIC_SHADES == {
         "DOMY": "cross_red", "LOOP": "cross_blue", "Dollar": "dollar_green",
         "The One": "moon_indigo", "Templar": "templar_black",
         "CHI": "ceramic",
@@ -437,20 +435,19 @@ def test_thematic_choices_mirror_the_recolor_presets():
     import json
     from pathlib import Path
 
-    from config import constants
 
     presets = json.loads(
         (Path(__file__).resolve().parents[1]
          / "recolor" / "presets" / "metals.json").read_text(encoding="utf-8")
     )
-    assert constants.METAL_SHADE_NAMES["thematic"] == tuple(
+    assert ring.METAL_SHADE_NAMES["thematic"] == tuple(
         presets["metals"].keys()
     )
     assert defaults.METAL_SHADES["thematic"] == {
-        name: name for name in constants.METAL_SHADE_NAMES["thematic"]
+        name: name for name in ring.METAL_SHADE_NAMES["thematic"]
     }
-    for shade in constants.METAL_SHADE_NAMES["thematic"]:
-        assert shade in constants.METAL_SHADE_TITLES, shade
+    for shade in ring.METAL_SHADE_NAMES["thematic"]:
+        assert shade in ring.METAL_SHADE_TITLES, shade
 
 
 def test_two_watches_keep_their_own_thematic_color():
@@ -502,7 +499,7 @@ def test_custom_ring_picks_its_own_thematic_color():
     name fails loudly at validation (Rule #1)."""
     import pytest as _pytest
 
-    from config import constants, paths
+    from config import paths
     from data.rings import validate_preset
 
     custom = (
@@ -542,7 +539,6 @@ def test_mason_crown_text_arc_loads_and_pins_its_key_jewels():
     seats it under the bottom, MUNDORUM ORDO NUMEN on the BOTTOM half
     (the same 4h/24h/20h pins as NOVUS, so the flip crowns it over the
     top with M left, the central O on top and N right)."""
-    from config import constants
     from data.rings import ring_presets
 
     presets = ring_presets()
@@ -847,14 +843,13 @@ def test_bronze_finish_and_theme_metals():
     assert bronze_ring.jewel_metal[4] == "bronze"
     assert bronze_ring.jewel_metal[0] == "bronze"     # TWO METALS RETIRED: no accent
     assert missing_assets(build_skin(replace(Settings(), ring_finish="bronze"))) == []
-    from config import constants
     # The EAGER door: the dial itself now draws the gold master until the
     # background warm catches up (owner 2026-07-28), so a test that wants
     # to see the real bronze pixels must ask for them (`jewel_metal_
     # variant` = name + materialize).
     from render.asset_recolor import jewel_metal_variant
 
-    for glyph in constants.LETTER_PLATE_FILES:
+    for glyph in ring.LETTER_PLATE_FILES:
         gold = letter_plates.plate_path(glyph)
         derived = jewel_metal_variant(gold, "bronze")
         assert derived.exists(), glyph
@@ -977,21 +972,20 @@ def test_metal_shade_table_pinned():
     numeric (hue, saturation, reference value) recipe is gone — a shade
     now NAMES a ramp in `recolor/presets/metals.json`, and the ramp is
     what draws it. What must still hold: the user-facing shade names
-    match `config.constants.METAL_SHADE_NAMES` exactly (Settings
+    match `config.ring.METAL_SHADE_NAMES` exactly (Settings
     validates against them), every default is one of its own metal's
     names, and every shade resolves to a ramp that actually exists —
     a typo here would surface as a KeyError mid-render on a user's
     machine, which is the failure this pin exists to prevent."""
-    from config import constants
     from recolor import recipe as recolor_recipe
 
     presets = recolor_recipe.load()
-    for metal, names in constants.METAL_SHADE_NAMES.items():
+    for metal, names in ring.METAL_SHADE_NAMES.items():
         assert tuple(defaults.METAL_SHADES[metal].keys()) == names, metal
-        assert constants.METAL_SHADE_DEFAULT[metal] in names, metal
+        assert ring.METAL_SHADE_DEFAULT[metal] in names, metal
         for shade, ramp_name in defaults.METAL_SHADES[metal].items():
             assert ramp_name in presets.metals, (metal, shade, ramp_name)
-        assert constants.METAL_SHADE_TITLES.keys() >= set(names), metal
+        assert ring.METAL_SHADE_TITLES.keys() >= set(names), metal
 
     # The art's own metals must be describable too — the transform is
     # source-agnostic and asks the presets for its SOURCE as well.
@@ -1174,7 +1168,6 @@ def test_live_derived_silver_jewels_read_as_cool_silver():
 
     import numpy as np
 
-    from config import constants
     from recolor import space as recolor_space
     from render.asset_recolor import jewel_metal_variant
 
@@ -1183,7 +1176,7 @@ def test_live_derived_silver_jewels_read_as_cool_silver():
     # saturation is a ratio over a vanishing maximum, so a deep shadow
     # pixel reads "saturated" at a chroma the eye cannot see. The silver
     # ramp's own peak chroma is ~0.021; gold's is ~0.135.
-    for glyph in constants.LETTER_PLATE_FILES:
+    for glyph in ring.LETTER_PLATE_FILES:
         filename, gold = glyph, letter_plates.plate_path(glyph)
         derived = jewel_metal_variant(gold, "silver")
         assert derived.exists() and derived != gold, filename
@@ -1234,7 +1227,6 @@ def test_live_derived_bronze_preserves_relief_and_reads_bronze():
     from PySide6.QtWidgets import QApplication
     from PySide6.QtGui import QColor, QImage
 
-    from config import constants
     from recolor import ramp as recolor_ramp, recipe as recolor_recipe
     from render.asset_recolor import jewel_metal_variant
 
@@ -1351,11 +1343,10 @@ def test_jewel_groups_cover_the_library_exactly():
     exactly once — and every glyph's gold master must exist (silver/
     bronze are derived at load, owner 2026-07-19 — no separate files
     to check)."""
-    from config import constants
 
     grouped = [
         glyph
-        for glyphs in constants.LETTER_PLATE_GROUPS.values()
+        for glyphs in ring.LETTER_PLATE_GROUPS.values()
         for glyph in glyphs
     ]
     # The ADAPTIVE eye glyph (DOLLAR/EYE round, 2026-07-27) is the ONE
@@ -1363,7 +1354,7 @@ def test_jewel_groups_cover_the_library_exactly():
     # Dollar card's own, resolved by the Settings art source and the
     # Shine toggle; custom rings pick one of the four explicit variants
     # instead (owner: "any of the four").
-    library = set(constants.LETTER_PLATE_FILES) - {constants.RING_EYE_GLYPH}
+    library = set(ring.LETTER_PLATE_FILES) - {ring.RING_EYE_GLYPH}
     # The five digits that are NOT a ring seat (0, 1, 2, 5, 7 — no outer
     # has an empty field at those hours) exist as COMPOSITION MATERIAL
     # for the two-digit numbers and for the live crown, so the builder
@@ -1371,16 +1362,16 @@ def test_jewel_groups_cover_the_library_exactly():
     # number makes no sense away from its own hour.
     material = {
         digit for digit in "0123456789"
-        if digit not in constants.LETTER_PLATE_GROUPS["Numbers"]
+        if digit not in ring.LETTER_PLATE_GROUPS["Numbers"]
     }
     assert material == {"0", "1", "2", "5", "7"}
     assert sorted(grouped) == sorted(library - material)
     assert len(grouped) == len(set(grouped))
     # The full alphabet plus the two ligature plates (Æ, Œ — THE
     # LIGATURE PLATES, owner 2026-08-14: one plate, one letter each).
-    assert len(constants.LETTER_PLATE_GROUPS["Latin"]) == 28
-    assert len(constants.LETTER_PLATE_GROUPS["Greek"]) == 24   # the full alphabet
-    for glyph in constants.LETTER_PLATE_FILES:
+    assert len(ring.LETTER_PLATE_GROUPS["Latin"]) == 28
+    assert len(ring.LETTER_PLATE_GROUPS["Greek"]) == 24   # the full alphabet
+    for glyph in ring.LETTER_PLATE_FILES:
         # The eye stems are SOURCED (canonical Eye[_shine].png resolves
         # to _gem/_gpt on disk) and a two-digit number is COMPOSED —
         # resolve exactly like the renderer does.
@@ -1394,9 +1385,8 @@ def test_three_new_plates_resolve_and_validate_in_crown_text():
     in `symbols/` — wiring `LETTER_PLATE_FILES` alone makes them legal
     in a custom ring's crown text too, since `data.rings.
     _validate_crown_text` reads that same table (Rule #5, no separate
-    charset to keep in sync) and `constants.RING_CROWN_TEXT_CHARSET`
+    charset to keep in sync) and `ring.RING_CROWN_TEXT_CHARSET`
     derives from it."""
-    from config import constants
     from data.rings import validate_preset
 
     for glyph, filename in (
@@ -1404,9 +1394,9 @@ def test_three_new_plates_resolve_and_validate_in_crown_text():
         ("&", "symbols/ampersan.png"),
         (":", "symbols/colon.png"),
     ):
-        assert constants.LETTER_PLATE_FILES[glyph] == (filename,)
-        assert glyph in constants.LETTER_PLATE_GROUPS["Symbols"]
-        assert glyph in constants.RING_CROWN_TEXT_CHARSET
+        assert ring.LETTER_PLATE_FILES[glyph] == (filename,)
+        assert glyph in ring.LETTER_PLATE_GROUPS["Symbols"]
+        assert glyph in ring.RING_CROWN_TEXT_CHARSET
         assert (dial.LETTER_ART_DIR / filename).exists(), glyph
 
     card = validate_preset({

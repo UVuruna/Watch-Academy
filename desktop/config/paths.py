@@ -16,7 +16,7 @@ from pathlib import Path
 from types import MappingProxyType
 from typing import Mapping
 
-from config import constants, identity, sky
+from config import identity, ring, sky
 
 
 # ═══════════════════════════ PATH ROOTS & BUNDLED RESOURCES ═══════════════════════════
@@ -174,18 +174,18 @@ class DisplayContext:
     thread never changes underneath it."""
 
     art_source: str = identity.ART_SOURCE_DEFAULT
-    subdial_set: str = constants.SUBDIAL_SET_DEFAULT
+    subdial_set: str = ring.SUBDIAL_SET_DEFAULT
     metal_shades: Mapping[str, str] = MappingProxyType(
-        dict(constants.METAL_SHADE_DEFAULT)
+        dict(ring.METAL_SHADE_DEFAULT)
     )
 
     def shade(self, metal: str) -> str:
-        return self.metal_shades.get(metal, constants.METAL_SHADE_DEFAULT[metal])
+        return self.metal_shades.get(metal, ring.METAL_SHADE_DEFAULT[metal])
 
 
 def display_context(
     art_source: str = identity.ART_SOURCE_DEFAULT,
-    subdial_set: str = constants.SUBDIAL_SET_DEFAULT,
+    subdial_set: str = ring.SUBDIAL_SET_DEFAULT,
     metal_shades: Mapping[str, str] | None = None,
 ) -> DisplayContext:
     """Build a validated `DisplayContext` — the ONE door (the retired
@@ -194,13 +194,13 @@ def display_context(
     point of choice rather than as missing art at paint time)."""
     if art_source not in identity.ART_SOURCES:
         raise ValueError(f"unknown art source: {art_source}")
-    if subdial_set not in constants.SUBDIAL_SETS:
+    if subdial_set not in ring.SUBDIAL_SETS:
         raise ValueError(f"unknown subdial set: {subdial_set}")
-    shades = dict(constants.METAL_SHADE_DEFAULT)
+    shades = dict(ring.METAL_SHADE_DEFAULT)
     for metal, shade in (metal_shades or {}).items():
-        if metal not in constants.METAL_SHADE_NAMES:
+        if metal not in ring.METAL_SHADE_NAMES:
             raise ValueError(f"unknown metal: {metal}")
-        if shade not in constants.METAL_SHADE_NAMES[metal]:
+        if shade not in ring.METAL_SHADE_NAMES[metal]:
             raise ValueError(f"unknown shade for {metal}: {shade}")
         shades[metal] = shade
     return DisplayContext(

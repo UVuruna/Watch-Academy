@@ -5,7 +5,7 @@ preset renames, the legacy-card migration and the per-ring-name dict
 loader in the same file.
 """
 
-from config import constants
+from config import ring
 from data.rings import validate_preset
 
 # RING PRESET RENAMES (TASK 2, MASON/ICONS round, owner verdicts
@@ -67,7 +67,7 @@ def load_named_dict(raw: dict, key: str, by_fold: dict, valid) -> dict:
 # positions signature resolves to exactly one of these three.
 _LEGACY_OUTER_BY_POSITIONS = {
     frozenset(outer["positions"]): name
-    for name, outer in constants.RING_OUTERS.items()
+    for name, outer in ring.RING_OUTERS.items()
     if name in ("bot_cross", "top_cross", "hexa")
 }
 

@@ -30,7 +30,7 @@ import pytest
 from PySide6.QtGui import QImage
 from PySide6.QtWidgets import QApplication
 
-from config import constants, dial
+from config import dial, ring
 from core import numerals
 from render import letter_plates
 
@@ -46,7 +46,7 @@ def test_every_declared_glyph_resolves_to_a_real_file(app):
     """The whole library, glyph by glyph — aliases and composed numbers
     included. This is the assertion whose absence let a missing
     alphabet pass as a design decision."""
-    for glyph in constants.LETTER_PLATE_FILES:
+    for glyph in ring.LETTER_PLATE_FILES:
         master = letter_plates.plate_path(glyph)
         assert master.exists(), f"{glyph!r} -> {master}"
         assert not QImage(str(master)).isNull(), glyph
@@ -80,16 +80,16 @@ def test_the_greek_twins_share_the_latin_plate_and_add_no_file(app):
     they are an ALIAS, never a second file — THE ONE COPY RULE. Between
     them and the ten with a shape of their own, the Greek alphabet is
     complete."""
-    for greek, latin in constants.GREEK_LATIN_TWINS.items():
+    for greek, latin in ring.GREEK_LATIN_TWINS.items():
         assert letter_plates.plate_path(greek) == letter_plates.plate_path(latin)
-    assert len(constants.GREEK_LATIN_TWINS) + len(constants.GREEK_OWN_PLATES) == 24
-    assert set(constants.LETTER_PLATE_GROUPS["Greek"]) == (
-        set(constants.GREEK_LATIN_TWINS) | set(constants.GREEK_OWN_PLATES)
+    assert len(ring.GREEK_LATIN_TWINS) + len(ring.GREEK_OWN_PLATES) == 24
+    assert set(ring.LETTER_PLATE_GROUPS["Greek"]) == (
+        set(ring.GREEK_LATIN_TWINS) | set(ring.GREEK_OWN_PLATES)
     )
     # And no duplicate file was quietly added beside the alias.
     greek_dir = dial.LETTER_ART_DIR / "greek"
     on_disk = {path.stem for path in greek_dir.glob("*.png")}
-    assert on_disk == set(constants.GREEK_OWN_PLATES.values())
+    assert on_disk == set(ring.GREEK_OWN_PLATES.values())
 
 
 # --------------------------------------------------- THE COMPOSED NUMBERS
@@ -101,7 +101,7 @@ def test_two_digit_numbers_are_composed_from_the_digit_plates(app):
     invention: at `LETTER_COMPOSE_INK_GAP_FRACTION` the composed "20"
     comes back at exactly the 730x512 he drew."""
     for number in ("12", "15", "16", "18", "20", "21"):
-        assert len(constants.LETTER_PLATE_FILES[number]) == 2
+        assert len(ring.LETTER_PLATE_FILES[number]) == 2
         composed = QImage(str(letter_plates.plate_path(number)))
         assert not composed.isNull(), number
         assert composed.height() == 512, number
@@ -164,12 +164,12 @@ def test_emblems_are_picked_never_typed(app):
     ne pripada tu, odluci"): SYMBOLS are characters a crown text can
     spell, EMBLEMS are seat art you pick. So no emblem may reach the
     crown-text whitelist, and the typeable symbols all must."""
-    for glyph, plates in constants.LETTER_PLATE_FILES.items():
+    for glyph, plates in ring.LETTER_PLATE_FILES.items():
         if plates[0].startswith("emblems/"):
-            assert glyph not in constants.RING_CROWN_TEXT_CHARSET, glyph
+            assert glyph not in ring.RING_CROWN_TEXT_CHARSET, glyph
         elif len(glyph) == 1:
-            assert glyph in constants.RING_CROWN_TEXT_CHARSET, glyph
+            assert glyph in ring.RING_CROWN_TEXT_CHARSET, glyph
     assert all(
-        constants.LETTER_PLATE_FILES[glyph][0].startswith("emblems/")
-        for glyph in constants.LETTER_PLATE_GROUPS["Emblems"]
+        ring.LETTER_PLATE_FILES[glyph][0].startswith("emblems/")
+        for glyph in ring.LETTER_PLATE_GROUPS["Emblems"]
     )

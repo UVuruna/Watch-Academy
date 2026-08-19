@@ -22,7 +22,7 @@ from app.settings_fields import (
     save_moving_bodies, save_numerals,
 )
 from app.settings_ring import fold_ring_name, load_named_dict, normalized_ring_card
-from config import calendar_mounts, complications, constants, defaults, dial, eras, identity, pantheon, pointer_geometry, umbra
+from config import calendar_mounts, complications, constants, defaults, dial, eras, identity, pantheon, pointer_geometry, ring, umbra
 from config.registry import week as week_registry
 from config.registry import slots as slot_registry
 from data.locations import Place, default_place
@@ -67,7 +67,7 @@ class Settings:
     # per-preset choice between the Eye of Providence with the glory
     # of rays and the plain eye, for every preset seating the adaptive
     # eye glyph (the Dollar today) — keyed by preset name; absent
-    # presets fall back to `constants.RING_EYE_SHINE_DEFAULT`
+    # presets fall back to `ring.RING_EYE_SHINE_DEFAULT`
     # (`app.skin_builder._ring_eye_shine` resolves both).
     ring_eye_shine: dict = field(default_factory=dict)
     # COMPOSITIONAL RING MODEL (owner decree 2026-08-05): the active
@@ -217,7 +217,7 @@ class Settings:
     # selectable shade each metal wears everywhere it appears (ring
     # letters always; badge medallions for gold/silver — bronze badges
     # stay the art as drawn). Names validated against
-    # `config.constants.METAL_SHADE_NAMES`; defaults are the shade
+    # `config.ring.METAL_SHADE_NAMES`; defaults are the shade
     # closest to the pre-redo look (`config.constants.
     # METAL_SHADE_DEFAULT`).
     metal_shade_gold: str = "classic"
@@ -515,7 +515,7 @@ class SettingsStore:
             is_bool = lambda v: isinstance(v, bool)
             ring_eye_shine = load_named_dict(raw, "ring_eye_shine", by_fold, is_bool)
             ring_inner = load_named_dict(
-                raw, "ring_inner", by_fold, constants.RING_INNERS.__contains__
+                raw, "ring_inner", by_fold, ring.RING_INNERS.__contains__
             )
             custom_ring_crown_text = load_named_dict(
                 raw, "custom_ring_crown_text", by_fold,
@@ -588,7 +588,7 @@ class SettingsStore:
                 }
             for key, default, allowed in (
                 ("language", "en", tuple(constants.TRANSLATION_LANGUAGES)),
-                ("ring_finish", "gold", constants.RING_FINISHES),
+                ("ring_finish", "gold", ring.RING_FINISHES),
                 ("pointer", "hexa", tuple(pointer_geometry.POINTER_POINTS)),
                 ("umbra_form", "gradient", umbra.UMBRA_FORMS),
                 ("umbra_contrast", "dark", umbra.UMBRA_CONTRAST_VARIANTS),
@@ -608,14 +608,14 @@ class SettingsStore:
                 ("third_slot_theme", "planets", constants.WEEKDAY_THEMES),
                 ("earth_style", "atmo", complications.EARTH_STYLES),
                 ("weekday_theme", "planets", constants.WEEKDAY_THEMES),
-                ("subdial_style", "black", constants.SUBDIAL_STYLES),
-                ("subdial_set", "set1", constants.SUBDIAL_SETS),
-                ("metal_shade_gold", constants.METAL_SHADE_DEFAULT["gold"],
-                 constants.METAL_SHADE_NAMES["gold"]),
-                ("metal_shade_bronze", constants.METAL_SHADE_DEFAULT["bronze"],
-                 constants.METAL_SHADE_NAMES["bronze"]),
-                ("metal_shade_silver", constants.METAL_SHADE_DEFAULT["silver"],
-                 constants.METAL_SHADE_NAMES["silver"]),
+                ("subdial_style", "black", ring.SUBDIAL_STYLES),
+                ("subdial_set", "set1", ring.SUBDIAL_SETS),
+                ("metal_shade_gold", ring.METAL_SHADE_DEFAULT["gold"],
+                 ring.METAL_SHADE_NAMES["gold"]),
+                ("metal_shade_bronze", ring.METAL_SHADE_DEFAULT["bronze"],
+                 ring.METAL_SHADE_NAMES["bronze"]),
+                ("metal_shade_silver", ring.METAL_SHADE_DEFAULT["silver"],
+                 ring.METAL_SHADE_NAMES["silver"]),
                 ("weekday_roster", "planetary", week_registry.FIGURE_ROSTERS),
                 ("info_slot_roster", "planetary", week_registry.FIGURE_ROSTERS),
                 ("third_slot_roster", "planetary", week_registry.FIGURE_ROSTERS),
@@ -718,11 +718,11 @@ class SettingsStore:
                     for theme, metal in dict(
                         raw.get("theme_metals", {})
                     ).items()
-                    if str(theme) in constants.METAL_THEMES
+                    if str(theme) in ring.METAL_THEMES
                     # Per-theme allowed set (owner 2026-07-18): planets_art
                     # has no colored/ folder, so "colored" is rejected for
                     # it even though it is metal-capable.
-                    and str(metal) in constants.theme_metals(str(theme))
+                    and str(metal) in ring.theme_metals(str(theme))
                 },
                 theme_metal_follow_ring=load_bool(
                     raw, "theme_metal_follow_ring", False

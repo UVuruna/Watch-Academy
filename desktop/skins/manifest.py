@@ -70,7 +70,7 @@ class RingSpec:
     # hour -> a HEIGHT multiplier for that seat's jewel art (CROSS-
     # WORDS/SHINE round, owner UV inbox 2026-07-27): the Eye's shine
     # masters pad the triangle with the glory of rays, so build_skin
-    # stamps `constants.RING_EYE_SHINE_ENLARGE[source]` here and the
+    # stamps `ring.RING_EYE_SHINE_ENLARGE[source]` here and the
     # triangle draws the SAME size as the no-light master — only the
     # rays extend beyond it. Absent hour = 1.0 (every plain jewel).
     jewel_zoom: dict[int, float] = field(default_factory=dict)

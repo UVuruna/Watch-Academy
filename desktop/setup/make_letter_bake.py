@@ -27,7 +27,7 @@ from time import perf_counter
 
 from PySide6.QtGui import QGuiApplication
 
-from config import bakery, constants, defaults, paths
+from config import bakery, defaults, paths, ring
 from render import letter_bake
 
 
@@ -133,7 +133,7 @@ def show() -> None:
     print(f"{len(_plates())} plates, {len(_finishes())} finishes:")
     for metal, shades in defaults.METAL_SHADES.items():
         print(f"  {metal:<9} {', '.join(shades)}")
-    unknown = set(defaults.METAL_SHADES) - set(constants.METAL_SHADE_NAMES)
+    unknown = set(defaults.METAL_SHADES) - set(ring.METAL_SHADE_NAMES)
     if unknown:
         print(f"  ! shades with no name table: {sorted(unknown)}")
 

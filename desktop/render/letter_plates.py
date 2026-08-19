@@ -26,7 +26,7 @@ import numpy as np
 from PySide6.QtCore import Qt
 from PySide6.QtGui import QImage, QPainter
 
-from config import constants, dial, paths
+from config import dial, paths, ring
 from render import raster_store
 
 # ═══════════════════════════════ THE FINISH ══════════════════════════
@@ -93,13 +93,13 @@ def plate_paths(glyph: str) -> tuple[Path, ...]:
     """The gold master(s) behind `glyph`, in reading order — one entry
     for an ordinary glyph, two for a composed hour number. Resolves the
     Greek twins and the crown's lowercase unit cut through
-    `constants.LETTER_PLATE_FILES`'s own aliases (Rule #5: the alias
+    `ring.LETTER_PLATE_FILES`'s own aliases (Rule #5: the alias
     lives in the table, the lookup lives here)."""
-    files = constants.LETTER_PLATE_FILES.get(glyph)
+    files = ring.LETTER_PLATE_FILES.get(glyph)
     if files is None and len(glyph) == 1 and glyph.isalpha():
         # The crown's "12h 35min" cut spells h/m/i/n in lowercase; the
         # library is uppercase (a plate is a shape, not a case).
-        files = constants.LETTER_PLATE_FILES.get(glyph.upper())
+        files = ring.LETTER_PLATE_FILES.get(glyph.upper())
     if files is None:
         raise MissingPlate(
             f"no letter plate for {glyph!r} — the library at "

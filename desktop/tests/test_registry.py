@@ -13,7 +13,7 @@ modules read the registry, it becomes the pin that keeps the
 derivation honest.
 """
 
-from config import constants, pantheon, registry
+from config import constants, pantheon, registry, ring
 
 
 def test_the_theme_list_and_its_menu():
@@ -47,9 +47,9 @@ def test_rosters_pantheon_and_titles():
 def test_text_sets_and_metal_looks():
     assert registry.ARTICLES == constants.WEEKDAY_THEME_ARTICLES
     assert registry.BLURBS == constants.WEEKDAY_THEME_BLURBS
-    assert set(registry.METAL_THEMES) == set(constants.METAL_THEMES)
+    assert set(registry.METAL_THEMES) == set(ring.METAL_THEMES)
     for theme in registry.METAL_THEMES:
-        assert registry.METALS[theme] == constants.theme_metals(theme)
+        assert registry.METALS[theme] == ring.theme_metals(theme)
 
 
 def test_the_contract_is_complete_for_every_theme():

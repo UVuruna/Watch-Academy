@@ -5,7 +5,7 @@ from datetime import date
 from PySide6.QtCore import QPointF
 from PySide6.QtGui import QPainter
 
-from config import complications, constants, defaults, dial, pantheon, paths
+from config import complications, defaults, dial, pantheon, paths, ring
 from config.registry import week as week_registry
 from render.context import Cadence, Layer, RenderContext
 from render.painting import dial_point, draw_pixmap_centered
@@ -173,7 +173,7 @@ class SlotLayer(Layer):
             # <family>/colored).
             asset = pantheon.weekday_theme_body_art(
                 theme, today,
-                colored=(metal == "colored" and theme in constants.METAL_THEMES),
+                colored=(metal == "colored" and theme in ring.METAL_THEMES),
             )
         # THE UNIVERSAL ROTATION CONVENTION (owner decree 2026-07-20,
         # weekday ALT ROTATION round 2026-07-20/21): resolved fresh
@@ -186,7 +186,7 @@ class SlotLayer(Layer):
                 painter, ctx, asset, pos, size,
                 metal=(
                     metal
-                    if theme in constants.METAL_THEMES
+                    if theme in ring.METAL_THEMES
                     and metal in defaults.METAL_SWAP_TARGETS
                     else None
                 ),

@@ -22,7 +22,7 @@ from PySide6.QtWidgets import QApplication
 
 from app.skin_builder import build_skin
 from app.settings_store import Settings
-from config import constants, dial
+from config import dial, ring
 from core.clock_state import build_day_context, build_tick_state
 from data.moon_phases import MoonPhaseRepository
 from data.seasons import SeasonsRepository
@@ -69,7 +69,7 @@ def _diff_count(image_a, image_b, step: int = 4) -> int:
         ("Templar", "cross", "seconds_cross"),
         ("The One", "octa", "simple_octa"),
         # CHI (Crown Polish round, owner ruling "može" 2026-08-06):
-        # constants.RING_INNER_PRESET_DEFAULT["CHI"] — the emptiest
+        # ring.RING_INNER_PRESET_DEFAULT["CHI"] — the emptiest
         # inner for the emptiest dial.
         ("CHI", "full", "simple"),
     ],
@@ -88,8 +88,8 @@ def test_every_preset_composes_its_locked_outer_and_default_inner(
     assert image.width() == 400 and image.height() == 400
 
 
-@pytest.mark.parametrize("outer", sorted(constants.RING_OUTERS))
-@pytest.mark.parametrize("inner", constants.RING_INNERS)
+@pytest.mark.parametrize("outer", sorted(ring.RING_OUTERS))
+@pytest.mark.parametrize("inner", ring.RING_INNERS)
 def test_every_outer_by_inner_combination_renders(app, frame_args, outer, inner):
     """Rule 2 (owner decree 2026-08-05): every outer x inner combination
     is legal for CUSTOM rings — build one directly on the skin (no
@@ -101,7 +101,7 @@ def test_every_outer_by_inner_combination_renders(app, frame_args, outer, inner)
         base,
         ring=dataclasses.replace(
             base.ring,
-            outer_asset=dial.RING_OUTER_ART_DIR / constants.RING_OUTERS[outer]["file"],
+            outer_asset=dial.RING_OUTER_ART_DIR / ring.RING_OUTERS[outer]["file"],
             inner_asset=dial.RING_INNER_ART_DIR / f"{inner}.png",
             jewels={},
         ),

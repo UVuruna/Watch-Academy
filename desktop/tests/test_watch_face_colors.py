@@ -24,7 +24,7 @@ from PySide6.QtWidgets import QApplication, QGroupBox, QLabel, QWidget
 from app import controller as controller_module
 from app.settings_store import Settings, SettingsStore
 from app.watch_face import colors, opacity
-from config import defaults, dial
+from config import defaults, dial, ring
 from core.clock_state import build_day_context, build_tick_state
 from data.moon_phases import MoonPhaseRepository
 from data.seasons import SeasonsRepository
@@ -397,7 +397,6 @@ def test_metal_shades_are_roundel_cards_not_dropdowns(app):
     from PySide6.QtWidgets import QComboBox, QGroupBox, QToolButton
 
     from app.watch_face import colors, thumbs
-    from config import constants
 
     page = colors.build(Settings(), _setters(), lambda text: text)
     boxes = {box.title(): box for box in page.findChildren(QGroupBox)}
@@ -405,7 +404,7 @@ def test_metal_shades_are_roundel_cards_not_dropdowns(app):
         box = boxes[metal.capitalize()]
         assert not box.findChildren(QComboBox), f"{metal} still wears a combo"
         cards = box.findChildren(QToolButton)
-        assert len(cards) == len(constants.METAL_SHADE_NAMES[metal])
+        assert len(cards) == len(ring.METAL_SHADE_NAMES[metal])
         for card in cards:
             assert not card.icon().isNull(), f"{card.text()} has no roundel"
 
@@ -415,10 +414,9 @@ def test_every_metal_shade_can_draw_its_roundel(app):
     `recolor/presets/metals.json`, never hand-picked — so a shade whose
     ramp went missing must fail here rather than ship a blank tile."""
     from app.watch_face import thumbs
-    from config import constants
 
     for metal in ("gold", "silver", "bronze"):
-        for shade in constants.METAL_SHADE_NAMES[metal]:
+        for shade in ring.METAL_SHADE_NAMES[metal]:
             assert thumbs.metal_roundel_icon(metal, shade) is not None, (
                 f"{metal}/{shade} has no ramp to draw"
             )

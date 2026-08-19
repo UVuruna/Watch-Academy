@@ -33,7 +33,7 @@ from PySide6.QtGui import (
     QRadialGradient,
 )
 
-from config import constants, dial, glow, palette, paths, umbra
+from config import dial, glow, palette, paths, ring, umbra
 from core import angles
 from render import letter_plates, marker_marks, moon_face, raster_store
 from render.daylight import umbra_ladder
@@ -100,7 +100,7 @@ def ring_preset_thumbnail(card: dict) -> QIcon | None:
     name" convention `pointer_swatch_icon` already uses, extended with
     a real fingerprint since — unlike a palette wheel's own Python
     values — these sources are art files that DO change on disk)."""
-    outer = constants.RING_OUTERS[card["outer"]]
+    outer = ring.RING_OUTERS[card["outer"]]
     outer_path = paths.art_file(dial.RING_OUTER_ART_DIR / outer["file"])
     if outer_path is None or not outer_path.exists():
         return None

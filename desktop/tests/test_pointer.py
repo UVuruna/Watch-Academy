@@ -16,7 +16,7 @@ import pytest
 from PySide6.QtCore import QPointF
 from PySide6.QtWidgets import QApplication
 
-from config import complications, constants, defaults, dial, encyclopedia_ui, glow, palette, pantheon, pointer_geometry, shortcuts, umbra
+from config import complications, constants, defaults, dial, encyclopedia_ui, glow, palette, pantheon, pointer_geometry, ring, shortcuts, umbra
 from config.registry import week as week_registry
 from config.registry import slots as slot_registry
 from core.clock_state import build_day_context, build_tick_state
@@ -337,7 +337,7 @@ def test_subdial_plate_resolves_directly_for_sets_one_through_four(app):
         set2_gold = subdial_plate_file("gold")
     assert set1_gold != set2_gold
     # ...and the scope RESTORES: outside it the shipped default is back.
-    assert _paths.subdial_set() == constants.SUBDIAL_SET_DEFAULT
+    assert _paths.subdial_set() == ring.SUBDIAL_SET_DEFAULT
 
 
 def test_subdial_plate_solo_set_derives_gold_and_bronze(app):
@@ -470,8 +470,8 @@ def test_dual_sunday_two_faces_on_compass_and_seasons(app, july_wednesday):
         assert theme in pantheon.WEEKDAY_DUAL_NAMES
     assert dual_less <= PENDING_DUAL, sorted(dual_less - PENDING_DUAL)
     colored_dual_less = set()
-    for theme in constants.METAL_THEMES:
-        if "colored" not in constants.theme_metals(theme):
+    for theme in ring.METAL_THEMES:
+        if "colored" not in ring.theme_metals(theme):
             # planets_art (owner 2026-07-18): bronze medallions with NO
             # colored/ subfolder — the metal-capable set is not 1:1
             # with the colored-capable set any more.

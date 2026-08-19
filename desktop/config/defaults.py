@@ -30,7 +30,6 @@ from typing import NamedTuple
 
 from config import (
     calendar_mounts,
-    constants,
     continents,
     dial,
     encyclopedia_ui,
@@ -38,6 +37,7 @@ from config import (
     palette,
     pantheon,
     paths,
+    ring,
 )
 from skins.manifest import (
     BackgroundSpec,
@@ -806,7 +806,7 @@ HOVER_BADGE_WIDTH_PX = 128
 # `tuning` block, in Oklab.
 #
 # The SHADE NAMES themselves are unchanged and still validated against
-# `config.constants.METAL_SHADE_NAMES` — the user's Settings choice keeps
+# `config.ring.METAL_SHADE_NAMES` — the user's Settings choice keeps
 # working exactly as before. Silver's three shades map to ramps that
 # already existed as metals in their own right; gold's and bronze's are
 # named `gold_*` / `bronze_*`.
@@ -834,9 +834,9 @@ METAL_SHADES = {
     # (the five ring theme colors plus every metal ramp, owner: "iron,
     # copper... sve"), exactly the "one entry, zero code" door the
     # transformer promises. moon_indigo stays the DEFAULT / custom
-    # fallback (constants.METAL_SHADE_DEFAULT).
+    # fallback (ring.METAL_SHADE_DEFAULT).
     "thematic": {
-        name: name for name in constants.METAL_SHADE_NAMES["thematic"]
+        name: name for name in ring.METAL_SHADE_NAMES["thematic"]
     },
 }
 # WHICH METAL THE ART WAS DRAWN IN — the transformer is source-agnostic

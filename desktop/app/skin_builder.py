@@ -67,17 +67,17 @@ def _jewel_metal(position: int, outer_metal: dict, finish: str) -> str:
 def _ring_eye_shine(settings: Settings, card: dict) -> bool:
     """Whether the ACTIVE preset's Eye of Providence wears the glory
     of rays (DOLLAR/EYE round, owner decree 2026-07-27) — only presets
-    seating the ADAPTIVE eye glyph (`constants.RING_EYE_GLYPH`, the
+    seating the ADAPTIVE eye glyph (`ring.RING_EYE_GLYPH`, the
     Dollar today) are eligible; a custom ring with one of the four
     EXPLICIT eye variants has its rays baked into the chosen glyph and
     always reads False here. The user's stored per-preset choice
     (`Settings.ring_eye_shine`) wins; absent, the owner's documented
-    per-preset default (`constants.RING_EYE_SHINE_DEFAULT`, Dollar
+    per-preset default (`ring.RING_EYE_SHINE_DEFAULT`, Dollar
     True — the banknote's own eye radiates)."""
-    if constants.RING_EYE_GLYPH not in card["jewels"]:
+    if ring.RING_EYE_GLYPH not in card["jewels"]:
         return False
     return settings.ring_eye_shine.get(
-        card["name"], constants.RING_EYE_SHINE_DEFAULT.get(card["name"], False)
+        card["name"], ring.RING_EYE_SHINE_DEFAULT.get(card["name"], False)
     )
 
 
@@ -134,7 +134,7 @@ def _theme_metal(settings: Settings, theme: str) -> str:
     """The METAL a bronze-plate theme wears (owner 2026-07-12):
     follow-the-ring wins, then the per-theme Settings choice, then
     bronze — the art as drawn. Non-metal themes are always bronze."""
-    if theme not in constants.METAL_THEMES:
+    if theme not in ring.METAL_THEMES:
         return "bronze"
     if settings.theme_metal_follow_ring:
         # The THEMATIC finish reads as gold outside the ring band
@@ -220,13 +220,13 @@ def _resolve_ring_inner(settings: Settings, card: dict) -> Path:
     inner is user-changeable independent of the outer's lock). The
     user's stored per-preset choice (`Settings.ring_inner`) wins;
     absent, the bundled presets' own coordinator-recommended default
-    (`constants.RING_INNER_PRESET_DEFAULT`), else the custom-ring
-    fallback (`constants.RING_INNER_DEFAULT`)."""
-    default = constants.RING_INNER_PRESET_DEFAULT.get(
-        card["name"], constants.RING_INNER_DEFAULT
+    (`ring.RING_INNER_PRESET_DEFAULT`), else the custom-ring
+    fallback (`ring.RING_INNER_DEFAULT`)."""
+    default = ring.RING_INNER_PRESET_DEFAULT.get(
+        card["name"], ring.RING_INNER_DEFAULT
     )
     inner = settings.ring_inner.get(card["name"], default)
-    if inner not in constants.RING_INNERS:
+    if inner not in ring.RING_INNERS:
         inner = default
     return dial.RING_INNER_ART_DIR / f"{inner}.png"
 
@@ -234,7 +234,7 @@ def _resolve_ring_inner(settings: Settings, card: dict) -> Path:
 def _location_crown_text(text: str) -> str:
     """The LOCATION crown's own renderable text (RING VERDICTS round,
     owner decree 2026-08-05) — the crown-text glyph library is a FIXED set
-    (`constants.RING_CROWN_TEXT_CHARSET`: uppercase Latin/Greek, digits,
+    (`ring.RING_CROWN_TEXT_CHARSET`: uppercase Latin/Greek, digits,
     the space), while a city/country name is free-form (lower case, a
     comma, accents no glyph exists for). Uppercased, then filtered to
     that exact drawable set (never a hand-picked substitution list —
@@ -244,14 +244,14 @@ def _location_crown_text(text: str) -> str:
     (every character unsupported) returns "" — the caller's own
     graceful-absence path (no crown drawn) then applies unchanged."""
     filtered = "".join(
-        char for char in text.upper() if char in constants.RING_CROWN_TEXT_CHARSET
+        char for char in text.upper() if char in ring.RING_CROWN_TEXT_CHARSET
     )
     return " ".join(filtered.split())
 
 
 def _compose_skin(settings: Settings, location_display: str = ""):
     card = ring_presets(settings.custom_rings)[settings.ring]
-    outer = constants.RING_OUTERS[card["outer"]]
+    outer = ring.RING_OUTERS[card["outer"]]
     # TWO METALS RETIRED (owner decree 2026-08-11): every ring wears
     # the plain one-metal reading now — see `_jewel_metal`'s docstring.
     metal_layout = {"triangle": ()}
@@ -271,8 +271,8 @@ def _compose_skin(settings: Settings, location_display: str = ""):
         # The jewel art is ALWAYS the gold master — silver/bronze are
         # derived from it AT LOAD (owner 2026-07-19,
         # render.asset_recolor.jewel_metal_file), never pre-rendered files.
-        if eye_shine and glyph == constants.RING_EYE_GLYPH:
-            master = dial.LETTER_ART_DIR / constants.RING_EYE_SHINE_FILE
+        if eye_shine and glyph == ring.RING_EYE_GLYPH:
+            master = dial.LETTER_ART_DIR / ring.RING_EYE_SHINE_FILE
         else:
             master = letter_plates.plate_path(glyph)
         stem = master.stem
@@ -287,7 +287,7 @@ def _compose_skin(settings: Settings, location_display: str = ""):
                 if stem.endswith(("_gem", "_gpt"))
                 else paths.ART_SUFFIX[settings.art_source]
             )
-            jewel_zoom[hour] = constants.RING_EYE_SHINE_ENLARGE[source]
+            jewel_zoom[hour] = ring.RING_EYE_SHINE_ENLARGE[source]
             # SHADOW/SHINE round (owner ruling 2026-08-06): the baked
             # glory-of-rays master already carries its own light, so the
             # ring's cast-shadow stamp is skipped for this seat — same
@@ -318,10 +318,10 @@ def _compose_skin(settings: Settings, location_display: str = ""):
     # text for this build rather than crashing the running app on a
     # keystroke; a KNOWN GAP — see the session's OPEN QUESTIONS for the
     # honest alternative (a visible validation message).
-    if settings.ring not in constants.RING_OUTER_LOCK:
+    if settings.ring not in ring.RING_OUTER_LOCK:
         crown_text = settings.custom_ring_crown_text.get(settings.ring, "")
         if crown_text and not any(
-            char != " " and char not in constants.LETTER_PLATE_FILES
+            char != " " and char not in ring.LETTER_PLATE_FILES
             for char in crown_text
         ):
             orientation = settings.custom_ring_crown_orientation.get(
@@ -360,7 +360,7 @@ def _compose_skin(settings: Settings, location_display: str = ""):
     #
     # SEPARATOR: `_location_crown_text` drops the comma and collapses the
     # gap to ONE SPACE, because the jewel library has no comma plate
-    # (`constants.LETTER_PLATE_FILES` — uppercase Latin/Greek,
+    # (`ring.LETTER_PLATE_FILES` — uppercase Latin/Greek,
     # digits, $, &, ✠, the Eye and the colon). "Belgrade, Serbia" reads
     # "BELGRADE SERBIA". That is the product's existing separator
     # practice, not a new invention: it is what the user toggle has drawn
@@ -574,7 +574,7 @@ def _themed_weekday_set(base, theme: str, metal: str | None):
     if metal in defaults.METAL_SWAP_TARGETS:
         weekday = dataclasses.replace(weekday, metal=metal)
     dual_rel = pantheon.WEEKDAY_DUAL_FILES[theme]
-    if metal == "colored" and theme in constants.METAL_THEMES:
+    if metal == "colored" and theme in ring.METAL_THEMES:
         dual_rel = pantheon.colored_variant_rel(dual_rel)
     dual = pantheon.weekday_art(f"{dual_rel}.png")
     if not paths.art_file(dual).exists():
@@ -647,12 +647,12 @@ def display_for(settings: Settings) -> paths.DisplayContext:
     CUSTOM ring may carry its OWN pick on its card — any transformer
     ramp, metals included (owner: "iron, copper... sve") — else the
     moon indigo. Not a Settings entry: the ring choice IS the choice."""
-    thematic_shade = constants.RING_THEMATIC_SHADES.get(settings.ring)
+    thematic_shade = ring.RING_THEMATIC_SHADES.get(settings.ring)
     if thematic_shade is None:
         card = ring_presets(settings.custom_rings).get(settings.ring)
         thematic_shade = (
             (card or {}).get("thematic")
-            or constants.METAL_SHADE_DEFAULT["thematic"]
+            or ring.METAL_SHADE_DEFAULT["thematic"]
         )
     return paths.display_context(
         art_source=settings.art_source,

@@ -64,7 +64,7 @@ from app.watch_face import thumbs, tint_control, tint_picker
 from app.ui_style import tooltip_wrap
 from app.watch_face.controls import picture_group
 from app.watch_face.widgets import pill
-from config import constants, palette
+from config import constants, palette, ring
 
 #: A card's horizontal padding around its label. The card's own
 #: sizeHint comes from the ICON and lets a longer label clip inside it,
@@ -281,14 +281,14 @@ def _metal_group(settings, setters, tr) -> QWidget:
     for metal in ("gold", "silver", "bronze"):
         entries = [
             (
-                shade, tr(constants.METAL_SHADE_TITLES[shade]),
+                shade, tr(ring.METAL_SHADE_TITLES[shade]),
                 tr("The {shade} {metal} ramp, as the dial strikes it.").format(
-                    shade=tr(constants.METAL_SHADE_TITLES[shade]),
+                    shade=tr(ring.METAL_SHADE_TITLES[shade]),
                     metal=tr(metal.capitalize()),
                 ),
                 thumbs.metal_roundel_icon(metal, shade),
             )
-            for shade in constants.METAL_SHADE_NAMES[metal]
+            for shade in ring.METAL_SHADE_NAMES[metal]
         ]
         apply_shade = setters[f"metal_shade_{metal}"]   # BOUND NOW
         group = picture_group(
@@ -309,8 +309,8 @@ def _metal_group(settings, setters, tr) -> QWidget:
         margins = group.contentsMargins()
         metrics = group.fontMetrics()
         widest = max(
-            metrics.horizontalAdvance(tr(constants.METAL_SHADE_TITLES[shade]))
-            for shade in constants.METAL_SHADE_NAMES[metal]
+            metrics.horizontalAdvance(tr(ring.METAL_SHADE_TITLES[shade]))
+            for shade in ring.METAL_SHADE_NAMES[metal]
         )
         group.setMinimumWidth(max(
             group.sizeHint().width(),

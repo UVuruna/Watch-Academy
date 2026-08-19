@@ -18,7 +18,7 @@ import json
 from datetime import date
 from pathlib import Path
 
-from config import constants, continents as continents_theme, defaults, pantheon, paths
+from config import constants, continents as continents_theme, defaults, pantheon, paths, ring
 from config.registry import week as week_registry
 from core import continents
 from data.encyclopedia import EncyclopediaRepository
@@ -87,7 +87,7 @@ def _ninth_looks(theme: str, plate: Path) -> tuple | None:
                 ("Colored", _colored_sibling(plate)),
             )
         )
-    if theme not in constants.METAL_THEMES:
+    if theme not in ring.METAL_THEMES:
         return None
     return tuple(
         (label, ((path,),))
@@ -177,7 +177,7 @@ def _weekday_topic(theme: str, travel_date: date | None = None):
         names = defaults.DEFAULT_SKIN.weekday_set.body_names
     else:
         names = pantheon.WEEKDAY_THEME_NAMES[theme]
-    metal = theme in constants.METAL_THEMES
+    metal = theme in ring.METAL_THEMES
     mandate_date = (
         travel_date
         if constants.NINTH_MECHANISMS.get(theme) == "term_weekly"
@@ -354,7 +354,7 @@ def _pantheon_topic(theme: str) -> list[dict]:
     together), and a missing pantheon DUAL pulls the whole Sunday pair
     (both faces) back to the planetary bundle too — never a pantheon
     name paired with planetary art or the reverse. Metal cycling
-    follows the theme's OWN rule (`theme in constants.METAL_THEMES`) —
+    follows the theme's OWN rule (`theme in ring.METAL_THEMES`) —
     greek/norse cycle Colored/Bronze/Gold/Silver on the Pantheon plates
     too, `_colored_sibling` finding the twin at whichever depth the
     seat's OWN plate lives at (owner round R8b item 3 fix: a seat that
@@ -364,7 +364,7 @@ def _pantheon_topic(theme: str) -> list[dict]:
     `pantheon/colored/` nesting); egypt/slavic stay a single plain
     plate, like their Planetary block."""
     table = pantheon.WEEKDAY_PANTHEON[theme]
-    metal = theme in constants.METAL_THEMES
+    metal = theme in ring.METAL_THEMES
 
     def seated(body: str) -> tuple[Path, str, str, str]:
         """(plate, name, article_set, article_body) for one body."""

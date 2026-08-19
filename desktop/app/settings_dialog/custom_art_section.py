@@ -21,13 +21,13 @@ from PySide6.QtWidgets import (
     QVBoxLayout,
 )
 
-from config import constants, defaults
+from config import defaults, ring
 
 
 class _CustomArtSectionMixin:
     def _build_custom_ring_group(self) -> QGroupBox:
         """THE COMPOSITIONAL RING MODEL (owner decree 2026-08-05): the
-        ring card builder picks an OUTER (`constants.RING_OUTERS` — any
+        ring card builder picks an OUTER (`ring.RING_OUTERS` — any
         outer is legal for a custom ring, not just the five presets'
         locked ones), a library jewel per empty field and a unique
         name — the new card joins Theme ▸ Ring with the gold/silver
@@ -40,7 +40,7 @@ class _CustomArtSectionMixin:
         column = QVBoxLayout(group)
         top = QHBoxLayout()
         self._ring_layout_combo = QComboBox()
-        for key, outer in constants.RING_OUTERS.items():
+        for key, outer in ring.RING_OUTERS.items():
             self._ring_layout_combo.addItem(
                 tr("{theme} ({n} jewels)").format(
                     theme=outer["theme"], n=len(outer["positions"])
@@ -67,8 +67,8 @@ class _CustomArtSectionMixin:
         thematic_row.addWidget(QLabel(tr("Thematic color")))
         self._ring_thematic_combo = QComboBox()
         self._ring_thematic_combo.addItem(tr("Auto (moon indigo)"), None)
-        for shade in constants.METAL_SHADE_NAMES["thematic"]:
-            title = constants.METAL_SHADE_TITLES.get(
+        for shade in ring.METAL_SHADE_NAMES["thematic"]:
+            title = ring.METAL_SHADE_TITLES.get(
                 shade, shade.replace("_", " ").title()
             )
             self._ring_thematic_combo.addItem(title, shade)
@@ -96,7 +96,7 @@ class _CustomArtSectionMixin:
                         inner.widget().deleteLater()
         self._ring_slot_combos = {}
         layout_key = self._ring_layout_combo.currentData()
-        for position in constants.RING_OUTERS[layout_key]["positions"]:
+        for position in ring.RING_OUTERS[layout_key]["positions"]:
             cell = QVBoxLayout()
             cell.addWidget(QLabel(f"{position}h"))
             combo = self._jewel_combo(position)
@@ -112,7 +112,7 @@ class _CustomArtSectionMixin:
         Numbers section offers at most the position's own number."""
         combo = QComboBox()
         model = QStandardItemModel(combo)
-        for group, glyphs in constants.LETTER_PLATE_GROUPS.items():
+        for group, glyphs in ring.LETTER_PLATE_GROUPS.items():
             if group == "Numbers":
                 glyphs = tuple(g for g in glyphs if int(g) == position)
                 if not glyphs:

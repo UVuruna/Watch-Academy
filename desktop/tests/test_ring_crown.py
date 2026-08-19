@@ -19,7 +19,7 @@ from app.controller import WatchController
 from app.skin_builder import _location_crown_text, build_skin
 from app.settings_store import Settings, replace
 from app.watch_face.ring import _crown_text_validator
-from config import constants
+from config import ring
 
 
 @pytest.fixture(scope="module")
@@ -31,12 +31,12 @@ def app():
 
 
 def test_crown_text_validator_accepts_every_charset_character(app):
-    """Every character `constants.RING_CROWN_TEXT_CHARSET` names — the
+    """Every character `ring.RING_CROWN_TEXT_CHARSET` names — the
     exact set the crown-text renderer can draw one-per-character — is
     ACCEPTABLE, derived programmatically, never a hand-written list."""
     edit = QLineEdit()
     validator = _crown_text_validator(edit)
-    text = "".join(sorted(constants.RING_CROWN_TEXT_CHARSET))
+    text = "".join(sorted(ring.RING_CROWN_TEXT_CHARSET))
     state, _text, _pos = validator.validate(text, 0)
     assert state == QValidator.State.Acceptable
 
@@ -73,7 +73,7 @@ def test_crown_text_field_typing_stops_at_the_first_bad_character(app):
 
 def test_location_crown_text_filters_to_the_drawable_charset():
     """`_location_crown_text` uppercases and keeps only characters
-    `constants.RING_CROWN_TEXT_CHARSET` names (the SAME set the widget
+    `ring.RING_CROWN_TEXT_CHARSET` names (the SAME set the widget
     validator enforces, Rule #5) — the comma and any other unsupported
     character simply vanish, collapsing to one word-gap."""
     assert _location_crown_text("Belgrade, Serbia") == "BELGRADE SERBIA"

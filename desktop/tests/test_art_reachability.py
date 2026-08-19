@@ -40,11 +40,11 @@ from config import (
     archetypes,
     calendar_mounts,
     complications,
-    constants,
     dial,
     pantheon,
     paths,
     registry,
+    ring,
 )
 
 _ROOT = Path(__file__).resolve().parents[1]
@@ -69,7 +69,7 @@ RESOLVED_ELSEWHERE: dict[str, str] = {
         "app.encyclopedia.tree — the five elements, a parallel reading "
         "of the same zodiac rather than a thirteenth animal",
     "instrument/subdial/{set}":
-        "config.constants.SUBDIAL_SETS + app.skin_builder.build_skin — the "
+        "config.ring.SUBDIAL_SETS + app.skin_builder.build_skin — the "
         "set name is a settings value, the path built from it",
     "instrument/hands/{style}":
         "the skin's own hand sets — path built from the skin JSON",
@@ -207,7 +207,7 @@ def _resolved_dirs() -> set[Path]:
     # table names a plate per glyph, relative to `dial.LETTER_ART_DIR` —
     # every jewel, crown word, crown location and crown digit is drawn
     # from one of these (`render.letter_plates`).
-    for plates in constants.LETTER_PLATE_FILES.values():
+    for plates in ring.LETTER_PLATE_FILES.values():
         for name in plates:
             add(dial.LETTER_ART_DIR / name)
     return found

@@ -42,7 +42,7 @@ from functools import lru_cache
 
 from PySide6.QtCore import QPointF
 
-from config import archetypes, calendar_mounts, complications, constants, defaults, dial, encyclopedia_ui, glow, pantheon, paths, pointer_geometry, profiling, sky
+from config import archetypes, calendar_mounts, complications, constants, defaults, dial, encyclopedia_ui, glow, pantheon, paths, pointer_geometry, profiling, ring, sky
 from config.ui_text import ui
 from config.registry import week as week_registry
 from core import angles, continents, world
@@ -784,7 +784,7 @@ class TooltipComposer:
             # whole — the same safety law as the classic unit.
             metal = (
                 slot_metal
-                if theme in constants.METAL_THEMES
+                if theme in ring.METAL_THEMES
                 and slot_metal in defaults.METAL_SWAP_TARGETS
                 else None
             )
@@ -807,7 +807,7 @@ class TooltipComposer:
                     theme, body, on_date=on_date,
                     colored=(
                         slot_metal == "colored"
-                        and theme in constants.METAL_THEMES
+                        and theme in ring.METAL_THEMES
                     ),
                 )
         if same_unit and image is not None and on_date is not None:

@@ -8,7 +8,7 @@ import pytest
 import dataclasses
 
 from app.settings_store import Settings, SettingsCorruptError, SettingsStore, replace
-from config import calendar_mounts, constants, paths
+from config import calendar_mounts, paths, ring
 from data.locations import default_place, shared_locations
 
 
@@ -642,7 +642,7 @@ def test_subdial_set_round_trip_and_default(store):
     FIVE sets persist, default to "set1" in older files, and reject an
     unknown value."""
 
-    for name in constants.SUBDIAL_SETS:
+    for name in ring.SUBDIAL_SETS:
         store.save(replace(Settings(), subdial_set=name))
         assert store.load().subdial_set == name
     store.path.write_text(
@@ -662,14 +662,14 @@ def test_subdial_set_round_trip_and_default(store):
 def test_metal_shade_round_trip_and_default(store):
     """THE METAL SHADES (R8a round, owner spec 2026-07-21 night): every
     shade of every metal persists, older files default to
-    config.constants.METAL_SHADE_DEFAULT, and an unknown shade name
+    config.ring.METAL_SHADE_DEFAULT, and an unknown shade name
     raises loudly (Rule #1) rather than silently falling back."""
 
-    for metal, names in constants.METAL_SHADE_NAMES.items():
+    for metal, names in ring.METAL_SHADE_NAMES.items():
         if metal == "thematic":
             # The THEMATIC pseudo-metal (ENLARGE/THEMATIC round, owner
             # 2026-07-27) is NOT a user setting — its shade follows the
-            # active ring preset (`constants.RING_THEMATIC_SHADES`,
+            # active ring preset (`ring.RING_THEMATIC_SHADES`,
             # resolved in `app.skin_builder.apply_display_settings`).
             continue
         field = f"metal_shade_{metal}"
@@ -681,9 +681,9 @@ def test_metal_shade_round_trip_and_default(store):
         encoding="utf-8",
     )
     loaded = store.load()
-    assert loaded.metal_shade_gold == constants.METAL_SHADE_DEFAULT["gold"]
-    assert loaded.metal_shade_bronze == constants.METAL_SHADE_DEFAULT["bronze"]
-    assert loaded.metal_shade_silver == constants.METAL_SHADE_DEFAULT["silver"]
+    assert loaded.metal_shade_gold == ring.METAL_SHADE_DEFAULT["gold"]
+    assert loaded.metal_shade_bronze == ring.METAL_SHADE_DEFAULT["bronze"]
+    assert loaded.metal_shade_silver == ring.METAL_SHADE_DEFAULT["silver"]
     store.path.write_text(
         '{"schema_version": 1, "window": {"x": 1, "y": 2, "diameter": 360},'
         ' "metal_shade_gold": "rose_gold"}',

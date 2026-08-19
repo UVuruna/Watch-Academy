@@ -224,7 +224,7 @@ AURA_OFF_FOLLOW_VALUE = 224
 # Ring PRESETS are data (Database/ring_presets.json + the user's custom
 # cards in settings, loaded by data/rings.py — THE COMPOSITIONAL RING
 # MODEL, owner decree 2026-08-05): a card is {name, outer, letters};
-# `outer` names a `constants.RING_OUTERS` entry directly, whose file
+# `outer` names a `ring.RING_OUTERS` entry directly, whose file
 # lives under `RING_OUTER_ART_DIR` below.
 RING_FACE_DIR = paths.assets_dir() / "instrument" / "ring"
 
@@ -246,7 +246,7 @@ TICK_HOVER_OUTER_FRACTION = 0.945
 # derived from the gold master at load. NOT under `ring/` (owner
 # 2026-08-07: "nije mu to mesto jer nisu oni samo za ring") — the ring
 # jewels, all four crown surfaces and, planned, the subdial read the
-# SAME plates. Its glyph table is `constants.LETTER_PLATE_FILES`; the
+# SAME plates. Its glyph table is `ring.LETTER_PLATE_FILES`; the
 # resolver that turns a glyph into a drawable gold master (aliases,
 # composed two-digit numbers) is `render.letter_plates`.
 LETTER_ART_DIR = paths.assets_dir() / "instrument" / "letters"
@@ -371,9 +371,9 @@ RING_CROWN_TEXT_LETTER_STEP_DEG = 60.0 / 9
 
 # --- Ring OUTER/INNER composition (owner decree 2026-08-05) -----------------------
 # THE COMPOSITIONAL RING MODEL: a ring is ALWAYS the composition of an
-# OUTER band (`RING_OUTER_ART_DIR`, `constants.RING_OUTERS[name]["file"]`
+# OUTER band (`RING_OUTER_ART_DIR`, `ring.RING_OUTERS[name]["file"]`
 # — the hour-tick band with the preset's own empty jewel fields) + an
-# INNER band (`RING_INNER_ART_DIR`, `constants.RING_INNERS` — the
+# INNER band (`RING_INNER_ART_DIR`, `ring.RING_INNERS` — the
 # minute-track band, independently tintable via `ring_tint_inner`) +
 # the jewels + an optional crown-text crown text arc. There is no single
 # monolithic plate and no procedural fallback any more — the old

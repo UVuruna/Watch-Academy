@@ -19,7 +19,7 @@ from PySide6.QtWidgets import QApplication
 
 from app.skin_builder import build_skin
 from app.settings_store import Settings, replace
-from config import constants, defaults, dial
+from config import defaults, dial, ring
 from core.clock_state import build_day_context, build_tick_state
 from data.moon_phases import MoonPhaseRepository
 from data.rings import ring_presets
@@ -57,8 +57,8 @@ def test_ceramic_is_a_choosable_thematic_shade():
     """Registered in the SAME roster every other transformer ramp lives
     in (test_thematic_choices_mirror_the_recolor_presets is the sync
     against recolor/presets/metals.json's own order)."""
-    assert "ceramic" in constants.METAL_SHADE_NAMES["thematic"]
-    assert constants.METAL_SHADE_TITLES["ceramic"] == "Ceramic"
+    assert "ceramic" in ring.METAL_SHADE_NAMES["thematic"]
+    assert ring.METAL_SHADE_TITLES["ceramic"] == "Ceramic"
 
 
 def test_ceramic_ramp_reads_visibly_distinct_from_silver():
@@ -105,9 +105,9 @@ def test_chi_preset_validates_and_locks_its_outer():
     assert chi["jewels"] == ("X",)
     assert chi["thematic"] == "ceramic"
     assert chi["about"]
-    assert constants.RING_OUTER_LOCK["CHI"] == "full"
+    assert ring.RING_OUTER_LOCK["CHI"] == "full"
     # RULED "može" (Crown Polish round, owner 2026-08-06).
-    assert constants.RING_INNER_PRESET_DEFAULT["CHI"] == "simple"
+    assert ring.RING_INNER_PRESET_DEFAULT["CHI"] == "simple"
 
 
 def test_chi_crown_text_chars_all_drawable():
@@ -117,7 +117,7 @@ def test_chi_crown_text_chars_all_drawable():
     assert texts == ["IXΘYΣ", "IN HOC SIGNO VINCES"]
     for text in texts:
         for char in text:
-            assert char == " " or char in constants.LETTER_PLATE_FILES
+            assert char == " " or char in ring.LETTER_PLATE_FILES
 
 
 def test_chi_crown_text_carries_its_own_reading():

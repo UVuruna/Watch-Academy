@@ -36,7 +36,7 @@ from app.watch_face.controls import (
     ValueKnob, ValueUnit, knob_row, picture_group,
 )
 from app.watch_face.widgets import FlowLayout, flow_row, pill
-from config import constants, dial, palette
+from config import constants, dial, palette, ring
 from data.rings import ring_presets
 
 
@@ -44,14 +44,14 @@ def _crown_text_validator(parent: QLineEdit) -> QRegularExpressionValidator:
     """RING VERDICTS round (owner decree 2026-08-05): the crown-text
     field must only ACCEPT a character the crown-text renderer can actually
     draw — a `QRegularExpressionValidator` built straight off
-    `constants.RING_CROWN_TEXT_CHARSET` (DERIVED, never a hand-written
+    `ring.RING_CROWN_TEXT_CHARSET` (DERIVED, never a hand-written
     list — Rule #5, the exact set `app.skin_builder._location_crown_text`
     filters the Location crown through too) so an unsupported keystroke
     is rejected outright instead of silently dropping the whole crown
     text at build time."""
     escaped = "".join(
         "\\" + char if char in "\\^]-" else char
-        for char in sorted(constants.RING_CROWN_TEXT_CHARSET)
+        for char in sorted(ring.RING_CROWN_TEXT_CHARSET)
         if char != " "
     )
     pattern = QRegularExpression(f"^[{escaped} ]*$")
@@ -60,7 +60,7 @@ def _crown_text_validator(parent: QLineEdit) -> QRegularExpressionValidator:
 
 def _crown_text_tooltip(tr) -> str:
     allowed = " ".join(
-        sorted(constants.RING_CROWN_TEXT_CHARSET - {" "})
+        sorted(ring.RING_CROWN_TEXT_CHARSET - {" "})
     )
     return tr("Allowed characters: {allowed}").format(allowed=allowed)
 
@@ -72,10 +72,10 @@ def build(settings, setters: dict, tr) -> QWidget:
     layout.addWidget(_preset_about(presets, settings.ring, tr))
     layout.addWidget(_finish_row(settings, setters, tr))
     active_card = presets[settings.ring]
-    if constants.RING_EYE_GLYPH in active_card["jewels"]:
+    if ring.RING_EYE_GLYPH in active_card["jewels"]:
         shine = settings.ring_eye_shine.get(
             settings.ring,
-            constants.RING_EYE_SHINE_DEFAULT.get(settings.ring, False),
+            ring.RING_EYE_SHINE_DEFAULT.get(settings.ring, False),
         )
         shine_box = QCheckBox(tr("Shine"))
         shine_box.setChecked(shine)
@@ -106,7 +106,7 @@ def _preset_gallery(settings, presets: dict, setters, tr) -> QWidget:
     for name in sorted(presets):
         card = presets[name]
         outer_name = card["outer"]
-        face = constants.RING_OUTERS[outer_name]["file"]
+        face = ring.RING_OUTERS[outer_name]["file"]
         icon = (
             thumbs.ring_preset_thumbnail(card)
             or thumbs.art_thumbnail(dial.RING_OUTER_ART_DIR / face)
@@ -154,18 +154,18 @@ def _finish_row(settings, setters, tr) -> QWidget:
             tr(f"{finish.capitalize()} jewels"), settings.ring_finish == finish,
             lambda f=finish, a=apply_finish: a(f),
         )
-        for finish in constants.RING_FINISHES
+        for finish in ring.RING_FINISHES
     )
 
 
 def _inner_group(settings, setters, tr):
     """THE INNER GALLERY (owner decree 2026-08-05): eight cards, one per
-    `constants.RING_INNERS` variant — applies to the ACTIVE preset (or
+    `ring.RING_INNERS` variant — applies to the ACTIVE preset (or
     the active custom ring), stored per-preset-name exactly like
     `ring_eye_shine` (`Settings.ring_inner`,
     `app.skin_builder._resolve_ring_inner`)."""
-    default = constants.RING_INNER_PRESET_DEFAULT.get(
-        settings.ring, constants.RING_INNER_DEFAULT
+    default = ring.RING_INNER_PRESET_DEFAULT.get(
+        settings.ring, ring.RING_INNER_DEFAULT
     )
     active = settings.ring_inner.get(settings.ring, default)
     entries = [
@@ -176,7 +176,7 @@ def _inner_group(settings, setters, tr):
             ),
             thumbs.art_thumbnail(dial.RING_INNER_ART_DIR / f"{inner}.png"),
         )
-        for inner in constants.RING_INNERS
+        for inner in ring.RING_INNERS
     ]
     return picture_group(
         tr("Inner (minute track)"),
@@ -300,7 +300,7 @@ def _crown_text_group(settings, card: dict, setters, tr) -> QGroupBox:
     apply_text = setters["custom_ring_crown_text"]
     apply_orientation = setters["custom_ring_crown_orientation"]
     location_on = settings.ring_crown_location.get(settings.ring, False)
-    if settings.ring in constants.RING_OUTER_LOCK:
+    if settings.ring in ring.RING_OUTER_LOCK:
         texts = " · ".join(entry["text"] for entry in card["crown_text"]) or tr("(none)")
         label = QLabel(texts)
         label.setEnabled(not location_on)

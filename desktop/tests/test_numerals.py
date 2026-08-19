@@ -34,7 +34,7 @@ from PySide6.QtWidgets import QApplication
 
 from app.skin_builder import build_skin
 from app.settings_store import Settings, SettingsStore, replace
-from config import dial, palette
+from config import dial, palette, ring
 from core import numerals
 from core.clock_state import build_day_context, build_tick_state
 from data.moon_phases import MoonPhaseRepository
@@ -260,8 +260,7 @@ def test_every_shipped_inner_variant_composes_from_a_real_base_plate():
     """The INNER half of the composition law: each variant is one of the
     owner's NUMBERLESS plates plus the seats that carry a number — and a
     seat that carries one of his arrows never carries a number."""
-    from config import constants
-    assert set(dial.RING_INNER_COMPOSITION) == set(constants.RING_INNERS)
+    assert set(dial.RING_INNER_COMPOSITION) == set(ring.RING_INNERS)
     arrow_seats = {
         "simple": (), "simple_point": (0,), "simple_cross": (0, 15, 30, 45),
         "simple_octa": (0, 15, 30, 45),
@@ -269,7 +268,7 @@ def test_every_shipped_inner_variant_composes_from_a_real_base_plate():
     for variant, entry in dial.RING_INNER_COMPOSITION.items():
         base = dial.RING_INNER_ART_DIR / f"{entry['base']}.png"
         assert base.exists(), f"{variant} names a base plate that is not there"
-        assert entry["base"] in constants.RING_INNERS
+        assert entry["base"] in ring.RING_INNERS
         numbers = set(entry["numbers"])
         assert not numbers & set(arrow_seats[entry["base"]]), variant
         assert numbers <= set(range(0, 60, dial.NUMERAL_MINUTE_LABEL_STEP))

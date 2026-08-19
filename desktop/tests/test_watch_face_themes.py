@@ -13,7 +13,7 @@ from PySide6.QtWidgets import (
 from app.settings_store import Settings, replace, slot_layout_target
 from app.watch_face import theme_tree, themes
 from app.watch_face.window import WatchFaceDialog
-from config import calendar_mounts, constants, palette, watch_face
+from config import calendar_mounts, palette, ring, watch_face
 from tests.test_watch_face import _setters, fake_descriptors
 
 #: The "next" role's gradient top color — pills painted with it are the
@@ -263,13 +263,13 @@ def test_the_subdial_set_gallery_marks_the_stored_pick(app):
     test lives below."""
     from PySide6.QtWidgets import QToolButton
 
-    from config import constants, palette
+    from config import palette
 
     settings = replace(Settings(), weekday_theme="greek", subdial_set="solo")
     page = themes.build(settings, _RecordingSetters(settings), lambda s: s)
     tiles = {b.text(): b for b in page.findChildren(QToolButton)}
     assert palette.THEME_COLORS["accent"] in tiles[
-        constants.SUBDIAL_SET_TITLES["solo"]
+        ring.SUBDIAL_SET_TITLES["solo"]
     ].styleSheet()
 
 

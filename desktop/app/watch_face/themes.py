@@ -23,7 +23,7 @@ from app.watch_face import theme_thumbs, thumbs
 from app.watch_face.controls import picture_group
 from app.watch_face.widgets import flow_row, pill
 from app.weekday_theme_grid import build_calendar_mount_grid
-from config import constants, pantheon
+from config import pantheon, ring
 
 _MEDALS = {1: "🥇", 2: "🥈", 3: "🥉"}
 _FACE_LAYOUT_TITLES = ("Full face", "1 subdial", "2 subdials", "3 subdials")
@@ -236,13 +236,13 @@ def _subdial_set_group(settings, setters, tr) -> QGroupBox:
            "jewel finish still decides which metal draws within it."),
         [
             (
-                name, tr(constants.SUBDIAL_SET_TITLES[name]),
+                name, tr(ring.SUBDIAL_SET_TITLES[name]),
                 tr("The {name} subdial plates.").format(
-                    name=constants.SUBDIAL_SET_TITLES[name]
+                    name=ring.SUBDIAL_SET_TITLES[name]
                 ),
                 theme_thumbs.subdial_set_icon(name),
             )
-            for name in constants.SUBDIAL_SETS
+            for name in ring.SUBDIAL_SETS
         ],
         settings.subdial_set, setters["subdial_set"],
     )
