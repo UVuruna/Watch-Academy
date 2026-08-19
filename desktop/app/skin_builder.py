@@ -109,21 +109,21 @@ def watch_title(
     UI chrome — the same treatment the ring preset name and the
     pointer's own `POINTER_DISPLAY_NAMES` already get (protected proper
     nouns, invariant across languages). The palette label is the
-    pointer's own wheel-pair (`constants.POINTER_PALETTE_LABELS`), read
+    pointer's own wheel-pair (`pointer_names.POINTER_PALETTE_LABELS`), read
     by the ACTIVE `palette_style` — the SAME table the Design menu's
     pair labels translate from (Rule #5, one source)."""
     location = settings.place.name if location_name is None else location_name
     if not full:
         return location
-    labels = constants.POINTER_PALETTE_LABELS.get(
-        settings.pointer, constants.POINTER_PALETTE_LABELS["default"]
+    labels = pointer_names.POINTER_PALETTE_LABELS.get(
+        settings.pointer, pointer_names.POINTER_PALETTE_LABELS["default"]
     )
     styles = constants.palette_styles_for(settings.pointer)
     style = palette.effective_palette_style(
         settings.pointer, settings.palette_style
     )
     palette_label = labels[styles.index(style)]
-    pointer_name = constants.POINTER_DISPLAY_NAMES[settings.pointer]
+    pointer_name = pointer_names.POINTER_DISPLAY_NAMES[settings.pointer]
     return (
         f"{location}-{settings.ring_finish.capitalize()} "
         f"{settings.ring}-{palette_label} {pointer_name}"

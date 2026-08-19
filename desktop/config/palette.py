@@ -34,7 +34,7 @@ alpha fraction and radius that merely happens to sit beside a hue.
 Layer: config (pure — no Qt, no wall clock). Documentation: palette.md.
 """
 
-from config import constants
+from config import constants, pointer_names
 
 
 # ==================================================================
@@ -323,8 +323,8 @@ def pointer_arm_labels(pointer: str, palette_style: str) -> tuple:
     Genesis wheel (trio + tertiary) speaks its inverted seats
     ("trio_tertiary"), every other wheel its pointer's own row."""
     if (pointer, palette_style) == ("trio", "tertiary"):
-        return constants.POINTER_ARM_LABELS["trio_tertiary"]
-    return constants.POINTER_ARM_LABELS[pointer]
+        return pointer_names.POINTER_ARM_LABELS["trio_tertiary"]
+    return pointer_names.POINTER_ARM_LABELS[pointer]
 
 # Elements switch "Colorful" OFF (owner spec, FINAL.txt #5): the day and
 # twilight arcs are still indicated, but as plain white transparency

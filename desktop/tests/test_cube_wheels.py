@@ -21,7 +21,7 @@ import astral
 import pytest
 from PySide6.QtWidgets import QApplication
 
-from config import archetypes, constants, defaults, palette, pointer_geometry
+from config import archetypes, constants, defaults, palette, pointer_geometry, pointer_names
 from config.registry import week as week_registry
 from app.skin_builder import apply_display_settings, build_skin, watch_title
 from app.settings_store import Settings
@@ -93,11 +93,11 @@ def test_the_third_wheel_follows_the_arm_count():
 
 
 def test_third_wheel_labels_are_the_sealed_names():
-    assert constants.POINTER_PALETTE_LABELS["trio"] == (
+    assert pointer_names.POINTER_PALETTE_LABELS["trio"] == (
         "Court", "Family", "Genesis"
     )
-    assert constants.POINTER_PALETTE_LABELS["hexa"][2] == "Council"
-    assert constants.POINTER_PALETTE_LABELS["octa"][2] == "Character"
+    assert pointer_names.POINTER_PALETTE_LABELS["hexa"][2] == "Council"
+    assert pointer_names.POINTER_PALETTE_LABELS["octa"][2] == "Character"
 
 
 def test_effective_palette_style_normalizes_the_third_wheel_off_its_pointers():

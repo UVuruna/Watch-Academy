@@ -27,7 +27,7 @@ from PySide6.QtWidgets import (
 from app.watch_face import thumbs
 from app.watch_face.controls import picture_group
 from app.watch_face.widgets import pill
-from config import constants, pointer_geometry
+from config import constants, pointer_geometry, pointer_names
 from render.skin_geometry import daylight_active
 
 
@@ -74,7 +74,7 @@ def _palette_hues_group(settings, setters, tr) -> QGroupBox:
     arm_labels = palette.pointer_arm_labels(pointer_key, style)
     group = QGroupBox(
         tr("Palette — {pointer} {style}").format(
-            pointer=constants.POINTER_DISPLAY_NAMES[pointer_key],
+            pointer=pointer_names.POINTER_DISPLAY_NAMES[pointer_key],
             style=style.capitalize(),
         )
     )
@@ -121,7 +121,7 @@ def _pointer_gallery(settings, setters, tr) -> QWidget:
     )
     entries = []
     for variant, count in variants:
-        name = constants.POINTER_DISPLAY_NAMES[variant]
+        name = pointer_names.POINTER_DISPLAY_NAMES[variant]
         style = (
             settings.palette_style if variant == settings.pointer else "primary"
         )
@@ -145,8 +145,8 @@ def _palette_style_row(settings, setters, tr) -> QHBoxLayout:
     # lookup the per-section Reset never records (see section_reset.py).
     apply_style = setters["palette_style"]
     row = QHBoxLayout()
-    labels = constants.POINTER_PALETTE_LABELS.get(
-        settings.pointer, constants.POINTER_PALETTE_LABELS["default"]
+    labels = pointer_names.POINTER_PALETTE_LABELS.get(
+        settings.pointer, pointer_names.POINTER_PALETTE_LABELS["default"]
     )
     for style, label in zip(
         constants.palette_styles_for(settings.pointer), labels

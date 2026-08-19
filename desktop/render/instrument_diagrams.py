@@ -30,7 +30,7 @@ from PySide6.QtGui import (
     QColor, QFont, QFontMetricsF, QPainter, QPen, QPixmap,
 )
 
-from config import constants, dial, doctrine, encyclopedia_ui, palette, paths, pointer_geometry, sky
+from config import constants, dial, doctrine, encyclopedia_ui, palette, paths, pointer_geometry, pointer_names, sky
 from core import angles
 from render import letter_plates
 from render.diagram_bank import DiagramBank
@@ -770,7 +770,7 @@ def _pointers(_key: str, size: int) -> QPixmap:
         # Genesis…) are longer than a tile is wide and belong to the
         # article, which lists every one of them per pointer.
         _tile_labels(painter, center, row, (
-            (constants.POINTER_DISPLAY_NAMES[key], _INK),
+            (pointer_names.POINTER_DISPLAY_NAMES[key], _INK),
             (str(pointer_geometry.POINTER_DIAL_COUNTS[key]), _ACCENT),
         ))
     _caption(painter, size,

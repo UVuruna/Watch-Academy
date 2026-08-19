@@ -23,7 +23,7 @@ import json
 
 import pytest
 
-from config import archetypes, constants, paths
+from config import archetypes, paths, pointer_names
 from data.encyclopedia import EncyclopediaRepository
 from data.symbolism import SymbolismRepository
 from data.translations import collect_corpus
@@ -48,7 +48,7 @@ def test_the_one_soul_family_is_complete_and_in_wheel_order():
     the theme's own title page — nine in all."""
     family = _family()
     assert list(family) == [
-        constants.ONE_SOUL_THEME_TITLE, *_PILLARS,
+        pointer_names.ONE_SOUL_THEME_TITLE, *_PILLARS,
         "The Union", "The Child",
     ]
     # The pillar order IS the wheel's figure order (CANON §Prism secondary).
@@ -74,7 +74,7 @@ def test_the_theme_argues_its_doctrine_not_its_seats():
     conjugation law, the three axes of love with their cross-cures, the
     union's two faces and the family triangle."""
     repo = EncyclopediaRepository()
-    title = repo.entry("one_soul", constants.ONE_SOUL_THEME_TITLE)["base"]
+    title = repo.entry("one_soul", pointer_names.ONE_SOUL_THEME_TITLE)["base"]
     # The conjugation law — the theme's whole engine.
     assert "honesty is a trait of the individual" in title
     assert "conjugated" in title
@@ -129,9 +129,9 @@ def test_the_triple_name_is_what_the_reader_sees():
     from app.encyclopedia import topics as _topics
 
     topic = _topics()["one_soul"]
-    assert topic["title"] == constants.ONE_SOUL_THEME_TITLE
-    assert topic["entries"][0]["name"] == constants.ONE_SOUL_THEME_TITLE
-    assert topic["tile_title"] == constants.ONE_SOUL_THEME_NAME
+    assert topic["title"] == pointer_names.ONE_SOUL_THEME_TITLE
+    assert topic["entries"][0]["name"] == pointer_names.ONE_SOUL_THEME_TITLE
+    assert topic["tile_title"] == pointer_names.ONE_SOUL_THEME_NAME
 
 
 def test_the_theme_opens_on_its_triple_title_in_a_live_dialog():
@@ -143,7 +143,7 @@ def test_the_theme_opens_on_its_triple_title_in_a_live_dialog():
 
     QApplication.instance() or QApplication([])
     dialog = EncyclopediaDialog(initial_topic="one_soul", initial_entry=0)
-    assert dialog._title.text() == constants.ONE_SOUL_THEME_TITLE
+    assert dialog._title.text() == pointer_names.ONE_SOUL_THEME_TITLE
     assert dialog._reader._counter.text() == "1 / 9"
     # And every page turns without a crash, plate or no plate.
     for _ in range(9):
@@ -195,4 +195,4 @@ def test_the_one_soul_pages_ride_the_translation_corpus():
     # The renamed hexa PAINT label rides the UI corpus too (owner "ok."
     # 2026-07-27: Paint palette → Persons on the Prism's wheel row).
     assert "ui/Persons" in corpus
-    assert constants.POINTER_PALETTE_LABELS["hexa"][0] == "Persons"
+    assert pointer_names.POINTER_PALETTE_LABELS["hexa"][0] == "Persons"

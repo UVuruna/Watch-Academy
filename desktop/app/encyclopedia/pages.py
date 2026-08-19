@@ -15,7 +15,7 @@ contract (see `config/encyclopedia_tree.py`).
 Layer: app. Documentation: pages.md.
 """
 
-from config import archetypes, constants, pantheon
+from config import archetypes, pantheon, pointer_names
 
 # The SEASONS topic (owner 2026-07-13; split 2026-07-16, ROADMAP queue
 # #10): the year's quarters, the tropics' halves and the measured twins
@@ -262,7 +262,7 @@ _CROSSES_ENTRIES = (
 # family is fully drawn); only the title page has no plate, exactly like
 # every other overview page in this hall.
 _ONE_SOUL_ENTRIES = (
-    (constants.ONE_SOUL_THEME_TITLE,
+    (pointer_names.ONE_SOUL_THEME_TITLE,
      archetypes.ONE_SOUL_ART_DIR / "Title.png"),
     ("Gratitude", archetypes.ONE_SOUL_ART_DIR / "Gratitude.png"),
     ("Support", archetypes.ONE_SOUL_ART_DIR / "Support.png"),
@@ -289,8 +289,8 @@ _ARCHETYPE_TOPICS = (
     ("crosses", "The Two Crosses", None,
      archetypes.CROSSES_ART_DIR / "Path_of_Light.png", "crosses",
      _CROSSES_ENTRIES),
-    ("one_soul", constants.ONE_SOUL_THEME_TITLE,
-     constants.ONE_SOUL_THEME_NAME,
+    ("one_soul", pointer_names.ONE_SOUL_THEME_TITLE,
+     pointer_names.ONE_SOUL_THEME_NAME,
      archetypes.center("prism_secondary")["file"], "one_soul",
      _ONE_SOUL_ENTRIES),
 )

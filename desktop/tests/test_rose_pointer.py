@@ -22,7 +22,7 @@ from PySide6.QtWidgets import QApplication
 
 from app.skin_builder import build_skin
 from app.settings_store import Settings
-from config import constants, defaults, palette, pantheon, pointer_geometry
+from config import constants, defaults, palette, pantheon, pointer_geometry, pointer_names
 from core.clock_state import build_day_context, build_tick_state
 from core.year_wheel import year_marker_angle
 from data.moon_phases import MoonPhaseRepository
@@ -92,10 +92,10 @@ def test_the_rose_ring_preset_is_gone_for_good():
 def test_the_rose_is_the_seventh_pointer_with_two_wheels():
     assert pointer_geometry.POINTER_POINTS["rose"] == 8
     assert len(pointer_geometry.POINTER_POINTS) == 7
-    assert constants.POINTER_DISPLAY_NAMES["rose"] == "Rose"
+    assert pointer_names.POINTER_DISPLAY_NAMES["rose"] == "Rose"
     # Two wheels, not three — the Rose is not a Cube-wheel pointer.
     assert constants.palette_styles_for("rose") == ("primary", "secondary")
-    assert constants.POINTER_PALETTE_LABELS["rose"] == ("Legacy", "Prophecy")
+    assert pointer_names.POINTER_PALETTE_LABELS["rose"] == ("Legacy", "Prophecy")
     assert "rose" not in constants.THIRD_WHEEL_POINTERS
 
 
@@ -182,7 +182,7 @@ def test_the_cardinals_are_the_turning_points_the_year_wheel_computes():
         (anchors.instants[1], 270.0),    # spring equinox  — 06h blue
     ):
         assert year_marker_angle(instant, anchors) == pytest.approx(angle)
-    labels = constants.POINTER_ARM_LABELS["rose"]
+    labels = pointer_names.POINTER_ARM_LABELS["rose"]
     assert labels[0] == "Summer Solstice"      # 0°   — yellow
     assert labels[2] == "Autumn Equinox"       # 90°  — red
     assert labels[4] == "Winter Solstice"      # 180° — purple
