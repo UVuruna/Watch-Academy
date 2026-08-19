@@ -16,7 +16,7 @@ from zoneinfo import ZoneInfo
 import astral
 
 from app.time_travel import TimeTravelDialog
-from config import constants, defaults, shortcuts
+from config import defaults, eras, shortcuts
 from core.clock_state import build_tick_state
 from core.continents import date_is_solstice
 from core.deep_time import (
@@ -240,7 +240,7 @@ class _TimeTravelMixin:
         canonical = proxy_cycles(astro_year)
         if canonical != cycles:
             moment = moment.replace(
-                year=astro_year + canonical * constants.GREGORIAN_CYCLE_YEARS
+                year=astro_year + canonical * eras.GREGORIAN_CYCLE_YEARS
             )
             cycles = canonical
         first, last = self._travel_coverage()

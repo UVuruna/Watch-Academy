@@ -26,7 +26,7 @@ from PySide6.QtWidgets import QComboBox, QDoubleSpinBox, QFormLayout, QGroupBox,
 from app.dialog_base import AcademyDialog
 from app.theme import apply_theme, size_to_screen
 from app.ui_style import style_button, uniform_width
-from config import constants, defaults, palette, shortcuts
+from config import defaults, eras, palette, shortcuts
 from core.deep_time import (
     astro_from_display,
     canonical_proxy,
@@ -113,7 +113,7 @@ class TimeTravelDialog(AcademyDialog):
             )
         astro_year = (
             initial_moment.year
-            - initial_cycles * constants.GREGORIAN_CYCLE_YEARS
+            - initial_cycles * eras.GREGORIAN_CYCLE_YEARS
         )
 
         # --- The moment editor (owner slika 13) -----------------------
@@ -158,12 +158,12 @@ class TimeTravelDialog(AcademyDialog):
         moment_row.addWidget(self._era)
         moment_row.addWidget(self._time)
 
-        low, high = constants.LATITUDE_RANGE
+        low, high = eras.LATITUDE_RANGE
         self._latitude = QDoubleSpinBox(self)
         self._latitude.setRange(low, high)
         self._latitude.setDecimals(4)
         self._latitude.setValue(latitude)
-        low, high = constants.LONGITUDE_RANGE
+        low, high = eras.LONGITUDE_RANGE
         self._longitude = QDoubleSpinBox(self)
         self._longitude.setRange(low, high)
         self._longitude.setDecimals(4)
@@ -564,7 +564,7 @@ class TimeTravelDialog(AcademyDialog):
         while individual fields are set so a single row click repaints
         the header/coverage lines exactly ONCE (`_refresh` below), not
         once per widget touched."""
-        astro_year = moment.year - cycles * constants.GREGORIAN_CYCLE_YEARS
+        astro_year = moment.year - cycles * eras.GREGORIAN_CYCLE_YEARS
         display_year, era_index = display_from_astro(astro_year)
         self._era.blockSignals(True)
         self._era.setCurrentIndex(era_index)

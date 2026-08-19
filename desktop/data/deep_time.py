@@ -13,7 +13,7 @@ from dataclasses import dataclass
 from datetime import datetime, timezone
 from pathlib import Path
 
-from config import constants, paths
+from config import eras, paths
 from core.clock_state import EclipseEvent
 from core.deep_time import julian_day_of, proxy_cycles
 from core.moon import MoonWindow
@@ -116,7 +116,7 @@ class DeepTimeRepository:
                     f"Deep Time pack covers {first}-{last}; "
                     f"no entry for {astro_year}"
                 )
-            shift = proxy_cycles(astro_year) * constants.GREGORIAN_CYCLE_YEARS
+            shift = proxy_cycles(astro_year) * eras.GREGORIAN_CYCLE_YEARS
             rows = {
                 (row[0], row[4]): row
                 for row in self._con.execute(
@@ -158,7 +158,7 @@ class DeepTimeRepository:
                     f"Deep Time pack covers {first}-{last}; "
                     f"no entry for {astro_year}"
                 )
-            shift = proxy_cycles(astro_year) * constants.GREGORIAN_CYCLE_YEARS
+            shift = proxy_cycles(astro_year) * eras.GREGORIAN_CYCLE_YEARS
             events = tuple(
                 (_instant(row, shift), row[4] / 360.0)
                 for row in self._con.execute(
@@ -236,7 +236,7 @@ class DeepTimeRepository:
         the found instants back into `now`'s own proxy frame so they
         compare directly against every other DayContext datetime."""
         jd = julian_day_of(now, cycles)
-        shift = cycles * constants.GREGORIAN_CYCLE_YEARS
+        shift = cycles * eras.GREGORIAN_CYCLE_YEARS
         events = []
         for kind in ("solar", "lunar"):
             for eclipse in (

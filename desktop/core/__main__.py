@@ -15,7 +15,7 @@ from zoneinfo import ZoneInfo, ZoneInfoNotFoundError
 
 import astral
 
-from config import constants
+from config import constants, eras
 from core.clock_state import build_day_context, build_tick_state
 from data.locations import LocationRepository
 from data.moon_phases import MoonPhaseRepository
@@ -48,8 +48,8 @@ def main() -> None:
         latitude, longitude, tz_name = record.latitude, record.longitude, record.timezone
         print(f"City:       {' / '.join(record.path)}  ({len(matches)} match(es))")
     elif args.lat is not None and args.lng is not None and args.tz:
-        lat_low, lat_high = constants.LATITUDE_RANGE
-        lng_low, lng_high = constants.LONGITUDE_RANGE
+        lat_low, lat_high = eras.LATITUDE_RANGE
+        lng_low, lng_high = eras.LONGITUDE_RANGE
         if not lat_low <= args.lat <= lat_high:
             parser.error(f"--lat must be within {lat_low}..{lat_high}")
         if not lng_low <= args.lng <= lng_high:

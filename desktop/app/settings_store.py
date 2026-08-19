@@ -22,7 +22,7 @@ from app.settings_fields import (
     save_moving_bodies, save_numerals,
 )
 from app.settings_ring import fold_ring_name, load_named_dict, normalized_ring_card
-from config import calendar_mounts, constants, defaults, dial, identity, pantheon
+from config import calendar_mounts, constants, defaults, dial, eras, identity, pantheon
 from data.locations import Place, default_place
 from data.rings import ring_presets
 
@@ -138,7 +138,7 @@ class Settings:
     hide_night_borders: bool = False
     # The Earth marker's label MODE (owner 2026-07-18, ROADMAP 15h — the
     # Design ▸ Earth submenu's FOUR exclusive toggles: Date / Weekday /
-    # Date & Weekday / Full Date, `constants.EARTH_LABEL_MODES`).
+    # Date & Weekday / Full Date, `eras.EARTH_LABEL_MODES`).
     # Replaces the old show_earth_date/earth_weekday bool pair (Rule #6 —
     # load() migrates an older file's pair, and the pre-rename
     # archetype_earth_day key, onto this single enum).
@@ -619,9 +619,9 @@ class SettingsStore:
                 ("third_slot_roster", "planetary", constants.FIGURE_ROSTERS),
                 ("art_source", identity.ART_SOURCE_DEFAULT,
                  identity.ART_SOURCES),
-                ("era_notation", "bce_ce", constants.ERA_NOTATIONS),
-                ("third_era", "none", constants.THIRD_ERAS),
-                ("z_mode", "bottom", constants.Z_MODES),
+                ("era_notation", "bce_ce", eras.ERA_NOTATIONS),
+                ("third_era", "none", eras.THIRD_ERAS),
+                ("z_mode", "bottom", eras.Z_MODES),
                 ("umbra_tint_mode", "follow", constants.UMBRA_TINT_MODES),
                 ("aura_off_tint_mode", "white", constants.AURA_OFF_TINT_MODES),
             ):

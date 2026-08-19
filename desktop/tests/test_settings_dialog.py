@@ -11,7 +11,7 @@ from PySide6.QtWidgets import QApplication
 from app.skin_builder import apply_display_settings
 from app.settings_dialog.dialog import SettingsDialog
 from app.settings_store import Settings, replace
-from config import defaults, encyclopedia_ui, identity, palette, pantheon, sky
+from config import defaults, encyclopedia_ui, eras, identity, palette, pantheon, sky
 from data.locations import Place, default_place
 from render.skin_geometry import palette_for
 
@@ -249,7 +249,7 @@ def test_third_era_combo_lists_chinese(app):
         dialog._third_era_combo.itemData(i)
         for i in range(dialog._third_era_combo.count())
     ]
-    assert values == list(constants.THIRD_ERAS)
+    assert values == list(eras.THIRD_ERAS)
     index = dialog._third_era_combo.findData("chinese")
     dialog._third_era_combo.setCurrentIndex(index)
     dialog.accept()
@@ -288,7 +288,7 @@ def test_third_era_combo_lists_kali_olympiad_unix(app):
     ]
     for era in ("kali", "olympiad", "unix"):
         assert era in values
-        assert era in constants.THIRD_ERA_TITLES
+        assert era in eras.THIRD_ERA_TITLES
         index = dialog._third_era_combo.findData(era)
         assert index >= 0
         dialog._third_era_combo.setCurrentIndex(index)

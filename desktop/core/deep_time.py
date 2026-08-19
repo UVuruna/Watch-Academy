@@ -16,7 +16,7 @@ proxies and produce identical results.
 import math
 from datetime import datetime
 
-from config import constants, dial
+from config import dial, eras
 
 
 # --- Era notation (owner amendment 2026-07-17) --------------------------------
@@ -28,9 +28,9 @@ def format_official(
     """The OFFICIAL year form: positive years bare ("2026", as the
     world writes it) unless `show_suffix` opts the label in; negative
     years ALWAYS carry it ("44 BCE"/"44 BC" per the notation)."""
-    if notation not in constants.ERA_NAMES:
+    if notation not in eras.ERA_NAMES:
         raise ValueError(f"unknown era notation: {notation!r}")
-    current, before = constants.ERA_NAMES[notation]
+    current, before = eras.ERA_NAMES[notation]
     if astro_year >= 1:
         return f"{astro_year} {current}" if show_suffix else str(astro_year)
     return f"{1 - astro_year} {before}"
@@ -42,8 +42,8 @@ def format_anno_lucis(astro_year: int) -> str:
     Earth hover card's own era block reuses this directly;
     `format_year_line` reuses it too, so the form is derived ONCE."""
     return (
-        f"{astro_year + constants.ANNO_LUCIS_OFFSET}. "
-        f"{constants.ANNO_LUCIS_LABEL}"
+        f"{astro_year + eras.ANNO_LUCIS_OFFSET}. "
+        f"{eras.ANNO_LUCIS_LABEL}"
     )
 
 
@@ -75,7 +75,7 @@ def format_year_line(
     if third_era == "maya":
         parts.append(
             f"{maya_long_count(astro_year, month, day)}. "
-            f"{constants.THIRD_ERA_LABELS['maya']}"
+            f"{eras.THIRD_ERA_LABELS['maya']}"
         )
     elif third_era == "unix":
         # Space-grouped digits (the year line's own readability
@@ -86,13 +86,13 @@ def format_year_line(
         grouped = f"{unix_epoch_seconds(astro_year, month, day):,}".replace(
             ",", " "
         )
-        parts.append(f"{grouped} s · {constants.THIRD_ERA_LABELS['unix']}")
+        parts.append(f"{grouped} s · {eras.THIRD_ERA_LABELS['unix']}")
     elif third_era == "olympiad":
         parts.append(olympiad_year(astro_year))
     elif third_era != "none":
         parts.append(
             f"{third_era_year(astro_year, third_era)}. "
-            f"{constants.THIRD_ERA_LABELS[third_era]}"
+            f"{eras.THIRD_ERA_LABELS[third_era]}"
         )
     return " · ".join(parts)
 
@@ -103,9 +103,9 @@ def is_age_of_light(astro_year: int) -> bool:
     ROADMAP 15a3) — else the Age of Darkness (dark otherwise within
     this dial's coverage, owner sealed 2026-07-16)."""
     return (
-        constants.AGE_OF_LIGHT_START_YEAR
+        eras.AGE_OF_LIGHT_START_YEAR
         <= astro_year
-        <= constants.AGE_OF_LIGHT_END_YEAR
+        <= eras.AGE_OF_LIGHT_END_YEAR
     )
 
 
@@ -114,12 +114,12 @@ def third_era_year(astro_year: int, third_era: str) -> int:
     eras are uniform +N on the astronomical axis; Anno Hegirae is
     LUNAR — the standard display-grade approximation
     AH ≈ (CE − 622) × 33/32 (exact AH needs lunisolar month math,
-    documented in constants.THIRD_ERA_NOTES). NOT called for "maya" —
+    documented in eras.THIRD_ERA_NOTES). NOT called for "maya" —
     the Long Count is a day count, not a year offset; see
     `maya_long_count`/`format_year_line`."""
     if third_era == "hegirae":
         return round((astro_year - 622) * 33 / 32)
-    return astro_year + constants.THIRD_ERA_OFFSETS[third_era]
+    return astro_year + eras.THIRD_ERA_OFFSETS[third_era]
 
 
 def olympiad_year(astro_year: int) -> str:
@@ -127,7 +127,7 @@ def olympiad_year(astro_year: int) -> str:
     2026-07-20) — a FORMATTER era like Maya/Unix, not a uniform
     "CE + N" offset: every 4 years is one Olympiad, counted from the
     first Olympiad's own Games (776 BCE, astro year −775,
-    `constants.OLYMPIAD_EPOCH_YEAR`); the historical midsummer
+    `eras.OLYMPIAD_EPOCH_YEAR`); the historical midsummer
     games-boundary is honestly approximated by the plain calendar year
     here, the same class of rounding the Byzantine September epoch and
     the Hebrew Tishri epoch already carry. Year K within the cycle
@@ -138,10 +138,10 @@ def olympiad_year(astro_year: int) -> str:
     393 CE, the conventional date of the last ancient Games under
     Theodosius I — this formula reproduces exactly (293, Year 1) from
     the same 776 BCE epoch (tests/test_deep_time.py)."""
-    elapsed = astro_year - constants.OLYMPIAD_EPOCH_YEAR
+    elapsed = astro_year - eras.OLYMPIAD_EPOCH_YEAR
     cycle, year_in_cycle = divmod(elapsed, 4)
     return (
-        f"{cycle + 1}. {constants.THIRD_ERA_LABELS['olympiad']} · "
+        f"{cycle + 1}. {eras.THIRD_ERA_LABELS['olympiad']} · "
         f"Year {year_in_cycle + 1}"
     )
 
@@ -150,7 +150,7 @@ def maya_long_count(astro_year: int, month: int, day: int) -> str:
     """The TRUE Maya Long Count (MAYA round, owner 2026-07-20) — a pure
     day count from the GMT correlation epoch (Julian Day Number
     584,283 = 11 August 3114 BCE proleptic Gregorian, 6 September
-    3114 BCE Julian; `constants.MAYA_EPOCH_JDN`), radix
+    3114 BCE Julian; `eras.MAYA_EPOCH_JDN`), radix
     baktun(144000 days)/katun(7200)/tun(360)/uinal(20)/kin(1 day).
     Unlike every other THIRD_ERA this is not a year offset, so it
     needs the full displayed DATE, not just the year — `julian_day`
@@ -160,7 +160,7 @@ def maya_long_count(astro_year: int, month: int, day: int) -> str:
     consistent anchors (tests/test_deep_time.py): 21 Dec 2012 =
     13.0.0.0.0, 1 Jan 2000 = 12.19.6.15.2 — cross-checked against the
     2012 anchor via plain `datetime.date` subtraction, agrees exactly."""
-    days = int(julian_day(astro_year, month, day, 0.5)) - constants.MAYA_EPOCH_JDN
+    days = int(julian_day(astro_year, month, day, 0.5)) - eras.MAYA_EPOCH_JDN
     baktun, days = divmod(days, 144000)
     katun, days = divmod(days, 7200)
     tun, days = divmod(days, 360)
@@ -194,9 +194,9 @@ def unix_epoch_seconds(astro_year: int, month: int, day: int) -> int:
 
 def era_names(notation: str) -> tuple[str, str]:
     """(current era, before era) combo labels of a notation."""
-    if notation not in constants.ERA_NAMES:
+    if notation not in eras.ERA_NAMES:
         raise ValueError(f"unknown era notation: {notation!r}")
-    return constants.ERA_NAMES[notation]
+    return eras.ERA_NAMES[notation]
 
 
 def display_from_astro(astro_year: int) -> tuple[int, int]:
@@ -223,8 +223,8 @@ def proxy_cycles(astro_year: int) -> int:
     shift too); otherwise into the canonical window."""
     if 2 <= astro_year <= 9998:
         return 0
-    first = constants.PROXY_WINDOW_FIRST
-    cycle = constants.GREGORIAN_CYCLE_YEARS
+    first = eras.PROXY_WINDOW_FIRST
+    cycle = eras.GREGORIAN_CYCLE_YEARS
     if astro_year < 2:
         return math.ceil((first - astro_year) / cycle)
     last = first + cycle - 1
@@ -239,7 +239,7 @@ def canonical_proxy(
     cycles = proxy_cycles(year)
     return (
         datetime(
-            year + cycles * constants.GREGORIAN_CYCLE_YEARS,
+            year + cycles * eras.GREGORIAN_CYCLE_YEARS,
             month, day, hour, minute,
         ),
         cycles,
@@ -248,7 +248,7 @@ def canonical_proxy(
 
 def real_year(proxy_year: int, cycles: int) -> int:
     """The astronomical year of a proxy datetime's year."""
-    return proxy_year - cycles * constants.GREGORIAN_CYCLE_YEARS
+    return proxy_year - cycles * eras.GREGORIAN_CYCLE_YEARS
 
 
 # --- Proleptic-Gregorian helpers ---------------------------------------------

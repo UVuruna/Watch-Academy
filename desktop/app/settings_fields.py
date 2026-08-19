@@ -17,7 +17,7 @@ never silently defaulted).
 
 import re
 
-from config import constants, dial, pantheon
+from config import constants, dial, eras, pantheon
 from data.locations import Place, default_place, place_from_mapping
 
 _HEX_COLOR = re.compile(r"^#[0-9A-Fa-f]{6}$")
@@ -275,7 +275,7 @@ def load_earth_label(raw: dict) -> str:
             value = "weekday"
         else:
             value = "off"
-    if value not in constants.EARTH_LABEL_MODES:
+    if value not in eras.EARTH_LABEL_MODES:
         raise ValueError(f"earth_label {value!r} unknown")
     return value
 

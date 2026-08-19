@@ -26,7 +26,7 @@ from PySide6.QtWidgets import (
     QSizePolicy,
 )
 
-from config import constants
+from config import eras
 from data.locations import Place, fold_name
 
 _NO_REGION = "—"                       # the country's direct cities
@@ -69,11 +69,11 @@ class _LocationSectionMixin:
 
         self._latitude = QDoubleSpinBox()
         self._latitude.setDecimals(4)
-        self._latitude.setRange(*constants.LATITUDE_RANGE)
+        self._latitude.setRange(*eras.LATITUDE_RANGE)
         self._latitude.setValue(self._place.latitude)
         self._longitude = QDoubleSpinBox()
         self._longitude.setDecimals(4)
-        self._longitude.setRange(*constants.LONGITUDE_RANGE)
+        self._longitude.setRange(*eras.LONGITUDE_RANGE)
         self._longitude.setValue(self._place.longitude)
         form.addRow(tr("Latitude"), self._latitude)
         form.addRow(tr("Longitude"), self._longitude)

@@ -18,7 +18,7 @@ from PySide6.QtWidgets import (
     QPushButton,
 )
 
-from config import constants
+from config import constants, eras
 
 
 class _LanguageSystemSectionMixin:
@@ -37,8 +37,8 @@ class _LanguageSystemSectionMixin:
         self._autostart_check.setChecked(native.autostart_enabled())
         form.addRow(self._autostart_check)
         self._z_mode_combo = QComboBox()
-        for mode in constants.Z_MODES:
-            self._z_mode_combo.addItem(tr(constants.Z_MODE_TITLES[mode]), mode)
+        for mode in eras.Z_MODES:
+            self._z_mode_combo.addItem(tr(eras.Z_MODE_TITLES[mode]), mode)
         index = self._z_mode_combo.findData(self._settings.z_mode)
         if index >= 0:
             self._z_mode_combo.setCurrentIndex(index)
@@ -56,9 +56,9 @@ class _LanguageSystemSectionMixin:
         group = QGroupBox(tr("Calendar eras"))
         form = QFormLayout(group)
         self._era_combo = QComboBox()
-        for notation in constants.ERA_NOTATIONS:
+        for notation in eras.ERA_NOTATIONS:
             self._era_combo.addItem(
-                constants.ERA_NOTATION_TITLES[notation], notation
+                eras.ERA_NOTATION_TITLES[notation], notation
             )
         index = self._era_combo.findData(self._settings.era_notation)
         if index >= 0:
@@ -70,11 +70,11 @@ class _LanguageSystemSectionMixin:
         self._era_suffix_check.setChecked(self._settings.show_era_suffix)
         form.addRow("", self._era_suffix_check)
         self._third_era_combo = QComboBox()
-        for era in constants.THIRD_ERAS:
+        for era in eras.THIRD_ERAS:
             self._third_era_combo.addItem(
-                tr(constants.THIRD_ERA_TITLES[era]), era
+                tr(eras.THIRD_ERA_TITLES[era]), era
             )
-            note = constants.THIRD_ERA_NOTES.get(era)
+            note = eras.THIRD_ERA_NOTES.get(era)
             if note:
                 # Epoch fine print (owner amendment: tooltip ONLY).
                 self._third_era_combo.setItemData(

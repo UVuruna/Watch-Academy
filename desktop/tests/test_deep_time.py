@@ -10,7 +10,7 @@ from pathlib import Path
 
 import pytest
 
-from config import constants
+from config import eras
 from core.deep_time import (
     astro_from_display,
     canonical_proxy,
@@ -93,8 +93,8 @@ def test_chinese_third_era_joins_the_year_line():
         format_year_line(2026, "bce_ce", True, "chinese")
         == "2026 CE · 6105. Anno Lucis · 4723. Huangdi"
     )
-    assert "chinese" in constants.THIRD_ERAS
-    assert constants.THIRD_ERA_LABELS["chinese"] == "Huangdi"
+    assert "chinese" in eras.THIRD_ERAS
+    assert eras.THIRD_ERA_LABELS["chinese"] == "Huangdi"
 
 
 def test_kali_yuga_third_era():
@@ -108,8 +108,8 @@ def test_kali_yuga_third_era():
         format_year_line(2026, "bce_ce", True, "kali")
         == "2026 CE · 6105. Anno Lucis · 5127. Kali Yuga"
     )
-    assert "kali" in constants.THIRD_ERAS
-    assert constants.THIRD_ERA_LABELS["kali"] == "Kali Yuga"
+    assert "kali" in eras.THIRD_ERAS
+    assert eras.THIRD_ERA_LABELS["kali"] == "Kali Yuga"
 
 
 def test_maya_long_count_golden_anchors():
@@ -140,8 +140,8 @@ def test_maya_third_era_joins_the_year_line():
         format_year_line(2026, "bce_ce", True, "maya", 12, 21)
         == "2026 CE · 6105. Anno Lucis · 13.0.14.3.13. Long Count"
     )
-    assert "maya" in constants.THIRD_ERAS
-    assert constants.THIRD_ERA_LABELS["maya"] == "Long Count"
+    assert "maya" in eras.THIRD_ERAS
+    assert eras.THIRD_ERA_LABELS["maya"] == "Long Count"
 
 
 def test_maya_deep_travel_case():
@@ -194,8 +194,8 @@ def test_olympiad_third_era_joins_the_year_line():
         format_year_line(2026, "bce_ce", True, "olympiad")
         == "2026 CE · 6105. Anno Lucis · 701. Olympiad · Year 2"
     )
-    assert "olympiad" in constants.THIRD_ERAS
-    assert constants.THIRD_ERA_LABELS["olympiad"] == "Olympiad"
+    assert "olympiad" in eras.THIRD_ERAS
+    assert eras.THIRD_ERA_LABELS["olympiad"] == "Olympiad"
 
 
 def test_unix_epoch_seconds_golden_anchors():
@@ -233,8 +233,8 @@ def test_unix_third_era_joins_the_year_line():
         format_year_line(2001, "bce_ce", True, "unix", 9, 9)
         == "2001 CE · 6080. Anno Lucis · 999 993 600 s · Unix"
     )
-    assert "unix" in constants.THIRD_ERAS
-    assert constants.THIRD_ERA_LABELS["unix"] == "Unix"
+    assert "unix" in eras.THIRD_ERAS
+    assert eras.THIRD_ERA_LABELS["unix"] == "Unix"
 
 
 def test_format_anno_lucis_matches_the_year_line_pairing():
@@ -281,9 +281,9 @@ def test_proxy_cycles_identity_inside_datetime_range():
 def test_proxy_cycles_shift_lands_in_the_canonical_window():
     for astro in (-13000, -4499, -1, 0, 1, 9999, 12000, 17000):
         cycles = proxy_cycles(astro)
-        proxy = astro + cycles * constants.GREGORIAN_CYCLE_YEARS
-        assert constants.PROXY_WINDOW_FIRST <= proxy < (
-            constants.PROXY_WINDOW_FIRST + constants.GREGORIAN_CYCLE_YEARS
+        proxy = astro + cycles * eras.GREGORIAN_CYCLE_YEARS
+        assert eras.PROXY_WINDOW_FIRST <= proxy < (
+            eras.PROXY_WINDOW_FIRST + eras.GREGORIAN_CYCLE_YEARS
         )
         assert real_year(proxy, cycles) == astro
 
@@ -292,7 +292,7 @@ def test_proxy_preserves_leap_and_weekday():
     """The whole point of the 400-year cycle: identical calendars."""
     for astro in (-4499, -4400, 0, 10000, 16993):
         cycles = proxy_cycles(astro)
-        proxy = astro + cycles * constants.GREGORIAN_CYCLE_YEARS
+        proxy = astro + cycles * eras.GREGORIAN_CYCLE_YEARS
         assert is_leap(astro) == is_leap(proxy)
         # Weekday golden via the Julian Day: JD+1.5 mod 7 == 0 for
         # Monday-start weekday of the proleptic Gregorian calendar.

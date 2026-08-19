@@ -24,7 +24,7 @@ from app.observatory.charts import (
 from app.observatory.panels import ChartPane, EnlargeDialog
 from app.theme import apply_theme, size_to_screen
 from app.ui_style import style_button, uniform_width
-from config import constants, defaults, encyclopedia_ui, palette
+from config import defaults, encyclopedia_ui, eras, palette
 from core.deep_time import julian_day_of, real_year
 from core.sun import day_length_curve
 from data.observatory import shared_observatory
@@ -68,7 +68,7 @@ class ObservatoryDialog(AcademyDialog):
         column = QVBoxLayout(self)
 
         astro_year = real_year(now.year, cycles)
-        anno = astro_year + constants.ANNO_LUCIS_OFFSET
+        anno = astro_year + eras.ANNO_LUCIS_OFFSET
         header = QLabel(
             f"<b>{self._tr('Observatory')}</b> — "
             f"{year_label(astro_year)} · {self._tr('A.L.')} {anno:,}"

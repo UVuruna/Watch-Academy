@@ -17,7 +17,7 @@ from dataclasses import dataclass
 from pathlib import Path
 from zoneinfo import ZoneInfo
 
-from config import constants, defaults, paths
+from config import defaults, eras, paths
 from data._io import load_json_checked
 from data._shared import Shared
 
@@ -88,7 +88,7 @@ def fold_name(text: str) -> str:
     stripped = "".join(ch for ch in decomposed if not unicodedata.combining(ch))
     lowered = stripped.casefold()
     return "".join(
-        constants.CITY_NAME_TRANSLITERATIONS.get(ch, ch) for ch in lowered
+        eras.CITY_NAME_TRANSLITERATIONS.get(ch, ch) for ch in lowered
     )
 
 
@@ -280,9 +280,9 @@ def place_from_mapping(raw: object) -> Place | None:
         longitude = float(raw["longitude"])
     except (KeyError, TypeError, ValueError):
         return None
-    if not constants.LATITUDE_RANGE[0] <= latitude <= constants.LATITUDE_RANGE[1]:
+    if not eras.LATITUDE_RANGE[0] <= latitude <= eras.LATITUDE_RANGE[1]:
         return None
-    if not constants.LONGITUDE_RANGE[0] <= longitude <= constants.LONGITUDE_RANGE[1]:
+    if not eras.LONGITUDE_RANGE[0] <= longitude <= eras.LONGITUDE_RANGE[1]:
         return None
     timezone = str(raw.get("timezone", ""))
     try:

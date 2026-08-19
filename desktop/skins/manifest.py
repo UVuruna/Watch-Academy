@@ -351,7 +351,7 @@ class SkinDefinition:
     archetype_names: bool = True
     # The Earth marker's label MODE (owner 2026-07-18, ROADMAP 15h — FOUR
     # exclusive Design ▸ Earth toggles, replacing the old show_earth_date/
-    # earth_weekday bool pair, `constants.EARTH_LABEL_MODES`): "off",
+    # earth_weekday bool pair, `eras.EARTH_LABEL_MODES`): "off",
     # "date" ("8 Jul"), "weekday" ("FRI"), "date_weekday" (date over the
     # abbreviated weekday) or "full" (date over the YEAR). A GENERAL
     # Earth option — works in BOTH normal and archetype mode.
