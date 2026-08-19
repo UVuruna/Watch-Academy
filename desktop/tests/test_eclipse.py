@@ -23,7 +23,7 @@ import astral
 import pytest
 from PySide6.QtWidgets import QApplication
 
-from config import constants, defaults, dial, encyclopedia_ui, glow, palette
+from config import constants, defaults, dial, encyclopedia_ui, glow, palette, sky
 from core import angles
 from core.clock_state import (
     EclipseEvent,
@@ -171,7 +171,7 @@ def test_eclipse_visibility_solar_distance_ground_truthed(app):
     )
     sun_up = astral.sun.elevation(
         observer, instant, with_refraction=False
-    ) > constants.HORIZON_ELEVATION_DEG
+    ) > sky.HORIZON_ELEVATION_DEG
     # Ground truth, read from astral directly (not assumed): 17:46 UT is
     # 19:46 local in mid-August Belgrade, well within evening daylight.
     assert sun_up is True

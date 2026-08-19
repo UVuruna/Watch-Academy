@@ -14,7 +14,7 @@ import astral
 import astral.moon
 import astral.sun
 
-from config import constants, dial
+from config import constants, dial, sky
 from core import angles, ascendant, blue_moon, numerals
 from core.moon import (
     MoonWindow,
@@ -28,7 +28,7 @@ from core.year_wheel import YearAnchors, year_marker_angle, zodiac_sign
 
 # Cycle fraction of a principal instant -> event name (for the glow).
 _MOON_EVENT_NAMES = {
-    fraction: name for name, fraction in constants.MOON_PHASE_FRACTIONS.items()
+    fraction: name for name, fraction in sky.MOON_PHASE_FRACTIONS.items()
 }
 
 
@@ -184,11 +184,11 @@ def build_day_context(
 ) -> DayContext:
     sun_day = compute_sun_day(observer, now_local.date(), now_local.tzinfo)
     moonrise, moonset = moon_rise_set(observer, now_local.date(), now_local.tzinfo)
-    if abs(observer.latitude) <= constants.TROPIC_LATITUDE_DEG:
+    if abs(observer.latitude) <= sky.TROPIC_LATITUDE_DEG:
         zone = "tropics"
     else:
         zone = "south" if observer.latitude < 0 else "north"
-    event_names = constants.ZONE_SEASON_EVENT_NAMES[zone]
+    event_names = sky.ZONE_SEASON_EVENT_NAMES[zone]
     sign_name, sign_symbol, sign_start, sign_end = zodiac_sign(now_local, year_anchors)
     chinese_name, chinese_start, chinese_end = chinese_zodiac(now_local, moon_window)
     # THE BLUE MOON LAW (owner-sealed 2026-07-22, CORRECTED 2026-07-2X):
@@ -330,7 +330,7 @@ def _with_visibility(
         return replace(event, visible=moon_up)
     sun_up = (
         astral.sun.elevation(observer, event.instant, with_refraction=False)
-        > constants.HORIZON_ELEVATION_DEG
+        > sky.HORIZON_ELEVATION_DEG
     )
     if event.lat is None or event.lon is None:
         # No catalog ground point to measure against — visibility rests

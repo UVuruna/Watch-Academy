@@ -30,7 +30,7 @@ from PySide6.QtGui import (
     QColor, QFont, QFontMetricsF, QPainter, QPen, QPixmap,
 )
 
-from config import constants, dial, doctrine, encyclopedia_ui, palette, paths
+from config import constants, dial, doctrine, encyclopedia_ui, palette, paths, sky
 from core import angles
 from render import letter_plates
 from render.diagram_bank import DiagramBank
@@ -401,7 +401,7 @@ def _moon_lunations(_key: str, size: int) -> QPixmap:
         seat = _on_dial(center, radius, angles.moon_cycle_angle(fraction))
         _draw_phase(painter, seat, disc, fraction, size)
         if step % (steps // 4) == 0:
-            name = constants.MOON_PHASE_NAMES[step // (steps // 4) * 2]
+            name = sky.MOON_PHASE_NAMES[step // (steps // 4) * 2]
             # INSIDE the ring: the quarters sit at the plate's own edge,
             # so a name hung outside them lands on top of its own moon.
             _text(painter, _on_dial(center, radius * 0.62,

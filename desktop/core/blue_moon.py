@@ -53,12 +53,12 @@ import math
 from dataclasses import dataclass
 from datetime import date, datetime, timedelta, timezone
 
-from config import constants
+from config import constants, sky
 from core.deep_time import delta_t_seconds, julian_day
 from core.moon import MoonWindow
 from core.year_wheel import YearAnchors
 
-_FULL_MOON_FRACTION = constants.MOON_PHASE_FRACTIONS["Full Moon"]
+_FULL_MOON_FRACTION = sky.MOON_PHASE_FRACTIONS["Full Moon"]
 
 
 def thirteen_moon_year(year: int, window: MoonWindow) -> bool:

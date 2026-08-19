@@ -9,7 +9,7 @@ normalized on load.
 from datetime import datetime
 from pathlib import Path
 
-from config import constants, paths
+from config import paths, sky
 from core.moon import MoonWindow
 from data._io import load_json_checked, year_bounds
 from data._shared import Shared
@@ -81,7 +81,7 @@ class MoonPhaseRepository:
                         events.append(
                             (
                                 datetime.fromisoformat(iso),
-                                constants.MOON_PHASE_FRACTIONS[name],
+                                sky.MOON_PHASE_FRACTIONS[name],
                             )
                         )
             events.sort(key=lambda event: event[0])

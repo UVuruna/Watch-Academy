@@ -16,7 +16,7 @@ from pathlib import Path
 from types import MappingProxyType
 from typing import Mapping
 
-from config import constants, identity
+from config import constants, identity, sky
 
 
 # ═══════════════════════════ PATH ROOTS & BUNDLED RESOURCES ═══════════════════════════
@@ -65,7 +65,7 @@ def deep_time_path() -> Path:
     friendly clamp. Gitignored; built by setup/make_deep_time.py and
     bundled only with the FULL installation. Frozen-safe like every
     other bundled path."""
-    return database_dir() / constants.DEEP_TIME_DB_FILENAME
+    return database_dir() / sky.DEEP_TIME_DB_FILENAME
 
 
 def assets_dir() -> Path:

@@ -36,14 +36,14 @@ _SUN_MOON_JUMP_PATTERN = re.compile(
     r"^(next|prev)_(sun|moon)(?:_(solstice|equinox|new|full|quarter))?$"
 )
 # Index into `SeasonsRepository.year_anchors().instants` (the 6 anchors,
-# `constants.YEAR_ANCHOR_ANGLES` order: prev Dec solstice, spring
+# `sky.YEAR_ANCHOR_ANGLES` order: prev Dec solstice, spring
 # equinox, summer solstice, autumn equinox, this Dec solstice, next
 # spring equinox) — solstices sit at the EVEN indices, equinoxes at the
 # ODD.
 _SOLSTICE_ANCHOR_INDICES = (0, 2, 4)
 _EQUINOX_ANCHOR_INDICES = (1, 3, 5)
 # MoonWindow events carry the phase as a FRACTION
-# (constants.MOON_PHASE_FRACTIONS): New 0.0, First Quarter 0.25, Full
+# (sky.MOON_PHASE_FRACTIONS): New 0.0, First Quarter 0.25, Full
 # 0.5, Third Quarter 0.75.
 _QUARTER_MOON_FRACTIONS = (0.25, 0.75)
 

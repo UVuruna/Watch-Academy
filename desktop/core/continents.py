@@ -24,7 +24,7 @@ Pure module (no Qt, no wall clock) — purity-gated by tests/test_purity.
 
 from datetime import date, datetime
 
-from config import constants
+from config import sky
 
 # All FOUR principal phases (owner verdict 2026-07-29, widening the
 # original New/Full-only trigger): New Moon, First Quarter, Full Moon,
@@ -32,8 +32,8 @@ from config import constants
 # Quarter" onto (module docstring: "'Last Quarter' is normalized to
 # 'Third Quarter' by the repository on load"). Read from the canon
 # fraction table (Rule #4), never hardcoded here.
-_PRINCIPAL_PHASE_FRACTIONS = frozenset(constants.MOON_PHASE_FRACTIONS.values())
-_PRINCIPAL_PHASE_NAMES = frozenset(constants.MOON_PHASE_FRACTIONS)
+_PRINCIPAL_PHASE_FRACTIONS = frozenset(sky.MOON_PHASE_FRACTIONS.values())
+_PRINCIPAL_PHASE_NAMES = frozenset(sky.MOON_PHASE_FRACTIONS)
 
 
 def pangea_over_zealandia(

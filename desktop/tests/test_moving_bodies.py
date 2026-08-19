@@ -27,7 +27,7 @@ from PySide6.QtCore import QPointF, Qt
 from PySide6.QtGui import QColor, QImage, QPainter
 
 from app.settings_store import Settings, SettingsCorruptError, SettingsStore, replace
-from config import constants, palette
+from config import constants, palette, sky
 from render.marker_marks import draw_pointer, station_of_moon_event, station_of_season_event
 from render.moon_face import dark_region, draw_moon_disc
 from skins.manifest import YearMarkerSpec
@@ -146,7 +146,7 @@ def test_unknown_moon_dark_style_raises_instead_of_a_silent_fallback():
 
 def test_dark_region_is_near_empty_at_full_moon_and_near_the_whole_disc_at_new_moon():
     """`dark_region` is the disc MINUS the lit region. Full moon
-    (fraction 0.5, per `constants.MOON_PHASE_FRACTIONS`) leaves almost
+    (fraction 0.5, per `sky.MOON_PHASE_FRACTIONS`) leaves almost
     nothing dark; new moon (fraction 0.0) leaves almost the whole
     disc dark."""
     radius = 100.0
@@ -321,14 +321,14 @@ def test_moving_body_menu_garbage_value_is_reported_as_corrupt_not_silently_swap
 # ----------------------------------------------------------------------
 
 def test_every_principal_moon_phase_resolves_to_a_station():
-    for name in constants.MOON_PHASE_FRACTIONS:
+    for name in sky.MOON_PHASE_FRACTIONS:
         assert station_of_moon_event(name) is not None, name
 
 
 def test_every_zone_season_event_name_resolves_to_a_station():
     """Every name in EVERY zone table — this is what catches a zone
     whose names were never added to `SUN_STATION_OF_EVENT`."""
-    for zone, table in constants.ZONE_SEASON_EVENT_NAMES.items():
+    for zone, table in sky.ZONE_SEASON_EVENT_NAMES.items():
         for name in table.values():
             assert station_of_season_event(name) is not None, f"{zone}: {name}"
 

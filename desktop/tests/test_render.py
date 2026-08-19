@@ -12,7 +12,7 @@ import astral
 import pytest
 from PySide6.QtWidgets import QApplication
 
-from config import defaults, dial, palette
+from config import defaults, dial, palette, sky
 from core.clock_state import build_day_context, build_tick_state
 from data.moon_phases import MoonPhaseRepository
 from data.seasons import SeasonsRepository
@@ -205,7 +205,7 @@ def test_spacebar_octa_season_arm_opens_the_seasons(app):
 
 def test_spacebar_moon_marker_opens_the_current_phase(app):
     """The Moon marker opens the Moon topic at the CURRENT phase's page
-    (owner 2026-07-16): the phase name indexes constants.MOON_PHASE_NAMES,
+    (owner 2026-07-16): the phase name indexes sky.MOON_PHASE_NAMES,
     the eight-page order of the topic (queue #8b)."""
     from config import constants
     from core.moon import phase_name
@@ -225,7 +225,7 @@ def test_spacebar_moon_marker_opens_the_current_phase(app):
         angles.moon_cycle_angle(tick.moon_fraction), 180.0 * orbit,
     )
     target = comp.encyclopedia_target(180.0 + pos.x(), 180.0 + pos.y(), 360.0)
-    expected = constants.MOON_PHASE_NAMES.index(phase_name(tick.moon_fraction))
+    expected = sky.MOON_PHASE_NAMES.index(phase_name(tick.moon_fraction))
     assert target == ("moon", expected)
 
 
@@ -233,7 +233,7 @@ def test_spacebar_moon_marker_pins_new_and_full(app):
     """The Moon-marker Spacebar mapping pinned at TWO fractions (owner
     2026-07-16, queue #8b): a New Moon (cycle fraction 0.0) opens the
     topic's FIRST page and a Full Moon (0.5) its FIFTH — the two anchors
-    the eight-page order (constants.MOON_PHASE_NAMES) hangs on. Driven
+    the eight-page order (sky.MOON_PHASE_NAMES) hangs on. Driven
     through `_element_encyclopedia_target`'s own moon branch with a stub
     tick, so it also proves the lunar-eclipse override stays inert while
     no eclipse is in the window (eclipse_event is None)."""

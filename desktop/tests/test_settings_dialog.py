@@ -11,7 +11,7 @@ from PySide6.QtWidgets import QApplication
 from app.skin_builder import apply_display_settings
 from app.settings_dialog.dialog import SettingsDialog
 from app.settings_store import Settings, replace
-from config import defaults, encyclopedia_ui, identity, palette, pantheon
+from config import defaults, encyclopedia_ui, identity, palette, pantheon, sky
 from data.locations import Place, default_place
 from render.skin_geometry import palette_for
 
@@ -840,7 +840,7 @@ def test_encyclopedia_expansion_wiring():
         "Summer_Solstice", "Winter_Solstice", "Equinox",
     ]
     # The Moon topic grows to EIGHT phase pages (owner 2026-07-16,
-    # ROADMAP queue #8b) — in constants.MOON_PHASE_NAMES cycle order.
+    # ROADMAP queue #8b) — in sky.MOON_PHASE_NAMES cycle order.
     from config import constants as _constants
     assert [e["name"][1] for e in topics["moon"]["entries"]] == list(
         _constants.MOON_PHASE_NAMES

@@ -20,7 +20,7 @@ import math
 from dataclasses import dataclass
 from datetime import date, datetime, time, timedelta, timezone
 
-from config import constants
+from config import constants, sky
 from core import angles
 from core.deep_time import delta_t_seconds, julian_day, real_year
 
@@ -48,7 +48,7 @@ def phase_fraction(now: datetime, window: MoonWindow) -> float:
     for (t0, f0), (t1, _) in zip(events, events[1:]):
         if t0 <= now <= t1:
             elapsed = (now - t0) / (t1 - t0)
-            return (f0 + elapsed * constants.MOON_CYCLE_QUARTER) % 1.0
+            return (f0 + elapsed * sky.MOON_CYCLE_QUARTER) % 1.0
     raise ValueError(f"no bracketing phase events around {now.isoformat()}")
 
 
@@ -174,7 +174,7 @@ def phase_name(fraction: float) -> str:
         (1.0, "New Moon"),
     )
     for anchor, name in principals:
-        if abs(fraction - anchor) <= constants.MOON_PRINCIPAL_WINDOW:
+        if abs(fraction - anchor) <= sky.MOON_PRINCIPAL_WINDOW:
             return name
     if fraction < 0.25:
         return "Waxing Crescent"

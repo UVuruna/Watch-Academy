@@ -17,7 +17,7 @@ from zoneinfo import ZoneInfo
 import astral
 import astral.sun
 
-from config import constants
+from config import sky
 
 
 class DaylightRegime(Enum):
@@ -104,7 +104,7 @@ def compute_sun_day(
             # day at this latitude (polar day/night, white nights).
             return None
 
-    dawn = try_event(astral.sun.dawn, depression=constants.CIVIL_DEPRESSION)
+    dawn = try_event(astral.sun.dawn, depression=sky.CIVIL_DEPRESSION)
     sunrise = try_event(astral.sun.sunrise)
     noon = astral.sun.noon(observer, date=local_date, tzinfo=tz)
     if noon.date() != local_date:
@@ -115,7 +115,7 @@ def compute_sun_day(
         shift = timedelta(days=1 if noon.date() > local_date else -1)
         noon = astral.sun.noon(observer, date=local_date - shift, tzinfo=tz)
     sunset = try_event(astral.sun.sunset)
-    dusk = try_event(astral.sun.dusk, depression=constants.CIVIL_DEPRESSION)
+    dusk = try_event(astral.sun.dusk, depression=sky.CIVIL_DEPRESSION)
 
     return SunDay(
         dawn=dawn,
@@ -147,9 +147,9 @@ def _classify(
     # (astral's own sunrise definition); apparent elevation would count it
     # twice and report POLAR_DAY on all-day-twilight days above ~87 deg.
     noon_elevation = astral.sun.elevation(observer, noon, with_refraction=False)
-    if noon_elevation > constants.HORIZON_ELEVATION_DEG:
+    if noon_elevation > sky.HORIZON_ELEVATION_DEG:
         return DaylightRegime.POLAR_DAY
-    if noon_elevation > constants.CIVIL_TWILIGHT_ELEVATION_DEG:
+    if noon_elevation > sky.CIVIL_TWILIGHT_ELEVATION_DEG:
         # All-day twilight: the sun stays between the horizon and civil
         # depression, so no event boundary exists on this day.
         return DaylightRegime.TWILIGHT_ONLY

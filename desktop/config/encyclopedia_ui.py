@@ -7,7 +7,7 @@ constants.
 Layer: config — pure, no Qt, no wall clock.
 """
 
-from config import constants, paths
+from config import paths, sky
 
 
 # ═══════════════════════════ ARTICLE HOVER SIZING ═══════════════════════════
@@ -349,13 +349,13 @@ INSTRUMENT_DIAGRAM_SAMPLE_TIME = (15, 20)
 # angle — the figure is a measurement.
 INSTRUMENT_DIAGRAM_SAMPLE_TILT_DEG = 10.76
 # THE TWILIGHT BANDS: (from, to, name) in degrees of solar depression.
-# Civil comes from `constants.CIVIL_DEPRESSION` — the one the dial
+# Civil comes from `sky.CIVIL_DEPRESSION` — the one the dial
 # actually draws; the other two boundaries are the standard astronomical
 # definitions and live here because nothing else in the program needs
 # them.
 INSTRUMENT_TWILIGHT_BANDS = (
-    (0.0, constants.CIVIL_DEPRESSION, "civil"),
-    (constants.CIVIL_DEPRESSION, 12.0, "nautical"),
+    (0.0, sky.CIVIL_DEPRESSION, "civil"),
+    (sky.CIVIL_DEPRESSION, 12.0, "nautical"),
     (12.0, 18.0, "astronomical"),
 )
 # THE THREE PICKER PAGES (owner order 2026-08-13; RESHAPED 2026-08-13

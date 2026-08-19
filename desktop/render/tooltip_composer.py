@@ -42,7 +42,7 @@ from functools import lru_cache
 
 from PySide6.QtCore import QPointF
 
-from config import archetypes, calendar_mounts, constants, defaults, dial, encyclopedia_ui, glow, pantheon, paths, profiling
+from config import archetypes, calendar_mounts, constants, defaults, dial, encyclopedia_ui, glow, pantheon, paths, profiling, sky
 from config.ui_text import ui
 from core import angles, continents, world
 from core.deep_time import (
@@ -515,7 +515,7 @@ class TooltipComposer:
                 else self._eclipse_encyclopedia_target(eclipse)
             )
         if element == "moon":
-            return "moon", constants.MOON_PHASE_NAMES.index(
+            return "moon", sky.MOON_PHASE_NAMES.index(
                 phase_name(self._dial.tick.moon_fraction)
             )
         if element == "earth":
@@ -1858,14 +1858,14 @@ class TooltipComposer:
         # on the RIGHT (first half) → the whole ring is the current
         # one (behind it the young past, ahead of it the rest).
         next_cycle = self._dial.tick.moon_fraction > 0.5 and fraction < 0.5
-        cycle_day = f"{fraction * constants.SYNODIC_MONTH_DAYS:.1f}"
+        cycle_day = f"{fraction * sky.SYNODIC_MONTH_DAYS:.1f}"
         line_moon = (
             f"{self._label('Illumination')} "
             f"{nominal_illumination(fraction) * 100:.1f}% - "
             f"{html.escape(self._tr(phase_name(fraction)))} - "
             + html.escape(
                 self._tr("Day {day} of {total}").format(
-                    day=cycle_day, total=constants.SYNODIC_MONTH_DAYS
+                    day=cycle_day, total=sky.SYNODIC_MONTH_DAYS
                 )
             )
         )
@@ -2099,7 +2099,7 @@ class TooltipComposer:
         tick = self._dial.tick
         name = phase_name(tick.moon_fraction)
         title = hover_title(html.escape(self._tr(name)))
-        if name in constants.MOON_PHASE_FRACTIONS:
+        if name in sky.MOON_PHASE_FRACTIONS:
             # A principal phase name holds ±12 h around its instant —
             # show that instant (the nearest principal event by name),
             # dated like the weekday tooltip (owner 2026-07-14:
@@ -2135,7 +2135,7 @@ class TooltipComposer:
         # the eclipse is its own body with its own card (`_eclipse_text`),
         # so this one speaks the PHASE — which is all the Moon marker
         # shows on an eclipse day, exactly as on any other.
-        cycle_day = tick.moon_fraction * constants.SYNODIC_MONTH_DAYS
+        cycle_day = tick.moon_fraction * sky.SYNODIC_MONTH_DAYS
         return title + centered_html(
             "",
             *lines,
@@ -2143,7 +2143,7 @@ class TooltipComposer:
             html.escape(
                 self._tr("Day {day} of {total}").format(
                     day=f"{cycle_day:.1f}",
-                    total=constants.SYNODIC_MONTH_DAYS,
+                    total=sky.SYNODIC_MONTH_DAYS,
                 )
             ),
             self._lunation_ordinal(),
@@ -2194,7 +2194,7 @@ class TooltipComposer:
             if angle % 180.0 == 90.0    # 270 / 450 / 630 — the equinoxes
         ]
         synthetic = (
-            equinoxes[1][0] - timedelta(days=constants.TROPICAL_YEAR_DAYS),
+            equinoxes[1][0] - timedelta(days=sky.TROPICAL_YEAR_DAYS),
             equinoxes[1][1] - 360.0,    # the September equinox before the span
         )
         equinoxes.insert(0, synthetic)

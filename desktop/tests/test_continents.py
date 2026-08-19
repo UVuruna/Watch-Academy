@@ -8,7 +8,7 @@ look switcher, and the live-dial body art (earth_style x day/night).
 
 from datetime import date
 
-from config import constants, continents as continents_theme, pantheon, paths
+from config import constants, continents as continents_theme, pantheon, paths, sky
 from core import continents
 
 
@@ -118,7 +118,7 @@ def test_easter_egg_from_events_matches_repos():
     ENCYCLOPEDIA wrapper (reading the repos) on the same day, and the
     live eclipse flag alone forces Pangea. `moon_events` is built with
     the SAME fraction->name mapping `core.clock_state`'s real
-    `DayContext` uses (`constants.MOON_PHASE_FRACTIONS` inverted, all
+    `DayContext` uses (`sky.MOON_PHASE_FRACTIONS` inverted, all
     FOUR principal phases) — not a hand-rolled full/new-only ternary."""
     from data.moon_phases import MoonPhaseRepository
     from data.seasons import SeasonsRepository
@@ -127,7 +127,7 @@ def test_easter_egg_from_events_matches_repos():
     full_moon = date(2026, 1, 3)
     first_quarter = date(2026, 1, 26)
     names_by_fraction = {
-        frac: name for name, frac in constants.MOON_PHASE_FRACTIONS.items()
+        frac: name for name, frac in sky.MOON_PHASE_FRACTIONS.items()
     }
     # Build the event lists the DayContext would carry, from the repos.
     season_events = tuple(
@@ -302,12 +302,12 @@ def test_date_is_solstice_opens_only_the_two_solstices():
     the anchor events whose name says Solstice and refuses the
     equinoxes and every ordinary day. Golden dates come from the
     bundled 2026 anchors, named exactly the way build_day_context
-    names them (constants.ZONE_SEASON_EVENT_NAMES)."""
+    names them (sky.ZONE_SEASON_EVENT_NAMES)."""
     from config import constants
     from data.seasons import SeasonsRepository
 
     anchors = SeasonsRepository().year_anchors(2026)
-    names = constants.ZONE_SEASON_EVENT_NAMES["north"]
+    names = sky.ZONE_SEASON_EVENT_NAMES["north"]
     season_events = tuple(
         (instant, names[round(angle) % 360])
         for instant, angle in zip(anchors.instants, anchors.angles)

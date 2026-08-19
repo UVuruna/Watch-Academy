@@ -26,7 +26,7 @@ Layer: app. Documentation: tree.md.
 
 from datetime import date
 
-from config import archetypes, calendar_mounts, constants, defaults, glow, pantheon
+from config import archetypes, calendar_mounts, constants, defaults, glow, pantheon, sky
 from config import encyclopedia_tree as tree
 from render import eclipse_plates
 from render.asset_recolor import metal_variant_path
@@ -645,7 +645,7 @@ def _build_topics(
     # the four principal phases and the four between them — in cycle
     # order, each a house-voice article carrying the phase's geometry,
     # its myth and the tides (spring at new/full, neap at the quarters).
-    # The order is constants.MOON_PHASE_NAMES, so the Spacebar jump
+    # The order is sky.MOON_PHASE_NAMES, so the Spacebar jump
     # (render.tooltip_composer._element_encyclopedia_target) indexes a hovered phase
     # straight into this list. Every page wears ITS OWN phase plate,
     # rendered LIVE (owner decree 2026-07-19: "bolje crtati na licu
@@ -659,14 +659,14 @@ def _build_topics(
             {
                 "images": (
                     moon_phase_file(
-                        index / len(constants.MOON_PHASE_NAMES),
+                        index / len(sky.MOON_PHASE_NAMES),
                         phase.lower().replace(" ", "_"),
                     ),
                 ),
                 "name": ("moon_title", phase),
                 "article": ("moon", phase),
             }
-            for index, phase in enumerate(constants.MOON_PHASE_NAMES)
+            for index, phase in enumerate(sky.MOON_PHASE_NAMES)
         ],
     }
     topics["seasons"] = {

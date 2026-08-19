@@ -12,13 +12,13 @@ import calendar
 from dataclasses import dataclass
 from datetime import date, datetime
 
-from config import constants
+from config import constants, sky
 
 
 @dataclass(frozen=True)
 class YearAnchors:
     """Six season instants bracketing one calendar year, paired with their
-    unwrapped dial angles (config.constants.YEAR_ANCHOR_ANGLES).
+    unwrapped dial angles (config.sky.YEAR_ANCHOR_ANGLES).
 
     instants[0] is the December solstice BEFORE the year, instants[5] the
     spring equinox AFTER it — any timestamp inside the calendar year falls
@@ -27,7 +27,7 @@ class YearAnchors:
 
     year: int
     instants: tuple[datetime, ...]   # strictly increasing, tz-aware UTC
-    angles: tuple[float, ...] = constants.YEAR_ANCHOR_ANGLES
+    angles: tuple[float, ...] = sky.YEAR_ANCHOR_ANGLES
 
 
 def year_marker_angle(now: datetime, anchors: YearAnchors) -> float:

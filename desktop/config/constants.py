@@ -14,63 +14,6 @@ from config import registry
 
 # ═══════════════════════════ APP IDENTITY ═══════════════════════════
 
-# --- Sun ----------------------------------------------------------------------
-CIVIL_DEPRESSION = 6.0              # degrees below horizon for dawn/dusk
-HORIZON_ELEVATION_DEG = -0.833      # solar disc touches the horizon (refraction)
-CIVIL_TWILIGHT_ELEVATION_DEG = -6.0
-
-# --- Year wheel ----------------------------------------------------------------
-# Unwrapped dial angles of the six season anchors bracketing one calendar
-# year in seasons_utc.json: previous December solstice, spring equinox,
-# summer solstice (top of dial after mod 360), autumn equinox, December
-# solstice, next spring equinox. Clockwise, 0 deg = summer solstice = top.
-YEAR_ANCHOR_ANGLES = (180.0, 270.0, 360.0, 450.0, 540.0, 630.0)
-
-# --- Moon ----------------------------------------------------------------------
-SYNODIC_MONTH_DAYS = 29.53           # mean lunar cycle length
-
-# A principal phase name (New/First Quarter/Full/Third Quarter) applies
-# only around the instant itself (±half a day, the common convention) —
-# afterwards the intermediate name takes over (e.g. Waning Crescent the
-# day after the Third Quarter).
-MOON_PRINCIPAL_WINDOW = 0.5 / SYNODIC_MONTH_DAYS
-
-# Octant names by cycle fraction (windows of 1/8 centered on the anchors).
-MOON_PHASE_NAMES = (
-    "New Moon",
-    "Waxing Crescent",
-    "First Quarter",
-    "Waxing Gibbous",
-    "Full Moon",
-    "Waning Gibbous",
-    "Third Quarter",
-    "Waning Crescent",
-)
-
-# Principal phase -> cycle fraction ("Last Quarter" is normalized to
-# "Third Quarter" by the repository on load).
-MOON_PHASE_FRACTIONS = {
-    "New Moon": 0.0,
-    "First Quarter": 0.25,
-    "Full Moon": 0.5,
-    "Third Quarter": 0.75,
-}
-MOON_CYCLE_QUARTER = 0.25           # fraction between consecutive principal phases
-
-# The bundled databases' coverage is READ FROM THE DATA, never hardcoded
-# (Rule #4): SeasonsRepository.coverage() / MoonPhaseRepository.coverage()
-# return the min/max year keys, so a Deep Time pack widens coverage by
-# swapping the JSON alone. Time Travel intersects the two and validates
-# every target before the day build (app/time_travel.py, controller).
-
-# --- Deep Time (Session 16, owner 2026-07-17) --------------------------------------
-# The optional full-span data pack (Database/deep_time.sqlite, built by
-# setup/make_deep_time.py, gitignored — ships only with the FULL
-# installation). Detected at startup; the season/moon repositories CHAIN
-# to it when the bundled coverage is exceeded. Its own coverage is read
-# from its meta table, never hardcoded.
-DEEP_TIME_DB_FILENAME = "deep_time.sqlite"
-
 # ═══════════════════════════ ERA NOTATION & THIRD CALENDARS ═══════════════════════════
 # Era notation (Settings, owner amendment 2026-07-17): governs ONLY the
 # OFFICIAL year form's labels — "bce_ce" (default) or "bc_ad". Positive
@@ -1795,35 +1738,6 @@ ECLIPSE_BODY_WINDOW_H = 12.0
 ECLIPSE_SOLAR_VISIBILITY_KM = 3500.0
 EARTH_RADIUS_KM = 6371.0            # mean radius — the great-circle distance basis
 
-# ═══════════════════════════ SEASON EVENT NAMES ═══════════════════════════
-# Year-wheel anchor angle (mod 360) -> season event name, PER CLIMATE
-# ZONE (owner decision 2026-07-10): the southern hemisphere flips the
-# seasonal names (their Summer Solstice is the December one) and the
-# tropics use the neutral month names (June/December Solstice,
-# March/September Equinox). SEASON_EVENT_NAMES keeps the northern table
-# as the canonical angle map.
-SEASON_EVENT_NAMES = {
-    0: "Summer Solstice",
-    90: "Autumn Equinox",
-    180: "Winter Solstice",
-    270: "Spring Equinox",
-}
-ZONE_SEASON_EVENT_NAMES = {
-    "north": SEASON_EVENT_NAMES,
-    "south": {
-        0: "Winter Solstice",
-        90: "Spring Equinox",
-        180: "Summer Solstice",
-        270: "Autumn Equinox",
-    },
-    "tropics": {
-        0: "June Solstice",
-        90: "September Equinox",
-        180: "December Solstice",
-        270: "March Equinox",
-    },
-}
-
 # ═══════════════════════════ TRANSLATION LANGUAGES ═══════════════════════════
 # Languages offered in Settings (owner: "all the provider offers") —
 # the Google-translate codes the gtx endpoint accepts, code -> English
@@ -1905,15 +1819,6 @@ HANDS_SATURATION_SLIDER_STEP = 1
 # to desaturate.
 UMBRA_SATURATION_RANGE = (0.0, 1.0)
 UMBRA_SATURATION_SLIDER_STEP = 1
-
-# ═══════════════════════════ TROPICS ═══════════════════════════
-# The tropics span the Tropic of Cancer to the Tropic of Capricorn;
-# their year splits into WET and DRY halves bounded by the equinoxes
-# (owner decision) — the wet half centers on the hemisphere's high sun.
-TROPIC_LATITUDE_DEG = 23.44
-# One tropical year — used only to SYNTHESIZE an equinox instant that
-# falls just before the bundled anchor span (day-count display accuracy).
-TROPICAL_YEAR_DAYS = 365.2422
 
 # ═══════════════════════════ WEEKDAY INDEX ═══════════════════════════
 # Body -> Sunday-first weekday index (the owner's numbering used by the
