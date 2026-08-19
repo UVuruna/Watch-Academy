@@ -22,7 +22,7 @@ from app.settings_fields import (
     save_moving_bodies, save_numerals,
 )
 from app.settings_ring import fold_ring_name, load_named_dict, normalized_ring_card
-from config import calendar_mounts, constants, defaults, dial, eras, identity, pantheon
+from config import calendar_mounts, constants, defaults, dial, eras, identity, pantheon, pointer_geometry
 from config.registry import week as week_registry
 from data.locations import Place, default_place
 from data.rings import ring_presets
@@ -126,13 +126,13 @@ class Settings:
     # on the Trinity, a touching 12-/24-point star on the Calendar and
     # the Rose). GLOBAL, one shape per watch; the armless Aurora ignores
     # it, and the value is never rewritten for it.
-    pointer_shape: str = constants.POINTER_SHAPE_DEFAULT
+    pointer_shape: str = pointer_geometry.POINTER_SHAPE_DEFAULT
     # THE EDGE PULL and its two forms (owner sheet: "Smooth concave" vs
     # "V-notched") — meaningful ONLY on the true polygons
     # (trio/cross/hexa/octa), inert on the Calendar's and the Rose's
     # star-shaped polygons and in the star shape itself.
-    polygon_curvature: float = constants.POLYGON_CURVATURE_DEFAULT
-    polygon_edge: str = constants.POLYGON_EDGE_DEFAULT
+    polygon_curvature: float = pointer_geometry.POLYGON_CURVATURE_DEFAULT
+    polygon_edge: str = pointer_geometry.POLYGON_EDGE_DEFAULT
     # HIDE NIGHT BORDERS (owner option 2026-07-29): the arm/polygon
     # outline strokes are drawn over the sunlit arcs only, so the night
     # keeps its fills without the overlapping-border mesh. All pointers.
@@ -588,14 +588,14 @@ class SettingsStore:
             for key, default, allowed in (
                 ("language", "en", tuple(constants.TRANSLATION_LANGUAGES)),
                 ("ring_finish", "gold", constants.RING_FINISHES),
-                ("pointer", "hexa", tuple(constants.POINTER_POINTS)),
+                ("pointer", "hexa", tuple(pointer_geometry.POINTER_POINTS)),
                 ("umbra_form", "gradient", constants.UMBRA_FORMS),
                 ("umbra_contrast", "dark", constants.UMBRA_CONTRAST_VARIANTS),
                 ("palette_style", "primary", constants.PALETTE_STYLES),
-                ("pointer_shape", constants.POINTER_SHAPE_DEFAULT,
-                 constants.POINTER_SHAPES),
-                ("polygon_edge", constants.POLYGON_EDGE_DEFAULT,
-                 constants.POLYGON_EDGE_MODES),
+                ("pointer_shape", pointer_geometry.POINTER_SHAPE_DEFAULT,
+                 pointer_geometry.POINTER_SHAPES),
+                ("polygon_edge", pointer_geometry.POLYGON_EDGE_DEFAULT,
+                 pointer_geometry.POLYGON_EDGE_MODES),
                 ("calendar_mount", "zodiac", calendar_mounts.CALENDAR_MOUNT_MODES),
                 ("octa_slot", "time", constants.OCTA_SLOT_MODES),
                 ("day_slot_style", "sign", constants.SLOT_STYLE_VALUES),
@@ -648,8 +648,8 @@ class SettingsStore:
                 # the star shape, no curvature and today's borders.
                 polygon_curvature=load_scale(
                     raw, "polygon_curvature",
-                    *constants.POLYGON_CURVATURE_RANGE,
-                    constants.POLYGON_CURVATURE_DEFAULT,
+                    *pointer_geometry.POLYGON_CURVATURE_RANGE,
+                    pointer_geometry.POLYGON_CURVATURE_DEFAULT,
                 ),
                 hide_night_borders=load_bool(
                     raw, "hide_night_borders", False

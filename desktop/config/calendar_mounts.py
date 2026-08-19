@@ -8,7 +8,7 @@ Layer: config — pure, no Qt, no wall clock.
 
 from typing import NamedTuple
 
-from config import constants, paths
+from config import constants, paths, pointer_geometry
 
 
 # --- Calendar pointer (owner 2026-07-16, CANON §The Dozen) ---------------------
@@ -193,7 +193,7 @@ CALENDAR_MOUNTS = {
         title="Months",
         system="B",
         members=almanac_seat_order(
-            dict(enumerate(constants.GREGORIAN_MONTH_NAMES, start=1))
+            dict(enumerate(pointer_geometry.GREGORIAN_MONTH_NAMES, start=1))
         ),
         art_dir="almanac/primary/colored",
         centre="sol",

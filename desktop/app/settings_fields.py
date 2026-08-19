@@ -17,7 +17,7 @@ never silently defaulted).
 
 import re
 
-from config import constants, dial, eras, pantheon
+from config import constants, dial, eras, pantheon, pointer_geometry
 from data.locations import Place, default_place, place_from_mapping
 
 _HEX_COLOR = re.compile(r"^#[0-9A-Fa-f]{6}$")
@@ -355,7 +355,7 @@ def load_palettes(raw: dict) -> dict:
         raise ValueError("palettes must be an object")
     valid_keys = {
         f"{pointer}_{style}"
-        for pointer in constants.POINTER_POINTS
+        for pointer in pointer_geometry.POINTER_POINTS
         for style in constants.PALETTE_STYLES
     }
     palettes: dict = {}
@@ -363,9 +363,9 @@ def load_palettes(raw: dict) -> dict:
         if key not in valid_keys:
             raise ValueError(f"palettes key {key!r} unknown")
         pointer = key.rsplit("_", 1)[0]
-        if len(hues) != constants.POINTER_POINTS[pointer]:
+        if len(hues) != pointer_geometry.POINTER_POINTS[pointer]:
             raise ValueError(
-                f"palettes[{key!r}] needs {constants.POINTER_POINTS[pointer]} hues"
+                f"palettes[{key!r}] needs {pointer_geometry.POINTER_POINTS[pointer]} hues"
             )
         for hue in hues:
             if not _HEX_COLOR.match(str(hue)):

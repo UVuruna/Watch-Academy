@@ -13,7 +13,7 @@ from PySide6.QtWidgets import QApplication, QCheckBox, QPushButton, QSlider
 
 from app.settings_store import Settings
 from app.watch_face import pointer
-from config import constants, palette
+from config import constants, palette, pointer_geometry
 
 _ACTIVE_TOP_COLOR = palette.UI_BUTTON_COLORS["next"][0].lower()
 
@@ -55,7 +55,7 @@ def _active_pill(widget, text: str) -> QPushButton:
     return next(b for b in widget.findChildren(QPushButton) if b.text() == text)
 
 
-@pytest.mark.parametrize("point", list(constants.POINTER_POINTS))
+@pytest.mark.parametrize("point", list(pointer_geometry.POINTER_POINTS))
 def test_shape_and_night_borders_rows_show_for_every_pointer_but_aurora(app, point):
     page = _page(dataclasses.replace(Settings(), pointer=point))
     texts = _pill_texts(page)
@@ -71,8 +71,8 @@ def test_shape_and_night_borders_rows_show_for_every_pointer_but_aurora(app, poi
         assert has_night_borders
 
 
-@pytest.mark.parametrize("point", list(constants.POINTER_POINTS))
-@pytest.mark.parametrize("shape", constants.POINTER_SHAPES)
+@pytest.mark.parametrize("point", list(pointer_geometry.POINTER_POINTS))
+@pytest.mark.parametrize("shape", pointer_geometry.POINTER_SHAPES)
 def test_curvature_and_edge_rows_gate_on_true_polygons_in_polygon_shape(
     app, point, shape
 ):
@@ -80,7 +80,7 @@ def test_curvature_and_edge_rows_gate_on_true_polygons_in_polygon_shape(
     to the four TRUE polygons (trio/cross/hexa/octa) and only while
     "Polygon" is the active shape."""
     page = _page(dataclasses.replace(Settings(), pointer=point, pointer_shape=shape))
-    expected = point in constants.POLYGON_POINTERS and shape == "polygon"
+    expected = point in pointer_geometry.POLYGON_POINTERS and shape == "polygon"
     assert bool(page.findChildren(QSlider)) is expected
     assert ({"Smooth concave", "V-notched"} <= _pill_texts(page)) is expected
 
@@ -146,7 +146,7 @@ def test_toggling_night_borders_calls_its_setter(app):
     assert ("hide_night_borders", (True,)) in setters.calls
 
 
-@pytest.mark.parametrize("point", list(constants.POINTER_POINTS))
+@pytest.mark.parametrize("point", list(pointer_geometry.POINTER_POINTS))
 @pytest.mark.parametrize("daylight", [True, False])
 def test_night_borders_greys_out_when_there_is_no_night(app, point, daylight):
     """OWNER CORRECTION 2026-07-29: with the daylight switch OFF on the
@@ -167,7 +167,7 @@ def test_daylight_switch_enabled_only_where_it_applies(app):
     """R-05: unlike the retired Settings dialog copy (always enabled),
     the Watch Face copy grays out on pointers with no daylight switch at
     all."""
-    for point in constants.POINTER_POINTS:
+    for point in pointer_geometry.POINTER_POINTS:
         page = _page(dataclasses.replace(Settings(), pointer=point))
         box = next(
             b for b in page.findChildren(QCheckBox)

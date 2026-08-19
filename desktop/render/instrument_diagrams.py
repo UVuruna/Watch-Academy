@@ -30,7 +30,7 @@ from PySide6.QtGui import (
     QColor, QFont, QFontMetricsF, QPainter, QPen, QPixmap,
 )
 
-from config import constants, dial, doctrine, encyclopedia_ui, palette, paths, sky
+from config import constants, dial, doctrine, encyclopedia_ui, palette, paths, pointer_geometry, sky
 from core import angles
 from render import letter_plates
 from render.diagram_bank import DiagramBank
@@ -708,9 +708,9 @@ def _pointer_arms(painter: QPainter, center: QPointF, radius: float,
                   key: str, hues: tuple, outline: float) -> None:
     """One armed pointer's standing diamonds, at its own arm half-angle
     — and the Rose's three stars at their own 15° pitch."""
-    half = constants.POINTER_ARM_HALF_ANGLE_DEG[key]
+    half = pointer_geometry.POINTER_ARM_HALF_ANGLE_DEG[key]
     waist = radius * encyclopedia_ui.INSTRUMENT_DIAGRAM_ARM_WAIST_RATIO
-    arms = constants.POINTER_POINTS[key]
+    arms = pointer_geometry.POINTER_POINTS[key]
     stars = (
         constants.ROSE_STAR_OFFSETS["primary"] if key == "rose" else (0.0,)
     )
@@ -732,28 +732,28 @@ def _pointers(_key: str, size: int) -> QPixmap:
     first. Each wears the hues its OWN default wheel ships
     (`palette.PALETTE_PRESETS`), so the figure changes when the palette
     does; the number under each is what a reader counts on the glass
-    (`constants.POINTER_DIAL_COUNTS`), which for the Rose is
+    (`pointer_geometry.POINTER_DIAL_COUNTS`), which for the Rose is
     twenty-four rays worn by eight hues."""
     row = _Row("pointers", size)
     pixmap, painter = _canvas(size, size / row.height)
-    order = sorted(constants.POINTER_DIAL_COUNTS,
-                   key=lambda key: constants.POINTER_DIAL_COUNTS[key])
+    order = sorted(pointer_geometry.POINTER_DIAL_COUNTS,
+                   key=lambda key: pointer_geometry.POINTER_DIAL_COUNTS[key])
     radius = row.radius
     outline = radius * encyclopedia_ui.INSTRUMENT_DIAGRAM_TILE_OUTLINE_PEN
     for index, key in enumerate(order):
         center = row.center(index)
         hues = palette.PALETTE_PRESETS[(key, "primary")]
-        if key in constants.POINTER_ARM_HALF_ANGLE_DEG:
+        if key in pointer_geometry.POINTER_ARM_HALF_ANGLE_DEG:
             _pointer_arms(painter, center, radius, key, hues, outline)
         elif key == "calendar":
             # Twelve equal two-hour wedges — no arms at all.
             box = QRectF(center.x() - radius, center.y() - radius,
                          radius * 2, radius * 2)
             painter.setPen(_pen_px(palette.ARM_OUTLINE, outline))
-            for index in range(constants.CALENDAR_WEDGES):
+            for index in range(pointer_geometry.CALENDAR_WEDGES):
                 painter.setBrush(QColor(hues[index % len(hues)]))
-                painter.drawPie(box, int((90 - (index + 1) * constants.CALENDAR_WEDGE_DEG) * 16),
-                                int(constants.CALENDAR_WEDGE_DEG * 16))
+                painter.drawPie(box, int((90 - (index + 1) * pointer_geometry.CALENDAR_WEDGE_DEG) * 16),
+                                int(pointer_geometry.CALENDAR_WEDGE_DEG * 16))
         else:
             # AURORA seats nothing: its hues run dawn to dusk across the
             # day's own arc, so a wheel of equal wedges would be a lie.
@@ -771,7 +771,7 @@ def _pointers(_key: str, size: int) -> QPixmap:
         # article, which lists every one of them per pointer.
         _tile_labels(painter, center, row, (
             (constants.POINTER_DISPLAY_NAMES[key], _INK),
-            (str(constants.POINTER_DIAL_COUNTS[key]), _ACCENT),
+            (str(pointer_geometry.POINTER_DIAL_COUNTS[key]), _ACCENT),
         ))
     _caption(painter, size,
              "the parts each wheel cuts the dial into · Palette gives "

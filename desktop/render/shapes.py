@@ -10,7 +10,7 @@ import math
 from PySide6.QtCore import QPointF
 from PySide6.QtGui import QPainterPath
 
-from config import constants, palette
+from config import palette, pointer_geometry
 from render.calendar_mount import calendar_wedge_bounds, calendar_wheel
 from render.painting import dial_point
 from render.skin_geometry import arm_half_deg, arm_offset_deg, aura_wedge_anchor, polygon_faces, polygon_shape, rose_star_offsets
@@ -110,7 +110,7 @@ def star_inner_radius(skin: SkinDefinition, tip: float) -> float:
     hexagram). It is both the star diamond's own side vertex and the
     radius a polygon's edge midpoint is pulled to at full curvature, so
     the two shapes meet there (Rule #5)."""
-    half = constants.POINTER_ARM_HALF_ANGLE_DEG[skin.pointer]
+    half = pointer_geometry.POINTER_ARM_HALF_ANGLE_DEG[skin.pointer]
     return tip / (2.0 * math.cos(math.radians(half)))
 
 

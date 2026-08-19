@@ -42,7 +42,7 @@ from functools import lru_cache
 
 from PySide6.QtCore import QPointF
 
-from config import archetypes, calendar_mounts, constants, defaults, dial, encyclopedia_ui, glow, pantheon, paths, profiling, sky
+from config import archetypes, calendar_mounts, constants, defaults, dial, encyclopedia_ui, glow, pantheon, paths, pointer_geometry, profiling, sky
 from config.ui_text import ui
 from config.registry import week as week_registry
 from core import angles, continents, world
@@ -701,7 +701,7 @@ class TooltipComposer:
         if not (radius * self._dial.interior_hit(0.08) <= distance <= outer):
             return None
         theta = self._dial.world_theta(point)
-        step = constants.CALENDAR_WEDGE_DEG
+        step = pointer_geometry.CALENDAR_WEDGE_DEG
         if calendar_wheel(self._dial.skin) == "almanac":
             index = int((theta + step / 2.0) // step) % 12
             return "chinese", (index - 6) % 12
@@ -2444,7 +2444,7 @@ class TooltipComposer:
         if not (radius * self._dial.interior_hit(0.08) <= distance <= outer):
             return None
         theta = self._dial.world_theta(point)
-        step = constants.CALENDAR_WEDGE_DEG
+        step = pointer_geometry.CALENDAR_WEDGE_DEG
         day = self._dial.day
         if calendar_wheel(self._dial.skin) == "almanac":
             index = int((theta + step / 2.0) // step) % 12
@@ -2480,7 +2480,7 @@ class TooltipComposer:
         day = self._dial.day
         name, symbol = constants.ZODIAC_SIGNS[index]
         start, end = zodiac_span(
-            day.year_anchors, index * constants.CALENDAR_WEDGE_DEG
+            day.year_anchors, index * pointer_geometry.CALENDAR_WEDGE_DEG
         )
         start = start.astimezone(day.tzinfo)
         last = end.astimezone(day.tzinfo) - timedelta(days=1)

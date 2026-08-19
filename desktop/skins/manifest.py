@@ -10,7 +10,7 @@ hold absolute paths; a None asset means "draw procedurally".
 from dataclasses import dataclass, field
 from pathlib import Path
 
-from config import constants, dial, palette, paths
+from config import constants, dial, palette, paths, pointer_geometry
 
 
 @dataclass(frozen=True)
@@ -327,16 +327,16 @@ class SkinDefinition:
     # far; "polygon" — the plain polygon of the same arms (square /
     # hexagon / octagon, the CUBE hexagon on the Trinity), the Calendar's
     # twelve-point and the Rose's twenty-four-point touching stars.
-    # `config.constants.POINTER_SHAPES`; the armless Aurora ignores it
+    # `config.pointer_geometry.POINTER_SHAPES`; the armless Aurora ignores it
     # (render.skin_geometry.polygon_shape).
-    pointer_shape: str = constants.POINTER_SHAPE_DEFAULT
+    pointer_shape: str = pointer_geometry.POINTER_SHAPE_DEFAULT
     # THE EDGE PULL of the true polygons (trio/cross/hexa/octa only —
     # render.shapes.polygon_curvature): 0.0 the plain polygon, toward
     # 1.0 each outer edge's midpoint pulled inward to the star's own
     # inner radius; `polygon_edge` draws that pull as one concave arc
     # ("smooth") or as two straight segments meeting in a V ("notched").
-    polygon_curvature: float = constants.POLYGON_CURVATURE_DEFAULT
-    polygon_edge: str = constants.POLYGON_EDGE_DEFAULT
+    polygon_curvature: float = pointer_geometry.POLYGON_CURVATURE_DEFAULT
+    polygon_edge: str = pointer_geometry.POLYGON_EDGE_DEFAULT
     # HIDE NIGHT BORDERS (owner option 2026-07-29): with the day/night
     # law running, the arm/polygon OUTLINE strokes are drawn only over
     # the sunlit arcs — the night keeps its fills and loses the border

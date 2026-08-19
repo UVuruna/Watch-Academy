@@ -10,22 +10,22 @@ dimension actually bites — because the shape half is the part a reader
 would most easily drop.
 """
 
-from config import constants
+from config import constants, pointer_geometry
 from config.registry import pointers
 
 
 def test_the_matrix_names_every_pointer_and_only_those():
     """A pointer that exists but is not in the matrix has no declared
     permissions, which is how a picker ends up guessing."""
-    assert set(pointers.POINTERS) == set(constants.POINTER_POINTS)
+    assert set(pointers.POINTERS) == set(pointer_geometry.POINTER_POINTS)
 
 
 def test_the_seat_counts_agree_with_what_the_dial_draws():
     """The matrix's `seats` is the count the READER counts on the dial
-    (`constants.POINTER_DIAL_COUNTS`) — the Rose's twenty-four rays, not
+    (`pointer_geometry.POINTER_DIAL_COUNTS`) — the Rose's twenty-four rays, not
     its eight hues."""
     for pointer, entry in pointers.POINTERS.items():
-        assert entry["seats"] == constants.POINTER_DIAL_COUNTS[pointer], pointer
+        assert entry["seats"] == pointer_geometry.POINTER_DIAL_COUNTS[pointer], pointer
 
 
 def test_the_calendar_refuses_the_week_in_both_shapes():

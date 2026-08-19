@@ -10,7 +10,7 @@ from pathlib import Path
 
 from PySide6.QtGui import QPainter, QPolygonF
 
-from config import calendar_mounts, constants
+from config import calendar_mounts, constants, pointer_geometry
 from core.clock_state import DayContext, TickState
 from core.year_wheel import almanac_marker_angle, almanac_month_index
 from render.context import RenderContext
@@ -33,7 +33,7 @@ def calendar_wedge_bounds(wheel: str) -> list[tuple[float, float]]:
     wedges are CENTERED on the axes — the top wedge is centered on the
     top (shifted half a wedge earlier). Starts may be negative; draw_pie
     handles the clockwise sweep."""
-    step = constants.CALENDAR_WEDGE_DEG
+    step = pointer_geometry.CALENDAR_WEDGE_DEG
     offset = 0.0 if wheel == "zodiac" else -step / 2.0
     return [(k * step + offset, k * step + offset + step) for k in range(12)]
 
@@ -96,8 +96,8 @@ def calendar_mount_angle(mount: str, index: int) -> float:
     start, end = calendar_wedge_bounds(calendar_mount_wheel(mount))[
         index // per_wedge
     ]
-    pitch = constants.CALENDAR_WEDGE_DEG / per_wedge
-    first = (start + end) / 2.0 - (constants.CALENDAR_WEDGE_DEG - pitch) / 2.0
+    pitch = pointer_geometry.CALENDAR_WEDGE_DEG / per_wedge
+    first = (start + end) / 2.0 - (pointer_geometry.CALENDAR_WEDGE_DEG - pitch) / 2.0
     return first + (index % per_wedge) * pitch
 
 

@@ -14,7 +14,7 @@ from typing import Callable
 from app.controller_display import _next_rotation_theme
 from app.skin_builder import build_skin, effective_weekday_slot
 from app.settings_store import replace, slot_layout_target
-from config import archetypes, constants, defaults, pantheon, shortcuts
+from config import archetypes, constants, defaults, pantheon, pointer_geometry, shortcuts
 from config.registry.slots import SLOT_KEYS
 from data.rings import ring_presets
 from render.asset_variants import (
@@ -107,7 +107,7 @@ class _ShortcutActionsMixin:
         actually PAINTED on the star's diamonds right now (R5b round,
         owner spec for Ctrl+W: "ONLY when the theme is displayed on the
         DIAMONDS"). Four conditions: the pointer HAS diamonds at all
-        (Aurora/Calendar draw none — `constants.POINTER_ARM_HALF_ANGLE_DEG`'s
+        (Aurora/Calendar draw none — `pointer_geometry.POINTER_ARM_HALF_ANGLE_DEG`'s
         own membership is the existing test for that), the Pointer
         element is visible, the 1st Slot is visible, and its EFFECTIVE
         mode is "weekday" (`effective_weekday_slot`) rather than a
@@ -119,7 +119,7 @@ class _ShortcutActionsMixin:
         DIFFERENT theme on the diamonds while this predicate holds."""
         settings = self._settings
         return (
-            settings.pointer in constants.POINTER_ARM_HALF_ANGLE_DEG
+            settings.pointer in pointer_geometry.POINTER_ARM_HALF_ANGLE_DEG
             and settings.show_pointer
             and settings.show_weekday
             and effective_weekday_slot(settings) == "weekday"

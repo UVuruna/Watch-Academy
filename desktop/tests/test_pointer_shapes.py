@@ -35,7 +35,7 @@ from app.settings_store import (
     SettingsStore,
     replace,
 )
-from config import constants, dial, palette
+from config import constants, dial, palette, pointer_geometry
 from config import defaults
 from core.clock_state import build_day_context, build_tick_state
 from data.moon_phases import MoonPhaseRepository
@@ -139,8 +139,8 @@ def _dt(when: datetime):
 
 
 def test_the_shape_is_a_global_two_way_choice_defaulting_to_the_star():
-    assert constants.POINTER_SHAPES == ("star", "polygon")
-    assert constants.POINTER_SHAPE_DEFAULT == "star"
+    assert pointer_geometry.POINTER_SHAPES == ("star", "polygon")
+    assert pointer_geometry.POINTER_SHAPE_DEFAULT == "star"
     assert Settings().pointer_shape == "star"
 
 
@@ -148,10 +148,10 @@ def test_only_the_four_true_polygons_take_a_polygon_face(app):
     """The Calendar's twelve-point and the Rose's twenty-four-point
     "polygons" are STARS with touching arms — they keep the star
     construction (owner sheet), and with it no curvature."""
-    assert constants.POLYGON_POINTERS == ("trio", "cross", "hexa", "octa")
-    for pointer in constants.POINTER_POINTS:
+    assert pointer_geometry.POLYGON_POINTERS == ("trio", "cross", "hexa", "octa")
+    for pointer in pointer_geometry.POINTER_POINTS:
         skin = _skin(pointer, pointer_shape="polygon")
-        assert polygon_faces(skin) is (pointer in constants.POLYGON_POINTERS)
+        assert polygon_faces(skin) is (pointer in pointer_geometry.POLYGON_POINTERS)
         # The star shape never draws a polygon face on anything.
         assert polygon_faces(_skin(pointer)) is False
 
@@ -241,7 +241,7 @@ def test_the_star_shape_is_untouched_by_the_rework(app):
     geometry lives in tests/test_rose_pointer.py.)"""
     for pointer in ("trio", "cross", "hexa", "octa", "rose"):
         skin = _skin(pointer)
-        half = constants.POINTER_ARM_HALF_ANGLE_DEG[pointer]
+        half = pointer_geometry.POINTER_ARM_HALF_ANGLE_DEG[pointer]
         assert arm_half_deg(skin) == half
         inner = TIP / (2.0 * math.cos(math.radians(half)))
         assert star_inner_radius(skin, TIP) == pytest.approx(inner)
@@ -264,10 +264,10 @@ def test_the_star_shape_is_untouched_by_the_rework(app):
 
 
 def test_the_curvature_range_and_the_two_edge_forms():
-    assert constants.POLYGON_CURVATURE_RANGE == (0.0, 1.0)
-    assert constants.POLYGON_CURVATURE_DEFAULT == 0.0
-    assert constants.POLYGON_EDGE_MODES == ("smooth", "notched")
-    assert constants.POLYGON_EDGE_DEFAULT == "smooth"
+    assert pointer_geometry.POLYGON_CURVATURE_RANGE == (0.0, 1.0)
+    assert pointer_geometry.POLYGON_CURVATURE_DEFAULT == 0.0
+    assert pointer_geometry.POLYGON_EDGE_MODES == ("smooth", "notched")
+    assert pointer_geometry.POLYGON_EDGE_DEFAULT == "smooth"
     assert Settings().polygon_curvature == 0.0
     assert Settings().polygon_edge == "smooth"
 
@@ -611,7 +611,7 @@ def test_border_clips_default_to_the_whole_circle(app):
     """The setting off: today's law — borders run the full circle so the
     night arms stay recognizable."""
     day, _tick = _dt(datetime(2026, 7, 16, 12, 0))
-    for pointer in constants.POINTER_POINTS:
+    for pointer in pointer_geometry.POINTER_POINTS:
         assert border_clips(_skin(pointer), day.sun) == (None,)
 
 
@@ -737,8 +737,8 @@ def _colour_count(image: QImage, name: str) -> int:
     )
 
 
-@pytest.mark.parametrize("pointer", list(constants.POINTER_POINTS))
-@pytest.mark.parametrize("shape", constants.POINTER_SHAPES)
+@pytest.mark.parametrize("pointer", list(pointer_geometry.POINTER_POINTS))
+@pytest.mark.parametrize("shape", pointer_geometry.POINTER_SHAPES)
 def test_every_drawn_arm_wears_the_black_lead_line(app, pointer, shape):
     """OWNER CORRECTION 2026-07-29: the Rose's dark lead was "the good
     example" — so EVERY drawn arm and polygon face wears it now, in both
@@ -888,9 +888,9 @@ def test_a_file_written_before_the_rework_gets_the_defaults(store):
         del raw[key]
     store.path.write_text(json.dumps(raw), encoding="utf-8")
     loaded = store.load()
-    assert loaded.pointer_shape == constants.POINTER_SHAPE_DEFAULT
-    assert loaded.polygon_curvature == constants.POLYGON_CURVATURE_DEFAULT
-    assert loaded.polygon_edge == constants.POLYGON_EDGE_DEFAULT
+    assert loaded.pointer_shape == pointer_geometry.POINTER_SHAPE_DEFAULT
+    assert loaded.polygon_curvature == pointer_geometry.POLYGON_CURVATURE_DEFAULT
+    assert loaded.polygon_edge == pointer_geometry.POLYGON_EDGE_DEFAULT
     assert loaded.hide_night_borders is False
 
 

@@ -27,7 +27,7 @@ from PySide6.QtWidgets import (
 from app.watch_face import thumbs
 from app.watch_face.controls import picture_group
 from app.watch_face.widgets import pill
-from config import constants
+from config import constants, pointer_geometry
 from render.skin_geometry import daylight_active
 
 
@@ -117,7 +117,7 @@ def _pointer_gallery(settings, setters, tr) -> QWidget:
     the same flow, now with the title, the sentence and the mandatory
     hover blurb the ballot sealed."""
     variants = sorted(
-        constants.POINTER_DIAL_COUNTS.items(), key=lambda item: item[1]
+        pointer_geometry.POINTER_DIAL_COUNTS.items(), key=lambda item: item[1]
     )
     entries = []
     for variant, count in variants:
@@ -166,18 +166,18 @@ def _add_shape_rows(layout: QVBoxLayout, settings, setters, tr) -> None:
     apply_curvature = setters["polygon_curvature"]
     apply_edge = setters["polygon_edge"]
     shape_row = QHBoxLayout()
-    for shape in constants.POINTER_SHAPES:
+    for shape in pointer_geometry.POINTER_SHAPES:
         shape_row.addWidget(pill(
             tr(shape.capitalize()), settings.pointer_shape == shape,
             lambda s=shape, a=apply_shape: a(s),
         ))
     layout.addLayout(shape_row)
     if not (
-        settings.pointer in constants.POLYGON_POINTERS
+        settings.pointer in pointer_geometry.POLYGON_POINTERS
         and settings.pointer_shape == "polygon"
     ):
         return
-    low, high = constants.POLYGON_CURVATURE_RANGE
+    low, high = pointer_geometry.POLYGON_CURVATURE_RANGE
     slider = QSlider(Qt.Orientation.Horizontal)
     slider.setRange(int(low * 100), int(high * 100))
     slider.setValue(int(round(settings.polygon_curvature * 100)))

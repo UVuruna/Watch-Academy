@@ -19,7 +19,7 @@ import astral
 import pytest
 from PySide6.QtWidgets import QApplication
 
-from config import calendar_mounts, constants, defaults, palette
+from config import calendar_mounts, constants, defaults, palette, pointer_geometry
 from core.clock_state import build_day_context, build_tick_state
 from core.year_wheel import almanac_marker_angle, almanac_month_index
 from data.moon_phases import MoonPhaseRepository
@@ -198,7 +198,7 @@ def test_every_calendar_wedge_paints_at_the_same_opacity(app):
     image = comp.render_offscreen(360.0, 1.0, day, tick)
     alphas = []
     for index in range(12):
-        angle = index * constants.CALENDAR_WEDGE_DEG + 15.0
+        angle = index * pointer_geometry.CALENDAR_WEDGE_DEG + 15.0
         point = dial_point(angle, 150.0)
         alphas.append(
             image.pixelColor(
@@ -644,7 +644,7 @@ def test_seat_law_places_twelve_one_per_wedge_and_twentyfour_two(app):
     formula serves both (`calendar_mount_angle`), so this test drives it
     through a real registry entry for 12 and through a 24-seat entry for
     24, proving the placement rather than a table."""
-    step = constants.CALENDAR_WEDGE_DEG
+    step = pointer_geometry.CALENDAR_WEDGE_DEG
     # 12 → one per wedge, exactly on the wedge center.
     for key in calendar_mounts.CALENDAR_MOUNTS:
         mount = calendar_mounts.CALENDAR_MOUNTS[key]

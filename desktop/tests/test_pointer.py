@@ -16,7 +16,7 @@ import pytest
 from PySide6.QtCore import QPointF
 from PySide6.QtWidgets import QApplication
 
-from config import constants, defaults, dial, encyclopedia_ui, glow, palette, pantheon, shortcuts
+from config import constants, defaults, dial, encyclopedia_ui, glow, palette, pantheon, pointer_geometry, shortcuts
 from config.registry import week as week_registry
 from core.clock_state import build_day_context, build_tick_state
 from data.moon_phases import MoonPhaseRepository
@@ -102,7 +102,7 @@ def test_slot_angles_sit_on_the_pointer_arms():
                 angle for angle, _ in slots
             ] == [180.0]
             continue
-        arm_step = 360.0 / constants.POINTER_POINTS[pointer]
+        arm_step = 360.0 / pointer_geometry.POINTER_POINTS[pointer]
         for angle, _ in slots:
             assert angle % arm_step == 0.0, (pointer, angle)
 
@@ -834,10 +834,10 @@ def test_today_slot_positions():
 def test_cross_arms_borrow_the_octa_shape():
     """Owner spec (cross.png): the cross is the octa star WITHOUT the
     four diagonal arms — slim diamonds with gaps, not a fat 4-star."""
-    half_angles = constants.POINTER_ARM_HALF_ANGLE_DEG
+    half_angles = pointer_geometry.POINTER_ARM_HALF_ANGLE_DEG
     assert half_angles["cross"] == half_angles["octa"]
     for pointer in ("hexa", "octa"):
-        assert half_angles[pointer] == 180.0 / constants.POINTER_POINTS[pointer]
+        assert half_angles[pointer] == 180.0 / pointer_geometry.POINTER_POINTS[pointer]
 
 
 # --- Palette presets (owner: 5 — hexa/octa primary+light, cross seasons) -------------
@@ -847,7 +847,7 @@ def test_palette_presets_cover_every_pointer_and_style():
     """Every pointer covers exactly the styles it SERVES
     (`palette_styles_for` — the Cube pointers carry the third wheel,
     the rest stay two-wheel; a preset must exist for each)."""
-    for pointer, arms in constants.POINTER_POINTS.items():
+    for pointer, arms in pointer_geometry.POINTER_POINTS.items():
         for style in constants.palette_styles_for(pointer):
             wheel_hues = palette.PALETTE_PRESETS[(pointer, style)]
             assert len(wheel_hues) == arms, (pointer, style)

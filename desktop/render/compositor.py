@@ -13,7 +13,7 @@ from time import monotonic
 from PySide6.QtCore import QPointF, Qt
 from PySide6.QtGui import QImage, QPainter, QPixmap
 
-from config import archetypes, calendar_mounts, constants, defaults, dial, paths, profiling
+from config import archetypes, calendar_mounts, defaults, dial, paths, pointer_geometry, profiling
 from config.registry import week as week_registry
 from data.encyclopedia import EncyclopediaRepository, shared_encyclopedia
 from data.symbolism import SymbolismRepository, shared_symbolism
@@ -718,7 +718,7 @@ class Compositor:
         if not (radius * self.interior_hit(0.08) <= distance <= star_tip):
             return None
         theta = math.degrees(math.atan2(point.x(), -point.y())) % 360.0
-        arms = constants.POINTER_POINTS[self._skin.pointer]
+        arms = pointer_geometry.POINTER_POINTS[self._skin.pointer]
         arm_step = 360.0 / arms
         # The DRAWN geometry (Rule #5 with StarLayer): the offset wheels
         # swing their arms (the Genesis inversion, the Seasons rotation),
@@ -948,7 +948,7 @@ class Compositor:
         """The figures-tuple index of an unrotated arm angle — the same
         k·(360/N) order archetype_lit_index counts in (Rule #5: one
         ordering shared by lighting, hovers and the Spacebar jump)."""
-        arms = constants.POINTER_POINTS[self._skin.pointer]
+        arms = pointer_geometry.POINTER_POINTS[self._skin.pointer]
         return int(round(arm_angle / (360.0 / arms))) % arms
 
     @paths.in_display

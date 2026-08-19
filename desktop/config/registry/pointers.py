@@ -42,7 +42,7 @@ KINDS = (WEEK, DOZEN, CUBE, WHEEL)
 # ═══════════════════════════ THE SHAPES ═══════════════════════════
 # A pointer is drawn either as a STAR (arms radiating, art seated on
 # them) or as a POLYGON of DIAMONDS (each face a seat of its own).
-# `constants.POINTER_SHAPES` is the settings vocabulary; these are the
+# `pointer_geometry.POINTER_SHAPES` is the settings vocabulary; these are the
 # same two words, kept here so the matrix reads without a second import.
 STAR = "star"
 POLYGON = "polygon"

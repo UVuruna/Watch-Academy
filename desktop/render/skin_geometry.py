@@ -8,7 +8,7 @@ weekday slots sit. Pure functions of a `SkinDefinition`; no painting.
 
 from PySide6.QtGui import QColor
 
-from config import archetypes, constants, palette
+from config import archetypes, constants, palette, pointer_geometry
 from config.registry import week as week_registry
 from render.context import RenderContext
 from skins.manifest import SkinDefinition
@@ -114,7 +114,7 @@ def polygon_faces(skin: SkinDefinition) -> bool:
     Calendar's twelve-point and the Rose's twenty-four-point "polygons"
     are STARS with touching arms, so they answer False and take the
     star construction (and, with it, no curvature)."""
-    return polygon_shape(skin) and skin.pointer in constants.POLYGON_POINTERS
+    return polygon_shape(skin) and skin.pointer in pointer_geometry.POLYGON_POINTERS
 
 
 def drawn_arm_count(skin: SkinDefinition) -> int:
@@ -124,10 +124,10 @@ def drawn_arm_count(skin: SkinDefinition) -> int:
     12), the star shape counts one star's arms (the Rose draws its 8
     three times; the Calendar's two hexagrams carry 6 each)."""
     if polygon_shape(skin):
-        return constants.POINTER_DIAL_COUNTS[skin.pointer]
+        return pointer_geometry.POINTER_DIAL_COUNTS[skin.pointer]
     if skin.pointer == "calendar":
         return constants.CALENDAR_STAR_ARMS
-    return constants.POINTER_POINTS[skin.pointer]
+    return pointer_geometry.POINTER_POINTS[skin.pointer]
 
 
 def arm_half_deg(skin: SkinDefinition) -> float:
@@ -151,7 +151,7 @@ def arm_half_deg(skin: SkinDefinition) -> float:
         return 180.0 / drawn_arm_count(skin)
     if skin.pointer == "calendar":
         return 180.0 / constants.CALENDAR_STAR_ARMS
-    return constants.POINTER_ARM_HALF_ANGLE_DEG[skin.pointer]
+    return pointer_geometry.POINTER_ARM_HALF_ANGLE_DEG[skin.pointer]
 
 
 def rose_star_offsets(skin: SkinDefinition) -> tuple:

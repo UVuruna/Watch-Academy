@@ -12,7 +12,7 @@ import calendar
 from dataclasses import dataclass
 from datetime import date, datetime
 
-from config import constants, sky
+from config import constants, pointer_geometry, sky
 
 
 @dataclass(frozen=True)
@@ -56,8 +56,8 @@ def almanac_marker_angle(when: date) -> float:
     rides the real calendar (calendar.monthrange)."""
     days_in_month = calendar.monthrange(when.year, when.month)[1]
     index = almanac_month_index(when.month)
-    wedge_start = index * constants.CALENDAR_WEDGE_DEG - constants.CALENDAR_WEDGE_DEG / 2
-    into = (when.day - 1) / days_in_month * constants.CALENDAR_WEDGE_DEG
+    wedge_start = index * pointer_geometry.CALENDAR_WEDGE_DEG - pointer_geometry.CALENDAR_WEDGE_DEG / 2
+    into = (when.day - 1) / days_in_month * pointer_geometry.CALENDAR_WEDGE_DEG
     return (wedge_start + into) % 360.0
 
 

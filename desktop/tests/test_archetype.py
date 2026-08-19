@@ -23,7 +23,7 @@ from PySide6.QtCore import QPointF, Qt
 from PySide6.QtGui import QImage, QPainter
 from PySide6.QtWidgets import QApplication
 
-from config import archetypes, constants, defaults, dial, encyclopedia_ui
+from config import archetypes, constants, defaults, dial, encyclopedia_ui, pointer_geometry
 from config.registry import week as week_registry
 from core.clock_state import build_day_context, build_tick_state
 from data.moon_phases import MoonPhaseRepository
@@ -156,7 +156,7 @@ def test_figure_order_matches_the_hour_spaces():
     for key in set(archetypes.ARCHETYPE_GRID.values()):
         pointer, style = seat_of[key]
         figs = archetypes.figures(key)
-        arms = constants.POINTER_POINTS[pointer]
+        arms = pointer_geometry.POINTER_POINTS[pointer]
         assert len(figs) == arms
         step = 360.0 / arms
         offset = (
@@ -532,7 +532,7 @@ def test_archetype_label_set_uses_the_smallest_fitted_member(app):
     arm_width = (
         ctx.radius * skin.star.radius_fraction
         * math.tan(
-            math.radians(constants.POINTER_ARM_HALF_ANGLE_DEG[skin.pointer])
+            math.radians(pointer_geometry.POINTER_ARM_HALF_ANGLE_DEG[skin.pointer])
         )
     )
     set_px = archetype_label_set_px(ctx, key, arm_width)

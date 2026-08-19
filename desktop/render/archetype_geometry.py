@@ -11,7 +11,7 @@ plus its name on the dial. The skin QUERIES (`archetype_key`,
 from PySide6.QtCore import QPointF
 from PySide6.QtGui import QImageReader, QPainter
 
-from config import archetypes, constants, dial, paths
+from config import archetypes, dial, paths, pointer_geometry
 from render.context import RenderContext
 from render.painting import draw_name_label, draw_pixmap_centered, name_label_px
 from render.slot_layout import weekday_body_size
@@ -30,7 +30,7 @@ def archetype_lit_index(
     it shifts the diamonds; index = the figures-tuple position.
     `offset` is the Genesis inversion (`arm_offset_deg`) — the trio's
     tertiary wheel counts its spaces from the 24h arm."""
-    arms = constants.POINTER_POINTS[pointer]
+    arms = pointer_geometry.POINTER_POINTS[pointer]
     step = 360.0 / arms
     return int(
         round(((hour_angle - rotation - offset) % 360.0) / step)

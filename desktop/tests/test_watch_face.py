@@ -20,7 +20,7 @@ from app.slot_descriptor import SlotDescriptor
 from app import section_host
 from app.watch_face import window
 from app.watch_face.window import WatchFaceDialog, _SECTIONS
-from config import constants, shortcuts
+from config import constants, pointer_geometry, shortcuts
 from data.hands import hand_packs
 from data.rings import ring_presets
 
@@ -208,7 +208,7 @@ def test_pointer_section_lists_every_pointer_variant(app):
     names = {tile.text() for tile in tiles}
     expected = {
         f"{constants.POINTER_DISPLAY_NAMES[variant]} ({count})"
-        for variant, count in constants.POINTER_DIAL_COUNTS.items()
+        for variant, count in pointer_geometry.POINTER_DIAL_COUNTS.items()
     }
     assert expected <= names
     dialog.deleteLater()

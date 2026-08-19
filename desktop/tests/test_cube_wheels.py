@@ -21,7 +21,7 @@ import astral
 import pytest
 from PySide6.QtWidgets import QApplication
 
-from config import archetypes, constants, defaults, palette
+from config import archetypes, constants, defaults, palette, pointer_geometry
 from config.registry import week as week_registry
 from app.skin_builder import apply_display_settings, build_skin, watch_title
 from app.settings_store import Settings
@@ -87,7 +87,7 @@ def test_the_third_wheel_follows_the_arm_count():
         assert constants.palette_styles_for(pointer) == ("primary", "secondary")
     wheels = sum(
         len(constants.palette_styles_for(pointer))
-        for pointer in constants.POINTER_POINTS
+        for pointer in pointer_geometry.POINTER_POINTS
     )
     assert wheels == 18
 
