@@ -658,7 +658,7 @@ class TooltipComposer:
                 # jump does nothing here, gracefully, exactly like the
                 # figure targets of every unwritten archetype.
                 return None
-            theme = constants.TRIO_ARM_THEMES[arm_angle]
+            theme = archetypes.TRIO_ARM_THEMES[arm_angle]
             return "trinity", _ENC_TRIO_ORDER.index(theme)
         if arm_angle % 90.0 == 0.0:
             # Cardinal arms (cross and octa) point at the turning points.
@@ -1387,7 +1387,7 @@ class TooltipComposer:
                 # work; until they land the hover carries the canon
                 # pending line, never a KeyError (the same graceful
                 # path every unwritten archetype article walks).
-                person, office = constants.GENESIS_ARM_OFFICES[arm_angle]
+                person, office = archetypes.GENESIS_ARM_OFFICES[arm_angle]
                 header = centered_html(
                     f"<b>{html.escape(self._tr(office))}</b>"
                     f"{html.escape(star)}",
@@ -1398,7 +1398,7 @@ class TooltipComposer:
                 return header + "<br/>" + article_body_html(
                     archetypes.ARCHETYPE_PENDING_LINE, tr=self._tr
                 )
-            theme = constants.TRIO_ARM_THEMES[arm_angle]
+            theme = archetypes.TRIO_ARM_THEMES[arm_angle]
             header = centered_html(
                 f"<b>{html.escape(self._tr(theme))}</b>{html.escape(star)}",
                 f"{start_hour:02d}:00 - {end_hour:02d}:00",
