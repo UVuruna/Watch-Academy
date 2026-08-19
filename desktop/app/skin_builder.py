@@ -36,8 +36,17 @@ from pathlib import Path
 from app.settings_store import Settings
 from app.watch_face import thumbs
 from config import (
-    archetypes, defaults, dial, palette, pantheon, paths, pointer_names,
-    profiling, registry, ring, umbra,
+    archetypes,
+    defaults,
+    dial,
+    palette,
+    pantheon,
+    paths,
+    pointer_names,
+    profiling,
+    registry,
+    ring,
+    umbra,
 )
 from config.registry import slots as slot_registry
 from config.registry import week as week_registry
@@ -135,7 +144,7 @@ def _theme_metal(settings: Settings, theme: str) -> str:
     """The METAL a bronze-plate theme wears (owner 2026-07-12):
     follow-the-ring wins, then the per-theme Settings choice, then
     bronze — the art as drawn. Non-metal themes are always bronze."""
-    if theme not in ring.METAL_THEMES:
+    if theme not in registry.METAL_THEMES:
         return "bronze"
     if settings.theme_metal_follow_ring:
         # The THEMATIC finish reads as gold outside the ring band
@@ -575,7 +584,7 @@ def _themed_weekday_set(base, theme: str, metal: str | None):
     if metal in defaults.METAL_SWAP_TARGETS:
         weekday = dataclasses.replace(weekday, metal=metal)
     dual_rel = pantheon.WEEKDAY_DUAL_FILES[theme]
-    if metal == "colored" and theme in ring.METAL_THEMES:
+    if metal == "colored" and theme in registry.METAL_THEMES:
         dual_rel = pantheon.colored_variant_rel(dual_rel)
     dual = pantheon.weekday_art(f"{dual_rel}.png")
     if not paths.art_file(dual).exists():

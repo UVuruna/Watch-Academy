@@ -28,8 +28,18 @@ from datetime import timedelta
 from PySide6.QtCore import QPointF
 
 from config import (
-    calendar_mounts, complications, defaults, dial, encyclopedia_ui,
-    pantheon, paths, pointer_geometry, registry, ring, sky, zodiac,
+    calendar_mounts,
+    complications,
+    defaults,
+    dial,
+    encyclopedia_ui,
+    pantheon,
+    paths,
+    pointer_geometry,
+    registry,
+    ring,
+    sky,
+    zodiac,
 )
 from config.registry import week as week_registry
 from core.moon import nominal_illumination, phase_name
@@ -292,7 +302,7 @@ class CalendarTooltips:
             # whole — the same safety law as the classic unit.
             metal = (
                 slot_metal
-                if theme in ring.METAL_THEMES
+                if theme in registry.METAL_THEMES
                 and slot_metal in defaults.METAL_SWAP_TARGETS
                 else None
             )
@@ -315,7 +325,7 @@ class CalendarTooltips:
                     theme, body, on_date=on_date,
                     colored=(
                         slot_metal == "colored"
-                        and theme in ring.METAL_THEMES
+                        and theme in registry.METAL_THEMES
                     ),
                 )
         if same_unit and image is not None and on_date is not None:

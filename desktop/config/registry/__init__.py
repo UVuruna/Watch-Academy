@@ -105,6 +105,14 @@ ARTICLES = {k: v["articles"] for k, v in WEEK.items() if v["articles"]}
 # `constants.WEEKDAY_THEME_BLURBS`; the alias is gone (2026-08-19).
 BLURBS = {k: v["blurbs"] for k, v in WEEK.items() if v["blurbs"]}
 
+# The bronze-plate themes (owner 2026-07-12): their medallions can wear
+# a METAL — bronze is the art as drawn, gold and silver are runtime
+# tritone tints. All other themes are full-color and never tint.
+# Read as `registry.METAL_THEMES` everywhere since 2026-08-19: the alias
+# `constants.METAL_THEMES` was deleted with THE CONSTANTS SPLIT rather
+# than moved into `config/ring.py`, because the same NAME for the same
+# object in two modules that callers import together is worse than a
+# differently-named shim, and a shim is already forbidden.
 METAL_THEMES = tuple(k for k, v in WEEK.items() if "metals" in v)
 
 METALS = {k: v["metals"] for k, v in WEEK.items() if "metals" in v}

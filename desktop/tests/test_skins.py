@@ -5,7 +5,7 @@ import pytest
 
 from app.skin_builder import build_skin
 from app.settings_store import Settings, replace
-from config import continents, defaults, dial, encyclopedia_ui, pantheon, paths, ring, zodiac
+from config import continents, defaults, dial, encyclopedia_ui, pantheon, paths, registry, ring, zodiac
 from config.registry import week as week_registry
 from render import letter_plates
 from skins.manifest import missing_assets
@@ -902,7 +902,7 @@ def test_bronze_finish_and_theme_metals():
     from tests.art_debt import PENDING_BODY_COLORED
 
     missing_colored = set()
-    for theme in ring.METAL_THEMES:
+    for theme in registry.METAL_THEMES:
         if "colored" not in ring.theme_metals(theme):
             # planets_art (owner 2026-07-18): bronze medallions with NO
             # colored/ subfolder — offering "Colored" for it would

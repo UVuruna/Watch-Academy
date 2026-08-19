@@ -718,7 +718,7 @@ class SettingsStore:
                     for theme, metal in dict(
                         raw.get("theme_metals", {})
                     ).items()
-                    if str(theme) in ring.METAL_THEMES
+                    if str(theme) in registry.METAL_THEMES
                     # Per-theme allowed set (owner 2026-07-18): planets_art
                     # has no colored/ folder, so "colored" is rejected for
                     # it even though it is metal-capable.

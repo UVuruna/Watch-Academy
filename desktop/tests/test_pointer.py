@@ -470,7 +470,7 @@ def test_dual_sunday_two_faces_on_compass_and_seasons(app, july_wednesday):
         assert theme in pantheon.WEEKDAY_DUAL_NAMES
     assert dual_less <= PENDING_DUAL, sorted(dual_less - PENDING_DUAL)
     colored_dual_less = set()
-    for theme in ring.METAL_THEMES:
+    for theme in registry.METAL_THEMES:
         if "colored" not in ring.theme_metals(theme):
             # planets_art (owner 2026-07-18): bronze medallions with NO
             # colored/ subfolder — the metal-capable set is not 1:1

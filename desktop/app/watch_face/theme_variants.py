@@ -37,7 +37,7 @@ from app.ui_style import tooltip_wrap
 from app.watch_face import theme_thumbs
 from app.watch_face.controls import picture_group
 from app.watch_face.widgets import flow_row, pill
-from config import identity, pantheon, ring
+from config import identity, pantheon, registry, ring
 from config.registry.week import WEEK
 from config.registry import week as week_registry
 
@@ -178,7 +178,7 @@ def _metal_row(theme, settings, setters, tr) -> QWidget | None:
     the rotation, so the same setting was reachable or not depending on
     an unrelated choice (verdict 5E moves it here and thins that group
     to what rotation actually is)."""
-    if theme not in ring.METAL_THEMES:
+    if theme not in registry.METAL_THEMES:
         return None
     metals = ring.theme_metals(theme)
     if len(metals) < 2:

@@ -1,5 +1,5 @@
 """RING VERDICTS round (owner decree 2026-08-05): the crown-text
-WHITELIST (a `QValidator` derived from `constants.RING_CROWN_TEXT_
+WHITELIST (a `QValidator` derived from `ring.RING_CROWN_TEXT_
 CHARSET` rejects an unsupported keystroke outright) and the LOCATION
 crown option (a per-ring toggle that replaces the crown text with the
 active location's own "CITY, COUNTRY", following every location change

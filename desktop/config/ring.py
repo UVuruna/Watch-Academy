@@ -396,10 +396,11 @@ RING_CROWN_TEXT_CHARSET = frozenset(
 )
 
 # ═══════════════════════════ THEME METAL LOOKS ═══════════════════════════
-# The bronze-plate themes (owner 2026-07-12): their medallions can wear
-# a METAL — bronze is the art as drawn, gold and silver are runtime
-# tritone tints. All other themes are full-color and never tint.
-METAL_THEMES = registry.METAL_THEMES
+# WHICH themes wear a metal at all is THE REGISTRY's own derived table
+# and is read as `registry.METAL_THEMES` — never re-exported here, which
+# would have put one object under one name in two modules that callers
+# routinely import together. What lives here is the metal LOOKS
+# themselves and the gate that offers them.
 # "colored" (owner 2026-07-12) is the FOURTH look: fresh full-color
 # badges from the theme's colored/ subfolder — separate art, no swap.
 THEME_METALS = ("gold", "bronze", "silver", "colored")

@@ -235,7 +235,7 @@ def _duality_ruler_default_angle(skin: SkinDefinition) -> float:
 
 def _duality_servant_default_angle(skin: SkinDefinition) -> float:
     """The Servant's UNFLIPPED seat, before any flip: the blue 06h/270°
-    arm on every horizontal-duality wheel (`constants.SERVANT_SEAT_
+    arm on every horizontal-duality wheel (`doctrine.SERVANT_SEAT_
     ANGLE`), the 24h bottom everywhere else."""
     if horizontal_duality(skin):
         return doctrine.SERVANT_SEAT_ANGLE["rose"]
@@ -245,7 +245,7 @@ def _duality_servant_default_angle(skin: SkinDefinition) -> float:
 def _duality_flipped(skin: SkinDefinition) -> bool:
     """Whether this theme swaps the Ruler's and the Servant's seats on
     this skin (the two faces swap ARMS, never names or articles):
-    on a HORIZONTAL wheel, the Sacred-Axis themes (`constants.DUALITY_
+    on a HORIZONTAL wheel, the Sacred-Axis themes (`doctrine.DUALITY_
     RULER_ON_COLD_POLE` — Christianity pulls to the cold blue pole,
     Satanism to the warm red); on a VERTICAL wheel, the geographic
     themes (`doctrine.DUALITY_SERVANT_ON_TOP` — the Arctic IS the

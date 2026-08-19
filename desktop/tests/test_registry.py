@@ -45,9 +45,25 @@ def test_rosters_pantheon_and_titles():
 
 
 def test_text_sets_and_metal_looks():
-    assert registry.ARTICLES == registry.ARTICLES
-    assert registry.BLURBS == registry.BLURBS
-    assert set(registry.METAL_THEMES) == set(ring.METAL_THEMES)
+    """The derived text and metal tables against the WEEK entries they
+    are computed from.
+
+    These three used to compare the derivation against
+    `constants.WEEKDAY_THEME_ARTICLES` / `_BLURBS` / `METAL_THEMES` —
+    aliases that THE CONSTANTS SPLIT (2026-08-19) deleted rather than
+    moved, because a second name for the same object is a re-export
+    shim. Comparing `registry.ARTICLES` to itself would have been a
+    tautology, so the claim is restated against the SOURCE: every
+    derived table must equal what WEEK actually declares."""
+    assert registry.ARTICLES == {
+        k: v["articles"] for k, v in registry.WEEK.items() if v["articles"]
+    }
+    assert registry.BLURBS == {
+        k: v["blurbs"] for k, v in registry.WEEK.items() if v["blurbs"]
+    }
+    assert set(registry.METAL_THEMES) == {
+        k for k, v in registry.WEEK.items() if "metals" in v
+    }
     for theme in registry.METAL_THEMES:
         assert registry.METALS[theme] == ring.theme_metals(theme)
 

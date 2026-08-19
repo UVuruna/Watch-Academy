@@ -86,8 +86,7 @@ def test_eight_wholes_wear_a_rose_hue_and_the_ninth_wears_the_moon():
 def test_every_dial_theme_is_reachable_from_home():
     """THE REACHABILITY LAW (Session 35, owner's exact 2026-07-29
     complaint — twelve casts were registered on the dial with no seat
-    anywhere in the Encyclopedia). Every key in `constants.WEEKDAY_
-    THEMES` — except the documented LOOK-ONLY keys (Session 30's own
+    anywhere in the Encyclopedia). Every key in `registry.THEMES` — except the documented LOOK-ONLY keys (Session 30's own
     exception set, reused verbatim from `tests/test_theme_completeness.
     py`'s `_look_only_themes`, Rule #5 — `planets_art` is the known
     member) — resolves, directly or through `tree.TOPIC_ALIASES`, to a

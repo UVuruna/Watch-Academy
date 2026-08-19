@@ -292,7 +292,7 @@ class SkinDefinition:
                                        # WHEEL: paint = Zodiac, light = Almanac
     calendar_mount: str = "zodiac"     # the DESIGN ZODIAC law's MOUNT (R9a,
                                        # GENERALIZED 2026-07-29): "off" or any
-                                       # config.constants.CALENDAR_MOUNTS key —
+                                       # config.calendar_mounts.CALENDAR_MOUNTS key —
                                        # twelve wedges of marks at CALENDAR_
                                        # MOUNT_RADIUS_FRACTION (a 24-set seats
                                        # TWO per wedge), independent of

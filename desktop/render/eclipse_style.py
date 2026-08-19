@@ -30,7 +30,7 @@ from config import umbra
 
 
 # Every solar/lunar style this module can actually PAINT today, keyed
-# by kind — everything else in `constants.ECLIPSE_*_STYLES` is either
+# by kind — everything else in `umbra.ECLIPSE_*_STYLES` is either
 # one of these, or listed in `_NOT_YET_PAINTED` below with the painted
 # style it currently borrows.
 _NATIVE_STYLES = {
@@ -112,7 +112,7 @@ def resolve_eclipse_style(
     the caller never has to know whether the fallback is "no band" or
     "no painter yet", only what to paint and, if it cares, why.
 
-    Raises `ValueError` for a `style` outside `constants.ECLIPSE_*_STYLES`
+    Raises `ValueError` for a `style` outside `umbra.ECLIPSE_*_STYLES`
     — that is a real bug (a typo, a stale name), never a case this door
     should quietly paper over."""
     roster = (
