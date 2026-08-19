@@ -181,7 +181,7 @@ def test_spacebar_octa_season_arm_opens_the_seasons(app):
     Summer maps to the Summer season page (entry 1)."""
     import dataclasses
 
-    from render.tooltip_composer import _ENC_SEASON_ORDER
+    from render.encyclopedia_targets import _ENC_SEASON_ORDER
 
     day, tick = _dt(app, datetime(2026, 7, 16, 12, 0))
     skin = dataclasses.replace(

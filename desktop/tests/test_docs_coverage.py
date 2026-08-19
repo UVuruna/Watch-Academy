@@ -169,6 +169,14 @@ FLOW_REQUIRED = frozenset({
     "render/canon_diagrams.py",
     "render/compositor.py",
     "render/tooltip_composer.py",
+    # THE TOOLTIP FAMILY SPLIT (owner 2026-08-19): the four families cut
+    # out of tooltip_composer.py. Each earns a flow doc — the dispatch and
+    # the calls that CROSS the families are exactly what a diagram tells
+    # better than the code.
+    "render/tooltip_sky.py",
+    "render/tooltip_ring.py",
+    "render/tooltip_calendar.py",
+    "render/encyclopedia_targets.py",
     "render/context.py",
     "render/cube_diagrams.py",
     "render/cube_preview3d.py",

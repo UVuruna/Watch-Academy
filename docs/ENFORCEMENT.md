@@ -167,13 +167,30 @@ Adding an entry to any of them needs the owner's explicit approval in that
 same session.
 
 **THE STRUCTURE RATCHET** lives in `desktop/tests/test_structure_law.py`.
-Today: `render/tooltip_composer.py` and five test files owed to a
-test-hygiene round (`test_pointer`, `test_settings_dialog`, `test_skins`,
-`test_archetype`, `test_eclipse`). Each entry names why it is tolerated
-and who owes the split. It now measures through
+Today: **five test files and nothing else** (`test_pointer`,
+`test_settings_dialog`, `test_skins`, `test_archetype`, `test_eclipse`),
+all owed to a test-hygiene round. Each entry names why it is tolerated
+and who owes the split. It measures through
 [THE ONE ARITHMETIC](#the-measure), so it holds exactly what the
-machine-readable ratchet holds — `render/tooltip_composer.py` — plus the
-test files the monorepo tool does not scan.
+machine-readable ratchet holds — **nothing** — plus the test files the
+monorepo tool does not scan.
+
+**`render/tooltip_composer.py` LEFT the list on 2026-08-19**, and with it
+the last product file: the owner gave the word for the cut BY TOOLTIP
+FAMILY that its own `owes` line had recorded as debt. 2,239 logic lines
+became five files, none near the wall —
+`render/tooltip_sky.py` (624), `render/tooltip_ring.py` (748),
+`render/tooltip_calendar.py` (504), `render/encyclopedia_targets.py`
+(262) and the composer itself (266), which keeps the three doors, the
+dispatch and the six shared formatting helpers. **The families are
+MIXINS, not collaborators** — the entry's own objection was "three
+holders is three back-channels", so the dial stays held ONCE, by the
+composer, and the four bases read it through `self._dial`. Not one call
+site changed. The move is proved by
+`desktop/tests/test_tooltip_families.py`: 959 hover points over seven
+dial configurations, a SHA-256 of the HTML per point plus 42
+representative tooltips kept verbatim, **recorded from the un-split
+composer at commit `6aa49db`** and green after the cut.
 
 **TWO GUARDS, TWO ARITHMETICS — found by WA-R14, closed by WA-R15.**
 WA-R14 cut `app/controller.py` into five responsibility mixins beside it
@@ -208,7 +225,9 @@ because the threshold measures logic and 962 of its lines are declarative
 cast tables. The ratchet only ever shrinks.
 
 **THE MACHINE-READABLE STRUCTURE RATCHET** lives beside it in
-`desktop/tests/structure_ratchet.json` and is read by the monorepo tool
+`desktop/tests/structure_ratchet.json`, is **EMPTY since 2026-08-19** —
+no `.py` under `desktop/` that the shared tool scans is over the wall at
+all — and is read by the monorepo tool
 `rules/tools/structure_guard.py` (wired into `run_guards.py` FULL). It is
 the same law in a form other tools can read: `{path: {lines, why, owes}}`
 measured in non-blank non-comment lines over a 1,000-line wall. It bites in

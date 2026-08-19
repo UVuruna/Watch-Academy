@@ -64,27 +64,16 @@ RATCHET: dict[str, tuple[str, str]] = {
     #     (CANON.md), not an agent's guess.
     # The ratchet only shrinks; none of the three may come back without
     # the owner's word in that same session.
-    "render/tooltip_composer.py": (
-        "2,238 logic lines, and they are ONE responsibility: every hover "
-        "the dial answers, one short named method per element — the arm "
-        "legends, the weekday bodies, the tick readout, the ring's jewels "
-        "and words, the crown, the moon, the eclipses, the Earth, the "
-        "calendar wedges, the twilight bands, plus the Encyclopedia "
-        "target each of them jumps to. There is no second subject hiding "
-        "in it; its size is the dial's own vocabulary. RATIFIED by the "
-        "owner on 2026-08-18 when he accepted R13, the round that added "
-        "this entry and removed the much larger compositor.py one",
-        "the natural next cut is BY TOOLTIP FAMILY, recorded 2026-08-19 "
-        "(WA-R14, no code): render/tooltip_sky.py (sun, moon, eclipses, "
-        "twilight bands, the Earth), render/tooltip_ring.py (jewels, "
-        "numerals, minutes, crown, the arm legends), "
-        "render/tooltip_calendar.py (calendar wedges, weekday bodies, "
-        "the tick readout). Beside it stands the earlier "
-        "render/encyclopedia_targets.py for the ~200 lines that answer "
-        "'what article does this open' rather than 'what does this say'. "
-        "Neither is done blind: the composer HOLDS THE DIAL, so three "
-        "holders is three back-channels — it needs the owner's word",
-    ),
+    # `render/tooltip_composer.py` (2,239 logic lines) LEFT this list on
+    # 2026-08-19, and with it the LAST non-test entry: the owner ruled the
+    # cut BY TOOLTIP FAMILY and it landed — render/tooltip_sky.py (624),
+    # render/tooltip_ring.py (748), render/tooltip_calendar.py (504) and
+    # render/encyclopedia_targets.py (262) are MIXINS on the composer, which
+    # is down to 266 and keeps the three doors, the dispatch and the six
+    # shared formatting helpers. One holder of the dial, not four; the HTML
+    # of 959 hover points is proven byte-identical by
+    # tests/test_tooltip_families.py, recorded BEFORE the cut. The
+    # machine-readable twin (tests/structure_ratchet.json) is now EMPTY.
     # `config/pantheon.py` (1,549 lines) LEFT this list on 2026-08-05 without
     # being touched: the threshold now measures LOGIC, and 962 of its lines
     # are the declarative cast tables. Its 587 lines of actual behaviour —

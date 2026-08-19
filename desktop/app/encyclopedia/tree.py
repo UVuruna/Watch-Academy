@@ -524,7 +524,7 @@ def _build_topics(
             }
             # THE ORDER LAW (owner decree 2026-08-09): Faith — Love —
             # Hope, in every display; the Spacebar jump mirrors this
-            # order in render.tooltip_composer._ENC_TRIO_ORDER.
+            # order in render.encyclopedia_targets._ENC_TRIO_ORDER.
             for virtue in ("Faith", "Love", "Hope")
         ],
     }
@@ -646,7 +646,7 @@ def _build_topics(
     # order, each a house-voice article carrying the phase's geometry,
     # its myth and the tides (spring at new/full, neap at the quarters).
     # The order is sky.MOON_PHASE_NAMES, so the Spacebar jump
-    # (render.tooltip_composer._element_encyclopedia_target) indexes a hovered phase
+    # (render.encyclopedia_targets._element_encyclopedia_target) indexes a hovered phase
     # straight into this list. Every page wears ITS OWN phase plate,
     # rendered LIVE (owner decree 2026-07-19: "bolje crtati na licu
     # mesta nego 15MB fajlova") from the full-moon master with the

@@ -90,7 +90,7 @@ def _validate_crown_text(name: str, raw: list, positions: tuple) -> tuple:
         clockwise = bool(crown_entry.get("clockwise", True))
         # EVERY CROWN TEXT CARRIES ITS OWN HOVER (ring_rework §3, owner
         # ruling 2026-08-06): an optional `reading` {title, text} —
-        # when present, `render.tooltip_composer._ring_word_legend_tooltip`
+        # when present, `render.tooltip_ring._ring_word_legend_tooltip`
         # shows THIS for every word of this entry instead of the seat's
         # own letter legend (the exact reported bug: ANNUIT's hover
         # used to narrate the Anointed Aegis letter under it instead of

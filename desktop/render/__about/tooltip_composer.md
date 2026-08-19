@@ -4,13 +4,32 @@
 **Flow:** [diagram](../__flow/tooltip_composer.md)
 
 ## Purpose
-THE TOOLTIP COMPOSER — everything the dial SAYS.
+THE TOOLTIP COMPOSER — **the ONE DOOR** to everything the dial SAYS.
 
-Every hover the dial answers is built here: the arm legends, the weekday
-bodies, the tick readout, the ring's jewels and words, the live crown,
-the moon, the eclipses, the Earth, the calendar wedges, the twilight
-bands, the greetings — and the Encyclopedia TARGET each of them jumps to
-when the reader presses SPACE.
+Every hover the dial answers is built behind this class: the arm
+legends, the weekday bodies, the tick readout, the ring's jewels and
+words, the live crown, the moon, the eclipses, the Earth, the calendar
+wedges, the twilight bands, the greetings — and the Encyclopedia TARGET
+each of them jumps to when the reader presses SPACE.
+
+**Since 2026-08-19 the bodies live in four family modules beside it**
+([Sky](tooltip_sky.md) · [Ring](tooltip_ring.md) ·
+[Calendar](tooltip_calendar.md) · [Encyclopedia
+Targets](encyclopedia_targets.md)), which this class INHERITS. What is
+left here is what belongs to no family:
+
+- **the three doors** — `tooltip_at`, `encyclopedia_target` and
+  `warm_hover_articles`, addressed by [Clock
+  Widget](../../app/__about/widget.md) and twenty test files;
+- **the dispatch** — `_tooltip_at`, which names the element under the
+  cursor and decides WHICH family answers;
+- **the six formatting helpers every family uses** — `_tr` (the active
+  language), `_ord` (the ordinal, raised in English only), `_month` /
+  `_month_short`, `_year` (the ONE pairing formatter, official year plus
+  Anno Lucis plus the optional third calendar) and `_label`;
+- **`_skin`**, the property `config.paths.in_display` reads.
+
+266 logic lines, down from 2,239.
 
 It was ~2,400 lines inside [Compositor](compositor.md), a module whose
 job is to stack paint layers and answer hit tests. The [OOP
@@ -73,10 +92,33 @@ finding L1 recorded elsewhere in the same audit.
   the one shared name, and the method that shared it —
   `_calendar_wedge_target` — is an encyclopedia TARGET, so it came along
   too and the table stopped being shared.
-- **It is over the wall, and that is a ratchet entry with a written
-  reason** (`tests/structure_ratchet.json`, PENDING OWNER RATIFICATION).
-  There is no second subject hiding in 2,238 lines of per-element text;
-  its size is the dial's own vocabulary. The audit's third piece —
-  `render/encyclopedia_targets.py`, the ~200 lines that answer "what
-  article does this open" rather than "what does this say" — would not
-  bring the rest under the wall, so it was not done blind.
+- **MIXINS, not collaborators, for the four families.** This is the
+  question the ratchet entry left open — *"the composer HOLDS THE DIAL,
+  so three holders is three back-channels"* — and the answer is that the
+  families must NOT hold it. The dial is held ONCE, here, and the four
+  bases read it through `self._dial`. The call graph makes the case
+  concrete: the ring's `_arm_tooltip` calls the sky's `_wet_dry_block`
+  and `_span_line`; the calendar's `_tick_tooltip` calls the ring's
+  `_live_crown_tooltip`, `_ring_jewel_legend_tooltip`,
+  `_ring_word_legend_tooltip` and the sky's `_greetings_tooltip`; the
+  targets' `_element_encyclopedia_target` calls the ring's
+  `_active_thirteenth`. Collaborators would have needed a hand-built path
+  for every crossing; `self` already is one, and no call site changed.
+  It is the same rule WA-R14 wrote for `app/controller.py`: **a
+  collaborator when the object is HELD, a mixin when the methods share
+  `self`.**
+- **The module tables went with their family, not with the door.**
+  `_ENC_*` to [Encyclopedia Targets](encyclopedia_targets.md),
+  `_crown_arc_centre` and `_SOUTH_ANCHOR_FLIP` to [Ring
+  Tooltips](tooltip_ring.md), `_greetings` to [Sky
+  Tooltips](tooltip_sky.md), `_MONTHS` / `_MONTHS_SHORT` to [Calendar
+  Tooltips](tooltip_calendar.md) — the composer imports the last two back
+  for `_month()` / `_month_short()`, and the targets module imports
+  `_SOUTH_ANCHOR_FLIP` from the ring, because both flip the same arm
+  anchors and one table with two readers beats two copies.
+- **It LEFT the structure ratchet, and took the ratchet with it.**
+  `tests/structure_ratchet.json` is now EMPTY and
+  `tests/test_structure_law.py`'s list holds only the five test files a
+  test-hygiene round owes. The proof that the cut was a MOVE is
+  `tests/test_tooltip_families.py`: 959 hover points over seven dial
+  configurations, recorded from the un-split composer at `6aa49db`.
