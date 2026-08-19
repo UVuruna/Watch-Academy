@@ -10,7 +10,7 @@ from pathlib import Path
 
 from PySide6.QtGui import QPainter, QPolygonF
 
-from config import calendar_mounts, constants, pointer_geometry
+from config import calendar_mounts, pointer_geometry, zodiac
 from core.clock_state import DayContext, TickState
 from core.year_wheel import almanac_marker_angle, almanac_month_index
 from render.context import RenderContext
@@ -182,7 +182,7 @@ def chinese_mount_dimmed_index(day: DayContext) -> int | None:
     # = Rat, index 0; month 12 = Ox, index 1 — the fixed jianyin
     # numbering core.blue_moon.chinese_leap_month itself counts in) —
     # then the seat that animal holds on the mount's own wheel.
-    animal = constants.CHINESE_ANIMALS[(number + 1) % 12]
+    animal = zodiac.CHINESE_ANIMALS[(number + 1) % 12]
     return calendar_mounts.CALENDAR_MOUNTS["chinese"].members.index(animal)
 
 

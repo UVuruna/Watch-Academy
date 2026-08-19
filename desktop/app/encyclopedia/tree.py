@@ -26,7 +26,7 @@ Layer: app. Documentation: tree.md.
 
 from datetime import date
 
-from config import archetypes, calendar_mounts, constants, defaults, glow, ninth, pantheon, sky
+from config import archetypes, calendar_mounts, defaults, glow, ninth, pantheon, sky, zodiac
 from config import encyclopedia_tree as tree
 from render import eclipse_plates
 from render.asset_recolor import metal_variant_path
@@ -167,7 +167,7 @@ def _build_topics(
                     )
                 ),
             }
-            for animal in constants.CHINESE_ANIMALS
+            for animal in zodiac.CHINESE_ANIMALS
         ] + [
             {
                 # THE FIVE ELEMENTS (Session 27 coverage law, owner
@@ -181,7 +181,7 @@ def _build_topics(
                 "name": element,
                 "article": ("element", element),
             }
-            for element in constants.CHINESE_ELEMENTS
+            for element in zodiac.CHINESE_ELEMENTS
         ],
     }
     # THE CLOCK (owner expansion 2026-07-13): the Week day pages and

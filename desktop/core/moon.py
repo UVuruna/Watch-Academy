@@ -20,7 +20,7 @@ import math
 from dataclasses import dataclass
 from datetime import date, datetime, time, timedelta, timezone
 
-from config import constants, sky
+from config import sky, zodiac
 from core import angles
 from core.deep_time import delta_t_seconds, julian_day, real_year
 
@@ -125,7 +125,7 @@ def chinese_zodiac(now_local: datetime, window: MoonWindow) -> tuple[str, date, 
     China's New Year date misclassified the year by up to a day for
     every non-UTC+8 observer around the cusp."""
     china_now = now_local.astimezone(timezone.utc) + timedelta(
-        hours=constants.CHINA_UTC_OFFSET_HOURS
+        hours=zodiac.CHINA_UTC_OFFSET_HOURS
     )
     year = china_now.date().year
     start = _chinese_new_year(year, window)
@@ -141,19 +141,19 @@ def chinese_name_of_year(year: int) -> str:
     alone. Shared by chinese_zodiac and the deep-time correction (a
     400-year proxy shift moves the sexagenary cycle by 40, so the
     controller renames the year from the REAL astronomical year)."""
-    animal = constants.CHINESE_ANIMALS[(year - 4) % 12]
-    element = constants.CHINESE_ELEMENTS[((year - 4) % 10) // 2]
+    animal = zodiac.CHINESE_ANIMALS[(year - 4) % 12]
+    element = zodiac.CHINESE_ELEMENTS[((year - 4) % 10) // 2]
     return f"{element} {animal}"
 
 
 def _chinese_new_year(year: int, window: MoonWindow) -> date:
     """The Chinese New Year date of `year` (China time)."""
-    (lo_m, lo_d), (hi_m, hi_d) = constants.CHINESE_NEW_YEAR_WINDOW
+    (lo_m, lo_d), (hi_m, hi_d) = zodiac.CHINESE_NEW_YEAR_WINDOW
     low, high = date(year, lo_m, lo_d), date(year, hi_m, hi_d)
     for instant, fraction in window.events:
         if fraction == 0.0:
             china = (
-                instant + timedelta(hours=constants.CHINA_UTC_OFFSET_HOURS)
+                instant + timedelta(hours=zodiac.CHINA_UTC_OFFSET_HOURS)
             ).date()
             if low <= china <= high:
                 return china

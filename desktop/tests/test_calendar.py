@@ -19,7 +19,7 @@ import astral
 import pytest
 from PySide6.QtWidgets import QApplication
 
-from config import calendar_mounts, constants, defaults, palette, pointer_geometry
+from config import calendar_mounts, constants, defaults, palette, pointer_geometry, zodiac
 from core.clock_state import build_day_context, build_tick_state
 from core.year_wheel import almanac_marker_angle, almanac_month_index
 from data.moon_phases import MoonPhaseRepository
@@ -350,7 +350,7 @@ def test_zodiac_mount_entries_carry_the_real_committed_badges():
     entries = calendar_mount_entries("zodiac")
     assert len(entries) == 12
     assert [name for name, _art in entries] == [
-        name for name, _symbol in constants.ZODIAC_SIGNS
+        name for name, _symbol in zodiac.ZODIAC_SIGNS
     ]
     assert all(art is not None and art.exists() for _name, art in entries)
 
@@ -378,7 +378,7 @@ def test_mount_current_index_matches_todays_sign_and_month_no_hemisphere_flip(ap
     the mark sits on its own fixed wedge identity (unlike the Earth
     marker's orbit)."""
     day, _tick = _day_tick(app, datetime(2026, 7, 16, 12, 15))
-    names = [name for name, _symbol in constants.ZODIAC_SIGNS]
+    names = [name for name, _symbol in zodiac.ZODIAC_SIGNS]
     assert calendar_mount_current_index("zodiac", day) == names.index(day.zodiac_name)
     assert calendar_mount_current_index("months", day) == almanac_month_index(
         day.local_date.month
@@ -468,7 +468,7 @@ def test_every_registered_mount_is_canon_shaped():
         assert len(mount.members) == len(set(mount.members)) == mount.seats, key
         assert all(mount.members), key
         assert len(mount.stems) == mount.seats, key
-        assert mount.centre is None or mount.centre in constants.THIRTEENTHS, key
+        assert mount.centre is None or mount.centre in zodiac.THIRTEENTHS, key
         assert mount.follows in (None, "sign", "month"), key
 
 
@@ -587,8 +587,8 @@ def test_the_sins_dozen_is_seated_exactly_where_canon_says():
         ), k
     # The axle is a real THIRTEENTHS key and an ALWAYS-CENTER — no
     # trigger, no window (THE AXLE LAW).
-    assert constants.THIRTEENTHS["hardness_of_heart"][0] == "Hardness of Heart"
-    assert "hardness_of_heart" in constants.AXLE_ALWAYS_CENTERS
+    assert zodiac.THIRTEENTHS["hardness_of_heart"][0] == "Hardness of Heart"
+    assert "hardness_of_heart" in zodiac.AXLE_ALWAYS_CENTERS
 
 
 def test_the_sins_mount_is_settable_and_survives_a_settings_round_trip(tmp_path):
@@ -630,9 +630,9 @@ def test_new_dozens_axle_plates_resolve_real_art():
     no-space rule `art_stems` applies to `Just_Indignation`."""
     from render.ninths import thirteenth_plate
 
-    for key in constants.AXLE_ALWAYS_CENTERS:
+    for key in zodiac.AXLE_ALWAYS_CENTERS:
         resolved_name, art = thirteenth_plate(key)
-        assert resolved_name == constants.THIRTEENTHS[key][0], key
+        assert resolved_name == zodiac.THIRTEENTHS[key][0], key
         assert art is not None and art.exists(), key
     assert thirteenth_plate("hardness_of_heart")[0] == "Hardness of Heart"
 
@@ -743,7 +743,7 @@ def test_axle_always_centers_are_unconditionally_present(app):
     from render.ninths import active_thirteenth
 
     ordinary, _t = _day_tick(app, datetime(2026, 3, 15, 12, 0))
-    assert constants.AXLE_ALWAYS_CENTERS <= ordinary.thirteenth_candidates
+    assert zodiac.AXLE_ALWAYS_CENTERS <= ordinary.thirteenth_candidates
     assert "ophiuchus" not in ordinary.thirteenth_candidates    # still rule-driven
     for mount, centre in (
         ("olympians", "hestia"), ("apostles", "jesus"),
@@ -771,7 +771,7 @@ def test_axle_always_centers_are_unconditionally_present(app):
 def test_chinese_mount_wheel_and_entries_are_gregorian_fixed_with_real_art():
     """The Chinese mount (owner R12: "Mount Chinese zodiac") rides the
     SAME Gregorian-fixed Almanac geometry as the months mount, keyed by
-    `constants.CHINESE_MONTH_BRANCH_ANIMALS` — real, committed COLORED
+    `zodiac.CHINESE_MONTH_BRANCH_ANIMALS` — real, committed COLORED
     badges (Rule #5), never a gap. June leads with the Horse (the
     branch that begins ~Jun 6), December with the Rat (the branch that
     holds the winter solstice — core.blue_moon.chinese_leap_month reads
@@ -896,7 +896,7 @@ def test_the_chinese_branches_tile_the_year_with_no_gap():
     covered: dict[tuple[int, int], str] = {}
     for month in range(1, 13):
         (open_m, open_d), (close_m, close_d), term = (
-            constants.chinese_branch_span(month)
+            zodiac.chinese_branch_span(month)
         )
         assert term, month
         start = date(2026, open_m, open_d)
@@ -905,7 +905,7 @@ def test_the_chinese_branches_tile_the_year_with_no_gap():
         while day <= end:
             key = (day.month, day.day)
             assert key not in covered, f"{key} claimed twice"
-            covered[key] = constants.CHINESE_MONTH_BRANCH_ANIMALS[month]
+            covered[key] = zodiac.CHINESE_MONTH_BRANCH_ANIMALS[month]
             day += timedelta(days=1)
     assert len(covered) == 365
     # the Tiger opens the cycle at the start of spring, the Rat holds

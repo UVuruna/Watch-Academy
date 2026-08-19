@@ -11,7 +11,7 @@ from PySide6.QtWidgets import QApplication
 from app.skin_builder import apply_display_settings
 from app.settings_dialog.dialog import SettingsDialog
 from app.settings_store import Settings, replace
-from config import defaults, encyclopedia_ui, eras, identity, palette, pantheon, sky
+from config import defaults, encyclopedia_ui, eras, identity, palette, pantheon, sky, zodiac
 from config.registry import week as week_registry
 from data.locations import Place, default_place
 from render.skin_geometry import palette_for
@@ -1568,11 +1568,11 @@ def test_chinese_articles_and_elements_cover_the_cycle():
     data = json.loads(
         (paths.database_dir() / "symbolism.json").read_text(encoding="utf-8")
     )
-    assert set(data["chinese_articles"]) == set(constants.CHINESE_ANIMALS)
+    assert set(data["chinese_articles"]) == set(zodiac.CHINESE_ANIMALS)
     for animal, article in data["chinese_articles"].items():
         assert len(article["base"]) > 250, animal
         assert "sixty" in article["base"], animal      # the folded claim
-    assert set(data["chinese_elements"]) == set(constants.CHINESE_ELEMENTS)
+    assert set(data["chinese_elements"]) == set(zodiac.CHINESE_ELEMENTS)
     for element, article in data["chinese_elements"].items():
         assert len(article["base"]) > 150, element
 
@@ -1590,7 +1590,7 @@ def test_zodiac_articles_cover_every_sign():
         (paths.database_dir() / "symbolism.json").read_text(encoding="utf-8")
     )
     zodiac = data["zodiac_articles"]
-    assert set(zodiac) == {name for name, _ in constants.ZODIAC_SIGNS}
+    assert set(zodiac) == {name for name, _ in zodiac.ZODIAC_SIGNS}
     for sign, article in zodiac.items():
         assert len(article["base"]) > 250, sign
         assert "\n\n" in article["base"], sign

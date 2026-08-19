@@ -22,7 +22,7 @@ REPO_ROOT = ROOT.parent
 SHARED = REPO_ROOT / "shared"
 sys.path.insert(0, str(REPO_ROOT / "desktop"))
 
-from config import complications, constants, ninth, pantheon, paths  # noqa: E402, ring
+from config import complications, ninth, pantheon, paths  # noqa: E402, ring, zodiac
 
 SOURCES = ("gemini", "chatgpt")
 SEATS = ("sun", "moon", "mars", "mercury", "jupiter", "venus", "saturn")
@@ -244,7 +244,7 @@ def zodiac_mark(source: str, rel: str) -> str:
 def zodiac_sections() -> list[str]:
     out = ["## Zodiac — Astrology (12 signs + the 13th)\n"]
     styles = complications.ZODIAC_STYLE_ART_DIRS       # sign/logo/const/colored
-    signs = [name for name, _ in constants.ZODIAC_SIGNS]
+    signs = [name for name, _ in zodiac.ZODIAC_SIGNS]
     head = "| Sign | " + " | ".join(
         f"{style} G | {style} C" for style in styles
     ) + " |"
@@ -263,7 +263,7 @@ def zodiac_sections() -> list[str]:
     }
     out.append("| Animal | primary G | primary C | colored G | colored C |")
     out.append("|---|---|---|---|---|")
-    for animal in list(constants.CHINESE_ANIMALS) + ["Cat"]:
+    for animal in list(zodiac.CHINESE_ANIMALS) + ["Cat"]:
         cells = []
         for folder in dirs.values():
             cells.append(zodiac_mark("gemini", f"{folder}/{animal}"))

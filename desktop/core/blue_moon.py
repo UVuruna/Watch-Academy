@@ -6,7 +6,7 @@ trigger+window it does not exist anywhere, dial or Encyclopedia.
 THE AXLE LAW (CANON.md §The Axle, owner-sealed 2026-07-29) adds a SECOND
 kind of thirteenth alongside these four: the ALWAYS-CENTERS (Hestia,
 Jesus, Prudence, Cunning, Peace, Hardness of Heart —
-`config.constants.AXLE_ALWAYS_CENTERS`), which carry no trigger and no
+`config.zodiac.AXLE_ALWAYS_CENTERS`), which carry no trigger and no
 window at all — they stand on EVERY date, because they are the axles
 their wheels turn on, not months a twelve-month calendar overflows into.
 `thirteenth_candidates` unions them in unconditionally, at the very end,
@@ -53,7 +53,7 @@ import math
 from dataclasses import dataclass
 from datetime import date, datetime, timedelta, timezone
 
-from config import constants, sky
+from config import sky, zodiac
 from core.deep_time import delta_t_seconds, julian_day
 from core.moon import MoonWindow
 from core.year_wheel import YearAnchors
@@ -78,14 +78,14 @@ def thirteen_moon_year(year: int, window: MoonWindow) -> bool:
 def ophiuchus_window(year: int) -> tuple[date, date]:
     """(first, last) inclusive date of Ophiuchus's window in `year` —
     the Sun's real transit through the constellation."""
-    (lo_m, lo_d), (hi_m, hi_d) = constants.OPHIUCHUS_WINDOW
+    (lo_m, lo_d), (hi_m, hi_d) = zodiac.OPHIUCHUS_WINDOW
     return date(year, lo_m, lo_d), date(year, hi_m, hi_d)
 
 
 def sol_window(year: int) -> tuple[date, date]:
     """(first, last) inclusive date of Sol's window in `year` — carries
     the June solstice."""
-    (lo_m, lo_d), (hi_m, hi_d) = constants.SOL_WINDOW
+    (lo_m, lo_d), (hi_m, hi_d) = zodiac.SOL_WINDOW
     return date(year, lo_m, lo_d), date(year, hi_m, hi_d)
 
 
@@ -94,7 +94,7 @@ def modrenik_window(december_solstice: datetime) -> tuple[date, date]:
     the real December solstice instant — `MODRENIK_WINDOW_HALF_DAYS`
     either side, honest across years (unlike a fixed MM-DD pair, since
     the solstice itself drifts a day)."""
-    half = timedelta(days=constants.MODRENIK_WINDOW_HALF_DAYS)
+    half = timedelta(days=zodiac.MODRENIK_WINDOW_HALF_DAYS)
     center = december_solstice.date()
     return center - half, center + half
 
@@ -264,4 +264,4 @@ def thirteenth_candidates(
     # ALWAYS-CENTERS carry no trigger and no window, so they join the
     # fact set unconditionally on every date, calendar-driven members
     # above untouched.
-    return frozenset(found) | constants.AXLE_ALWAYS_CENTERS
+    return frozenset(found) | zodiac.AXLE_ALWAYS_CENTERS

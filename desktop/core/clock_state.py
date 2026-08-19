@@ -108,7 +108,7 @@ class DayContext:
     # picks the one (if any) whose ±3h window covers "now".
     eclipses: tuple[EclipseEvent, ...] = ()
     # THE BLUE MOON LAW (owner-sealed 2026-07-22, CORRECTED 2026-07-2X):
-    # every 13th (config.constants.THIRTEENTHS' keys) whose OWN
+    # every 13th (config.zodiac.THIRTEENTHS' keys) whose OWN
     # trigger+window holds TODAY — a fact set, no precedence, no render
     # mode read here (computed ONCE via core.blue_moon.
     # thirteenth_candidates, never on the MINUTE-cadence paint pass);

@@ -42,7 +42,7 @@ from functools import lru_cache
 
 from PySide6.QtCore import QPointF
 
-from config import archetypes, calendar_mounts, complications, constants, defaults, dial, encyclopedia_ui, glow, ninth, pantheon, paths, pointer_geometry, profiling, ring, sky
+from config import archetypes, calendar_mounts, complications, constants, defaults, dial, encyclopedia_ui, glow, ninth, pantheon, paths, pointer_geometry, profiling, ring, sky, zodiac
 from config.ui_text import ui
 from config.registry import week as week_registry
 from core import angles, continents, world
@@ -99,7 +99,7 @@ def _greetings() -> dict:
 _SOUTH_ANCHOR_FLIP = {270.0: 450.0, 360.0: 540.0, 450.0: 270.0, 540.0: 360.0}
 
 # The Astrology encyclopedia topic lists its signs in astronomical
-# order (Aries first), NOT the year-wheel order of constants.ZODIAC_SIGNS
+# order (Aries first), NOT the year-wheel order of zodiac.ZODIAC_SIGNS
 # — the Spacebar jump (owner 2026-07-16, ROADMAP queue #8) indexes into
 # this order to open the hovered sign's page.
 _ENC_ZODIAC_ORDER = (
@@ -142,13 +142,13 @@ _ENC_ECLIPSE_LUNAR_ORDER = ("Overview", "Total", "Partial", "Penumbral")
 # order, mirrored here exactly like every other `_ENC_*_ORDER` constant
 # above. Ophiuchus/The Cat close the "astrology"/"chinese" GALLERY
 # topics (their shared ninth-append loop's LAST entries — their
-# ARTICLE TEXT family is "ninths", `constants.THIRTEENTHS`, but the
+# ARTICLE TEXT family is "ninths", `zodiac.THIRTEENTHS`, but the
 # gallery page that opens lives in their own zodiac topic, never a
 # literal "ninths" topic, which does not exist); Sol/Modrenik close
 # "months" (the Overview entry, the twelve Slavic months, THEN the
 # pair, `app.encyclopedia._topics`'s own append order).
 _ENC_OPHIUCHUS_INDEX = len(_ENC_ZODIAC_ORDER)
-_ENC_CAT_INDEX = len(constants.CHINESE_ANIMALS) + len(constants.CHINESE_ELEMENTS)
+_ENC_CAT_INDEX = len(zodiac.CHINESE_ANIMALS) + len(zodiac.CHINESE_ELEMENTS)
 _ENC_SOL_INDEX = len(calendar_mounts.SLAVIC_MONTHS) + 1
 _ENC_MODRENIK_INDEX = _ENC_SOL_INDEX + 1
 
@@ -551,7 +551,7 @@ class TooltipComposer:
                 )
             if mode == "chinese":
                 animal = self._dial.day.chinese_name.split()[1]
-                return "chinese", constants.CHINESE_ANIMALS.index(animal)
+                return "chinese", zodiac.CHINESE_ANIMALS.index(animal)
             if mode == "weekday":
                 # A seated weekday slot shows TODAY's body in the slot's
                 # OWN theme (owner failing case: Zeus / the Egyptian body
@@ -648,7 +648,7 @@ class TooltipComposer:
             return (
                 "astrology",
                 _ENC_ZODIAC_ORDER.index(
-                    constants.ZODIAC_SIGNS[int(start_angle) // 30][0]
+                    zodiac.ZODIAC_SIGNS[int(start_angle) // 30][0]
                 ),
             )
         if pointer == "trio":
@@ -708,7 +708,7 @@ class TooltipComposer:
         start_angle = int(theta // step) * step
         if self._dial.day.southern_hemisphere:
             start_angle = (start_angle + 180.0) % 360.0
-        name = constants.ZODIAC_SIGNS[int(start_angle) // 30][0]
+        name = zodiac.ZODIAC_SIGNS[int(start_angle) // 30][0]
         return "astrology", _ENC_ZODIAC_ORDER.index(name)
 
     def _combo_key(self) -> str:
@@ -1172,10 +1172,10 @@ class TooltipComposer:
 
         THE AXLE LAW (CANON §The Axle) splits the closing line in two:
         a calendar-driven 13th is a blue-moon guest, empty every other
-        day; an ALWAYS-CENTER (`constants.AXLE_ALWAYS_CENTERS`) is the
+        day; an ALWAYS-CENTER (`zodiac.AXLE_ALWAYS_CENTERS`) is the
         axle the twelve turn on, present on literally every date
         instead. An always-center whose Encyclopedia article is not written yet
-        (`family is None` in `constants.THIRTEENTHS` — the graceful-
+        (`family is None` in `zodiac.THIRTEENTHS` — the graceful-
         absent contract, same as a missing art plate) skips the
         `entry()` lookup entirely rather than crash on an unwritten
         family/article pair, and the closing line itself becomes the
@@ -1183,8 +1183,8 @@ class TooltipComposer:
         appending the closing note after an empty base would tease a
         bare " …", not this line)."""
         name, asset = thirteenth_plate(key)
-        _display, family, article_name = constants.THIRTEENTHS[key]
-        axle = key in constants.AXLE_ALWAYS_CENTERS
+        _display, family, article_name = zodiac.THIRTEENTHS[key]
+        axle = key in zodiac.AXLE_ALWAYS_CENTERS
         closing = (
             "The one who does not turn with the twelve: always present, "
             "the Calendar pointer's own dial center." if axle else
@@ -1317,7 +1317,7 @@ class TooltipComposer:
                     # the diamond the Earth passes must name the signs
                     # it actually passes there — the opposite half.
                     start_angle = (start_angle + 180.0) % 360.0
-                name, _symbol = constants.ZODIAC_SIGNS[int(start_angle) // 30]
+                name, _symbol = zodiac.ZODIAC_SIGNS[int(start_angle) // 30]
                 start, end = zodiac_span(self._dial.day.year_anchors, start_angle)
                 start = start.astimezone(self._dial.day.tzinfo)
                 last = end.astimezone(self._dial.day.tzinfo) - timedelta(days=1)
@@ -2055,7 +2055,7 @@ class TooltipComposer:
         beneath it, the image TRIO led by the active style, then the
         sign's article."""
         sign = self._dial.tick.ascendant_sign
-        symbol = dict(constants.ZODIAC_SIGNS)[sign]
+        symbol = dict(zodiac.ZODIAC_SIGNS)[sign]
         header = hover_title(
             html.escape(self._tr("Ascendant"))
         ) + centered(f"{symbol} {self._tr(sign)}")
@@ -2449,7 +2449,7 @@ class TooltipComposer:
         if calendar_wheel(self._dial.skin) == "almanac":
             index = int((theta + step / 2.0) // step) % 12
             month = (index + 5) % 12 + 1
-            animal = constants.CHINESE_ANIMALS[(index - 6) % 12]
+            animal = zodiac.CHINESE_ANIMALS[(index - 6) % 12]
             center_hour = (2 * index - 12) % 24
             start_hour, end_hour = (center_hour - 1) % 24, (center_hour + 1) % 24
             art = octa_slot_art(
@@ -2470,7 +2470,7 @@ class TooltipComposer:
 
     def _zodiac_wedge_html(self, index: int) -> str:
         """Sign name + date span + the COLORED badge for the FIXED
-        `constants.ZODIAC_SIGNS[index]` wedge identity — factored out of
+        `zodiac.ZODIAC_SIGNS[index]` wedge identity — factored out of
         `_calendar_tooltip`'s own zodiac branch (Rule #5) so the mounted
         zodiac mark hover (`_calendar_mount_tooltip`, drawn on this exact
         wedge, never hemisphere-mirrored) speaks the identical text the
@@ -2478,7 +2478,7 @@ class TooltipComposer:
         from render.subdial import octa_slot_art
 
         day = self._dial.day
-        name, symbol = constants.ZODIAC_SIGNS[index]
+        name, symbol = zodiac.ZODIAC_SIGNS[index]
         start, end = zodiac_span(
             day.year_anchors, index * pointer_geometry.CALENDAR_WEDGE_DEG
         )
@@ -2518,7 +2518,7 @@ class TooltipComposer:
         from render.subdial import octa_slot_art
 
         gregorian = (index + 5) % 12 + 1
-        animal = constants.CHINESE_MONTH_BRANCH_ANIMALS[gregorian]
+        animal = zodiac.CHINESE_MONTH_BRANCH_ANIMALS[gregorian]
         art = octa_slot_art("zodiac/chinese/primary/colored", animal)
         # THE BRANCH'S TRUE SPAN (owner 2026-08-05): the wedge is a
         # Gregorian seat, but the branch itself opens on its own solar
@@ -2526,7 +2526,7 @@ class TooltipComposer:
         # from when to when, and says "approx." because the term drifts
         # about a day with the leap cycle.
         (open_m, open_d), (close_m, close_d), term = (
-            constants.chinese_branch_span(gregorian)
+            zodiac.chinese_branch_span(gregorian)
         )
         lines = [
             f"<b>{html.escape(self._tr(animal))}</b>",

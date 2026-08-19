@@ -12,7 +12,7 @@ import calendar
 from dataclasses import dataclass
 from datetime import date, datetime
 
-from config import constants, pointer_geometry, sky
+from config import pointer_geometry, sky, zodiac
 
 
 @dataclass(frozen=True)
@@ -81,13 +81,13 @@ def zodiac_sign(now: datetime, anchors: YearAnchors) -> tuple[str, str, datetime
     solstice, Aries' the spring equinox — so the cusps ride the REAL
     season instants, not fixed calendar dates."""
     unwrapped = _unwrapped_angle(now, anchors)
-    start_angle = int(unwrapped // constants.ZODIAC_SPAN_DEG) * constants.ZODIAC_SPAN_DEG
-    name, symbol = constants.ZODIAC_SIGNS[int(start_angle % 360.0) // 30]
+    start_angle = int(unwrapped // zodiac.ZODIAC_SPAN_DEG) * zodiac.ZODIAC_SPAN_DEG
+    name, symbol = zodiac.ZODIAC_SIGNS[int(start_angle % 360.0) // 30]
     return (
         name,
         symbol,
         _instant_at(anchors, start_angle),
-        _instant_at(anchors, start_angle + constants.ZODIAC_SPAN_DEG),
+        _instant_at(anchors, start_angle + zodiac.ZODIAC_SPAN_DEG),
     )
 
 
@@ -101,7 +101,7 @@ def zodiac_span(anchors: YearAnchors, start_dial_angle: float) -> tuple[datetime
     )
     return (
         _instant_at(anchors, unwrapped),
-        _instant_at(anchors, unwrapped + constants.ZODIAC_SPAN_DEG),
+        _instant_at(anchors, unwrapped + zodiac.ZODIAC_SPAN_DEG),
     )
 
 

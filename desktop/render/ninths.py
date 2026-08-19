@@ -8,7 +8,7 @@ Ninth holds the window, which face the centre shows, and the thirteenth
 from datetime import date
 from pathlib import Path
 
-from config import calendar_mounts, constants, defaults, ninth, pantheon, paths
+from config import calendar_mounts, defaults, ninth, pantheon, paths, zodiac
 from core import angles, continents
 from core.clock_state import DayContext, TickState
 from render.calendar_mount import calendar_wheel
@@ -19,7 +19,7 @@ from skins.manifest import SkinDefinition
 
 def thirteenth_plate(key: str) -> tuple[str, Path | None]:
     """(display name, resolved asset path or None) of the Blue Moon
-    Law's 13th `key` (one of `constants.THIRTEENTHS`) — mirrors
+    Law's 13th `key` (one of `zodiac.THIRTEENTHS`) — mirrors
     `theme_ninth`'s graceful-absent contract (Rule #5): the caller draws
     the name-only fallback when the path is None. Ophiuchus/The Cat
     resolve through the SAME zodiac/chinese registers every sign/animal
@@ -43,7 +43,7 @@ def thirteenth_plate(key: str) -> tuple[str, Path | None]:
     (`Just_Indignation`): a filename cannot carry a space, so
     "Hardness of Heart" drops as `Hardness_of_Heart.png` — one rule, no
     second table (Rule #19); single-word axles are unaffected."""
-    name, _family, _article = constants.THIRTEENTHS[key]
+    name, _family, _article = zodiac.THIRTEENTHS[key]
     if key == "ophiuchus":
         art = octa_slot_art("zodiac/astrology/primary/sign", name)
     elif key == "chinese":
@@ -100,7 +100,7 @@ def active_thirteenth(
     appearance rule's business — `day.thirteenth_candidates` holds the
     calendar-driven members only on their own trigger+window (so on
     almost every day of the year one of THOSE returns None), but holds
-    the ALWAYS-CENTERS (`constants.AXLE_ALWAYS_CENTERS`)
+    the ALWAYS-CENTERS (`zodiac.AXLE_ALWAYS_CENTERS`)
     UNCONDITIONALLY (CANON §The Axle: "ALWAYS-CENTERS stand on EVERY
     date") — so a mount whose `centre` is an axle (Hestia/Jesus/
     Prudence/Cunning/Peace/Hardness of Heart) shows it on literally

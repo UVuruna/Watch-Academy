@@ -8,7 +8,7 @@ Layer: config — pure, no Qt, no wall clock.
 
 from typing import NamedTuple
 
-from config import constants, paths, pointer_geometry
+from config import paths, pointer_geometry, zodiac
 
 
 # --- Calendar pointer (owner 2026-07-16, CANON §The Dozen) ---------------------
@@ -93,12 +93,12 @@ SLAVIC_MONTHS = (
 # three stars already stand on. Both fall out of one formula in
 # `render.calendar_mount.calendar_mount_angle`; nothing is tabulated per seat.
 #
-# THE CENTER (`centre`) is the `constants.THIRTEENTHS` key whose member
+# THE CENTER (`centre`) is the `zodiac.THIRTEENTHS` key whose member
 # may take the dial CENTER while this mount rides. Two different LAWS
 # govern whether the seat actually shows (CANON §The Axle, owner-sealed
 # 2026-07-29): a CALENDAR-DRIVEN centre (Ophiuchus/Sol/Modrenik/The Cat)
 # keeps its own appearance rule (`core.blue_moon`), empty on almost every
-# day of the year; an ALWAYS-CENTRE (`constants.AXLE_ALWAYS_CENTERS` —
+# day of the year; an ALWAYS-CENTRE (`zodiac.AXLE_ALWAYS_CENTERS` —
 # Hestia, Jesus, Prudence, Cunning, Peace, Hardness of Heart) is
 # unconditionally present on EVERY date instead — the axle never leaves.
 # `None` means the canon seals no thirteenth for this set and the center
@@ -182,7 +182,7 @@ CALENDAR_MOUNTS = {
     "zodiac": CalendarMount(
         title="Zodiac signs",
         system="A",
-        members=tuple(name for name, _symbol in constants.ZODIAC_SIGNS),
+        members=tuple(name for name, _symbol in zodiac.ZODIAC_SIGNS),
         art_dir="zodiac/astrology/primary/colored",
         centre="ophiuchus",
         follows="sign",
@@ -219,7 +219,7 @@ CALENDAR_MOUNTS = {
     "chinese": CalendarMount(
         title="Chinese zodiac",
         system="B",
-        members=almanac_seat_order(constants.CHINESE_MONTH_BRANCH_ANIMALS),
+        members=almanac_seat_order(zodiac.CHINESE_MONTH_BRANCH_ANIMALS),
         art_dir="zodiac/chinese/primary/colored",
         centre="chinese",
         follows="month",
@@ -228,7 +228,7 @@ CALENDAR_MOUNTS = {
     # sealed Dozens) — System B, seated by canon's own hours. Its centre
     # is PEACE, the still point every emotion runs toward (SEALED
     # 2026-07-29, CANON §The Emotions Dozen) — an ALWAYS-CENTER, always
-    # present (`constants.AXLE_ALWAYS_CENTERS`), unlike the calendar-driven
+    # present (`zodiac.AXLE_ALWAYS_CENTERS`), unlike the calendar-driven
     # thirteenths above.
     "emotions": CalendarMount(
         title="Emotions",

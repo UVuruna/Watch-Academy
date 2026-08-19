@@ -25,7 +25,7 @@ from PySide6.QtWidgets import QApplication
 
 from app.skin_builder import apply_display_settings
 from app.settings_store import Settings, replace
-from config import constants, defaults, paths
+from config import defaults, paths, zodiac
 from config.registry import week as week_registry
 from core.blue_moon import (
     ChineseLeapMonth,
@@ -183,7 +183,7 @@ def test_window_alone_is_not_enough_without_the_trigger():
     # Cat's own Jul25-Aug22 leap window.
     assert thirteenth_candidates(
         date(2025, 7, 1), window, anchors, leap
-    ) == constants.AXLE_ALWAYS_CENTERS
+    ) == zodiac.AXLE_ALWAYS_CENTERS
 
 
 def test_no_thirteenth_candidate_on_an_ordinary_date():
@@ -195,7 +195,7 @@ def test_no_thirteenth_candidate_on_an_ordinary_date():
     leap = chinese_leap_month(anchors, window)
     assert thirteenth_candidates(
         date(2026, 3, 15), window, anchors, leap
-    ) == constants.AXLE_ALWAYS_CENTERS
+    ) == zodiac.AXLE_ALWAYS_CENTERS
 
 
 def test_ophiuchus_and_modrenik_windows_can_both_be_true_facts():
@@ -214,7 +214,7 @@ def test_ophiuchus_and_modrenik_windows_can_both_be_true_facts():
     m_lo, m_hi = modrenik_window(anchors.instants[4])
     assert m_lo <= o_hi < m_hi                             # the windows truly overlap
     candidates = thirteenth_candidates(date(2026, 12, 13), window, anchors, leap)
-    assert candidates == {"ophiuchus", "modrenik"} | constants.AXLE_ALWAYS_CENTERS
+    assert candidates == {"ophiuchus", "modrenik"} | zodiac.AXLE_ALWAYS_CENTERS
 
 
 # --- 4. THE CAT: the real lunisolar leap month --------------------------------
@@ -260,15 +260,15 @@ def test_day_context_carries_the_candidate_fact_set():
     along on every one of these dates — the calendar-driven candidate is
     still the ONLY member gated by a trigger+window."""
     sol_day, _tick = _day_tick(datetime(2026, 7, 8, 12, 0))   # inside Sol's window
-    assert sol_day.thirteenth_candidates == {"sol"} | constants.AXLE_ALWAYS_CENTERS
+    assert sol_day.thirteenth_candidates == {"sol"} | zodiac.AXLE_ALWAYS_CENTERS
     assert sol_day.chinese_leap_month_number is None
 
     cat_day, _tick = _day_tick(datetime(2025, 8, 1, 12, 0))   # inside the Cat's window
-    assert cat_day.thirteenth_candidates == {"chinese"} | constants.AXLE_ALWAYS_CENTERS
+    assert cat_day.thirteenth_candidates == {"chinese"} | zodiac.AXLE_ALWAYS_CENTERS
     assert cat_day.chinese_leap_month_number == 6
 
     plain_day, _tick = _day_tick(datetime(2026, 3, 15, 12, 0))
-    assert plain_day.thirteenth_candidates == constants.AXLE_ALWAYS_CENTERS
+    assert plain_day.thirteenth_candidates == zodiac.AXLE_ALWAYS_CENTERS
     assert plain_day.chinese_leap_month_number is None
 
 
@@ -281,12 +281,12 @@ def test_thirteenths_registry_is_exhaustive():
     display name; `family`/`article` are a pair, both set (an
     Encyclopedia article exists) or both `None` (graceful-absent — no
     article written yet, same contract a missing art plate carries)."""
-    assert set(constants.THIRTEENTHS) == {
+    assert set(zodiac.THIRTEENTHS) == {
         "ophiuchus", "sol", "modrenik", "chinese",
-    } | constants.AXLE_ALWAYS_CENTERS
-    for key, (name, family, article) in constants.THIRTEENTHS.items():
+    } | zodiac.AXLE_ALWAYS_CENTERS
+    for key, (name, family, article) in zodiac.THIRTEENTHS.items():
         assert name, key
-        if key in constants.AXLE_ALWAYS_CENTERS:
+        if key in zodiac.AXLE_ALWAYS_CENTERS:
             assert family is None or family == "wider", key
         else:
             assert family in ("ninths", "months"), key
@@ -437,7 +437,7 @@ def test_no_thirteenth_on_the_calendar_pointer_off_its_own_window():
     simply not what "off" resolves to on this wheel)."""
     skin = _calendar_skin(palette_style="primary", calendar_mount="off")
     day, _tick = _day_tick(datetime(2026, 3, 15, 12, 0))
-    assert day.thirteenth_candidates == constants.AXLE_ALWAYS_CENTERS
+    assert day.thirteenth_candidates == zodiac.AXLE_ALWAYS_CENTERS
     assert active_thirteenth(skin, day) is None
 
 
