@@ -22,7 +22,7 @@ from app.settings_fields import (
     save_moving_bodies, save_numerals,
 )
 from app.settings_ring import fold_ring_name, load_named_dict, normalized_ring_card
-from config import calendar_mounts, constants, defaults, dial, eras, identity, pantheon, pointer_geometry, umbra
+from config import calendar_mounts, complications, constants, defaults, dial, eras, identity, pantheon, pointer_geometry, umbra
 from config.registry import week as week_registry
 from config.registry import slots as slot_registry
 from data.locations import Place, default_place
@@ -598,15 +598,15 @@ class SettingsStore:
                 ("polygon_edge", pointer_geometry.POLYGON_EDGE_DEFAULT,
                  pointer_geometry.POLYGON_EDGE_MODES),
                 ("calendar_mount", "zodiac", calendar_mounts.CALENDAR_MOUNT_MODES),
-                ("octa_slot", "time", constants.OCTA_SLOT_MODES),
-                ("day_slot_style", "sign", constants.SLOT_STYLE_VALUES),
-                ("info_slot_style", "sign", constants.SLOT_STYLE_VALUES),
+                ("octa_slot", "time", complications.OCTA_SLOT_MODES),
+                ("day_slot_style", "sign", complications.SLOT_STYLE_VALUES),
+                ("info_slot_style", "sign", complications.SLOT_STYLE_VALUES),
                 ("info_slot_theme", "planets", constants.WEEKDAY_THEMES),
-                ("weekday_slot", "weekday", constants.WEEKDAY_SLOT_MODES),
-                ("third_slot", "date", constants.OCTA_SLOT_MODES),
-                ("third_slot_style", "sign", constants.SLOT_STYLE_VALUES),
+                ("weekday_slot", "weekday", complications.WEEKDAY_SLOT_MODES),
+                ("third_slot", "date", complications.OCTA_SLOT_MODES),
+                ("third_slot_style", "sign", complications.SLOT_STYLE_VALUES),
                 ("third_slot_theme", "planets", constants.WEEKDAY_THEMES),
-                ("earth_style", "atmo", constants.EARTH_STYLES),
+                ("earth_style", "atmo", complications.EARTH_STYLES),
                 ("weekday_theme", "planets", constants.WEEKDAY_THEMES),
                 ("subdial_style", "black", constants.SUBDIAL_STYLES),
                 ("subdial_set", "set1", constants.SUBDIAL_SETS),

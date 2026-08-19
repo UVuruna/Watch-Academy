@@ -14,7 +14,7 @@ from typing import Callable
 from app.controller_display import _next_rotation_theme
 from app.skin_builder import build_skin, effective_weekday_slot
 from app.settings_store import replace, slot_layout_target
-from config import archetypes, constants, defaults, pantheon, pointer_geometry, shortcuts
+from config import archetypes, complications, defaults, pantheon, pointer_geometry, shortcuts
 from config.registry.slots import SLOT_KEYS
 from data.rings import ring_presets
 from render.asset_variants import (
@@ -50,10 +50,10 @@ class _ShortcutActionsMixin:
     _WEEKDAY_THEME_ORDER = pantheon.WEEKDAY_MENU_TOP + tuple(
         key for _title, keys in pantheon.WEEKDAY_MENU_GROUPS for key in keys
     )
-    #: The 4 Complication modes, in `constants.SLOT_COMPLICATION_TITLES`'s
+    #: The 4 Complication modes, in `complications.SLOT_COMPLICATION_TITLES`'s
     #: own dict order (Digital Time -> Date -> Day length -> Seconds) —
     #: the R5b SLOTS shortcuts (Ctrl+1/2/3) cycle through exactly this.
-    _SLOT_COMPLICATION_ORDER = tuple(constants.SLOT_COMPLICATION_TITLES)
+    _SLOT_COMPLICATION_ORDER = tuple(complications.SLOT_COMPLICATION_TITLES)
 
     def _on_shortcut(self, action_id: str) -> None:
         """Dispatch one `shortcuts.SHORTCUTS` entry (owner "OSMISLITI ŠTA

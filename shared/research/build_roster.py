@@ -22,7 +22,7 @@ REPO_ROOT = ROOT.parent
 SHARED = REPO_ROOT / "shared"
 sys.path.insert(0, str(REPO_ROOT / "desktop"))
 
-from config import constants, pantheon, paths  # noqa: E402
+from config import complications, constants, pantheon, paths  # noqa: E402
 
 SOURCES = ("gemini", "chatgpt")
 SEATS = ("sun", "moon", "mars", "mercury", "jupiter", "venus", "saturn")
@@ -243,7 +243,7 @@ def zodiac_mark(source: str, rel: str) -> str:
 
 def zodiac_sections() -> list[str]:
     out = ["## Zodiac — Astrology (12 signs + the 13th)\n"]
-    styles = constants.ZODIAC_STYLE_ART_DIRS       # sign/logo/const/colored
+    styles = complications.ZODIAC_STYLE_ART_DIRS       # sign/logo/const/colored
     signs = [name for name, _ in constants.ZODIAC_SIGNS]
     head = "| Sign | " + " | ".join(
         f"{style} G | {style} C" for style in styles

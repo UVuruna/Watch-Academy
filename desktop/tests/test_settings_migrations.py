@@ -49,13 +49,13 @@ def test_every_retired_name_the_program_still_answers_to_has_a_successor():
     actually accepts today — a typo here would trade a corrupt-file
     dialog for a silently wrong watch."""
     from app.settings_fields import MERGED_MOUNTS, RETIRED_SLOT_MODES
-    from config import calendar_mounts, constants
+    from config import calendar_mounts, complications
 
     for retired, successor in RETIRED_SLOT_MODES.items():
-        assert retired not in constants.WEEKDAY_SLOT_MODES
-        assert retired not in constants.OCTA_SLOT_MODES
-        assert successor in constants.WEEKDAY_SLOT_MODES
-        assert successor in constants.OCTA_SLOT_MODES
+        assert retired not in complications.WEEKDAY_SLOT_MODES
+        assert retired not in complications.OCTA_SLOT_MODES
+        assert successor in complications.WEEKDAY_SLOT_MODES
+        assert successor in complications.OCTA_SLOT_MODES
     for retired, successor in MERGED_MOUNTS.items():
         assert retired not in calendar_mounts.CALENDAR_MOUNT_MODES
         assert successor in calendar_mounts.CALENDAR_MOUNT_MODES

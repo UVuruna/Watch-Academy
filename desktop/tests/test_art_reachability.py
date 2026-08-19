@@ -37,7 +37,14 @@ from pathlib import Path
 
 import config
 from config import (
-    archetypes, calendar_mounts, constants, dial, pantheon, paths, registry,
+    archetypes,
+    calendar_mounts,
+    complications,
+    constants,
+    dial,
+    pantheon,
+    paths,
+    registry,
 )
 
 _ROOT = Path(__file__).resolve().parents[1]
@@ -183,8 +190,8 @@ def _resolved_dirs() -> set[Path]:
         for face in (mount, mount.paint):
             if face is not None:
                 add(_ASSETS / "calendars" / face.art_dir)
-    for table in (constants.ZODIAC_STYLE_ART_DIRS,
-                  constants.CHINESE_STYLE_ART_DIRS):
+    for table in (complications.ZODIAC_STYLE_ART_DIRS,
+                  complications.CHINESE_STYLE_ART_DIRS):
         for rel in table.values():
             add(_ASSETS / "calendars" / rel)
     for spec in archetypes.ARCHETYPES.values():

@@ -23,7 +23,7 @@ from PySide6.QtCore import QPointF, Qt
 from PySide6.QtGui import QImage, QPainter
 from PySide6.QtWidgets import QApplication
 
-from config import archetypes, constants, defaults, dial, encyclopedia_ui, pointer_geometry
+from config import archetypes, complications, defaults, dial, encyclopedia_ui, pointer_geometry
 from config.registry import week as week_registry
 from config.registry import slots as slot_registry
 from core.clock_state import build_day_context, build_tick_state
@@ -278,8 +278,8 @@ def test_mode_overrides_slots_without_mutating_settings():
         defaults.DEFAULT_SKIN, replace(settings, archetype_mode=False)
     )
     assert slot_layout(restored) == {
-        1: constants.SLOT_SEAT_LEFT_ARM_ANGLE,
-        2: constants.SLOT_SEAT_RIGHT_ARM_ANGLE,
+        1: complications.SLOT_SEAT_LEFT_ARM_ANGLE,
+        2: complications.SLOT_SEAT_RIGHT_ARM_ANGLE,
     }
     # Aurora has no archetype — the mode is inert there.
     aurora = apply_display_settings(

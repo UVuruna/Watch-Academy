@@ -16,7 +16,7 @@ import pytest
 from PySide6.QtCore import QPointF
 from PySide6.QtWidgets import QApplication
 
-from config import constants, defaults, dial, encyclopedia_ui, glow, palette, pantheon, pointer_geometry, shortcuts, umbra
+from config import complications, constants, defaults, dial, encyclopedia_ui, glow, palette, pantheon, pointer_geometry, shortcuts, umbra
 from config.registry import week as week_registry
 from config.registry import slots as slot_registry
 from core.clock_state import build_day_context, build_tick_state
@@ -123,9 +123,9 @@ def test_slot_layout_matrix():
     order."""
     import dataclasses
 
-    TOP = constants.SLOT_SEAT_TOP_ANGLE
-    RIGHT_ARM = constants.SLOT_SEAT_RIGHT_ARM_ANGLE
-    LEFT_ARM = constants.SLOT_SEAT_LEFT_ARM_ANGLE
+    TOP = complications.SLOT_SEAT_TOP_ANGLE
+    RIGHT_ARM = complications.SLOT_SEAT_RIGHT_ARM_ANGLE
+    LEFT_ARM = complications.SLOT_SEAT_LEFT_ARM_ANGLE
     H3 = constants.AURORA_DUAL_WEEKDAY_ANGLE
     H21 = constants.AURORA_DUAL_SLOT_ANGLE
     SOUTH = constants.SOUTH_SLOT_ANGLE
@@ -936,10 +936,10 @@ def test_slot_modes_are_real_everywhere():
     assert locked.weekday_slot == "weekday"          # the Seasons lock
     # The Chinese styles resolve art folders + swap metals (Rule #5:
     # one mapping shared by every slot).
-    assert constants.CHINESE_STYLE_ART_DIRS["gold"] == "zodiac/chinese/primary/bronze"
-    assert constants.CHINESE_STYLE_ART_DIRS["colored"] == "zodiac/chinese/primary/colored"
+    assert complications.CHINESE_STYLE_ART_DIRS["gold"] == "zodiac/chinese/primary/bronze"
+    assert complications.CHINESE_STYLE_ART_DIRS["colored"] == "zodiac/chinese/primary/colored"
     assert "gold" in defaults.METAL_SWAP_TARGETS
-    assert constants.ZODIAC_STYLE_ART_DIRS["colored"] == "zodiac/astrology/primary/colored"
+    assert complications.ZODIAC_STYLE_ART_DIRS["colored"] == "zodiac/astrology/primary/colored"
 
 
 def test_ring_tick_hover_reads_all_three_wheels(july_wednesday):
@@ -1098,7 +1098,7 @@ def test_bottom_slot_layer_stack_positions():
     assert slot_index < first_hand           # bottom -> below the hands
 
 
-@pytest.mark.parametrize("mode", constants.OCTA_SLOT_MODES)
+@pytest.mark.parametrize("mode", complications.OCTA_SLOT_MODES)
 def test_octa_slot_modes_render(july_wednesday, mode):
     day, tick = july_wednesday
     skin = dataclasses.replace(
@@ -1109,7 +1109,7 @@ def test_octa_slot_modes_render(july_wednesday, mode):
     assert image.pixelColor(180, 8).alpha() > 200        # painted, no crash
 
 
-@pytest.mark.parametrize("style", constants.ZODIAC_SLOT_STYLES)
+@pytest.mark.parametrize("style", complications.ZODIAC_SLOT_STYLES)
 def test_zodiac_slot_styles_render(july_wednesday, style):
     day, tick = july_wednesday
     skin = dataclasses.replace(
@@ -1120,7 +1120,7 @@ def test_zodiac_slot_styles_render(july_wednesday, style):
     assert image.pixelColor(180, 8).alpha() > 200
 
 
-@pytest.mark.parametrize("style", constants.CHINESE_SLOT_STYLES)
+@pytest.mark.parametrize("style", complications.CHINESE_SLOT_STYLES)
 def test_chinese_slot_styles_render(july_wednesday, style):
     """Every Chinese dropdown style paints (owner 2026-07-12): text in
     two lines, colored from its own folder, gold/silver through the

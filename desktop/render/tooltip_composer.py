@@ -42,7 +42,7 @@ from functools import lru_cache
 
 from PySide6.QtCore import QPointF
 
-from config import archetypes, calendar_mounts, constants, defaults, dial, encyclopedia_ui, glow, pantheon, paths, pointer_geometry, profiling, sky
+from config import archetypes, calendar_mounts, complications, constants, defaults, dial, encyclopedia_ui, glow, pantheon, paths, pointer_geometry, profiling, sky
 from config.ui_text import ui
 from config.registry import week as week_registry
 from core import angles, continents, world
@@ -1329,7 +1329,7 @@ class TooltipComposer:
                 if offset == -30.0 and star:
                     header += html.escape(star)
                 colored = octa_slot_art(
-                    constants.ZODIAC_STYLE_ART_DIRS["colored"], name
+                    complications.ZODIAC_STYLE_ART_DIRS["colored"], name
                 )
                 plate = ""
                 if colored is not None and colored.exists():
@@ -1608,7 +1608,7 @@ class TooltipComposer:
             + "\n\n"
             + self._dial.symbolism.chinese_element(element)["base"]
         )
-        folder = constants.CHINESE_STYLE_ART_DIRS.get(style, "zodiac/chinese/primary/bronze")
+        folder = complications.CHINESE_STYLE_ART_DIRS.get(style, "zodiac/chinese/primary/bronze")
         image = metal_variant_file(
             octa_slot_art(folder, animal),
             style if style in defaults.METAL_SWAP_TARGETS else None,
@@ -1634,7 +1634,7 @@ class TooltipComposer:
         mode leads with the colored logo)."""
         from render.subdial import octa_slot_art
 
-        dirs = constants.ZODIAC_STYLE_ART_DIRS
+        dirs = complications.ZODIAC_STYLE_ART_DIRS
         main_style = style if style in dirs else "colored"
         sides = {
             "logo": ("sign", "constellation"),
@@ -2453,7 +2453,7 @@ class TooltipComposer:
             center_hour = (2 * index - 12) % 24
             start_hour, end_hour = (center_hour - 1) % 24, (center_hour + 1) % 24
             art = octa_slot_art(
-                constants.CHINESE_STYLE_ART_DIRS["colored"], animal
+                complications.CHINESE_STYLE_ART_DIRS["colored"], animal
             )
             return hover_badge(art) + centered_html(
                 f"<b>{html.escape(self._tr(_MONTHS[month - 1]))}</b>",
@@ -2484,7 +2484,7 @@ class TooltipComposer:
         )
         start = start.astimezone(day.tzinfo)
         last = end.astimezone(day.tzinfo) - timedelta(days=1)
-        art = octa_slot_art(constants.ZODIAC_STYLE_ART_DIRS["colored"], name)
+        art = octa_slot_art(complications.ZODIAC_STYLE_ART_DIRS["colored"], name)
         return hover_badge(art) + centered_html(
             f"<b>{html.escape(symbol)} {html.escape(self._tr(name))}</b>",
             f"{self._ord(start.day)} {html.escape(self._month(start))} - "

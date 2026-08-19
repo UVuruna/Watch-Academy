@@ -5,7 +5,7 @@ from datetime import date
 from PySide6.QtCore import QPointF
 from PySide6.QtGui import QPainter
 
-from config import constants, defaults, dial, pantheon, paths
+from config import complications, constants, defaults, dial, pantheon, paths
 from config.registry import week as week_registry
 from render.context import Cadence, Layer, RenderContext
 from render.painting import dial_point, draw_pixmap_centered
@@ -98,9 +98,9 @@ class SlotLayer(Layer):
                 if mode == "ascendant"
                 else ctx.day.zodiac_name
             )
-            if style in constants.ZODIAC_STYLE_ART_DIRS:
+            if style in complications.ZODIAC_STYLE_ART_DIRS:
                 asset = octa_slot_art(
-                    constants.ZODIAC_STYLE_ART_DIRS[style], sign
+                    complications.ZODIAC_STYLE_ART_DIRS[style], sign
                 )
                 if asset is not None:
                     if style == "colored":
@@ -125,9 +125,9 @@ class SlotLayer(Layer):
         # Chinese zodiac: the plates stay bare, text and the fallback
         # ride the subdial as element-over-animal (owner 2026-07-12).
         animal = ctx.day.chinese_name.split()[-1]
-        if style in constants.CHINESE_STYLE_ART_DIRS:
+        if style in complications.CHINESE_STYLE_ART_DIRS:
             asset = octa_slot_art(
-                constants.CHINESE_STYLE_ART_DIRS[style], animal
+                complications.CHINESE_STYLE_ART_DIRS[style], animal
             )
             if asset is not None:
                 draw_pixmap_centered(

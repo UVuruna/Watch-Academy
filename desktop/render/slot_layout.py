@@ -6,7 +6,7 @@ the duality questions that decide who holds the Sunday and the centre
 seat.
 """
 
-from config import constants, dial, pantheon, paths
+from config import complications, constants, dial, pantheon, paths
 from render.skin_geometry import archetype_active, center_duality, servant_seat_angle, visible_occupant, weekday_slots
 from skins.manifest import SkinDefinition
 
@@ -58,9 +58,9 @@ def slot_layout(skin: SkinDefinition) -> dict:
             1: (constants.SOUTH_SLOT_ANGLE,),
             2: (constants.AURORA_DUAL_WEEKDAY_ANGLE,
                 constants.AURORA_DUAL_SLOT_ANGLE),
-            3: (constants.SLOT_SEAT_TOP_ANGLE,
-                constants.SLOT_SEAT_RIGHT_ARM_ANGLE,
-                constants.SLOT_SEAT_LEFT_ARM_ANGLE),
+            3: (complications.SLOT_SEAT_TOP_ANGLE,
+                complications.SLOT_SEAT_RIGHT_ARM_ANGLE,
+                complications.SLOT_SEAT_LEFT_ARM_ANGLE),
         }[count]
         return dict(zip(order, seats))
     if skin.pointer in ("trio", "hexa"):
@@ -77,13 +77,13 @@ def slot_layout(skin: SkinDefinition) -> dict:
             }
         if count == 2:
             return {
-                order[0]: constants.SLOT_SEAT_LEFT_ARM_ANGLE,
-                order[1]: constants.SLOT_SEAT_RIGHT_ARM_ANGLE,
+                order[0]: complications.SLOT_SEAT_LEFT_ARM_ANGLE,
+                order[1]: complications.SLOT_SEAT_RIGHT_ARM_ANGLE,
             }
         return {
-            order[0]: constants.SLOT_SEAT_TOP_ANGLE,
-            order[1]: constants.SLOT_SEAT_RIGHT_ARM_ANGLE,
-            order[2]: constants.SLOT_SEAT_LEFT_ARM_ANGLE,
+            order[0]: complications.SLOT_SEAT_TOP_ANGLE,
+            order[1]: complications.SLOT_SEAT_RIGHT_ARM_ANGLE,
+            order[2]: complications.SLOT_SEAT_LEFT_ARM_ANGLE,
         }
     # The Seasons (cross) and the Compass (octa): the weekday unit
     # keeps priority.
@@ -109,7 +109,7 @@ def slot_layout(skin: SkinDefinition) -> dict:
             order[2]: constants.AURORA_DUAL_WEEKDAY_ANGLE,
         }
     return {
-        order[0]: constants.SLOT_SEAT_TOP_ANGLE,
+        order[0]: complications.SLOT_SEAT_TOP_ANGLE,
         order[1]: constants.AURORA_DUAL_SLOT_ANGLE,
         order[2]: constants.AURORA_DUAL_WEEKDAY_ANGLE,
     }

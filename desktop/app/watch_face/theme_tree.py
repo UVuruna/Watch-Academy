@@ -19,14 +19,14 @@ from app.weekday_theme_grid import (
     build_weekday_theme_tiles,
     weekday_group_titles,
 )
-from config import constants, defaults, watch_face
+from config import complications, defaults, watch_face
 from config.registry import pointers
 
 # Order-preserving DEDUPE (owner review round 2026-08-09): the source
 # tuples already end in "text", so the old `+ ("text",)` doubled that
 # button in every style gallery.
-_ZODIAC_STYLES = tuple(dict.fromkeys(constants.ZODIAC_SLOT_STYLES + ("text",)))
-_CHINESE_STYLES = tuple(dict.fromkeys(constants.CHINESE_SLOT_STYLES + ("text",)))
+_ZODIAC_STYLES = tuple(dict.fromkeys(complications.ZODIAC_SLOT_STYLES + ("text",)))
+_CHINESE_STYLES = tuple(dict.fromkeys(complications.CHINESE_SLOT_STYLES + ("text",)))
 
 #: The pointer's default weekday theme, asked of THE POINTER REGISTRY
 #: (`config.registry.pointers.default_theme`) rather than assumed.
@@ -211,7 +211,7 @@ def _complications_branch(active, tr) -> QWidget:
                 ),
                 thumbs.complication_icon(mode),
             )
-            for mode, title in constants.SLOT_COMPLICATION_TITLES.items()
+            for mode, title in complications.SLOT_COMPLICATION_TITLES.items()
         ],
         active.mode_value, active.set_mode,
     )
@@ -226,8 +226,8 @@ def _style_icon(family: str, style: str):
     if style == "text":
         return thumbs.text_style_icon(figure)
     dirs = (
-        constants.CHINESE_STYLE_ART_DIRS if family == "chinese"
-        else constants.ZODIAC_STYLE_ART_DIRS
+        complications.CHINESE_STYLE_ART_DIRS if family == "chinese"
+        else complications.ZODIAC_STYLE_ART_DIRS
     )
     art_dir = dirs.get(style)
     if art_dir is None:
