@@ -30,7 +30,7 @@ from PySide6.QtGui import (
     QColor, QFont, QFontMetricsF, QPainter, QPen, QPixmap,
 )
 
-from config import constants, dial, doctrine, encyclopedia_ui, palette, paths, pointer_geometry, pointer_names, sky
+from config import calendar_mounts, constants, dial, doctrine, encyclopedia_ui, palette, paths, pointer_geometry, pointer_names, sky
 from core import angles
 from render import letter_plates
 from render.diagram_bank import DiagramBank
@@ -712,7 +712,7 @@ def _pointer_arms(painter: QPainter, center: QPointF, radius: float,
     waist = radius * encyclopedia_ui.INSTRUMENT_DIAGRAM_ARM_WAIST_RATIO
     arms = pointer_geometry.POINTER_POINTS[key]
     stars = (
-        constants.ROSE_STAR_OFFSETS["primary"] if key == "rose" else (0.0,)
+        calendar_mounts.ROSE_STAR_OFFSETS["primary"] if key == "rose" else (0.0,)
     )
     for star in stars:
         for index in range(arms):

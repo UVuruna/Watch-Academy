@@ -27,7 +27,7 @@ from PySide6.QtWidgets import (
 from app.watch_face import thumbs
 from app.watch_face.controls import picture_group
 from app.watch_face.widgets import pill
-from config import constants, pointer_geometry, pointer_names
+from config import calendar_mounts, constants, pointer_geometry, pointer_names
 from render.skin_geometry import daylight_active
 
 
@@ -214,12 +214,12 @@ def _add_daylight_switch(layout: QVBoxLayout, settings, setters, tr) -> None:
     """R-05: moved here from Settings' Archetype group
     (`display_section._build_archetype_group`) — same stored `daylight`
     key, only the location changed. Enabled only on the pointers that
-    actually carry the switch (`constants.DAYLIGHT_SWITCH_POINTERS`, the
+    actually carry the switch (`calendar_mounts.DAYLIGHT_SWITCH_POINTERS`, the
     SAME set `daylight_active` reads) — an intentional tightening over
     the old Settings copy (always enabled there), since this copy now
     sits beside the pointer picker it gates on."""
     checkbox = QCheckBox(tr("Daylight - Night"))
     checkbox.setChecked(settings.daylight)
-    checkbox.setEnabled(settings.pointer in constants.DAYLIGHT_SWITCH_POINTERS)
+    checkbox.setEnabled(settings.pointer in calendar_mounts.DAYLIGHT_SWITCH_POINTERS)
     checkbox.toggled.connect(setters["daylight"])   # BOUND NOW
     layout.addWidget(checkbox)

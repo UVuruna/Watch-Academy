@@ -14,7 +14,7 @@ import pathlib
 
 import pytest
 
-from config import archetypes, constants, cube
+from config import archetypes, calendar_mounts, cube
 
 # THE THREE-FOLDER MIGRATION (2026-08-12): CUBE.md stays at the TRUE repo
 # root, one level above the desktop Python root this test lives under.
@@ -252,5 +252,5 @@ def test_only_the_cube_wheels_answer_the_roster():
 def test_the_star_the_roster_and_the_register_speak_one_word():
     """Session 24 retired the star map's private "myth": the three Rose
     stars name the very sets the roster and the disk registers name."""
-    assert set(constants.ROSE_STAR_SETS.values()) == set(cube.FIGURE_SETS)
+    assert set(calendar_mounts.ROSE_STAR_SETS.values()) == set(cube.FIGURE_SETS)
     assert cube.FIGURE_SETS == ("archetypal", "historical", "modern")

@@ -35,7 +35,7 @@ from app.settings_store import (
     SettingsStore,
     replace,
 )
-from config import constants, dial, palette, pointer_geometry
+from config import calendar_mounts, constants, dial, palette, pointer_geometry
 from config import defaults
 from core.clock_state import build_day_context, build_tick_state
 from data.moon_phases import MoonPhaseRepository
@@ -372,8 +372,8 @@ def test_both_rose_wheels_keep_every_ray_on_a_full_hour(app):
     assert not hasattr(skin_geometry, "rose_assembly_offset_deg")
     assert not hasattr(skin_geometry, "wheel_offset_deg")
     assert not hasattr(skin_geometry, "aura_group_offset_deg")
-    assert constants.ROSE_STAR_OFFSETS["primary"] == (-30.0, -15.0, 0.0)
-    assert constants.ROSE_STAR_OFFSETS["secondary"] == (-15.0, 15.0, 0.0)
+    assert calendar_mounts.ROSE_STAR_OFFSETS["primary"] == (-30.0, -15.0, 0.0)
+    assert calendar_mounts.ROSE_STAR_OFFSETS["secondary"] == (-15.0, 15.0, 0.0)
 
     def rays(skin):
         return sorted(
@@ -401,7 +401,7 @@ def test_the_rose_wheels_move_no_hue_off_its_own_ray(app):
         }
         plain = {
             angle % 360.0: hue
-            for offset in constants.ROSE_STAR_OFFSETS[wheel]
+            for offset in calendar_mounts.ROSE_STAR_OFFSETS[wheel]
             for angle, hue in (
                 (offset + index * 45.0, hue)
                 for index, hue in enumerate(wheel_hues)
@@ -418,7 +418,7 @@ def test_the_aura_wedge_of_a_one_star_pointer_is_unchanged(app):
     still centers on the arm itself."""
     for pointer in ("trio", "cross", "hexa", "octa"):
         skin = _skin(pointer)
-        assert aura_wedge_anchor(skin) == constants.AURA_WEDGE_ANCHOR_DEFAULT
+        assert aura_wedge_anchor(skin) == calendar_mounts.AURA_WEDGE_ANCHOR_DEFAULT
         assert aura_wedge_anchor(skin) == (-0.5, 0.5)
         wheel_hues = palette_for(skin)
         span = 360.0 / len(wheel_hues)
@@ -522,7 +522,7 @@ def test_the_calendar_star_is_two_hexagrams_the_even_one_on_top(app):
     the twelve wedge hues between them — the star on the EVEN wedge
     centers painted last (the Rose's z-stack pattern)."""
     skin = _skin("calendar")
-    assert constants.CALENDAR_STAR_ARMS == 6
+    assert calendar_mounts.CALENDAR_STAR_ARMS == 6
     assert drawn_arm_count(skin) == 6
     assert arm_half_deg(skin) == 30.0
     passes = _arm_angles(skin)
@@ -633,7 +633,7 @@ def test_hide_night_borders_is_inert_while_the_daylight_law_is_off(app):
     in flat full colour — everything counts as lit, so the borders run
     the whole circle again."""
     day, _tick = _dt(datetime(2026, 7, 16, 12, 0))
-    for pointer in constants.DAYLIGHT_SWITCH_POINTERS:
+    for pointer in calendar_mounts.DAYLIGHT_SWITCH_POINTERS:
         skin = _skin(pointer, hide_night_borders=True, daylight=False)
         assert border_clips(skin, day.sun) == (None,)
 
@@ -809,7 +809,7 @@ def test_the_umbra_stands_at_flat_noon_with_the_daylight_switch_off(app):
             if image.pixelColor(x, y).alpha() > 250
         }
 
-    for pointer in constants.DAYLIGHT_SWITCH_POINTERS:
+    for pointer in calendar_mounts.DAYLIGHT_SWITCH_POINTERS:
         skin = _skin(pointer, daylight=False)
         lightest, _darkest = dial.UMBRA_CONTRAST_SPANS[skin.umbra_contrast]
         flat = tinted_gray(min(255, lightest), skin.ring_tint).name().upper()
@@ -819,7 +819,7 @@ def test_the_umbra_stands_at_flat_noon_with_the_daylight_switch_off(app):
     assert len(shades("hexa", False)) > 1
 
 
-@pytest.mark.parametrize("pointer", list(constants.DAYLIGHT_SWITCH_POINTERS))
+@pytest.mark.parametrize("pointer", list(calendar_mounts.DAYLIGHT_SWITCH_POINTERS))
 def test_the_aura_leaves_the_night_gray_and_floods_it_with_the_switch_off(
     app, pointer
 ):

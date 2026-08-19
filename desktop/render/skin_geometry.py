@@ -8,7 +8,7 @@ weekday slots sit. Pure functions of a `SkinDefinition`; no painting.
 
 from PySide6.QtGui import QColor
 
-from config import archetypes, constants, palette, pointer_geometry
+from config import archetypes, calendar_mounts, constants, palette, pointer_geometry
 from config.registry import week as week_registry
 from render.context import RenderContext
 from skins.manifest import SkinDefinition
@@ -78,8 +78,8 @@ def arm_offset_deg(skin: SkinDefinition) -> float:
 def aura_wedge_anchor(skin: SkinDefinition) -> tuple[float, float]:
     """Where a hue's Aura WEDGE stands relative to that hue's LEAD RAY,
     as (low, high) FRACTIONS of the hue's own share of the circle —
-    `constants.AURA_WEDGE_ANCHOR_DEFAULT` and, on the Rose,
-    `constants.ROSE_AURA_WEDGE_ANCHOR` (owner's correction round
+    `calendar_mounts.AURA_WEDGE_ANCHOR_DEFAULT` and, on the Rose,
+    `calendar_mounts.ROSE_AURA_WEDGE_ANCHOR` (owner's correction round
     2026-07-29, his exact numbers).
 
     The lead ray is the direction the hue wears on the topmost (0°)
@@ -94,8 +94,8 @@ def aura_wedge_anchor(skin: SkinDefinition) -> tuple[float, float]:
     tips never move, both wheels keep every ray on a full hour, and the
     per-wheel difference lives HERE, in the background alone."""
     if skin.pointer != "rose":
-        return constants.AURA_WEDGE_ANCHOR_DEFAULT
-    return constants.ROSE_AURA_WEDGE_ANCHOR[
+        return calendar_mounts.AURA_WEDGE_ANCHOR_DEFAULT
+    return calendar_mounts.ROSE_AURA_WEDGE_ANCHOR[
         palette.effective_palette_style(skin.pointer, skin.palette_style)
     ]
 
@@ -126,7 +126,7 @@ def drawn_arm_count(skin: SkinDefinition) -> int:
     if polygon_shape(skin):
         return pointer_geometry.POINTER_DIAL_COUNTS[skin.pointer]
     if skin.pointer == "calendar":
-        return constants.CALENDAR_STAR_ARMS
+        return calendar_mounts.CALENDAR_STAR_ARMS
     return pointer_geometry.POINTER_POINTS[skin.pointer]
 
 
@@ -150,7 +150,7 @@ def arm_half_deg(skin: SkinDefinition) -> float:
     if polygon_shape(skin) or cube_look_active(skin):
         return 180.0 / drawn_arm_count(skin)
     if skin.pointer == "calendar":
-        return 180.0 / constants.CALENDAR_STAR_ARMS
+        return 180.0 / calendar_mounts.CALENDAR_STAR_ARMS
     return pointer_geometry.POINTER_ARM_HALF_ANGLE_DEG[skin.pointer]
 
 
@@ -164,7 +164,7 @@ def rose_star_offsets(skin: SkinDefinition) -> tuple:
     its single star through the same loop with no offset."""
     if skin.pointer != "rose":
         return ()
-    return constants.ROSE_STAR_OFFSETS[
+    return calendar_mounts.ROSE_STAR_OFFSETS[
         palette.effective_palette_style(skin.pointer, skin.palette_style)
     ]
 
@@ -176,7 +176,7 @@ def rose_star_set(offset: float) -> str:
     (the myth we inherited), +15° on Prophecy (the myth that comes). The
     three words are `cube.FIGURE_SETS`, so the star names the very set
     the roster and the disk register name (Session 24)."""
-    return constants.ROSE_STAR_SETS[offset]
+    return calendar_mounts.ROSE_STAR_SETS[offset]
 
 
 def _wheel(skin: SkinDefinition) -> str:
@@ -299,7 +299,7 @@ def daylight_active(skin: SkinDefinition) -> bool:
     sky. It answers on the two fields alone (`pointer`, `daylight`), so
     the Design window can ask it of the raw `Settings` object it holds
     and the ONE law serves both (Rule #5)."""
-    if skin.pointer not in constants.DAYLIGHT_SWITCH_POINTERS:
+    if skin.pointer not in calendar_mounts.DAYLIGHT_SWITCH_POINTERS:
         return True
     return skin.daylight
 

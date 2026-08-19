@@ -126,7 +126,7 @@ THE_ONE_SEAT = SACRED_TRIO_NAMES[1]
 # ways) — archetypal (biblical, mythological, classical-literary),
 # historical (real persons), modern (fantasy, film, comics). They are
 # also the REGISTERS on disk (`<group>/<set>/colored/<Stem>.png`) and the
-# three Rose stars' own sets (`constants.ROSE_STAR_SETS`): ONE tuple, all
+# three Rose stars' own sets (`calendar_mounts.ROSE_STAR_SETS`): ONE tuple, all
 # three readers.
 FIGURE_SETS = ("archetypal", "historical", "modern")
 

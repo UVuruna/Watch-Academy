@@ -22,7 +22,7 @@ from PySide6.QtWidgets import QApplication
 
 from app.skin_builder import build_skin
 from app.settings_store import Settings
-from config import constants, defaults, palette, pantheon, pointer_geometry, pointer_names
+from config import calendar_mounts, constants, defaults, palette, pantheon, pointer_geometry, pointer_names
 from core.clock_state import build_day_context, build_tick_state
 from core.year_wheel import year_marker_angle
 from data.moon_phases import MoonPhaseRepository
@@ -350,12 +350,12 @@ def test_only_the_rose_and_the_calendar_carry_the_daylight_switch(app):
     clock second. Every other pointer always runs day/night, and the
     stored setting is ignored — never rewritten — on them, so the
     choice survives a pointer switch."""
-    assert constants.DAYLIGHT_SWITCH_POINTERS == ("calendar", "rose")
+    assert calendar_mounts.DAYLIGHT_SWITCH_POINTERS == ("calendar", "rose")
     for pointer in pointer_geometry.POINTER_POINTS:
         skin = build_skin(
             dataclasses.replace(Settings(), pointer=pointer, daylight=False)
         )
-        expected = pointer not in constants.DAYLIGHT_SWITCH_POINTERS
+        expected = pointer not in calendar_mounts.DAYLIGHT_SWITCH_POINTERS
         assert daylight_active(skin) is expected
         assert skin.daylight is False           # the setting survives
 

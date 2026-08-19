@@ -13,7 +13,7 @@ from PySide6.QtWidgets import QApplication, QCheckBox, QPushButton, QSlider
 
 from app.settings_store import Settings
 from app.watch_face import pointer
-from config import constants, palette, pointer_geometry
+from config import calendar_mounts, palette, pointer_geometry
 
 _ACTIVE_TOP_COLOR = palette.UI_BUTTON_COLORS["next"][0].lower()
 
@@ -159,7 +159,7 @@ def test_night_borders_greys_out_when_there_is_no_night(app, point, daylight):
     box = next(
         b for b in page.findChildren(QCheckBox) if b.text() == "Hide night borders"
     )
-    no_night = not daylight and point in constants.DAYLIGHT_SWITCH_POINTERS
+    no_night = not daylight and point in calendar_mounts.DAYLIGHT_SWITCH_POINTERS
     assert box.isEnabled() is not no_night
 
 
@@ -173,4 +173,4 @@ def test_daylight_switch_enabled_only_where_it_applies(app):
             b for b in page.findChildren(QCheckBox)
             if b.text() == "Daylight - Night"
         )
-        assert box.isEnabled() is (point in constants.DAYLIGHT_SWITCH_POINTERS)
+        assert box.isEnabled() is (point in calendar_mounts.DAYLIGHT_SWITCH_POINTERS)
