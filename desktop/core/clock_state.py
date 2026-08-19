@@ -14,7 +14,7 @@ import astral
 import astral.moon
 import astral.sun
 
-from config import constants, dial, sky
+from config import dial, glow, sky
 from core import angles, ascendant, blue_moon, numerals
 from core.moon import (
     MoonWindow,
@@ -54,7 +54,7 @@ class EclipseEvent:
     # VISIBILITY (fix round E, owner verdict "može", 2026-07-19): whether
     # THIS observer can actually see the event at its instant — LUNAR:
     # the Moon above the horizon; SOLAR: the Sun above the horizon AND
-    # within `constants.ECLIPSE_SOLAR_VISIBILITY_KM` of the greatest-
+    # within `glow.ECLIPSE_SOLAR_VISIBILITY_KM` of the greatest-
     # eclipse point. Stamped by `_active_eclipse` (has the observer's
     # coordinates in hand); a fresh catalog row defaults to True so
     # every pre-existing test/caller that never touches visibility is
@@ -281,16 +281,16 @@ def build_tick_state(now_local: datetime, day: DayContext) -> TickState:
             now_local, day.latitude, day.longitude
         ),
         season_event=_active_event(
-            now_local, day.season_events, constants.SEASON_GLOW_WINDOW_H
+            now_local, day.season_events, glow.SEASON_GLOW_WINDOW_H
         ),
         moon_event=_active_event(
-            now_local, day.moon_events, constants.MOON_GLOW_WINDOW_H
+            now_local, day.moon_events, glow.MOON_GLOW_WINDOW_H
         ),
         eclipse_event=_active_eclipse(
-            now_local, day, constants.ECLIPSE_GLOW_WINDOW_H
+            now_local, day, glow.ECLIPSE_GLOW_WINDOW_H
         ),
         eclipse_body_event=_active_eclipse(
-            now_local, day, constants.ECLIPSE_BODY_WINDOW_H
+            now_local, day, glow.ECLIPSE_BODY_WINDOW_H
         ),
     )
 
@@ -319,7 +319,7 @@ def _with_visibility(
     Moon stands above the horizon; SOLAR visible <=> the Sun stands
     above the horizon AND the observer's great-circle distance to the
     catalog's greatest-eclipse point is within
-    `constants.ECLIPSE_SOLAR_VISIBILITY_KM`. Evaluated at the INSTANT
+    `glow.ECLIPSE_SOLAR_VISIBILITY_KM`. Evaluated at the INSTANT
     (astral's own elevation formulas), never the day's rise/set edges —
     the ±3h glow window is short enough that the instant is what
     matters. Pure function of its inputs (no wall clock), matching the
@@ -337,18 +337,18 @@ def _with_visibility(
         # on daylight alone (better than a crash; documented absence).
         return replace(event, visible=sun_up)
     distance = _great_circle_km(latitude, longitude, event.lat, event.lon)
-    visible = sun_up and distance <= constants.ECLIPSE_SOLAR_VISIBILITY_KM
+    visible = sun_up and distance <= glow.ECLIPSE_SOLAR_VISIBILITY_KM
     return replace(event, visible=visible, distance_km=distance)
 
 
 def _great_circle_km(lat1: float, lon1: float, lat2: float, lon2: float) -> float:
     """Haversine great-circle distance in km — the eclipse visibility's
-    only geometry need (mean Earth radius, `constants.EARTH_RADIUS_KM`)."""
+    only geometry need (mean Earth radius, `glow.EARTH_RADIUS_KM`)."""
     p1, p2 = math.radians(lat1), math.radians(lat2)
     dp = math.radians(lat2 - lat1)
     dl = math.radians(lon2 - lon1)
     a = math.sin(dp / 2) ** 2 + math.cos(p1) * math.cos(p2) * math.sin(dl / 2) ** 2
-    return 2 * constants.EARTH_RADIUS_KM * math.asin(math.sqrt(a))
+    return 2 * glow.EARTH_RADIUS_KM * math.asin(math.sqrt(a))
 
 
 def _active_event(

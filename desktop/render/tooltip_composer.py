@@ -2244,7 +2244,7 @@ class TooltipComposer:
         if (
             eclipse.kind == "solar"
             and eclipse.distance_km is not None
-            and eclipse.distance_km > constants.ECLIPSE_SOLAR_VISIBILITY_KM
+            and eclipse.distance_km > glow.ECLIPSE_SOLAR_VISIBILITY_KM
         ):
             return html.escape(
                 self._tr("path {km} km away").format(

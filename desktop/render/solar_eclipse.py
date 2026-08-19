@@ -40,7 +40,7 @@ from pathlib import Path
 from PySide6.QtCore import QPointF, QRectF, Qt
 from PySide6.QtGui import QColor, QPainter, QPainterPath, QPen, QRadialGradient
 
-from config import constants, defaults, glow, palette
+from config import defaults, glow, palette
 from render.assets import shared_cache
 
 # The solar eclipse's own geometry. (The occulter-circle travel and
@@ -158,7 +158,7 @@ _HYBRID_GHOST_ALPHA = 0.90
 #      * Lunar rows and solar rows whose finder reported no surface
 #        point carry `distance_km is None` — the dashed case above.
 #
-#    The scale is `constants.ECLIPSE_SOLAR_VISIBILITY_KM` (3,500 km),
+#    The scale is `glow.ECLIPSE_SOLAR_VISIBILITY_KM` (3,500 km),
 #    the SAME number the visibility flag and the hover reason already
 #    use — the owner's own "3,500 km away" is that constant, so the arc
 #    empties exactly where the app already says the eclipse cannot be
@@ -530,7 +530,7 @@ def totality_path_reach(
 
     MEASURED (`distance_km` in hand): the observer's great-circle
     distance to the catalog's greatest-eclipse ground point, mapped
-    linearly onto `constants.ECLIPSE_SOLAR_VISIBILITY_KM` — 1.0 standing
+    linearly onto `glow.ECLIPSE_SOLAR_VISIBILITY_KM` — 1.0 standing
     on the point, 0.0 at or past the 3,500 km the app already calls
     "cannot be seen from here". Read the honesty note beside
     `_TOTALITY_ARC_RADIUS` before changing this: it is a distance to ONE
@@ -545,7 +545,7 @@ def totality_path_reach(
     draws that case dashed."""
     if distance_km is None:
         return max(0.0, min(1.0, covered)), False
-    span = constants.ECLIPSE_SOLAR_VISIBILITY_KM
+    span = glow.ECLIPSE_SOLAR_VISIBILITY_KM
     return max(0.0, min(1.0, 1.0 - distance_km / span)), True
 
 

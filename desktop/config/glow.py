@@ -158,3 +158,34 @@ ECLIPSE_TYPE_EMBLEM = {
 # another new module (the fixed DAG); the remnant is the one place that
 # may import glow.py's siblings downhill while also owning ICON_DIR.
 ECLIPSE_TYPE_ICON_PX = 22   # the hover-line's small inline badge
+
+# ═══════════════════════════ GLOW WINDOWS & ECLIPSE VISIBILITY ═══════════════════════════
+# Season/moon event glow windows (owner spec): the Earth marker glows
+# ±12 h around the four season instants, the Moon marker ±6 h around the
+# four principal phase instants. The phase NAME window stays ±12 h
+# (MOON_PRINCIPAL_WINDOW above).
+SEASON_GLOW_WINDOW_H = 12.0
+MOON_GLOW_WINDOW_H = 6.0
+# Eclipse display (owner 2026-07-18, ROADMAP 15h item 11): the sealed
+# ±3h window, same shape as the season/moon windows above but its own
+# constant (the owner's spec is explicitly ±3h, not the moon's ±6h).
+ECLIPSE_GLOW_WINDOW_H = 3.0
+# THE ECLIPSE BODY's own, WIDER window (owner ballot verdict 2026-08-12,
+# option B2 with his written correction "+-12h"): the eclipse now stands
+# on the dial as a THIRD celestial body at the hour it happens
+# (`render.layers.year_marker.YearMarkerLayer._draw_eclipse_body`), and a
+# body that only appeared three hours before its own instant would keep
+# the dial silent for most of the day that carries the eclipse. Twelve
+# hours is his number, and it is the SEASON window's number too — half a
+# day either side, so an eclipse is on the dial for the whole span in
+# which its own date is the current one.
+ECLIPSE_BODY_WINDOW_H = 12.0
+
+# Eclipse VISIBILITY (owner verdict "može", fix round E, 2026-07-19):
+# a SOLAR eclipse is visible to the observer only within this great-
+# circle distance of the catalog's greatest-eclipse point (the path of
+# totality/partiality does not reach much farther); LUNAR visibility has
+# no distance term — a lunar eclipse is visible from the whole night
+# hemisphere, so only "Moon above the horizon" gates it.
+ECLIPSE_SOLAR_VISIBILITY_KM = 3500.0
+EARTH_RADIUS_KM = 6371.0            # mean radius — the great-circle distance basis

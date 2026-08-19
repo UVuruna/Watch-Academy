@@ -17,7 +17,7 @@ hiding the Earth hid the eclipse with it. Now:
   local time, on the same orbit lane the Earth and the Moon ride;
 - the Earth keeps its own art at its own seat, and the Moon keeps its
   phase at its own seat, on the eclipse day like on any other (D1);
-- the body stands for `constants.ECLIPSE_BODY_WINDOW_H` (±12 h) around
+- the body stands for `glow.ECLIPSE_BODY_WINDOW_H` (±12 h) around
   that instant (B2 as he corrected it), through its OWN switch,
   `skin.show_eclipse` (C1);
 - when it would overlap a marker — the new moon at the top for a solar

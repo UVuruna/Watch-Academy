@@ -23,7 +23,7 @@ import astral
 import pytest
 from PySide6.QtWidgets import QApplication
 
-from config import constants, defaults, dial, encyclopedia_ui, glow, palette, sky, umbra
+from config import defaults, dial, encyclopedia_ui, glow, palette, sky, umbra
 from config.registry import week as week_registry
 from core import angles
 from core.clock_state import (
@@ -178,7 +178,7 @@ def test_eclipse_visibility_solar_distance_ground_truthed(app):
     assert sun_up is True
 
     def haversine(lat1, lon1, lat2, lon2):
-        r = constants.EARTH_RADIUS_KM
+        r = glow.EARTH_RADIUS_KM
         p1, p2 = math.radians(lat1), math.radians(lat2)
         dp, dl = math.radians(lat2 - lat1), math.radians(lon2 - lon1)
         a = (
@@ -194,8 +194,8 @@ def test_eclipse_visibility_solar_distance_ground_truthed(app):
     far_lat, far_lon = -33.87, 151.21
     near_distance = haversine(city["latitude"], city["longitude"], near_lat, near_lon)
     far_distance = haversine(city["latitude"], city["longitude"], far_lat, far_lon)
-    assert near_distance <= constants.ECLIPSE_SOLAR_VISIBILITY_KM
-    assert far_distance > constants.ECLIPSE_SOLAR_VISIBILITY_KM
+    assert near_distance <= glow.ECLIPSE_SOLAR_VISIBILITY_KM
+    assert far_distance > glow.ECLIPSE_SOLAR_VISIBILITY_KM
 
     near_day = _belgrade_day(
         local_now,
@@ -282,7 +282,7 @@ def test_eclipse_invisible_hover_names_the_reason(app):
     horizon_line = compositor._tooltips._eclipse_visibility_text(horizon_event)
     assert "16123 km away" in far_line
     assert "below the horizon" in horizon_line
-    assert str(constants.ECLIPSE_SOLAR_VISIBILITY_KM) not in far_line
+    assert str(glow.ECLIPSE_SOLAR_VISIBILITY_KM) not in far_line
     # A visible one says so rather than falling silent.
     assert "Visible" in compositor._tooltips._eclipse_visibility_text(
         dataclasses.replace(far_event, visible=True)
@@ -1397,8 +1397,8 @@ def test_eclipse_body_window_is_twelve_hours(app):
     the ±3 h "happening now" window that still drives the hover card —
     so `eclipse_event` can never be set while `eclipse_body_event` is
     not, which would leave a costume with nobody wearing it."""
-    assert constants.ECLIPSE_BODY_WINDOW_H == 12.0
-    assert constants.ECLIPSE_BODY_WINDOW_H > constants.ECLIPSE_GLOW_WINDOW_H
+    assert glow.ECLIPSE_BODY_WINDOW_H == 12.0
+    assert glow.ECLIPSE_BODY_WINDOW_H > glow.ECLIPSE_GLOW_WINDOW_H
     tz = ZoneInfo("Europe/Belgrade")
     instant = datetime(2026, 3, 3, 12, 0, tzinfo=tz)
     event = EclipseEvent(
@@ -1624,15 +1624,15 @@ def test_the_totality_arc_is_derived_from_the_observers_own_distance(app):
     on_the_point, measured = totality_path_reach(1.0, 0.0)
     assert measured and on_the_point == pytest.approx(1.0)
     far, measured = totality_path_reach(
-        1.0, constants.ECLIPSE_SOLAR_VISIBILITY_KM
+        1.0, glow.ECLIPSE_SOLAR_VISIBILITY_KM
     )
     assert measured and far == pytest.approx(0.0)
     beyond, _ = totality_path_reach(
-        1.0, constants.ECLIPSE_SOLAR_VISIBILITY_KM * 4
+        1.0, glow.ECLIPSE_SOLAR_VISIBILITY_KM * 4
     )
     assert beyond == 0.0, "the reach is clamped, never negative"
     half, _ = totality_path_reach(
-        1.0, constants.ECLIPSE_SOLAR_VISIBILITY_KM / 2
+        1.0, glow.ECLIPSE_SOLAR_VISIBILITY_KM / 2
     )
     assert half == pytest.approx(0.5)
     # NO GROUND POINT: the honest fallback is the catalog magnitude, and
@@ -1645,7 +1645,7 @@ def test_the_totality_arc_is_derived_from_the_observers_own_distance(app):
     near = _solar_style_image("totality_path", "solar_total", 1.0, 100.0)
     away = _solar_style_image(
         "totality_path", "solar_total", 1.0,
-        constants.ECLIPSE_SOLAR_VISIBILITY_KM * 0.95,
+        glow.ECLIPSE_SOLAR_VISIBILITY_KM * 0.95,
     )
     assert _ink(near) > _ink(away) * 1.5, (
         "an observer under the shadow and one 3,300 km away must not get "
