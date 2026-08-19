@@ -36,7 +36,7 @@ from app.watch_face.controls import (
     ValueKnob, ValueUnit, knob_row, picture_group,
 )
 from app.watch_face.widgets import FlowLayout, flow_row, pill
-from config import constants, dial, palette, ring
+from config import dial, palette, ring, ui_ranges
 from data.rings import ring_presets
 
 
@@ -247,8 +247,8 @@ def _crown_style_row(settings, setters, tr) -> QWidget:
         "crown_text_scale", tr("Scale"),
         tr("The Great Seal inscription's size — multiplies on top of Jewels."),
         unit=ValueUnit.PERCENT,
-        low=round(constants.ELEMENT_SCALE_RANGE[0] * 100),
-        high=round(constants.ELEMENT_SCALE_RANGE[1] * 100), family="size",
+        low=round(ui_ranges.ELEMENT_SCALE_RANGE[0] * 100),
+        high=round(ui_ranges.ELEMENT_SCALE_RANGE[1] * 100), family="size",
         default_value=100,
         on_change=lambda value: apply_scale(value / 100.0),
     )

@@ -29,7 +29,7 @@ from PySide6.QtWidgets import QApplication, QScrollArea
 from app.encyclopedia import EncyclopediaDialog, topics as build_topics
 from app.encyclopedia.cards import card_width_for, row_content_width
 from app.encyclopedia.tree import resolve_target, switch_variant, variant_at
-from config import constants, defaults, encyclopedia_ui, palette, pantheon
+from config import constants, defaults, encyclopedia_ui, palette, pantheon, ui_ranges
 from config import encyclopedia_tree as tree
 from tests.test_theme_completeness import _look_only_themes
 
@@ -196,7 +196,7 @@ def test_zooming_all_the_way_in_still_grows_no_horizontal_bar(app):
     app.processEvents()
     dialog._apply_zoom_delta(120 * 40)        # far past the ceiling
     app.processEvents()
-    assert dialog._zoom == constants.ENCYCLOPEDIA_ZOOM_RANGE[1]
+    assert dialog._zoom == ui_ranges.ENCYCLOPEDIA_ZOOM_RANGE[1]
     for area in dialog.findChildren(QScrollArea):
         assert not area.horizontalScrollBar().isVisible()
     dialog.deleteLater()

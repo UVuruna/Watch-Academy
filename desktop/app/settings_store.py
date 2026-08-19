@@ -22,7 +22,7 @@ from app.settings_fields import (
     save_moving_bodies, save_numerals,
 )
 from app.settings_ring import fold_ring_name, load_named_dict, normalized_ring_card
-from config import calendar_mounts, complications, constants, defaults, dial, eras, identity, pantheon, pointer_geometry, ring, umbra
+from config import calendar_mounts, complications, constants, defaults, dial, eras, identity, pantheon, pointer_geometry, ring, ui_ranges, umbra
 from config.registry import week as week_registry
 from config.registry import slots as slot_registry
 from data.locations import Place, default_place
@@ -587,7 +587,7 @@ class SettingsStore:
                     for key, hues in raw["palettes"].items()
                 }
             for key, default, allowed in (
-                ("language", "en", tuple(constants.TRANSLATION_LANGUAGES)),
+                ("language", "en", tuple(ui_ranges.TRANSLATION_LANGUAGES)),
                 ("ring_finish", "gold", ring.RING_FINISHES),
                 ("pointer", "hexa", tuple(pointer_geometry.POINTER_POINTS)),
                 ("umbra_form", "gradient", umbra.UMBRA_FORMS),
@@ -737,26 +737,26 @@ class SettingsStore:
                 ring_crown_location=ring_crown_location,
                 jump_cities=jump_cities,
                 ring_tint=ring_tint,
-                earth_scale=load_scale(raw, "earth_scale", *constants.ELEMENT_SCALE_RANGE, 1.0),
-                moon_scale=load_scale(raw, "moon_scale", *constants.ELEMENT_SCALE_RANGE, 1.0),
+                earth_scale=load_scale(raw, "earth_scale", *ui_ranges.ELEMENT_SCALE_RANGE, 1.0),
+                moon_scale=load_scale(raw, "moon_scale", *ui_ranges.ELEMENT_SCALE_RANGE, 1.0),
                 # One-time migration (2026-07-14): the separate weekday
                 # and south-slot scales merged into slot_scale — older
                 # files inherit their weekday value.
                 slot_scale=load_scale(
-                    raw, "slot_scale", *constants.ELEMENT_SCALE_RANGE,
+                    raw, "slot_scale", *ui_ranges.ELEMENT_SCALE_RANGE,
                     load_scale(
                         raw, "weekday_scale",
-                        *constants.ELEMENT_SCALE_RANGE, 1.0,
+                        *ui_ranges.ELEMENT_SCALE_RANGE, 1.0,
                     ),
                 ),
                 # One-release migration (JEWELS naming sweep, owner ruling
                 # 2026-08-06): "ring_letter_scale" is read as the fallback
                 # default when the new key is absent.
                 ring_jewels_scale=load_scale(
-                    raw, "ring_jewels_scale", *constants.ELEMENT_SCALE_RANGE,
-                    load_scale(raw, "ring_letter_scale", *constants.ELEMENT_SCALE_RANGE, 1.0),
+                    raw, "ring_jewels_scale", *ui_ranges.ELEMENT_SCALE_RANGE,
+                    load_scale(raw, "ring_letter_scale", *ui_ranges.ELEMENT_SCALE_RANGE, 1.0),
                 ),
-                hover_enlarge=load_scale(raw, "hover_enlarge", *constants.HOVER_ENLARGE_RANGE, 1.2),
+                hover_enlarge=load_scale(raw, "hover_enlarge", *ui_ranges.HOVER_ENLARGE_RANGE, 1.2),
                 # One-release migration (Session 21-D, owner rename for
                 # clarity now that RING has its own saturation slider):
                 # "palette_saturation" is read as the fallback default
@@ -764,15 +764,15 @@ class SettingsStore:
                 # under the new key on the next save.
                 pointer_saturation=load_scale(
                     raw, "pointer_saturation",
-                    *constants.POINTER_SATURATION_RANGE,
+                    *ui_ranges.POINTER_SATURATION_RANGE,
                     load_scale(
                         raw, "palette_saturation",
-                        *constants.POINTER_SATURATION_RANGE, 1.0,
+                        *ui_ranges.POINTER_SATURATION_RANGE, 1.0,
                     ),
                 ),
                 ring_saturation=load_scale(
                     raw, "ring_saturation",
-                    *constants.RING_SATURATION_RANGE, 1.0,
+                    *ui_ranges.RING_SATURATION_RANGE, 1.0,
                 ),
                 star_alpha=load_alpha(raw, "star_alpha"),
                 aura_day_alpha=load_alpha(raw, "aura_day_alpha"),
@@ -782,12 +782,12 @@ class SettingsStore:
                 ghost_alpha=load_alpha(raw, "ghost_alpha"),
                 umbra_tint=load_hex(raw, "umbra_tint"),
                 umbra_saturation=load_scale(
-                    raw, "umbra_saturation", *constants.UMBRA_SATURATION_RANGE, 1.0
+                    raw, "umbra_saturation", *ui_ranges.UMBRA_SATURATION_RANGE, 1.0
                 ),
                 aura_off_tint=load_hex(raw, "aura_off_tint"),
                 hands_tint=load_hex(raw, "hands_tint"),
                 hands_saturation=load_scale(
-                    raw, "hands_saturation", *constants.HANDS_SATURATION_RANGE, 1.0
+                    raw, "hands_saturation", *ui_ranges.HANDS_SATURATION_RANGE, 1.0
                 ),
                 # One-release migration (JEWELS naming sweep, owner ruling
                 # 2026-08-06): "letter_tint" is read as the fallback default
@@ -807,9 +807,9 @@ class SettingsStore:
                     load_scale(raw, "motto_alpha", 0.0, 1.0, 1.0),
                 ),
                 crown_text_scale=load_scale(
-                    raw, "crown_text_scale", *constants.ELEMENT_SCALE_RANGE,
+                    raw, "crown_text_scale", *ui_ranges.ELEMENT_SCALE_RANGE,
                     load_scale(
-                        raw, "motto_scale", *constants.ELEMENT_SCALE_RANGE, 1.0
+                        raw, "motto_scale", *ui_ranges.ELEMENT_SCALE_RANGE, 1.0
                     ),
                 ),
                 crown_text_tint=(

@@ -31,7 +31,7 @@ from app.encyclopedia.reader import ReaderScreen
 from app.encyclopedia.themes import ThemeScreen
 from app.theme import apply_theme
 from app.ui_style import style_button
-from config import constants, defaults, encyclopedia_ui, palette, pantheon, paths
+from config import defaults, encyclopedia_ui, palette, pantheon, paths, ui_ranges
 from config import encyclopedia_tree as tree
 from data.encyclopedia import shared_encyclopedia
 from data.symbolism import shared_symbolism
@@ -346,10 +346,10 @@ class EncyclopediaDialog(AcademyDialog):
         `_session_zoom`, so the next Encyclopedia window this app run
         opens seeds from where this one left off."""
         global _session_zoom
-        low, high = constants.ENCYCLOPEDIA_ZOOM_RANGE
+        low, high = ui_ranges.ENCYCLOPEDIA_ZOOM_RANGE
         steps = angle_delta_y / 120.0
         self._zoom = max(
-            low, min(high, self._zoom + steps * constants.ENCYCLOPEDIA_ZOOM_STEP)
+            low, min(high, self._zoom + steps * ui_ranges.ENCYCLOPEDIA_ZOOM_STEP)
         )
         _session_zoom = self._zoom
         self._apply_zoom()

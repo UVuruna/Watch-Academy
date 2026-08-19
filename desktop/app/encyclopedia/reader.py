@@ -42,7 +42,7 @@ from app.encyclopedia import tree as topic_tree
 from app.encyclopedia.screen import EncyclopediaScreen
 from app.encyclopedia.text import article_text, entry_name, flow_html, image_tooltip
 from app.ui_style import style_button, style_look_chip, uniform_width
-from config import constants, defaults, encyclopedia_ui, paths
+from config import defaults, encyclopedia_ui, paths, ui_ranges
 from render.asset_recolor import ensure_variant, variant_pending
 from render import cube_preview3d, diagrams
 from render.asset_variants import scaled_variant_file
@@ -648,10 +648,10 @@ class ReaderScreen(EncyclopediaScreen):
             and event.type() == QEvent.Type.Wheel
             and event.modifiers() & Qt.KeyboardModifier.ControlModifier
         ):
-            low, high = constants.ENCYCLOPEDIA_ZOOM_RANGE
+            low, high = ui_ranges.ENCYCLOPEDIA_ZOOM_RANGE
             steps = event.angleDelta().y() / 120.0
             self._zoom = max(low, min(
-                high, self._zoom + steps * constants.ENCYCLOPEDIA_ZOOM_STEP
+                high, self._zoom + steps * ui_ranges.ENCYCLOPEDIA_ZOOM_STEP
             ))
             self.zoomed.emit(self._zoom)
             self._rescale()

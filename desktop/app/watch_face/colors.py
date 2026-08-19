@@ -64,7 +64,7 @@ from app.watch_face import thumbs, tint_control, tint_picker
 from app.ui_style import tooltip_wrap
 from app.watch_face.controls import picture_group
 from app.watch_face.widgets import pill
-from config import constants, palette, ring
+from config import palette, ring, ui_ranges
 
 #: A card's horizontal padding around its label. The card's own
 #: sizeHint comes from the ICON and lets a longer label clip inside it,
@@ -346,13 +346,13 @@ def _saturation_group(settings, setters, tr) -> QGroupBox:
     column = QVBoxLayout(group)
     flow = FlowLayout()
     rows = (
-        ("Aura", "pointer_saturation", constants.POINTER_SATURATION_RANGE,
+        ("Aura", "pointer_saturation", ui_ranges.POINTER_SATURATION_RANGE,
          "The aura wedges' color saturation."),
-        ("Ring", "ring_saturation", constants.RING_SATURATION_RANGE,
+        ("Ring", "ring_saturation", ui_ranges.RING_SATURATION_RANGE,
          "The ring plate and its jewels together — one sealed target."),
-        ("Hands", "hands_saturation", constants.HANDS_SATURATION_RANGE,
+        ("Hands", "hands_saturation", ui_ranges.HANDS_SATURATION_RANGE,
          "The hands' color saturation."),
-        ("Umbra", "umbra_saturation", constants.UMBRA_SATURATION_RANGE,
+        ("Umbra", "umbra_saturation", ui_ranges.UMBRA_SATURATION_RANGE,
          "The night shadow's color saturation."),
     )
     for title, key, (low, high), blurb in rows:

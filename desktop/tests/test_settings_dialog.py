@@ -11,7 +11,7 @@ from PySide6.QtWidgets import QApplication
 from app.skin_builder import apply_display_settings
 from app.settings_dialog.dialog import SettingsDialog
 from app.settings_store import Settings, replace
-from config import defaults, encyclopedia_ui, eras, identity, palette, pantheon, sky, zodiac
+from config import defaults, encyclopedia_ui, eras, identity, palette, pantheon, sky, ui_ranges, zodiac
 from config.registry import week as week_registry
 from data.locations import Place, default_place
 from render.skin_geometry import palette_for
@@ -1770,7 +1770,7 @@ def test_encyclopedia_zoom_bounds_and_persists_for_the_session():
     from app.encyclopedia import EncyclopediaDialog
     from config import constants
 
-    low, high = constants.ENCYCLOPEDIA_ZOOM_RANGE
+    low, high = ui_ranges.ENCYCLOPEDIA_ZOOM_RANGE
     original = dialog_module._session_zoom
     try:
         first = EncyclopediaDialog()
@@ -1779,7 +1779,7 @@ def test_encyclopedia_zoom_bounds_and_persists_for_the_session():
         first._apply_zoom_delta(-120 * 1000)          # way past the floor
         assert first._zoom == low
         first._apply_zoom_delta(120)                  # one notch back up
-        expected = min(high, low + constants.ENCYCLOPEDIA_ZOOM_STEP)
+        expected = min(high, low + ui_ranges.ENCYCLOPEDIA_ZOOM_STEP)
         assert first._zoom == pytest.approx(expected)
         second = EncyclopediaDialog()                 # a fresh "reopen"
         assert second._zoom == first._zoom

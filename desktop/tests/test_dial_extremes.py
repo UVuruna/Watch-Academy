@@ -27,7 +27,7 @@ from PySide6.QtWidgets import QApplication
 
 from app.skin_builder import build_skin
 from app.settings_store import Settings
-from config import constants, defaults, dial
+from config import defaults, dial, ui_ranges
 from core.clock_state import build_day_context, build_tick_state
 from data.moon_phases import MoonPhaseRepository
 from data.seasons import SeasonsRepository
@@ -100,20 +100,20 @@ _EXTREMES = {
         numeral_outer_size=dial.NUMERAL_SIZE_RANGE[1],
         numeral_outer_ring_size=dial.NUMERAL_OUTER_RING_SIZE_RANGE[1],
         minutes_size=dial.NUMERAL_SIZE_RANGE[1],
-        ring_jewels_scale=constants.ELEMENT_SCALE_RANGE[1],
-        crown_text_scale=constants.ELEMENT_SCALE_RANGE[1],
+        ring_jewels_scale=ui_ranges.ELEMENT_SCALE_RANGE[1],
+        crown_text_scale=ui_ranges.ELEMENT_SCALE_RANGE[1],
     ),
     "min radial sizes": dict(
         numeral_outer_size=dial.NUMERAL_SIZE_RANGE[0],
         numeral_outer_ring_size=dial.NUMERAL_OUTER_RING_SIZE_RANGE[0],
         minutes_size=dial.NUMERAL_SIZE_RANGE[0],
-        ring_jewels_scale=constants.ELEMENT_SCALE_RANGE[0],
-        crown_text_scale=constants.ELEMENT_SCALE_RANGE[0],
+        ring_jewels_scale=ui_ranges.ELEMENT_SCALE_RANGE[0],
+        crown_text_scale=ui_ranges.ELEMENT_SCALE_RANGE[0],
     ),
     "max marker scales": dict(
-        earth_scale=constants.ELEMENT_SCALE_RANGE[1],
-        moon_scale=constants.ELEMENT_SCALE_RANGE[1],
-        hover_enlarge=constants.HOVER_ENLARGE_RANGE[1],
+        earth_scale=ui_ranges.ELEMENT_SCALE_RANGE[1],
+        moon_scale=ui_ranges.ELEMENT_SCALE_RANGE[1],
+        hover_enlarge=ui_ranges.HOVER_ENLARGE_RANGE[1],
     ),
 }
 
@@ -282,9 +282,9 @@ def test_a_thin_band_with_max_jewels_stays_inside_the_window(app, moment):
     settings = replace(
         Settings(),
         numeral_outer_ring_size=dial.NUMERAL_OUTER_RING_SIZE_RANGE[0],
-        ring_jewels_scale=constants.ELEMENT_SCALE_RANGE[1],
-        earth_scale=constants.ELEMENT_SCALE_RANGE[0],
-        moon_scale=constants.ELEMENT_SCALE_RANGE[0],
+        ring_jewels_scale=ui_ranges.ELEMENT_SCALE_RANGE[1],
+        earth_scale=ui_ranges.ELEMENT_SCALE_RANGE[0],
+        moon_scale=ui_ranges.ELEMENT_SCALE_RANGE[0],
     )
     margin = _window_margin(settings)
     escaped = [side - margin for side in _painted_bounds(settings, moment)]

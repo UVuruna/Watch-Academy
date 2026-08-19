@@ -51,7 +51,7 @@ from app.settings_store import (
 )
 from app.tray import TrayController, logo_icon, window_icon
 from app.widget import ClockWidget
-from config import constants, defaults, dial, identity, paths, profiling
+from config import defaults, dial, identity, paths, profiling, ui_ranges
 from core.clock_state import build_day_context, build_tick_state
 from core.deep_time import real_year
 from core.moon import chinese_name_of_year
@@ -1087,7 +1087,7 @@ class WatchController(
                 self._ui(
                     "Preparing {language} — the clock keeps running; "
                     "texts switch when ready."
-                ).format(language=constants.TRANSLATION_LANGUAGES[language]),
+                ).format(language=ui_ranges.TRANSLATION_LANGUAGES[language]),
                 critical=False,
             )
 
@@ -1149,7 +1149,7 @@ class WatchController(
             self._tray.notify(
                 self._ui("Translation ready"),
                 self._ui("{language} is active.").format(
-                    language=constants.TRANSLATION_LANGUAGES[language]
+                    language=ui_ranges.TRANSLATION_LANGUAGES[language]
                 ),
                 critical=False,
             )

@@ -19,7 +19,7 @@ edge exactly on the line at every combination.
 
 import pytest
 
-from config import constants, dial
+from config import dial, ui_ranges
 
 
 # --- The measured tick zone itself -------------------------------------------
@@ -38,7 +38,7 @@ def test_the_tick_zone_is_inside_the_hour_band():
 # --- The tangent fit at every extreme ----------------------------------------
 
 _RING_SIZES = dial.NUMERAL_OUTER_RING_SIZE_RANGE + (dial.NUMERAL_OUTER_RING_SIZE_DEFAULT,)
-_SCALE_MULTIPLIERS = constants.ELEMENT_SCALE_RANGE + (1.0,)
+_SCALE_MULTIPLIERS = ui_ranges.ELEMENT_SCALE_RANGE + (1.0,)
 _BASE_HALF_SIZES = (0.11, 0.08)           # the Earth's and the Moon's own `scale`
 
 

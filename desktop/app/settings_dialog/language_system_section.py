@@ -18,7 +18,7 @@ from PySide6.QtWidgets import (
     QPushButton,
 )
 
-from config import constants, eras
+from config import eras, ui_ranges
 
 
 class _LanguageSystemSectionMixin:
@@ -108,14 +108,14 @@ class _LanguageSystemSectionMixin:
         # and Serbian Latin ship hand-written in the app; everything
         # below the separator machine-translates on first pick.
         originals = [
-            (code, constants.TRANSLATION_LANGUAGES[code])
-            for code in constants.TRANSLATION_ORIGINALS
+            (code, ui_ranges.TRANSLATION_LANGUAGES[code])
+            for code in ui_ranges.TRANSLATION_ORIGINALS
         ]
         rest = sorted(
             (
                 (code, name)
-                for code, name in constants.TRANSLATION_LANGUAGES.items()
-                if code not in constants.TRANSLATION_ORIGINALS
+                for code, name in ui_ranges.TRANSLATION_LANGUAGES.items()
+                if code not in ui_ranges.TRANSLATION_ORIGINALS
             ),
             key=lambda item: item[1],
         )

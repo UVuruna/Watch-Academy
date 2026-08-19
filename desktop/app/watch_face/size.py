@@ -18,19 +18,19 @@ from PySide6.QtWidgets import QGroupBox, QHBoxLayout, QVBoxLayout, QWidget
 
 from app.watch_face.controls import KnobKind, ValueKnob, ValueUnit, knob_row
 from app.watch_face.widgets import FlowLayout, flow_row, pill
-from config import constants, dial
+from config import dial, ui_ranges
 
 # (setting key, on-screen label, (low, high) range, default*100, blurb)
 _SCALE_ROWS = (
-    ("earth_scale", "Earth", constants.ELEMENT_SCALE_RANGE, 100,
+    ("earth_scale", "Earth", ui_ranges.ELEMENT_SCALE_RANGE, 100,
      "The Earth marker's size."),
-    ("moon_scale", "Moon", constants.ELEMENT_SCALE_RANGE, 100,
+    ("moon_scale", "Moon", ui_ranges.ELEMENT_SCALE_RANGE, 100,
      "The Moon marker's size."),
-    ("slot_scale", "Complications", constants.ELEMENT_SCALE_RANGE, 100,
+    ("slot_scale", "Complications", ui_ranges.ELEMENT_SCALE_RANGE, 100,
      "The subdial complications' size."),
-    ("ring_jewels_scale", "Jewels", constants.ELEMENT_SCALE_RANGE, 100,
+    ("ring_jewels_scale", "Jewels", ui_ranges.ELEMENT_SCALE_RANGE, 100,
      "The ring jewels' size."),
-    ("hover_enlarge", "Hover enlarge", constants.HOVER_ENLARGE_RANGE, 120,
+    ("hover_enlarge", "Hover enlarge", ui_ranges.HOVER_ENLARGE_RANGE, 120,
      "How much a hovered body grows."),
 )
 

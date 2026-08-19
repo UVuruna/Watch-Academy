@@ -16,7 +16,7 @@ import pytest
 from PySide6.QtCore import QPointF
 from PySide6.QtWidgets import QApplication
 
-from config import complications, constants, defaults, dial, encyclopedia_ui, glow, ninth, palette, pantheon, pointer_geometry, ring, shortcuts, umbra
+from config import complications, constants, defaults, dial, encyclopedia_ui, glow, ninth, palette, pantheon, pointer_geometry, ring, shortcuts, ui_ranges, umbra
 from config.registry import week as week_registry
 from config.registry import slots as slot_registry
 from core.clock_state import build_day_context, build_tick_state
@@ -2639,7 +2639,7 @@ def test_earth_solstice_glow_never_clipped_even_when_hovered(app):
     assert tick.season_event == "Winter Solstice"
     skin = dataclasses.replace(
         defaults.DEFAULT_SKIN, solar_rotation=False,
-        hover_enlarge=constants.HOVER_ENLARGE_RANGE[1],
+        hover_enlarge=ui_ranges.HOVER_ENLARGE_RANGE[1],
     )
     compositor = Compositor(skin, AssetCache())
     compositor._hovered = "earth"                  # force the enlarge factor
