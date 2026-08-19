@@ -42,7 +42,7 @@ from functools import lru_cache
 
 from PySide6.QtCore import QPointF
 
-from config import archetypes, calendar_mounts, complications, constants, defaults, dial, encyclopedia_ui, glow, pantheon, paths, pointer_geometry, profiling, ring, sky
+from config import archetypes, calendar_mounts, complications, constants, defaults, dial, encyclopedia_ui, glow, ninth, pantheon, paths, pointer_geometry, profiling, ring, sky
 from config.ui_text import ui
 from config.registry import week as week_registry
 from core import angles, continents, world
@@ -1225,7 +1225,7 @@ class TooltipComposer:
         """THE DOUBLE NINTH's alt-face flag for the hover (owner
         Double-Ninth verdicts, 2026-07-29 — was `_center_pangea`,
         continents-only, before the law generalized): dispatches by the
-        theme's OWN `constants.NINTH_MECHANISMS` entry, fed from this
+        theme's OWN `ninth.NINTH_MECHANISMS` entry, fed from this
         compositor's own day and last tick so the card and the dial
         never disagree.
 
@@ -1236,7 +1236,7 @@ class TooltipComposer:
         - every other mechanism (or none) answers False."""
         if self._dial.day is None:
             return False
-        mechanism = constants.NINTH_MECHANISMS.get(self._dial.skin.weekday_theme)
+        mechanism = ninth.NINTH_MECHANISMS.get(self._dial.skin.weekday_theme)
         if mechanism == "easter_egg":
             return continents.ninth_is_pangea_from_events(
                 self._dial.day.local_date,

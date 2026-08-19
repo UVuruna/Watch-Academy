@@ -22,7 +22,7 @@ REPO_ROOT = ROOT.parent
 SHARED = REPO_ROOT / "shared"
 sys.path.insert(0, str(REPO_ROOT / "desktop"))
 
-from config import complications, constants, pantheon, paths  # noqa: E402, ring
+from config import complications, constants, ninth, pantheon, paths  # noqa: E402, ring
 
 SOURCES = ("gemini", "chatgpt")
 SEATS = ("sun", "moon", "mars", "mercury", "jupiter", "venus", "saturn")
@@ -49,13 +49,13 @@ ARCHETYPES = (
 # own parallel copy had silently drifted back to the RETIRED exile
 # ninths (Hades/Baldur/Set/Crnobog/The Jester/Legion...) that the
 # round-four/five UNION verdicts superseded on 2026-07-15 — exactly
-# the drift `constants.WEEKDAY_THEME_NINTHS`'s docstring warns a
+# the drift `ninth.WEEKDAY_THEME_NINTHS`'s docstring warns a
 # parallel copy would suffer. Continents' LIVING ninth (Zealandia/
 # Pangea, ../earth) stays out: it is celestial owner art, no
 # per-source coverage row to draw.
 NINTHS = {
     theme: (name, rel[: -len(".png")])
-    for theme, (name, rel) in constants.WEEKDAY_THEME_NINTHS.items()
+    for theme, (name, rel) in ninth.WEEKDAY_THEME_NINTHS.items()
     if theme != "continents"
 }
 THEME_ORDER = (

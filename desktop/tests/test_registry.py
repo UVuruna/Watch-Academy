@@ -13,7 +13,7 @@ modules read the registry, it becomes the pin that keeps the
 derivation honest.
 """
 
-from config import constants, pantheon, registry, ring
+from config import constants, ninth, pantheon, registry, ring
 
 
 def test_the_theme_list_and_its_menu():
@@ -32,10 +32,10 @@ def test_every_seat_name_stem_and_directory():
 def test_the_sunday_three():
     assert registry.DUAL_NAMES == pantheon.WEEKDAY_DUAL_NAMES
     assert registry.DUAL_FILES == pantheon.WEEKDAY_DUAL_FILES
-    assert registry.NINTHS == constants.WEEKDAY_THEME_NINTHS
-    assert registry.NINTH_EASTER_EGG == constants.WEEKDAY_THEME_NINTH_EASTER_EGG
-    assert registry.NINTH_NIGHT == constants.WEEKDAY_THEME_NINTH_NIGHT
-    assert registry.MECHANISMS == constants.NINTH_MECHANISMS
+    assert registry.NINTHS == ninth.WEEKDAY_THEME_NINTHS
+    assert registry.NINTH_EASTER_EGG == ninth.WEEKDAY_THEME_NINTH_EASTER_EGG
+    assert registry.NINTH_NIGHT == ninth.WEEKDAY_THEME_NINTH_NIGHT
+    assert registry.MECHANISMS == ninth.NINTH_MECHANISMS
 
 
 def test_rosters_pantheon_and_titles():
@@ -83,7 +83,7 @@ def test_a_double_ninth_always_names_its_mechanism():
         if not ninth:
             continue
         if ninth.get("alt") or ninth.get("rotates"):
-            assert ninth.get("mechanism") in constants.NINTH_MECHANISM_KINDS, (
+            assert ninth.get("mechanism") in ninth.NINTH_MECHANISM_KINDS, (
                 f"{key}'s Ninth has a second face and no declared mechanism"
             )
 

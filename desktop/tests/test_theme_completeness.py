@@ -32,7 +32,7 @@ Two guards, symmetric to each other:
 import re
 from pathlib import Path
 
-from config import constants, defaults, pantheon, paths, taxonomy
+from config import constants, defaults, ninth, pantheon, paths, taxonomy
 from data.encyclopedia import EncyclopediaRepository
 from data.symbolism import SymbolismRepository
 
@@ -151,7 +151,7 @@ def test_no_registered_theme_is_textless():
             except KeyError:
                 offenders.append(f"{theme}: missing theme_title")
 
-        ninth = constants.WEEKDAY_THEME_NINTHS.get(theme)
+        ninth = ninth.WEEKDAY_THEME_NINTHS.get(theme)
         if ninth is not None:
             name, _plate = ninth
             try:

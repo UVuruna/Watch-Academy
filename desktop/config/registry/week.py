@@ -1016,10 +1016,10 @@ WEEK = {
     # SEALED, superseding Session 33's PROVISIONAL date rotation): the
     # Ninth is a DAYLIGHT/NIGHT switch, not a seat roster — "the duality
     # of that theme pulling the actors to one of two sides." Day shows The
-    # Ghosts (`constants.WEEKDAY_THEME_NINTHS["sw_dyad"]`, the
+    # Ghosts (`ninth.WEEKDAY_THEME_NINTHS["sw_dyad"]`, the
     # canonical/good face), night shows Exegol
-    # (`constants.WEEKDAY_THEME_NINTH_NIGHT`) — dispatched through
-    # `constants.NINTH_MECHANISMS["sw_dyad"] == "daynight"` by
+    # (`ninth.WEEKDAY_THEME_NINTH_NIGHT`) — dispatched through
+    # `ninth.NINTH_MECHANISMS["sw_dyad"] == "daynight"` by
     # `render.ninths.theme_ninth`/`ninth_alt_active` and `render.
     # compositor._center_ninth_alt`, reading the SAME `TickState.
     # is_daylight` `center_face` already reads. The "ninth" entry that

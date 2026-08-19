@@ -91,7 +91,7 @@ class CenterBodyLayer(Layer):
         if today == "sun" and not ghost_reveal and center_dual_face(self._skin):
             # THE DOUBLE NINTH's alt face (owner Double-Ninth verdicts,
             # 2026-07-29): `ninth_alt_active` dispatches by the theme's
-            # OWN `constants.NINTH_MECHANISMS` entry — continents' sky
+            # OWN `ninth.NINTH_MECHANISMS` entry — continents' sky
             # trigger, sw_dyad's daylight/night switch, or neither.
             ninth = theme_ninth(
                 ctx.skin.weekday_theme, ninth_alt_active(ctx),

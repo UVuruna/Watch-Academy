@@ -6,10 +6,10 @@
 
 This module is the LAW's own guard: it collects every double ninth
 this program registers, from EVERY registry shape that can carry one —
-`constants.WEEKDAY_THEME_NINTH_EASTER_EGG`, `constants.
+`ninth.WEEKDAY_THEME_NINTH_EASTER_EGG`, `constants.
 WEEKDAY_THEME_NINTH_NIGHT`, and `pantheon.WEEKDAY_SEAT_ROSTERS[*]
 ["ninth"]` — and fails the build the moment one is found with no
-`constants.NINTH_MECHANISMS` entry, or an entry naming a mechanism no
+`ninth.NINTH_MECHANISMS` entry, or an entry naming a mechanism no
 dispatch actually implements. It also pins the three sealed mechanisms
 by name (continents "easter_egg", sw_dyad "daynight", cp_corpo
 "term_weekly") and proves the Encyclopedia's active-only law for the
@@ -21,7 +21,7 @@ Layer: tests. See project CLAUDE.md "THE DOUBLE NINTH LAW" and
 
 from datetime import date
 
-from config import constants, pantheon
+from config import ninth, pantheon
 from render.ninths import ninth_table_for
 
 
@@ -32,8 +32,8 @@ def _double_ninth_themes() -> set:
     moment it exists; forgetting to add it here is exactly the silent
     drift the law exists to catch."""
     return (
-        set(constants.WEEKDAY_THEME_NINTH_EASTER_EGG)
-        | set(constants.WEEKDAY_THEME_NINTH_NIGHT)
+        set(ninth.WEEKDAY_THEME_NINTH_EASTER_EGG)
+        | set(ninth.WEEKDAY_THEME_NINTH_NIGHT)
         | {
             theme for theme, seats in pantheon.WEEKDAY_SEAT_ROSTERS.items()
             if "ninth" in seats
@@ -46,7 +46,7 @@ def test_every_double_ninth_has_a_defined_mechanism():
     the exact failure mode THE DOUBLE NINTH LAW forbids."""
     double_ninths = _double_ninth_themes()
     assert double_ninths, "the probe itself found nothing — check the union"
-    missing = double_ninths - set(constants.NINTH_MECHANISMS)
+    missing = double_ninths - set(ninth.NINTH_MECHANISMS)
     assert not missing, f"double ninth with no mechanism: {sorted(missing)}"
 
 
@@ -54,7 +54,7 @@ def test_every_mechanism_name_is_one_a_dispatch_implements():
     """Every `NINTH_MECHANISMS` value must be in the vocabulary a real
     dispatch recognizes — a typo or an unimplemented name fails here
     instead of silently falling through to the canonical plate."""
-    unknown = set(constants.NINTH_MECHANISMS.values()) - constants.NINTH_MECHANISM_KINDS
+    unknown = set(ninth.NINTH_MECHANISMS.values()) - ninth.NINTH_MECHANISM_KINDS
     assert not unknown, f"unimplemented mechanism name(s): {sorted(unknown)}"
 
 
@@ -63,7 +63,7 @@ def test_every_mechanism_entry_names_a_real_double_ninth():
     ninth behind it would be a stale/orphan lie — nothing to dispatch
     for."""
     double_ninths = _double_ninth_themes()
-    orphans = set(constants.NINTH_MECHANISMS) - double_ninths
+    orphans = set(ninth.NINTH_MECHANISMS) - double_ninths
     assert not orphans, f"mechanism entry with no double ninth: {sorted(orphans)}"
 
 
@@ -71,7 +71,7 @@ def test_the_three_sealed_mechanisms():
     """The owner's three Double-Ninth verdicts (2026-07-29), pinned
     together so a future edit cannot blur one theme's mechanism into
     another's by accident."""
-    assert constants.NINTH_MECHANISMS == {
+    assert ninth.NINTH_MECHANISMS == {
         "continents": "easter_egg",
         "sw_dyad": "daynight",
         "cp_corpo": "term_weekly",
@@ -87,11 +87,11 @@ def test_ninth_table_for_dispatches_by_mechanism():
     override — see that function's own docstring)."""
     assert (
         ninth_table_for("continents", active_alt=True)
-        is constants.WEEKDAY_THEME_NINTH_EASTER_EGG
+        is ninth.WEEKDAY_THEME_NINTH_EASTER_EGG
     )
     assert (
         ninth_table_for("sw_dyad", active_alt=True)
-        is constants.WEEKDAY_THEME_NINTH_NIGHT
+        is ninth.WEEKDAY_THEME_NINTH_NIGHT
     )
     assert ninth_table_for("cp_corpo", active_alt=True) is None
     # Inactive is inactive regardless of mechanism.
@@ -112,9 +112,9 @@ def test_every_alt_ninth_name_has_an_encyclopedia_article():
     from data.encyclopedia import EncyclopediaRepository
 
     enc = EncyclopediaRepository()
-    for name, _rel in constants.WEEKDAY_THEME_NINTH_EASTER_EGG.values():
+    for name, _rel in ninth.WEEKDAY_THEME_NINTH_EASTER_EGG.values():
         enc.entry("ninths", name)          # raises KeyError if missing
-    for name, _rel in constants.WEEKDAY_THEME_NINTH_NIGHT.values():
+    for name, _rel in ninth.WEEKDAY_THEME_NINTH_NIGHT.values():
         enc.entry("ninths", name)
     assert "Exegol" in enc.entry("ninths", "Exegol")["base"]
 
@@ -200,7 +200,7 @@ def test_cp_gangs_and_cp_street_stay_on_plain_date_rotation():
     siblings' rosters (no "sun"/"dual"/"ninth" seats to synchronize,
     and no `NINTH_MECHANISMS` entry) must not have drifted onto ISO-week
     parity by accident."""
-    assert "cp_gangs" not in constants.NINTH_MECHANISMS
-    assert "cp_street" not in constants.NINTH_MECHANISMS
+    assert "cp_gangs" not in ninth.NINTH_MECHANISMS
+    assert "cp_street" not in ninth.NINTH_MECHANISMS
     assert "ninth" not in pantheon.WEEKDAY_SEAT_ROSTERS["cp_gangs"]
     assert "ninth" not in pantheon.WEEKDAY_SEAT_ROSTERS["cp_street"]

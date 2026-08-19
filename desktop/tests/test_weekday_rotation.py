@@ -18,7 +18,7 @@ member is reachable."""
 
 from datetime import date, timedelta
 
-from config import constants, pantheon, paths
+from config import ninth, pantheon, paths
 from config.registry import week as week_registry
 from render.ninths import ninth_table_for, theme_ninth
 
@@ -32,11 +32,11 @@ DAY_B = date(2026, 7, 21)
 def _probe_days(theme: str, count: int) -> list:
     """The right PROBE DATES to exercise `count` picks of `theme`'s own
     seat rosters: WEEKLY steps for THE WEEKLY MANDATE (owner decree
-    2026-07-29, cp_corpo — `constants.NINTH_MECHANISMS[theme] ==
+    2026-07-29, cp_corpo — `ninth.NINTH_MECHANISMS[theme] ==
     "term_weekly"`, ISO week parity), ordinary consecutive days for
     every daily-cadence theme (every other roster). `DAY_A` (2026-07-20,
     ISO week 30, even) anchors either way."""
-    if constants.NINTH_MECHANISMS.get(theme) == "term_weekly":
+    if ninth.NINTH_MECHANISMS.get(theme) == "term_weekly":
         return [DAY_A + timedelta(weeks=o) for o in range(count)]
     return [date(2026, 7, 20 + o) for o in range(count)]
 
@@ -192,9 +192,9 @@ def test_sw_dyad_ninth_is_a_daylight_night_switch():
     Art-free on purpose: neither plate exists yet, so the assertion is
     on the MECHANISM DISPATCH (`ninth_table_for` — which table
     `theme_ninth` would consult) rather than on a rendered file."""
-    assert constants.NINTH_MECHANISMS["sw_dyad"] == "daynight"
-    day_name, day_rel = constants.WEEKDAY_THEME_NINTHS["sw_dyad"]
-    night_name, night_rel = constants.WEEKDAY_THEME_NINTH_NIGHT["sw_dyad"]
+    assert ninth.NINTH_MECHANISMS["sw_dyad"] == "daynight"
+    day_name, day_rel = ninth.WEEKDAY_THEME_NINTHS["sw_dyad"]
+    night_name, night_rel = ninth.WEEKDAY_THEME_NINTH_NIGHT["sw_dyad"]
     assert (day_name, day_rel) == (
         "The Ghosts", "sw_dyad/primary/bronze/Ghosts.png",
     )
@@ -207,12 +207,12 @@ def test_sw_dyad_ninth_is_a_daylight_night_switch():
     assert ninth_table_for("sw_dyad", active_alt=False) is None
     assert (
         ninth_table_for("sw_dyad", active_alt=True)
-        is constants.WEEKDAY_THEME_NINTH_NIGHT
+        is ninth.WEEKDAY_THEME_NINTH_NIGHT
     )
     # The date-rotation path this ninth used to ride is GONE.
     assert "ninth" not in pantheon.WEEKDAY_SEAT_ROSTERS["sw_dyad"]
     assert pantheon._seat_roster_of(pantheon.weekday_art(day_rel)) is None
-    assert "sw_dyad" not in constants.WEEKDAY_THEME_NINTH_EASTER_EGG
+    assert "sw_dyad" not in ninth.WEEKDAY_THEME_NINTH_EASTER_EGG
 
 
 def test_cp_corpo_throne_mirror_and_ninth_turn_in_lockstep():

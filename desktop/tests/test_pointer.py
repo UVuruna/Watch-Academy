@@ -16,7 +16,7 @@ import pytest
 from PySide6.QtCore import QPointF
 from PySide6.QtWidgets import QApplication
 
-from config import complications, constants, defaults, dial, encyclopedia_ui, glow, palette, pantheon, pointer_geometry, ring, shortcuts, umbra
+from config import complications, constants, defaults, dial, encyclopedia_ui, glow, ninth, palette, pantheon, pointer_geometry, ring, shortcuts, umbra
 from config.registry import week as week_registry
 from config.registry import slots as slot_registry
 from core.clock_state import build_day_context, build_tick_state
@@ -694,7 +694,7 @@ def test_center_face_solar_windows_golden(app):
 
 def test_theme_ninth_matches_the_encyclopedia_table(app):
     """`render.ninths.theme_ninth` (round R3b item 3) reads the SAME
-    `constants.WEEKDAY_THEME_NINTHS` table the Encyclopedia's ninths
+    `ninth.WEEKDAY_THEME_NINTHS` table the Encyclopedia's ninths
     pass now builds from (Rule #5) — every listed theme resolves its
     OWN name and an EXISTING plate, graceful-absent otherwise. Which
     Ninths are wired ahead of their art is the ART DEBT REGISTRY's to say
@@ -713,7 +713,7 @@ def test_theme_ninth_matches_the_encyclopedia_table(app):
     from tests.art_debt import PENDING_NINTH
 
     absent = set()
-    for theme, (name, _rel) in constants.WEEKDAY_THEME_NINTHS.items():
+    for theme, (name, _rel) in ninth.WEEKDAY_THEME_NINTHS.items():
         found = theme_ninth(theme)
         if found is None:
             absent.add(theme)                 # the plate is pending art

@@ -8,7 +8,7 @@ look switcher, and the live-dial body art (earth_style x day/night).
 
 from datetime import date
 
-from config import constants, continents as continents_theme, pantheon, paths, sky
+from config import constants, continents as continents_theme, ninth, pantheon, paths, sky
 from config.registry import week as week_registry
 from core import continents
 
@@ -50,8 +50,8 @@ def test_continents_ninth_wired_zealandia_and_pangea():
     resolves both faces, and this pin keeps them resolvable forever."""
     from render.ninths import theme_ninth
 
-    assert constants.WEEKDAY_THEME_NINTHS["continents"][0] == "Zealandia"
-    assert constants.WEEKDAY_THEME_NINTH_EASTER_EGG["continents"][0] == "Pangea"
+    assert ninth.WEEKDAY_THEME_NINTHS["continents"][0] == "Zealandia"
+    assert ninth.WEEKDAY_THEME_NINTH_EASTER_EGG["continents"][0] == "Pangea"
     zealandia = theme_ninth("continents")
     assert (zealandia is not None
             and zealandia[1].name == "earth_atmo_zealandia_day.png")

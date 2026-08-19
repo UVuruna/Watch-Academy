@@ -26,7 +26,7 @@ Layer: app. Documentation: tree.md.
 
 from datetime import date
 
-from config import archetypes, calendar_mounts, constants, defaults, glow, pantheon, sky
+from config import archetypes, calendar_mounts, constants, defaults, glow, ninth, pantheon, sky
 from config import encyclopedia_tree as tree
 from render import eclipse_plates
 from render.asset_recolor import metal_variant_path
@@ -425,7 +425,7 @@ def _build_topics(
     # Melchizedek relocates to Bible II, the Unknown God to the
     # Ancient set. Retired entries stay in encyclopedia.json for the
     # Wider-Pantheon wave. The 15 WEEKDAY themes' ninths now live in
-    # `constants.WEEKDAY_THEME_NINTHS` (round R3b item 3 — the SAME
+    # `ninth.WEEKDAY_THEME_NINTHS` (round R3b item 3 — the SAME
     # table the CENTER seat's solar-window face law reads, Rule #5);
     # the two ZODIAC-only ninths (no weekday Sunday duality) stay
     # local, since render never needs them.
@@ -434,7 +434,7 @@ def _build_topics(
             (theme, *_live_ninth_face(
                 theme, name, pantheon.weekday_art(rel), is_daylight, travel_date,
             ))
-            for theme, (name, rel) in constants.WEEKDAY_THEME_NINTHS.items()
+            for theme, (name, rel) in ninth.WEEKDAY_THEME_NINTHS.items()
             # THE CONTINENTS builds its own LIVING Ninth inside
             # `_continents_topic` (Zealandia/Pangea by the traveled day),
             # so this shared static append must skip it (owner-sealed

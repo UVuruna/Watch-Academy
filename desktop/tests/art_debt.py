@@ -59,7 +59,7 @@ PENDING_BODY_COLORED = frozenset({
 # Mirrors (Vader, Anakin, Kylo Ren) are wave III's own debt.
 PENDING_DUAL = frozenset({"religion", "sw_jedi", "sw_sith", "sw_dyad"})
 
-# --- The NINTH plate (`constants.WEEKDAY_THEME_NINTHS`) ---------------------
+# --- The NINTH plate (`ninth.WEEKDAY_THEME_NINTHS`) ---------------------
 # Themes whose Ninth is wired ahead of its art. sw_jedi (Yoda) and
 # sw_dyad (The Ghosts) are wave III's. sw_sith is NOT here — Darth
 # Plagueis landed with the sheet. `continents` (Zealandia) left this set

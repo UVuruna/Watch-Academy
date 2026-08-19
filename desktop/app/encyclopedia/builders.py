@@ -18,7 +18,7 @@ import json
 from datetime import date
 from pathlib import Path
 
-from config import constants, continents as continents_theme, defaults, pantheon, paths, ring
+from config import constants, continents as continents_theme, defaults, ninth, pantheon, paths, ring
 from config.registry import week as week_registry
 from core import continents
 from data.encyclopedia import EncyclopediaRepository
@@ -102,16 +102,16 @@ def _live_ninth_face(
     shows — THE DOUBLE NINTH LAW's Encyclopedia side (owner Double-
     Ninth verdicts, 2026-07-29): the reader shows ONLY the currently
     active face, never both. "daynight" swaps to the NIGHT face when
-    `is_daylight` is False (`constants.WEEKDAY_THEME_NINTH_NIGHT`);
+    `is_daylight` is False (`ninth.WEEKDAY_THEME_NINTH_NIGHT`);
     "term_weekly" rotates the SAME canonical plate through its OWN seat
     roster by the traveled date's ISO week
     (`pantheon.rotating_art_file`'s cadence override — the identical
     chokepoint the dial reads, Rule #5); every other mechanism (or none)
     keeps `name`/`plate` untouched, the plain static plate every
     non-double Ninth has always shown here."""
-    mechanism = constants.NINTH_MECHANISMS.get(theme)
+    mechanism = ninth.NINTH_MECHANISMS.get(theme)
     if mechanism == "daynight" and not is_daylight:
-        alt_name, alt_rel = constants.WEEKDAY_THEME_NINTH_NIGHT[theme]
+        alt_name, alt_rel = ninth.WEEKDAY_THEME_NINTH_NIGHT[theme]
         return alt_name, pantheon.weekday_art(alt_rel)
     if mechanism == "term_weekly":
         return name, pantheon.rotating_art_file(plate, travel_date) or plate
@@ -165,7 +165,7 @@ def _weekday_topic(theme: str, travel_date: date | None = None):
     (`_topics`' ninths loop), landing last either way.
 
     `travel_date` feeds THE WEEKLY MANDATE alone (owner decree
-    2026-07-29, `constants.NINTH_MECHANISMS[theme] == "term_weekly"` —
+    2026-07-29, `ninth.NINTH_MECHANISMS[theme] == "term_weekly"` —
     today only cp_corpo): the GOOD/EVIL pages then rotate through the
     seat roster's OWN two halves by the ISO week's parity, exactly like
     the dial. Every OTHER theme ignores `travel_date` completely — its
@@ -180,7 +180,7 @@ def _weekday_topic(theme: str, travel_date: date | None = None):
     metal = theme in ring.METAL_THEMES
     mandate_date = (
         travel_date
-        if constants.NINTH_MECHANISMS.get(theme) == "term_weekly"
+        if ninth.NINTH_MECHANISMS.get(theme) == "term_weekly"
         else None
     )
 
@@ -553,9 +553,9 @@ def _continents_topic(travel_date: date) -> dict:
         travel_date, shared_seasons(), shared_moon_phases()
     )
     ninth_name, ninth_rel = (
-        constants.WEEKDAY_THEME_NINTH_EASTER_EGG["continents"]
+        ninth.WEEKDAY_THEME_NINTH_EASTER_EGG["continents"]
         if pangea
-        else constants.WEEKDAY_THEME_NINTHS["continents"]
+        else ninth.WEEKDAY_THEME_NINTHS["continents"]
     )
     ninth_entry = {
         "images": (pantheon.weekday_art(ninth_rel),),

@@ -8,7 +8,7 @@ Ninth holds the window, which face the centre shows, and the thirteenth
 from datetime import date
 from pathlib import Path
 
-from config import calendar_mounts, constants, defaults, pantheon, paths
+from config import calendar_mounts, constants, defaults, ninth, pantheon, paths
 from core import angles, continents
 from core.clock_state import DayContext, TickState
 from render.calendar_mount import calendar_wheel
@@ -119,15 +119,15 @@ def active_thirteenth(
 
 def ninth_table_for(theme: str, active_alt: bool) -> dict | None:
     """Which ALT-NINTH TABLE `theme_ninth` consults, or None to keep the
-    canonical `constants.WEEKDAY_THEME_NINTHS` entry — THE MECHANISM
+    canonical `ninth.WEEKDAY_THEME_NINTHS` entry — THE MECHANISM
     DISPATCH itself (owner Double-Ninth verdicts, 2026-07-29), extracted
     so the WIRING is directly testable without needing a plate to exist
     on disk (`tests/test_weekday_rotation.py`'s art-free pins). Reads
-    `constants.NINTH_MECHANISMS`:
+    `ninth.NINTH_MECHANISMS`:
 
-    - "easter_egg"  -> `constants.WEEKDAY_THEME_NINTH_EASTER_EGG`
+    - "easter_egg"  -> `ninth.WEEKDAY_THEME_NINTH_EASTER_EGG`
       (continents' Pangea).
-    - "daynight"    -> `constants.WEEKDAY_THEME_NINTH_NIGHT` (sw_dyad's
+    - "daynight"    -> `ninth.WEEKDAY_THEME_NINTH_NIGHT` (sw_dyad's
       Exegol).
     - "term_weekly" -> None always: cp_corpo's weekly mandate reads NO
       alt table — the canonical entry's OWN seat roster already names
@@ -137,11 +137,11 @@ def ninth_table_for(theme: str, active_alt: bool) -> dict | None:
       plate, unconditionally)."""
     if not active_alt:
         return None
-    mechanism = constants.NINTH_MECHANISMS.get(theme)
+    mechanism = ninth.NINTH_MECHANISMS.get(theme)
     if mechanism == "easter_egg":
-        return constants.WEEKDAY_THEME_NINTH_EASTER_EGG
+        return ninth.WEEKDAY_THEME_NINTH_EASTER_EGG
     if mechanism == "daynight":
-        return constants.WEEKDAY_THEME_NINTH_NIGHT
+        return ninth.WEEKDAY_THEME_NINTH_NIGHT
     return None
 
 
@@ -149,7 +149,7 @@ def theme_ninth(
     theme: str, active_alt: bool = False, on_date: date | None = None,
 ) -> tuple[str, Path] | None:
     """(display name, resolved asset path) of `theme`'s Ninth plate, or
-    None when the theme names no Ninth (`constants.WEEKDAY_THEME_NINTHS`)
+    None when the theme names no Ninth (`ninth.WEEKDAY_THEME_NINTHS`)
     or its plate has not landed on disk yet — the ONE existence-gated
     lookup `CenterBodyLayer` (paint) and the compositor's hover share
     (Rule #5), matching the graceful-absent law every other Ninth plate
@@ -173,7 +173,7 @@ def theme_ninth(
     table = ninth_table_for(theme, active_alt)
     entry = table.get(theme) if table is not None else None
     if entry is None:
-        entry = constants.WEEKDAY_THEME_NINTHS.get(theme)
+        entry = ninth.WEEKDAY_THEME_NINTHS.get(theme)
     if entry is None:
         return None
     name, rel = entry
@@ -201,7 +201,7 @@ def ninth_alt_active(ctx: RenderContext) -> bool:
       already reads — night is the alt face.
     - every other mechanism (or none) answers False; `theme_ninth` then
       falls back to the canonical plate, rotated by `on_date` alone."""
-    mechanism = constants.NINTH_MECHANISMS.get(ctx.skin.weekday_theme)
+    mechanism = ninth.NINTH_MECHANISMS.get(ctx.skin.weekday_theme)
     if mechanism == "easter_egg":
         return continents.ninth_is_pangea_from_events(
             ctx.day.local_date, ctx.day.season_events, ctx.day.moon_events,
@@ -213,7 +213,7 @@ def ninth_alt_active(ctx: RenderContext) -> bool:
 
 
 def ninth_window_anchor(day: DayContext, tick: TickState) -> str | None:
-    """Which SOLAR anchor's ±`constants.CENTER_WINDOW_HOURS` window the
+    """Which SOLAR anchor's ±`ninth.CENTER_WINDOW_HOURS` window the
     hour hand stands in right now — "noon", "midnight", or None outside
     both. SOLAR, not wall-clock: `day.sun.noon` is the SAME anchor the
     hexagram's own rotation reads (`star_rotation_deg`) — reused via
@@ -221,13 +221,13 @@ def ninth_window_anchor(day: DayContext, tick: TickState) -> str | None:
     noon_angle = angles.time_to_dial_angle(day.sun.noon)
     if (
         abs(angles.hours_between(tick.hour_angle, noon_angle))
-        <= constants.CENTER_WINDOW_HOURS
+        <= ninth.CENTER_WINDOW_HOURS
     ):
         return "noon"
     midnight_angle = (noon_angle + 180.0) % 360.0
     if (
         abs(angles.hours_between(tick.hour_angle, midnight_angle))
-        <= constants.CENTER_WINDOW_HOURS
+        <= ninth.CENTER_WINDOW_HOURS
     ):
         return "midnight"
     return None

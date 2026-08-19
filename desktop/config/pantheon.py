@@ -20,7 +20,7 @@ import re
 from datetime import date
 from pathlib import Path
 
-from config import constants, continents, paths, registry
+from config import continents, ninth, paths, registry
 
 
 # --- The PANTHEON roster (owner doctrine 2026-07-15) --------------------------
@@ -197,7 +197,7 @@ def _pick_rotation(candidates: list[Path], on_date: date) -> Path | None:
 
 def _pick_weekly_mandate(candidates: list[Path], on_date: date) -> Path | None:
     """cp_corpo's WEEKLY MANDATE (owner decree 2026-07-29,
-    `constants.NINTH_MECHANISMS["cp_corpo"] == "term_weekly"`): the
+    `ninth.NINTH_MECHANISMS["cp_corpo"] == "term_weekly"`): the
     RULING triple flips at the ISO calendar week BOUNDARY, not daily —
     even week rules the canonical (Arasaka) half, odd week the
     alternate (NUSA) half, same graceful degrade as `_pick_rotation`
@@ -288,7 +288,7 @@ def rotating_art_file(canonical_path: Path, on_date: date) -> Path | None:
     canonical member of a SEAT ROSTER above, that roster's own figures in
     declared order — normally by `_pick_rotation`'s daily modulo, except
     cp_corpo's own roster, which reads the ISO week's parity instead
-    (`_pick_weekly_mandate`, `constants.NINTH_MECHANISMS["cp_corpo"] ==
+    (`_pick_weekly_mandate`, `ninth.NINTH_MECHANISMS["cp_corpo"] ==
     "term_weekly"` — THE WEEKLY MANDATE, owner decree 2026-07-29): ONE
     rotation chokepoint, a per-theme CADENCE rather than a second
     mechanism (Rule #5). Opt-in per consumer (scale duality, era
@@ -305,7 +305,7 @@ def rotating_art_file(canonical_path: Path, on_date: date) -> Path | None:
         theme = canonical_path.parts[-4]
         picker = (
             _pick_weekly_mandate
-            if constants.NINTH_MECHANISMS.get(theme) == "term_weekly"
+            if ninth.NINTH_MECHANISMS.get(theme) == "term_weekly"
             else _pick_rotation
         )
         return picker(_roster_candidates(canonical_path.parent, stems), on_date)
