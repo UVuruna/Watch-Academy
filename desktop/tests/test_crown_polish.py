@@ -481,8 +481,8 @@ def test_crown_metal_is_the_presets_finish_metal(app, ring, finish):
     )
 
 
-@pytest.mark.parametrize("ring", BUNDLED)
-def test_crown_and_jewels_share_one_treatment(app, ring):
+@pytest.mark.parametrize("preset", BUNDLED)
+def test_crown_and_jewels_share_one_treatment(app, preset):
     """Same TREATMENT, not only the same metal: both families are
     stamped by `RingLayer._draw_ring_glyph` from the SAME plate library,
     so no bundled preset can ship a crown drawn by a different machine
@@ -490,15 +490,15 @@ def test_crown_and_jewels_share_one_treatment(app, ring):
     20, 21) points at the cache instead of the library, so the proof is
     per-glyph — the asset IS what `letter_plates` resolves for the glyph
     seated there, which is the same statement without the loophole."""
-    skin = build_skin(replace(Settings(), ring=ring))
+    skin = build_skin(replace(Settings(), ring=preset))
     for entry in skin.ring.crown_text:
         for asset, _theta in entry["glyphs"]:
-            assert dial.LETTER_ART_DIR in asset.parents, ring
+            assert dial.LETTER_ART_DIR in asset.parents, preset
     for hour, asset in skin.ring.jewel_art.items():
         glyph = skin.ring.jewels[hour]
         if glyph == ring.RING_EYE_GLYPH:
             continue                     # the Shine toggle picks its own master
-        assert asset == letter_plates.plate_path(glyph), (ring, hour, glyph)
+        assert asset == letter_plates.plate_path(glyph), (preset, hour, glyph)
 
 
 # ═══════════════════ THE TINT NEVER TOUCHES A PLATE ═══════════════════

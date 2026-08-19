@@ -87,7 +87,7 @@ METAL_SHADE_NAMES = {
     # `RING_THEMATIC_SHADES`; never offered in the Settings shade
     # pickers. This tuple mirrors `recolor/presets/metals.json` and is
     # guarded against drift by `tests/test_skins.py`
-    # (test_thematic_choices_mirror_the_recolor_presets) — constants.py
+    # (test_thematic_choices_mirror_the_recolor_presets) — this module
     # stays a pure-literals file (its own docstring law), the test is
     # the sync.
     "thematic": (

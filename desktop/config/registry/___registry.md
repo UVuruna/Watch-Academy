@@ -13,7 +13,12 @@ THE CONFIG SECTION LAW's ban on post-definition patching holds by
 construction.
 
 Layer: config — pure. `week.py` imports NOTHING, which is what lets
-`constants` and `pantheon` both derive from it without a cycle.
+`pantheon`, `config/ninth.py` and `config/ring.py` all derive from it
+without a cycle. Since THE CONSTANTS SPLIT (2026-08-19) `week.py` also
+holds the WEEKDAY VOCABULARY itself — bodies, labels, full names, figure
+rosters, the Sunday-first index and the per-pointer weekday slots — and
+`slots.py` holds BOTH slot vocabularies, the dial's three and the
+wheel's three.
 
 ## Files
 
@@ -34,8 +39,8 @@ Layer: config — pure. `week.py` imports NOTHING, which is what lets
   whose stems are computed rather than declared.
 
 ### Used by
-- [Constants](../__about/constants.md) — the weekday master list, the
-  Ninth tables and the metal looks
+- [Ninth](../__about/ninth.md) and [Ring](../__about/ring.md) — the
+  Ninth tables and the metal looks, derived here
 - [Pantheon](../__about/pantheon.md) — seat names, dirs, stems, duals,
   titles, rosters and the picker menu
 - [The Theme Dictionary](../../../docs/archive/THEME-REGISTRY.md) — the design brief

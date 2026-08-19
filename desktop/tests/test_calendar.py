@@ -16,6 +16,8 @@ from datetime import date, datetime
 from zoneinfo import ZoneInfo
 
 import astral
+import importlib.util
+
 import pytest
 from PySide6.QtWidgets import QApplication
 
@@ -182,7 +184,7 @@ def test_lit_wedge_feature_names_are_all_gone():
     assert "calendar_lighting" not in field_names(Settings)
     assert "calendar_lighting" not in field_names(SkinDefinition)
     assert "calendar_lit" not in field_names(RenderContextClass)
-    assert not hasattr(constants, "CALENDAR_LIGHTING_MODES")
+    assert not hasattr(calendar_mounts, "CALENDAR_LIGHTING_MODES")
     assert not hasattr(defaults, "CALENDAR_WEDGE_LIT_DELTA")
     assert not hasattr(calendar_mount_module, "calendar_lit_index")
     assert not hasattr(Compositor, "_calendar_lit")
@@ -454,7 +456,9 @@ def test_calendar_mount_modes_are_derived_from_the_registry():
         calendar_mounts.CALENDAR_MOUNTS
     )
     assert defaults.DEFAULT_SKIN.calendar_mount in calendar_mounts.CALENDAR_MOUNT_MODES
-    assert not hasattr(constants, "CALENDAR_MOUNT_MODES")   # moved, not copied
+    # moved, not copied — and since THE CONSTANTS SPLIT (2026-08-19)
+    # the module it moved OUT of does not exist at all.
+    assert importlib.util.find_spec("config.constants") is None
 
 
 def test_every_registered_mount_is_canon_shaped():

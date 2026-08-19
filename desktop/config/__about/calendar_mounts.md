@@ -87,4 +87,19 @@ date instead.
   themes" — as verified against the current code, neither name lives
   in `config/defaults.py`: both, along with `AXLE_ALWAYS_CENTERS`,
   `OPHIUCHUS_WINDOW`, `SOL_WINDOW` and `MODRENIK_WINDOW_HALF_DAYS`,
-  live in [Constants](constants.md) instead.
+  live in [Pointer Geometry](pointer_geometry.md) instead.
+
+## What THE CONSTANTS SPLIT added (2026-08-19)
+
+**CALENDAR & ROSE STAR GEOMETRY** and **ROSE FIGURE SETS & DAYLIGHT
+SWITCH** moved in from the deleted `config/constants.py`:
+`CALENDAR_STAR_ARMS`, `ROSE_STAR_OFFSETS`, `AURA_WEDGE_ANCHOR_DEFAULT`,
+`ROSE_AURA_WEDGE_ANCHOR`, `ROSE_STAR_SETS`, `ROSE_ARM_SYSTEMS` and
+`DAYLIGHT_SWITCH_POINTERS`.
+
+They belong with the wedge geometry this module already owns: the rose's
+star offsets and aura anchors are the same kind of statement as the
+twelve wedges' own, and every reader of one reads the other.
+
+The whole 38-section map, with the reason for every destination, is
+in [Config (folder)](../___config.md#the-constants-split).

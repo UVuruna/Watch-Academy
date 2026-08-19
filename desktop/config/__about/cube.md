@@ -109,3 +109,17 @@ are described language-neutrally):
   tests re-run that search rather than trusting the constant. The
   Calendar-12 seating is not stored at all — it is computed from the
   two laws above.
+
+## What THE CONSTANTS SPLIT added (2026-08-19)
+
+**THE CUBE LOOK** moved in from the deleted `config/constants.py`:
+`CUBE_LOOK_WHEELS` — the three Double-Trinity family wheels (the Court,
+Genesis and the Council) that render in the owner's corner view, where
+the arm diamonds widen to 180/N half-angles so the rhombi tile the
+hexagon exactly.
+
+It is a Cube display law (CUBE.md §Display laws), so it belongs with the
+Cube canon rather than with pointer geometry.
+
+The whole 38-section map, with the reason for every destination, is
+in [Config (folder)](../___config.md#the-constants-split).

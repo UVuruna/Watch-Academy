@@ -177,7 +177,7 @@ Layer: config — pure, no Qt, no wall clock.
   Every value that turned out to need TWO new modules' data (or one
   new module plus something only this remnant holds, like `ICON_DIR`)
   stays in the remnant rather than forcing a DAG cycle.
-- **`METAL_SHADES` here, `METAL_SHADE_NAMES` in [Constants](constants.md).**
+- **`METAL_SHADES` here, `METAL_SHADE_NAMES` in [Ring](ring.md).**
   The split follows the same rule as `SUBDIAL_SETS` (names, in
   constants) vs `SUBDIAL_RECOLOR_COLORS` (recipe, in defaults) — the
   validation/enumeration surface lives in `constants.py` (nothing else

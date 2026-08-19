@@ -129,3 +129,23 @@ Layer: config — pure, no Qt, no wall clock.
   its value is a straight alias of a `dial.py` name and the fixed DAG
   forbids one new module importing another — it lives beside what it
   aliases.
+
+## What THE CONSTANTS SPLIT added (2026-08-19)
+
+The **dial identity** block moved in from the deleted
+`config/constants.py` and now sits at the TOP of the module, above its
+first section: `HOURS_PER_REVOLUTION`, `DIAL_TOP_HOUR`,
+`SECONDS_PER_DAY`, `SECONDS_PER_HOUR`, `DIAL_OFFSET_DEG`,
+`SOLAR_NOON_SECS`, `SECONDS_PER_DEGREE` and `HAND_HUB_OFFSET_UNITS`.
+
+These numbers ARE the dial convention — 24 hours clockwise, noon at the
+top, `DIAL_OFFSET_DEG = 180` ([The Dial](../../../docs/DIAL.md)) — so the
+module that owns dial geometry is where a reader looks for them. They
+went to the top rather than the bottom because everything below is
+measured against them.
+
+They are NOT the sky: the sun depressions, the lunation and the season
+anchors went to `config/sky.py` instead.
+
+The whole 38-section map, with the reason for every destination, is
+in [Config (folder)](../___config.md#the-constants-split).

@@ -89,22 +89,77 @@ docstring promised none) and now walks `config/` RECURSIVELY, so
 
 <a id="constants-debt"></a>
 
-### The debt this leaves: `config/constants.py`'s SHAPE
+### The debt this left: `config/constants.py`'s SHAPE — **PAID 2026-08-19**
 
-Its SIZE is settled — 125 lines of behaviour behind 645 lines of
-declarative tables. Its SHAPE is not: **38 top-level sections** spanning
-app identity, era notation, weekday bodies, pointer geometry, ring
-finishes, zodiac, translation languages, UI scale and seating is a junk
-drawer, not a directory. The [OOP audit](AUDIT-OOP-2026-08-18.md)'s R15
-asked for a topic split in the shape of Session 36 (new
-`config/<topic>.py` modules, callers repointed, no re-export shims).
-
-**It was NOT done in this round, deliberately.** No guard demands it any
-more, and it repoints **1,070 references across 142 files**; the topic
-names have to come from the owner's own vocabulary
+Its SIZE was settled by THE ONE ARITHMETIC — 125 lines of behaviour
+behind 645 lines of declarative tables. Its SHAPE was not: **38
+top-level sections** spanning app identity, era notation, weekday
+bodies, pointer geometry, ring finishes, zodiac, translation languages,
+UI scale and seating is a junk drawer, not a directory. The [OOP
+audit](AUDIT-OOP-2026-08-18.md)'s R15 asked for a topic split in the
+shape of Session 36 (new `config/<topic>.py` modules, callers repointed,
+no re-export shims), and WA-R15 deliberately did NOT do it: no guard
+demanded it, it repoints **1,070 references across 142 files**, and the
+topic names had to come from the owner's own vocabulary
 ([The DOMY Canon](../CANON.md), THE RING VOCABULARY in
-[The Dial](DIAL.md)), not an agent's guess — a wrong name here is a
-wrong name in a hundred files. It waits for his word.
+[The Dial](DIAL.md)), not an agent's guess.
+
+**The owner gave the map and the names on 2026-08-19, and the split
+landed the same day.** `config/constants.py` is DELETED. Eleven new
+modules were born and nine existing ones grew; every reference was
+repointed to the module that now owns the name; **no re-export shim was
+left behind** (`rules/CODE.md` — No backward compatibility), so
+`constants.NAME` no longer resolves anywhere.
+
+The map, one row per section, with the reason for every destination:
+[Config (folder) → THE CONSTANTS
+SPLIT](../desktop/config/___config.md#the-constants-split). Every new
+module carries its own `__about/` (and `__flow/` for the seven
+Algorithmic ones) stating what it holds, why it was separated and who
+its neighbours are — the owner's explicit condition for the round.
+
+One commit per destination module:
+
+| Commit | Module |
+|--------|--------|
+| `0fe05f9` | **NEW** `config/identity.py` |
+| `1c1ec22` | `config/dial.py` ← the dial identity block |
+| `92290eb` | **NEW** `config/sky.py` |
+| `a6b2910` | the two aliased `constants` imports normalised |
+| `3fe8164` | **NEW** `config/eras.py` |
+| `f3400c6` | `config/registry/week.py` ← the weekday vocabulary |
+| `c79b69b` | **NEW** `config/pointer_geometry.py` |
+| `ff9bccd` | **NEW** `config/pointer_names.py` |
+| `2a86b8a` | `config/calendar_mounts.py` ← rose & calendar star geometry |
+| `e6d016d` | `config/watch_face.py` ← WATCH FACE CONTENT KINDS |
+| `3a06a11` | `config/archetypes.py` ← TRIO & GENESIS ARM THEMES |
+| `381acc4` | **NEW** `config/umbra.py` |
+| `e18f7cd` | `config/registry/slots.py` ← the WHEEL slots and arm offsets |
+| `973d72b` | `config/cube.py` ← THE CUBE LOOK |
+| `6d64003` | **NEW** `config/complications.py` |
+| `8b4985b` | **NEW** `config/ring.py` |
+| `06ecea8` | **NEW** `config/ninth.py` |
+| `4e1a483` | **NEW** `config/zodiac.py` |
+| `81a529a` | `config/glow.py` ← GLOW WINDOWS & ECLIPSE VISIBILITY |
+| `755124b` | **NEW** `config/ui_ranges.py` |
+| `0f7a591` | `config/doctrine.py` ← DUALITY SEATING |
+| *(final)* | the three registry aliases collapsed, `constants.py` DELETED, docs |
+
+**One deviation from the map, and it is written down.** WEEKDAY THEMES
+and THEME BLURBS & ARTICLES were mapped to `config/registry/week.py`,
+but their three names were one-line aliases of `registry.THEMES` /
+`.BLURBS` / `.ARTICLES` — and `config/registry/__init__.py` imports
+`week.py`, so reading them back there is an import cycle, while
+re-deriving them would give one truth two homes. The aliases were
+DELETED and their 42 call sites repointed to THE REGISTRY directly; each
+alias's comment moved to the derivation site. A second name for the same
+object is itself a re-export shim.
+
+**What the split leaves for the next session.**
+`config/registry/week.py` is now **987 logic lines** against
+`test_config_cohesion.py`'s 1,000-line wall, and that guard has no
+ratchet and no exemption list: **the next weekday table added there
+needs a split, not a row.** Nothing else in `config/` is close.
 
 ## The ratchets — all of them may only SHRINK
 

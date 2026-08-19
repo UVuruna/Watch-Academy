@@ -16,7 +16,7 @@ import pytest
 from PySide6.QtCore import QPointF
 from PySide6.QtWidgets import QApplication
 
-from config import complications, constants, defaults, dial, doctrine, encyclopedia_ui, glow, ninth, palette, pantheon, pointer_geometry, ring, shortcuts, ui_ranges, umbra
+from config import complications, defaults, dial, doctrine, encyclopedia_ui, glow, ninth, palette, pantheon, pointer_geometry, registry, ring, shortcuts, ui_ranges, umbra
 from config.registry import week as week_registry
 from config.registry import slots as slot_registry
 from core.clock_state import build_day_context, build_tick_state
@@ -460,7 +460,7 @@ def test_dual_sunday_two_faces_on_compass_and_seasons(app, july_wednesday):
     from tests.art_debt import PENDING_DUAL
 
     dual_less = set()
-    for theme in constants.WEEKDAY_THEMES:
+    for theme in registry.THEMES:
         rel = pantheon.WEEKDAY_DUAL_FILES[theme]
         if not _paths.art_file(
             pantheon.weekday_art(f"{rel}.png")
@@ -495,7 +495,7 @@ def test_dual_sunday_two_faces_on_compass_and_seasons(app, july_wednesday):
     data = _json.loads(
         (paths.database_dir() / "symbolism.json").read_text(encoding="utf-8")
     )
-    for article_set in set(constants.WEEKDAY_THEME_ARTICLES.values()):
+    for article_set in set(registry.ARTICLES.values()):
         faces = data["articles"][article_set]["sun"].get("faces")
         assert faces is not None, article_set
         assert set(faces) == {"ruler", "servant"}, article_set

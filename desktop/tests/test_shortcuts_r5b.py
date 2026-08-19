@@ -22,7 +22,7 @@ from PySide6.QtWidgets import QApplication
 from app.controller import WatchController
 from app.fast_travel_flash import FastTravelFlash
 from app.settings_store import Settings, replace
-from config import constants, defaults, shortcuts
+from config import defaults, shortcuts
 from core.deep_time import real_year
 from data.locations import Place
 

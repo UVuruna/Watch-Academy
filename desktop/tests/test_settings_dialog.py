@@ -11,7 +11,7 @@ from PySide6.QtWidgets import QApplication
 from app.skin_builder import apply_display_settings
 from app.settings_dialog.dialog import SettingsDialog
 from app.settings_store import Settings, replace
-from config import defaults, encyclopedia_ui, eras, identity, palette, pantheon, sky, ui_ranges, zodiac
+from config import defaults, encyclopedia_ui, eras, identity, palette, pantheon, registry, sky, ui_ranges, zodiac
 from config.registry import week as week_registry
 from data.locations import Place, default_place
 from render.skin_geometry import palette_for
@@ -243,7 +243,6 @@ def test_third_era_combo_lists_chinese(app):
     """Owner fix-round B, 2026-07-19: the Huangdi count appears in the
     Third calendar combo (Calendar eras, under Language) and round-trips
     through `result_settings()` exactly like every other option."""
-    from config import constants
 
     dialog = SettingsDialog(Settings(), defaults.DEFAULT_SKIN)
     values = [
@@ -280,7 +279,6 @@ def test_third_era_combo_lists_kali_olympiad_unix(app):
     exactly like every other option — verified independently for all
     three since they cover three different internal shapes (a uniform
     offset, a year-only formatter, a date-level formatter)."""
-    from config import constants
 
     dialog = SettingsDialog(Settings(), defaults.DEFAULT_SKIN)
     values = [
@@ -411,13 +409,12 @@ def test_every_theme_skeleton_is_complete():
     (`tests/art_debt.py`, the single list four guards share) — a NEW gap
     anywhere else (a stem typo, a folder rename, a cast wired against art
     nobody queued) still fails immediately."""
-    from config import constants
 
     from config import paths as _paths
     from tests.art_debt import PENDING_BODY_BRONZE
 
     missing = set()
-    for theme in constants.WEEKDAY_THEMES:
+    for theme in registry.THEMES:
         if theme == "planets":
             continue
         folder = pantheon.weekday_art(pantheon.WEEKDAY_THEME_DIRS[theme])
@@ -475,7 +472,6 @@ def test_hidden_mode_unlocks_the_four_greetings(app):
     # SESSION-only (owner 2026-07-15): the unlock never persists —
     # the settings know nothing about it.
     assert not hasattr(Settings(), "hidden_unlocked")
-    from config import constants
 
     assert len(identity.HIDDEN_MODE_SECRET) >= 3
 
@@ -554,7 +550,7 @@ def test_art_source_resolves_with_fallback(tmp_path, monkeypatch):
     file, FALLS BACK to the other source where it is missing, then to the
     suffix-less owner file; a step-up across roots still resolves. Pinned
     on a SYNTHETIC assets tree with controlled coverage."""
-    from config import constants, paths
+    from config import paths
 
     assets = tmp_path / "assets"
     for rel in (
@@ -687,13 +683,12 @@ def test_hexa_arm_hover_carries_the_sign_articles(app):
 
 
 def test_symbolism_repository_covers_every_body_and_theme():
-    from config import constants
     from data.symbolism import SymbolismRepository
 
     repo = SymbolismRepository()
     for body in week_registry.WEEKDAY_BODIES:
         blurbs = repo.arm_blurbs(body)
-        for theme, key in constants.WEEKDAY_THEME_BLURBS.items():
+        for theme, key in registry.BLURBS.items():
             assert blurbs[key], (body, theme)
 
 
@@ -706,7 +701,7 @@ def test_articles_cover_every_theme_and_body():
     Voodoo Sat) whose entries also carry a display `name`."""
     import json
 
-    from config import constants, paths
+    from config import paths
 
     data = json.loads(
         (paths.database_dir() / "symbolism.json").read_text(encoding="utf-8")
@@ -714,8 +709,8 @@ def test_articles_cover_every_theme_and_body():
     combos = {
         "hexa_primary", "hexa_secondary", "octa_primary", "octa_secondary", "cross", "trio",
     }
-    for theme in constants.WEEKDAY_THEMES:
-        article_set = constants.WEEKDAY_THEME_ARTICLES[theme]
+    for theme in registry.THEMES:
+        article_set = registry.ARTICLES[theme]
         for body in week_registry.WEEKDAY_BODIES:
             article = data["articles"][article_set][body]
             assert len(article["base"]) > 250, (theme, body)
@@ -1563,7 +1558,7 @@ def test_chinese_articles_and_elements_cover_the_cycle():
     """
     import json
 
-    from config import constants, paths
+    from config import paths
 
     data = json.loads(
         (paths.database_dir() / "symbolism.json").read_text(encoding="utf-8")
@@ -1584,14 +1579,14 @@ def test_zodiac_articles_cover_every_sign():
     2026-07-12), a *_south pair with the color-borrowed reading."""
     import json
 
-    from config import constants, paths
+    from config import paths
 
     data = json.loads(
         (paths.database_dir() / "symbolism.json").read_text(encoding="utf-8")
     )
-    zodiac = data["zodiac_articles"]
-    assert set(zodiac) == {name for name, _ in zodiac.ZODIAC_SIGNS}
-    for sign, article in zodiac.items():
+    articles = data["zodiac_articles"]
+    assert set(articles) == {name for name, _ in zodiac.ZODIAC_SIGNS}
+    for sign, article in articles.items():
         assert len(article["base"]) > 250, sign
         assert "\n\n" in article["base"], sign
         assert set(article["variants"]) == {
@@ -1768,7 +1763,6 @@ def test_encyclopedia_zoom_bounds_and_persists_for_the_session():
     written to settings, resets on app restart)."""
     import app.encyclopedia.dialog as dialog_module
     from app.encyclopedia import EncyclopediaDialog
-    from config import constants
 
     low, high = ui_ranges.ENCYCLOPEDIA_ZOOM_RANGE
     original = dialog_module._session_zoom

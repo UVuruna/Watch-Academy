@@ -42,7 +42,7 @@ from functools import lru_cache
 
 from PySide6.QtCore import QPointF
 
-from config import archetypes, calendar_mounts, complications, constants, defaults, dial, encyclopedia_ui, glow, ninth, pantheon, paths, pointer_geometry, profiling, ring, sky, zodiac
+from config import archetypes, calendar_mounts, complications, defaults, dial, encyclopedia_ui, glow, ninth, pantheon, paths, pointer_geometry, profiling, registry, ring, sky, zodiac
 from config.ui_text import ui
 from config.registry import week as week_registry
 from core import angles, continents, world
@@ -738,7 +738,7 @@ class TooltipComposer:
         one image (owner 2026-07-13) — the extended base text already
         tells the two faces."""
         theme = theme or self._dial.skin.weekday_theme
-        article_set = constants.WEEKDAY_THEME_ARTICLES[theme]
+        article_set = registry.ARTICLES[theme]
         article_body = body
         # THE UNIVERSAL ROTATION CONVENTION (weekday ALT ROTATION round
         # 2026-07-20/21): `self._dial.day` is None before the first tick
@@ -1071,7 +1071,7 @@ class TooltipComposer:
         )
         node = self._dial.symbolism.article(
             self._dial.skin.weekday_set.article_set
-            or constants.WEEKDAY_THEME_ARTICLES[theme],
+            or registry.ARTICLES[theme],
             "sun",
         )
         text = node.get("faces", {}).get(face) or node["base"]
@@ -1109,7 +1109,7 @@ class TooltipComposer:
         "ninth" (THE UNFOUND)."""
         spec = self._dial.skin.weekday_set
         dual_names = spec.dual_names or pantheon.WEEKDAY_DUAL_NAMES[theme]
-        article_set = spec.article_set or constants.WEEKDAY_THEME_ARTICLES[theme]
+        article_set = spec.article_set or registry.ARTICLES[theme]
         columns = []
         sunday = html.escape(self._tr(week_registry.WEEKDAY_FULL_NAMES["sun"]))
         for face in faces:

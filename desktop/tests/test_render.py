@@ -207,7 +207,6 @@ def test_spacebar_moon_marker_opens_the_current_phase(app):
     """The Moon marker opens the Moon topic at the CURRENT phase's page
     (owner 2026-07-16): the phase name indexes sky.MOON_PHASE_NAMES,
     the eight-page order of the topic (queue #8b)."""
-    from config import constants
     from core.moon import phase_name
     from render.painting import dial_point
     from core import angles
@@ -239,7 +238,6 @@ def test_spacebar_moon_marker_pins_new_and_full(app):
     no eclipse is in the window (eclipse_event is None)."""
     from types import SimpleNamespace
 
-    from config import constants
 
     comp = Compositor(defaults.DEFAULT_SKIN, AssetCache())
     for fraction, page in ((0.0, 0), (0.5, 4)):

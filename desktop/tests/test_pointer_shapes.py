@@ -366,8 +366,12 @@ def test_both_rose_wheels_keep_every_ray_on_a_full_hour(app):
     twenty-four rays of both stand on FULL hours — in the star shape and
     the twenty-four-ray polygon alike. If a half-hour ray ever comes
     back, the dead mechanism is being rebuilt."""
-    assert not hasattr(constants, "ROSE_WHEEL_ASSEMBLY_OFFSET_DEG")
-    assert not hasattr(constants, "ROSE_RAY_PITCH_DEG")
+    # The rose geometry now lives in config/calendar_mounts.py and
+    # config/pointer_geometry.py (THE CONSTANTS SPLIT, 2026-08-19);
+    # neither may grow the retired half-hour ray back.
+    for module in (calendar_mounts, pointer_geometry):
+        assert not hasattr(module, "ROSE_WHEEL_ASSEMBLY_OFFSET_DEG")
+        assert not hasattr(module, "ROSE_RAY_PITCH_DEG")
     import render.skin_geometry as skin_geometry
 
     assert not hasattr(skin_geometry, "rose_assembly_offset_deg")

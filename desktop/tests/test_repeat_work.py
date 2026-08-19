@@ -32,7 +32,7 @@ from PySide6.QtWidgets import QApplication
 
 from app.controller import WatchController
 from app.watch_manager import AppController
-from config import pantheon, paths
+from config import pantheon, paths, registry
 from data import locations, translations
 from render import archetype_geometry, painting
 
@@ -310,11 +310,10 @@ def test_the_sunday_dual_probe_agrees_with_the_form_it_replaced(app):
     appears or vanishes."""
     from app.skin_builder import build_skin
     from app.settings_store import Settings, replace
-    from config import constants
     from render.slot_layout import sunday_dual_face
 
     checked = 0
-    for theme in constants.WEEKDAY_THEMES:
+    for theme in registry.THEMES:
         skin = build_skin(replace(
             Settings(), pointer="octa", weekday_theme=theme,
         ))

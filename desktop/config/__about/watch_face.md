@@ -47,3 +47,17 @@ is data. Adding a plain setting is now one line here.
   bands. A key's reason moves with the key.
 - **Order is documentation, not behaviour.** Nothing reads this tuple
   positionally; the map is consumed by key lookup only.
+
+## What THE CONSTANTS SPLIT added (2026-08-19)
+
+**WATCH FACE CONTENT KINDS (R-18)** moved in from the deleted
+`config/constants.py`: `WATCH_FACE_KINDS_BY_POINTER` and the
+`watch_face_kinds()` reader.
+
+This module is THE WATCH FACE CONTROL VOCABULARY — every control whose
+setter is just "store this key". Which content kinds a pointer may carry
+is exactly that vocabulary, and it was the only Watch Face table still
+living outside it.
+
+The whole 38-section map, with the reason for every destination, is
+in [Config (folder)](../___config.md#the-constants-split).

@@ -78,7 +78,7 @@ MENU = (
 
 # ═══════════════════════════ THE THEMES ═══════════════════════════
 # key -> the whole contract, in the dial's own registration order
-# (what `constants.WEEKDAY_THEMES` has always been). The picker's
+# (what `registry.THEMES` has always been). The picker's
 # grouping is a display decision and lives in MENU above.
 WEEK = {
     'planets': {

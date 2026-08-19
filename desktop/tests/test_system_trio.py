@@ -328,7 +328,6 @@ def test_the_renaming_migrates_the_legacy_user_dir(tmp_path, monkeypatch):
     settings-rename-needs-migration rule). An already-present new
     folder wins and the legacy one is then left untouched forever."""
     import main as main_mod
-    from config import constants
 
     monkeypatch.setenv("APPDATA", str(tmp_path))
     monkeypatch.delenv("WATCH_ACADEMY_USER_DIR_OVERRIDE", raising=False)

@@ -8,7 +8,7 @@ look switcher, and the live-dial body art (earth_style x day/night).
 
 from datetime import date
 
-from config import constants, continents as continents_theme, ninth, pantheon, paths, sky
+from config import continents as continents_theme, ninth, pantheon, paths, registry, sky
 from config.registry import week as week_registry
 from core import continents
 
@@ -18,10 +18,10 @@ from core import continents
 def test_continents_registered_everywhere():
     """The theme is a first-class weekday theme: in the dial roster, in a
     menu group, with a title, an article set, blurb, dual and Ninth."""
-    assert "continents" in constants.WEEKDAY_THEMES
+    assert "continents" in registry.THEMES
     assert pantheon.WEEKDAY_THEME_TITLES["continents"] == "Continents"
-    assert constants.WEEKDAY_THEME_ARTICLES["continents"] == "continents"
-    assert constants.WEEKDAY_THEME_BLURBS["continents"] == "day"
+    assert registry.ARTICLES["continents"] == "continents"
+    assert registry.BLURBS["continents"] == "day"
     assert pantheon.WEEKDAY_DUAL_NAMES["continents"] == ("Antarctica", "Arctic")
     # It rides a menu group so the dial can offer it.
     grouped = {key for _t, keys in pantheon.WEEKDAY_MENU_GROUPS for key in keys}
@@ -304,7 +304,6 @@ def test_date_is_solstice_opens_only_the_two_solstices():
     equinoxes and every ordinary day. Golden dates come from the
     bundled 2026 anchors, named exactly the way build_day_context
     names them (sky.ZONE_SEASON_EVENT_NAMES)."""
-    from config import constants
     from data.seasons import SeasonsRepository
 
     anchors = SeasonsRepository().year_anchors(2026)

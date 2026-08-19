@@ -85,3 +85,20 @@ neighbours; `defaults.py` still imports `pantheon` regardless, for
   module's data moved to sit beside that data (or, when it needed TWO
   new modules at once, stayed in the remnant `defaults.py`, which
   alone may import every new module downhill).
+
+## What THE CONSTANTS SPLIT added (2026-08-19)
+
+**GLOW WINDOWS & ECLIPSE VISIBILITY** moved in from the deleted
+`config/constants.py`: `SEASON_GLOW_WINDOW_H`, `MOON_GLOW_WINDOW_H`,
+`ECLIPSE_GLOW_WINDOW_H`, `ECLIPSE_BODY_WINDOW_H`,
+`ECLIPSE_SOLAR_VISIBILITY_KM` and `EARTH_RADIUS_KM`.
+
+The windows say for how long an event glows and the two kilometre
+figures say whether the observer can see a solar eclipse at all — both
+are inputs to the eclipse state machine this module already owns. The
+Umbra's own eclipse STYLES (what the band looks like) went to
+`config/umbra.py` instead: this module answers how bright, that one
+answers what shape.
+
+The whole 38-section map, with the reason for every destination, is
+in [Config (folder)](../___config.md#the-constants-split).

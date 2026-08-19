@@ -22,7 +22,7 @@ REPO_ROOT = ROOT.parent
 SHARED = REPO_ROOT / "shared"
 sys.path.insert(0, str(REPO_ROOT / "desktop"))
 
-from config import complications, ninth, pantheon, paths  # noqa: E402, ring, zodiac
+from config import complications, ninth, pantheon, paths, ring, zodiac  # noqa: E402
 
 SOURCES = ("gemini", "chatgpt")
 SEATS = ("sun", "moon", "mars", "mercury", "jupiter", "venus", "saturn")

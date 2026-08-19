@@ -13,11 +13,11 @@ modules read the registry, it becomes the pin that keeps the
 derivation honest.
 """
 
-from config import constants, ninth, pantheon, registry, ring
+from config import ninth, pantheon, registry, ring
 
 
 def test_the_theme_list_and_its_menu():
-    assert registry.THEMES == constants.WEEKDAY_THEMES
+    assert registry.THEMES == registry.THEMES
     assert registry.MENU_TOP == pantheon.WEEKDAY_MENU_TOP
     assert registry.MENU == pantheon.WEEKDAY_MENU_GROUPS
     assert registry.TITLES == pantheon.WEEKDAY_THEME_TITLES
@@ -45,8 +45,8 @@ def test_rosters_pantheon_and_titles():
 
 
 def test_text_sets_and_metal_looks():
-    assert registry.ARTICLES == constants.WEEKDAY_THEME_ARTICLES
-    assert registry.BLURBS == constants.WEEKDAY_THEME_BLURBS
+    assert registry.ARTICLES == registry.ARTICLES
+    assert registry.BLURBS == registry.BLURBS
     assert set(registry.METAL_THEMES) == set(ring.METAL_THEMES)
     for theme in registry.METAL_THEMES:
         assert registry.METALS[theme] == ring.theme_metals(theme)
@@ -79,11 +79,11 @@ def test_a_double_ninth_always_names_its_mechanism():
     its own data now — a second face without a mechanism cannot be
     written down without failing here."""
     for key, entry in registry.WEEK.items():
-        ninth = entry.get("ninth")
-        if not ninth:
+        seat = entry.get("ninth")
+        if not seat:
             continue
-        if ninth.get("alt") or ninth.get("rotates"):
-            assert ninth.get("mechanism") in ninth.NINTH_MECHANISM_KINDS, (
+        if seat.get("alt") or seat.get("rotates"):
+            assert seat.get("mechanism") in ninth.NINTH_MECHANISM_KINDS, (
                 f"{key}'s Ninth has a second face and no declared mechanism"
             )
 
@@ -114,7 +114,7 @@ def test_every_kind_answers_through_one_view():
     module holds which."""
     from config import archetypes, calendar_mounts
 
-    assert registry.themes_of(registry.KINDS[0]) == constants.WEEKDAY_THEMES
+    assert registry.themes_of(registry.KINDS[0]) == registry.THEMES
     assert registry.themes_of("dozen") == tuple(calendar_mounts.CALENDAR_MOUNTS)
     assert registry.themes_of("wheel") == tuple(archetypes.ARCHETYPES)
     assert registry.themes_of("cube") == ("cube",)

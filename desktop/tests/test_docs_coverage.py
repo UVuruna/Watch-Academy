@@ -104,7 +104,13 @@ FLOW_REQUIRED = frozenset({
     "app/widget.py",
     "config/archetypes.py",
     "config/calendar_mounts.py",
-    "config/constants.py",
+    # `config/constants.py` LEFT this list on 2026-08-19: THE CONSTANTS
+    # SPLIT (the owner's map) deleted the 38-section junk drawer and gave
+    # its topics eleven modules of their own. Seven of them are
+    # Algorithmic and are listed here; four (identity, pointer_names,
+    # complications, ui_ranges) are Standard — flat tables where a
+    # diagram would only restate the code (rules/DOCS.md: a flow doc must
+    # EARN its place).
     "config/continents.py",
     "config/cube.py",
     "config/defaults.py",
@@ -113,6 +119,13 @@ FLOW_REQUIRED = frozenset({
     "config/encyclopedia_tree.py",
     "config/encyclopedia_ui.py",
     "config/glow.py",
+    "config/zodiac.py",
+    "config/umbra.py",
+    "config/sky.py",
+    "config/ring.py",
+    "config/pointer_geometry.py",
+    "config/ninth.py",
+    "config/eras.py",
     "config/palette.py",
     "config/pantheon.py",
     "config/paths.py",

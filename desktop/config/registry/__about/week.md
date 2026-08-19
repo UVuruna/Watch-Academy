@@ -64,3 +64,30 @@ the same index on any given day.
 ### Used by
 - [Registry derivation](__init__.md) — the only reader; every consumer
   goes through the tables it computes
+
+## What THE CONSTANTS SPLIT added (2026-08-19)
+
+The **weekday vocabulary** moved in from the deleted
+`config/constants.py`: `WEEKDAY_BODIES` (the `datetime.weekday()` index →
+celestial body tuple), `WEEKDAY_LABELS` (the short day name written on
+each body), `WEEKDAY_FULL_NAMES`, `FIGURE_ROSTERS` ("planetary" and
+"pantheon"), `SUNDAY_FIRST_INDEX` (the owner's numbering for the
+shared-slot priority rule) and `POINTER_WEEKDAY_SLOTS` (which seats each
+pointer offers, in dial degrees from its top vertex).
+
+This module already declares all 35 themes' weekday seats; the words
+those seats are named in belong beside them.
+
+**It now measures 987 logic lines against `test_config_cohesion.py`'s
+1,000-line wall — the tightest module in `config/`. The next weekday
+table added here needs a split, not a row.**
+
+The three names the owner's map also sent here — `WEEKDAY_THEMES`,
+`WEEKDAY_THEME_BLURBS` and `WEEKDAY_THEME_ARTICLES` — did NOT come: they
+were aliases of `registry.THEMES` / `.BLURBS` / `.ARTICLES`, and
+`config/registry/__init__.py` imports THIS module, so reading them back
+here would be a cycle. They were deleted and their callers repointed to
+THE REGISTRY directly.
+
+The whole 38-section map, with the reason for every destination, is
+in [Config (folder)](../../___config.md#the-constants-split).

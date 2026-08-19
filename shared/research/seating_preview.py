@@ -17,7 +17,7 @@ from PySide6.QtGui import (QColor, QFont, QFontDatabase,       # noqa: E402
                            QImage, QPainter, QPen, QPolygonF)
 from PySide6.QtWidgets import QApplication                     # noqa: E402
 
-from config import constants, cube, defaults, palette          # noqa: E402
+from config import cube, defaults, palette, pointer_geometry    # noqa: E402
 from core import cube_seating as seating                       # noqa: E402
 
 SIZE = 1400
@@ -100,7 +100,7 @@ def draw_rose() -> QImage:
     image, painter = _canvas()
     centre = QPointF(SIZE / 2, SIZE / 2 + 14)
     tip = SIZE * 0.245
-    half = constants.POINTER_ARM_HALF_ANGLE_DEG["rose"]
+    half = pointer_geometry.POINTER_ARM_HALF_ANGLE_DEG["rose"]
     # the three stars' labels stand at three radii, so a hue's triple of
     # neighbouring rays never writes over itself
     label_reach = {"0": SIZE * 0.275, "+15": SIZE * 0.355, "-15": SIZE * 0.435}

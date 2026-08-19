@@ -16,7 +16,7 @@ import urllib.parse
 import urllib.request
 from pathlib import Path
 
-from config import constants, defaults, paths, profiling, ui_text
+from config import defaults, paths, profiling, ui_text
 from data._io import load_json_checked
 
 _SR_LATN = {

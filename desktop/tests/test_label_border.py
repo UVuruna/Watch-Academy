@@ -188,7 +188,7 @@ def test_every_weekday_label_and_figure_stem_composes_from_plates():
     import re
     from pathlib import Path
 
-    from config import constants, paths
+    from config import paths
 
     labels = set(week_registry.WEEKDAY_LABELS.values())
     labels |= set(week_registry.WEEKDAY_FULL_NAMES.values())

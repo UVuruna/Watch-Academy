@@ -121,7 +121,7 @@ class ObservatoryDialog(AcademyDialog):
         )
 
         # 2 — the light − dark envelope with the eras and every peak.
-        eras = data.season_eras()
+        season_eras = data.season_eras()
         light_minus_dark = [
             round(light - dark, 4)
             for light, dark in zip(series["light"], series["dark"])
@@ -135,7 +135,7 @@ class ObservatoryDialog(AcademyDialog):
             "color": palette.OBSERVATORY_SERIES_COLORS["light"],
             "xs": series["years"], "ys": light_minus_dark,
         }])
-        light_from, light_to = eras["age_of_light"]
+        light_from, light_to = season_eras["age_of_light"]
         envelope.set_bands([
             (first, light_from, palette.OBSERVATORY_ERA_DARK_BAND),
             (light_from, light_to, palette.OBSERVATORY_ERA_LIGHT_BAND),
@@ -147,7 +147,7 @@ class ObservatoryDialog(AcademyDialog):
         # the decimated bundle (data.light_dark_extrema()); each one
         # labeled with its year and value, thinned at full zoom.
         vmarks = [
-            (eras["anno_lucis_year"], self._tr("Anno Lucis"), mark),
+            (season_eras["anno_lucis_year"], self._tr("Anno Lucis"), mark),
             (light_to, self._tr("Age of Darkness"), mark),
         ]
         for year, value, kind in data.light_dark_extrema():

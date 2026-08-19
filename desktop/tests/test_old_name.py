@@ -45,7 +45,12 @@ OLD_NAME = re.compile(r"domy[ _\-]?watch", re.IGNORECASE)
 ALLOWED: dict[str, tuple[str, ...]] = {
     # The settings migration must NAME the folder it carries data out of:
     # %APPDATA%\DOMY Watch is where the app lived for its whole prior life.
-    "desktop/config/constants.py": ('APP_NAME_LEGACY = "DOMY Watch"',),
+    # `config/constants.py` was DELETED by THE CONSTANTS SPLIT (owner's map,
+    # 2026-08-19); the legacy name moved with the rest of APP IDENTITY into
+    # `config/identity.py`, and its __about doc has to quote it to explain
+    # what the constant is for.
+    "desktop/config/identity.py": ('APP_NAME_LEGACY = "DOMY Watch"',),
+    "desktop/config/__about/identity.md": ('("DOMY Watch") — the retired product name',),
     "desktop/main.py": ("%APPDATA%/DOMY Watch",),
     "desktop/app/__about/warm.md": ("%APPDATA%\\DOMY Watch",),
     "desktop/tests/test_system_trio.py": ("%APPDATA%/DOMY Watch",),

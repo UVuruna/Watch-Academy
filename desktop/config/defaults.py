@@ -767,8 +767,8 @@ SEASON_ART_DIR = paths.assets_dir() / "celestial" / "seasons" / "badges"
 # its own. Prompt sheet: research/prompts/era/era_prompts.md.
 ERA_ART_DIR = paths.assets_dir() / "celestial" / "era"
 # The SLAVIC MONTHS 12-set marks (owner-sealed R7b 2026-07-21). A
-# CANONICAL SOURCELESS root — deliberately OUTSIDE
-# constants.ART_SOURCED_ROOTS, the subdial precedent (see
+# CANONICAL SOURCELESS root — deliberately outside the per-source
+# art suffixes (`config.identity.ART_SOURCES`), the subdial precedent (see
 # assets/___assets.md): a Calendar-pointer mount set is its OWN shared
 # thing, not a Gemini/ChatGPT split. assets/months/<stem>.png,
 # graceful-absent until the owner's prompt sheet lands — every consumer

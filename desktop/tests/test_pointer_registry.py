@@ -10,7 +10,7 @@ dimension actually bites — because the shape half is the part a reader
 would most easily drop.
 """
 
-from config import constants, pointer_geometry
+from config import pointer_geometry, registry
 from config.registry import pointers
 
 
@@ -102,6 +102,5 @@ def test_the_bootstrap_default_is_a_real_week_theme():
     """It is the app's own `Settings.weekday_theme` default, not a
     per-pointer favourite — nobody has made that product decision, and
     the registry does not invent one."""
-    from config import constants
 
-    assert pointers.BOOTSTRAP_WEEK_THEME in constants.WEEKDAY_THEMES
+    assert pointers.BOOTSTRAP_WEEK_THEME in registry.THEMES

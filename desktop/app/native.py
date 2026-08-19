@@ -137,7 +137,6 @@ def migrate_legacy_autostart() -> None:
     key never stops the app at the door."""
     import winreg
 
-    from config import constants
 
     try:
         with winreg.OpenKey(

@@ -4,7 +4,7 @@
 Born from a real, expensive failure: twelve figure casts (429 files)
 were generated and correctly placed on disk under `assets/weeks/`, and
 not one of them was visible anywhere in the program — never registered
-in `constants.WEEKDAY_THEMES`, so the dial's picker never learned they
+in `registry.THEMES`, so the dial's picker never learned they
 existed and the Encyclopedia had no page for any of them. The prompt
 sheets that produced them wrote "two wiring rounds left for later" into
 `research/prompts/COVERAGE.md` and moved on; later never came, and
@@ -32,7 +32,7 @@ Two guards, symmetric to each other:
 import re
 from pathlib import Path
 
-from config import constants, defaults, ninth, pantheon, paths, taxonomy
+from config import defaults, ninth, pantheon, paths, registry, taxonomy
 from data.encyclopedia import EncyclopediaRepository
 from data.symbolism import SymbolismRepository
 
@@ -56,7 +56,7 @@ def _ledger_folders() -> set[str]:
 
 def _weekday_theme_folders() -> set[str]:
     """Every `assets/weeks/<group>/<folder>` name reachable from a
-    registered `constants.WEEKDAY_THEMES` key, read off the already-
+    registered `registry.THEMES` key, read off the already-
     resolved `pantheon.WEEKDAY_THEME_DIRS` (past `THEME_KEY_RENAMES`/
     `THEME_FOLDER` — Rule #5, the same chain `defaults.title_plate_art`
     walks, not reimplemented here). "planets" itself carries no themed
@@ -65,7 +65,7 @@ def _weekday_theme_folders() -> set[str]:
     `assets/celestial/earth`, outside `assets/weeks/` entirely, and
     contributes no folder here."""
     folders = set()
-    for theme in constants.WEEKDAY_THEMES:
+    for theme in registry.THEMES:
         rel = pantheon.WEEKDAY_THEME_DIRS.get(theme)
         if rel is None:
             continue
@@ -101,11 +101,11 @@ def _look_only_themes() -> set[str]:
     source) — a look-only theme has nothing of its own for the Home
     screen to seat, so it is the one documented exception to "every
     registered theme reaches a whole"."""
-    return set(constants.WEEKDAY_THEMES) - set(pantheon.WEEKDAY_THEME_TITLES)
+    return set(registry.THEMES) - set(pantheon.WEEKDAY_THEME_TITLES)
 
 
 def test_no_registered_theme_is_textless():
-    """Every key in `constants.WEEKDAY_THEMES` resolves an article set,
+    """Every key in `registry.THEMES` resolves an article set,
     a blurb set, a title article and (where it has a Ninth) a Ninth
     article. Two DOCUMENTED exceptions to the title-article check, both
     real production behavior rather than omissions:
@@ -123,17 +123,17 @@ def test_no_registered_theme_is_textless():
     """
     symbolism = SymbolismRepository()
     encyclopedia = EncyclopediaRepository()
-    emblem_override = set(defaults.EMBLEM_ART_DIRS) & set(constants.WEEKDAY_THEMES)
+    emblem_override = set(defaults.EMBLEM_ART_DIRS) & set(registry.THEMES)
     no_own_topic = _look_only_themes()
     title_exempt = emblem_override | no_own_topic
 
     offenders = []
-    for theme in constants.WEEKDAY_THEMES:
-        article_set = constants.WEEKDAY_THEME_ARTICLES.get(theme)
+    for theme in registry.THEMES:
+        article_set = registry.ARTICLES.get(theme)
         if article_set is None:
             offenders.append(f"{theme}: no WEEKDAY_THEME_ARTICLES entry")
             continue
-        blurb_set = constants.WEEKDAY_THEME_BLURBS.get(theme)
+        blurb_set = registry.BLURBS.get(theme)
         if blurb_set is None:
             offenders.append(f"{theme}: no WEEKDAY_THEME_BLURBS entry")
             continue
@@ -151,9 +151,9 @@ def test_no_registered_theme_is_textless():
             except KeyError:
                 offenders.append(f"{theme}: missing theme_title")
 
-        ninth = ninth.WEEKDAY_THEME_NINTHS.get(theme)
-        if ninth is not None:
-            name, _plate = ninth
+        seat = ninth.WEEKDAY_THEME_NINTHS.get(theme)
+        if seat is not None:
+            name, _plate = seat
             try:
                 encyclopedia.entry("ninths", name)
             except KeyError:
@@ -164,7 +164,7 @@ def test_no_registered_theme_is_textless():
 
 def test_no_art_sits_unseen():
     """Every theme FOLDER under `assets/weeks/` is either registered in
-    `constants.WEEKDAY_THEMES` or listed in the STAGING LEDGER
+    `registry.THEMES` or listed in the STAGING LEDGER
     (`research/theme_staging.md`). Without the ledger this fails with
     exactly the twelve casts CLAUDE.md's THEME COMPLETION LAW names —
     that detection power is the deliverable; with it in place (and kept
@@ -183,6 +183,6 @@ def test_no_art_sits_unseen():
             offenders.append(f"{group_dir.name}/{theme_dir.name}")
 
     assert offenders == [], (
-        "art sits unseen — register in constants.WEEKDAY_THEMES or add a "
+        "art sits unseen — register in registry.THEMES or add a "
         "row to research/theme_staging.md: " + ", ".join(offenders)
     )

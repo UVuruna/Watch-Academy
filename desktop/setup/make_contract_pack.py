@@ -43,7 +43,7 @@ sys.path.insert(0, str(PROJECT_ROOT))
 
 import astral                                            # noqa: E402
 
-from config import constants                              # noqa: E402, dial
+from config import dial                                    # noqa: E402
 from config.registry import availability as availability_registry  # noqa: E402
 from config.registry import pointers as pointers_registry  # noqa: E402
 from config.registry.week import WEEK                     # noqa: E402

@@ -36,10 +36,11 @@ from pathlib import Path
 from app.settings_store import Settings
 from app.watch_face import thumbs
 from config import (
-from config.registry import week as week_registry
-    archetypes, constants, defaults, dial, palette, pantheon, paths,
-    profiling,
+    archetypes, defaults, dial, palette, pantheon, paths, pointer_names,
+    profiling, registry, ring, umbra,
 )
+from config.registry import slots as slot_registry
+from config.registry import week as week_registry
 from core.crown_text import free_arc_angles
 from core.world import arc_centre_deg
 from data.hands import HAND_NAMES, hand_packs
@@ -607,7 +608,7 @@ def _pantheon_weekday_set(base, theme: str, metal: str | None):
             bodies[body] = planetary.bodies[body]
             names[body] = planetary.body_names[body]
             articles[body] = (
-                constants.WEEKDAY_THEME_ARTICLES[theme], body
+                registry.ARTICLES[theme], body
             )
     dual_rel = table["dual"][0]
     dual = pantheon.weekday_art(f"{dual_rel}.png")

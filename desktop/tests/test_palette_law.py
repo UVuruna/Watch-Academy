@@ -121,7 +121,6 @@ def test_every_pointer_keeps_its_wheels_in_one_run():
 def test_the_wheels_a_pointer_declares_are_the_ones_it_serves():
     """The table and the pointer roster agree: no wheel nobody can
     select, no selectable style with no wheel behind it."""
-    from config import constants
 
     declared: dict[str, set] = {}
     for pointer, style in palette.PALETTE_PRESETS:

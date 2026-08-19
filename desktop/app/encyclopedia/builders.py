@@ -18,7 +18,7 @@ import json
 from datetime import date
 from pathlib import Path
 
-from config import constants, continents as continents_theme, defaults, ninth, pantheon, paths, ring
+from config import continents as continents_theme, defaults, ninth, pantheon, paths, registry, ring
 from config.registry import week as week_registry
 from core import continents
 from data.encyclopedia import EncyclopediaRepository
@@ -172,7 +172,7 @@ def _weekday_topic(theme: str, travel_date: date | None = None):
     Monday..Saturday and Sunday pages stay the frozen canonical plate
     they have always been in the Encyclopedia (Rule #15 — this law
     touches cp_corpo alone, not every theme's static gallery)."""
-    article_set = constants.WEEKDAY_THEME_ARTICLES[theme]
+    article_set = registry.ARTICLES[theme]
     if theme == "planets":
         names = defaults.DEFAULT_SKIN.weekday_set.body_names
     else:
@@ -375,7 +375,7 @@ def _pantheon_topic(theme: str) -> list[dict]:
         return (
             _theme_body_art(theme, body),
             pantheon.WEEKDAY_THEME_NAMES[theme][body],
-            constants.WEEKDAY_THEME_ARTICLES[theme],
+            registry.ARTICLES[theme],
             body,
         )
 
@@ -409,7 +409,7 @@ def _pantheon_topic(theme: str) -> list[dict]:
         sun_path = _theme_body_art(theme, "sun")
         dual_path = _theme_dual_art(theme)
         ruler_name, servant_name = pantheon.WEEKDAY_DUAL_NAMES[theme]
-        face_article_set = constants.WEEKDAY_THEME_ARTICLES[theme]
+        face_article_set = registry.ARTICLES[theme]
 
     title_key = f"{theme}_pantheon"
     title_entry = {

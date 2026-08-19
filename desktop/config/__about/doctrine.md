@@ -59,3 +59,19 @@ Layer: config — pure, no Qt, no wall clock.
 - **`RING_JEWEL_SEATS` lives here because the article states it and
   the computed ring-jewel diagram draws it** — one source, so the
   figure can never disagree with the prose it stands beside.
+
+## What THE CONSTANTS SPLIT added (2026-08-19)
+
+**DUALITY SEATING** moved in from the deleted `config/constants.py`:
+`SOUTH_SLOT_ANGLE`, `SERVANT_SEAT_ANGLE`, `AURORA_DUAL_WEEKDAY_ANGLE`,
+`AURORA_DUAL_SLOT_ANGLE`, `DUALITY_RULER_ON_COLD_POLE`,
+`CENTER_DUALITY_WHEELS`, `HORIZONTAL_DUALITY_WHEELS` and
+`DUALITY_SERVANT_ON_TOP`.
+
+They are canon seating rules — who sits where when a Sunday wears two
+faces — which is what this module already holds for the Two Crosses and
+the Twenty-Four Fields. They are neither coordinates in the geometric
+sense nor wheel data.
+
+The whole 38-section map, with the reason for every destination, is
+in [Config (folder)](../___config.md#the-constants-split).

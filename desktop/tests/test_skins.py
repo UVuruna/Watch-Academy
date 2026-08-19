@@ -5,7 +5,8 @@ import pytest
 
 from app.skin_builder import build_skin
 from app.settings_store import Settings, replace
-from config import continents, defaults, dial, encyclopedia_ui, pantheon, paths, ring
+from config import continents, defaults, dial, encyclopedia_ui, pantheon, paths, ring, zodiac
+from config.registry import week as week_registry
 from render import letter_plates
 from skins.manifest import missing_assets
 
@@ -901,8 +902,8 @@ def test_bronze_finish_and_theme_metals():
     from tests.art_debt import PENDING_BODY_COLORED
 
     missing_colored = set()
-    for theme in c.METAL_THEMES:
-        if "colored" not in c.theme_metals(theme):
+    for theme in ring.METAL_THEMES:
+        if "colored" not in ring.theme_metals(theme):
             # planets_art (owner 2026-07-18): bronze medallions with NO
             # colored/ subfolder — offering "Colored" for it would
             # dangle on a missing asset, so it is excluded up front.
@@ -911,7 +912,7 @@ def test_bronze_finish_and_theme_metals():
         folder = pantheon.weekday_art(
             pantheon.WEEKDAY_THEME_DIRS[theme]
         ).parent / "colored"
-        for body in c.WEEKDAY_BODIES:
+        for body in week_registry.WEEKDAY_BODIES:
             stem = pantheon.WEEKDAY_THEME_FILES[theme][body]
             if not _paths.art_file(folder / f"{stem}.png").exists():
                 missing_colored.add((theme, body))
@@ -930,14 +931,14 @@ def test_bronze_finish_and_theme_metals():
         Settings(), weekday_theme="planets_art",
     )).weekday_set
     assert plain_planets_art.metal is None            # bronze = as drawn
-    assert c.theme_metals("planets_art") == ("gold", "bronze", "silver")
-    assert "colored" not in c.theme_metals("planets_art")
-    for animal in c.CHINESE_ANIMALS:
+    assert ring.theme_metals("planets_art") == ("gold", "bronze", "silver")
+    assert "colored" not in ring.theme_metals("planets_art")
+    for animal in zodiac.CHINESE_ANIMALS:
         assert _paths.art_file(
             defaults.ZODIAC_ART_DIR / "zodiac" / "chinese" / "primary" / "colored"
             / f"{animal}.png"
         ).exists(), animal
-    for sign, _ in c.ZODIAC_SIGNS:
+    for sign, _ in zodiac.ZODIAC_SIGNS:
         assert _paths.art_file(
             defaults.ZODIAC_ART_DIR / "zodiac" / "astrology" / "primary"
             / "colored" / f"{sign}.png"

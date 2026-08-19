@@ -135,3 +135,15 @@ Tetramorph's paragraph two reuses its evangelist rondel.
   many degrees of true solar noon OR midnight — the rest of the time it
   draws at the weekday `ghost_opacity`, exactly like an un-lit arm
   figure.
+
+## What THE CONSTANTS SPLIT added (2026-08-19)
+
+**TRIO & GENESIS ARM THEMES** moved in from the deleted
+`config/constants.py`: `TRIO_ARM_THEMES` and `GENESIS_ARM_OFFICES`.
+
+THE ARCHETYPE MODE's (pointer, wheel) → figure grid already answers what
+each of those arms SHOWS; the arm themes and offices say what each is
+called and which office it holds. One subject, one module.
+
+The whole 38-section map, with the reason for every destination, is
+in [Config (folder)](../___config.md#the-constants-split).

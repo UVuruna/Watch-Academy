@@ -22,7 +22,7 @@ from app.settings_fields import (
     save_moving_bodies, save_numerals,
 )
 from app.settings_ring import fold_ring_name, load_named_dict, normalized_ring_card
-from config import calendar_mounts, complications, constants, defaults, dial, eras, identity, pantheon, pointer_geometry, ring, ui_ranges, umbra
+from config import calendar_mounts, complications, defaults, dial, eras, identity, pantheon, pointer_geometry, registry, ring, ui_ranges, umbra
 from config.registry import week as week_registry
 from config.registry import slots as slot_registry
 from data.locations import Place, default_place
@@ -94,7 +94,7 @@ class Settings:
                                         # light = Almanac wheel
     # The Calendar MOUNT (R9a, DESIGN ZODIAC law; GENERALIZED 2026-07-29):
     # WHICH roster rides the twelve wedges — "off" or any key of
-    # `constants.CALENDAR_MOUNTS`. A file written before the
+    # `calendar_mounts.CALENDAR_MOUNTS`. A file written before the
     # generalization keeps its value untouched; a file written before
     # the LIT-WEDGE DELETION (same day) still carries a stale
     # `calendar_lighting` key, which the loader simply ignores.
@@ -218,7 +218,7 @@ class Settings:
     # letters always; badge medallions for gold/silver — bronze badges
     # stay the art as drawn). Names validated against
     # `config.ring.METAL_SHADE_NAMES`; defaults are the shade
-    # closest to the pre-redo look (`config.constants.
+    # closest to the pre-redo look (`config.ring.
     # METAL_SHADE_DEFAULT`).
     metal_shade_gold: str = "classic"
     metal_shade_bronze: str = "bronze"
@@ -271,7 +271,7 @@ class Settings:
     # family; "custom" cycles the CHECKED themes.
     theme_rotation_group: str = "none"
     theme_rotation_minutes: int = 60
-    theme_rotation_themes: tuple[str, ...] = constants.WEEKDAY_THEMES
+    theme_rotation_themes: tuple[str, ...] = registry.THEMES
     # The METAL each bronze-plate theme wears (owner 2026-07-12):
     # {"greek"/"norse"/"profession": "gold"/"bronze"/"silver"}; absent
     # theme = bronze (the art as drawn). follow_ring makes all three
@@ -500,8 +500,8 @@ class SettingsStore:
                 name.lower(): name for name in ring_presets(custom_rings)
             }
             ring_value = str(raw.get("ring", "DOMY"))
-            ring = fold_ring_name(ring_value, by_fold)
-            if ring is None:
+            ring_name = fold_ring_name(ring_value, by_fold)
+            if ring_name is None:
                 raise ValueError(f"ring {ring_value!r} unknown")
             # Per-preset dict, same lenient policy `theme_metals`
             # already uses below — a non-bool value or a name that
@@ -601,13 +601,13 @@ class SettingsStore:
                 ("octa_slot", "time", complications.OCTA_SLOT_MODES),
                 ("day_slot_style", "sign", complications.SLOT_STYLE_VALUES),
                 ("info_slot_style", "sign", complications.SLOT_STYLE_VALUES),
-                ("info_slot_theme", "planets", constants.WEEKDAY_THEMES),
+                ("info_slot_theme", "planets", registry.THEMES),
                 ("weekday_slot", "weekday", complications.WEEKDAY_SLOT_MODES),
                 ("third_slot", "date", complications.OCTA_SLOT_MODES),
                 ("third_slot_style", "sign", complications.SLOT_STYLE_VALUES),
-                ("third_slot_theme", "planets", constants.WEEKDAY_THEMES),
+                ("third_slot_theme", "planets", registry.THEMES),
                 ("earth_style", "atmo", complications.EARTH_STYLES),
-                ("weekday_theme", "planets", constants.WEEKDAY_THEMES),
+                ("weekday_theme", "planets", registry.THEMES),
                 ("subdial_style", "black", ring.SUBDIAL_STYLES),
                 ("subdial_set", "set1", ring.SUBDIAL_SETS),
                 ("metal_shade_gold", ring.METAL_SHADE_DEFAULT["gold"],
@@ -709,10 +709,10 @@ class SettingsStore:
                 theme_rotation_themes=tuple(
                     theme
                     for theme in raw.get(
-                        "theme_rotation_themes", constants.WEEKDAY_THEMES
+                        "theme_rotation_themes", registry.THEMES
                     )
-                    if theme in constants.WEEKDAY_THEMES
-                ) or constants.WEEKDAY_THEMES,
+                    if theme in registry.THEMES
+                ) or registry.THEMES,
                 theme_metals={
                     str(theme): str(metal)
                     for theme, metal in dict(
@@ -728,7 +728,7 @@ class SettingsStore:
                     raw, "theme_metal_follow_ring", False
                 ),
                 place=place,
-                ring=ring,
+                ring=ring_name,
                 custom_rings=custom_rings,
                 ring_eye_shine=ring_eye_shine,
                 ring_inner=ring_inner,

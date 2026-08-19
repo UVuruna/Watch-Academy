@@ -29,7 +29,7 @@ from PySide6.QtWidgets import QApplication, QScrollArea
 from app.encyclopedia import EncyclopediaDialog, topics as build_topics
 from app.encyclopedia.cards import card_width_for, row_content_width
 from app.encyclopedia.tree import resolve_target, switch_variant, variant_at
-from config import constants, defaults, encyclopedia_ui, palette, pantheon, ui_ranges
+from config import defaults, encyclopedia_ui, palette, pantheon, registry, ui_ranges
 from config import encyclopedia_tree as tree
 from tests.test_theme_completeness import _look_only_themes
 
@@ -101,7 +101,7 @@ def test_every_dial_theme_is_reachable_from_home():
     been registered and worded, because none of them had a whole."""
     look_only = _look_only_themes()
     unreachable = []
-    for theme in constants.WEEKDAY_THEMES:
+    for theme in registry.THEMES:
         if theme in look_only:
             continue
         if theme in tree.THEME_TO_WHOLE:
@@ -187,7 +187,6 @@ def test_zooming_all_the_way_in_still_grows_no_horizontal_bar(app):
     """Zoom scales cards, fonts and images — never the page's width past
     its viewport (owner round R8b item 5a; the regression that started
     this law was exactly "zoom in on a narrow window")."""
-    from config import constants
 
     dialog = EncyclopediaDialog()
     dialog.resize(dialog.minimumWidth(), dialog.minimumHeight())

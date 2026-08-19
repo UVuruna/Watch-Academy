@@ -42,8 +42,8 @@ from PySide6.QtGui import (
     QColor, QImage, QImageReader, QPainter, QPainterPath, QPen, QPixmap,
 )
 
-from config import (, umbra
-    constants, defaults, dial, palette, pantheon, paths, profiling, shortcuts,
+from config import (
+    defaults, dial, palette, pantheon, paths, profiling, shortcuts, umbra,
 )
 from config.paths import art_file
 from render import raster_store

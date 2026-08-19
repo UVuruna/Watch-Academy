@@ -80,6 +80,13 @@ def _earth_stems():
 # Every table below is ONE assignment over WEEK. Nothing is patched
 # afterwards; a value that used to be an "exception" is now a field.
 
+# Weekday body themes (SYMBOLISM.md canon): "planets" uses the skin's
+# own weekday unit; the others swap in the owner's themed art from
+# assets/skins/domy/weekday/<theme>/ with the canon display names.
+# Read as `registry.THEMES` everywhere since 2026-08-19: the alias
+# `constants.WEEKDAY_THEMES` was deleted with the rest of THE CONSTANTS
+# SPLIT rather than moved, because a second name for the same object is
+# a re-export shim (rules/CODE.md - No backward compatibility).
 THEMES = tuple(WEEK)
 
 GROUP_OF = {theme: label for label, themes in MENU for theme in themes}
@@ -88,8 +95,14 @@ TITLES = {k: v["title"] for k, v in WEEK.items() if v["title"] is not None}
 
 DIRS = {k: v["art"] for k, v in WEEK.items() if v["art"] is not None}
 
+# Theme -> symbolism.json article set (the glyph theme shares the
+# planet articles - same entities, different art). Formerly aliased as
+# `constants.WEEKDAY_THEME_ARTICLES`; the alias is gone (2026-08-19).
 ARTICLES = {k: v["articles"] for k, v in WEEK.items() if v["articles"]}
 
+# Theme -> symbolism.json blurb key (the encyclopedic text under the
+# hexa diamond hover follows the active theme). Formerly aliased as
+# `constants.WEEKDAY_THEME_BLURBS`; the alias is gone (2026-08-19).
 BLURBS = {k: v["blurbs"] for k, v in WEEK.items() if v["blurbs"]}
 
 METAL_THEMES = tuple(k for k, v in WEEK.items() if "metals" in v)

@@ -16,7 +16,7 @@ os.environ.setdefault("QT_QPA_PLATFORM", "offscreen")
 import calendar
 from datetime import date
 
-from config import calendar_mounts, constants, defaults, paths
+from config import calendar_mounts, defaults, paths
 from data.encyclopedia import EncyclopediaRepository
 
 

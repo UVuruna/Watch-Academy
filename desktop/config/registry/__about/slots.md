@@ -43,3 +43,28 @@ what lets ONE `_set_slot(index, ...)` serve all three.
   role name they already speak (`keys["theme"]`) and pass that straight
   to `getattr`/`replace`; a typed record would buy nothing here and
   cost the table its at-a-glance shape.
+
+## What THE CONSTANTS SPLIT added (2026-08-19)
+
+The **WHEEL slots** moved in from the deleted `config/constants.py`:
+`PALETTE_STYLES` (primary / secondary / tertiary), `THIRD_WHEEL_POINTERS`
+(the four pointers whose row carries a third wheel), the
+`palette_styles_for()` gate every caller reads, and the **WHEEL ARM
+OFFSETS** — `GENESIS_ARM_OFFSET_DEG` (THE GENESIS INVERSION),
+`SEASONS_ARM_OFFSET_DEG` (THE SEASONS ROTATION) and the
+`WHEEL_ARM_OFFSET_DEG` table `render.layers.arm_offset_deg` reads.
+
+**The word "slot" now means two things in this module, and that is
+deliberate.** The dial has three SLOTS (seats that carry content beside
+the time, each with its `Settings` field) and a pointer's palette row has
+three WHEEL slots. Both are declared here so a reader finds the whole
+vocabulary in one place instead of chasing it across two modules — the
+module docstring names both.
+
+What a wheel MEANS is still not here: that is
+`config/pointer_names.py`'s `POINTER_PALETTE_LABELS`, the one place a
+wheel's meaning is written. The keys in `PALETTE_STYLES` are positional
+and carry no meaning of their own (owner decree 2026-07-28).
+
+The whole 38-section map, with the reason for every destination, is
+in [Config (folder)](../../___config.md#the-constants-split).
