@@ -15,7 +15,7 @@ from astral import LocationInfo
 
 from app.skin_builder import build_skin
 from app.settings_store import Settings, SettingsStore, replace
-from config import constants, dial
+from config import dial, umbra
 from core import angles
 from core.moon import moon_horizon_arcs
 from render.layers.moon_band import MoonBandLayer
@@ -336,14 +336,14 @@ def test_settings_reject_unknown_mode_falls_back_to_default(tmp_path) -> None:
         encoding="utf-8",
     )
     loaded = store.load()
-    assert loaded.moon_band_mode == constants.MOON_BAND_MODE_DEFAULT
-    assert loaded.moon_band_style == constants.MOON_BAND_STYLE_DEFAULT
+    assert loaded.moon_band_mode == umbra.MOON_BAND_MODE_DEFAULT
+    assert loaded.moon_band_style == umbra.MOON_BAND_STYLE_DEFAULT
 
 
 # --- SKIN wiring + mode/style smoke test ------------------------------------
 
 
-@pytest.mark.parametrize("style", constants.MOON_BAND_STYLES)
+@pytest.mark.parametrize("style", umbra.MOON_BAND_STYLES)
 def test_every_style_paints_without_error(style) -> None:
     """A smoke test for all 4 styles: each one paints a real Skin/
     RenderContext-shaped scene without raising, both for the ordinary
@@ -454,18 +454,18 @@ def _contact_ink(state: str) -> "QImage":
 def test_the_contacts_stand_at_the_documented_approximation() -> None:
     """THE FOUR CONTACTS are P1, U1, U4, P4 (owner ballot 2026-08-13) and
     they are INDICATIVE: the catalog stores only greatest eclipse, so the
-    umbral pair sit at half of `constants.ECLIPSE_BAND_DURATION_H` either
+    umbral pair sit at half of `umbra.ECLIPSE_BAND_DURATION_H` either
     side of the peak — the SAME approximation the segment already draws,
     kept in the one place — and the penumbral pair at
     `ECLIPSE_PENUMBRAL_SPAN_RATIO` times that. This pins the arithmetic
     so a later round cannot quietly widen one without the other."""
-    umbral_half = constants.ECLIPSE_BAND_DURATION_H / 24.0 * 360.0 / 2.0
+    umbral_half = umbra.ECLIPSE_BAND_DURATION_H / 24.0 * 360.0 / 2.0
     assert umbral_half == pytest.approx(22.5)
-    penumbral_half = umbral_half * constants.ECLIPSE_PENUMBRAL_SPAN_RATIO
+    penumbral_half = umbral_half * umbra.ECLIPSE_PENUMBRAL_SPAN_RATIO
     assert penumbral_half == pytest.approx(40.05)
     # The ratio is the shadow geometry, never a second guess: ~4.6 lunar
     # radii of penumbra over ~2.6 of umbra.
-    assert constants.ECLIPSE_PENUMBRAL_SPAN_RATIO == pytest.approx(
+    assert umbra.ECLIPSE_PENUMBRAL_SPAN_RATIO == pytest.approx(
         4.6 / 2.6, abs=0.03
     )
 

@@ -17,7 +17,7 @@ never silently defaulted).
 
 import re
 
-from config import constants, dial, eras, pantheon, pointer_geometry
+from config import constants, dial, eras, pantheon, pointer_geometry, umbra
 from data.locations import Place, default_place, place_from_mapping
 
 _HEX_COLOR = re.compile(r"^#[0-9A-Fa-f]{6}$")
@@ -111,7 +111,7 @@ def save_numerals(settings) -> dict:
 
 def load_moving_bodies(raw: dict) -> dict:
     """THE MOVING BODIES' eight menus (owner verdict 2026-08-10) as
-    `Settings` kwargs, read straight off `constants.MOVING_BODY_MENUS`
+    `Settings` kwargs, read straight off `umbra.MOVING_BODY_MENUS`
     — the ONE roster the controller and the Watch Face section also
     read. Written as a roster walk rather than one hand-copied
     `load_choice` block per menu: the seven blocks it replaces pushed
@@ -119,7 +119,7 @@ def load_moving_bodies(raw: dict) -> dict:
     added to the roster now reaches storage with no edit here at all."""
     return {
         name: load_choice(raw, name, choices, default)
-        for name, (choices, default) in constants.MOVING_BODY_MENUS.items()
+        for name, (choices, default) in umbra.MOVING_BODY_MENUS.items()
     }
 
 
@@ -128,7 +128,7 @@ def save_moving_bodies(settings) -> dict:
     `load_moving_bodies`, walking the same roster so a stored file can
     never carry a menu the loader does not read back."""
     return {
-        name: getattr(settings, name) for name in constants.MOVING_BODY_MENUS
+        name: getattr(settings, name) for name in umbra.MOVING_BODY_MENUS
     }
 
 

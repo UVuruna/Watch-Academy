@@ -42,7 +42,7 @@ from PySide6.QtGui import (
     QColor, QImage, QImageReader, QPainter, QPainterPath, QPen, QPixmap,
 )
 
-from config import (
+from config import (, umbra
     constants, defaults, dial, palette, pantheon, paths, profiling, shortcuts,
 )
 from config.paths import art_file
@@ -156,7 +156,7 @@ def moon_phase_image(
     2026-08-10 this renderer still carried its own copy of it, and the
     Encyclopedia would have gone on printing the retired treatment
     beside a dial that no longer drew it. `style` defaults to
-    `constants.MOON_DARK_STYLE_DEFAULT` because these images are cached
+    `umbra.MOON_DARK_STYLE_DEFAULT` because these images are cached
     by (phase, size) on disk and shared process-wide — they are not
     per-watch, so they follow the shipped default rather than one
     window's pick.
@@ -203,7 +203,7 @@ def moon_phase_image(
 
     draw_moon_disc(
         painter, fraction, radius,
-        style if style is not None else constants.MOON_DARK_STYLE_DEFAULT,
+        style if style is not None else umbra.MOON_DARK_STYLE_DEFAULT,
         paint_face, marker.moon_dark_color,
     )
     painter.end()

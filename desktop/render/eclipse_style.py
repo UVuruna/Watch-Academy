@@ -26,7 +26,7 @@ exact failure the ballot names.
 Layer: render. Documentation: __about/eclipse_style.md.
 """
 
-from config import constants
+from config import umbra
 
 
 # Every solar/lunar style this module can actually PAINT today, keyed
@@ -116,8 +116,8 @@ def resolve_eclipse_style(
     — that is a real bug (a typo, a stale name), never a case this door
     should quietly paper over."""
     roster = (
-        constants.ECLIPSE_SOLAR_STYLES if kind == "solar"
-        else constants.ECLIPSE_LUNAR_STYLES
+        umbra.ECLIPSE_SOLAR_STYLES if kind == "solar"
+        else umbra.ECLIPSE_LUNAR_STYLES
     )
     if style not in roster:
         raise ValueError(f"unknown {kind} eclipse style {style!r}")

@@ -30,7 +30,7 @@ from pathlib import Path
 from PySide6.QtCore import QPointF, QRectF, Qt
 from PySide6.QtGui import QColor, QImage, QPainter, QPixmap
 
-from config import constants, defaults, glow, palette, paths
+from config import defaults, glow, palette, paths, umbra
 from render import marker_marks, moon_face, raster_store
 from render.eclipse_glow import (
     draw_event_glow,
@@ -62,8 +62,8 @@ TYPES = {
     "lunar": ("total", "partial", "penumbral"),
 }
 STYLES = {
-    "solar": constants.ECLIPSE_SOLAR_STYLES,
-    "lunar": constants.ECLIPSE_LUNAR_STYLES,
+    "solar": umbra.ECLIPSE_SOLAR_STYLES,
+    "lunar": umbra.ECLIPSE_LUNAR_STYLES,
 }
 # A TYPICAL catalog magnitude per type — the plate has no real event to
 # read, and the geometry styles ("bite", "umbra_sweep", "magnitude_arc")
@@ -71,7 +71,7 @@ STYLES = {
 # same picture for every type. These are the values the reference tables
 # give for an average eclipse of each kind, stated here rather than
 # hidden in the painter (a documented approximation, exactly like
-# `constants.ECLIPSE_BAND_DURATION_H`).
+# `umbra.ECLIPSE_BAND_DURATION_H`).
 TYPICAL_MAGNITUDE = {
     ("solar", "total"): 1.05,
     ("solar", "annular"): 0.94,
@@ -223,7 +223,7 @@ def _draw_lunar(
     # A FULL disc: a lunar eclipse only ever happens at full moon, so
     # 0.5 is not a chosen illustration but the phase the event requires.
     moon_face.draw_moon_disc(
-        painter, 0.5, radius, constants.MOON_DARK_STYLE_DEFAULT,
+        painter, 0.5, radius, umbra.MOON_DARK_STYLE_DEFAULT,
         paint_face, palette.MOON_SILVER,
     )
     if style == "umbra_sweep":

@@ -24,7 +24,7 @@ from app.settings_dialog.dialog import SettingsDialog
 from app.skin_builder import build_skin
 from app.settings_store import replace
 from app.slot_descriptor import SlotDescriptor
-from config import constants, palette, paths
+from config import palette, paths, umbra
 from config import watch_face as watch_face_keys
 from config.registry.slots import SLOT_KEYS
 
@@ -164,7 +164,7 @@ class _DialogHostsMixin:
             **{
                 key: wrap(_display_choice(self._set_display_choice, key))
                 for key in (*watch_face_keys.DISPLAY_CHOICE_KEYS,
-                            *constants.MOVING_BODY_MENUS)
+                            *umbra.MOVING_BODY_MENUS)
             },
             # --- and the controls that are NOT a plain key write -------
             # Each of these needs a method of its own: it touches more

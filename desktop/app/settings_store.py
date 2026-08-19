@@ -22,7 +22,7 @@ from app.settings_fields import (
     save_moving_bodies, save_numerals,
 )
 from app.settings_ring import fold_ring_name, load_named_dict, normalized_ring_card
-from config import calendar_mounts, constants, defaults, dial, eras, identity, pantheon, pointer_geometry
+from config import calendar_mounts, constants, defaults, dial, eras, identity, pantheon, pointer_geometry, umbra
 from config.registry import week as week_registry
 from data.locations import Place, default_place
 from data.rings import ring_presets
@@ -250,19 +250,19 @@ class Settings:
     # THE MOON HORIZON BAND (owner verdict 2026-08-09): the 3-mode
     # switch ("horizon" band+dimming default, "dim_only", "always_full")
     # and the 4 owner-approved styles, read only in "horizon" mode.
-    moon_band_mode: str = constants.MOON_BAND_MODE_DEFAULT
-    moon_band_style: str = constants.MOON_BAND_STYLE_DEFAULT
+    moon_band_mode: str = umbra.MOON_BAND_MODE_DEFAULT
+    moon_band_style: str = umbra.MOON_BAND_STYLE_DEFAULT
     # THE MOVING BODIES (owner verdict 2026-08-10) — the eight menus of
     # `constants`' section of that name, all picked in Watch Face ▸
     # Hands & Bodies beside the hand pack, because the Moon and the
     # Earth belong to the hands system.
-    moon_dark_style: str = constants.MOON_DARK_STYLE_DEFAULT
-    moon_transit_style: str = constants.MOON_TRANSIT_STYLE_DEFAULT
-    marker_pointer_shape: str = constants.MARKER_POINTER_SHAPE_DEFAULT
-    eclipse_solar_style: str = constants.ECLIPSE_SOLAR_STYLE_DEFAULT
-    eclipse_lunar_style: str = constants.ECLIPSE_LUNAR_STYLE_DEFAULT
-    moon_station_style: str = constants.MOON_STATION_STYLE_DEFAULT
-    sun_station_style: str = constants.SUN_STATION_STYLE_DEFAULT
+    moon_dark_style: str = umbra.MOON_DARK_STYLE_DEFAULT
+    moon_transit_style: str = umbra.MOON_TRANSIT_STYLE_DEFAULT
+    marker_pointer_shape: str = umbra.MARKER_POINTER_SHAPE_DEFAULT
+    eclipse_solar_style: str = umbra.ECLIPSE_SOLAR_STYLE_DEFAULT
+    eclipse_lunar_style: str = umbra.ECLIPSE_LUNAR_STYLE_DEFAULT
+    moon_station_style: str = umbra.MOON_STATION_STYLE_DEFAULT
+    sun_station_style: str = umbra.SUN_STATION_STYLE_DEFAULT
     hands: str = "STEEL"                # the hand pack (Design ▸ Hands)
     # Theme rotation (owner spec 2026-07-12; group dropdown
     # 2026-07-14): "none" = the canon, no rotation; a kinship-group
@@ -589,8 +589,8 @@ class SettingsStore:
                 ("language", "en", tuple(constants.TRANSLATION_LANGUAGES)),
                 ("ring_finish", "gold", constants.RING_FINISHES),
                 ("pointer", "hexa", tuple(pointer_geometry.POINTER_POINTS)),
-                ("umbra_form", "gradient", constants.UMBRA_FORMS),
-                ("umbra_contrast", "dark", constants.UMBRA_CONTRAST_VARIANTS),
+                ("umbra_form", "gradient", umbra.UMBRA_FORMS),
+                ("umbra_contrast", "dark", umbra.UMBRA_CONTRAST_VARIANTS),
                 ("palette_style", "primary", constants.PALETTE_STYLES),
                 ("pointer_shape", pointer_geometry.POINTER_SHAPE_DEFAULT,
                  pointer_geometry.POINTER_SHAPES),
@@ -623,8 +623,8 @@ class SettingsStore:
                 ("era_notation", "bce_ce", eras.ERA_NOTATIONS),
                 ("third_era", "none", eras.THIRD_ERAS),
                 ("z_mode", "bottom", eras.Z_MODES),
-                ("umbra_tint_mode", "follow", constants.UMBRA_TINT_MODES),
-                ("aura_off_tint_mode", "white", constants.AURA_OFF_TINT_MODES),
+                ("umbra_tint_mode", "follow", umbra.UMBRA_TINT_MODES),
+                ("aura_off_tint_mode", "white", umbra.AURA_OFF_TINT_MODES),
             ):
                 value = str(raw.get(key, default))
                 if value not in allowed:
@@ -685,12 +685,12 @@ class SettingsStore:
                     raw, "moon_hidden_alpha", 0.0, 1.0, 0.5
                 ),
                 moon_band_mode=load_choice(
-                    raw, "moon_band_mode", constants.MOON_BAND_MODES,
-                    constants.MOON_BAND_MODE_DEFAULT,
+                    raw, "moon_band_mode", umbra.MOON_BAND_MODES,
+                    umbra.MOON_BAND_MODE_DEFAULT,
                 ),
                 moon_band_style=load_choice(
-                    raw, "moon_band_style", constants.MOON_BAND_STYLES,
-                    constants.MOON_BAND_STYLE_DEFAULT,
+                    raw, "moon_band_style", umbra.MOON_BAND_STYLES,
+                    umbra.MOON_BAND_STYLE_DEFAULT,
                 ),
                 **load_moving_bodies(raw),
                 hands=(

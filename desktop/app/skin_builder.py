@@ -786,13 +786,13 @@ def _overlay_display_settings(skin, settings: Settings, display):
         moon_band_mode=settings.moon_band_mode,
         moon_band_style=settings.moon_band_style,
         # THE MOVING BODIES (owner verdict 2026-08-10): eight menus, one
-        # roster — `constants.MOVING_BODY_MENUS` names every one, and
+        # roster — `umbra.MOVING_BODY_MENUS` names every one, and
         # the spec carries a field of the SAME name for each, so this
         # overlay never needs a line per menu and can never drift from
         # what storage loads.
         **{
             name: getattr(settings, name)
-            for name in constants.MOVING_BODY_MENUS
+            for name in umbra.MOVING_BODY_MENUS
         },
     )
     # A stored "tertiary" wheel only holds where the pointer serves one

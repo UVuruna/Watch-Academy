@@ -24,7 +24,7 @@ from PySide6.QtGui import (
     QColor, QPainter, QPainterPath, QPen, QPolygonF, QRadialGradient,
 )
 
-from config import constants, dial, glow, palette
+from config import dial, glow, palette, umbra
 from render.eclipse_glow import draw_event_glow
 from render.moon_face import dark_region
 from render.painting import dial_point
@@ -82,7 +82,7 @@ assert _OUTERMOST_MARK <= glow.MARK_REACH_LIMIT, (
 def station_of_moon_event(name: str | None) -> str | None:
     """The life station a moon event opens, or None when the tick is
     not sitting on a principal instant at all."""
-    return None if name is None else constants.MOON_STATION_OF_PHASE.get(name)
+    return None if name is None else umbra.MOON_STATION_OF_PHASE.get(name)
 
 
 def station_of_season_event(name: str | None) -> str | None:
@@ -90,7 +90,7 @@ def station_of_season_event(name: str | None) -> str | None:
     zone-aware event NAME the tick already carries — so a southern
     observer's Winter Solstice is his birth station even though it sits
     at the wheel angle a northern observer calls midsummer."""
-    return None if name is None else constants.SUN_STATION_OF_EVENT.get(name)
+    return None if name is None else umbra.SUN_STATION_OF_EVENT.get(name)
 
 
 # ----------------------------------------------------------------------
@@ -102,7 +102,7 @@ def draw_pointer(
     orbit_fraction: float, half_size_fraction: float, color: str,
     tip_radius: float | None = None,
 ) -> None:
-    """One of `constants.MARKER_POINTER_SHAPES` BEHIND the body (owner
+    """One of `umbra.MARKER_POINTER_SHAPES` BEHIND the body (owner
     correction 2026-08-11, "IZA NE ISPRED ZEMLJE" — the caller draws
     this BEFORE the body's own disc): its tip on the marked point, its
     base hidden under the disc, so only the flanks show beside the
@@ -262,7 +262,7 @@ def draw_station_mark(
             _halo(painter, radius, color, 1.0)
             _arc_grammar(painter, station, radius, color)
         elif style == "inner_glow":
-            outer, _inner = constants.MOON_STATION_GLOW[station]
+            outer, _inner = umbra.MOON_STATION_GLOW[station]
             # THE INTENSITY RAMP (owner spec 2026-08-10): the radius is
             # the SAME for all four stations — a full moon burns
             # brighter, it does not reach further.
@@ -286,7 +286,7 @@ def draw_station_inner_glow(
     half left to glow into at all."""
     if style != "inner_glow":
         return
-    _outer, inner = constants.MOON_STATION_GLOW[station]
+    _outer, inner = umbra.MOON_STATION_GLOW[station]
     if inner <= 0.0:
         return
     painter.save()
@@ -324,7 +324,7 @@ def _sun_station_body(
         _halo(painter, radius, gold, 1.0)
         return
     if style == "uniform_seasonal":
-        season = constants.SUN_STATION_SEASONS[station]
+        season = umbra.SUN_STATION_SEASONS[station]
         _halo(painter, radius, palette.INSTRUMENT_SEASON_COLORS[season], 1.0)
         return
     if style == "arc_grammar":

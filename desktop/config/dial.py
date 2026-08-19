@@ -7,7 +7,7 @@ Layer: config — pure, no Qt, no wall clock.
 
 import math
 
-from config import constants, paths
+from config import paths
 
 
 # --- Dial identity -----------------------------------------------------------
@@ -200,7 +200,7 @@ MARKER_GEM_WIDTH_RATIO = 0.85         # gem width, of its own height
 SEAT_TICK_WIDTH_FRACTION = 0.0068
 SEAT_TICK_BORDER_RATIO = 1.9
 
-# THE CROSSING (owner verdict 2026-08-10, `constants.MOON_TRANSIT_STYLES`)
+# THE CROSSING (owner verdict 2026-08-10, `umbra.MOON_TRANSIT_STYLES`)
 # — how far each non-overlapping style moves the Moon while it meets the
 # Earth on the shared lane, scaled by `render.daylight.
 # moon_transit_nearness` (0 clear, 1 concentric). "lane_split" eases the

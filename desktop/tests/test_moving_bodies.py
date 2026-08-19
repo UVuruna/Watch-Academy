@@ -6,10 +6,10 @@ are drawn (owner verdict 2026-08-10). Pins four separate laws:
    silver ring, and an unknown style raises rather than falling back.
 2. `render.marker_marks.draw_pointer` — THE ANGLE LAW: every shape
    rides the body's own dial angle, never a fixed screen "up".
-3. `constants.MOON_STATION_GLOW` — THE INTENSITY RAMP, exactly as the
+3. `umbra.MOON_STATION_GLOW` — THE INTENSITY RAMP, exactly as the
    owner specified it, plus the cross-table completeness the four
    life stations must keep.
-4. `constants.MOVING_BODY_MENUS` — THE ROSTER LAW: the one table the
+4. `umbra.MOVING_BODY_MENUS` — THE ROSTER LAW: the one table the
    storage, the controller and the GUI all walk, round-tripped through
    a real `SettingsStore`.
 
@@ -27,7 +27,7 @@ from PySide6.QtCore import QPointF, Qt
 from PySide6.QtGui import QColor, QImage, QPainter
 
 from app.settings_store import Settings, SettingsCorruptError, SettingsStore, replace
-from config import constants, palette, sky
+from config import palette, sky, umbra
 from render.marker_marks import draw_pointer, station_of_moon_event, station_of_season_event
 from render.moon_face import dark_region, draw_moon_disc
 from skins.manifest import YearMarkerSpec
@@ -105,7 +105,7 @@ def test_moon_dark_styles_paint_visibly_different_crescents_at_a_thin_phase():
     radius = 150.0
     samples = {
         style: _alpha_at(_render_moon_disc(style, 0.08, radius), -radius * 0.6, 0.0)
-        for style in constants.MOON_DARK_STYLES
+        for style in umbra.MOON_DARK_STYLES
     }
     assert samples["cut_rim"] == 0
     assert 0 < samples["cut_ghost"] < 200
@@ -195,13 +195,13 @@ def _painted_centroid_angle(image: QImage) -> float:
     return math.degrees(math.atan2(dx, -dy)) % 360.0
 
 
-@pytest.mark.parametrize("shape", constants.MARKER_POINTER_SHAPES)
+@pytest.mark.parametrize("shape", umbra.MARKER_POINTER_SHAPES)
 @pytest.mark.parametrize("angle_deg", (0.0, 90.0, 180.0, 270.0))
 def test_pointer_rides_the_bodys_own_dial_angle_not_a_fixed_up(shape, angle_deg):
     """The owner had to correct exactly this once (2026-08-10): a
     proposal mockup drew every pointer straight up, which is only true
     for a body sitting at the top of the dial. Pinned for all three
-    `constants.MARKER_POINTER_SHAPES` at four spread-out angles."""
+    `umbra.MARKER_POINTER_SHAPES` at four spread-out angles."""
     centroid = _painted_centroid_angle(_render_pointer(shape, angle_deg))
     delta = min((centroid - angle_deg) % 360.0, (angle_deg - centroid) % 360.0)
     assert delta < 15.0, (
@@ -224,14 +224,14 @@ def test_unknown_pointer_shape_raises_instead_of_a_silent_fallback():
 # ----------------------------------------------------------------------
 
 def test_station_glow_ramp_matches_the_owners_exact_words():
-    """`constants.MOON_STATION_GLOW` as (outer, inner) fractions of
+    """`umbra.MOON_STATION_GLOW` as (outer, inner) fractions of
     peak intensity: zenith (full moon) carries the STRONGEST outer
     intensity of the four; youth and age share the SAME outer
     intensity; youth alone carries an inner glow, age none at all."""
-    outer = {s: constants.MOON_STATION_GLOW[s][0] for s in constants.LIFE_STATIONS}
-    inner = {s: constants.MOON_STATION_GLOW[s][1] for s in constants.LIFE_STATIONS}
+    outer = {s: umbra.MOON_STATION_GLOW[s][0] for s in umbra.LIFE_STATIONS}
+    inner = {s: umbra.MOON_STATION_GLOW[s][1] for s in umbra.LIFE_STATIONS}
     assert outer["zenith"] == max(outer.values())
-    assert all(outer["zenith"] > outer[s] for s in constants.LIFE_STATIONS if s != "zenith")
+    assert all(outer["zenith"] > outer[s] for s in umbra.LIFE_STATIONS if s != "zenith")
     assert outer["youth"] == outer["age"]
     assert inner["youth"] > 0.0
     assert inner["age"] == 0.0
@@ -240,16 +240,16 @@ def test_station_glow_ramp_matches_the_owners_exact_words():
 def test_every_life_station_has_a_moon_glow_entry_and_a_sun_season_entry():
     """One roster (`LIFE_STATIONS`) drives two tables — a station can
     never exist in one and be missing from the other."""
-    for station in constants.LIFE_STATIONS:
-        assert station in constants.MOON_STATION_GLOW, station
-        assert station in constants.SUN_STATION_SEASONS, station
+    for station in umbra.LIFE_STATIONS:
+        assert station in umbra.MOON_STATION_GLOW, station
+        assert station in umbra.SUN_STATION_SEASONS, station
 
 
 def test_every_sun_station_season_is_a_real_instrument_season_color():
     """THE PALETTE COLOUR LAW: `uniform_seasonal`'s halo reads
     `palette.INSTRUMENT_SEASON_COLORS`, so it can never name a season
     the palette does not sample."""
-    for season in constants.SUN_STATION_SEASONS.values():
+    for season in umbra.SUN_STATION_SEASONS.values():
         assert season in palette.INSTRUMENT_SEASON_COLORS, season
 
 
@@ -262,7 +262,7 @@ _MARKER_SPEC_FIELD_NAMES = {f.name for f in dataclasses.fields(YearMarkerSpec)}
 
 
 def test_every_moving_body_menu_is_a_real_settings_field():
-    for name in constants.MOVING_BODY_MENUS:
+    for name in umbra.MOVING_BODY_MENUS:
         assert name in _SETTINGS_FIELD_NAMES, name
 
 
@@ -270,12 +270,12 @@ def test_every_moving_body_menu_is_a_real_year_marker_spec_field():
     """The overlay depends on the names matching — a menu present in
     one table and absent from the other would silently stop reaching
     the dial."""
-    for name in constants.MOVING_BODY_MENUS:
+    for name in umbra.MOVING_BODY_MENUS:
         assert name in _MARKER_SPEC_FIELD_NAMES, name
 
 
 def test_every_moving_body_default_belongs_to_its_own_choices():
-    for name, (choices, default) in constants.MOVING_BODY_MENUS.items():
+    for name, (choices, default) in umbra.MOVING_BODY_MENUS.items():
         assert default in choices, name
 
 
@@ -286,7 +286,7 @@ def test_moving_body_menus_round_trip_through_settings_store(tmp_path):
     store = SettingsStore(tmp_path / "settings.json")
     overrides = {
         name: next(choice for choice in choices if choice != default)
-        for name, (choices, default) in constants.MOVING_BODY_MENUS.items()
+        for name, (choices, default) in umbra.MOVING_BODY_MENUS.items()
     }
     store.save(replace(Settings(), **overrides))
     loaded = store.load()

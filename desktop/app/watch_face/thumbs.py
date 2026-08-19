@@ -33,7 +33,7 @@ from PySide6.QtGui import (
     QRadialGradient,
 )
 
-from config import constants, dial, glow, palette, paths
+from config import constants, dial, glow, palette, paths, umbra
 from core import angles
 from render import letter_plates, marker_marks, moon_face, raster_store
 from render.daylight import umbra_ladder
@@ -287,7 +287,7 @@ def umbra_icon(form: str, contrast: str) -> QIcon:
             painter.setBrush(QBrush(gradient))
             painter.drawEllipse(QRectF(-radius, -radius, 2 * radius, 2 * radius))
             return
-        sections = constants.UMBRA_SECTION_COUNTS[form]
+        sections = umbra.UMBRA_SECTION_COUNTS[form]
         span = 360.0 / sections
         shades = umbra_ladder(sections // 2 + 1, contrast)
         for k, value in enumerate(shades):
@@ -714,7 +714,7 @@ def moon_station_style_icon(style: str) -> QIcon:
             fraction=0.25,
         )
         moon_face.draw_moon_disc(
-            painter, 0.25, body_radius, constants.MOON_DARK_STYLE_DEFAULT,
+            painter, 0.25, body_radius, umbra.MOON_DARK_STYLE_DEFAULT,
             _plain_moon_face(body_radius), palette.SKIN_MOON_DARK,
         )
         marker_marks.draw_station_inner_glow(

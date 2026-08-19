@@ -53,7 +53,7 @@ import math
 from PySide6.QtCore import QPointF, QRectF, Qt
 from PySide6.QtGui import QColor, QPainter, QPainterPath, QPen, QPolygonF
 
-from config import constants, dial, glow, palette
+from config import dial, glow, palette, umbra
 from core import angles
 from core.moon import MoonArc, moon_horizon_arcs, shift_arcs
 from render.context import Cadence, Layer, RenderContext
@@ -255,7 +255,7 @@ class MoonBandLayer(Layer):
         It is drawn on the band whatever the band's own style is: the
         style decides how the above-horizon arc looks, this is a
         separate mark laid over it. The span comes from
-        `constants.ECLIPSE_BAND_DURATION_H`, a documented approximation
+        `umbra.ECLIPSE_BAND_DURATION_H`, a documented approximation
         — the catalog stores only the instant of greatest eclipse (see
         that constant's own note), so a segment that claimed exact
         contact times would be inventing them.
@@ -264,7 +264,7 @@ class MoonBandLayer(Layer):
         segment's WEIGHT and colour (`_ECLIPSE_SEGMENT_STATE_WEIGHT`):
         the three lunar types drew one identical bar until the rework,
         which made "horizon_shadow" type-blind."""
-        half = constants.ECLIPSE_BAND_DURATION_H / 24.0 * 360.0 / 2.0
+        half = umbra.ECLIPSE_BAND_DURATION_H / 24.0 * 360.0 / 2.0
         width = radius * _ECLIPSE_SEGMENT_WIDTH_FRACTION * (
             _ECLIPSE_SEGMENT_STATE_WEIGHT[state]
         )
@@ -318,20 +318,20 @@ class MoonBandLayer(Layer):
 
         THE APPROXIMATION IS NOT UPGRADED INTO A CLAIM. The catalog
         stores only the instant of GREATEST eclipse (see
-        `constants.ECLIPSE_BAND_DURATION_H`'s own note), so these are
+        `umbra.ECLIPSE_BAND_DURATION_H`'s own note), so these are
         NOT observed contact times and the docs say so in those words.
         The umbral pair sit at half of that same documented span either
         side of the peak — the identical approximation the segment
         already draws, kept in the one place — and the penumbral pair at
-        `constants.ECLIPSE_PENUMBRAL_SPAN_RATIO` times that, a ratio
+        `umbra.ECLIPSE_PENUMBRAL_SPAN_RATIO` times that, a ratio
         derived from the two shadow radii rather than guessed a second
         time.
 
         A PENUMBRAL eclipse draws only P1 and P4: the Moon never enters
         the umbra, so U1 and U4 do not exist, and drawing them would be
         the invention this whole note exists to refuse."""
-        umbral_half = constants.ECLIPSE_BAND_DURATION_H / 24.0 * 360.0 / 2.0
-        penumbral_half = umbral_half * constants.ECLIPSE_PENUMBRAL_SPAN_RATIO
+        umbral_half = umbra.ECLIPSE_BAND_DURATION_H / 24.0 * 360.0 / 2.0
+        penumbral_half = umbral_half * umbra.ECLIPSE_PENUMBRAL_SPAN_RATIO
         width = radius * _ECLIPSE_SEGMENT_WIDTH_FRACTION
         painter.save()
         painter.setBrush(Qt.BrushStyle.NoBrush)

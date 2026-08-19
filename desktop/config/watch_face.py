@@ -30,7 +30,7 @@ Layer: config — pure data, imports nothing.
 # window builds them. Every key here is applied by
 # `_set_display_choice(key, value)` and by nothing else; the eight
 # MOVING BODY menus take the same path but are named by their own
-# registry (`constants.MOVING_BODY_MENUS`) and are spliced in beside
+# registry (`umbra.MOVING_BODY_MENUS`) and are spliced in beside
 # these rather than re-listed, so a body can never be added in one place
 # and forgotten in the other.
 DISPLAY_CHOICE_KEYS: tuple[str, ...] = (

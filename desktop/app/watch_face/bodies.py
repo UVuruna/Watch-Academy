@@ -44,7 +44,7 @@ from PySide6.QtWidgets import (
 from app.watch_face import thumbs
 from app.watch_face.controls import picture_group
 from app.watch_face.widgets import flow_row, pill
-from config import constants, continents, dial
+from config import continents, dial, umbra
 from data.hands import hand_packs
 
 _MOON_DARK_TITLES = {
@@ -284,7 +284,7 @@ def _earth_groups(settings, setters, tr) -> list:
         tr("Position pointer shape"),
         tr("Shape of the small pointer at the body's own angle."),
         _styles(
-            "marker_pointer_shape", constants.MARKER_POINTER_SHAPES,
+            "marker_pointer_shape", umbra.MARKER_POINTER_SHAPES,
             _MARKER_POINTER_SHAPE_TITLES, thumbs.marker_pointer_shape_icon, tr,
         ),
         settings.marker_pointer_shape, setters["marker_pointer_shape"],
@@ -306,7 +306,7 @@ def _moon_groups(settings, setters, tr) -> list:
     groups = [picture_group(
         tr("Moon — unlit half"), tr("How the unlit half of the Moon is drawn."),
         _styles(
-            "moon_dark_style", constants.MOON_DARK_STYLES, _MOON_DARK_TITLES,
+            "moon_dark_style", umbra.MOON_DARK_STYLES, _MOON_DARK_TITLES,
             thumbs.moon_dark_style_icon, tr,
         ),
         settings.moon_dark_style, setters["moon_dark_style"],
@@ -347,7 +347,7 @@ def _moon_groups(settings, setters, tr) -> list:
         tr("Moon — horizon band"),
         tr("Whether an arc shows when the Moon stands above the horizon."),
         _styles(
-            "moon_band_mode", constants.MOON_BAND_MODES, _MOON_BAND_MODE_TITLES,
+            "moon_band_mode", umbra.MOON_BAND_MODES, _MOON_BAND_MODE_TITLES,
             thumbs.moon_band_mode_icon, tr,
         ),
         settings.moon_band_mode, setters["moon_band_mode"],
@@ -356,7 +356,7 @@ def _moon_groups(settings, setters, tr) -> list:
         groups.append(picture_group(
             tr("Moon — band style"), tr("How the horizon band itself is drawn."),
             _styles(
-                "moon_band_style", constants.MOON_BAND_STYLES,
+                "moon_band_style", umbra.MOON_BAND_STYLES,
                 _MOON_BAND_STYLE_TITLES, thumbs.moon_band_style_icon, tr,
             ),
             settings.moon_band_style, setters["moon_band_style"],
@@ -370,7 +370,7 @@ def _eclipse_groups(settings, setters, tr) -> list:
             tr("Solar eclipses"),
             tr("How a solar eclipse is drawn on the Earth marker."),
             _styles(
-                "eclipse_solar_style", constants.ECLIPSE_SOLAR_STYLES,
+                "eclipse_solar_style", umbra.ECLIPSE_SOLAR_STYLES,
                 _ECLIPSE_SOLAR_TITLES, thumbs.eclipse_solar_style_icon, tr,
             ),
             settings.eclipse_solar_style, setters["eclipse_solar_style"],
@@ -379,7 +379,7 @@ def _eclipse_groups(settings, setters, tr) -> list:
             tr("Lunar eclipses"),
             tr("How a lunar eclipse is drawn on the Moon marker."),
             _styles(
-                "eclipse_lunar_style", constants.ECLIPSE_LUNAR_STYLES,
+                "eclipse_lunar_style", umbra.ECLIPSE_LUNAR_STYLES,
                 _ECLIPSE_LUNAR_TITLES, thumbs.eclipse_lunar_style_icon, tr,
             ),
             settings.eclipse_lunar_style, setters["eclipse_lunar_style"],
@@ -393,7 +393,7 @@ def _station_groups(settings, setters, tr) -> list:
             tr("Moon stations"),
             tr("How the Moon's birth/youth/zenith/age marks are drawn."),
             _styles(
-                "moon_station_style", constants.MOON_STATION_STYLES,
+                "moon_station_style", umbra.MOON_STATION_STYLES,
                 _MOON_STATION_TITLES, thumbs.moon_station_style_icon, tr,
             ),
             settings.moon_station_style, setters["moon_station_style"],
@@ -402,7 +402,7 @@ def _station_groups(settings, setters, tr) -> list:
             tr("Sun stations"),
             tr("How the Sun's solstice/equinox life-arc marks are drawn."),
             _styles(
-                "sun_station_style", constants.SUN_STATION_STYLES,
+                "sun_station_style", umbra.SUN_STATION_STYLES,
                 _SUN_STATION_TITLES, thumbs.sun_station_style_icon, tr,
             ),
             settings.sun_station_style, setters["sun_station_style"],

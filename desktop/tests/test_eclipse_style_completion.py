@@ -6,7 +6,7 @@ painter yet: `totality_path`/`type_emblem`/`dial_shadow` (solar),
 it impossible for the roster to silently lose a deliverable again — the
 same failure THE THEME COMPLETION LAW guards for a weekday theme, here
 for one eclipse STYLE roster: every name in
-`constants.ECLIPSE_SOLAR_STYLES` / `ECLIPSE_LUNAR_STYLES` must carry (a)
+`umbra.ECLIPSE_SOLAR_STYLES` / `ECLIPSE_LUNAR_STYLES` must carry (a)
 a human picker label, (b) a settings round-trip, (c) a rendered
 Encyclopedia plate, and (d) either its own painter or an explicit,
 reasoned entry in `render.eclipse_style`'s fallback door.
@@ -21,7 +21,7 @@ from PySide6.QtWidgets import QApplication
 
 from app.settings_store import Settings, SettingsStore, replace
 from app.watch_face.bodies import _ECLIPSE_LUNAR_TITLES, _ECLIPSE_SOLAR_TITLES
-from config import constants
+from config import umbra
 from render.eclipse_plates import TYPES, plate_file
 from render.eclipse_style import resolve_eclipse_style
 
@@ -32,8 +32,8 @@ def app():
 
 
 _ROSTERS = {
-    "solar": (constants.ECLIPSE_SOLAR_STYLES, _ECLIPSE_SOLAR_TITLES),
-    "lunar": (constants.ECLIPSE_LUNAR_STYLES, _ECLIPSE_LUNAR_TITLES),
+    "solar": (umbra.ECLIPSE_SOLAR_STYLES, _ECLIPSE_SOLAR_TITLES),
+    "lunar": (umbra.ECLIPSE_LUNAR_STYLES, _ECLIPSE_LUNAR_TITLES),
 }
 _SETTINGS_FIELD = {
     "solar": "eclipse_solar_style", "lunar": "eclipse_lunar_style",
@@ -100,7 +100,7 @@ def test_every_eclipse_style_is_drawn_or_honestly_declared(kind):
 def test_dial_shadow_is_never_the_solar_default():
     """Owner's explicit instruction (owner ballot 2026-08-13): the most
     aggressive style is selectable but never ships as the default."""
-    assert constants.ECLIPSE_SOLAR_STYLE_DEFAULT != "dial_shadow"
+    assert umbra.ECLIPSE_SOLAR_STYLE_DEFAULT != "dial_shadow"
 
 
 def test_resolve_eclipse_style_rejects_a_garbage_name():

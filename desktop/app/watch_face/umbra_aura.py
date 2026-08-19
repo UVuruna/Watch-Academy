@@ -14,7 +14,7 @@ from PySide6.QtWidgets import QVBoxLayout, QWidget
 
 from app.watch_face import thumbs
 from app.watch_face.controls import picture_group
-from config import constants
+from config import umbra
 
 _FORM_BLURBS = {
     "fine": "Sixteen shade steps — the smoothest ladder, and the busiest.",
@@ -50,7 +50,7 @@ def build(settings, setters: dict, tr) -> QWidget:
                    "the active form.").format(variant=variant),
                 thumbs.umbra_icon(settings.umbra_form, variant),
             )
-            for variant in constants.UMBRA_CONTRAST_VARIANTS
+            for variant in umbra.UMBRA_CONTRAST_VARIANTS
         ],
         settings.umbra_contrast, setters["umbra_contrast"],
     ))

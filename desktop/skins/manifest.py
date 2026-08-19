@@ -10,7 +10,7 @@ hold absolute paths; a None asset means "draw procedurally".
 from dataclasses import dataclass, field
 from pathlib import Path
 
-from config import constants, dial, palette, paths, pointer_geometry
+from config import dial, palette, paths, pointer_geometry, umbra
 
 
 @dataclass(frozen=True)
@@ -207,8 +207,8 @@ class YearMarkerSpec:
     # this spec — a plain pass-through, `app.controller._overlay_
     # display_settings` overlays `Settings.moon_band_mode`/`_style` here
     # the same way it overlays `moon_hidden_alpha`.
-    moon_band_mode: str = constants.MOON_BAND_MODE_DEFAULT
-    moon_band_style: str = constants.MOON_BAND_STYLE_DEFAULT
+    moon_band_mode: str = umbra.MOON_BAND_MODE_DEFAULT
+    moon_band_style: str = umbra.MOON_BAND_STYLE_DEFAULT
     # THE MOVING BODIES (owner verdict 2026-08-10, `config.constants`'s
     # section of the same name): eight menus for how the Moon and the
     # Earth are DRAWN, all of them plain pass-throughs of the matching
@@ -217,8 +217,8 @@ class YearMarkerSpec:
     # off this spec and nothing else — `render.moon_face`,
     # `render.marker_pointer`, `render.eclipse_marks` and
     # `render.station_marks` each own one menu's drawing.
-    moon_dark_style: str = constants.MOON_DARK_STYLE_DEFAULT
-    moon_transit_style: str = constants.MOON_TRANSIT_STYLE_DEFAULT
+    moon_dark_style: str = umbra.MOON_DARK_STYLE_DEFAULT
+    moon_transit_style: str = umbra.MOON_TRANSIT_STYLE_DEFAULT
     # THE CROSSING SWITCHES (owner ballot verdict 2026-08-11) — these
     # three supersede `moon_transit_style` (kept stored for old files):
     transit_shadow: bool = True
@@ -228,11 +228,11 @@ class YearMarkerSpec:
     # ARCHETYPE pointer's own shape (the Pointer section's pills), a
     # different thing entirely, and one overlay walking a shared roster
     # would have silently crossed the two.
-    marker_pointer_shape: str = constants.MARKER_POINTER_SHAPE_DEFAULT
-    eclipse_solar_style: str = constants.ECLIPSE_SOLAR_STYLE_DEFAULT
-    eclipse_lunar_style: str = constants.ECLIPSE_LUNAR_STYLE_DEFAULT
-    moon_station_style: str = constants.MOON_STATION_STYLE_DEFAULT
-    sun_station_style: str = constants.SUN_STATION_STYLE_DEFAULT
+    marker_pointer_shape: str = umbra.MARKER_POINTER_SHAPE_DEFAULT
+    eclipse_solar_style: str = umbra.ECLIPSE_SOLAR_STYLE_DEFAULT
+    eclipse_lunar_style: str = umbra.ECLIPSE_LUNAR_STYLE_DEFAULT
+    moon_station_style: str = umbra.MOON_STATION_STYLE_DEFAULT
+    sun_station_style: str = umbra.SUN_STATION_STYLE_DEFAULT
 
 
 @dataclass(frozen=True)

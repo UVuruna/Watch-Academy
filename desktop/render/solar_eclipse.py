@@ -309,7 +309,7 @@ def draw_solar_eclipse(
     magnitude: float | None, color: str, origin: QPointF | None = None,
     distance_km: float | None = None,
 ) -> None:
-    """The Sun-side eclipse in one of `constants.ECLIPSE_SOLAR_STYLES`,
+    """The Sun-side eclipse in one of `umbra.ECLIPSE_SOLAR_STYLES`,
     drawn as an OVERLAY on a body the caller has already painted.
 
     All three styles read the catalog MAGNITUDE, and all three tell the

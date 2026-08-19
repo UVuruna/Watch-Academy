@@ -79,7 +79,7 @@ def draw_moon_disc(
     painter: QPainter, fraction: float, radius: float, style: str,
     paint_face: Callable[[QPainter], None], dark_color: str,
 ) -> None:
-    """The Moon's disc in one of `constants.MOON_DARK_STYLES`, centred
+    """The Moon's disc in one of `umbra.MOON_DARK_STYLES`, centred
     on the painter's current origin.
 
     `paint_face` draws the FULL-moon face (a pixmap on the dial, a flat
@@ -203,7 +203,7 @@ def draw_blood_moon(
     # BOTH circles, always, from the ONE placement above. Whichever of
     # the two `shadow_placement` measured the magnitude against is the
     # anchor; the other keeps its true proportion to it (the ~1.78 the
-    # measured fractions carry — `constants.ECLIPSE_PENUMBRAL_SPAN_RATIO`
+    # measured fractions carry — `umbra.ECLIPSE_PENUMBRAL_SPAN_RATIO`
     # states the same ratio for the band's contact marks).
     if state == "lunar_penumbral":
         penumbra_radius = shadow_radius

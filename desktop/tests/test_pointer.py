@@ -16,7 +16,7 @@ import pytest
 from PySide6.QtCore import QPointF
 from PySide6.QtWidgets import QApplication
 
-from config import constants, defaults, dial, encyclopedia_ui, glow, palette, pantheon, pointer_geometry, shortcuts
+from config import constants, defaults, dial, encyclopedia_ui, glow, palette, pantheon, pointer_geometry, shortcuts, umbra
 from config.registry import week as week_registry
 from core.clock_state import build_day_context, build_tick_state
 from data.moon_phases import MoonPhaseRepository
@@ -2162,12 +2162,12 @@ def test_umbra_forms_structure():
     """Sectioned forms (owner spec): fine 30 sections/16 shades (his
     measured art), coarse 24/13 — single lightest/darkest + mirror
     pairs; the gradient form has no sections at all."""
-    assert constants.UMBRA_SECTION_COUNTS == {"fine": 30, "coarse": 24}
-    for form, sections in constants.UMBRA_SECTION_COUNTS.items():
+    assert umbra.UMBRA_SECTION_COUNTS == {"fine": 30, "coarse": 24}
+    for form, sections in umbra.UMBRA_SECTION_COUNTS.items():
         shades = sections // 2 + 1
         assert 1 + 2 * (shades - 2) + 1 == sections, form
-    assert "gradient" in constants.UMBRA_FORMS
-    assert "gradient" not in constants.UMBRA_SECTION_COUNTS
+    assert "gradient" in umbra.UMBRA_FORMS
+    assert "gradient" not in umbra.UMBRA_SECTION_COUNTS
 
 
 def test_umbra_ladders_hit_the_owner_values():

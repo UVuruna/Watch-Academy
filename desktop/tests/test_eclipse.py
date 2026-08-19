@@ -23,7 +23,7 @@ import astral
 import pytest
 from PySide6.QtWidgets import QApplication
 
-from config import constants, defaults, dial, encyclopedia_ui, glow, palette, sky
+from config import constants, defaults, dial, encyclopedia_ui, glow, palette, sky, umbra
 from config.registry import week as week_registry
 from core import angles
 from core.clock_state import (
@@ -1718,7 +1718,7 @@ def test_the_dial_shadow_takes_light_away_and_is_never_the_default(app):
         "totality must take more light than a 62 % partial — reach and "
         "depth both ride the covered fraction"
     )
-    assert constants.ECLIPSE_SOLAR_STYLE_DEFAULT != "dial_shadow", (
+    assert umbra.ECLIPSE_SOLAR_STYLE_DEFAULT != "dial_shadow", (
         "the owner's explicit order: selectable, never the default"
     )
 

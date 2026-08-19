@@ -3,7 +3,7 @@
 from PySide6.QtCore import QPointF, QRectF, Qt
 from PySide6.QtGui import QBrush, QColor, QConicalGradient, QPainter
 
-from config import constants, dial, palette
+from config import dial, palette, umbra
 from render.calendar_mount import _draw_calendar_mount, calendar_wedge_bounds, calendar_wheel
 from render.context import Cadence, Layer, RenderContext
 from render.daylight import aurora_bands, lit_regions, umbra_ladder
@@ -229,7 +229,7 @@ class BackgroundLayer(Layer):
             painter.setBrush(QBrush(gradient))
             painter.drawEllipse(QRectF(-radius, -radius, 2 * radius, 2 * radius))
             return
-        sections = constants.UMBRA_SECTION_COUNTS[ctx.skin.umbra_form]
+        sections = umbra.UMBRA_SECTION_COUNTS[ctx.skin.umbra_form]
         span = 360.0 / sections
         shades = umbra_ladder(sections // 2 + 1, contrast)
         for k, value in enumerate(shades):

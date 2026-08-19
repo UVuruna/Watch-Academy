@@ -20,7 +20,7 @@ def moon_transit_nearness(spec, year_angle: float, moon_angle: float) -> float:
     smoothly to 1.0 when they are concentric.
 
     THE ONE MEASURE all three transit styles read (owner verdict
-    2026-08-10, `constants.MOON_TRANSIT_STYLES`) — "lane_split" eases
+    2026-08-10, `umbra.MOON_TRANSIT_STYLES`) — "lane_split" eases
     the Moon inward by it, "shrink_pass" scales the Moon down by it,
     "occultation" uses it only to know that a crossing is happening.
     It reuses the SAME touch angle `moon_transit_opacity` computes, so
