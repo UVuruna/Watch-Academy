@@ -119,7 +119,8 @@ halls table in `app/encyclopedia.py` becomes a READ of taxonomy data
   asset directory (derived, but stored for the structure test).
 - `ROSTERS` — per rotating seat: ordered tuple of figures
   `(stem, display_name, article_key | None)`.
-- Existing flat tables in `constants.py` / `defaults.py` that this
+- Existing flat tables in `config/` (the topic modules THE CONSTANTS
+  SPLIT of 2026-08-19 made, plus `defaults.py`) that this
   supersedes are DELETED and their readers repointed (Rule #6):
   `WEEKDAY_THEMES`, `METAL_THEMES(+OVERRIDE)`, `WEEKDAY_THEME_TITLES`,
   the hall tuples in `encyclopedia.py`, and every per-theme scatter

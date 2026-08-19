@@ -1,0 +1,20 @@
+====================================================================
+Norse Gods — the Aesir Weekday Theme (Planetary + Pantheon, bronze + colored)  [Gemini]
+Run started:  2026-08-14 15:43:43  (0/29 pending)
+--------------------------------------------------------------------
+--------------------------------------------------------------------
+Images: 0
+Run finished: 2026-08-14 15:43:43  (all pending items done)
+
+====================================================================
+Norse Gods — the Aesir Weekday Theme (Planetary + Pantheon, bronze + colored)  [Gemini]
+Run started:  2026-08-14 19:52:23  (3/29 pending)
+--------------------------------------------------------------------
+2026-08-14 19:53:27  masters/weeks/myth/norse/wider/bronze/baldur.png gen   37.9s  ours   23.7s  1024x1024 -> 1013x1012    2.0 MB  [REMOVE BG: done, CROP: done]
+2026-08-14 19:54:32  masters/weeks/myth/norse/wider/bronze/heimdall.png gen   27.3s  ours   35.7s   1024x1024 -> 974x973    1.7 MB  [REMOVE BG: done, CROP: done]
+2026-08-14 19:55:04  masters/weeks/myth/norse/wider/bronze/njord.png gen   29.0s  ours    0.2s    1024x559 -> 526x531    571 KB  [REMOVE BG: done, CROP: done]
+--------------------------------------------------------------------
+Images: 3  |  average generation (AI): 31s/image  |  average our time (save+bgfix+pause): 20s/image
+Total AI + our time: 2m 34s  (wall clock: 2m 41s)
+Run finished: 2026-08-14 19:55:04  (all pending items done)
+

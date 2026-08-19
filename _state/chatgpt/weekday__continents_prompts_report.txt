@@ -1,0 +1,11 @@
+====================================================================
+Continents — the two Ninths  [ChatGPT]
+Run started:  2026-08-14 19:58:45  (2/2 pending)
+--------------------------------------------------------------------
+2026-08-14 20:00:56  masters/celestial/earth/zealandia.png        gen  100.2s  ours   28.3s  1254x1254 -> 1254x1249    2.7 MB  [REMOVE BG: nothing, CROP: done]
+2026-08-14 20:02:36  masters/celestial/earth/pangea.png           gen   97.6s  ours    0.1s              1254x1254    3.3 MB  [REMOVE BG: nothing, CROP: nothing]
+--------------------------------------------------------------------
+Images: 2  |  average generation (AI): 1m 39s/image  |  average our time (save+bgfix+pause): 14s/image
+Total AI + our time: 3m 46s  (wall clock: 3m 51s)
+Run finished: 2026-08-14 20:02:36  (all pending items done)
+

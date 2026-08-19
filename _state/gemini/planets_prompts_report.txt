@@ -1,0 +1,18 @@
+====================================================================
+Planets — the Real-Photo Weekday Theme  [Gemini]
+Run started:  2026-08-14 15:43:43  (0/1 pending)
+--------------------------------------------------------------------
+--------------------------------------------------------------------
+Images: 0
+Run finished: 2026-08-14 15:43:43  (all pending items done)
+
+====================================================================
+Planets — the Real-Photo Weekday Theme  [Gemini]
+Run started:  2026-08-14 19:55:15  (1/1 pending)
+--------------------------------------------------------------------
+2026-08-14 19:55:59  masters/weeks/celestial_bodies/planets/primary/photo/Sun_Eclipse.png gen   41.8s  ours    0.6s   1024x1024 -> 827x804    357 KB  [REMOVE BG: done, CROP: done]
+--------------------------------------------------------------------
+Images: 1  |  average generation (AI): 42s/image  |  average our time (save+bgfix+pause): 1s/image
+Total AI + our time: 42s  (wall clock: 45s)
+Run finished: 2026-08-14 19:55:59  (all pending items done)
+

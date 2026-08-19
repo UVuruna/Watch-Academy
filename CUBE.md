@@ -682,7 +682,7 @@ Sacred Axis."*
     exceptions: **creeds** (the horizontal Sacred-Axis flip above)
     and **continents** (the GEOGRAPHIC vertical flip: the Arctic IS
     the north — Arctic/Servant 12h, Antarctica/Ruler 24h).
-  Config: `constants.CENTER_DUALITY_WHEELS` /
+  Config: `doctrine.CENTER_DUALITY_WHEELS` /
   `HORIZONTAL_DUALITY_WHEELS` / `DUALITY_RULER_ON_COLD_POLE` /
   `DUALITY_SERVANT_ON_TOP` / `CENTER_WINDOW_HOURS`; pinned by
   `tests/test_dual_sunday_wheels.py`. (Sessions 23 + 2026-07-29.)

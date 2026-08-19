@@ -1,0 +1,22 @@
+====================================================================
+Egyptian Gods — the Theban Weekday Theme (Planetary + Pantheon, bronze + colored)  [Gemini]
+Run started:  2026-08-14 15:43:43  (0/31 pending)
+--------------------------------------------------------------------
+--------------------------------------------------------------------
+Images: 0
+Run finished: 2026-08-14 15:43:43  (all pending items done)
+
+====================================================================
+Egyptian Gods — the Theban Weekday Theme (Planetary + Pantheon, bronze + colored)  [Gemini]
+Run started:  2026-08-14 19:47:50  (5/31 pending)
+--------------------------------------------------------------------
+2026-08-14 19:48:52  masters/weeks/myth/egypt/wider/bronze/set.png gen   24.1s  ours   35.7s   1024x1024 -> 984x983    1.6 MB  [REMOVE BG: done, CROP: done]
+2026-08-14 19:50:02  masters/weeks/myth/egypt/wider/bronze/nut.png gen   33.7s  ours   33.7s   1024x1024 -> 984x982    1.8 MB  [REMOVE BG: done, CROP: done]
+2026-08-14 19:50:56  masters/weeks/myth/egypt/wider/bronze/geb.png gen   34.8s  ours   17.6s   1024x1024 -> 978x975    1.5 MB  [REMOVE BG: done, CROP: done]
+2026-08-14 19:51:38  masters/weeks/myth/egypt/wider/bronze/ptah.png gen   21.0s  ours   17.7s   1024x1024 -> 967x968    1.5 MB  [REMOVE BG: done, CROP: done]
+2026-08-14 19:52:13  masters/weeks/myth/egypt/wider/bronze/sekhmet.png gen   31.3s  ours    0.9s   1024x1024 -> 986x987    1.7 MB  [REMOVE BG: done, CROP: done]
+--------------------------------------------------------------------
+Images: 5  |  average generation (AI): 29s/image  |  average our time (save+bgfix+pause): 21s/image
+Total AI + our time: 4m 11s  (wall clock: 4m 23s)
+Run finished: 2026-08-14 19:52:13  (all pending items done)
+

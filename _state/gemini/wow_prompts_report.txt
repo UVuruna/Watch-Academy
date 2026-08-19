@@ -1,0 +1,21 @@
+====================================================================
+World of Warcraft — the Three-Faction Weekday Theme (Gemini/ChatGPT)  [Gemini]
+Run started:  2026-08-14 15:43:43  (0/54 pending)
+--------------------------------------------------------------------
+--------------------------------------------------------------------
+Images: 0
+Run finished: 2026-08-14 15:43:43  (all pending items done)
+
+====================================================================
+World of Warcraft — the Three-Faction Weekday Theme (Gemini/ChatGPT)  [Gemini]
+Run started:  2026-08-14 20:00:28  (4/54 pending)
+--------------------------------------------------------------------
+2026-08-14 20:01:23  masters/weeks/gaming/wow_evil/primary/bronze/Illidan.png gen   33.3s  ours   18.6s   1024x1024 -> 910x909    1.2 MB  [REMOVE BG: done, CROP: done]
+2026-08-14 20:02:35  masters/weeks/gaming/wow_evil/primary/colored/Illidan.png gen   42.8s  ours   25.8s   1024x1024 -> 910x909    1.1 MB  [REMOVE BG: done, CROP: done]
+2026-08-14 20:03:36  masters/weeks/gaming/wow_evil/primary/bronze/Medivh.png gen   38.0s  ours   20.6s   1024x1024 -> 888x881    1.3 MB  [REMOVE BG: done, CROP: done]
+2026-08-14 20:04:26  masters/weeks/gaming/wow_evil/primary/colored/Medivh.png gen   46.6s  ours    0.6s   1024x1024 -> 888x881    1.2 MB  [REMOVE BG: done, CROP: done]
+--------------------------------------------------------------------
+Images: 4  |  average generation (AI): 40s/image  |  average our time (save+bgfix+pause): 16s/image
+Total AI + our time: 3m 46s  (wall clock: 3m 58s)
+Run finished: 2026-08-14 20:04:26  (all pending items done)
+

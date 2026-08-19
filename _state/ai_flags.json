@@ -1,0 +1,21 @@
+{
+  "masters/instrument/logo_gem.png": {
+    "defects": [
+      "Dial shows 24 at the top and 12 at the bottom instead of noon at top and midnight at bottom"
+    ],
+    "raw": "DEFECTS:\n- Dial shows 24 at the top and 12 at the bottom instead of noon at top and midnight at bottom",
+    "checked_at": "2026-08-14T15:39:24",
+    "model": "gemini-flash-latest",
+    "mtime": 1786714736.1817956
+  },
+  "masters/instrument/thirteenth_gem.png": {
+    "defects": [
+      "Content mismatch: the main ring has an open gap rather than 12 closed segments with a 13th lifted above.",
+      "Floating gray artifact / unnatural shadow cutout beneath the lifted top segment."
+    ],
+    "raw": "DEFECTS:\n- Content mismatch: the main ring has an open gap rather than 12 closed segments with a 13th lifted above.\n- Floating gray artifact / unnatural shadow cutout beneath the lifted top segment.",
+    "checked_at": "2026-08-14T15:42:16",
+    "model": "gemini-flash-latest",
+    "mtime": 1786714905.3155563
+  }
+}

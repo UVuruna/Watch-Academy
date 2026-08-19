@@ -1,0 +1,17 @@
+====================================================================
+Continent Prompts — Pangea & Zealandia join the earth matrix  [Gemini]
+Run started:  2026-08-14 19:39:48  (8/8 pending)
+--------------------------------------------------------------------
+2026-08-14 19:40:36  masters/celestial/earth/earth_atmo_pangea_day.png gen   18.2s  ours   27.6s   1024x1024 -> 959x957    1.1 MB  [REMOVE BG: done, CROP: done]
+2026-08-14 19:41:23  masters/celestial/earth/earth_atmo_pangea_night.png gen   23.4s  ours   22.1s   1024x1024 -> 962x961    890 KB  [REMOVE BG: done, CROP: done]
+2026-08-14 19:42:20  masters/celestial/earth/earth_clean_pangea_day.png gen   34.3s  ours   20.7s   1024x1024 -> 950x948    1.1 MB  [REMOVE BG: done, CROP: done]
+2026-08-14 19:43:01  masters/celestial/earth/earth_clean_pangea_night.png gen   25.3s  ours   13.2s   1024x1024 -> 945x945    716 KB  [REMOVE BG: done, CROP: done]
+2026-08-14 19:44:02  masters/celestial/earth/earth_atmo_zealandia_day.png gen   25.0s  ours   33.7s   1024x1024 -> 980x980    989 KB  [REMOVE BG: done, CROP: done]
+2026-08-14 19:44:47  masters/celestial/earth/earth_atmo_zealandia_night.png gen   23.6s  ours   19.0s   1024x1024 -> 980x979    681 KB  [REMOVE BG: done, CROP: done]
+2026-08-14 19:45:26  masters/celestial/earth/earth_clean_zealandia_day.png gen   23.4s  ours   13.1s   1024x1024 -> 951x946    934 KB  [REMOVE BG: done, CROP: done]
+2026-08-14 19:46:04  masters/celestial/earth/earth_clean_zealandia_night.png gen   35.6s  ours    0.5s   1024x1024 -> 950x945    491 KB  [REMOVE BG: done, CROP: done]
+--------------------------------------------------------------------
+Images: 8  |  average generation (AI): 26s/image  |  average our time (save+bgfix+pause): 19s/image
+Total AI + our time: 5m 59s  (wall clock: 6m 16s)
+Run finished: 2026-08-14 19:46:04  (all pending items done)
+

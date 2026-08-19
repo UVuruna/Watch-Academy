@@ -1,0 +1,23 @@
+====================================================================
+Norse Gods — the Aesir Weekday Theme (Planetary + Pantheon, bronze + colored)  [ChatGPT]
+Run started:  2026-08-14 18:20:45  (3/29 pending)
+--------------------------------------------------------------------
+2026-08-14 18:23:44  masters/weeks/myth/norse/wider/bronze/baldur.png gen  139.7s  ours   32.9s  1254x1254 -> 1253x1229    3.2 MB  [REMOVE BG: nothing, CROP: done]
+2026-08-14 18:26:31  masters/weeks/myth/norse/wider/bronze/heimdall.png gen  148.7s  ours   16.0s  1254x1254 -> 1254x1246    3.1 MB  [REMOVE BG: nothing, CROP: done]
+2026-08-14 18:28:37  masters/weeks/myth/norse/wider/bronze/njord.png REFUSED — prompt vanished; re-send failed — ChatGPT: our sent prompt is NO LONGER the newest user turn — the site dropped the mess
+--------------------------------------------------------------------
+Refused: 1 image(s) — rework those prompts in the sheet (or intervene manually) and rerun
+Images: 2  |  average generation (AI): 2m 24s/image  |  average our time (save+bgfix+pause): 24s/image
+Total AI + our time: 5m 37s  (wall clock: 7m 52s)
+Run finished: 2026-08-14 18:28:37  (all pending items done)
+
+====================================================================
+Norse Gods — the Aesir Weekday Theme (Planetary + Pantheon, bronze + colored)  [ChatGPT]
+Run started:  2026-08-14 20:10:23  (1/29 pending)
+--------------------------------------------------------------------
+2026-08-14 20:12:03  masters/weeks/myth/norse/wider/bronze/njord.png gen   94.3s  ours    0.4s  1254x1254 -> 1254x1238    3.1 MB  [REMOVE BG: nothing, CROP: done]
+--------------------------------------------------------------------
+Images: 1  |  average generation (AI): 1m 34s/image  |  average our time (save+bgfix+pause): 0s/image
+Total AI + our time: 1m 35s  (wall clock: 1m 40s)
+Run finished: 2026-08-14 20:12:03  (all pending items done)
+

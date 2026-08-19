@@ -1,0 +1,42 @@
+====================================================================
+Eclipse Category Prompts — the seven category emblems  [ChatGPT]
+Run started:  2026-08-14 15:32:37  (7/7 pending)
+--------------------------------------------------------------------
+2026-08-14 15:35:44  masters/celestial/eclipse/Solar_Total.png    gen  148.5s  ours   36.1s  1254x1254 -> 1254x1242    2.8 MB  [REMOVE BG: nothing, CROP: done]
+2026-08-14 15:37:44  masters/celestial/eclipse/Solar_Annular.png  gen  105.1s  ours   13.2s              1254x1254    2.9 MB  [REMOVE BG: nothing, CROP: nothing]
+2026-08-14 15:39:35  masters/celestial/eclipse/Solar_Partial.png  REFUSED — prompt vanished; re-send failed — ChatGPT: our sent prompt is NO LONGER the newest user turn — the site dropped the mess
+2026-08-14 15:42:01  masters/celestial/eclipse/Solar_Hybrid.png   REFUSED — prompt vanished; re-send failed — ChatGPT: our sent prompt is NO LONGER the newest user turn — the site dropped the mess
+2026-08-14 15:45:29  masters/celestial/eclipse/Lunar_Total.png    gen  158.1s  ours   24.3s  1254x1254 -> 1254x1243    2.6 MB  [REMOVE BG: nothing, CROP: done]
+2026-08-14 15:47:21  masters/celestial/eclipse/Lunar_Partial.png  REFUSED — prompt vanished; re-send failed — ChatGPT: our sent prompt is NO LONGER the newest user turn — the site dropped the mess
+2026-08-14 15:49:27  masters/celestial/eclipse/Lunar_Penumbral.png REFUSED — prompt vanished; re-send failed — ChatGPT: our sent prompt is NO LONGER the newest user turn — the site dropped the mess
+--------------------------------------------------------------------
+Refused: 4 image(s) — rework those prompts in the sheet (or intervene manually) and rerun
+Images: 3  |  average generation (AI): 2m 17s/image  |  average our time (save+bgfix+pause): 25s/image
+Total AI + our time: 8m 05s  (wall clock: 16m 50s)
+Run finished: 2026-08-14 15:49:27  (all pending items done)
+
+====================================================================
+Eclipse Category Prompts — the seven category emblems  [ChatGPT]
+Run started:  2026-08-14 16:12:53  (4/7 pending)
+--------------------------------------------------------------------
+2026-08-14 16:16:36  masters/celestial/eclipse/Solar_Partial.png  gen  144.4s  ours   29.6s  1254x1254 -> 1254x1241    2.5 MB  [REMOVE BG: nothing, CROP: done]
+2026-08-14 16:18:25  masters/celestial/eclipse/Solar_Hybrid.png   REFUSED — prompt vanished; re-send failed — ChatGPT: our sent prompt is NO LONGER the newest user turn — the site dropped the mess
+2026-08-14 16:20:50  masters/celestial/eclipse/Lunar_Partial.png  REFUSED — prompt vanished; re-send failed — ChatGPT: our sent prompt is NO LONGER the newest user turn — the site dropped the mess
+2026-08-14 16:22:56  masters/celestial/eclipse/Lunar_Penumbral.png gen  102.8s  ours    0.7s  1254x1254 -> 1254x1242    2.8 MB  [REMOVE BG: nothing, CROP: done]
+--------------------------------------------------------------------
+Refused: 2 image(s) — rework those prompts in the sheet (or intervene manually) and rerun
+Images: 2  |  average generation (AI): 2m 04s/image  |  average our time (save+bgfix+pause): 15s/image
+Total AI + our time: 4m 38s  (wall clock: 10m 03s)
+Run finished: 2026-08-14 16:22:56  (all pending items done)
+
+====================================================================
+Eclipse Category Prompts — the seven category emblems  [ChatGPT]
+Run started:  2026-08-14 19:49:08  (2/7 pending)
+--------------------------------------------------------------------
+2026-08-14 19:51:24  masters/celestial/eclipse/Solar_Hybrid.png   gen   98.4s  ours   35.5s  1254x1254 -> 1254x1239    2.6 MB  [REMOVE BG: nothing, CROP: done]
+2026-08-14 19:53:53  masters/celestial/eclipse/Lunar_Partial.png  gen  145.8s  ours    0.5s  1254x1254 -> 1254x1235    3.0 MB  [REMOVE BG: nothing, CROP: done]
+--------------------------------------------------------------------
+Images: 2  |  average generation (AI): 2m 02s/image  |  average our time (save+bgfix+pause): 18s/image
+Total AI + our time: 4m 40s  (wall clock: 4m 45s)
+Run finished: 2026-08-14 19:53:53  (all pending items done)
+

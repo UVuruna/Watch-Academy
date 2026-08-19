@@ -1,0 +1,10 @@
+====================================================================
+World of Warcraft — the Three-Faction Weekday Theme (Gemini/ChatGPT)  [ChatGPT]
+Run started:  2026-08-14 20:25:00  (4/54 pending)
+--------------------------------------------------------------------
+2026-08-14 20:25:44  masters/weeks/gaming/wow_evil/primary/bronze/Illidan.png REFUSED — no image — ChatGPT: the response answered with TEXT but no image (settled 6s), and the text matches no known marker — lo
+--------------------------------------------------------------------
+Refused: 1 image(s) — rework those prompts in the sheet (or intervene manually) and rerun
+Images: 0
+Run finished: 2026-08-14 20:26:20  (quota / rate limit — stopped (reset in ~180m 00s))
+

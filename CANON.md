@@ -421,9 +421,9 @@ TRAVELED date, same law as the poles' glyphs.
 **The name (owner seal 2026-07-27).** The theme keeps ALL THREE
 candidate names, layered rather than chosen between. Titled in full it
 is **One Soul — The Vow — The Bond**
-(`constants.ONE_SOUL_THEME_TITLE`); wherever one name must stand
+(`pointer_names.ONE_SOUL_THEME_TITLE`); wherever one name must stand
 alone — the Design window's wheel row, the menus, the watch title, any
-label — it is **One Soul** (`constants.ONE_SOUL_THEME_NAME`).
+label — it is **One Soul** (`pointer_names.ONE_SOUL_THEME_NAME`).
 
 **The Encyclopedia home (owner verdict 2026-07-27: "napravi naravno —
 jedna od važnijih ljubavnih tematika").** The theme has its own topic,

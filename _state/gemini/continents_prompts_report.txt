@@ -1,0 +1,28 @@
+====================================================================
+Continents — the two Ninths  [Gemini]
+Run started:  2026-08-14 15:41:46  (2/2 pending)
+--------------------------------------------------------------------
+2026-08-14 15:43:03  masters/celestial/earth/zealandia.png        gen   46.9s  ours   27.9s    1024x559 -> 772x559    613 KB  [REMOVE BG: done, CROP: done]
+2026-08-14 15:43:41  masters/celestial/earth/pangea.png           gen   35.6s  ours    0.7s   1024x1024 -> 926x926    1.4 MB  [REMOVE BG: done, CROP: done]
+--------------------------------------------------------------------
+Images: 2  |  average generation (AI): 41s/image  |  average our time (save+bgfix+pause): 14s/image
+Total AI + our time: 1m 51s  (wall clock: 1m 55s)
+Run finished: 2026-08-14 15:43:41  (all pending items done)
+
+====================================================================
+Continent Prompts — Pangea & Zealandia join the earth matrix  [Gemini]
+Run started:  2026-08-14 19:17:21  (8/8 pending)
+--------------------------------------------------------------------
+2026-08-14 19:17:54  masters/celestial/earth/earth_atmo_pangea_day.png REFUSED — prompt vanished; re-send failed — Gemini: our sent prompt is NO LONGER the newest user turn — the site dropped the messa
+2026-08-14 19:18:48  masters/celestial/earth/earth_atmo_pangea_night.png REFUSED — prompt vanished; re-send failed — Gemini: our sent prompt is NO LONGER the newest user turn — the site dropped the messa
+2026-08-14 19:19:57  masters/celestial/earth/earth_clean_pangea_day.png REFUSED — prompt vanished; re-send failed — Gemini: our sent prompt is NO LONGER the newest user turn — the site dropped the messa
+2026-08-14 19:21:09  masters/celestial/earth/earth_clean_pangea_night.png REFUSED — prompt vanished; re-send failed — Gemini: our sent prompt is NO LONGER the newest user turn — the site dropped the messa
+2026-08-14 19:22:17  masters/celestial/earth/earth_atmo_zealandia_day.png REFUSED — prompt vanished; re-send failed — Gemini: our sent prompt is NO LONGER the newest user turn — the site dropped the messa
+2026-08-14 19:23:28  masters/celestial/earth/earth_atmo_zealandia_night.png REFUSED — prompt vanished; re-send failed — Gemini: our sent prompt is NO LONGER the newest user turn — the site dropped the messa
+2026-08-14 19:24:39  masters/celestial/earth/earth_clean_zealandia_day.png REFUSED — prompt vanished; re-send failed — Gemini: our sent prompt is NO LONGER the newest user turn — the site dropped the messa
+2026-08-14 19:25:42  masters/celestial/earth/earth_clean_zealandia_night.png REFUSED — prompt vanished; re-send failed — Gemini: our sent prompt is NO LONGER the newest user turn — the site dropped the messa
+--------------------------------------------------------------------
+Refused: 8 image(s) — rework those prompts in the sheet (or intervene manually) and rerun
+Images: 0
+Run finished: 2026-08-14 19:25:42  (all pending items done)
+

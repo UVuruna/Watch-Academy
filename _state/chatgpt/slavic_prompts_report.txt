@@ -1,0 +1,21 @@
+====================================================================
+Slavic Gods — the Rodnovery Weekday Theme (Planetary + Pantheon, bronze plates + colored)  [ChatGPT]
+Run started:  2026-08-14 18:28:41  (4/26 pending)
+--------------------------------------------------------------------
+--------------------------------------------------------------------
+Images: 0
+Run finished: 2026-08-14 18:35:59  (generation timed out)
+
+====================================================================
+Slavic Gods — the Rodnovery Weekday Theme (Planetary + Pantheon, bronze plates + colored)  [ChatGPT]
+Run started:  2026-08-14 20:14:46  (4/26 pending)
+--------------------------------------------------------------------
+2026-08-14 20:17:09  masters/weeks/myth/slavic/wider/bronze/crnobog.png gen  104.6s  ours   34.1s  1254x1254 -> 1254x1234    2.9 MB  [REMOVE BG: nothing, CROP: done]
+2026-08-14 20:19:23  masters/weeks/myth/slavic/wider/bronze/stribog.png gen  104.5s  ours   26.4s  1254x1254 -> 1254x1251    3.3 MB  [REMOVE BG: nothing, CROP: done]
+2026-08-14 20:22:14  masters/weeks/myth/slavic/wider/bronze/jarilo.png gen  151.3s  ours   16.8s  1254x1254 -> 1254x1248    3.2 MB  [REMOVE BG: nothing, CROP: done]
+2026-08-14 20:24:49  masters/weeks/myth/slavic/wider/bronze/rod.png gen  153.1s  ours    0.4s  1254x1254 -> 1254x1250    3.4 MB  [REMOVE BG: nothing, CROP: done]
+--------------------------------------------------------------------
+Images: 4  |  average generation (AI): 2m 08s/image  |  average our time (save+bgfix+pause): 19s/image
+Total AI + our time: 9m 51s  (wall clock: 10m 04s)
+Run finished: 2026-08-14 20:24:49  (all pending items done)
+

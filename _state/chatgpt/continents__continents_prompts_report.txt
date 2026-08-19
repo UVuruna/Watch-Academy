@@ -1,0 +1,13 @@
+====================================================================
+Continent Prompts — Pangea & Zealandia join the earth matrix  [ChatGPT]
+Run started:  2026-08-14 19:39:46  (4/8 pending)
+--------------------------------------------------------------------
+2026-08-14 19:41:41  masters/celestial/earth/earth_atmo_zealandia_day.png gen   94.7s  ours   18.1s              1254x1254    3.1 MB  [REMOVE BG: nothing, CROP: nothing]
+2026-08-14 19:44:50  masters/celestial/earth/earth_atmo_zealandia_night.png gen  142.1s  ours   30.2s  1254x1254 -> 1254x1252    2.3 MB  [REMOVE BG: nothing, CROP: done]
+2026-08-14 19:47:36  masters/celestial/earth/earth_clean_zealandia_day.png gen  141.1s  ours   22.6s  1254x1254 -> 1254x1247    2.7 MB  [REMOVE BG: nothing, CROP: done]
+2026-08-14 19:48:58  masters/celestial/earth/earth_clean_zealandia_night.png gen   79.9s  ours    0.7s  1254x1254 -> 1254x1243    2.5 MB  [REMOVE BG: nothing, CROP: done]
+--------------------------------------------------------------------
+Images: 4  |  average generation (AI): 1m 54s/image  |  average our time (save+bgfix+pause): 18s/image
+Total AI + our time: 8m 49s  (wall clock: 9m 12s)
+Run finished: 2026-08-14 19:48:58  (all pending items done)
+

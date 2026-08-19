@@ -131,7 +131,7 @@ correction 2026-08-05): The One moved off its locked "full" outer onto
 wearing their own NUMBER glyphs (3/6/9/12/15/18/21); "full" is now
 preset-free (custom rings only). Every preset's own inner-band DEFAULT
 (user-changeable) was re-verdicted in the same round
-(`config.constants.RING_INNER_PRESET_DEFAULT`).
+(`config.ring.RING_INNER_PRESET_DEFAULT`).
 
 ### `translations/`
 BUNDLED ORIGINAL translations (owner decision 2026-07-11): English is

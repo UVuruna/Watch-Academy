@@ -1,0 +1,24 @@
+====================================================================
+Eclipse Category Prompts — the seven category emblems  [Gemini]
+Run started:  2026-08-14 15:32:42  (7/7 pending)
+--------------------------------------------------------------------
+2026-08-14 15:33:25  masters/celestial/eclipse/Solar_Total.png    gen   20.7s  ours   20.7s  1024x1024 -> 1003x1002    1.2 MB  [REMOVE BG: done, CROP: done]
+2026-08-14 15:34:07  masters/celestial/eclipse/Solar_Annular.png  gen   24.2s  ours   15.5s   1024x1024 -> 908x908    1.0 MB  [REMOVE BG: done, CROP: done]
+2026-08-14 15:35:00  masters/celestial/eclipse/Solar_Partial.png  gen   26.2s  ours   24.1s   1024x1024 -> 944x943    1.0 MB  [REMOVE BG: done, CROP: done]
+2026-08-14 15:36:04  masters/celestial/eclipse/Solar_Hybrid.png   gen   25.0s  ours   36.6s   1024x1024 -> 968x967    1.1 MB  [REMOVE BG: done, CROP: done]
+2026-08-14 15:37:07  masters/celestial/eclipse/Lunar_Total.png    gen   28.7s  ours   32.3s    1024x559 -> 533x537    431 KB  [REMOVE BG: done, CROP: done]
+2026-08-14 15:37:56  masters/celestial/eclipse/Lunar_Partial.png  gen   27.2s  ours   19.6s   1024x1024 -> 966x966    1.1 MB  [REMOVE BG: done, CROP: done]
+2026-08-14 15:38:19  masters/celestial/eclipse/Lunar_Penumbral.png gen   21.1s  ours    0.5s  1024x1024 -> 1008x1003    917 KB  [REMOVE BG: done, CROP: done]
+--------------------------------------------------------------------
+Images: 7  |  average generation (AI): 25s/image  |  average our time (save+bgfix+pause): 21s/image
+Total AI + our time: 5m 22s  (wall clock: 5m 37s)
+Run finished: 2026-08-14 15:38:19  (all pending items done)
+
+====================================================================
+Eclipse Category Prompts — the seven category emblems  [Gemini]
+Run started:  2026-08-14 19:46:14  (0/7 pending)
+--------------------------------------------------------------------
+--------------------------------------------------------------------
+Images: 0
+Run finished: 2026-08-14 19:46:14  (all pending items done)
+

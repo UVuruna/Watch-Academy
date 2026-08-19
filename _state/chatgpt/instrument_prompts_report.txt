@@ -1,0 +1,33 @@
+====================================================================
+The Instrument — Prompt & Shot Sheet (Gemini + Screenshots)  [ChatGPT]
+Run started:  2026-08-14 15:49:28  (4/4 pending)
+--------------------------------------------------------------------
+--------------------------------------------------------------------
+Images: 0
+Run finished: 2026-08-14 15:56:37  (generation timed out)
+
+====================================================================
+The Instrument — Prompt & Shot Sheet (Gemini + Screenshots)  [ChatGPT]
+Run started:  2026-08-14 16:22:58  (4/4 pending)
+--------------------------------------------------------------------
+2026-08-14 16:24:57  masters/instrument/logo.png                  gen   97.0s  ours   16.0s  1254x1254 -> 1246x1240    2.8 MB  [REMOVE BG: nothing, CROP: done]
+2026-08-14 16:28:30  masters/instrument/paint_light.png           gen  177.8s  ours   30.1s  1254x1254 -> 1250x1244    2.9 MB  [REMOVE BG: nothing, CROP: done]
+2026-08-14 16:30:21  masters/instrument/duality.png               REFUSED — prompt vanished; re-send failed — ChatGPT: our sent prompt is NO LONGER the newest user turn — the site dropped the mess
+2026-08-14 16:32:29  masters/instrument/thirteenth.png            REFUSED — prompt vanished; re-send failed — ChatGPT: our sent prompt is NO LONGER the newest user turn — the site dropped the mess
+--------------------------------------------------------------------
+Refused: 2 image(s) — rework those prompts in the sheet (or intervene manually) and rerun
+Images: 2  |  average generation (AI): 2m 17s/image  |  average our time (save+bgfix+pause): 23s/image
+Total AI + our time: 5m 21s  (wall clock: 9m 31s)
+Run finished: 2026-08-14 16:32:29  (all pending items done)
+
+====================================================================
+The Instrument — Prompt & Shot Sheet (Gemini + Screenshots)  [ChatGPT]
+Run started:  2026-08-14 19:54:03  (2/4 pending)
+--------------------------------------------------------------------
+2026-08-14 19:56:17  masters/instrument/duality.png               gen  104.8s  ours   23.5s  1254x1254 -> 1135x1249    2.6 MB  [REMOVE BG: nothing, CROP: done]
+2026-08-14 19:58:34  masters/instrument/thirteenth.png            gen  119.4s  ours    0.5s  1254x1254 -> 1165x1226    2.6 MB  [REMOVE BG: nothing, CROP: done]
+--------------------------------------------------------------------
+Images: 2  |  average generation (AI): 1m 52s/image  |  average our time (save+bgfix+pause): 12s/image
+Total AI + our time: 4m 08s  (wall clock: 4m 31s)
+Run finished: 2026-08-14 19:58:34  (all pending items done)
+

@@ -1,0 +1,45 @@
+====================================================================
+Theme Title Plates — the Encyclopedia's Own Cover Pages (Gemini/ChatGPT)  [ChatGPT]
+Run started:  2026-08-14 16:32:30  (27/65 pending)
+--------------------------------------------------------------------
+2026-08-14 16:38:39  masters/weeks/films/sw_sith/primary/colored/Title.png gen  111.2s  ours   13.6s              1254x1254    3.1 MB  [REMOVE BG: nothing, CROP: nothing]
+2026-08-14 16:40:29  masters/weeks/films/sw_dyad/primary/colored/Title.png REFUSED — prompt vanished; re-send failed — ChatGPT: our sent prompt is NO LONGER the newest user turn — the site dropped the mess
+2026-08-14 16:43:12  masters/weeks/myth/greek/primary/colored/Duality.png REFUSED — prompt vanished; re-send failed — ChatGPT: our sent prompt is NO LONGER the newest user turn — the site dropped the mess
+2026-08-14 16:46:11  masters/weeks/myth/egypt/primary/colored/Duality.png gen  121.8s  ours   34.1s              1254x1254    3.5 MB  [REMOVE BG: nothing, CROP: nothing]
+2026-08-14 16:48:25  masters/weeks/faith/creeds/primary/colored/Duality.png REFUSED — prompt vanished; re-send failed — ChatGPT: our sent prompt is NO LONGER the newest user turn — the site dropped the mess
+2026-08-14 16:50:41  masters/weeks/faith/creeds/secondary/colored/Duality.png REFUSED — prompt vanished; re-send failed — ChatGPT: our sent prompt is NO LONGER the newest user turn — the site dropped the mess
+2026-08-14 16:54:41  masters/weeks/faith/bible/primary/colored/Duality.png gen    0.6s  ours   25.2s  1254x1254 -> 1254x1233    3.1 MB  [REMOVE BG: nothing, CROP: done]
+2026-08-14 16:56:33  masters/weeks/faith/bible/secondary/colored/Duality.png REFUSED — prompt vanished; re-send failed — ChatGPT: our sent prompt is NO LONGER the newest user turn — the site dropped the mess
+2026-08-14 16:58:37  masters/weeks/faith/bible/dark/colored/Duality.png REFUSED — prompt vanished; re-send failed — ChatGPT: our sent prompt is NO LONGER the newest user turn — the site dropped the mess
+2026-08-14 17:02:30  masters/weeks/crafts/profession/primary/colored/Duality.png REFUSED — prompt vanished; re-send failed — ChatGPT: our sent prompt is NO LONGER the newest user turn — the site dropped the mess
+2026-08-14 17:04:38  masters/weeks/societies/wolf/primary/colored/Duality.png REFUSED — prompt vanished; re-send failed — ChatGPT: our sent prompt is NO LONGER the newest user turn — the site dropped the mess
+2026-08-14 17:06:45  masters/weeks/societies/bee/primary/colored/Duality.png REFUSED — prompt vanished; re-send failed — ChatGPT: our sent prompt is NO LONGER the newest user turn — the site dropped the mess
+2026-08-14 17:08:59  masters/weeks/societies/elephant/primary/colored/Duality.png REFUSED — prompt vanished; re-send failed — ChatGPT: our sent prompt is NO LONGER the newest user turn — the site dropped the mess
+2026-08-14 17:11:28  masters/weeks/crafts/alchemy/primary/colored/Duality.png REFUSED — prompt vanished; re-send failed — ChatGPT: our sent prompt is NO LONGER the newest user turn — the site dropped the mess
+2026-08-14 17:13:40  masters/weeks/crafts/japan/primary/colored/Duality.png REFUSED — prompt vanished; re-send failed — ChatGPT: our sent prompt is NO LONGER the newest user turn — the site dropped the mess
+2026-08-14 17:16:10  masters/weeks/myth/greek/pantheon/colored/Title.png REFUSED — prompt vanished; re-send failed — ChatGPT: our sent prompt is NO LONGER the newest user turn — the site dropped the mess
+2026-08-14 17:18:18  masters/weeks/myth/norse/pantheon/colored/Title.png REFUSED — prompt vanished; re-send failed — ChatGPT: our sent prompt is NO LONGER the newest user turn — the site dropped the mess
+2026-08-14 17:20:43  masters/weeks/myth/egypt/pantheon/colored/Title.png REFUSED — prompt vanished; re-send failed — ChatGPT: our sent prompt is NO LONGER the newest user turn — the site dropped the mess
+2026-08-14 17:23:01  masters/weeks/myth/slavic/pantheon/colored/Title.png REFUSED — prompt vanished; re-send failed — ChatGPT: our sent prompt is NO LONGER the newest user turn — the site dropped the mess
+2026-08-14 17:25:13  masters/weeks/myth/greek/wider/colored/Title.png REFUSED — prompt vanished; re-send failed — ChatGPT: our sent prompt is NO LONGER the newest user turn — the site dropped the mess
+2026-08-14 17:27:34  masters/weeks/myth/norse/wider/colored/Title.png REFUSED — prompt vanished; re-send failed — ChatGPT: our sent prompt is NO LONGER the newest user turn — the site dropped the mess
+2026-08-14 17:29:53  masters/weeks/myth/egypt/wider/colored/Title.png REFUSED — prompt vanished; re-send failed — ChatGPT: our sent prompt is NO LONGER the newest user turn — the site dropped the mess
+2026-08-14 17:30:27  masters/weeks/myth/slavic/wider/colored/Title.png REFUSED — prompt vanished; re-send failed — ChatGPT: the site put a native thread error on our send (its Retry button appeared) — 
+2026-08-14 17:34:28  masters/weeks/myth/greek/pantheon/colored/Duality.png REFUSED — prompt vanished; re-send failed — ChatGPT: our sent prompt is NO LONGER the newest user turn — the site dropped the mess
+2026-08-14 17:38:29  masters/weeks/myth/norse/pantheon/colored/Duality.png REFUSED — prompt vanished; re-send failed — ChatGPT: our sent prompt is NO LONGER the newest user turn — the site dropped the mess
+2026-08-14 17:42:30  masters/weeks/myth/slavic/pantheon/colored/Duality.png REFUSED — prompt vanished; re-send failed — ChatGPT: our sent prompt is NO LONGER the newest user turn — the site dropped the mess
+2026-08-14 17:53:19  masters/archetypes/one_soul/primary/colored/Title.png REFUSED — prompt vanished; re-send failed — ChatGPT: no result for OUR turn after 420s (hard timeout)
+--------------------------------------------------------------------
+Refused: 24 image(s) — rework those prompts in the sheet (or intervene manually) and rerun
+Images: 3  |  average generation (AI): 1m 18s/image  |  average our time (save+bgfix+pause): 24s/image
+Total AI + our time: 5m 07s  (wall clock: 80m 48s)
+Run finished: 2026-08-14 17:53:19  (all pending items done)
+
+====================================================================
+Theme Title Plates — the Encyclopedia's Own Cover Pages (Gemini/ChatGPT)  [ChatGPT]
+Run started:  2026-08-14 19:58:45  (0/65 pending)
+--------------------------------------------------------------------
+--------------------------------------------------------------------
+Images: 0
+Run finished: 2026-08-14 19:58:45  (all pending items done)
+

@@ -26,7 +26,7 @@ Gotchas learned the hard way (2026-07-07):
 - **FindWindowW from PowerShell:** pass `[NullString]::Value` for the class,
   NOT `$null` (PowerShell marshals `$null` as empty string → no match).
   Better: enumerate windows by PID — the window title is
-  `constants.APP_NAME` = "Watch Academy" (`desktop/app/widget.py`), and an
+  `identity.APP_NAME` = "Watch Academy" (`desktop/app/widget.py`), and an
   Explorer window open on a folder of that name carries the same title.
 - **Always capture at the window's CURRENT GetWindowRect**, never at a
   remembered position — and re-read the rect immediately before each capture.

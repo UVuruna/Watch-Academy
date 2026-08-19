@@ -15,7 +15,7 @@ folders and no skin.json packs; all art is shared app content under
 `assets/`.
 
 Seven dial pointer wheels exist (`manifest.SkinDefinition.pointer`,
-`config.constants.POINTER_POINTS`/`POINTER_DISPLAY_NAMES`): four ARMED
+`config.pointer_geometry.POINTER_POINTS` / `config.pointer_names.POINTER_DISPLAY_NAMES`): four ARMED
 wheels — **hexa/Prism** (6, the default), **cross/Quaternity** (4),
 **octa/Compass** (8), **trio/Trinity** (3, half of hexa) — whose star
 diamonds carry the palette, and three ARMLESS wheels — **aurora/Aurora**

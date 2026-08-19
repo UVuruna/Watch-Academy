@@ -44,7 +44,8 @@ its own — this file is the ONLY doc in the folder; no `__about/`, no
 | `test_dual_sunday_wheels.py` | THE DUAL SUNDAY WHEEL MAP: duality is a property of the wheel (center on hexa/trio/Seasons, vertical on Quaternity/Compass, horizontal on Rose/Character), plus the two sealed per-theme flips. |
 | `test_earth_moon_orbit.py` | THE CLEAR ORBIT LANE (owner verdict 2026-08-09): the shared Earth/Moon orbit clears both the minute band's own radius and the outer hour band's measured inner edge, with a real margin, across every "Outer ring size" and marker-scale extreme. |
 | `test_eclipse_distinctness.py` | NO TWO ECLIPSE DISPLAYS MAY DRAW THE SAME PICTURE (owner order 2026-08-13). Renders every legal (kind, type, style) plate and compares every pair with a PERCEPTUAL measure — a brightness-blind structural axis plus a brightness-blind colour axis, worst-block rather than whole-image — because a SHA-256 comparison passed the very pair the owner's eye condemned. Carries its own calibration test, which rebuilds the pre-rework halo and requires the measure to condemn it. The 6 ballot-accepted names with no painter yet (owner ballot 2026-08-13) are exempt from the "same picture" scan via `render.eclipse_style.NOT_YET_PAINTED_STYLES` — their sameness with the style they borrow is this round's DECLARED, honest state, not the silent alias the law exists to catch; the exemption shrinks on its own as painters land. |
-| `test_eclipse_style_completion.py` | THE ECLIPSE STYLE COMPLETION TOOTH (owner ballot 2026-08-13, item 14). Every name in `constants.ECLIPSE_SOLAR_STYLES`/`ECLIPSE_LUNAR_STYLES` has a picker label, survives settings round-trip, renders an Encyclopedia plate, and is either drawn by its own painter or explicitly declared in `render.eclipse_style`'s fallback door with a reason — plus `dial_shadow` is pinned as never the solar default and a garbage style name is pinned to raise. |
+| `test_tooltip_families.py` | THE TOOLTIP FAMILY SPLIT's move proof (owner 2026-08-19). Sweeps a 15x15 grid over seven dial configurations at one frozen instant and compares every answer against `tooltip_goldens.json`, recorded from the UN-SPLIT `render/tooltip_composer.py` at commit `6aa49db`: a SHA-256 of the exact `tooltip_at` HTML plus the exact `encyclopedia_target` for all 959 answered points, and the full verbatim HTML of the six longest answers per configuration. A MOVE test, not a snapshot — re-recording it (`DOMY_TOOLTIP_REBASELINE=1`) is legitimate only when a hover's TEXT is deliberately changed. |
+| `test_eclipse_style_completion.py` | THE ECLIPSE STYLE COMPLETION TOOTH (owner ballot 2026-08-13, item 14). Every name in `umbra.ECLIPSE_SOLAR_STYLES`/`ECLIPSE_LUNAR_STYLES` has a picker label, survives settings round-trip, renders an Encyclopedia plate, and is either drawn by its own painter or explicitly declared in `render.eclipse_style`'s fallback door with a reason — plus `dial_shadow` is pinned as never the solar default and a garbage style name is pinned to raise. |
 | `test_eclipse_plates.py` | THE OWNER'S TWO ECLIPSE BODY PLATES (his art, 2026-08-13). RE-MEASURES `eclipse_body_sun.png` and `eclipse_body_moon.png` off the files — solid-disc radius, ray reach, black-body radius, rim-glow reach — and requires `render.marker_marks`'s constants to still match, so changed art can never leave a stale number behind. Then, on rendered pixels: both plates actually draw, a missing plate RAISES (THE ONE PLATE LAW), the dark disc never eats the rays (his one composition rule), the occulter's limb sits where `solar_occulter_geometry` puts it, and the hybrid's ghost ring is present but stays a hairline beside the annular ring of fire. |
 | `test_eclipse.py` | Eclipse display: bounded (non-scanning) data lookup, the ±3h core window, red-solar/bronze-lunar render, the absence rule — no Deep Time pack means no eclipse ever renders. |
 | `test_elements.py` | The Elements switches: pointer/weekday/marker/seconds toggles drop exactly their own layers, Colorful-off Aura pixel probe, switched-off elements answer no hovers. |
@@ -127,7 +128,12 @@ The project's guards, ratchets and their current entries are documented in
   on 2026-08-05, `app/observatory.py` on 2026-08-18 (it became the
   `app/observatory/` package), and `app/controller.py`,
   `render/compositor.py` and `config/constants.py` on 2026-08-19 — the
-  ratchet only ever shrinks.
+  ratchet only ever shrinks. **The last product file left it the same
+  day:** `render/tooltip_composer.py`, cut BY TOOLTIP FAMILY into
+  `render/tooltip_sky.py`, `render/tooltip_ring.py`,
+  `render/tooltip_calendar.py` and `render/encyclopedia_targets.py` —
+  four MIXINS on the composer, which keeps the three doors and the
+  dispatch. Only the five test files remain.
 - **`structure_ratchet.json`** — the same law in machine-readable form,
   checked by the monorepo tool `rules/tools/structure_guard.py` from the
   FULL pass. `{path: {lines, why, owes}}` over a 1,000-line wall measured
@@ -156,9 +162,10 @@ The project's guards, ratchets and their current entries are documented in
   reachable from [Watch Academy (README)](../../README.md) by following
   links.
 - **`test_config_cohesion.py`** — the config split's own guard: every
-  `config/*.py` file must be at/under the god-file threshold except the two
-  entries already tracked in `test_structure_law.py`'s ratchet
-  (`constants.py`, `pantheon.py`, not duplicated here); and no name that
+  `config/*.py` file must be at/under the god-file threshold — **no
+  exemptions at all**, and since 2026-08-19 the walk is RECURSIVE, so
+  `config/registry/` is covered too (its `week.py` is the tightest module
+  in the folder at 987 of the 1,000 lines); and no name that
   moved out of `config/defaults.py` into the six new modules (`dial`,
   `shortcuts`, `pantheon`, `calendar_mounts`, `encyclopedia_ui`, `glow`,
   `continents`) may still resolve as `defaults.<name>` (Rule #6, no
@@ -198,7 +205,7 @@ The project's guards, ratchets and their current entries are documented in
   the ledger's §Art Outside The Weeks. Two shrink guards keep both lists
   honest.
 - **`test_theme_completeness.py`** — THE THEME COMPLETION LAW: a registered
-  theme (every `constants.WEEKDAY_THEMES` key) must resolve its article
+  theme (every `registry.THEMES` key) must resolve its article
   set, blurb set, title article and (if it has one) Ninth article, with two
   named exceptions; and every `assets/weeks/` theme folder must be either a
   registered key or an open row in the STAGING LEDGER
@@ -209,7 +216,7 @@ The project's guards, ratchets and their current entries are documented in
   a probe fixture's fill is data, not a design decision); `PALETTE_PRESETS`
   values are bare names, never inlined hues; every pointer's palette
   entries form ONE contiguous run in the table; the table's pointer/style
-  pairs agree with `constants.palette_styles_for`.
+  pairs agree with `config.registry.slots.palette_styles_for`.
 - **`test_app_info.py`** — the pre-M7 `setup/app_info.json` seed: `name`/
   `description` market the app as **Watch Academy**, and `exe_name`/
   `installer_name` carry the same name (`WatchAcademy.exe` /
@@ -276,8 +283,8 @@ python -m pytest tests/test_moon.py::test_fraction_matches_the_owner_cross_check
 
 ### Uses
 - [Config (folder)](../config/___config.md) — the tables and thresholds
-  every golden and every guard test reads against (palette, constants,
-  pantheon, defaults).
+  every golden and every guard test reads against (palette, the topic
+  modules THE CONSTANTS SPLIT made, pantheon, defaults).
 - [Core (folder)](../core/___core.md) — the pure astronomy/geometry engine
   the golden-value tests pin directly.
 - [Data (folder)](../data/___data.md) — the repositories (seasons, moon
