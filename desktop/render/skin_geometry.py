@@ -9,6 +9,7 @@ weekday slots sit. Pure functions of a `SkinDefinition`; no painting.
 from PySide6.QtGui import QColor
 
 from config import archetypes, constants, palette
+from config.registry import week as week_registry
 from render.context import RenderContext
 from skins.manifest import SkinDefinition
 
@@ -216,8 +217,8 @@ def _base_weekday_slots(skin: SkinDefinition) -> tuple:
     hue-seated table wholesale, because their arms wear the Rose's own
     hues and the seat is the HUE (owner seal 2026-07-29)."""
     if (skin.pointer, _wheel(skin)) in constants.HORIZONTAL_DUALITY_WHEELS:
-        return constants.POINTER_WEEKDAY_SLOTS["rose"]
-    return constants.POINTER_WEEKDAY_SLOTS[skin.pointer]
+        return week_registry.POINTER_WEEKDAY_SLOTS["rose"]
+    return week_registry.POINTER_WEEKDAY_SLOTS[skin.pointer]
 
 
 def _duality_ruler_default_angle(skin: SkinDefinition) -> float:
@@ -317,7 +318,7 @@ def cube_look_active(skin: SkinDefinition) -> bool:
 
 def weekday_slots(skin: SkinDefinition) -> tuple:
     """The skin's weekday slots as DRAWN — every consumer of
-    `constants.POINTER_WEEKDAY_SLOTS` reads through this (Rule #5).
+    `week_registry.POINTER_WEEKDAY_SLOTS` reads through this (Rule #5).
     Three transforms, in order: the wheel's own arm offset (slots ride
     the DRAWN arms — pure geometry: each occupant pair stays glued to
     its arm as the Genesis/Seasons wheels swing it; no re-pairing
@@ -367,10 +368,10 @@ def hover_factor(ctx: "RenderContext", element: str) -> float:
 def visible_occupant(occupants: tuple[str, ...], today: str) -> str:
     """Shared-slot priority (owner rule): the occupant whose weekday comes
     NEXT from today wins — and today itself always wins (distance 0)."""
-    today_index = constants.SUNDAY_FIRST_INDEX[today]
+    today_index = week_registry.SUNDAY_FIRST_INDEX[today]
     return min(
         occupants,
-        key=lambda body: (constants.SUNDAY_FIRST_INDEX[body] - today_index) % 7,
+        key=lambda body: (week_registry.SUNDAY_FIRST_INDEX[body] - today_index) % 7,
     )
 
 

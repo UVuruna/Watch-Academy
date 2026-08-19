@@ -33,6 +33,7 @@ from PySide6.QtCore import QPointF, Qt
 from PySide6.QtWidgets import QApplication
 
 from config import dial, palette
+from config.registry import week as week_registry
 from render import glyph_shadow, letter_plates, painting
 
 
@@ -189,8 +190,8 @@ def test_every_weekday_label_and_figure_stem_composes_from_plates():
 
     from config import constants, paths
 
-    labels = set(constants.WEEKDAY_LABELS.values())
-    labels |= set(constants.WEEKDAY_FULL_NAMES.values())
+    labels = set(week_registry.WEEKDAY_LABELS.values())
+    labels |= set(week_registry.WEEKDAY_FULL_NAMES.values())
     for source in paths.art_files_under(paths.assets_dir()):
         if "_baked" in source.parts or "_state" in source.parts:
             continue

@@ -36,6 +36,7 @@ from pathlib import Path
 from app.settings_store import Settings
 from app.watch_face import thumbs
 from config import (
+from config.registry import week as week_registry
     archetypes, constants, defaults, dial, palette, pantheon, paths,
     profiling,
 )
@@ -598,7 +599,7 @@ def _pantheon_weekday_set(base, theme: str, metal: str | None):
     bodies: dict = {}
     names: dict = {}
     articles: dict = {}
-    for body in constants.WEEKDAY_BODIES:
+    for body in week_registry.WEEKDAY_BODIES:
         seat = pantheon.pantheon_seat(theme, body)
         if seat is not None:
             bodies[body], names[body], articles[body] = seat

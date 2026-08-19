@@ -19,6 +19,7 @@ from datetime import date
 from pathlib import Path
 
 from config import constants, continents as continents_theme, defaults, pantheon, paths
+from config.registry import week as week_registry
 from core import continents
 from data.encyclopedia import EncyclopediaRepository
 from data.moon_phases import shared_moon_phases
@@ -249,7 +250,7 @@ def _weekday_topic(theme: str, travel_date: date | None = None):
             "article": ("article", article_set, body),
             # TITLES CARRY THE DAY (owner round R8b item 8): read by
             # `_entry_name`, the ONE build point that appends it.
-            "weekday": constants.WEEKDAY_FULL_NAMES[body],
+            "weekday": week_registry.WEEKDAY_FULL_NAMES[body],
         }
 
     def good_entry() -> dict:
@@ -266,7 +267,7 @@ def _weekday_topic(theme: str, travel_date: date | None = None):
             "looks": looks_for("sun", on_date=mandate_date),
             "name": ruler_name,
             "article": ("article_face", article_set, "sun", "ruler"),
-            "weekday": constants.WEEKDAY_FULL_NAMES["sun"],
+            "weekday": week_registry.WEEKDAY_FULL_NAMES["sun"],
         }
 
     def evil_entry() -> dict:
@@ -278,7 +279,7 @@ def _weekday_topic(theme: str, travel_date: date | None = None):
             "looks": evil_looks_for(on_date=mandate_date),
             "name": servant_name,
             "article": ("article_face", article_set, "sun", "servant"),
-            "weekday": constants.WEEKDAY_FULL_NAMES["sun"],
+            "weekday": week_registry.WEEKDAY_FULL_NAMES["sun"],
         }
 
     title_entry = {
@@ -392,7 +393,7 @@ def _pantheon_topic(theme: str) -> list[dict]:
             "looks": looks_for(path),
             "name": name,
             "article": ("article", article_set, article_body),
-            "weekday": constants.WEEKDAY_FULL_NAMES[body],
+            "weekday": week_registry.WEEKDAY_FULL_NAMES[body],
         }
 
     sun_path, _sun_name, _sun_set, _sun_body = seated("sun")
@@ -425,13 +426,13 @@ def _pantheon_topic(theme: str) -> list[dict]:
         "looks": looks_for(sun_path),
         "name": ruler_name,
         "article": ("article_face", face_article_set, "sun", "ruler"),
-        "weekday": constants.WEEKDAY_FULL_NAMES["sun"],
+        "weekday": week_registry.WEEKDAY_FULL_NAMES["sun"],
     }
     evil_entry = {
         "looks": looks_for(dual_path),
         "name": servant_name,
         "article": ("article_face", face_article_set, "sun", "servant"),
-        "weekday": constants.WEEKDAY_FULL_NAMES["sun"],
+        "weekday": week_registry.WEEKDAY_FULL_NAMES["sun"],
     }
     return (
         [title_entry]
@@ -516,7 +517,7 @@ def _continents_topic(travel_date: date) -> dict:
             "looks": region_looks(continents_theme.CONTINENTS_REGIONS[body]),
             "name": pantheon.WEEKDAY_THEME_NAMES["continents"][body],
             "article": ("article", "continents", body),
-            "weekday": constants.WEEKDAY_FULL_NAMES[body],
+            "weekday": week_registry.WEEKDAY_FULL_NAMES[body],
         }
 
     ruler_name, servant_name = pantheon.WEEKDAY_DUAL_NAMES["continents"]
@@ -538,13 +539,13 @@ def _continents_topic(travel_date: date) -> dict:
         "looks": region_looks("south_pole"),
         "name": ruler_name,
         "article": ("article_face", "continents", "sun", "ruler"),
-        "weekday": constants.WEEKDAY_FULL_NAMES["sun"],
+        "weekday": week_registry.WEEKDAY_FULL_NAMES["sun"],
     }
     evil_entry = {
         "looks": region_looks("north_pole"),
         "name": servant_name,
         "article": ("article_face", "continents", "sun", "servant"),
-        "weekday": constants.WEEKDAY_FULL_NAMES["sun"],
+        "weekday": week_registry.WEEKDAY_FULL_NAMES["sun"],
     }
     pangea = continents.ninth_is_pangea_from_repos(
         # THE ONE COPY RULE — this used to build a fresh pair (476 KB +

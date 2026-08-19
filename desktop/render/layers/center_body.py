@@ -3,7 +3,8 @@
 from PySide6.QtCore import QPointF
 from PySide6.QtGui import QPainter
 
-from config import constants, continents as continents_theme, dial, pantheon, paths
+from config import continents as continents_theme, dial, pantheon, paths
+from config.registry import week as week_registry
 from core import continents
 from render.context import Cadence, Layer, RenderContext
 from render.ninths import active_thirteenth, center_face, ninth_alt_active, theme_ninth, thirteenth_plate
@@ -40,7 +41,7 @@ class CenterBodyLayer(Layer):
 
     def paint(self, painter: QPainter, ctx: RenderContext) -> None:
         spec = self._skin.weekday_set
-        today = constants.WEEKDAY_BODIES[ctx.day.weekday_index]
+        today = week_registry.WEEKDAY_BODIES[ctx.day.weekday_index]
         thirteenth = active_thirteenth(ctx.skin, ctx.day)
         if thirteenth is not None:
             self._draw_thirteenth(painter, ctx, thirteenth)

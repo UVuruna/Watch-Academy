@@ -22,6 +22,7 @@ import pytest
 from PySide6.QtWidgets import QApplication
 
 from config import archetypes, constants, defaults, palette
+from config.registry import week as week_registry
 from app.skin_builder import apply_display_settings, build_skin, watch_title
 from app.settings_store import Settings
 from core.clock_state import build_day_context, build_tick_state
@@ -228,7 +229,7 @@ def test_genesis_weekday_slots_ride_the_inverted_arms():
     }
     # Every other wheel reads the table untouched.
     assert weekday_slots(_skin("trio", "primary")) == (
-        constants.POINTER_WEEKDAY_SLOTS["trio"]
+        week_registry.POINTER_WEEKDAY_SLOTS["trio"]
     )
     assert today_slot_theta(_skin("trio"), "jupiter") == 180.0
     assert today_slot_theta(_skin("trio"), "sun") is None

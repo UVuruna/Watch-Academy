@@ -37,7 +37,8 @@ import math
 from PySide6.QtCore import QPointF, QRectF, Qt
 from PySide6.QtGui import QColor, QFont, QPainter, QPainterPath, QPen
 
-from config import archetypes, constants, continents as continents_theme, defaults, dial, glow, palette
+from config import archetypes, continents as continents_theme, defaults, dial, glow, palette
+from config.registry import week as week_registry
 from core import angles
 from core.year_wheel import almanac_marker_angle, almanac_month_index
 from render import marker_marks, moon_face
@@ -719,7 +720,7 @@ class YearMarkerLayer(Layer):
         # ONE on-dial label door, which composes from the plate library
         # and stamps the jewels' own dense halo around it.
         deep_travel = ctx.day.deep_cycles != 0
-        today = constants.WEEKDAY_BODIES[ctx.day.weekday_index]
+        today = week_registry.WEEKDAY_BODIES[ctx.day.weekday_index]
         mode = ctx.skin.earth_label
         date_px = max(
             dial.BODY_LABEL_MIN_PX, round(size * dial.EARTH_DATE_TEXT_SIZE)
@@ -729,7 +730,7 @@ class YearMarkerLayer(Layer):
             # without the date). Uses the date size (it is the only row,
             # so it gets the full label size).
             draw_name_label(
-                painter, constants.WEEKDAY_LABELS[today], pos, date_px, ctx=ctx,
+                painter, week_registry.WEEKDAY_LABELS[today], pos, date_px, ctx=ctx,
             )
             return
         # "date", "date_weekday" and "full" all lead with the date row.
@@ -739,7 +740,7 @@ class YearMarkerLayer(Layer):
         elif mode == "date_weekday":
             second_row = (
                 display_year(ctx) if deep_travel
-                else constants.WEEKDAY_LABELS[today]
+                else week_registry.WEEKDAY_LABELS[today]
             )
         else:
             second_row = None

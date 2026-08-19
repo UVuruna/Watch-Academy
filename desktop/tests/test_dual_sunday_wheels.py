@@ -13,6 +13,7 @@ import pytest
 from PySide6.QtWidgets import QApplication
 
 from config import constants, defaults
+from config.registry import week as week_registry
 from render.skin_geometry import (
     center_duality,
     horizontal_duality,
@@ -53,7 +54,7 @@ def test_compass_character_wheel_rides_the_horizontal_axis(app):
     assert ruler_seat_angle(skin) == 90.0       # 18h, red
     assert servant_seat_angle(skin) == 270.0    # 06h, blue
     slots = dict(weekday_slots(skin))
-    assert slots == dict(constants.POINTER_WEEKDAY_SLOTS["rose"])
+    assert slots == dict(week_registry.POINTER_WEEKDAY_SLOTS["rose"])
     assert 270.0 not in slots                   # the Servant's seat is his alone
     # The first two wheels keep the vertical axis untouched.
     for style in ("primary", "secondary"):

@@ -6,6 +6,7 @@ from PySide6.QtCore import QPointF
 from PySide6.QtGui import QPainter
 
 from config import constants, defaults, dial, pantheon, paths
+from config.registry import week as week_registry
 from render.context import Cadence, Layer, RenderContext
 from render.painting import dial_point, draw_pixmap_centered
 from render.skin_geometry import hover_factor
@@ -66,7 +67,7 @@ class SlotLayer(Layer):
     ) -> None:
         mode, style, theme, metal, roster = slot_view(ctx.skin, index)
         inner = size * dial.SLOT_ROUNDEL_CONTENT_FRACTION
-        today = constants.WEEKDAY_BODIES[ctx.day.weekday_index]
+        today = week_registry.WEEKDAY_BODIES[ctx.day.weekday_index]
         if mode == "seconds":
             # The SMALL-SECONDS complication (owner 2026-07-14).
             draw_slot_roundel(painter, ctx, pos, size)
@@ -198,5 +199,5 @@ class SlotLayer(Layer):
         draw_fitted_text(
             painter, ctx, pos,
             size * dial.SLOT_ROUNDEL_CONTENT_FRACTION,
-            constants.WEEKDAY_LABELS[today],
+            week_registry.WEEKDAY_LABELS[today],
         )

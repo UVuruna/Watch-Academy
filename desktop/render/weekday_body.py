@@ -8,7 +8,8 @@ body+label draw call itself.
 from PySide6.QtCore import QPointF, Qt
 from PySide6.QtGui import QColor, QPainter
 
-from config import constants, continents as continents_theme, dial, pantheon, paths
+from config import continents as continents_theme, dial, pantheon, paths
+from config.registry import week as week_registry
 from core import continents
 from render.context import RenderContext
 from render.painting import draw_name_label, draw_pixmap_centered, name_label_px
@@ -22,8 +23,8 @@ def weekday_label_text(ctx: RenderContext, body: str) -> str:
     preset, full from `WEEKDAY_FULL_NAME_MIN_DIAMETER`."""
     full_text = 2 * ctx.radius >= dial.WEEKDAY_FULL_NAME_MIN_DIAMETER
     return (
-        constants.WEEKDAY_FULL_NAMES[body] if full_text
-        else constants.WEEKDAY_LABELS[body]
+        week_registry.WEEKDAY_FULL_NAMES[body] if full_text
+        else week_registry.WEEKDAY_LABELS[body]
     )
 
 
@@ -38,7 +39,7 @@ def weekday_label_set_px(ctx: RenderContext) -> int:
     MINUTE) call this same pure function and agree on one size without
     sharing mutable state."""
     spec = ctx.skin.weekday_set
-    today = constants.WEEKDAY_BODIES[ctx.day.weekday_index]
+    today = week_registry.WEEKDAY_BODIES[ctx.day.weekday_index]
     if spec.display_mode == "center_only":
         # A set of one — its own fit is the whole answer.
         text = weekday_label_text(ctx, today)

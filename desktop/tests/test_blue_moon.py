@@ -26,6 +26,7 @@ from PySide6.QtWidgets import QApplication
 from app.skin_builder import apply_display_settings
 from app.settings_store import Settings, replace
 from config import constants, defaults, paths
+from config.registry import week as week_registry
 from core.blue_moon import (
     ChineseLeapMonth,
     chinese_leap_month,
@@ -331,7 +332,7 @@ def test_no_thirteenth_ever_off_the_calendar_pointer(app):
         ),
     )
     day, tick = _day_tick(datetime(2026, 12, 13, 12, 0))   # Sunday, Ophiuchus's window
-    assert constants.WEEKDAY_BODIES[day.weekday_index] == "sun"
+    assert week_registry.WEEKDAY_BODIES[day.weekday_index] == "sun"
     assert "ophiuchus" in day.thirteenth_candidates        # the date fact still holds
     assert active_thirteenth(skin, day) is None             # but hexa never shows it
     comp = Compositor(skin, AssetCache())
@@ -354,7 +355,7 @@ def test_center_only_mode_shows_no_thirteenth_off_the_calendar_pointer(app):
     )
     day, tick = _day_tick(datetime(2026, 7, 8, 12, 0))     # inside Sol's window
     assert "sol" in day.thirteenth_candidates
-    assert center_seat_body_key(skin, constants.WEEKDAY_BODIES[day.weekday_index]) is not None
+    assert center_seat_body_key(skin, week_registry.WEEKDAY_BODIES[day.weekday_index]) is not None
     assert active_thirteenth(skin, day) is None
     comp = Compositor(skin, AssetCache())
     comp.render_offscreen(360.0, 1.0, day, tick)

@@ -17,6 +17,7 @@ from PySide6.QtCore import QPointF
 from PySide6.QtWidgets import QApplication
 
 from config import constants, defaults, dial, encyclopedia_ui, glow, palette, pantheon, shortcuts
+from config.registry import week as week_registry
 from core.clock_state import build_day_context, build_tick_state
 from data.moon_phases import MoonPhaseRepository
 from data.seasons import SeasonsRepository
@@ -85,19 +86,19 @@ def blue_moon_free_wednesday(app):
 
 
 def test_every_layout_seats_the_whole_week():
-    for pointer, slots in constants.POINTER_WEEKDAY_SLOTS.items():
+    for pointer, slots in week_registry.POINTER_WEEKDAY_SLOTS.items():
         seated = [body for _, occupants in slots for body in occupants]
         if pointer in ("hexa", "trio"):
             seated.append("sun")     # hexa and trio center the Sun
-        assert sorted(seated) == sorted(constants.WEEKDAY_BODIES), pointer
+        assert sorted(seated) == sorted(week_registry.WEEKDAY_BODIES), pointer
 
 
 def test_slot_angles_sit_on_the_pointer_arms():
-    for pointer, slots in constants.POINTER_WEEKDAY_SLOTS.items():
+    for pointer, slots in week_registry.POINTER_WEEKDAY_SLOTS.items():
         if pointer == "aurora":
             # No arms exist — the single slot is pinned to the dial
             # bottom, above the Omega (owner spec 2026-07-12).
-            assert slots == ((180.0, constants.WEEKDAY_BODIES),) or [
+            assert slots == ((180.0, week_registry.WEEKDAY_BODIES),) or [
                 angle for angle, _ in slots
             ] == [180.0]
             continue
@@ -107,7 +108,7 @@ def test_slot_angles_sit_on_the_pointer_arms():
 
 
 def test_octa_reserves_the_bottom_arm_for_the_info_slot():
-    occupied = [angle for angle, _ in constants.POINTER_WEEKDAY_SLOTS["octa"]]
+    occupied = [angle for angle, _ in week_registry.POINTER_WEEKDAY_SLOTS["octa"]]
     assert constants.SOUTH_SLOT_ANGLE not in occupied
 
 
@@ -249,7 +250,7 @@ def test_classic_weekday_unit_carries_the_pointer_scale():
     comp = Compositor(defaults.DEFAULT_SKIN, AssetCache())  # hexa → 1.5×
     spec = defaults.DEFAULT_SKIN.weekday_set
     R = 180.0
-    angle = constants.POINTER_WEEKDAY_SLOTS["hexa"][1][0]  # a non-south seat
+    angle = week_registry.POINTER_WEEKDAY_SLOTS["hexa"][1][0]  # a non-south seat
     center = dial_point(angle, R * weekday_body_orbit(defaults.DEFAULT_SKIN))
     unscaled_half = R * spec.diamond_scale
     norm = math.hypot(center.x(), center.y())
@@ -1048,7 +1049,7 @@ def test_aurora_bands_spread_the_day_hues_evenly():
         assert all(alpha == 0.55 for _, _, _, alpha in day_bands)
     # The weekday slot never rotates: pinned at the bottom, above Omega.
     aurora_skin = dataclasses.replace(defaults.DEFAULT_SKIN, pointer="aurora")
-    for body in constants.WEEKDAY_BODIES:
+    for body in week_registry.WEEKDAY_BODIES:
         assert today_slot_theta(aurora_skin, body) == 180.0
     # Aurora is ALWAYS solar-rotated, whatever the toggle says.
     skin = apply_display_settings(
@@ -1219,7 +1220,7 @@ def test_seated_slot_wears_its_own_roster():
     # The safety law on every seat: a pantheon identity only ever
     # rides an existing pantheon plate — no seat may pair the
     # pantheon name with missing art.
-    for body in constants.WEEKDAY_BODIES:
+    for body in week_registry.WEEKDAY_BODIES:
         resolved = pantheon.pantheon_seat("greek", body)
         if resolved is not None:
             assert _paths.art_file(resolved[0]).exists(), body
@@ -1260,7 +1261,7 @@ def test_trio_centers_the_sun_and_pairs_the_week():
 
     trio_skin = dataclasses.replace(defaults.DEFAULT_SKIN, pointer="trio")
     assert today_slot_theta(trio_skin, "sun") is None
-    slots = dict(constants.POINTER_WEEKDAY_SLOTS["trio"])
+    slots = dict(week_registry.POINTER_WEEKDAY_SLOTS["trio"])
     assert slots[0.0] == ("jupiter", "saturn")
     assert slots[120.0] == ("venus", "mars")
     assert slots[240.0] == ("moon", "mercury")
@@ -1687,7 +1688,7 @@ def test_reveal_week_raises_ghost_opacity_and_lifts_the_center_body(
 
     day, tick = blue_moon_free_wednesday
     skin = dc.replace(defaults.DEFAULT_SKIN, pointer="trio")
-    today = constants.WEEKDAY_BODIES[day.weekday_index]
+    today = week_registry.WEEKDAY_BODIES[day.weekday_index]
     assert today != "sun"                       # Wednesday: Sun is a ghost
 
     cache = AssetCache()
@@ -2435,7 +2436,7 @@ def test_moon_marker_hover_outranks_the_ring_tick_during_glow(app):
     point = QPointF(moon_x - radius, moon_y - radius)
     element = comp.element_at(
         point, radius, comp.rotation(),
-        constants.WEEKDAY_BODIES[day.weekday_index],
+        week_registry.WEEKDAY_BODIES[day.weekday_index],
     )
     assert element == "moon"          # not None (which would fall to the tick)
     tooltip = comp.tooltip_at(moon_x, moon_y, 540.0)

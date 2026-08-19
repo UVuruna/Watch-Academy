@@ -3,7 +3,8 @@
 from PySide6.QtCore import QPointF
 from PySide6.QtGui import QPainter
 
-from config import constants, continents as continents_theme, pantheon, paths
+from config import continents as continents_theme, pantheon, paths
+from config.registry import week as week_registry
 from core import continents
 from render.context import Cadence, Layer, RenderContext
 from render.ninths import dual_seat_ninth, ninth_alt_active, theme_ninth
@@ -31,7 +32,7 @@ class WeekdayLayer(Layer):
 
     def paint(self, painter: QPainter, ctx: RenderContext) -> None:
         spec = self._skin.weekday_set
-        today = constants.WEEKDAY_BODIES[ctx.day.weekday_index]
+        today = week_registry.WEEKDAY_BODIES[ctx.day.weekday_index]
 
         if weekday_classic_slot(ctx.skin) is None:
             return   # every slot sits in a SEAT (the slot layer draws)

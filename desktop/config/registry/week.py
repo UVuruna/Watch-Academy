@@ -1051,3 +1051,143 @@ WEEK = {
         },
     },
 }
+
+# ═══════════════════════════ WEEKDAY BODIES ═══════════════════════════
+# Weekday index (datetime.weekday(): Monday=0) -> celestial body.
+# Sunday's body (Sun) sits in the dial center on the hexa pointer; the
+# other bodies occupy the star's arm slots.
+WEEKDAY_BODIES = (
+    "moon",      # Monday
+    "mars",      # Tuesday
+    "mercury",   # Wednesday
+    "jupiter",   # Thursday
+    "venus",     # Friday
+    "saturn",    # Saturday
+    "sun",       # Sunday
+)
+
+# Label written in white ON each body: the weekday SHORT name, never the
+# planet-name abbreviation (owner spec). Larger dials show the full name.
+WEEKDAY_LABELS = {
+    "moon": "MON",
+    "mars": "TUE",
+    "mercury": "WED",
+    "jupiter": "THU",
+    "venus": "FRI",
+    "saturn": "SAT",
+    "sun": "SUN",
+}
+WEEKDAY_FULL_NAMES = {
+    "moon": "Monday",
+    "mars": "Tuesday",
+    "mercury": "Wednesday",
+    "jupiter": "Thursday",
+    "venus": "Friday",
+    "saturn": "Saturday",
+    "sun": "Sunday",
+}
+
+# ═══════════════════════════ FIGURE ROSTERS ═══════════════════════════
+# The two figure ROSTERS (owner doctrine 2026-07-15): "planetary" —
+# the day-ruler counterparts (the shipped canon); "pantheon" — the
+# culture's own hierarchy seated on our archetypes. Themes without a
+# pantheon table fall back to planetary (documented).
+FIGURE_ROSTERS = ("planetary", "pantheon")
+
+# ═══════════════════════════ WEEKDAY INDEX ═══════════════════════════
+# Body -> Sunday-first weekday index (the owner's numbering used by the
+# shared-slot priority rule: the occupant whose day comes NEXT wins).
+SUNDAY_FIRST_INDEX = {
+    "sun": 0,
+    "moon": 1,
+    "mars": 2,
+    "mercury": 3,
+    "jupiter": 4,
+    "venus": 5,
+    "saturn": 6,
+}
+
+# ═══════════════════════════ WEEKDAY SLOTS PER POINTER ═══════════════════════════
+# Weekday slots per pointer: (dial degrees from the pointer's TOP vertex,
+# occupant bodies). Slots rotate WITH the star (owner decision). Owner's
+# layouts: hexa = one body per arm, Sun in the center; cross = pairs on
+# 6/12/18 with Wednesday alone at the bottom; octa = one per arm with the
+# bottom arm showing the digital time instead of a body.
+POINTER_WEEKDAY_SLOTS = {
+    "hexa": (
+        (0.0, ("jupiter",)),
+        (60.0, ("mars",)),
+        (120.0, ("venus",)),
+        (180.0, ("mercury",)),
+        (240.0, ("moon",)),
+        (300.0, ("saturn",)),
+    ),
+    "cross": (
+        (0.0, ("jupiter", "sun")),
+        (90.0, ("mars", "venus")),
+        (180.0, ("mercury",)),
+        (270.0, ("moon", "saturn")),
+    ),
+    "octa": (
+        (0.0, ("sun",)),
+        (45.0, ("mars",)),
+        (90.0, ("venus",)),
+        (135.0, ("mercury",)),
+        (225.0, ("moon",)),
+        (270.0, ("saturn",)),
+        (315.0, ("jupiter",)),
+    ),
+    # TRIO — the planets are bound to the ARMS and never moved; the
+    # names re-seated over them (owner decree 2026-08-09, the order law
+    # above): Love 12h = Jupiter (the open hand) + Saturn (love proved
+    # by time, the only one of the three that outlasts its own object);
+    # Hope 20h = Venus + Mars (longing and the courage to endure — the
+    # irascible pair, and hope is the irascible virtue, straining toward
+    # a good that is difficult); Faith 4h = Moon + Mercury (light that
+    # is RECEIVED and never made, and the herald who carries a message
+    # he did not author — faith answers what was already given).
+    # Sunday's Sun sits in the center, like the hexa layout.
+    "trio": (
+        (0.0, ("jupiter", "saturn")),
+        (120.0, ("venus", "mars")),
+        (240.0, ("moon", "mercury")),
+    ),
+    # AURORA (owner spec 2026-07-12): one FIXED slot at the imagined
+    # south — the dial bottom, above the Omega — showing today's body
+    # only (all seven occupants -> the priority rule always picks
+    # today). It never rotates with the sun.
+    "aurora": (
+        (180.0, ("sun", "moon", "mars", "mercury", "jupiter", "venus",
+                 "saturn")),
+    ),
+    # CALENDAR (owner 2026-07-16): no weekday model of its own — it uses
+    # the PINNED slot layout (like Aurora / the pointer-off case), one
+    # fixed slot at the dial bottom above the Omega showing today alone.
+    "calendar": (
+        (180.0, ("sun", "moon", "mars", "mercury", "jupiter", "venus",
+                 "saturn")),
+    ),
+    # THE ROSE'S COLOR LAW (owner seal 2026-07-27, CUBE.md §The Rose).
+    # The seat is the HUE, not the position: it is the Prism primary canon
+    # with the two Sunday hues lightened, because Sunday needs blue and
+    # red for its own two faces. Bodies ride their BADGES as always —
+    # never painted into the diamonds.
+    #   12h yellow THU · 15h orange TUE · 18h red SUN (Ruler)
+    #   21h rose  FRI · 24h purple WED · 03h cyan  MON
+    #   06h blue  SUN (Servant, `servant_seat_angle`) · 09h green SAT
+    # Six weekdays plus the dual Sunday fill all EIGHT arms, so no arm
+    # is reserved for anything else and Thursday and Wednesday keep
+    # their canonical color seats. The 06h SERVANT seat is absent from
+    # this table on purpose — exactly as 24h is absent from the octa's:
+    # the seat is the Servant face's alone and
+    # `render.slot_layout.servant_holds_the_seat` hands it to him.
+    "rose": (
+        (0.0, ("jupiter",)),        # 12h yellow — Thursday
+        (45.0, ("mars",)),          # 15h orange — Tuesday
+        (90.0, ("sun",)),           # 18h red    — Sunday, the Ruler
+        (135.0, ("venus",)),        # 21h rose   — Friday
+        (180.0, ("mercury",)),      # 24h purple — Wednesday
+        (225.0, ("moon",)),         # 03h cyan   — Monday
+        (315.0, ("saturn",)),       # 09h green  — Saturday
+    ),
+}

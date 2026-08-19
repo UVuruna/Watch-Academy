@@ -9,6 +9,7 @@ look switcher, and the live-dial body art (earth_style x day/night).
 from datetime import date
 
 from config import constants, continents as continents_theme, pantheon, paths, sky
+from config.registry import week as week_registry
 from core import continents
 
 
@@ -31,7 +32,7 @@ def test_continents_body_and_dual_plates_exist_on_disk():
     """Every one of the seven weekday bodies resolves to an EXISTING Earth
     face (the sealed owner exception — the dial's own art reused), and so
     does the Arctic Servant dual (test_every_theme_skeleton's law)."""
-    for body in constants.WEEKDAY_BODIES:
+    for body in week_registry.WEEKDAY_BODIES:
         plate = pantheon.weekday_theme_body_art("continents", body)
         assert paths.art_file(plate).exists(), body
     rel = pantheon.WEEKDAY_DUAL_FILES["continents"]
@@ -268,7 +269,7 @@ def test_continents_body_art_follows_style_and_sky():
         "earth_atmo_north_pole_night.png"
     )
     # Every live combination resolves to an existing face.
-    for body in constants.WEEKDAY_BODIES:
+    for body in week_registry.WEEKDAY_BODIES:
         for style in continents_theme.CONTINENTS_PREVIEW_STYLE, "clean":
             for day in (True, False):
                 assert paths.art_file(
@@ -284,7 +285,7 @@ def test_body_articles_resolve_with_faces():
     from data.symbolism import SymbolismRepository
 
     sym = SymbolismRepository()
-    for body in constants.WEEKDAY_BODIES:
+    for body in week_registry.WEEKDAY_BODIES:
         assert len(sym.article("continents", body)["base"]) > 250, body
     faces = sym.article("continents", "sun")["faces"]
     assert set(faces) == {"ruler", "servant"}

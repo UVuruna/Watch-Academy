@@ -24,6 +24,7 @@ import pytest
 from PySide6.QtWidgets import QApplication
 
 from config import constants, defaults, dial, encyclopedia_ui, glow, palette, sky
+from config.registry import week as week_registry
 from core import angles
 from core.clock_state import (
     EclipseEvent,
@@ -463,7 +464,7 @@ def test_the_eclipse_body_answers_the_cursor_not_the_earth(app):
     comp = Compositor(skin, AssetCache())
     comp.render_offscreen(540.0, 1.0, day, eclipsed)
     radius = 270.0
-    today = constants.WEEKDAY_BODIES[day.weekday_index]
+    today = week_registry.WEEKDAY_BODIES[day.weekday_index]
 
     def element_at(x: float, y: float) -> str | None:
         return comp.element_at(
@@ -553,7 +554,7 @@ def test_the_hover_follows_the_moon_off_the_ring_when_it_yields(app):
     comp = Compositor(skin, AssetCache())
     comp.render_offscreen(540.0, 1.0, day, eclipsed)
     radius = 270.0
-    today = constants.WEEKDAY_BODIES[day.weekday_index]
+    today = week_registry.WEEKDAY_BODIES[day.weekday_index]
 
     def element_at(point) -> str | None:
         return comp.element_at(

@@ -44,6 +44,7 @@ from PySide6.QtCore import QPointF
 
 from config import archetypes, calendar_mounts, constants, defaults, dial, encyclopedia_ui, glow, pantheon, paths, profiling, sky
 from config.ui_text import ui
+from config.registry import week as week_registry
 from core import angles, continents, world
 from core.deep_time import (
     format_anno_lucis, format_official, format_year_line, is_age_of_light,
@@ -247,7 +248,7 @@ class TooltipComposer:
         radius = size / 2
         point = QPointF(x - radius, y - radius)      # center-origin
         rotation = self._dial.rotation()
-        today = constants.WEEKDAY_BODIES[self._dial.day.weekday_index]
+        today = week_registry.WEEKDAY_BODIES[self._dial.day.weekday_index]
 
         element = self._dial.element_at(point, radius, rotation, today)
         if element is not None:
@@ -466,7 +467,7 @@ class TooltipComposer:
         radius = size / 2
         point = QPointF(x - radius, y - radius)
         rotation = self._dial.rotation()
-        today = constants.WEEKDAY_BODIES[self._dial.day.weekday_index]
+        today = week_registry.WEEKDAY_BODIES[self._dial.day.weekday_index]
         element = self._dial.element_at(point, radius, rotation, today)
         if element is not None:
             return self._element_encyclopedia_target(element, today)
@@ -847,7 +848,7 @@ class TooltipComposer:
         if active:
             date = self._dial.day.local_date
             title += (
-                f"<br/>{html.escape(self._tr(constants.WEEKDAY_FULL_NAMES[body]))}, "
+                f"<br/>{html.escape(self._tr(week_registry.WEEKDAY_FULL_NAMES[body]))}, "
                 f"{self._ord(date.day)} {html.escape(self._month(date))} "
                 f"{self._year(date)}"
             )
@@ -858,7 +859,7 @@ class TooltipComposer:
             # full date line above already carries it.
             title += (
                 f"<br/>"
-                f"{html.escape(self._tr(constants.WEEKDAY_FULL_NAMES[body]))}"
+                f"{html.escape(self._tr(week_registry.WEEKDAY_FULL_NAMES[body]))}"
             )
         return article_html(image, title, text, tr=self._tr)
 
@@ -1086,7 +1087,7 @@ class TooltipComposer:
         if active:
             date = self._dial.day.local_date
             title += (
-                f"<br/>{html.escape(self._tr(constants.WEEKDAY_FULL_NAMES['sun']))}, "
+                f"<br/>{html.escape(self._tr(week_registry.WEEKDAY_FULL_NAMES['sun']))}, "
                 f"{self._ord(date.day)} {html.escape(self._month(date))} "
                 f"{self._year(date)}"
             )
@@ -1094,7 +1095,7 @@ class TooltipComposer:
             # THE WEEKDAY-TITLE LAW: the Sunday faces are Sunday-bound.
             title += (
                 f"<br/>"
-                f"{html.escape(self._tr(constants.WEEKDAY_FULL_NAMES['sun']))}"
+                f"{html.escape(self._tr(week_registry.WEEKDAY_FULL_NAMES['sun']))}"
             )
         return article_html(image, title, text, tr=self._tr)
 
@@ -1110,7 +1111,7 @@ class TooltipComposer:
         dual_names = spec.dual_names or pantheon.WEEKDAY_DUAL_NAMES[theme]
         article_set = spec.article_set or constants.WEEKDAY_THEME_ARTICLES[theme]
         columns = []
-        sunday = html.escape(self._tr(constants.WEEKDAY_FULL_NAMES["sun"]))
+        sunday = html.escape(self._tr(week_registry.WEEKDAY_FULL_NAMES["sun"]))
         for face in faces:
             if face == "ninth":
                 name, asset = theme_ninth(
@@ -1210,7 +1211,7 @@ class TooltipComposer:
         the hover card and the dial can never disagree."""
         if self._dial.day is None or self._dial.tick is None:
             return None
-        today = constants.WEEKDAY_BODIES[self._dial.day.weekday_index]
+        today = week_registry.WEEKDAY_BODIES[self._dial.day.weekday_index]
         if today != "sun" or not sunday_dual_face(self._dial.skin):
             return None
         if theme_ninth(
@@ -1377,7 +1378,7 @@ class TooltipComposer:
                 if angle == arm_angle
             )
             days = " · ".join(
-                self._tr(constants.WEEKDAY_FULL_NAMES[body]) for body in bodies
+                self._tr(week_registry.WEEKDAY_FULL_NAMES[body]) for body in bodies
             )
             if self._dial.skin.palette_style == "tertiary":
                 # The GENESIS wheel (CUBE.md §Double Trinity): the arm

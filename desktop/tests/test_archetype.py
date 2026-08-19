@@ -24,6 +24,7 @@ from PySide6.QtGui import QImage, QPainter
 from PySide6.QtWidgets import QApplication
 
 from config import archetypes, constants, defaults, dial, encyclopedia_ui
+from config.registry import week as week_registry
 from core.clock_state import build_day_context, build_tick_state
 from data.moon_phases import MoonPhaseRepository
 from data.seasons import SeasonsRepository
@@ -508,7 +509,7 @@ def test_weekday_label_set_uses_the_smallest_fitted_member(app):
     target = slot_size * dial.NAME_LABEL_WIDTH_FRACTION
     own_fits = [
         name_label_px(weekday_label_text(ctx, body), target)
-        for body in constants.WEEKDAY_BODIES
+        for body in week_registry.WEEKDAY_BODIES
     ]
     assert set_px == min(own_fits)
     assert dial.BODY_LABEL_MIN_PX <= set_px <= dial.NAME_LABEL_MAX_PX

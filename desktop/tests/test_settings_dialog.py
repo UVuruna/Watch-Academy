@@ -12,6 +12,7 @@ from app.skin_builder import apply_display_settings
 from app.settings_dialog.dialog import SettingsDialog
 from app.settings_store import Settings, replace
 from config import defaults, encyclopedia_ui, eras, identity, palette, pantheon, sky
+from config.registry import week as week_registry
 from data.locations import Place, default_place
 from render.skin_geometry import palette_for
 
@@ -420,7 +421,7 @@ def test_every_theme_skeleton_is_complete():
         if theme == "planets":
             continue
         folder = pantheon.weekday_art(pantheon.WEEKDAY_THEME_DIRS[theme])
-        for body in constants.WEEKDAY_BODIES:
+        for body in week_registry.WEEKDAY_BODIES:
             stem = pantheon.WEEKDAY_THEME_FILES[theme][body]
             if not _paths.art_file(folder / f"{stem}.png").exists():
                 missing.add((theme, body))
@@ -690,7 +691,7 @@ def test_symbolism_repository_covers_every_body_and_theme():
     from data.symbolism import SymbolismRepository
 
     repo = SymbolismRepository()
-    for body in constants.WEEKDAY_BODIES:
+    for body in week_registry.WEEKDAY_BODIES:
         blurbs = repo.arm_blurbs(body)
         for theme, key in constants.WEEKDAY_THEME_BLURBS.items():
             assert blurbs[key], (body, theme)
@@ -715,13 +716,13 @@ def test_articles_cover_every_theme_and_body():
     }
     for theme in constants.WEEKDAY_THEMES:
         article_set = constants.WEEKDAY_THEME_ARTICLES[theme]
-        for body in constants.WEEKDAY_BODIES:
+        for body in week_registry.WEEKDAY_BODIES:
             article = data["articles"][article_set][body]
             assert len(article["base"]) > 250, (theme, body)
             assert "\n\n" in article["base"], (theme, body)   # paragraphs
             assert set(article["variants"]) == combos, (theme, body)
     alternates = data["articles"]["religion_alt"]
-    assert set(alternates) == set(constants.WEEKDAY_BODIES)
+    assert set(alternates) == set(week_registry.WEEKDAY_BODIES)
     for body, article in alternates.items():
         assert article["name"], body       # covered by the main loop above,
                                            # plus the display-name field

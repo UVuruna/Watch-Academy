@@ -14,6 +14,7 @@ from PySide6.QtCore import QPointF, Qt
 from PySide6.QtGui import QImage, QPainter, QPixmap
 
 from config import archetypes, calendar_mounts, constants, defaults, dial, paths, profiling
+from config.registry import week as week_registry
 from data.encyclopedia import EncyclopediaRepository, shared_encyclopedia
 from data.symbolism import SymbolismRepository, shared_symbolism
 from core import world
@@ -883,7 +884,7 @@ class Compositor:
         ):
             radius = size / 2
             point = QPointF(x - radius, y - radius)
-            today = constants.WEEKDAY_BODIES[self._day.weekday_index]
+            today = week_registry.WEEKDAY_BODIES[self._day.weekday_index]
             hovered = self.element_at(point, radius, self.rotation(), today)
         if hovered == self._hovered:
             return False

@@ -15,7 +15,8 @@ from zoneinfo import ZoneInfo, ZoneInfoNotFoundError
 
 import astral
 
-from config import constants, eras
+from config import eras
+from config.registry import week as week_registry
 from core.clock_state import build_day_context, build_tick_state
 from data.locations import LocationRepository
 from data.moon_phases import MoonPhaseRepository
@@ -78,7 +79,7 @@ def main() -> None:
     day = build_day_context(now, observer, anchors, window)
     tick = build_tick_state(now, day)
 
-    body = constants.WEEKDAY_BODIES[day.weekday_index]
+    body = week_registry.WEEKDAY_BODIES[day.weekday_index]
     print(f"Moment:     {now.isoformat()}  (UTC offset {day.utc_offset})")
     print(f"Weekday:    {now.strftime('%A')}  ->  {body}")
     print(f"Regime:     {day.sun.regime.value}")

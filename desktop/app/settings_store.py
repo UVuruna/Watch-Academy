@@ -23,6 +23,7 @@ from app.settings_fields import (
 )
 from app.settings_ring import fold_ring_name, load_named_dict, normalized_ring_card
 from config import calendar_mounts, constants, defaults, dial, eras, identity, pantheon
+from config.registry import week as week_registry
 from data.locations import Place, default_place
 from data.rings import ring_presets
 
@@ -614,9 +615,9 @@ class SettingsStore:
                  constants.METAL_SHADE_NAMES["bronze"]),
                 ("metal_shade_silver", constants.METAL_SHADE_DEFAULT["silver"],
                  constants.METAL_SHADE_NAMES["silver"]),
-                ("weekday_roster", "planetary", constants.FIGURE_ROSTERS),
-                ("info_slot_roster", "planetary", constants.FIGURE_ROSTERS),
-                ("third_slot_roster", "planetary", constants.FIGURE_ROSTERS),
+                ("weekday_roster", "planetary", week_registry.FIGURE_ROSTERS),
+                ("info_slot_roster", "planetary", week_registry.FIGURE_ROSTERS),
+                ("third_slot_roster", "planetary", week_registry.FIGURE_ROSTERS),
                 ("art_source", identity.ART_SOURCE_DEFAULT,
                  identity.ART_SOURCES),
                 ("era_notation", "bce_ce", eras.ERA_NOTATIONS),

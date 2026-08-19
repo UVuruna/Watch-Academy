@@ -39,6 +39,7 @@ from app.watch_face.controls import picture_group
 from app.watch_face.widgets import flow_row, pill
 from config import constants, identity, pantheon
 from config.registry.week import WEEK
+from config.registry import week as week_registry
 
 #: The style each `title_plate` look is called in front of a person.
 #: The registry stores the FOLDER name; these are the words.
@@ -243,5 +244,5 @@ def _roster_row(theme, active, settings, tr) -> QWidget | None:
             tr(roster.capitalize()), roster == active.roster_value,
             lambda r=roster: active.set_weekday(theme, roster=r),
         )
-        for roster in constants.FIGURE_ROSTERS
+        for roster in week_registry.FIGURE_ROSTERS
     ])

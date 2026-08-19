@@ -19,6 +19,7 @@ member is reachable."""
 from datetime import date, timedelta
 
 from config import constants, pantheon, paths
+from config.registry import week as week_registry
 from render.ninths import ninth_table_for, theme_ninth
 
 # Two ordinally-consecutive dates, chosen arbitrarily — with exactly two
@@ -173,7 +174,7 @@ def test_seat_roster_shows_every_member_across_its_cycle():
                 assert resolved.stem in shown, (theme, seat, stem)
         # The canonical stem of every BODY seat is the roster's first
         # member, so the two tables can never drift apart.
-        for body in constants.WEEKDAY_BODIES:
+        for body in week_registry.WEEKDAY_BODIES:
             if body in seats:
                 assert pantheon.WEEKDAY_THEME_FILES[theme][body] == seats[body][0]
 
