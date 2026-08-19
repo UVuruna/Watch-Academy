@@ -1,0 +1,5410 @@
+{
+ "hexa": {
+  "points": {
+   "257.143x51.429": {
+    "sha256": "7046858b6bb39be728774427ca27ff547bad83b973a87b84e77c5e042db50898",
+    "target": null
+   },
+   "308.571x51.429": {
+    "sha256": "b46eec4ecd673d9bf1d04dbe6d43b7792789bea7baf7c1fc981b23adbd65e182",
+    "target": null
+   },
+   "360.0x51.429": {
+    "sha256": "8496f597e14d60652e06861044036df3d9131c88659915fdb12006943459adb4",
+    "target": null
+   },
+   "411.429x51.429": {
+    "sha256": "56061bab15e61be84847e17128679aff0a18c19322bb10b78caba6b9971d2fe2",
+    "target": null
+   },
+   "462.857x51.429": {
+    "sha256": "41ebb52d5f8b35e91c1fdf41ad34927267216c03d85a70db004bca7fac388bfd",
+    "target": null
+   },
+   "154.286x102.857": {
+    "sha256": "888d34b45f7d609d7deb4598c05307f9eb91c5527db8e4d58d2d738097d345f3",
+    "target": null
+   },
+   "205.714x102.857": {
+    "sha256": "8496f597e14d60652e06861044036df3d9131c88659915fdb12006943459adb4",
+    "target": null
+   },
+   "257.143x102.857": {
+    "sha256": "8496f597e14d60652e06861044036df3d9131c88659915fdb12006943459adb4",
+    "target": null
+   },
+   "308.571x102.857": {
+    "sha256": "8496f597e14d60652e06861044036df3d9131c88659915fdb12006943459adb4",
+    "target": null
+   },
+   "360.0x102.857": {
+    "sha256": "8496f597e14d60652e06861044036df3d9131c88659915fdb12006943459adb4",
+    "target": null
+   },
+   "411.429x102.857": {
+    "sha256": "d304ddd1d56da5ce3a2567891a9b6a5bf788ed164d3441c1207b9f7d77c17908",
+    "target": [
+     "astrology",
+     3
+    ]
+   },
+   "462.857x102.857": {
+    "sha256": "49aad8e2a745a8788ea0dc7fb2e931e661b6d9e55d35b830eda9dbe3303904ca",
+    "target": [
+     "seasons",
+     1
+    ]
+   },
+   "514.286x102.857": {
+    "sha256": "8496f597e14d60652e06861044036df3d9131c88659915fdb12006943459adb4",
+    "target": null
+   },
+   "565.714x102.857": {
+    "sha256": "58b65ccb63d12da7341224bf893080c2a09d44779b1da60b5a001002ef7f6ed2",
+    "target": null
+   },
+   "102.857x154.286": {
+    "sha256": "25db4ecbefb4212cdebed6a7a09dc1edce9b288c92ec3ae9865d392470af8f24",
+    "target": null
+   },
+   "154.286x154.286": {
+    "sha256": "8496f597e14d60652e06861044036df3d9131c88659915fdb12006943459adb4",
+    "target": null
+   },
+   "205.714x154.286": {
+    "sha256": "8496f597e14d60652e06861044036df3d9131c88659915fdb12006943459adb4",
+    "target": null
+   },
+   "257.143x154.286": {
+    "sha256": "8496f597e14d60652e06861044036df3d9131c88659915fdb12006943459adb4",
+    "target": null
+   },
+   "308.571x154.286": {
+    "sha256": "8496f597e14d60652e06861044036df3d9131c88659915fdb12006943459adb4",
+    "target": null
+   },
+   "360.0x154.286": {
+    "sha256": "d304ddd1d56da5ce3a2567891a9b6a5bf788ed164d3441c1207b9f7d77c17908",
+    "target": [
+     "astrology",
+     2
+    ]
+   },
+   "411.429x154.286": {
+    "sha256": "2e9a9bc13fad2dc4254cd1e8341323bcf8b4d5e2316852e7a7ae4318138025ef",
+    "target": [
+     "planets",
+     4
+    ]
+   },
+   "462.857x154.286": {
+    "sha256": "3acae1cc81363773c5c1c43e92d10ec89c78f65bb11c8be4e8e64cdd29df7ec7",
+    "target": [
+     "moon",
+     1
+    ]
+   },
+   "514.286x154.286": {
+    "sha256": "8496f597e14d60652e06861044036df3d9131c88659915fdb12006943459adb4",
+    "target": null
+   },
+   "565.714x154.286": {
+    "sha256": "8496f597e14d60652e06861044036df3d9131c88659915fdb12006943459adb4",
+    "target": null
+   },
+   "617.143x154.286": {
+    "sha256": "806ef89544fbf76cd953e6dd566ab65670cd7f9de18dd7cb3a2667faf287200e",
+    "target": null
+   },
+   "102.857x205.714": {
+    "sha256": "8496f597e14d60652e06861044036df3d9131c88659915fdb12006943459adb4",
+    "target": null
+   },
+   "154.286x205.714": {
+    "sha256": "6c70b6f36244e06bdfae86e42eb2d01030d2a4360f291d9397c27b224d6ec3f5",
+    "target": [
+     "astrology",
+     0
+    ]
+   },
+   "205.714x205.714": {
+    "sha256": "6c70b6f36244e06bdfae86e42eb2d01030d2a4360f291d9397c27b224d6ec3f5",
+    "target": [
+     "astrology",
+     1
+    ]
+   },
+   "257.143x205.714": {
+    "sha256": "e7c1a12777a5fd9a0b85c58f37e7d0b3aa59909c8318b37b274fda744e81cecf",
+    "target": [
+     "planets",
+     6
+    ]
+   },
+   "308.571x205.714": {
+    "sha256": "d304ddd1d56da5ce3a2567891a9b6a5bf788ed164d3441c1207b9f7d77c17908",
+    "target": [
+     "astrology",
+     2
+    ]
+   },
+   "360.0x205.714": {
+    "sha256": "2e9a9bc13fad2dc4254cd1e8341323bcf8b4d5e2316852e7a7ae4318138025ef",
+    "target": [
+     "planets",
+     4
+    ]
+   },
+   "411.429x205.714": {
+    "sha256": "2e9a9bc13fad2dc4254cd1e8341323bcf8b4d5e2316852e7a7ae4318138025ef",
+    "target": [
+     "planets",
+     4
+    ]
+   },
+   "462.857x205.714": {
+    "sha256": "d304ddd1d56da5ce3a2567891a9b6a5bf788ed164d3441c1207b9f7d77c17908",
+    "target": [
+     "astrology",
+     3
+    ]
+   },
+   "514.286x205.714": {
+    "sha256": "8496f597e14d60652e06861044036df3d9131c88659915fdb12006943459adb4",
+    "target": null
+   },
+   "565.714x205.714": {
+    "sha256": "8496f597e14d60652e06861044036df3d9131c88659915fdb12006943459adb4",
+    "target": null
+   },
+   "617.143x205.714": {
+    "sha256": "8496f597e14d60652e06861044036df3d9131c88659915fdb12006943459adb4",
+    "target": null
+   },
+   "51.429x257.143": {
+    "sha256": "a0f5e604e56bdee4174a77c7384317cd4bf1fb1575b7d50a1a0dd61e0d1b6b1e",
+    "target": null
+   },
+   "102.857x257.143": {
+    "sha256": "8496f597e14d60652e06861044036df3d9131c88659915fdb12006943459adb4",
+    "target": null
+   },
+   "154.286x257.143": {
+    "sha256": "8496f597e14d60652e06861044036df3d9131c88659915fdb12006943459adb4",
+    "target": null
+   },
+   "205.714x257.143": {
+    "sha256": "e7c1a12777a5fd9a0b85c58f37e7d0b3aa59909c8318b37b274fda744e81cecf",
+    "target": [
+     "planets",
+     6
+    ]
+   },
+   "257.143x257.143": {
+    "sha256": "e7c1a12777a5fd9a0b85c58f37e7d0b3aa59909c8318b37b274fda744e81cecf",
+    "target": [
+     "planets",
+     6
+    ]
+   },
+   "308.571x257.143": {
+    "sha256": "6c70b6f36244e06bdfae86e42eb2d01030d2a4360f291d9397c27b224d6ec3f5",
+    "target": [
+     "astrology",
+     1
+    ]
+   },
+   "360.0x257.143": {
+    "sha256": "2e9a9bc13fad2dc4254cd1e8341323bcf8b4d5e2316852e7a7ae4318138025ef",
+    "target": [
+     "planets",
+     4
+    ]
+   },
+   "411.429x257.143": {
+    "sha256": "2e9a9bc13fad2dc4254cd1e8341323bcf8b4d5e2316852e7a7ae4318138025ef",
+    "target": [
+     "planets",
+     4
+    ]
+   },
+   "462.857x257.143": {
+    "sha256": "b0419737f800f8139b6e963c07c769a7ffbbfe74a538dc04ee3b85a2f2d04ad8",
+    "target": [
+     "astrology",
+     4
+    ]
+   },
+   "514.286x257.143": {
+    "sha256": "02430b4e5bb16baf9b00f4e2f4914b6c79ea5fd43baf8aa179ec5234166c9dc1",
+    "target": [
+     "planets",
+     2
+    ]
+   },
+   "565.714x257.143": {
+    "sha256": "b0419737f800f8139b6e963c07c769a7ffbbfe74a538dc04ee3b85a2f2d04ad8",
+    "target": [
+     "astrology",
+     4
+    ]
+   },
+   "617.143x257.143": {
+    "sha256": "b0419737f800f8139b6e963c07c769a7ffbbfe74a538dc04ee3b85a2f2d04ad8",
+    "target": [
+     "astrology",
+     4
+    ]
+   },
+   "668.571x257.143": {
+    "sha256": "7370ec695ee4ae43541e439e95aa225b7a708468166a16cfd779aae95d794588",
+    "target": null
+   },
+   "51.429x308.571": {
+    "sha256": "b29c2bbb28ad6903cca220a1abb0dc2c7527e0a2b3605d4d81259bd7a86a4447",
+    "target": null
+   },
+   "102.857x308.571": {
+    "sha256": "8496f597e14d60652e06861044036df3d9131c88659915fdb12006943459adb4",
+    "target": null
+   },
+   "154.286x308.571": {
+    "sha256": "8496f597e14d60652e06861044036df3d9131c88659915fdb12006943459adb4",
+    "target": null
+   },
+   "205.714x308.571": {
+    "sha256": "6c70b6f36244e06bdfae86e42eb2d01030d2a4360f291d9397c27b224d6ec3f5",
+    "target": [
+     "astrology",
+     0
+    ]
+   },
+   "257.143x308.571": {
+    "sha256": "e7c1a12777a5fd9a0b85c58f37e7d0b3aa59909c8318b37b274fda744e81cecf",
+    "target": [
+     "planets",
+     6
+    ]
+   },
+   "308.571x308.571": {
+    "sha256": "6c70b6f36244e06bdfae86e42eb2d01030d2a4360f291d9397c27b224d6ec3f5",
+    "target": [
+     "astrology",
+     1
+    ]
+   },
+   "360.0x308.571": {
+    "sha256": "389666ae8d756a1563f4e9684d3233f0577d8f53ba1d41ebe710dc435d649f39",
+    "target": [
+     "planets",
+     0
+    ]
+   },
+   "411.429x308.571": {
+    "sha256": "b0419737f800f8139b6e963c07c769a7ffbbfe74a538dc04ee3b85a2f2d04ad8",
+    "target": [
+     "astrology",
+     4
+    ]
+   },
+   "462.857x308.571": {
+    "sha256": "02430b4e5bb16baf9b00f4e2f4914b6c79ea5fd43baf8aa179ec5234166c9dc1",
+    "target": [
+     "planets",
+     2
+    ]
+   },
+   "514.286x308.571": {
+    "sha256": "02430b4e5bb16baf9b00f4e2f4914b6c79ea5fd43baf8aa179ec5234166c9dc1",
+    "target": [
+     "planets",
+     2
+    ]
+   },
+   "565.714x308.571": {
+    "sha256": "02430b4e5bb16baf9b00f4e2f4914b6c79ea5fd43baf8aa179ec5234166c9dc1",
+    "target": [
+     "planets",
+     2
+    ]
+   },
+   "617.143x308.571": {
+    "sha256": "8496f597e14d60652e06861044036df3d9131c88659915fdb12006943459adb4",
+    "target": null
+   },
+   "668.571x308.571": {
+    "sha256": "baf1ade3bed9c9ed2ba9c1e51612c273338324653be5f1c34f5d53d0f4259cf5",
+    "target": null
+   },
+   "51.429x360.0": {
+    "sha256": "8496f597e14d60652e06861044036df3d9131c88659915fdb12006943459adb4",
+    "target": null
+   },
+   "102.857x360.0": {
+    "sha256": "8496f597e14d60652e06861044036df3d9131c88659915fdb12006943459adb4",
+    "target": null
+   },
+   "154.286x360.0": {
+    "sha256": "8496f597e14d60652e06861044036df3d9131c88659915fdb12006943459adb4",
+    "target": null
+   },
+   "205.714x360.0": {
+    "sha256": "71b48e5e12cc762132eb405fb8f075f50b8ffcb8dfff6a2cc47585600c7e2a72",
+    "target": [
+     "planets",
+     1
+    ]
+   },
+   "257.143x360.0": {
+    "sha256": "2857e3097ddc00a67dba4a97cc46ad3a1e033db31c9d0dfeafa7856192fcd3c3",
+    "target": [
+     "astrology",
+     11
+    ]
+   },
+   "308.571x360.0": {
+    "sha256": "389666ae8d756a1563f4e9684d3233f0577d8f53ba1d41ebe710dc435d649f39",
+    "target": [
+     "planets",
+     0
+    ]
+   },
+   "360.0x360.0": {
+    "sha256": "389666ae8d756a1563f4e9684d3233f0577d8f53ba1d41ebe710dc435d649f39",
+    "target": [
+     "planets",
+     0
+    ]
+   },
+   "411.429x360.0": {
+    "sha256": "389666ae8d756a1563f4e9684d3233f0577d8f53ba1d41ebe710dc435d649f39",
+    "target": [
+     "planets",
+     0
+    ]
+   },
+   "462.857x360.0": {
+    "sha256": "b0419737f800f8139b6e963c07c769a7ffbbfe74a538dc04ee3b85a2f2d04ad8",
+    "target": [
+     "astrology",
+     5
+    ]
+   },
+   "514.286x360.0": {
+    "sha256": "02430b4e5bb16baf9b00f4e2f4914b6c79ea5fd43baf8aa179ec5234166c9dc1",
+    "target": [
+     "planets",
+     2
+    ]
+   },
+   "565.714x360.0": {
+    "sha256": "8496f597e14d60652e06861044036df3d9131c88659915fdb12006943459adb4",
+    "target": null
+   },
+   "617.143x360.0": {
+    "sha256": "8496f597e14d60652e06861044036df3d9131c88659915fdb12006943459adb4",
+    "target": null
+   },
+   "668.571x360.0": {
+    "sha256": "8496f597e14d60652e06861044036df3d9131c88659915fdb12006943459adb4",
+    "target": null
+   },
+   "51.429x411.429": {
+    "sha256": "a0158d73209b32a42e1de4acc432e54b530689fc2603591703f1c68b44142fc6",
+    "target": null
+   },
+   "102.857x411.429": {
+    "sha256": "8496f597e14d60652e06861044036df3d9131c88659915fdb12006943459adb4",
+    "target": null
+   },
+   "154.286x411.429": {
+    "sha256": "71b48e5e12cc762132eb405fb8f075f50b8ffcb8dfff6a2cc47585600c7e2a72",
+    "target": [
+     "planets",
+     1
+    ]
+   },
+   "205.714x411.429": {
+    "sha256": "71b48e5e12cc762132eb405fb8f075f50b8ffcb8dfff6a2cc47585600c7e2a72",
+    "target": [
+     "planets",
+     1
+    ]
+   },
+   "257.143x411.429": {
+    "sha256": "71b48e5e12cc762132eb405fb8f075f50b8ffcb8dfff6a2cc47585600c7e2a72",
+    "target": [
+     "planets",
+     1
+    ]
+   },
+   "308.571x411.429": {
+    "sha256": "2857e3097ddc00a67dba4a97cc46ad3a1e033db31c9d0dfeafa7856192fcd3c3",
+    "target": [
+     "astrology",
+     10
+    ]
+   },
+   "360.0x411.429": {
+    "sha256": "389666ae8d756a1563f4e9684d3233f0577d8f53ba1d41ebe710dc435d649f39",
+    "target": [
+     "planets",
+     0
+    ]
+   },
+   "411.429x411.429": {
+    "sha256": "67f616fa0c7489d6b8c45a911f76d67d87926d55234627323489d97eb574f5fc",
+    "target": [
+     "astrology",
+     7
+    ]
+   },
+   "462.857x411.429": {
+    "sha256": "36c283ac0f473c75f183310b0a11b09a3ee31bdd16e12eb5246f8698d994d6dc",
+    "target": [
+     "planets",
+     5
+    ]
+   },
+   "514.286x411.429": {
+    "sha256": "67f616fa0c7489d6b8c45a911f76d67d87926d55234627323489d97eb574f5fc",
+    "target": [
+     "astrology",
+     6
+    ]
+   },
+   "565.714x411.429": {
+    "sha256": "8496f597e14d60652e06861044036df3d9131c88659915fdb12006943459adb4",
+    "target": null
+   },
+   "617.143x411.429": {
+    "sha256": "8496f597e14d60652e06861044036df3d9131c88659915fdb12006943459adb4",
+    "target": null
+   },
+   "668.571x411.429": {
+    "sha256": "dbecaf60db0ef4176f31c2c843e00c85485c5bb3cd7d3ea5f9b62f6cba6d4658",
+    "target": null
+   },
+   "51.429x462.857": {
+    "sha256": "f566c13e93b922990a124e0cc6b97bd234eee3fb753e5f1ec6512d40602e7025",
+    "target": null
+   },
+   "102.857x462.857": {
+    "sha256": "7ebeae7c0d346bca1f45f5f02129d192e6b8204c408ae8e941bd852817952ee0",
+    "target": [
+     "astrology",
+     10
+    ]
+   },
+   "154.286x462.857": {
+    "sha256": "2857e3097ddc00a67dba4a97cc46ad3a1e033db31c9d0dfeafa7856192fcd3c3",
+    "target": [
+     "astrology",
+     10
+    ]
+   },
+   "205.714x462.857": {
+    "sha256": "71b48e5e12cc762132eb405fb8f075f50b8ffcb8dfff6a2cc47585600c7e2a72",
+    "target": [
+     "planets",
+     1
+    ]
+   },
+   "257.143x462.857": {
+    "sha256": "2857e3097ddc00a67dba4a97cc46ad3a1e033db31c9d0dfeafa7856192fcd3c3",
+    "target": [
+     "astrology",
+     10
+    ]
+   },
+   "308.571x462.857": {
+    "sha256": "8410d08d37c244be8a14e0c86be551a65dff664a48cd56afb04eee8241c87419",
+    "target": [
+     "planets",
+     3
+    ]
+   },
+   "360.0x462.857": {
+    "sha256": "8410d08d37c244be8a14e0c86be551a65dff664a48cd56afb04eee8241c87419",
+    "target": [
+     "planets",
+     3
+    ]
+   },
+   "411.429x462.857": {
+    "sha256": "67f616fa0c7489d6b8c45a911f76d67d87926d55234627323489d97eb574f5fc",
+    "target": [
+     "astrology",
+     7
+    ]
+   },
+   "462.857x462.857": {
+    "sha256": "36c283ac0f473c75f183310b0a11b09a3ee31bdd16e12eb5246f8698d994d6dc",
+    "target": [
+     "planets",
+     5
+    ]
+   },
+   "514.286x462.857": {
+    "sha256": "36c283ac0f473c75f183310b0a11b09a3ee31bdd16e12eb5246f8698d994d6dc",
+    "target": [
+     "planets",
+     5
+    ]
+   },
+   "565.714x462.857": {
+    "sha256": "8496f597e14d60652e06861044036df3d9131c88659915fdb12006943459adb4",
+    "target": null
+   },
+   "617.143x462.857": {
+    "sha256": "8496f597e14d60652e06861044036df3d9131c88659915fdb12006943459adb4",
+    "target": null
+   },
+   "668.571x462.857": {
+    "sha256": "5b7c22d8bbe5ffa428755164ac8c235d0b114756b1f176a1d9a83c9fdf1f85a0",
+    "target": null
+   },
+   "102.857x514.286": {
+    "sha256": "cf9d7db73e4e00e9716c08b9ab1b8aea3366713ed9755ebc3c6d102602c1bc0b",
+    "target": null
+   },
+   "154.286x514.286": {
+    "sha256": "cf9d7db73e4e00e9716c08b9ab1b8aea3366713ed9755ebc3c6d102602c1bc0b",
+    "target": null
+   },
+   "205.714x514.286": {
+    "sha256": "cf9d7db73e4e00e9716c08b9ab1b8aea3366713ed9755ebc3c6d102602c1bc0b",
+    "target": null
+   },
+   "257.143x514.286": {
+    "sha256": "e10f97c10c46daffdab3c14b5de110fb4e96eb03848448b73572853b22bb390e",
+    "target": [
+     "astrology",
+     9
+    ]
+   },
+   "308.571x514.286": {
+    "sha256": "8410d08d37c244be8a14e0c86be551a65dff664a48cd56afb04eee8241c87419",
+    "target": [
+     "planets",
+     3
+    ]
+   },
+   "360.0x514.286": {
+    "sha256": "8410d08d37c244be8a14e0c86be551a65dff664a48cd56afb04eee8241c87419",
+    "target": [
+     "planets",
+     3
+    ]
+   },
+   "411.429x514.286": {
+    "sha256": "e10f97c10c46daffdab3c14b5de110fb4e96eb03848448b73572853b22bb390e",
+    "target": [
+     "astrology",
+     8
+    ]
+   },
+   "462.857x514.286": {
+    "sha256": "36c283ac0f473c75f183310b0a11b09a3ee31bdd16e12eb5246f8698d994d6dc",
+    "target": [
+     "planets",
+     5
+    ]
+   },
+   "514.286x514.286": {
+    "sha256": "67f616fa0c7489d6b8c45a911f76d67d87926d55234627323489d97eb574f5fc",
+    "target": [
+     "astrology",
+     7
+    ]
+   },
+   "565.714x514.286": {
+    "sha256": "d58b71e6796d49192918f6240b33dd4475f086edc91a9eef352ce3b26845970e",
+    "target": [
+     "astrology",
+     6
+    ]
+   },
+   "617.143x514.286": {
+    "sha256": "8496f597e14d60652e06861044036df3d9131c88659915fdb12006943459adb4",
+    "target": null
+   },
+   "102.857x565.714": {
+    "sha256": "cbfa604fee7e2f6286b479de763bd1b3eb6703af0337933001b8049e5b6fdc1f",
+    "target": null
+   },
+   "154.286x565.714": {
+    "sha256": "cf9d7db73e4e00e9716c08b9ab1b8aea3366713ed9755ebc3c6d102602c1bc0b",
+    "target": null
+   },
+   "205.714x565.714": {
+    "sha256": "cf9d7db73e4e00e9716c08b9ab1b8aea3366713ed9755ebc3c6d102602c1bc0b",
+    "target": null
+   },
+   "257.143x565.714": {
+    "sha256": "cf9d7db73e4e00e9716c08b9ab1b8aea3366713ed9755ebc3c6d102602c1bc0b",
+    "target": null
+   },
+   "308.571x565.714": {
+    "sha256": "8410d08d37c244be8a14e0c86be551a65dff664a48cd56afb04eee8241c87419",
+    "target": [
+     "planets",
+     3
+    ]
+   },
+   "360.0x565.714": {
+    "sha256": "e10f97c10c46daffdab3c14b5de110fb4e96eb03848448b73572853b22bb390e",
+    "target": [
+     "astrology",
+     8
+    ]
+   },
+   "411.429x565.714": {
+    "sha256": "cf9d7db73e4e00e9716c08b9ab1b8aea3366713ed9755ebc3c6d102602c1bc0b",
+    "target": null
+   },
+   "462.857x565.714": {
+    "sha256": "cf9d7db73e4e00e9716c08b9ab1b8aea3366713ed9755ebc3c6d102602c1bc0b",
+    "target": null
+   },
+   "514.286x565.714": {
+    "sha256": "cf9d7db73e4e00e9716c08b9ab1b8aea3366713ed9755ebc3c6d102602c1bc0b",
+    "target": null
+   },
+   "565.714x565.714": {
+    "sha256": "cf9d7db73e4e00e9716c08b9ab1b8aea3366713ed9755ebc3c6d102602c1bc0b",
+    "target": null
+   },
+   "617.143x565.714": {
+    "sha256": "8f4766e4f34fc3418da6dc29b0f85dcb5e1a2c38a08ec011f08807ea228d1af0",
+    "target": null
+   },
+   "154.286x617.143": {
+    "sha256": "73edc9217c0c6831ad0105c8f20e4fe71b6a6cff5dc740a333e3f012d5fa1eed",
+    "target": null
+   },
+   "205.714x617.143": {
+    "sha256": "cf9d7db73e4e00e9716c08b9ab1b8aea3366713ed9755ebc3c6d102602c1bc0b",
+    "target": null
+   },
+   "257.143x617.143": {
+    "sha256": "cf9d7db73e4e00e9716c08b9ab1b8aea3366713ed9755ebc3c6d102602c1bc0b",
+    "target": null
+   },
+   "308.571x617.143": {
+    "sha256": "e10f97c10c46daffdab3c14b5de110fb4e96eb03848448b73572853b22bb390e",
+    "target": [
+     "astrology",
+     9
+    ]
+   },
+   "360.0x617.143": {
+    "sha256": "cf9d7db73e4e00e9716c08b9ab1b8aea3366713ed9755ebc3c6d102602c1bc0b",
+    "target": null
+   },
+   "411.429x617.143": {
+    "sha256": "cf9d7db73e4e00e9716c08b9ab1b8aea3366713ed9755ebc3c6d102602c1bc0b",
+    "target": null
+   },
+   "462.857x617.143": {
+    "sha256": "cf9d7db73e4e00e9716c08b9ab1b8aea3366713ed9755ebc3c6d102602c1bc0b",
+    "target": null
+   },
+   "514.286x617.143": {
+    "sha256": "cf9d7db73e4e00e9716c08b9ab1b8aea3366713ed9755ebc3c6d102602c1bc0b",
+    "target": null
+   },
+   "565.714x617.143": {
+    "sha256": "1d3f18e6aa364f2b25e977a1adb8ebc74ca429441f63260de841a06ea7d9a50f",
+    "target": null
+   },
+   "257.143x668.571": {
+    "sha256": "8a5f18d2ad2296d71ff22b2516bd8bf0ad4c5cac8804748a68a25074f7fa9e1f",
+    "target": null
+   },
+   "308.571x668.571": {
+    "sha256": "4602c2bcd93bdb00105d8faf950a6fe4fd2067d1979cb00ac74e271fa0f5208e",
+    "target": null
+   },
+   "360.0x668.571": {
+    "sha256": "cf9d7db73e4e00e9716c08b9ab1b8aea3366713ed9755ebc3c6d102602c1bc0b",
+    "target": null
+   },
+   "411.429x668.571": {
+    "sha256": "06b636634d4e09533cd90060f1fd61f4645cea0ddb70c42a24656b4d6481aeb4",
+    "target": null
+   },
+   "462.857x668.571": {
+    "sha256": "78ce2247538c942158f267c84f670124ffbda231a981e5b02daf43a0138a46e4",
+    "target": null
+   }
+  },
+  "representative_html": {
+   "411.429x308.571": "<table cellspacing='12'><tr><td width='400'><div align='center'><span style='font-size:17px; font-weight:bold'>Leo (22<sup>nd</sup> July - 21<sup>st</sup> August)*</span></div><div align='center'><img src='file:///C:/Users/vurun/AppData/Roaming/Watch%20Academy/raster_cache/07fae55c5579e9a9_1a5d43971e1a_w384_Leo_gem.png' width='192'/></div><p align='justify'>Leo is the Nemean lion, the first labor of Heracles, whose hide no weapon could pierce, set into the sky with Regulus, the little king, burning at its heart. It guards 23 July to 22 August, the arc from 30 to 60 degrees, the furnace weeks just past the solstice. …</p></td><td width='400'><div align='center'><span style='font-size:17px; font-weight:bold'>Virgo (22<sup>nd</sup> August - 22<sup>nd</sup> September)</span></div><div align='center'><img src='file:///C:/Users/vurun/AppData/Roaming/Watch%20Academy/raster_cache/0f2569dcef0ed289_89375928da5e_w384_Virgo_gem.png' width='192'/></div><p align='justify'>Virgo is the star-maiden, Astraea who left the earth last of the immortals, or Demeter of the grain; either way the sky agrees, giving her Spica, the ear of wheat, for her brightest star. She guards 23 August to 22 September, from 60 degrees down to the autumn equinox at 90, closing the summer at the dial&#x27;s right side, the year&#x27;s dusk. …</p></td></tr></table><hr/><div align='center'><a href='domy:encyclopedia' style='color:#8FB8FF'><u>Learn more</u></a>&nbsp;&nbsp;<span style='color:#9A9A9A'>press SPACE</span></div>",
+   "411.429x411.429": "<table cellspacing='12'><tr><td width='400'><div align='center'><span style='font-size:17px; font-weight:bold'>Libra (23<sup>rd</sup> September - 22<sup>nd</sup> October)*</span></div><div align='center'><img src='file:///C:/Users/vurun/AppData/Roaming/Watch%20Academy/raster_cache/fb4f7bd259d844f7_9e14fa38764d_w384_Libra_gem.png' width='192'/></div><p align='justify'>Libra is the only sign that is an object rather than a creature: a balance. It opens on 23 September at the autumn equinox, when day and night stand exactly equal and the year performs its own act of weighing, and it holds the wheel from 90 to 120 degrees, easing the light down into October. …</p></td><td width='400'><div align='center'><span style='font-size:17px; font-weight:bold'>Scorpio (23<sup>rd</sup> October - 20<sup>th</sup> November)</span></div><div align='center'><img src='file:///C:/Users/vurun/AppData/Roaming/Watch%20Academy/raster_cache/f005c9523be2951a_b1affe8bdf21_w384_Scorpio_gem.png' width='192'/></div><p align='justify'>Scorpio guards the dying of the year, 23 October to 21 November, from 120 to 150 degrees, where autumn stops pretending and the wheel sinks toward the winter tip of the dial. Its stars are drawn as a long chain that fans open at the head and hooks upward at the sting. …</p></td></tr></table><hr/><div align='center'><a href='domy:encyclopedia' style='color:#8FB8FF'><u>Learn more</u></a>&nbsp;&nbsp;<span style='color:#9A9A9A'>press SPACE</span></div>",
+   "462.857x257.143": "<table cellspacing='12'><tr><td width='400'><div align='center'><span style='font-size:17px; font-weight:bold'>Leo (22<sup>nd</sup> July - 21<sup>st</sup> August)*</span></div><div align='center'><img src='file:///C:/Users/vurun/AppData/Roaming/Watch%20Academy/raster_cache/07fae55c5579e9a9_1a5d43971e1a_w384_Leo_gem.png' width='192'/></div><p align='justify'>Leo is the Nemean lion, the first labor of Heracles, whose hide no weapon could pierce, set into the sky with Regulus, the little king, burning at its heart. It guards 23 July to 22 August, the arc from 30 to 60 degrees, the furnace weeks just past the solstice. …</p></td><td width='400'><div align='center'><span style='font-size:17px; font-weight:bold'>Virgo (22<sup>nd</sup> August - 22<sup>nd</sup> September)</span></div><div align='center'><img src='file:///C:/Users/vurun/AppData/Roaming/Watch%20Academy/raster_cache/0f2569dcef0ed289_89375928da5e_w384_Virgo_gem.png' width='192'/></div><p align='justify'>Virgo is the star-maiden, Astraea who left the earth last of the immortals, or Demeter of the grain; either way the sky agrees, giving her Spica, the ear of wheat, for her brightest star. She guards 23 August to 22 September, from 60 degrees down to the autumn equinox at 90, closing the summer at the dial&#x27;s right side, the year&#x27;s dusk. …</p></td></tr></table><hr/><div align='center'><a href='domy:encyclopedia' style='color:#8FB8FF'><u>Learn more</u></a>&nbsp;&nbsp;<span style='color:#9A9A9A'>press SPACE</span></div>",
+   "462.857x360.0": "<table cellspacing='12'><tr><td width='400'><div align='center'><span style='font-size:17px; font-weight:bold'>Leo (22<sup>nd</sup> July - 21<sup>st</sup> August)*</span></div><div align='center'><img src='file:///C:/Users/vurun/AppData/Roaming/Watch%20Academy/raster_cache/07fae55c5579e9a9_1a5d43971e1a_w384_Leo_gem.png' width='192'/></div><p align='justify'>Leo is the Nemean lion, the first labor of Heracles, whose hide no weapon could pierce, set into the sky with Regulus, the little king, burning at its heart. It guards 23 July to 22 August, the arc from 30 to 60 degrees, the furnace weeks just past the solstice. …</p></td><td width='400'><div align='center'><span style='font-size:17px; font-weight:bold'>Virgo (22<sup>nd</sup> August - 22<sup>nd</sup> September)</span></div><div align='center'><img src='file:///C:/Users/vurun/AppData/Roaming/Watch%20Academy/raster_cache/0f2569dcef0ed289_89375928da5e_w384_Virgo_gem.png' width='192'/></div><p align='justify'>Virgo is the star-maiden, Astraea who left the earth last of the immortals, or Demeter of the grain; either way the sky agrees, giving her Spica, the ear of wheat, for her brightest star. She guards 23 August to 22 September, from 60 degrees down to the autumn equinox at 90, closing the summer at the dial&#x27;s right side, the year&#x27;s dusk. …</p></td></tr></table><hr/><div align='center'><a href='domy:encyclopedia' style='color:#8FB8FF'><u>Learn more</u></a>&nbsp;&nbsp;<span style='color:#9A9A9A'>press SPACE</span></div>",
+   "565.714x257.143": "<table cellspacing='12'><tr><td width='400'><div align='center'><span style='font-size:17px; font-weight:bold'>Leo (22<sup>nd</sup> July - 21<sup>st</sup> August)*</span></div><div align='center'><img src='file:///C:/Users/vurun/AppData/Roaming/Watch%20Academy/raster_cache/07fae55c5579e9a9_1a5d43971e1a_w384_Leo_gem.png' width='192'/></div><p align='justify'>Leo is the Nemean lion, the first labor of Heracles, whose hide no weapon could pierce, set into the sky with Regulus, the little king, burning at its heart. It guards 23 July to 22 August, the arc from 30 to 60 degrees, the furnace weeks just past the solstice. …</p></td><td width='400'><div align='center'><span style='font-size:17px; font-weight:bold'>Virgo (22<sup>nd</sup> August - 22<sup>nd</sup> September)</span></div><div align='center'><img src='file:///C:/Users/vurun/AppData/Roaming/Watch%20Academy/raster_cache/0f2569dcef0ed289_89375928da5e_w384_Virgo_gem.png' width='192'/></div><p align='justify'>Virgo is the star-maiden, Astraea who left the earth last of the immortals, or Demeter of the grain; either way the sky agrees, giving her Spica, the ear of wheat, for her brightest star. She guards 23 August to 22 September, from 60 degrees down to the autumn equinox at 90, closing the summer at the dial&#x27;s right side, the year&#x27;s dusk. …</p></td></tr></table><hr/><div align='center'><a href='domy:encyclopedia' style='color:#8FB8FF'><u>Learn more</u></a>&nbsp;&nbsp;<span style='color:#9A9A9A'>press SPACE</span></div>",
+   "617.143x257.143": "<table cellspacing='12'><tr><td width='400'><div align='center'><span style='font-size:17px; font-weight:bold'>Leo (22<sup>nd</sup> July - 21<sup>st</sup> August)*</span></div><div align='center'><img src='file:///C:/Users/vurun/AppData/Roaming/Watch%20Academy/raster_cache/07fae55c5579e9a9_1a5d43971e1a_w384_Leo_gem.png' width='192'/></div><p align='justify'>Leo is the Nemean lion, the first labor of Heracles, whose hide no weapon could pierce, set into the sky with Regulus, the little king, burning at its heart. It guards 23 July to 22 August, the arc from 30 to 60 degrees, the furnace weeks just past the solstice. …</p></td><td width='400'><div align='center'><span style='font-size:17px; font-weight:bold'>Virgo (22<sup>nd</sup> August - 22<sup>nd</sup> September)</span></div><div align='center'><img src='file:///C:/Users/vurun/AppData/Roaming/Watch%20Academy/raster_cache/0f2569dcef0ed289_89375928da5e_w384_Virgo_gem.png' width='192'/></div><p align='justify'>Virgo is the star-maiden, Astraea who left the earth last of the immortals, or Demeter of the grain; either way the sky agrees, giving her Spica, the ear of wheat, for her brightest star. She guards 23 August to 22 September, from 60 degrees down to the autumn equinox at 90, closing the summer at the dial&#x27;s right side, the year&#x27;s dusk. …</p></td></tr></table><hr/><div align='center'><a href='domy:encyclopedia' style='color:#8FB8FF'><u>Learn more</u></a>&nbsp;&nbsp;<span style='color:#9A9A9A'>press SPACE</span></div>"
+  }
+ },
+ "calendar_zodiac": {
+  "points": {
+   "257.143x51.429": {
+    "sha256": "7046858b6bb39be728774427ca27ff547bad83b973a87b84e77c5e042db50898",
+    "target": null
+   },
+   "308.571x51.429": {
+    "sha256": "cadb682af668812d12d2c19cad6f2e9316b570310b3d20ddb313cdd42c8df02d",
+    "target": [
+     "astrology",
+     2
+    ]
+   },
+   "360.0x51.429": {
+    "sha256": "9ee30a6d60d7f2b84de411e33baffe65d458b3f1a91452f0a90970c356902ba7",
+    "target": [
+     "astrology",
+     3
+    ]
+   },
+   "411.429x51.429": {
+    "sha256": "5637b0dd2e227f168518d88aa7ee466d6c87471a36f610ce6670fcf705f1afd0",
+    "target": [
+     "astrology",
+     3
+    ]
+   },
+   "462.857x51.429": {
+    "sha256": "41ebb52d5f8b35e91c1fdf41ad34927267216c03d85a70db004bca7fac388bfd",
+    "target": null
+   },
+   "154.286x102.857": {
+    "sha256": "888d34b45f7d609d7deb4598c05307f9eb91c5527db8e4d58d2d738097d345f3",
+    "target": null
+   },
+   "205.714x102.857": {
+    "sha256": "fd504436fa829730a0268a704f4d9a8dd8129c7f698d8a47f45c5274bfa261a2",
+    "target": [
+     "astrology",
+     1
+    ]
+   },
+   "257.143x102.857": {
+    "sha256": "055c89be2a1337568a393567a0e1d672a897ba815ccba450640ae7d6dbadddb4",
+    "target": [
+     "astrology",
+     2
+    ]
+   },
+   "308.571x102.857": {
+    "sha256": "055c89be2a1337568a393567a0e1d672a897ba815ccba450640ae7d6dbadddb4",
+    "target": [
+     "astrology",
+     2
+    ]
+   },
+   "360.0x102.857": {
+    "sha256": "9ee30a6d60d7f2b84de411e33baffe65d458b3f1a91452f0a90970c356902ba7",
+    "target": [
+     "astrology",
+     3
+    ]
+   },
+   "411.429x102.857": {
+    "sha256": "9ee30a6d60d7f2b84de411e33baffe65d458b3f1a91452f0a90970c356902ba7",
+    "target": [
+     "astrology",
+     3
+    ]
+   },
+   "462.857x102.857": {
+    "sha256": "49aad8e2a745a8788ea0dc7fb2e931e661b6d9e55d35b830eda9dbe3303904ca",
+    "target": [
+     "seasons",
+     1
+    ]
+   },
+   "514.286x102.857": {
+    "sha256": "7d2981c422bac4eea52671b04f07f0b9b54d16671668e26ad329b577912169e0",
+    "target": [
+     "astrology",
+     4
+    ]
+   },
+   "565.714x102.857": {
+    "sha256": "58b65ccb63d12da7341224bf893080c2a09d44779b1da60b5a001002ef7f6ed2",
+    "target": null
+   },
+   "102.857x154.286": {
+    "sha256": "25db4ecbefb4212cdebed6a7a09dc1edce9b288c92ec3ae9865d392470af8f24",
+    "target": null
+   },
+   "154.286x154.286": {
+    "sha256": "fd504436fa829730a0268a704f4d9a8dd8129c7f698d8a47f45c5274bfa261a2",
+    "target": [
+     "astrology",
+     1
+    ]
+   },
+   "205.714x154.286": {
+    "sha256": "fd504436fa829730a0268a704f4d9a8dd8129c7f698d8a47f45c5274bfa261a2",
+    "target": [
+     "astrology",
+     1
+    ]
+   },
+   "257.143x154.286": {
+    "sha256": "055c89be2a1337568a393567a0e1d672a897ba815ccba450640ae7d6dbadddb4",
+    "target": [
+     "astrology",
+     2
+    ]
+   },
+   "308.571x154.286": {
+    "sha256": "055c89be2a1337568a393567a0e1d672a897ba815ccba450640ae7d6dbadddb4",
+    "target": [
+     "astrology",
+     2
+    ]
+   },
+   "360.0x154.286": {
+    "sha256": "9ee30a6d60d7f2b84de411e33baffe65d458b3f1a91452f0a90970c356902ba7",
+    "target": [
+     "astrology",
+     3
+    ]
+   },
+   "411.429x154.286": {
+    "sha256": "9ee30a6d60d7f2b84de411e33baffe65d458b3f1a91452f0a90970c356902ba7",
+    "target": [
+     "astrology",
+     3
+    ]
+   },
+   "462.857x154.286": {
+    "sha256": "3acae1cc81363773c5c1c43e92d10ec89c78f65bb11c8be4e8e64cdd29df7ec7",
+    "target": [
+     "moon",
+     1
+    ]
+   },
+   "514.286x154.286": {
+    "sha256": "7d2981c422bac4eea52671b04f07f0b9b54d16671668e26ad329b577912169e0",
+    "target": [
+     "astrology",
+     4
+    ]
+   },
+   "565.714x154.286": {
+    "sha256": "7d2981c422bac4eea52671b04f07f0b9b54d16671668e26ad329b577912169e0",
+    "target": [
+     "astrology",
+     4
+    ]
+   },
+   "617.143x154.286": {
+    "sha256": "806ef89544fbf76cd953e6dd566ab65670cd7f9de18dd7cb3a2667faf287200e",
+    "target": null
+   },
+   "102.857x205.714": {
+    "sha256": "fd504436fa829730a0268a704f4d9a8dd8129c7f698d8a47f45c5274bfa261a2",
+    "target": [
+     "astrology",
+     1
+    ]
+   },
+   "154.286x205.714": {
+    "sha256": "fd504436fa829730a0268a704f4d9a8dd8129c7f698d8a47f45c5274bfa261a2",
+    "target": [
+     "astrology",
+     1
+    ]
+   },
+   "205.714x205.714": {
+    "sha256": "fd504436fa829730a0268a704f4d9a8dd8129c7f698d8a47f45c5274bfa261a2",
+    "target": [
+     "astrology",
+     1
+    ]
+   },
+   "257.143x205.714": {
+    "sha256": "fd504436fa829730a0268a704f4d9a8dd8129c7f698d8a47f45c5274bfa261a2",
+    "target": [
+     "astrology",
+     1
+    ]
+   },
+   "308.571x205.714": {
+    "sha256": "055c89be2a1337568a393567a0e1d672a897ba815ccba450640ae7d6dbadddb4",
+    "target": [
+     "astrology",
+     2
+    ]
+   },
+   "360.0x205.714": {
+    "sha256": "9ee30a6d60d7f2b84de411e33baffe65d458b3f1a91452f0a90970c356902ba7",
+    "target": [
+     "astrology",
+     3
+    ]
+   },
+   "411.429x205.714": {
+    "sha256": "9ee30a6d60d7f2b84de411e33baffe65d458b3f1a91452f0a90970c356902ba7",
+    "target": [
+     "astrology",
+     3
+    ]
+   },
+   "462.857x205.714": {
+    "sha256": "7d2981c422bac4eea52671b04f07f0b9b54d16671668e26ad329b577912169e0",
+    "target": [
+     "astrology",
+     4
+    ]
+   },
+   "514.286x205.714": {
+    "sha256": "7d2981c422bac4eea52671b04f07f0b9b54d16671668e26ad329b577912169e0",
+    "target": [
+     "astrology",
+     4
+    ]
+   },
+   "565.714x205.714": {
+    "sha256": "7d2981c422bac4eea52671b04f07f0b9b54d16671668e26ad329b577912169e0",
+    "target": [
+     "astrology",
+     4
+    ]
+   },
+   "617.143x205.714": {
+    "sha256": "7d2981c422bac4eea52671b04f07f0b9b54d16671668e26ad329b577912169e0",
+    "target": [
+     "astrology",
+     4
+    ]
+   },
+   "51.429x257.143": {
+    "sha256": "a0f5e604e56bdee4174a77c7384317cd4bf1fb1575b7d50a1a0dd61e0d1b6b1e",
+    "target": null
+   },
+   "102.857x257.143": {
+    "sha256": "4b282d1ae79def487202313fc6bf278ef82e1fa71b5ca5e9ccf81e5b5447b6ef",
+    "target": [
+     "astrology",
+     0
+    ]
+   },
+   "154.286x257.143": {
+    "sha256": "4b282d1ae79def487202313fc6bf278ef82e1fa71b5ca5e9ccf81e5b5447b6ef",
+    "target": [
+     "astrology",
+     0
+    ]
+   },
+   "205.714x257.143": {
+    "sha256": "fd504436fa829730a0268a704f4d9a8dd8129c7f698d8a47f45c5274bfa261a2",
+    "target": [
+     "astrology",
+     1
+    ]
+   },
+   "257.143x257.143": {
+    "sha256": "fd504436fa829730a0268a704f4d9a8dd8129c7f698d8a47f45c5274bfa261a2",
+    "target": [
+     "astrology",
+     1
+    ]
+   },
+   "308.571x257.143": {
+    "sha256": "055c89be2a1337568a393567a0e1d672a897ba815ccba450640ae7d6dbadddb4",
+    "target": [
+     "astrology",
+     2
+    ]
+   },
+   "360.0x257.143": {
+    "sha256": "9ee30a6d60d7f2b84de411e33baffe65d458b3f1a91452f0a90970c356902ba7",
+    "target": [
+     "astrology",
+     3
+    ]
+   },
+   "411.429x257.143": {
+    "sha256": "9ee30a6d60d7f2b84de411e33baffe65d458b3f1a91452f0a90970c356902ba7",
+    "target": [
+     "astrology",
+     3
+    ]
+   },
+   "462.857x257.143": {
+    "sha256": "7d2981c422bac4eea52671b04f07f0b9b54d16671668e26ad329b577912169e0",
+    "target": [
+     "astrology",
+     4
+    ]
+   },
+   "514.286x257.143": {
+    "sha256": "7d2981c422bac4eea52671b04f07f0b9b54d16671668e26ad329b577912169e0",
+    "target": [
+     "astrology",
+     4
+    ]
+   },
+   "565.714x257.143": {
+    "sha256": "4a668c4ee707d65ff2e6ee84b902019c734a05ffb5976cff48422ec7ade0da4e",
+    "target": [
+     "astrology",
+     5
+    ]
+   },
+   "617.143x257.143": {
+    "sha256": "4a668c4ee707d65ff2e6ee84b902019c734a05ffb5976cff48422ec7ade0da4e",
+    "target": [
+     "astrology",
+     5
+    ]
+   },
+   "668.571x257.143": {
+    "sha256": "7370ec695ee4ae43541e439e95aa225b7a708468166a16cfd779aae95d794588",
+    "target": null
+   },
+   "51.429x308.571": {
+    "sha256": "1ce54756079c6fbb653329863dbffdb654d6117e9e8a4b24d6c12a47c6a86711",
+    "target": [
+     "astrology",
+     0
+    ]
+   },
+   "102.857x308.571": {
+    "sha256": "4b282d1ae79def487202313fc6bf278ef82e1fa71b5ca5e9ccf81e5b5447b6ef",
+    "target": [
+     "astrology",
+     0
+    ]
+   },
+   "154.286x308.571": {
+    "sha256": "4b282d1ae79def487202313fc6bf278ef82e1fa71b5ca5e9ccf81e5b5447b6ef",
+    "target": [
+     "astrology",
+     0
+    ]
+   },
+   "205.714x308.571": {
+    "sha256": "4b282d1ae79def487202313fc6bf278ef82e1fa71b5ca5e9ccf81e5b5447b6ef",
+    "target": [
+     "astrology",
+     0
+    ]
+   },
+   "257.143x308.571": {
+    "sha256": "4b282d1ae79def487202313fc6bf278ef82e1fa71b5ca5e9ccf81e5b5447b6ef",
+    "target": [
+     "astrology",
+     0
+    ]
+   },
+   "308.571x308.571": {
+    "sha256": "fd504436fa829730a0268a704f4d9a8dd8129c7f698d8a47f45c5274bfa261a2",
+    "target": [
+     "astrology",
+     1
+    ]
+   },
+   "360.0x308.571": {
+    "sha256": "9ee30a6d60d7f2b84de411e33baffe65d458b3f1a91452f0a90970c356902ba7",
+    "target": [
+     "astrology",
+     3
+    ]
+   },
+   "411.429x308.571": {
+    "sha256": "7d2981c422bac4eea52671b04f07f0b9b54d16671668e26ad329b577912169e0",
+    "target": [
+     "astrology",
+     4
+    ]
+   },
+   "462.857x308.571": {
+    "sha256": "4a668c4ee707d65ff2e6ee84b902019c734a05ffb5976cff48422ec7ade0da4e",
+    "target": [
+     "astrology",
+     5
+    ]
+   },
+   "514.286x308.571": {
+    "sha256": "4a668c4ee707d65ff2e6ee84b902019c734a05ffb5976cff48422ec7ade0da4e",
+    "target": [
+     "astrology",
+     5
+    ]
+   },
+   "565.714x308.571": {
+    "sha256": "4a668c4ee707d65ff2e6ee84b902019c734a05ffb5976cff48422ec7ade0da4e",
+    "target": [
+     "astrology",
+     5
+    ]
+   },
+   "617.143x308.571": {
+    "sha256": "4a668c4ee707d65ff2e6ee84b902019c734a05ffb5976cff48422ec7ade0da4e",
+    "target": [
+     "astrology",
+     5
+    ]
+   },
+   "668.571x308.571": {
+    "sha256": "07dd9538a77e0fd18368dcc580df569f481ead23de75966ceb6a02a8917a11ec",
+    "target": [
+     "astrology",
+     5
+    ]
+   },
+   "51.429x360.0": {
+    "sha256": "4b282d1ae79def487202313fc6bf278ef82e1fa71b5ca5e9ccf81e5b5447b6ef",
+    "target": [
+     "astrology",
+     0
+    ]
+   },
+   "102.857x360.0": {
+    "sha256": "4b282d1ae79def487202313fc6bf278ef82e1fa71b5ca5e9ccf81e5b5447b6ef",
+    "target": [
+     "astrology",
+     0
+    ]
+   },
+   "154.286x360.0": {
+    "sha256": "4b282d1ae79def487202313fc6bf278ef82e1fa71b5ca5e9ccf81e5b5447b6ef",
+    "target": [
+     "astrology",
+     0
+    ]
+   },
+   "205.714x360.0": {
+    "sha256": "4b282d1ae79def487202313fc6bf278ef82e1fa71b5ca5e9ccf81e5b5447b6ef",
+    "target": [
+     "astrology",
+     0
+    ]
+   },
+   "257.143x360.0": {
+    "sha256": "4b282d1ae79def487202313fc6bf278ef82e1fa71b5ca5e9ccf81e5b5447b6ef",
+    "target": [
+     "astrology",
+     0
+    ]
+   },
+   "308.571x360.0": {
+    "sha256": "4b282d1ae79def487202313fc6bf278ef82e1fa71b5ca5e9ccf81e5b5447b6ef",
+    "target": [
+     "astrology",
+     0
+    ]
+   },
+   "360.0x360.0": {
+    "sha256": "cf9d7db73e4e00e9716c08b9ab1b8aea3366713ed9755ebc3c6d102602c1bc0b",
+    "target": null
+   },
+   "411.429x360.0": {
+    "sha256": "1da50471d0b4b3d23d16bf8127f6c3451168bb6bbbad8c67e2b3938586fdf8cf",
+    "target": [
+     "astrology",
+     6
+    ]
+   },
+   "462.857x360.0": {
+    "sha256": "1da50471d0b4b3d23d16bf8127f6c3451168bb6bbbad8c67e2b3938586fdf8cf",
+    "target": [
+     "astrology",
+     6
+    ]
+   },
+   "514.286x360.0": {
+    "sha256": "1da50471d0b4b3d23d16bf8127f6c3451168bb6bbbad8c67e2b3938586fdf8cf",
+    "target": [
+     "astrology",
+     6
+    ]
+   },
+   "565.714x360.0": {
+    "sha256": "1da50471d0b4b3d23d16bf8127f6c3451168bb6bbbad8c67e2b3938586fdf8cf",
+    "target": [
+     "astrology",
+     6
+    ]
+   },
+   "617.143x360.0": {
+    "sha256": "1da50471d0b4b3d23d16bf8127f6c3451168bb6bbbad8c67e2b3938586fdf8cf",
+    "target": [
+     "astrology",
+     6
+    ]
+   },
+   "668.571x360.0": {
+    "sha256": "1da50471d0b4b3d23d16bf8127f6c3451168bb6bbbad8c67e2b3938586fdf8cf",
+    "target": [
+     "astrology",
+     6
+    ]
+   },
+   "51.429x411.429": {
+    "sha256": "05cef33cd9b0da975101220de034a674b1352bd6f2c09fe08f2600cb4102c806",
+    "target": [
+     "astrology",
+     11
+    ]
+   },
+   "102.857x411.429": {
+    "sha256": "2ff8a8eed82246cb9d037761a563ef67199fd53afde5b5ee0e75b26bb51e1d2c",
+    "target": [
+     "astrology",
+     11
+    ]
+   },
+   "154.286x411.429": {
+    "sha256": "7ebeae7c0d346bca1f45f5f02129d192e6b8204c408ae8e941bd852817952ee0",
+    "target": [
+     "astrology",
+     11
+    ]
+   },
+   "205.714x411.429": {
+    "sha256": "7ebeae7c0d346bca1f45f5f02129d192e6b8204c408ae8e941bd852817952ee0",
+    "target": [
+     "astrology",
+     11
+    ]
+   },
+   "257.143x411.429": {
+    "sha256": "2ff8a8eed82246cb9d037761a563ef67199fd53afde5b5ee0e75b26bb51e1d2c",
+    "target": [
+     "astrology",
+     11
+    ]
+   },
+   "308.571x411.429": {
+    "sha256": "96b2c44ccae5e31464a737262b3bafd72512ec816cd8a90d4de8b7ad1857db69",
+    "target": [
+     "astrology",
+     10
+    ]
+   },
+   "360.0x411.429": {
+    "sha256": "5d7e06e2ae0018d3f02ed74290bbbf27f85d849116d7c6eeaebd267ba39b9e40",
+    "target": [
+     "astrology",
+     9
+    ]
+   },
+   "411.429x411.429": {
+    "sha256": "39dbe76fd6aa2fa87457fe13e9ed8807626cb58bee75d8e49be02ddf940f52fd",
+    "target": [
+     "astrology",
+     7
+    ]
+   },
+   "462.857x411.429": {
+    "sha256": "1da50471d0b4b3d23d16bf8127f6c3451168bb6bbbad8c67e2b3938586fdf8cf",
+    "target": [
+     "astrology",
+     6
+    ]
+   },
+   "514.286x411.429": {
+    "sha256": "1da50471d0b4b3d23d16bf8127f6c3451168bb6bbbad8c67e2b3938586fdf8cf",
+    "target": [
+     "astrology",
+     6
+    ]
+   },
+   "565.714x411.429": {
+    "sha256": "1da50471d0b4b3d23d16bf8127f6c3451168bb6bbbad8c67e2b3938586fdf8cf",
+    "target": [
+     "astrology",
+     6
+    ]
+   },
+   "617.143x411.429": {
+    "sha256": "1da50471d0b4b3d23d16bf8127f6c3451168bb6bbbad8c67e2b3938586fdf8cf",
+    "target": [
+     "astrology",
+     6
+    ]
+   },
+   "668.571x411.429": {
+    "sha256": "54f9eda24779fddd77532689afa4c87475ba691f276966a243e724422c06a906",
+    "target": [
+     "astrology",
+     6
+    ]
+   },
+   "51.429x462.857": {
+    "sha256": "f566c13e93b922990a124e0cc6b97bd234eee3fb753e5f1ec6512d40602e7025",
+    "target": null
+   },
+   "102.857x462.857": {
+    "sha256": "7ebeae7c0d346bca1f45f5f02129d192e6b8204c408ae8e941bd852817952ee0",
+    "target": [
+     "astrology",
+     11
+    ]
+   },
+   "154.286x462.857": {
+    "sha256": "2ff8a8eed82246cb9d037761a563ef67199fd53afde5b5ee0e75b26bb51e1d2c",
+    "target": [
+     "astrology",
+     11
+    ]
+   },
+   "205.714x462.857": {
+    "sha256": "96b2c44ccae5e31464a737262b3bafd72512ec816cd8a90d4de8b7ad1857db69",
+    "target": [
+     "astrology",
+     10
+    ]
+   },
+   "257.143x462.857": {
+    "sha256": "96b2c44ccae5e31464a737262b3bafd72512ec816cd8a90d4de8b7ad1857db69",
+    "target": [
+     "astrology",
+     10
+    ]
+   },
+   "308.571x462.857": {
+    "sha256": "5d7e06e2ae0018d3f02ed74290bbbf27f85d849116d7c6eeaebd267ba39b9e40",
+    "target": [
+     "astrology",
+     9
+    ]
+   },
+   "360.0x462.857": {
+    "sha256": "2e9a9bc13fad2dc4254cd1e8341323bcf8b4d5e2316852e7a7ae4318138025ef",
+    "target": [
+     "planets",
+     4
+    ]
+   },
+   "411.429x462.857": {
+    "sha256": "43b489f6b816f8117de546b3655f948fdbc396cdb3658e70f4d75f13582272db",
+    "target": [
+     "astrology",
+     8
+    ]
+   },
+   "462.857x462.857": {
+    "sha256": "39dbe76fd6aa2fa87457fe13e9ed8807626cb58bee75d8e49be02ddf940f52fd",
+    "target": [
+     "astrology",
+     7
+    ]
+   },
+   "514.286x462.857": {
+    "sha256": "39dbe76fd6aa2fa87457fe13e9ed8807626cb58bee75d8e49be02ddf940f52fd",
+    "target": [
+     "astrology",
+     7
+    ]
+   },
+   "565.714x462.857": {
+    "sha256": "1da50471d0b4b3d23d16bf8127f6c3451168bb6bbbad8c67e2b3938586fdf8cf",
+    "target": [
+     "astrology",
+     6
+    ]
+   },
+   "617.143x462.857": {
+    "sha256": "1da50471d0b4b3d23d16bf8127f6c3451168bb6bbbad8c67e2b3938586fdf8cf",
+    "target": [
+     "astrology",
+     6
+    ]
+   },
+   "668.571x462.857": {
+    "sha256": "5b7c22d8bbe5ffa428755164ac8c235d0b114756b1f176a1d9a83c9fdf1f85a0",
+    "target": null
+   },
+   "102.857x514.286": {
+    "sha256": "96b2c44ccae5e31464a737262b3bafd72512ec816cd8a90d4de8b7ad1857db69",
+    "target": [
+     "astrology",
+     10
+    ]
+   },
+   "154.286x514.286": {
+    "sha256": "96b2c44ccae5e31464a737262b3bafd72512ec816cd8a90d4de8b7ad1857db69",
+    "target": [
+     "astrology",
+     10
+    ]
+   },
+   "205.714x514.286": {
+    "sha256": "96b2c44ccae5e31464a737262b3bafd72512ec816cd8a90d4de8b7ad1857db69",
+    "target": [
+     "astrology",
+     10
+    ]
+   },
+   "257.143x514.286": {
+    "sha256": "96b2c44ccae5e31464a737262b3bafd72512ec816cd8a90d4de8b7ad1857db69",
+    "target": [
+     "astrology",
+     10
+    ]
+   },
+   "308.571x514.286": {
+    "sha256": "2e9a9bc13fad2dc4254cd1e8341323bcf8b4d5e2316852e7a7ae4318138025ef",
+    "target": [
+     "planets",
+     4
+    ]
+   },
+   "360.0x514.286": {
+    "sha256": "2e9a9bc13fad2dc4254cd1e8341323bcf8b4d5e2316852e7a7ae4318138025ef",
+    "target": [
+     "planets",
+     4
+    ]
+   },
+   "411.429x514.286": {
+    "sha256": "2e9a9bc13fad2dc4254cd1e8341323bcf8b4d5e2316852e7a7ae4318138025ef",
+    "target": [
+     "planets",
+     4
+    ]
+   },
+   "462.857x514.286": {
+    "sha256": "39dbe76fd6aa2fa87457fe13e9ed8807626cb58bee75d8e49be02ddf940f52fd",
+    "target": [
+     "astrology",
+     7
+    ]
+   },
+   "514.286x514.286": {
+    "sha256": "39dbe76fd6aa2fa87457fe13e9ed8807626cb58bee75d8e49be02ddf940f52fd",
+    "target": [
+     "astrology",
+     7
+    ]
+   },
+   "565.714x514.286": {
+    "sha256": "d58b71e6796d49192918f6240b33dd4475f086edc91a9eef352ce3b26845970e",
+    "target": [
+     "astrology",
+     7
+    ]
+   },
+   "617.143x514.286": {
+    "sha256": "39dbe76fd6aa2fa87457fe13e9ed8807626cb58bee75d8e49be02ddf940f52fd",
+    "target": [
+     "astrology",
+     7
+    ]
+   },
+   "102.857x565.714": {
+    "sha256": "cbfa604fee7e2f6286b479de763bd1b3eb6703af0337933001b8049e5b6fdc1f",
+    "target": null
+   },
+   "154.286x565.714": {
+    "sha256": "96b2c44ccae5e31464a737262b3bafd72512ec816cd8a90d4de8b7ad1857db69",
+    "target": [
+     "astrology",
+     10
+    ]
+   },
+   "205.714x565.714": {
+    "sha256": "96b2c44ccae5e31464a737262b3bafd72512ec816cd8a90d4de8b7ad1857db69",
+    "target": [
+     "astrology",
+     10
+    ]
+   },
+   "257.143x565.714": {
+    "sha256": "5d7e06e2ae0018d3f02ed74290bbbf27f85d849116d7c6eeaebd267ba39b9e40",
+    "target": [
+     "astrology",
+     9
+    ]
+   },
+   "308.571x565.714": {
+    "sha256": "5d7e06e2ae0018d3f02ed74290bbbf27f85d849116d7c6eeaebd267ba39b9e40",
+    "target": [
+     "astrology",
+     9
+    ]
+   },
+   "360.0x565.714": {
+    "sha256": "5d7e06e2ae0018d3f02ed74290bbbf27f85d849116d7c6eeaebd267ba39b9e40",
+    "target": [
+     "astrology",
+     9
+    ]
+   },
+   "411.429x565.714": {
+    "sha256": "43b489f6b816f8117de546b3655f948fdbc396cdb3658e70f4d75f13582272db",
+    "target": [
+     "astrology",
+     8
+    ]
+   },
+   "462.857x565.714": {
+    "sha256": "43b489f6b816f8117de546b3655f948fdbc396cdb3658e70f4d75f13582272db",
+    "target": [
+     "astrology",
+     8
+    ]
+   },
+   "514.286x565.714": {
+    "sha256": "39dbe76fd6aa2fa87457fe13e9ed8807626cb58bee75d8e49be02ddf940f52fd",
+    "target": [
+     "astrology",
+     7
+    ]
+   },
+   "565.714x565.714": {
+    "sha256": "39dbe76fd6aa2fa87457fe13e9ed8807626cb58bee75d8e49be02ddf940f52fd",
+    "target": [
+     "astrology",
+     7
+    ]
+   },
+   "617.143x565.714": {
+    "sha256": "8f4766e4f34fc3418da6dc29b0f85dcb5e1a2c38a08ec011f08807ea228d1af0",
+    "target": null
+   },
+   "154.286x617.143": {
+    "sha256": "73edc9217c0c6831ad0105c8f20e4fe71b6a6cff5dc740a333e3f012d5fa1eed",
+    "target": null
+   },
+   "205.714x617.143": {
+    "sha256": "96b2c44ccae5e31464a737262b3bafd72512ec816cd8a90d4de8b7ad1857db69",
+    "target": [
+     "astrology",
+     10
+    ]
+   },
+   "257.143x617.143": {
+    "sha256": "5d7e06e2ae0018d3f02ed74290bbbf27f85d849116d7c6eeaebd267ba39b9e40",
+    "target": [
+     "astrology",
+     9
+    ]
+   },
+   "308.571x617.143": {
+    "sha256": "5d7e06e2ae0018d3f02ed74290bbbf27f85d849116d7c6eeaebd267ba39b9e40",
+    "target": [
+     "astrology",
+     9
+    ]
+   },
+   "360.0x617.143": {
+    "sha256": "5d7e06e2ae0018d3f02ed74290bbbf27f85d849116d7c6eeaebd267ba39b9e40",
+    "target": [
+     "astrology",
+     9
+    ]
+   },
+   "411.429x617.143": {
+    "sha256": "43b489f6b816f8117de546b3655f948fdbc396cdb3658e70f4d75f13582272db",
+    "target": [
+     "astrology",
+     8
+    ]
+   },
+   "462.857x617.143": {
+    "sha256": "43b489f6b816f8117de546b3655f948fdbc396cdb3658e70f4d75f13582272db",
+    "target": [
+     "astrology",
+     8
+    ]
+   },
+   "514.286x617.143": {
+    "sha256": "39dbe76fd6aa2fa87457fe13e9ed8807626cb58bee75d8e49be02ddf940f52fd",
+    "target": [
+     "astrology",
+     7
+    ]
+   },
+   "565.714x617.143": {
+    "sha256": "1d3f18e6aa364f2b25e977a1adb8ebc74ca429441f63260de841a06ea7d9a50f",
+    "target": null
+   },
+   "257.143x668.571": {
+    "sha256": "8a5f18d2ad2296d71ff22b2516bd8bf0ad4c5cac8804748a68a25074f7fa9e1f",
+    "target": null
+   },
+   "308.571x668.571": {
+    "sha256": "6e40f8dd5e63e6cdc03d71963d342bc74dfcf68c3ce0e5ec353b6ec3f94d8c19",
+    "target": [
+     "astrology",
+     9
+    ]
+   },
+   "360.0x668.571": {
+    "sha256": "5d7e06e2ae0018d3f02ed74290bbbf27f85d849116d7c6eeaebd267ba39b9e40",
+    "target": [
+     "astrology",
+     9
+    ]
+   },
+   "411.429x668.571": {
+    "sha256": "c22da872104994649107d2d0bd724047e8f0cc5ea04795ea9cf3df69e76043a6",
+    "target": [
+     "astrology",
+     8
+    ]
+   },
+   "462.857x668.571": {
+    "sha256": "78ce2247538c942158f267c84f670124ffbda231a981e5b02daf43a0138a46e4",
+    "target": null
+   }
+  },
+  "representative_html": {
+   "308.571x514.286": "<div align='center'><img src='file:///C:/Users/vurun/AppData/Roaming/Watch%20Academy/raster_cache/efb963f8e4e27b1a_4443da0566cd_w384_Jupiter.png' width='192'/></div><div align='center'><span style='font-size: 17px'><b>Jupiter</b></span><br/>Thursday, 16<sup>th</sup> July 2026 · 6105. Anno Lucis</div><br/><table><tr><td width='460'><p align='justify'>Jupiter is the giant in banded robes: cream and caramel stripes wrap the whole globe, whipped into curls at their borders, and low on one side turns the Great Red Spot — a single storm wider than the Earth that has been raging for centuries. Everything about the planet is surplus: the largest body, the loudest weather, a king&#x27;s wardrobe of clouds. …</p></td></tr></table><hr/><div align='center'><a href='domy:encyclopedia' style='color:#8FB8FF'><u>Learn more</u></a>&nbsp;&nbsp;<span style='color:#9A9A9A'>press SPACE</span></div>",
+   "360.0x462.857": "<div align='center'><img src='file:///C:/Users/vurun/AppData/Roaming/Watch%20Academy/raster_cache/efb963f8e4e27b1a_4443da0566cd_w384_Jupiter.png' width='192'/></div><div align='center'><span style='font-size: 17px'><b>Jupiter</b></span><br/>Thursday, 16<sup>th</sup> July 2026 · 6105. Anno Lucis</div><br/><table><tr><td width='460'><p align='justify'>Jupiter is the giant in banded robes: cream and caramel stripes wrap the whole globe, whipped into curls at their borders, and low on one side turns the Great Red Spot — a single storm wider than the Earth that has been raging for centuries. Everything about the planet is surplus: the largest body, the loudest weather, a king&#x27;s wardrobe of clouds. …</p></td></tr></table><hr/><div align='center'><a href='domy:encyclopedia' style='color:#8FB8FF'><u>Learn more</u></a>&nbsp;&nbsp;<span style='color:#9A9A9A'>press SPACE</span></div>",
+   "360.0x514.286": "<div align='center'><img src='file:///C:/Users/vurun/AppData/Roaming/Watch%20Academy/raster_cache/efb963f8e4e27b1a_4443da0566cd_w384_Jupiter.png' width='192'/></div><div align='center'><span style='font-size: 17px'><b>Jupiter</b></span><br/>Thursday, 16<sup>th</sup> July 2026 · 6105. Anno Lucis</div><br/><table><tr><td width='460'><p align='justify'>Jupiter is the giant in banded robes: cream and caramel stripes wrap the whole globe, whipped into curls at their borders, and low on one side turns the Great Red Spot — a single storm wider than the Earth that has been raging for centuries. Everything about the planet is surplus: the largest body, the loudest weather, a king&#x27;s wardrobe of clouds. …</p></td></tr></table><hr/><div align='center'><a href='domy:encyclopedia' style='color:#8FB8FF'><u>Learn more</u></a>&nbsp;&nbsp;<span style='color:#9A9A9A'>press SPACE</span></div>",
+   "411.429x514.286": "<div align='center'><img src='file:///C:/Users/vurun/AppData/Roaming/Watch%20Academy/raster_cache/efb963f8e4e27b1a_4443da0566cd_w384_Jupiter.png' width='192'/></div><div align='center'><span style='font-size: 17px'><b>Jupiter</b></span><br/>Thursday, 16<sup>th</sup> July 2026 · 6105. Anno Lucis</div><br/><table><tr><td width='460'><p align='justify'>Jupiter is the giant in banded robes: cream and caramel stripes wrap the whole globe, whipped into curls at their borders, and low on one side turns the Great Red Spot — a single storm wider than the Earth that has been raging for centuries. Everything about the planet is surplus: the largest body, the loudest weather, a king&#x27;s wardrobe of clouds. …</p></td></tr></table><hr/><div align='center'><a href='domy:encyclopedia' style='color:#8FB8FF'><u>Learn more</u></a>&nbsp;&nbsp;<span style='color:#9A9A9A'>press SPACE</span></div>",
+   "411.429x668.571": "<div align='center'><div style='white-space:nowrap'><b>Day</b></div><div style='white-space:nowrap'><b>Time:</b> 23:22 - <b>Angle:</b> 170.5° - Night</div><div style='white-space:nowrap'>&nbsp;</div><div style='white-space:nowrap'><b>Year</b></div><div style='white-space:nowrap'><b>Date:</b> 12<sup>th</sup> December 2026 · 6105. Anno Lucis</div><div style='white-space:nowrap'><b>Season:</b> Autumn - 346<sup>th</sup> Day - 50<sup>th</sup> Week</div><div style='white-space:nowrap'>&nbsp;</div><div style='white-space:nowrap'><b>Moon</b></div><div style='white-space:nowrap'>7<sup>th</sup> Moon of 2026</div><div style='white-space:nowrap'><b>Illumination:</b> 99.3% - Waxing Gibbous - Day 14.0 of 29.53</div></div><hr/><div align='center'><a href='domy:encyclopedia' style='color:#8FB8FF'><u>Learn more</u></a>&nbsp;&nbsp;<span style='color:#9A9A9A'>press SPACE</span></div>",
+   "462.857x102.857": "<div align='center'><span style='font-size:17px; font-weight:bold'>Date</span></div><div align='center'><div style='white-space:nowrap'>16<sup>th</sup> July 2026</div><div style='white-space:nowrap'>197<sup>th</sup> Day - 29<sup>th</sup> Week</div><div style='white-space:nowrap'>&nbsp;</div></div><div align='center'><img src='file:///C:/Users/vurun/AppData/Roaming/Watch%20Academy/raster_cache/30327a7b620d9283_7367196e1055_w256_Age_of_Light_v2_gem.png' width='128'/></div><div align='center'><span style='font-size:17px; font-weight:bold'>Age of Light</span></div><div align='center'><div style='white-space:nowrap'>6105. Anno Lucis</div><div style='white-space:nowrap'>&nbsp;</div></div><div align='center'><img src='file:///C:/Users/vurun/AppData/Roaming/Watch%20Academy/raster_cache/e885fab4345c91fd_5e30b62e10ec_w256_Summer_gem.png' width='128'/></div><div align='center'><div style='white-space:nowrap'><b>Season:</b> Summer 26<sup>th</sup> of 94 Days</div><div style='white-space:nowrap'><b>Sign:</b> ♋ Cancer (21<sup>st</sup> June - 21<sup>st</sup> July)</div></div><hr/><div align='center'><a href='domy:encyclopedia' style='color:#8FB8FF'><u>Learn more</u></a>&nbsp;&nbsp;<span style='color:#9A9A9A'>press SPACE</span></div>"
+  }
+ },
+ "calendar_almanac": {
+  "points": {
+   "257.143x51.429": {
+    "sha256": "7046858b6bb39be728774427ca27ff547bad83b973a87b84e77c5e042db50898",
+    "target": null
+   },
+   "308.571x51.429": {
+    "sha256": "cadb682af668812d12d2c19cad6f2e9316b570310b3d20ddb313cdd42c8df02d",
+    "target": [
+     "chinese",
+     6
+    ]
+   },
+   "360.0x51.429": {
+    "sha256": "5405638e3801719d4fced91992ad6b88ad1721d85a10435c3fc68641f779d2e0",
+    "target": [
+     "chinese",
+     6
+    ]
+   },
+   "411.429x51.429": {
+    "sha256": "5637b0dd2e227f168518d88aa7ee466d6c87471a36f610ce6670fcf705f1afd0",
+    "target": [
+     "chinese",
+     6
+    ]
+   },
+   "462.857x51.429": {
+    "sha256": "41ebb52d5f8b35e91c1fdf41ad34927267216c03d85a70db004bca7fac388bfd",
+    "target": null
+   },
+   "154.286x102.857": {
+    "sha256": "888d34b45f7d609d7deb4598c05307f9eb91c5527db8e4d58d2d738097d345f3",
+    "target": null
+   },
+   "205.714x102.857": {
+    "sha256": "31e9dd99355d2bfbd4e45911c74c1094bbf7feb2c8d5e860887e4482407381d4",
+    "target": [
+     "chinese",
+     5
+    ]
+   },
+   "257.143x102.857": {
+    "sha256": "31e9dd99355d2bfbd4e45911c74c1094bbf7feb2c8d5e860887e4482407381d4",
+    "target": [
+     "chinese",
+     5
+    ]
+   },
+   "308.571x102.857": {
+    "sha256": "5405638e3801719d4fced91992ad6b88ad1721d85a10435c3fc68641f779d2e0",
+    "target": [
+     "chinese",
+     6
+    ]
+   },
+   "360.0x102.857": {
+    "sha256": "5405638e3801719d4fced91992ad6b88ad1721d85a10435c3fc68641f779d2e0",
+    "target": [
+     "chinese",
+     6
+    ]
+   },
+   "411.429x102.857": {
+    "sha256": "5405638e3801719d4fced91992ad6b88ad1721d85a10435c3fc68641f779d2e0",
+    "target": [
+     "chinese",
+     6
+    ]
+   },
+   "462.857x102.857": {
+    "sha256": "88c7eda1d377d819d9df02bdf936f62cf8f0fcd4d86e2e0136a2d7378669bd40",
+    "target": [
+     "chinese",
+     7
+    ]
+   },
+   "514.286x102.857": {
+    "sha256": "88c7eda1d377d819d9df02bdf936f62cf8f0fcd4d86e2e0136a2d7378669bd40",
+    "target": [
+     "chinese",
+     7
+    ]
+   },
+   "565.714x102.857": {
+    "sha256": "58b65ccb63d12da7341224bf893080c2a09d44779b1da60b5a001002ef7f6ed2",
+    "target": null
+   },
+   "102.857x154.286": {
+    "sha256": "25db4ecbefb4212cdebed6a7a09dc1edce9b288c92ec3ae9865d392470af8f24",
+    "target": null
+   },
+   "154.286x154.286": {
+    "sha256": "31e9dd99355d2bfbd4e45911c74c1094bbf7feb2c8d5e860887e4482407381d4",
+    "target": [
+     "chinese",
+     5
+    ]
+   },
+   "205.714x154.286": {
+    "sha256": "31e9dd99355d2bfbd4e45911c74c1094bbf7feb2c8d5e860887e4482407381d4",
+    "target": [
+     "chinese",
+     5
+    ]
+   },
+   "257.143x154.286": {
+    "sha256": "31e9dd99355d2bfbd4e45911c74c1094bbf7feb2c8d5e860887e4482407381d4",
+    "target": [
+     "chinese",
+     5
+    ]
+   },
+   "308.571x154.286": {
+    "sha256": "055c89be2a1337568a393567a0e1d672a897ba815ccba450640ae7d6dbadddb4",
+    "target": [
+     "chinese",
+     6
+    ]
+   },
+   "360.0x154.286": {
+    "sha256": "5405638e3801719d4fced91992ad6b88ad1721d85a10435c3fc68641f779d2e0",
+    "target": [
+     "chinese",
+     6
+    ]
+   },
+   "411.429x154.286": {
+    "sha256": "9ee30a6d60d7f2b84de411e33baffe65d458b3f1a91452f0a90970c356902ba7",
+    "target": [
+     "chinese",
+     6
+    ]
+   },
+   "462.857x154.286": {
+    "sha256": "3acae1cc81363773c5c1c43e92d10ec89c78f65bb11c8be4e8e64cdd29df7ec7",
+    "target": [
+     "moon",
+     1
+    ]
+   },
+   "514.286x154.286": {
+    "sha256": "49aad8e2a745a8788ea0dc7fb2e931e661b6d9e55d35b830eda9dbe3303904ca",
+    "target": [
+     "seasons",
+     1
+    ]
+   },
+   "565.714x154.286": {
+    "sha256": "71cd56db6d259cb86be02c08493f3e1efffa46fe869b447cee6b5753a9fadac5",
+    "target": [
+     "chinese",
+     8
+    ]
+   },
+   "617.143x154.286": {
+    "sha256": "806ef89544fbf76cd953e6dd566ab65670cd7f9de18dd7cb3a2667faf287200e",
+    "target": null
+   },
+   "102.857x205.714": {
+    "sha256": "8c607bcbc2d28c8ed0995cdbc8bab3cd064b34cc58aca7be465b88f052464e11",
+    "target": [
+     "chinese",
+     4
+    ]
+   },
+   "154.286x205.714": {
+    "sha256": "8c607bcbc2d28c8ed0995cdbc8bab3cd064b34cc58aca7be465b88f052464e11",
+    "target": [
+     "chinese",
+     4
+    ]
+   },
+   "205.714x205.714": {
+    "sha256": "fd504436fa829730a0268a704f4d9a8dd8129c7f698d8a47f45c5274bfa261a2",
+    "target": [
+     "chinese",
+     5
+    ]
+   },
+   "257.143x205.714": {
+    "sha256": "31e9dd99355d2bfbd4e45911c74c1094bbf7feb2c8d5e860887e4482407381d4",
+    "target": [
+     "chinese",
+     5
+    ]
+   },
+   "308.571x205.714": {
+    "sha256": "31e9dd99355d2bfbd4e45911c74c1094bbf7feb2c8d5e860887e4482407381d4",
+    "target": [
+     "chinese",
+     5
+    ]
+   },
+   "360.0x205.714": {
+    "sha256": "5405638e3801719d4fced91992ad6b88ad1721d85a10435c3fc68641f779d2e0",
+    "target": [
+     "chinese",
+     6
+    ]
+   },
+   "411.429x205.714": {
+    "sha256": "88c7eda1d377d819d9df02bdf936f62cf8f0fcd4d86e2e0136a2d7378669bd40",
+    "target": [
+     "chinese",
+     7
+    ]
+   },
+   "462.857x205.714": {
+    "sha256": "88c7eda1d377d819d9df02bdf936f62cf8f0fcd4d86e2e0136a2d7378669bd40",
+    "target": [
+     "chinese",
+     7
+    ]
+   },
+   "514.286x205.714": {
+    "sha256": "7d2981c422bac4eea52671b04f07f0b9b54d16671668e26ad329b577912169e0",
+    "target": [
+     "chinese",
+     7
+    ]
+   },
+   "565.714x205.714": {
+    "sha256": "71cd56db6d259cb86be02c08493f3e1efffa46fe869b447cee6b5753a9fadac5",
+    "target": [
+     "chinese",
+     8
+    ]
+   },
+   "617.143x205.714": {
+    "sha256": "71cd56db6d259cb86be02c08493f3e1efffa46fe869b447cee6b5753a9fadac5",
+    "target": [
+     "chinese",
+     8
+    ]
+   },
+   "51.429x257.143": {
+    "sha256": "a0f5e604e56bdee4174a77c7384317cd4bf1fb1575b7d50a1a0dd61e0d1b6b1e",
+    "target": null
+   },
+   "102.857x257.143": {
+    "sha256": "8c607bcbc2d28c8ed0995cdbc8bab3cd064b34cc58aca7be465b88f052464e11",
+    "target": [
+     "chinese",
+     4
+    ]
+   },
+   "154.286x257.143": {
+    "sha256": "8c607bcbc2d28c8ed0995cdbc8bab3cd064b34cc58aca7be465b88f052464e11",
+    "target": [
+     "chinese",
+     4
+    ]
+   },
+   "205.714x257.143": {
+    "sha256": "8c607bcbc2d28c8ed0995cdbc8bab3cd064b34cc58aca7be465b88f052464e11",
+    "target": [
+     "chinese",
+     4
+    ]
+   },
+   "257.143x257.143": {
+    "sha256": "31e9dd99355d2bfbd4e45911c74c1094bbf7feb2c8d5e860887e4482407381d4",
+    "target": [
+     "chinese",
+     5
+    ]
+   },
+   "308.571x257.143": {
+    "sha256": "31e9dd99355d2bfbd4e45911c74c1094bbf7feb2c8d5e860887e4482407381d4",
+    "target": [
+     "chinese",
+     5
+    ]
+   },
+   "360.0x257.143": {
+    "sha256": "5405638e3801719d4fced91992ad6b88ad1721d85a10435c3fc68641f779d2e0",
+    "target": [
+     "chinese",
+     6
+    ]
+   },
+   "411.429x257.143": {
+    "sha256": "88c7eda1d377d819d9df02bdf936f62cf8f0fcd4d86e2e0136a2d7378669bd40",
+    "target": [
+     "chinese",
+     7
+    ]
+   },
+   "462.857x257.143": {
+    "sha256": "71cd56db6d259cb86be02c08493f3e1efffa46fe869b447cee6b5753a9fadac5",
+    "target": [
+     "chinese",
+     8
+    ]
+   },
+   "514.286x257.143": {
+    "sha256": "71cd56db6d259cb86be02c08493f3e1efffa46fe869b447cee6b5753a9fadac5",
+    "target": [
+     "chinese",
+     8
+    ]
+   },
+   "565.714x257.143": {
+    "sha256": "71cd56db6d259cb86be02c08493f3e1efffa46fe869b447cee6b5753a9fadac5",
+    "target": [
+     "chinese",
+     8
+    ]
+   },
+   "617.143x257.143": {
+    "sha256": "71cd56db6d259cb86be02c08493f3e1efffa46fe869b447cee6b5753a9fadac5",
+    "target": [
+     "chinese",
+     8
+    ]
+   },
+   "668.571x257.143": {
+    "sha256": "7370ec695ee4ae43541e439e95aa225b7a708468166a16cfd779aae95d794588",
+    "target": null
+   },
+   "51.429x308.571": {
+    "sha256": "1ce54756079c6fbb653329863dbffdb654d6117e9e8a4b24d6c12a47c6a86711",
+    "target": [
+     "chinese",
+     3
+    ]
+   },
+   "102.857x308.571": {
+    "sha256": "7133301a51ce0795253681f9c56ef636e5ec659ba34804e6fd9822d950276d0d",
+    "target": [
+     "chinese",
+     3
+    ]
+   },
+   "154.286x308.571": {
+    "sha256": "4b282d1ae79def487202313fc6bf278ef82e1fa71b5ca5e9ccf81e5b5447b6ef",
+    "target": [
+     "chinese",
+     3
+    ]
+   },
+   "205.714x308.571": {
+    "sha256": "8c607bcbc2d28c8ed0995cdbc8bab3cd064b34cc58aca7be465b88f052464e11",
+    "target": [
+     "chinese",
+     4
+    ]
+   },
+   "257.143x308.571": {
+    "sha256": "8c607bcbc2d28c8ed0995cdbc8bab3cd064b34cc58aca7be465b88f052464e11",
+    "target": [
+     "chinese",
+     4
+    ]
+   },
+   "308.571x308.571": {
+    "sha256": "31e9dd99355d2bfbd4e45911c74c1094bbf7feb2c8d5e860887e4482407381d4",
+    "target": [
+     "chinese",
+     5
+    ]
+   },
+   "360.0x308.571": {
+    "sha256": "5405638e3801719d4fced91992ad6b88ad1721d85a10435c3fc68641f779d2e0",
+    "target": [
+     "chinese",
+     6
+    ]
+   },
+   "411.429x308.571": {
+    "sha256": "71cd56db6d259cb86be02c08493f3e1efffa46fe869b447cee6b5753a9fadac5",
+    "target": [
+     "chinese",
+     8
+    ]
+   },
+   "462.857x308.571": {
+    "sha256": "71cd56db6d259cb86be02c08493f3e1efffa46fe869b447cee6b5753a9fadac5",
+    "target": [
+     "chinese",
+     8
+    ]
+   },
+   "514.286x308.571": {
+    "sha256": "71cd56db6d259cb86be02c08493f3e1efffa46fe869b447cee6b5753a9fadac5",
+    "target": [
+     "chinese",
+     8
+    ]
+   },
+   "565.714x308.571": {
+    "sha256": "4a668c4ee707d65ff2e6ee84b902019c734a05ffb5976cff48422ec7ade0da4e",
+    "target": [
+     "chinese",
+     9
+    ]
+   },
+   "617.143x308.571": {
+    "sha256": "982cca0009865408b151f0de2aae546a5f847a0ee28e3792dd70c81ccbbd5863",
+    "target": [
+     "chinese",
+     9
+    ]
+   },
+   "668.571x308.571": {
+    "sha256": "07dd9538a77e0fd18368dcc580df569f481ead23de75966ceb6a02a8917a11ec",
+    "target": [
+     "chinese",
+     9
+    ]
+   },
+   "51.429x360.0": {
+    "sha256": "7133301a51ce0795253681f9c56ef636e5ec659ba34804e6fd9822d950276d0d",
+    "target": [
+     "chinese",
+     3
+    ]
+   },
+   "102.857x360.0": {
+    "sha256": "7133301a51ce0795253681f9c56ef636e5ec659ba34804e6fd9822d950276d0d",
+    "target": [
+     "chinese",
+     3
+    ]
+   },
+   "154.286x360.0": {
+    "sha256": "7133301a51ce0795253681f9c56ef636e5ec659ba34804e6fd9822d950276d0d",
+    "target": [
+     "chinese",
+     3
+    ]
+   },
+   "205.714x360.0": {
+    "sha256": "7133301a51ce0795253681f9c56ef636e5ec659ba34804e6fd9822d950276d0d",
+    "target": [
+     "chinese",
+     3
+    ]
+   },
+   "257.143x360.0": {
+    "sha256": "7133301a51ce0795253681f9c56ef636e5ec659ba34804e6fd9822d950276d0d",
+    "target": [
+     "chinese",
+     3
+    ]
+   },
+   "308.571x360.0": {
+    "sha256": "7133301a51ce0795253681f9c56ef636e5ec659ba34804e6fd9822d950276d0d",
+    "target": [
+     "chinese",
+     3
+    ]
+   },
+   "360.0x360.0": {
+    "sha256": "cf9d7db73e4e00e9716c08b9ab1b8aea3366713ed9755ebc3c6d102602c1bc0b",
+    "target": null
+   },
+   "411.429x360.0": {
+    "sha256": "982cca0009865408b151f0de2aae546a5f847a0ee28e3792dd70c81ccbbd5863",
+    "target": [
+     "chinese",
+     9
+    ]
+   },
+   "462.857x360.0": {
+    "sha256": "982cca0009865408b151f0de2aae546a5f847a0ee28e3792dd70c81ccbbd5863",
+    "target": [
+     "chinese",
+     9
+    ]
+   },
+   "514.286x360.0": {
+    "sha256": "982cca0009865408b151f0de2aae546a5f847a0ee28e3792dd70c81ccbbd5863",
+    "target": [
+     "chinese",
+     9
+    ]
+   },
+   "565.714x360.0": {
+    "sha256": "982cca0009865408b151f0de2aae546a5f847a0ee28e3792dd70c81ccbbd5863",
+    "target": [
+     "chinese",
+     9
+    ]
+   },
+   "617.143x360.0": {
+    "sha256": "982cca0009865408b151f0de2aae546a5f847a0ee28e3792dd70c81ccbbd5863",
+    "target": [
+     "chinese",
+     9
+    ]
+   },
+   "668.571x360.0": {
+    "sha256": "982cca0009865408b151f0de2aae546a5f847a0ee28e3792dd70c81ccbbd5863",
+    "target": [
+     "chinese",
+     9
+    ]
+   },
+   "51.429x411.429": {
+    "sha256": "05cef33cd9b0da975101220de034a674b1352bd6f2c09fe08f2600cb4102c806",
+    "target": [
+     "chinese",
+     3
+    ]
+   },
+   "102.857x411.429": {
+    "sha256": "7133301a51ce0795253681f9c56ef636e5ec659ba34804e6fd9822d950276d0d",
+    "target": [
+     "chinese",
+     3
+    ]
+   },
+   "154.286x411.429": {
+    "sha256": "7ebeae7c0d346bca1f45f5f02129d192e6b8204c408ae8e941bd852817952ee0",
+    "target": [
+     "chinese",
+     3
+    ]
+   },
+   "205.714x411.429": {
+    "sha256": "7ebeae7c0d346bca1f45f5f02129d192e6b8204c408ae8e941bd852817952ee0",
+    "target": [
+     "chinese",
+     2
+    ]
+   },
+   "257.143x411.429": {
+    "sha256": "e388de5d2e0a1bcece5b1bc362be20866585c78c71014d3265a06635ed974674",
+    "target": [
+     "chinese",
+     2
+    ]
+   },
+   "308.571x411.429": {
+    "sha256": "e388de5d2e0a1bcece5b1bc362be20866585c78c71014d3265a06635ed974674",
+    "target": [
+     "chinese",
+     2
+    ]
+   },
+   "360.0x411.429": {
+    "sha256": "8d0857a883871fa372c9dc84d3352352cb03aa6695036211657a4c795dad8c9b",
+    "target": [
+     "chinese",
+     0
+    ]
+   },
+   "411.429x411.429": {
+    "sha256": "de267817222f98176b101f02b283eef41709884717b15d566def5ffa918a1cea",
+    "target": [
+     "chinese",
+     11
+    ]
+   },
+   "462.857x411.429": {
+    "sha256": "79f47e6d3ebe756410ad5c144f9dc123f653650e06c96bb1febe1662001c5782",
+    "target": [
+     "chinese",
+     10
+    ]
+   },
+   "514.286x411.429": {
+    "sha256": "79f47e6d3ebe756410ad5c144f9dc123f653650e06c96bb1febe1662001c5782",
+    "target": [
+     "chinese",
+     10
+    ]
+   },
+   "565.714x411.429": {
+    "sha256": "1da50471d0b4b3d23d16bf8127f6c3451168bb6bbbad8c67e2b3938586fdf8cf",
+    "target": [
+     "chinese",
+     9
+    ]
+   },
+   "617.143x411.429": {
+    "sha256": "982cca0009865408b151f0de2aae546a5f847a0ee28e3792dd70c81ccbbd5863",
+    "target": [
+     "chinese",
+     9
+    ]
+   },
+   "668.571x411.429": {
+    "sha256": "54f9eda24779fddd77532689afa4c87475ba691f276966a243e724422c06a906",
+    "target": [
+     "chinese",
+     9
+    ]
+   },
+   "51.429x462.857": {
+    "sha256": "f566c13e93b922990a124e0cc6b97bd234eee3fb753e5f1ec6512d40602e7025",
+    "target": null
+   },
+   "102.857x462.857": {
+    "sha256": "7ebeae7c0d346bca1f45f5f02129d192e6b8204c408ae8e941bd852817952ee0",
+    "target": [
+     "chinese",
+     2
+    ]
+   },
+   "154.286x462.857": {
+    "sha256": "e388de5d2e0a1bcece5b1bc362be20866585c78c71014d3265a06635ed974674",
+    "target": [
+     "chinese",
+     2
+    ]
+   },
+   "205.714x462.857": {
+    "sha256": "e388de5d2e0a1bcece5b1bc362be20866585c78c71014d3265a06635ed974674",
+    "target": [
+     "chinese",
+     2
+    ]
+   },
+   "257.143x462.857": {
+    "sha256": "e388de5d2e0a1bcece5b1bc362be20866585c78c71014d3265a06635ed974674",
+    "target": [
+     "chinese",
+     2
+    ]
+   },
+   "308.571x462.857": {
+    "sha256": "679487b7fb54ce0a64503d4e44263c01b356b6c5a81995522f10ca1d7fa5eea8",
+    "target": [
+     "chinese",
+     1
+    ]
+   },
+   "360.0x462.857": {
+    "sha256": "2e9a9bc13fad2dc4254cd1e8341323bcf8b4d5e2316852e7a7ae4318138025ef",
+    "target": [
+     "planets",
+     4
+    ]
+   },
+   "411.429x462.857": {
+    "sha256": "de267817222f98176b101f02b283eef41709884717b15d566def5ffa918a1cea",
+    "target": [
+     "chinese",
+     11
+    ]
+   },
+   "462.857x462.857": {
+    "sha256": "de267817222f98176b101f02b283eef41709884717b15d566def5ffa918a1cea",
+    "target": [
+     "chinese",
+     11
+    ]
+   },
+   "514.286x462.857": {
+    "sha256": "79f47e6d3ebe756410ad5c144f9dc123f653650e06c96bb1febe1662001c5782",
+    "target": [
+     "chinese",
+     10
+    ]
+   },
+   "565.714x462.857": {
+    "sha256": "79f47e6d3ebe756410ad5c144f9dc123f653650e06c96bb1febe1662001c5782",
+    "target": [
+     "chinese",
+     10
+    ]
+   },
+   "617.143x462.857": {
+    "sha256": "79f47e6d3ebe756410ad5c144f9dc123f653650e06c96bb1febe1662001c5782",
+    "target": [
+     "chinese",
+     10
+    ]
+   },
+   "668.571x462.857": {
+    "sha256": "5b7c22d8bbe5ffa428755164ac8c235d0b114756b1f176a1d9a83c9fdf1f85a0",
+    "target": null
+   },
+   "102.857x514.286": {
+    "sha256": "e388de5d2e0a1bcece5b1bc362be20866585c78c71014d3265a06635ed974674",
+    "target": [
+     "chinese",
+     2
+    ]
+   },
+   "154.286x514.286": {
+    "sha256": "e388de5d2e0a1bcece5b1bc362be20866585c78c71014d3265a06635ed974674",
+    "target": [
+     "chinese",
+     2
+    ]
+   },
+   "205.714x514.286": {
+    "sha256": "96b2c44ccae5e31464a737262b3bafd72512ec816cd8a90d4de8b7ad1857db69",
+    "target": [
+     "chinese",
+     2
+    ]
+   },
+   "257.143x514.286": {
+    "sha256": "679487b7fb54ce0a64503d4e44263c01b356b6c5a81995522f10ca1d7fa5eea8",
+    "target": [
+     "chinese",
+     1
+    ]
+   },
+   "308.571x514.286": {
+    "sha256": "2e9a9bc13fad2dc4254cd1e8341323bcf8b4d5e2316852e7a7ae4318138025ef",
+    "target": [
+     "planets",
+     4
+    ]
+   },
+   "360.0x514.286": {
+    "sha256": "2e9a9bc13fad2dc4254cd1e8341323bcf8b4d5e2316852e7a7ae4318138025ef",
+    "target": [
+     "planets",
+     4
+    ]
+   },
+   "411.429x514.286": {
+    "sha256": "2e9a9bc13fad2dc4254cd1e8341323bcf8b4d5e2316852e7a7ae4318138025ef",
+    "target": [
+     "planets",
+     4
+    ]
+   },
+   "462.857x514.286": {
+    "sha256": "de267817222f98176b101f02b283eef41709884717b15d566def5ffa918a1cea",
+    "target": [
+     "chinese",
+     11
+    ]
+   },
+   "514.286x514.286": {
+    "sha256": "39dbe76fd6aa2fa87457fe13e9ed8807626cb58bee75d8e49be02ddf940f52fd",
+    "target": [
+     "chinese",
+     11
+    ]
+   },
+   "565.714x514.286": {
+    "sha256": "d58b71e6796d49192918f6240b33dd4475f086edc91a9eef352ce3b26845970e",
+    "target": [
+     "chinese",
+     10
+    ]
+   },
+   "617.143x514.286": {
+    "sha256": "79f47e6d3ebe756410ad5c144f9dc123f653650e06c96bb1febe1662001c5782",
+    "target": [
+     "chinese",
+     10
+    ]
+   },
+   "102.857x565.714": {
+    "sha256": "cbfa604fee7e2f6286b479de763bd1b3eb6703af0337933001b8049e5b6fdc1f",
+    "target": null
+   },
+   "154.286x565.714": {
+    "sha256": "679487b7fb54ce0a64503d4e44263c01b356b6c5a81995522f10ca1d7fa5eea8",
+    "target": [
+     "chinese",
+     1
+    ]
+   },
+   "205.714x565.714": {
+    "sha256": "679487b7fb54ce0a64503d4e44263c01b356b6c5a81995522f10ca1d7fa5eea8",
+    "target": [
+     "chinese",
+     1
+    ]
+   },
+   "257.143x565.714": {
+    "sha256": "679487b7fb54ce0a64503d4e44263c01b356b6c5a81995522f10ca1d7fa5eea8",
+    "target": [
+     "chinese",
+     1
+    ]
+   },
+   "308.571x565.714": {
+    "sha256": "5d7e06e2ae0018d3f02ed74290bbbf27f85d849116d7c6eeaebd267ba39b9e40",
+    "target": [
+     "chinese",
+     0
+    ]
+   },
+   "360.0x565.714": {
+    "sha256": "8d0857a883871fa372c9dc84d3352352cb03aa6695036211657a4c795dad8c9b",
+    "target": [
+     "chinese",
+     0
+    ]
+   },
+   "411.429x565.714": {
+    "sha256": "43b489f6b816f8117de546b3655f948fdbc396cdb3658e70f4d75f13582272db",
+    "target": [
+     "chinese",
+     0
+    ]
+   },
+   "462.857x565.714": {
+    "sha256": "de267817222f98176b101f02b283eef41709884717b15d566def5ffa918a1cea",
+    "target": [
+     "chinese",
+     11
+    ]
+   },
+   "514.286x565.714": {
+    "sha256": "de267817222f98176b101f02b283eef41709884717b15d566def5ffa918a1cea",
+    "target": [
+     "chinese",
+     11
+    ]
+   },
+   "565.714x565.714": {
+    "sha256": "de267817222f98176b101f02b283eef41709884717b15d566def5ffa918a1cea",
+    "target": [
+     "chinese",
+     11
+    ]
+   },
+   "617.143x565.714": {
+    "sha256": "8f4766e4f34fc3418da6dc29b0f85dcb5e1a2c38a08ec011f08807ea228d1af0",
+    "target": null
+   },
+   "154.286x617.143": {
+    "sha256": "73edc9217c0c6831ad0105c8f20e4fe71b6a6cff5dc740a333e3f012d5fa1eed",
+    "target": null
+   },
+   "205.714x617.143": {
+    "sha256": "679487b7fb54ce0a64503d4e44263c01b356b6c5a81995522f10ca1d7fa5eea8",
+    "target": [
+     "chinese",
+     1
+    ]
+   },
+   "257.143x617.143": {
+    "sha256": "679487b7fb54ce0a64503d4e44263c01b356b6c5a81995522f10ca1d7fa5eea8",
+    "target": [
+     "chinese",
+     1
+    ]
+   },
+   "308.571x617.143": {
+    "sha256": "8d0857a883871fa372c9dc84d3352352cb03aa6695036211657a4c795dad8c9b",
+    "target": [
+     "chinese",
+     0
+    ]
+   },
+   "360.0x617.143": {
+    "sha256": "8d0857a883871fa372c9dc84d3352352cb03aa6695036211657a4c795dad8c9b",
+    "target": [
+     "chinese",
+     0
+    ]
+   },
+   "411.429x617.143": {
+    "sha256": "8d0857a883871fa372c9dc84d3352352cb03aa6695036211657a4c795dad8c9b",
+    "target": [
+     "chinese",
+     0
+    ]
+   },
+   "462.857x617.143": {
+    "sha256": "de267817222f98176b101f02b283eef41709884717b15d566def5ffa918a1cea",
+    "target": [
+     "chinese",
+     11
+    ]
+   },
+   "514.286x617.143": {
+    "sha256": "de267817222f98176b101f02b283eef41709884717b15d566def5ffa918a1cea",
+    "target": [
+     "chinese",
+     11
+    ]
+   },
+   "565.714x617.143": {
+    "sha256": "1d3f18e6aa364f2b25e977a1adb8ebc74ca429441f63260de841a06ea7d9a50f",
+    "target": null
+   },
+   "257.143x668.571": {
+    "sha256": "8a5f18d2ad2296d71ff22b2516bd8bf0ad4c5cac8804748a68a25074f7fa9e1f",
+    "target": null
+   },
+   "308.571x668.571": {
+    "sha256": "6e40f8dd5e63e6cdc03d71963d342bc74dfcf68c3ce0e5ec353b6ec3f94d8c19",
+    "target": [
+     "chinese",
+     0
+    ]
+   },
+   "360.0x668.571": {
+    "sha256": "8d0857a883871fa372c9dc84d3352352cb03aa6695036211657a4c795dad8c9b",
+    "target": [
+     "chinese",
+     0
+    ]
+   },
+   "411.429x668.571": {
+    "sha256": "c22da872104994649107d2d0bd724047e8f0cc5ea04795ea9cf3df69e76043a6",
+    "target": [
+     "chinese",
+     0
+    ]
+   },
+   "462.857x668.571": {
+    "sha256": "78ce2247538c942158f267c84f670124ffbda231a981e5b02daf43a0138a46e4",
+    "target": null
+   }
+  },
+  "representative_html": {
+   "308.571x514.286": "<div align='center'><img src='file:///C:/Users/vurun/AppData/Roaming/Watch%20Academy/raster_cache/efb963f8e4e27b1a_4443da0566cd_w384_Jupiter.png' width='192'/></div><div align='center'><span style='font-size: 17px'><b>Jupiter</b></span><br/>Thursday, 16<sup>th</sup> July 2026 · 6105. Anno Lucis</div><br/><table><tr><td width='460'><p align='justify'>Jupiter is the giant in banded robes: cream and caramel stripes wrap the whole globe, whipped into curls at their borders, and low on one side turns the Great Red Spot — a single storm wider than the Earth that has been raging for centuries. Everything about the planet is surplus: the largest body, the loudest weather, a king&#x27;s wardrobe of clouds. …</p></td></tr></table><hr/><div align='center'><a href='domy:encyclopedia' style='color:#8FB8FF'><u>Learn more</u></a>&nbsp;&nbsp;<span style='color:#9A9A9A'>press SPACE</span></div>",
+   "360.0x462.857": "<div align='center'><img src='file:///C:/Users/vurun/AppData/Roaming/Watch%20Academy/raster_cache/efb963f8e4e27b1a_4443da0566cd_w384_Jupiter.png' width='192'/></div><div align='center'><span style='font-size: 17px'><b>Jupiter</b></span><br/>Thursday, 16<sup>th</sup> July 2026 · 6105. Anno Lucis</div><br/><table><tr><td width='460'><p align='justify'>Jupiter is the giant in banded robes: cream and caramel stripes wrap the whole globe, whipped into curls at their borders, and low on one side turns the Great Red Spot — a single storm wider than the Earth that has been raging for centuries. Everything about the planet is surplus: the largest body, the loudest weather, a king&#x27;s wardrobe of clouds. …</p></td></tr></table><hr/><div align='center'><a href='domy:encyclopedia' style='color:#8FB8FF'><u>Learn more</u></a>&nbsp;&nbsp;<span style='color:#9A9A9A'>press SPACE</span></div>",
+   "360.0x514.286": "<div align='center'><img src='file:///C:/Users/vurun/AppData/Roaming/Watch%20Academy/raster_cache/efb963f8e4e27b1a_4443da0566cd_w384_Jupiter.png' width='192'/></div><div align='center'><span style='font-size: 17px'><b>Jupiter</b></span><br/>Thursday, 16<sup>th</sup> July 2026 · 6105. Anno Lucis</div><br/><table><tr><td width='460'><p align='justify'>Jupiter is the giant in banded robes: cream and caramel stripes wrap the whole globe, whipped into curls at their borders, and low on one side turns the Great Red Spot — a single storm wider than the Earth that has been raging for centuries. Everything about the planet is surplus: the largest body, the loudest weather, a king&#x27;s wardrobe of clouds. …</p></td></tr></table><hr/><div align='center'><a href='domy:encyclopedia' style='color:#8FB8FF'><u>Learn more</u></a>&nbsp;&nbsp;<span style='color:#9A9A9A'>press SPACE</span></div>",
+   "411.429x514.286": "<div align='center'><img src='file:///C:/Users/vurun/AppData/Roaming/Watch%20Academy/raster_cache/efb963f8e4e27b1a_4443da0566cd_w384_Jupiter.png' width='192'/></div><div align='center'><span style='font-size: 17px'><b>Jupiter</b></span><br/>Thursday, 16<sup>th</sup> July 2026 · 6105. Anno Lucis</div><br/><table><tr><td width='460'><p align='justify'>Jupiter is the giant in banded robes: cream and caramel stripes wrap the whole globe, whipped into curls at their borders, and low on one side turns the Great Red Spot — a single storm wider than the Earth that has been raging for centuries. Everything about the planet is surplus: the largest body, the loudest weather, a king&#x27;s wardrobe of clouds. …</p></td></tr></table><hr/><div align='center'><a href='domy:encyclopedia' style='color:#8FB8FF'><u>Learn more</u></a>&nbsp;&nbsp;<span style='color:#9A9A9A'>press SPACE</span></div>",
+   "411.429x668.571": "<div align='center'><div style='white-space:nowrap'><b>Day</b></div><div style='white-space:nowrap'><b>Time:</b> 23:22 - <b>Angle:</b> 170.5° - Night</div><div style='white-space:nowrap'>&nbsp;</div><div style='white-space:nowrap'><b>Year</b></div><div style='white-space:nowrap'><b>Date:</b> 12<sup>th</sup> December 2026 · 6105. Anno Lucis</div><div style='white-space:nowrap'><b>Season:</b> Autumn - 346<sup>th</sup> Day - 50<sup>th</sup> Week</div><div style='white-space:nowrap'>&nbsp;</div><div style='white-space:nowrap'><b>Moon</b></div><div style='white-space:nowrap'>7<sup>th</sup> Moon of 2026</div><div style='white-space:nowrap'><b>Illumination:</b> 99.3% - Waxing Gibbous - Day 14.0 of 29.53</div></div><hr/><div align='center'><a href='domy:encyclopedia' style='color:#8FB8FF'><u>Learn more</u></a>&nbsp;&nbsp;<span style='color:#9A9A9A'>press SPACE</span></div>",
+   "514.286x154.286": "<div align='center'><span style='font-size:17px; font-weight:bold'>Date</span></div><div align='center'><div style='white-space:nowrap'>16<sup>th</sup> July 2026</div><div style='white-space:nowrap'>197<sup>th</sup> Day - 29<sup>th</sup> Week</div><div style='white-space:nowrap'>&nbsp;</div></div><div align='center'><img src='file:///C:/Users/vurun/AppData/Roaming/Watch%20Academy/raster_cache/30327a7b620d9283_7367196e1055_w256_Age_of_Light_v2_gem.png' width='128'/></div><div align='center'><span style='font-size:17px; font-weight:bold'>Age of Light</span></div><div align='center'><div style='white-space:nowrap'>6105. Anno Lucis</div><div style='white-space:nowrap'>&nbsp;</div></div><div align='center'><img src='file:///C:/Users/vurun/AppData/Roaming/Watch%20Academy/raster_cache/e885fab4345c91fd_5e30b62e10ec_w256_Summer_gem.png' width='128'/></div><div align='center'><div style='white-space:nowrap'><b>Season:</b> Summer 26<sup>th</sup> of 94 Days</div><div style='white-space:nowrap'><b>Sign:</b> ♋ Cancer (21<sup>st</sup> June - 21<sup>st</sup> July)</div></div><hr/><div align='center'><a href='domy:encyclopedia' style='color:#8FB8FF'><u>Learn more</u></a>&nbsp;&nbsp;<span style='color:#9A9A9A'>press SPACE</span></div>"
+  }
+ },
+ "trio": {
+  "points": {
+   "257.143x51.429": {
+    "sha256": "7046858b6bb39be728774427ca27ff547bad83b973a87b84e77c5e042db50898",
+    "target": null
+   },
+   "308.571x51.429": {
+    "sha256": "b46eec4ecd673d9bf1d04dbe6d43b7792789bea7baf7c1fc981b23adbd65e182",
+    "target": null
+   },
+   "360.0x51.429": {
+    "sha256": "8496f597e14d60652e06861044036df3d9131c88659915fdb12006943459adb4",
+    "target": null
+   },
+   "411.429x51.429": {
+    "sha256": "56061bab15e61be84847e17128679aff0a18c19322bb10b78caba6b9971d2fe2",
+    "target": null
+   },
+   "462.857x51.429": {
+    "sha256": "41ebb52d5f8b35e91c1fdf41ad34927267216c03d85a70db004bca7fac388bfd",
+    "target": null
+   },
+   "154.286x102.857": {
+    "sha256": "888d34b45f7d609d7deb4598c05307f9eb91c5527db8e4d58d2d738097d345f3",
+    "target": null
+   },
+   "205.714x102.857": {
+    "sha256": "8496f597e14d60652e06861044036df3d9131c88659915fdb12006943459adb4",
+    "target": null
+   },
+   "257.143x102.857": {
+    "sha256": "8496f597e14d60652e06861044036df3d9131c88659915fdb12006943459adb4",
+    "target": null
+   },
+   "308.571x102.857": {
+    "sha256": "8496f597e14d60652e06861044036df3d9131c88659915fdb12006943459adb4",
+    "target": null
+   },
+   "360.0x102.857": {
+    "sha256": "8496f597e14d60652e06861044036df3d9131c88659915fdb12006943459adb4",
+    "target": null
+   },
+   "411.429x102.857": {
+    "sha256": "b5df81441ca7492420e0a582ad15d0a71cb9d6bf1f2433841351f2b394b104cd",
+    "target": [
+     "trinity",
+     1
+    ]
+   },
+   "462.857x102.857": {
+    "sha256": "49aad8e2a745a8788ea0dc7fb2e931e661b6d9e55d35b830eda9dbe3303904ca",
+    "target": [
+     "seasons",
+     1
+    ]
+   },
+   "514.286x102.857": {
+    "sha256": "8496f597e14d60652e06861044036df3d9131c88659915fdb12006943459adb4",
+    "target": null
+   },
+   "565.714x102.857": {
+    "sha256": "58b65ccb63d12da7341224bf893080c2a09d44779b1da60b5a001002ef7f6ed2",
+    "target": null
+   },
+   "102.857x154.286": {
+    "sha256": "25db4ecbefb4212cdebed6a7a09dc1edce9b288c92ec3ae9865d392470af8f24",
+    "target": null
+   },
+   "154.286x154.286": {
+    "sha256": "8496f597e14d60652e06861044036df3d9131c88659915fdb12006943459adb4",
+    "target": null
+   },
+   "205.714x154.286": {
+    "sha256": "8496f597e14d60652e06861044036df3d9131c88659915fdb12006943459adb4",
+    "target": null
+   },
+   "257.143x154.286": {
+    "sha256": "8496f597e14d60652e06861044036df3d9131c88659915fdb12006943459adb4",
+    "target": null
+   },
+   "308.571x154.286": {
+    "sha256": "8496f597e14d60652e06861044036df3d9131c88659915fdb12006943459adb4",
+    "target": null
+   },
+   "360.0x154.286": {
+    "sha256": "b5df81441ca7492420e0a582ad15d0a71cb9d6bf1f2433841351f2b394b104cd",
+    "target": [
+     "trinity",
+     1
+    ]
+   },
+   "411.429x154.286": {
+    "sha256": "2e9a9bc13fad2dc4254cd1e8341323bcf8b4d5e2316852e7a7ae4318138025ef",
+    "target": [
+     "planets",
+     4
+    ]
+   },
+   "462.857x154.286": {
+    "sha256": "3acae1cc81363773c5c1c43e92d10ec89c78f65bb11c8be4e8e64cdd29df7ec7",
+    "target": [
+     "moon",
+     1
+    ]
+   },
+   "514.286x154.286": {
+    "sha256": "8496f597e14d60652e06861044036df3d9131c88659915fdb12006943459adb4",
+    "target": null
+   },
+   "565.714x154.286": {
+    "sha256": "8496f597e14d60652e06861044036df3d9131c88659915fdb12006943459adb4",
+    "target": null
+   },
+   "617.143x154.286": {
+    "sha256": "806ef89544fbf76cd953e6dd566ab65670cd7f9de18dd7cb3a2667faf287200e",
+    "target": null
+   },
+   "102.857x205.714": {
+    "sha256": "8496f597e14d60652e06861044036df3d9131c88659915fdb12006943459adb4",
+    "target": null
+   },
+   "154.286x205.714": {
+    "sha256": "8496f597e14d60652e06861044036df3d9131c88659915fdb12006943459adb4",
+    "target": null
+   },
+   "205.714x205.714": {
+    "sha256": "8496f597e14d60652e06861044036df3d9131c88659915fdb12006943459adb4",
+    "target": null
+   },
+   "257.143x205.714": {
+    "sha256": "8496f597e14d60652e06861044036df3d9131c88659915fdb12006943459adb4",
+    "target": null
+   },
+   "308.571x205.714": {
+    "sha256": "b5df81441ca7492420e0a582ad15d0a71cb9d6bf1f2433841351f2b394b104cd",
+    "target": [
+     "trinity",
+     1
+    ]
+   },
+   "360.0x205.714": {
+    "sha256": "2e9a9bc13fad2dc4254cd1e8341323bcf8b4d5e2316852e7a7ae4318138025ef",
+    "target": [
+     "planets",
+     4
+    ]
+   },
+   "411.429x205.714": {
+    "sha256": "2e9a9bc13fad2dc4254cd1e8341323bcf8b4d5e2316852e7a7ae4318138025ef",
+    "target": [
+     "planets",
+     4
+    ]
+   },
+   "462.857x205.714": {
+    "sha256": "b5df81441ca7492420e0a582ad15d0a71cb9d6bf1f2433841351f2b394b104cd",
+    "target": [
+     "trinity",
+     1
+    ]
+   },
+   "514.286x205.714": {
+    "sha256": "8496f597e14d60652e06861044036df3d9131c88659915fdb12006943459adb4",
+    "target": null
+   },
+   "565.714x205.714": {
+    "sha256": "8496f597e14d60652e06861044036df3d9131c88659915fdb12006943459adb4",
+    "target": null
+   },
+   "617.143x205.714": {
+    "sha256": "8496f597e14d60652e06861044036df3d9131c88659915fdb12006943459adb4",
+    "target": null
+   },
+   "51.429x257.143": {
+    "sha256": "a0f5e604e56bdee4174a77c7384317cd4bf1fb1575b7d50a1a0dd61e0d1b6b1e",
+    "target": null
+   },
+   "102.857x257.143": {
+    "sha256": "8496f597e14d60652e06861044036df3d9131c88659915fdb12006943459adb4",
+    "target": null
+   },
+   "154.286x257.143": {
+    "sha256": "8496f597e14d60652e06861044036df3d9131c88659915fdb12006943459adb4",
+    "target": null
+   },
+   "205.714x257.143": {
+    "sha256": "8496f597e14d60652e06861044036df3d9131c88659915fdb12006943459adb4",
+    "target": null
+   },
+   "257.143x257.143": {
+    "sha256": "8496f597e14d60652e06861044036df3d9131c88659915fdb12006943459adb4",
+    "target": null
+   },
+   "308.571x257.143": {
+    "sha256": "8496f597e14d60652e06861044036df3d9131c88659915fdb12006943459adb4",
+    "target": null
+   },
+   "360.0x257.143": {
+    "sha256": "2e9a9bc13fad2dc4254cd1e8341323bcf8b4d5e2316852e7a7ae4318138025ef",
+    "target": [
+     "planets",
+     4
+    ]
+   },
+   "411.429x257.143": {
+    "sha256": "2e9a9bc13fad2dc4254cd1e8341323bcf8b4d5e2316852e7a7ae4318138025ef",
+    "target": [
+     "planets",
+     4
+    ]
+   },
+   "462.857x257.143": {
+    "sha256": "8496f597e14d60652e06861044036df3d9131c88659915fdb12006943459adb4",
+    "target": null
+   },
+   "514.286x257.143": {
+    "sha256": "8496f597e14d60652e06861044036df3d9131c88659915fdb12006943459adb4",
+    "target": null
+   },
+   "565.714x257.143": {
+    "sha256": "8496f597e14d60652e06861044036df3d9131c88659915fdb12006943459adb4",
+    "target": null
+   },
+   "617.143x257.143": {
+    "sha256": "8496f597e14d60652e06861044036df3d9131c88659915fdb12006943459adb4",
+    "target": null
+   },
+   "668.571x257.143": {
+    "sha256": "7370ec695ee4ae43541e439e95aa225b7a708468166a16cfd779aae95d794588",
+    "target": null
+   },
+   "51.429x308.571": {
+    "sha256": "b29c2bbb28ad6903cca220a1abb0dc2c7527e0a2b3605d4d81259bd7a86a4447",
+    "target": null
+   },
+   "102.857x308.571": {
+    "sha256": "8496f597e14d60652e06861044036df3d9131c88659915fdb12006943459adb4",
+    "target": null
+   },
+   "154.286x308.571": {
+    "sha256": "8496f597e14d60652e06861044036df3d9131c88659915fdb12006943459adb4",
+    "target": null
+   },
+   "205.714x308.571": {
+    "sha256": "8496f597e14d60652e06861044036df3d9131c88659915fdb12006943459adb4",
+    "target": null
+   },
+   "257.143x308.571": {
+    "sha256": "8496f597e14d60652e06861044036df3d9131c88659915fdb12006943459adb4",
+    "target": null
+   },
+   "308.571x308.571": {
+    "sha256": "8496f597e14d60652e06861044036df3d9131c88659915fdb12006943459adb4",
+    "target": null
+   },
+   "360.0x308.571": {
+    "sha256": "389666ae8d756a1563f4e9684d3233f0577d8f53ba1d41ebe710dc435d649f39",
+    "target": [
+     "planets",
+     0
+    ]
+   },
+   "411.429x308.571": {
+    "sha256": "8496f597e14d60652e06861044036df3d9131c88659915fdb12006943459adb4",
+    "target": null
+   },
+   "462.857x308.571": {
+    "sha256": "8496f597e14d60652e06861044036df3d9131c88659915fdb12006943459adb4",
+    "target": null
+   },
+   "514.286x308.571": {
+    "sha256": "8496f597e14d60652e06861044036df3d9131c88659915fdb12006943459adb4",
+    "target": null
+   },
+   "565.714x308.571": {
+    "sha256": "8496f597e14d60652e06861044036df3d9131c88659915fdb12006943459adb4",
+    "target": null
+   },
+   "617.143x308.571": {
+    "sha256": "8496f597e14d60652e06861044036df3d9131c88659915fdb12006943459adb4",
+    "target": null
+   },
+   "668.571x308.571": {
+    "sha256": "baf1ade3bed9c9ed2ba9c1e51612c273338324653be5f1c34f5d53d0f4259cf5",
+    "target": null
+   },
+   "51.429x360.0": {
+    "sha256": "8496f597e14d60652e06861044036df3d9131c88659915fdb12006943459adb4",
+    "target": null
+   },
+   "102.857x360.0": {
+    "sha256": "8496f597e14d60652e06861044036df3d9131c88659915fdb12006943459adb4",
+    "target": null
+   },
+   "154.286x360.0": {
+    "sha256": "8496f597e14d60652e06861044036df3d9131c88659915fdb12006943459adb4",
+    "target": null
+   },
+   "205.714x360.0": {
+    "sha256": "71b48e5e12cc762132eb405fb8f075f50b8ffcb8dfff6a2cc47585600c7e2a72",
+    "target": [
+     "planets",
+     1
+    ]
+   },
+   "257.143x360.0": {
+    "sha256": "3c1af767b488b5285ce17f1a445f758056241d9272308530f02347fe7f17c944",
+    "target": [
+     "trinity",
+     0
+    ]
+   },
+   "308.571x360.0": {
+    "sha256": "389666ae8d756a1563f4e9684d3233f0577d8f53ba1d41ebe710dc435d649f39",
+    "target": [
+     "planets",
+     0
+    ]
+   },
+   "360.0x360.0": {
+    "sha256": "389666ae8d756a1563f4e9684d3233f0577d8f53ba1d41ebe710dc435d649f39",
+    "target": [
+     "planets",
+     0
+    ]
+   },
+   "411.429x360.0": {
+    "sha256": "389666ae8d756a1563f4e9684d3233f0577d8f53ba1d41ebe710dc435d649f39",
+    "target": [
+     "planets",
+     0
+    ]
+   },
+   "462.857x360.0": {
+    "sha256": "8496f597e14d60652e06861044036df3d9131c88659915fdb12006943459adb4",
+    "target": null
+   },
+   "514.286x360.0": {
+    "sha256": "8496f597e14d60652e06861044036df3d9131c88659915fdb12006943459adb4",
+    "target": null
+   },
+   "565.714x360.0": {
+    "sha256": "8496f597e14d60652e06861044036df3d9131c88659915fdb12006943459adb4",
+    "target": null
+   },
+   "617.143x360.0": {
+    "sha256": "8496f597e14d60652e06861044036df3d9131c88659915fdb12006943459adb4",
+    "target": null
+   },
+   "668.571x360.0": {
+    "sha256": "8496f597e14d60652e06861044036df3d9131c88659915fdb12006943459adb4",
+    "target": null
+   },
+   "51.429x411.429": {
+    "sha256": "a0158d73209b32a42e1de4acc432e54b530689fc2603591703f1c68b44142fc6",
+    "target": null
+   },
+   "102.857x411.429": {
+    "sha256": "8496f597e14d60652e06861044036df3d9131c88659915fdb12006943459adb4",
+    "target": null
+   },
+   "154.286x411.429": {
+    "sha256": "71b48e5e12cc762132eb405fb8f075f50b8ffcb8dfff6a2cc47585600c7e2a72",
+    "target": [
+     "planets",
+     1
+    ]
+   },
+   "205.714x411.429": {
+    "sha256": "71b48e5e12cc762132eb405fb8f075f50b8ffcb8dfff6a2cc47585600c7e2a72",
+    "target": [
+     "planets",
+     1
+    ]
+   },
+   "257.143x411.429": {
+    "sha256": "71b48e5e12cc762132eb405fb8f075f50b8ffcb8dfff6a2cc47585600c7e2a72",
+    "target": [
+     "planets",
+     1
+    ]
+   },
+   "308.571x411.429": {
+    "sha256": "3c1af767b488b5285ce17f1a445f758056241d9272308530f02347fe7f17c944",
+    "target": [
+     "trinity",
+     0
+    ]
+   },
+   "360.0x411.429": {
+    "sha256": "389666ae8d756a1563f4e9684d3233f0577d8f53ba1d41ebe710dc435d649f39",
+    "target": [
+     "planets",
+     0
+    ]
+   },
+   "411.429x411.429": {
+    "sha256": "96539e8d081d167415fc0d1ab57236c3a76abb16c74ccb86e793cb39bc5991e7",
+    "target": [
+     "trinity",
+     2
+    ]
+   },
+   "462.857x411.429": {
+    "sha256": "36c283ac0f473c75f183310b0a11b09a3ee31bdd16e12eb5246f8698d994d6dc",
+    "target": [
+     "planets",
+     5
+    ]
+   },
+   "514.286x411.429": {
+    "sha256": "96539e8d081d167415fc0d1ab57236c3a76abb16c74ccb86e793cb39bc5991e7",
+    "target": [
+     "trinity",
+     2
+    ]
+   },
+   "565.714x411.429": {
+    "sha256": "8496f597e14d60652e06861044036df3d9131c88659915fdb12006943459adb4",
+    "target": null
+   },
+   "617.143x411.429": {
+    "sha256": "8496f597e14d60652e06861044036df3d9131c88659915fdb12006943459adb4",
+    "target": null
+   },
+   "668.571x411.429": {
+    "sha256": "dbecaf60db0ef4176f31c2c843e00c85485c5bb3cd7d3ea5f9b62f6cba6d4658",
+    "target": null
+   },
+   "51.429x462.857": {
+    "sha256": "f566c13e93b922990a124e0cc6b97bd234eee3fb753e5f1ec6512d40602e7025",
+    "target": null
+   },
+   "102.857x462.857": {
+    "sha256": "7ebeae7c0d346bca1f45f5f02129d192e6b8204c408ae8e941bd852817952ee0",
+    "target": [
+     "trinity",
+     0
+    ]
+   },
+   "154.286x462.857": {
+    "sha256": "3c1af767b488b5285ce17f1a445f758056241d9272308530f02347fe7f17c944",
+    "target": [
+     "trinity",
+     0
+    ]
+   },
+   "205.714x462.857": {
+    "sha256": "71b48e5e12cc762132eb405fb8f075f50b8ffcb8dfff6a2cc47585600c7e2a72",
+    "target": [
+     "planets",
+     1
+    ]
+   },
+   "257.143x462.857": {
+    "sha256": "3c1af767b488b5285ce17f1a445f758056241d9272308530f02347fe7f17c944",
+    "target": [
+     "trinity",
+     0
+    ]
+   },
+   "308.571x462.857": {
+    "sha256": "cf9d7db73e4e00e9716c08b9ab1b8aea3366713ed9755ebc3c6d102602c1bc0b",
+    "target": null
+   },
+   "360.0x462.857": {
+    "sha256": "cf9d7db73e4e00e9716c08b9ab1b8aea3366713ed9755ebc3c6d102602c1bc0b",
+    "target": null
+   },
+   "411.429x462.857": {
+    "sha256": "96539e8d081d167415fc0d1ab57236c3a76abb16c74ccb86e793cb39bc5991e7",
+    "target": [
+     "trinity",
+     2
+    ]
+   },
+   "462.857x462.857": {
+    "sha256": "36c283ac0f473c75f183310b0a11b09a3ee31bdd16e12eb5246f8698d994d6dc",
+    "target": [
+     "planets",
+     5
+    ]
+   },
+   "514.286x462.857": {
+    "sha256": "36c283ac0f473c75f183310b0a11b09a3ee31bdd16e12eb5246f8698d994d6dc",
+    "target": [
+     "planets",
+     5
+    ]
+   },
+   "565.714x462.857": {
+    "sha256": "8496f597e14d60652e06861044036df3d9131c88659915fdb12006943459adb4",
+    "target": null
+   },
+   "617.143x462.857": {
+    "sha256": "8496f597e14d60652e06861044036df3d9131c88659915fdb12006943459adb4",
+    "target": null
+   },
+   "668.571x462.857": {
+    "sha256": "5b7c22d8bbe5ffa428755164ac8c235d0b114756b1f176a1d9a83c9fdf1f85a0",
+    "target": null
+   },
+   "102.857x514.286": {
+    "sha256": "cf9d7db73e4e00e9716c08b9ab1b8aea3366713ed9755ebc3c6d102602c1bc0b",
+    "target": null
+   },
+   "154.286x514.286": {
+    "sha256": "cf9d7db73e4e00e9716c08b9ab1b8aea3366713ed9755ebc3c6d102602c1bc0b",
+    "target": null
+   },
+   "205.714x514.286": {
+    "sha256": "cf9d7db73e4e00e9716c08b9ab1b8aea3366713ed9755ebc3c6d102602c1bc0b",
+    "target": null
+   },
+   "257.143x514.286": {
+    "sha256": "cf9d7db73e4e00e9716c08b9ab1b8aea3366713ed9755ebc3c6d102602c1bc0b",
+    "target": null
+   },
+   "308.571x514.286": {
+    "sha256": "cf9d7db73e4e00e9716c08b9ab1b8aea3366713ed9755ebc3c6d102602c1bc0b",
+    "target": null
+   },
+   "360.0x514.286": {
+    "sha256": "cf9d7db73e4e00e9716c08b9ab1b8aea3366713ed9755ebc3c6d102602c1bc0b",
+    "target": null
+   },
+   "411.429x514.286": {
+    "sha256": "cf9d7db73e4e00e9716c08b9ab1b8aea3366713ed9755ebc3c6d102602c1bc0b",
+    "target": null
+   },
+   "462.857x514.286": {
+    "sha256": "36c283ac0f473c75f183310b0a11b09a3ee31bdd16e12eb5246f8698d994d6dc",
+    "target": [
+     "planets",
+     5
+    ]
+   },
+   "514.286x514.286": {
+    "sha256": "96539e8d081d167415fc0d1ab57236c3a76abb16c74ccb86e793cb39bc5991e7",
+    "target": [
+     "trinity",
+     2
+    ]
+   },
+   "565.714x514.286": {
+    "sha256": "d58b71e6796d49192918f6240b33dd4475f086edc91a9eef352ce3b26845970e",
+    "target": [
+     "trinity",
+     2
+    ]
+   },
+   "617.143x514.286": {
+    "sha256": "8496f597e14d60652e06861044036df3d9131c88659915fdb12006943459adb4",
+    "target": null
+   },
+   "102.857x565.714": {
+    "sha256": "cbfa604fee7e2f6286b479de763bd1b3eb6703af0337933001b8049e5b6fdc1f",
+    "target": null
+   },
+   "154.286x565.714": {
+    "sha256": "cf9d7db73e4e00e9716c08b9ab1b8aea3366713ed9755ebc3c6d102602c1bc0b",
+    "target": null
+   },
+   "205.714x565.714": {
+    "sha256": "cf9d7db73e4e00e9716c08b9ab1b8aea3366713ed9755ebc3c6d102602c1bc0b",
+    "target": null
+   },
+   "257.143x565.714": {
+    "sha256": "cf9d7db73e4e00e9716c08b9ab1b8aea3366713ed9755ebc3c6d102602c1bc0b",
+    "target": null
+   },
+   "308.571x565.714": {
+    "sha256": "cf9d7db73e4e00e9716c08b9ab1b8aea3366713ed9755ebc3c6d102602c1bc0b",
+    "target": null
+   },
+   "360.0x565.714": {
+    "sha256": "cf9d7db73e4e00e9716c08b9ab1b8aea3366713ed9755ebc3c6d102602c1bc0b",
+    "target": null
+   },
+   "411.429x565.714": {
+    "sha256": "cf9d7db73e4e00e9716c08b9ab1b8aea3366713ed9755ebc3c6d102602c1bc0b",
+    "target": null
+   },
+   "462.857x565.714": {
+    "sha256": "cf9d7db73e4e00e9716c08b9ab1b8aea3366713ed9755ebc3c6d102602c1bc0b",
+    "target": null
+   },
+   "514.286x565.714": {
+    "sha256": "cf9d7db73e4e00e9716c08b9ab1b8aea3366713ed9755ebc3c6d102602c1bc0b",
+    "target": null
+   },
+   "565.714x565.714": {
+    "sha256": "cf9d7db73e4e00e9716c08b9ab1b8aea3366713ed9755ebc3c6d102602c1bc0b",
+    "target": null
+   },
+   "617.143x565.714": {
+    "sha256": "8f4766e4f34fc3418da6dc29b0f85dcb5e1a2c38a08ec011f08807ea228d1af0",
+    "target": null
+   },
+   "154.286x617.143": {
+    "sha256": "73edc9217c0c6831ad0105c8f20e4fe71b6a6cff5dc740a333e3f012d5fa1eed",
+    "target": null
+   },
+   "205.714x617.143": {
+    "sha256": "cf9d7db73e4e00e9716c08b9ab1b8aea3366713ed9755ebc3c6d102602c1bc0b",
+    "target": null
+   },
+   "257.143x617.143": {
+    "sha256": "cf9d7db73e4e00e9716c08b9ab1b8aea3366713ed9755ebc3c6d102602c1bc0b",
+    "target": null
+   },
+   "308.571x617.143": {
+    "sha256": "cf9d7db73e4e00e9716c08b9ab1b8aea3366713ed9755ebc3c6d102602c1bc0b",
+    "target": null
+   },
+   "360.0x617.143": {
+    "sha256": "cf9d7db73e4e00e9716c08b9ab1b8aea3366713ed9755ebc3c6d102602c1bc0b",
+    "target": null
+   },
+   "411.429x617.143": {
+    "sha256": "cf9d7db73e4e00e9716c08b9ab1b8aea3366713ed9755ebc3c6d102602c1bc0b",
+    "target": null
+   },
+   "462.857x617.143": {
+    "sha256": "cf9d7db73e4e00e9716c08b9ab1b8aea3366713ed9755ebc3c6d102602c1bc0b",
+    "target": null
+   },
+   "514.286x617.143": {
+    "sha256": "cf9d7db73e4e00e9716c08b9ab1b8aea3366713ed9755ebc3c6d102602c1bc0b",
+    "target": null
+   },
+   "565.714x617.143": {
+    "sha256": "1d3f18e6aa364f2b25e977a1adb8ebc74ca429441f63260de841a06ea7d9a50f",
+    "target": null
+   },
+   "257.143x668.571": {
+    "sha256": "8a5f18d2ad2296d71ff22b2516bd8bf0ad4c5cac8804748a68a25074f7fa9e1f",
+    "target": null
+   },
+   "308.571x668.571": {
+    "sha256": "4602c2bcd93bdb00105d8faf950a6fe4fd2067d1979cb00ac74e271fa0f5208e",
+    "target": null
+   },
+   "360.0x668.571": {
+    "sha256": "cf9d7db73e4e00e9716c08b9ab1b8aea3366713ed9755ebc3c6d102602c1bc0b",
+    "target": null
+   },
+   "411.429x668.571": {
+    "sha256": "06b636634d4e09533cd90060f1fd61f4645cea0ddb70c42a24656b4d6481aeb4",
+    "target": null
+   },
+   "462.857x668.571": {
+    "sha256": "78ce2247538c942158f267c84f670124ffbda231a981e5b02daf43a0138a46e4",
+    "target": null
+   }
+  },
+  "representative_html": {
+   "257.143x360.0": "<div align='center'><img src='file:///C:/Users/vurun/AppData/Roaming/Watch%20Academy/raster_cache/f57b0752b5839f0a_aa31f01d4d30_w256_Faith_gem.png' width='128'/></div><div align='center'><div style='white-space:nowrap'><b>Faith</b>*</div><div style='white-space:nowrap'>00:00 - 08:00</div><div style='white-space:nowrap'>Monday · Wednesday</div></div><br/><table><tr><td width='460'><p align='justify'><b>Faith</b> is the line that comes from BEHIND: not a feeling but an answer, the part of a person that turns toward something already given - a testimony, a promise, an event that did not wait for permission to happen. Nobody believes standing over the thing believed, which is why the dial seats <b>faith</b> at the start of the road and never at its summit. …</p></td></tr></table><hr/><div align='center'><a href='domy:encyclopedia' style='color:#8FB8FF'><u>Learn more</u></a>&nbsp;&nbsp;<span style='color:#9A9A9A'>press SPACE</span></div>",
+   "308.571x205.714": "<div align='center'><img src='file:///C:/Users/vurun/AppData/Roaming/Watch%20Academy/raster_cache/9d892578b247a218_ae0b27b725a7_w256_Love_gem.png' width='128'/></div><div align='center'><div style='white-space:nowrap'><b>Love</b>*</div><div style='white-space:nowrap'>08:00 - 16:00</div><div style='white-space:nowrap'>Thursday · Saturday</div></div><br/><table><tr><td width='460'><p align='justify'><b>Love</b> is the vertical line of the three, and Paul&#x27;s verdict stands over the whole trio: the greatest of these is <b>love</b>. It is the only one that must be ACTUAL to exist at all - not I loved, not I will <b>love</b>, but do I <b>love</b> now - so the dial gives it the highest arm, where the M points from the top of this ring and the sun stands at its full. …</p></td></tr></table><hr/><div align='center'><a href='domy:encyclopedia' style='color:#8FB8FF'><u>Learn more</u></a>&nbsp;&nbsp;<span style='color:#9A9A9A'>press SPACE</span></div>",
+   "360.0x154.286": "<div align='center'><img src='file:///C:/Users/vurun/AppData/Roaming/Watch%20Academy/raster_cache/9d892578b247a218_ae0b27b725a7_w256_Love_gem.png' width='128'/></div><div align='center'><div style='white-space:nowrap'><b>Love</b>*</div><div style='white-space:nowrap'>08:00 - 16:00</div><div style='white-space:nowrap'>Thursday · Saturday</div></div><br/><table><tr><td width='460'><p align='justify'><b>Love</b> is the vertical line of the three, and Paul&#x27;s verdict stands over the whole trio: the greatest of these is <b>love</b>. It is the only one that must be ACTUAL to exist at all - not I loved, not I will <b>love</b>, but do I <b>love</b> now - so the dial gives it the highest arm, where the M points from the top of this ring and the sun stands at its full. …</p></td></tr></table><hr/><div align='center'><a href='domy:encyclopedia' style='color:#8FB8FF'><u>Learn more</u></a>&nbsp;&nbsp;<span style='color:#9A9A9A'>press SPACE</span></div>",
+   "411.429x102.857": "<div align='center'><img src='file:///C:/Users/vurun/AppData/Roaming/Watch%20Academy/raster_cache/9d892578b247a218_ae0b27b725a7_w256_Love_gem.png' width='128'/></div><div align='center'><div style='white-space:nowrap'><b>Love</b>*</div><div style='white-space:nowrap'>08:00 - 16:00</div><div style='white-space:nowrap'>Thursday · Saturday</div></div><br/><table><tr><td width='460'><p align='justify'><b>Love</b> is the vertical line of the three, and Paul&#x27;s verdict stands over the whole trio: the greatest of these is <b>love</b>. It is the only one that must be ACTUAL to exist at all - not I loved, not I will <b>love</b>, but do I <b>love</b> now - so the dial gives it the highest arm, where the M points from the top of this ring and the sun stands at its full. …</p></td></tr></table><hr/><div align='center'><a href='domy:encyclopedia' style='color:#8FB8FF'><u>Learn more</u></a>&nbsp;&nbsp;<span style='color:#9A9A9A'>press SPACE</span></div>",
+   "462.857x102.857": "<div align='center'><span style='font-size:17px; font-weight:bold'>Date</span></div><div align='center'><div style='white-space:nowrap'>16<sup>th</sup> July 2026</div><div style='white-space:nowrap'>197<sup>th</sup> Day - 29<sup>th</sup> Week</div><div style='white-space:nowrap'>&nbsp;</div></div><div align='center'><img src='file:///C:/Users/vurun/AppData/Roaming/Watch%20Academy/raster_cache/30327a7b620d9283_7367196e1055_w256_Age_of_Light_v2_gem.png' width='128'/></div><div align='center'><span style='font-size:17px; font-weight:bold'>Age of Light</span></div><div align='center'><div style='white-space:nowrap'>6105. Anno Lucis</div><div style='white-space:nowrap'>&nbsp;</div></div><div align='center'><img src='file:///C:/Users/vurun/AppData/Roaming/Watch%20Academy/raster_cache/e885fab4345c91fd_5e30b62e10ec_w256_Summer_gem.png' width='128'/></div><div align='center'><div style='white-space:nowrap'><b>Season:</b> Summer 26<sup>th</sup> of 94 Days</div><div style='white-space:nowrap'><b>Sign:</b> ♋ Cancer (21<sup>st</sup> June - 21<sup>st</sup> July)</div></div><hr/><div align='center'><a href='domy:encyclopedia' style='color:#8FB8FF'><u>Learn more</u></a>&nbsp;&nbsp;<span style='color:#9A9A9A'>press SPACE</span></div>",
+   "462.857x205.714": "<div align='center'><img src='file:///C:/Users/vurun/AppData/Roaming/Watch%20Academy/raster_cache/9d892578b247a218_ae0b27b725a7_w256_Love_gem.png' width='128'/></div><div align='center'><div style='white-space:nowrap'><b>Love</b>*</div><div style='white-space:nowrap'>08:00 - 16:00</div><div style='white-space:nowrap'>Thursday · Saturday</div></div><br/><table><tr><td width='460'><p align='justify'><b>Love</b> is the vertical line of the three, and Paul&#x27;s verdict stands over the whole trio: the greatest of these is <b>love</b>. It is the only one that must be ACTUAL to exist at all - not I loved, not I will <b>love</b>, but do I <b>love</b> now - so the dial gives it the highest arm, where the M points from the top of this ring and the sun stands at its full. …</p></td></tr></table><hr/><div align='center'><a href='domy:encyclopedia' style='color:#8FB8FF'><u>Learn more</u></a>&nbsp;&nbsp;<span style='color:#9A9A9A'>press SPACE</span></div>"
+  }
+ },
+ "octa": {
+  "points": {
+   "257.143x51.429": {
+    "sha256": "7046858b6bb39be728774427ca27ff547bad83b973a87b84e77c5e042db50898",
+    "target": null
+   },
+   "308.571x51.429": {
+    "sha256": "b46eec4ecd673d9bf1d04dbe6d43b7792789bea7baf7c1fc981b23adbd65e182",
+    "target": null
+   },
+   "360.0x51.429": {
+    "sha256": "8496f597e14d60652e06861044036df3d9131c88659915fdb12006943459adb4",
+    "target": null
+   },
+   "411.429x51.429": {
+    "sha256": "56061bab15e61be84847e17128679aff0a18c19322bb10b78caba6b9971d2fe2",
+    "target": null
+   },
+   "462.857x51.429": {
+    "sha256": "41ebb52d5f8b35e91c1fdf41ad34927267216c03d85a70db004bca7fac388bfd",
+    "target": null
+   },
+   "154.286x102.857": {
+    "sha256": "888d34b45f7d609d7deb4598c05307f9eb91c5527db8e4d58d2d738097d345f3",
+    "target": null
+   },
+   "205.714x102.857": {
+    "sha256": "8496f597e14d60652e06861044036df3d9131c88659915fdb12006943459adb4",
+    "target": null
+   },
+   "257.143x102.857": {
+    "sha256": "8496f597e14d60652e06861044036df3d9131c88659915fdb12006943459adb4",
+    "target": null
+   },
+   "308.571x102.857": {
+    "sha256": "8496f597e14d60652e06861044036df3d9131c88659915fdb12006943459adb4",
+    "target": null
+   },
+   "360.0x102.857": {
+    "sha256": "8496f597e14d60652e06861044036df3d9131c88659915fdb12006943459adb4",
+    "target": null
+   },
+   "411.429x102.857": {
+    "sha256": "a03d304df34e23ec700b1ede2c90945a4991797b3a52747ade91ecead65a9d3c",
+    "target": [
+     "sun",
+     0
+    ]
+   },
+   "462.857x102.857": {
+    "sha256": "49aad8e2a745a8788ea0dc7fb2e931e661b6d9e55d35b830eda9dbe3303904ca",
+    "target": [
+     "seasons",
+     1
+    ]
+   },
+   "514.286x102.857": {
+    "sha256": "8496f597e14d60652e06861044036df3d9131c88659915fdb12006943459adb4",
+    "target": null
+   },
+   "565.714x102.857": {
+    "sha256": "58b65ccb63d12da7341224bf893080c2a09d44779b1da60b5a001002ef7f6ed2",
+    "target": null
+   },
+   "102.857x154.286": {
+    "sha256": "25db4ecbefb4212cdebed6a7a09dc1edce9b288c92ec3ae9865d392470af8f24",
+    "target": null
+   },
+   "154.286x154.286": {
+    "sha256": "8496f597e14d60652e06861044036df3d9131c88659915fdb12006943459adb4",
+    "target": null
+   },
+   "205.714x154.286": {
+    "sha256": "fa338fdaa461e158f0737ddddfcdca2ac22b514517eef65af2981616320701e4",
+    "target": [
+     "seasons",
+     0
+    ]
+   },
+   "257.143x154.286": {
+    "sha256": "fa338fdaa461e158f0737ddddfcdca2ac22b514517eef65af2981616320701e4",
+    "target": [
+     "seasons",
+     0
+    ]
+   },
+   "308.571x154.286": {
+    "sha256": "8496f597e14d60652e06861044036df3d9131c88659915fdb12006943459adb4",
+    "target": null
+   },
+   "360.0x154.286": {
+    "sha256": "a03d304df34e23ec700b1ede2c90945a4991797b3a52747ade91ecead65a9d3c",
+    "target": [
+     "sun",
+     0
+    ]
+   },
+   "411.429x154.286": {
+    "sha256": "a03d304df34e23ec700b1ede2c90945a4991797b3a52747ade91ecead65a9d3c",
+    "target": [
+     "sun",
+     0
+    ]
+   },
+   "462.857x154.286": {
+    "sha256": "3acae1cc81363773c5c1c43e92d10ec89c78f65bb11c8be4e8e64cdd29df7ec7",
+    "target": [
+     "moon",
+     1
+    ]
+   },
+   "514.286x154.286": {
+    "sha256": "8496f597e14d60652e06861044036df3d9131c88659915fdb12006943459adb4",
+    "target": null
+   },
+   "565.714x154.286": {
+    "sha256": "8496f597e14d60652e06861044036df3d9131c88659915fdb12006943459adb4",
+    "target": null
+   },
+   "617.143x154.286": {
+    "sha256": "806ef89544fbf76cd953e6dd566ab65670cd7f9de18dd7cb3a2667faf287200e",
+    "target": null
+   },
+   "102.857x205.714": {
+    "sha256": "8496f597e14d60652e06861044036df3d9131c88659915fdb12006943459adb4",
+    "target": null
+   },
+   "154.286x205.714": {
+    "sha256": "8496f597e14d60652e06861044036df3d9131c88659915fdb12006943459adb4",
+    "target": null
+   },
+   "205.714x205.714": {
+    "sha256": "8496f597e14d60652e06861044036df3d9131c88659915fdb12006943459adb4",
+    "target": null
+   },
+   "257.143x205.714": {
+    "sha256": "2e9a9bc13fad2dc4254cd1e8341323bcf8b4d5e2316852e7a7ae4318138025ef",
+    "target": [
+     "planets",
+     4
+    ]
+   },
+   "308.571x205.714": {
+    "sha256": "2e9a9bc13fad2dc4254cd1e8341323bcf8b4d5e2316852e7a7ae4318138025ef",
+    "target": [
+     "planets",
+     4
+    ]
+   },
+   "360.0x205.714": {
+    "sha256": "389666ae8d756a1563f4e9684d3233f0577d8f53ba1d41ebe710dc435d649f39",
+    "target": [
+     "planets",
+     0
+    ]
+   },
+   "411.429x205.714": {
+    "sha256": "389666ae8d756a1563f4e9684d3233f0577d8f53ba1d41ebe710dc435d649f39",
+    "target": [
+     "planets",
+     0
+    ]
+   },
+   "462.857x205.714": {
+    "sha256": "8496f597e14d60652e06861044036df3d9131c88659915fdb12006943459adb4",
+    "target": null
+   },
+   "514.286x205.714": {
+    "sha256": "8496f597e14d60652e06861044036df3d9131c88659915fdb12006943459adb4",
+    "target": null
+   },
+   "565.714x205.714": {
+    "sha256": "efec950ebee42795cf68f5aaa54632e77a13fbd775d4396ef083caddd4d1d707",
+    "target": [
+     "seasons",
+     1
+    ]
+   },
+   "617.143x205.714": {
+    "sha256": "8496f597e14d60652e06861044036df3d9131c88659915fdb12006943459adb4",
+    "target": null
+   },
+   "51.429x257.143": {
+    "sha256": "a0f5e604e56bdee4174a77c7384317cd4bf1fb1575b7d50a1a0dd61e0d1b6b1e",
+    "target": null
+   },
+   "102.857x257.143": {
+    "sha256": "8496f597e14d60652e06861044036df3d9131c88659915fdb12006943459adb4",
+    "target": null
+   },
+   "154.286x257.143": {
+    "sha256": "8496f597e14d60652e06861044036df3d9131c88659915fdb12006943459adb4",
+    "target": null
+   },
+   "205.714x257.143": {
+    "sha256": "8496f597e14d60652e06861044036df3d9131c88659915fdb12006943459adb4",
+    "target": null
+   },
+   "257.143x257.143": {
+    "sha256": "2e9a9bc13fad2dc4254cd1e8341323bcf8b4d5e2316852e7a7ae4318138025ef",
+    "target": [
+     "planets",
+     4
+    ]
+   },
+   "308.571x257.143": {
+    "sha256": "2e9a9bc13fad2dc4254cd1e8341323bcf8b4d5e2316852e7a7ae4318138025ef",
+    "target": [
+     "planets",
+     4
+    ]
+   },
+   "360.0x257.143": {
+    "sha256": "a03d304df34e23ec700b1ede2c90945a4991797b3a52747ade91ecead65a9d3c",
+    "target": [
+     "sun",
+     0
+    ]
+   },
+   "411.429x257.143": {
+    "sha256": "a03d304df34e23ec700b1ede2c90945a4991797b3a52747ade91ecead65a9d3c",
+    "target": [
+     "sun",
+     0
+    ]
+   },
+   "462.857x257.143": {
+    "sha256": "02430b4e5bb16baf9b00f4e2f4914b6c79ea5fd43baf8aa179ec5234166c9dc1",
+    "target": [
+     "planets",
+     2
+    ]
+   },
+   "514.286x257.143": {
+    "sha256": "02430b4e5bb16baf9b00f4e2f4914b6c79ea5fd43baf8aa179ec5234166c9dc1",
+    "target": [
+     "planets",
+     2
+    ]
+   },
+   "565.714x257.143": {
+    "sha256": "efec950ebee42795cf68f5aaa54632e77a13fbd775d4396ef083caddd4d1d707",
+    "target": [
+     "seasons",
+     1
+    ]
+   },
+   "617.143x257.143": {
+    "sha256": "8496f597e14d60652e06861044036df3d9131c88659915fdb12006943459adb4",
+    "target": null
+   },
+   "668.571x257.143": {
+    "sha256": "7370ec695ee4ae43541e439e95aa225b7a708468166a16cfd779aae95d794588",
+    "target": null
+   },
+   "51.429x308.571": {
+    "sha256": "b29c2bbb28ad6903cca220a1abb0dc2c7527e0a2b3605d4d81259bd7a86a4447",
+    "target": null
+   },
+   "102.857x308.571": {
+    "sha256": "915e1257c39418af7ef25ff6cd74c5bb3a12715449f813b9f223b78eed869e53",
+    "target": [
+     "sun",
+     2
+    ]
+   },
+   "154.286x308.571": {
+    "sha256": "915e1257c39418af7ef25ff6cd74c5bb3a12715449f813b9f223b78eed869e53",
+    "target": [
+     "sun",
+     2
+    ]
+   },
+   "205.714x308.571": {
+    "sha256": "e7c1a12777a5fd9a0b85c58f37e7d0b3aa59909c8318b37b274fda744e81cecf",
+    "target": [
+     "planets",
+     6
+    ]
+   },
+   "257.143x308.571": {
+    "sha256": "915e1257c39418af7ef25ff6cd74c5bb3a12715449f813b9f223b78eed869e53",
+    "target": [
+     "sun",
+     2
+    ]
+   },
+   "308.571x308.571": {
+    "sha256": "fa338fdaa461e158f0737ddddfcdca2ac22b514517eef65af2981616320701e4",
+    "target": [
+     "seasons",
+     0
+    ]
+   },
+   "360.0x308.571": {
+    "sha256": "a03d304df34e23ec700b1ede2c90945a4991797b3a52747ade91ecead65a9d3c",
+    "target": [
+     "sun",
+     0
+    ]
+   },
+   "411.429x308.571": {
+    "sha256": "efec950ebee42795cf68f5aaa54632e77a13fbd775d4396ef083caddd4d1d707",
+    "target": [
+     "seasons",
+     1
+    ]
+   },
+   "462.857x308.571": {
+    "sha256": "02430b4e5bb16baf9b00f4e2f4914b6c79ea5fd43baf8aa179ec5234166c9dc1",
+    "target": [
+     "planets",
+     2
+    ]
+   },
+   "514.286x308.571": {
+    "sha256": "02430b4e5bb16baf9b00f4e2f4914b6c79ea5fd43baf8aa179ec5234166c9dc1",
+    "target": [
+     "planets",
+     2
+    ]
+   },
+   "565.714x308.571": {
+    "sha256": "8496f597e14d60652e06861044036df3d9131c88659915fdb12006943459adb4",
+    "target": null
+   },
+   "617.143x308.571": {
+    "sha256": "8496f597e14d60652e06861044036df3d9131c88659915fdb12006943459adb4",
+    "target": null
+   },
+   "668.571x308.571": {
+    "sha256": "baf1ade3bed9c9ed2ba9c1e51612c273338324653be5f1c34f5d53d0f4259cf5",
+    "target": null
+   },
+   "51.429x360.0": {
+    "sha256": "8496f597e14d60652e06861044036df3d9131c88659915fdb12006943459adb4",
+    "target": null
+   },
+   "102.857x360.0": {
+    "sha256": "8496f597e14d60652e06861044036df3d9131c88659915fdb12006943459adb4",
+    "target": null
+   },
+   "154.286x360.0": {
+    "sha256": "915e1257c39418af7ef25ff6cd74c5bb3a12715449f813b9f223b78eed869e53",
+    "target": [
+     "sun",
+     2
+    ]
+   },
+   "205.714x360.0": {
+    "sha256": "e7c1a12777a5fd9a0b85c58f37e7d0b3aa59909c8318b37b274fda744e81cecf",
+    "target": [
+     "planets",
+     6
+    ]
+   },
+   "257.143x360.0": {
+    "sha256": "915e1257c39418af7ef25ff6cd74c5bb3a12715449f813b9f223b78eed869e53",
+    "target": [
+     "sun",
+     2
+    ]
+   },
+   "308.571x360.0": {
+    "sha256": "915e1257c39418af7ef25ff6cd74c5bb3a12715449f813b9f223b78eed869e53",
+    "target": [
+     "sun",
+     2
+    ]
+   },
+   "360.0x360.0": {
+    "sha256": "cf9d7db73e4e00e9716c08b9ab1b8aea3366713ed9755ebc3c6d102602c1bc0b",
+    "target": null
+   },
+   "411.429x360.0": {
+    "sha256": "9d4509efdca65bbc13d96b0e6477a7b645d16a1b23f71526b73808ffbc687b51",
+    "target": [
+     "sun",
+     2
+    ]
+   },
+   "462.857x360.0": {
+    "sha256": "9d4509efdca65bbc13d96b0e6477a7b645d16a1b23f71526b73808ffbc687b51",
+    "target": [
+     "sun",
+     2
+    ]
+   },
+   "514.286x360.0": {
+    "sha256": "36c283ac0f473c75f183310b0a11b09a3ee31bdd16e12eb5246f8698d994d6dc",
+    "target": [
+     "planets",
+     5
+    ]
+   },
+   "565.714x360.0": {
+    "sha256": "9d4509efdca65bbc13d96b0e6477a7b645d16a1b23f71526b73808ffbc687b51",
+    "target": [
+     "sun",
+     2
+    ]
+   },
+   "617.143x360.0": {
+    "sha256": "8496f597e14d60652e06861044036df3d9131c88659915fdb12006943459adb4",
+    "target": null
+   },
+   "668.571x360.0": {
+    "sha256": "8496f597e14d60652e06861044036df3d9131c88659915fdb12006943459adb4",
+    "target": null
+   },
+   "51.429x411.429": {
+    "sha256": "a0158d73209b32a42e1de4acc432e54b530689fc2603591703f1c68b44142fc6",
+    "target": null
+   },
+   "102.857x411.429": {
+    "sha256": "8496f597e14d60652e06861044036df3d9131c88659915fdb12006943459adb4",
+    "target": null
+   },
+   "154.286x411.429": {
+    "sha256": "c9840f13772fcfae7a68e0046a6dbc5a224c37b703f52ba32cad83b103d5d7cb",
+    "target": null
+   },
+   "205.714x411.429": {
+    "sha256": "71b48e5e12cc762132eb405fb8f075f50b8ffcb8dfff6a2cc47585600c7e2a72",
+    "target": [
+     "planets",
+     1
+    ]
+   },
+   "257.143x411.429": {
+    "sha256": "71b48e5e12cc762132eb405fb8f075f50b8ffcb8dfff6a2cc47585600c7e2a72",
+    "target": [
+     "planets",
+     1
+    ]
+   },
+   "308.571x411.429": {
+    "sha256": "8bb7076d685fc3b449229d3094037f102a79ab3cc846086a42ad0582ac1c25a8",
+    "target": [
+     "seasons",
+     3
+    ]
+   },
+   "360.0x411.429": {
+    "sha256": "c31fa8432cf66debf69dc0f0f8acee98cf7749c1bf6b2a98eddbdb821ede0a7c",
+    "target": [
+     "sun",
+     1
+    ]
+   },
+   "411.429x411.429": {
+    "sha256": "5596bfe7c4d2a155f7a3d6303f5485e7b250fddbea325cff5e94ea4beb4382d2",
+    "target": [
+     "seasons",
+     2
+    ]
+   },
+   "462.857x411.429": {
+    "sha256": "9d4509efdca65bbc13d96b0e6477a7b645d16a1b23f71526b73808ffbc687b51",
+    "target": [
+     "sun",
+     2
+    ]
+   },
+   "514.286x411.429": {
+    "sha256": "36c283ac0f473c75f183310b0a11b09a3ee31bdd16e12eb5246f8698d994d6dc",
+    "target": [
+     "planets",
+     5
+    ]
+   },
+   "565.714x411.429": {
+    "sha256": "9d4509efdca65bbc13d96b0e6477a7b645d16a1b23f71526b73808ffbc687b51",
+    "target": [
+     "sun",
+     2
+    ]
+   },
+   "617.143x411.429": {
+    "sha256": "9d4509efdca65bbc13d96b0e6477a7b645d16a1b23f71526b73808ffbc687b51",
+    "target": [
+     "sun",
+     2
+    ]
+   },
+   "668.571x411.429": {
+    "sha256": "dbecaf60db0ef4176f31c2c843e00c85485c5bb3cd7d3ea5f9b62f6cba6d4658",
+    "target": null
+   },
+   "51.429x462.857": {
+    "sha256": "f566c13e93b922990a124e0cc6b97bd234eee3fb753e5f1ec6512d40602e7025",
+    "target": null
+   },
+   "102.857x462.857": {
+    "sha256": "c9840f13772fcfae7a68e0046a6dbc5a224c37b703f52ba32cad83b103d5d7cb",
+    "target": null
+   },
+   "154.286x462.857": {
+    "sha256": "8bb7076d685fc3b449229d3094037f102a79ab3cc846086a42ad0582ac1c25a8",
+    "target": [
+     "seasons",
+     3
+    ]
+   },
+   "205.714x462.857": {
+    "sha256": "71b48e5e12cc762132eb405fb8f075f50b8ffcb8dfff6a2cc47585600c7e2a72",
+    "target": [
+     "planets",
+     1
+    ]
+   },
+   "257.143x462.857": {
+    "sha256": "71b48e5e12cc762132eb405fb8f075f50b8ffcb8dfff6a2cc47585600c7e2a72",
+    "target": [
+     "planets",
+     1
+    ]
+   },
+   "308.571x462.857": {
+    "sha256": "c31fa8432cf66debf69dc0f0f8acee98cf7749c1bf6b2a98eddbdb821ede0a7c",
+    "target": [
+     "sun",
+     1
+    ]
+   },
+   "360.0x462.857": {
+    "sha256": "c31fa8432cf66debf69dc0f0f8acee98cf7749c1bf6b2a98eddbdb821ede0a7c",
+    "target": [
+     "sun",
+     1
+    ]
+   },
+   "411.429x462.857": {
+    "sha256": "8410d08d37c244be8a14e0c86be551a65dff664a48cd56afb04eee8241c87419",
+    "target": [
+     "planets",
+     3
+    ]
+   },
+   "462.857x462.857": {
+    "sha256": "8410d08d37c244be8a14e0c86be551a65dff664a48cd56afb04eee8241c87419",
+    "target": [
+     "planets",
+     3
+    ]
+   },
+   "514.286x462.857": {
+    "sha256": "8496f597e14d60652e06861044036df3d9131c88659915fdb12006943459adb4",
+    "target": null
+   },
+   "565.714x462.857": {
+    "sha256": "8496f597e14d60652e06861044036df3d9131c88659915fdb12006943459adb4",
+    "target": null
+   },
+   "617.143x462.857": {
+    "sha256": "8496f597e14d60652e06861044036df3d9131c88659915fdb12006943459adb4",
+    "target": null
+   },
+   "668.571x462.857": {
+    "sha256": "5b7c22d8bbe5ffa428755164ac8c235d0b114756b1f176a1d9a83c9fdf1f85a0",
+    "target": null
+   },
+   "102.857x514.286": {
+    "sha256": "cf9d7db73e4e00e9716c08b9ab1b8aea3366713ed9755ebc3c6d102602c1bc0b",
+    "target": null
+   },
+   "154.286x514.286": {
+    "sha256": "8bb7076d685fc3b449229d3094037f102a79ab3cc846086a42ad0582ac1c25a8",
+    "target": [
+     "seasons",
+     3
+    ]
+   },
+   "205.714x514.286": {
+    "sha256": "cf9d7db73e4e00e9716c08b9ab1b8aea3366713ed9755ebc3c6d102602c1bc0b",
+    "target": null
+   },
+   "257.143x514.286": {
+    "sha256": "cf9d7db73e4e00e9716c08b9ab1b8aea3366713ed9755ebc3c6d102602c1bc0b",
+    "target": null
+   },
+   "308.571x514.286": {
+    "sha256": "c31fa8432cf66debf69dc0f0f8acee98cf7749c1bf6b2a98eddbdb821ede0a7c",
+    "target": [
+     "sun",
+     1
+    ]
+   },
+   "360.0x514.286": {
+    "sha256": "c31fa8432cf66debf69dc0f0f8acee98cf7749c1bf6b2a98eddbdb821ede0a7c",
+    "target": [
+     "sun",
+     1
+    ]
+   },
+   "411.429x514.286": {
+    "sha256": "8410d08d37c244be8a14e0c86be551a65dff664a48cd56afb04eee8241c87419",
+    "target": [
+     "planets",
+     3
+    ]
+   },
+   "462.857x514.286": {
+    "sha256": "8410d08d37c244be8a14e0c86be551a65dff664a48cd56afb04eee8241c87419",
+    "target": [
+     "planets",
+     3
+    ]
+   },
+   "514.286x514.286": {
+    "sha256": "cf9d7db73e4e00e9716c08b9ab1b8aea3366713ed9755ebc3c6d102602c1bc0b",
+    "target": null
+   },
+   "565.714x514.286": {
+    "sha256": "f9be8c67b7a8de854abc4fbaf7e1e2d2faff7dca3af88f6dd8e2b36c0c6b295f",
+    "target": null
+   },
+   "617.143x514.286": {
+    "sha256": "8496f597e14d60652e06861044036df3d9131c88659915fdb12006943459adb4",
+    "target": null
+   },
+   "102.857x565.714": {
+    "sha256": "cbfa604fee7e2f6286b479de763bd1b3eb6703af0337933001b8049e5b6fdc1f",
+    "target": null
+   },
+   "154.286x565.714": {
+    "sha256": "cf9d7db73e4e00e9716c08b9ab1b8aea3366713ed9755ebc3c6d102602c1bc0b",
+    "target": null
+   },
+   "205.714x565.714": {
+    "sha256": "cf9d7db73e4e00e9716c08b9ab1b8aea3366713ed9755ebc3c6d102602c1bc0b",
+    "target": null
+   },
+   "257.143x565.714": {
+    "sha256": "cf9d7db73e4e00e9716c08b9ab1b8aea3366713ed9755ebc3c6d102602c1bc0b",
+    "target": null
+   },
+   "308.571x565.714": {
+    "sha256": "c31fa8432cf66debf69dc0f0f8acee98cf7749c1bf6b2a98eddbdb821ede0a7c",
+    "target": [
+     "sun",
+     1
+    ]
+   },
+   "360.0x565.714": {
+    "sha256": "c31fa8432cf66debf69dc0f0f8acee98cf7749c1bf6b2a98eddbdb821ede0a7c",
+    "target": [
+     "sun",
+     1
+    ]
+   },
+   "411.429x565.714": {
+    "sha256": "cf9d7db73e4e00e9716c08b9ab1b8aea3366713ed9755ebc3c6d102602c1bc0b",
+    "target": null
+   },
+   "462.857x565.714": {
+    "sha256": "5596bfe7c4d2a155f7a3d6303f5485e7b250fddbea325cff5e94ea4beb4382d2",
+    "target": [
+     "seasons",
+     2
+    ]
+   },
+   "514.286x565.714": {
+    "sha256": "5596bfe7c4d2a155f7a3d6303f5485e7b250fddbea325cff5e94ea4beb4382d2",
+    "target": [
+     "seasons",
+     2
+    ]
+   },
+   "565.714x565.714": {
+    "sha256": "cf9d7db73e4e00e9716c08b9ab1b8aea3366713ed9755ebc3c6d102602c1bc0b",
+    "target": null
+   },
+   "617.143x565.714": {
+    "sha256": "8f4766e4f34fc3418da6dc29b0f85dcb5e1a2c38a08ec011f08807ea228d1af0",
+    "target": null
+   },
+   "154.286x617.143": {
+    "sha256": "73edc9217c0c6831ad0105c8f20e4fe71b6a6cff5dc740a333e3f012d5fa1eed",
+    "target": null
+   },
+   "205.714x617.143": {
+    "sha256": "cf9d7db73e4e00e9716c08b9ab1b8aea3366713ed9755ebc3c6d102602c1bc0b",
+    "target": null
+   },
+   "257.143x617.143": {
+    "sha256": "cf9d7db73e4e00e9716c08b9ab1b8aea3366713ed9755ebc3c6d102602c1bc0b",
+    "target": null
+   },
+   "308.571x617.143": {
+    "sha256": "c31fa8432cf66debf69dc0f0f8acee98cf7749c1bf6b2a98eddbdb821ede0a7c",
+    "target": [
+     "sun",
+     1
+    ]
+   },
+   "360.0x617.143": {
+    "sha256": "cf9d7db73e4e00e9716c08b9ab1b8aea3366713ed9755ebc3c6d102602c1bc0b",
+    "target": null
+   },
+   "411.429x617.143": {
+    "sha256": "cf9d7db73e4e00e9716c08b9ab1b8aea3366713ed9755ebc3c6d102602c1bc0b",
+    "target": null
+   },
+   "462.857x617.143": {
+    "sha256": "cf9d7db73e4e00e9716c08b9ab1b8aea3366713ed9755ebc3c6d102602c1bc0b",
+    "target": null
+   },
+   "514.286x617.143": {
+    "sha256": "cf9d7db73e4e00e9716c08b9ab1b8aea3366713ed9755ebc3c6d102602c1bc0b",
+    "target": null
+   },
+   "565.714x617.143": {
+    "sha256": "1d3f18e6aa364f2b25e977a1adb8ebc74ca429441f63260de841a06ea7d9a50f",
+    "target": null
+   },
+   "257.143x668.571": {
+    "sha256": "8a5f18d2ad2296d71ff22b2516bd8bf0ad4c5cac8804748a68a25074f7fa9e1f",
+    "target": null
+   },
+   "308.571x668.571": {
+    "sha256": "4602c2bcd93bdb00105d8faf950a6fe4fd2067d1979cb00ac74e271fa0f5208e",
+    "target": null
+   },
+   "360.0x668.571": {
+    "sha256": "cf9d7db73e4e00e9716c08b9ab1b8aea3366713ed9755ebc3c6d102602c1bc0b",
+    "target": null
+   },
+   "411.429x668.571": {
+    "sha256": "06b636634d4e09533cd90060f1fd61f4645cea0ddb70c42a24656b4d6481aeb4",
+    "target": null
+   },
+   "462.857x668.571": {
+    "sha256": "78ce2247538c942158f267c84f670124ffbda231a981e5b02daf43a0138a46e4",
+    "target": null
+   }
+  },
+  "representative_html": {
+   "257.143x205.714": "<div align='center'><img src='file:///C:/Users/vurun/AppData/Roaming/Watch%20Academy/raster_cache/efb963f8e4e27b1a_4443da0566cd_w384_Jupiter.png' width='192'/></div><div align='center'><span style='font-size: 17px'><b>Jupiter</b></span><br/>Thursday, 16<sup>th</sup> July 2026 · 6105. Anno Lucis</div><br/><table><tr><td width='460'><p align='justify'>Jupiter is the giant in banded robes: cream and caramel stripes wrap the whole globe, whipped into curls at their borders, and low on one side turns the Great Red Spot — a single storm wider than the Earth that has been raging for centuries. Everything about the planet is surplus: the largest body, the loudest weather, a king&#x27;s wardrobe of clouds. …</p></td></tr></table><hr/><div align='center'><a href='domy:encyclopedia' style='color:#8FB8FF'><u>Learn more</u></a>&nbsp;&nbsp;<span style='color:#9A9A9A'>press SPACE</span></div>",
+   "257.143x257.143": "<div align='center'><img src='file:///C:/Users/vurun/AppData/Roaming/Watch%20Academy/raster_cache/efb963f8e4e27b1a_4443da0566cd_w384_Jupiter.png' width='192'/></div><div align='center'><span style='font-size: 17px'><b>Jupiter</b></span><br/>Thursday, 16<sup>th</sup> July 2026 · 6105. Anno Lucis</div><br/><table><tr><td width='460'><p align='justify'>Jupiter is the giant in banded robes: cream and caramel stripes wrap the whole globe, whipped into curls at their borders, and low on one side turns the Great Red Spot — a single storm wider than the Earth that has been raging for centuries. Everything about the planet is surplus: the largest body, the loudest weather, a king&#x27;s wardrobe of clouds. …</p></td></tr></table><hr/><div align='center'><a href='domy:encyclopedia' style='color:#8FB8FF'><u>Learn more</u></a>&nbsp;&nbsp;<span style='color:#9A9A9A'>press SPACE</span></div>",
+   "308.571x205.714": "<div align='center'><img src='file:///C:/Users/vurun/AppData/Roaming/Watch%20Academy/raster_cache/efb963f8e4e27b1a_4443da0566cd_w384_Jupiter.png' width='192'/></div><div align='center'><span style='font-size: 17px'><b>Jupiter</b></span><br/>Thursday, 16<sup>th</sup> July 2026 · 6105. Anno Lucis</div><br/><table><tr><td width='460'><p align='justify'>Jupiter is the giant in banded robes: cream and caramel stripes wrap the whole globe, whipped into curls at their borders, and low on one side turns the Great Red Spot — a single storm wider than the Earth that has been raging for centuries. Everything about the planet is surplus: the largest body, the loudest weather, a king&#x27;s wardrobe of clouds. …</p></td></tr></table><hr/><div align='center'><a href='domy:encyclopedia' style='color:#8FB8FF'><u>Learn more</u></a>&nbsp;&nbsp;<span style='color:#9A9A9A'>press SPACE</span></div>",
+   "308.571x257.143": "<div align='center'><img src='file:///C:/Users/vurun/AppData/Roaming/Watch%20Academy/raster_cache/efb963f8e4e27b1a_4443da0566cd_w384_Jupiter.png' width='192'/></div><div align='center'><span style='font-size: 17px'><b>Jupiter</b></span><br/>Thursday, 16<sup>th</sup> July 2026 · 6105. Anno Lucis</div><br/><table><tr><td width='460'><p align='justify'>Jupiter is the giant in banded robes: cream and caramel stripes wrap the whole globe, whipped into curls at their borders, and low on one side turns the Great Red Spot — a single storm wider than the Earth that has been raging for centuries. Everything about the planet is surplus: the largest body, the loudest weather, a king&#x27;s wardrobe of clouds. …</p></td></tr></table><hr/><div align='center'><a href='domy:encyclopedia' style='color:#8FB8FF'><u>Learn more</u></a>&nbsp;&nbsp;<span style='color:#9A9A9A'>press SPACE</span></div>",
+   "411.429x462.857": "<div align='center'><img src='file:///C:/Users/vurun/AppData/Roaming/Watch%20Academy/raster_cache/b739ad49a8376d52_752fd4ea6007_w384_Mercury.png' width='192'/></div><div align='center'><span style='font-size: 17px'><b>Mercury</b></span><br/>Wednesday</div><br/><table><tr><td width='460'><p align='justify'>Mercury is a small cratered ball of two extremes: one face scorched amber-tan, the other pale ashen gray, the whole surface pocked with craters like a well-traveled road. It suits the planet perfectly — the innermost wanderer and the fastest of all, circling the Sun in 88 days — a slow-turning world of the harshest extremes, its days scorching and its nights freezing on the very same plain. …</p></td></tr></table><hr/><div align='center'><a href='domy:encyclopedia' style='color:#8FB8FF'><u>Learn more</u></a>&nbsp;&nbsp;<span style='color:#9A9A9A'>press SPACE</span></div>",
+   "462.857x102.857": "<div align='center'><span style='font-size:17px; font-weight:bold'>Date</span></div><div align='center'><div style='white-space:nowrap'>16<sup>th</sup> July 2026</div><div style='white-space:nowrap'>197<sup>th</sup> Day - 29<sup>th</sup> Week</div><div style='white-space:nowrap'>&nbsp;</div></div><div align='center'><img src='file:///C:/Users/vurun/AppData/Roaming/Watch%20Academy/raster_cache/30327a7b620d9283_7367196e1055_w256_Age_of_Light_v2_gem.png' width='128'/></div><div align='center'><span style='font-size:17px; font-weight:bold'>Age of Light</span></div><div align='center'><div style='white-space:nowrap'>6105. Anno Lucis</div><div style='white-space:nowrap'>&nbsp;</div></div><div align='center'><img src='file:///C:/Users/vurun/AppData/Roaming/Watch%20Academy/raster_cache/e885fab4345c91fd_5e30b62e10ec_w256_Summer_gem.png' width='128'/></div><div align='center'><div style='white-space:nowrap'><b>Season:</b> Summer 26<sup>th</sup> of 94 Days</div><div style='white-space:nowrap'><b>Sign:</b> ♋ Cancer (21<sup>st</sup> June - 21<sup>st</sup> July)</div></div><hr/><div align='center'><a href='domy:encyclopedia' style='color:#8FB8FF'><u>Learn more</u></a>&nbsp;&nbsp;<span style='color:#9A9A9A'>press SPACE</span></div>"
+  }
+ },
+ "cross": {
+  "points": {
+   "257.143x51.429": {
+    "sha256": "7046858b6bb39be728774427ca27ff547bad83b973a87b84e77c5e042db50898",
+    "target": null
+   },
+   "308.571x51.429": {
+    "sha256": "b46eec4ecd673d9bf1d04dbe6d43b7792789bea7baf7c1fc981b23adbd65e182",
+    "target": null
+   },
+   "360.0x51.429": {
+    "sha256": "8496f597e14d60652e06861044036df3d9131c88659915fdb12006943459adb4",
+    "target": null
+   },
+   "411.429x51.429": {
+    "sha256": "56061bab15e61be84847e17128679aff0a18c19322bb10b78caba6b9971d2fe2",
+    "target": null
+   },
+   "462.857x51.429": {
+    "sha256": "41ebb52d5f8b35e91c1fdf41ad34927267216c03d85a70db004bca7fac388bfd",
+    "target": null
+   },
+   "154.286x102.857": {
+    "sha256": "888d34b45f7d609d7deb4598c05307f9eb91c5527db8e4d58d2d738097d345f3",
+    "target": null
+   },
+   "205.714x102.857": {
+    "sha256": "8496f597e14d60652e06861044036df3d9131c88659915fdb12006943459adb4",
+    "target": null
+   },
+   "257.143x102.857": {
+    "sha256": "8496f597e14d60652e06861044036df3d9131c88659915fdb12006943459adb4",
+    "target": null
+   },
+   "308.571x102.857": {
+    "sha256": "8496f597e14d60652e06861044036df3d9131c88659915fdb12006943459adb4",
+    "target": null
+   },
+   "360.0x102.857": {
+    "sha256": "8496f597e14d60652e06861044036df3d9131c88659915fdb12006943459adb4",
+    "target": null
+   },
+   "411.429x102.857": {
+    "sha256": "8b6316c820f2bc11033b5493ffb1d050bc4522f2ee944cd8f30370e4761beed2",
+    "target": [
+     "sun",
+     0
+    ]
+   },
+   "462.857x102.857": {
+    "sha256": "49aad8e2a745a8788ea0dc7fb2e931e661b6d9e55d35b830eda9dbe3303904ca",
+    "target": [
+     "seasons",
+     1
+    ]
+   },
+   "514.286x102.857": {
+    "sha256": "8496f597e14d60652e06861044036df3d9131c88659915fdb12006943459adb4",
+    "target": null
+   },
+   "565.714x102.857": {
+    "sha256": "58b65ccb63d12da7341224bf893080c2a09d44779b1da60b5a001002ef7f6ed2",
+    "target": null
+   },
+   "102.857x154.286": {
+    "sha256": "25db4ecbefb4212cdebed6a7a09dc1edce9b288c92ec3ae9865d392470af8f24",
+    "target": null
+   },
+   "154.286x154.286": {
+    "sha256": "8496f597e14d60652e06861044036df3d9131c88659915fdb12006943459adb4",
+    "target": null
+   },
+   "205.714x154.286": {
+    "sha256": "8496f597e14d60652e06861044036df3d9131c88659915fdb12006943459adb4",
+    "target": null
+   },
+   "257.143x154.286": {
+    "sha256": "8496f597e14d60652e06861044036df3d9131c88659915fdb12006943459adb4",
+    "target": null
+   },
+   "308.571x154.286": {
+    "sha256": "8496f597e14d60652e06861044036df3d9131c88659915fdb12006943459adb4",
+    "target": null
+   },
+   "360.0x154.286": {
+    "sha256": "8b6316c820f2bc11033b5493ffb1d050bc4522f2ee944cd8f30370e4761beed2",
+    "target": [
+     "sun",
+     0
+    ]
+   },
+   "411.429x154.286": {
+    "sha256": "8b6316c820f2bc11033b5493ffb1d050bc4522f2ee944cd8f30370e4761beed2",
+    "target": [
+     "sun",
+     0
+    ]
+   },
+   "462.857x154.286": {
+    "sha256": "3acae1cc81363773c5c1c43e92d10ec89c78f65bb11c8be4e8e64cdd29df7ec7",
+    "target": [
+     "moon",
+     1
+    ]
+   },
+   "514.286x154.286": {
+    "sha256": "8496f597e14d60652e06861044036df3d9131c88659915fdb12006943459adb4",
+    "target": null
+   },
+   "565.714x154.286": {
+    "sha256": "8496f597e14d60652e06861044036df3d9131c88659915fdb12006943459adb4",
+    "target": null
+   },
+   "617.143x154.286": {
+    "sha256": "806ef89544fbf76cd953e6dd566ab65670cd7f9de18dd7cb3a2667faf287200e",
+    "target": null
+   },
+   "102.857x205.714": {
+    "sha256": "8496f597e14d60652e06861044036df3d9131c88659915fdb12006943459adb4",
+    "target": null
+   },
+   "154.286x205.714": {
+    "sha256": "8496f597e14d60652e06861044036df3d9131c88659915fdb12006943459adb4",
+    "target": null
+   },
+   "205.714x205.714": {
+    "sha256": "8496f597e14d60652e06861044036df3d9131c88659915fdb12006943459adb4",
+    "target": null
+   },
+   "257.143x205.714": {
+    "sha256": "8496f597e14d60652e06861044036df3d9131c88659915fdb12006943459adb4",
+    "target": null
+   },
+   "308.571x205.714": {
+    "sha256": "8496f597e14d60652e06861044036df3d9131c88659915fdb12006943459adb4",
+    "target": null
+   },
+   "360.0x205.714": {
+    "sha256": "2e9a9bc13fad2dc4254cd1e8341323bcf8b4d5e2316852e7a7ae4318138025ef",
+    "target": [
+     "planets",
+     4
+    ]
+   },
+   "411.429x205.714": {
+    "sha256": "2e9a9bc13fad2dc4254cd1e8341323bcf8b4d5e2316852e7a7ae4318138025ef",
+    "target": [
+     "planets",
+     4
+    ]
+   },
+   "462.857x205.714": {
+    "sha256": "8496f597e14d60652e06861044036df3d9131c88659915fdb12006943459adb4",
+    "target": null
+   },
+   "514.286x205.714": {
+    "sha256": "8496f597e14d60652e06861044036df3d9131c88659915fdb12006943459adb4",
+    "target": null
+   },
+   "565.714x205.714": {
+    "sha256": "8496f597e14d60652e06861044036df3d9131c88659915fdb12006943459adb4",
+    "target": null
+   },
+   "617.143x205.714": {
+    "sha256": "8496f597e14d60652e06861044036df3d9131c88659915fdb12006943459adb4",
+    "target": null
+   },
+   "51.429x257.143": {
+    "sha256": "a0f5e604e56bdee4174a77c7384317cd4bf1fb1575b7d50a1a0dd61e0d1b6b1e",
+    "target": null
+   },
+   "102.857x257.143": {
+    "sha256": "8496f597e14d60652e06861044036df3d9131c88659915fdb12006943459adb4",
+    "target": null
+   },
+   "154.286x257.143": {
+    "sha256": "8496f597e14d60652e06861044036df3d9131c88659915fdb12006943459adb4",
+    "target": null
+   },
+   "205.714x257.143": {
+    "sha256": "8496f597e14d60652e06861044036df3d9131c88659915fdb12006943459adb4",
+    "target": null
+   },
+   "257.143x257.143": {
+    "sha256": "8496f597e14d60652e06861044036df3d9131c88659915fdb12006943459adb4",
+    "target": null
+   },
+   "308.571x257.143": {
+    "sha256": "8496f597e14d60652e06861044036df3d9131c88659915fdb12006943459adb4",
+    "target": null
+   },
+   "360.0x257.143": {
+    "sha256": "8b6316c820f2bc11033b5493ffb1d050bc4522f2ee944cd8f30370e4761beed2",
+    "target": [
+     "sun",
+     0
+    ]
+   },
+   "411.429x257.143": {
+    "sha256": "8b6316c820f2bc11033b5493ffb1d050bc4522f2ee944cd8f30370e4761beed2",
+    "target": [
+     "sun",
+     0
+    ]
+   },
+   "462.857x257.143": {
+    "sha256": "8496f597e14d60652e06861044036df3d9131c88659915fdb12006943459adb4",
+    "target": null
+   },
+   "514.286x257.143": {
+    "sha256": "8496f597e14d60652e06861044036df3d9131c88659915fdb12006943459adb4",
+    "target": null
+   },
+   "565.714x257.143": {
+    "sha256": "8496f597e14d60652e06861044036df3d9131c88659915fdb12006943459adb4",
+    "target": null
+   },
+   "617.143x257.143": {
+    "sha256": "8496f597e14d60652e06861044036df3d9131c88659915fdb12006943459adb4",
+    "target": null
+   },
+   "668.571x257.143": {
+    "sha256": "7370ec695ee4ae43541e439e95aa225b7a708468166a16cfd779aae95d794588",
+    "target": null
+   },
+   "51.429x308.571": {
+    "sha256": "b29c2bbb28ad6903cca220a1abb0dc2c7527e0a2b3605d4d81259bd7a86a4447",
+    "target": null
+   },
+   "102.857x308.571": {
+    "sha256": "4fbe5aa1c4e43a63a24a11f9dbe2815224c25db2cd98e5933f73cd755a5a9885",
+    "target": [
+     "sun",
+     2
+    ]
+   },
+   "154.286x308.571": {
+    "sha256": "4fbe5aa1c4e43a63a24a11f9dbe2815224c25db2cd98e5933f73cd755a5a9885",
+    "target": [
+     "sun",
+     2
+    ]
+   },
+   "205.714x308.571": {
+    "sha256": "e7c1a12777a5fd9a0b85c58f37e7d0b3aa59909c8318b37b274fda744e81cecf",
+    "target": [
+     "planets",
+     6
+    ]
+   },
+   "257.143x308.571": {
+    "sha256": "4fbe5aa1c4e43a63a24a11f9dbe2815224c25db2cd98e5933f73cd755a5a9885",
+    "target": [
+     "sun",
+     2
+    ]
+   },
+   "308.571x308.571": {
+    "sha256": "8496f597e14d60652e06861044036df3d9131c88659915fdb12006943459adb4",
+    "target": null
+   },
+   "360.0x308.571": {
+    "sha256": "8b6316c820f2bc11033b5493ffb1d050bc4522f2ee944cd8f30370e4761beed2",
+    "target": [
+     "sun",
+     0
+    ]
+   },
+   "411.429x308.571": {
+    "sha256": "8496f597e14d60652e06861044036df3d9131c88659915fdb12006943459adb4",
+    "target": null
+   },
+   "462.857x308.571": {
+    "sha256": "8496f597e14d60652e06861044036df3d9131c88659915fdb12006943459adb4",
+    "target": null
+   },
+   "514.286x308.571": {
+    "sha256": "8496f597e14d60652e06861044036df3d9131c88659915fdb12006943459adb4",
+    "target": null
+   },
+   "565.714x308.571": {
+    "sha256": "8496f597e14d60652e06861044036df3d9131c88659915fdb12006943459adb4",
+    "target": null
+   },
+   "617.143x308.571": {
+    "sha256": "8496f597e14d60652e06861044036df3d9131c88659915fdb12006943459adb4",
+    "target": null
+   },
+   "668.571x308.571": {
+    "sha256": "baf1ade3bed9c9ed2ba9c1e51612c273338324653be5f1c34f5d53d0f4259cf5",
+    "target": null
+   },
+   "51.429x360.0": {
+    "sha256": "8496f597e14d60652e06861044036df3d9131c88659915fdb12006943459adb4",
+    "target": null
+   },
+   "102.857x360.0": {
+    "sha256": "8496f597e14d60652e06861044036df3d9131c88659915fdb12006943459adb4",
+    "target": null
+   },
+   "154.286x360.0": {
+    "sha256": "4fbe5aa1c4e43a63a24a11f9dbe2815224c25db2cd98e5933f73cd755a5a9885",
+    "target": [
+     "sun",
+     2
+    ]
+   },
+   "205.714x360.0": {
+    "sha256": "e7c1a12777a5fd9a0b85c58f37e7d0b3aa59909c8318b37b274fda744e81cecf",
+    "target": [
+     "planets",
+     6
+    ]
+   },
+   "257.143x360.0": {
+    "sha256": "4fbe5aa1c4e43a63a24a11f9dbe2815224c25db2cd98e5933f73cd755a5a9885",
+    "target": [
+     "sun",
+     2
+    ]
+   },
+   "308.571x360.0": {
+    "sha256": "4fbe5aa1c4e43a63a24a11f9dbe2815224c25db2cd98e5933f73cd755a5a9885",
+    "target": [
+     "sun",
+     2
+    ]
+   },
+   "360.0x360.0": {
+    "sha256": "cf9d7db73e4e00e9716c08b9ab1b8aea3366713ed9755ebc3c6d102602c1bc0b",
+    "target": null
+   },
+   "411.429x360.0": {
+    "sha256": "a03e8c8bf490095043ef3960330672ad1d1e3d0fdeb5434108b4bd021aa482a4",
+    "target": [
+     "sun",
+     2
+    ]
+   },
+   "462.857x360.0": {
+    "sha256": "a03e8c8bf490095043ef3960330672ad1d1e3d0fdeb5434108b4bd021aa482a4",
+    "target": [
+     "sun",
+     2
+    ]
+   },
+   "514.286x360.0": {
+    "sha256": "36c283ac0f473c75f183310b0a11b09a3ee31bdd16e12eb5246f8698d994d6dc",
+    "target": [
+     "planets",
+     5
+    ]
+   },
+   "565.714x360.0": {
+    "sha256": "a03e8c8bf490095043ef3960330672ad1d1e3d0fdeb5434108b4bd021aa482a4",
+    "target": [
+     "sun",
+     2
+    ]
+   },
+   "617.143x360.0": {
+    "sha256": "8496f597e14d60652e06861044036df3d9131c88659915fdb12006943459adb4",
+    "target": null
+   },
+   "668.571x360.0": {
+    "sha256": "8496f597e14d60652e06861044036df3d9131c88659915fdb12006943459adb4",
+    "target": null
+   },
+   "51.429x411.429": {
+    "sha256": "a0158d73209b32a42e1de4acc432e54b530689fc2603591703f1c68b44142fc6",
+    "target": null
+   },
+   "102.857x411.429": {
+    "sha256": "8496f597e14d60652e06861044036df3d9131c88659915fdb12006943459adb4",
+    "target": null
+   },
+   "154.286x411.429": {
+    "sha256": "c9840f13772fcfae7a68e0046a6dbc5a224c37b703f52ba32cad83b103d5d7cb",
+    "target": null
+   },
+   "205.714x411.429": {
+    "sha256": "c9840f13772fcfae7a68e0046a6dbc5a224c37b703f52ba32cad83b103d5d7cb",
+    "target": null
+   },
+   "257.143x411.429": {
+    "sha256": "cf9d7db73e4e00e9716c08b9ab1b8aea3366713ed9755ebc3c6d102602c1bc0b",
+    "target": null
+   },
+   "308.571x411.429": {
+    "sha256": "cf9d7db73e4e00e9716c08b9ab1b8aea3366713ed9755ebc3c6d102602c1bc0b",
+    "target": null
+   },
+   "360.0x411.429": {
+    "sha256": "78c0e59723758651fedecf86a2d3169734f51af876b0b673ce41ccd9bf8bec1f",
+    "target": [
+     "sun",
+     1
+    ]
+   },
+   "411.429x411.429": {
+    "sha256": "cf9d7db73e4e00e9716c08b9ab1b8aea3366713ed9755ebc3c6d102602c1bc0b",
+    "target": null
+   },
+   "462.857x411.429": {
+    "sha256": "a03e8c8bf490095043ef3960330672ad1d1e3d0fdeb5434108b4bd021aa482a4",
+    "target": [
+     "sun",
+     2
+    ]
+   },
+   "514.286x411.429": {
+    "sha256": "36c283ac0f473c75f183310b0a11b09a3ee31bdd16e12eb5246f8698d994d6dc",
+    "target": [
+     "planets",
+     5
+    ]
+   },
+   "565.714x411.429": {
+    "sha256": "a03e8c8bf490095043ef3960330672ad1d1e3d0fdeb5434108b4bd021aa482a4",
+    "target": [
+     "sun",
+     2
+    ]
+   },
+   "617.143x411.429": {
+    "sha256": "a03e8c8bf490095043ef3960330672ad1d1e3d0fdeb5434108b4bd021aa482a4",
+    "target": [
+     "sun",
+     2
+    ]
+   },
+   "668.571x411.429": {
+    "sha256": "dbecaf60db0ef4176f31c2c843e00c85485c5bb3cd7d3ea5f9b62f6cba6d4658",
+    "target": null
+   },
+   "51.429x462.857": {
+    "sha256": "f566c13e93b922990a124e0cc6b97bd234eee3fb753e5f1ec6512d40602e7025",
+    "target": null
+   },
+   "102.857x462.857": {
+    "sha256": "c9840f13772fcfae7a68e0046a6dbc5a224c37b703f52ba32cad83b103d5d7cb",
+    "target": null
+   },
+   "154.286x462.857": {
+    "sha256": "cf9d7db73e4e00e9716c08b9ab1b8aea3366713ed9755ebc3c6d102602c1bc0b",
+    "target": null
+   },
+   "205.714x462.857": {
+    "sha256": "cf9d7db73e4e00e9716c08b9ab1b8aea3366713ed9755ebc3c6d102602c1bc0b",
+    "target": null
+   },
+   "257.143x462.857": {
+    "sha256": "cf9d7db73e4e00e9716c08b9ab1b8aea3366713ed9755ebc3c6d102602c1bc0b",
+    "target": null
+   },
+   "308.571x462.857": {
+    "sha256": "78c0e59723758651fedecf86a2d3169734f51af876b0b673ce41ccd9bf8bec1f",
+    "target": [
+     "sun",
+     1
+    ]
+   },
+   "360.0x462.857": {
+    "sha256": "78c0e59723758651fedecf86a2d3169734f51af876b0b673ce41ccd9bf8bec1f",
+    "target": [
+     "sun",
+     1
+    ]
+   },
+   "411.429x462.857": {
+    "sha256": "cf9d7db73e4e00e9716c08b9ab1b8aea3366713ed9755ebc3c6d102602c1bc0b",
+    "target": null
+   },
+   "462.857x462.857": {
+    "sha256": "cf9d7db73e4e00e9716c08b9ab1b8aea3366713ed9755ebc3c6d102602c1bc0b",
+    "target": null
+   },
+   "514.286x462.857": {
+    "sha256": "8496f597e14d60652e06861044036df3d9131c88659915fdb12006943459adb4",
+    "target": null
+   },
+   "565.714x462.857": {
+    "sha256": "8496f597e14d60652e06861044036df3d9131c88659915fdb12006943459adb4",
+    "target": null
+   },
+   "617.143x462.857": {
+    "sha256": "8496f597e14d60652e06861044036df3d9131c88659915fdb12006943459adb4",
+    "target": null
+   },
+   "668.571x462.857": {
+    "sha256": "5b7c22d8bbe5ffa428755164ac8c235d0b114756b1f176a1d9a83c9fdf1f85a0",
+    "target": null
+   },
+   "102.857x514.286": {
+    "sha256": "cf9d7db73e4e00e9716c08b9ab1b8aea3366713ed9755ebc3c6d102602c1bc0b",
+    "target": null
+   },
+   "154.286x514.286": {
+    "sha256": "cf9d7db73e4e00e9716c08b9ab1b8aea3366713ed9755ebc3c6d102602c1bc0b",
+    "target": null
+   },
+   "205.714x514.286": {
+    "sha256": "cf9d7db73e4e00e9716c08b9ab1b8aea3366713ed9755ebc3c6d102602c1bc0b",
+    "target": null
+   },
+   "257.143x514.286": {
+    "sha256": "cf9d7db73e4e00e9716c08b9ab1b8aea3366713ed9755ebc3c6d102602c1bc0b",
+    "target": null
+   },
+   "308.571x514.286": {
+    "sha256": "8410d08d37c244be8a14e0c86be551a65dff664a48cd56afb04eee8241c87419",
+    "target": [
+     "planets",
+     3
+    ]
+   },
+   "360.0x514.286": {
+    "sha256": "8410d08d37c244be8a14e0c86be551a65dff664a48cd56afb04eee8241c87419",
+    "target": [
+     "planets",
+     3
+    ]
+   },
+   "411.429x514.286": {
+    "sha256": "cf9d7db73e4e00e9716c08b9ab1b8aea3366713ed9755ebc3c6d102602c1bc0b",
+    "target": null
+   },
+   "462.857x514.286": {
+    "sha256": "cf9d7db73e4e00e9716c08b9ab1b8aea3366713ed9755ebc3c6d102602c1bc0b",
+    "target": null
+   },
+   "514.286x514.286": {
+    "sha256": "cf9d7db73e4e00e9716c08b9ab1b8aea3366713ed9755ebc3c6d102602c1bc0b",
+    "target": null
+   },
+   "565.714x514.286": {
+    "sha256": "f9be8c67b7a8de854abc4fbaf7e1e2d2faff7dca3af88f6dd8e2b36c0c6b295f",
+    "target": null
+   },
+   "617.143x514.286": {
+    "sha256": "8496f597e14d60652e06861044036df3d9131c88659915fdb12006943459adb4",
+    "target": null
+   },
+   "102.857x565.714": {
+    "sha256": "cbfa604fee7e2f6286b479de763bd1b3eb6703af0337933001b8049e5b6fdc1f",
+    "target": null
+   },
+   "154.286x565.714": {
+    "sha256": "cf9d7db73e4e00e9716c08b9ab1b8aea3366713ed9755ebc3c6d102602c1bc0b",
+    "target": null
+   },
+   "205.714x565.714": {
+    "sha256": "cf9d7db73e4e00e9716c08b9ab1b8aea3366713ed9755ebc3c6d102602c1bc0b",
+    "target": null
+   },
+   "257.143x565.714": {
+    "sha256": "cf9d7db73e4e00e9716c08b9ab1b8aea3366713ed9755ebc3c6d102602c1bc0b",
+    "target": null
+   },
+   "308.571x565.714": {
+    "sha256": "78c0e59723758651fedecf86a2d3169734f51af876b0b673ce41ccd9bf8bec1f",
+    "target": [
+     "sun",
+     1
+    ]
+   },
+   "360.0x565.714": {
+    "sha256": "78c0e59723758651fedecf86a2d3169734f51af876b0b673ce41ccd9bf8bec1f",
+    "target": [
+     "sun",
+     1
+    ]
+   },
+   "411.429x565.714": {
+    "sha256": "cf9d7db73e4e00e9716c08b9ab1b8aea3366713ed9755ebc3c6d102602c1bc0b",
+    "target": null
+   },
+   "462.857x565.714": {
+    "sha256": "cf9d7db73e4e00e9716c08b9ab1b8aea3366713ed9755ebc3c6d102602c1bc0b",
+    "target": null
+   },
+   "514.286x565.714": {
+    "sha256": "cf9d7db73e4e00e9716c08b9ab1b8aea3366713ed9755ebc3c6d102602c1bc0b",
+    "target": null
+   },
+   "565.714x565.714": {
+    "sha256": "cf9d7db73e4e00e9716c08b9ab1b8aea3366713ed9755ebc3c6d102602c1bc0b",
+    "target": null
+   },
+   "617.143x565.714": {
+    "sha256": "8f4766e4f34fc3418da6dc29b0f85dcb5e1a2c38a08ec011f08807ea228d1af0",
+    "target": null
+   },
+   "154.286x617.143": {
+    "sha256": "73edc9217c0c6831ad0105c8f20e4fe71b6a6cff5dc740a333e3f012d5fa1eed",
+    "target": null
+   },
+   "205.714x617.143": {
+    "sha256": "cf9d7db73e4e00e9716c08b9ab1b8aea3366713ed9755ebc3c6d102602c1bc0b",
+    "target": null
+   },
+   "257.143x617.143": {
+    "sha256": "cf9d7db73e4e00e9716c08b9ab1b8aea3366713ed9755ebc3c6d102602c1bc0b",
+    "target": null
+   },
+   "308.571x617.143": {
+    "sha256": "78c0e59723758651fedecf86a2d3169734f51af876b0b673ce41ccd9bf8bec1f",
+    "target": [
+     "sun",
+     1
+    ]
+   },
+   "360.0x617.143": {
+    "sha256": "cf9d7db73e4e00e9716c08b9ab1b8aea3366713ed9755ebc3c6d102602c1bc0b",
+    "target": null
+   },
+   "411.429x617.143": {
+    "sha256": "cf9d7db73e4e00e9716c08b9ab1b8aea3366713ed9755ebc3c6d102602c1bc0b",
+    "target": null
+   },
+   "462.857x617.143": {
+    "sha256": "cf9d7db73e4e00e9716c08b9ab1b8aea3366713ed9755ebc3c6d102602c1bc0b",
+    "target": null
+   },
+   "514.286x617.143": {
+    "sha256": "cf9d7db73e4e00e9716c08b9ab1b8aea3366713ed9755ebc3c6d102602c1bc0b",
+    "target": null
+   },
+   "565.714x617.143": {
+    "sha256": "1d3f18e6aa364f2b25e977a1adb8ebc74ca429441f63260de841a06ea7d9a50f",
+    "target": null
+   },
+   "257.143x668.571": {
+    "sha256": "8a5f18d2ad2296d71ff22b2516bd8bf0ad4c5cac8804748a68a25074f7fa9e1f",
+    "target": null
+   },
+   "308.571x668.571": {
+    "sha256": "4602c2bcd93bdb00105d8faf950a6fe4fd2067d1979cb00ac74e271fa0f5208e",
+    "target": null
+   },
+   "360.0x668.571": {
+    "sha256": "cf9d7db73e4e00e9716c08b9ab1b8aea3366713ed9755ebc3c6d102602c1bc0b",
+    "target": null
+   },
+   "411.429x668.571": {
+    "sha256": "06b636634d4e09533cd90060f1fd61f4645cea0ddb70c42a24656b4d6481aeb4",
+    "target": null
+   },
+   "462.857x668.571": {
+    "sha256": "78ce2247538c942158f267c84f670124ffbda231a981e5b02daf43a0138a46e4",
+    "target": null
+   }
+  },
+  "representative_html": {
+   "308.571x462.857": "<div align='center'><img src='file:///C:/Users/vurun/AppData/Roaming/Watch%20Academy/raster_cache/5382020f1b99d08b_67bcc91519ce_w256_Winter_Solstice_gem.png' width='128'/></div><div align='center'><span style='font-size:17px; font-weight:bold'>Winter Solstice*</span></div><div align='center'><div style='white-space:nowrap'>&nbsp;</div><div style='white-space:nowrap'>21<sup>st</sup> December 2026 · 6105. Anno Lucis - 21:50</div><div style='white-space:nowrap'><b>Daylight:</b> 8h 47min</div></div><hr/><div align='center'><img src='file:///C:/Users/vurun/AppData/Roaming/Watch%20Academy/raster_cache/15d836234ca4a405_b469e619c8f5_w256_Winter_gem.png' width='128'/></div><div align='center'><span style='font-size:17px; font-weight:bold'>Meteorological Winter</span></div><div align='center'><div style='white-space:nowrap'>&nbsp;</div><div style='white-space:nowrap'><b>From</b> 6<sup>th</sup> November 2026 · 6105. Anno Lucis - 23:27</div><div style='white-space:nowrap'><b>To</b> 4<sup>th</sup> February 2027 · 6106. Anno Lucis - 09:37</div><div style='white-space:nowrap'><b>Duration:</b> 89.4 Days</div></div><hr/><div align='center'><a href='domy:encyclopedia' style='color:#8FB8FF'><u>Learn more</u></a>&nbsp;&nbsp;<span style='color:#9A9A9A'>press SPACE</span></div>",
+   "308.571x565.714": "<div align='center'><img src='file:///C:/Users/vurun/AppData/Roaming/Watch%20Academy/raster_cache/5382020f1b99d08b_67bcc91519ce_w256_Winter_Solstice_gem.png' width='128'/></div><div align='center'><span style='font-size:17px; font-weight:bold'>Winter Solstice*</span></div><div align='center'><div style='white-space:nowrap'>&nbsp;</div><div style='white-space:nowrap'>21<sup>st</sup> December 2026 · 6105. Anno Lucis - 21:50</div><div style='white-space:nowrap'><b>Daylight:</b> 8h 47min</div></div><hr/><div align='center'><img src='file:///C:/Users/vurun/AppData/Roaming/Watch%20Academy/raster_cache/15d836234ca4a405_b469e619c8f5_w256_Winter_gem.png' width='128'/></div><div align='center'><span style='font-size:17px; font-weight:bold'>Meteorological Winter</span></div><div align='center'><div style='white-space:nowrap'>&nbsp;</div><div style='white-space:nowrap'><b>From</b> 6<sup>th</sup> November 2026 · 6105. Anno Lucis - 23:27</div><div style='white-space:nowrap'><b>To</b> 4<sup>th</sup> February 2027 · 6106. Anno Lucis - 09:37</div><div style='white-space:nowrap'><b>Duration:</b> 89.4 Days</div></div><hr/><div align='center'><a href='domy:encyclopedia' style='color:#8FB8FF'><u>Learn more</u></a>&nbsp;&nbsp;<span style='color:#9A9A9A'>press SPACE</span></div>",
+   "308.571x617.143": "<div align='center'><img src='file:///C:/Users/vurun/AppData/Roaming/Watch%20Academy/raster_cache/5382020f1b99d08b_67bcc91519ce_w256_Winter_Solstice_gem.png' width='128'/></div><div align='center'><span style='font-size:17px; font-weight:bold'>Winter Solstice*</span></div><div align='center'><div style='white-space:nowrap'>&nbsp;</div><div style='white-space:nowrap'>21<sup>st</sup> December 2026 · 6105. Anno Lucis - 21:50</div><div style='white-space:nowrap'><b>Daylight:</b> 8h 47min</div></div><hr/><div align='center'><img src='file:///C:/Users/vurun/AppData/Roaming/Watch%20Academy/raster_cache/15d836234ca4a405_b469e619c8f5_w256_Winter_gem.png' width='128'/></div><div align='center'><span style='font-size:17px; font-weight:bold'>Meteorological Winter</span></div><div align='center'><div style='white-space:nowrap'>&nbsp;</div><div style='white-space:nowrap'><b>From</b> 6<sup>th</sup> November 2026 · 6105. Anno Lucis - 23:27</div><div style='white-space:nowrap'><b>To</b> 4<sup>th</sup> February 2027 · 6106. Anno Lucis - 09:37</div><div style='white-space:nowrap'><b>Duration:</b> 89.4 Days</div></div><hr/><div align='center'><a href='domy:encyclopedia' style='color:#8FB8FF'><u>Learn more</u></a>&nbsp;&nbsp;<span style='color:#9A9A9A'>press SPACE</span></div>",
+   "360.0x411.429": "<div align='center'><img src='file:///C:/Users/vurun/AppData/Roaming/Watch%20Academy/raster_cache/5382020f1b99d08b_67bcc91519ce_w256_Winter_Solstice_gem.png' width='128'/></div><div align='center'><span style='font-size:17px; font-weight:bold'>Winter Solstice*</span></div><div align='center'><div style='white-space:nowrap'>&nbsp;</div><div style='white-space:nowrap'>21<sup>st</sup> December 2026 · 6105. Anno Lucis - 21:50</div><div style='white-space:nowrap'><b>Daylight:</b> 8h 47min</div></div><hr/><div align='center'><img src='file:///C:/Users/vurun/AppData/Roaming/Watch%20Academy/raster_cache/15d836234ca4a405_b469e619c8f5_w256_Winter_gem.png' width='128'/></div><div align='center'><span style='font-size:17px; font-weight:bold'>Meteorological Winter</span></div><div align='center'><div style='white-space:nowrap'>&nbsp;</div><div style='white-space:nowrap'><b>From</b> 6<sup>th</sup> November 2026 · 6105. Anno Lucis - 23:27</div><div style='white-space:nowrap'><b>To</b> 4<sup>th</sup> February 2027 · 6106. Anno Lucis - 09:37</div><div style='white-space:nowrap'><b>Duration:</b> 89.4 Days</div></div><hr/><div align='center'><a href='domy:encyclopedia' style='color:#8FB8FF'><u>Learn more</u></a>&nbsp;&nbsp;<span style='color:#9A9A9A'>press SPACE</span></div>",
+   "360.0x462.857": "<div align='center'><img src='file:///C:/Users/vurun/AppData/Roaming/Watch%20Academy/raster_cache/5382020f1b99d08b_67bcc91519ce_w256_Winter_Solstice_gem.png' width='128'/></div><div align='center'><span style='font-size:17px; font-weight:bold'>Winter Solstice*</span></div><div align='center'><div style='white-space:nowrap'>&nbsp;</div><div style='white-space:nowrap'>21<sup>st</sup> December 2026 · 6105. Anno Lucis - 21:50</div><div style='white-space:nowrap'><b>Daylight:</b> 8h 47min</div></div><hr/><div align='center'><img src='file:///C:/Users/vurun/AppData/Roaming/Watch%20Academy/raster_cache/15d836234ca4a405_b469e619c8f5_w256_Winter_gem.png' width='128'/></div><div align='center'><span style='font-size:17px; font-weight:bold'>Meteorological Winter</span></div><div align='center'><div style='white-space:nowrap'>&nbsp;</div><div style='white-space:nowrap'><b>From</b> 6<sup>th</sup> November 2026 · 6105. Anno Lucis - 23:27</div><div style='white-space:nowrap'><b>To</b> 4<sup>th</sup> February 2027 · 6106. Anno Lucis - 09:37</div><div style='white-space:nowrap'><b>Duration:</b> 89.4 Days</div></div><hr/><div align='center'><a href='domy:encyclopedia' style='color:#8FB8FF'><u>Learn more</u></a>&nbsp;&nbsp;<span style='color:#9A9A9A'>press SPACE</span></div>",
+   "360.0x565.714": "<div align='center'><img src='file:///C:/Users/vurun/AppData/Roaming/Watch%20Academy/raster_cache/5382020f1b99d08b_67bcc91519ce_w256_Winter_Solstice_gem.png' width='128'/></div><div align='center'><span style='font-size:17px; font-weight:bold'>Winter Solstice*</span></div><div align='center'><div style='white-space:nowrap'>&nbsp;</div><div style='white-space:nowrap'>21<sup>st</sup> December 2026 · 6105. Anno Lucis - 21:50</div><div style='white-space:nowrap'><b>Daylight:</b> 8h 47min</div></div><hr/><div align='center'><img src='file:///C:/Users/vurun/AppData/Roaming/Watch%20Academy/raster_cache/15d836234ca4a405_b469e619c8f5_w256_Winter_gem.png' width='128'/></div><div align='center'><span style='font-size:17px; font-weight:bold'>Meteorological Winter</span></div><div align='center'><div style='white-space:nowrap'>&nbsp;</div><div style='white-space:nowrap'><b>From</b> 6<sup>th</sup> November 2026 · 6105. Anno Lucis - 23:27</div><div style='white-space:nowrap'><b>To</b> 4<sup>th</sup> February 2027 · 6106. Anno Lucis - 09:37</div><div style='white-space:nowrap'><b>Duration:</b> 89.4 Days</div></div><hr/><div align='center'><a href='domy:encyclopedia' style='color:#8FB8FF'><u>Learn more</u></a>&nbsp;&nbsp;<span style='color:#9A9A9A'>press SPACE</span></div>"
+  }
+ },
+ "rose": {
+  "points": {
+   "257.143x51.429": {
+    "sha256": "7046858b6bb39be728774427ca27ff547bad83b973a87b84e77c5e042db50898",
+    "target": null
+   },
+   "308.571x51.429": {
+    "sha256": "b46eec4ecd673d9bf1d04dbe6d43b7792789bea7baf7c1fc981b23adbd65e182",
+    "target": null
+   },
+   "360.0x51.429": {
+    "sha256": "8496f597e14d60652e06861044036df3d9131c88659915fdb12006943459adb4",
+    "target": null
+   },
+   "411.429x51.429": {
+    "sha256": "56061bab15e61be84847e17128679aff0a18c19322bb10b78caba6b9971d2fe2",
+    "target": null
+   },
+   "462.857x51.429": {
+    "sha256": "41ebb52d5f8b35e91c1fdf41ad34927267216c03d85a70db004bca7fac388bfd",
+    "target": null
+   },
+   "154.286x102.857": {
+    "sha256": "888d34b45f7d609d7deb4598c05307f9eb91c5527db8e4d58d2d738097d345f3",
+    "target": null
+   },
+   "205.714x102.857": {
+    "sha256": "8496f597e14d60652e06861044036df3d9131c88659915fdb12006943459adb4",
+    "target": null
+   },
+   "257.143x102.857": {
+    "sha256": "8496f597e14d60652e06861044036df3d9131c88659915fdb12006943459adb4",
+    "target": null
+   },
+   "308.571x102.857": {
+    "sha256": "8496f597e14d60652e06861044036df3d9131c88659915fdb12006943459adb4",
+    "target": null
+   },
+   "360.0x102.857": {
+    "sha256": "8496f597e14d60652e06861044036df3d9131c88659915fdb12006943459adb4",
+    "target": null
+   },
+   "411.429x102.857": {
+    "sha256": "a03d304df34e23ec700b1ede2c90945a4991797b3a52747ade91ecead65a9d3c",
+    "target": [
+     "sun",
+     0
+    ]
+   },
+   "462.857x102.857": {
+    "sha256": "49aad8e2a745a8788ea0dc7fb2e931e661b6d9e55d35b830eda9dbe3303904ca",
+    "target": [
+     "seasons",
+     1
+    ]
+   },
+   "514.286x102.857": {
+    "sha256": "8496f597e14d60652e06861044036df3d9131c88659915fdb12006943459adb4",
+    "target": null
+   },
+   "565.714x102.857": {
+    "sha256": "58b65ccb63d12da7341224bf893080c2a09d44779b1da60b5a001002ef7f6ed2",
+    "target": null
+   },
+   "102.857x154.286": {
+    "sha256": "25db4ecbefb4212cdebed6a7a09dc1edce9b288c92ec3ae9865d392470af8f24",
+    "target": null
+   },
+   "154.286x154.286": {
+    "sha256": "8496f597e14d60652e06861044036df3d9131c88659915fdb12006943459adb4",
+    "target": null
+   },
+   "205.714x154.286": {
+    "sha256": "fa338fdaa461e158f0737ddddfcdca2ac22b514517eef65af2981616320701e4",
+    "target": [
+     "seasons",
+     0
+    ]
+   },
+   "257.143x154.286": {
+    "sha256": "fa338fdaa461e158f0737ddddfcdca2ac22b514517eef65af2981616320701e4",
+    "target": [
+     "seasons",
+     0
+    ]
+   },
+   "308.571x154.286": {
+    "sha256": "8496f597e14d60652e06861044036df3d9131c88659915fdb12006943459adb4",
+    "target": null
+   },
+   "360.0x154.286": {
+    "sha256": "a03d304df34e23ec700b1ede2c90945a4991797b3a52747ade91ecead65a9d3c",
+    "target": [
+     "sun",
+     0
+    ]
+   },
+   "411.429x154.286": {
+    "sha256": "a03d304df34e23ec700b1ede2c90945a4991797b3a52747ade91ecead65a9d3c",
+    "target": [
+     "sun",
+     0
+    ]
+   },
+   "462.857x154.286": {
+    "sha256": "3acae1cc81363773c5c1c43e92d10ec89c78f65bb11c8be4e8e64cdd29df7ec7",
+    "target": [
+     "moon",
+     1
+    ]
+   },
+   "514.286x154.286": {
+    "sha256": "8496f597e14d60652e06861044036df3d9131c88659915fdb12006943459adb4",
+    "target": null
+   },
+   "565.714x154.286": {
+    "sha256": "8496f597e14d60652e06861044036df3d9131c88659915fdb12006943459adb4",
+    "target": null
+   },
+   "617.143x154.286": {
+    "sha256": "806ef89544fbf76cd953e6dd566ab65670cd7f9de18dd7cb3a2667faf287200e",
+    "target": null
+   },
+   "102.857x205.714": {
+    "sha256": "8496f597e14d60652e06861044036df3d9131c88659915fdb12006943459adb4",
+    "target": null
+   },
+   "154.286x205.714": {
+    "sha256": "8496f597e14d60652e06861044036df3d9131c88659915fdb12006943459adb4",
+    "target": null
+   },
+   "205.714x205.714": {
+    "sha256": "8496f597e14d60652e06861044036df3d9131c88659915fdb12006943459adb4",
+    "target": null
+   },
+   "257.143x205.714": {
+    "sha256": "e7c1a12777a5fd9a0b85c58f37e7d0b3aa59909c8318b37b274fda744e81cecf",
+    "target": [
+     "planets",
+     6
+    ]
+   },
+   "308.571x205.714": {
+    "sha256": "e7c1a12777a5fd9a0b85c58f37e7d0b3aa59909c8318b37b274fda744e81cecf",
+    "target": [
+     "planets",
+     6
+    ]
+   },
+   "360.0x205.714": {
+    "sha256": "2e9a9bc13fad2dc4254cd1e8341323bcf8b4d5e2316852e7a7ae4318138025ef",
+    "target": [
+     "planets",
+     4
+    ]
+   },
+   "411.429x205.714": {
+    "sha256": "2e9a9bc13fad2dc4254cd1e8341323bcf8b4d5e2316852e7a7ae4318138025ef",
+    "target": [
+     "planets",
+     4
+    ]
+   },
+   "462.857x205.714": {
+    "sha256": "8496f597e14d60652e06861044036df3d9131c88659915fdb12006943459adb4",
+    "target": null
+   },
+   "514.286x205.714": {
+    "sha256": "8496f597e14d60652e06861044036df3d9131c88659915fdb12006943459adb4",
+    "target": null
+   },
+   "565.714x205.714": {
+    "sha256": "efec950ebee42795cf68f5aaa54632e77a13fbd775d4396ef083caddd4d1d707",
+    "target": [
+     "seasons",
+     1
+    ]
+   },
+   "617.143x205.714": {
+    "sha256": "8496f597e14d60652e06861044036df3d9131c88659915fdb12006943459adb4",
+    "target": null
+   },
+   "51.429x257.143": {
+    "sha256": "a0f5e604e56bdee4174a77c7384317cd4bf1fb1575b7d50a1a0dd61e0d1b6b1e",
+    "target": null
+   },
+   "102.857x257.143": {
+    "sha256": "8496f597e14d60652e06861044036df3d9131c88659915fdb12006943459adb4",
+    "target": null
+   },
+   "154.286x257.143": {
+    "sha256": "8496f597e14d60652e06861044036df3d9131c88659915fdb12006943459adb4",
+    "target": null
+   },
+   "205.714x257.143": {
+    "sha256": "8496f597e14d60652e06861044036df3d9131c88659915fdb12006943459adb4",
+    "target": null
+   },
+   "257.143x257.143": {
+    "sha256": "e7c1a12777a5fd9a0b85c58f37e7d0b3aa59909c8318b37b274fda744e81cecf",
+    "target": [
+     "planets",
+     6
+    ]
+   },
+   "308.571x257.143": {
+    "sha256": "e7c1a12777a5fd9a0b85c58f37e7d0b3aa59909c8318b37b274fda744e81cecf",
+    "target": [
+     "planets",
+     6
+    ]
+   },
+   "360.0x257.143": {
+    "sha256": "a03d304df34e23ec700b1ede2c90945a4991797b3a52747ade91ecead65a9d3c",
+    "target": [
+     "sun",
+     0
+    ]
+   },
+   "411.429x257.143": {
+    "sha256": "a03d304df34e23ec700b1ede2c90945a4991797b3a52747ade91ecead65a9d3c",
+    "target": [
+     "sun",
+     0
+    ]
+   },
+   "462.857x257.143": {
+    "sha256": "02430b4e5bb16baf9b00f4e2f4914b6c79ea5fd43baf8aa179ec5234166c9dc1",
+    "target": [
+     "planets",
+     2
+    ]
+   },
+   "514.286x257.143": {
+    "sha256": "02430b4e5bb16baf9b00f4e2f4914b6c79ea5fd43baf8aa179ec5234166c9dc1",
+    "target": [
+     "planets",
+     2
+    ]
+   },
+   "565.714x257.143": {
+    "sha256": "efec950ebee42795cf68f5aaa54632e77a13fbd775d4396ef083caddd4d1d707",
+    "target": [
+     "seasons",
+     1
+    ]
+   },
+   "617.143x257.143": {
+    "sha256": "8496f597e14d60652e06861044036df3d9131c88659915fdb12006943459adb4",
+    "target": null
+   },
+   "668.571x257.143": {
+    "sha256": "7370ec695ee4ae43541e439e95aa225b7a708468166a16cfd779aae95d794588",
+    "target": null
+   },
+   "51.429x308.571": {
+    "sha256": "b29c2bbb28ad6903cca220a1abb0dc2c7527e0a2b3605d4d81259bd7a86a4447",
+    "target": null
+   },
+   "102.857x308.571": {
+    "sha256": "915e1257c39418af7ef25ff6cd74c5bb3a12715449f813b9f223b78eed869e53",
+    "target": [
+     "sun",
+     2
+    ]
+   },
+   "154.286x308.571": {
+    "sha256": "915e1257c39418af7ef25ff6cd74c5bb3a12715449f813b9f223b78eed869e53",
+    "target": [
+     "sun",
+     2
+    ]
+   },
+   "205.714x308.571": {
+    "sha256": "915e1257c39418af7ef25ff6cd74c5bb3a12715449f813b9f223b78eed869e53",
+    "target": [
+     "sun",
+     2
+    ]
+   },
+   "257.143x308.571": {
+    "sha256": "915e1257c39418af7ef25ff6cd74c5bb3a12715449f813b9f223b78eed869e53",
+    "target": [
+     "sun",
+     2
+    ]
+   },
+   "308.571x308.571": {
+    "sha256": "fa338fdaa461e158f0737ddddfcdca2ac22b514517eef65af2981616320701e4",
+    "target": [
+     "seasons",
+     0
+    ]
+   },
+   "360.0x308.571": {
+    "sha256": "a03d304df34e23ec700b1ede2c90945a4991797b3a52747ade91ecead65a9d3c",
+    "target": [
+     "sun",
+     0
+    ]
+   },
+   "411.429x308.571": {
+    "sha256": "efec950ebee42795cf68f5aaa54632e77a13fbd775d4396ef083caddd4d1d707",
+    "target": [
+     "seasons",
+     1
+    ]
+   },
+   "462.857x308.571": {
+    "sha256": "02430b4e5bb16baf9b00f4e2f4914b6c79ea5fd43baf8aa179ec5234166c9dc1",
+    "target": [
+     "planets",
+     2
+    ]
+   },
+   "514.286x308.571": {
+    "sha256": "02430b4e5bb16baf9b00f4e2f4914b6c79ea5fd43baf8aa179ec5234166c9dc1",
+    "target": [
+     "planets",
+     2
+    ]
+   },
+   "565.714x308.571": {
+    "sha256": "8496f597e14d60652e06861044036df3d9131c88659915fdb12006943459adb4",
+    "target": null
+   },
+   "617.143x308.571": {
+    "sha256": "8496f597e14d60652e06861044036df3d9131c88659915fdb12006943459adb4",
+    "target": null
+   },
+   "668.571x308.571": {
+    "sha256": "baf1ade3bed9c9ed2ba9c1e51612c273338324653be5f1c34f5d53d0f4259cf5",
+    "target": null
+   },
+   "51.429x360.0": {
+    "sha256": "8496f597e14d60652e06861044036df3d9131c88659915fdb12006943459adb4",
+    "target": null
+   },
+   "102.857x360.0": {
+    "sha256": "8496f597e14d60652e06861044036df3d9131c88659915fdb12006943459adb4",
+    "target": null
+   },
+   "154.286x360.0": {
+    "sha256": "915e1257c39418af7ef25ff6cd74c5bb3a12715449f813b9f223b78eed869e53",
+    "target": [
+     "sun",
+     2
+    ]
+   },
+   "205.714x360.0": {
+    "sha256": "915e1257c39418af7ef25ff6cd74c5bb3a12715449f813b9f223b78eed869e53",
+    "target": [
+     "sun",
+     2
+    ]
+   },
+   "257.143x360.0": {
+    "sha256": "915e1257c39418af7ef25ff6cd74c5bb3a12715449f813b9f223b78eed869e53",
+    "target": [
+     "sun",
+     2
+    ]
+   },
+   "308.571x360.0": {
+    "sha256": "915e1257c39418af7ef25ff6cd74c5bb3a12715449f813b9f223b78eed869e53",
+    "target": [
+     "sun",
+     2
+    ]
+   },
+   "360.0x360.0": {
+    "sha256": "cf9d7db73e4e00e9716c08b9ab1b8aea3366713ed9755ebc3c6d102602c1bc0b",
+    "target": null
+   },
+   "411.429x360.0": {
+    "sha256": "9d4509efdca65bbc13d96b0e6477a7b645d16a1b23f71526b73808ffbc687b51",
+    "target": [
+     "sun",
+     2
+    ]
+   },
+   "462.857x360.0": {
+    "sha256": "9d4509efdca65bbc13d96b0e6477a7b645d16a1b23f71526b73808ffbc687b51",
+    "target": [
+     "sun",
+     2
+    ]
+   },
+   "514.286x360.0": {
+    "sha256": "389666ae8d756a1563f4e9684d3233f0577d8f53ba1d41ebe710dc435d649f39",
+    "target": [
+     "planets",
+     0
+    ]
+   },
+   "565.714x360.0": {
+    "sha256": "9d4509efdca65bbc13d96b0e6477a7b645d16a1b23f71526b73808ffbc687b51",
+    "target": [
+     "sun",
+     2
+    ]
+   },
+   "617.143x360.0": {
+    "sha256": "8496f597e14d60652e06861044036df3d9131c88659915fdb12006943459adb4",
+    "target": null
+   },
+   "668.571x360.0": {
+    "sha256": "8496f597e14d60652e06861044036df3d9131c88659915fdb12006943459adb4",
+    "target": null
+   },
+   "51.429x411.429": {
+    "sha256": "a0158d73209b32a42e1de4acc432e54b530689fc2603591703f1c68b44142fc6",
+    "target": null
+   },
+   "102.857x411.429": {
+    "sha256": "8496f597e14d60652e06861044036df3d9131c88659915fdb12006943459adb4",
+    "target": null
+   },
+   "154.286x411.429": {
+    "sha256": "c9840f13772fcfae7a68e0046a6dbc5a224c37b703f52ba32cad83b103d5d7cb",
+    "target": null
+   },
+   "205.714x411.429": {
+    "sha256": "71b48e5e12cc762132eb405fb8f075f50b8ffcb8dfff6a2cc47585600c7e2a72",
+    "target": [
+     "planets",
+     1
+    ]
+   },
+   "257.143x411.429": {
+    "sha256": "71b48e5e12cc762132eb405fb8f075f50b8ffcb8dfff6a2cc47585600c7e2a72",
+    "target": [
+     "planets",
+     1
+    ]
+   },
+   "308.571x411.429": {
+    "sha256": "8bb7076d685fc3b449229d3094037f102a79ab3cc846086a42ad0582ac1c25a8",
+    "target": [
+     "seasons",
+     3
+    ]
+   },
+   "360.0x411.429": {
+    "sha256": "c31fa8432cf66debf69dc0f0f8acee98cf7749c1bf6b2a98eddbdb821ede0a7c",
+    "target": [
+     "sun",
+     1
+    ]
+   },
+   "411.429x411.429": {
+    "sha256": "5596bfe7c4d2a155f7a3d6303f5485e7b250fddbea325cff5e94ea4beb4382d2",
+    "target": [
+     "seasons",
+     2
+    ]
+   },
+   "462.857x411.429": {
+    "sha256": "9d4509efdca65bbc13d96b0e6477a7b645d16a1b23f71526b73808ffbc687b51",
+    "target": [
+     "sun",
+     2
+    ]
+   },
+   "514.286x411.429": {
+    "sha256": "389666ae8d756a1563f4e9684d3233f0577d8f53ba1d41ebe710dc435d649f39",
+    "target": [
+     "planets",
+     0
+    ]
+   },
+   "565.714x411.429": {
+    "sha256": "9d4509efdca65bbc13d96b0e6477a7b645d16a1b23f71526b73808ffbc687b51",
+    "target": [
+     "sun",
+     2
+    ]
+   },
+   "617.143x411.429": {
+    "sha256": "9d4509efdca65bbc13d96b0e6477a7b645d16a1b23f71526b73808ffbc687b51",
+    "target": [
+     "sun",
+     2
+    ]
+   },
+   "668.571x411.429": {
+    "sha256": "dbecaf60db0ef4176f31c2c843e00c85485c5bb3cd7d3ea5f9b62f6cba6d4658",
+    "target": null
+   },
+   "51.429x462.857": {
+    "sha256": "f566c13e93b922990a124e0cc6b97bd234eee3fb753e5f1ec6512d40602e7025",
+    "target": null
+   },
+   "102.857x462.857": {
+    "sha256": "c9840f13772fcfae7a68e0046a6dbc5a224c37b703f52ba32cad83b103d5d7cb",
+    "target": null
+   },
+   "154.286x462.857": {
+    "sha256": "8bb7076d685fc3b449229d3094037f102a79ab3cc846086a42ad0582ac1c25a8",
+    "target": [
+     "seasons",
+     3
+    ]
+   },
+   "205.714x462.857": {
+    "sha256": "71b48e5e12cc762132eb405fb8f075f50b8ffcb8dfff6a2cc47585600c7e2a72",
+    "target": [
+     "planets",
+     1
+    ]
+   },
+   "257.143x462.857": {
+    "sha256": "71b48e5e12cc762132eb405fb8f075f50b8ffcb8dfff6a2cc47585600c7e2a72",
+    "target": [
+     "planets",
+     1
+    ]
+   },
+   "308.571x462.857": {
+    "sha256": "c31fa8432cf66debf69dc0f0f8acee98cf7749c1bf6b2a98eddbdb821ede0a7c",
+    "target": [
+     "sun",
+     1
+    ]
+   },
+   "360.0x462.857": {
+    "sha256": "c31fa8432cf66debf69dc0f0f8acee98cf7749c1bf6b2a98eddbdb821ede0a7c",
+    "target": [
+     "sun",
+     1
+    ]
+   },
+   "411.429x462.857": {
+    "sha256": "36c283ac0f473c75f183310b0a11b09a3ee31bdd16e12eb5246f8698d994d6dc",
+    "target": [
+     "planets",
+     5
+    ]
+   },
+   "462.857x462.857": {
+    "sha256": "36c283ac0f473c75f183310b0a11b09a3ee31bdd16e12eb5246f8698d994d6dc",
+    "target": [
+     "planets",
+     5
+    ]
+   },
+   "514.286x462.857": {
+    "sha256": "8496f597e14d60652e06861044036df3d9131c88659915fdb12006943459adb4",
+    "target": null
+   },
+   "565.714x462.857": {
+    "sha256": "8496f597e14d60652e06861044036df3d9131c88659915fdb12006943459adb4",
+    "target": null
+   },
+   "617.143x462.857": {
+    "sha256": "8496f597e14d60652e06861044036df3d9131c88659915fdb12006943459adb4",
+    "target": null
+   },
+   "668.571x462.857": {
+    "sha256": "5b7c22d8bbe5ffa428755164ac8c235d0b114756b1f176a1d9a83c9fdf1f85a0",
+    "target": null
+   },
+   "102.857x514.286": {
+    "sha256": "cf9d7db73e4e00e9716c08b9ab1b8aea3366713ed9755ebc3c6d102602c1bc0b",
+    "target": null
+   },
+   "154.286x514.286": {
+    "sha256": "8bb7076d685fc3b449229d3094037f102a79ab3cc846086a42ad0582ac1c25a8",
+    "target": [
+     "seasons",
+     3
+    ]
+   },
+   "205.714x514.286": {
+    "sha256": "cf9d7db73e4e00e9716c08b9ab1b8aea3366713ed9755ebc3c6d102602c1bc0b",
+    "target": null
+   },
+   "257.143x514.286": {
+    "sha256": "cf9d7db73e4e00e9716c08b9ab1b8aea3366713ed9755ebc3c6d102602c1bc0b",
+    "target": null
+   },
+   "308.571x514.286": {
+    "sha256": "8410d08d37c244be8a14e0c86be551a65dff664a48cd56afb04eee8241c87419",
+    "target": [
+     "planets",
+     3
+    ]
+   },
+   "360.0x514.286": {
+    "sha256": "8410d08d37c244be8a14e0c86be551a65dff664a48cd56afb04eee8241c87419",
+    "target": [
+     "planets",
+     3
+    ]
+   },
+   "411.429x514.286": {
+    "sha256": "36c283ac0f473c75f183310b0a11b09a3ee31bdd16e12eb5246f8698d994d6dc",
+    "target": [
+     "planets",
+     5
+    ]
+   },
+   "462.857x514.286": {
+    "sha256": "36c283ac0f473c75f183310b0a11b09a3ee31bdd16e12eb5246f8698d994d6dc",
+    "target": [
+     "planets",
+     5
+    ]
+   },
+   "514.286x514.286": {
+    "sha256": "cf9d7db73e4e00e9716c08b9ab1b8aea3366713ed9755ebc3c6d102602c1bc0b",
+    "target": null
+   },
+   "565.714x514.286": {
+    "sha256": "f9be8c67b7a8de854abc4fbaf7e1e2d2faff7dca3af88f6dd8e2b36c0c6b295f",
+    "target": null
+   },
+   "617.143x514.286": {
+    "sha256": "8496f597e14d60652e06861044036df3d9131c88659915fdb12006943459adb4",
+    "target": null
+   },
+   "102.857x565.714": {
+    "sha256": "cbfa604fee7e2f6286b479de763bd1b3eb6703af0337933001b8049e5b6fdc1f",
+    "target": null
+   },
+   "154.286x565.714": {
+    "sha256": "cf9d7db73e4e00e9716c08b9ab1b8aea3366713ed9755ebc3c6d102602c1bc0b",
+    "target": null
+   },
+   "205.714x565.714": {
+    "sha256": "cf9d7db73e4e00e9716c08b9ab1b8aea3366713ed9755ebc3c6d102602c1bc0b",
+    "target": null
+   },
+   "257.143x565.714": {
+    "sha256": "cf9d7db73e4e00e9716c08b9ab1b8aea3366713ed9755ebc3c6d102602c1bc0b",
+    "target": null
+   },
+   "308.571x565.714": {
+    "sha256": "c31fa8432cf66debf69dc0f0f8acee98cf7749c1bf6b2a98eddbdb821ede0a7c",
+    "target": [
+     "sun",
+     1
+    ]
+   },
+   "360.0x565.714": {
+    "sha256": "c31fa8432cf66debf69dc0f0f8acee98cf7749c1bf6b2a98eddbdb821ede0a7c",
+    "target": [
+     "sun",
+     1
+    ]
+   },
+   "411.429x565.714": {
+    "sha256": "cf9d7db73e4e00e9716c08b9ab1b8aea3366713ed9755ebc3c6d102602c1bc0b",
+    "target": null
+   },
+   "462.857x565.714": {
+    "sha256": "5596bfe7c4d2a155f7a3d6303f5485e7b250fddbea325cff5e94ea4beb4382d2",
+    "target": [
+     "seasons",
+     2
+    ]
+   },
+   "514.286x565.714": {
+    "sha256": "5596bfe7c4d2a155f7a3d6303f5485e7b250fddbea325cff5e94ea4beb4382d2",
+    "target": [
+     "seasons",
+     2
+    ]
+   },
+   "565.714x565.714": {
+    "sha256": "cf9d7db73e4e00e9716c08b9ab1b8aea3366713ed9755ebc3c6d102602c1bc0b",
+    "target": null
+   },
+   "617.143x565.714": {
+    "sha256": "8f4766e4f34fc3418da6dc29b0f85dcb5e1a2c38a08ec011f08807ea228d1af0",
+    "target": null
+   },
+   "154.286x617.143": {
+    "sha256": "73edc9217c0c6831ad0105c8f20e4fe71b6a6cff5dc740a333e3f012d5fa1eed",
+    "target": null
+   },
+   "205.714x617.143": {
+    "sha256": "cf9d7db73e4e00e9716c08b9ab1b8aea3366713ed9755ebc3c6d102602c1bc0b",
+    "target": null
+   },
+   "257.143x617.143": {
+    "sha256": "cf9d7db73e4e00e9716c08b9ab1b8aea3366713ed9755ebc3c6d102602c1bc0b",
+    "target": null
+   },
+   "308.571x617.143": {
+    "sha256": "c31fa8432cf66debf69dc0f0f8acee98cf7749c1bf6b2a98eddbdb821ede0a7c",
+    "target": [
+     "sun",
+     1
+    ]
+   },
+   "360.0x617.143": {
+    "sha256": "cf9d7db73e4e00e9716c08b9ab1b8aea3366713ed9755ebc3c6d102602c1bc0b",
+    "target": null
+   },
+   "411.429x617.143": {
+    "sha256": "cf9d7db73e4e00e9716c08b9ab1b8aea3366713ed9755ebc3c6d102602c1bc0b",
+    "target": null
+   },
+   "462.857x617.143": {
+    "sha256": "cf9d7db73e4e00e9716c08b9ab1b8aea3366713ed9755ebc3c6d102602c1bc0b",
+    "target": null
+   },
+   "514.286x617.143": {
+    "sha256": "cf9d7db73e4e00e9716c08b9ab1b8aea3366713ed9755ebc3c6d102602c1bc0b",
+    "target": null
+   },
+   "565.714x617.143": {
+    "sha256": "1d3f18e6aa364f2b25e977a1adb8ebc74ca429441f63260de841a06ea7d9a50f",
+    "target": null
+   },
+   "257.143x668.571": {
+    "sha256": "8a5f18d2ad2296d71ff22b2516bd8bf0ad4c5cac8804748a68a25074f7fa9e1f",
+    "target": null
+   },
+   "308.571x668.571": {
+    "sha256": "4602c2bcd93bdb00105d8faf950a6fe4fd2067d1979cb00ac74e271fa0f5208e",
+    "target": null
+   },
+   "360.0x668.571": {
+    "sha256": "cf9d7db73e4e00e9716c08b9ab1b8aea3366713ed9755ebc3c6d102602c1bc0b",
+    "target": null
+   },
+   "411.429x668.571": {
+    "sha256": "06b636634d4e09533cd90060f1fd61f4645cea0ddb70c42a24656b4d6481aeb4",
+    "target": null
+   },
+   "462.857x668.571": {
+    "sha256": "78ce2247538c942158f267c84f670124ffbda231a981e5b02daf43a0138a46e4",
+    "target": null
+   }
+  },
+  "representative_html": {
+   "308.571x514.286": "<div align='center'><img src='file:///C:/Users/vurun/AppData/Roaming/Watch%20Academy/raster_cache/b739ad49a8376d52_752fd4ea6007_w384_Mercury.png' width='192'/></div><div align='center'><span style='font-size: 17px'><b>Mercury</b></span><br/>Wednesday</div><br/><table><tr><td width='460'><p align='justify'>Mercury is a small cratered ball of two extremes: one face scorched amber-tan, the other pale ashen gray, the whole surface pocked with craters like a well-traveled road. It suits the planet perfectly — the innermost wanderer and the fastest of all, circling the Sun in 88 days — a slow-turning world of the harshest extremes, its days scorching and its nights freezing on the very same plain. …</p></td></tr></table><hr/><div align='center'><a href='domy:encyclopedia' style='color:#8FB8FF'><u>Learn more</u></a>&nbsp;&nbsp;<span style='color:#9A9A9A'>press SPACE</span></div>",
+   "360.0x205.714": "<div align='center'><img src='file:///C:/Users/vurun/AppData/Roaming/Watch%20Academy/raster_cache/efb963f8e4e27b1a_4443da0566cd_w384_Jupiter.png' width='192'/></div><div align='center'><span style='font-size: 17px'><b>Jupiter</b></span><br/>Thursday, 16<sup>th</sup> July 2026 · 6105. Anno Lucis</div><br/><table><tr><td width='460'><p align='justify'>Jupiter is the giant in banded robes: cream and caramel stripes wrap the whole globe, whipped into curls at their borders, and low on one side turns the Great Red Spot — a single storm wider than the Earth that has been raging for centuries. Everything about the planet is surplus: the largest body, the loudest weather, a king&#x27;s wardrobe of clouds. …</p></td></tr></table><hr/><div align='center'><a href='domy:encyclopedia' style='color:#8FB8FF'><u>Learn more</u></a>&nbsp;&nbsp;<span style='color:#9A9A9A'>press SPACE</span></div>",
+   "360.0x514.286": "<div align='center'><img src='file:///C:/Users/vurun/AppData/Roaming/Watch%20Academy/raster_cache/b739ad49a8376d52_752fd4ea6007_w384_Mercury.png' width='192'/></div><div align='center'><span style='font-size: 17px'><b>Mercury</b></span><br/>Wednesday</div><br/><table><tr><td width='460'><p align='justify'>Mercury is a small cratered ball of two extremes: one face scorched amber-tan, the other pale ashen gray, the whole surface pocked with craters like a well-traveled road. It suits the planet perfectly — the innermost wanderer and the fastest of all, circling the Sun in 88 days — a slow-turning world of the harshest extremes, its days scorching and its nights freezing on the very same plain. …</p></td></tr></table><hr/><div align='center'><a href='domy:encyclopedia' style='color:#8FB8FF'><u>Learn more</u></a>&nbsp;&nbsp;<span style='color:#9A9A9A'>press SPACE</span></div>",
+   "411.429x205.714": "<div align='center'><img src='file:///C:/Users/vurun/AppData/Roaming/Watch%20Academy/raster_cache/efb963f8e4e27b1a_4443da0566cd_w384_Jupiter.png' width='192'/></div><div align='center'><span style='font-size: 17px'><b>Jupiter</b></span><br/>Thursday, 16<sup>th</sup> July 2026 · 6105. Anno Lucis</div><br/><table><tr><td width='460'><p align='justify'>Jupiter is the giant in banded robes: cream and caramel stripes wrap the whole globe, whipped into curls at their borders, and low on one side turns the Great Red Spot — a single storm wider than the Earth that has been raging for centuries. Everything about the planet is surplus: the largest body, the loudest weather, a king&#x27;s wardrobe of clouds. …</p></td></tr></table><hr/><div align='center'><a href='domy:encyclopedia' style='color:#8FB8FF'><u>Learn more</u></a>&nbsp;&nbsp;<span style='color:#9A9A9A'>press SPACE</span></div>",
+   "411.429x462.857": "<div align='center'><img src='file:///C:/Users/vurun/AppData/Roaming/Watch%20Academy/raster_cache/02c0ac5be0c5ecc7_68f1225a18e9_w384_Venus.png' width='192'/></div><div align='center'><span style='font-size: 17px'><b>Venus</b></span><br/>Friday</div><br/><table><tr><td width='460'><p align='justify'>Venus is not the pale pearl of the evening sky but the truth beneath it: a globe of molten orange and red, its surface veined with bright fire like embers seen through smoke. That is the real planet under the lovely clouds — a furnace hotter than Mercury — and it is exactly the <b>passion</b> it stands for: the most beautiful light in the sky, burning at close range. …</p></td></tr></table><hr/><div align='center'><a href='domy:encyclopedia' style='color:#8FB8FF'><u>Learn more</u></a>&nbsp;&nbsp;<span style='color:#9A9A9A'>press SPACE</span></div>",
+   "462.857x102.857": "<div align='center'><span style='font-size:17px; font-weight:bold'>Date</span></div><div align='center'><div style='white-space:nowrap'>16<sup>th</sup> July 2026</div><div style='white-space:nowrap'>197<sup>th</sup> Day - 29<sup>th</sup> Week</div><div style='white-space:nowrap'>&nbsp;</div></div><div align='center'><img src='file:///C:/Users/vurun/AppData/Roaming/Watch%20Academy/raster_cache/30327a7b620d9283_7367196e1055_w256_Age_of_Light_v2_gem.png' width='128'/></div><div align='center'><span style='font-size:17px; font-weight:bold'>Age of Light</span></div><div align='center'><div style='white-space:nowrap'>6105. Anno Lucis</div><div style='white-space:nowrap'>&nbsp;</div></div><div align='center'><img src='file:///C:/Users/vurun/AppData/Roaming/Watch%20Academy/raster_cache/e885fab4345c91fd_5e30b62e10ec_w256_Summer_gem.png' width='128'/></div><div align='center'><div style='white-space:nowrap'><b>Season:</b> Summer 26<sup>th</sup> of 94 Days</div><div style='white-space:nowrap'><b>Sign:</b> ♋ Cancer (21<sup>st</sup> June - 21<sup>st</sup> July)</div></div><hr/><div align='center'><a href='domy:encyclopedia' style='color:#8FB8FF'><u>Learn more</u></a>&nbsp;&nbsp;<span style='color:#9A9A9A'>press SPACE</span></div>"
+  }
+ }
+}
