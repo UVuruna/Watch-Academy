@@ -6,6 +6,13 @@ each one is its own round. The seating doctrine behind the theme work
 lives in [The DOMY Canon](CANON.md). The phone edition's sealed charter —
 **Pocket Watch** — lives in [Android Charter](ANDROID.md).
 
+> **Reading an old `constants.X` below?** `config/constants.py` was a
+> 38-section junk drawer and was DELETED on 2026-08-19, split by the
+> owner's own map into eleven new `config/` modules plus nine that
+> grew. This file is a dated RECORD and is not rewritten; the name a
+> line quotes still exists, in the module the map gives it —
+> [Config (folder)](desktop/config/___config.md#the-constants-split).
+
 ## Table of Contents
 
 - [Where We Stand](#where-we-stand)

@@ -6,6 +6,13 @@ says: WHAT to tell the agent, WHAT the agent must read, WHAT it
 delivers, and WHICH model tier the job deserves — so the strongest
 agent is never burned on an easy job.
 
+> **Reading an old `constants.X` below?** `config/constants.py` was a
+> 38-section junk drawer and was DELETED on 2026-08-19, split by the
+> owner's own map into eleven new `config/` modules plus nine that
+> grew. This file is a dated RECORD and is not rewritten; the name a
+> line quotes still exists, in the module the map gives it —
+> [Config (folder)](desktop/config/___config.md#the-constants-split).
+
 ## How to Open Any Session
 
 1. The project `CLAUDE.md` loads automatically — it points the agent
